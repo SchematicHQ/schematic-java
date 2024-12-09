@@ -153,8 +153,4 @@ public class BaseSchematic {
     public WebhooksClient webhooks() {
         return this.webhooksClient.get();
     }
-
-    public static BaseSchematicBuilder builder() {
-        return new BaseSchematicBuilder();
-    }
 }
