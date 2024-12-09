@@ -4,12 +4,12 @@
 package com.schematic.api.resources.events;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.schematic.api.core.BaseSchematicApiException;
+import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.core.RequestOptions;
-import com.schematic.api.core.SchematicApiApiException;
-import com.schematic.api.core.SchematicApiException;
 import com.schematic.api.errors.BadRequestError;
 import com.schematic.api.errors.ForbiddenError;
 import com.schematic.api.errors.InternalServerError;
@@ -22,7 +22,6 @@ import com.schematic.api.resources.events.types.CreateEventBatchResponse;
 import com.schematic.api.resources.events.types.CreateEventResponse;
 import com.schematic.api.resources.events.types.GetEventResponse;
 import com.schematic.api.resources.events.types.GetEventSummariesResponse;
-import com.schematic.api.resources.events.types.GetEventSummaryBySubtypeResponse;
 import com.schematic.api.resources.events.types.GetSegmentIntegrationStatusResponse;
 import com.schematic.api.resources.events.types.ListEventsResponse;
 import com.schematic.api.types.ApiError;
@@ -58,7 +57,7 @@ public class EventsClient {
             body = RequestBody.create(
                     ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
         } catch (JsonProcessingException e) {
-            throw new SchematicApiException("Failed to serialize request", e);
+            throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
@@ -94,12 +93,12 @@ public class EventsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
-            throw new SchematicApiApiException(
+            throw new BaseSchematicApiException(
                     "Error with status code " + response.code(),
                     response.code(),
                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
         } catch (IOException e) {
-            throw new SchematicApiException("Network error executing HTTP request", e);
+            throw new BaseSchematicException("Network error executing HTTP request", e);
         }
     }
 
@@ -163,66 +162,12 @@ public class EventsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
-            throw new SchematicApiApiException(
+            throw new BaseSchematicApiException(
                     "Error with status code " + response.code(),
                     response.code(),
                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
         } catch (IOException e) {
-            throw new SchematicApiException("Network error executing HTTP request", e);
-        }
-    }
-
-    public GetEventSummaryBySubtypeResponse getEventSummaryBySubtype(String key) {
-        return getEventSummaryBySubtype(key, null);
-    }
-
-    public GetEventSummaryBySubtypeResponse getEventSummaryBySubtype(String key, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("event-types")
-                .addPathSegment(key)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(
-                        responseBody.string(), GetEventSummaryBySubtypeResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new SchematicApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new SchematicApiException("Network error executing HTTP request", e);
+            throw new BaseSchematicException("Network error executing HTTP request", e);
         }
     }
 
@@ -293,12 +238,12 @@ public class EventsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
-            throw new SchematicApiApiException(
+            throw new BaseSchematicApiException(
                     "Error with status code " + response.code(),
                     response.code(),
                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
         } catch (IOException e) {
-            throw new SchematicApiException("Network error executing HTTP request", e);
+            throw new BaseSchematicException("Network error executing HTTP request", e);
         }
     }
 
@@ -316,7 +261,7 @@ public class EventsClient {
             body = RequestBody.create(
                     ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
         } catch (JsonProcessingException e) {
-            throw new SchematicApiException("Failed to serialize request", e);
+            throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
@@ -352,12 +297,12 @@ public class EventsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
-            throw new SchematicApiApiException(
+            throw new BaseSchematicApiException(
                     "Error with status code " + response.code(),
                     response.code(),
                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
         } catch (IOException e) {
-            throw new SchematicApiException("Network error executing HTTP request", e);
+            throw new BaseSchematicException("Network error executing HTTP request", e);
         }
     }
 
@@ -405,12 +350,12 @@ public class EventsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
-            throw new SchematicApiApiException(
+            throw new BaseSchematicApiException(
                     "Error with status code " + response.code(),
                     response.code(),
                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
         } catch (IOException e) {
-            throw new SchematicApiException("Network error executing HTTP request", e);
+            throw new BaseSchematicException("Network error executing HTTP request", e);
         }
     }
 
@@ -458,12 +403,12 @@ public class EventsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
-            throw new SchematicApiApiException(
+            throw new BaseSchematicApiException(
                     "Error with status code " + response.code(),
                     response.code(),
                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
         } catch (IOException e) {
-            throw new SchematicApiException("Network error executing HTTP request", e);
+            throw new BaseSchematicException("Network error executing HTTP request", e);
         }
     }
 }

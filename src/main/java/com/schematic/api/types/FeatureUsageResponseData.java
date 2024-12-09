@@ -27,6 +27,8 @@ public final class FeatureUsageResponseData {
 
     private final FeatureUsageResponseDataAllocationType allocationType;
 
+    private final Optional<OffsetDateTime> entitlementExpirationDate;
+
     private final String entitlementId;
 
     private final String entitlementType;
@@ -49,6 +51,7 @@ public final class FeatureUsageResponseData {
             boolean access,
             Optional<Integer> allocation,
             FeatureUsageResponseDataAllocationType allocationType,
+            Optional<OffsetDateTime> entitlementExpirationDate,
             String entitlementId,
             String entitlementType,
             Optional<FeatureDetailResponseData> feature,
@@ -61,6 +64,7 @@ public final class FeatureUsageResponseData {
         this.access = access;
         this.allocation = allocation;
         this.allocationType = allocationType;
+        this.entitlementExpirationDate = entitlementExpirationDate;
         this.entitlementId = entitlementId;
         this.entitlementType = entitlementType;
         this.feature = feature;
@@ -94,6 +98,11 @@ public final class FeatureUsageResponseData {
     @JsonProperty("allocation_type")
     public FeatureUsageResponseDataAllocationType getAllocationType() {
         return allocationType;
+    }
+
+    @JsonProperty("entitlement_expiration_date")
+    public Optional<OffsetDateTime> getEntitlementExpirationDate() {
+        return entitlementExpirationDate;
     }
 
     @JsonProperty("entitlement_id")
@@ -163,6 +172,7 @@ public final class FeatureUsageResponseData {
         return access == other.access
                 && allocation.equals(other.allocation)
                 && allocationType.equals(other.allocationType)
+                && entitlementExpirationDate.equals(other.entitlementExpirationDate)
                 && entitlementId.equals(other.entitlementId)
                 && entitlementType.equals(other.entitlementType)
                 && feature.equals(other.feature)
@@ -179,6 +189,7 @@ public final class FeatureUsageResponseData {
                 this.access,
                 this.allocation,
                 this.allocationType,
+                this.entitlementExpirationDate,
                 this.entitlementId,
                 this.entitlementType,
                 this.feature,
@@ -222,6 +233,10 @@ public final class FeatureUsageResponseData {
         _FinalStage allocation(Optional<Integer> allocation);
 
         _FinalStage allocation(Integer allocation);
+
+        _FinalStage entitlementExpirationDate(Optional<OffsetDateTime> entitlementExpirationDate);
+
+        _FinalStage entitlementExpirationDate(OffsetDateTime entitlementExpirationDate);
 
         _FinalStage feature(Optional<FeatureDetailResponseData> feature);
 
@@ -271,6 +286,8 @@ public final class FeatureUsageResponseData {
 
         private Optional<FeatureDetailResponseData> feature = Optional.empty();
 
+        private Optional<OffsetDateTime> entitlementExpirationDate = Optional.empty();
+
         private Optional<Integer> allocation = Optional.empty();
 
         @JsonAnySetter
@@ -283,6 +300,7 @@ public final class FeatureUsageResponseData {
             access(other.getAccess());
             allocation(other.getAllocation());
             allocationType(other.getAllocationType());
+            entitlementExpirationDate(other.getEntitlementExpirationDate());
             entitlementId(other.getEntitlementId());
             entitlementType(other.getEntitlementType());
             feature(other.getFeature());
@@ -424,6 +442,19 @@ public final class FeatureUsageResponseData {
             return this;
         }
 
+        @java.lang.Override
+        public _FinalStage entitlementExpirationDate(OffsetDateTime entitlementExpirationDate) {
+            this.entitlementExpirationDate = Optional.of(entitlementExpirationDate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "entitlement_expiration_date", nulls = Nulls.SKIP)
+        public _FinalStage entitlementExpirationDate(Optional<OffsetDateTime> entitlementExpirationDate) {
+            this.entitlementExpirationDate = entitlementExpirationDate;
+            return this;
+        }
+
         /**
          * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -447,6 +478,7 @@ public final class FeatureUsageResponseData {
                     access,
                     allocation,
                     allocationType,
+                    entitlementExpirationDate,
                     entitlementId,
                     entitlementType,
                     feature,

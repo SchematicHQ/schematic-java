@@ -6,7 +6,7 @@ package com.schematic.api.core;
 /**
  * This exception type will be thrown for any non-2XX API responses.
  */
-public class SchematicApiApiException extends SchematicApiException {
+public class BaseSchematicApiException extends BaseSchematicException {
     /**
      * The error code of the response that triggered the exception.
      */
@@ -17,7 +17,7 @@ public class SchematicApiApiException extends SchematicApiException {
      */
     private final Object body;
 
-    public SchematicApiApiException(String message, int statusCode, Object body) {
+    public BaseSchematicApiException(String message, int statusCode, Object body) {
         super(message);
         this.statusCode = statusCode;
         this.body = body;
@@ -39,7 +39,7 @@ public class SchematicApiApiException extends SchematicApiException {
 
     @java.lang.Override
     public String toString() {
-        return "SchematicApiApiException{" + "message: " + getMessage() + ", statusCode: " + statusCode + ", body: "
+        return "BaseSchematicApiException{" + "message: " + getMessage() + ", statusCode: " + statusCode + ", body: "
                 + body + "}";
     }
 }

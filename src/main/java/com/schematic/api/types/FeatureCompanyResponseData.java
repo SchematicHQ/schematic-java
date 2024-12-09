@@ -29,6 +29,8 @@ public final class FeatureCompanyResponseData {
 
     private final Optional<CompanyDetailResponseData> company;
 
+    private final Optional<OffsetDateTime> entitlementExpirationDate;
+
     private final String entitlementId;
 
     private final String entitlementType;
@@ -52,6 +54,7 @@ public final class FeatureCompanyResponseData {
             Optional<Integer> allocation,
             FeatureCompanyResponseDataAllocationType allocationType,
             Optional<CompanyDetailResponseData> company,
+            Optional<OffsetDateTime> entitlementExpirationDate,
             String entitlementId,
             String entitlementType,
             Optional<FeatureDetailResponseData> feature,
@@ -65,6 +68,7 @@ public final class FeatureCompanyResponseData {
         this.allocation = allocation;
         this.allocationType = allocationType;
         this.company = company;
+        this.entitlementExpirationDate = entitlementExpirationDate;
         this.entitlementId = entitlementId;
         this.entitlementType = entitlementType;
         this.feature = feature;
@@ -103,6 +107,11 @@ public final class FeatureCompanyResponseData {
     @JsonProperty("company")
     public Optional<CompanyDetailResponseData> getCompany() {
         return company;
+    }
+
+    @JsonProperty("entitlement_expiration_date")
+    public Optional<OffsetDateTime> getEntitlementExpirationDate() {
+        return entitlementExpirationDate;
     }
 
     @JsonProperty("entitlement_id")
@@ -173,6 +182,7 @@ public final class FeatureCompanyResponseData {
                 && allocation.equals(other.allocation)
                 && allocationType.equals(other.allocationType)
                 && company.equals(other.company)
+                && entitlementExpirationDate.equals(other.entitlementExpirationDate)
                 && entitlementId.equals(other.entitlementId)
                 && entitlementType.equals(other.entitlementType)
                 && feature.equals(other.feature)
@@ -190,6 +200,7 @@ public final class FeatureCompanyResponseData {
                 this.allocation,
                 this.allocationType,
                 this.company,
+                this.entitlementExpirationDate,
                 this.entitlementId,
                 this.entitlementType,
                 this.feature,
@@ -237,6 +248,10 @@ public final class FeatureCompanyResponseData {
         _FinalStage company(Optional<CompanyDetailResponseData> company);
 
         _FinalStage company(CompanyDetailResponseData company);
+
+        _FinalStage entitlementExpirationDate(Optional<OffsetDateTime> entitlementExpirationDate);
+
+        _FinalStage entitlementExpirationDate(OffsetDateTime entitlementExpirationDate);
 
         _FinalStage feature(Optional<FeatureDetailResponseData> feature);
 
@@ -286,6 +301,8 @@ public final class FeatureCompanyResponseData {
 
         private Optional<FeatureDetailResponseData> feature = Optional.empty();
 
+        private Optional<OffsetDateTime> entitlementExpirationDate = Optional.empty();
+
         private Optional<CompanyDetailResponseData> company = Optional.empty();
 
         private Optional<Integer> allocation = Optional.empty();
@@ -301,6 +318,7 @@ public final class FeatureCompanyResponseData {
             allocation(other.getAllocation());
             allocationType(other.getAllocationType());
             company(other.getCompany());
+            entitlementExpirationDate(other.getEntitlementExpirationDate());
             entitlementId(other.getEntitlementId());
             entitlementType(other.getEntitlementType());
             feature(other.getFeature());
@@ -443,6 +461,19 @@ public final class FeatureCompanyResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage entitlementExpirationDate(OffsetDateTime entitlementExpirationDate) {
+            this.entitlementExpirationDate = Optional.of(entitlementExpirationDate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "entitlement_expiration_date", nulls = Nulls.SKIP)
+        public _FinalStage entitlementExpirationDate(Optional<OffsetDateTime> entitlementExpirationDate) {
+            this.entitlementExpirationDate = entitlementExpirationDate;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage company(CompanyDetailResponseData company) {
             this.company = Optional.of(company);
             return this;
@@ -479,6 +510,7 @@ public final class FeatureCompanyResponseData {
                     allocation,
                     allocationType,
                     company,
+                    entitlementExpirationDate,
                     entitlementId,
                     entitlementType,
                     feature,

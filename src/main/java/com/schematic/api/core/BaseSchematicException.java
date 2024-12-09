@@ -6,12 +6,12 @@ package com.schematic.api.core;
 /**
  * This class serves as the base exception for all errors in the SDK.
  */
-public class SchematicApiException extends RuntimeException {
-    public SchematicApiException(String message) {
+public class BaseSchematicException extends RuntimeException {
+    public BaseSchematicException(String message) {
         super(message);
     }
 
-    public SchematicApiException(String message, Exception e) {
+    public BaseSchematicException(String message, Exception e) {
         super(message, e);
     }
 }
