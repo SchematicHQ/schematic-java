@@ -4,12 +4,12 @@
 package com.schematic.api.resources.accesstokens;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.schematic.api.core.BaseSchematicApiException;
+import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.core.RequestOptions;
-import com.schematic.api.core.SchematicApiApiException;
-import com.schematic.api.core.SchematicApiException;
 import com.schematic.api.errors.BadRequestError;
 import com.schematic.api.errors.ForbiddenError;
 import com.schematic.api.errors.InternalServerError;
@@ -48,7 +48,7 @@ public class AccesstokensClient {
             body = RequestBody.create(
                     ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
         } catch (JsonProcessingException e) {
-            throw new SchematicApiException("Failed to serialize request", e);
+            throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
@@ -85,12 +85,12 @@ public class AccesstokensClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
-            throw new SchematicApiApiException(
+            throw new BaseSchematicApiException(
                     "Error with status code " + response.code(),
                     response.code(),
                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
         } catch (IOException e) {
-            throw new SchematicApiException("Network error executing HTTP request", e);
+            throw new BaseSchematicException("Network error executing HTTP request", e);
         }
     }
 }

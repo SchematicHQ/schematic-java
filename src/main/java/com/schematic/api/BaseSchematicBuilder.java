@@ -6,7 +6,7 @@ package com.schematic.api;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.Environment;
 
-public final class SchematicApiClientBuilder {
+public final class BaseSchematicBuilder {
     private ClientOptions.Builder clientOptionsBuilder = ClientOptions.builder();
 
     private String apiKey = null;
@@ -16,27 +16,27 @@ public final class SchematicApiClientBuilder {
     /**
      * Sets apiKey
      */
-    public SchematicApiClientBuilder apiKey(String apiKey) {
+    public BaseSchematicBuilder apiKey(String apiKey) {
         this.apiKey = apiKey;
         return this;
     }
 
-    public SchematicApiClientBuilder environment(Environment environment) {
+    public BaseSchematicBuilder environment(Environment environment) {
         this.environment = environment;
         return this;
     }
 
-    public SchematicApiClientBuilder url(String url) {
+    public BaseSchematicBuilder url(String url) {
         this.environment = Environment.custom(url);
         return this;
     }
 
-    public SchematicApiClient build() {
+    public BaseSchematic build() {
         if (apiKey == null) {
             throw new RuntimeException("Please provide apiKey");
         }
         this.clientOptionsBuilder.addHeader("X-Schematic-Api-Key", this.apiKey);
         clientOptionsBuilder.environment(this.environment);
-        return new SchematicApiClient(clientOptionsBuilder.build());
+        return new BaseSchematic(clientOptionsBuilder.build());
     }
 }

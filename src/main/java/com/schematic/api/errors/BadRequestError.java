@@ -3,10 +3,10 @@
  */
 package com.schematic.api.errors;
 
-import com.schematic.api.core.SchematicApiApiException;
+import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.types.ApiError;
 
-public final class BadRequestError extends SchematicApiApiException {
+public final class BadRequestError extends BaseSchematicApiException {
     /**
      * The body of the response that triggered the exception.
      */

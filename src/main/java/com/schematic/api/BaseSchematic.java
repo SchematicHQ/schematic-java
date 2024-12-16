@@ -3,11 +3,11 @@
  */
 package com.schematic.api;
 
+import com.schematic.api.core.BaseSchematicApiException;
+import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.core.RequestOptions;
-import com.schematic.api.core.SchematicApiApiException;
-import com.schematic.api.core.SchematicApiException;
 import com.schematic.api.core.Suppliers;
 import com.schematic.api.resources.accesstokens.AccesstokensClient;
 import com.schematic.api.resources.accounts.AccountsClient;
@@ -30,7 +30,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class SchematicApiClient {
+public class BaseSchematic {
     protected final ClientOptions clientOptions;
 
     protected final Supplier<AccountsClient> accountsClient;
@@ -57,7 +57,7 @@ public class SchematicApiClient {
 
     protected final Supplier<WebhooksClient> webhooksClient;
 
-    public SchematicApiClient(ClientOptions clientOptions) {
+    public BaseSchematic(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.accountsClient = Suppliers.memoize(() -> new AccountsClient(clientOptions));
         this.featuresClient = Suppliers.memoize(() -> new FeaturesClient(clientOptions));
@@ -97,12 +97,12 @@ public class SchematicApiClient {
                 return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new SchematicApiApiException(
+            throw new BaseSchematicApiException(
                     "Error with status code " + response.code(),
                     response.code(),
                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
         } catch (IOException e) {
-            throw new SchematicApiException("Network error executing HTTP request", e);
+            throw new BaseSchematicException("Network error executing HTTP request", e);
         }
     }
 
@@ -152,9 +152,5 @@ public class SchematicApiClient {
 
     public WebhooksClient webhooks() {
         return this.webhooksClient.get();
-    }
-
-    public static SchematicApiClientBuilder builder() {
-        return new SchematicApiClientBuilder();
     }
 }
