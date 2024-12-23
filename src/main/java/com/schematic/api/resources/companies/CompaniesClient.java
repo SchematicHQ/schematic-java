@@ -533,7 +533,7 @@ public class CompaniesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("companies/lookup");
-        httpUrl.addQueryParameter("keys", request.getKeys());
+        // httpUrl.addQueryParameter("keys", request.getKeys());
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1997,7 +1997,7 @@ public class CompaniesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("users/lookup");
-        httpUrl.addQueryParameter("keys", request.getKeys());
+        // httpUrl.addQueryParameter("keys", request.getKeys());
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)

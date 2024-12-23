@@ -1275,7 +1275,7 @@ public class EntitlementsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("usage-by-company");
-        httpUrl.addQueryParameter("keys", request.getKeys());
+        // httpUrl.addQueryParameter("keys", request.getKeys());
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
