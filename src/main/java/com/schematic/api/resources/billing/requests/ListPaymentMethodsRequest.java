@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListPaymentMethodsRequest.Builder.class)
 public final class ListPaymentMethodsRequest {
     private final Optional<String> companyId;
@@ -178,7 +178,7 @@ public final class ListPaymentMethodsRequest {
          */
         @java.lang.Override
         public _FinalStage offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -195,7 +195,7 @@ public final class ListPaymentMethodsRequest {
          */
         @java.lang.Override
         public _FinalStage limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -208,7 +208,7 @@ public final class ListPaymentMethodsRequest {
 
         @java.lang.Override
         public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = Optional.of(subscriptionExternalId);
+            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
             return this;
         }
 
@@ -221,7 +221,7 @@ public final class ListPaymentMethodsRequest {
 
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FeatureCompanyResponseData.Builder.class)
 public final class FeatureCompanyResponseData {
     private final boolean access;
@@ -372,7 +372,7 @@ public final class FeatureCompanyResponseData {
          */
         @java.lang.Override
         public _FinalStage usage(Integer usage) {
-            this.usage = Optional.of(usage);
+            this.usage = Optional.ofNullable(usage);
             return this;
         }
 
@@ -385,7 +385,7 @@ public final class FeatureCompanyResponseData {
 
         @java.lang.Override
         public _FinalStage plan(PlanResponseData plan) {
-            this.plan = Optional.of(plan);
+            this.plan = Optional.ofNullable(plan);
             return this;
         }
 
@@ -402,7 +402,7 @@ public final class FeatureCompanyResponseData {
          */
         @java.lang.Override
         public _FinalStage period(String period) {
-            this.period = Optional.of(period);
+            this.period = Optional.ofNullable(period);
             return this;
         }
 
@@ -419,7 +419,7 @@ public final class FeatureCompanyResponseData {
          */
         @java.lang.Override
         public _FinalStage monthReset(String monthReset) {
-            this.monthReset = Optional.of(monthReset);
+            this.monthReset = Optional.ofNullable(monthReset);
             return this;
         }
 
@@ -436,7 +436,7 @@ public final class FeatureCompanyResponseData {
          */
         @java.lang.Override
         public _FinalStage metricResetAt(OffsetDateTime metricResetAt) {
-            this.metricResetAt = Optional.of(metricResetAt);
+            this.metricResetAt = Optional.ofNullable(metricResetAt);
             return this;
         }
 
@@ -449,7 +449,7 @@ public final class FeatureCompanyResponseData {
 
         @java.lang.Override
         public _FinalStage feature(FeatureDetailResponseData feature) {
-            this.feature = Optional.of(feature);
+            this.feature = Optional.ofNullable(feature);
             return this;
         }
 
@@ -462,7 +462,7 @@ public final class FeatureCompanyResponseData {
 
         @java.lang.Override
         public _FinalStage entitlementExpirationDate(OffsetDateTime entitlementExpirationDate) {
-            this.entitlementExpirationDate = Optional.of(entitlementExpirationDate);
+            this.entitlementExpirationDate = Optional.ofNullable(entitlementExpirationDate);
             return this;
         }
 
@@ -475,7 +475,7 @@ public final class FeatureCompanyResponseData {
 
         @java.lang.Override
         public _FinalStage company(CompanyDetailResponseData company) {
-            this.company = Optional.of(company);
+            this.company = Optional.ofNullable(company);
             return this;
         }
 
@@ -492,7 +492,7 @@ public final class FeatureCompanyResponseData {
          */
         @java.lang.Override
         public _FinalStage allocation(Integer allocation) {
-            this.allocation = Optional.of(allocation);
+            this.allocation = Optional.ofNullable(allocation);
             return this;
         }
 

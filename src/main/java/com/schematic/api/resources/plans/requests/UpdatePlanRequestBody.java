@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdatePlanRequestBody.Builder.class)
 public final class UpdatePlanRequestBody {
     private final Optional<String> description;
@@ -131,7 +131,7 @@ public final class UpdatePlanRequestBody {
 
         @java.lang.Override
         public _FinalStage icon(String icon) {
-            this.icon = Optional.of(icon);
+            this.icon = Optional.ofNullable(icon);
             return this;
         }
 
@@ -144,7 +144,7 @@ public final class UpdatePlanRequestBody {
 
         @java.lang.Override
         public _FinalStage description(String description) {
-            this.description = Optional.of(description);
+            this.description = Optional.ofNullable(description);
             return this;
         }
 

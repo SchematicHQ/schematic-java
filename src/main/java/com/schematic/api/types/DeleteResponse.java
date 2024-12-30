@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DeleteResponse.Builder.class)
 public final class DeleteResponse {
     private final Optional<Boolean> deleted;
@@ -87,7 +87,7 @@ public final class DeleteResponse {
         }
 
         public Builder deleted(Boolean deleted) {
-            this.deleted = Optional.of(deleted);
+            this.deleted = Optional.ofNullable(deleted);
             return this;
         }
 

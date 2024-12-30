@@ -20,6 +20,7 @@ import com.schematic.api.resources.billing.requests.CreateBillingCustomerRequest
 import com.schematic.api.resources.billing.requests.CreateBillingPriceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateBillingProductRequestBody;
 import com.schematic.api.resources.billing.requests.CreateBillingSubscriptionsRequestBody;
+import com.schematic.api.resources.billing.requests.CreateCouponRequestBody;
 import com.schematic.api.resources.billing.requests.CreateInvoiceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateMeterRequestBody;
 import com.schematic.api.resources.billing.requests.CreatePaymentMethodRequestBody;
@@ -40,6 +41,7 @@ import com.schematic.api.resources.billing.types.ListMetersResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
 import com.schematic.api.resources.billing.types.ListProductPricesResponse;
 import com.schematic.api.resources.billing.types.SearchBillingPricesResponse;
+import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingMeterResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingPriceResponse;
@@ -62,6 +64,66 @@ public class BillingClient {
 
     public BillingClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+    }
+
+    public UpsertBillingCouponResponse upsertBillingCoupon(CreateCouponRequestBody request) {
+        return upsertBillingCoupon(request, null);
+    }
+
+    public UpsertBillingCouponResponse upsertBillingCoupon(
+            CreateCouponRequestBody request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/coupons")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertBillingCouponResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
     }
 
     public UpsertBillingCustomerResponse upsertBillingCustomer(CreateBillingCustomerRequestBody request) {

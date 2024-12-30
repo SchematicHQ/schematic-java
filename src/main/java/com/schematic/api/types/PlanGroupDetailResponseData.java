@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanGroupDetailResponseData.Builder.class)
 public final class PlanGroupDetailResponseData {
     private final List<PlanGroupPlanDetailResponseData> addOns;
@@ -214,7 +214,7 @@ public final class PlanGroupDetailResponseData {
 
         @java.lang.Override
         public _FinalStage trialPaymentMethodRequired(Boolean trialPaymentMethodRequired) {
-            this.trialPaymentMethodRequired = Optional.of(trialPaymentMethodRequired);
+            this.trialPaymentMethodRequired = Optional.ofNullable(trialPaymentMethodRequired);
             return this;
         }
 
@@ -227,7 +227,7 @@ public final class PlanGroupDetailResponseData {
 
         @java.lang.Override
         public _FinalStage trialDays(Integer trialDays) {
-            this.trialDays = Optional.of(trialDays);
+            this.trialDays = Optional.ofNullable(trialDays);
             return this;
         }
 
@@ -260,7 +260,7 @@ public final class PlanGroupDetailResponseData {
 
         @java.lang.Override
         public _FinalStage defaultPlanId(String defaultPlanId) {
-            this.defaultPlanId = Optional.of(defaultPlanId);
+            this.defaultPlanId = Optional.ofNullable(defaultPlanId);
             return this;
         }
 
@@ -273,7 +273,7 @@ public final class PlanGroupDetailResponseData {
 
         @java.lang.Override
         public _FinalStage defaultPlan(PlanGroupPlanDetailResponseData defaultPlan) {
-            this.defaultPlan = Optional.of(defaultPlan);
+            this.defaultPlan = Optional.ofNullable(defaultPlan);
             return this;
         }
 

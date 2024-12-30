@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateOrUpdateConditionGroupRequestBody.Builder.class)
 public final class CreateOrUpdateConditionGroupRequestBody {
     private final List<CreateOrUpdateConditionRequestBody> conditions;
@@ -145,7 +145,7 @@ public final class CreateOrUpdateConditionGroupRequestBody {
         }
 
         public Builder flagId(String flagId) {
-            this.flagId = Optional.of(flagId);
+            this.flagId = Optional.ofNullable(flagId);
             return this;
         }
 
@@ -156,7 +156,7 @@ public final class CreateOrUpdateConditionGroupRequestBody {
         }
 
         public Builder id(String id) {
-            this.id = Optional.of(id);
+            this.id = Optional.ofNullable(id);
             return this;
         }
 
@@ -167,7 +167,7 @@ public final class CreateOrUpdateConditionGroupRequestBody {
         }
 
         public Builder planId(String planId) {
-            this.planId = Optional.of(planId);
+            this.planId = Optional.ofNullable(planId);
             return this;
         }
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PaymentMethodResponseData.Builder.class)
 public final class PaymentMethodResponseData {
     private final Optional<String> accountLast4;
@@ -457,7 +457,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = Optional.of(subscriptionExternalId);
+            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
             return this;
         }
 
@@ -470,7 +470,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -483,7 +483,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage cardLast4(String cardLast4) {
-            this.cardLast4 = Optional.of(cardLast4);
+            this.cardLast4 = Optional.ofNullable(cardLast4);
             return this;
         }
 
@@ -496,7 +496,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage cardExpYear(Integer cardExpYear) {
-            this.cardExpYear = Optional.of(cardExpYear);
+            this.cardExpYear = Optional.ofNullable(cardExpYear);
             return this;
         }
 
@@ -509,7 +509,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage cardExpMonth(Integer cardExpMonth) {
-            this.cardExpMonth = Optional.of(cardExpMonth);
+            this.cardExpMonth = Optional.ofNullable(cardExpMonth);
             return this;
         }
 
@@ -522,7 +522,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage cardBrand(String cardBrand) {
-            this.cardBrand = Optional.of(cardBrand);
+            this.cardBrand = Optional.ofNullable(cardBrand);
             return this;
         }
 
@@ -535,7 +535,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage billingName(String billingName) {
-            this.billingName = Optional.of(billingName);
+            this.billingName = Optional.ofNullable(billingName);
             return this;
         }
 
@@ -548,7 +548,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage billingEmail(String billingEmail) {
-            this.billingEmail = Optional.of(billingEmail);
+            this.billingEmail = Optional.ofNullable(billingEmail);
             return this;
         }
 
@@ -561,7 +561,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage bankName(String bankName) {
-            this.bankName = Optional.of(bankName);
+            this.bankName = Optional.ofNullable(bankName);
             return this;
         }
 
@@ -574,7 +574,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage accountName(String accountName) {
-            this.accountName = Optional.of(accountName);
+            this.accountName = Optional.ofNullable(accountName);
             return this;
         }
 
@@ -587,7 +587,7 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         public _FinalStage accountLast4(String accountLast4) {
-            this.accountLast4 = Optional.of(accountLast4);
+            this.accountLast4 = Optional.ofNullable(accountLast4);
             return this;
         }
 

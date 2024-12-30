@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetActiveDealsParams.Builder.class)
 public final class GetActiveDealsParams {
     private final Optional<String> companyId;
@@ -131,7 +131,7 @@ public final class GetActiveDealsParams {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -142,7 +142,7 @@ public final class GetActiveDealsParams {
         }
 
         public Builder dealStage(String dealStage) {
-            this.dealStage = Optional.of(dealStage);
+            this.dealStage = Optional.ofNullable(dealStage);
             return this;
         }
 
@@ -153,7 +153,7 @@ public final class GetActiveDealsParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -164,7 +164,7 @@ public final class GetActiveDealsParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 

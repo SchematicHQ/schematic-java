@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListCompaniesRequest.Builder.class)
 public final class ListCompaniesRequest {
     private final Optional<String> ids;
@@ -192,7 +192,7 @@ public final class ListCompaniesRequest {
         }
 
         public Builder ids(String ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -203,7 +203,7 @@ public final class ListCompaniesRequest {
         }
 
         public Builder planId(String planId) {
-            this.planId = Optional.of(planId);
+            this.planId = Optional.ofNullable(planId);
             return this;
         }
 
@@ -214,7 +214,7 @@ public final class ListCompaniesRequest {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -225,7 +225,7 @@ public final class ListCompaniesRequest {
         }
 
         public Builder withoutFeatureOverrideFor(String withoutFeatureOverrideFor) {
-            this.withoutFeatureOverrideFor = Optional.of(withoutFeatureOverrideFor);
+            this.withoutFeatureOverrideFor = Optional.ofNullable(withoutFeatureOverrideFor);
             return this;
         }
 
@@ -236,7 +236,7 @@ public final class ListCompaniesRequest {
         }
 
         public Builder withoutPlan(Boolean withoutPlan) {
-            this.withoutPlan = Optional.of(withoutPlan);
+            this.withoutPlan = Optional.ofNullable(withoutPlan);
             return this;
         }
 
@@ -247,7 +247,7 @@ public final class ListCompaniesRequest {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -258,7 +258,7 @@ public final class ListCompaniesRequest {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 

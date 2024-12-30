@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateEntityTraitDefinitionRequestBody.Builder.class)
 public final class CreateEntityTraitDefinitionRequestBody {
     private final Optional<String> displayName;
@@ -184,7 +184,7 @@ public final class CreateEntityTraitDefinitionRequestBody {
 
         @java.lang.Override
         public _FinalStage displayName(String displayName) {
-            this.displayName = Optional.of(displayName);
+            this.displayName = Optional.ofNullable(displayName);
             return this;
         }
 

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountApiRequestsParams.Builder.class)
 public final class CountApiRequestsParams {
     private final Optional<String> environmentId;
@@ -144,7 +144,7 @@ public final class CountApiRequestsParams {
         }
 
         public Builder environmentId(String environmentId) {
-            this.environmentId = Optional.of(environmentId);
+            this.environmentId = Optional.ofNullable(environmentId);
             return this;
         }
 
@@ -155,7 +155,7 @@ public final class CountApiRequestsParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -166,7 +166,7 @@ public final class CountApiRequestsParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -177,7 +177,7 @@ public final class CountApiRequestsParams {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -188,7 +188,7 @@ public final class CountApiRequestsParams {
         }
 
         public Builder requestType(String requestType) {
-            this.requestType = Optional.of(requestType);
+            this.requestType = Optional.ofNullable(requestType);
             return this;
         }
 

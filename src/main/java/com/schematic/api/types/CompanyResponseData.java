@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyResponseData.Builder.class)
 public final class CompanyResponseData {
     private final OffsetDateTime createdAt;
@@ -232,7 +232,7 @@ public final class CompanyResponseData {
 
         @java.lang.Override
         public _FinalStage logoUrl(String logoUrl) {
-            this.logoUrl = Optional.of(logoUrl);
+            this.logoUrl = Optional.ofNullable(logoUrl);
             return this;
         }
 
@@ -245,7 +245,7 @@ public final class CompanyResponseData {
 
         @java.lang.Override
         public _FinalStage lastSeenAt(OffsetDateTime lastSeenAt) {
-            this.lastSeenAt = Optional.of(lastSeenAt);
+            this.lastSeenAt = Optional.ofNullable(lastSeenAt);
             return this;
         }
 

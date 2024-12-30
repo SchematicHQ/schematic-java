@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateFeatureRequestBody.Builder.class)
 public final class UpdateFeatureRequestBody {
     private final Optional<String> description;
@@ -201,7 +201,7 @@ public final class UpdateFeatureRequestBody {
         }
 
         public Builder description(String description) {
-            this.description = Optional.of(description);
+            this.description = Optional.ofNullable(description);
             return this;
         }
 
@@ -212,7 +212,7 @@ public final class UpdateFeatureRequestBody {
         }
 
         public Builder eventSubtype(String eventSubtype) {
-            this.eventSubtype = Optional.of(eventSubtype);
+            this.eventSubtype = Optional.ofNullable(eventSubtype);
             return this;
         }
 
@@ -223,7 +223,7 @@ public final class UpdateFeatureRequestBody {
         }
 
         public Builder featureType(UpdateFeatureRequestBodyFeatureType featureType) {
-            this.featureType = Optional.of(featureType);
+            this.featureType = Optional.ofNullable(featureType);
             return this;
         }
 
@@ -234,7 +234,7 @@ public final class UpdateFeatureRequestBody {
         }
 
         public Builder flag(CreateOrUpdateFlagRequestBody flag) {
-            this.flag = Optional.of(flag);
+            this.flag = Optional.ofNullable(flag);
             return this;
         }
 
@@ -245,7 +245,7 @@ public final class UpdateFeatureRequestBody {
         }
 
         public Builder icon(String icon) {
-            this.icon = Optional.of(icon);
+            this.icon = Optional.ofNullable(icon);
             return this;
         }
 
@@ -256,7 +256,7 @@ public final class UpdateFeatureRequestBody {
         }
 
         public Builder lifecyclePhase(String lifecyclePhase) {
-            this.lifecyclePhase = Optional.of(lifecyclePhase);
+            this.lifecyclePhase = Optional.ofNullable(lifecyclePhase);
             return this;
         }
 
@@ -267,7 +267,7 @@ public final class UpdateFeatureRequestBody {
         }
 
         public Builder maintainerId(String maintainerId) {
-            this.maintainerId = Optional.of(maintainerId);
+            this.maintainerId = Optional.ofNullable(maintainerId);
             return this;
         }
 
@@ -278,7 +278,7 @@ public final class UpdateFeatureRequestBody {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -289,7 +289,7 @@ public final class UpdateFeatureRequestBody {
         }
 
         public Builder traitId(String traitId) {
-            this.traitId = Optional.of(traitId);
+            this.traitId = Optional.ofNullable(traitId);
             return this;
         }
 

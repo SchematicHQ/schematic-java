@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountCompanyOverridesParams.Builder.class)
 public final class CountCompanyOverridesParams {
     private final Optional<String> companyId;
@@ -37,6 +37,8 @@ public final class CountCompanyOverridesParams {
 
     private final Optional<String> q;
 
+    private final Optional<Boolean> withoutExpired;
+
     private final Map<String, Object> additionalProperties;
 
     private CountCompanyOverridesParams(
@@ -48,6 +50,7 @@ public final class CountCompanyOverridesParams {
             Optional<Integer> limit,
             Optional<Integer> offset,
             Optional<String> q,
+            Optional<Boolean> withoutExpired,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.companyIds = companyIds;
@@ -57,6 +60,7 @@ public final class CountCompanyOverridesParams {
         this.limit = limit;
         this.offset = offset;
         this.q = q;
+        this.withoutExpired = withoutExpired;
         this.additionalProperties = additionalProperties;
     }
 
@@ -124,6 +128,14 @@ public final class CountCompanyOverridesParams {
         return q;
     }
 
+    /**
+     * @return Filter company overrides by whether they have not expired
+     */
+    @JsonProperty("without_expired")
+    public Optional<Boolean> getWithoutExpired() {
+        return withoutExpired;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -143,7 +155,8 @@ public final class CountCompanyOverridesParams {
                 && ids.equals(other.ids)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
-                && q.equals(other.q);
+                && q.equals(other.q)
+                && withoutExpired.equals(other.withoutExpired);
     }
 
     @java.lang.Override
@@ -156,7 +169,8 @@ public final class CountCompanyOverridesParams {
                 this.ids,
                 this.limit,
                 this.offset,
-                this.q);
+                this.q,
+                this.withoutExpired);
     }
 
     @java.lang.Override
@@ -186,6 +200,8 @@ public final class CountCompanyOverridesParams {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<Boolean> withoutExpired = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -200,6 +216,7 @@ public final class CountCompanyOverridesParams {
             limit(other.getLimit());
             offset(other.getOffset());
             q(other.getQ());
+            withoutExpired(other.getWithoutExpired());
             return this;
         }
 
@@ -210,7 +227,7 @@ public final class CountCompanyOverridesParams {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -221,7 +238,7 @@ public final class CountCompanyOverridesParams {
         }
 
         public Builder companyIds(List<String> companyIds) {
-            this.companyIds = Optional.of(companyIds);
+            this.companyIds = Optional.ofNullable(companyIds);
             return this;
         }
 
@@ -232,7 +249,7 @@ public final class CountCompanyOverridesParams {
         }
 
         public Builder featureId(String featureId) {
-            this.featureId = Optional.of(featureId);
+            this.featureId = Optional.ofNullable(featureId);
             return this;
         }
 
@@ -243,7 +260,7 @@ public final class CountCompanyOverridesParams {
         }
 
         public Builder featureIds(List<String> featureIds) {
-            this.featureIds = Optional.of(featureIds);
+            this.featureIds = Optional.ofNullable(featureIds);
             return this;
         }
 
@@ -254,7 +271,7 @@ public final class CountCompanyOverridesParams {
         }
 
         public Builder ids(List<String> ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -265,7 +282,7 @@ public final class CountCompanyOverridesParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -276,7 +293,7 @@ public final class CountCompanyOverridesParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -287,13 +304,33 @@ public final class CountCompanyOverridesParams {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
+            return this;
+        }
+
+        @JsonSetter(value = "without_expired", nulls = Nulls.SKIP)
+        public Builder withoutExpired(Optional<Boolean> withoutExpired) {
+            this.withoutExpired = withoutExpired;
+            return this;
+        }
+
+        public Builder withoutExpired(Boolean withoutExpired) {
+            this.withoutExpired = Optional.ofNullable(withoutExpired);
             return this;
         }
 
         public CountCompanyOverridesParams build() {
             return new CountCompanyOverridesParams(
-                    companyId, companyIds, featureId, featureIds, ids, limit, offset, q, additionalProperties);
+                    companyId,
+                    companyIds,
+                    featureId,
+                    featureIds,
+                    ids,
+                    limit,
+                    offset,
+                    q,
+                    withoutExpired,
+                    additionalProperties);
         }
     }
 }

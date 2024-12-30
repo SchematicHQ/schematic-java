@@ -20,14 +20,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreatePlanEntitlementRequestBody.Builder.class)
 public final class CreatePlanEntitlementRequestBody {
     private final String featureId;
-
-    private final Optional<String> meteredMonthlyPriceId;
-
-    private final Optional<String> meteredYearlyPriceId;
 
     private final Optional<CreatePlanEntitlementRequestBodyMetricPeriod> metricPeriod;
 
@@ -53,8 +49,6 @@ public final class CreatePlanEntitlementRequestBody {
 
     private CreatePlanEntitlementRequestBody(
             String featureId,
-            Optional<String> meteredMonthlyPriceId,
-            Optional<String> meteredYearlyPriceId,
             Optional<CreatePlanEntitlementRequestBodyMetricPeriod> metricPeriod,
             Optional<CreatePlanEntitlementRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<String> monthlyMeteredPriceId,
@@ -67,8 +61,6 @@ public final class CreatePlanEntitlementRequestBody {
             Optional<String> yearlyMeteredPriceId,
             Map<String, Object> additionalProperties) {
         this.featureId = featureId;
-        this.meteredMonthlyPriceId = meteredMonthlyPriceId;
-        this.meteredYearlyPriceId = meteredYearlyPriceId;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.monthlyMeteredPriceId = monthlyMeteredPriceId;
@@ -85,16 +77,6 @@ public final class CreatePlanEntitlementRequestBody {
     @JsonProperty("feature_id")
     public String getFeatureId() {
         return featureId;
-    }
-
-    @JsonProperty("metered_monthly_price_id")
-    public Optional<String> getMeteredMonthlyPriceId() {
-        return meteredMonthlyPriceId;
-    }
-
-    @JsonProperty("metered_yearly_price_id")
-    public Optional<String> getMeteredYearlyPriceId() {
-        return meteredYearlyPriceId;
     }
 
     @JsonProperty("metric_period")
@@ -160,8 +142,6 @@ public final class CreatePlanEntitlementRequestBody {
 
     private boolean equalTo(CreatePlanEntitlementRequestBody other) {
         return featureId.equals(other.featureId)
-                && meteredMonthlyPriceId.equals(other.meteredMonthlyPriceId)
-                && meteredYearlyPriceId.equals(other.meteredYearlyPriceId)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && monthlyMeteredPriceId.equals(other.monthlyMeteredPriceId)
@@ -178,8 +158,6 @@ public final class CreatePlanEntitlementRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.featureId,
-                this.meteredMonthlyPriceId,
-                this.meteredYearlyPriceId,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
                 this.monthlyMeteredPriceId,
@@ -217,14 +195,6 @@ public final class CreatePlanEntitlementRequestBody {
 
     public interface _FinalStage {
         CreatePlanEntitlementRequestBody build();
-
-        _FinalStage meteredMonthlyPriceId(Optional<String> meteredMonthlyPriceId);
-
-        _FinalStage meteredMonthlyPriceId(String meteredMonthlyPriceId);
-
-        _FinalStage meteredYearlyPriceId(Optional<String> meteredYearlyPriceId);
-
-        _FinalStage meteredYearlyPriceId(String meteredYearlyPriceId);
 
         _FinalStage metricPeriod(Optional<CreatePlanEntitlementRequestBodyMetricPeriod> metricPeriod);
 
@@ -286,10 +256,6 @@ public final class CreatePlanEntitlementRequestBody {
 
         private Optional<CreatePlanEntitlementRequestBodyMetricPeriod> metricPeriod = Optional.empty();
 
-        private Optional<String> meteredYearlyPriceId = Optional.empty();
-
-        private Optional<String> meteredMonthlyPriceId = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -298,8 +264,6 @@ public final class CreatePlanEntitlementRequestBody {
         @java.lang.Override
         public Builder from(CreatePlanEntitlementRequestBody other) {
             featureId(other.getFeatureId());
-            meteredMonthlyPriceId(other.getMeteredMonthlyPriceId());
-            meteredYearlyPriceId(other.getMeteredYearlyPriceId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             monthlyMeteredPriceId(other.getMonthlyMeteredPriceId());
@@ -336,7 +300,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         @java.lang.Override
         public _FinalStage yearlyMeteredPriceId(String yearlyMeteredPriceId) {
-            this.yearlyMeteredPriceId = Optional.of(yearlyMeteredPriceId);
+            this.yearlyMeteredPriceId = Optional.ofNullable(yearlyMeteredPriceId);
             return this;
         }
 
@@ -349,7 +313,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         @java.lang.Override
         public _FinalStage valueTraitId(String valueTraitId) {
-            this.valueTraitId = Optional.of(valueTraitId);
+            this.valueTraitId = Optional.ofNullable(valueTraitId);
             return this;
         }
 
@@ -362,7 +326,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         @java.lang.Override
         public _FinalStage valueNumeric(Integer valueNumeric) {
-            this.valueNumeric = Optional.of(valueNumeric);
+            this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
@@ -375,7 +339,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         @java.lang.Override
         public _FinalStage valueBool(Boolean valueBool) {
-            this.valueBool = Optional.of(valueBool);
+            this.valueBool = Optional.ofNullable(valueBool);
             return this;
         }
 
@@ -388,7 +352,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         @java.lang.Override
         public _FinalStage priceBehavior(String priceBehavior) {
-            this.priceBehavior = Optional.of(priceBehavior);
+            this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
         }
 
@@ -401,7 +365,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         @java.lang.Override
         public _FinalStage monthlyMeteredPriceId(String monthlyMeteredPriceId) {
-            this.monthlyMeteredPriceId = Optional.of(monthlyMeteredPriceId);
+            this.monthlyMeteredPriceId = Optional.ofNullable(monthlyMeteredPriceId);
             return this;
         }
 
@@ -415,7 +379,7 @@ public final class CreatePlanEntitlementRequestBody {
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(
                 CreatePlanEntitlementRequestBodyMetricPeriodMonthReset metricPeriodMonthReset) {
-            this.metricPeriodMonthReset = Optional.of(metricPeriodMonthReset);
+            this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
@@ -429,7 +393,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         @java.lang.Override
         public _FinalStage metricPeriod(CreatePlanEntitlementRequestBodyMetricPeriod metricPeriod) {
-            this.metricPeriod = Optional.of(metricPeriod);
+            this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
@@ -441,37 +405,9 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage meteredYearlyPriceId(String meteredYearlyPriceId) {
-            this.meteredYearlyPriceId = Optional.of(meteredYearlyPriceId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "metered_yearly_price_id", nulls = Nulls.SKIP)
-        public _FinalStage meteredYearlyPriceId(Optional<String> meteredYearlyPriceId) {
-            this.meteredYearlyPriceId = meteredYearlyPriceId;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage meteredMonthlyPriceId(String meteredMonthlyPriceId) {
-            this.meteredMonthlyPriceId = Optional.of(meteredMonthlyPriceId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "metered_monthly_price_id", nulls = Nulls.SKIP)
-        public _FinalStage meteredMonthlyPriceId(Optional<String> meteredMonthlyPriceId) {
-            this.meteredMonthlyPriceId = meteredMonthlyPriceId;
-            return this;
-        }
-
-        @java.lang.Override
         public CreatePlanEntitlementRequestBody build() {
             return new CreatePlanEntitlementRequestBody(
                     featureId,
-                    meteredMonthlyPriceId,
-                    meteredYearlyPriceId,
                     metricPeriod,
                     metricPeriodMonthReset,
                     monthlyMeteredPriceId,

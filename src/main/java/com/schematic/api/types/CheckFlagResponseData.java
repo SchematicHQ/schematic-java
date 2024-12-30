@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CheckFlagResponseData.Builder.class)
 public final class CheckFlagResponseData {
     private final Optional<String> companyId;
@@ -208,7 +208,7 @@ public final class CheckFlagResponseData {
 
         @java.lang.Override
         public _FinalStage userId(String userId) {
-            this.userId = Optional.of(userId);
+            this.userId = Optional.ofNullable(userId);
             return this;
         }
 
@@ -221,7 +221,7 @@ public final class CheckFlagResponseData {
 
         @java.lang.Override
         public _FinalStage ruleId(String ruleId) {
-            this.ruleId = Optional.of(ruleId);
+            this.ruleId = Optional.ofNullable(ruleId);
             return this;
         }
 
@@ -234,7 +234,7 @@ public final class CheckFlagResponseData {
 
         @java.lang.Override
         public _FinalStage flagId(String flagId) {
-            this.flagId = Optional.of(flagId);
+            this.flagId = Optional.ofNullable(flagId);
             return this;
         }
 
@@ -247,7 +247,7 @@ public final class CheckFlagResponseData {
 
         @java.lang.Override
         public _FinalStage error(String error) {
-            this.error = Optional.of(error);
+            this.error = Optional.ofNullable(error);
             return this;
         }
 
@@ -260,7 +260,7 @@ public final class CheckFlagResponseData {
 
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 

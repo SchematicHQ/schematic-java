@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanEntitlementResponseData.Builder.class)
 public final class PlanEntitlementResponseData {
     private final OffsetDateTime createdAt;
@@ -483,7 +483,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage valueTraitId(String valueTraitId) {
-            this.valueTraitId = Optional.of(valueTraitId);
+            this.valueTraitId = Optional.ofNullable(valueTraitId);
             return this;
         }
 
@@ -496,7 +496,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage valueTrait(EntityTraitDefinitionResponseData valueTrait) {
-            this.valueTrait = Optional.of(valueTrait);
+            this.valueTrait = Optional.ofNullable(valueTrait);
             return this;
         }
 
@@ -509,7 +509,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage valueNumeric(Integer valueNumeric) {
-            this.valueNumeric = Optional.of(valueNumeric);
+            this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
@@ -522,7 +522,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage valueBool(Boolean valueBool) {
-            this.valueBool = Optional.of(valueBool);
+            this.valueBool = Optional.ofNullable(valueBool);
             return this;
         }
 
@@ -535,7 +535,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage priceBehavior(String priceBehavior) {
-            this.priceBehavior = Optional.of(priceBehavior);
+            this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
         }
 
@@ -548,7 +548,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage plan(PlanResponseData plan) {
-            this.plan = Optional.of(plan);
+            this.plan = Optional.ofNullable(plan);
             return this;
         }
 
@@ -561,7 +561,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset) {
-            this.metricPeriodMonthReset = Optional.of(metricPeriodMonthReset);
+            this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
@@ -574,7 +574,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage metricPeriod(String metricPeriod) {
-            this.metricPeriod = Optional.of(metricPeriod);
+            this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
@@ -587,7 +587,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage meteredYearlyPrice(BillingPriceView meteredYearlyPrice) {
-            this.meteredYearlyPrice = Optional.of(meteredYearlyPrice);
+            this.meteredYearlyPrice = Optional.ofNullable(meteredYearlyPrice);
             return this;
         }
 
@@ -600,7 +600,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage meteredMonthlyPrice(BillingPriceView meteredMonthlyPrice) {
-            this.meteredMonthlyPrice = Optional.of(meteredMonthlyPrice);
+            this.meteredMonthlyPrice = Optional.ofNullable(meteredMonthlyPrice);
             return this;
         }
 
@@ -613,7 +613,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage feature(FeatureResponseData feature) {
-            this.feature = Optional.of(feature);
+            this.feature = Optional.ofNullable(feature);
             return this;
         }
 

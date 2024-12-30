@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RawEventResponseData.Builder.class)
 public final class RawEventResponseData {
     private final OffsetDateTime capturedAt;
@@ -190,7 +190,7 @@ public final class RawEventResponseData {
 
         @java.lang.Override
         public _FinalStage eventId(String eventId) {
-            this.eventId = Optional.of(eventId);
+            this.eventId = Optional.ofNullable(eventId);
             return this;
         }
 

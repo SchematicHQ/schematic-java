@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PreviewComponentDataParams.Builder.class)
 public final class PreviewComponentDataParams {
     private final Optional<String> companyId;
@@ -96,7 +96,7 @@ public final class PreviewComponentDataParams {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -107,7 +107,7 @@ public final class PreviewComponentDataParams {
         }
 
         public Builder componentId(String componentId) {
-            this.componentId = Optional.of(componentId);
+            this.componentId = Optional.ofNullable(componentId);
             return this;
         }
 

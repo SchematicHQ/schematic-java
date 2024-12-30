@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetEventSummariesParams.Builder.class)
 public final class GetEventSummariesParams {
     private final Optional<List<String>> eventSubtypes;
@@ -132,7 +132,7 @@ public final class GetEventSummariesParams {
         }
 
         public Builder eventSubtypes(List<String> eventSubtypes) {
-            this.eventSubtypes = Optional.of(eventSubtypes);
+            this.eventSubtypes = Optional.ofNullable(eventSubtypes);
             return this;
         }
 
@@ -143,7 +143,7 @@ public final class GetEventSummariesParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -154,7 +154,7 @@ public final class GetEventSummariesParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -165,7 +165,7 @@ public final class GetEventSummariesParams {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 

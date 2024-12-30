@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventResponseData.Builder.class)
 public final class EventResponseData {
     private final Optional<String> apiKey;
@@ -451,7 +451,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage userId(String userId) {
-            this.userId = Optional.of(userId);
+            this.userId = Optional.ofNullable(userId);
             return this;
         }
 
@@ -464,7 +464,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage subtype(String subtype) {
-            this.subtype = Optional.of(subtype);
+            this.subtype = Optional.ofNullable(subtype);
             return this;
         }
 
@@ -477,7 +477,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage sentAt(OffsetDateTime sentAt) {
-            this.sentAt = Optional.of(sentAt);
+            this.sentAt = Optional.ofNullable(sentAt);
             return this;
         }
 
@@ -490,7 +490,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage processedAt(OffsetDateTime processedAt) {
-            this.processedAt = Optional.of(processedAt);
+            this.processedAt = Optional.ofNullable(processedAt);
             return this;
         }
 
@@ -503,7 +503,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage loadedAt(OffsetDateTime loadedAt) {
-            this.loadedAt = Optional.of(loadedAt);
+            this.loadedAt = Optional.ofNullable(loadedAt);
             return this;
         }
 
@@ -536,7 +536,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage errorMessage(String errorMessage) {
-            this.errorMessage = Optional.of(errorMessage);
+            this.errorMessage = Optional.ofNullable(errorMessage);
             return this;
         }
 
@@ -549,7 +549,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage environmentId(String environmentId) {
-            this.environmentId = Optional.of(environmentId);
+            this.environmentId = Optional.ofNullable(environmentId);
             return this;
         }
 
@@ -562,7 +562,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage enrichedAt(OffsetDateTime enrichedAt) {
-            this.enrichedAt = Optional.of(enrichedAt);
+            this.enrichedAt = Optional.ofNullable(enrichedAt);
             return this;
         }
 
@@ -575,7 +575,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -608,7 +608,7 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage apiKey(String apiKey) {
-            this.apiKey = Optional.of(apiKey);
+            this.apiKey = Optional.ofNullable(apiKey);
             return this;
         }
 

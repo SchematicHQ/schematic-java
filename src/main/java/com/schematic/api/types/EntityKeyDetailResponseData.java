@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EntityKeyDetailResponseData.Builder.class)
 public final class EntityKeyDetailResponseData {
     private final OffsetDateTime createdAt;
@@ -329,7 +329,7 @@ public final class EntityKeyDetailResponseData {
 
         @java.lang.Override
         public _FinalStage definition(EntityKeyDefinitionResponseData definition) {
-            this.definition = Optional.of(definition);
+            this.definition = Optional.ofNullable(definition);
             return this;
         }
 

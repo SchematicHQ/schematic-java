@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateOrUpdateRuleRequestBody.Builder.class)
 public final class CreateOrUpdateRuleRequestBody {
     private final List<CreateOrUpdateConditionGroupRequestBody> conditionGroups;
@@ -222,7 +222,7 @@ public final class CreateOrUpdateRuleRequestBody {
 
         @java.lang.Override
         public _FinalStage ruleType(CreateOrUpdateRuleRequestBodyRuleType ruleType) {
-            this.ruleType = Optional.of(ruleType);
+            this.ruleType = Optional.ofNullable(ruleType);
             return this;
         }
 
@@ -235,7 +235,7 @@ public final class CreateOrUpdateRuleRequestBody {
 
         @java.lang.Override
         public _FinalStage id(String id) {
-            this.id = Optional.of(id);
+            this.id = Optional.ofNullable(id);
             return this;
         }
 

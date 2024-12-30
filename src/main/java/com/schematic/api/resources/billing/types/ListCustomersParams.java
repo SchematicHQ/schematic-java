@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListCustomersParams.Builder.class)
 public final class ListCustomersParams {
     private final Optional<Boolean> failedToImport;
@@ -144,7 +144,7 @@ public final class ListCustomersParams {
         }
 
         public Builder failedToImport(Boolean failedToImport) {
-            this.failedToImport = Optional.of(failedToImport);
+            this.failedToImport = Optional.ofNullable(failedToImport);
             return this;
         }
 
@@ -155,7 +155,7 @@ public final class ListCustomersParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -166,7 +166,7 @@ public final class ListCustomersParams {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -177,7 +177,7 @@ public final class ListCustomersParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -188,7 +188,7 @@ public final class ListCustomersParams {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 

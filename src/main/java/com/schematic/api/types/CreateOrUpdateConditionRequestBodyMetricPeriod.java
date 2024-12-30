@@ -8,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum CreateOrUpdateConditionRequestBodyMetricPeriod {
     ALL_TIME("all_time"),
 
-    BILLING("billing"),
-
     CURRENT_MONTH("current_month"),
 
     CURRENT_WEEK("current_week"),

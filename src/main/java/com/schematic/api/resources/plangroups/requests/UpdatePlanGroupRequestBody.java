@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdatePlanGroupRequestBody.Builder.class)
 public final class UpdatePlanGroupRequestBody {
     private final List<String> addOnIds;
@@ -158,7 +158,7 @@ public final class UpdatePlanGroupRequestBody {
         }
 
         public Builder defaultPlanId(String defaultPlanId) {
-            this.defaultPlanId = Optional.of(defaultPlanId);
+            this.defaultPlanId = Optional.ofNullable(defaultPlanId);
             return this;
         }
 
@@ -186,7 +186,7 @@ public final class UpdatePlanGroupRequestBody {
         }
 
         public Builder trialDays(Integer trialDays) {
-            this.trialDays = Optional.of(trialDays);
+            this.trialDays = Optional.ofNullable(trialDays);
             return this;
         }
 
@@ -197,7 +197,7 @@ public final class UpdatePlanGroupRequestBody {
         }
 
         public Builder trialPaymentMethodRequired(Boolean trialPaymentMethodRequired) {
-            this.trialPaymentMethodRequired = Optional.of(trialPaymentMethodRequired);
+            this.trialPaymentMethodRequired = Optional.ofNullable(trialPaymentMethodRequired);
             return this;
         }
 

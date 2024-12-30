@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserDetailResponseData.Builder.class)
 public final class UserDetailResponseData {
     private final List<CompanyMembershipDetailResponseData> companyMemberships;
@@ -308,7 +308,7 @@ public final class UserDetailResponseData {
          */
         @java.lang.Override
         public _FinalStage traits(Map<String, JsonNode> traits) {
-            this.traits = Optional.of(traits);
+            this.traits = Optional.ofNullable(traits);
             return this;
         }
 
@@ -321,7 +321,7 @@ public final class UserDetailResponseData {
 
         @java.lang.Override
         public _FinalStage lastSeenAt(OffsetDateTime lastSeenAt) {
-            this.lastSeenAt = Optional.of(lastSeenAt);
+            this.lastSeenAt = Optional.ofNullable(lastSeenAt);
             return this;
         }
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingCustomerResponseData.Builder.class)
 public final class BillingCustomerResponseData {
     private final Optional<String> companyId;
@@ -269,7 +269,7 @@ public final class BillingCustomerResponseData {
 
         @java.lang.Override
         public _FinalStage deletedAt(OffsetDateTime deletedAt) {
-            this.deletedAt = Optional.of(deletedAt);
+            this.deletedAt = Optional.ofNullable(deletedAt);
             return this;
         }
 
@@ -282,7 +282,7 @@ public final class BillingCustomerResponseData {
 
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 

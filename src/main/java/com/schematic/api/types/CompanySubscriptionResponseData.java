@@ -20,12 +20,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanySubscriptionResponseData.Builder.class)
 public final class CompanySubscriptionResponseData {
     private final String currency;
 
     private final String customerExternalId;
+
+    private final List<BillingSubscriptionDiscountView> discounts;
 
     private final Optional<OffsetDateTime> expiredAt;
 
@@ -43,11 +45,14 @@ public final class CompanySubscriptionResponseData {
 
     private final int totalPrice;
 
+    private final Optional<OffsetDateTime> trialEnd;
+
     private final Map<String, Object> additionalProperties;
 
     private CompanySubscriptionResponseData(
             String currency,
             String customerExternalId,
+            List<BillingSubscriptionDiscountView> discounts,
             Optional<OffsetDateTime> expiredAt,
             String interval,
             Optional<InvoiceResponseData> latestInvoice,
@@ -56,9 +61,11 @@ public final class CompanySubscriptionResponseData {
             String status,
             String subscriptionExternalId,
             int totalPrice,
+            Optional<OffsetDateTime> trialEnd,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.customerExternalId = customerExternalId;
+        this.discounts = discounts;
         this.expiredAt = expiredAt;
         this.interval = interval;
         this.latestInvoice = latestInvoice;
@@ -67,6 +74,7 @@ public final class CompanySubscriptionResponseData {
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.totalPrice = totalPrice;
+        this.trialEnd = trialEnd;
         this.additionalProperties = additionalProperties;
     }
 
@@ -78,6 +86,11 @@ public final class CompanySubscriptionResponseData {
     @JsonProperty("customer_external_id")
     public String getCustomerExternalId() {
         return customerExternalId;
+    }
+
+    @JsonProperty("discounts")
+    public List<BillingSubscriptionDiscountView> getDiscounts() {
+        return discounts;
     }
 
     @JsonProperty("expired_at")
@@ -120,6 +133,11 @@ public final class CompanySubscriptionResponseData {
         return totalPrice;
     }
 
+    @JsonProperty("trial_end")
+    public Optional<OffsetDateTime> getTrialEnd() {
+        return trialEnd;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -134,6 +152,7 @@ public final class CompanySubscriptionResponseData {
     private boolean equalTo(CompanySubscriptionResponseData other) {
         return currency.equals(other.currency)
                 && customerExternalId.equals(other.customerExternalId)
+                && discounts.equals(other.discounts)
                 && expiredAt.equals(other.expiredAt)
                 && interval.equals(other.interval)
                 && latestInvoice.equals(other.latestInvoice)
@@ -141,7 +160,8 @@ public final class CompanySubscriptionResponseData {
                 && products.equals(other.products)
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
-                && totalPrice == other.totalPrice;
+                && totalPrice == other.totalPrice
+                && trialEnd.equals(other.trialEnd);
     }
 
     @java.lang.Override
@@ -149,6 +169,7 @@ public final class CompanySubscriptionResponseData {
         return Objects.hash(
                 this.currency,
                 this.customerExternalId,
+                this.discounts,
                 this.expiredAt,
                 this.interval,
                 this.latestInvoice,
@@ -156,7 +177,8 @@ public final class CompanySubscriptionResponseData {
                 this.products,
                 this.status,
                 this.subscriptionExternalId,
-                this.totalPrice);
+                this.totalPrice,
+                this.trialEnd);
     }
 
     @java.lang.Override
@@ -197,6 +219,12 @@ public final class CompanySubscriptionResponseData {
     public interface _FinalStage {
         CompanySubscriptionResponseData build();
 
+        _FinalStage discounts(List<BillingSubscriptionDiscountView> discounts);
+
+        _FinalStage addDiscounts(BillingSubscriptionDiscountView discounts);
+
+        _FinalStage addAllDiscounts(List<BillingSubscriptionDiscountView> discounts);
+
         _FinalStage expiredAt(Optional<OffsetDateTime> expiredAt);
 
         _FinalStage expiredAt(OffsetDateTime expiredAt);
@@ -214,6 +242,10 @@ public final class CompanySubscriptionResponseData {
         _FinalStage addProducts(BillingProductForSubscriptionResponseData products);
 
         _FinalStage addAllProducts(List<BillingProductForSubscriptionResponseData> products);
+
+        _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd);
+
+        _FinalStage trialEnd(OffsetDateTime trialEnd);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -237,6 +269,8 @@ public final class CompanySubscriptionResponseData {
 
         private int totalPrice;
 
+        private Optional<OffsetDateTime> trialEnd = Optional.empty();
+
         private List<BillingProductForSubscriptionResponseData> products = new ArrayList<>();
 
         private Optional<PaymentMethodResponseData> paymentMethod = Optional.empty();
@@ -244,6 +278,8 @@ public final class CompanySubscriptionResponseData {
         private Optional<InvoiceResponseData> latestInvoice = Optional.empty();
 
         private Optional<OffsetDateTime> expiredAt = Optional.empty();
+
+        private List<BillingSubscriptionDiscountView> discounts = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -254,6 +290,7 @@ public final class CompanySubscriptionResponseData {
         public Builder from(CompanySubscriptionResponseData other) {
             currency(other.getCurrency());
             customerExternalId(other.getCustomerExternalId());
+            discounts(other.getDiscounts());
             expiredAt(other.getExpiredAt());
             interval(other.getInterval());
             latestInvoice(other.getLatestInvoice());
@@ -262,6 +299,7 @@ public final class CompanySubscriptionResponseData {
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             totalPrice(other.getTotalPrice());
+            trialEnd(other.getTrialEnd());
             return this;
         }
 
@@ -308,6 +346,19 @@ public final class CompanySubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage trialEnd(OffsetDateTime trialEnd) {
+            this.trialEnd = Optional.ofNullable(trialEnd);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_end", nulls = Nulls.SKIP)
+        public _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd) {
+            this.trialEnd = trialEnd;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllProducts(List<BillingProductForSubscriptionResponseData> products) {
             this.products.addAll(products);
             return this;
@@ -329,7 +380,7 @@ public final class CompanySubscriptionResponseData {
 
         @java.lang.Override
         public _FinalStage paymentMethod(PaymentMethodResponseData paymentMethod) {
-            this.paymentMethod = Optional.of(paymentMethod);
+            this.paymentMethod = Optional.ofNullable(paymentMethod);
             return this;
         }
 
@@ -342,7 +393,7 @@ public final class CompanySubscriptionResponseData {
 
         @java.lang.Override
         public _FinalStage latestInvoice(InvoiceResponseData latestInvoice) {
-            this.latestInvoice = Optional.of(latestInvoice);
+            this.latestInvoice = Optional.ofNullable(latestInvoice);
             return this;
         }
 
@@ -355,7 +406,7 @@ public final class CompanySubscriptionResponseData {
 
         @java.lang.Override
         public _FinalStage expiredAt(OffsetDateTime expiredAt) {
-            this.expiredAt = Optional.of(expiredAt);
+            this.expiredAt = Optional.ofNullable(expiredAt);
             return this;
         }
 
@@ -367,10 +418,31 @@ public final class CompanySubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllDiscounts(List<BillingSubscriptionDiscountView> discounts) {
+            this.discounts.addAll(discounts);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addDiscounts(BillingSubscriptionDiscountView discounts) {
+            this.discounts.add(discounts);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "discounts", nulls = Nulls.SKIP)
+        public _FinalStage discounts(List<BillingSubscriptionDiscountView> discounts) {
+            this.discounts.clear();
+            this.discounts.addAll(discounts);
+            return this;
+        }
+
+        @java.lang.Override
         public CompanySubscriptionResponseData build() {
             return new CompanySubscriptionResponseData(
                     currency,
                     customerExternalId,
+                    discounts,
                     expiredAt,
                     interval,
                     latestInvoice,
@@ -379,6 +451,7 @@ public final class CompanySubscriptionResponseData {
                     status,
                     subscriptionExternalId,
                     totalPrice,
+                    trialEnd,
                     additionalProperties);
         }
     }

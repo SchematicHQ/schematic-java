@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListEntityTraitDefinitionsParams.Builder.class)
 public final class ListEntityTraitDefinitionsParams {
     private final Optional<ListEntityTraitDefinitionsResponseParamsEntityType> entityType;
@@ -158,7 +158,7 @@ public final class ListEntityTraitDefinitionsParams {
         }
 
         public Builder entityType(ListEntityTraitDefinitionsResponseParamsEntityType entityType) {
-            this.entityType = Optional.of(entityType);
+            this.entityType = Optional.ofNullable(entityType);
             return this;
         }
 
@@ -169,7 +169,7 @@ public final class ListEntityTraitDefinitionsParams {
         }
 
         public Builder ids(List<String> ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -180,7 +180,7 @@ public final class ListEntityTraitDefinitionsParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -191,7 +191,7 @@ public final class ListEntityTraitDefinitionsParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -202,7 +202,7 @@ public final class ListEntityTraitDefinitionsParams {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -213,7 +213,7 @@ public final class ListEntityTraitDefinitionsParams {
         }
 
         public Builder traitType(ListEntityTraitDefinitionsResponseParamsTraitType traitType) {
-            this.traitType = Optional.of(traitType);
+            this.traitType = Optional.ofNullable(traitType);
             return this;
         }
 

@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RuleConditionDetailResponseData.Builder.class)
 public final class RuleConditionDetailResponseData {
     private final Optional<EntityTraitDefinitionResponseData> comparisonTrait;
@@ -543,7 +543,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage traitId(String traitId) {
-            this.traitId = Optional.of(traitId);
+            this.traitId = Optional.ofNullable(traitId);
             return this;
         }
 
@@ -556,7 +556,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage traitEntityType(String traitEntityType) {
-            this.traitEntityType = Optional.of(traitEntityType);
+            this.traitEntityType = Optional.ofNullable(traitEntityType);
             return this;
         }
 
@@ -569,7 +569,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage trait(EntityTraitDefinitionResponseData trait) {
-            this.trait = Optional.of(trait);
+            this.trait = Optional.ofNullable(trait);
             return this;
         }
 
@@ -622,7 +622,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage planId(String planId) {
-            this.planId = Optional.of(planId);
+            this.planId = Optional.ofNullable(planId);
             return this;
         }
 
@@ -635,7 +635,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage metricValue(Integer metricValue) {
-            this.metricValue = Optional.of(metricValue);
+            this.metricValue = Optional.ofNullable(metricValue);
             return this;
         }
 
@@ -648,7 +648,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset) {
-            this.metricPeriodMonthReset = Optional.of(metricPeriodMonthReset);
+            this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
@@ -661,7 +661,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage metricPeriod(String metricPeriod) {
-            this.metricPeriod = Optional.of(metricPeriod);
+            this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
@@ -674,7 +674,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage flagId(String flagId) {
-            this.flagId = Optional.of(flagId);
+            this.flagId = Optional.ofNullable(flagId);
             return this;
         }
 
@@ -687,7 +687,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage eventSubtype(String eventSubtype) {
-            this.eventSubtype = Optional.of(eventSubtype);
+            this.eventSubtype = Optional.ofNullable(eventSubtype);
             return this;
         }
 
@@ -700,7 +700,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage conditionGroupId(String conditionGroupId) {
-            this.conditionGroupId = Optional.of(conditionGroupId);
+            this.conditionGroupId = Optional.ofNullable(conditionGroupId);
             return this;
         }
 
@@ -713,7 +713,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage comparisonTraitId(String comparisonTraitId) {
-            this.comparisonTraitId = Optional.of(comparisonTraitId);
+            this.comparisonTraitId = Optional.ofNullable(comparisonTraitId);
             return this;
         }
 
@@ -726,7 +726,7 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage comparisonTrait(EntityTraitDefinitionResponseData comparisonTrait) {
-            this.comparisonTrait = Optional.of(comparisonTrait);
+            this.comparisonTrait = Optional.ofNullable(comparisonTrait);
             return this;
         }
 

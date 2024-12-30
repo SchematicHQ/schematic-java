@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyOverrideResponseData.Builder.class)
 public final class CompanyOverrideResponseData {
     private final Optional<CompanyDetailResponseData> company;
@@ -439,7 +439,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage valueTraitId(String valueTraitId) {
-            this.valueTraitId = Optional.of(valueTraitId);
+            this.valueTraitId = Optional.ofNullable(valueTraitId);
             return this;
         }
 
@@ -452,7 +452,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage valueTrait(EntityTraitDefinitionResponseData valueTrait) {
-            this.valueTrait = Optional.of(valueTrait);
+            this.valueTrait = Optional.ofNullable(valueTrait);
             return this;
         }
 
@@ -465,7 +465,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage valueNumeric(Integer valueNumeric) {
-            this.valueNumeric = Optional.of(valueNumeric);
+            this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
@@ -478,7 +478,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage valueBool(Boolean valueBool) {
-            this.valueBool = Optional.of(valueBool);
+            this.valueBool = Optional.ofNullable(valueBool);
             return this;
         }
 
@@ -491,7 +491,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage ruleId(String ruleId) {
-            this.ruleId = Optional.of(ruleId);
+            this.ruleId = Optional.ofNullable(ruleId);
             return this;
         }
 
@@ -504,7 +504,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset) {
-            this.metricPeriodMonthReset = Optional.of(metricPeriodMonthReset);
+            this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
@@ -517,7 +517,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage metricPeriod(String metricPeriod) {
-            this.metricPeriod = Optional.of(metricPeriod);
+            this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
@@ -530,7 +530,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage feature(FeatureResponseData feature) {
-            this.feature = Optional.of(feature);
+            this.feature = Optional.ofNullable(feature);
             return this;
         }
 
@@ -543,7 +543,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage expirationDate(OffsetDateTime expirationDate) {
-            this.expirationDate = Optional.of(expirationDate);
+            this.expirationDate = Optional.ofNullable(expirationDate);
             return this;
         }
 
@@ -556,7 +556,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         public _FinalStage company(CompanyDetailResponseData company) {
-            this.company = Optional.of(company);
+            this.company = Optional.ofNullable(company);
             return this;
         }
 

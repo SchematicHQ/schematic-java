@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateOrUpdateConditionRequestBody.Builder.class)
 public final class CreateOrUpdateConditionRequestBody {
     private final Optional<String> comparisonTraitId;
@@ -323,7 +323,7 @@ public final class CreateOrUpdateConditionRequestBody {
          */
         @java.lang.Override
         public _FinalStage traitValue(String traitValue) {
-            this.traitValue = Optional.of(traitValue);
+            this.traitValue = Optional.ofNullable(traitValue);
             return this;
         }
 
@@ -340,7 +340,7 @@ public final class CreateOrUpdateConditionRequestBody {
          */
         @java.lang.Override
         public _FinalStage traitId(String traitId) {
-            this.traitId = Optional.of(traitId);
+            this.traitId = Optional.ofNullable(traitId);
             return this;
         }
 
@@ -385,7 +385,7 @@ public final class CreateOrUpdateConditionRequestBody {
          */
         @java.lang.Override
         public _FinalStage metricValue(Integer metricValue) {
-            this.metricValue = Optional.of(metricValue);
+            this.metricValue = Optional.ofNullable(metricValue);
             return this;
         }
 
@@ -403,7 +403,7 @@ public final class CreateOrUpdateConditionRequestBody {
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(
                 CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset metricPeriodMonthReset) {
-            this.metricPeriodMonthReset = Optional.of(metricPeriodMonthReset);
+            this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
@@ -421,7 +421,7 @@ public final class CreateOrUpdateConditionRequestBody {
          */
         @java.lang.Override
         public _FinalStage metricPeriod(CreateOrUpdateConditionRequestBodyMetricPeriod metricPeriod) {
-            this.metricPeriod = Optional.of(metricPeriod);
+            this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
@@ -434,7 +434,7 @@ public final class CreateOrUpdateConditionRequestBody {
 
         @java.lang.Override
         public _FinalStage id(String id) {
-            this.id = Optional.of(id);
+            this.id = Optional.ofNullable(id);
             return this;
         }
 
@@ -451,7 +451,7 @@ public final class CreateOrUpdateConditionRequestBody {
          */
         @java.lang.Override
         public _FinalStage eventSubtype(String eventSubtype) {
-            this.eventSubtype = Optional.of(eventSubtype);
+            this.eventSubtype = Optional.ofNullable(eventSubtype);
             return this;
         }
 
@@ -468,7 +468,7 @@ public final class CreateOrUpdateConditionRequestBody {
          */
         @java.lang.Override
         public _FinalStage comparisonTraitId(String comparisonTraitId) {
-            this.comparisonTraitId = Optional.of(comparisonTraitId);
+            this.comparisonTraitId = Optional.ofNullable(comparisonTraitId);
             return this;
         }
 

@@ -19,7 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateCompanyOverrideResponse.Builder.class)
 public final class UpdateCompanyOverrideResponse {
     private final CompanyOverrideResponseData data;

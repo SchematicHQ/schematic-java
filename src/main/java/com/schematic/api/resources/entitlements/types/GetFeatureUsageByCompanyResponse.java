@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetFeatureUsageByCompanyResponse.Builder.class)
 public final class GetFeatureUsageByCompanyResponse {
     private final FeatureUsageDetailResponseData data;

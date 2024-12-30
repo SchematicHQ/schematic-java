@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListEventsRequest.Builder.class)
 public final class ListEventsRequest {
     private final Optional<String> companyId;
@@ -171,7 +171,7 @@ public final class ListEventsRequest {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -182,7 +182,7 @@ public final class ListEventsRequest {
         }
 
         public Builder eventSubtype(String eventSubtype) {
-            this.eventSubtype = Optional.of(eventSubtype);
+            this.eventSubtype = Optional.ofNullable(eventSubtype);
             return this;
         }
 
@@ -193,7 +193,7 @@ public final class ListEventsRequest {
         }
 
         public Builder eventTypes(String eventTypes) {
-            this.eventTypes = Optional.of(eventTypes);
+            this.eventTypes = Optional.ofNullable(eventTypes);
             return this;
         }
 
@@ -204,7 +204,7 @@ public final class ListEventsRequest {
         }
 
         public Builder flagId(String flagId) {
-            this.flagId = Optional.of(flagId);
+            this.flagId = Optional.ofNullable(flagId);
             return this;
         }
 
@@ -215,7 +215,7 @@ public final class ListEventsRequest {
         }
 
         public Builder userId(String userId) {
-            this.userId = Optional.of(userId);
+            this.userId = Optional.ofNullable(userId);
             return this;
         }
 
@@ -226,7 +226,7 @@ public final class ListEventsRequest {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -237,7 +237,7 @@ public final class ListEventsRequest {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 

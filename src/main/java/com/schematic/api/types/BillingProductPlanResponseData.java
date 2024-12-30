@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductPlanResponseData.Builder.class)
 public final class BillingProductPlanResponseData {
     private final String accountId;
@@ -260,7 +260,7 @@ public final class BillingProductPlanResponseData {
 
         @java.lang.Override
         public _FinalStage yearlyPriceId(String yearlyPriceId) {
-            this.yearlyPriceId = Optional.of(yearlyPriceId);
+            this.yearlyPriceId = Optional.ofNullable(yearlyPriceId);
             return this;
         }
 
@@ -273,7 +273,7 @@ public final class BillingProductPlanResponseData {
 
         @java.lang.Override
         public _FinalStage trialDays(Integer trialDays) {
-            this.trialDays = Optional.of(trialDays);
+            this.trialDays = Optional.ofNullable(trialDays);
             return this;
         }
 
@@ -286,7 +286,7 @@ public final class BillingProductPlanResponseData {
 
         @java.lang.Override
         public _FinalStage monthlyPriceId(String monthlyPriceId) {
-            this.monthlyPriceId = Optional.of(monthlyPriceId);
+            this.monthlyPriceId = Optional.ofNullable(monthlyPriceId);
             return this;
         }
 

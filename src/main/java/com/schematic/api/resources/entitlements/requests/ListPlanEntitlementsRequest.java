@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListPlanEntitlementsRequest.Builder.class)
 public final class ListPlanEntitlementsRequest {
     private final Optional<String> featureId;
@@ -226,7 +226,7 @@ public final class ListPlanEntitlementsRequest {
         }
 
         public Builder featureId(String featureId) {
-            this.featureId = Optional.of(featureId);
+            this.featureId = Optional.ofNullable(featureId);
             return this;
         }
 
@@ -237,7 +237,7 @@ public final class ListPlanEntitlementsRequest {
         }
 
         public Builder featureIds(String featureIds) {
-            this.featureIds = Optional.of(featureIds);
+            this.featureIds = Optional.ofNullable(featureIds);
             return this;
         }
 
@@ -248,7 +248,7 @@ public final class ListPlanEntitlementsRequest {
         }
 
         public Builder ids(String ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -259,7 +259,7 @@ public final class ListPlanEntitlementsRequest {
         }
 
         public Builder planId(String planId) {
-            this.planId = Optional.of(planId);
+            this.planId = Optional.ofNullable(planId);
             return this;
         }
 
@@ -270,7 +270,7 @@ public final class ListPlanEntitlementsRequest {
         }
 
         public Builder planIds(String planIds) {
-            this.planIds = Optional.of(planIds);
+            this.planIds = Optional.ofNullable(planIds);
             return this;
         }
 
@@ -281,7 +281,7 @@ public final class ListPlanEntitlementsRequest {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -292,7 +292,7 @@ public final class ListPlanEntitlementsRequest {
         }
 
         public Builder withMeteredProducts(Boolean withMeteredProducts) {
-            this.withMeteredProducts = Optional.of(withMeteredProducts);
+            this.withMeteredProducts = Optional.ofNullable(withMeteredProducts);
             return this;
         }
 
@@ -303,7 +303,7 @@ public final class ListPlanEntitlementsRequest {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -314,7 +314,7 @@ public final class ListPlanEntitlementsRequest {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 

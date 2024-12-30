@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductForSubscriptionResponseData.Builder.class)
 public final class BillingProductForSubscriptionResponseData {
     private final OffsetDateTime createdAt;
@@ -41,6 +41,8 @@ public final class BillingProductForSubscriptionResponseData {
 
     private final String priceExternalId;
 
+    private final String priceId;
+
     private final double quantity;
 
     private final String subscriptionId;
@@ -62,6 +64,7 @@ public final class BillingProductForSubscriptionResponseData {
             String name,
             int price,
             String priceExternalId,
+            String priceId,
             double quantity,
             String subscriptionId,
             OffsetDateTime updatedAt,
@@ -77,6 +80,7 @@ public final class BillingProductForSubscriptionResponseData {
         this.name = name;
         this.price = price;
         this.priceExternalId = priceExternalId;
+        this.priceId = priceId;
         this.quantity = quantity;
         this.subscriptionId = subscriptionId;
         this.updatedAt = updatedAt;
@@ -134,6 +138,11 @@ public final class BillingProductForSubscriptionResponseData {
         return priceExternalId;
     }
 
+    @JsonProperty("price_id")
+    public String getPriceId() {
+        return priceId;
+    }
+
     @JsonProperty("quantity")
     public double getQuantity() {
         return quantity;
@@ -177,6 +186,7 @@ public final class BillingProductForSubscriptionResponseData {
                 && name.equals(other.name)
                 && price == other.price
                 && priceExternalId.equals(other.priceExternalId)
+                && priceId.equals(other.priceId)
                 && quantity == other.quantity
                 && subscriptionId.equals(other.subscriptionId)
                 && updatedAt.equals(other.updatedAt)
@@ -196,6 +206,7 @@ public final class BillingProductForSubscriptionResponseData {
                 this.name,
                 this.price,
                 this.priceExternalId,
+                this.priceId,
                 this.quantity,
                 this.subscriptionId,
                 this.updatedAt,
@@ -246,7 +257,11 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     public interface PriceExternalIdStage {
-        QuantityStage priceExternalId(String priceExternalId);
+        PriceIdStage priceExternalId(String priceExternalId);
+    }
+
+    public interface PriceIdStage {
+        QuantityStage priceId(String priceId);
     }
 
     public interface QuantityStage {
@@ -284,6 +299,7 @@ public final class BillingProductForSubscriptionResponseData {
                     NameStage,
                     PriceStage,
                     PriceExternalIdStage,
+                    PriceIdStage,
                     QuantityStage,
                     SubscriptionIdStage,
                     UpdatedAtStage,
@@ -306,6 +322,8 @@ public final class BillingProductForSubscriptionResponseData {
         private int price;
 
         private String priceExternalId;
+
+        private String priceId;
 
         private double quantity;
 
@@ -334,6 +352,7 @@ public final class BillingProductForSubscriptionResponseData {
             name(other.getName());
             price(other.getPrice());
             priceExternalId(other.getPriceExternalId());
+            priceId(other.getPriceId());
             quantity(other.getQuantity());
             subscriptionId(other.getSubscriptionId());
             updatedAt(other.getUpdatedAt());
@@ -399,8 +418,15 @@ public final class BillingProductForSubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("price_external_id")
-        public QuantityStage priceExternalId(String priceExternalId) {
+        public PriceIdStage priceExternalId(String priceExternalId) {
             this.priceExternalId = priceExternalId;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("price_id")
+        public QuantityStage priceId(String priceId) {
+            this.priceId = priceId;
             return this;
         }
 
@@ -434,7 +460,7 @@ public final class BillingProductForSubscriptionResponseData {
 
         @java.lang.Override
         public _FinalStage meterId(String meterId) {
-            this.meterId = Optional.of(meterId);
+            this.meterId = Optional.ofNullable(meterId);
             return this;
         }
 
@@ -458,6 +484,7 @@ public final class BillingProductForSubscriptionResponseData {
                     name,
                     price,
                     priceExternalId,
+                    priceId,
                     quantity,
                     subscriptionId,
                     updatedAt,

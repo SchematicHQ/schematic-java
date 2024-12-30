@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CrmDealResponseData.Builder.class)
 public final class CrmDealResponseData {
     private final String accountId;
@@ -339,7 +339,7 @@ public final class CrmDealResponseData {
 
         @java.lang.Override
         public _FinalStage productExternalId(String productExternalId) {
-            this.productExternalId = Optional.of(productExternalId);
+            this.productExternalId = Optional.ofNullable(productExternalId);
             return this;
         }
 
@@ -352,7 +352,7 @@ public final class CrmDealResponseData {
 
         @java.lang.Override
         public _FinalStage name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -365,7 +365,7 @@ public final class CrmDealResponseData {
 
         @java.lang.Override
         public _FinalStage companyExternalId(String companyExternalId) {
-            this.companyExternalId = Optional.of(companyExternalId);
+            this.companyExternalId = Optional.ofNullable(companyExternalId);
             return this;
         }
 

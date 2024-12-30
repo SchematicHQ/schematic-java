@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateEventRequestBody.Builder.class)
 public final class CreateEventRequestBody {
     private final Optional<EventBody> body;
@@ -146,7 +146,7 @@ public final class CreateEventRequestBody {
          */
         @java.lang.Override
         public _FinalStage sentAt(OffsetDateTime sentAt) {
-            this.sentAt = Optional.of(sentAt);
+            this.sentAt = Optional.ofNullable(sentAt);
             return this;
         }
 
@@ -159,7 +159,7 @@ public final class CreateEventRequestBody {
 
         @java.lang.Override
         public _FinalStage body(EventBody body) {
-            this.body = Optional.of(body);
+            this.body = Optional.ofNullable(body);
             return this;
         }
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SearchBillingPricesParams.Builder.class)
 public final class SearchBillingPricesParams {
     private final Optional<List<String>> ids;
@@ -158,7 +158,7 @@ public final class SearchBillingPricesParams {
         }
 
         public Builder ids(List<String> ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -169,7 +169,7 @@ public final class SearchBillingPricesParams {
         }
 
         public Builder interval(String interval) {
-            this.interval = Optional.of(interval);
+            this.interval = Optional.ofNullable(interval);
             return this;
         }
 
@@ -180,7 +180,7 @@ public final class SearchBillingPricesParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -191,7 +191,7 @@ public final class SearchBillingPricesParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -202,7 +202,7 @@ public final class SearchBillingPricesParams {
         }
 
         public Builder price(Integer price) {
-            this.price = Optional.of(price);
+            this.price = Optional.ofNullable(price);
             return this;
         }
 
@@ -213,7 +213,7 @@ public final class SearchBillingPricesParams {
         }
 
         public Builder usageType(String usageType) {
-            this.usageType = Optional.of(usageType);
+            this.usageType = Optional.ofNullable(usageType);
             return this;
         }
 
