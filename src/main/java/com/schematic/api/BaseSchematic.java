@@ -3,11 +3,7 @@
  */
 package com.schematic.api;
 
-import com.schematic.api.core.BaseSchematicApiException;
-import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.ClientOptions;
-import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.Suppliers;
 import com.schematic.api.resources.accesstokens.AccesstokensClient;
 import com.schematic.api.resources.accounts.AccountsClient;
@@ -22,14 +18,7 @@ import com.schematic.api.resources.features.FeaturesClient;
 import com.schematic.api.resources.plangroups.PlangroupsClient;
 import com.schematic.api.resources.plans.PlansClient;
 import com.schematic.api.resources.webhooks.WebhooksClient;
-import java.io.IOException;
 import java.util.function.Supplier;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class BaseSchematic {
     protected final ClientOptions clientOptions;
@@ -75,39 +64,6 @@ public class BaseSchematic {
         this.plangroupsClient = Suppliers.memoize(() -> new PlangroupsClient(clientOptions));
         this.accesstokensClient = Suppliers.memoize(() -> new AccesstokensClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
-    }
-
-    public void getCompanyPlans() {
-        getCompanyPlans(null);
-    }
-
-    public void getCompanyPlans(RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("company-plans")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
     }
 
     public AccountsClient accounts() {
@@ -160,9 +116,5 @@ public class BaseSchematic {
 
     public WebhooksClient webhooks() {
         return this.webhooksClient.get();
-    }
-
-    public static BaseSchematicBuilder builder() {
-        return new BaseSchematicBuilder();
     }
 }
