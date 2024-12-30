@@ -12,6 +12,7 @@ import com.schematic.api.core.Suppliers;
 import com.schematic.api.resources.accesstokens.AccesstokensClient;
 import com.schematic.api.resources.accounts.AccountsClient;
 import com.schematic.api.resources.billing.BillingClient;
+import com.schematic.api.resources.checkout.CheckoutClient;
 import com.schematic.api.resources.companies.CompaniesClient;
 import com.schematic.api.resources.components.ComponentsClient;
 import com.schematic.api.resources.crm.CrmClient;
@@ -39,6 +40,8 @@ public class BaseSchematic {
 
     protected final Supplier<BillingClient> billingClient;
 
+    protected final Supplier<CheckoutClient> checkoutClient;
+
     protected final Supplier<CompaniesClient> companiesClient;
 
     protected final Supplier<EntitlementsClient> entitlementsClient;
@@ -62,6 +65,7 @@ public class BaseSchematic {
         this.accountsClient = Suppliers.memoize(() -> new AccountsClient(clientOptions));
         this.featuresClient = Suppliers.memoize(() -> new FeaturesClient(clientOptions));
         this.billingClient = Suppliers.memoize(() -> new BillingClient(clientOptions));
+        this.checkoutClient = Suppliers.memoize(() -> new CheckoutClient(clientOptions));
         this.companiesClient = Suppliers.memoize(() -> new CompaniesClient(clientOptions));
         this.entitlementsClient = Suppliers.memoize(() -> new EntitlementsClient(clientOptions));
         this.componentsClient = Suppliers.memoize(() -> new ComponentsClient(clientOptions));
@@ -118,6 +122,10 @@ public class BaseSchematic {
         return this.billingClient.get();
     }
 
+    public CheckoutClient checkout() {
+        return this.checkoutClient.get();
+    }
+
     public CompaniesClient companies() {
         return this.companiesClient.get();
     }
@@ -152,5 +160,9 @@ public class BaseSchematic {
 
     public WebhooksClient webhooks() {
         return this.webhooksClient.get();
+    }
+
+    public static BaseSchematicBuilder builder() {
+        return new BaseSchematicBuilder();
     }
 }
