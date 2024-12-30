@@ -1,5 +1,6 @@
 # Specify files that shouldn't be modified by Fern
 README.md
+src/main/java/com/schematic/api/BaseSchematic.java
 src/main/java/com/schematic/api/Schematic.java
 src/main/java/com/schematic/api/resources/accounts/AccountsClient.java
 src/main/java/com/schematic/api/resources/companies/CompaniesClient.java
