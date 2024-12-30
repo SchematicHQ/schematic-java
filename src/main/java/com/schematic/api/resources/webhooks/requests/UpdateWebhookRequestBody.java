@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateWebhookRequestBody.Builder.class)
 public final class UpdateWebhookRequestBody {
     private final Optional<String> name;
@@ -128,7 +128,7 @@ public final class UpdateWebhookRequestBody {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -139,7 +139,7 @@ public final class UpdateWebhookRequestBody {
         }
 
         public Builder requestTypes(List<UpdateWebhookRequestBodyRequestTypesItem> requestTypes) {
-            this.requestTypes = Optional.of(requestTypes);
+            this.requestTypes = Optional.ofNullable(requestTypes);
             return this;
         }
 
@@ -150,7 +150,7 @@ public final class UpdateWebhookRequestBody {
         }
 
         public Builder status(UpdateWebhookRequestBodyStatus status) {
-            this.status = Optional.of(status);
+            this.status = Optional.ofNullable(status);
             return this;
         }
 
@@ -161,7 +161,7 @@ public final class UpdateWebhookRequestBody {
         }
 
         public Builder url(String url) {
-            this.url = Optional.of(url);
+            this.url = Optional.ofNullable(url);
             return this;
         }
 

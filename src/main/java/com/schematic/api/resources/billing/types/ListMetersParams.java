@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListMetersParams.Builder.class)
 public final class ListMetersParams {
     private final Optional<String> displayName;
@@ -116,7 +116,7 @@ public final class ListMetersParams {
         }
 
         public Builder displayName(String displayName) {
-            this.displayName = Optional.of(displayName);
+            this.displayName = Optional.ofNullable(displayName);
             return this;
         }
 
@@ -127,7 +127,7 @@ public final class ListMetersParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -138,7 +138,7 @@ public final class ListMetersParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 

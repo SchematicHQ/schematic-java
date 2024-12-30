@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetActiveDealsRequest.Builder.class)
 public final class GetActiveDealsRequest {
     private final String companyId;
@@ -167,7 +167,7 @@ public final class GetActiveDealsRequest {
          */
         @java.lang.Override
         public _FinalStage offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -184,7 +184,7 @@ public final class GetActiveDealsRequest {
          */
         @java.lang.Override
         public _FinalStage limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 

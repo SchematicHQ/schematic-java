@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountFeatureUsersRequest.Builder.class)
 public final class CountFeatureUsersRequest {
     private final String featureId;
@@ -160,7 +160,7 @@ public final class CountFeatureUsersRequest {
          */
         @java.lang.Override
         public _FinalStage offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -177,7 +177,7 @@ public final class CountFeatureUsersRequest {
          */
         @java.lang.Override
         public _FinalStage limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -190,7 +190,7 @@ public final class CountFeatureUsersRequest {
 
         @java.lang.Override
         public _FinalStage q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 

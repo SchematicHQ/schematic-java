@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyPlanDetailResponseData.Builder.class)
 public final class CompanyPlanDetailResponseData {
     private final Optional<String> audienceType;
@@ -573,7 +573,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         public _FinalStage yearlyPrice(BillingPriceResponseData yearlyPrice) {
-            this.yearlyPrice = Optional.of(yearlyPrice);
+            this.yearlyPrice = Optional.ofNullable(yearlyPrice);
             return this;
         }
 
@@ -586,7 +586,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         public _FinalStage trialDays(Integer trialDays) {
-            this.trialDays = Optional.of(trialDays);
+            this.trialDays = Optional.ofNullable(trialDays);
             return this;
         }
 
@@ -599,7 +599,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         public _FinalStage monthlyPrice(BillingPriceResponseData monthlyPrice) {
-            this.monthlyPrice = Optional.of(monthlyPrice);
+            this.monthlyPrice = Optional.ofNullable(monthlyPrice);
             return this;
         }
 
@@ -652,7 +652,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         public _FinalStage billingProduct(BillingProductDetailResponseData billingProduct) {
-            this.billingProduct = Optional.of(billingProduct);
+            this.billingProduct = Optional.ofNullable(billingProduct);
             return this;
         }
 
@@ -665,7 +665,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         public _FinalStage audienceType(String audienceType) {
-            this.audienceType = Optional.of(audienceType);
+            this.audienceType = Optional.ofNullable(audienceType);
             return this;
         }
 

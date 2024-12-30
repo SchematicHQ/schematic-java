@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UsageBasedEntitlementResponseData.Builder.class)
 public final class UsageBasedEntitlementResponseData {
     private final String featureId;
@@ -233,7 +233,7 @@ public final class UsageBasedEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage valueNumeric(Integer valueNumeric) {
-            this.valueNumeric = Optional.of(valueNumeric);
+            this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
@@ -246,7 +246,7 @@ public final class UsageBasedEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage valueBool(Boolean valueBool) {
-            this.valueBool = Optional.of(valueBool);
+            this.valueBool = Optional.ofNullable(valueBool);
             return this;
         }
 
@@ -259,7 +259,7 @@ public final class UsageBasedEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage priceBehavior(String priceBehavior) {
-            this.priceBehavior = Optional.of(priceBehavior);
+            this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
         }
 
@@ -272,7 +272,7 @@ public final class UsageBasedEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset) {
-            this.metricPeriodMonthReset = Optional.of(metricPeriodMonthReset);
+            this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
@@ -285,7 +285,7 @@ public final class UsageBasedEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage metricPeriod(String metricPeriod) {
-            this.metricPeriod = Optional.of(metricPeriod);
+            this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
@@ -298,7 +298,7 @@ public final class UsageBasedEntitlementResponseData {
 
         @java.lang.Override
         public _FinalStage meteredPrice(BillingPriceView meteredPrice) {
-            this.meteredPrice = Optional.of(meteredPrice);
+            this.meteredPrice = Optional.ofNullable(meteredPrice);
             return this;
         }
 

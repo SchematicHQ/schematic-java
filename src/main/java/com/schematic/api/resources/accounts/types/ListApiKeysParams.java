@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListApiKeysParams.Builder.class)
 public final class ListApiKeysParams {
     private final Optional<String> environmentId;
@@ -131,7 +131,7 @@ public final class ListApiKeysParams {
         }
 
         public Builder environmentId(String environmentId) {
-            this.environmentId = Optional.of(environmentId);
+            this.environmentId = Optional.ofNullable(environmentId);
             return this;
         }
 
@@ -142,7 +142,7 @@ public final class ListApiKeysParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -153,7 +153,7 @@ public final class ListApiKeysParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -164,7 +164,7 @@ public final class ListApiKeysParams {
         }
 
         public Builder requireEnvironment(Boolean requireEnvironment) {
-            this.requireEnvironment = Optional.of(requireEnvironment);
+            this.requireEnvironment = Optional.ofNullable(requireEnvironment);
             return this;
         }
 

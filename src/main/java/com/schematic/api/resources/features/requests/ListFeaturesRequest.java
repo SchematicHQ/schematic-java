@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListFeaturesRequest.Builder.class)
 public final class ListFeaturesRequest {
     private final Optional<String> ids;
@@ -169,7 +169,7 @@ public final class ListFeaturesRequest {
         }
 
         public Builder ids(String ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -180,7 +180,7 @@ public final class ListFeaturesRequest {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -191,7 +191,7 @@ public final class ListFeaturesRequest {
         }
 
         public Builder withoutCompanyOverrideFor(String withoutCompanyOverrideFor) {
-            this.withoutCompanyOverrideFor = Optional.of(withoutCompanyOverrideFor);
+            this.withoutCompanyOverrideFor = Optional.ofNullable(withoutCompanyOverrideFor);
             return this;
         }
 
@@ -202,7 +202,7 @@ public final class ListFeaturesRequest {
         }
 
         public Builder withoutPlanEntitlementFor(String withoutPlanEntitlementFor) {
-            this.withoutPlanEntitlementFor = Optional.of(withoutPlanEntitlementFor);
+            this.withoutPlanEntitlementFor = Optional.ofNullable(withoutPlanEntitlementFor);
             return this;
         }
 
@@ -213,7 +213,7 @@ public final class ListFeaturesRequest {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -224,7 +224,7 @@ public final class ListFeaturesRequest {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 

@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RulesDetailResponseData.Builder.class)
 public final class RulesDetailResponseData {
     private final Optional<FlagResponseData> flag;
@@ -100,7 +100,7 @@ public final class RulesDetailResponseData {
         }
 
         public Builder flag(FlagResponseData flag) {
-            this.flag = Optional.of(flag);
+            this.flag = Optional.ofNullable(flag);
             return this;
         }
 

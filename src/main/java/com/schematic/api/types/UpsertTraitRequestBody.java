@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpsertTraitRequestBody.Builder.class)
 public final class UpsertTraitRequestBody {
     private final Optional<Integer> incr;
@@ -193,7 +193,7 @@ public final class UpsertTraitRequestBody {
          */
         @java.lang.Override
         public _FinalStage updateOnly(Boolean updateOnly) {
-            this.updateOnly = Optional.of(updateOnly);
+            this.updateOnly = Optional.ofNullable(updateOnly);
             return this;
         }
 
@@ -210,7 +210,7 @@ public final class UpsertTraitRequestBody {
          */
         @java.lang.Override
         public _FinalStage set(String set) {
-            this.set = Optional.of(set);
+            this.set = Optional.ofNullable(set);
             return this;
         }
 
@@ -255,7 +255,7 @@ public final class UpsertTraitRequestBody {
          */
         @java.lang.Override
         public _FinalStage incr(Integer incr) {
-            this.incr = Optional.of(incr);
+            this.incr = Optional.ofNullable(incr);
             return this;
         }
 

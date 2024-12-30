@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GenericPreviewObject.Builder.class)
 public final class GenericPreviewObject {
     private final Optional<String> description;
@@ -157,7 +157,7 @@ public final class GenericPreviewObject {
 
         @java.lang.Override
         public _FinalStage imageUrl(String imageUrl) {
-            this.imageUrl = Optional.of(imageUrl);
+            this.imageUrl = Optional.ofNullable(imageUrl);
             return this;
         }
 
@@ -170,7 +170,7 @@ public final class GenericPreviewObject {
 
         @java.lang.Override
         public _FinalStage description(String description) {
-            this.description = Optional.of(description);
+            this.description = Optional.ofNullable(description);
             return this;
         }
 

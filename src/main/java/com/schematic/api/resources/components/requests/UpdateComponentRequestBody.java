@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateComponentRequestBody.Builder.class)
 public final class UpdateComponentRequestBody {
     private final Optional<Map<String, Double>> ast;
@@ -127,7 +127,7 @@ public final class UpdateComponentRequestBody {
         }
 
         public Builder ast(Map<String, Double> ast) {
-            this.ast = Optional.of(ast);
+            this.ast = Optional.ofNullable(ast);
             return this;
         }
 
@@ -138,7 +138,7 @@ public final class UpdateComponentRequestBody {
         }
 
         public Builder entityType(UpdateComponentRequestBodyEntityType entityType) {
-            this.entityType = Optional.of(entityType);
+            this.entityType = Optional.ofNullable(entityType);
             return this;
         }
 
@@ -149,7 +149,7 @@ public final class UpdateComponentRequestBody {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -160,7 +160,7 @@ public final class UpdateComponentRequestBody {
         }
 
         public Builder state(UpdateComponentRequestBodyState state) {
-            this.state = Optional.of(state);
+            this.state = Optional.ofNullable(state);
             return this;
         }
 

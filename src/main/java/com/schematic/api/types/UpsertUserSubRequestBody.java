@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpsertUserSubRequestBody.Builder.class)
 public final class UpsertUserSubRequestBody {
     private final Optional<String> companyId;
@@ -177,7 +177,7 @@ public final class UpsertUserSubRequestBody {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -188,7 +188,7 @@ public final class UpsertUserSubRequestBody {
         }
 
         public Builder id(String id) {
-            this.id = Optional.of(id);
+            this.id = Optional.ofNullable(id);
             return this;
         }
 
@@ -216,7 +216,7 @@ public final class UpsertUserSubRequestBody {
         }
 
         public Builder lastSeenAt(OffsetDateTime lastSeenAt) {
-            this.lastSeenAt = Optional.of(lastSeenAt);
+            this.lastSeenAt = Optional.ofNullable(lastSeenAt);
             return this;
         }
 
@@ -227,7 +227,7 @@ public final class UpsertUserSubRequestBody {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -238,7 +238,7 @@ public final class UpsertUserSubRequestBody {
         }
 
         public Builder traits(Map<String, JsonNode> traits) {
-            this.traits = Optional.of(traits);
+            this.traits = Optional.ofNullable(traits);
             return this;
         }
 
@@ -249,7 +249,7 @@ public final class UpsertUserSubRequestBody {
         }
 
         public Builder updateOnly(Boolean updateOnly) {
-            this.updateOnly = Optional.of(updateOnly);
+            this.updateOnly = Optional.ofNullable(updateOnly);
             return this;
         }
 

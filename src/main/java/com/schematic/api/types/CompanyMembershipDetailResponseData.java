@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyMembershipDetailResponseData.Builder.class)
 public final class CompanyMembershipDetailResponseData {
     private final Optional<CompanyResponseData> company;
@@ -215,7 +215,7 @@ public final class CompanyMembershipDetailResponseData {
 
         @java.lang.Override
         public _FinalStage company(CompanyResponseData company) {
-            this.company = Optional.of(company);
+            this.company = Optional.ofNullable(company);
             return this;
         }
 

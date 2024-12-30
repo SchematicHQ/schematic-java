@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListFlagsRequest.Builder.class)
 public final class ListFlagsRequest {
     private final Optional<String> featureId;
@@ -144,7 +144,7 @@ public final class ListFlagsRequest {
         }
 
         public Builder featureId(String featureId) {
-            this.featureId = Optional.of(featureId);
+            this.featureId = Optional.ofNullable(featureId);
             return this;
         }
 
@@ -155,7 +155,7 @@ public final class ListFlagsRequest {
         }
 
         public Builder ids(String ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -166,7 +166,7 @@ public final class ListFlagsRequest {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -177,7 +177,7 @@ public final class ListFlagsRequest {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -188,7 +188,7 @@ public final class ListFlagsRequest {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 

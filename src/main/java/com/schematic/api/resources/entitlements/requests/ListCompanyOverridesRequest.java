@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListCompanyOverridesRequest.Builder.class)
 public final class ListCompanyOverridesRequest {
     private final Optional<String> companyId;
@@ -29,6 +29,8 @@ public final class ListCompanyOverridesRequest {
     private final Optional<String> featureIds;
 
     private final Optional<String> ids;
+
+    private final Optional<Boolean> withoutExpired;
 
     private final Optional<String> q;
 
@@ -44,6 +46,7 @@ public final class ListCompanyOverridesRequest {
             Optional<String> featureId,
             Optional<String> featureIds,
             Optional<String> ids,
+            Optional<Boolean> withoutExpired,
             Optional<String> q,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -53,6 +56,7 @@ public final class ListCompanyOverridesRequest {
         this.featureId = featureId;
         this.featureIds = featureIds;
         this.ids = ids;
+        this.withoutExpired = withoutExpired;
         this.q = q;
         this.limit = limit;
         this.offset = offset;
@@ -100,6 +104,14 @@ public final class ListCompanyOverridesRequest {
     }
 
     /**
+     * @return Filter company overrides by whether they have not expired
+     */
+    @JsonProperty("without_expired")
+    public Optional<Boolean> getWithoutExpired() {
+        return withoutExpired;
+    }
+
+    /**
      * @return Search for company overrides by feature or company name
      */
     @JsonProperty("q")
@@ -140,6 +152,7 @@ public final class ListCompanyOverridesRequest {
                 && featureId.equals(other.featureId)
                 && featureIds.equals(other.featureIds)
                 && ids.equals(other.ids)
+                && withoutExpired.equals(other.withoutExpired)
                 && q.equals(other.q)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
@@ -153,6 +166,7 @@ public final class ListCompanyOverridesRequest {
                 this.featureId,
                 this.featureIds,
                 this.ids,
+                this.withoutExpired,
                 this.q,
                 this.limit,
                 this.offset);
@@ -179,6 +193,8 @@ public final class ListCompanyOverridesRequest {
 
         private Optional<String> ids = Optional.empty();
 
+        private Optional<Boolean> withoutExpired = Optional.empty();
+
         private Optional<String> q = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
@@ -196,6 +212,7 @@ public final class ListCompanyOverridesRequest {
             featureId(other.getFeatureId());
             featureIds(other.getFeatureIds());
             ids(other.getIds());
+            withoutExpired(other.getWithoutExpired());
             q(other.getQ());
             limit(other.getLimit());
             offset(other.getOffset());
@@ -209,7 +226,7 @@ public final class ListCompanyOverridesRequest {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -220,7 +237,7 @@ public final class ListCompanyOverridesRequest {
         }
 
         public Builder companyIds(String companyIds) {
-            this.companyIds = Optional.of(companyIds);
+            this.companyIds = Optional.ofNullable(companyIds);
             return this;
         }
 
@@ -231,7 +248,7 @@ public final class ListCompanyOverridesRequest {
         }
 
         public Builder featureId(String featureId) {
-            this.featureId = Optional.of(featureId);
+            this.featureId = Optional.ofNullable(featureId);
             return this;
         }
 
@@ -242,7 +259,7 @@ public final class ListCompanyOverridesRequest {
         }
 
         public Builder featureIds(String featureIds) {
-            this.featureIds = Optional.of(featureIds);
+            this.featureIds = Optional.ofNullable(featureIds);
             return this;
         }
 
@@ -253,7 +270,18 @@ public final class ListCompanyOverridesRequest {
         }
 
         public Builder ids(String ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
+            return this;
+        }
+
+        @JsonSetter(value = "without_expired", nulls = Nulls.SKIP)
+        public Builder withoutExpired(Optional<Boolean> withoutExpired) {
+            this.withoutExpired = withoutExpired;
+            return this;
+        }
+
+        public Builder withoutExpired(Boolean withoutExpired) {
+            this.withoutExpired = Optional.ofNullable(withoutExpired);
             return this;
         }
 
@@ -264,7 +292,7 @@ public final class ListCompanyOverridesRequest {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -275,7 +303,7 @@ public final class ListCompanyOverridesRequest {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -286,13 +314,22 @@ public final class ListCompanyOverridesRequest {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
         public ListCompanyOverridesRequest build() {
             return new ListCompanyOverridesRequest(
-                    companyId, companyIds, featureId, featureIds, ids, q, limit, offset, additionalProperties);
+                    companyId,
+                    companyIds,
+                    featureId,
+                    featureIds,
+                    ids,
+                    withoutExpired,
+                    q,
+                    limit,
+                    offset,
+                    additionalProperties);
         }
     }
 }

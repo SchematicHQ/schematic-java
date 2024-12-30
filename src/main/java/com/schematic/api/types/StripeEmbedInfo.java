@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = StripeEmbedInfo.Builder.class)
 public final class StripeEmbedInfo {
     private final String publishableKey;
@@ -114,7 +114,7 @@ public final class StripeEmbedInfo {
 
         @java.lang.Override
         public _FinalStage setupIntentClientSecret(String setupIntentClientSecret) {
-            this.setupIntentClientSecret = Optional.of(setupIntentClientSecret);
+            this.setupIntentClientSecret = Optional.ofNullable(setupIntentClientSecret);
             return this;
         }
 

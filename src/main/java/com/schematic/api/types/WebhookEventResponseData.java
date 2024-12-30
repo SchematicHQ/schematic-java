@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WebhookEventResponseData.Builder.class)
 public final class WebhookEventResponseData {
     private final OffsetDateTime createdAt;
@@ -287,7 +287,7 @@ public final class WebhookEventResponseData {
 
         @java.lang.Override
         public _FinalStage sentAt(OffsetDateTime sentAt) {
-            this.sentAt = Optional.of(sentAt);
+            this.sentAt = Optional.ofNullable(sentAt);
             return this;
         }
 
@@ -300,7 +300,7 @@ public final class WebhookEventResponseData {
 
         @java.lang.Override
         public _FinalStage responseCode(Integer responseCode) {
-            this.responseCode = Optional.of(responseCode);
+            this.responseCode = Optional.ofNullable(responseCode);
             return this;
         }
 
@@ -313,7 +313,7 @@ public final class WebhookEventResponseData {
 
         @java.lang.Override
         public _FinalStage payload(String payload) {
-            this.payload = Optional.of(payload);
+            this.payload = Optional.ofNullable(payload);
             return this;
         }
 

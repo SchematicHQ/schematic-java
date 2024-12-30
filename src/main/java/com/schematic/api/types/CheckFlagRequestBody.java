@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CheckFlagRequestBody.Builder.class)
 public final class CheckFlagRequestBody {
     private final Optional<Map<String, String>> company;
@@ -98,7 +98,7 @@ public final class CheckFlagRequestBody {
         }
 
         public Builder company(Map<String, String> company) {
-            this.company = Optional.of(company);
+            this.company = Optional.ofNullable(company);
             return this;
         }
 
@@ -109,7 +109,7 @@ public final class CheckFlagRequestBody {
         }
 
         public Builder user(Map<String, String> user) {
-            this.user = Optional.of(user);
+            this.user = Optional.ofNullable(user);
             return this;
         }
 

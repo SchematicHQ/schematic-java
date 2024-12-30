@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanResponseData.Builder.class)
 public final class PlanResponseData {
     private final Optional<String> audienceType;
@@ -277,7 +277,7 @@ public final class PlanResponseData {
 
         @java.lang.Override
         public _FinalStage audienceType(String audienceType) {
-            this.audienceType = Optional.of(audienceType);
+            this.audienceType = Optional.ofNullable(audienceType);
             return this;
         }
 

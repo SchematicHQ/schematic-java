@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListCompanyMembershipsParams.Builder.class)
 public final class ListCompanyMembershipsParams {
     private final Optional<String> companyId;
@@ -131,7 +131,7 @@ public final class ListCompanyMembershipsParams {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -142,7 +142,7 @@ public final class ListCompanyMembershipsParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -153,7 +153,7 @@ public final class ListCompanyMembershipsParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -164,7 +164,7 @@ public final class ListCompanyMembershipsParams {
         }
 
         public Builder userId(String userId) {
-            this.userId = Optional.of(userId);
+            this.userId = Optional.ofNullable(userId);
             return this;
         }
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountUsersParams.Builder.class)
 public final class CountUsersParams {
     private final Optional<String> companyId;
@@ -170,7 +170,7 @@ public final class CountUsersParams {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -181,7 +181,7 @@ public final class CountUsersParams {
         }
 
         public Builder ids(List<String> ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -192,7 +192,7 @@ public final class CountUsersParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -203,7 +203,7 @@ public final class CountUsersParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -214,7 +214,7 @@ public final class CountUsersParams {
         }
 
         public Builder planId(String planId) {
-            this.planId = Optional.of(planId);
+            this.planId = Optional.ofNullable(planId);
             return this;
         }
 
@@ -225,7 +225,7 @@ public final class CountUsersParams {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 

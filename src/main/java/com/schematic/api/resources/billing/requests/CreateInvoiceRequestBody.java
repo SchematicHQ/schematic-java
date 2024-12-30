@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateInvoiceRequestBody.Builder.class)
 public final class CreateInvoiceRequestBody {
     private final int amountDue;
@@ -349,7 +349,7 @@ public final class CreateInvoiceRequestBody {
 
         @java.lang.Override
         public _FinalStage url(String url) {
-            this.url = Optional.of(url);
+            this.url = Optional.ofNullable(url);
             return this;
         }
 
@@ -362,7 +362,7 @@ public final class CreateInvoiceRequestBody {
 
         @java.lang.Override
         public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = Optional.of(subscriptionExternalId);
+            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
             return this;
         }
 
@@ -375,7 +375,7 @@ public final class CreateInvoiceRequestBody {
 
         @java.lang.Override
         public _FinalStage paymentMethodExternalId(String paymentMethodExternalId) {
-            this.paymentMethodExternalId = Optional.of(paymentMethodExternalId);
+            this.paymentMethodExternalId = Optional.ofNullable(paymentMethodExternalId);
             return this;
         }
 
@@ -388,7 +388,7 @@ public final class CreateInvoiceRequestBody {
 
         @java.lang.Override
         public _FinalStage externalId(String externalId) {
-            this.externalId = Optional.of(externalId);
+            this.externalId = Optional.ofNullable(externalId);
             return this;
         }
 
@@ -401,7 +401,7 @@ public final class CreateInvoiceRequestBody {
 
         @java.lang.Override
         public _FinalStage dueDate(OffsetDateTime dueDate) {
-            this.dueDate = Optional.of(dueDate);
+            this.dueDate = Optional.ofNullable(dueDate);
             return this;
         }
 

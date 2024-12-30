@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingProductPricing;
+import com.schematic.api.types.BillingSubscriptionDiscount;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,12 +23,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingSubscriptionsRequestBody.Builder.class)
 public final class CreateBillingSubscriptionsRequestBody {
     private final String currency;
 
     private final String customerExternalId;
+
+    private final List<BillingSubscriptionDiscount> discounts;
 
     private final OffsetDateTime expiredAt;
 
@@ -49,11 +52,14 @@ public final class CreateBillingSubscriptionsRequestBody {
 
     private final Optional<Integer> trialEnd;
 
+    private final Optional<String> trialEndSetting;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingSubscriptionsRequestBody(
             String currency,
             String customerExternalId,
+            List<BillingSubscriptionDiscount> discounts,
             OffsetDateTime expiredAt,
             Optional<String> interval,
             Optional<Map<String, JsonNode>> metadata,
@@ -64,9 +70,11 @@ public final class CreateBillingSubscriptionsRequestBody {
             String subscriptionExternalId,
             int totalPrice,
             Optional<Integer> trialEnd,
+            Optional<String> trialEndSetting,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.customerExternalId = customerExternalId;
+        this.discounts = discounts;
         this.expiredAt = expiredAt;
         this.interval = interval;
         this.metadata = metadata;
@@ -77,6 +85,7 @@ public final class CreateBillingSubscriptionsRequestBody {
         this.subscriptionExternalId = subscriptionExternalId;
         this.totalPrice = totalPrice;
         this.trialEnd = trialEnd;
+        this.trialEndSetting = trialEndSetting;
         this.additionalProperties = additionalProperties;
     }
 
@@ -88,6 +97,11 @@ public final class CreateBillingSubscriptionsRequestBody {
     @JsonProperty("customer_external_id")
     public String getCustomerExternalId() {
         return customerExternalId;
+    }
+
+    @JsonProperty("discounts")
+    public List<BillingSubscriptionDiscount> getDiscounts() {
+        return discounts;
     }
 
     @JsonProperty("expired_at")
@@ -140,6 +154,11 @@ public final class CreateBillingSubscriptionsRequestBody {
         return trialEnd;
     }
 
+    @JsonProperty("trial_end_setting")
+    public Optional<String> getTrialEndSetting() {
+        return trialEndSetting;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -155,6 +174,7 @@ public final class CreateBillingSubscriptionsRequestBody {
     private boolean equalTo(CreateBillingSubscriptionsRequestBody other) {
         return currency.equals(other.currency)
                 && customerExternalId.equals(other.customerExternalId)
+                && discounts.equals(other.discounts)
                 && expiredAt.equals(other.expiredAt)
                 && interval.equals(other.interval)
                 && metadata.equals(other.metadata)
@@ -164,7 +184,8 @@ public final class CreateBillingSubscriptionsRequestBody {
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && totalPrice == other.totalPrice
-                && trialEnd.equals(other.trialEnd);
+                && trialEnd.equals(other.trialEnd)
+                && trialEndSetting.equals(other.trialEndSetting);
     }
 
     @java.lang.Override
@@ -172,6 +193,7 @@ public final class CreateBillingSubscriptionsRequestBody {
         return Objects.hash(
                 this.currency,
                 this.customerExternalId,
+                this.discounts,
                 this.expiredAt,
                 this.interval,
                 this.metadata,
@@ -181,7 +203,8 @@ public final class CreateBillingSubscriptionsRequestBody {
                 this.status,
                 this.subscriptionExternalId,
                 this.totalPrice,
-                this.trialEnd);
+                this.trialEnd,
+                this.trialEndSetting);
     }
 
     @java.lang.Override
@@ -218,6 +241,12 @@ public final class CreateBillingSubscriptionsRequestBody {
     public interface _FinalStage {
         CreateBillingSubscriptionsRequestBody build();
 
+        _FinalStage discounts(List<BillingSubscriptionDiscount> discounts);
+
+        _FinalStage addDiscounts(BillingSubscriptionDiscount discounts);
+
+        _FinalStage addAllDiscounts(List<BillingSubscriptionDiscount> discounts);
+
         _FinalStage interval(Optional<String> interval);
 
         _FinalStage interval(String interval);
@@ -247,6 +276,10 @@ public final class CreateBillingSubscriptionsRequestBody {
         _FinalStage trialEnd(Optional<Integer> trialEnd);
 
         _FinalStage trialEnd(Integer trialEnd);
+
+        _FinalStage trialEndSetting(Optional<String> trialEndSetting);
+
+        _FinalStage trialEndSetting(String trialEndSetting);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -267,6 +300,8 @@ public final class CreateBillingSubscriptionsRequestBody {
 
         private int totalPrice;
 
+        private Optional<String> trialEndSetting = Optional.empty();
+
         private Optional<Integer> trialEnd = Optional.empty();
 
         private Optional<String> status = Optional.empty();
@@ -281,6 +316,8 @@ public final class CreateBillingSubscriptionsRequestBody {
 
         private Optional<String> interval = Optional.empty();
 
+        private List<BillingSubscriptionDiscount> discounts = new ArrayList<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -290,6 +327,7 @@ public final class CreateBillingSubscriptionsRequestBody {
         public Builder from(CreateBillingSubscriptionsRequestBody other) {
             currency(other.getCurrency());
             customerExternalId(other.getCustomerExternalId());
+            discounts(other.getDiscounts());
             expiredAt(other.getExpiredAt());
             interval(other.getInterval());
             metadata(other.getMetadata());
@@ -300,6 +338,7 @@ public final class CreateBillingSubscriptionsRequestBody {
             subscriptionExternalId(other.getSubscriptionExternalId());
             totalPrice(other.getTotalPrice());
             trialEnd(other.getTrialEnd());
+            trialEndSetting(other.getTrialEndSetting());
             return this;
         }
 
@@ -339,8 +378,21 @@ public final class CreateBillingSubscriptionsRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage trialEndSetting(String trialEndSetting) {
+            this.trialEndSetting = Optional.ofNullable(trialEndSetting);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_end_setting", nulls = Nulls.SKIP)
+        public _FinalStage trialEndSetting(Optional<String> trialEndSetting) {
+            this.trialEndSetting = trialEndSetting;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage trialEnd(Integer trialEnd) {
-            this.trialEnd = Optional.of(trialEnd);
+            this.trialEnd = Optional.ofNullable(trialEnd);
             return this;
         }
 
@@ -353,7 +405,7 @@ public final class CreateBillingSubscriptionsRequestBody {
 
         @java.lang.Override
         public _FinalStage status(String status) {
-            this.status = Optional.of(status);
+            this.status = Optional.ofNullable(status);
             return this;
         }
 
@@ -386,7 +438,7 @@ public final class CreateBillingSubscriptionsRequestBody {
 
         @java.lang.Override
         public _FinalStage periodStart(Integer periodStart) {
-            this.periodStart = Optional.of(periodStart);
+            this.periodStart = Optional.ofNullable(periodStart);
             return this;
         }
 
@@ -399,7 +451,7 @@ public final class CreateBillingSubscriptionsRequestBody {
 
         @java.lang.Override
         public _FinalStage periodEnd(Integer periodEnd) {
-            this.periodEnd = Optional.of(periodEnd);
+            this.periodEnd = Optional.ofNullable(periodEnd);
             return this;
         }
 
@@ -412,7 +464,7 @@ public final class CreateBillingSubscriptionsRequestBody {
 
         @java.lang.Override
         public _FinalStage metadata(Map<String, JsonNode> metadata) {
-            this.metadata = Optional.of(metadata);
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 
@@ -425,7 +477,7 @@ public final class CreateBillingSubscriptionsRequestBody {
 
         @java.lang.Override
         public _FinalStage interval(String interval) {
-            this.interval = Optional.of(interval);
+            this.interval = Optional.ofNullable(interval);
             return this;
         }
 
@@ -437,10 +489,31 @@ public final class CreateBillingSubscriptionsRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage addAllDiscounts(List<BillingSubscriptionDiscount> discounts) {
+            this.discounts.addAll(discounts);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addDiscounts(BillingSubscriptionDiscount discounts) {
+            this.discounts.add(discounts);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "discounts", nulls = Nulls.SKIP)
+        public _FinalStage discounts(List<BillingSubscriptionDiscount> discounts) {
+            this.discounts.clear();
+            this.discounts.addAll(discounts);
+            return this;
+        }
+
+        @java.lang.Override
         public CreateBillingSubscriptionsRequestBody build() {
             return new CreateBillingSubscriptionsRequestBody(
                     currency,
                     customerExternalId,
+                    discounts,
                     expiredAt,
                     interval,
                     metadata,
@@ -451,6 +524,7 @@ public final class CreateBillingSubscriptionsRequestBody {
                     subscriptionExternalId,
                     totalPrice,
                     trialEnd,
+                    trialEndSetting,
                     additionalProperties);
         }
     }

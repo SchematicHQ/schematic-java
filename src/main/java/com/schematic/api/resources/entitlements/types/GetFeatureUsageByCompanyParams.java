@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetFeatureUsageByCompanyParams.Builder.class)
 public final class GetFeatureUsageByCompanyParams {
     private final Optional<Map<String, JsonNode>> keys;
@@ -86,7 +86,7 @@ public final class GetFeatureUsageByCompanyParams {
         }
 
         public Builder keys(Map<String, JsonNode> keys) {
-            this.keys = Optional.of(keys);
+            this.keys = Optional.ofNullable(keys);
             return this;
         }
 

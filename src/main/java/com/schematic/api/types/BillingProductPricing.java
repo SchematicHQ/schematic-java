@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductPricing.Builder.class)
 public final class BillingProductPricing {
     private final String currency;
@@ -276,7 +276,7 @@ public final class BillingProductPricing {
 
         @java.lang.Override
         public _FinalStage meterId(String meterId) {
-            this.meterId = Optional.of(meterId);
+            this.meterId = Optional.ofNullable(meterId);
             return this;
         }
 

@@ -21,14 +21,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateCompanyOverrideRequestBody.Builder.class)
 public final class UpdateCompanyOverrideRequestBody {
     private final Optional<OffsetDateTime> expirationDate;
-
-    private final Optional<String> meteredMonthlyPriceId;
-
-    private final Optional<String> meteredYearlyPriceId;
 
     private final Optional<UpdateCompanyOverrideRequestBodyMetricPeriod> metricPeriod;
 
@@ -46,8 +42,6 @@ public final class UpdateCompanyOverrideRequestBody {
 
     private UpdateCompanyOverrideRequestBody(
             Optional<OffsetDateTime> expirationDate,
-            Optional<String> meteredMonthlyPriceId,
-            Optional<String> meteredYearlyPriceId,
             Optional<UpdateCompanyOverrideRequestBodyMetricPeriod> metricPeriod,
             Optional<UpdateCompanyOverrideRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Boolean> valueBool,
@@ -56,8 +50,6 @@ public final class UpdateCompanyOverrideRequestBody {
             UpdateCompanyOverrideRequestBodyValueType valueType,
             Map<String, Object> additionalProperties) {
         this.expirationDate = expirationDate;
-        this.meteredMonthlyPriceId = meteredMonthlyPriceId;
-        this.meteredYearlyPriceId = meteredYearlyPriceId;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.valueBool = valueBool;
@@ -70,16 +62,6 @@ public final class UpdateCompanyOverrideRequestBody {
     @JsonProperty("expiration_date")
     public Optional<OffsetDateTime> getExpirationDate() {
         return expirationDate;
-    }
-
-    @JsonProperty("metered_monthly_price_id")
-    public Optional<String> getMeteredMonthlyPriceId() {
-        return meteredMonthlyPriceId;
-    }
-
-    @JsonProperty("metered_yearly_price_id")
-    public Optional<String> getMeteredYearlyPriceId() {
-        return meteredYearlyPriceId;
     }
 
     @JsonProperty("metric_period")
@@ -125,8 +107,6 @@ public final class UpdateCompanyOverrideRequestBody {
 
     private boolean equalTo(UpdateCompanyOverrideRequestBody other) {
         return expirationDate.equals(other.expirationDate)
-                && meteredMonthlyPriceId.equals(other.meteredMonthlyPriceId)
-                && meteredYearlyPriceId.equals(other.meteredYearlyPriceId)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && valueBool.equals(other.valueBool)
@@ -139,8 +119,6 @@ public final class UpdateCompanyOverrideRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.expirationDate,
-                this.meteredMonthlyPriceId,
-                this.meteredYearlyPriceId,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
                 this.valueBool,
@@ -170,14 +148,6 @@ public final class UpdateCompanyOverrideRequestBody {
         _FinalStage expirationDate(Optional<OffsetDateTime> expirationDate);
 
         _FinalStage expirationDate(OffsetDateTime expirationDate);
-
-        _FinalStage meteredMonthlyPriceId(Optional<String> meteredMonthlyPriceId);
-
-        _FinalStage meteredMonthlyPriceId(String meteredMonthlyPriceId);
-
-        _FinalStage meteredYearlyPriceId(Optional<String> meteredYearlyPriceId);
-
-        _FinalStage meteredYearlyPriceId(String meteredYearlyPriceId);
 
         _FinalStage metricPeriod(Optional<UpdateCompanyOverrideRequestBodyMetricPeriod> metricPeriod);
 
@@ -217,10 +187,6 @@ public final class UpdateCompanyOverrideRequestBody {
 
         private Optional<UpdateCompanyOverrideRequestBodyMetricPeriod> metricPeriod = Optional.empty();
 
-        private Optional<String> meteredYearlyPriceId = Optional.empty();
-
-        private Optional<String> meteredMonthlyPriceId = Optional.empty();
-
         private Optional<OffsetDateTime> expirationDate = Optional.empty();
 
         @JsonAnySetter
@@ -231,8 +197,6 @@ public final class UpdateCompanyOverrideRequestBody {
         @java.lang.Override
         public Builder from(UpdateCompanyOverrideRequestBody other) {
             expirationDate(other.getExpirationDate());
-            meteredMonthlyPriceId(other.getMeteredMonthlyPriceId());
-            meteredYearlyPriceId(other.getMeteredYearlyPriceId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             valueBool(other.getValueBool());
@@ -251,7 +215,7 @@ public final class UpdateCompanyOverrideRequestBody {
 
         @java.lang.Override
         public _FinalStage valueTraitId(String valueTraitId) {
-            this.valueTraitId = Optional.of(valueTraitId);
+            this.valueTraitId = Optional.ofNullable(valueTraitId);
             return this;
         }
 
@@ -264,7 +228,7 @@ public final class UpdateCompanyOverrideRequestBody {
 
         @java.lang.Override
         public _FinalStage valueNumeric(Integer valueNumeric) {
-            this.valueNumeric = Optional.of(valueNumeric);
+            this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
@@ -277,7 +241,7 @@ public final class UpdateCompanyOverrideRequestBody {
 
         @java.lang.Override
         public _FinalStage valueBool(Boolean valueBool) {
-            this.valueBool = Optional.of(valueBool);
+            this.valueBool = Optional.ofNullable(valueBool);
             return this;
         }
 
@@ -291,7 +255,7 @@ public final class UpdateCompanyOverrideRequestBody {
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(
                 UpdateCompanyOverrideRequestBodyMetricPeriodMonthReset metricPeriodMonthReset) {
-            this.metricPeriodMonthReset = Optional.of(metricPeriodMonthReset);
+            this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
@@ -305,7 +269,7 @@ public final class UpdateCompanyOverrideRequestBody {
 
         @java.lang.Override
         public _FinalStage metricPeriod(UpdateCompanyOverrideRequestBodyMetricPeriod metricPeriod) {
-            this.metricPeriod = Optional.of(metricPeriod);
+            this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
@@ -317,34 +281,8 @@ public final class UpdateCompanyOverrideRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage meteredYearlyPriceId(String meteredYearlyPriceId) {
-            this.meteredYearlyPriceId = Optional.of(meteredYearlyPriceId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "metered_yearly_price_id", nulls = Nulls.SKIP)
-        public _FinalStage meteredYearlyPriceId(Optional<String> meteredYearlyPriceId) {
-            this.meteredYearlyPriceId = meteredYearlyPriceId;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage meteredMonthlyPriceId(String meteredMonthlyPriceId) {
-            this.meteredMonthlyPriceId = Optional.of(meteredMonthlyPriceId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "metered_monthly_price_id", nulls = Nulls.SKIP)
-        public _FinalStage meteredMonthlyPriceId(Optional<String> meteredMonthlyPriceId) {
-            this.meteredMonthlyPriceId = meteredMonthlyPriceId;
-            return this;
-        }
-
-        @java.lang.Override
         public _FinalStage expirationDate(OffsetDateTime expirationDate) {
-            this.expirationDate = Optional.of(expirationDate);
+            this.expirationDate = Optional.ofNullable(expirationDate);
             return this;
         }
 
@@ -359,8 +297,6 @@ public final class UpdateCompanyOverrideRequestBody {
         public UpdateCompanyOverrideRequestBody build() {
             return new UpdateCompanyOverrideRequestBody(
                     expirationDate,
-                    meteredMonthlyPriceId,
-                    meteredYearlyPriceId,
                     metricPeriod,
                     metricPeriodMonthReset,
                     valueBool,

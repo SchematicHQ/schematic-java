@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingCustomerSubscription.Builder.class)
 public final class BillingCustomerSubscription {
     private final String currency;
@@ -220,7 +220,7 @@ public final class BillingCustomerSubscription {
 
         @java.lang.Override
         public _FinalStage expiredAt(OffsetDateTime expiredAt) {
-            this.expiredAt = Optional.of(expiredAt);
+            this.expiredAt = Optional.ofNullable(expiredAt);
             return this;
         }
 

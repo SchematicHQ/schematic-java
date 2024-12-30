@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CrmDealLineItem.Builder.class)
 public final class CrmDealLineItem {
     private final String billingFrequency;
@@ -366,7 +366,7 @@ public final class CrmDealLineItem {
 
         @java.lang.Override
         public _FinalStage totalDiscount(Map<String, JsonNode> totalDiscount) {
-            this.totalDiscount = Optional.of(totalDiscount);
+            this.totalDiscount = Optional.ofNullable(totalDiscount);
             return this;
         }
 
@@ -379,7 +379,7 @@ public final class CrmDealLineItem {
 
         @java.lang.Override
         public _FinalStage termMonth(Integer termMonth) {
-            this.termMonth = Optional.of(termMonth);
+            this.termMonth = Optional.ofNullable(termMonth);
             return this;
         }
 
@@ -392,7 +392,7 @@ public final class CrmDealLineItem {
 
         @java.lang.Override
         public _FinalStage discountPercentage(Map<String, JsonNode> discountPercentage) {
-            this.discountPercentage = Optional.of(discountPercentage);
+            this.discountPercentage = Optional.ofNullable(discountPercentage);
             return this;
         }
 

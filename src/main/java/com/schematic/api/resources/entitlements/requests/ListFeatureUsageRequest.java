@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListFeatureUsageRequest.Builder.class)
 public final class ListFeatureUsageRequest {
     private final Optional<String> companyId;
@@ -177,7 +177,7 @@ public final class ListFeatureUsageRequest {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -188,7 +188,7 @@ public final class ListFeatureUsageRequest {
         }
 
         public Builder companyKeys(Map<String, String> companyKeys) {
-            this.companyKeys = Optional.of(companyKeys);
+            this.companyKeys = Optional.ofNullable(companyKeys);
             return this;
         }
 
@@ -199,7 +199,7 @@ public final class ListFeatureUsageRequest {
         }
 
         public Builder featureIds(String featureIds) {
-            this.featureIds = Optional.of(featureIds);
+            this.featureIds = Optional.ofNullable(featureIds);
             return this;
         }
 
@@ -210,7 +210,7 @@ public final class ListFeatureUsageRequest {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -221,7 +221,7 @@ public final class ListFeatureUsageRequest {
         }
 
         public Builder withoutNegativeEntitlements(Boolean withoutNegativeEntitlements) {
-            this.withoutNegativeEntitlements = Optional.of(withoutNegativeEntitlements);
+            this.withoutNegativeEntitlements = Optional.ofNullable(withoutNegativeEntitlements);
             return this;
         }
 
@@ -232,7 +232,7 @@ public final class ListFeatureUsageRequest {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -243,7 +243,7 @@ public final class ListFeatureUsageRequest {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListCrmProductsParams.Builder.class)
 public final class ListCrmProductsParams {
     private final Optional<List<String>> ids;
@@ -132,7 +132,7 @@ public final class ListCrmProductsParams {
         }
 
         public Builder ids(List<String> ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -143,7 +143,7 @@ public final class ListCrmProductsParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -154,7 +154,7 @@ public final class ListCrmProductsParams {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -165,7 +165,7 @@ public final class ListCrmProductsParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 

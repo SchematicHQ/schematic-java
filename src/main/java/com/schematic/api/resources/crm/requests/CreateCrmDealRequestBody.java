@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateCrmDealRequestBody.Builder.class)
 public final class CreateCrmDealRequestBody {
     private final Optional<String> arr;
@@ -258,7 +258,7 @@ public final class CreateCrmDealRequestBody {
 
         @java.lang.Override
         public _FinalStage mrr(String mrr) {
-            this.mrr = Optional.of(mrr);
+            this.mrr = Optional.ofNullable(mrr);
             return this;
         }
 
@@ -271,7 +271,7 @@ public final class CreateCrmDealRequestBody {
 
         @java.lang.Override
         public _FinalStage dealStage(String dealStage) {
-            this.dealStage = Optional.of(dealStage);
+            this.dealStage = Optional.ofNullable(dealStage);
             return this;
         }
 
@@ -284,7 +284,7 @@ public final class CreateCrmDealRequestBody {
 
         @java.lang.Override
         public _FinalStage dealName(String dealName) {
-            this.dealName = Optional.of(dealName);
+            this.dealName = Optional.ofNullable(dealName);
             return this;
         }
 
@@ -297,7 +297,7 @@ public final class CreateCrmDealRequestBody {
 
         @java.lang.Override
         public _FinalStage crmProductId(String crmProductId) {
-            this.crmProductId = Optional.of(crmProductId);
+            this.crmProductId = Optional.ofNullable(crmProductId);
             return this;
         }
 
@@ -310,7 +310,7 @@ public final class CreateCrmDealRequestBody {
 
         @java.lang.Override
         public _FinalStage crmCompanyId(String crmCompanyId) {
-            this.crmCompanyId = Optional.of(crmCompanyId);
+            this.crmCompanyId = Optional.ofNullable(crmCompanyId);
             return this;
         }
 
@@ -323,7 +323,7 @@ public final class CreateCrmDealRequestBody {
 
         @java.lang.Override
         public _FinalStage arr(String arr) {
-            this.arr = Optional.of(arr);
+            this.arr = Optional.ofNullable(arr);
             return this;
         }
 

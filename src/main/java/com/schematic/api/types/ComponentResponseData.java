@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ComponentResponseData.Builder.class)
 public final class ComponentResponseData {
     private final Optional<Map<String, Double>> ast;
@@ -238,7 +238,7 @@ public final class ComponentResponseData {
 
         @java.lang.Override
         public _FinalStage ast(Map<String, Double> ast) {
-            this.ast = Optional.of(ast);
+            this.ast = Optional.ofNullable(ast);
             return this;
         }
 

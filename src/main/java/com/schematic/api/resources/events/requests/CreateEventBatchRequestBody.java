@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateEventBatchRequestBody.Builder.class)
 public final class CreateEventBatchRequestBody {
     private final List<CreateEventRequestBody> events;

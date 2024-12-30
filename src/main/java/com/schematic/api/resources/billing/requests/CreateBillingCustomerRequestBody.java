@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingCustomerRequestBody.Builder.class)
 public final class CreateBillingCustomerRequestBody {
     private final Optional<String> companyId;
@@ -229,7 +229,7 @@ public final class CreateBillingCustomerRequestBody {
 
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 

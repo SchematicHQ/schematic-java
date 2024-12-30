@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ApiKeyCreateResponseData.Builder.class)
 public final class ApiKeyCreateResponseData {
     private final OffsetDateTime createdAt;
@@ -298,7 +298,7 @@ public final class ApiKeyCreateResponseData {
 
         @java.lang.Override
         public _FinalStage lastUsedAt(OffsetDateTime lastUsedAt) {
-            this.lastUsedAt = Optional.of(lastUsedAt);
+            this.lastUsedAt = Optional.ofNullable(lastUsedAt);
             return this;
         }
 
@@ -311,7 +311,7 @@ public final class ApiKeyCreateResponseData {
 
         @java.lang.Override
         public _FinalStage environmentId(String environmentId) {
-            this.environmentId = Optional.of(environmentId);
+            this.environmentId = Optional.ofNullable(environmentId);
             return this;
         }
 
@@ -324,7 +324,7 @@ public final class ApiKeyCreateResponseData {
 
         @java.lang.Override
         public _FinalStage description(String description) {
-            this.description = Optional.of(description);
+            this.description = Optional.ofNullable(description);
             return this;
         }
 

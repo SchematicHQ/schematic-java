@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventSummaryResponseData.Builder.class)
 public final class EventSummaryResponseData {
     private final int companyCount;
@@ -225,7 +225,7 @@ public final class EventSummaryResponseData {
 
         @java.lang.Override
         public _FinalStage lastSeenAt(OffsetDateTime lastSeenAt) {
-            this.lastSeenAt = Optional.of(lastSeenAt);
+            this.lastSeenAt = Optional.ofNullable(lastSeenAt);
             return this;
         }
 

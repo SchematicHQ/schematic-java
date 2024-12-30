@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyCrmDealsResponseData.Builder.class)
 public final class CompanyCrmDealsResponseData {
     private final String dealArr;
@@ -205,7 +205,7 @@ public final class CompanyCrmDealsResponseData {
 
         @java.lang.Override
         public _FinalStage dealName(String dealName) {
-            this.dealName = Optional.of(dealName);
+            this.dealName = Optional.ofNullable(dealName);
             return this;
         }
 

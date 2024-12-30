@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListInvoicesParams.Builder.class)
 public final class ListInvoicesParams {
     private final Optional<String> companyId;
@@ -145,7 +145,7 @@ public final class ListInvoicesParams {
         }
 
         public Builder companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -156,7 +156,7 @@ public final class ListInvoicesParams {
         }
 
         public Builder customerExternalId(String customerExternalId) {
-            this.customerExternalId = Optional.of(customerExternalId);
+            this.customerExternalId = Optional.ofNullable(customerExternalId);
             return this;
         }
 
@@ -167,7 +167,7 @@ public final class ListInvoicesParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -178,7 +178,7 @@ public final class ListInvoicesParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -189,7 +189,7 @@ public final class ListInvoicesParams {
         }
 
         public Builder subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = Optional.of(subscriptionExternalId);
+            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
             return this;
         }
 

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyDetailResponseData.Builder.class)
 public final class CompanyDetailResponseData {
     private final List<CompanyPlanWithBillingSubView> addOns;
@@ -43,6 +43,8 @@ public final class CompanyDetailResponseData {
     private final Optional<OffsetDateTime> lastSeenAt;
 
     private final Optional<String> logoUrl;
+
+    private final List<CompanyEventPeriodMetricsResponseData> metrics;
 
     private final String name;
 
@@ -69,6 +71,7 @@ public final class CompanyDetailResponseData {
             List<EntityKeyDetailResponseData> keys,
             Optional<OffsetDateTime> lastSeenAt,
             Optional<String> logoUrl,
+            List<CompanyEventPeriodMetricsResponseData> metrics,
             String name,
             Optional<CompanyPlanWithBillingSubView> plan,
             List<GenericPreviewObject> plans,
@@ -86,6 +89,7 @@ public final class CompanyDetailResponseData {
         this.keys = keys;
         this.lastSeenAt = lastSeenAt;
         this.logoUrl = logoUrl;
+        this.metrics = metrics;
         this.name = name;
         this.plan = plan;
         this.plans = plans;
@@ -145,6 +149,11 @@ public final class CompanyDetailResponseData {
         return logoUrl;
     }
 
+    @JsonProperty("metrics")
+    public List<CompanyEventPeriodMetricsResponseData> getMetrics() {
+        return metrics;
+    }
+
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -200,6 +209,7 @@ public final class CompanyDetailResponseData {
                 && keys.equals(other.keys)
                 && lastSeenAt.equals(other.lastSeenAt)
                 && logoUrl.equals(other.logoUrl)
+                && metrics.equals(other.metrics)
                 && name.equals(other.name)
                 && plan.equals(other.plan)
                 && plans.equals(other.plans)
@@ -221,6 +231,7 @@ public final class CompanyDetailResponseData {
                 this.keys,
                 this.lastSeenAt,
                 this.logoUrl,
+                this.metrics,
                 this.name,
                 this.plan,
                 this.plans,
@@ -303,6 +314,12 @@ public final class CompanyDetailResponseData {
 
         _FinalStage logoUrl(String logoUrl);
 
+        _FinalStage metrics(List<CompanyEventPeriodMetricsResponseData> metrics);
+
+        _FinalStage addMetrics(CompanyEventPeriodMetricsResponseData metrics);
+
+        _FinalStage addAllMetrics(List<CompanyEventPeriodMetricsResponseData> metrics);
+
         _FinalStage plan(Optional<CompanyPlanWithBillingSubView> plan);
 
         _FinalStage plan(CompanyPlanWithBillingSubView plan);
@@ -345,6 +362,8 @@ public final class CompanyDetailResponseData {
 
         private Optional<CompanyPlanWithBillingSubView> plan = Optional.empty();
 
+        private List<CompanyEventPeriodMetricsResponseData> metrics = new ArrayList<>();
+
         private Optional<String> logoUrl = Optional.empty();
 
         private Optional<OffsetDateTime> lastSeenAt = Optional.empty();
@@ -376,6 +395,7 @@ public final class CompanyDetailResponseData {
             keys(other.getKeys());
             lastSeenAt(other.getLastSeenAt());
             logoUrl(other.getLogoUrl());
+            metrics(other.getMetrics());
             name(other.getName());
             plan(other.getPlan());
             plans(other.getPlans());
@@ -433,7 +453,7 @@ public final class CompanyDetailResponseData {
          */
         @java.lang.Override
         public _FinalStage traits(Map<String, JsonNode> traits) {
-            this.traits = Optional.of(traits);
+            this.traits = Optional.ofNullable(traits);
             return this;
         }
 
@@ -466,7 +486,7 @@ public final class CompanyDetailResponseData {
 
         @java.lang.Override
         public _FinalStage plan(CompanyPlanWithBillingSubView plan) {
-            this.plan = Optional.of(plan);
+            this.plan = Optional.ofNullable(plan);
             return this;
         }
 
@@ -478,8 +498,28 @@ public final class CompanyDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllMetrics(List<CompanyEventPeriodMetricsResponseData> metrics) {
+            this.metrics.addAll(metrics);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addMetrics(CompanyEventPeriodMetricsResponseData metrics) {
+            this.metrics.add(metrics);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metrics", nulls = Nulls.SKIP)
+        public _FinalStage metrics(List<CompanyEventPeriodMetricsResponseData> metrics) {
+            this.metrics.clear();
+            this.metrics.addAll(metrics);
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage logoUrl(String logoUrl) {
-            this.logoUrl = Optional.of(logoUrl);
+            this.logoUrl = Optional.ofNullable(logoUrl);
             return this;
         }
 
@@ -492,7 +532,7 @@ public final class CompanyDetailResponseData {
 
         @java.lang.Override
         public _FinalStage lastSeenAt(OffsetDateTime lastSeenAt) {
-            this.lastSeenAt = Optional.of(lastSeenAt);
+            this.lastSeenAt = Optional.ofNullable(lastSeenAt);
             return this;
         }
 
@@ -565,7 +605,7 @@ public final class CompanyDetailResponseData {
 
         @java.lang.Override
         public _FinalStage billingSubscription(BillingSubscriptionView billingSubscription) {
-            this.billingSubscription = Optional.of(billingSubscription);
+            this.billingSubscription = Optional.ofNullable(billingSubscription);
             return this;
         }
 
@@ -609,6 +649,7 @@ public final class CompanyDetailResponseData {
                     keys,
                     lastSeenAt,
                     logoUrl,
+                    metrics,
                     name,
                     plan,
                     plans,

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingSubscriptionView.Builder.class)
 public final class BillingSubscriptionView {
     private final Optional<String> companyId;
@@ -31,6 +31,8 @@ public final class BillingSubscriptionView {
     private final String currency;
 
     private final String customerExternalId;
+
+    private final List<BillingSubscriptionDiscountView> discounts;
 
     private final Optional<OffsetDateTime> expiredAt;
 
@@ -58,6 +60,8 @@ public final class BillingSubscriptionView {
 
     private final Optional<Integer> trialEnd;
 
+    private final Optional<String> trialEndSetting;
+
     private final Map<String, Object> additionalProperties;
 
     private BillingSubscriptionView(
@@ -65,6 +69,7 @@ public final class BillingSubscriptionView {
             OffsetDateTime createdAt,
             String currency,
             String customerExternalId,
+            List<BillingSubscriptionDiscountView> discounts,
             Optional<OffsetDateTime> expiredAt,
             String id,
             String interval,
@@ -78,11 +83,13 @@ public final class BillingSubscriptionView {
             String subscriptionExternalId,
             int totalPrice,
             Optional<Integer> trialEnd,
+            Optional<String> trialEndSetting,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.createdAt = createdAt;
         this.currency = currency;
         this.customerExternalId = customerExternalId;
+        this.discounts = discounts;
         this.expiredAt = expiredAt;
         this.id = id;
         this.interval = interval;
@@ -96,6 +103,7 @@ public final class BillingSubscriptionView {
         this.subscriptionExternalId = subscriptionExternalId;
         this.totalPrice = totalPrice;
         this.trialEnd = trialEnd;
+        this.trialEndSetting = trialEndSetting;
         this.additionalProperties = additionalProperties;
     }
 
@@ -117,6 +125,11 @@ public final class BillingSubscriptionView {
     @JsonProperty("customer_external_id")
     public String getCustomerExternalId() {
         return customerExternalId;
+    }
+
+    @JsonProperty("discounts")
+    public List<BillingSubscriptionDiscountView> getDiscounts() {
+        return discounts;
     }
 
     @JsonProperty("expired_at")
@@ -184,6 +197,11 @@ public final class BillingSubscriptionView {
         return trialEnd;
     }
 
+    @JsonProperty("trial_end_setting")
+    public Optional<String> getTrialEndSetting() {
+        return trialEndSetting;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -200,6 +218,7 @@ public final class BillingSubscriptionView {
                 && createdAt.equals(other.createdAt)
                 && currency.equals(other.currency)
                 && customerExternalId.equals(other.customerExternalId)
+                && discounts.equals(other.discounts)
                 && expiredAt.equals(other.expiredAt)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
@@ -212,7 +231,8 @@ public final class BillingSubscriptionView {
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && totalPrice == other.totalPrice
-                && trialEnd.equals(other.trialEnd);
+                && trialEnd.equals(other.trialEnd)
+                && trialEndSetting.equals(other.trialEndSetting);
     }
 
     @java.lang.Override
@@ -222,6 +242,7 @@ public final class BillingSubscriptionView {
                 this.createdAt,
                 this.currency,
                 this.customerExternalId,
+                this.discounts,
                 this.expiredAt,
                 this.id,
                 this.interval,
@@ -234,7 +255,8 @@ public final class BillingSubscriptionView {
                 this.status,
                 this.subscriptionExternalId,
                 this.totalPrice,
-                this.trialEnd);
+                this.trialEnd,
+                this.trialEndSetting);
     }
 
     @java.lang.Override
@@ -295,6 +317,12 @@ public final class BillingSubscriptionView {
 
         _FinalStage companyId(String companyId);
 
+        _FinalStage discounts(List<BillingSubscriptionDiscountView> discounts);
+
+        _FinalStage addDiscounts(BillingSubscriptionDiscountView discounts);
+
+        _FinalStage addAllDiscounts(List<BillingSubscriptionDiscountView> discounts);
+
         _FinalStage expiredAt(Optional<OffsetDateTime> expiredAt);
 
         _FinalStage expiredAt(OffsetDateTime expiredAt);
@@ -320,6 +348,10 @@ public final class BillingSubscriptionView {
         _FinalStage trialEnd(Optional<Integer> trialEnd);
 
         _FinalStage trialEnd(Integer trialEnd);
+
+        _FinalStage trialEndSetting(Optional<String> trialEndSetting);
+
+        _FinalStage trialEndSetting(String trialEndSetting);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -355,6 +387,8 @@ public final class BillingSubscriptionView {
 
         private int totalPrice;
 
+        private Optional<String> trialEndSetting = Optional.empty();
+
         private Optional<Integer> trialEnd = Optional.empty();
 
         private List<BillingProductForSubscriptionResponseData> products = new ArrayList<>();
@@ -366,6 +400,8 @@ public final class BillingSubscriptionView {
         private Optional<InvoiceResponseData> latestInvoice = Optional.empty();
 
         private Optional<OffsetDateTime> expiredAt = Optional.empty();
+
+        private List<BillingSubscriptionDiscountView> discounts = new ArrayList<>();
 
         private Optional<String> companyId = Optional.empty();
 
@@ -380,6 +416,7 @@ public final class BillingSubscriptionView {
             createdAt(other.getCreatedAt());
             currency(other.getCurrency());
             customerExternalId(other.getCustomerExternalId());
+            discounts(other.getDiscounts());
             expiredAt(other.getExpiredAt());
             id(other.getId());
             interval(other.getInterval());
@@ -393,6 +430,7 @@ public final class BillingSubscriptionView {
             subscriptionExternalId(other.getSubscriptionExternalId());
             totalPrice(other.getTotalPrice());
             trialEnd(other.getTrialEnd());
+            trialEndSetting(other.getTrialEndSetting());
             return this;
         }
 
@@ -467,8 +505,21 @@ public final class BillingSubscriptionView {
         }
 
         @java.lang.Override
+        public _FinalStage trialEndSetting(String trialEndSetting) {
+            this.trialEndSetting = Optional.ofNullable(trialEndSetting);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_end_setting", nulls = Nulls.SKIP)
+        public _FinalStage trialEndSetting(Optional<String> trialEndSetting) {
+            this.trialEndSetting = trialEndSetting;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage trialEnd(Integer trialEnd) {
-            this.trialEnd = Optional.of(trialEnd);
+            this.trialEnd = Optional.ofNullable(trialEnd);
             return this;
         }
 
@@ -501,7 +552,7 @@ public final class BillingSubscriptionView {
 
         @java.lang.Override
         public _FinalStage paymentMethod(PaymentMethodResponseData paymentMethod) {
-            this.paymentMethod = Optional.of(paymentMethod);
+            this.paymentMethod = Optional.ofNullable(paymentMethod);
             return this;
         }
 
@@ -514,7 +565,7 @@ public final class BillingSubscriptionView {
 
         @java.lang.Override
         public _FinalStage metadata(Map<String, JsonNode> metadata) {
-            this.metadata = Optional.of(metadata);
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 
@@ -527,7 +578,7 @@ public final class BillingSubscriptionView {
 
         @java.lang.Override
         public _FinalStage latestInvoice(InvoiceResponseData latestInvoice) {
-            this.latestInvoice = Optional.of(latestInvoice);
+            this.latestInvoice = Optional.ofNullable(latestInvoice);
             return this;
         }
 
@@ -540,7 +591,7 @@ public final class BillingSubscriptionView {
 
         @java.lang.Override
         public _FinalStage expiredAt(OffsetDateTime expiredAt) {
-            this.expiredAt = Optional.of(expiredAt);
+            this.expiredAt = Optional.ofNullable(expiredAt);
             return this;
         }
 
@@ -552,8 +603,28 @@ public final class BillingSubscriptionView {
         }
 
         @java.lang.Override
+        public _FinalStage addAllDiscounts(List<BillingSubscriptionDiscountView> discounts) {
+            this.discounts.addAll(discounts);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addDiscounts(BillingSubscriptionDiscountView discounts) {
+            this.discounts.add(discounts);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "discounts", nulls = Nulls.SKIP)
+        public _FinalStage discounts(List<BillingSubscriptionDiscountView> discounts) {
+            this.discounts.clear();
+            this.discounts.addAll(discounts);
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -571,6 +642,7 @@ public final class BillingSubscriptionView {
                     createdAt,
                     currency,
                     customerExternalId,
+                    discounts,
                     expiredAt,
                     id,
                     interval,
@@ -584,6 +656,7 @@ public final class BillingSubscriptionView {
                     subscriptionExternalId,
                     totalPrice,
                     trialEnd,
+                    trialEndSetting,
                     additionalProperties);
         }
     }

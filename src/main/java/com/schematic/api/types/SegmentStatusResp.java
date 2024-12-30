@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SegmentStatusResp.Builder.class)
 public final class SegmentStatusResp {
     private final boolean connected;
@@ -141,7 +141,7 @@ public final class SegmentStatusResp {
 
         @java.lang.Override
         public _FinalStage lastEventAt(OffsetDateTime lastEventAt) {
-            this.lastEventAt = Optional.of(lastEventAt);
+            this.lastEventAt = Optional.ofNullable(lastEventAt);
             return this;
         }
 

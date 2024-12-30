@@ -17,14 +17,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateEntitlementReqCommon.Builder.class)
 public final class CreateEntitlementReqCommon {
     private final String featureId;
-
-    private final Optional<String> meteredMonthlyPriceId;
-
-    private final Optional<String> meteredYearlyPriceId;
 
     private final Optional<CreateEntitlementReqCommonMetricPeriod> metricPeriod;
 
@@ -42,8 +38,6 @@ public final class CreateEntitlementReqCommon {
 
     private CreateEntitlementReqCommon(
             String featureId,
-            Optional<String> meteredMonthlyPriceId,
-            Optional<String> meteredYearlyPriceId,
             Optional<CreateEntitlementReqCommonMetricPeriod> metricPeriod,
             Optional<CreateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Boolean> valueBool,
@@ -52,8 +46,6 @@ public final class CreateEntitlementReqCommon {
             CreateEntitlementReqCommonValueType valueType,
             Map<String, Object> additionalProperties) {
         this.featureId = featureId;
-        this.meteredMonthlyPriceId = meteredMonthlyPriceId;
-        this.meteredYearlyPriceId = meteredYearlyPriceId;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.valueBool = valueBool;
@@ -66,16 +58,6 @@ public final class CreateEntitlementReqCommon {
     @JsonProperty("feature_id")
     public String getFeatureId() {
         return featureId;
-    }
-
-    @JsonProperty("metered_monthly_price_id")
-    public Optional<String> getMeteredMonthlyPriceId() {
-        return meteredMonthlyPriceId;
-    }
-
-    @JsonProperty("metered_yearly_price_id")
-    public Optional<String> getMeteredYearlyPriceId() {
-        return meteredYearlyPriceId;
     }
 
     @JsonProperty("metric_period")
@@ -121,8 +103,6 @@ public final class CreateEntitlementReqCommon {
 
     private boolean equalTo(CreateEntitlementReqCommon other) {
         return featureId.equals(other.featureId)
-                && meteredMonthlyPriceId.equals(other.meteredMonthlyPriceId)
-                && meteredYearlyPriceId.equals(other.meteredYearlyPriceId)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && valueBool.equals(other.valueBool)
@@ -135,8 +115,6 @@ public final class CreateEntitlementReqCommon {
     public int hashCode() {
         return Objects.hash(
                 this.featureId,
-                this.meteredMonthlyPriceId,
-                this.meteredYearlyPriceId,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
                 this.valueBool,
@@ -166,14 +144,6 @@ public final class CreateEntitlementReqCommon {
 
     public interface _FinalStage {
         CreateEntitlementReqCommon build();
-
-        _FinalStage meteredMonthlyPriceId(Optional<String> meteredMonthlyPriceId);
-
-        _FinalStage meteredMonthlyPriceId(String meteredMonthlyPriceId);
-
-        _FinalStage meteredYearlyPriceId(Optional<String> meteredYearlyPriceId);
-
-        _FinalStage meteredYearlyPriceId(String meteredYearlyPriceId);
 
         _FinalStage metricPeriod(Optional<CreateEntitlementReqCommonMetricPeriod> metricPeriod);
 
@@ -213,10 +183,6 @@ public final class CreateEntitlementReqCommon {
 
         private Optional<CreateEntitlementReqCommonMetricPeriod> metricPeriod = Optional.empty();
 
-        private Optional<String> meteredYearlyPriceId = Optional.empty();
-
-        private Optional<String> meteredMonthlyPriceId = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -225,8 +191,6 @@ public final class CreateEntitlementReqCommon {
         @java.lang.Override
         public Builder from(CreateEntitlementReqCommon other) {
             featureId(other.getFeatureId());
-            meteredMonthlyPriceId(other.getMeteredMonthlyPriceId());
-            meteredYearlyPriceId(other.getMeteredYearlyPriceId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             valueBool(other.getValueBool());
@@ -252,7 +216,7 @@ public final class CreateEntitlementReqCommon {
 
         @java.lang.Override
         public _FinalStage valueTraitId(String valueTraitId) {
-            this.valueTraitId = Optional.of(valueTraitId);
+            this.valueTraitId = Optional.ofNullable(valueTraitId);
             return this;
         }
 
@@ -265,7 +229,7 @@ public final class CreateEntitlementReqCommon {
 
         @java.lang.Override
         public _FinalStage valueNumeric(Integer valueNumeric) {
-            this.valueNumeric = Optional.of(valueNumeric);
+            this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
@@ -278,7 +242,7 @@ public final class CreateEntitlementReqCommon {
 
         @java.lang.Override
         public _FinalStage valueBool(Boolean valueBool) {
-            this.valueBool = Optional.of(valueBool);
+            this.valueBool = Optional.ofNullable(valueBool);
             return this;
         }
 
@@ -292,7 +256,7 @@ public final class CreateEntitlementReqCommon {
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(
                 CreateEntitlementReqCommonMetricPeriodMonthReset metricPeriodMonthReset) {
-            this.metricPeriodMonthReset = Optional.of(metricPeriodMonthReset);
+            this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
@@ -306,7 +270,7 @@ public final class CreateEntitlementReqCommon {
 
         @java.lang.Override
         public _FinalStage metricPeriod(CreateEntitlementReqCommonMetricPeriod metricPeriod) {
-            this.metricPeriod = Optional.of(metricPeriod);
+            this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
@@ -318,37 +282,9 @@ public final class CreateEntitlementReqCommon {
         }
 
         @java.lang.Override
-        public _FinalStage meteredYearlyPriceId(String meteredYearlyPriceId) {
-            this.meteredYearlyPriceId = Optional.of(meteredYearlyPriceId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "metered_yearly_price_id", nulls = Nulls.SKIP)
-        public _FinalStage meteredYearlyPriceId(Optional<String> meteredYearlyPriceId) {
-            this.meteredYearlyPriceId = meteredYearlyPriceId;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage meteredMonthlyPriceId(String meteredMonthlyPriceId) {
-            this.meteredMonthlyPriceId = Optional.of(meteredMonthlyPriceId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "metered_monthly_price_id", nulls = Nulls.SKIP)
-        public _FinalStage meteredMonthlyPriceId(Optional<String> meteredMonthlyPriceId) {
-            this.meteredMonthlyPriceId = meteredMonthlyPriceId;
-            return this;
-        }
-
-        @java.lang.Override
         public CreateEntitlementReqCommon build() {
             return new CreateEntitlementReqCommon(
                     featureId,
-                    meteredMonthlyPriceId,
-                    meteredYearlyPriceId,
                     metricPeriod,
                     metricPeriodMonthReset,
                     valueBool,

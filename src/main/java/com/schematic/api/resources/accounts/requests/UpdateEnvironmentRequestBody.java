@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateEnvironmentRequestBody.Builder.class)
 public final class UpdateEnvironmentRequestBody {
     private final Optional<UpdateEnvironmentRequestBodyEnvironmentType> environmentType;
@@ -99,7 +99,7 @@ public final class UpdateEnvironmentRequestBody {
         }
 
         public Builder environmentType(UpdateEnvironmentRequestBodyEnvironmentType environmentType) {
-            this.environmentType = Optional.of(environmentType);
+            this.environmentType = Optional.ofNullable(environmentType);
             return this;
         }
 
@@ -110,7 +110,7 @@ public final class UpdateEnvironmentRequestBody {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductPriceResponseData.Builder.class)
 public final class BillingProductPriceResponseData {
     private final OffsetDateTime createdAt;
@@ -329,7 +329,7 @@ public final class BillingProductPriceResponseData {
 
         @java.lang.Override
         public _FinalStage meterId(String meterId) {
-            this.meterId = Optional.of(meterId);
+            this.meterId = Optional.ofNullable(meterId);
             return this;
         }
 

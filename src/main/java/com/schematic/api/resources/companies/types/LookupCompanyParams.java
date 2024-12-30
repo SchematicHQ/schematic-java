@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = LookupCompanyParams.Builder.class)
 public final class LookupCompanyParams {
     private final Optional<Map<String, JsonNode>> keys;
@@ -85,7 +85,7 @@ public final class LookupCompanyParams {
         }
 
         public Builder keys(Map<String, JsonNode> keys) {
-            this.keys = Optional.of(keys);
+            this.keys = Optional.ofNullable(keys);
             return this;
         }
 

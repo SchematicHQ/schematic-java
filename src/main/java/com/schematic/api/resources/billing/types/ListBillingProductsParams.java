@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListBillingProductsParams.Builder.class)
 public final class ListBillingProductsParams {
     private final Optional<List<String>> ids;
@@ -215,7 +215,7 @@ public final class ListBillingProductsParams {
         }
 
         public Builder ids(List<String> ids) {
-            this.ids = Optional.of(ids);
+            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -226,7 +226,7 @@ public final class ListBillingProductsParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -237,7 +237,7 @@ public final class ListBillingProductsParams {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -248,7 +248,7 @@ public final class ListBillingProductsParams {
         }
 
         public Builder offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -259,7 +259,7 @@ public final class ListBillingProductsParams {
         }
 
         public Builder priceUsageType(String priceUsageType) {
-            this.priceUsageType = Optional.of(priceUsageType);
+            this.priceUsageType = Optional.ofNullable(priceUsageType);
             return this;
         }
 
@@ -270,7 +270,7 @@ public final class ListBillingProductsParams {
         }
 
         public Builder q(String q) {
-            this.q = Optional.of(q);
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -281,7 +281,7 @@ public final class ListBillingProductsParams {
         }
 
         public Builder withPricesOnly(Boolean withPricesOnly) {
-            this.withPricesOnly = Optional.of(withPricesOnly);
+            this.withPricesOnly = Optional.ofNullable(withPricesOnly);
             return this;
         }
 
@@ -292,7 +292,7 @@ public final class ListBillingProductsParams {
         }
 
         public Builder withZeroPrice(Boolean withZeroPrice) {
-            this.withZeroPrice = Optional.of(withZeroPrice);
+            this.withZeroPrice = Optional.ofNullable(withZeroPrice);
             return this;
         }
 
@@ -303,7 +303,7 @@ public final class ListBillingProductsParams {
         }
 
         public Builder withoutLinkedToPlan(Boolean withoutLinkedToPlan) {
-            this.withoutLinkedToPlan = Optional.of(withoutLinkedToPlan);
+            this.withoutLinkedToPlan = Optional.ofNullable(withoutLinkedToPlan);
             return this;
         }
 

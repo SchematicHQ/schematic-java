@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateFlagRequestBody.Builder.class)
 public final class CreateFlagRequestBody {
     private final boolean defaultValue;
@@ -237,7 +237,7 @@ public final class CreateFlagRequestBody {
 
         @java.lang.Override
         public _FinalStage maintainerId(String maintainerId) {
-            this.maintainerId = Optional.of(maintainerId);
+            this.maintainerId = Optional.ofNullable(maintainerId);
             return this;
         }
 
@@ -250,7 +250,7 @@ public final class CreateFlagRequestBody {
 
         @java.lang.Override
         public _FinalStage featureId(String featureId) {
-            this.featureId = Optional.of(featureId);
+            this.featureId = Optional.ofNullable(featureId);
             return this;
         }
 

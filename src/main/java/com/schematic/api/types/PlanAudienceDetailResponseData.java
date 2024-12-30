@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanAudienceDetailResponseData.Builder.class)
 public final class PlanAudienceDetailResponseData {
     private final List<RuleConditionGroupDetailResponseData> conditionGroups;
@@ -363,7 +363,7 @@ public final class PlanAudienceDetailResponseData {
 
         @java.lang.Override
         public _FinalStage planId(String planId) {
-            this.planId = Optional.of(planId);
+            this.planId = Optional.ofNullable(planId);
             return this;
         }
 
@@ -376,7 +376,7 @@ public final class PlanAudienceDetailResponseData {
 
         @java.lang.Override
         public _FinalStage flagId(String flagId) {
-            this.flagId = Optional.of(flagId);
+            this.flagId = Optional.ofNullable(flagId);
             return this;
         }
 

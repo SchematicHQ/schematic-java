@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ComponentHydrateResponseData.Builder.class)
 public final class ComponentHydrateResponseData {
     private final List<CompanyPlanDetailResponseData> activeAddOns;
@@ -40,6 +40,8 @@ public final class ComponentHydrateResponseData {
 
     private final Optional<CompanySubscriptionResponseData> subscription;
 
+    private final Optional<Boolean> trialPaymentMethodRequired;
+
     private final Optional<InvoiceResponseData> upcomingInvoice;
 
     private final Map<String, Object> additionalProperties;
@@ -54,6 +56,7 @@ public final class ComponentHydrateResponseData {
             Optional<FeatureUsageDetailResponseData> featureUsage,
             Optional<StripeEmbedInfo> stripeEmbed,
             Optional<CompanySubscriptionResponseData> subscription,
+            Optional<Boolean> trialPaymentMethodRequired,
             Optional<InvoiceResponseData> upcomingInvoice,
             Map<String, Object> additionalProperties) {
         this.activeAddOns = activeAddOns;
@@ -65,6 +68,7 @@ public final class ComponentHydrateResponseData {
         this.featureUsage = featureUsage;
         this.stripeEmbed = stripeEmbed;
         this.subscription = subscription;
+        this.trialPaymentMethodRequired = trialPaymentMethodRequired;
         this.upcomingInvoice = upcomingInvoice;
         this.additionalProperties = additionalProperties;
     }
@@ -114,6 +118,11 @@ public final class ComponentHydrateResponseData {
         return subscription;
     }
 
+    @JsonProperty("trial_payment_method_required")
+    public Optional<Boolean> getTrialPaymentMethodRequired() {
+        return trialPaymentMethodRequired;
+    }
+
     @JsonProperty("upcoming_invoice")
     public Optional<InvoiceResponseData> getUpcomingInvoice() {
         return upcomingInvoice;
@@ -140,6 +149,7 @@ public final class ComponentHydrateResponseData {
                 && featureUsage.equals(other.featureUsage)
                 && stripeEmbed.equals(other.stripeEmbed)
                 && subscription.equals(other.subscription)
+                && trialPaymentMethodRequired.equals(other.trialPaymentMethodRequired)
                 && upcomingInvoice.equals(other.upcomingInvoice);
     }
 
@@ -155,6 +165,7 @@ public final class ComponentHydrateResponseData {
                 this.featureUsage,
                 this.stripeEmbed,
                 this.subscription,
+                this.trialPaymentMethodRequired,
                 this.upcomingInvoice);
     }
 
@@ -187,6 +198,8 @@ public final class ComponentHydrateResponseData {
 
         private Optional<CompanySubscriptionResponseData> subscription = Optional.empty();
 
+        private Optional<Boolean> trialPaymentMethodRequired = Optional.empty();
+
         private Optional<InvoiceResponseData> upcomingInvoice = Optional.empty();
 
         @JsonAnySetter
@@ -204,6 +217,7 @@ public final class ComponentHydrateResponseData {
             featureUsage(other.getFeatureUsage());
             stripeEmbed(other.getStripeEmbed());
             subscription(other.getSubscription());
+            trialPaymentMethodRequired(other.getTrialPaymentMethodRequired());
             upcomingInvoice(other.getUpcomingInvoice());
             return this;
         }
@@ -268,7 +282,7 @@ public final class ComponentHydrateResponseData {
         }
 
         public Builder capabilities(ComponentCapabilities capabilities) {
-            this.capabilities = Optional.of(capabilities);
+            this.capabilities = Optional.ofNullable(capabilities);
             return this;
         }
 
@@ -279,7 +293,7 @@ public final class ComponentHydrateResponseData {
         }
 
         public Builder company(CompanyDetailResponseData company) {
-            this.company = Optional.of(company);
+            this.company = Optional.ofNullable(company);
             return this;
         }
 
@@ -290,7 +304,7 @@ public final class ComponentHydrateResponseData {
         }
 
         public Builder component(ComponentResponseData component) {
-            this.component = Optional.of(component);
+            this.component = Optional.ofNullable(component);
             return this;
         }
 
@@ -301,7 +315,7 @@ public final class ComponentHydrateResponseData {
         }
 
         public Builder featureUsage(FeatureUsageDetailResponseData featureUsage) {
-            this.featureUsage = Optional.of(featureUsage);
+            this.featureUsage = Optional.ofNullable(featureUsage);
             return this;
         }
 
@@ -312,7 +326,7 @@ public final class ComponentHydrateResponseData {
         }
 
         public Builder stripeEmbed(StripeEmbedInfo stripeEmbed) {
-            this.stripeEmbed = Optional.of(stripeEmbed);
+            this.stripeEmbed = Optional.ofNullable(stripeEmbed);
             return this;
         }
 
@@ -323,7 +337,18 @@ public final class ComponentHydrateResponseData {
         }
 
         public Builder subscription(CompanySubscriptionResponseData subscription) {
-            this.subscription = Optional.of(subscription);
+            this.subscription = Optional.ofNullable(subscription);
+            return this;
+        }
+
+        @JsonSetter(value = "trial_payment_method_required", nulls = Nulls.SKIP)
+        public Builder trialPaymentMethodRequired(Optional<Boolean> trialPaymentMethodRequired) {
+            this.trialPaymentMethodRequired = trialPaymentMethodRequired;
+            return this;
+        }
+
+        public Builder trialPaymentMethodRequired(Boolean trialPaymentMethodRequired) {
+            this.trialPaymentMethodRequired = Optional.ofNullable(trialPaymentMethodRequired);
             return this;
         }
 
@@ -334,7 +359,7 @@ public final class ComponentHydrateResponseData {
         }
 
         public Builder upcomingInvoice(InvoiceResponseData upcomingInvoice) {
-            this.upcomingInvoice = Optional.of(upcomingInvoice);
+            this.upcomingInvoice = Optional.ofNullable(upcomingInvoice);
             return this;
         }
 
@@ -349,6 +374,7 @@ public final class ComponentHydrateResponseData {
                     featureUsage,
                     stripeEmbed,
                     subscription,
+                    trialPaymentMethodRequired,
                     upcomingInvoice,
                     additionalProperties);
         }

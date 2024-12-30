@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventBodyIdentify.Builder.class)
 public final class EventBodyIdentify {
     private final Optional<EventBodyIdentifyCompany> company;
@@ -139,7 +139,7 @@ public final class EventBodyIdentify {
         }
 
         public Builder company(EventBodyIdentifyCompany company) {
-            this.company = Optional.of(company);
+            this.company = Optional.ofNullable(company);
             return this;
         }
 
@@ -167,7 +167,7 @@ public final class EventBodyIdentify {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -178,7 +178,7 @@ public final class EventBodyIdentify {
         }
 
         public Builder traits(Map<String, JsonNode> traits) {
-            this.traits = Optional.of(traits);
+            this.traits = Optional.ofNullable(traits);
             return this;
         }
 

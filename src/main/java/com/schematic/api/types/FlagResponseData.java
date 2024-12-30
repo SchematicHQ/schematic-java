@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FlagResponseData.Builder.class)
 public final class FlagResponseData {
     private final OffsetDateTime createdAt;
@@ -321,7 +321,7 @@ public final class FlagResponseData {
 
         @java.lang.Override
         public _FinalStage maintainerId(String maintainerId) {
-            this.maintainerId = Optional.of(maintainerId);
+            this.maintainerId = Optional.ofNullable(maintainerId);
             return this;
         }
 
@@ -334,7 +334,7 @@ public final class FlagResponseData {
 
         @java.lang.Override
         public _FinalStage featureId(String featureId) {
-            this.featureId = Optional.of(featureId);
+            this.featureId = Optional.ofNullable(featureId);
             return this;
         }
 

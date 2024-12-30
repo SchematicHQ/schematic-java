@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListApiKeysRequest.Builder.class)
 public final class ListApiKeysRequest {
     private final Optional<String> environmentId;
@@ -160,7 +160,7 @@ public final class ListApiKeysRequest {
          */
         @java.lang.Override
         public _FinalStage offset(Integer offset) {
-            this.offset = Optional.of(offset);
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
@@ -177,7 +177,7 @@ public final class ListApiKeysRequest {
          */
         @java.lang.Override
         public _FinalStage limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
@@ -190,7 +190,7 @@ public final class ListApiKeysRequest {
 
         @java.lang.Override
         public _FinalStage environmentId(String environmentId) {
-            this.environmentId = Optional.of(environmentId);
+            this.environmentId = Optional.ofNullable(environmentId);
             return this;
         }
 

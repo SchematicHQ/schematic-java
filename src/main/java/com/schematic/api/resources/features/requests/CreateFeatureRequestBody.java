@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateFeatureRequestBody.Builder.class)
 public final class CreateFeatureRequestBody {
     private final String description;
@@ -260,7 +260,7 @@ public final class CreateFeatureRequestBody {
 
         @java.lang.Override
         public _FinalStage traitId(String traitId) {
-            this.traitId = Optional.of(traitId);
+            this.traitId = Optional.ofNullable(traitId);
             return this;
         }
 
@@ -273,7 +273,7 @@ public final class CreateFeatureRequestBody {
 
         @java.lang.Override
         public _FinalStage maintainerId(String maintainerId) {
-            this.maintainerId = Optional.of(maintainerId);
+            this.maintainerId = Optional.ofNullable(maintainerId);
             return this;
         }
 
@@ -286,7 +286,7 @@ public final class CreateFeatureRequestBody {
 
         @java.lang.Override
         public _FinalStage lifecyclePhase(String lifecyclePhase) {
-            this.lifecyclePhase = Optional.of(lifecyclePhase);
+            this.lifecyclePhase = Optional.ofNullable(lifecyclePhase);
             return this;
         }
 
@@ -299,7 +299,7 @@ public final class CreateFeatureRequestBody {
 
         @java.lang.Override
         public _FinalStage icon(String icon) {
-            this.icon = Optional.of(icon);
+            this.icon = Optional.ofNullable(icon);
             return this;
         }
 
@@ -312,7 +312,7 @@ public final class CreateFeatureRequestBody {
 
         @java.lang.Override
         public _FinalStage flag(CreateOrUpdateFlagRequestBody flag) {
-            this.flag = Optional.of(flag);
+            this.flag = Optional.ofNullable(flag);
             return this;
         }
 
@@ -325,7 +325,7 @@ public final class CreateFeatureRequestBody {
 
         @java.lang.Override
         public _FinalStage eventSubtype(String eventSubtype) {
-            this.eventSubtype = Optional.of(eventSubtype);
+            this.eventSubtype = Optional.ofNullable(eventSubtype);
             return this;
         }
 

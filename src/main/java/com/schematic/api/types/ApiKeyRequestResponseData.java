@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ApiKeyRequestResponseData.Builder.class)
 public final class ApiKeyRequestResponseData {
     private final String apiKeyId;
@@ -454,7 +454,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage userName(String userName) {
-            this.userName = Optional.of(userName);
+            this.userName = Optional.ofNullable(userName);
             return this;
         }
 
@@ -467,7 +467,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage userId(String userId) {
-            this.userId = Optional.of(userId);
+            this.userId = Optional.ofNullable(userId);
             return this;
         }
 
@@ -480,7 +480,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage userAgent(String userAgent) {
-            this.userAgent = Optional.of(userAgent);
+            this.userAgent = Optional.ofNullable(userAgent);
             return this;
         }
 
@@ -493,7 +493,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage secondaryResource(String secondaryResource) {
-            this.secondaryResource = Optional.of(secondaryResource);
+            this.secondaryResource = Optional.ofNullable(secondaryResource);
             return this;
         }
 
@@ -506,7 +506,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage respCode(Integer respCode) {
-            this.respCode = Optional.of(respCode);
+            this.respCode = Optional.ofNullable(respCode);
             return this;
         }
 
@@ -519,7 +519,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage respBody(String respBody) {
-            this.respBody = Optional.of(respBody);
+            this.respBody = Optional.ofNullable(respBody);
             return this;
         }
 
@@ -532,7 +532,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage resourceType(String resourceType) {
-            this.resourceType = Optional.of(resourceType);
+            this.resourceType = Optional.ofNullable(resourceType);
             return this;
         }
 
@@ -545,7 +545,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage resourceName(String resourceName) {
-            this.resourceName = Optional.of(resourceName);
+            this.resourceName = Optional.ofNullable(resourceName);
             return this;
         }
 
@@ -558,7 +558,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage resourceIdString(String resourceIdString) {
-            this.resourceIdString = Optional.of(resourceIdString);
+            this.resourceIdString = Optional.ofNullable(resourceIdString);
             return this;
         }
 
@@ -571,7 +571,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage resourceId(Integer resourceId) {
-            this.resourceId = Optional.of(resourceId);
+            this.resourceId = Optional.ofNullable(resourceId);
             return this;
         }
 
@@ -584,7 +584,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage requestType(String requestType) {
-            this.requestType = Optional.of(requestType);
+            this.requestType = Optional.ofNullable(requestType);
             return this;
         }
 
@@ -597,7 +597,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage reqBody(String reqBody) {
-            this.reqBody = Optional.of(reqBody);
+            this.reqBody = Optional.ofNullable(reqBody);
             return this;
         }
 
@@ -610,7 +610,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage environmentId(String environmentId) {
-            this.environmentId = Optional.of(environmentId);
+            this.environmentId = Optional.ofNullable(environmentId);
             return this;
         }
 
@@ -623,7 +623,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public _FinalStage endedAt(OffsetDateTime endedAt) {
-            this.endedAt = Optional.of(endedAt);
+            this.endedAt = Optional.ofNullable(endedAt);
             return this;
         }
 

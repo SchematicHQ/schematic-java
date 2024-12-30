@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventBodyTrack.Builder.class)
 public final class EventBodyTrack {
     private final Optional<Map<String, String>> company;
@@ -171,7 +171,7 @@ public final class EventBodyTrack {
          */
         @java.lang.Override
         public _FinalStage user(Map<String, String> user) {
-            this.user = Optional.of(user);
+            this.user = Optional.ofNullable(user);
             return this;
         }
 
@@ -188,7 +188,7 @@ public final class EventBodyTrack {
          */
         @java.lang.Override
         public _FinalStage traits(Map<String, JsonNode> traits) {
-            this.traits = Optional.of(traits);
+            this.traits = Optional.ofNullable(traits);
             return this;
         }
 
@@ -205,7 +205,7 @@ public final class EventBodyTrack {
          */
         @java.lang.Override
         public _FinalStage company(Map<String, String> company) {
-            this.company = Optional.of(company);
+            this.company = Optional.ofNullable(company);
             return this;
         }
 

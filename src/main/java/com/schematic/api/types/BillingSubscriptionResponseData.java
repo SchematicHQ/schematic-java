@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingSubscriptionResponseData.Builder.class)
 public final class BillingSubscriptionResponseData {
     private final Optional<String> companyId;
@@ -50,6 +50,8 @@ public final class BillingSubscriptionResponseData {
 
     private final Optional<Integer> trialEnd;
 
+    private final Optional<String> trialEndSetting;
+
     private final Map<String, Object> additionalProperties;
 
     private BillingSubscriptionResponseData(
@@ -67,6 +69,7 @@ public final class BillingSubscriptionResponseData {
             String subscriptionExternalId,
             int totalPrice,
             Optional<Integer> trialEnd,
+            Optional<String> trialEndSetting,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.createdAt = createdAt;
@@ -82,6 +85,7 @@ public final class BillingSubscriptionResponseData {
         this.subscriptionExternalId = subscriptionExternalId;
         this.totalPrice = totalPrice;
         this.trialEnd = trialEnd;
+        this.trialEndSetting = trialEndSetting;
         this.additionalProperties = additionalProperties;
     }
 
@@ -155,6 +159,11 @@ public final class BillingSubscriptionResponseData {
         return trialEnd;
     }
 
+    @JsonProperty("trial_end_setting")
+    public Optional<String> getTrialEndSetting() {
+        return trialEndSetting;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -180,7 +189,8 @@ public final class BillingSubscriptionResponseData {
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && totalPrice == other.totalPrice
-                && trialEnd.equals(other.trialEnd);
+                && trialEnd.equals(other.trialEnd)
+                && trialEndSetting.equals(other.trialEndSetting);
     }
 
     @java.lang.Override
@@ -199,7 +209,8 @@ public final class BillingSubscriptionResponseData {
                 this.status,
                 this.subscriptionExternalId,
                 this.totalPrice,
-                this.trialEnd);
+                this.trialEnd,
+                this.trialEndSetting);
     }
 
     @java.lang.Override
@@ -271,6 +282,10 @@ public final class BillingSubscriptionResponseData {
         _FinalStage trialEnd(Optional<Integer> trialEnd);
 
         _FinalStage trialEnd(Integer trialEnd);
+
+        _FinalStage trialEndSetting(Optional<String> trialEndSetting);
+
+        _FinalStage trialEndSetting(String trialEndSetting);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -306,6 +321,8 @@ public final class BillingSubscriptionResponseData {
 
         private int totalPrice;
 
+        private Optional<String> trialEndSetting = Optional.empty();
+
         private Optional<Integer> trialEnd = Optional.empty();
 
         private Optional<Map<String, JsonNode>> metadata = Optional.empty();
@@ -335,6 +352,7 @@ public final class BillingSubscriptionResponseData {
             subscriptionExternalId(other.getSubscriptionExternalId());
             totalPrice(other.getTotalPrice());
             trialEnd(other.getTrialEnd());
+            trialEndSetting(other.getTrialEndSetting());
             return this;
         }
 
@@ -409,8 +427,21 @@ public final class BillingSubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage trialEndSetting(String trialEndSetting) {
+            this.trialEndSetting = Optional.ofNullable(trialEndSetting);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_end_setting", nulls = Nulls.SKIP)
+        public _FinalStage trialEndSetting(Optional<String> trialEndSetting) {
+            this.trialEndSetting = trialEndSetting;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage trialEnd(Integer trialEnd) {
-            this.trialEnd = Optional.of(trialEnd);
+            this.trialEnd = Optional.ofNullable(trialEnd);
             return this;
         }
 
@@ -423,7 +454,7 @@ public final class BillingSubscriptionResponseData {
 
         @java.lang.Override
         public _FinalStage metadata(Map<String, JsonNode> metadata) {
-            this.metadata = Optional.of(metadata);
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 
@@ -436,7 +467,7 @@ public final class BillingSubscriptionResponseData {
 
         @java.lang.Override
         public _FinalStage expiredAt(OffsetDateTime expiredAt) {
-            this.expiredAt = Optional.of(expiredAt);
+            this.expiredAt = Optional.ofNullable(expiredAt);
             return this;
         }
 
@@ -449,7 +480,7 @@ public final class BillingSubscriptionResponseData {
 
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
-            this.companyId = Optional.of(companyId);
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -477,6 +508,7 @@ public final class BillingSubscriptionResponseData {
                     subscriptionExternalId,
                     totalPrice,
                     trialEnd,
+                    trialEndSetting,
                     additionalProperties);
         }
     }

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyPlanWithBillingSubView.Builder.class)
 public final class CompanyPlanWithBillingSubView {
     private final Optional<String> billingProductId;
@@ -215,7 +215,7 @@ public final class CompanyPlanWithBillingSubView {
 
         @java.lang.Override
         public _FinalStage planPrice(Integer planPrice) {
-            this.planPrice = Optional.of(planPrice);
+            this.planPrice = Optional.ofNullable(planPrice);
             return this;
         }
 
@@ -228,7 +228,7 @@ public final class CompanyPlanWithBillingSubView {
 
         @java.lang.Override
         public _FinalStage planPeriod(String planPeriod) {
-            this.planPeriod = Optional.of(planPeriod);
+            this.planPeriod = Optional.ofNullable(planPeriod);
             return this;
         }
 
@@ -241,7 +241,7 @@ public final class CompanyPlanWithBillingSubView {
 
         @java.lang.Override
         public _FinalStage imageUrl(String imageUrl) {
-            this.imageUrl = Optional.of(imageUrl);
+            this.imageUrl = Optional.ofNullable(imageUrl);
             return this;
         }
 
@@ -254,7 +254,7 @@ public final class CompanyPlanWithBillingSubView {
 
         @java.lang.Override
         public _FinalStage description(String description) {
-            this.description = Optional.of(description);
+            this.description = Optional.ofNullable(description);
             return this;
         }
 
@@ -267,7 +267,7 @@ public final class CompanyPlanWithBillingSubView {
 
         @java.lang.Override
         public _FinalStage billingProductId(String billingProductId) {
-            this.billingProductId = Optional.of(billingProductId);
+            this.billingProductId = Optional.ofNullable(billingProductId);
             return this;
         }
 
