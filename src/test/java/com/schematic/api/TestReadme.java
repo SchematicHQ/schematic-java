@@ -1,5 +1,9 @@
 package com.schematic.api;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.schematic.api.cache.LocalCache;
 import com.schematic.api.core.ObjectMappers;
@@ -17,9 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 // Testing code examples used in README
 @ExtendWith(MockitoExtension.class)
@@ -31,9 +32,7 @@ class SchematicReadmeTest {
     void testCompanyUpsert() {
         // Test the company upsert example from README
         CompaniesClient companiesClient = mock(CompaniesClient.class);
-        Schematic spySchematic = spy(Schematic.builder()
-            .apiKey("test_api_key")
-            .build());
+        Schematic spySchematic = spy(Schematic.builder().apiKey("test_api_key").build());
         when(spySchematic.companies()).thenReturn(companiesClient);
 
         Map<String, String> keys = new HashMap<>();
@@ -45,24 +44,23 @@ class SchematicReadmeTest {
         traits.put("is_active", ObjectMappers.JSON_MAPPER.valueToTree(true));
 
         UpsertCompanyRequestBody request = UpsertCompanyRequestBody.builder()
-            .keys(keys)
-            .name("Acme Widgets, Inc.")
-            .traits(traits)
-            .build();
+                .keys(keys)
+                .name("Acme Widgets, Inc.")
+                .traits(traits)
+                .build();
 
         OffsetDateTime now = OffsetDateTime.now();
         CompanyDetailResponseData responseData = CompanyDetailResponseData.builder()
-            .createdAt(now)
-            .environmentId("test-env")
-            .id("test-id")
-            .name("Acme Widgets, Inc.")
-            .updatedAt(now)
-            .userCount(1)
-            .build();
+                .createdAt(now)
+                .environmentId("test-env")
+                .id("test-id")
+                .name("Acme Widgets, Inc.")
+                .updatedAt(now)
+                .userCount(1)
+                .build();
 
-        UpsertCompanyResponse response = UpsertCompanyResponse.builder()
-            .data(responseData)
-            .build();
+        UpsertCompanyResponse response =
+                UpsertCompanyResponse.builder().data(responseData).build();
 
         when(companiesClient.upsertCompany(any())).thenReturn(response);
 
@@ -74,9 +72,7 @@ class SchematicReadmeTest {
     @Test
     void testClientBasicInitialization() {
         // Test basic client initialization from README
-        Schematic schematic = Schematic.builder()
-            .apiKey("test_api_key")
-            .build();
+        Schematic schematic = Schematic.builder().apiKey("test_api_key").build();
 
         assertNotNull(schematic);
         assertEquals("test_api_key", schematic.getApiKey());
@@ -86,9 +82,9 @@ class SchematicReadmeTest {
     void testClientWithLocalCache() {
         // Test client with local cache configuration
         Schematic schematic = Schematic.builder()
-            .apiKey("test_api_key")
-            .cacheProviders(Collections.singletonList(new LocalCache<>()))
-            .build();
+                .apiKey("test_api_key")
+                .cacheProviders(Collections.singletonList(new LocalCache<>()))
+                .build();
 
         assertNotNull(schematic.getFlagCheckCacheProviders());
         assertEquals(1, schematic.getFlagCheckCacheProviders().size());
@@ -99,9 +95,9 @@ class SchematicReadmeTest {
     void testClientWithDisabledCache() {
         // Test client with disabled caching
         Schematic schematic = Schematic.builder()
-            .apiKey("test_api_key")
-            .cacheProviders(Collections.emptyList())
-            .build();
+                .apiKey("test_api_key")
+                .cacheProviders(Collections.emptyList())
+                .build();
 
         assertTrue(schematic.getFlagCheckCacheProviders().isEmpty());
     }
@@ -111,9 +107,9 @@ class SchematicReadmeTest {
         // Test client with custom event buffer interval
         Duration customInterval = Duration.ofSeconds(5);
         Schematic schematic = Schematic.builder()
-            .apiKey("test_api_key")
-            .eventBufferInterval(customInterval)
-            .build();
+                .apiKey("test_api_key")
+                .eventBufferInterval(customInterval)
+                .build();
 
         assertEquals(customInterval, schematic.getEventBufferInterval());
     }
@@ -125,10 +121,10 @@ class SchematicReadmeTest {
         flagDefaults.put("some-flag-key", true);
 
         Schematic schematic = Schematic.builder()
-            .apiKey("test_api_key")
-            .offline(true)
-            .flagDefaults(flagDefaults)
-            .build();
+                .apiKey("test_api_key")
+                .offline(true)
+                .flagDefaults(flagDefaults)
+                .build();
 
         assertTrue(schematic.isOffline());
         assertTrue(schematic.checkFlag("some-flag-key", null, null));

@@ -1,5 +1,11 @@
 package com.schematic.api;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
 import com.schematic.api.cache.CacheProvider;
 import com.schematic.api.cache.LocalCache;
 import com.schematic.api.logger.SchematicLogger;
@@ -7,28 +13,21 @@ import com.schematic.api.resources.features.FeaturesClient;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
 import com.schematic.api.types.CheckFlagResponseData;
 import com.schematic.api.types.EventBodyIdentifyCompany;
+import java.time.Duration;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Duration;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class SchematicTest {
     @Mock
     private SchematicLogger logger;
-    
+
     private Schematic schematic;
     private static final Duration DEFAULT_BUFFER_PERIOD = Duration.ofSeconds(3);
 
@@ -47,13 +46,13 @@ class SchematicTest {
         FeaturesClient featuresClient = mock(FeaturesClient.class);
         Schematic spySchematic = spy(schematic);
         when(spySchematic.features()).thenReturn(featuresClient);
-        
+
         CheckFlagResponse response = mock(CheckFlagResponse.class);
         when(response.getData()).thenReturn(null);
         when(featuresClient.checkFlag(any(), any())).thenReturn(response);
-        
+
         boolean result = spySchematic.checkFlag("test_flag", null, null);
-        
+
         assertFalse(result);
         verify(logger).error(contains("Error checking flag"));
     }
@@ -65,14 +64,14 @@ class SchematicTest {
         when(spySchematic.features()).thenReturn(featuresClient);
 
         CheckFlagResponse response = CheckFlagResponse.builder()
-            .data(CheckFlagResponseData.builder()
-                .reason("test_reason")
-                .value(true)
-                .build())
-            .build();
-            
+                .data(CheckFlagResponseData.builder()
+                        .reason("test_reason")
+                        .value(true)
+                        .build())
+                .build();
+
         when(featuresClient.checkFlag(eq("test_flag"), any())).thenReturn(response);
-        
+
         boolean result = spySchematic.checkFlag("test_flag", null, null);
 
         assertTrue(result);
@@ -129,9 +128,8 @@ class SchematicTest {
     @Test
     void identify_EnqueuesEventNonBlocking() throws InterruptedException {
         Map<String, String> keys = Collections.singletonMap("user_id", "12345");
-        EventBodyIdentifyCompany company = EventBodyIdentifyCompany.builder()
-                .name("test_company")
-                .build();
+        EventBodyIdentifyCompany company =
+                EventBodyIdentifyCompany.builder().name("test_company").build();
         Map<String, Object> traits = new HashMap<>();
 
         schematic.identify(keys, company, "John Doe", traits);
@@ -157,7 +155,7 @@ class SchematicTest {
         Map<String, String> company = Collections.singletonMap("company_id", "67890");
         Map<String, String> user = Collections.singletonMap("user_id", "12345");
         Map<String, Object> traits = new HashMap<>();
-        
+
         Schematic.builder()
                 .apiKey("test_api_key")
                 .offline(true)
@@ -171,10 +169,9 @@ class SchematicTest {
     @Test
     void identify_OfflineMode() {
         Map<String, String> keys = Collections.singletonMap("user_id", "12345");
-        EventBodyIdentifyCompany company = EventBodyIdentifyCompany.builder()
-                .name("test_company")
-                .build();
-        
+        EventBodyIdentifyCompany company =
+                EventBodyIdentifyCompany.builder().name("test_company").build();
+
         Schematic.builder()
                 .apiKey("test_api_key")
                 .offline(true)

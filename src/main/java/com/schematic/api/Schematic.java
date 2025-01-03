@@ -38,30 +38,29 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         super(buildClientOptions(builder.apiKey, builder));
 
         this.apiKey = builder.apiKey;
-        this.eventBufferInterval = builder.eventBufferInterval != null ?
-            builder.eventBufferInterval :
-            Duration.ofMillis(5000);
+        this.eventBufferInterval =
+                builder.eventBufferInterval != null ? builder.eventBufferInterval : Duration.ofMillis(5000);
         this.logger = builder.logger != null ? builder.logger : new ConsoleLogger();
         this.flagDefaults = builder.flagDefaults != null ? builder.flagDefaults : new HashMap<>();
         this.offline = builder.offline;
-        this.flagCheckCacheProviders = builder.cacheProviders != null ?
-            builder.cacheProviders :
-            Collections.singletonList(new LocalCache<>());
+        this.flagCheckCacheProviders =
+                builder.cacheProviders != null ? builder.cacheProviders : Collections.singletonList(new LocalCache<>());
 
         this.eventBuffer = new EventBuffer(
-            super.events(),
-            this.logger,
-            builder.eventBufferMaxSize,
-            builder.eventBufferInterval != null ? builder.eventBufferInterval : Duration.ofMillis(5000)
-        );
+                super.events(),
+                this.logger,
+                builder.eventBufferMaxSize,
+                builder.eventBufferInterval != null ? builder.eventBufferInterval : Duration.ofMillis(5000));
 
-        this.shutdownHook = new Thread(() -> {
-            try {
-                this.eventBuffer.close();
-            } catch (Exception e) {
-                logger.error("Error during Schematic shutdown: " + e.getMessage());
-            }
-        }, "SchematicShutdownHook");
+        this.shutdownHook = new Thread(
+                () -> {
+                    try {
+                        this.eventBuffer.close();
+                    } catch (Exception e) {
+                        logger.error("Error during Schematic shutdown: " + e.getMessage());
+                    }
+                },
+                "SchematicShutdownHook");
 
         Runtime.getRuntime().addShutdownHook(this.shutdownHook);
     }
@@ -137,10 +136,10 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     private static ClientOptions buildClientOptions(String apiKey, Builder builder) {
         String basePath = builder.basePath != null ? builder.basePath : "https://api.schematichq.com";
         return ClientOptions.builder()
-            .environment(Environment.custom(basePath))
-            .addHeader("Authorization", "Bearer " + apiKey)
-            .addHeader("Content-Type", "application/json")
-            .build();
+                .environment(Environment.custom(basePath))
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .addHeader("Content-Type", "application/json")
+                .build();
     }
 
     public List<CacheProvider<Boolean>> getFlagCheckCacheProviders() {
@@ -176,10 +175,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             }
 
             // Make API call
-            CheckFlagRequestBody request = CheckFlagRequestBody.builder()
-                .company(company)
-                .user(user)
-                .build();
+            CheckFlagRequestBody request =
+                    CheckFlagRequestBody.builder().company(company).user(user).build();
 
             CheckFlagResponse response = features().checkFlag(flagKey, request);
             boolean value = response.getData().getValue();
@@ -196,22 +193,23 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         }
     }
 
-    public void identify(Map<String, String> keys, EventBodyIdentifyCompany company, String name, Map<String, Object> traits) {
+    public void identify(
+            Map<String, String> keys, EventBodyIdentifyCompany company, String name, Map<String, Object> traits) {
         if (offline) return;
 
         try {
             EventBodyIdentify body = EventBodyIdentify.builder()
-                .keys(keys)
-                .company(company)
-                .name(name)
-                .traits(objectMapToJsonNode(traits))
-                .build();
+                    .keys(keys)
+                    .company(company)
+                    .name(name)
+                    .traits(objectMapToJsonNode(traits))
+                    .build();
 
             CreateEventRequestBody event = CreateEventRequestBody.builder()
-                .eventType(CreateEventRequestBodyEventType.IDENTIFY)
-                .body(EventBody.of(body))
-                .sentAt(OffsetDateTime.now())
-                .build();
+                    .eventType(CreateEventRequestBodyEventType.IDENTIFY)
+                    .body(EventBody.of(body))
+                    .sentAt(OffsetDateTime.now())
+                    .build();
 
             eventBuffer.push(event);
         } catch (Exception e) {
@@ -219,22 +217,23 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         }
     }
 
-    public void track(String eventName, Map<String, String> company, Map<String, String> user, Map<String, Object> traits) {
+    public void track(
+            String eventName, Map<String, String> company, Map<String, String> user, Map<String, Object> traits) {
         if (offline) return;
 
         try {
             EventBodyTrack body = EventBodyTrack.builder()
-                .event(eventName)
-                .company(company)
-                .user(user)
-                .traits(objectMapToJsonNode(traits))
-                .build();
+                    .event(eventName)
+                    .company(company)
+                    .user(user)
+                    .traits(objectMapToJsonNode(traits))
+                    .build();
 
             CreateEventRequestBody event = CreateEventRequestBody.builder()
-                .eventType(CreateEventRequestBodyEventType.TRACK)
-                .body(EventBody.of(body))
-                .sentAt(OffsetDateTime.now())
-                .build();
+                    .eventType(CreateEventRequestBodyEventType.TRACK)
+                    .body(EventBody.of(body))
+                    .sentAt(OffsetDateTime.now())
+                    .build();
 
             eventBuffer.push(event);
         } catch (Exception e) {
@@ -286,8 +285,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     private String serializeMap(Map<String, String> map) {
         return map.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .map(e -> e.getKey() + "=" + e.getValue())
-            .collect(Collectors.joining(";"));
+                .sorted(Map.Entry.comparingByKey())
+                .map(e -> e.getKey() + "=" + e.getValue())
+                .collect(Collectors.joining(";"));
     }
 }

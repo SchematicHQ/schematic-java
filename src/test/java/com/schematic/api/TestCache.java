@@ -1,8 +1,9 @@
 package com.schematic.api;
 
-import com.schematic.api.cache.LocalCache;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.schematic.api.cache.CacheProvider;
-import org.junit.jupiter.api.Test;
+import com.schematic.api.cache.LocalCache;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class LocalCacheTest {
 
@@ -53,10 +54,7 @@ class LocalCacheTest {
 
     @Test
     void testDefaultCapacity() {
-        LocalCache<Integer> cacheProvider = new LocalCache<>(
-            LocalCache.DEFAULT_CACHE_CAPACITY,
-            Duration.ofMinutes(10)
-        );
+        LocalCache<Integer> cacheProvider = new LocalCache<>(LocalCache.DEFAULT_CACHE_CAPACITY, Duration.ofMinutes(10));
         String key = "test_key";
 
         cacheProvider.set(key, -1);
@@ -116,10 +114,7 @@ class LocalCacheTest {
         }
 
         assertEquals(cacheCapacity, cacheHits.size());
-        assertNotEquals(
-            cacheCapacity,
-            cacheHits.get(cacheHits.size() - 1) - cacheHits.get(0) + 1
-        );
+        assertNotEquals(cacheCapacity, cacheHits.get(cacheHits.size() - 1) - cacheHits.get(0) + 1);
     }
 
     @Test
