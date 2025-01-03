@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TemporaryAccessTokenResponseData.Builder.class)
@@ -132,33 +133,33 @@ public final class TemporaryAccessTokenResponseData {
     }
 
     public interface ApiKeyIdStage {
-        CreatedAtStage apiKeyId(String apiKeyId);
+        CreatedAtStage apiKeyId(@NotNull String apiKeyId);
 
         Builder from(TemporaryAccessTokenResponseData other);
     }
 
     public interface CreatedAtStage {
-        EnvironmentIdStage createdAt(OffsetDateTime createdAt);
+        EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface EnvironmentIdStage {
-        ExpiredAtStage environmentId(String environmentId);
+        ExpiredAtStage environmentId(@NotNull String environmentId);
     }
 
     public interface ExpiredAtStage {
-        IdStage expiredAt(OffsetDateTime expiredAt);
+        IdStage expiredAt(@NotNull OffsetDateTime expiredAt);
     }
 
     public interface IdStage {
-        ResourceTypeStage id(String id);
+        ResourceTypeStage id(@NotNull String id);
     }
 
     public interface ResourceTypeStage {
-        UpdatedAtStage resourceType(String resourceType);
+        UpdatedAtStage resourceType(@NotNull String resourceType);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -208,50 +209,50 @@ public final class TemporaryAccessTokenResponseData {
 
         @java.lang.Override
         @JsonSetter("api_key_id")
-        public CreatedAtStage apiKeyId(String apiKeyId) {
-            this.apiKeyId = apiKeyId;
+        public CreatedAtStage apiKeyId(@NotNull String apiKeyId) {
+            this.apiKeyId = Objects.requireNonNull(apiKeyId, "apiKeyId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public EnvironmentIdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public ExpiredAtStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public ExpiredAtStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("expired_at")
-        public IdStage expiredAt(OffsetDateTime expiredAt) {
-            this.expiredAt = expiredAt;
+        public IdStage expiredAt(@NotNull OffsetDateTime expiredAt) {
+            this.expiredAt = Objects.requireNonNull(expiredAt, "expiredAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public ResourceTypeStage id(String id) {
-            this.id = id;
+        public ResourceTypeStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("resource_type")
-        public UpdatedAtStage resourceType(String resourceType) {
-            this.resourceType = resourceType;
+        public UpdatedAtStage resourceType(@NotNull String resourceType) {
+            this.resourceType = Objects.requireNonNull(resourceType, "resourceType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

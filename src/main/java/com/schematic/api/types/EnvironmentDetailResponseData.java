@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EnvironmentDetailResponseData.Builder.class)
@@ -118,25 +119,25 @@ public final class EnvironmentDetailResponseData {
     }
 
     public interface CreatedAtStage {
-        EnvironmentTypeStage createdAt(OffsetDateTime createdAt);
+        EnvironmentTypeStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(EnvironmentDetailResponseData other);
     }
 
     public interface EnvironmentTypeStage {
-        IdStage environmentType(String environmentType);
+        IdStage environmentType(@NotNull String environmentType);
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        NameStage id(@NotNull String id);
     }
 
     public interface NameStage {
-        UpdatedAtStage name(String name);
+        UpdatedAtStage name(@NotNull String name);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -182,36 +183,36 @@ public final class EnvironmentDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public EnvironmentTypeStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public EnvironmentTypeStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_type")
-        public IdStage environmentType(String environmentType) {
-            this.environmentType = environmentType;
+        public IdStage environmentType(@NotNull String environmentType) {
+            this.environmentType = Objects.requireNonNull(environmentType, "environmentType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public UpdatedAtStage name(String name) {
-            this.name = name;
+        public UpdatedAtStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

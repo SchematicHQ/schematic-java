@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ChangeSubscriptionInternalRequestBody.Builder.class)
@@ -136,17 +137,17 @@ public final class ChangeSubscriptionInternalRequestBody {
     }
 
     public interface CompanyIdStage {
-        NewPlanIdStage companyId(String companyId);
+        NewPlanIdStage companyId(@NotNull String companyId);
 
         Builder from(ChangeSubscriptionInternalRequestBody other);
     }
 
     public interface NewPlanIdStage {
-        NewPriceIdStage newPlanId(String newPlanId);
+        NewPriceIdStage newPlanId(@NotNull String newPlanId);
     }
 
     public interface NewPriceIdStage {
-        _FinalStage newPriceId(String newPriceId);
+        _FinalStage newPriceId(@NotNull String newPriceId);
     }
 
     public interface _FinalStage {
@@ -208,22 +209,22 @@ public final class ChangeSubscriptionInternalRequestBody {
 
         @java.lang.Override
         @JsonSetter("company_id")
-        public NewPlanIdStage companyId(String companyId) {
-            this.companyId = companyId;
+        public NewPlanIdStage companyId(@NotNull String companyId) {
+            this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("new_plan_id")
-        public NewPriceIdStage newPlanId(String newPlanId) {
-            this.newPlanId = newPlanId;
+        public NewPriceIdStage newPlanId(@NotNull String newPlanId) {
+            this.newPlanId = Objects.requireNonNull(newPlanId, "newPlanId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("new_price_id")
-        public _FinalStage newPriceId(String newPriceId) {
-            this.newPriceId = newPriceId;
+        public _FinalStage newPriceId(@NotNull String newPriceId) {
+            this.newPriceId = Objects.requireNonNull(newPriceId, "newPriceId must not be null");
             return this;
         }
 

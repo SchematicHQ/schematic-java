@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListApiRequestsResponse.Builder.class)
@@ -83,7 +84,7 @@ public final class ListApiRequestsResponse {
     }
 
     public interface ParamsStage {
-        _FinalStage params(ListApiRequestsParams params);
+        _FinalStage params(@NotNull ListApiRequestsParams params);
 
         Builder from(ListApiRequestsResponse other);
     }
@@ -122,8 +123,8 @@ public final class ListApiRequestsResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(ListApiRequestsParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull ListApiRequestsParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

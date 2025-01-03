@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FlagResponseData.Builder.class)
@@ -167,7 +168,7 @@ public final class FlagResponseData {
     }
 
     public interface CreatedAtStage {
-        DefaultValueStage createdAt(OffsetDateTime createdAt);
+        DefaultValueStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(FlagResponseData other);
     }
@@ -177,27 +178,27 @@ public final class FlagResponseData {
     }
 
     public interface DescriptionStage {
-        FlagTypeStage description(String description);
+        FlagTypeStage description(@NotNull String description);
     }
 
     public interface FlagTypeStage {
-        IdStage flagType(String flagType);
+        IdStage flagType(@NotNull String flagType);
     }
 
     public interface IdStage {
-        KeyStage id(String id);
+        KeyStage id(@NotNull String id);
     }
 
     public interface KeyStage {
-        NameStage key(String key);
+        NameStage key(@NotNull String key);
     }
 
     public interface NameStage {
-        UpdatedAtStage name(String name);
+        UpdatedAtStage name(@NotNull String name);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -265,8 +266,8 @@ public final class FlagResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public DefaultValueStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public DefaultValueStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
@@ -279,43 +280,43 @@ public final class FlagResponseData {
 
         @java.lang.Override
         @JsonSetter("description")
-        public FlagTypeStage description(String description) {
-            this.description = description;
+        public FlagTypeStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("flag_type")
-        public IdStage flagType(String flagType) {
-            this.flagType = flagType;
+        public IdStage flagType(@NotNull String flagType) {
+            this.flagType = Objects.requireNonNull(flagType, "flagType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public KeyStage id(String id) {
-            this.id = id;
+        public KeyStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("key")
-        public NameStage key(String key) {
-            this.key = key;
+        public NameStage key(@NotNull String key) {
+            this.key = Objects.requireNonNull(key, "key must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public UpdatedAtStage name(String name) {
-            this.name = name;
+        public UpdatedAtStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

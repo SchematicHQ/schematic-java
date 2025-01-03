@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CrmDealLineItem.Builder.class)
@@ -190,29 +191,29 @@ public final class CrmDealLineItem {
     }
 
     public interface BillingFrequencyStage {
-        CreatedAtStage billingFrequency(String billingFrequency);
+        CreatedAtStage billingFrequency(@NotNull String billingFrequency);
 
         Builder from(CrmDealLineItem other);
     }
 
     public interface CreatedAtStage {
-        CurrencyStage createdAt(OffsetDateTime createdAt);
+        CurrencyStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface CurrencyStage {
-        DescriptionStage currency(String currency);
+        DescriptionStage currency(@NotNull String currency);
     }
 
     public interface DescriptionStage {
-        IdStage description(String description);
+        IdStage description(@NotNull String description);
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        NameStage id(@NotNull String id);
     }
 
     public interface NameStage {
-        PriceStage name(String name);
+        PriceStage name(@NotNull String name);
     }
 
     public interface PriceStage {
@@ -224,7 +225,7 @@ public final class CrmDealLineItem {
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -303,43 +304,43 @@ public final class CrmDealLineItem {
 
         @java.lang.Override
         @JsonSetter("billing_frequency")
-        public CreatedAtStage billingFrequency(String billingFrequency) {
-            this.billingFrequency = billingFrequency;
+        public CreatedAtStage billingFrequency(@NotNull String billingFrequency) {
+            this.billingFrequency = Objects.requireNonNull(billingFrequency, "billingFrequency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public CurrencyStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public CurrencyStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("currency")
-        public DescriptionStage currency(String currency) {
-            this.currency = currency;
+        public DescriptionStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("description")
-        public IdStage description(String description) {
-            this.description = description;
+        public IdStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public PriceStage name(String name) {
-            this.name = name;
+        public PriceStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -359,8 +360,8 @@ public final class CrmDealLineItem {
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

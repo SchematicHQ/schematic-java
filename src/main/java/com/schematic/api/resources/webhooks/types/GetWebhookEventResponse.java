@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetWebhookEventResponse.Builder.class)
@@ -80,7 +81,7 @@ public final class GetWebhookEventResponse {
     }
 
     public interface DataStage {
-        _FinalStage data(WebhookEventDetailResponseData data);
+        _FinalStage data(@NotNull WebhookEventDetailResponseData data);
 
         Builder from(GetWebhookEventResponse other);
     }
@@ -115,8 +116,8 @@ public final class GetWebhookEventResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public _FinalStage data(WebhookEventDetailResponseData data) {
-            this.data = data;
+        public _FinalStage data(@NotNull WebhookEventDetailResponseData data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 

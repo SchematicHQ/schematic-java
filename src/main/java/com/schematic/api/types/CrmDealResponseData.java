@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CrmDealResponseData.Builder.class)
@@ -178,37 +179,37 @@ public final class CrmDealResponseData {
     }
 
     public interface AccountIdStage {
-        ArrStage accountId(String accountId);
+        ArrStage accountId(@NotNull String accountId);
 
         Builder from(CrmDealResponseData other);
     }
 
     public interface ArrStage {
-        CreatedAtStage arr(String arr);
+        CreatedAtStage arr(@NotNull String arr);
     }
 
     public interface CreatedAtStage {
-        DealExternalIdStage createdAt(OffsetDateTime createdAt);
+        DealExternalIdStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface DealExternalIdStage {
-        DealIdStage dealExternalId(String dealExternalId);
+        DealIdStage dealExternalId(@NotNull String dealExternalId);
     }
 
     public interface DealIdStage {
-        EnvironmentIdStage dealId(String dealId);
+        EnvironmentIdStage dealId(@NotNull String dealId);
     }
 
     public interface EnvironmentIdStage {
-        MrrStage environmentId(String environmentId);
+        MrrStage environmentId(@NotNull String environmentId);
     }
 
     public interface MrrStage {
-        UpdatedAtStage mrr(String mrr);
+        UpdatedAtStage mrr(@NotNull String mrr);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -283,57 +284,57 @@ public final class CrmDealResponseData {
 
         @java.lang.Override
         @JsonSetter("account_id")
-        public ArrStage accountId(String accountId) {
-            this.accountId = accountId;
+        public ArrStage accountId(@NotNull String accountId) {
+            this.accountId = Objects.requireNonNull(accountId, "accountId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("arr")
-        public CreatedAtStage arr(String arr) {
-            this.arr = arr;
+        public CreatedAtStage arr(@NotNull String arr) {
+            this.arr = Objects.requireNonNull(arr, "arr must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public DealExternalIdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public DealExternalIdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("deal_external_id")
-        public DealIdStage dealExternalId(String dealExternalId) {
-            this.dealExternalId = dealExternalId;
+        public DealIdStage dealExternalId(@NotNull String dealExternalId) {
+            this.dealExternalId = Objects.requireNonNull(dealExternalId, "dealExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("deal_id")
-        public EnvironmentIdStage dealId(String dealId) {
-            this.dealId = dealId;
+        public EnvironmentIdStage dealId(@NotNull String dealId) {
+            this.dealId = Objects.requireNonNull(dealId, "dealId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public MrrStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public MrrStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("mrr")
-        public UpdatedAtStage mrr(String mrr) {
-            this.mrr = mrr;
+        public UpdatedAtStage mrr(@NotNull String mrr) {
+            this.mrr = Objects.requireNonNull(mrr, "mrr must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

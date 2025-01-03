@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateEntitlementReqCommon.Builder.class)
@@ -122,7 +123,7 @@ public final class UpdateEntitlementReqCommon {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(UpdateEntitlementReqCommonValueType valueType);
+        _FinalStage valueType(@NotNull UpdateEntitlementReqCommonValueType valueType);
 
         Builder from(UpdateEntitlementReqCommon other);
     }
@@ -184,8 +185,8 @@ public final class UpdateEntitlementReqCommon {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(UpdateEntitlementReqCommonValueType valueType) {
-            this.valueType = valueType;
+        public _FinalStage valueType(@NotNull UpdateEntitlementReqCommonValueType valueType) {
+            this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }
 

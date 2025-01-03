@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateCustomerSubscriptionTrialEndResponse.Builder.class)
@@ -79,7 +80,7 @@ public final class UpdateCustomerSubscriptionTrialEndResponse {
     }
 
     public interface DataStage {
-        _FinalStage data(BillingSubscriptionView data);
+        _FinalStage data(@NotNull BillingSubscriptionView data);
 
         Builder from(UpdateCustomerSubscriptionTrialEndResponse other);
     }
@@ -114,8 +115,8 @@ public final class UpdateCustomerSubscriptionTrialEndResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public _FinalStage data(BillingSubscriptionView data) {
-            this.data = data;
+        public _FinalStage data(@NotNull BillingSubscriptionView data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 

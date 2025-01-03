@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateEntityTraitDefinitionRequestBody.Builder.class)
@@ -77,7 +78,7 @@ public final class UpdateEntityTraitDefinitionRequestBody {
     }
 
     public interface TraitTypeStage {
-        _FinalStage traitType(UpdateEntityTraitDefinitionRequestBodyTraitType traitType);
+        _FinalStage traitType(@NotNull UpdateEntityTraitDefinitionRequestBodyTraitType traitType);
 
         Builder from(UpdateEntityTraitDefinitionRequestBody other);
     }
@@ -110,8 +111,8 @@ public final class UpdateEntityTraitDefinitionRequestBody {
 
         @java.lang.Override
         @JsonSetter("trait_type")
-        public _FinalStage traitType(UpdateEntityTraitDefinitionRequestBodyTraitType traitType) {
-            this.traitType = traitType;
+        public _FinalStage traitType(@NotNull UpdateEntityTraitDefinitionRequestBodyTraitType traitType) {
+            this.traitType = Objects.requireNonNull(traitType, "traitType must not be null");
             return this;
         }
 

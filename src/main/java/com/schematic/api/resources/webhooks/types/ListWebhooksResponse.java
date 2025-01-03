@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListWebhooksResponse.Builder.class)
@@ -81,7 +82,7 @@ public final class ListWebhooksResponse {
     }
 
     public interface ParamsStage {
-        _FinalStage params(ListWebhooksParams params);
+        _FinalStage params(@NotNull ListWebhooksParams params);
 
         Builder from(ListWebhooksResponse other);
     }
@@ -120,8 +121,8 @@ public final class ListWebhooksResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(ListWebhooksParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull ListWebhooksParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

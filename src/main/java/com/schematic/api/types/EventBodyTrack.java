@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventBodyTrack.Builder.class)
@@ -109,7 +110,7 @@ public final class EventBodyTrack {
     }
 
     public interface EventStage {
-        _FinalStage event(String event);
+        _FinalStage event(@NotNull String event);
 
         Builder from(EventBodyTrack other);
     }
@@ -160,8 +161,8 @@ public final class EventBodyTrack {
          */
         @java.lang.Override
         @JsonSetter("event")
-        public _FinalStage event(String event) {
-            this.event = event;
+        public _FinalStage event(@NotNull String event) {
+            this.event = Objects.requireNonNull(event, "event must not be null");
             return this;
         }
 

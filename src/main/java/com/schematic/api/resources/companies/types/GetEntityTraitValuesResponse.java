@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetEntityTraitValuesResponse.Builder.class)
@@ -81,7 +82,7 @@ public final class GetEntityTraitValuesResponse {
     }
 
     public interface ParamsStage {
-        _FinalStage params(GetEntityTraitValuesParams params);
+        _FinalStage params(@NotNull GetEntityTraitValuesParams params);
 
         Builder from(GetEntityTraitValuesResponse other);
     }
@@ -120,8 +121,8 @@ public final class GetEntityTraitValuesResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(GetEntityTraitValuesParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull GetEntityTraitValuesParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

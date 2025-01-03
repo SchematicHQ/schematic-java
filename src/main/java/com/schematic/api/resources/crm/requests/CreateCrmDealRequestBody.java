@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateCrmDealRequestBody.Builder.class)
@@ -155,17 +156,17 @@ public final class CreateCrmDealRequestBody {
     }
 
     public interface CrmCompanyKeyStage {
-        CrmTypeStage crmCompanyKey(String crmCompanyKey);
+        CrmTypeStage crmCompanyKey(@NotNull String crmCompanyKey);
 
         Builder from(CreateCrmDealRequestBody other);
     }
 
     public interface CrmTypeStage {
-        DealExternalIdStage crmType(String crmType);
+        DealExternalIdStage crmType(@NotNull String crmType);
     }
 
     public interface DealExternalIdStage {
-        _FinalStage dealExternalId(String dealExternalId);
+        _FinalStage dealExternalId(@NotNull String dealExternalId);
     }
 
     public interface _FinalStage {
@@ -237,22 +238,22 @@ public final class CreateCrmDealRequestBody {
 
         @java.lang.Override
         @JsonSetter("crm_company_key")
-        public CrmTypeStage crmCompanyKey(String crmCompanyKey) {
-            this.crmCompanyKey = crmCompanyKey;
+        public CrmTypeStage crmCompanyKey(@NotNull String crmCompanyKey) {
+            this.crmCompanyKey = Objects.requireNonNull(crmCompanyKey, "crmCompanyKey must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("crm_type")
-        public DealExternalIdStage crmType(String crmType) {
-            this.crmType = crmType;
+        public DealExternalIdStage crmType(@NotNull String crmType) {
+            this.crmType = Objects.requireNonNull(crmType, "crmType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("deal_external_id")
-        public _FinalStage dealExternalId(String dealExternalId) {
-            this.dealExternalId = dealExternalId;
+        public _FinalStage dealExternalId(@NotNull String dealExternalId) {
+            this.dealExternalId = Objects.requireNonNull(dealExternalId, "dealExternalId must not be null");
             return this;
         }
 

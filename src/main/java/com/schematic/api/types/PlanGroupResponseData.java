@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanGroupResponseData.Builder.class)
@@ -124,7 +125,7 @@ public final class PlanGroupResponseData {
     }
 
     public interface IdStage {
-        _FinalStage id(String id);
+        _FinalStage id(@NotNull String id);
 
         Builder from(PlanGroupResponseData other);
     }
@@ -189,8 +190,8 @@ public final class PlanGroupResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public _FinalStage id(String id) {
-            this.id = id;
+        public _FinalStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 

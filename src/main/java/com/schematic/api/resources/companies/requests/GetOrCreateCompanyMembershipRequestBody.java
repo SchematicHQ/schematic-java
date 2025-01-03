@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetOrCreateCompanyMembershipRequestBody.Builder.class)
@@ -72,13 +73,13 @@ public final class GetOrCreateCompanyMembershipRequestBody {
     }
 
     public interface CompanyIdStage {
-        UserIdStage companyId(String companyId);
+        UserIdStage companyId(@NotNull String companyId);
 
         Builder from(GetOrCreateCompanyMembershipRequestBody other);
     }
 
     public interface UserIdStage {
-        _FinalStage userId(String userId);
+        _FinalStage userId(@NotNull String userId);
     }
 
     public interface _FinalStage {
@@ -105,15 +106,15 @@ public final class GetOrCreateCompanyMembershipRequestBody {
 
         @java.lang.Override
         @JsonSetter("company_id")
-        public UserIdStage companyId(String companyId) {
-            this.companyId = companyId;
+        public UserIdStage companyId(@NotNull String companyId) {
+            this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("user_id")
-        public _FinalStage userId(String userId) {
-            this.userId = userId;
+        public _FinalStage userId(@NotNull String userId) {
+            this.userId = Objects.requireNonNull(userId, "userId must not be null");
             return this;
         }
 

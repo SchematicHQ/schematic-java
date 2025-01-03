@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ApiKeyCreateResponseData.Builder.class)
@@ -158,25 +159,25 @@ public final class ApiKeyCreateResponseData {
     }
 
     public interface CreatedAtStage {
-        IdStage createdAt(OffsetDateTime createdAt);
+        IdStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(ApiKeyCreateResponseData other);
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        NameStage id(@NotNull String id);
     }
 
     public interface NameStage {
-        SecretStage name(String name);
+        SecretStage name(@NotNull String name);
     }
 
     public interface SecretStage {
-        UpdatedAtStage secret(String secret);
+        UpdatedAtStage secret(@NotNull String secret);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -243,36 +244,36 @@ public final class ApiKeyCreateResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public IdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public IdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public SecretStage name(String name) {
-            this.name = name;
+        public SecretStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("secret")
-        public UpdatedAtStage secret(String secret) {
-            this.secret = secret;
+        public UpdatedAtStage secret(@NotNull String secret) {
+            this.secret = Objects.requireNonNull(secret, "secret must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

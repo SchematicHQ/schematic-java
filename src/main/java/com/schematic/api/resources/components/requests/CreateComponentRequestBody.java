@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateComponentRequestBody.Builder.class)
@@ -85,13 +86,13 @@ public final class CreateComponentRequestBody {
     }
 
     public interface EntityTypeStage {
-        NameStage entityType(CreateComponentRequestBodyEntityType entityType);
+        NameStage entityType(@NotNull CreateComponentRequestBodyEntityType entityType);
 
         Builder from(CreateComponentRequestBody other);
     }
 
     public interface NameStage {
-        _FinalStage name(String name);
+        _FinalStage name(@NotNull String name);
     }
 
     public interface _FinalStage {
@@ -125,15 +126,15 @@ public final class CreateComponentRequestBody {
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public NameStage entityType(CreateComponentRequestBodyEntityType entityType) {
-            this.entityType = entityType;
+        public NameStage entityType(@NotNull CreateComponentRequestBodyEntityType entityType) {
+            this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public _FinalStage name(String name) {
-            this.name = name;
+        public _FinalStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

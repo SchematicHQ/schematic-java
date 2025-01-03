@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EntityTraitResponseData.Builder.class)
@@ -115,29 +116,29 @@ public final class EntityTraitResponseData {
     }
 
     public interface CreatedAtStage {
-        DefinitionIdStage createdAt(OffsetDateTime createdAt);
+        DefinitionIdStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(EntityTraitResponseData other);
     }
 
     public interface DefinitionIdStage {
-        EnvironmentIdStage definitionId(String definitionId);
+        EnvironmentIdStage definitionId(@NotNull String definitionId);
     }
 
     public interface EnvironmentIdStage {
-        IdStage environmentId(String environmentId);
+        IdStage environmentId(@NotNull String environmentId);
     }
 
     public interface IdStage {
-        UpdatedAtStage id(String id);
+        UpdatedAtStage id(@NotNull String id);
     }
 
     public interface UpdatedAtStage {
-        ValueStage updatedAt(OffsetDateTime updatedAt);
+        ValueStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface ValueStage {
-        _FinalStage value(String value);
+        _FinalStage value(@NotNull String value);
     }
 
     public interface _FinalStage {
@@ -183,43 +184,43 @@ public final class EntityTraitResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public DefinitionIdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public DefinitionIdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("definition_id")
-        public EnvironmentIdStage definitionId(String definitionId) {
-            this.definitionId = definitionId;
+        public EnvironmentIdStage definitionId(@NotNull String definitionId) {
+            this.definitionId = Objects.requireNonNull(definitionId, "definitionId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public IdStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public IdStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public UpdatedAtStage id(String id) {
-            this.id = id;
+        public UpdatedAtStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public ValueStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public ValueStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("value")
-        public _FinalStage value(String value) {
-            this.value = value;
+        public _FinalStage value(@NotNull String value) {
+            this.value = Objects.requireNonNull(value, "value must not be null");
             return this;
         }
 

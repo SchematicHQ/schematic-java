@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingSubscriptionsRequestBody.Builder.class)
@@ -217,21 +218,21 @@ public final class CreateBillingSubscriptionsRequestBody {
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(String currency);
+        CustomerExternalIdStage currency(@NotNull String currency);
 
         Builder from(CreateBillingSubscriptionsRequestBody other);
     }
 
     public interface CustomerExternalIdStage {
-        ExpiredAtStage customerExternalId(String customerExternalId);
+        ExpiredAtStage customerExternalId(@NotNull String customerExternalId);
     }
 
     public interface ExpiredAtStage {
-        SubscriptionExternalIdStage expiredAt(OffsetDateTime expiredAt);
+        SubscriptionExternalIdStage expiredAt(@NotNull OffsetDateTime expiredAt);
     }
 
     public interface SubscriptionExternalIdStage {
-        TotalPriceStage subscriptionExternalId(String subscriptionExternalId);
+        TotalPriceStage subscriptionExternalId(@NotNull String subscriptionExternalId);
     }
 
     public interface TotalPriceStage {
@@ -344,29 +345,30 @@ public final class CreateBillingSubscriptionsRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(String currency) {
-            this.currency = currency;
+        public CustomerExternalIdStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public ExpiredAtStage customerExternalId(String customerExternalId) {
-            this.customerExternalId = customerExternalId;
+        public ExpiredAtStage customerExternalId(@NotNull String customerExternalId) {
+            this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("expired_at")
-        public SubscriptionExternalIdStage expiredAt(OffsetDateTime expiredAt) {
-            this.expiredAt = expiredAt;
+        public SubscriptionExternalIdStage expiredAt(@NotNull OffsetDateTime expiredAt) {
+            this.expiredAt = Objects.requireNonNull(expiredAt, "expiredAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("subscription_external_id")
-        public TotalPriceStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = subscriptionExternalId;
+        public TotalPriceStage subscriptionExternalId(@NotNull String subscriptionExternalId) {
+            this.subscriptionExternalId =
+                    Objects.requireNonNull(subscriptionExternalId, "subscriptionExternalId must not be null");
             return this;
         }
 

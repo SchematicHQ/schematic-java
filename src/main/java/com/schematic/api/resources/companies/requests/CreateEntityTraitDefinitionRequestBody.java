@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateEntityTraitDefinitionRequestBody.Builder.class)
@@ -101,13 +102,13 @@ public final class CreateEntityTraitDefinitionRequestBody {
     }
 
     public interface EntityTypeStage {
-        TraitTypeStage entityType(CreateEntityTraitDefinitionRequestBodyEntityType entityType);
+        TraitTypeStage entityType(@NotNull CreateEntityTraitDefinitionRequestBodyEntityType entityType);
 
         Builder from(CreateEntityTraitDefinitionRequestBody other);
     }
 
     public interface TraitTypeStage {
-        _FinalStage traitType(CreateEntityTraitDefinitionRequestBodyTraitType traitType);
+        _FinalStage traitType(@NotNull CreateEntityTraitDefinitionRequestBodyTraitType traitType);
     }
 
     public interface _FinalStage {
@@ -150,15 +151,15 @@ public final class CreateEntityTraitDefinitionRequestBody {
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public TraitTypeStage entityType(CreateEntityTraitDefinitionRequestBodyEntityType entityType) {
-            this.entityType = entityType;
+        public TraitTypeStage entityType(@NotNull CreateEntityTraitDefinitionRequestBodyEntityType entityType) {
+            this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("trait_type")
-        public _FinalStage traitType(CreateEntityTraitDefinitionRequestBodyTraitType traitType) {
-            this.traitType = traitType;
+        public _FinalStage traitType(@NotNull CreateEntityTraitDefinitionRequestBodyTraitType traitType) {
+            this.traitType = Objects.requireNonNull(traitType, "traitType must not be null");
             return this;
         }
 

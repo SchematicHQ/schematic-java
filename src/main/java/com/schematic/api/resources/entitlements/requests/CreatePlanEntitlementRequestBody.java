@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreatePlanEntitlementRequestBody.Builder.class)
@@ -180,17 +181,17 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     public interface FeatureIdStage {
-        PlanIdStage featureId(String featureId);
+        PlanIdStage featureId(@NotNull String featureId);
 
         Builder from(CreatePlanEntitlementRequestBody other);
     }
 
     public interface PlanIdStage {
-        ValueTypeStage planId(String planId);
+        ValueTypeStage planId(@NotNull String planId);
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(CreatePlanEntitlementRequestBodyValueType valueType);
+        _FinalStage valueType(@NotNull CreatePlanEntitlementRequestBodyValueType valueType);
     }
 
     public interface _FinalStage {
@@ -279,22 +280,22 @@ public final class CreatePlanEntitlementRequestBody {
 
         @java.lang.Override
         @JsonSetter("feature_id")
-        public PlanIdStage featureId(String featureId) {
-            this.featureId = featureId;
+        public PlanIdStage featureId(@NotNull String featureId) {
+            this.featureId = Objects.requireNonNull(featureId, "featureId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("plan_id")
-        public ValueTypeStage planId(String planId) {
-            this.planId = planId;
+        public ValueTypeStage planId(@NotNull String planId) {
+            this.planId = Objects.requireNonNull(planId, "planId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(CreatePlanEntitlementRequestBodyValueType valueType) {
-            this.valueType = valueType;
+        public _FinalStage valueType(@NotNull CreatePlanEntitlementRequestBodyValueType valueType) {
+            this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }
 

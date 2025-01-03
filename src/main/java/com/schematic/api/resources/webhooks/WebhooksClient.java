@@ -418,10 +418,6 @@ public class WebhooksClient {
         }
     }
 
-    public UpdateWebhookResponse updateWebhook(String webhookId) {
-        return updateWebhook(webhookId, UpdateWebhookRequestBody.builder().build());
-    }
-
     public UpdateWebhookResponse updateWebhook(String webhookId, UpdateWebhookRequestBody request) {
         return updateWebhook(webhookId, request, null);
     }

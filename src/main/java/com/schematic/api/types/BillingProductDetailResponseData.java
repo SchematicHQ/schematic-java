@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductDetailResponseData.Builder.class)
@@ -179,29 +180,29 @@ public final class BillingProductDetailResponseData {
     }
 
     public interface AccountIdStage {
-        CreatedAtStage accountId(String accountId);
+        CreatedAtStage accountId(@NotNull String accountId);
 
         Builder from(BillingProductDetailResponseData other);
     }
 
     public interface CreatedAtStage {
-        CurrencyStage createdAt(OffsetDateTime createdAt);
+        CurrencyStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface CurrencyStage {
-        EnvironmentIdStage currency(String currency);
+        EnvironmentIdStage currency(@NotNull String currency);
     }
 
     public interface EnvironmentIdStage {
-        ExternalIdStage environmentId(String environmentId);
+        ExternalIdStage environmentId(@NotNull String environmentId);
     }
 
     public interface ExternalIdStage {
-        NameStage externalId(String externalId);
+        NameStage externalId(@NotNull String externalId);
     }
 
     public interface NameStage {
-        PriceStage name(String name);
+        PriceStage name(@NotNull String name);
     }
 
     public interface PriceStage {
@@ -209,7 +210,7 @@ public final class BillingProductDetailResponseData {
     }
 
     public interface ProductIdStage {
-        QuantityStage productId(String productId);
+        QuantityStage productId(@NotNull String productId);
     }
 
     public interface QuantityStage {
@@ -217,7 +218,7 @@ public final class BillingProductDetailResponseData {
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -288,43 +289,43 @@ public final class BillingProductDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("account_id")
-        public CreatedAtStage accountId(String accountId) {
-            this.accountId = accountId;
+        public CreatedAtStage accountId(@NotNull String accountId) {
+            this.accountId = Objects.requireNonNull(accountId, "accountId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public CurrencyStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public CurrencyStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("currency")
-        public EnvironmentIdStage currency(String currency) {
-            this.currency = currency;
+        public EnvironmentIdStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public ExternalIdStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public ExternalIdStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public NameStage externalId(String externalId) {
-            this.externalId = externalId;
+        public NameStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public PriceStage name(String name) {
-            this.name = name;
+        public PriceStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -337,8 +338,8 @@ public final class BillingProductDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("product_id")
-        public QuantityStage productId(String productId) {
-            this.productId = productId;
+        public QuantityStage productId(@NotNull String productId) {
+            this.productId = Objects.requireNonNull(productId, "productId must not be null");
             return this;
         }
 
@@ -351,8 +352,8 @@ public final class BillingProductDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

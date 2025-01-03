@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CouponRequestBody.Builder.class)
@@ -150,7 +151,7 @@ public final class CouponRequestBody {
     }
 
     public interface DurationStage {
-        DurationInMonthsStage duration(String duration);
+        DurationInMonthsStage duration(@NotNull String duration);
     }
 
     public interface DurationInMonthsStage {
@@ -162,7 +163,7 @@ public final class CouponRequestBody {
     }
 
     public interface NameStage {
-        PercentOffStage name(String name);
+        PercentOffStage name(@NotNull String name);
     }
 
     public interface PercentOffStage {
@@ -234,8 +235,8 @@ public final class CouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("duration")
-        public DurationInMonthsStage duration(String duration) {
-            this.duration = duration;
+        public DurationInMonthsStage duration(@NotNull String duration) {
+            this.duration = Objects.requireNonNull(duration, "duration must not be null");
             return this;
         }
 
@@ -255,8 +256,8 @@ public final class CouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("name")
-        public PercentOffStage name(String name) {
-            this.name = name;
+        public PercentOffStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

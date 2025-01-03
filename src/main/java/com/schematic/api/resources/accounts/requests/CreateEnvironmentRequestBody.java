@@ -15,6 +15,7 @@ import com.schematic.api.resources.accounts.types.CreateEnvironmentRequestBodyEn
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateEnvironmentRequestBody.Builder.class)
@@ -74,13 +75,13 @@ public final class CreateEnvironmentRequestBody {
     }
 
     public interface EnvironmentTypeStage {
-        NameStage environmentType(CreateEnvironmentRequestBodyEnvironmentType environmentType);
+        NameStage environmentType(@NotNull CreateEnvironmentRequestBodyEnvironmentType environmentType);
 
         Builder from(CreateEnvironmentRequestBody other);
     }
 
     public interface NameStage {
-        _FinalStage name(String name);
+        _FinalStage name(@NotNull String name);
     }
 
     public interface _FinalStage {
@@ -107,15 +108,15 @@ public final class CreateEnvironmentRequestBody {
 
         @java.lang.Override
         @JsonSetter("environment_type")
-        public NameStage environmentType(CreateEnvironmentRequestBodyEnvironmentType environmentType) {
-            this.environmentType = environmentType;
+        public NameStage environmentType(@NotNull CreateEnvironmentRequestBodyEnvironmentType environmentType) {
+            this.environmentType = Objects.requireNonNull(environmentType, "environmentType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public _FinalStage name(String name) {
-            this.name = name;
+        public _FinalStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

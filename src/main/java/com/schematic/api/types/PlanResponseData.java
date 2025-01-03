@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanResponseData.Builder.class)
@@ -145,33 +146,33 @@ public final class PlanResponseData {
     }
 
     public interface CreatedAtStage {
-        DescriptionStage createdAt(OffsetDateTime createdAt);
+        DescriptionStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(PlanResponseData other);
     }
 
     public interface DescriptionStage {
-        IconStage description(String description);
+        IconStage description(@NotNull String description);
     }
 
     public interface IconStage {
-        IdStage icon(String icon);
+        IdStage icon(@NotNull String icon);
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        NameStage id(@NotNull String id);
     }
 
     public interface NameStage {
-        PlanTypeStage name(String name);
+        PlanTypeStage name(@NotNull String name);
     }
 
     public interface PlanTypeStage {
-        UpdatedAtStage planType(String planType);
+        UpdatedAtStage planType(@NotNull String planType);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -228,50 +229,50 @@ public final class PlanResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public DescriptionStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public DescriptionStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("description")
-        public IconStage description(String description) {
-            this.description = description;
+        public IconStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("icon")
-        public IdStage icon(String icon) {
-            this.icon = icon;
+        public IdStage icon(@NotNull String icon) {
+            this.icon = Objects.requireNonNull(icon, "icon must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public PlanTypeStage name(String name) {
-            this.name = name;
+        public PlanTypeStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("plan_type")
-        public UpdatedAtStage planType(String planType) {
-            this.planType = planType;
+        public UpdatedAtStage planType(@NotNull String planType) {
+            this.planType = Objects.requireNonNull(planType, "planType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventResponseData.Builder.class)
@@ -259,29 +260,29 @@ public final class EventResponseData {
     }
 
     public interface BodyPreviewStage {
-        CapturedAtStage bodyPreview(String bodyPreview);
+        CapturedAtStage bodyPreview(@NotNull String bodyPreview);
 
         Builder from(EventResponseData other);
     }
 
     public interface CapturedAtStage {
-        IdStage capturedAt(OffsetDateTime capturedAt);
+        IdStage capturedAt(@NotNull OffsetDateTime capturedAt);
     }
 
     public interface IdStage {
-        StatusStage id(String id);
+        StatusStage id(@NotNull String id);
     }
 
     public interface StatusStage {
-        TypeStage status(String status);
+        TypeStage status(@NotNull String status);
     }
 
     public interface TypeStage {
-        UpdatedAtStage type(String type);
+        UpdatedAtStage type(@NotNull String type);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -409,43 +410,43 @@ public final class EventResponseData {
 
         @java.lang.Override
         @JsonSetter("body_preview")
-        public CapturedAtStage bodyPreview(String bodyPreview) {
-            this.bodyPreview = bodyPreview;
+        public CapturedAtStage bodyPreview(@NotNull String bodyPreview) {
+            this.bodyPreview = Objects.requireNonNull(bodyPreview, "bodyPreview must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("captured_at")
-        public IdStage capturedAt(OffsetDateTime capturedAt) {
-            this.capturedAt = capturedAt;
+        public IdStage capturedAt(@NotNull OffsetDateTime capturedAt) {
+            this.capturedAt = Objects.requireNonNull(capturedAt, "capturedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public StatusStage id(String id) {
-            this.id = id;
+        public StatusStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("status")
-        public TypeStage status(String status) {
-            this.status = status;
+        public TypeStage status(@NotNull String status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("type")
-        public UpdatedAtStage type(String type) {
-            this.type = type;
+        public UpdatedAtStage type(@NotNull String type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

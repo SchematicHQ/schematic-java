@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EntityTraitValue.Builder.class)
@@ -70,13 +71,13 @@ public final class EntityTraitValue {
     }
 
     public interface DefinitionIdStage {
-        ValueStage definitionId(String definitionId);
+        ValueStage definitionId(@NotNull String definitionId);
 
         Builder from(EntityTraitValue other);
     }
 
     public interface ValueStage {
-        _FinalStage value(String value);
+        _FinalStage value(@NotNull String value);
     }
 
     public interface _FinalStage {
@@ -103,15 +104,15 @@ public final class EntityTraitValue {
 
         @java.lang.Override
         @JsonSetter("definition_id")
-        public ValueStage definitionId(String definitionId) {
-            this.definitionId = definitionId;
+        public ValueStage definitionId(@NotNull String definitionId) {
+            this.definitionId = Objects.requireNonNull(definitionId, "definitionId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("value")
-        public _FinalStage value(String value) {
-            this.value = value;
+        public _FinalStage value(@NotNull String value) {
+            this.value = Objects.requireNonNull(value, "value must not be null");
             return this;
         }
 

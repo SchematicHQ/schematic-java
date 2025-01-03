@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdatePlanEntitlementRequestBody.Builder.class)
@@ -158,7 +159,7 @@ public final class UpdatePlanEntitlementRequestBody {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(UpdatePlanEntitlementRequestBodyValueType valueType);
+        _FinalStage valueType(@NotNull UpdatePlanEntitlementRequestBodyValueType valueType);
 
         Builder from(UpdatePlanEntitlementRequestBody other);
     }
@@ -243,8 +244,8 @@ public final class UpdatePlanEntitlementRequestBody {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(UpdatePlanEntitlementRequestBodyValueType valueType) {
-            this.valueType = valueType;
+        public _FinalStage valueType(@NotNull UpdatePlanEntitlementRequestBodyValueType valueType) {
+            this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }
 

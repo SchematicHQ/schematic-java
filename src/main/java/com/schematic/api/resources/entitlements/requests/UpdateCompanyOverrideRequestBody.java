@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateCompanyOverrideRequestBody.Builder.class)
@@ -137,7 +138,7 @@ public final class UpdateCompanyOverrideRequestBody {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(UpdateCompanyOverrideRequestBodyValueType valueType);
+        _FinalStage valueType(@NotNull UpdateCompanyOverrideRequestBodyValueType valueType);
 
         Builder from(UpdateCompanyOverrideRequestBody other);
     }
@@ -208,8 +209,8 @@ public final class UpdateCompanyOverrideRequestBody {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(UpdateCompanyOverrideRequestBodyValueType valueType) {
-            this.valueType = valueType;
+        public _FinalStage valueType(@NotNull UpdateCompanyOverrideRequestBodyValueType valueType) {
+            this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }
 

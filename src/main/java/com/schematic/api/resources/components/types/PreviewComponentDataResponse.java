@@ -15,6 +15,7 @@ import com.schematic.api.types.ComponentPreviewResponseData;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PreviewComponentDataResponse.Builder.class)
@@ -77,13 +78,13 @@ public final class PreviewComponentDataResponse {
     }
 
     public interface DataStage {
-        ParamsStage data(ComponentPreviewResponseData data);
+        ParamsStage data(@NotNull ComponentPreviewResponseData data);
 
         Builder from(PreviewComponentDataResponse other);
     }
 
     public interface ParamsStage {
-        _FinalStage params(PreviewComponentDataParams params);
+        _FinalStage params(@NotNull PreviewComponentDataParams params);
     }
 
     public interface _FinalStage {
@@ -110,8 +111,8 @@ public final class PreviewComponentDataResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public ParamsStage data(ComponentPreviewResponseData data) {
-            this.data = data;
+        public ParamsStage data(@NotNull ComponentPreviewResponseData data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 
@@ -121,8 +122,8 @@ public final class PreviewComponentDataResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(PreviewComponentDataParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull PreviewComponentDataParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

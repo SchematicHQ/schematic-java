@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpsertTraitRequestBody.Builder.class)
@@ -122,7 +123,7 @@ public final class UpsertTraitRequestBody {
     }
 
     public interface TraitStage {
-        _FinalStage trait(String trait);
+        _FinalStage trait(@NotNull String trait);
 
         Builder from(UpsertTraitRequestBody other);
     }
@@ -182,8 +183,8 @@ public final class UpsertTraitRequestBody {
          */
         @java.lang.Override
         @JsonSetter("trait")
-        public _FinalStage trait(String trait) {
-            this.trait = trait;
+        public _FinalStage trait(@NotNull String trait) {
+            this.trait = Objects.requireNonNull(trait, "trait must not be null");
             return this;
         }
 

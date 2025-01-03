@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreatePlanRequestBody.Builder.class)
@@ -97,17 +98,17 @@ public final class CreatePlanRequestBody {
     }
 
     public interface DescriptionStage {
-        NameStage description(String description);
+        NameStage description(@NotNull String description);
 
         Builder from(CreatePlanRequestBody other);
     }
 
     public interface NameStage {
-        PlanTypeStage name(String name);
+        PlanTypeStage name(@NotNull String name);
     }
 
     public interface PlanTypeStage {
-        _FinalStage planType(CreatePlanRequestBodyPlanType planType);
+        _FinalStage planType(@NotNull CreatePlanRequestBodyPlanType planType);
     }
 
     public interface _FinalStage {
@@ -144,22 +145,22 @@ public final class CreatePlanRequestBody {
 
         @java.lang.Override
         @JsonSetter("description")
-        public NameStage description(String description) {
-            this.description = description;
+        public NameStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public PlanTypeStage name(String name) {
-            this.name = name;
+        public PlanTypeStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("plan_type")
-        public _FinalStage planType(CreatePlanRequestBodyPlanType planType) {
-            this.planType = planType;
+        public _FinalStage planType(@NotNull CreatePlanRequestBodyPlanType planType) {
+            this.planType = Objects.requireNonNull(planType, "planType must not be null");
             return this;
         }
 

@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingProductRequestBody.Builder.class)
@@ -104,17 +105,17 @@ public final class CreateBillingProductRequestBody {
     }
 
     public interface CurrencyStage {
-        ExternalIdStage currency(String currency);
+        ExternalIdStage currency(@NotNull String currency);
 
         Builder from(CreateBillingProductRequestBody other);
     }
 
     public interface ExternalIdStage {
-        NameStage externalId(String externalId);
+        NameStage externalId(@NotNull String externalId);
     }
 
     public interface NameStage {
-        PriceStage name(String name);
+        PriceStage name(@NotNull String name);
     }
 
     public interface PriceStage {
@@ -159,22 +160,22 @@ public final class CreateBillingProductRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public ExternalIdStage currency(String currency) {
-            this.currency = currency;
+        public ExternalIdStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public NameStage externalId(String externalId) {
-            this.externalId = externalId;
+        public NameStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public PriceStage name(String name) {
-            this.name = name;
+        public PriceStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

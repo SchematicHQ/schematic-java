@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateWebhookRequestBody.Builder.class)
@@ -86,13 +87,13 @@ public final class CreateWebhookRequestBody {
     }
 
     public interface NameStage {
-        UrlStage name(String name);
+        UrlStage name(@NotNull String name);
 
         Builder from(CreateWebhookRequestBody other);
     }
 
     public interface UrlStage {
-        _FinalStage url(String url);
+        _FinalStage url(@NotNull String url);
     }
 
     public interface _FinalStage {
@@ -128,15 +129,15 @@ public final class CreateWebhookRequestBody {
 
         @java.lang.Override
         @JsonSetter("name")
-        public UrlStage name(String name) {
-            this.name = name;
+        public UrlStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("url")
-        public _FinalStage url(String url) {
-            this.url = url;
+        public _FinalStage url(@NotNull String url) {
+            this.url = Objects.requireNonNull(url, "url must not be null");
             return this;
         }
 

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingCustomerResponseData.Builder.class)
@@ -145,13 +146,13 @@ public final class BillingCustomerResponseData {
     }
 
     public interface EmailStage {
-        ExternalIdStage email(String email);
+        ExternalIdStage email(@NotNull String email);
 
         Builder from(BillingCustomerResponseData other);
     }
 
     public interface ExternalIdStage {
-        FailedToImportStage externalId(String externalId);
+        FailedToImportStage externalId(@NotNull String externalId);
     }
 
     public interface FailedToImportStage {
@@ -159,15 +160,15 @@ public final class BillingCustomerResponseData {
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        NameStage id(@NotNull String id);
     }
 
     public interface NameStage {
-        UpdatedAtStage name(String name);
+        UpdatedAtStage name(@NotNull String name);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -227,15 +228,15 @@ public final class BillingCustomerResponseData {
 
         @java.lang.Override
         @JsonSetter("email")
-        public ExternalIdStage email(String email) {
-            this.email = email;
+        public ExternalIdStage email(@NotNull String email) {
+            this.email = Objects.requireNonNull(email, "email must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public FailedToImportStage externalId(String externalId) {
-            this.externalId = externalId;
+        public FailedToImportStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
@@ -248,22 +249,22 @@ public final class BillingCustomerResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public UpdatedAtStage name(String name) {
-            this.name = name;
+        public UpdatedAtStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

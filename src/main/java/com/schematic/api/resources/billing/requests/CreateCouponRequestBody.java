@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateCouponRequestBody.Builder.class)
@@ -161,7 +162,7 @@ public final class CreateCouponRequestBody {
     }
 
     public interface DurationStage {
-        DurationInMonthsStage duration(String duration);
+        DurationInMonthsStage duration(@NotNull String duration);
     }
 
     public interface DurationInMonthsStage {
@@ -169,7 +170,7 @@ public final class CreateCouponRequestBody {
     }
 
     public interface ExternalIdStage {
-        MaxRedemptionsStage externalId(String externalId);
+        MaxRedemptionsStage externalId(@NotNull String externalId);
     }
 
     public interface MaxRedemptionsStage {
@@ -177,7 +178,7 @@ public final class CreateCouponRequestBody {
     }
 
     public interface NameStage {
-        PercentOffStage name(String name);
+        PercentOffStage name(@NotNull String name);
     }
 
     public interface PercentOffStage {
@@ -253,8 +254,8 @@ public final class CreateCouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("duration")
-        public DurationInMonthsStage duration(String duration) {
-            this.duration = duration;
+        public DurationInMonthsStage duration(@NotNull String duration) {
+            this.duration = Objects.requireNonNull(duration, "duration must not be null");
             return this;
         }
 
@@ -267,8 +268,8 @@ public final class CreateCouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public MaxRedemptionsStage externalId(String externalId) {
-            this.externalId = externalId;
+        public MaxRedemptionsStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
@@ -281,8 +282,8 @@ public final class CreateCouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("name")
-        public PercentOffStage name(String name) {
-            this.name = name;
+        public PercentOffStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

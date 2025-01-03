@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EntityTraitDefinitionResponseData.Builder.class)
@@ -135,29 +136,29 @@ public final class EntityTraitDefinitionResponseData {
     }
 
     public interface CreatedAtStage {
-        DisplayNameStage createdAt(OffsetDateTime createdAt);
+        DisplayNameStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(EntityTraitDefinitionResponseData other);
     }
 
     public interface DisplayNameStage {
-        EntityTypeStage displayName(String displayName);
+        EntityTypeStage displayName(@NotNull String displayName);
     }
 
     public interface EntityTypeStage {
-        IdStage entityType(String entityType);
+        IdStage entityType(@NotNull String entityType);
     }
 
     public interface IdStage {
-        TraitTypeStage id(String id);
+        TraitTypeStage id(@NotNull String id);
     }
 
     public interface TraitTypeStage {
-        UpdatedAtStage traitType(String traitType);
+        UpdatedAtStage traitType(@NotNull String traitType);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -212,43 +213,43 @@ public final class EntityTraitDefinitionResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public DisplayNameStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public DisplayNameStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("display_name")
-        public EntityTypeStage displayName(String displayName) {
-            this.displayName = displayName;
+        public EntityTypeStage displayName(@NotNull String displayName) {
+            this.displayName = Objects.requireNonNull(displayName, "displayName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public IdStage entityType(String entityType) {
-            this.entityType = entityType;
+        public IdStage entityType(@NotNull String entityType) {
+            this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public TraitTypeStage id(String id) {
-            this.id = id;
+        public TraitTypeStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("trait_type")
-        public UpdatedAtStage traitType(String traitType) {
-            this.traitType = traitType;
+        public UpdatedAtStage traitType(@NotNull String traitType) {
+            this.traitType = Objects.requireNonNull(traitType, "traitType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetSegmentIntegrationStatusResponse.Builder.class)
@@ -79,7 +80,7 @@ public final class GetSegmentIntegrationStatusResponse {
     }
 
     public interface DataStage {
-        _FinalStage data(SegmentStatusResp data);
+        _FinalStage data(@NotNull SegmentStatusResp data);
 
         Builder from(GetSegmentIntegrationStatusResponse other);
     }
@@ -114,8 +115,8 @@ public final class GetSegmentIntegrationStatusResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public _FinalStage data(SegmentStatusResp data) {
-            this.data = data;
+        public _FinalStage data(@NotNull SegmentStatusResp data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 

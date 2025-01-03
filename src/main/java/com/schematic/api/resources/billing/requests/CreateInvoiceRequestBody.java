@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateInvoiceRequestBody.Builder.class)
@@ -203,15 +204,15 @@ public final class CreateInvoiceRequestBody {
     }
 
     public interface CollectionMethodStage {
-        CurrencyStage collectionMethod(String collectionMethod);
+        CurrencyStage collectionMethod(@NotNull String collectionMethod);
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(String currency);
+        CustomerExternalIdStage currency(@NotNull String currency);
     }
 
     public interface CustomerExternalIdStage {
-        SubtotalStage customerExternalId(String customerExternalId);
+        SubtotalStage customerExternalId(@NotNull String customerExternalId);
     }
 
     public interface SubtotalStage {
@@ -321,22 +322,22 @@ public final class CreateInvoiceRequestBody {
 
         @java.lang.Override
         @JsonSetter("collection_method")
-        public CurrencyStage collectionMethod(String collectionMethod) {
-            this.collectionMethod = collectionMethod;
+        public CurrencyStage collectionMethod(@NotNull String collectionMethod) {
+            this.collectionMethod = Objects.requireNonNull(collectionMethod, "collectionMethod must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(String currency) {
-            this.currency = currency;
+        public CustomerExternalIdStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public SubtotalStage customerExternalId(String customerExternalId) {
-            this.customerExternalId = customerExternalId;
+        public SubtotalStage customerExternalId(@NotNull String customerExternalId) {
+            this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
             return this;
         }
 

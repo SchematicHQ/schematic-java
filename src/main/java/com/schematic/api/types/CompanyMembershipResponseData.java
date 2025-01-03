@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyMembershipResponseData.Builder.class)
@@ -105,25 +106,25 @@ public final class CompanyMembershipResponseData {
     }
 
     public interface CompanyIdStage {
-        CreatedAtStage companyId(String companyId);
+        CreatedAtStage companyId(@NotNull String companyId);
 
         Builder from(CompanyMembershipResponseData other);
     }
 
     public interface CreatedAtStage {
-        IdStage createdAt(OffsetDateTime createdAt);
+        IdStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface IdStage {
-        UpdatedAtStage id(String id);
+        UpdatedAtStage id(@NotNull String id);
     }
 
     public interface UpdatedAtStage {
-        UserIdStage updatedAt(OffsetDateTime updatedAt);
+        UserIdStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface UserIdStage {
-        _FinalStage userId(String userId);
+        _FinalStage userId(@NotNull String userId);
     }
 
     public interface _FinalStage {
@@ -160,36 +161,36 @@ public final class CompanyMembershipResponseData {
 
         @java.lang.Override
         @JsonSetter("company_id")
-        public CreatedAtStage companyId(String companyId) {
-            this.companyId = companyId;
+        public CreatedAtStage companyId(@NotNull String companyId) {
+            this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public IdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public IdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public UpdatedAtStage id(String id) {
-            this.id = id;
+        public UpdatedAtStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public UserIdStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public UserIdStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("user_id")
-        public _FinalStage userId(String userId) {
-            this.userId = userId;
+        public _FinalStage userId(@NotNull String userId) {
+            this.userId = Objects.requireNonNull(userId, "userId must not be null");
             return this;
         }
 

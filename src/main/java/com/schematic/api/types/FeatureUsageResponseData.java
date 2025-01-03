@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FeatureUsageResponseData.Builder.class)
@@ -249,15 +250,15 @@ public final class FeatureUsageResponseData {
     }
 
     public interface AllocationTypeStage {
-        EntitlementIdStage allocationType(FeatureUsageResponseDataAllocationType allocationType);
+        EntitlementIdStage allocationType(@NotNull FeatureUsageResponseDataAllocationType allocationType);
     }
 
     public interface EntitlementIdStage {
-        EntitlementTypeStage entitlementId(String entitlementId);
+        EntitlementTypeStage entitlementId(@NotNull String entitlementId);
     }
 
     public interface EntitlementTypeStage {
-        _FinalStage entitlementType(String entitlementType);
+        _FinalStage entitlementType(@NotNull String entitlementType);
     }
 
     public interface _FinalStage {
@@ -383,22 +384,22 @@ public final class FeatureUsageResponseData {
          */
         @java.lang.Override
         @JsonSetter("allocation_type")
-        public EntitlementIdStage allocationType(FeatureUsageResponseDataAllocationType allocationType) {
-            this.allocationType = allocationType;
+        public EntitlementIdStage allocationType(@NotNull FeatureUsageResponseDataAllocationType allocationType) {
+            this.allocationType = Objects.requireNonNull(allocationType, "allocationType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("entitlement_id")
-        public EntitlementTypeStage entitlementId(String entitlementId) {
-            this.entitlementId = entitlementId;
+        public EntitlementTypeStage entitlementId(@NotNull String entitlementId) {
+            this.entitlementId = Objects.requireNonNull(entitlementId, "entitlementId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("entitlement_type")
-        public _FinalStage entitlementType(String entitlementType) {
-            this.entitlementType = entitlementType;
+        public _FinalStage entitlementType(@NotNull String entitlementType) {
+            this.entitlementType = Objects.requireNonNull(entitlementType, "entitlementType must not be null");
             return this;
         }
 

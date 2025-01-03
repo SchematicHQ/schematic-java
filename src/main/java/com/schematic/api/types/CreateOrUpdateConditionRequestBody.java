@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateOrUpdateConditionRequestBody.Builder.class)
@@ -204,13 +205,13 @@ public final class CreateOrUpdateConditionRequestBody {
     }
 
     public interface ConditionTypeStage {
-        OperatorStage conditionType(CreateOrUpdateConditionRequestBodyConditionType conditionType);
+        OperatorStage conditionType(@NotNull CreateOrUpdateConditionRequestBodyConditionType conditionType);
 
         Builder from(CreateOrUpdateConditionRequestBody other);
     }
 
     public interface OperatorStage {
-        _FinalStage operator(CreateOrUpdateConditionRequestBodyOperator operator);
+        _FinalStage operator(@NotNull CreateOrUpdateConditionRequestBodyOperator operator);
     }
 
     public interface _FinalStage {
@@ -305,15 +306,15 @@ public final class CreateOrUpdateConditionRequestBody {
 
         @java.lang.Override
         @JsonSetter("condition_type")
-        public OperatorStage conditionType(CreateOrUpdateConditionRequestBodyConditionType conditionType) {
-            this.conditionType = conditionType;
+        public OperatorStage conditionType(@NotNull CreateOrUpdateConditionRequestBodyConditionType conditionType) {
+            this.conditionType = Objects.requireNonNull(conditionType, "conditionType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("operator")
-        public _FinalStage operator(CreateOrUpdateConditionRequestBodyOperator operator) {
-            this.operator = operator;
+        public _FinalStage operator(@NotNull CreateOrUpdateConditionRequestBodyOperator operator) {
+            this.operator = Objects.requireNonNull(operator, "operator must not be null");
             return this;
         }
 

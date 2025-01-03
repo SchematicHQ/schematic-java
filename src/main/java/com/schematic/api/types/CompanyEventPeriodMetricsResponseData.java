@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyEventPeriodMetricsResponseData.Builder.class)
@@ -179,41 +180,41 @@ public final class CompanyEventPeriodMetricsResponseData {
     }
 
     public interface AccountIdStage {
-        CapturedAtMaxStage accountId(String accountId);
+        CapturedAtMaxStage accountId(@NotNull String accountId);
 
         Builder from(CompanyEventPeriodMetricsResponseData other);
     }
 
     public interface CapturedAtMaxStage {
-        CapturedAtMinStage capturedAtMax(OffsetDateTime capturedAtMax);
+        CapturedAtMinStage capturedAtMax(@NotNull OffsetDateTime capturedAtMax);
     }
 
     public interface CapturedAtMinStage {
-        CompanyIdStage capturedAtMin(OffsetDateTime capturedAtMin);
+        CompanyIdStage capturedAtMin(@NotNull OffsetDateTime capturedAtMin);
     }
 
     public interface CompanyIdStage {
-        CreatedAtStage companyId(String companyId);
+        CreatedAtStage companyId(@NotNull String companyId);
     }
 
     public interface CreatedAtStage {
-        EnvironmentIdStage createdAt(OffsetDateTime createdAt);
+        EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface EnvironmentIdStage {
-        EventSubtypeStage environmentId(String environmentId);
+        EventSubtypeStage environmentId(@NotNull String environmentId);
     }
 
     public interface EventSubtypeStage {
-        MonthResetStage eventSubtype(String eventSubtype);
+        MonthResetStage eventSubtype(@NotNull String eventSubtype);
     }
 
     public interface MonthResetStage {
-        PeriodStage monthReset(String monthReset);
+        PeriodStage monthReset(@NotNull String monthReset);
     }
 
     public interface PeriodStage {
-        ValueStage period(String period);
+        ValueStage period(@NotNull String period);
     }
 
     public interface ValueStage {
@@ -286,64 +287,64 @@ public final class CompanyEventPeriodMetricsResponseData {
 
         @java.lang.Override
         @JsonSetter("account_id")
-        public CapturedAtMaxStage accountId(String accountId) {
-            this.accountId = accountId;
+        public CapturedAtMaxStage accountId(@NotNull String accountId) {
+            this.accountId = Objects.requireNonNull(accountId, "accountId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("captured_at_max")
-        public CapturedAtMinStage capturedAtMax(OffsetDateTime capturedAtMax) {
-            this.capturedAtMax = capturedAtMax;
+        public CapturedAtMinStage capturedAtMax(@NotNull OffsetDateTime capturedAtMax) {
+            this.capturedAtMax = Objects.requireNonNull(capturedAtMax, "capturedAtMax must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("captured_at_min")
-        public CompanyIdStage capturedAtMin(OffsetDateTime capturedAtMin) {
-            this.capturedAtMin = capturedAtMin;
+        public CompanyIdStage capturedAtMin(@NotNull OffsetDateTime capturedAtMin) {
+            this.capturedAtMin = Objects.requireNonNull(capturedAtMin, "capturedAtMin must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("company_id")
-        public CreatedAtStage companyId(String companyId) {
-            this.companyId = companyId;
+        public CreatedAtStage companyId(@NotNull String companyId) {
+            this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public EnvironmentIdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public EventSubtypeStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public EventSubtypeStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("event_subtype")
-        public MonthResetStage eventSubtype(String eventSubtype) {
-            this.eventSubtype = eventSubtype;
+        public MonthResetStage eventSubtype(@NotNull String eventSubtype) {
+            this.eventSubtype = Objects.requireNonNull(eventSubtype, "eventSubtype must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("month_reset")
-        public PeriodStage monthReset(String monthReset) {
-            this.monthReset = monthReset;
+        public PeriodStage monthReset(@NotNull String monthReset) {
+            this.monthReset = Objects.requireNonNull(monthReset, "monthReset must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("period")
-        public ValueStage period(String period) {
-            this.period = period;
+        public ValueStage period(@NotNull String period) {
+            this.period = Objects.requireNonNull(period, "period must not be null");
             return this;
         }
 

@@ -15,6 +15,7 @@ import com.schematic.api.types.FeatureUsageDetailResponseData;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetFeatureUsageByCompanyResponse.Builder.class)
@@ -77,13 +78,13 @@ public final class GetFeatureUsageByCompanyResponse {
     }
 
     public interface DataStage {
-        ParamsStage data(FeatureUsageDetailResponseData data);
+        ParamsStage data(@NotNull FeatureUsageDetailResponseData data);
 
         Builder from(GetFeatureUsageByCompanyResponse other);
     }
 
     public interface ParamsStage {
-        _FinalStage params(GetFeatureUsageByCompanyParams params);
+        _FinalStage params(@NotNull GetFeatureUsageByCompanyParams params);
     }
 
     public interface _FinalStage {
@@ -110,8 +111,8 @@ public final class GetFeatureUsageByCompanyResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public ParamsStage data(FeatureUsageDetailResponseData data) {
-            this.data = data;
+        public ParamsStage data(@NotNull FeatureUsageDetailResponseData data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 
@@ -121,8 +122,8 @@ public final class GetFeatureUsageByCompanyResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(GetFeatureUsageByCompanyParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull GetFeatureUsageByCompanyParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

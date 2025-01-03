@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountFeatureCompaniesRequest.Builder.class)
@@ -102,7 +103,7 @@ public final class CountFeatureCompaniesRequest {
     }
 
     public interface FeatureIdStage {
-        _FinalStage featureId(String featureId);
+        _FinalStage featureId(@NotNull String featureId);
 
         Builder from(CountFeatureCompaniesRequest other);
     }
@@ -149,8 +150,8 @@ public final class CountFeatureCompaniesRequest {
 
         @java.lang.Override
         @JsonSetter("feature_id")
-        public _FinalStage featureId(String featureId) {
-            this.featureId = featureId;
+        public _FinalStage featureId(@NotNull String featureId) {
+            this.featureId = Objects.requireNonNull(featureId, "featureId must not be null");
             return this;
         }
 

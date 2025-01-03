@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateEventRequestBody.Builder.class)
@@ -91,7 +92,7 @@ public final class CreateEventRequestBody {
     }
 
     public interface EventTypeStage {
-        _FinalStage eventType(CreateEventRequestBodyEventType eventType);
+        _FinalStage eventType(@NotNull CreateEventRequestBodyEventType eventType);
 
         Builder from(CreateEventRequestBody other);
     }
@@ -135,8 +136,8 @@ public final class CreateEventRequestBody {
          */
         @java.lang.Override
         @JsonSetter("event_type")
-        public _FinalStage eventType(CreateEventRequestBodyEventType eventType) {
-            this.eventType = eventType;
+        public _FinalStage eventType(@NotNull CreateEventRequestBodyEventType eventType) {
+            this.eventType = Objects.requireNonNull(eventType, "eventType must not be null");
             return this;
         }
 

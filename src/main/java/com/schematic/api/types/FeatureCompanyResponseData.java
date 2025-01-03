@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FeatureCompanyResponseData.Builder.class)
@@ -227,15 +228,15 @@ public final class FeatureCompanyResponseData {
     }
 
     public interface AllocationTypeStage {
-        EntitlementIdStage allocationType(FeatureCompanyResponseDataAllocationType allocationType);
+        EntitlementIdStage allocationType(@NotNull FeatureCompanyResponseDataAllocationType allocationType);
     }
 
     public interface EntitlementIdStage {
-        EntitlementTypeStage entitlementId(String entitlementId);
+        EntitlementTypeStage entitlementId(@NotNull String entitlementId);
     }
 
     public interface EntitlementTypeStage {
-        _FinalStage entitlementType(String entitlementType);
+        _FinalStage entitlementType(@NotNull String entitlementType);
     }
 
     public interface _FinalStage {
@@ -347,22 +348,22 @@ public final class FeatureCompanyResponseData {
          */
         @java.lang.Override
         @JsonSetter("allocation_type")
-        public EntitlementIdStage allocationType(FeatureCompanyResponseDataAllocationType allocationType) {
-            this.allocationType = allocationType;
+        public EntitlementIdStage allocationType(@NotNull FeatureCompanyResponseDataAllocationType allocationType) {
+            this.allocationType = Objects.requireNonNull(allocationType, "allocationType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("entitlement_id")
-        public EntitlementTypeStage entitlementId(String entitlementId) {
-            this.entitlementId = entitlementId;
+        public EntitlementTypeStage entitlementId(@NotNull String entitlementId) {
+            this.entitlementId = Objects.requireNonNull(entitlementId, "entitlementId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("entitlement_type")
-        public _FinalStage entitlementType(String entitlementType) {
-            this.entitlementType = entitlementType;
+        public _FinalStage entitlementType(@NotNull String entitlementType) {
+            this.entitlementType = Objects.requireNonNull(entitlementType, "entitlementType must not be null");
             return this;
         }
 

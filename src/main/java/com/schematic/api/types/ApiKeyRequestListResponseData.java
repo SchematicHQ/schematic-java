@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ApiKeyRequestListResponseData.Builder.class)
@@ -233,25 +234,25 @@ public final class ApiKeyRequestListResponseData {
     }
 
     public interface ApiKeyIdStage {
-        IdStage apiKeyId(String apiKeyId);
+        IdStage apiKeyId(@NotNull String apiKeyId);
 
         Builder from(ApiKeyRequestListResponseData other);
     }
 
     public interface IdStage {
-        MethodStage id(String id);
+        MethodStage id(@NotNull String id);
     }
 
     public interface MethodStage {
-        StartedAtStage method(String method);
+        StartedAtStage method(@NotNull String method);
     }
 
     public interface StartedAtStage {
-        UrlStage startedAt(OffsetDateTime startedAt);
+        UrlStage startedAt(@NotNull OffsetDateTime startedAt);
     }
 
     public interface UrlStage {
-        _FinalStage url(String url);
+        _FinalStage url(@NotNull String url);
     }
 
     public interface _FinalStage {
@@ -365,36 +366,36 @@ public final class ApiKeyRequestListResponseData {
 
         @java.lang.Override
         @JsonSetter("api_key_id")
-        public IdStage apiKeyId(String apiKeyId) {
-            this.apiKeyId = apiKeyId;
+        public IdStage apiKeyId(@NotNull String apiKeyId) {
+            this.apiKeyId = Objects.requireNonNull(apiKeyId, "apiKeyId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public MethodStage id(String id) {
-            this.id = id;
+        public MethodStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("method")
-        public StartedAtStage method(String method) {
-            this.method = method;
+        public StartedAtStage method(@NotNull String method) {
+            this.method = Objects.requireNonNull(method, "method must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("started_at")
-        public UrlStage startedAt(OffsetDateTime startedAt) {
-            this.startedAt = startedAt;
+        public UrlStage startedAt(@NotNull OffsetDateTime startedAt) {
+            this.startedAt = Objects.requireNonNull(startedAt, "startedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("url")
-        public _FinalStage url(String url) {
-            this.url = url;
+        public _FinalStage url(@NotNull String url) {
+            this.url = Objects.requireNonNull(url, "url must not be null");
             return this;
         }
 

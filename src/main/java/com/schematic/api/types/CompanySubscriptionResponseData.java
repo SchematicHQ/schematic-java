@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanySubscriptionResponseData.Builder.class)
@@ -191,25 +192,25 @@ public final class CompanySubscriptionResponseData {
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(String currency);
+        CustomerExternalIdStage currency(@NotNull String currency);
 
         Builder from(CompanySubscriptionResponseData other);
     }
 
     public interface CustomerExternalIdStage {
-        IntervalStage customerExternalId(String customerExternalId);
+        IntervalStage customerExternalId(@NotNull String customerExternalId);
     }
 
     public interface IntervalStage {
-        StatusStage interval(String interval);
+        StatusStage interval(@NotNull String interval);
     }
 
     public interface StatusStage {
-        SubscriptionExternalIdStage status(String status);
+        SubscriptionExternalIdStage status(@NotNull String status);
     }
 
     public interface SubscriptionExternalIdStage {
-        TotalPriceStage subscriptionExternalId(String subscriptionExternalId);
+        TotalPriceStage subscriptionExternalId(@NotNull String subscriptionExternalId);
     }
 
     public interface TotalPriceStage {
@@ -305,36 +306,37 @@ public final class CompanySubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(String currency) {
-            this.currency = currency;
+        public CustomerExternalIdStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public IntervalStage customerExternalId(String customerExternalId) {
-            this.customerExternalId = customerExternalId;
+        public IntervalStage customerExternalId(@NotNull String customerExternalId) {
+            this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("interval")
-        public StatusStage interval(String interval) {
-            this.interval = interval;
+        public StatusStage interval(@NotNull String interval) {
+            this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("status")
-        public SubscriptionExternalIdStage status(String status) {
-            this.status = status;
+        public SubscriptionExternalIdStage status(@NotNull String status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("subscription_external_id")
-        public TotalPriceStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = subscriptionExternalId;
+        public TotalPriceStage subscriptionExternalId(@NotNull String subscriptionExternalId) {
+            this.subscriptionExternalId =
+                    Objects.requireNonNull(subscriptionExternalId, "subscriptionExternalId must not be null");
             return this;
         }
 

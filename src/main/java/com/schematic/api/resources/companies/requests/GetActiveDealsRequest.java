@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetActiveDealsRequest.Builder.class)
@@ -102,13 +103,13 @@ public final class GetActiveDealsRequest {
     }
 
     public interface CompanyIdStage {
-        DealStageStage companyId(String companyId);
+        DealStageStage companyId(@NotNull String companyId);
 
         Builder from(GetActiveDealsRequest other);
     }
 
     public interface DealStageStage {
-        _FinalStage dealStage(String dealStage);
+        _FinalStage dealStage(@NotNull String dealStage);
     }
 
     public interface _FinalStage {
@@ -149,15 +150,15 @@ public final class GetActiveDealsRequest {
 
         @java.lang.Override
         @JsonSetter("company_id")
-        public DealStageStage companyId(String companyId) {
-            this.companyId = companyId;
+        public DealStageStage companyId(@NotNull String companyId) {
+            this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("deal_stage")
-        public _FinalStage dealStage(String dealStage) {
-            this.dealStage = dealStage;
+        public _FinalStage dealStage(@NotNull String dealStage) {
+            this.dealStage = Objects.requireNonNull(dealStage, "dealStage must not be null");
             return this;
         }
 

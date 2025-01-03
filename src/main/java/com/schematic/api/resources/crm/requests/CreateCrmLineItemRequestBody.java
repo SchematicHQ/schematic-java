@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateCrmLineItemRequestBody.Builder.class)
@@ -144,21 +145,21 @@ public final class CreateCrmLineItemRequestBody {
     }
 
     public interface AmountStage {
-        IntervalStage amount(String amount);
+        IntervalStage amount(@NotNull String amount);
 
         Builder from(CreateCrmLineItemRequestBody other);
     }
 
     public interface IntervalStage {
-        LineItemExternalIdStage interval(String interval);
+        LineItemExternalIdStage interval(@NotNull String interval);
     }
 
     public interface LineItemExternalIdStage {
-        ProductExternalIdStage lineItemExternalId(String lineItemExternalId);
+        ProductExternalIdStage lineItemExternalId(@NotNull String lineItemExternalId);
     }
 
     public interface ProductExternalIdStage {
-        QuantityStage productExternalId(String productExternalId);
+        QuantityStage productExternalId(@NotNull String productExternalId);
     }
 
     public interface QuantityStage {
@@ -225,29 +226,29 @@ public final class CreateCrmLineItemRequestBody {
 
         @java.lang.Override
         @JsonSetter("amount")
-        public IntervalStage amount(String amount) {
-            this.amount = amount;
+        public IntervalStage amount(@NotNull String amount) {
+            this.amount = Objects.requireNonNull(amount, "amount must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("interval")
-        public LineItemExternalIdStage interval(String interval) {
-            this.interval = interval;
+        public LineItemExternalIdStage interval(@NotNull String interval) {
+            this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("line_item_external_id")
-        public ProductExternalIdStage lineItemExternalId(String lineItemExternalId) {
-            this.lineItemExternalId = lineItemExternalId;
+        public ProductExternalIdStage lineItemExternalId(@NotNull String lineItemExternalId) {
+            this.lineItemExternalId = Objects.requireNonNull(lineItemExternalId, "lineItemExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("product_external_id")
-        public QuantityStage productExternalId(String productExternalId) {
-            this.productExternalId = productExternalId;
+        public QuantityStage productExternalId(@NotNull String productExternalId) {
+            this.productExternalId = Objects.requireNonNull(productExternalId, "productExternalId must not be null");
             return this;
         }
 

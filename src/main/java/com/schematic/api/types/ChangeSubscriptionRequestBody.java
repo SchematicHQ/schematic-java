@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ChangeSubscriptionRequestBody.Builder.class)
@@ -124,13 +125,13 @@ public final class ChangeSubscriptionRequestBody {
     }
 
     public interface NewPlanIdStage {
-        NewPriceIdStage newPlanId(String newPlanId);
+        NewPriceIdStage newPlanId(@NotNull String newPlanId);
 
         Builder from(ChangeSubscriptionRequestBody other);
     }
 
     public interface NewPriceIdStage {
-        _FinalStage newPriceId(String newPriceId);
+        _FinalStage newPriceId(@NotNull String newPriceId);
     }
 
     public interface _FinalStage {
@@ -189,15 +190,15 @@ public final class ChangeSubscriptionRequestBody {
 
         @java.lang.Override
         @JsonSetter("new_plan_id")
-        public NewPriceIdStage newPlanId(String newPlanId) {
-            this.newPlanId = newPlanId;
+        public NewPriceIdStage newPlanId(@NotNull String newPlanId) {
+            this.newPlanId = Objects.requireNonNull(newPlanId, "newPlanId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("new_price_id")
-        public _FinalStage newPriceId(String newPriceId) {
-            this.newPriceId = newPriceId;
+        public _FinalStage newPriceId(@NotNull String newPriceId) {
+            this.newPriceId = Objects.requireNonNull(newPriceId, "newPriceId must not be null");
             return this;
         }
 

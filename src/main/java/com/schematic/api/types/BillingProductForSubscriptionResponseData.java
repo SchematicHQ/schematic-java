@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductForSubscriptionResponseData.Builder.class)
@@ -223,33 +224,33 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     public interface CreatedAtStage {
-        CurrencyStage createdAt(OffsetDateTime createdAt);
+        CurrencyStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(BillingProductForSubscriptionResponseData other);
     }
 
     public interface CurrencyStage {
-        EnvironmentIdStage currency(String currency);
+        EnvironmentIdStage currency(@NotNull String currency);
     }
 
     public interface EnvironmentIdStage {
-        ExternalIdStage environmentId(String environmentId);
+        ExternalIdStage environmentId(@NotNull String environmentId);
     }
 
     public interface ExternalIdStage {
-        IdStage externalId(String externalId);
+        IdStage externalId(@NotNull String externalId);
     }
 
     public interface IdStage {
-        IntervalStage id(String id);
+        IntervalStage id(@NotNull String id);
     }
 
     public interface IntervalStage {
-        NameStage interval(String interval);
+        NameStage interval(@NotNull String interval);
     }
 
     public interface NameStage {
-        PriceStage name(String name);
+        PriceStage name(@NotNull String name);
     }
 
     public interface PriceStage {
@@ -257,11 +258,11 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     public interface PriceExternalIdStage {
-        PriceIdStage priceExternalId(String priceExternalId);
+        PriceIdStage priceExternalId(@NotNull String priceExternalId);
     }
 
     public interface PriceIdStage {
-        QuantityStage priceId(String priceId);
+        QuantityStage priceId(@NotNull String priceId);
     }
 
     public interface QuantityStage {
@@ -269,15 +270,15 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     public interface SubscriptionIdStage {
-        UpdatedAtStage subscriptionId(String subscriptionId);
+        UpdatedAtStage subscriptionId(@NotNull String subscriptionId);
     }
 
     public interface UpdatedAtStage {
-        UsageTypeStage updatedAt(OffsetDateTime updatedAt);
+        UsageTypeStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface UsageTypeStage {
-        _FinalStage usageType(String usageType);
+        _FinalStage usageType(@NotNull String usageType);
     }
 
     public interface _FinalStage {
@@ -362,50 +363,50 @@ public final class BillingProductForSubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public CurrencyStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public CurrencyStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("currency")
-        public EnvironmentIdStage currency(String currency) {
-            this.currency = currency;
+        public EnvironmentIdStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public ExternalIdStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public ExternalIdStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public IdStage externalId(String externalId) {
-            this.externalId = externalId;
+        public IdStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public IntervalStage id(String id) {
-            this.id = id;
+        public IntervalStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("interval")
-        public NameStage interval(String interval) {
-            this.interval = interval;
+        public NameStage interval(@NotNull String interval) {
+            this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public PriceStage name(String name) {
-            this.name = name;
+        public PriceStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -418,15 +419,15 @@ public final class BillingProductForSubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("price_external_id")
-        public PriceIdStage priceExternalId(String priceExternalId) {
-            this.priceExternalId = priceExternalId;
+        public PriceIdStage priceExternalId(@NotNull String priceExternalId) {
+            this.priceExternalId = Objects.requireNonNull(priceExternalId, "priceExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("price_id")
-        public QuantityStage priceId(String priceId) {
-            this.priceId = priceId;
+        public QuantityStage priceId(@NotNull String priceId) {
+            this.priceId = Objects.requireNonNull(priceId, "priceId must not be null");
             return this;
         }
 
@@ -439,22 +440,22 @@ public final class BillingProductForSubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("subscription_id")
-        public UpdatedAtStage subscriptionId(String subscriptionId) {
-            this.subscriptionId = subscriptionId;
+        public UpdatedAtStage subscriptionId(@NotNull String subscriptionId) {
+            this.subscriptionId = Objects.requireNonNull(subscriptionId, "subscriptionId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public UsageTypeStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public UsageTypeStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("usage_type")
-        public _FinalStage usageType(String usageType) {
-            this.usageType = usageType;
+        public _FinalStage usageType(@NotNull String usageType) {
+            this.usageType = Objects.requireNonNull(usageType, "usageType must not be null");
             return this;
         }
 
