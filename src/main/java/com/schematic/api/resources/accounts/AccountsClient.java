@@ -67,8 +67,7 @@ public class AccountsClient {
             httpUrl.addQueryParameter(
                     "environment_id", request.getEnvironmentId().get());
         }
-        httpUrl.addQueryParameter(
-                "require_environment", Boolean.toString(request.getRequireEnvironment()));
+        httpUrl.addQueryParameter("require_environment", Boolean.toString(request.getRequireEnvironment()));
         if (request.getLimit().isPresent()) {
             httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
         }
@@ -363,8 +362,7 @@ public class AccountsClient {
             httpUrl.addQueryParameter(
                     "environment_id", request.getEnvironmentId().get());
         }
-        httpUrl.addQueryParameter(
-                "require_environment", Boolean.toString(request.getRequireEnvironment()));
+        httpUrl.addQueryParameter("require_environment", Boolean.toString(request.getRequireEnvironment()));
         if (request.getLimit().isPresent()) {
             httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
         }

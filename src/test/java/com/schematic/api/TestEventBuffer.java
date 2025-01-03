@@ -1,9 +1,16 @@
 package com.schematic.api;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.events.EventsClient;
 import com.schematic.api.resources.events.requests.CreateEventBatchRequestBody;
 import com.schematic.api.types.CreateEventRequestBody;
+import java.time.Duration;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,21 +19,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class EventBufferTest {
     @Mock
     private EventsClient eventsClient;
+
     @Mock
     private SchematicLogger logger;
+
     private EventBuffer eventBuffer;
 
     @BeforeEach
@@ -139,17 +139,18 @@ class EventBufferTest {
 
         for (int i = 0; i < threadCount; i++) {
             new Thread(() -> {
-                try {
-                    startLatch.await();
-                    for (int j = 0; j < 10; j++) {
-                        eventBuffer.push(mock(CreateEventRequestBody.class));
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                } finally {
-                    doneLatch.countDown();
-                }
-            }).start();
+                        try {
+                            startLatch.await();
+                            for (int j = 0; j < 10; j++) {
+                                eventBuffer.push(mock(CreateEventRequestBody.class));
+                            }
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        } finally {
+                            doneLatch.countDown();
+                        }
+                    })
+                    .start();
         }
 
         startLatch.countDown();
@@ -163,8 +164,8 @@ class EventBufferTest {
         verify(eventsClient, atLeastOnce()).createEventBatch(captor.capture());
 
         int totalEvents = captor.getAllValues().stream()
-            .mapToInt(batch -> batch.getEvents().size())
-            .sum();
+                .mapToInt(batch -> batch.getEvents().size())
+                .sum();
         assertEquals(100, totalEvents);
     }
 }

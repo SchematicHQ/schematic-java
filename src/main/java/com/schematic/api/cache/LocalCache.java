@@ -2,8 +2,8 @@ package com.schematic.api.cache;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class LocalCache<T> implements CacheProvider<T> {
