@@ -201,7 +201,7 @@ Schematic schematic = Schematic.builder()
 
 ### Offline Mode
 
-In development or testing environments, you may want to avoid making network requests to the Schematic API. You can run Schematic in offline mode; in this case, it does not matter what API key you specify:
+In development or testing environments, you may want to avoid making network requests when checking flags or submitting events. You can run Schematic in offline mode:
 
 ```java
 import com.schematic.api.Schematic;
@@ -211,6 +211,8 @@ Schematic schematic = Schematic.builder()
     .offline(true)
     .build();
 ```
+
+While in offline mode, flag checks will return the default value for the flag being checked, and events will no-op. Other API calls will still be attempted as normal; offline mode does not affect these.
 
 Offline mode works well with flag defaults:
 
