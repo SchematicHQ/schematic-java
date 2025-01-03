@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateFeatureRequestBody.Builder.class)
@@ -157,17 +158,17 @@ public final class CreateFeatureRequestBody {
     }
 
     public interface DescriptionStage {
-        FeatureTypeStage description(String description);
+        FeatureTypeStage description(@NotNull String description);
 
         Builder from(CreateFeatureRequestBody other);
     }
 
     public interface FeatureTypeStage {
-        NameStage featureType(CreateFeatureRequestBodyFeatureType featureType);
+        NameStage featureType(@NotNull CreateFeatureRequestBodyFeatureType featureType);
     }
 
     public interface NameStage {
-        _FinalStage name(String name);
+        _FinalStage name(@NotNull String name);
     }
 
     public interface _FinalStage {
@@ -239,22 +240,22 @@ public final class CreateFeatureRequestBody {
 
         @java.lang.Override
         @JsonSetter("description")
-        public FeatureTypeStage description(String description) {
-            this.description = description;
+        public FeatureTypeStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("feature_type")
-        public NameStage featureType(CreateFeatureRequestBodyFeatureType featureType) {
-            this.featureType = featureType;
+        public NameStage featureType(@NotNull CreateFeatureRequestBodyFeatureType featureType) {
+            this.featureType = Objects.requireNonNull(featureType, "featureType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public _FinalStage name(String name) {
-            this.name = name;
+        public _FinalStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

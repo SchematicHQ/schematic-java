@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductPriceResponseData.Builder.class)
@@ -167,21 +168,21 @@ public final class BillingProductPriceResponseData {
     }
 
     public interface CreatedAtStage {
-        CurrencyStage createdAt(OffsetDateTime createdAt);
+        CurrencyStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(BillingProductPriceResponseData other);
     }
 
     public interface CurrencyStage {
-        IdStage currency(String currency);
+        IdStage currency(@NotNull String currency);
     }
 
     public interface IdStage {
-        IntervalStage id(String id);
+        IntervalStage id(@NotNull String id);
     }
 
     public interface IntervalStage {
-        PriceStage interval(String interval);
+        PriceStage interval(@NotNull String interval);
     }
 
     public interface PriceStage {
@@ -189,19 +190,19 @@ public final class BillingProductPriceResponseData {
     }
 
     public interface PriceExternalIdStage {
-        ProductExternalIdStage priceExternalId(String priceExternalId);
+        ProductExternalIdStage priceExternalId(@NotNull String priceExternalId);
     }
 
     public interface ProductExternalIdStage {
-        UpdatedAtStage productExternalId(String productExternalId);
+        UpdatedAtStage productExternalId(@NotNull String productExternalId);
     }
 
     public interface UpdatedAtStage {
-        UsageTypeStage updatedAt(OffsetDateTime updatedAt);
+        UsageTypeStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface UsageTypeStage {
-        _FinalStage usageType(String usageType);
+        _FinalStage usageType(@NotNull String usageType);
     }
 
     public interface _FinalStage {
@@ -266,29 +267,29 @@ public final class BillingProductPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public CurrencyStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public CurrencyStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("currency")
-        public IdStage currency(String currency) {
-            this.currency = currency;
+        public IdStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public IntervalStage id(String id) {
-            this.id = id;
+        public IntervalStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("interval")
-        public PriceStage interval(String interval) {
-            this.interval = interval;
+        public PriceStage interval(@NotNull String interval) {
+            this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
 
@@ -301,29 +302,29 @@ public final class BillingProductPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("price_external_id")
-        public ProductExternalIdStage priceExternalId(String priceExternalId) {
-            this.priceExternalId = priceExternalId;
+        public ProductExternalIdStage priceExternalId(@NotNull String priceExternalId) {
+            this.priceExternalId = Objects.requireNonNull(priceExternalId, "priceExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("product_external_id")
-        public UpdatedAtStage productExternalId(String productExternalId) {
-            this.productExternalId = productExternalId;
+        public UpdatedAtStage productExternalId(@NotNull String productExternalId) {
+            this.productExternalId = Objects.requireNonNull(productExternalId, "productExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public UsageTypeStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public UsageTypeStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("usage_type")
-        public _FinalStage usageType(String usageType) {
-            this.usageType = usageType;
+        public _FinalStage usageType(@NotNull String usageType) {
+            this.usageType = Objects.requireNonNull(usageType, "usageType must not be null");
             return this;
         }
 

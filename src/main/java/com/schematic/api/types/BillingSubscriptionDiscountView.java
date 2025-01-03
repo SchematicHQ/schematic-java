@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingSubscriptionDiscountView.Builder.class)
@@ -211,21 +212,21 @@ public final class BillingSubscriptionDiscountView {
     }
 
     public interface CouponIdStage {
-        CouponNameStage couponId(String couponId);
+        CouponNameStage couponId(@NotNull String couponId);
 
         Builder from(BillingSubscriptionDiscountView other);
     }
 
     public interface CouponNameStage {
-        DiscountExternalIdStage couponName(String couponName);
+        DiscountExternalIdStage couponName(@NotNull String couponName);
     }
 
     public interface DiscountExternalIdStage {
-        DurationStage discountExternalId(String discountExternalId);
+        DurationStage discountExternalId(@NotNull String discountExternalId);
     }
 
     public interface DurationStage {
-        IsActiveStage duration(String duration);
+        IsActiveStage duration(@NotNull String duration);
     }
 
     public interface IsActiveStage {
@@ -233,11 +234,11 @@ public final class BillingSubscriptionDiscountView {
     }
 
     public interface StartedAtStage {
-        SubscriptionExternalIdStage startedAt(OffsetDateTime startedAt);
+        SubscriptionExternalIdStage startedAt(@NotNull OffsetDateTime startedAt);
     }
 
     public interface SubscriptionExternalIdStage {
-        _FinalStage subscriptionExternalId(String subscriptionExternalId);
+        _FinalStage subscriptionExternalId(@NotNull String subscriptionExternalId);
     }
 
     public interface _FinalStage {
@@ -336,29 +337,29 @@ public final class BillingSubscriptionDiscountView {
 
         @java.lang.Override
         @JsonSetter("coupon_id")
-        public CouponNameStage couponId(String couponId) {
-            this.couponId = couponId;
+        public CouponNameStage couponId(@NotNull String couponId) {
+            this.couponId = Objects.requireNonNull(couponId, "couponId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("coupon_name")
-        public DiscountExternalIdStage couponName(String couponName) {
-            this.couponName = couponName;
+        public DiscountExternalIdStage couponName(@NotNull String couponName) {
+            this.couponName = Objects.requireNonNull(couponName, "couponName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("discount_external_id")
-        public DurationStage discountExternalId(String discountExternalId) {
-            this.discountExternalId = discountExternalId;
+        public DurationStage discountExternalId(@NotNull String discountExternalId) {
+            this.discountExternalId = Objects.requireNonNull(discountExternalId, "discountExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("duration")
-        public IsActiveStage duration(String duration) {
-            this.duration = duration;
+        public IsActiveStage duration(@NotNull String duration) {
+            this.duration = Objects.requireNonNull(duration, "duration must not be null");
             return this;
         }
 
@@ -371,15 +372,16 @@ public final class BillingSubscriptionDiscountView {
 
         @java.lang.Override
         @JsonSetter("started_at")
-        public SubscriptionExternalIdStage startedAt(OffsetDateTime startedAt) {
-            this.startedAt = startedAt;
+        public SubscriptionExternalIdStage startedAt(@NotNull OffsetDateTime startedAt) {
+            this.startedAt = Objects.requireNonNull(startedAt, "startedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("subscription_external_id")
-        public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = subscriptionExternalId;
+        public _FinalStage subscriptionExternalId(@NotNull String subscriptionExternalId) {
+            this.subscriptionExternalId =
+                    Objects.requireNonNull(subscriptionExternalId, "subscriptionExternalId must not be null");
             return this;
         }
 

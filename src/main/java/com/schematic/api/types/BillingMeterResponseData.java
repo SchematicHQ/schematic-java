@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingMeterResponseData.Builder.class)
@@ -104,25 +105,25 @@ public final class BillingMeterResponseData {
     }
 
     public interface DispalyNameStage {
-        EventNameStage dispalyName(String dispalyName);
+        EventNameStage dispalyName(@NotNull String dispalyName);
 
         Builder from(BillingMeterResponseData other);
     }
 
     public interface EventNameStage {
-        EventPayloadKeyStage eventName(String eventName);
+        EventPayloadKeyStage eventName(@NotNull String eventName);
     }
 
     public interface EventPayloadKeyStage {
-        ExternalPriceIdStage eventPayloadKey(String eventPayloadKey);
+        ExternalPriceIdStage eventPayloadKey(@NotNull String eventPayloadKey);
     }
 
     public interface ExternalPriceIdStage {
-        IdStage externalPriceId(String externalPriceId);
+        IdStage externalPriceId(@NotNull String externalPriceId);
     }
 
     public interface IdStage {
-        _FinalStage id(String id);
+        _FinalStage id(@NotNull String id);
     }
 
     public interface _FinalStage {
@@ -164,36 +165,36 @@ public final class BillingMeterResponseData {
 
         @java.lang.Override
         @JsonSetter("dispaly_name")
-        public EventNameStage dispalyName(String dispalyName) {
-            this.dispalyName = dispalyName;
+        public EventNameStage dispalyName(@NotNull String dispalyName) {
+            this.dispalyName = Objects.requireNonNull(dispalyName, "dispalyName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("event_name")
-        public EventPayloadKeyStage eventName(String eventName) {
-            this.eventName = eventName;
+        public EventPayloadKeyStage eventName(@NotNull String eventName) {
+            this.eventName = Objects.requireNonNull(eventName, "eventName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("event_payload_key")
-        public ExternalPriceIdStage eventPayloadKey(String eventPayloadKey) {
-            this.eventPayloadKey = eventPayloadKey;
+        public ExternalPriceIdStage eventPayloadKey(@NotNull String eventPayloadKey) {
+            this.eventPayloadKey = Objects.requireNonNull(eventPayloadKey, "eventPayloadKey must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_price_id")
-        public IdStage externalPriceId(String externalPriceId) {
-            this.externalPriceId = externalPriceId;
+        public IdStage externalPriceId(@NotNull String externalPriceId) {
+            this.externalPriceId = Objects.requireNonNull(externalPriceId, "externalPriceId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public _FinalStage id(String id) {
-            this.id = id;
+        public _FinalStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 

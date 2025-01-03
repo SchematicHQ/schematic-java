@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CheckFlagOutputWithFlagKey.Builder.class)
@@ -137,13 +138,13 @@ public final class CheckFlagOutputWithFlagKey {
     }
 
     public interface FlagStage {
-        ReasonStage flag(String flag);
+        ReasonStage flag(@NotNull String flag);
 
         Builder from(CheckFlagOutputWithFlagKey other);
     }
 
     public interface ReasonStage {
-        ValueStage reason(String reason);
+        ValueStage reason(@NotNull String reason);
     }
 
     public interface ValueStage {
@@ -212,15 +213,15 @@ public final class CheckFlagOutputWithFlagKey {
 
         @java.lang.Override
         @JsonSetter("flag")
-        public ReasonStage flag(String flag) {
-            this.flag = flag;
+        public ReasonStage flag(@NotNull String flag) {
+            this.flag = Objects.requireNonNull(flag, "flag must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("reason")
-        public ValueStage reason(String reason) {
-            this.reason = reason;
+        public ValueStage reason(@NotNull String reason) {
+            this.reason = Objects.requireNonNull(reason, "reason must not be null");
             return this;
         }
 

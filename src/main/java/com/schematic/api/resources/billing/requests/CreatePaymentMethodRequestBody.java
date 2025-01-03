@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreatePaymentMethodRequestBody.Builder.class)
@@ -199,17 +200,17 @@ public final class CreatePaymentMethodRequestBody {
     }
 
     public interface CustomerExternalIdStage {
-        ExternalIdStage customerExternalId(String customerExternalId);
+        ExternalIdStage customerExternalId(@NotNull String customerExternalId);
 
         Builder from(CreatePaymentMethodRequestBody other);
     }
 
     public interface ExternalIdStage {
-        PaymentMethodTypeStage externalId(String externalId);
+        PaymentMethodTypeStage externalId(@NotNull String externalId);
     }
 
     public interface PaymentMethodTypeStage {
-        _FinalStage paymentMethodType(String paymentMethodType);
+        _FinalStage paymentMethodType(@NotNull String paymentMethodType);
     }
 
     public interface _FinalStage {
@@ -310,22 +311,22 @@ public final class CreatePaymentMethodRequestBody {
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public ExternalIdStage customerExternalId(String customerExternalId) {
-            this.customerExternalId = customerExternalId;
+        public ExternalIdStage customerExternalId(@NotNull String customerExternalId) {
+            this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public PaymentMethodTypeStage externalId(String externalId) {
-            this.externalId = externalId;
+        public PaymentMethodTypeStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("payment_method_type")
-        public _FinalStage paymentMethodType(String paymentMethodType) {
-            this.paymentMethodType = paymentMethodType;
+        public _FinalStage paymentMethodType(@NotNull String paymentMethodType) {
+            this.paymentMethodType = Objects.requireNonNull(paymentMethodType, "paymentMethodType must not be null");
             return this;
         }
 

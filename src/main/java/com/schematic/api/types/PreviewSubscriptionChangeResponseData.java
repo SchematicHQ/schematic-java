@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PreviewSubscriptionChangeResponseData.Builder.class)
@@ -164,7 +165,7 @@ public final class PreviewSubscriptionChangeResponseData {
     }
 
     public interface PeriodStartStage {
-        PromoCodeAppliedStage periodStart(OffsetDateTime periodStart);
+        PromoCodeAppliedStage periodStart(@NotNull OffsetDateTime periodStart);
     }
 
     public interface PromoCodeAppliedStage {
@@ -257,8 +258,8 @@ public final class PreviewSubscriptionChangeResponseData {
 
         @java.lang.Override
         @JsonSetter("period_start")
-        public PromoCodeAppliedStage periodStart(OffsetDateTime periodStart) {
-            this.periodStart = periodStart;
+        public PromoCodeAppliedStage periodStart(@NotNull OffsetDateTime periodStart) {
+            this.periodStart = Objects.requireNonNull(periodStart, "periodStart must not be null");
             return this;
         }
 

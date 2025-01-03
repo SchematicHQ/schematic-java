@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DeleteCompanyByKeysResponse.Builder.class)
@@ -78,7 +79,7 @@ public final class DeleteCompanyByKeysResponse {
     }
 
     public interface DataStage {
-        _FinalStage data(CompanyResponseData data);
+        _FinalStage data(@NotNull CompanyResponseData data);
 
         Builder from(DeleteCompanyByKeysResponse other);
     }
@@ -113,8 +114,8 @@ public final class DeleteCompanyByKeysResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public _FinalStage data(CompanyResponseData data) {
-            this.data = data;
+        public _FinalStage data(@NotNull CompanyResponseData data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 

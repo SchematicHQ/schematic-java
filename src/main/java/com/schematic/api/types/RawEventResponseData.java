@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RawEventResponseData.Builder.class)
@@ -107,21 +108,21 @@ public final class RawEventResponseData {
     }
 
     public interface CapturedAtStage {
-        RemoteAddrStage capturedAt(OffsetDateTime capturedAt);
+        RemoteAddrStage capturedAt(@NotNull OffsetDateTime capturedAt);
 
         Builder from(RawEventResponseData other);
     }
 
     public interface RemoteAddrStage {
-        RemoteIpStage remoteAddr(String remoteAddr);
+        RemoteIpStage remoteAddr(@NotNull String remoteAddr);
     }
 
     public interface RemoteIpStage {
-        UserAgentStage remoteIp(String remoteIp);
+        UserAgentStage remoteIp(@NotNull String remoteIp);
     }
 
     public interface UserAgentStage {
-        _FinalStage userAgent(String userAgent);
+        _FinalStage userAgent(@NotNull String userAgent);
     }
 
     public interface _FinalStage {
@@ -162,29 +163,29 @@ public final class RawEventResponseData {
 
         @java.lang.Override
         @JsonSetter("captured_at")
-        public RemoteAddrStage capturedAt(OffsetDateTime capturedAt) {
-            this.capturedAt = capturedAt;
+        public RemoteAddrStage capturedAt(@NotNull OffsetDateTime capturedAt) {
+            this.capturedAt = Objects.requireNonNull(capturedAt, "capturedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("remote_addr")
-        public RemoteIpStage remoteAddr(String remoteAddr) {
-            this.remoteAddr = remoteAddr;
+        public RemoteIpStage remoteAddr(@NotNull String remoteAddr) {
+            this.remoteAddr = Objects.requireNonNull(remoteAddr, "remoteAddr must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("remote_ip")
-        public UserAgentStage remoteIp(String remoteIp) {
-            this.remoteIp = remoteIp;
+        public UserAgentStage remoteIp(@NotNull String remoteIp) {
+            this.remoteIp = Objects.requireNonNull(remoteIp, "remoteIp must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("user_agent")
-        public _FinalStage userAgent(String userAgent) {
-            this.userAgent = userAgent;
+        public _FinalStage userAgent(@NotNull String userAgent) {
+            this.userAgent = Objects.requireNonNull(userAgent, "userAgent must not be null");
             return this;
         }
 

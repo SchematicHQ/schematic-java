@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingCustomerRequestBody.Builder.class)
@@ -117,13 +118,13 @@ public final class CreateBillingCustomerRequestBody {
     }
 
     public interface EmailStage {
-        ExternalIdStage email(String email);
+        ExternalIdStage email(@NotNull String email);
 
         Builder from(CreateBillingCustomerRequestBody other);
     }
 
     public interface ExternalIdStage {
-        FailedToImportStage externalId(String externalId);
+        FailedToImportStage externalId(@NotNull String externalId);
     }
 
     public interface FailedToImportStage {
@@ -131,7 +132,7 @@ public final class CreateBillingCustomerRequestBody {
     }
 
     public interface NameStage {
-        _FinalStage name(String name);
+        _FinalStage name(@NotNull String name);
     }
 
     public interface _FinalStage {
@@ -181,15 +182,15 @@ public final class CreateBillingCustomerRequestBody {
 
         @java.lang.Override
         @JsonSetter("email")
-        public ExternalIdStage email(String email) {
-            this.email = email;
+        public ExternalIdStage email(@NotNull String email) {
+            this.email = Objects.requireNonNull(email, "email must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public FailedToImportStage externalId(String externalId) {
-            this.externalId = externalId;
+        public FailedToImportStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
@@ -202,8 +203,8 @@ public final class CreateBillingCustomerRequestBody {
 
         @java.lang.Override
         @JsonSetter("name")
-        public _FinalStage name(String name) {
-            this.name = name;
+        public _FinalStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

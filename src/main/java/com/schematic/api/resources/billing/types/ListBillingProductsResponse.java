@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListBillingProductsResponse.Builder.class)
@@ -83,7 +84,7 @@ public final class ListBillingProductsResponse {
     }
 
     public interface ParamsStage {
-        _FinalStage params(ListBillingProductsParams params);
+        _FinalStage params(@NotNull ListBillingProductsParams params);
 
         Builder from(ListBillingProductsResponse other);
     }
@@ -122,8 +123,8 @@ public final class ListBillingProductsResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(ListBillingProductsParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull ListBillingProductsParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

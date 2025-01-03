@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingCouponResponseData.Builder.class)
@@ -235,21 +236,21 @@ public final class BillingCouponResponseData {
     }
 
     public interface AccountIdStage {
-        EnvironmentIdStage accountId(String accountId);
+        EnvironmentIdStage accountId(@NotNull String accountId);
 
         Builder from(BillingCouponResponseData other);
     }
 
     public interface EnvironmentIdStage {
-        ExternalIdStage environmentId(String environmentId);
+        ExternalIdStage environmentId(@NotNull String environmentId);
     }
 
     public interface ExternalIdStage {
-        IdStage externalId(String externalId);
+        IdStage externalId(@NotNull String externalId);
     }
 
     public interface IdStage {
-        IsActiveStage id(String id);
+        IsActiveStage id(@NotNull String id);
     }
 
     public interface IsActiveStage {
@@ -257,7 +258,7 @@ public final class BillingCouponResponseData {
     }
 
     public interface NameStage {
-        TimesRedeemedStage name(String name);
+        TimesRedeemedStage name(@NotNull String name);
     }
 
     public interface TimesRedeemedStage {
@@ -376,29 +377,29 @@ public final class BillingCouponResponseData {
 
         @java.lang.Override
         @JsonSetter("account_id")
-        public EnvironmentIdStage accountId(String accountId) {
-            this.accountId = accountId;
+        public EnvironmentIdStage accountId(@NotNull String accountId) {
+            this.accountId = Objects.requireNonNull(accountId, "accountId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public ExternalIdStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public ExternalIdStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public IdStage externalId(String externalId) {
-            this.externalId = externalId;
+        public IdStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public IsActiveStage id(String id) {
-            this.id = id;
+        public IsActiveStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
@@ -411,8 +412,8 @@ public final class BillingCouponResponseData {
 
         @java.lang.Override
         @JsonSetter("name")
-        public TimesRedeemedStage name(String name) {
-            this.name = name;
+        public TimesRedeemedStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

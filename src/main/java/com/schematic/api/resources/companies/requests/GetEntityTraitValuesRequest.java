@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetEntityTraitValuesRequest.Builder.class)
@@ -102,7 +103,7 @@ public final class GetEntityTraitValuesRequest {
     }
 
     public interface DefinitionIdStage {
-        _FinalStage definitionId(String definitionId);
+        _FinalStage definitionId(@NotNull String definitionId);
 
         Builder from(GetEntityTraitValuesRequest other);
     }
@@ -149,8 +150,8 @@ public final class GetEntityTraitValuesRequest {
 
         @java.lang.Override
         @JsonSetter("definition_id")
-        public _FinalStage definitionId(String definitionId) {
-            this.definitionId = definitionId;
+        public _FinalStage definitionId(@NotNull String definitionId) {
+            this.definitionId = Objects.requireNonNull(definitionId, "definitionId must not be null");
             return this;
         }
 

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateRuleRequestBody.Builder.class)
@@ -107,7 +108,7 @@ public final class UpdateRuleRequestBody {
     }
 
     public interface NameStage {
-        PriorityStage name(String name);
+        PriorityStage name(@NotNull String name);
 
         Builder from(UpdateRuleRequestBody other);
     }
@@ -165,8 +166,8 @@ public final class UpdateRuleRequestBody {
 
         @java.lang.Override
         @JsonSetter("name")
-        public PriorityStage name(String name) {
-            this.name = name;
+        public PriorityStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

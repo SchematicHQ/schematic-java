@@ -158,11 +158,6 @@ public class CheckoutClient {
         }
     }
 
-    public UpdateCustomerSubscriptionTrialEndResponse updateCustomerSubscriptionTrialEnd(String subscriptionId) {
-        return updateCustomerSubscriptionTrialEnd(
-                subscriptionId, UpdateTrialEndRequestBody.builder().build());
-    }
-
     public UpdateCustomerSubscriptionTrialEndResponse updateCustomerSubscriptionTrialEnd(
             String subscriptionId, UpdateTrialEndRequestBody request) {
         return updateCustomerSubscriptionTrialEnd(subscriptionId, request, null);

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductPlanResponseData.Builder.class)
@@ -144,17 +145,17 @@ public final class BillingProductPlanResponseData {
     }
 
     public interface AccountIdStage {
-        BillingProductIdStage accountId(String accountId);
+        BillingProductIdStage accountId(@NotNull String accountId);
 
         Builder from(BillingProductPlanResponseData other);
     }
 
     public interface BillingProductIdStage {
-        EnvironmentIdStage billingProductId(String billingProductId);
+        EnvironmentIdStage billingProductId(@NotNull String billingProductId);
     }
 
     public interface EnvironmentIdStage {
-        IsTrialableStage environmentId(String environmentId);
+        IsTrialableStage environmentId(@NotNull String environmentId);
     }
 
     public interface IsTrialableStage {
@@ -162,7 +163,7 @@ public final class BillingProductPlanResponseData {
     }
 
     public interface PlanIdStage {
-        _FinalStage planId(String planId);
+        _FinalStage planId(@NotNull String planId);
     }
 
     public interface _FinalStage {
@@ -225,22 +226,22 @@ public final class BillingProductPlanResponseData {
 
         @java.lang.Override
         @JsonSetter("account_id")
-        public BillingProductIdStage accountId(String accountId) {
-            this.accountId = accountId;
+        public BillingProductIdStage accountId(@NotNull String accountId) {
+            this.accountId = Objects.requireNonNull(accountId, "accountId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("billing_product_id")
-        public EnvironmentIdStage billingProductId(String billingProductId) {
-            this.billingProductId = billingProductId;
+        public EnvironmentIdStage billingProductId(@NotNull String billingProductId) {
+            this.billingProductId = Objects.requireNonNull(billingProductId, "billingProductId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public IsTrialableStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public IsTrialableStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
@@ -253,8 +254,8 @@ public final class BillingProductPlanResponseData {
 
         @java.lang.Override
         @JsonSetter("plan_id")
-        public _FinalStage planId(String planId) {
-            this.planId = planId;
+        public _FinalStage planId(@NotNull String planId) {
+            this.planId = Objects.requireNonNull(planId, "planId must not be null");
             return this;
         }
 

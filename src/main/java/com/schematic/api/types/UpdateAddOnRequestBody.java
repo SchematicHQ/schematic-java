@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateAddOnRequestBody.Builder.class)
@@ -70,13 +71,13 @@ public final class UpdateAddOnRequestBody {
     }
 
     public interface AddOnIdStage {
-        PriceIdStage addOnId(String addOnId);
+        PriceIdStage addOnId(@NotNull String addOnId);
 
         Builder from(UpdateAddOnRequestBody other);
     }
 
     public interface PriceIdStage {
-        _FinalStage priceId(String priceId);
+        _FinalStage priceId(@NotNull String priceId);
     }
 
     public interface _FinalStage {
@@ -103,15 +104,15 @@ public final class UpdateAddOnRequestBody {
 
         @java.lang.Override
         @JsonSetter("add_on_id")
-        public PriceIdStage addOnId(String addOnId) {
-            this.addOnId = addOnId;
+        public PriceIdStage addOnId(@NotNull String addOnId) {
+            this.addOnId = Objects.requireNonNull(addOnId, "addOnId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("price_id")
-        public _FinalStage priceId(String priceId) {
-            this.priceId = priceId;
+        public _FinalStage priceId(@NotNull String priceId) {
+            this.priceId = Objects.requireNonNull(priceId, "priceId must not be null");
             return this;
         }
 

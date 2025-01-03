@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = IssueTemporaryAccessTokenRequestBody.Builder.class)
@@ -74,7 +75,7 @@ public final class IssueTemporaryAccessTokenRequestBody {
     }
 
     public interface ResourceTypeStage {
-        _FinalStage resourceType(String resourceType);
+        _FinalStage resourceType(@NotNull String resourceType);
 
         Builder from(IssueTemporaryAccessTokenRequestBody other);
     }
@@ -109,8 +110,8 @@ public final class IssueTemporaryAccessTokenRequestBody {
 
         @java.lang.Override
         @JsonSetter("resource_type")
-        public _FinalStage resourceType(String resourceType) {
-            this.resourceType = resourceType;
+        public _FinalStage resourceType(@NotNull String resourceType) {
+            this.resourceType = Objects.requireNonNull(resourceType, "resourceType must not be null");
             return this;
         }
 

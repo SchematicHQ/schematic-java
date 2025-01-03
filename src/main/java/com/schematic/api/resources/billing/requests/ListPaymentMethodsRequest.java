@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListPaymentMethodsRequest.Builder.class)
@@ -113,7 +114,7 @@ public final class ListPaymentMethodsRequest {
     }
 
     public interface CustomerExternalIdStage {
-        _FinalStage customerExternalId(String customerExternalId);
+        _FinalStage customerExternalId(@NotNull String customerExternalId);
 
         Builder from(ListPaymentMethodsRequest other);
     }
@@ -167,8 +168,8 @@ public final class ListPaymentMethodsRequest {
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public _FinalStage customerExternalId(String customerExternalId) {
-            this.customerExternalId = customerExternalId;
+        public _FinalStage customerExternalId(@NotNull String customerExternalId) {
+            this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
             return this;
         }
 

@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateCrmProductRequestBody.Builder.class)
@@ -142,29 +143,29 @@ public final class CreateCrmProductRequestBody {
     }
 
     public interface CurrencyStage {
-        DescriptionStage currency(String currency);
+        DescriptionStage currency(@NotNull String currency);
 
         Builder from(CreateCrmProductRequestBody other);
     }
 
     public interface DescriptionStage {
-        ExternalIdStage description(String description);
+        ExternalIdStage description(@NotNull String description);
     }
 
     public interface ExternalIdStage {
-        IntervalStage externalId(String externalId);
+        IntervalStage externalId(@NotNull String externalId);
     }
 
     public interface IntervalStage {
-        NameStage interval(String interval);
+        NameStage interval(@NotNull String interval);
     }
 
     public interface NameStage {
-        PriceStage name(String name);
+        PriceStage name(@NotNull String name);
     }
 
     public interface PriceStage {
-        QuantityStage price(String price);
+        QuantityStage price(@NotNull String price);
     }
 
     public interface QuantityStage {
@@ -172,7 +173,7 @@ public final class CreateCrmProductRequestBody {
     }
 
     public interface SkuStage {
-        _FinalStage sku(String sku);
+        _FinalStage sku(@NotNull String sku);
     }
 
     public interface _FinalStage {
@@ -226,43 +227,43 @@ public final class CreateCrmProductRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public DescriptionStage currency(String currency) {
-            this.currency = currency;
+        public DescriptionStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("description")
-        public ExternalIdStage description(String description) {
-            this.description = description;
+        public ExternalIdStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public IntervalStage externalId(String externalId) {
-            this.externalId = externalId;
+        public IntervalStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("interval")
-        public NameStage interval(String interval) {
-            this.interval = interval;
+        public NameStage interval(@NotNull String interval) {
+            this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public PriceStage name(String name) {
-            this.name = name;
+        public PriceStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("price")
-        public QuantityStage price(String price) {
-            this.price = price;
+        public QuantityStage price(@NotNull String price) {
+            this.price = Objects.requireNonNull(price, "price must not be null");
             return this;
         }
 
@@ -275,8 +276,8 @@ public final class CreateCrmProductRequestBody {
 
         @java.lang.Override
         @JsonSetter("sku")
-        public _FinalStage sku(String sku) {
-            this.sku = sku;
+        public _FinalStage sku(@NotNull String sku) {
+            this.sku = Objects.requireNonNull(sku, "sku must not be null");
             return this;
         }
 

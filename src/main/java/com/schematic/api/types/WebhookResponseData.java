@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WebhookResponseData.Builder.class)
@@ -129,29 +130,29 @@ public final class WebhookResponseData {
     }
 
     public interface CreatedAtStage {
-        IdStage createdAt(OffsetDateTime createdAt);
+        IdStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(WebhookResponseData other);
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        NameStage id(@NotNull String id);
     }
 
     public interface NameStage {
-        StatusStage name(String name);
+        StatusStage name(@NotNull String name);
     }
 
     public interface StatusStage {
-        UpdatedAtStage status(String status);
+        UpdatedAtStage status(@NotNull String status);
     }
 
     public interface UpdatedAtStage {
-        UrlStage updatedAt(OffsetDateTime updatedAt);
+        UrlStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface UrlStage {
-        _FinalStage url(String url);
+        _FinalStage url(@NotNull String url);
     }
 
     public interface _FinalStage {
@@ -200,43 +201,43 @@ public final class WebhookResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public IdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public IdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public StatusStage name(String name) {
-            this.name = name;
+        public StatusStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("status")
-        public UpdatedAtStage status(String status) {
-            this.status = status;
+        public UpdatedAtStage status(@NotNull String status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public UrlStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public UrlStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("url")
-        public _FinalStage url(String url) {
-            this.url = url;
+        public _FinalStage url(@NotNull String url) {
+            this.url = Objects.requireNonNull(url, "url must not be null");
             return this;
         }
 

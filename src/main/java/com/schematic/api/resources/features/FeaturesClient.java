@@ -488,10 +488,6 @@ public class FeaturesClient {
         }
     }
 
-    public UpdateFeatureResponse updateFeature(String featureId) {
-        return updateFeature(featureId, UpdateFeatureRequestBody.builder().build());
-    }
-
     public UpdateFeatureResponse updateFeature(String featureId, UpdateFeatureRequestBody request) {
         return updateFeature(featureId, request, null);
     }

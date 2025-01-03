@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyCrmDealsResponseData.Builder.class)
@@ -108,17 +109,17 @@ public final class CompanyCrmDealsResponseData {
     }
 
     public interface DealArrStage {
-        DealExternalIdStage dealArr(String dealArr);
+        DealExternalIdStage dealArr(@NotNull String dealArr);
 
         Builder from(CompanyCrmDealsResponseData other);
     }
 
     public interface DealExternalIdStage {
-        DealMrrStage dealExternalId(String dealExternalId);
+        DealMrrStage dealExternalId(@NotNull String dealExternalId);
     }
 
     public interface DealMrrStage {
-        _FinalStage dealMrr(String dealMrr);
+        _FinalStage dealMrr(@NotNull String dealMrr);
     }
 
     public interface _FinalStage {
@@ -164,22 +165,22 @@ public final class CompanyCrmDealsResponseData {
 
         @java.lang.Override
         @JsonSetter("deal_arr")
-        public DealExternalIdStage dealArr(String dealArr) {
-            this.dealArr = dealArr;
+        public DealExternalIdStage dealArr(@NotNull String dealArr) {
+            this.dealArr = Objects.requireNonNull(dealArr, "dealArr must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("deal_external_id")
-        public DealMrrStage dealExternalId(String dealExternalId) {
-            this.dealExternalId = dealExternalId;
+        public DealMrrStage dealExternalId(@NotNull String dealExternalId) {
+            this.dealExternalId = Objects.requireNonNull(dealExternalId, "dealExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("deal_mrr")
-        public _FinalStage dealMrr(String dealMrr) {
-            this.dealMrr = dealMrr;
+        public _FinalStage dealMrr(@NotNull String dealMrr) {
+            this.dealMrr = Objects.requireNonNull(dealMrr, "dealMrr must not be null");
             return this;
         }
 

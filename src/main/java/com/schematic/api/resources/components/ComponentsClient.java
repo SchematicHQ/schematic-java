@@ -220,10 +220,6 @@ public class ComponentsClient {
         }
     }
 
-    public UpdateComponentResponse updateComponent(String componentId) {
-        return updateComponent(componentId, UpdateComponentRequestBody.builder().build());
-    }
-
     public UpdateComponentResponse updateComponent(String componentId, UpdateComponentRequestBody request) {
         return updateComponent(componentId, request, null);
     }

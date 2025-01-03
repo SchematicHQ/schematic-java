@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingPriceRequestBody.Builder.class)
@@ -133,13 +134,13 @@ public final class CreateBillingPriceRequestBody {
     }
 
     public interface CurrencyStage {
-        IntervalStage currency(String currency);
+        IntervalStage currency(@NotNull String currency);
 
         Builder from(CreateBillingPriceRequestBody other);
     }
 
     public interface IntervalStage {
-        PriceStage interval(String interval);
+        PriceStage interval(@NotNull String interval);
     }
 
     public interface PriceStage {
@@ -147,15 +148,15 @@ public final class CreateBillingPriceRequestBody {
     }
 
     public interface PriceExternalIdStage {
-        ProductExternalIdStage priceExternalId(String priceExternalId);
+        ProductExternalIdStage priceExternalId(@NotNull String priceExternalId);
     }
 
     public interface ProductExternalIdStage {
-        UsageTypeStage productExternalId(String productExternalId);
+        UsageTypeStage productExternalId(@NotNull String productExternalId);
     }
 
     public interface UsageTypeStage {
-        _FinalStage usageType(String usageType);
+        _FinalStage usageType(@NotNull String usageType);
     }
 
     public interface _FinalStage {
@@ -208,15 +209,15 @@ public final class CreateBillingPriceRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public IntervalStage currency(String currency) {
-            this.currency = currency;
+        public IntervalStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("interval")
-        public PriceStage interval(String interval) {
-            this.interval = interval;
+        public PriceStage interval(@NotNull String interval) {
+            this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
 
@@ -229,22 +230,22 @@ public final class CreateBillingPriceRequestBody {
 
         @java.lang.Override
         @JsonSetter("price_external_id")
-        public ProductExternalIdStage priceExternalId(String priceExternalId) {
-            this.priceExternalId = priceExternalId;
+        public ProductExternalIdStage priceExternalId(@NotNull String priceExternalId) {
+            this.priceExternalId = Objects.requireNonNull(priceExternalId, "priceExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("product_external_id")
-        public UsageTypeStage productExternalId(String productExternalId) {
-            this.productExternalId = productExternalId;
+        public UsageTypeStage productExternalId(@NotNull String productExternalId) {
+            this.productExternalId = Objects.requireNonNull(productExternalId, "productExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("usage_type")
-        public _FinalStage usageType(String usageType) {
-            this.usageType = usageType;
+        public _FinalStage usageType(@NotNull String usageType) {
+            this.usageType = Objects.requireNonNull(usageType, "usageType must not be null");
             return this;
         }
 

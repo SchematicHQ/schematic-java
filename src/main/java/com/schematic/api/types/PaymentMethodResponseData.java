@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PaymentMethodResponseData.Builder.class)
@@ -255,33 +256,33 @@ public final class PaymentMethodResponseData {
     }
 
     public interface CreatedAtStage {
-        CustomerExternalIdStage createdAt(OffsetDateTime createdAt);
+        CustomerExternalIdStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(PaymentMethodResponseData other);
     }
 
     public interface CustomerExternalIdStage {
-        EnvironmentIdStage customerExternalId(String customerExternalId);
+        EnvironmentIdStage customerExternalId(@NotNull String customerExternalId);
     }
 
     public interface EnvironmentIdStage {
-        ExternalIdStage environmentId(String environmentId);
+        ExternalIdStage environmentId(@NotNull String environmentId);
     }
 
     public interface ExternalIdStage {
-        IdStage externalId(String externalId);
+        IdStage externalId(@NotNull String externalId);
     }
 
     public interface IdStage {
-        PaymentMethodTypeStage id(String id);
+        PaymentMethodTypeStage id(@NotNull String id);
     }
 
     public interface PaymentMethodTypeStage {
-        UpdatedAtStage paymentMethodType(String paymentMethodType);
+        UpdatedAtStage paymentMethodType(@NotNull String paymentMethodType);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -408,50 +409,50 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public CustomerExternalIdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public CustomerExternalIdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public EnvironmentIdStage customerExternalId(String customerExternalId) {
-            this.customerExternalId = customerExternalId;
+        public EnvironmentIdStage customerExternalId(@NotNull String customerExternalId) {
+            this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public ExternalIdStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public ExternalIdStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public IdStage externalId(String externalId) {
-            this.externalId = externalId;
+        public IdStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public PaymentMethodTypeStage id(String id) {
-            this.id = id;
+        public PaymentMethodTypeStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("payment_method_type")
-        public UpdatedAtStage paymentMethodType(String paymentMethodType) {
-            this.paymentMethodType = paymentMethodType;
+        public UpdatedAtStage paymentMethodType(@NotNull String paymentMethodType) {
+            this.paymentMethodType = Objects.requireNonNull(paymentMethodType, "paymentMethodType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetFeatureResponse.Builder.class)
@@ -78,7 +79,7 @@ public final class GetFeatureResponse {
     }
 
     public interface DataStage {
-        _FinalStage data(FeatureDetailResponseData data);
+        _FinalStage data(@NotNull FeatureDetailResponseData data);
 
         Builder from(GetFeatureResponse other);
     }
@@ -113,8 +114,8 @@ public final class GetFeatureResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public _FinalStage data(FeatureDetailResponseData data) {
-            this.data = data;
+        public _FinalStage data(@NotNull FeatureDetailResponseData data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 

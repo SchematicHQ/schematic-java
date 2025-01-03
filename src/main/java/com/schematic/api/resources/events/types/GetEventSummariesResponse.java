@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetEventSummariesResponse.Builder.class)
@@ -83,7 +84,7 @@ public final class GetEventSummariesResponse {
     }
 
     public interface ParamsStage {
-        _FinalStage params(GetEventSummariesParams params);
+        _FinalStage params(@NotNull GetEventSummariesParams params);
 
         Builder from(GetEventSummariesResponse other);
     }
@@ -122,8 +123,8 @@ public final class GetEventSummariesResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(GetEventSummariesParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull GetEventSummariesParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

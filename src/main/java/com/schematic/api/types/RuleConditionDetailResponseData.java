@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RuleConditionDetailResponseData.Builder.class)
@@ -301,37 +302,37 @@ public final class RuleConditionDetailResponseData {
     }
 
     public interface ConditionTypeStage {
-        CreatedAtStage conditionType(String conditionType);
+        CreatedAtStage conditionType(@NotNull String conditionType);
 
         Builder from(RuleConditionDetailResponseData other);
     }
 
     public interface CreatedAtStage {
-        EnvironmentIdStage createdAt(OffsetDateTime createdAt);
+        EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface EnvironmentIdStage {
-        IdStage environmentId(String environmentId);
+        IdStage environmentId(@NotNull String environmentId);
     }
 
     public interface IdStage {
-        OperatorStage id(String id);
+        OperatorStage id(@NotNull String id);
     }
 
     public interface OperatorStage {
-        RuleIdStage operator(String operator);
+        RuleIdStage operator(@NotNull String operator);
     }
 
     public interface RuleIdStage {
-        TraitValueStage ruleId(String ruleId);
+        TraitValueStage ruleId(@NotNull String ruleId);
     }
 
     public interface TraitValueStage {
-        UpdatedAtStage traitValue(String traitValue);
+        UpdatedAtStage traitValue(@NotNull String traitValue);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -487,57 +488,57 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("condition_type")
-        public CreatedAtStage conditionType(String conditionType) {
-            this.conditionType = conditionType;
+        public CreatedAtStage conditionType(@NotNull String conditionType) {
+            this.conditionType = Objects.requireNonNull(conditionType, "conditionType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public EnvironmentIdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public IdStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public IdStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public OperatorStage id(String id) {
-            this.id = id;
+        public OperatorStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("operator")
-        public RuleIdStage operator(String operator) {
-            this.operator = operator;
+        public RuleIdStage operator(@NotNull String operator) {
+            this.operator = Objects.requireNonNull(operator, "operator must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("rule_id")
-        public TraitValueStage ruleId(String ruleId) {
-            this.ruleId = ruleId;
+        public TraitValueStage ruleId(@NotNull String ruleId) {
+            this.ruleId = Objects.requireNonNull(ruleId, "ruleId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("trait_value")
-        public UpdatedAtStage traitValue(String traitValue) {
-            this.traitValue = traitValue;
+        public UpdatedAtStage traitValue(@NotNull String traitValue) {
+            this.traitValue = Objects.requireNonNull(traitValue, "traitValue must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingSubscriptionDiscount.Builder.class)
@@ -134,13 +135,13 @@ public final class BillingSubscriptionDiscount {
     }
 
     public interface CouponExternalIdStage {
-        ExternalIdStage couponExternalId(String couponExternalId);
+        ExternalIdStage couponExternalId(@NotNull String couponExternalId);
 
         Builder from(BillingSubscriptionDiscount other);
     }
 
     public interface ExternalIdStage {
-        IsActiveStage externalId(String externalId);
+        IsActiveStage externalId(@NotNull String externalId);
     }
 
     public interface IsActiveStage {
@@ -148,7 +149,7 @@ public final class BillingSubscriptionDiscount {
     }
 
     public interface StartedAtStage {
-        _FinalStage startedAt(OffsetDateTime startedAt);
+        _FinalStage startedAt(@NotNull OffsetDateTime startedAt);
     }
 
     public interface _FinalStage {
@@ -203,15 +204,15 @@ public final class BillingSubscriptionDiscount {
 
         @java.lang.Override
         @JsonSetter("coupon_external_id")
-        public ExternalIdStage couponExternalId(String couponExternalId) {
-            this.couponExternalId = couponExternalId;
+        public ExternalIdStage couponExternalId(@NotNull String couponExternalId) {
+            this.couponExternalId = Objects.requireNonNull(couponExternalId, "couponExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public IsActiveStage externalId(String externalId) {
-            this.externalId = externalId;
+        public IsActiveStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 
@@ -224,8 +225,8 @@ public final class BillingSubscriptionDiscount {
 
         @java.lang.Override
         @JsonSetter("started_at")
-        public _FinalStage startedAt(OffsetDateTime startedAt) {
-            this.startedAt = startedAt;
+        public _FinalStage startedAt(@NotNull OffsetDateTime startedAt) {
+            this.startedAt = Objects.requireNonNull(startedAt, "startedAt must not be null");
             return this;
         }
 

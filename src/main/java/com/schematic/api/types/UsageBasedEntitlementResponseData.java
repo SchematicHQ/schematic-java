@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UsageBasedEntitlementResponseData.Builder.class)
@@ -144,13 +145,13 @@ public final class UsageBasedEntitlementResponseData {
     }
 
     public interface FeatureIdStage {
-        ValueTypeStage featureId(String featureId);
+        ValueTypeStage featureId(@NotNull String featureId);
 
         Builder from(UsageBasedEntitlementResponseData other);
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(String valueType);
+        _FinalStage valueType(@NotNull String valueType);
     }
 
     public interface _FinalStage {
@@ -219,15 +220,15 @@ public final class UsageBasedEntitlementResponseData {
 
         @java.lang.Override
         @JsonSetter("feature_id")
-        public ValueTypeStage featureId(String featureId) {
-            this.featureId = featureId;
+        public ValueTypeStage featureId(@NotNull String featureId) {
+            this.featureId = Objects.requireNonNull(featureId, "featureId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(String valueType) {
-            this.valueType = valueType;
+        public _FinalStage valueType(@NotNull String valueType) {
+            this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }
 

@@ -31,6 +31,14 @@ public final class BaseSchematicBuilder {
         return this;
     }
 
+    /**
+     * Sets the timeout (in seconds) for the client
+     */
+    public BaseSchematicBuilder timeout(int timeout) {
+        this.clientOptionsBuilder.timeout(timeout);
+        return this;
+    }
+
     public BaseSchematic build() {
         if (apiKey == null) {
             throw new RuntimeException("Please provide apiKey");

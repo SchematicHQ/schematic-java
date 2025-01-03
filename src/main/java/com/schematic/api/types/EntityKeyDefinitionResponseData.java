@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EntityKeyDefinitionResponseData.Builder.class)
@@ -105,25 +106,25 @@ public final class EntityKeyDefinitionResponseData {
     }
 
     public interface CreatedAtStage {
-        EntityTypeStage createdAt(OffsetDateTime createdAt);
+        EntityTypeStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(EntityKeyDefinitionResponseData other);
     }
 
     public interface EntityTypeStage {
-        IdStage entityType(String entityType);
+        IdStage entityType(@NotNull String entityType);
     }
 
     public interface IdStage {
-        KeyStage id(String id);
+        KeyStage id(@NotNull String id);
     }
 
     public interface KeyStage {
-        UpdatedAtStage key(String key);
+        UpdatedAtStage key(@NotNull String key);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -160,36 +161,36 @@ public final class EntityKeyDefinitionResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public EntityTypeStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public EntityTypeStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public IdStage entityType(String entityType) {
-            this.entityType = entityType;
+        public IdStage entityType(@NotNull String entityType) {
+            this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public KeyStage id(String id) {
-            this.id = id;
+        public KeyStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("key")
-        public UpdatedAtStage key(String key) {
-            this.key = key;
+        public UpdatedAtStage key(@NotNull String key) {
+            this.key = Objects.requireNonNull(key, "key must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

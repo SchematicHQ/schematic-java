@@ -15,6 +15,7 @@ import com.schematic.api.types.CountResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountUsersResponse.Builder.class)
@@ -74,13 +75,13 @@ public final class CountUsersResponse {
     }
 
     public interface DataStage {
-        ParamsStage data(CountResponse data);
+        ParamsStage data(@NotNull CountResponse data);
 
         Builder from(CountUsersResponse other);
     }
 
     public interface ParamsStage {
-        _FinalStage params(CountUsersParams params);
+        _FinalStage params(@NotNull CountUsersParams params);
     }
 
     public interface _FinalStage {
@@ -107,8 +108,8 @@ public final class CountUsersResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public ParamsStage data(CountResponse data) {
-            this.data = data;
+        public ParamsStage data(@NotNull CountResponse data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 
@@ -118,8 +119,8 @@ public final class CountUsersResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(CountUsersParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull CountUsersParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

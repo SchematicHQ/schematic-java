@@ -15,6 +15,7 @@ import com.schematic.api.types.CountResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountEntityTraitDefinitionsResponse.Builder.class)
@@ -76,13 +77,13 @@ public final class CountEntityTraitDefinitionsResponse {
     }
 
     public interface DataStage {
-        ParamsStage data(CountResponse data);
+        ParamsStage data(@NotNull CountResponse data);
 
         Builder from(CountEntityTraitDefinitionsResponse other);
     }
 
     public interface ParamsStage {
-        _FinalStage params(CountEntityTraitDefinitionsParams params);
+        _FinalStage params(@NotNull CountEntityTraitDefinitionsParams params);
     }
 
     public interface _FinalStage {
@@ -109,8 +110,8 @@ public final class CountEntityTraitDefinitionsResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public ParamsStage data(CountResponse data) {
-            this.data = data;
+        public ParamsStage data(@NotNull CountResponse data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 
@@ -120,8 +121,8 @@ public final class CountEntityTraitDefinitionsResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(CountEntityTraitDefinitionsParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull CountEntityTraitDefinitionsParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

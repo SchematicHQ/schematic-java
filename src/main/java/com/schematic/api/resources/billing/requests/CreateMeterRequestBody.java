@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateMeterRequestBody.Builder.class)
@@ -94,21 +95,21 @@ public final class CreateMeterRequestBody {
     }
 
     public interface DisplayNameStage {
-        EventNameStage displayName(String displayName);
+        EventNameStage displayName(@NotNull String displayName);
 
         Builder from(CreateMeterRequestBody other);
     }
 
     public interface EventNameStage {
-        EventPayloadKeyStage eventName(String eventName);
+        EventPayloadKeyStage eventName(@NotNull String eventName);
     }
 
     public interface EventPayloadKeyStage {
-        ExternalIdStage eventPayloadKey(String eventPayloadKey);
+        ExternalIdStage eventPayloadKey(@NotNull String eventPayloadKey);
     }
 
     public interface ExternalIdStage {
-        _FinalStage externalId(String externalId);
+        _FinalStage externalId(@NotNull String externalId);
     }
 
     public interface _FinalStage {
@@ -142,29 +143,29 @@ public final class CreateMeterRequestBody {
 
         @java.lang.Override
         @JsonSetter("display_name")
-        public EventNameStage displayName(String displayName) {
-            this.displayName = displayName;
+        public EventNameStage displayName(@NotNull String displayName) {
+            this.displayName = Objects.requireNonNull(displayName, "displayName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("event_name")
-        public EventPayloadKeyStage eventName(String eventName) {
-            this.eventName = eventName;
+        public EventPayloadKeyStage eventName(@NotNull String eventName) {
+            this.eventName = Objects.requireNonNull(eventName, "eventName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("event_payload_key")
-        public ExternalIdStage eventPayloadKey(String eventPayloadKey) {
-            this.eventPayloadKey = eventPayloadKey;
+        public ExternalIdStage eventPayloadKey(@NotNull String eventPayloadKey) {
+            this.eventPayloadKey = Objects.requireNonNull(eventPayloadKey, "eventPayloadKey must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public _FinalStage externalId(String externalId) {
-            this.externalId = externalId;
+        public _FinalStage externalId(@NotNull String externalId) {
+            this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
             return this;
         }
 

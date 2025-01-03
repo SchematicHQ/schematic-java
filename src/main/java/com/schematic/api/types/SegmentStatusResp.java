@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SegmentStatusResp.Builder.class)
@@ -93,7 +94,7 @@ public final class SegmentStatusResp {
     }
 
     public interface EnvironmentIdStage {
-        _FinalStage environmentId(String environmentId);
+        _FinalStage environmentId(@NotNull String environmentId);
     }
 
     public interface _FinalStage {
@@ -134,8 +135,8 @@ public final class SegmentStatusResp {
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public _FinalStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public _FinalStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 

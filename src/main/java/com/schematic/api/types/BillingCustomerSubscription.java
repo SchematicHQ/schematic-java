@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingCustomerSubscription.Builder.class)
@@ -118,13 +119,13 @@ public final class BillingCustomerSubscription {
     }
 
     public interface CurrencyStage {
-        IntervalStage currency(String currency);
+        IntervalStage currency(@NotNull String currency);
 
         Builder from(BillingCustomerSubscription other);
     }
 
     public interface IntervalStage {
-        MeteredUsageStage interval(String interval);
+        MeteredUsageStage interval(@NotNull String interval);
     }
 
     public interface MeteredUsageStage {
@@ -185,15 +186,15 @@ public final class BillingCustomerSubscription {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public IntervalStage currency(String currency) {
-            this.currency = currency;
+        public IntervalStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("interval")
-        public MeteredUsageStage interval(String interval) {
-            this.interval = interval;
+        public MeteredUsageStage interval(@NotNull String interval) {
+            this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
 

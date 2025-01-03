@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateCrmDealLineItemAssociationRequestBody.Builder.class)
@@ -72,13 +73,13 @@ public final class CreateCrmDealLineItemAssociationRequestBody {
     }
 
     public interface DealExternalIdStage {
-        LineItemExternalIdStage dealExternalId(String dealExternalId);
+        LineItemExternalIdStage dealExternalId(@NotNull String dealExternalId);
 
         Builder from(CreateCrmDealLineItemAssociationRequestBody other);
     }
 
     public interface LineItemExternalIdStage {
-        _FinalStage lineItemExternalId(String lineItemExternalId);
+        _FinalStage lineItemExternalId(@NotNull String lineItemExternalId);
     }
 
     public interface _FinalStage {
@@ -105,15 +106,15 @@ public final class CreateCrmDealLineItemAssociationRequestBody {
 
         @java.lang.Override
         @JsonSetter("deal_external_id")
-        public LineItemExternalIdStage dealExternalId(String dealExternalId) {
-            this.dealExternalId = dealExternalId;
+        public LineItemExternalIdStage dealExternalId(@NotNull String dealExternalId) {
+            this.dealExternalId = Objects.requireNonNull(dealExternalId, "dealExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("line_item_external_id")
-        public _FinalStage lineItemExternalId(String lineItemExternalId) {
-            this.lineItemExternalId = lineItemExternalId;
+        public _FinalStage lineItemExternalId(@NotNull String lineItemExternalId) {
+            this.lineItemExternalId = Objects.requireNonNull(lineItemExternalId, "lineItemExternalId must not be null");
             return this;
         }
 

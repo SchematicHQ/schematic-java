@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingPriceResponseData.Builder.class)
@@ -104,21 +105,21 @@ public final class BillingPriceResponseData {
     }
 
     public interface CurrencyStage {
-        ExternalPriceIdStage currency(String currency);
+        ExternalPriceIdStage currency(@NotNull String currency);
 
         Builder from(BillingPriceResponseData other);
     }
 
     public interface ExternalPriceIdStage {
-        IdStage externalPriceId(String externalPriceId);
+        IdStage externalPriceId(@NotNull String externalPriceId);
     }
 
     public interface IdStage {
-        IntervalStage id(String id);
+        IntervalStage id(@NotNull String id);
     }
 
     public interface IntervalStage {
-        PriceStage interval(String interval);
+        PriceStage interval(@NotNull String interval);
     }
 
     public interface PriceStage {
@@ -159,29 +160,29 @@ public final class BillingPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public ExternalPriceIdStage currency(String currency) {
-            this.currency = currency;
+        public ExternalPriceIdStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("external_price_id")
-        public IdStage externalPriceId(String externalPriceId) {
-            this.externalPriceId = externalPriceId;
+        public IdStage externalPriceId(@NotNull String externalPriceId) {
+            this.externalPriceId = Objects.requireNonNull(externalPriceId, "externalPriceId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public IntervalStage id(String id) {
-            this.id = id;
+        public IntervalStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("interval")
-        public PriceStage interval(String interval) {
-            this.interval = interval;
+        public PriceStage interval(@NotNull String interval) {
+            this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
 

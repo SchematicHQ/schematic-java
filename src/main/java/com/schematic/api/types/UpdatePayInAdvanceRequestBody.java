@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdatePayInAdvanceRequestBody.Builder.class)
@@ -70,7 +71,7 @@ public final class UpdatePayInAdvanceRequestBody {
     }
 
     public interface PriceIdStage {
-        QuantityStage priceId(String priceId);
+        QuantityStage priceId(@NotNull String priceId);
 
         Builder from(UpdatePayInAdvanceRequestBody other);
     }
@@ -103,8 +104,8 @@ public final class UpdatePayInAdvanceRequestBody {
 
         @java.lang.Override
         @JsonSetter("price_id")
-        public QuantityStage priceId(String priceId) {
-            this.priceId = priceId;
+        public QuantityStage priceId(@NotNull String priceId) {
+            this.priceId = Objects.requireNonNull(priceId, "priceId must not be null");
             return this;
         }
 

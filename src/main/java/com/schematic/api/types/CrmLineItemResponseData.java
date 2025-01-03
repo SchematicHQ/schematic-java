@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CrmLineItemResponseData.Builder.class)
@@ -123,21 +124,21 @@ public final class CrmLineItemResponseData {
     }
 
     public interface AccountIdStage {
-        CreatedAtStage accountId(String accountId);
+        CreatedAtStage accountId(@NotNull String accountId);
 
         Builder from(CrmLineItemResponseData other);
     }
 
     public interface CreatedAtStage {
-        EnvironmentIdStage createdAt(OffsetDateTime createdAt);
+        EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface EnvironmentIdStage {
-        UpdatedAtStage environmentId(String environmentId);
+        UpdatedAtStage environmentId(@NotNull String environmentId);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -185,29 +186,29 @@ public final class CrmLineItemResponseData {
 
         @java.lang.Override
         @JsonSetter("account_id")
-        public CreatedAtStage accountId(String accountId) {
-            this.accountId = accountId;
+        public CreatedAtStage accountId(@NotNull String accountId) {
+            this.accountId = Objects.requireNonNull(accountId, "accountId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public EnvironmentIdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public UpdatedAtStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public UpdatedAtStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

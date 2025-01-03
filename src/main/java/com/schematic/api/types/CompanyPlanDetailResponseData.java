@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyPlanDetailResponseData.Builder.class)
@@ -300,7 +301,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface CreatedAtStage {
-        CurrentStage createdAt(OffsetDateTime createdAt);
+        CurrentStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface CurrentStage {
@@ -308,15 +309,15 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface DescriptionStage {
-        IconStage description(String description);
+        IconStage description(@NotNull String description);
     }
 
     public interface IconStage {
-        IdStage icon(String icon);
+        IdStage icon(@NotNull String icon);
     }
 
     public interface IdStage {
-        IsDefaultStage id(String id);
+        IsDefaultStage id(@NotNull String id);
     }
 
     public interface IsDefaultStage {
@@ -332,15 +333,15 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface NameStage {
-        PlanTypeStage name(String name);
+        PlanTypeStage name(@NotNull String name);
     }
 
     public interface PlanTypeStage {
-        UpdatedAtStage planType(String planType);
+        UpdatedAtStage planType(@NotNull String planType);
     }
 
     public interface UpdatedAtStage {
-        ValidStage updatedAt(OffsetDateTime updatedAt);
+        ValidStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface ValidStage {
@@ -489,8 +490,8 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public CurrentStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public CurrentStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
@@ -503,22 +504,22 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("description")
-        public IconStage description(String description) {
-            this.description = description;
+        public IconStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("icon")
-        public IdStage icon(String icon) {
-            this.icon = icon;
+        public IdStage icon(@NotNull String icon) {
+            this.icon = Objects.requireNonNull(icon, "icon must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public IsDefaultStage id(String id) {
-            this.id = id;
+        public IsDefaultStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
@@ -545,22 +546,22 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("name")
-        public PlanTypeStage name(String name) {
-            this.name = name;
+        public PlanTypeStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("plan_type")
-        public UpdatedAtStage planType(String planType) {
-            this.planType = planType;
+        public UpdatedAtStage planType(@NotNull String planType) {
+            this.planType = Objects.requireNonNull(planType, "planType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public ValidStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public ValidStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

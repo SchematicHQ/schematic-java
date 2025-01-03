@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PaymentMethodRequestBody.Builder.class)
@@ -188,13 +189,13 @@ public final class PaymentMethodRequestBody {
     }
 
     public interface CustomerExternalIdStage {
-        PaymentMethodTypeStage customerExternalId(String customerExternalId);
+        PaymentMethodTypeStage customerExternalId(@NotNull String customerExternalId);
 
         Builder from(PaymentMethodRequestBody other);
     }
 
     public interface PaymentMethodTypeStage {
-        _FinalStage paymentMethodType(String paymentMethodType);
+        _FinalStage paymentMethodType(@NotNull String paymentMethodType);
     }
 
     public interface _FinalStage {
@@ -291,15 +292,15 @@ public final class PaymentMethodRequestBody {
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public PaymentMethodTypeStage customerExternalId(String customerExternalId) {
-            this.customerExternalId = customerExternalId;
+        public PaymentMethodTypeStage customerExternalId(@NotNull String customerExternalId) {
+            this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("payment_method_type")
-        public _FinalStage paymentMethodType(String paymentMethodType) {
-            this.paymentMethodType = paymentMethodType;
+        public _FinalStage paymentMethodType(@NotNull String paymentMethodType) {
+            this.paymentMethodType = Objects.requireNonNull(paymentMethodType, "paymentMethodType must not be null");
             return this;
         }
 

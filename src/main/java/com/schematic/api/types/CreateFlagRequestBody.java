@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateFlagRequestBody.Builder.class)
@@ -139,19 +140,19 @@ public final class CreateFlagRequestBody {
     }
 
     public interface DescriptionStage {
-        FlagTypeStage description(String description);
+        FlagTypeStage description(@NotNull String description);
     }
 
     public interface FlagTypeStage {
-        KeyStage flagType(String flagType);
+        KeyStage flagType(@NotNull String flagType);
     }
 
     public interface KeyStage {
-        NameStage key(String key);
+        NameStage key(@NotNull String key);
     }
 
     public interface NameStage {
-        _FinalStage name(String name);
+        _FinalStage name(@NotNull String name);
     }
 
     public interface _FinalStage {
@@ -209,29 +210,29 @@ public final class CreateFlagRequestBody {
 
         @java.lang.Override
         @JsonSetter("description")
-        public FlagTypeStage description(String description) {
-            this.description = description;
+        public FlagTypeStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("flag_type")
-        public KeyStage flagType(String flagType) {
-            this.flagType = flagType;
+        public KeyStage flagType(@NotNull String flagType) {
+            this.flagType = Objects.requireNonNull(flagType, "flagType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("key")
-        public NameStage key(String key) {
-            this.key = key;
+        public NameStage key(@NotNull String key) {
+            this.key = Objects.requireNonNull(key, "key must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public _FinalStage name(String name) {
-            this.name = name;
+        public _FinalStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

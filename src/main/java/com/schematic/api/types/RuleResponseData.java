@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RuleResponseData.Builder.class)
@@ -167,21 +168,21 @@ public final class RuleResponseData {
     }
 
     public interface CreatedAtStage {
-        EnvironmentIdStage createdAt(OffsetDateTime createdAt);
+        EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(RuleResponseData other);
     }
 
     public interface EnvironmentIdStage {
-        IdStage environmentId(String environmentId);
+        IdStage environmentId(@NotNull String environmentId);
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        NameStage id(@NotNull String id);
     }
 
     public interface NameStage {
-        PriorityStage name(String name);
+        PriorityStage name(@NotNull String name);
     }
 
     public interface PriorityStage {
@@ -189,11 +190,11 @@ public final class RuleResponseData {
     }
 
     public interface RuleTypeStage {
-        UpdatedAtStage ruleType(String ruleType);
+        UpdatedAtStage ruleType(@NotNull String ruleType);
     }
 
     public interface UpdatedAtStage {
-        ValueStage updatedAt(OffsetDateTime updatedAt);
+        ValueStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface ValueStage {
@@ -265,29 +266,29 @@ public final class RuleResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public EnvironmentIdStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public IdStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public IdStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public PriorityStage name(String name) {
-            this.name = name;
+        public PriorityStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -300,15 +301,15 @@ public final class RuleResponseData {
 
         @java.lang.Override
         @JsonSetter("rule_type")
-        public UpdatedAtStage ruleType(String ruleType) {
-            this.ruleType = ruleType;
+        public UpdatedAtStage ruleType(@NotNull String ruleType) {
+            this.ruleType = Objects.requireNonNull(ruleType, "ruleType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public ValueStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public ValueStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

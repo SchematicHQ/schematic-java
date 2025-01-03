@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ApiError.Builder.class)
@@ -65,7 +66,7 @@ public final class ApiError {
     }
 
     public interface ErrorStage {
-        _FinalStage error(String error);
+        _FinalStage error(@NotNull String error);
 
         Builder from(ApiError other);
     }
@@ -95,8 +96,8 @@ public final class ApiError {
          */
         @java.lang.Override
         @JsonSetter("error")
-        public _FinalStage error(String error) {
-            this.error = error;
+        public _FinalStage error(@NotNull String error) {
+            this.error = Objects.requireNonNull(error, "error must not be null");
             return this;
         }
 

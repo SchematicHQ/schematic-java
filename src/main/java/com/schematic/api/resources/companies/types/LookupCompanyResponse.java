@@ -15,6 +15,7 @@ import com.schematic.api.types.CompanyDetailResponseData;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = LookupCompanyResponse.Builder.class)
@@ -75,13 +76,13 @@ public final class LookupCompanyResponse {
     }
 
     public interface DataStage {
-        ParamsStage data(CompanyDetailResponseData data);
+        ParamsStage data(@NotNull CompanyDetailResponseData data);
 
         Builder from(LookupCompanyResponse other);
     }
 
     public interface ParamsStage {
-        _FinalStage params(LookupCompanyParams params);
+        _FinalStage params(@NotNull LookupCompanyParams params);
     }
 
     public interface _FinalStage {
@@ -108,8 +109,8 @@ public final class LookupCompanyResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public ParamsStage data(CompanyDetailResponseData data) {
-            this.data = data;
+        public ParamsStage data(@NotNull CompanyDetailResponseData data) {
+            this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 
@@ -119,8 +120,8 @@ public final class LookupCompanyResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(LookupCompanyParams params) {
-            this.params = params;
+        public _FinalStage params(@NotNull LookupCompanyParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 

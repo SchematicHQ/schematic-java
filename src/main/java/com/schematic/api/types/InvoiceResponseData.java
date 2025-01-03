@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InvoiceResponseData.Builder.class)
@@ -258,27 +259,27 @@ public final class InvoiceResponseData {
     }
 
     public interface CollectionMethodStage {
-        CreatedAtStage collectionMethod(String collectionMethod);
+        CreatedAtStage collectionMethod(@NotNull String collectionMethod);
     }
 
     public interface CreatedAtStage {
-        CurrencyStage createdAt(OffsetDateTime createdAt);
+        CurrencyStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(String currency);
+        CustomerExternalIdStage currency(@NotNull String currency);
     }
 
     public interface CustomerExternalIdStage {
-        EnvironmentIdStage customerExternalId(String customerExternalId);
+        EnvironmentIdStage customerExternalId(@NotNull String customerExternalId);
     }
 
     public interface EnvironmentIdStage {
-        IdStage environmentId(String environmentId);
+        IdStage environmentId(@NotNull String environmentId);
     }
 
     public interface IdStage {
-        SubtotalStage id(String id);
+        SubtotalStage id(@NotNull String id);
     }
 
     public interface SubtotalStage {
@@ -286,7 +287,7 @@ public final class InvoiceResponseData {
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -415,43 +416,43 @@ public final class InvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("collection_method")
-        public CreatedAtStage collectionMethod(String collectionMethod) {
-            this.collectionMethod = collectionMethod;
+        public CreatedAtStage collectionMethod(@NotNull String collectionMethod) {
+            this.collectionMethod = Objects.requireNonNull(collectionMethod, "collectionMethod must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public CurrencyStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = createdAt;
+        public CurrencyStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(String currency) {
-            this.currency = currency;
+        public CustomerExternalIdStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public EnvironmentIdStage customerExternalId(String customerExternalId) {
-            this.customerExternalId = customerExternalId;
+        public EnvironmentIdStage customerExternalId(@NotNull String customerExternalId) {
+            this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public IdStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public IdStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public SubtotalStage id(String id) {
-            this.id = id;
+        public SubtotalStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
@@ -464,8 +465,8 @@ public final class InvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventSummaryResponseData.Builder.class)
@@ -129,7 +130,7 @@ public final class EventSummaryResponseData {
     }
 
     public interface EnvironmentIdStage {
-        EventCountStage environmentId(String environmentId);
+        EventCountStage environmentId(@NotNull String environmentId);
     }
 
     public interface EventCountStage {
@@ -137,7 +138,7 @@ public final class EventSummaryResponseData {
     }
 
     public interface EventSubtypeStage {
-        UserCountStage eventSubtype(String eventSubtype);
+        UserCountStage eventSubtype(@NotNull String eventSubtype);
     }
 
     public interface UserCountStage {
@@ -197,8 +198,8 @@ public final class EventSummaryResponseData {
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public EventCountStage environmentId(String environmentId) {
-            this.environmentId = environmentId;
+        public EventCountStage environmentId(@NotNull String environmentId) {
+            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
@@ -211,8 +212,8 @@ public final class EventSummaryResponseData {
 
         @java.lang.Override
         @JsonSetter("event_subtype")
-        public UserCountStage eventSubtype(String eventSubtype) {
-            this.eventSubtype = eventSubtype;
+        public UserCountStage eventSubtype(@NotNull String eventSubtype) {
+            this.eventSubtype = Objects.requireNonNull(eventSubtype, "eventSubtype must not be null");
             return this;
         }
 

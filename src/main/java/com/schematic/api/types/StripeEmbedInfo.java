@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = StripeEmbedInfo.Builder.class)
@@ -74,7 +75,7 @@ public final class StripeEmbedInfo {
     }
 
     public interface PublishableKeyStage {
-        _FinalStage publishableKey(String publishableKey);
+        _FinalStage publishableKey(@NotNull String publishableKey);
 
         Builder from(StripeEmbedInfo other);
     }
@@ -107,8 +108,8 @@ public final class StripeEmbedInfo {
 
         @java.lang.Override
         @JsonSetter("publishable_key")
-        public _FinalStage publishableKey(String publishableKey) {
-            this.publishableKey = publishableKey;
+        public _FinalStage publishableKey(@NotNull String publishableKey) {
+            this.publishableKey = Objects.requireNonNull(publishableKey, "publishableKey must not be null");
             return this;
         }
 
