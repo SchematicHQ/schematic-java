@@ -54,13 +54,7 @@ jobs:
 
       - name: Publish to maven
         run: |
-          echo "MAVEN_USERNAME exists: ${MAVEN_USERNAME:0:3}..."
-          echo "MAVEN_PASSWORD exists: ${MAVEN_PASSWORD:+YES}"
-          echo "MAVEN_PUBLISH_REGISTRY_URL: $MAVEN_PUBLISH_REGISTRY_URL"
-          echo "MAVEN_SIGNATURE_KID exists: ${MAVEN_SIGNATURE_KID:0:4}..."
-          echo "MAVEN_SIGNATURE_SECRET_KEY exists: ${MAVEN_SIGNATURE_SECRET_KEY:+YES}"
-          echo "MAVEN_SIGNATURE_PASSWORD exists: ${MAVEN_SIGNATURE_PASSWORD:+YES}"
-          ./gradlew sonatypeCentralUpload --info --debug --scan --stacktrace
+          ./gradlew sonatypeCentralUpload
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
