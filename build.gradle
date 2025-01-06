@@ -46,21 +46,21 @@ java {
 }
 
 
-group = 'schematichq'
+group = 'com.schematichq'
 
 version = '1.1.0'
 
 jar {
     dependsOn(":generatePomFileForMavenPublication")
-    archiveBaseName = "schematichq-java"
+    archiveBaseName = "schematic-java"
 }
 
 sourcesJar {
-    archiveBaseName = "schematichq-java"
+    archiveBaseName = "schematic-java"
 }
 
 javadocJar {
-    archiveBaseName = "schematichq-java"
+    archiveBaseName = "schematic-java"
 }
 
 signing {
@@ -77,8 +77,8 @@ test {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'schematichq'
-            artifactId = 'schematichq-java'
+            groupId = 'com.schematichq'
+            artifactId = 'schematic-java'
             version = '1.1.0'
             from components.java
             pom {
@@ -112,9 +112,9 @@ sonatypeCentralUpload {
     password = "$System.env.MAVEN_PASSWORD"
 
     archives = files(
-        "$buildDir/libs/schematichq-java-" + version + ".jar",
-        "$buildDir/libs/schematichq-java-" + version + "-sources.jar",
-        "$buildDir/libs/schematichq-java-" + version + "-javadoc.jar"
+        "$buildDir/libs/schematic-java-" + version + ".jar",
+        "$buildDir/libs/schematic-java-" + version + "-sources.jar",
+        "$buildDir/libs/schematic-java-" + version + "-javadoc.jar"
     )
 
     pom = file("$buildDir/publications/maven/pom-default.xml")
