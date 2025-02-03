@@ -48,6 +48,8 @@ public final class PlanEntitlementResponseData {
 
     private final String ruleId;
 
+    private final Optional<String> ruleIdUsageExceeded;
+
     private final OffsetDateTime updatedAt;
 
     private final Optional<Boolean> valueBool;
@@ -76,6 +78,7 @@ public final class PlanEntitlementResponseData {
             String planId,
             Optional<String> priceBehavior,
             String ruleId,
+            Optional<String> ruleIdUsageExceeded,
             OffsetDateTime updatedAt,
             Optional<Boolean> valueBool,
             Optional<Integer> valueNumeric,
@@ -96,6 +99,7 @@ public final class PlanEntitlementResponseData {
         this.planId = planId;
         this.priceBehavior = priceBehavior;
         this.ruleId = ruleId;
+        this.ruleIdUsageExceeded = ruleIdUsageExceeded;
         this.updatedAt = updatedAt;
         this.valueBool = valueBool;
         this.valueNumeric = valueNumeric;
@@ -170,6 +174,11 @@ public final class PlanEntitlementResponseData {
         return ruleId;
     }
 
+    @JsonProperty("rule_id_usage_exceeded")
+    public Optional<String> getRuleIdUsageExceeded() {
+        return ruleIdUsageExceeded;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -225,6 +234,7 @@ public final class PlanEntitlementResponseData {
                 && planId.equals(other.planId)
                 && priceBehavior.equals(other.priceBehavior)
                 && ruleId.equals(other.ruleId)
+                && ruleIdUsageExceeded.equals(other.ruleIdUsageExceeded)
                 && updatedAt.equals(other.updatedAt)
                 && valueBool.equals(other.valueBool)
                 && valueNumeric.equals(other.valueNumeric)
@@ -249,6 +259,7 @@ public final class PlanEntitlementResponseData {
                 this.planId,
                 this.priceBehavior,
                 this.ruleId,
+                this.ruleIdUsageExceeded,
                 this.updatedAt,
                 this.valueBool,
                 this.valueNumeric,
@@ -331,6 +342,10 @@ public final class PlanEntitlementResponseData {
 
         _FinalStage priceBehavior(String priceBehavior);
 
+        _FinalStage ruleIdUsageExceeded(Optional<String> ruleIdUsageExceeded);
+
+        _FinalStage ruleIdUsageExceeded(String ruleIdUsageExceeded);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -383,6 +398,8 @@ public final class PlanEntitlementResponseData {
 
         private Optional<Boolean> valueBool = Optional.empty();
 
+        private Optional<String> ruleIdUsageExceeded = Optional.empty();
+
         private Optional<String> priceBehavior = Optional.empty();
 
         private Optional<PlanResponseData> plan = Optional.empty();
@@ -417,6 +434,7 @@ public final class PlanEntitlementResponseData {
             planId(other.getPlanId());
             priceBehavior(other.getPriceBehavior());
             ruleId(other.getRuleId());
+            ruleIdUsageExceeded(other.getRuleIdUsageExceeded());
             updatedAt(other.getUpdatedAt());
             valueBool(other.getValueBool());
             valueNumeric(other.getValueNumeric());
@@ -535,6 +553,19 @@ public final class PlanEntitlementResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage ruleIdUsageExceeded(String ruleIdUsageExceeded) {
+            this.ruleIdUsageExceeded = Optional.ofNullable(ruleIdUsageExceeded);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "rule_id_usage_exceeded", nulls = Nulls.SKIP)
+        public _FinalStage ruleIdUsageExceeded(Optional<String> ruleIdUsageExceeded) {
+            this.ruleIdUsageExceeded = ruleIdUsageExceeded;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage priceBehavior(String priceBehavior) {
             this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
@@ -641,6 +672,7 @@ public final class PlanEntitlementResponseData {
                     planId,
                     priceBehavior,
                     ruleId,
+                    ruleIdUsageExceeded,
                     updatedAt,
                     valueBool,
                     valueNumeric,

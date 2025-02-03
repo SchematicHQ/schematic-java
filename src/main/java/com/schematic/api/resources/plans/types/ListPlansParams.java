@@ -37,6 +37,8 @@ public final class ListPlansParams {
 
     private final Optional<String> withoutEntitlementFor;
 
+    private final Optional<Boolean> withoutPaidProductId;
+
     private final Optional<Boolean> withoutProductId;
 
     private final Map<String, Object> additionalProperties;
@@ -50,6 +52,7 @@ public final class ListPlansParams {
             Optional<ListPlansResponseParamsPlanType> planType,
             Optional<String> q,
             Optional<String> withoutEntitlementFor,
+            Optional<Boolean> withoutPaidProductId,
             Optional<Boolean> withoutProductId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
@@ -60,6 +63,7 @@ public final class ListPlansParams {
         this.planType = planType;
         this.q = q;
         this.withoutEntitlementFor = withoutEntitlementFor;
+        this.withoutPaidProductId = withoutPaidProductId;
         this.withoutProductId = withoutProductId;
         this.additionalProperties = additionalProperties;
     }
@@ -120,6 +124,14 @@ public final class ListPlansParams {
     }
 
     /**
+     * @return Filter out plans that have a paid billing product ID
+     */
+    @JsonProperty("without_paid_product_id")
+    public Optional<Boolean> getWithoutPaidProductId() {
+        return withoutPaidProductId;
+    }
+
+    /**
      * @return Filter out plans that have a billing product ID
      */
     @JsonProperty("without_product_id")
@@ -147,6 +159,7 @@ public final class ListPlansParams {
                 && planType.equals(other.planType)
                 && q.equals(other.q)
                 && withoutEntitlementFor.equals(other.withoutEntitlementFor)
+                && withoutPaidProductId.equals(other.withoutPaidProductId)
                 && withoutProductId.equals(other.withoutProductId);
     }
 
@@ -161,6 +174,7 @@ public final class ListPlansParams {
                 this.planType,
                 this.q,
                 this.withoutEntitlementFor,
+                this.withoutPaidProductId,
                 this.withoutProductId);
     }
 
@@ -191,6 +205,8 @@ public final class ListPlansParams {
 
         private Optional<String> withoutEntitlementFor = Optional.empty();
 
+        private Optional<Boolean> withoutPaidProductId = Optional.empty();
+
         private Optional<Boolean> withoutProductId = Optional.empty();
 
         @JsonAnySetter
@@ -207,6 +223,7 @@ public final class ListPlansParams {
             planType(other.getPlanType());
             q(other.getQ());
             withoutEntitlementFor(other.getWithoutEntitlementFor());
+            withoutPaidProductId(other.getWithoutPaidProductId());
             withoutProductId(other.getWithoutProductId());
             return this;
         }
@@ -299,6 +316,17 @@ public final class ListPlansParams {
             return this;
         }
 
+        @JsonSetter(value = "without_paid_product_id", nulls = Nulls.SKIP)
+        public Builder withoutPaidProductId(Optional<Boolean> withoutPaidProductId) {
+            this.withoutPaidProductId = withoutPaidProductId;
+            return this;
+        }
+
+        public Builder withoutPaidProductId(Boolean withoutPaidProductId) {
+            this.withoutPaidProductId = Optional.ofNullable(withoutPaidProductId);
+            return this;
+        }
+
         @JsonSetter(value = "without_product_id", nulls = Nulls.SKIP)
         public Builder withoutProductId(Optional<Boolean> withoutProductId) {
             this.withoutProductId = withoutProductId;
@@ -320,6 +348,7 @@ public final class ListPlansParams {
                     planType,
                     q,
                     withoutEntitlementFor,
+                    withoutPaidProductId,
                     withoutProductId,
                     additionalProperties);
         }

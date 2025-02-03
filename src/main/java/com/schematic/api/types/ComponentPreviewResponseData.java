@@ -34,6 +34,8 @@ public final class ComponentPreviewResponseData {
 
     private final Optional<ComponentResponseData> component;
 
+    private final Optional<PlanDetailResponseData> defaultPlan;
+
     private final Optional<FeatureUsageDetailResponseData> featureUsage;
 
     private final List<InvoiceResponseData> invoices;
@@ -55,6 +57,7 @@ public final class ComponentPreviewResponseData {
             Optional<ComponentCapabilities> capabilities,
             Optional<CompanyDetailResponseData> company,
             Optional<ComponentResponseData> component,
+            Optional<PlanDetailResponseData> defaultPlan,
             Optional<FeatureUsageDetailResponseData> featureUsage,
             List<InvoiceResponseData> invoices,
             Optional<StripeEmbedInfo> stripeEmbed,
@@ -68,6 +71,7 @@ public final class ComponentPreviewResponseData {
         this.capabilities = capabilities;
         this.company = company;
         this.component = component;
+        this.defaultPlan = defaultPlan;
         this.featureUsage = featureUsage;
         this.invoices = invoices;
         this.stripeEmbed = stripeEmbed;
@@ -105,6 +109,11 @@ public final class ComponentPreviewResponseData {
     @JsonProperty("component")
     public Optional<ComponentResponseData> getComponent() {
         return component;
+    }
+
+    @JsonProperty("default_plan")
+    public Optional<PlanDetailResponseData> getDefaultPlan() {
+        return defaultPlan;
     }
 
     @JsonProperty("feature_usage")
@@ -155,6 +164,7 @@ public final class ComponentPreviewResponseData {
                 && capabilities.equals(other.capabilities)
                 && company.equals(other.company)
                 && component.equals(other.component)
+                && defaultPlan.equals(other.defaultPlan)
                 && featureUsage.equals(other.featureUsage)
                 && invoices.equals(other.invoices)
                 && stripeEmbed.equals(other.stripeEmbed)
@@ -172,6 +182,7 @@ public final class ComponentPreviewResponseData {
                 this.capabilities,
                 this.company,
                 this.component,
+                this.defaultPlan,
                 this.featureUsage,
                 this.invoices,
                 this.stripeEmbed,
@@ -203,6 +214,8 @@ public final class ComponentPreviewResponseData {
 
         private Optional<ComponentResponseData> component = Optional.empty();
 
+        private Optional<PlanDetailResponseData> defaultPlan = Optional.empty();
+
         private Optional<FeatureUsageDetailResponseData> featureUsage = Optional.empty();
 
         private List<InvoiceResponseData> invoices = new ArrayList<>();
@@ -227,6 +240,7 @@ public final class ComponentPreviewResponseData {
             capabilities(other.getCapabilities());
             company(other.getCompany());
             component(other.getComponent());
+            defaultPlan(other.getDefaultPlan());
             featureUsage(other.getFeatureUsage());
             invoices(other.getInvoices());
             stripeEmbed(other.getStripeEmbed());
@@ -322,6 +336,17 @@ public final class ComponentPreviewResponseData {
             return this;
         }
 
+        @JsonSetter(value = "default_plan", nulls = Nulls.SKIP)
+        public Builder defaultPlan(Optional<PlanDetailResponseData> defaultPlan) {
+            this.defaultPlan = defaultPlan;
+            return this;
+        }
+
+        public Builder defaultPlan(PlanDetailResponseData defaultPlan) {
+            this.defaultPlan = Optional.ofNullable(defaultPlan);
+            return this;
+        }
+
         @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
         public Builder featureUsage(Optional<FeatureUsageDetailResponseData> featureUsage) {
             this.featureUsage = featureUsage;
@@ -402,6 +427,7 @@ public final class ComponentPreviewResponseData {
                     capabilities,
                     company,
                     component,
+                    defaultPlan,
                     featureUsage,
                     invoices,
                     stripeEmbed,

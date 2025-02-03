@@ -86,7 +86,7 @@ public final class EventBody {
         }
 
         @java.lang.Override
-        public EventBody deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public EventBody deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyTrack.class));

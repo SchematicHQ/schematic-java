@@ -25,6 +25,8 @@ public final class CreateBillingPriceRequestBody {
 
     private final String interval;
 
+    private final boolean isActive;
+
     private final Optional<String> meterId;
 
     private final int price;
@@ -40,6 +42,7 @@ public final class CreateBillingPriceRequestBody {
     private CreateBillingPriceRequestBody(
             String currency,
             String interval,
+            boolean isActive,
             Optional<String> meterId,
             int price,
             String priceExternalId,
@@ -48,6 +51,7 @@ public final class CreateBillingPriceRequestBody {
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.interval = interval;
+        this.isActive = isActive;
         this.meterId = meterId;
         this.price = price;
         this.priceExternalId = priceExternalId;
@@ -64,6 +68,11 @@ public final class CreateBillingPriceRequestBody {
     @JsonProperty("interval")
     public String getInterval() {
         return interval;
+    }
+
+    @JsonProperty("is_active")
+    public boolean getIsActive() {
+        return isActive;
     }
 
     @JsonProperty("meter_id")
@@ -105,6 +114,7 @@ public final class CreateBillingPriceRequestBody {
     private boolean equalTo(CreateBillingPriceRequestBody other) {
         return currency.equals(other.currency)
                 && interval.equals(other.interval)
+                && isActive == other.isActive
                 && meterId.equals(other.meterId)
                 && price == other.price
                 && priceExternalId.equals(other.priceExternalId)
@@ -117,6 +127,7 @@ public final class CreateBillingPriceRequestBody {
         return Objects.hash(
                 this.currency,
                 this.interval,
+                this.isActive,
                 this.meterId,
                 this.price,
                 this.priceExternalId,
@@ -140,7 +151,11 @@ public final class CreateBillingPriceRequestBody {
     }
 
     public interface IntervalStage {
-        PriceStage interval(@NotNull String interval);
+        IsActiveStage interval(@NotNull String interval);
+    }
+
+    public interface IsActiveStage {
+        PriceStage isActive(boolean isActive);
     }
 
     public interface PriceStage {
@@ -171,6 +186,7 @@ public final class CreateBillingPriceRequestBody {
     public static final class Builder
             implements CurrencyStage,
                     IntervalStage,
+                    IsActiveStage,
                     PriceStage,
                     PriceExternalIdStage,
                     ProductExternalIdStage,
@@ -179,6 +195,8 @@ public final class CreateBillingPriceRequestBody {
         private String currency;
 
         private String interval;
+
+        private boolean isActive;
 
         private int price;
 
@@ -199,6 +217,7 @@ public final class CreateBillingPriceRequestBody {
         public Builder from(CreateBillingPriceRequestBody other) {
             currency(other.getCurrency());
             interval(other.getInterval());
+            isActive(other.getIsActive());
             meterId(other.getMeterId());
             price(other.getPrice());
             priceExternalId(other.getPriceExternalId());
@@ -216,8 +235,15 @@ public final class CreateBillingPriceRequestBody {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public PriceStage interval(@NotNull String interval) {
+        public IsActiveStage interval(@NotNull String interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("is_active")
+        public PriceStage isActive(boolean isActive) {
+            this.isActive = isActive;
             return this;
         }
 
@@ -267,6 +293,7 @@ public final class CreateBillingPriceRequestBody {
             return new CreateBillingPriceRequestBody(
                     currency,
                     interval,
+                    isActive,
                     meterId,
                     price,
                     priceExternalId,

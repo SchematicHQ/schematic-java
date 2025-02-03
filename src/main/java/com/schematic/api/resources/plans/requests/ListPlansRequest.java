@@ -35,6 +35,8 @@ public final class ListPlansRequest {
 
     private final Optional<Boolean> withoutProductId;
 
+    private final Optional<Boolean> withoutPaidProductId;
+
     private final Optional<Integer> limit;
 
     private final Optional<Integer> offset;
@@ -49,6 +51,7 @@ public final class ListPlansRequest {
             Optional<String> q,
             Optional<String> withoutEntitlementFor,
             Optional<Boolean> withoutProductId,
+            Optional<Boolean> withoutPaidProductId,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
@@ -59,6 +62,7 @@ public final class ListPlansRequest {
         this.q = q;
         this.withoutEntitlementFor = withoutEntitlementFor;
         this.withoutProductId = withoutProductId;
+        this.withoutPaidProductId = withoutPaidProductId;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
@@ -112,6 +116,14 @@ public final class ListPlansRequest {
     }
 
     /**
+     * @return Filter out plans that have a paid billing product ID
+     */
+    @JsonProperty("without_paid_product_id")
+    public Optional<Boolean> getWithoutPaidProductId() {
+        return withoutPaidProductId;
+    }
+
+    /**
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
@@ -146,6 +158,7 @@ public final class ListPlansRequest {
                 && q.equals(other.q)
                 && withoutEntitlementFor.equals(other.withoutEntitlementFor)
                 && withoutProductId.equals(other.withoutProductId)
+                && withoutPaidProductId.equals(other.withoutPaidProductId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
@@ -160,6 +173,7 @@ public final class ListPlansRequest {
                 this.q,
                 this.withoutEntitlementFor,
                 this.withoutProductId,
+                this.withoutPaidProductId,
                 this.limit,
                 this.offset);
     }
@@ -189,6 +203,8 @@ public final class ListPlansRequest {
 
         private Optional<Boolean> withoutProductId = Optional.empty();
 
+        private Optional<Boolean> withoutPaidProductId = Optional.empty();
+
         private Optional<Integer> limit = Optional.empty();
 
         private Optional<Integer> offset = Optional.empty();
@@ -206,6 +222,7 @@ public final class ListPlansRequest {
             q(other.getQ());
             withoutEntitlementFor(other.getWithoutEntitlementFor());
             withoutProductId(other.getWithoutProductId());
+            withoutPaidProductId(other.getWithoutPaidProductId());
             limit(other.getLimit());
             offset(other.getOffset());
             return this;
@@ -288,6 +305,17 @@ public final class ListPlansRequest {
             return this;
         }
 
+        @JsonSetter(value = "without_paid_product_id", nulls = Nulls.SKIP)
+        public Builder withoutPaidProductId(Optional<Boolean> withoutPaidProductId) {
+            this.withoutPaidProductId = withoutPaidProductId;
+            return this;
+        }
+
+        public Builder withoutPaidProductId(Boolean withoutPaidProductId) {
+            this.withoutPaidProductId = Optional.ofNullable(withoutPaidProductId);
+            return this;
+        }
+
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -319,6 +347,7 @@ public final class ListPlansRequest {
                     q,
                     withoutEntitlementFor,
                     withoutProductId,
+                    withoutPaidProductId,
                     limit,
                     offset,
                     additionalProperties);

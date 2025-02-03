@@ -50,7 +50,9 @@ public enum CreateWebhookRequestBodyRequestTypesItem {
 
     FLAG_DELETED("flag.deleted"),
 
-    TEST_SEND("test.send");
+    TEST_SEND("test.send"),
+
+    SUBSCRIPTION_TRIAL_ENDED("subscription.trial.ended");
 
     private final String value;
 
