@@ -137,7 +137,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         String basePath = builder.basePath != null ? builder.basePath : "https://api.schematichq.com";
         return ClientOptions.builder()
                 .environment(Environment.custom(basePath))
-                .addHeader("Authorization", "Bearer " + apiKey)
+                .addHeader("X-Schematic-Api-Key", apiKey)
                 .addHeader("Content-Type", "application/json")
                 .build();
     }
