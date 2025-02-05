@@ -19,6 +19,7 @@ import com.schematic.api.resources.plans.requests.CountPlansRequest;
 import com.schematic.api.resources.plans.requests.CreatePlanRequestBody;
 import com.schematic.api.resources.plans.requests.ListPlansRequest;
 import com.schematic.api.resources.plans.requests.UpdateAudienceRequestBody;
+import com.schematic.api.resources.plans.requests.UpdateCompanyPlansRequestBody;
 import com.schematic.api.resources.plans.requests.UpdatePlanRequestBody;
 import com.schematic.api.resources.plans.requests.UpsertBillingProductRequestBody;
 import com.schematic.api.resources.plans.types.CountPlansResponse;
@@ -29,6 +30,7 @@ import com.schematic.api.resources.plans.types.GetAudienceResponse;
 import com.schematic.api.resources.plans.types.GetPlanResponse;
 import com.schematic.api.resources.plans.types.ListPlansResponse;
 import com.schematic.api.resources.plans.types.UpdateAudienceResponse;
+import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
 import com.schematic.api.resources.plans.types.UpdatePlanResponse;
 import com.schematic.api.resources.plans.types.UpsertBillingProductPlanResponse;
 import com.schematic.api.types.ApiError;
@@ -48,6 +50,71 @@ public class PlansClient {
         this.clientOptions = clientOptions;
     }
 
+    public UpdateCompanyPlansResponse updateCompanyPlans(String companyPlanId, UpdateCompanyPlansRequestBody request) {
+        return updateCompanyPlans(companyPlanId, request, null);
+    }
+
+    public UpdateCompanyPlansResponse updateCompanyPlans(
+            String companyPlanId, UpdateCompanyPlansRequestBody request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("company-plans")
+                .addPathSegment(companyPlanId)
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PUT", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateCompanyPlansResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
     public GetAudienceResponse getAudience(String planAudienceId) {
         return getAudience(planAudienceId, null);
     }
@@ -63,6 +130,7 @@ public class PlansClient {
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -124,6 +192,7 @@ public class PlansClient {
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -180,6 +249,7 @@ public class PlansClient {
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -255,6 +325,11 @@ public class PlansClient {
             httpUrl.addQueryParameter(
                     "without_product_id", request.getWithoutProductId().get().toString());
         }
+        if (request.getWithoutPaidProductId().isPresent()) {
+            httpUrl.addQueryParameter(
+                    "without_paid_product_id",
+                    request.getWithoutPaidProductId().get().toString());
+        }
         if (request.getLimit().isPresent()) {
             httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
         }
@@ -265,7 +340,8 @@ public class PlansClient {
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -325,6 +401,7 @@ public class PlansClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -378,6 +455,7 @@ public class PlansClient {
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -438,6 +516,7 @@ public class PlansClient {
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -494,6 +573,7 @@ public class PlansClient {
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -557,6 +637,7 @@ public class PlansClient {
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -636,6 +717,11 @@ public class PlansClient {
             httpUrl.addQueryParameter(
                     "without_product_id", request.getWithoutProductId().get().toString());
         }
+        if (request.getWithoutPaidProductId().isPresent()) {
+            httpUrl.addQueryParameter(
+                    "without_paid_product_id",
+                    request.getWithoutPaidProductId().get().toString());
+        }
         if (request.getLimit().isPresent()) {
             httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
         }
@@ -646,7 +732,8 @@ public class PlansClient {
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {

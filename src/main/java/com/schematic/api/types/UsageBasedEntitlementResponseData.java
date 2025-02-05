@@ -29,6 +29,8 @@ public final class UsageBasedEntitlementResponseData {
 
     private final Optional<String> metricPeriodMonthReset;
 
+    private final Optional<BillingPriceView> monthlyUsageBasedPrice;
+
     private final Optional<String> priceBehavior;
 
     private final Optional<Boolean> valueBool;
@@ -37,6 +39,8 @@ public final class UsageBasedEntitlementResponseData {
 
     private final String valueType;
 
+    private final Optional<BillingPriceView> yearlyUsageBasedPrice;
+
     private final Map<String, Object> additionalProperties;
 
     private UsageBasedEntitlementResponseData(
@@ -44,19 +48,23 @@ public final class UsageBasedEntitlementResponseData {
             Optional<BillingPriceView> meteredPrice,
             Optional<String> metricPeriod,
             Optional<String> metricPeriodMonthReset,
+            Optional<BillingPriceView> monthlyUsageBasedPrice,
             Optional<String> priceBehavior,
             Optional<Boolean> valueBool,
             Optional<Integer> valueNumeric,
             String valueType,
+            Optional<BillingPriceView> yearlyUsageBasedPrice,
             Map<String, Object> additionalProperties) {
         this.featureId = featureId;
         this.meteredPrice = meteredPrice;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.monthlyUsageBasedPrice = monthlyUsageBasedPrice;
         this.priceBehavior = priceBehavior;
         this.valueBool = valueBool;
         this.valueNumeric = valueNumeric;
         this.valueType = valueType;
+        this.yearlyUsageBasedPrice = yearlyUsageBasedPrice;
         this.additionalProperties = additionalProperties;
     }
 
@@ -80,6 +88,11 @@ public final class UsageBasedEntitlementResponseData {
         return metricPeriodMonthReset;
     }
 
+    @JsonProperty("monthly_usage_based_price")
+    public Optional<BillingPriceView> getMonthlyUsageBasedPrice() {
+        return monthlyUsageBasedPrice;
+    }
+
     @JsonProperty("price_behavior")
     public Optional<String> getPriceBehavior() {
         return priceBehavior;
@@ -100,6 +113,11 @@ public final class UsageBasedEntitlementResponseData {
         return valueType;
     }
 
+    @JsonProperty("yearly_usage_based_price")
+    public Optional<BillingPriceView> getYearlyUsageBasedPrice() {
+        return yearlyUsageBasedPrice;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -116,10 +134,12 @@ public final class UsageBasedEntitlementResponseData {
                 && meteredPrice.equals(other.meteredPrice)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && monthlyUsageBasedPrice.equals(other.monthlyUsageBasedPrice)
                 && priceBehavior.equals(other.priceBehavior)
                 && valueBool.equals(other.valueBool)
                 && valueNumeric.equals(other.valueNumeric)
-                && valueType.equals(other.valueType);
+                && valueType.equals(other.valueType)
+                && yearlyUsageBasedPrice.equals(other.yearlyUsageBasedPrice);
     }
 
     @java.lang.Override
@@ -129,10 +149,12 @@ public final class UsageBasedEntitlementResponseData {
                 this.meteredPrice,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.monthlyUsageBasedPrice,
                 this.priceBehavior,
                 this.valueBool,
                 this.valueNumeric,
-                this.valueType);
+                this.valueType,
+                this.yearlyUsageBasedPrice);
     }
 
     @java.lang.Override
@@ -169,6 +191,10 @@ public final class UsageBasedEntitlementResponseData {
 
         _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset);
 
+        _FinalStage monthlyUsageBasedPrice(Optional<BillingPriceView> monthlyUsageBasedPrice);
+
+        _FinalStage monthlyUsageBasedPrice(BillingPriceView monthlyUsageBasedPrice);
+
         _FinalStage priceBehavior(Optional<String> priceBehavior);
 
         _FinalStage priceBehavior(String priceBehavior);
@@ -180,6 +206,10 @@ public final class UsageBasedEntitlementResponseData {
         _FinalStage valueNumeric(Optional<Integer> valueNumeric);
 
         _FinalStage valueNumeric(Integer valueNumeric);
+
+        _FinalStage yearlyUsageBasedPrice(Optional<BillingPriceView> yearlyUsageBasedPrice);
+
+        _FinalStage yearlyUsageBasedPrice(BillingPriceView yearlyUsageBasedPrice);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -188,11 +218,15 @@ public final class UsageBasedEntitlementResponseData {
 
         private String valueType;
 
+        private Optional<BillingPriceView> yearlyUsageBasedPrice = Optional.empty();
+
         private Optional<Integer> valueNumeric = Optional.empty();
 
         private Optional<Boolean> valueBool = Optional.empty();
 
         private Optional<String> priceBehavior = Optional.empty();
+
+        private Optional<BillingPriceView> monthlyUsageBasedPrice = Optional.empty();
 
         private Optional<String> metricPeriodMonthReset = Optional.empty();
 
@@ -211,10 +245,12 @@ public final class UsageBasedEntitlementResponseData {
             meteredPrice(other.getMeteredPrice());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            monthlyUsageBasedPrice(other.getMonthlyUsageBasedPrice());
             priceBehavior(other.getPriceBehavior());
             valueBool(other.getValueBool());
             valueNumeric(other.getValueNumeric());
             valueType(other.getValueType());
+            yearlyUsageBasedPrice(other.getYearlyUsageBasedPrice());
             return this;
         }
 
@@ -229,6 +265,19 @@ public final class UsageBasedEntitlementResponseData {
         @JsonSetter("value_type")
         public _FinalStage valueType(@NotNull String valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage yearlyUsageBasedPrice(BillingPriceView yearlyUsageBasedPrice) {
+            this.yearlyUsageBasedPrice = Optional.ofNullable(yearlyUsageBasedPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "yearly_usage_based_price", nulls = Nulls.SKIP)
+        public _FinalStage yearlyUsageBasedPrice(Optional<BillingPriceView> yearlyUsageBasedPrice) {
+            this.yearlyUsageBasedPrice = yearlyUsageBasedPrice;
             return this;
         }
 
@@ -268,6 +317,19 @@ public final class UsageBasedEntitlementResponseData {
         @JsonSetter(value = "price_behavior", nulls = Nulls.SKIP)
         public _FinalStage priceBehavior(Optional<String> priceBehavior) {
             this.priceBehavior = priceBehavior;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage monthlyUsageBasedPrice(BillingPriceView monthlyUsageBasedPrice) {
+            this.monthlyUsageBasedPrice = Optional.ofNullable(monthlyUsageBasedPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "monthly_usage_based_price", nulls = Nulls.SKIP)
+        public _FinalStage monthlyUsageBasedPrice(Optional<BillingPriceView> monthlyUsageBasedPrice) {
+            this.monthlyUsageBasedPrice = monthlyUsageBasedPrice;
             return this;
         }
 
@@ -317,10 +379,12 @@ public final class UsageBasedEntitlementResponseData {
                     meteredPrice,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    monthlyUsageBasedPrice,
                     priceBehavior,
                     valueBool,
                     valueNumeric,
                     valueType,
+                    yearlyUsageBasedPrice,
                     additionalProperties);
         }
     }

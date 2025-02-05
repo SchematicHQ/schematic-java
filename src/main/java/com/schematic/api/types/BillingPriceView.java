@@ -30,6 +30,8 @@ public final class BillingPriceView {
 
     private final String interval;
 
+    private final boolean isActive;
+
     private final Optional<String> meterId;
 
     private final int price;
@@ -55,6 +57,7 @@ public final class BillingPriceView {
             String currency,
             String id,
             String interval,
+            boolean isActive,
             Optional<String> meterId,
             int price,
             String priceExternalId,
@@ -69,6 +72,7 @@ public final class BillingPriceView {
         this.currency = currency;
         this.id = id;
         this.interval = interval;
+        this.isActive = isActive;
         this.meterId = meterId;
         this.price = price;
         this.priceExternalId = priceExternalId;
@@ -99,6 +103,11 @@ public final class BillingPriceView {
     @JsonProperty("interval")
     public String getInterval() {
         return interval;
+    }
+
+    @JsonProperty("is_active")
+    public boolean getIsActive() {
+        return isActive;
     }
 
     @JsonProperty("meter_id")
@@ -162,6 +171,7 @@ public final class BillingPriceView {
                 && currency.equals(other.currency)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
+                && isActive == other.isActive
                 && meterId.equals(other.meterId)
                 && price == other.price
                 && priceExternalId.equals(other.priceExternalId)
@@ -180,6 +190,7 @@ public final class BillingPriceView {
                 this.currency,
                 this.id,
                 this.interval,
+                this.isActive,
                 this.meterId,
                 this.price,
                 this.priceExternalId,
@@ -215,7 +226,11 @@ public final class BillingPriceView {
     }
 
     public interface IntervalStage {
-        PriceStage interval(@NotNull String interval);
+        IsActiveStage interval(@NotNull String interval);
+    }
+
+    public interface IsActiveStage {
+        PriceStage isActive(boolean isActive);
     }
 
     public interface PriceStage {
@@ -264,6 +279,7 @@ public final class BillingPriceView {
                     CurrencyStage,
                     IdStage,
                     IntervalStage,
+                    IsActiveStage,
                     PriceStage,
                     PriceExternalIdStage,
                     PriceIdStage,
@@ -280,6 +296,8 @@ public final class BillingPriceView {
         private String id;
 
         private String interval;
+
+        private boolean isActive;
 
         private int price;
 
@@ -310,6 +328,7 @@ public final class BillingPriceView {
             currency(other.getCurrency());
             id(other.getId());
             interval(other.getInterval());
+            isActive(other.getIsActive());
             meterId(other.getMeterId());
             price(other.getPrice());
             priceExternalId(other.getPriceExternalId());
@@ -345,8 +364,15 @@ public final class BillingPriceView {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public PriceStage interval(@NotNull String interval) {
+        public IsActiveStage interval(@NotNull String interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("is_active")
+        public PriceStage isActive(boolean isActive) {
+            this.isActive = isActive;
             return this;
         }
 
@@ -426,6 +452,7 @@ public final class BillingPriceView {
                     currency,
                     id,
                     interval,
+                    isActive,
                     meterId,
                     price,
                     priceExternalId,

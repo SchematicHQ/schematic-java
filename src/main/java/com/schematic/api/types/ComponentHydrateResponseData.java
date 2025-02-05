@@ -34,6 +34,8 @@ public final class ComponentHydrateResponseData {
 
     private final Optional<ComponentResponseData> component;
 
+    private final Optional<PlanDetailResponseData> defaultPlan;
+
     private final Optional<FeatureUsageDetailResponseData> featureUsage;
 
     private final Optional<StripeEmbedInfo> stripeEmbed;
@@ -53,6 +55,7 @@ public final class ComponentHydrateResponseData {
             Optional<ComponentCapabilities> capabilities,
             Optional<CompanyDetailResponseData> company,
             Optional<ComponentResponseData> component,
+            Optional<PlanDetailResponseData> defaultPlan,
             Optional<FeatureUsageDetailResponseData> featureUsage,
             Optional<StripeEmbedInfo> stripeEmbed,
             Optional<CompanySubscriptionResponseData> subscription,
@@ -65,6 +68,7 @@ public final class ComponentHydrateResponseData {
         this.capabilities = capabilities;
         this.company = company;
         this.component = component;
+        this.defaultPlan = defaultPlan;
         this.featureUsage = featureUsage;
         this.stripeEmbed = stripeEmbed;
         this.subscription = subscription;
@@ -101,6 +105,11 @@ public final class ComponentHydrateResponseData {
     @JsonProperty("component")
     public Optional<ComponentResponseData> getComponent() {
         return component;
+    }
+
+    @JsonProperty("default_plan")
+    public Optional<PlanDetailResponseData> getDefaultPlan() {
+        return defaultPlan;
     }
 
     @JsonProperty("feature_usage")
@@ -146,6 +155,7 @@ public final class ComponentHydrateResponseData {
                 && capabilities.equals(other.capabilities)
                 && company.equals(other.company)
                 && component.equals(other.component)
+                && defaultPlan.equals(other.defaultPlan)
                 && featureUsage.equals(other.featureUsage)
                 && stripeEmbed.equals(other.stripeEmbed)
                 && subscription.equals(other.subscription)
@@ -162,6 +172,7 @@ public final class ComponentHydrateResponseData {
                 this.capabilities,
                 this.company,
                 this.component,
+                this.defaultPlan,
                 this.featureUsage,
                 this.stripeEmbed,
                 this.subscription,
@@ -192,6 +203,8 @@ public final class ComponentHydrateResponseData {
 
         private Optional<ComponentResponseData> component = Optional.empty();
 
+        private Optional<PlanDetailResponseData> defaultPlan = Optional.empty();
+
         private Optional<FeatureUsageDetailResponseData> featureUsage = Optional.empty();
 
         private Optional<StripeEmbedInfo> stripeEmbed = Optional.empty();
@@ -214,6 +227,7 @@ public final class ComponentHydrateResponseData {
             capabilities(other.getCapabilities());
             company(other.getCompany());
             component(other.getComponent());
+            defaultPlan(other.getDefaultPlan());
             featureUsage(other.getFeatureUsage());
             stripeEmbed(other.getStripeEmbed());
             subscription(other.getSubscription());
@@ -308,6 +322,17 @@ public final class ComponentHydrateResponseData {
             return this;
         }
 
+        @JsonSetter(value = "default_plan", nulls = Nulls.SKIP)
+        public Builder defaultPlan(Optional<PlanDetailResponseData> defaultPlan) {
+            this.defaultPlan = defaultPlan;
+            return this;
+        }
+
+        public Builder defaultPlan(PlanDetailResponseData defaultPlan) {
+            this.defaultPlan = Optional.ofNullable(defaultPlan);
+            return this;
+        }
+
         @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
         public Builder featureUsage(Optional<FeatureUsageDetailResponseData> featureUsage) {
             this.featureUsage = featureUsage;
@@ -371,6 +396,7 @@ public final class ComponentHydrateResponseData {
                     capabilities,
                     company,
                     component,
+                    defaultPlan,
                     featureUsage,
                     stripeEmbed,
                     subscription,

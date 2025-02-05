@@ -65,6 +65,7 @@ class SchematicTest {
 
         CheckFlagResponse response = CheckFlagResponse.builder()
                 .data(CheckFlagResponseData.builder()
+                        .flag("test_flag")
                         .reason("test_reason")
                         .value(true)
                         .build())

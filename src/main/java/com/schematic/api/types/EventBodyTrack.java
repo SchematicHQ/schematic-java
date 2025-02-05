@@ -26,6 +26,8 @@ public final class EventBodyTrack {
 
     private final String event;
 
+    private final Optional<Integer> quantity;
+
     private final Optional<Map<String, JsonNode>> traits;
 
     private final Optional<Map<String, String>> user;
@@ -35,11 +37,13 @@ public final class EventBodyTrack {
     private EventBodyTrack(
             Optional<Map<String, String>> company,
             String event,
+            Optional<Integer> quantity,
             Optional<Map<String, JsonNode>> traits,
             Optional<Map<String, String>> user,
             Map<String, Object> additionalProperties) {
         this.company = company;
         this.event = event;
+        this.quantity = quantity;
         this.traits = traits;
         this.user = user;
         this.additionalProperties = additionalProperties;
@@ -59,6 +63,14 @@ public final class EventBodyTrack {
     @JsonProperty("event")
     public String getEvent() {
         return event;
+    }
+
+    /**
+     * @return Optionally specify the quantity of the event
+     */
+    @JsonProperty("quantity")
+    public Optional<Integer> getQuantity() {
+        return quantity;
     }
 
     /**
@@ -91,13 +103,14 @@ public final class EventBodyTrack {
     private boolean equalTo(EventBodyTrack other) {
         return company.equals(other.company)
                 && event.equals(other.event)
+                && quantity.equals(other.quantity)
                 && traits.equals(other.traits)
                 && user.equals(other.user);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.company, this.event, this.traits, this.user);
+        return Objects.hash(this.company, this.event, this.quantity, this.traits, this.user);
     }
 
     @java.lang.Override
@@ -122,6 +135,10 @@ public final class EventBodyTrack {
 
         _FinalStage company(Map<String, String> company);
 
+        _FinalStage quantity(Optional<Integer> quantity);
+
+        _FinalStage quantity(Integer quantity);
+
         _FinalStage traits(Optional<Map<String, JsonNode>> traits);
 
         _FinalStage traits(Map<String, JsonNode> traits);
@@ -139,6 +156,8 @@ public final class EventBodyTrack {
 
         private Optional<Map<String, JsonNode>> traits = Optional.empty();
 
+        private Optional<Integer> quantity = Optional.empty();
+
         private Optional<Map<String, String>> company = Optional.empty();
 
         @JsonAnySetter
@@ -150,6 +169,7 @@ public final class EventBodyTrack {
         public Builder from(EventBodyTrack other) {
             company(other.getCompany());
             event(other.getEvent());
+            quantity(other.getQuantity());
             traits(other.getTraits());
             user(other.getUser());
             return this;
@@ -201,6 +221,23 @@ public final class EventBodyTrack {
         }
 
         /**
+         * <p>Optionally specify the quantity of the event</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage quantity(Integer quantity) {
+            this.quantity = Optional.ofNullable(quantity);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quantity", nulls = Nulls.SKIP)
+        public _FinalStage quantity(Optional<Integer> quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        /**
          * <p>Key-value pairs to identify company associated with track event</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -219,7 +256,7 @@ public final class EventBodyTrack {
 
         @java.lang.Override
         public EventBodyTrack build() {
-            return new EventBodyTrack(company, event, traits, user, additionalProperties);
+            return new EventBodyTrack(company, event, quantity, traits, user, additionalProperties);
         }
     }
 }

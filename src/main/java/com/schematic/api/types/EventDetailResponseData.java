@@ -54,6 +54,8 @@ public final class EventDetailResponseData {
 
     private final Optional<OffsetDateTime> processedAt;
 
+    private final int quantity;
+
     private final Optional<OffsetDateTime> sentAt;
 
     private final String status;
@@ -85,6 +87,7 @@ public final class EventDetailResponseData {
             String id,
             Optional<OffsetDateTime> loadedAt,
             Optional<OffsetDateTime> processedAt,
+            int quantity,
             Optional<OffsetDateTime> sentAt,
             String status,
             Optional<String> subtype,
@@ -107,6 +110,7 @@ public final class EventDetailResponseData {
         this.id = id;
         this.loadedAt = loadedAt;
         this.processedAt = processedAt;
+        this.quantity = quantity;
         this.sentAt = sentAt;
         this.status = status;
         this.subtype = subtype;
@@ -187,6 +191,11 @@ public final class EventDetailResponseData {
         return processedAt;
     }
 
+    @JsonProperty("quantity")
+    public int getQuantity() {
+        return quantity;
+    }
+
     @JsonProperty("sent_at")
     public Optional<OffsetDateTime> getSentAt() {
         return sentAt;
@@ -248,6 +257,7 @@ public final class EventDetailResponseData {
                 && id.equals(other.id)
                 && loadedAt.equals(other.loadedAt)
                 && processedAt.equals(other.processedAt)
+                && quantity == other.quantity
                 && sentAt.equals(other.sentAt)
                 && status.equals(other.status)
                 && subtype.equals(other.subtype)
@@ -274,6 +284,7 @@ public final class EventDetailResponseData {
                 this.id,
                 this.loadedAt,
                 this.processedAt,
+                this.quantity,
                 this.sentAt,
                 this.status,
                 this.subtype,
@@ -303,7 +314,11 @@ public final class EventDetailResponseData {
     }
 
     public interface IdStage {
-        StatusStage id(@NotNull String id);
+        QuantityStage id(@NotNull String id);
+    }
+
+    public interface QuantityStage {
+        StatusStage quantity(int quantity);
     }
 
     public interface StatusStage {
@@ -390,12 +405,21 @@ public final class EventDetailResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements BodyPreviewStage, CapturedAtStage, IdStage, StatusStage, TypeStage, UpdatedAtStage, _FinalStage {
+            implements BodyPreviewStage,
+                    CapturedAtStage,
+                    IdStage,
+                    QuantityStage,
+                    StatusStage,
+                    TypeStage,
+                    UpdatedAtStage,
+                    _FinalStage {
         private String bodyPreview;
 
         private OffsetDateTime capturedAt;
 
         private String id;
+
+        private int quantity;
 
         private String status;
 
@@ -454,6 +478,7 @@ public final class EventDetailResponseData {
             id(other.getId());
             loadedAt(other.getLoadedAt());
             processedAt(other.getProcessedAt());
+            quantity(other.getQuantity());
             sentAt(other.getSentAt());
             status(other.getStatus());
             subtype(other.getSubtype());
@@ -480,8 +505,15 @@ public final class EventDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public StatusStage id(@NotNull String id) {
+        public QuantityStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("quantity")
+        public StatusStage quantity(int quantity) {
+            this.quantity = quantity;
             return this;
         }
 
@@ -739,6 +771,7 @@ public final class EventDetailResponseData {
                     id,
                     loadedAt,
                     processedAt,
+                    quantity,
                     sentAt,
                     status,
                     subtype,

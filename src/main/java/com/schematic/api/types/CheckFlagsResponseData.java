@@ -21,17 +21,17 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CheckFlagsResponseData.Builder.class)
 public final class CheckFlagsResponseData {
-    private final List<CheckFlagOutputWithFlagKey> flags;
+    private final List<CheckFlagResponseData> flags;
 
     private final Map<String, Object> additionalProperties;
 
-    private CheckFlagsResponseData(List<CheckFlagOutputWithFlagKey> flags, Map<String, Object> additionalProperties) {
+    private CheckFlagsResponseData(List<CheckFlagResponseData> flags, Map<String, Object> additionalProperties) {
         this.flags = flags;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("flags")
-    public List<CheckFlagOutputWithFlagKey> getFlags() {
+    public List<CheckFlagResponseData> getFlags() {
         return flags;
     }
 
@@ -66,7 +66,7 @@ public final class CheckFlagsResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private List<CheckFlagOutputWithFlagKey> flags = new ArrayList<>();
+        private List<CheckFlagResponseData> flags = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -79,18 +79,18 @@ public final class CheckFlagsResponseData {
         }
 
         @JsonSetter(value = "flags", nulls = Nulls.SKIP)
-        public Builder flags(List<CheckFlagOutputWithFlagKey> flags) {
+        public Builder flags(List<CheckFlagResponseData> flags) {
             this.flags.clear();
             this.flags.addAll(flags);
             return this;
         }
 
-        public Builder addFlags(CheckFlagOutputWithFlagKey flags) {
+        public Builder addFlags(CheckFlagResponseData flags) {
             this.flags.add(flags);
             return this;
         }
 
-        public Builder addAllFlags(List<CheckFlagOutputWithFlagKey> flags) {
+        public Builder addAllFlags(List<CheckFlagResponseData> flags) {
             this.flags.addAll(flags);
             return this;
         }

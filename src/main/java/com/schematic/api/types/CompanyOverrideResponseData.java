@@ -44,6 +44,8 @@ public final class CompanyOverrideResponseData {
 
     private final Optional<String> ruleId;
 
+    private final Optional<String> ruleIdUsageExceeded;
+
     private final OffsetDateTime updatedAt;
 
     private final Optional<Boolean> valueBool;
@@ -70,6 +72,7 @@ public final class CompanyOverrideResponseData {
             Optional<String> metricPeriod,
             Optional<String> metricPeriodMonthReset,
             Optional<String> ruleId,
+            Optional<String> ruleIdUsageExceeded,
             OffsetDateTime updatedAt,
             Optional<Boolean> valueBool,
             Optional<Integer> valueNumeric,
@@ -88,6 +91,7 @@ public final class CompanyOverrideResponseData {
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.ruleId = ruleId;
+        this.ruleIdUsageExceeded = ruleIdUsageExceeded;
         this.updatedAt = updatedAt;
         this.valueBool = valueBool;
         this.valueNumeric = valueNumeric;
@@ -152,6 +156,11 @@ public final class CompanyOverrideResponseData {
         return ruleId;
     }
 
+    @JsonProperty("rule_id_usage_exceeded")
+    public Optional<String> getRuleIdUsageExceeded() {
+        return ruleIdUsageExceeded;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -205,6 +214,7 @@ public final class CompanyOverrideResponseData {
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && ruleId.equals(other.ruleId)
+                && ruleIdUsageExceeded.equals(other.ruleIdUsageExceeded)
                 && updatedAt.equals(other.updatedAt)
                 && valueBool.equals(other.valueBool)
                 && valueNumeric.equals(other.valueNumeric)
@@ -227,6 +237,7 @@ public final class CompanyOverrideResponseData {
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
                 this.ruleId,
+                this.ruleIdUsageExceeded,
                 this.updatedAt,
                 this.valueBool,
                 this.valueNumeric,
@@ -301,6 +312,10 @@ public final class CompanyOverrideResponseData {
 
         _FinalStage ruleId(String ruleId);
 
+        _FinalStage ruleIdUsageExceeded(Optional<String> ruleIdUsageExceeded);
+
+        _FinalStage ruleIdUsageExceeded(String ruleIdUsageExceeded);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -350,6 +365,8 @@ public final class CompanyOverrideResponseData {
 
         private Optional<Boolean> valueBool = Optional.empty();
 
+        private Optional<String> ruleIdUsageExceeded = Optional.empty();
+
         private Optional<String> ruleId = Optional.empty();
 
         private Optional<String> metricPeriodMonthReset = Optional.empty();
@@ -380,6 +397,7 @@ public final class CompanyOverrideResponseData {
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             ruleId(other.getRuleId());
+            ruleIdUsageExceeded(other.getRuleIdUsageExceeded());
             updatedAt(other.getUpdatedAt());
             valueBool(other.getValueBool());
             valueNumeric(other.getValueNumeric());
@@ -491,6 +509,19 @@ public final class CompanyOverrideResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage ruleIdUsageExceeded(String ruleIdUsageExceeded) {
+            this.ruleIdUsageExceeded = Optional.ofNullable(ruleIdUsageExceeded);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "rule_id_usage_exceeded", nulls = Nulls.SKIP)
+        public _FinalStage ruleIdUsageExceeded(Optional<String> ruleIdUsageExceeded) {
+            this.ruleIdUsageExceeded = ruleIdUsageExceeded;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage ruleId(String ruleId) {
             this.ruleId = Optional.ofNullable(ruleId);
             return this;
@@ -582,6 +613,7 @@ public final class CompanyOverrideResponseData {
                     metricPeriod,
                     metricPeriodMonthReset,
                     ruleId,
+                    ruleIdUsageExceeded,
                     updatedAt,
                     valueBool,
                     valueNumeric,
