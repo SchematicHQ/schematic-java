@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyUsageType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -35,7 +36,7 @@ public final class CreateBillingPriceRequestBody {
 
     private final String productExternalId;
 
-    private final String usageType;
+    private final CreateBillingPriceRequestBodyUsageType usageType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -47,7 +48,7 @@ public final class CreateBillingPriceRequestBody {
             int price,
             String priceExternalId,
             String productExternalId,
-            String usageType,
+            CreateBillingPriceRequestBodyUsageType usageType,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.interval = interval;
@@ -96,7 +97,7 @@ public final class CreateBillingPriceRequestBody {
     }
 
     @JsonProperty("usage_type")
-    public String getUsageType() {
+    public CreateBillingPriceRequestBodyUsageType getUsageType() {
         return usageType;
     }
 
@@ -171,7 +172,7 @@ public final class CreateBillingPriceRequestBody {
     }
 
     public interface UsageTypeStage {
-        _FinalStage usageType(@NotNull String usageType);
+        _FinalStage usageType(@NotNull CreateBillingPriceRequestBodyUsageType usageType);
     }
 
     public interface _FinalStage {
@@ -204,7 +205,7 @@ public final class CreateBillingPriceRequestBody {
 
         private String productExternalId;
 
-        private String usageType;
+        private CreateBillingPriceRequestBodyUsageType usageType;
 
         private Optional<String> meterId = Optional.empty();
 
@@ -270,7 +271,7 @@ public final class CreateBillingPriceRequestBody {
 
         @java.lang.Override
         @JsonSetter("usage_type")
-        public _FinalStage usageType(@NotNull String usageType) {
+        public _FinalStage usageType(@NotNull CreateBillingPriceRequestBodyUsageType usageType) {
             this.usageType = Objects.requireNonNull(usageType, "usageType must not be null");
             return this;
         }

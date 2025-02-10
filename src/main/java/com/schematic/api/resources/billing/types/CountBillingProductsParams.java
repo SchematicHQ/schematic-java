@@ -29,7 +29,7 @@ public final class CountBillingProductsParams {
 
     private final Optional<Integer> offset;
 
-    private final Optional<String> priceUsageType;
+    private final Optional<CountBillingProductsResponseParamsPriceUsageType> priceUsageType;
 
     private final Optional<String> q;
 
@@ -46,7 +46,7 @@ public final class CountBillingProductsParams {
             Optional<Integer> limit,
             Optional<String> name,
             Optional<Integer> offset,
-            Optional<String> priceUsageType,
+            Optional<CountBillingProductsResponseParamsPriceUsageType> priceUsageType,
             Optional<String> q,
             Optional<Boolean> withPricesOnly,
             Optional<Boolean> withZeroPrice,
@@ -91,7 +91,7 @@ public final class CountBillingProductsParams {
     }
 
     @JsonProperty("price_usage_type")
-    public Optional<String> getPriceUsageType() {
+    public Optional<CountBillingProductsResponseParamsPriceUsageType> getPriceUsageType() {
         return priceUsageType;
     }
 
@@ -180,7 +180,7 @@ public final class CountBillingProductsParams {
 
         private Optional<Integer> offset = Optional.empty();
 
-        private Optional<String> priceUsageType = Optional.empty();
+        private Optional<CountBillingProductsResponseParamsPriceUsageType> priceUsageType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -253,12 +253,12 @@ public final class CountBillingProductsParams {
         }
 
         @JsonSetter(value = "price_usage_type", nulls = Nulls.SKIP)
-        public Builder priceUsageType(Optional<String> priceUsageType) {
+        public Builder priceUsageType(Optional<CountBillingProductsResponseParamsPriceUsageType> priceUsageType) {
             this.priceUsageType = priceUsageType;
             return this;
         }
 
-        public Builder priceUsageType(String priceUsageType) {
+        public Builder priceUsageType(CountBillingProductsResponseParamsPriceUsageType priceUsageType) {
             this.priceUsageType = Optional.ofNullable(priceUsageType);
             return this;
         }
