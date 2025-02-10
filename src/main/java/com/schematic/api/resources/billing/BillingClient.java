@@ -874,7 +874,7 @@ public class BillingClient {
         }
         if (request.getPriceUsageType().isPresent()) {
             httpUrl.addQueryParameter(
-                    "price_usage_type", request.getPriceUsageType().get());
+                    "price_usage_type", request.getPriceUsageType().get().toString());
         }
         if (request.getWithoutLinkedToPlan().isPresent()) {
             httpUrl.addQueryParameter(
@@ -1078,7 +1078,7 @@ public class BillingClient {
         }
         if (request.getPriceUsageType().isPresent()) {
             httpUrl.addQueryParameter(
-                    "price_usage_type", request.getPriceUsageType().get());
+                    "price_usage_type", request.getPriceUsageType().get().toString());
         }
         if (request.getWithoutLinkedToPlan().isPresent()) {
             httpUrl.addQueryParameter(
@@ -1167,7 +1167,7 @@ public class BillingClient {
         }
         if (request.getPriceUsageType().isPresent()) {
             httpUrl.addQueryParameter(
-                    "price_usage_type", request.getPriceUsageType().get());
+                    "price_usage_type", request.getPriceUsageType().get().toString());
         }
         if (request.getWithoutLinkedToPlan().isPresent()) {
             httpUrl.addQueryParameter(

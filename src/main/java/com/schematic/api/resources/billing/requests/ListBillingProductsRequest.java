@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.resources.billing.types.ListBillingProductsRequestPriceUsageType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -26,7 +27,7 @@ public final class ListBillingProductsRequest {
 
     private final Optional<String> q;
 
-    private final Optional<String> priceUsageType;
+    private final Optional<ListBillingProductsRequestPriceUsageType> priceUsageType;
 
     private final Optional<Boolean> withoutLinkedToPlan;
 
@@ -44,7 +45,7 @@ public final class ListBillingProductsRequest {
             Optional<String> ids,
             Optional<String> name,
             Optional<String> q,
-            Optional<String> priceUsageType,
+            Optional<ListBillingProductsRequestPriceUsageType> priceUsageType,
             Optional<Boolean> withoutLinkedToPlan,
             Optional<Boolean> withZeroPrice,
             Optional<Boolean> withPricesOnly,
@@ -79,7 +80,7 @@ public final class ListBillingProductsRequest {
     }
 
     @JsonProperty("price_usage_type")
-    public Optional<String> getPriceUsageType() {
+    public Optional<ListBillingProductsRequestPriceUsageType> getPriceUsageType() {
         return priceUsageType;
     }
 
@@ -177,7 +178,7 @@ public final class ListBillingProductsRequest {
 
         private Optional<String> q = Optional.empty();
 
-        private Optional<String> priceUsageType = Optional.empty();
+        private Optional<ListBillingProductsRequestPriceUsageType> priceUsageType = Optional.empty();
 
         private Optional<Boolean> withoutLinkedToPlan = Optional.empty();
 
@@ -241,12 +242,12 @@ public final class ListBillingProductsRequest {
         }
 
         @JsonSetter(value = "price_usage_type", nulls = Nulls.SKIP)
-        public Builder priceUsageType(Optional<String> priceUsageType) {
+        public Builder priceUsageType(Optional<ListBillingProductsRequestPriceUsageType> priceUsageType) {
             this.priceUsageType = priceUsageType;
             return this;
         }
 
-        public Builder priceUsageType(String priceUsageType) {
+        public Builder priceUsageType(ListBillingProductsRequestPriceUsageType priceUsageType) {
             this.priceUsageType = Optional.ofNullable(priceUsageType);
             return this;
         }
