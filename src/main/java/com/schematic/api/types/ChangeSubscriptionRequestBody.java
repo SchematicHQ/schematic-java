@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 public final class ChangeSubscriptionRequestBody {
     private final List<UpdateAddOnRequestBody> addOnIds;
 
+    private final Optional<String> couponExternalId;
+
     private final String newPlanId;
 
     private final String newPriceId;
@@ -39,6 +41,7 @@ public final class ChangeSubscriptionRequestBody {
 
     private ChangeSubscriptionRequestBody(
             List<UpdateAddOnRequestBody> addOnIds,
+            Optional<String> couponExternalId,
             String newPlanId,
             String newPriceId,
             List<UpdatePayInAdvanceRequestBody> payInAdvance,
@@ -46,6 +49,7 @@ public final class ChangeSubscriptionRequestBody {
             Optional<String> promoCode,
             Map<String, Object> additionalProperties) {
         this.addOnIds = addOnIds;
+        this.couponExternalId = couponExternalId;
         this.newPlanId = newPlanId;
         this.newPriceId = newPriceId;
         this.payInAdvance = payInAdvance;
@@ -57,6 +61,11 @@ public final class ChangeSubscriptionRequestBody {
     @JsonProperty("add_on_ids")
     public List<UpdateAddOnRequestBody> getAddOnIds() {
         return addOnIds;
+    }
+
+    @JsonProperty("coupon_external_id")
+    public Optional<String> getCouponExternalId() {
+        return couponExternalId;
     }
 
     @JsonProperty("new_plan_id")
@@ -97,6 +106,7 @@ public final class ChangeSubscriptionRequestBody {
 
     private boolean equalTo(ChangeSubscriptionRequestBody other) {
         return addOnIds.equals(other.addOnIds)
+                && couponExternalId.equals(other.couponExternalId)
                 && newPlanId.equals(other.newPlanId)
                 && newPriceId.equals(other.newPriceId)
                 && payInAdvance.equals(other.payInAdvance)
@@ -108,6 +118,7 @@ public final class ChangeSubscriptionRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.addOnIds,
+                this.couponExternalId,
                 this.newPlanId,
                 this.newPriceId,
                 this.payInAdvance,
@@ -143,6 +154,10 @@ public final class ChangeSubscriptionRequestBody {
 
         _FinalStage addAllAddOnIds(List<UpdateAddOnRequestBody> addOnIds);
 
+        _FinalStage couponExternalId(Optional<String> couponExternalId);
+
+        _FinalStage couponExternalId(String couponExternalId);
+
         _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
 
         _FinalStage addPayInAdvance(UpdatePayInAdvanceRequestBody payInAdvance);
@@ -170,6 +185,8 @@ public final class ChangeSubscriptionRequestBody {
 
         private List<UpdatePayInAdvanceRequestBody> payInAdvance = new ArrayList<>();
 
+        private Optional<String> couponExternalId = Optional.empty();
+
         private List<UpdateAddOnRequestBody> addOnIds = new ArrayList<>();
 
         @JsonAnySetter
@@ -180,6 +197,7 @@ public final class ChangeSubscriptionRequestBody {
         @java.lang.Override
         public Builder from(ChangeSubscriptionRequestBody other) {
             addOnIds(other.getAddOnIds());
+            couponExternalId(other.getCouponExternalId());
             newPlanId(other.getNewPlanId());
             newPriceId(other.getNewPriceId());
             payInAdvance(other.getPayInAdvance());
@@ -249,6 +267,19 @@ public final class ChangeSubscriptionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage couponExternalId(String couponExternalId) {
+            this.couponExternalId = Optional.ofNullable(couponExternalId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "coupon_external_id", nulls = Nulls.SKIP)
+        public _FinalStage couponExternalId(Optional<String> couponExternalId) {
+            this.couponExternalId = couponExternalId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllAddOnIds(List<UpdateAddOnRequestBody> addOnIds) {
             this.addOnIds.addAll(addOnIds);
             return this;
@@ -271,7 +302,14 @@ public final class ChangeSubscriptionRequestBody {
         @java.lang.Override
         public ChangeSubscriptionRequestBody build() {
             return new ChangeSubscriptionRequestBody(
-                    addOnIds, newPlanId, newPriceId, payInAdvance, paymentMethodId, promoCode, additionalProperties);
+                    addOnIds,
+                    couponExternalId,
+                    newPlanId,
+                    newPriceId,
+                    payInAdvance,
+                    paymentMethodId,
+                    promoCode,
+                    additionalProperties);
         }
     }
 }
