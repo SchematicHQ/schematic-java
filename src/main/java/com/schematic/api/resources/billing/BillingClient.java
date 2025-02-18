@@ -25,6 +25,7 @@ import com.schematic.api.resources.billing.requests.CreateInvoiceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateMeterRequestBody;
 import com.schematic.api.resources.billing.requests.CreatePaymentMethodRequestBody;
 import com.schematic.api.resources.billing.requests.ListBillingProductsRequest;
+import com.schematic.api.resources.billing.requests.ListCouponsRequest;
 import com.schematic.api.resources.billing.requests.ListCustomersRequest;
 import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
@@ -35,6 +36,7 @@ import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
+import com.schematic.api.resources.billing.types.ListCouponsResponse;
 import com.schematic.api.resources.billing.types.ListCustomersResponse;
 import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
@@ -64,6 +66,74 @@ public class BillingClient {
 
     public BillingClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+    }
+
+    public ListCouponsResponse listCoupons() {
+        return listCoupons(ListCouponsRequest.builder().build());
+    }
+
+    public ListCouponsResponse listCoupons(ListCouponsRequest request) {
+        return listCoupons(request, null);
+    }
+
+    public ListCouponsResponse listCoupons(ListCouponsRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/coupons");
+        if (request.getIsActive().isPresent()) {
+            httpUrl.addQueryParameter("is_active", request.getIsActive().get().toString());
+        }
+        if (request.getQ().isPresent()) {
+            httpUrl.addQueryParameter("q", request.getQ().get());
+        }
+        if (request.getLimit().isPresent()) {
+            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
+        }
+        if (request.getOffset().isPresent()) {
+            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListCouponsResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
     }
 
     public UpsertBillingCouponResponse upsertBillingCoupon(CreateCouponRequestBody request) {

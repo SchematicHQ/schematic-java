@@ -15,6 +15,7 @@ import com.schematic.api.errors.ForbiddenError;
 import com.schematic.api.errors.InternalServerError;
 import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
+import com.schematic.api.resources.checkout.requests.CheckoutDataRequestBody;
 import com.schematic.api.resources.checkout.requests.UpdateTrialEndRequestBody;
 import com.schematic.api.resources.checkout.types.CheckoutInternalResponse;
 import com.schematic.api.resources.checkout.types.GetCheckoutDataResponse;
@@ -99,20 +100,25 @@ public class CheckoutClient {
         }
     }
 
-    public GetCheckoutDataResponse getCheckoutData(String checkoutInternalId) {
-        return getCheckoutData(checkoutInternalId, null);
+    public GetCheckoutDataResponse getCheckoutData(CheckoutDataRequestBody request) {
+        return getCheckoutData(request, null);
     }
 
-    public GetCheckoutDataResponse getCheckoutData(String checkoutInternalId, RequestOptions requestOptions) {
+    public GetCheckoutDataResponse getCheckoutData(CheckoutDataRequestBody request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("checkout-internal")
-                .addPathSegment(checkoutInternalId)
-                .addPathSegments("data")
+                .addPathSegments("checkout-internal/data")
                 .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("GET", null)
+                .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
@@ -129,14 +135,14 @@ public class CheckoutClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
                     case 401:
                         throw new UnauthorizedError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 404:
-                        throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
                     case 500:
                         throw new InternalServerError(

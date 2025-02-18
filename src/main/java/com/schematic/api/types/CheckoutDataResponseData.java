@@ -32,6 +32,10 @@ public final class CheckoutDataResponseData {
 
     private final Optional<FeatureUsageDetailResponseData> featureUsage;
 
+    private final Optional<PlanDetailResponseData> selectedPlan;
+
+    private final List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements;
+
     private final Optional<CompanySubscriptionResponseData> subscription;
 
     private final Map<String, Object> additionalProperties;
@@ -42,6 +46,8 @@ public final class CheckoutDataResponseData {
             List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements,
             Optional<CompanyDetailResponseData> company,
             Optional<FeatureUsageDetailResponseData> featureUsage,
+            Optional<PlanDetailResponseData> selectedPlan,
+            List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements,
             Optional<CompanySubscriptionResponseData> subscription,
             Map<String, Object> additionalProperties) {
         this.activeAddOns = activeAddOns;
@@ -49,6 +55,8 @@ public final class CheckoutDataResponseData {
         this.activeUsageBasedEntitlements = activeUsageBasedEntitlements;
         this.company = company;
         this.featureUsage = featureUsage;
+        this.selectedPlan = selectedPlan;
+        this.selectedUsageBasedEntitlements = selectedUsageBasedEntitlements;
         this.subscription = subscription;
         this.additionalProperties = additionalProperties;
     }
@@ -78,6 +86,16 @@ public final class CheckoutDataResponseData {
         return featureUsage;
     }
 
+    @JsonProperty("selected_plan")
+    public Optional<PlanDetailResponseData> getSelectedPlan() {
+        return selectedPlan;
+    }
+
+    @JsonProperty("selected_usage_based_entitlements")
+    public List<UsageBasedEntitlementResponseData> getSelectedUsageBasedEntitlements() {
+        return selectedUsageBasedEntitlements;
+    }
+
     @JsonProperty("subscription")
     public Optional<CompanySubscriptionResponseData> getSubscription() {
         return subscription;
@@ -100,6 +118,8 @@ public final class CheckoutDataResponseData {
                 && activeUsageBasedEntitlements.equals(other.activeUsageBasedEntitlements)
                 && company.equals(other.company)
                 && featureUsage.equals(other.featureUsage)
+                && selectedPlan.equals(other.selectedPlan)
+                && selectedUsageBasedEntitlements.equals(other.selectedUsageBasedEntitlements)
                 && subscription.equals(other.subscription);
     }
 
@@ -111,6 +131,8 @@ public final class CheckoutDataResponseData {
                 this.activeUsageBasedEntitlements,
                 this.company,
                 this.featureUsage,
+                this.selectedPlan,
+                this.selectedUsageBasedEntitlements,
                 this.subscription);
     }
 
@@ -135,6 +157,10 @@ public final class CheckoutDataResponseData {
 
         private Optional<FeatureUsageDetailResponseData> featureUsage = Optional.empty();
 
+        private Optional<PlanDetailResponseData> selectedPlan = Optional.empty();
+
+        private List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements = new ArrayList<>();
+
         private Optional<CompanySubscriptionResponseData> subscription = Optional.empty();
 
         @JsonAnySetter
@@ -148,6 +174,8 @@ public final class CheckoutDataResponseData {
             activeUsageBasedEntitlements(other.getActiveUsageBasedEntitlements());
             company(other.getCompany());
             featureUsage(other.getFeatureUsage());
+            selectedPlan(other.getSelectedPlan());
+            selectedUsageBasedEntitlements(other.getSelectedUsageBasedEntitlements());
             subscription(other.getSubscription());
             return this;
         }
@@ -221,6 +249,37 @@ public final class CheckoutDataResponseData {
             return this;
         }
 
+        @JsonSetter(value = "selected_plan", nulls = Nulls.SKIP)
+        public Builder selectedPlan(Optional<PlanDetailResponseData> selectedPlan) {
+            this.selectedPlan = selectedPlan;
+            return this;
+        }
+
+        public Builder selectedPlan(PlanDetailResponseData selectedPlan) {
+            this.selectedPlan = Optional.ofNullable(selectedPlan);
+            return this;
+        }
+
+        @JsonSetter(value = "selected_usage_based_entitlements", nulls = Nulls.SKIP)
+        public Builder selectedUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements) {
+            this.selectedUsageBasedEntitlements.clear();
+            this.selectedUsageBasedEntitlements.addAll(selectedUsageBasedEntitlements);
+            return this;
+        }
+
+        public Builder addSelectedUsageBasedEntitlements(
+                UsageBasedEntitlementResponseData selectedUsageBasedEntitlements) {
+            this.selectedUsageBasedEntitlements.add(selectedUsageBasedEntitlements);
+            return this;
+        }
+
+        public Builder addAllSelectedUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements) {
+            this.selectedUsageBasedEntitlements.addAll(selectedUsageBasedEntitlements);
+            return this;
+        }
+
         @JsonSetter(value = "subscription", nulls = Nulls.SKIP)
         public Builder subscription(Optional<CompanySubscriptionResponseData> subscription) {
             this.subscription = subscription;
@@ -239,6 +298,8 @@ public final class CheckoutDataResponseData {
                     activeUsageBasedEntitlements,
                     company,
                     featureUsage,
+                    selectedPlan,
+                    selectedUsageBasedEntitlements,
                     subscription,
                     additionalProperties);
         }
