@@ -36,6 +36,10 @@ public final class CompanyPlanDetailResponseData {
 
     private final boolean current;
 
+    private final boolean custom;
+
+    private final Optional<CustomPlanConfig> customPlanConfig;
+
     private final String description;
 
     private final List<PlanEntitlementResponseData> entitlements;
@@ -45,6 +49,8 @@ public final class CompanyPlanDetailResponseData {
     private final String icon;
 
     private final String id;
+
+    private final boolean isCustom;
 
     private final boolean isDefault;
 
@@ -75,11 +81,14 @@ public final class CompanyPlanDetailResponseData {
             int companyCount,
             OffsetDateTime createdAt,
             boolean current,
+            boolean custom,
+            Optional<CustomPlanConfig> customPlanConfig,
             String description,
             List<PlanEntitlementResponseData> entitlements,
             List<FeatureDetailResponseData> features,
             String icon,
             String id,
+            boolean isCustom,
             boolean isDefault,
             boolean isFree,
             boolean isTrialable,
@@ -97,11 +106,14 @@ public final class CompanyPlanDetailResponseData {
         this.companyCount = companyCount;
         this.createdAt = createdAt;
         this.current = current;
+        this.custom = custom;
+        this.customPlanConfig = customPlanConfig;
         this.description = description;
         this.entitlements = entitlements;
         this.features = features;
         this.icon = icon;
         this.id = id;
+        this.isCustom = isCustom;
         this.isDefault = isDefault;
         this.isFree = isFree;
         this.isTrialable = isTrialable;
@@ -145,6 +157,16 @@ public final class CompanyPlanDetailResponseData {
         return current;
     }
 
+    @JsonProperty("custom")
+    public boolean getCustom() {
+        return custom;
+    }
+
+    @JsonProperty("custom_plan_config")
+    public Optional<CustomPlanConfig> getCustomPlanConfig() {
+        return customPlanConfig;
+    }
+
     @JsonProperty("description")
     public String getDescription() {
         return description;
@@ -168,6 +190,11 @@ public final class CompanyPlanDetailResponseData {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    @JsonProperty("is_custom")
+    public boolean getIsCustom() {
+        return isCustom;
     }
 
     @JsonProperty("is_default")
@@ -238,11 +265,14 @@ public final class CompanyPlanDetailResponseData {
                 && companyCount == other.companyCount
                 && createdAt.equals(other.createdAt)
                 && current == other.current
+                && custom == other.custom
+                && customPlanConfig.equals(other.customPlanConfig)
                 && description.equals(other.description)
                 && entitlements.equals(other.entitlements)
                 && features.equals(other.features)
                 && icon.equals(other.icon)
                 && id.equals(other.id)
+                && isCustom == other.isCustom
                 && isDefault == other.isDefault
                 && isFree == other.isFree
                 && isTrialable == other.isTrialable
@@ -264,11 +294,14 @@ public final class CompanyPlanDetailResponseData {
                 this.companyCount,
                 this.createdAt,
                 this.current,
+                this.custom,
+                this.customPlanConfig,
                 this.description,
                 this.entitlements,
                 this.features,
                 this.icon,
                 this.id,
+                this.isCustom,
                 this.isDefault,
                 this.isFree,
                 this.isTrialable,
@@ -305,7 +338,11 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface CurrentStage {
-        DescriptionStage current(boolean current);
+        CustomStage current(boolean current);
+    }
+
+    public interface CustomStage {
+        DescriptionStage custom(boolean custom);
     }
 
     public interface DescriptionStage {
@@ -317,7 +354,11 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface IdStage {
-        IsDefaultStage id(@NotNull String id);
+        IsCustomStage id(@NotNull String id);
+    }
+
+    public interface IsCustomStage {
+        IsDefaultStage isCustom(boolean isCustom);
     }
 
     public interface IsDefaultStage {
@@ -359,6 +400,10 @@ public final class CompanyPlanDetailResponseData {
 
         _FinalStage billingProduct(BillingProductDetailResponseData billingProduct);
 
+        _FinalStage customPlanConfig(Optional<CustomPlanConfig> customPlanConfig);
+
+        _FinalStage customPlanConfig(CustomPlanConfig customPlanConfig);
+
         _FinalStage entitlements(List<PlanEntitlementResponseData> entitlements);
 
         _FinalStage addEntitlements(PlanEntitlementResponseData entitlements);
@@ -390,9 +435,11 @@ public final class CompanyPlanDetailResponseData {
                     CompanyCountStage,
                     CreatedAtStage,
                     CurrentStage,
+                    CustomStage,
                     DescriptionStage,
                     IconStage,
                     IdStage,
+                    IsCustomStage,
                     IsDefaultStage,
                     IsFreeStage,
                     IsTrialableStage,
@@ -409,11 +456,15 @@ public final class CompanyPlanDetailResponseData {
 
         private boolean current;
 
+        private boolean custom;
+
         private String description;
 
         private String icon;
 
         private String id;
+
+        private boolean isCustom;
 
         private boolean isDefault;
 
@@ -439,6 +490,8 @@ public final class CompanyPlanDetailResponseData {
 
         private List<PlanEntitlementResponseData> entitlements = new ArrayList<>();
 
+        private Optional<CustomPlanConfig> customPlanConfig = Optional.empty();
+
         private Optional<BillingProductDetailResponseData> billingProduct = Optional.empty();
 
         private Optional<String> audienceType = Optional.empty();
@@ -456,11 +509,14 @@ public final class CompanyPlanDetailResponseData {
             companyCount(other.getCompanyCount());
             createdAt(other.getCreatedAt());
             current(other.getCurrent());
+            custom(other.getCustom());
+            customPlanConfig(other.getCustomPlanConfig());
             description(other.getDescription());
             entitlements(other.getEntitlements());
             features(other.getFeatures());
             icon(other.getIcon());
             id(other.getId());
+            isCustom(other.getIsCustom());
             isDefault(other.getIsDefault());
             isFree(other.getIsFree());
             isTrialable(other.getIsTrialable());
@@ -497,8 +553,15 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("current")
-        public DescriptionStage current(boolean current) {
+        public CustomStage current(boolean current) {
             this.current = current;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("custom")
+        public DescriptionStage custom(boolean custom) {
+            this.custom = custom;
             return this;
         }
 
@@ -518,8 +581,15 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public IsDefaultStage id(@NotNull String id) {
+        public IsCustomStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("is_custom")
+        public IsDefaultStage isCustom(boolean isCustom) {
+            this.isCustom = isCustom;
             return this;
         }
 
@@ -652,6 +722,19 @@ public final class CompanyPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage customPlanConfig(CustomPlanConfig customPlanConfig) {
+            this.customPlanConfig = Optional.ofNullable(customPlanConfig);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_plan_config", nulls = Nulls.SKIP)
+        public _FinalStage customPlanConfig(Optional<CustomPlanConfig> customPlanConfig) {
+            this.customPlanConfig = customPlanConfig;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingProduct(BillingProductDetailResponseData billingProduct) {
             this.billingProduct = Optional.ofNullable(billingProduct);
             return this;
@@ -686,11 +769,14 @@ public final class CompanyPlanDetailResponseData {
                     companyCount,
                     createdAt,
                     current,
+                    custom,
+                    customPlanConfig,
                     description,
                     entitlements,
                     features,
                     icon,
                     id,
+                    isCustom,
                     isDefault,
                     isFree,
                     isTrialable,
