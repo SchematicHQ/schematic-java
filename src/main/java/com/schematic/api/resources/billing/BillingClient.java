@@ -800,6 +800,9 @@ public class BillingClient {
         if (request.getIds().isPresent()) {
             httpUrl.addQueryParameter("ids", request.getIds().get());
         }
+        if (request.getQ().isPresent()) {
+            httpUrl.addQueryParameter("q", request.getQ().get());
+        }
         if (request.getInterval().isPresent()) {
             httpUrl.addQueryParameter("interval", request.getInterval().get());
         }

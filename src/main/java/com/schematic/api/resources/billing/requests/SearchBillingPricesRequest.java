@@ -22,6 +22,8 @@ import java.util.Optional;
 public final class SearchBillingPricesRequest {
     private final Optional<String> ids;
 
+    private final Optional<String> q;
+
     private final Optional<String> interval;
 
     private final Optional<String> usageType;
@@ -36,6 +38,7 @@ public final class SearchBillingPricesRequest {
 
     private SearchBillingPricesRequest(
             Optional<String> ids,
+            Optional<String> q,
             Optional<String> interval,
             Optional<String> usageType,
             Optional<Integer> price,
@@ -43,6 +46,7 @@ public final class SearchBillingPricesRequest {
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
+        this.q = q;
         this.interval = interval;
         this.usageType = usageType;
         this.price = price;
@@ -54,6 +58,11 @@ public final class SearchBillingPricesRequest {
     @JsonProperty("ids")
     public Optional<String> getIds() {
         return ids;
+    }
+
+    @JsonProperty("q")
+    public Optional<String> getQ() {
+        return q;
     }
 
     @JsonProperty("interval")
@@ -100,6 +109,7 @@ public final class SearchBillingPricesRequest {
 
     private boolean equalTo(SearchBillingPricesRequest other) {
         return ids.equals(other.ids)
+                && q.equals(other.q)
                 && interval.equals(other.interval)
                 && usageType.equals(other.usageType)
                 && price.equals(other.price)
@@ -109,7 +119,7 @@ public final class SearchBillingPricesRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.ids, this.interval, this.usageType, this.price, this.limit, this.offset);
+        return Objects.hash(this.ids, this.q, this.interval, this.usageType, this.price, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -124,6 +134,8 @@ public final class SearchBillingPricesRequest {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<String> ids = Optional.empty();
+
+        private Optional<String> q = Optional.empty();
 
         private Optional<String> interval = Optional.empty();
 
@@ -142,6 +154,7 @@ public final class SearchBillingPricesRequest {
 
         public Builder from(SearchBillingPricesRequest other) {
             ids(other.getIds());
+            q(other.getQ());
             interval(other.getInterval());
             usageType(other.getUsageType());
             price(other.getPrice());
@@ -158,6 +171,17 @@ public final class SearchBillingPricesRequest {
 
         public Builder ids(String ids) {
             this.ids = Optional.ofNullable(ids);
+            return this;
+        }
+
+        @JsonSetter(value = "q", nulls = Nulls.SKIP)
+        public Builder q(Optional<String> q) {
+            this.q = q;
+            return this;
+        }
+
+        public Builder q(String q) {
+            this.q = Optional.ofNullable(q);
             return this;
         }
 
@@ -217,7 +241,8 @@ public final class SearchBillingPricesRequest {
         }
 
         public SearchBillingPricesRequest build() {
-            return new SearchBillingPricesRequest(ids, interval, usageType, price, limit, offset, additionalProperties);
+            return new SearchBillingPricesRequest(
+                    ids, q, interval, usageType, price, limit, offset, additionalProperties);
         }
     }
 }

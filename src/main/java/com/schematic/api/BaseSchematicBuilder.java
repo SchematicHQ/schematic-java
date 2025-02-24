@@ -5,6 +5,7 @@ package com.schematic.api;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.Environment;
+import okhttp3.OkHttpClient;
 
 public final class BaseSchematicBuilder {
     private ClientOptions.Builder clientOptionsBuilder = ClientOptions.builder();
@@ -36,6 +37,14 @@ public final class BaseSchematicBuilder {
      */
     public BaseSchematicBuilder timeout(int timeout) {
         this.clientOptionsBuilder.timeout(timeout);
+        return this;
+    }
+
+    /**
+     * Sets the underlying OkHttp client
+     */
+    public BaseSchematicBuilder httpClient(OkHttpClient httpClient) {
+        this.clientOptionsBuilder.httpClient(httpClient);
         return this;
     }
 

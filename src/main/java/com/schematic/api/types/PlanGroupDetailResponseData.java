@@ -25,6 +25,10 @@ import org.jetbrains.annotations.NotNull;
 public final class PlanGroupDetailResponseData {
     private final List<PlanGroupPlanDetailResponseData> addOns;
 
+    private final Optional<CustomPlanViewConfigResponseData> customPlanConfig;
+
+    private final Optional<String> customPlanId;
+
     private final Optional<PlanGroupPlanDetailResponseData> defaultPlan;
 
     private final Optional<String> defaultPlanId;
@@ -41,6 +45,8 @@ public final class PlanGroupDetailResponseData {
 
     private PlanGroupDetailResponseData(
             List<PlanGroupPlanDetailResponseData> addOns,
+            Optional<CustomPlanViewConfigResponseData> customPlanConfig,
+            Optional<String> customPlanId,
             Optional<PlanGroupPlanDetailResponseData> defaultPlan,
             Optional<String> defaultPlanId,
             String id,
@@ -49,6 +55,8 @@ public final class PlanGroupDetailResponseData {
             Optional<Boolean> trialPaymentMethodRequired,
             Map<String, Object> additionalProperties) {
         this.addOns = addOns;
+        this.customPlanConfig = customPlanConfig;
+        this.customPlanId = customPlanId;
         this.defaultPlan = defaultPlan;
         this.defaultPlanId = defaultPlanId;
         this.id = id;
@@ -61,6 +69,16 @@ public final class PlanGroupDetailResponseData {
     @JsonProperty("add_ons")
     public List<PlanGroupPlanDetailResponseData> getAddOns() {
         return addOns;
+    }
+
+    @JsonProperty("custom_plan_config")
+    public Optional<CustomPlanViewConfigResponseData> getCustomPlanConfig() {
+        return customPlanConfig;
+    }
+
+    @JsonProperty("custom_plan_id")
+    public Optional<String> getCustomPlanId() {
+        return customPlanId;
     }
 
     @JsonProperty("default_plan")
@@ -106,6 +124,8 @@ public final class PlanGroupDetailResponseData {
 
     private boolean equalTo(PlanGroupDetailResponseData other) {
         return addOns.equals(other.addOns)
+                && customPlanConfig.equals(other.customPlanConfig)
+                && customPlanId.equals(other.customPlanId)
                 && defaultPlan.equals(other.defaultPlan)
                 && defaultPlanId.equals(other.defaultPlanId)
                 && id.equals(other.id)
@@ -118,6 +138,8 @@ public final class PlanGroupDetailResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.addOns,
+                this.customPlanConfig,
+                this.customPlanId,
                 this.defaultPlan,
                 this.defaultPlanId,
                 this.id,
@@ -149,6 +171,14 @@ public final class PlanGroupDetailResponseData {
         _FinalStage addAddOns(PlanGroupPlanDetailResponseData addOns);
 
         _FinalStage addAllAddOns(List<PlanGroupPlanDetailResponseData> addOns);
+
+        _FinalStage customPlanConfig(Optional<CustomPlanViewConfigResponseData> customPlanConfig);
+
+        _FinalStage customPlanConfig(CustomPlanViewConfigResponseData customPlanConfig);
+
+        _FinalStage customPlanId(Optional<String> customPlanId);
+
+        _FinalStage customPlanId(String customPlanId);
 
         _FinalStage defaultPlan(Optional<PlanGroupPlanDetailResponseData> defaultPlan);
 
@@ -187,6 +217,10 @@ public final class PlanGroupDetailResponseData {
 
         private Optional<PlanGroupPlanDetailResponseData> defaultPlan = Optional.empty();
 
+        private Optional<String> customPlanId = Optional.empty();
+
+        private Optional<CustomPlanViewConfigResponseData> customPlanConfig = Optional.empty();
+
         private List<PlanGroupPlanDetailResponseData> addOns = new ArrayList<>();
 
         @JsonAnySetter
@@ -197,6 +231,8 @@ public final class PlanGroupDetailResponseData {
         @java.lang.Override
         public Builder from(PlanGroupDetailResponseData other) {
             addOns(other.getAddOns());
+            customPlanConfig(other.getCustomPlanConfig());
+            customPlanId(other.getCustomPlanId());
             defaultPlan(other.getDefaultPlan());
             defaultPlanId(other.getDefaultPlanId());
             id(other.getId());
@@ -286,6 +322,32 @@ public final class PlanGroupDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage customPlanId(String customPlanId) {
+            this.customPlanId = Optional.ofNullable(customPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage customPlanId(Optional<String> customPlanId) {
+            this.customPlanId = customPlanId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage customPlanConfig(CustomPlanViewConfigResponseData customPlanConfig) {
+            this.customPlanConfig = Optional.ofNullable(customPlanConfig);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_plan_config", nulls = Nulls.SKIP)
+        public _FinalStage customPlanConfig(Optional<CustomPlanViewConfigResponseData> customPlanConfig) {
+            this.customPlanConfig = customPlanConfig;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllAddOns(List<PlanGroupPlanDetailResponseData> addOns) {
             this.addOns.addAll(addOns);
             return this;
@@ -309,6 +371,8 @@ public final class PlanGroupDetailResponseData {
         public PlanGroupDetailResponseData build() {
             return new PlanGroupDetailResponseData(
                     addOns,
+                    customPlanConfig,
+                    customPlanId,
                     defaultPlan,
                     defaultPlanId,
                     id,

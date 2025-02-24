@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CustomPlanConfig;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,10 @@ import java.util.Optional;
 @JsonDeserialize(builder = CreatePlanGroupRequestBody.Builder.class)
 public final class CreatePlanGroupRequestBody {
     private final List<String> addOnIds;
+
+    private final Optional<CustomPlanConfig> customPlanConfig;
+
+    private final Optional<String> customPlanId;
 
     private final Optional<String> defaultPlanId;
 
@@ -36,12 +41,16 @@ public final class CreatePlanGroupRequestBody {
 
     private CreatePlanGroupRequestBody(
             List<String> addOnIds,
+            Optional<CustomPlanConfig> customPlanConfig,
+            Optional<String> customPlanId,
             Optional<String> defaultPlanId,
             List<String> planIds,
             Optional<Integer> trialDays,
             Optional<Boolean> trialPaymentMethodRequired,
             Map<String, Object> additionalProperties) {
         this.addOnIds = addOnIds;
+        this.customPlanConfig = customPlanConfig;
+        this.customPlanId = customPlanId;
         this.defaultPlanId = defaultPlanId;
         this.planIds = planIds;
         this.trialDays = trialDays;
@@ -52,6 +61,16 @@ public final class CreatePlanGroupRequestBody {
     @JsonProperty("add_on_ids")
     public List<String> getAddOnIds() {
         return addOnIds;
+    }
+
+    @JsonProperty("custom_plan_config")
+    public Optional<CustomPlanConfig> getCustomPlanConfig() {
+        return customPlanConfig;
+    }
+
+    @JsonProperty("custom_plan_id")
+    public Optional<String> getCustomPlanId() {
+        return customPlanId;
     }
 
     @JsonProperty("default_plan_id")
@@ -87,6 +106,8 @@ public final class CreatePlanGroupRequestBody {
 
     private boolean equalTo(CreatePlanGroupRequestBody other) {
         return addOnIds.equals(other.addOnIds)
+                && customPlanConfig.equals(other.customPlanConfig)
+                && customPlanId.equals(other.customPlanId)
                 && defaultPlanId.equals(other.defaultPlanId)
                 && planIds.equals(other.planIds)
                 && trialDays.equals(other.trialDays)
@@ -96,7 +117,13 @@ public final class CreatePlanGroupRequestBody {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.addOnIds, this.defaultPlanId, this.planIds, this.trialDays, this.trialPaymentMethodRequired);
+                this.addOnIds,
+                this.customPlanConfig,
+                this.customPlanId,
+                this.defaultPlanId,
+                this.planIds,
+                this.trialDays,
+                this.trialPaymentMethodRequired);
     }
 
     @java.lang.Override
@@ -111,6 +138,10 @@ public final class CreatePlanGroupRequestBody {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private List<String> addOnIds = new ArrayList<>();
+
+        private Optional<CustomPlanConfig> customPlanConfig = Optional.empty();
+
+        private Optional<String> customPlanId = Optional.empty();
 
         private Optional<String> defaultPlanId = Optional.empty();
 
@@ -127,6 +158,8 @@ public final class CreatePlanGroupRequestBody {
 
         public Builder from(CreatePlanGroupRequestBody other) {
             addOnIds(other.getAddOnIds());
+            customPlanConfig(other.getCustomPlanConfig());
+            customPlanId(other.getCustomPlanId());
             defaultPlanId(other.getDefaultPlanId());
             planIds(other.getPlanIds());
             trialDays(other.getTrialDays());
@@ -148,6 +181,28 @@ public final class CreatePlanGroupRequestBody {
 
         public Builder addAllAddOnIds(List<String> addOnIds) {
             this.addOnIds.addAll(addOnIds);
+            return this;
+        }
+
+        @JsonSetter(value = "custom_plan_config", nulls = Nulls.SKIP)
+        public Builder customPlanConfig(Optional<CustomPlanConfig> customPlanConfig) {
+            this.customPlanConfig = customPlanConfig;
+            return this;
+        }
+
+        public Builder customPlanConfig(CustomPlanConfig customPlanConfig) {
+            this.customPlanConfig = Optional.ofNullable(customPlanConfig);
+            return this;
+        }
+
+        @JsonSetter(value = "custom_plan_id", nulls = Nulls.SKIP)
+        public Builder customPlanId(Optional<String> customPlanId) {
+            this.customPlanId = customPlanId;
+            return this;
+        }
+
+        public Builder customPlanId(String customPlanId) {
+            this.customPlanId = Optional.ofNullable(customPlanId);
             return this;
         }
 
@@ -203,7 +258,14 @@ public final class CreatePlanGroupRequestBody {
 
         public CreatePlanGroupRequestBody build() {
             return new CreatePlanGroupRequestBody(
-                    addOnIds, defaultPlanId, planIds, trialDays, trialPaymentMethodRequired, additionalProperties);
+                    addOnIds,
+                    customPlanConfig,
+                    customPlanId,
+                    defaultPlanId,
+                    planIds,
+                    trialDays,
+                    trialPaymentMethodRequired,
+                    additionalProperties);
         }
     }
 }

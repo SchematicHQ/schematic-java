@@ -31,6 +31,8 @@ public final class SearchBillingPricesParams {
 
     private final Optional<Integer> price;
 
+    private final Optional<String> q;
+
     private final Optional<String> usageType;
 
     private final Map<String, Object> additionalProperties;
@@ -41,6 +43,7 @@ public final class SearchBillingPricesParams {
             Optional<Integer> limit,
             Optional<Integer> offset,
             Optional<Integer> price,
+            Optional<String> q,
             Optional<String> usageType,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
@@ -48,6 +51,7 @@ public final class SearchBillingPricesParams {
         this.limit = limit;
         this.offset = offset;
         this.price = price;
+        this.q = q;
         this.usageType = usageType;
         this.additionalProperties = additionalProperties;
     }
@@ -83,6 +87,11 @@ public final class SearchBillingPricesParams {
         return price;
     }
 
+    @JsonProperty("q")
+    public Optional<String> getQ() {
+        return q;
+    }
+
     @JsonProperty("usage_type")
     public Optional<String> getUsageType() {
         return usageType;
@@ -105,12 +114,13 @@ public final class SearchBillingPricesParams {
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
                 && price.equals(other.price)
+                && q.equals(other.q)
                 && usageType.equals(other.usageType);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.ids, this.interval, this.limit, this.offset, this.price, this.usageType);
+        return Objects.hash(this.ids, this.interval, this.limit, this.offset, this.price, this.q, this.usageType);
     }
 
     @java.lang.Override
@@ -134,6 +144,8 @@ public final class SearchBillingPricesParams {
 
         private Optional<Integer> price = Optional.empty();
 
+        private Optional<String> q = Optional.empty();
+
         private Optional<String> usageType = Optional.empty();
 
         @JsonAnySetter
@@ -147,6 +159,7 @@ public final class SearchBillingPricesParams {
             limit(other.getLimit());
             offset(other.getOffset());
             price(other.getPrice());
+            q(other.getQ());
             usageType(other.getUsageType());
             return this;
         }
@@ -206,6 +219,17 @@ public final class SearchBillingPricesParams {
             return this;
         }
 
+        @JsonSetter(value = "q", nulls = Nulls.SKIP)
+        public Builder q(Optional<String> q) {
+            this.q = q;
+            return this;
+        }
+
+        public Builder q(String q) {
+            this.q = Optional.ofNullable(q);
+            return this;
+        }
+
         @JsonSetter(value = "usage_type", nulls = Nulls.SKIP)
         public Builder usageType(Optional<String> usageType) {
             this.usageType = usageType;
@@ -218,7 +242,8 @@ public final class SearchBillingPricesParams {
         }
 
         public SearchBillingPricesParams build() {
-            return new SearchBillingPricesParams(ids, interval, limit, offset, price, usageType, additionalProperties);
+            return new SearchBillingPricesParams(
+                    ids, interval, limit, offset, price, q, usageType, additionalProperties);
         }
     }
 }
