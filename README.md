@@ -212,7 +212,13 @@ Schematic schematic = Schematic.builder()
     .build();
 ```
 
-While in offline mode, flag checks will return the default value for the flag being checked, and events will no-op. Other API calls will still be attempted as normal; offline mode does not affect these.
+When in offline mode:
+
+1. Flag checks will return the default value for the flag being checked (false by default, or as specified in flagDefaults)
+2. Events (identify and track) will be skipped completely
+3. All other API calls will use a no-op HTTP client that doesn't make actual network requests, returning empty responses
+
+This is especially useful for development, testing, or when running unit tests that shouldn't depend on the Schematic API.
 
 Offline mode works well with flag defaults:
 

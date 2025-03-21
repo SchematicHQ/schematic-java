@@ -5,6 +5,7 @@ import com.schematic.api.cache.CacheProvider;
 import com.schematic.api.cache.LocalCache;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.Environment;
+import com.schematic.api.core.NoOpHttpClient;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.logger.ConsoleLogger;
 import com.schematic.api.logger.SchematicLogger;
@@ -135,11 +136,16 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     private static ClientOptions buildClientOptions(String apiKey, Builder builder) {
         String basePath = builder.basePath != null ? builder.basePath : "https://api.schematichq.com";
-        return ClientOptions.builder()
+        ClientOptions.Builder clientOptionsBuilder = ClientOptions.builder()
                 .environment(Environment.custom(basePath))
                 .addHeader("X-Schematic-Api-Key", apiKey)
-                .addHeader("Content-Type", "application/json")
-                .build();
+                .addHeader("Content-Type", "application/json");
+
+        if (builder.offline) {
+            clientOptionsBuilder.httpClient(new NoOpHttpClient());
+        }
+
+        return clientOptionsBuilder.build();
     }
 
     public List<CacheProvider<Boolean>> getFlagCheckCacheProviders() {
