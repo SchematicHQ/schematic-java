@@ -32,6 +32,8 @@ public final class UpdatePlanEntitlementRequestBody {
 
     private final Optional<String> priceBehavior;
 
+    private final Optional<Integer> softLimit;
+
     private final Optional<Boolean> valueBool;
 
     private final Optional<Integer> valueNumeric;
@@ -49,6 +51,7 @@ public final class UpdatePlanEntitlementRequestBody {
             Optional<UpdatePlanEntitlementRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<String> monthlyMeteredPriceId,
             Optional<String> priceBehavior,
+            Optional<Integer> softLimit,
             Optional<Boolean> valueBool,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
@@ -59,6 +62,7 @@ public final class UpdatePlanEntitlementRequestBody {
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.monthlyMeteredPriceId = monthlyMeteredPriceId;
         this.priceBehavior = priceBehavior;
+        this.softLimit = softLimit;
         this.valueBool = valueBool;
         this.valueNumeric = valueNumeric;
         this.valueTraitId = valueTraitId;
@@ -85,6 +89,11 @@ public final class UpdatePlanEntitlementRequestBody {
     @JsonProperty("price_behavior")
     public Optional<String> getPriceBehavior() {
         return priceBehavior;
+    }
+
+    @JsonProperty("soft_limit")
+    public Optional<Integer> getSoftLimit() {
+        return softLimit;
     }
 
     @JsonProperty("value_bool")
@@ -128,6 +137,7 @@ public final class UpdatePlanEntitlementRequestBody {
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && monthlyMeteredPriceId.equals(other.monthlyMeteredPriceId)
                 && priceBehavior.equals(other.priceBehavior)
+                && softLimit.equals(other.softLimit)
                 && valueBool.equals(other.valueBool)
                 && valueNumeric.equals(other.valueNumeric)
                 && valueTraitId.equals(other.valueTraitId)
@@ -142,6 +152,7 @@ public final class UpdatePlanEntitlementRequestBody {
                 this.metricPeriodMonthReset,
                 this.monthlyMeteredPriceId,
                 this.priceBehavior,
+                this.softLimit,
                 this.valueBool,
                 this.valueNumeric,
                 this.valueTraitId,
@@ -185,6 +196,10 @@ public final class UpdatePlanEntitlementRequestBody {
 
         _FinalStage priceBehavior(String priceBehavior);
 
+        _FinalStage softLimit(Optional<Integer> softLimit);
+
+        _FinalStage softLimit(Integer softLimit);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -214,6 +229,8 @@ public final class UpdatePlanEntitlementRequestBody {
 
         private Optional<Boolean> valueBool = Optional.empty();
 
+        private Optional<Integer> softLimit = Optional.empty();
+
         private Optional<String> priceBehavior = Optional.empty();
 
         private Optional<String> monthlyMeteredPriceId = Optional.empty();
@@ -234,6 +251,7 @@ public final class UpdatePlanEntitlementRequestBody {
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             monthlyMeteredPriceId(other.getMonthlyMeteredPriceId());
             priceBehavior(other.getPriceBehavior());
+            softLimit(other.getSoftLimit());
             valueBool(other.getValueBool());
             valueNumeric(other.getValueNumeric());
             valueTraitId(other.getValueTraitId());
@@ -302,6 +320,19 @@ public final class UpdatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage softLimit(Integer softLimit) {
+            this.softLimit = Optional.ofNullable(softLimit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
+        public _FinalStage softLimit(Optional<Integer> softLimit) {
+            this.softLimit = softLimit;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage priceBehavior(String priceBehavior) {
             this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
@@ -362,6 +393,7 @@ public final class UpdatePlanEntitlementRequestBody {
                     metricPeriodMonthReset,
                     monthlyMeteredPriceId,
                     priceBehavior,
+                    softLimit,
                     valueBool,
                     valueNumeric,
                     valueTraitId,

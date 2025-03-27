@@ -54,8 +54,6 @@ public final class PaymentMethodResponseData {
 
     private final String paymentMethodType;
 
-    private final Optional<String> subscriptionExternalId;
-
     private final OffsetDateTime updatedAt;
 
     private final Map<String, Object> additionalProperties;
@@ -77,7 +75,6 @@ public final class PaymentMethodResponseData {
             String externalId,
             String id,
             String paymentMethodType,
-            Optional<String> subscriptionExternalId,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.accountLast4 = accountLast4;
@@ -96,7 +93,6 @@ public final class PaymentMethodResponseData {
         this.externalId = externalId;
         this.id = id;
         this.paymentMethodType = paymentMethodType;
-        this.subscriptionExternalId = subscriptionExternalId;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -181,11 +177,6 @@ public final class PaymentMethodResponseData {
         return paymentMethodType;
     }
 
-    @JsonProperty("subscription_external_id")
-    public Optional<String> getSubscriptionExternalId() {
-        return subscriptionExternalId;
-    }
-
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -219,7 +210,6 @@ public final class PaymentMethodResponseData {
                 && externalId.equals(other.externalId)
                 && id.equals(other.id)
                 && paymentMethodType.equals(other.paymentMethodType)
-                && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && updatedAt.equals(other.updatedAt);
     }
 
@@ -242,7 +232,6 @@ public final class PaymentMethodResponseData {
                 this.externalId,
                 this.id,
                 this.paymentMethodType,
-                this.subscriptionExternalId,
                 this.updatedAt);
     }
 
@@ -327,10 +316,6 @@ public final class PaymentMethodResponseData {
         _FinalStage companyId(Optional<String> companyId);
 
         _FinalStage companyId(String companyId);
-
-        _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId);
-
-        _FinalStage subscriptionExternalId(String subscriptionExternalId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -356,8 +341,6 @@ public final class PaymentMethodResponseData {
         private String paymentMethodType;
 
         private OffsetDateTime updatedAt;
-
-        private Optional<String> subscriptionExternalId = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
 
@@ -402,7 +385,6 @@ public final class PaymentMethodResponseData {
             externalId(other.getExternalId());
             id(other.getId());
             paymentMethodType(other.getPaymentMethodType());
-            subscriptionExternalId(other.getSubscriptionExternalId());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -453,19 +435,6 @@ public final class PaymentMethodResponseData {
         @JsonSetter("updated_at")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "subscription_external_id", nulls = Nulls.SKIP)
-        public _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId) {
-            this.subscriptionExternalId = subscriptionExternalId;
             return this;
         }
 
@@ -618,7 +587,6 @@ public final class PaymentMethodResponseData {
                     externalId,
                     id,
                     paymentMethodType,
-                    subscriptionExternalId,
                     updatedAt,
                     additionalProperties);
         }

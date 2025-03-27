@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CustomPlanConfig;
+import com.schematic.api.types.OrderedPlansInGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,7 @@ public final class CreatePlanGroupRequestBody {
 
     private final Optional<String> defaultPlanId;
 
-    private final List<String> planIds;
+    private final List<OrderedPlansInGroup> orderedPlans;
 
     private final Optional<Integer> trialDays;
 
@@ -44,7 +45,7 @@ public final class CreatePlanGroupRequestBody {
             Optional<CustomPlanConfig> customPlanConfig,
             Optional<String> customPlanId,
             Optional<String> defaultPlanId,
-            List<String> planIds,
+            List<OrderedPlansInGroup> orderedPlans,
             Optional<Integer> trialDays,
             Optional<Boolean> trialPaymentMethodRequired,
             Map<String, Object> additionalProperties) {
@@ -52,7 +53,7 @@ public final class CreatePlanGroupRequestBody {
         this.customPlanConfig = customPlanConfig;
         this.customPlanId = customPlanId;
         this.defaultPlanId = defaultPlanId;
-        this.planIds = planIds;
+        this.orderedPlans = orderedPlans;
         this.trialDays = trialDays;
         this.trialPaymentMethodRequired = trialPaymentMethodRequired;
         this.additionalProperties = additionalProperties;
@@ -78,9 +79,9 @@ public final class CreatePlanGroupRequestBody {
         return defaultPlanId;
     }
 
-    @JsonProperty("plan_ids")
-    public List<String> getPlanIds() {
-        return planIds;
+    @JsonProperty("ordered_plans")
+    public List<OrderedPlansInGroup> getOrderedPlans() {
+        return orderedPlans;
     }
 
     @JsonProperty("trial_days")
@@ -109,7 +110,7 @@ public final class CreatePlanGroupRequestBody {
                 && customPlanConfig.equals(other.customPlanConfig)
                 && customPlanId.equals(other.customPlanId)
                 && defaultPlanId.equals(other.defaultPlanId)
-                && planIds.equals(other.planIds)
+                && orderedPlans.equals(other.orderedPlans)
                 && trialDays.equals(other.trialDays)
                 && trialPaymentMethodRequired.equals(other.trialPaymentMethodRequired);
     }
@@ -121,7 +122,7 @@ public final class CreatePlanGroupRequestBody {
                 this.customPlanConfig,
                 this.customPlanId,
                 this.defaultPlanId,
-                this.planIds,
+                this.orderedPlans,
                 this.trialDays,
                 this.trialPaymentMethodRequired);
     }
@@ -145,7 +146,7 @@ public final class CreatePlanGroupRequestBody {
 
         private Optional<String> defaultPlanId = Optional.empty();
 
-        private List<String> planIds = new ArrayList<>();
+        private List<OrderedPlansInGroup> orderedPlans = new ArrayList<>();
 
         private Optional<Integer> trialDays = Optional.empty();
 
@@ -161,7 +162,7 @@ public final class CreatePlanGroupRequestBody {
             customPlanConfig(other.getCustomPlanConfig());
             customPlanId(other.getCustomPlanId());
             defaultPlanId(other.getDefaultPlanId());
-            planIds(other.getPlanIds());
+            orderedPlans(other.getOrderedPlans());
             trialDays(other.getTrialDays());
             trialPaymentMethodRequired(other.getTrialPaymentMethodRequired());
             return this;
@@ -217,20 +218,20 @@ public final class CreatePlanGroupRequestBody {
             return this;
         }
 
-        @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
-        public Builder planIds(List<String> planIds) {
-            this.planIds.clear();
-            this.planIds.addAll(planIds);
+        @JsonSetter(value = "ordered_plans", nulls = Nulls.SKIP)
+        public Builder orderedPlans(List<OrderedPlansInGroup> orderedPlans) {
+            this.orderedPlans.clear();
+            this.orderedPlans.addAll(orderedPlans);
             return this;
         }
 
-        public Builder addPlanIds(String planIds) {
-            this.planIds.add(planIds);
+        public Builder addOrderedPlans(OrderedPlansInGroup orderedPlans) {
+            this.orderedPlans.add(orderedPlans);
             return this;
         }
 
-        public Builder addAllPlanIds(List<String> planIds) {
-            this.planIds.addAll(planIds);
+        public Builder addAllOrderedPlans(List<OrderedPlansInGroup> orderedPlans) {
+            this.orderedPlans.addAll(orderedPlans);
             return this;
         }
 
@@ -262,7 +263,7 @@ public final class CreatePlanGroupRequestBody {
                     customPlanConfig,
                     customPlanId,
                     defaultPlanId,
-                    planIds,
+                    orderedPlans,
                     trialDays,
                     trialPaymentMethodRequired,
                     additionalProperties);

@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateBillingCustomerRequestBody {
     private final Optional<String> companyId;
 
+    private final Optional<String> defaultPaymentMethodId;
+
     private final String email;
 
     private final String externalId;
@@ -38,6 +40,7 @@ public final class CreateBillingCustomerRequestBody {
 
     private CreateBillingCustomerRequestBody(
             Optional<String> companyId,
+            Optional<String> defaultPaymentMethodId,
             String email,
             String externalId,
             boolean failedToImport,
@@ -45,6 +48,7 @@ public final class CreateBillingCustomerRequestBody {
             String name,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
+        this.defaultPaymentMethodId = defaultPaymentMethodId;
         this.email = email;
         this.externalId = externalId;
         this.failedToImport = failedToImport;
@@ -56,6 +60,11 @@ public final class CreateBillingCustomerRequestBody {
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
+    }
+
+    @JsonProperty("default_payment_method_id")
+    public Optional<String> getDefaultPaymentMethodId() {
+        return defaultPaymentMethodId;
     }
 
     @JsonProperty("email")
@@ -96,6 +105,7 @@ public final class CreateBillingCustomerRequestBody {
 
     private boolean equalTo(CreateBillingCustomerRequestBody other) {
         return companyId.equals(other.companyId)
+                && defaultPaymentMethodId.equals(other.defaultPaymentMethodId)
                 && email.equals(other.email)
                 && externalId.equals(other.externalId)
                 && failedToImport == other.failedToImport
@@ -105,7 +115,14 @@ public final class CreateBillingCustomerRequestBody {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.email, this.externalId, this.failedToImport, this.meta, this.name);
+        return Objects.hash(
+                this.companyId,
+                this.defaultPaymentMethodId,
+                this.email,
+                this.externalId,
+                this.failedToImport,
+                this.meta,
+                this.name);
     }
 
     @java.lang.Override
@@ -142,6 +159,10 @@ public final class CreateBillingCustomerRequestBody {
 
         _FinalStage companyId(String companyId);
 
+        _FinalStage defaultPaymentMethodId(Optional<String> defaultPaymentMethodId);
+
+        _FinalStage defaultPaymentMethodId(String defaultPaymentMethodId);
+
         _FinalStage meta(Map<String, String> meta);
 
         _FinalStage putAllMeta(Map<String, String> meta);
@@ -162,6 +183,8 @@ public final class CreateBillingCustomerRequestBody {
 
         private Map<String, String> meta = new LinkedHashMap<>();
 
+        private Optional<String> defaultPaymentMethodId = Optional.empty();
+
         private Optional<String> companyId = Optional.empty();
 
         @JsonAnySetter
@@ -172,6 +195,7 @@ public final class CreateBillingCustomerRequestBody {
         @java.lang.Override
         public Builder from(CreateBillingCustomerRequestBody other) {
             companyId(other.getCompanyId());
+            defaultPaymentMethodId(other.getDefaultPaymentMethodId());
             email(other.getEmail());
             externalId(other.getExternalId());
             failedToImport(other.getFailedToImport());
@@ -229,6 +253,19 @@ public final class CreateBillingCustomerRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage defaultPaymentMethodId(String defaultPaymentMethodId) {
+            this.defaultPaymentMethodId = Optional.ofNullable(defaultPaymentMethodId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "default_payment_method_id", nulls = Nulls.SKIP)
+        public _FinalStage defaultPaymentMethodId(Optional<String> defaultPaymentMethodId) {
+            this.defaultPaymentMethodId = defaultPaymentMethodId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
             return this;
@@ -244,7 +281,14 @@ public final class CreateBillingCustomerRequestBody {
         @java.lang.Override
         public CreateBillingCustomerRequestBody build() {
             return new CreateBillingCustomerRequestBody(
-                    companyId, email, externalId, failedToImport, meta, name, additionalProperties);
+                    companyId,
+                    defaultPaymentMethodId,
+                    email,
+                    externalId,
+                    failedToImport,
+                    meta,
+                    name,
+                    additionalProperties);
         }
     }
 }

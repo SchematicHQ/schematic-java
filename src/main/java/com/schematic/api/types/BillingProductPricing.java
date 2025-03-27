@@ -35,7 +35,7 @@ public final class BillingProductPricing {
 
     private final int quantity;
 
-    private final String usageType;
+    private final BillingProductPricingUsageType usageType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -47,7 +47,7 @@ public final class BillingProductPricing {
             String priceExternalId,
             String productExternalId,
             int quantity,
-            String usageType,
+            BillingProductPricingUsageType usageType,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.interval = interval;
@@ -96,7 +96,7 @@ public final class BillingProductPricing {
     }
 
     @JsonProperty("usage_type")
-    public String getUsageType() {
+    public BillingProductPricingUsageType getUsageType() {
         return usageType;
     }
 
@@ -171,7 +171,7 @@ public final class BillingProductPricing {
     }
 
     public interface UsageTypeStage {
-        _FinalStage usageType(@NotNull String usageType);
+        _FinalStage usageType(@NotNull BillingProductPricingUsageType usageType);
     }
 
     public interface _FinalStage {
@@ -204,7 +204,7 @@ public final class BillingProductPricing {
 
         private int quantity;
 
-        private String usageType;
+        private BillingProductPricingUsageType usageType;
 
         private Optional<String> meterId = Optional.empty();
 
@@ -270,7 +270,7 @@ public final class BillingProductPricing {
 
         @java.lang.Override
         @JsonSetter("usage_type")
-        public _FinalStage usageType(@NotNull String usageType) {
+        public _FinalStage usageType(@NotNull BillingProductPricingUsageType usageType) {
             this.usageType = Objects.requireNonNull(usageType, "usageType must not be null");
             return this;
         }

@@ -12,8 +12,12 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyTierMode;
 import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyUsageType;
+import com.schematic.api.types.CreateBillingPriceTierRequestBody;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonDeserialize(builder = CreateBillingPriceRequestBody.Builder.class)
 public final class CreateBillingPriceRequestBody {
     private final String currency;
+
+    private final String externalAccountId;
 
     private final String interval;
 
@@ -34,7 +40,11 @@ public final class CreateBillingPriceRequestBody {
 
     private final String priceExternalId;
 
+    private final List<CreateBillingPriceTierRequestBody> priceTiers;
+
     private final String productExternalId;
+
+    private final Optional<CreateBillingPriceRequestBodyTierMode> tierMode;
 
     private final CreateBillingPriceRequestBodyUsageType usageType;
 
@@ -42,21 +52,27 @@ public final class CreateBillingPriceRequestBody {
 
     private CreateBillingPriceRequestBody(
             String currency,
+            String externalAccountId,
             String interval,
             boolean isActive,
             Optional<String> meterId,
             int price,
             String priceExternalId,
+            List<CreateBillingPriceTierRequestBody> priceTiers,
             String productExternalId,
+            Optional<CreateBillingPriceRequestBodyTierMode> tierMode,
             CreateBillingPriceRequestBodyUsageType usageType,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
+        this.externalAccountId = externalAccountId;
         this.interval = interval;
         this.isActive = isActive;
         this.meterId = meterId;
         this.price = price;
         this.priceExternalId = priceExternalId;
+        this.priceTiers = priceTiers;
         this.productExternalId = productExternalId;
+        this.tierMode = tierMode;
         this.usageType = usageType;
         this.additionalProperties = additionalProperties;
     }
@@ -64,6 +80,11 @@ public final class CreateBillingPriceRequestBody {
     @JsonProperty("currency")
     public String getCurrency() {
         return currency;
+    }
+
+    @JsonProperty("external_account_id")
+    public String getExternalAccountId() {
+        return externalAccountId;
     }
 
     @JsonProperty("interval")
@@ -91,9 +112,19 @@ public final class CreateBillingPriceRequestBody {
         return priceExternalId;
     }
 
+    @JsonProperty("price_tiers")
+    public List<CreateBillingPriceTierRequestBody> getPriceTiers() {
+        return priceTiers;
+    }
+
     @JsonProperty("product_external_id")
     public String getProductExternalId() {
         return productExternalId;
+    }
+
+    @JsonProperty("tier_mode")
+    public Optional<CreateBillingPriceRequestBodyTierMode> getTierMode() {
+        return tierMode;
     }
 
     @JsonProperty("usage_type")
@@ -114,12 +145,15 @@ public final class CreateBillingPriceRequestBody {
 
     private boolean equalTo(CreateBillingPriceRequestBody other) {
         return currency.equals(other.currency)
+                && externalAccountId.equals(other.externalAccountId)
                 && interval.equals(other.interval)
                 && isActive == other.isActive
                 && meterId.equals(other.meterId)
                 && price == other.price
                 && priceExternalId.equals(other.priceExternalId)
+                && priceTiers.equals(other.priceTiers)
                 && productExternalId.equals(other.productExternalId)
+                && tierMode.equals(other.tierMode)
                 && usageType.equals(other.usageType);
     }
 
@@ -127,12 +161,15 @@ public final class CreateBillingPriceRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.currency,
+                this.externalAccountId,
                 this.interval,
                 this.isActive,
                 this.meterId,
                 this.price,
                 this.priceExternalId,
+                this.priceTiers,
                 this.productExternalId,
+                this.tierMode,
                 this.usageType);
     }
 
@@ -146,9 +183,13 @@ public final class CreateBillingPriceRequestBody {
     }
 
     public interface CurrencyStage {
-        IntervalStage currency(@NotNull String currency);
+        ExternalAccountIdStage currency(@NotNull String currency);
 
         Builder from(CreateBillingPriceRequestBody other);
+    }
+
+    public interface ExternalAccountIdStage {
+        IntervalStage externalAccountId(@NotNull String externalAccountId);
     }
 
     public interface IntervalStage {
@@ -181,11 +222,22 @@ public final class CreateBillingPriceRequestBody {
         _FinalStage meterId(Optional<String> meterId);
 
         _FinalStage meterId(String meterId);
+
+        _FinalStage priceTiers(List<CreateBillingPriceTierRequestBody> priceTiers);
+
+        _FinalStage addPriceTiers(CreateBillingPriceTierRequestBody priceTiers);
+
+        _FinalStage addAllPriceTiers(List<CreateBillingPriceTierRequestBody> priceTiers);
+
+        _FinalStage tierMode(Optional<CreateBillingPriceRequestBodyTierMode> tierMode);
+
+        _FinalStage tierMode(CreateBillingPriceRequestBodyTierMode tierMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements CurrencyStage,
+                    ExternalAccountIdStage,
                     IntervalStage,
                     IsActiveStage,
                     PriceStage,
@@ -194,6 +246,8 @@ public final class CreateBillingPriceRequestBody {
                     UsageTypeStage,
                     _FinalStage {
         private String currency;
+
+        private String externalAccountId;
 
         private String interval;
 
@@ -207,6 +261,10 @@ public final class CreateBillingPriceRequestBody {
 
         private CreateBillingPriceRequestBodyUsageType usageType;
 
+        private Optional<CreateBillingPriceRequestBodyTierMode> tierMode = Optional.empty();
+
+        private List<CreateBillingPriceTierRequestBody> priceTiers = new ArrayList<>();
+
         private Optional<String> meterId = Optional.empty();
 
         @JsonAnySetter
@@ -217,20 +275,30 @@ public final class CreateBillingPriceRequestBody {
         @java.lang.Override
         public Builder from(CreateBillingPriceRequestBody other) {
             currency(other.getCurrency());
+            externalAccountId(other.getExternalAccountId());
             interval(other.getInterval());
             isActive(other.getIsActive());
             meterId(other.getMeterId());
             price(other.getPrice());
             priceExternalId(other.getPriceExternalId());
+            priceTiers(other.getPriceTiers());
             productExternalId(other.getProductExternalId());
+            tierMode(other.getTierMode());
             usageType(other.getUsageType());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("currency")
-        public IntervalStage currency(@NotNull String currency) {
+        public ExternalAccountIdStage currency(@NotNull String currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("external_account_id")
+        public IntervalStage externalAccountId(@NotNull String externalAccountId) {
+            this.externalAccountId = Objects.requireNonNull(externalAccountId, "externalAccountId must not be null");
             return this;
         }
 
@@ -277,6 +345,39 @@ public final class CreateBillingPriceRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage tierMode(CreateBillingPriceRequestBodyTierMode tierMode) {
+            this.tierMode = Optional.ofNullable(tierMode);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "tier_mode", nulls = Nulls.SKIP)
+        public _FinalStage tierMode(Optional<CreateBillingPriceRequestBodyTierMode> tierMode) {
+            this.tierMode = tierMode;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllPriceTiers(List<CreateBillingPriceTierRequestBody> priceTiers) {
+            this.priceTiers.addAll(priceTiers);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addPriceTiers(CreateBillingPriceTierRequestBody priceTiers) {
+            this.priceTiers.add(priceTiers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "price_tiers", nulls = Nulls.SKIP)
+        public _FinalStage priceTiers(List<CreateBillingPriceTierRequestBody> priceTiers) {
+            this.priceTiers.clear();
+            this.priceTiers.addAll(priceTiers);
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage meterId(String meterId) {
             this.meterId = Optional.ofNullable(meterId);
             return this;
@@ -293,12 +394,15 @@ public final class CreateBillingPriceRequestBody {
         public CreateBillingPriceRequestBody build() {
             return new CreateBillingPriceRequestBody(
                     currency,
+                    externalAccountId,
                     interval,
                     isActive,
                     meterId,
                     price,
                     priceExternalId,
+                    priceTiers,
                     productExternalId,
+                    tierMode,
                     usageType,
                     additionalProperties);
         }

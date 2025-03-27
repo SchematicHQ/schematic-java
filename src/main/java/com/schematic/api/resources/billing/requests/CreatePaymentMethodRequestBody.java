@@ -45,8 +45,6 @@ public final class CreatePaymentMethodRequestBody {
 
     private final String paymentMethodType;
 
-    private final Optional<String> subscriptionExternalId;
-
     private final Map<String, Object> additionalProperties;
 
     private CreatePaymentMethodRequestBody(
@@ -62,7 +60,6 @@ public final class CreatePaymentMethodRequestBody {
             String customerExternalId,
             String externalId,
             String paymentMethodType,
-            Optional<String> subscriptionExternalId,
             Map<String, Object> additionalProperties) {
         this.accountLast4 = accountLast4;
         this.accountName = accountName;
@@ -76,7 +73,6 @@ public final class CreatePaymentMethodRequestBody {
         this.customerExternalId = customerExternalId;
         this.externalId = externalId;
         this.paymentMethodType = paymentMethodType;
-        this.subscriptionExternalId = subscriptionExternalId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -140,11 +136,6 @@ public final class CreatePaymentMethodRequestBody {
         return paymentMethodType;
     }
 
-    @JsonProperty("subscription_external_id")
-    public Optional<String> getSubscriptionExternalId() {
-        return subscriptionExternalId;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -168,8 +159,7 @@ public final class CreatePaymentMethodRequestBody {
                 && cardLast4.equals(other.cardLast4)
                 && customerExternalId.equals(other.customerExternalId)
                 && externalId.equals(other.externalId)
-                && paymentMethodType.equals(other.paymentMethodType)
-                && subscriptionExternalId.equals(other.subscriptionExternalId);
+                && paymentMethodType.equals(other.paymentMethodType);
     }
 
     @java.lang.Override
@@ -186,8 +176,7 @@ public final class CreatePaymentMethodRequestBody {
                 this.cardLast4,
                 this.customerExternalId,
                 this.externalId,
-                this.paymentMethodType,
-                this.subscriptionExternalId);
+                this.paymentMethodType);
     }
 
     @java.lang.Override
@@ -251,10 +240,6 @@ public final class CreatePaymentMethodRequestBody {
         _FinalStage cardLast4(Optional<String> cardLast4);
 
         _FinalStage cardLast4(String cardLast4);
-
-        _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId);
-
-        _FinalStage subscriptionExternalId(String subscriptionExternalId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -265,8 +250,6 @@ public final class CreatePaymentMethodRequestBody {
         private String externalId;
 
         private String paymentMethodType;
-
-        private Optional<String> subscriptionExternalId = Optional.empty();
 
         private Optional<String> cardLast4 = Optional.empty();
 
@@ -305,7 +288,6 @@ public final class CreatePaymentMethodRequestBody {
             customerExternalId(other.getCustomerExternalId());
             externalId(other.getExternalId());
             paymentMethodType(other.getPaymentMethodType());
-            subscriptionExternalId(other.getSubscriptionExternalId());
             return this;
         }
 
@@ -327,19 +309,6 @@ public final class CreatePaymentMethodRequestBody {
         @JsonSetter("payment_method_type")
         public _FinalStage paymentMethodType(@NotNull String paymentMethodType) {
             this.paymentMethodType = Objects.requireNonNull(paymentMethodType, "paymentMethodType must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "subscription_external_id", nulls = Nulls.SKIP)
-        public _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId) {
-            this.subscriptionExternalId = subscriptionExternalId;
             return this;
         }
 
@@ -475,7 +444,6 @@ public final class CreatePaymentMethodRequestBody {
                     customerExternalId,
                     externalId,
                     paymentMethodType,
-                    subscriptionExternalId,
                     additionalProperties);
         }
     }

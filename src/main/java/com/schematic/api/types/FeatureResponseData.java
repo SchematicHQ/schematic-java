@@ -40,6 +40,10 @@ public final class FeatureResponseData {
 
     private final String name;
 
+    private final Optional<String> pluralName;
+
+    private final Optional<String> singularName;
+
     private final Optional<String> traitId;
 
     private final OffsetDateTime updatedAt;
@@ -56,6 +60,8 @@ public final class FeatureResponseData {
             Optional<String> lifecyclePhase,
             Optional<String> maintainerId,
             String name,
+            Optional<String> pluralName,
+            Optional<String> singularName,
             Optional<String> traitId,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -68,6 +74,8 @@ public final class FeatureResponseData {
         this.lifecyclePhase = lifecyclePhase;
         this.maintainerId = maintainerId;
         this.name = name;
+        this.pluralName = pluralName;
+        this.singularName = singularName;
         this.traitId = traitId;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -118,6 +126,16 @@ public final class FeatureResponseData {
         return name;
     }
 
+    @JsonProperty("plural_name")
+    public Optional<String> getPluralName() {
+        return pluralName;
+    }
+
+    @JsonProperty("singular_name")
+    public Optional<String> getSingularName() {
+        return singularName;
+    }
+
     @JsonProperty("trait_id")
     public Optional<String> getTraitId() {
         return traitId;
@@ -149,6 +167,8 @@ public final class FeatureResponseData {
                 && lifecyclePhase.equals(other.lifecyclePhase)
                 && maintainerId.equals(other.maintainerId)
                 && name.equals(other.name)
+                && pluralName.equals(other.pluralName)
+                && singularName.equals(other.singularName)
                 && traitId.equals(other.traitId)
                 && updatedAt.equals(other.updatedAt);
     }
@@ -165,6 +185,8 @@ public final class FeatureResponseData {
                 this.lifecyclePhase,
                 this.maintainerId,
                 this.name,
+                this.pluralName,
+                this.singularName,
                 this.traitId,
                 this.updatedAt);
     }
@@ -223,6 +245,14 @@ public final class FeatureResponseData {
 
         _FinalStage maintainerId(String maintainerId);
 
+        _FinalStage pluralName(Optional<String> pluralName);
+
+        _FinalStage pluralName(String pluralName);
+
+        _FinalStage singularName(Optional<String> singularName);
+
+        _FinalStage singularName(String singularName);
+
         _FinalStage traitId(Optional<String> traitId);
 
         _FinalStage traitId(String traitId);
@@ -254,6 +284,10 @@ public final class FeatureResponseData {
 
         private Optional<String> traitId = Optional.empty();
 
+        private Optional<String> singularName = Optional.empty();
+
+        private Optional<String> pluralName = Optional.empty();
+
         private Optional<String> maintainerId = Optional.empty();
 
         private Optional<String> lifecyclePhase = Optional.empty();
@@ -276,6 +310,8 @@ public final class FeatureResponseData {
             lifecyclePhase(other.getLifecyclePhase());
             maintainerId(other.getMaintainerId());
             name(other.getName());
+            pluralName(other.getPluralName());
+            singularName(other.getSingularName());
             traitId(other.getTraitId());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -344,6 +380,32 @@ public final class FeatureResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage singularName(String singularName) {
+            this.singularName = Optional.ofNullable(singularName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "singular_name", nulls = Nulls.SKIP)
+        public _FinalStage singularName(Optional<String> singularName) {
+            this.singularName = singularName;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage pluralName(String pluralName) {
+            this.pluralName = Optional.ofNullable(pluralName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "plural_name", nulls = Nulls.SKIP)
+        public _FinalStage pluralName(Optional<String> pluralName) {
+            this.pluralName = pluralName;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage maintainerId(String maintainerId) {
             this.maintainerId = Optional.ofNullable(maintainerId);
             return this;
@@ -394,6 +456,8 @@ public final class FeatureResponseData {
                     lifecyclePhase,
                     maintainerId,
                     name,
+                    pluralName,
+                    singularName,
                     traitId,
                     updatedAt,
                     additionalProperties);
