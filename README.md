@@ -157,6 +157,70 @@ user.put("user_id", "your-user-id");
 boolean flagValue = schematic.checkFlag("some-flag-key", company, user);
 ```
 
+## Webhook Verification
+
+Schematic can send webhooks to notify your application of events. To ensure the security of these webhooks, Schematic signs each request using HMAC-SHA256. The Java SDK provides utility functions to verify these signatures.
+
+### Verifying Webhook Signatures
+
+When your application receives a webhook request from Schematic, you should verify its signature to ensure it's authentic:
+
+```java
+import com.schematic.webhook.WebhookVerifier;
+import com.schematic.webhook.WebhookSignatureException;
+import java.util.Map;
+import java.util.HashMap;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+// In your webhook endpoint handler:
+public void handleWebhook(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Read the request body
+    String body = request.getReader().lines().collect(Collectors.joining("\n"));
+
+    // Get the required headers
+    Map<String, String> headers = new HashMap<>();
+    headers.put(WebhookVerifier.WEBHOOK_SIGNATURE_HEADER,
+                request.getHeader(WebhookVerifier.WEBHOOK_SIGNATURE_HEADER));
+    headers.put(WebhookVerifier.WEBHOOK_TIMESTAMP_HEADER,
+                request.getHeader(WebhookVerifier.WEBHOOK_TIMESTAMP_HEADER));
+
+    String webhookSecret = "your-webhook-secret";
+
+    try {
+        // Verify the webhook signature
+        WebhookVerifier.verifyWebhookSignature(body, headers, webhookSecret);
+
+        // Process the webhook payload
+        // ...
+
+        response.setStatus(HttpServletResponse.SC_OK);
+    } catch (WebhookSignatureException e) {
+        // Handle signature verification failure
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Invalid signature: " + e.getMessage());
+    }
+}
+```
+
+### Verifying Signatures Manually
+
+If you need to verify a webhook signature outside of the context of a servlet request, you can use the `verifySignature` method:
+
+```java
+import com.schematic.webhook.WebhookVerifier;
+import com.schematic.webhook.WebhookSignatureException;
+
+public void verifyWebhookManually(String body, String signature, String timestamp, String secret) {
+    try {
+        WebhookVerifier.verifySignature(body, signature, timestamp, secret);
+        System.out.println("Signature verification successful!");
+    } catch (WebhookSignatureException e) {
+        System.out.println("Signature verification failed: " + e.getMessage());
+    }
+}
+```
+
 ## Configuration Options
 
 There are a number of configuration options that can be specified using the builder when instantiating the Schematic client.

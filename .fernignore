@@ -12,9 +12,11 @@ src/main/java/com/schematic/api/logger/SchematicLogger.java
 src/main/java/com/schematic/api/resources/accounts/AccountsClient.java
 src/main/java/com/schematic/api/resources/companies/CompaniesClient.java
 src/main/java/com/schematic/api/resources/entitlements/EntitlementsClient.java
+src/main/java/com/schematic/webhook/
 src/test/java/com/schematic/api/TestCache.java
 src/test/java/com/schematic/api/TestEventBuffer.java
 src/test/java/com/schematic/api/TestLogger.java
 src/test/java/com/schematic/api/TestOfflineMode.java
 src/test/java/com/schematic/api/TestReadme.java
 src/test/java/com/schematic/api/TestSchematic.java
+src/test/java/com/schematic/webhook/
