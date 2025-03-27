@@ -6,6 +6,7 @@ src/main/java/com/schematic/api/Schematic.java
 src/main/java/com/schematic/api/cache/CacheProvider.java
 src/main/java/com/schematic/api/cache/CachedItem.java
 src/main/java/com/schematic/api/cache/LocalCache.java
+src/main/java/com/schematic/api/core/NoOpHttpClient.java
 src/main/java/com/schematic/api/logger/ConsoleLogger.java
 src/main/java/com/schematic/api/logger/SchematicLogger.java
 src/main/java/com/schematic/api/resources/accounts/AccountsClient.java
@@ -14,5 +15,6 @@ src/main/java/com/schematic/api/resources/entitlements/EntitlementsClient.java
 src/test/java/com/schematic/api/TestCache.java
 src/test/java/com/schematic/api/TestEventBuffer.java
 src/test/java/com/schematic/api/TestLogger.java
+src/test/java/com/schematic/api/TestOfflineMode.java
 src/test/java/com/schematic/api/TestReadme.java
 src/test/java/com/schematic/api/TestSchematic.java
