@@ -7,7 +7,7 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.Environment;
 import okhttp3.OkHttpClient;
 
-public final class BaseSchematicBuilder {
+public final class AsyncBaseSchematicBuilder {
     private ClientOptions.Builder clientOptionsBuilder = ClientOptions.builder();
 
     private String apiKey = null;
@@ -17,17 +17,17 @@ public final class BaseSchematicBuilder {
     /**
      * Sets apiKey
      */
-    public BaseSchematicBuilder apiKey(String apiKey) {
+    public AsyncBaseSchematicBuilder apiKey(String apiKey) {
         this.apiKey = apiKey;
         return this;
     }
 
-    public BaseSchematicBuilder environment(Environment environment) {
+    public AsyncBaseSchematicBuilder environment(Environment environment) {
         this.environment = environment;
         return this;
     }
 
-    public BaseSchematicBuilder url(String url) {
+    public AsyncBaseSchematicBuilder url(String url) {
         this.environment = Environment.custom(url);
         return this;
     }
@@ -35,7 +35,7 @@ public final class BaseSchematicBuilder {
     /**
      * Sets the timeout (in seconds) for the client. Defaults to 60 seconds.
      */
-    public BaseSchematicBuilder timeout(int timeout) {
+    public AsyncBaseSchematicBuilder timeout(int timeout) {
         this.clientOptionsBuilder.timeout(timeout);
         return this;
     }
@@ -43,7 +43,7 @@ public final class BaseSchematicBuilder {
     /**
      * Sets the maximum number of retries for the client. Defaults to 2 retries.
      */
-    public BaseSchematicBuilder maxRetries(int maxRetries) {
+    public AsyncBaseSchematicBuilder maxRetries(int maxRetries) {
         this.clientOptionsBuilder.maxRetries(maxRetries);
         return this;
     }
@@ -51,17 +51,17 @@ public final class BaseSchematicBuilder {
     /**
      * Sets the underlying OkHttp client
      */
-    public BaseSchematicBuilder httpClient(OkHttpClient httpClient) {
+    public AsyncBaseSchematicBuilder httpClient(OkHttpClient httpClient) {
         this.clientOptionsBuilder.httpClient(httpClient);
         return this;
     }
 
-    public BaseSchematic build() {
+    public AsyncBaseSchematic build() {
         if (apiKey == null) {
             throw new RuntimeException("Please provide apiKey");
         }
         this.clientOptionsBuilder.addHeader("X-Schematic-Api-Key", this.apiKey);
         clientOptionsBuilder.environment(this.environment);
-        return new BaseSchematic(clientOptionsBuilder.build());
+        return new AsyncBaseSchematic(clientOptionsBuilder.build());
     }
 }
