@@ -4,7 +4,7 @@ package com.schematic.webhook;
  * Exception thrown when webhook signature verification fails.
  */
 public class WebhookSignatureException extends RuntimeException {
-    
+
     /**
      * Constructs a new WebhookSignatureException with the specified detail message.
      *
@@ -13,7 +13,7 @@ public class WebhookSignatureException extends RuntimeException {
     public WebhookSignatureException(String message) {
         super(message);
     }
-    
+
     /**
      * Constructs a new WebhookSignatureException with the specified detail message and cause.
      *

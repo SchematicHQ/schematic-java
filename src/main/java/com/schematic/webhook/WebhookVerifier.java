@@ -35,13 +35,13 @@ public class WebhookVerifier {
      * @param secret The webhook secret
      * @throws WebhookSignatureException if the signature is invalid
      */
-    public static void verifyWebhookSignature(String body, Map<String, String> headers, String secret) 
+    public static void verifyWebhookSignature(String body, Map<String, String> headers, String secret)
             throws WebhookSignatureException {
-        
+
         // Extract signature and timestamp headers
         String signature = headers.get(WEBHOOK_SIGNATURE_HEADER);
         String timestamp = headers.get(WEBHOOK_TIMESTAMP_HEADER);
-        
+
         // Verify signature
         verifySignature(body, signature, timestamp, secret);
     }
@@ -55,20 +55,20 @@ public class WebhookVerifier {
      * @param secret The webhook secret
      * @throws WebhookSignatureException if the signature is invalid
      */
-    public static void verifySignature(String body, String signature, String timestamp, String secret) 
+    public static void verifySignature(String body, String signature, String timestamp, String secret)
             throws WebhookSignatureException {
-        
+
         if (signature == null || signature.isEmpty()) {
             throw new WebhookSignatureException("Missing webhook signature");
         }
-        
+
         if (timestamp == null || timestamp.isEmpty()) {
             throw new WebhookSignatureException("Missing webhook timestamp");
         }
-        
+
         // Compute expected signature
         String expectedSignature = computeHexSignature(body, timestamp, secret);
-        
+
         // Compare signatures using constant-time comparison
         if (!constantTimeEquals(hexToBytes(expectedSignature), hexToBytes(signature))) {
             throw new WebhookSignatureException("Invalid signature");
@@ -84,9 +84,9 @@ public class WebhookVerifier {
      * @return The hex-encoded signature
      * @throws WebhookSignatureException if an error occurs during signature computation
      */
-    public static String computeHexSignature(String body, String timestamp, String secret) 
+    public static String computeHexSignature(String body, String timestamp, String secret)
             throws WebhookSignatureException {
-        
+
         byte[] signature = computeSignature(body, timestamp, secret);
         return bytesToHex(signature);
     }
@@ -100,22 +100,22 @@ public class WebhookVerifier {
      * @return The signature bytes
      * @throws WebhookSignatureException if an error occurs during signature computation
      */
-    public static byte[] computeSignature(String body, String timestamp, String secret) 
+    public static byte[] computeSignature(String body, String timestamp, String secret)
             throws WebhookSignatureException {
-        
+
         try {
             // Create message by concatenating body and timestamp
             String message = body + "+" + timestamp;
             byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
-            
+
             // Create HMAC-SHA256 instance
             SecretKeySpec keySpec = new SecretKeySpec(
-                    secret.getBytes(StandardCharsets.UTF_8), 
+                    secret.getBytes(StandardCharsets.UTF_8),
                     HMAC_SHA256
             );
             Mac mac = Mac.getInstance(HMAC_SHA256);
             mac.init(keySpec);
-            
+
             // Compute and return signature
             return mac.doFinal(messageBytes);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
@@ -169,7 +169,7 @@ public class WebhookVerifier {
         if (a.length != b.length) {
             return false;
         }
-        
+
         int result = 0;
         for (int i = 0; i < a.length; i++) {
             result |= a[i] ^ b[i];

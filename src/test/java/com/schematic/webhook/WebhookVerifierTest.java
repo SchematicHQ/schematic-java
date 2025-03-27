@@ -39,27 +39,27 @@ class WebhookVerifierTest {
     @Test
     void testVerifySignature_InvalidSignature() {
         // Invalid signature
-        assertThrows(WebhookSignatureException.class, () -> 
+        assertThrows(WebhookSignatureException.class, () ->
                 WebhookVerifier.verifySignature(PAYLOAD, "invalid", TIMESTAMP, WEBHOOK_SECRET));
     }
 
     @Test
     void testVerifySignature_MissingSignature() {
         // Missing signature
-        assertThrows(WebhookSignatureException.class, () -> 
+        assertThrows(WebhookSignatureException.class, () ->
                 WebhookVerifier.verifySignature(PAYLOAD, null, TIMESTAMP, WEBHOOK_SECRET));
-        
-        assertThrows(WebhookSignatureException.class, () -> 
+
+        assertThrows(WebhookSignatureException.class, () ->
                 WebhookVerifier.verifySignature(PAYLOAD, "", TIMESTAMP, WEBHOOK_SECRET));
     }
 
     @Test
     void testVerifySignature_MissingTimestamp() {
         // Missing timestamp
-        assertThrows(WebhookSignatureException.class, () -> 
+        assertThrows(WebhookSignatureException.class, () ->
                 WebhookVerifier.verifySignature(PAYLOAD, validSignature, null, WEBHOOK_SECRET));
-        
-        assertThrows(WebhookSignatureException.class, () -> 
+
+        assertThrows(WebhookSignatureException.class, () ->
                 WebhookVerifier.verifySignature(PAYLOAD, validSignature, "", WEBHOOK_SECRET));
     }
 
@@ -67,7 +67,7 @@ class WebhookVerifierTest {
     void testVerifySignature_TamperedPayload() {
         // Tampered payload
         String tamperedPayload = "{\"event\":\"tampered_event\"}";
-        assertThrows(WebhookSignatureException.class, () -> 
+        assertThrows(WebhookSignatureException.class, () ->
                 WebhookVerifier.verifySignature(tamperedPayload, validSignature, TIMESTAMP, WEBHOOK_SECRET));
     }
 
@@ -77,7 +77,7 @@ class WebhookVerifierTest {
         Map<String, String> headers = new HashMap<>();
         headers.put(WebhookVerifier.WEBHOOK_SIGNATURE_HEADER, validSignature);
         headers.put(WebhookVerifier.WEBHOOK_TIMESTAMP_HEADER, TIMESTAMP);
-        
+
         // Should not throw an exception
         WebhookVerifier.verifyWebhookSignature(PAYLOAD, headers, WEBHOOK_SECRET);
     }
@@ -88,9 +88,19 @@ class WebhookVerifierTest {
         Map<String, String> headers = new HashMap<>();
         headers.put(WebhookVerifier.WEBHOOK_SIGNATURE_HEADER, "invalid");
         headers.put(WebhookVerifier.WEBHOOK_TIMESTAMP_HEADER, TIMESTAMP);
-        
+
         // Should throw an exception
-        assertThrows(WebhookSignatureException.class, () -> 
+        assertThrows(WebhookSignatureException.class, () ->
                 WebhookVerifier.verifyWebhookSignature(PAYLOAD, headers, WEBHOOK_SECRET));
+    }
+
+    @Test
+    void testVerifySignature_WrongSecret() {
+        // Generate signature using correct secret but verify with wrong secret
+        String wrongSecret = "wrong_secret";
+
+        // Should throw an exception
+        assertThrows(WebhookSignatureException.class, () ->
+                WebhookVerifier.verifySignature(PAYLOAD, validSignature, TIMESTAMP, wrongSecret));
     }
 }
