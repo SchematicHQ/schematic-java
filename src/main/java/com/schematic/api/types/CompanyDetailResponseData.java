@@ -49,6 +49,8 @@ public final class CompanyDetailResponseData {
 
     private final String name;
 
+    private final List<PaymentMethodResponseData> paymentMethods;
+
     private final Optional<CompanyPlanWithBillingSubView> plan;
 
     private final List<GenericPreviewObject> plans;
@@ -74,6 +76,7 @@ public final class CompanyDetailResponseData {
             Optional<String> logoUrl,
             List<CompanyEventPeriodMetricsResponseData> metrics,
             String name,
+            List<PaymentMethodResponseData> paymentMethods,
             Optional<CompanyPlanWithBillingSubView> plan,
             List<GenericPreviewObject> plans,
             Optional<Map<String, JsonNode>> traits,
@@ -92,6 +95,7 @@ public final class CompanyDetailResponseData {
         this.logoUrl = logoUrl;
         this.metrics = metrics;
         this.name = name;
+        this.paymentMethods = paymentMethods;
         this.plan = plan;
         this.plans = plans;
         this.traits = traits;
@@ -160,6 +164,11 @@ public final class CompanyDetailResponseData {
         return name;
     }
 
+    @JsonProperty("payment_methods")
+    public List<PaymentMethodResponseData> getPaymentMethods() {
+        return paymentMethods;
+    }
+
     @JsonProperty("plan")
     public Optional<CompanyPlanWithBillingSubView> getPlan() {
         return plan;
@@ -212,6 +221,7 @@ public final class CompanyDetailResponseData {
                 && logoUrl.equals(other.logoUrl)
                 && metrics.equals(other.metrics)
                 && name.equals(other.name)
+                && paymentMethods.equals(other.paymentMethods)
                 && plan.equals(other.plan)
                 && plans.equals(other.plans)
                 && traits.equals(other.traits)
@@ -234,6 +244,7 @@ public final class CompanyDetailResponseData {
                 this.logoUrl,
                 this.metrics,
                 this.name,
+                this.paymentMethods,
                 this.plan,
                 this.plans,
                 this.traits,
@@ -321,6 +332,12 @@ public final class CompanyDetailResponseData {
 
         _FinalStage addAllMetrics(List<CompanyEventPeriodMetricsResponseData> metrics);
 
+        _FinalStage paymentMethods(List<PaymentMethodResponseData> paymentMethods);
+
+        _FinalStage addPaymentMethods(PaymentMethodResponseData paymentMethods);
+
+        _FinalStage addAllPaymentMethods(List<PaymentMethodResponseData> paymentMethods);
+
         _FinalStage plan(Optional<CompanyPlanWithBillingSubView> plan);
 
         _FinalStage plan(CompanyPlanWithBillingSubView plan);
@@ -363,6 +380,8 @@ public final class CompanyDetailResponseData {
 
         private Optional<CompanyPlanWithBillingSubView> plan = Optional.empty();
 
+        private List<PaymentMethodResponseData> paymentMethods = new ArrayList<>();
+
         private List<CompanyEventPeriodMetricsResponseData> metrics = new ArrayList<>();
 
         private Optional<String> logoUrl = Optional.empty();
@@ -398,6 +417,7 @@ public final class CompanyDetailResponseData {
             logoUrl(other.getLogoUrl());
             metrics(other.getMetrics());
             name(other.getName());
+            paymentMethods(other.getPaymentMethods());
             plan(other.getPlan());
             plans(other.getPlans());
             traits(other.getTraits());
@@ -495,6 +515,26 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "plan", nulls = Nulls.SKIP)
         public _FinalStage plan(Optional<CompanyPlanWithBillingSubView> plan) {
             this.plan = plan;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllPaymentMethods(List<PaymentMethodResponseData> paymentMethods) {
+            this.paymentMethods.addAll(paymentMethods);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addPaymentMethods(PaymentMethodResponseData paymentMethods) {
+            this.paymentMethods.add(paymentMethods);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "payment_methods", nulls = Nulls.SKIP)
+        public _FinalStage paymentMethods(List<PaymentMethodResponseData> paymentMethods) {
+            this.paymentMethods.clear();
+            this.paymentMethods.addAll(paymentMethods);
             return this;
         }
 
@@ -652,6 +692,7 @@ public final class CompanyDetailResponseData {
                     logoUrl,
                     metrics,
                     name,
+                    paymentMethods,
                     plan,
                     plans,
                     traits,

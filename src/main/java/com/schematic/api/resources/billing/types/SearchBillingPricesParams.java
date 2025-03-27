@@ -33,7 +33,7 @@ public final class SearchBillingPricesParams {
 
     private final Optional<String> q;
 
-    private final Optional<String> usageType;
+    private final Optional<SearchBillingPricesResponseParamsUsageType> usageType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -44,7 +44,7 @@ public final class SearchBillingPricesParams {
             Optional<Integer> offset,
             Optional<Integer> price,
             Optional<String> q,
-            Optional<String> usageType,
+            Optional<SearchBillingPricesResponseParamsUsageType> usageType,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
         this.interval = interval;
@@ -93,7 +93,7 @@ public final class SearchBillingPricesParams {
     }
 
     @JsonProperty("usage_type")
-    public Optional<String> getUsageType() {
+    public Optional<SearchBillingPricesResponseParamsUsageType> getUsageType() {
         return usageType;
     }
 
@@ -146,7 +146,7 @@ public final class SearchBillingPricesParams {
 
         private Optional<String> q = Optional.empty();
 
-        private Optional<String> usageType = Optional.empty();
+        private Optional<SearchBillingPricesResponseParamsUsageType> usageType = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -231,12 +231,12 @@ public final class SearchBillingPricesParams {
         }
 
         @JsonSetter(value = "usage_type", nulls = Nulls.SKIP)
-        public Builder usageType(Optional<String> usageType) {
+        public Builder usageType(Optional<SearchBillingPricesResponseParamsUsageType> usageType) {
             this.usageType = usageType;
             return this;
         }
 
-        public Builder usageType(String usageType) {
+        public Builder usageType(SearchBillingPricesResponseParamsUsageType usageType) {
             this.usageType = Optional.ofNullable(usageType);
             return this;
         }

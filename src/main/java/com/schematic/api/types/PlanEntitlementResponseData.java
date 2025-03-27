@@ -50,6 +50,8 @@ public final class PlanEntitlementResponseData {
 
     private final Optional<String> ruleIdUsageExceeded;
 
+    private final Optional<Integer> softLimit;
+
     private final OffsetDateTime updatedAt;
 
     private final Optional<Boolean> valueBool;
@@ -79,6 +81,7 @@ public final class PlanEntitlementResponseData {
             Optional<String> priceBehavior,
             String ruleId,
             Optional<String> ruleIdUsageExceeded,
+            Optional<Integer> softLimit,
             OffsetDateTime updatedAt,
             Optional<Boolean> valueBool,
             Optional<Integer> valueNumeric,
@@ -100,6 +103,7 @@ public final class PlanEntitlementResponseData {
         this.priceBehavior = priceBehavior;
         this.ruleId = ruleId;
         this.ruleIdUsageExceeded = ruleIdUsageExceeded;
+        this.softLimit = softLimit;
         this.updatedAt = updatedAt;
         this.valueBool = valueBool;
         this.valueNumeric = valueNumeric;
@@ -179,6 +183,11 @@ public final class PlanEntitlementResponseData {
         return ruleIdUsageExceeded;
     }
 
+    @JsonProperty("soft_limit")
+    public Optional<Integer> getSoftLimit() {
+        return softLimit;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -235,6 +244,7 @@ public final class PlanEntitlementResponseData {
                 && priceBehavior.equals(other.priceBehavior)
                 && ruleId.equals(other.ruleId)
                 && ruleIdUsageExceeded.equals(other.ruleIdUsageExceeded)
+                && softLimit.equals(other.softLimit)
                 && updatedAt.equals(other.updatedAt)
                 && valueBool.equals(other.valueBool)
                 && valueNumeric.equals(other.valueNumeric)
@@ -260,6 +270,7 @@ public final class PlanEntitlementResponseData {
                 this.priceBehavior,
                 this.ruleId,
                 this.ruleIdUsageExceeded,
+                this.softLimit,
                 this.updatedAt,
                 this.valueBool,
                 this.valueNumeric,
@@ -346,6 +357,10 @@ public final class PlanEntitlementResponseData {
 
         _FinalStage ruleIdUsageExceeded(String ruleIdUsageExceeded);
 
+        _FinalStage softLimit(Optional<Integer> softLimit);
+
+        _FinalStage softLimit(Integer softLimit);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -398,6 +413,8 @@ public final class PlanEntitlementResponseData {
 
         private Optional<Boolean> valueBool = Optional.empty();
 
+        private Optional<Integer> softLimit = Optional.empty();
+
         private Optional<String> ruleIdUsageExceeded = Optional.empty();
 
         private Optional<String> priceBehavior = Optional.empty();
@@ -435,6 +452,7 @@ public final class PlanEntitlementResponseData {
             priceBehavior(other.getPriceBehavior());
             ruleId(other.getRuleId());
             ruleIdUsageExceeded(other.getRuleIdUsageExceeded());
+            softLimit(other.getSoftLimit());
             updatedAt(other.getUpdatedAt());
             valueBool(other.getValueBool());
             valueNumeric(other.getValueNumeric());
@@ -549,6 +567,19 @@ public final class PlanEntitlementResponseData {
         @JsonSetter(value = "value_bool", nulls = Nulls.SKIP)
         public _FinalStage valueBool(Optional<Boolean> valueBool) {
             this.valueBool = valueBool;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage softLimit(Integer softLimit) {
+            this.softLimit = Optional.ofNullable(softLimit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
+        public _FinalStage softLimit(Optional<Integer> softLimit) {
+            this.softLimit = softLimit;
             return this;
         }
 
@@ -673,6 +704,7 @@ public final class PlanEntitlementResponseData {
                     priceBehavior,
                     ruleId,
                     ruleIdUsageExceeded,
+                    softLimit,
                     updatedAt,
                     valueBool,
                     valueNumeric,

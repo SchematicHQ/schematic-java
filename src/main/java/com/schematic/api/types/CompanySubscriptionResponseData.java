@@ -24,6 +24,10 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanySubscriptionResponseData.Builder.class)
 public final class CompanySubscriptionResponseData {
+    private final Optional<OffsetDateTime> cancelAt;
+
+    private final boolean cancelAtPeriodEnd;
+
     private final String currency;
 
     private final String customerExternalId;
@@ -51,6 +55,8 @@ public final class CompanySubscriptionResponseData {
     private final Map<String, Object> additionalProperties;
 
     private CompanySubscriptionResponseData(
+            Optional<OffsetDateTime> cancelAt,
+            boolean cancelAtPeriodEnd,
             String currency,
             String customerExternalId,
             List<BillingSubscriptionDiscountView> discounts,
@@ -64,6 +70,8 @@ public final class CompanySubscriptionResponseData {
             int totalPrice,
             Optional<OffsetDateTime> trialEnd,
             Map<String, Object> additionalProperties) {
+        this.cancelAt = cancelAt;
+        this.cancelAtPeriodEnd = cancelAtPeriodEnd;
         this.currency = currency;
         this.customerExternalId = customerExternalId;
         this.discounts = discounts;
@@ -77,6 +85,16 @@ public final class CompanySubscriptionResponseData {
         this.totalPrice = totalPrice;
         this.trialEnd = trialEnd;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("cancel_at")
+    public Optional<OffsetDateTime> getCancelAt() {
+        return cancelAt;
+    }
+
+    @JsonProperty("cancel_at_period_end")
+    public boolean getCancelAtPeriodEnd() {
+        return cancelAtPeriodEnd;
     }
 
     @JsonProperty("currency")
@@ -151,7 +169,9 @@ public final class CompanySubscriptionResponseData {
     }
 
     private boolean equalTo(CompanySubscriptionResponseData other) {
-        return currency.equals(other.currency)
+        return cancelAt.equals(other.cancelAt)
+                && cancelAtPeriodEnd == other.cancelAtPeriodEnd
+                && currency.equals(other.currency)
                 && customerExternalId.equals(other.customerExternalId)
                 && discounts.equals(other.discounts)
                 && expiredAt.equals(other.expiredAt)
@@ -168,6 +188,8 @@ public final class CompanySubscriptionResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cancelAt,
+                this.cancelAtPeriodEnd,
                 this.currency,
                 this.customerExternalId,
                 this.discounts,
@@ -187,14 +209,18 @@ public final class CompanySubscriptionResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static CurrencyStage builder() {
+    public static CancelAtPeriodEndStage builder() {
         return new Builder();
+    }
+
+    public interface CancelAtPeriodEndStage {
+        CurrencyStage cancelAtPeriodEnd(boolean cancelAtPeriodEnd);
+
+        Builder from(CompanySubscriptionResponseData other);
     }
 
     public interface CurrencyStage {
         CustomerExternalIdStage currency(@NotNull String currency);
-
-        Builder from(CompanySubscriptionResponseData other);
     }
 
     public interface CustomerExternalIdStage {
@@ -219,6 +245,10 @@ public final class CompanySubscriptionResponseData {
 
     public interface _FinalStage {
         CompanySubscriptionResponseData build();
+
+        _FinalStage cancelAt(Optional<OffsetDateTime> cancelAt);
+
+        _FinalStage cancelAt(OffsetDateTime cancelAt);
 
         _FinalStage discounts(List<BillingSubscriptionDiscountView> discounts);
 
@@ -251,13 +281,16 @@ public final class CompanySubscriptionResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CurrencyStage,
+            implements CancelAtPeriodEndStage,
+                    CurrencyStage,
                     CustomerExternalIdStage,
                     IntervalStage,
                     StatusStage,
                     SubscriptionExternalIdStage,
                     TotalPriceStage,
                     _FinalStage {
+        private boolean cancelAtPeriodEnd;
+
         private String currency;
 
         private String customerExternalId;
@@ -282,6 +315,8 @@ public final class CompanySubscriptionResponseData {
 
         private List<BillingSubscriptionDiscountView> discounts = new ArrayList<>();
 
+        private Optional<OffsetDateTime> cancelAt = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -289,6 +324,8 @@ public final class CompanySubscriptionResponseData {
 
         @java.lang.Override
         public Builder from(CompanySubscriptionResponseData other) {
+            cancelAt(other.getCancelAt());
+            cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
             currency(other.getCurrency());
             customerExternalId(other.getCustomerExternalId());
             discounts(other.getDiscounts());
@@ -301,6 +338,13 @@ public final class CompanySubscriptionResponseData {
             subscriptionExternalId(other.getSubscriptionExternalId());
             totalPrice(other.getTotalPrice());
             trialEnd(other.getTrialEnd());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("cancel_at_period_end")
+        public CurrencyStage cancelAtPeriodEnd(boolean cancelAtPeriodEnd) {
+            this.cancelAtPeriodEnd = cancelAtPeriodEnd;
             return this;
         }
 
@@ -440,8 +484,23 @@ public final class CompanySubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage cancelAt(OffsetDateTime cancelAt) {
+            this.cancelAt = Optional.ofNullable(cancelAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cancel_at", nulls = Nulls.SKIP)
+        public _FinalStage cancelAt(Optional<OffsetDateTime> cancelAt) {
+            this.cancelAt = cancelAt;
+            return this;
+        }
+
+        @java.lang.Override
         public CompanySubscriptionResponseData build() {
             return new CompanySubscriptionResponseData(
+                    cancelAt,
+                    cancelAtPeriodEnd,
                     currency,
                     customerExternalId,
                     discounts,

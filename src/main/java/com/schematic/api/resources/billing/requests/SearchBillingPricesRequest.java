@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.resources.billing.types.SearchBillingPricesRequestUsageType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -26,7 +27,7 @@ public final class SearchBillingPricesRequest {
 
     private final Optional<String> interval;
 
-    private final Optional<String> usageType;
+    private final Optional<SearchBillingPricesRequestUsageType> usageType;
 
     private final Optional<Integer> price;
 
@@ -40,7 +41,7 @@ public final class SearchBillingPricesRequest {
             Optional<String> ids,
             Optional<String> q,
             Optional<String> interval,
-            Optional<String> usageType,
+            Optional<SearchBillingPricesRequestUsageType> usageType,
             Optional<Integer> price,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -71,7 +72,7 @@ public final class SearchBillingPricesRequest {
     }
 
     @JsonProperty("usage_type")
-    public Optional<String> getUsageType() {
+    public Optional<SearchBillingPricesRequestUsageType> getUsageType() {
         return usageType;
     }
 
@@ -139,7 +140,7 @@ public final class SearchBillingPricesRequest {
 
         private Optional<String> interval = Optional.empty();
 
-        private Optional<String> usageType = Optional.empty();
+        private Optional<SearchBillingPricesRequestUsageType> usageType = Optional.empty();
 
         private Optional<Integer> price = Optional.empty();
 
@@ -197,12 +198,12 @@ public final class SearchBillingPricesRequest {
         }
 
         @JsonSetter(value = "usage_type", nulls = Nulls.SKIP)
-        public Builder usageType(Optional<String> usageType) {
+        public Builder usageType(Optional<SearchBillingPricesRequestUsageType> usageType) {
             this.usageType = usageType;
             return this;
         }
 
-        public Builder usageType(String usageType) {
+        public Builder usageType(SearchBillingPricesRequestUsageType usageType) {
             this.usageType = Optional.ofNullable(usageType);
             return this;
         }

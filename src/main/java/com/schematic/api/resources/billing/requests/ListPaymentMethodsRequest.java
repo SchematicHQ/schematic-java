@@ -25,8 +25,6 @@ public final class ListPaymentMethodsRequest {
 
     private final String customerExternalId;
 
-    private final Optional<String> subscriptionExternalId;
-
     private final Optional<Integer> limit;
 
     private final Optional<Integer> offset;
@@ -36,13 +34,11 @@ public final class ListPaymentMethodsRequest {
     private ListPaymentMethodsRequest(
             Optional<String> companyId,
             String customerExternalId,
-            Optional<String> subscriptionExternalId,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.customerExternalId = customerExternalId;
-        this.subscriptionExternalId = subscriptionExternalId;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
@@ -56,11 +52,6 @@ public final class ListPaymentMethodsRequest {
     @JsonProperty("customer_external_id")
     public String getCustomerExternalId() {
         return customerExternalId;
-    }
-
-    @JsonProperty("subscription_external_id")
-    public Optional<String> getSubscriptionExternalId() {
-        return subscriptionExternalId;
     }
 
     /**
@@ -93,15 +84,13 @@ public final class ListPaymentMethodsRequest {
     private boolean equalTo(ListPaymentMethodsRequest other) {
         return companyId.equals(other.companyId)
                 && customerExternalId.equals(other.customerExternalId)
-                && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.companyId, this.customerExternalId, this.subscriptionExternalId, this.limit, this.offset);
+        return Objects.hash(this.companyId, this.customerExternalId, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -126,10 +115,6 @@ public final class ListPaymentMethodsRequest {
 
         _FinalStage companyId(String companyId);
 
-        _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId);
-
-        _FinalStage subscriptionExternalId(String subscriptionExternalId);
-
         _FinalStage limit(Optional<Integer> limit);
 
         _FinalStage limit(Integer limit);
@@ -147,8 +132,6 @@ public final class ListPaymentMethodsRequest {
 
         private Optional<Integer> limit = Optional.empty();
 
-        private Optional<String> subscriptionExternalId = Optional.empty();
-
         private Optional<String> companyId = Optional.empty();
 
         @JsonAnySetter
@@ -160,7 +143,6 @@ public final class ListPaymentMethodsRequest {
         public Builder from(ListPaymentMethodsRequest other) {
             companyId(other.getCompanyId());
             customerExternalId(other.getCustomerExternalId());
-            subscriptionExternalId(other.getSubscriptionExternalId());
             limit(other.getLimit());
             offset(other.getOffset());
             return this;
@@ -208,19 +190,6 @@ public final class ListPaymentMethodsRequest {
         }
 
         @java.lang.Override
-        public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "subscription_external_id", nulls = Nulls.SKIP)
-        public _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId) {
-            this.subscriptionExternalId = subscriptionExternalId;
-            return this;
-        }
-
-        @java.lang.Override
         public _FinalStage companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
             return this;
@@ -235,8 +204,7 @@ public final class ListPaymentMethodsRequest {
 
         @java.lang.Override
         public ListPaymentMethodsRequest build() {
-            return new ListPaymentMethodsRequest(
-                    companyId, customerExternalId, subscriptionExternalId, limit, offset, additionalProperties);
+            return new ListPaymentMethodsRequest(companyId, customerExternalId, limit, offset, additionalProperties);
         }
     }
 }

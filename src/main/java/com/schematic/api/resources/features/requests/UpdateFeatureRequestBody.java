@@ -38,6 +38,10 @@ public final class UpdateFeatureRequestBody {
 
     private final Optional<String> name;
 
+    private final Optional<String> pluralName;
+
+    private final Optional<String> singularName;
+
     private final Optional<String> traitId;
 
     private final Map<String, Object> additionalProperties;
@@ -51,6 +55,8 @@ public final class UpdateFeatureRequestBody {
             Optional<String> lifecyclePhase,
             Optional<String> maintainerId,
             Optional<String> name,
+            Optional<String> pluralName,
+            Optional<String> singularName,
             Optional<String> traitId,
             Map<String, Object> additionalProperties) {
         this.description = description;
@@ -61,6 +67,8 @@ public final class UpdateFeatureRequestBody {
         this.lifecyclePhase = lifecyclePhase;
         this.maintainerId = maintainerId;
         this.name = name;
+        this.pluralName = pluralName;
+        this.singularName = singularName;
         this.traitId = traitId;
         this.additionalProperties = additionalProperties;
     }
@@ -105,6 +113,16 @@ public final class UpdateFeatureRequestBody {
         return name;
     }
 
+    @JsonProperty("plural_name")
+    public Optional<String> getPluralName() {
+        return pluralName;
+    }
+
+    @JsonProperty("singular_name")
+    public Optional<String> getSingularName() {
+        return singularName;
+    }
+
     @JsonProperty("trait_id")
     public Optional<String> getTraitId() {
         return traitId;
@@ -130,6 +148,8 @@ public final class UpdateFeatureRequestBody {
                 && lifecyclePhase.equals(other.lifecyclePhase)
                 && maintainerId.equals(other.maintainerId)
                 && name.equals(other.name)
+                && pluralName.equals(other.pluralName)
+                && singularName.equals(other.singularName)
                 && traitId.equals(other.traitId);
     }
 
@@ -144,6 +164,8 @@ public final class UpdateFeatureRequestBody {
                 this.lifecyclePhase,
                 this.maintainerId,
                 this.name,
+                this.pluralName,
+                this.singularName,
                 this.traitId);
     }
 
@@ -174,6 +196,10 @@ public final class UpdateFeatureRequestBody {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<String> pluralName = Optional.empty();
+
+        private Optional<String> singularName = Optional.empty();
+
         private Optional<String> traitId = Optional.empty();
 
         @JsonAnySetter
@@ -190,6 +216,8 @@ public final class UpdateFeatureRequestBody {
             lifecyclePhase(other.getLifecyclePhase());
             maintainerId(other.getMaintainerId());
             name(other.getName());
+            pluralName(other.getPluralName());
+            singularName(other.getSingularName());
             traitId(other.getTraitId());
             return this;
         }
@@ -282,6 +310,28 @@ public final class UpdateFeatureRequestBody {
             return this;
         }
 
+        @JsonSetter(value = "plural_name", nulls = Nulls.SKIP)
+        public Builder pluralName(Optional<String> pluralName) {
+            this.pluralName = pluralName;
+            return this;
+        }
+
+        public Builder pluralName(String pluralName) {
+            this.pluralName = Optional.ofNullable(pluralName);
+            return this;
+        }
+
+        @JsonSetter(value = "singular_name", nulls = Nulls.SKIP)
+        public Builder singularName(Optional<String> singularName) {
+            this.singularName = singularName;
+            return this;
+        }
+
+        public Builder singularName(String singularName) {
+            this.singularName = Optional.ofNullable(singularName);
+            return this;
+        }
+
         @JsonSetter(value = "trait_id", nulls = Nulls.SKIP)
         public Builder traitId(Optional<String> traitId) {
             this.traitId = traitId;
@@ -303,6 +353,8 @@ public final class UpdateFeatureRequestBody {
                     lifecyclePhase,
                     maintainerId,
                     name,
+                    pluralName,
+                    singularName,
                     traitId,
                     additionalProperties);
         }

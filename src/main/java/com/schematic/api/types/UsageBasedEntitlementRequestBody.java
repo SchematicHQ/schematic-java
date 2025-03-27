@@ -24,6 +24,8 @@ public final class UsageBasedEntitlementRequestBody {
 
     private final Optional<String> priceBehavior;
 
+    private final Optional<Integer> softLimit;
+
     private final Optional<String> yearlyMeteredPriceId;
 
     private final Map<String, Object> additionalProperties;
@@ -31,10 +33,12 @@ public final class UsageBasedEntitlementRequestBody {
     private UsageBasedEntitlementRequestBody(
             Optional<String> monthlyMeteredPriceId,
             Optional<String> priceBehavior,
+            Optional<Integer> softLimit,
             Optional<String> yearlyMeteredPriceId,
             Map<String, Object> additionalProperties) {
         this.monthlyMeteredPriceId = monthlyMeteredPriceId;
         this.priceBehavior = priceBehavior;
+        this.softLimit = softLimit;
         this.yearlyMeteredPriceId = yearlyMeteredPriceId;
         this.additionalProperties = additionalProperties;
     }
@@ -47,6 +51,11 @@ public final class UsageBasedEntitlementRequestBody {
     @JsonProperty("price_behavior")
     public Optional<String> getPriceBehavior() {
         return priceBehavior;
+    }
+
+    @JsonProperty("soft_limit")
+    public Optional<Integer> getSoftLimit() {
+        return softLimit;
     }
 
     @JsonProperty("yearly_metered_price_id")
@@ -68,12 +77,13 @@ public final class UsageBasedEntitlementRequestBody {
     private boolean equalTo(UsageBasedEntitlementRequestBody other) {
         return monthlyMeteredPriceId.equals(other.monthlyMeteredPriceId)
                 && priceBehavior.equals(other.priceBehavior)
+                && softLimit.equals(other.softLimit)
                 && yearlyMeteredPriceId.equals(other.yearlyMeteredPriceId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.monthlyMeteredPriceId, this.priceBehavior, this.yearlyMeteredPriceId);
+        return Objects.hash(this.monthlyMeteredPriceId, this.priceBehavior, this.softLimit, this.yearlyMeteredPriceId);
     }
 
     @java.lang.Override
@@ -91,6 +101,8 @@ public final class UsageBasedEntitlementRequestBody {
 
         private Optional<String> priceBehavior = Optional.empty();
 
+        private Optional<Integer> softLimit = Optional.empty();
+
         private Optional<String> yearlyMeteredPriceId = Optional.empty();
 
         @JsonAnySetter
@@ -101,6 +113,7 @@ public final class UsageBasedEntitlementRequestBody {
         public Builder from(UsageBasedEntitlementRequestBody other) {
             monthlyMeteredPriceId(other.getMonthlyMeteredPriceId());
             priceBehavior(other.getPriceBehavior());
+            softLimit(other.getSoftLimit());
             yearlyMeteredPriceId(other.getYearlyMeteredPriceId());
             return this;
         }
@@ -127,6 +140,17 @@ public final class UsageBasedEntitlementRequestBody {
             return this;
         }
 
+        @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
+        public Builder softLimit(Optional<Integer> softLimit) {
+            this.softLimit = softLimit;
+            return this;
+        }
+
+        public Builder softLimit(Integer softLimit) {
+            this.softLimit = Optional.ofNullable(softLimit);
+            return this;
+        }
+
         @JsonSetter(value = "yearly_metered_price_id", nulls = Nulls.SKIP)
         public Builder yearlyMeteredPriceId(Optional<String> yearlyMeteredPriceId) {
             this.yearlyMeteredPriceId = yearlyMeteredPriceId;
@@ -140,7 +164,7 @@ public final class UsageBasedEntitlementRequestBody {
 
         public UsageBasedEntitlementRequestBody build() {
             return new UsageBasedEntitlementRequestBody(
-                    monthlyMeteredPriceId, priceBehavior, yearlyMeteredPriceId, additionalProperties);
+                    monthlyMeteredPriceId, priceBehavior, softLimit, yearlyMeteredPriceId, additionalProperties);
         }
     }
 }

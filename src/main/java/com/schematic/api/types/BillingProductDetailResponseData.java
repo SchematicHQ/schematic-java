@@ -43,6 +43,8 @@ public final class BillingProductDetailResponseData {
 
     private final double quantity;
 
+    private final int subscriptionCount;
+
     private final OffsetDateTime updatedAt;
 
     private final Map<String, Object> additionalProperties;
@@ -58,6 +60,7 @@ public final class BillingProductDetailResponseData {
             List<BillingPriceResponseData> prices,
             String productId,
             double quantity,
+            int subscriptionCount,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
@@ -70,6 +73,7 @@ public final class BillingProductDetailResponseData {
         this.prices = prices;
         this.productId = productId;
         this.quantity = quantity;
+        this.subscriptionCount = subscriptionCount;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -124,6 +128,11 @@ public final class BillingProductDetailResponseData {
         return quantity;
     }
 
+    @JsonProperty("subscription_count")
+    public int getSubscriptionCount() {
+        return subscriptionCount;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -151,6 +160,7 @@ public final class BillingProductDetailResponseData {
                 && prices.equals(other.prices)
                 && productId.equals(other.productId)
                 && quantity == other.quantity
+                && subscriptionCount == other.subscriptionCount
                 && updatedAt.equals(other.updatedAt);
     }
 
@@ -167,6 +177,7 @@ public final class BillingProductDetailResponseData {
                 this.prices,
                 this.productId,
                 this.quantity,
+                this.subscriptionCount,
                 this.updatedAt);
     }
 
@@ -214,7 +225,11 @@ public final class BillingProductDetailResponseData {
     }
 
     public interface QuantityStage {
-        UpdatedAtStage quantity(double quantity);
+        SubscriptionCountStage quantity(double quantity);
+    }
+
+    public interface SubscriptionCountStage {
+        UpdatedAtStage subscriptionCount(int subscriptionCount);
     }
 
     public interface UpdatedAtStage {
@@ -242,6 +257,7 @@ public final class BillingProductDetailResponseData {
                     PriceStage,
                     ProductIdStage,
                     QuantityStage,
+                    SubscriptionCountStage,
                     UpdatedAtStage,
                     _FinalStage {
         private String accountId;
@@ -261,6 +277,8 @@ public final class BillingProductDetailResponseData {
         private String productId;
 
         private double quantity;
+
+        private int subscriptionCount;
 
         private OffsetDateTime updatedAt;
 
@@ -283,6 +301,7 @@ public final class BillingProductDetailResponseData {
             prices(other.getPrices());
             productId(other.getProductId());
             quantity(other.getQuantity());
+            subscriptionCount(other.getSubscriptionCount());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -345,8 +364,15 @@ public final class BillingProductDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public UpdatedAtStage quantity(double quantity) {
+        public SubscriptionCountStage quantity(double quantity) {
             this.quantity = quantity;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("subscription_count")
+        public UpdatedAtStage subscriptionCount(int subscriptionCount) {
+            this.subscriptionCount = subscriptionCount;
             return this;
         }
 
@@ -390,6 +416,7 @@ public final class BillingProductDetailResponseData {
                     prices,
                     productId,
                     quantity,
+                    subscriptionCount,
                     updatedAt,
                     additionalProperties);
         }

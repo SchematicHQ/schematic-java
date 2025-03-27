@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingProductRequestBody.Builder.class)
 public final class CreateBillingProductRequestBody {
+    private final boolean active;
+
     private final String currency;
 
     private final String externalId;
@@ -32,18 +34,25 @@ public final class CreateBillingProductRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingProductRequestBody(
+            boolean active,
             String currency,
             String externalId,
             String name,
             double price,
             int quantity,
             Map<String, Object> additionalProperties) {
+        this.active = active;
         this.currency = currency;
         this.externalId = externalId;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("active")
+    public boolean getActive() {
+        return active;
     }
 
     @JsonProperty("currency")
@@ -83,7 +92,8 @@ public final class CreateBillingProductRequestBody {
     }
 
     private boolean equalTo(CreateBillingProductRequestBody other) {
-        return currency.equals(other.currency)
+        return active == other.active
+                && currency.equals(other.currency)
                 && externalId.equals(other.externalId)
                 && name.equals(other.name)
                 && price == other.price
@@ -92,7 +102,7 @@ public final class CreateBillingProductRequestBody {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.currency, this.externalId, this.name, this.price, this.quantity);
+        return Objects.hash(this.active, this.currency, this.externalId, this.name, this.price, this.quantity);
     }
 
     @java.lang.Override
@@ -100,14 +110,18 @@ public final class CreateBillingProductRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static CurrencyStage builder() {
+    public static ActiveStage builder() {
         return new Builder();
+    }
+
+    public interface ActiveStage {
+        CurrencyStage active(boolean active);
+
+        Builder from(CreateBillingProductRequestBody other);
     }
 
     public interface CurrencyStage {
         ExternalIdStage currency(@NotNull String currency);
-
-        Builder from(CreateBillingProductRequestBody other);
     }
 
     public interface ExternalIdStage {
@@ -132,7 +146,9 @@ public final class CreateBillingProductRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CurrencyStage, ExternalIdStage, NameStage, PriceStage, QuantityStage, _FinalStage {
+            implements ActiveStage, CurrencyStage, ExternalIdStage, NameStage, PriceStage, QuantityStage, _FinalStage {
+        private boolean active;
+
         private String currency;
 
         private String externalId;
@@ -150,11 +166,19 @@ public final class CreateBillingProductRequestBody {
 
         @java.lang.Override
         public Builder from(CreateBillingProductRequestBody other) {
+            active(other.getActive());
             currency(other.getCurrency());
             externalId(other.getExternalId());
             name(other.getName());
             price(other.getPrice());
             quantity(other.getQuantity());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("active")
+        public CurrencyStage active(boolean active) {
+            this.active = active;
             return this;
         }
 
@@ -196,7 +220,7 @@ public final class CreateBillingProductRequestBody {
         @java.lang.Override
         public CreateBillingProductRequestBody build() {
             return new CreateBillingProductRequestBody(
-                    currency, externalId, name, price, quantity, additionalProperties);
+                    active, currency, externalId, name, price, quantity, additionalProperties);
         }
     }
 }

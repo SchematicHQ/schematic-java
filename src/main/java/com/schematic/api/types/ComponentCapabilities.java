@@ -18,13 +18,21 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ComponentCapabilities.Builder.class)
 public final class ComponentCapabilities {
+    private final boolean badgeVisibility;
+
     private final boolean checkout;
 
     private final Map<String, Object> additionalProperties;
 
-    private ComponentCapabilities(boolean checkout, Map<String, Object> additionalProperties) {
+    private ComponentCapabilities(boolean badgeVisibility, boolean checkout, Map<String, Object> additionalProperties) {
+        this.badgeVisibility = badgeVisibility;
         this.checkout = checkout;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("badge_visibility")
+    public boolean getBadgeVisibility() {
+        return badgeVisibility;
     }
 
     @JsonProperty("checkout")
@@ -44,12 +52,12 @@ public final class ComponentCapabilities {
     }
 
     private boolean equalTo(ComponentCapabilities other) {
-        return checkout == other.checkout;
+        return badgeVisibility == other.badgeVisibility && checkout == other.checkout;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.checkout);
+        return Objects.hash(this.badgeVisibility, this.checkout);
     }
 
     @java.lang.Override
@@ -57,14 +65,18 @@ public final class ComponentCapabilities {
         return ObjectMappers.stringify(this);
     }
 
-    public static CheckoutStage builder() {
+    public static BadgeVisibilityStage builder() {
         return new Builder();
+    }
+
+    public interface BadgeVisibilityStage {
+        CheckoutStage badgeVisibility(boolean badgeVisibility);
+
+        Builder from(ComponentCapabilities other);
     }
 
     public interface CheckoutStage {
         _FinalStage checkout(boolean checkout);
-
-        Builder from(ComponentCapabilities other);
     }
 
     public interface _FinalStage {
@@ -72,7 +84,9 @@ public final class ComponentCapabilities {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CheckoutStage, _FinalStage {
+    public static final class Builder implements BadgeVisibilityStage, CheckoutStage, _FinalStage {
+        private boolean badgeVisibility;
+
         private boolean checkout;
 
         @JsonAnySetter
@@ -82,7 +96,15 @@ public final class ComponentCapabilities {
 
         @java.lang.Override
         public Builder from(ComponentCapabilities other) {
+            badgeVisibility(other.getBadgeVisibility());
             checkout(other.getCheckout());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("badge_visibility")
+        public CheckoutStage badgeVisibility(boolean badgeVisibility) {
+            this.badgeVisibility = badgeVisibility;
             return this;
         }
 
@@ -95,7 +117,7 @@ public final class ComponentCapabilities {
 
         @java.lang.Override
         public ComponentCapabilities build() {
-            return new ComponentCapabilities(checkout, additionalProperties);
+            return new ComponentCapabilities(badgeVisibility, checkout, additionalProperties);
         }
     }
 }

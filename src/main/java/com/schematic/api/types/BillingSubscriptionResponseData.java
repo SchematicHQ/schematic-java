@@ -23,6 +23,10 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingSubscriptionResponseData.Builder.class)
 public final class BillingSubscriptionResponseData {
+    private final Optional<Integer> cancelAt;
+
+    private final boolean cancelAtPeriodEnd;
+
     private final Optional<String> companyId;
 
     private final OffsetDateTime createdAt;
@@ -30,6 +34,8 @@ public final class BillingSubscriptionResponseData {
     private final String currency;
 
     private final String customerExternalId;
+
+    private final Optional<String> defaultPaymentMethodId;
 
     private final Optional<OffsetDateTime> expiredAt;
 
@@ -56,10 +62,13 @@ public final class BillingSubscriptionResponseData {
     private final Map<String, Object> additionalProperties;
 
     private BillingSubscriptionResponseData(
+            Optional<Integer> cancelAt,
+            boolean cancelAtPeriodEnd,
             Optional<String> companyId,
             OffsetDateTime createdAt,
             String currency,
             String customerExternalId,
+            Optional<String> defaultPaymentMethodId,
             Optional<OffsetDateTime> expiredAt,
             String id,
             String interval,
@@ -72,10 +81,13 @@ public final class BillingSubscriptionResponseData {
             Optional<Integer> trialEnd,
             Optional<String> trialEndSetting,
             Map<String, Object> additionalProperties) {
+        this.cancelAt = cancelAt;
+        this.cancelAtPeriodEnd = cancelAtPeriodEnd;
         this.companyId = companyId;
         this.createdAt = createdAt;
         this.currency = currency;
         this.customerExternalId = customerExternalId;
+        this.defaultPaymentMethodId = defaultPaymentMethodId;
         this.expiredAt = expiredAt;
         this.id = id;
         this.interval = interval;
@@ -88,6 +100,16 @@ public final class BillingSubscriptionResponseData {
         this.trialEnd = trialEnd;
         this.trialEndSetting = trialEndSetting;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("cancel_at")
+    public Optional<Integer> getCancelAt() {
+        return cancelAt;
+    }
+
+    @JsonProperty("cancel_at_period_end")
+    public boolean getCancelAtPeriodEnd() {
+        return cancelAtPeriodEnd;
     }
 
     @JsonProperty("company_id")
@@ -108,6 +130,11 @@ public final class BillingSubscriptionResponseData {
     @JsonProperty("customer_external_id")
     public String getCustomerExternalId() {
         return customerExternalId;
+    }
+
+    @JsonProperty("default_payment_method_id")
+    public Optional<String> getDefaultPaymentMethodId() {
+        return defaultPaymentMethodId;
     }
 
     @JsonProperty("expired_at")
@@ -177,10 +204,13 @@ public final class BillingSubscriptionResponseData {
     }
 
     private boolean equalTo(BillingSubscriptionResponseData other) {
-        return companyId.equals(other.companyId)
+        return cancelAt.equals(other.cancelAt)
+                && cancelAtPeriodEnd == other.cancelAtPeriodEnd
+                && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
                 && currency.equals(other.currency)
                 && customerExternalId.equals(other.customerExternalId)
+                && defaultPaymentMethodId.equals(other.defaultPaymentMethodId)
                 && expiredAt.equals(other.expiredAt)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
@@ -197,10 +227,13 @@ public final class BillingSubscriptionResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cancelAt,
+                this.cancelAtPeriodEnd,
                 this.companyId,
                 this.createdAt,
                 this.currency,
                 this.customerExternalId,
+                this.defaultPaymentMethodId,
                 this.expiredAt,
                 this.id,
                 this.interval,
@@ -219,14 +252,18 @@ public final class BillingSubscriptionResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static CreatedAtStage builder() {
+    public static CancelAtPeriodEndStage builder() {
         return new Builder();
+    }
+
+    public interface CancelAtPeriodEndStage {
+        CreatedAtStage cancelAtPeriodEnd(boolean cancelAtPeriodEnd);
+
+        Builder from(BillingSubscriptionResponseData other);
     }
 
     public interface CreatedAtStage {
         CurrencyStage createdAt(@NotNull OffsetDateTime createdAt);
-
-        Builder from(BillingSubscriptionResponseData other);
     }
 
     public interface CurrencyStage {
@@ -268,9 +305,17 @@ public final class BillingSubscriptionResponseData {
     public interface _FinalStage {
         BillingSubscriptionResponseData build();
 
+        _FinalStage cancelAt(Optional<Integer> cancelAt);
+
+        _FinalStage cancelAt(Integer cancelAt);
+
         _FinalStage companyId(Optional<String> companyId);
 
         _FinalStage companyId(String companyId);
+
+        _FinalStage defaultPaymentMethodId(Optional<String> defaultPaymentMethodId);
+
+        _FinalStage defaultPaymentMethodId(String defaultPaymentMethodId);
 
         _FinalStage expiredAt(Optional<OffsetDateTime> expiredAt);
 
@@ -291,7 +336,8 @@ public final class BillingSubscriptionResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CreatedAtStage,
+            implements CancelAtPeriodEndStage,
+                    CreatedAtStage,
                     CurrencyStage,
                     CustomerExternalIdStage,
                     IdStage,
@@ -302,6 +348,8 @@ public final class BillingSubscriptionResponseData {
                     SubscriptionExternalIdStage,
                     TotalPriceStage,
                     _FinalStage {
+        private boolean cancelAtPeriodEnd;
+
         private OffsetDateTime createdAt;
 
         private String currency;
@@ -330,7 +378,11 @@ public final class BillingSubscriptionResponseData {
 
         private Optional<OffsetDateTime> expiredAt = Optional.empty();
 
+        private Optional<String> defaultPaymentMethodId = Optional.empty();
+
         private Optional<String> companyId = Optional.empty();
+
+        private Optional<Integer> cancelAt = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -339,10 +391,13 @@ public final class BillingSubscriptionResponseData {
 
         @java.lang.Override
         public Builder from(BillingSubscriptionResponseData other) {
+            cancelAt(other.getCancelAt());
+            cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
             companyId(other.getCompanyId());
             createdAt(other.getCreatedAt());
             currency(other.getCurrency());
             customerExternalId(other.getCustomerExternalId());
+            defaultPaymentMethodId(other.getDefaultPaymentMethodId());
             expiredAt(other.getExpiredAt());
             id(other.getId());
             interval(other.getInterval());
@@ -354,6 +409,13 @@ public final class BillingSubscriptionResponseData {
             totalPrice(other.getTotalPrice());
             trialEnd(other.getTrialEnd());
             trialEndSetting(other.getTrialEndSetting());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("cancel_at_period_end")
+        public CreatedAtStage cancelAtPeriodEnd(boolean cancelAtPeriodEnd) {
+            this.cancelAtPeriodEnd = cancelAtPeriodEnd;
             return this;
         }
 
@@ -481,6 +543,19 @@ public final class BillingSubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage defaultPaymentMethodId(String defaultPaymentMethodId) {
+            this.defaultPaymentMethodId = Optional.ofNullable(defaultPaymentMethodId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "default_payment_method_id", nulls = Nulls.SKIP)
+        public _FinalStage defaultPaymentMethodId(Optional<String> defaultPaymentMethodId) {
+            this.defaultPaymentMethodId = defaultPaymentMethodId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
             return this;
@@ -494,12 +569,28 @@ public final class BillingSubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage cancelAt(Integer cancelAt) {
+            this.cancelAt = Optional.ofNullable(cancelAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cancel_at", nulls = Nulls.SKIP)
+        public _FinalStage cancelAt(Optional<Integer> cancelAt) {
+            this.cancelAt = cancelAt;
+            return this;
+        }
+
+        @java.lang.Override
         public BillingSubscriptionResponseData build() {
             return new BillingSubscriptionResponseData(
+                    cancelAt,
+                    cancelAtPeriodEnd,
                     companyId,
                     createdAt,
                     currency,
                     customerExternalId,
+                    defaultPaymentMethodId,
                     expiredAt,
                     id,
                     interval,
