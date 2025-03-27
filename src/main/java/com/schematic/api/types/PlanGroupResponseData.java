@@ -29,7 +29,7 @@ public final class PlanGroupResponseData {
 
     private final String id;
 
-    private final List<String> planIds;
+    private final List<OrderedPlansInGroup> planIds;
 
     private final Optional<Integer> trialDays;
 
@@ -41,7 +41,7 @@ public final class PlanGroupResponseData {
             List<String> addOnIds,
             Optional<String> defaultPlanId,
             String id,
-            List<String> planIds,
+            List<OrderedPlansInGroup> planIds,
             Optional<Integer> trialDays,
             Optional<Boolean> trialPaymentMethodRequired,
             Map<String, Object> additionalProperties) {
@@ -70,7 +70,7 @@ public final class PlanGroupResponseData {
     }
 
     @JsonProperty("plan_ids")
-    public List<String> getPlanIds() {
+    public List<OrderedPlansInGroup> getPlanIds() {
         return planIds;
     }
 
@@ -143,11 +143,11 @@ public final class PlanGroupResponseData {
 
         _FinalStage defaultPlanId(String defaultPlanId);
 
-        _FinalStage planIds(List<String> planIds);
+        _FinalStage planIds(List<OrderedPlansInGroup> planIds);
 
-        _FinalStage addPlanIds(String planIds);
+        _FinalStage addPlanIds(OrderedPlansInGroup planIds);
 
-        _FinalStage addAllPlanIds(List<String> planIds);
+        _FinalStage addAllPlanIds(List<OrderedPlansInGroup> planIds);
 
         _FinalStage trialDays(Optional<Integer> trialDays);
 
@@ -166,7 +166,7 @@ public final class PlanGroupResponseData {
 
         private Optional<Integer> trialDays = Optional.empty();
 
-        private List<String> planIds = new ArrayList<>();
+        private List<OrderedPlansInGroup> planIds = new ArrayList<>();
 
         private Optional<String> defaultPlanId = Optional.empty();
 
@@ -222,20 +222,20 @@ public final class PlanGroupResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage addAllPlanIds(List<String> planIds) {
+        public _FinalStage addAllPlanIds(List<OrderedPlansInGroup> planIds) {
             this.planIds.addAll(planIds);
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage addPlanIds(String planIds) {
+        public _FinalStage addPlanIds(OrderedPlansInGroup planIds) {
             this.planIds.add(planIds);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
-        public _FinalStage planIds(List<String> planIds) {
+        public _FinalStage planIds(List<OrderedPlansInGroup> planIds) {
             this.planIds.clear();
             this.planIds.addAll(planIds);
             return this;

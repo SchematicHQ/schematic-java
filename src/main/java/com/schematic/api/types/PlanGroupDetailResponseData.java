@@ -35,6 +35,8 @@ public final class PlanGroupDetailResponseData {
 
     private final String id;
 
+    private final List<PlanGroupPlanEntitlementsOrder> orderedPlanList;
+
     private final List<PlanGroupPlanDetailResponseData> plans;
 
     private final Optional<Integer> trialDays;
@@ -50,6 +52,7 @@ public final class PlanGroupDetailResponseData {
             Optional<PlanGroupPlanDetailResponseData> defaultPlan,
             Optional<String> defaultPlanId,
             String id,
+            List<PlanGroupPlanEntitlementsOrder> orderedPlanList,
             List<PlanGroupPlanDetailResponseData> plans,
             Optional<Integer> trialDays,
             Optional<Boolean> trialPaymentMethodRequired,
@@ -60,6 +63,7 @@ public final class PlanGroupDetailResponseData {
         this.defaultPlan = defaultPlan;
         this.defaultPlanId = defaultPlanId;
         this.id = id;
+        this.orderedPlanList = orderedPlanList;
         this.plans = plans;
         this.trialDays = trialDays;
         this.trialPaymentMethodRequired = trialPaymentMethodRequired;
@@ -96,6 +100,11 @@ public final class PlanGroupDetailResponseData {
         return id;
     }
 
+    @JsonProperty("ordered_plan_list")
+    public List<PlanGroupPlanEntitlementsOrder> getOrderedPlanList() {
+        return orderedPlanList;
+    }
+
     @JsonProperty("plans")
     public List<PlanGroupPlanDetailResponseData> getPlans() {
         return plans;
@@ -129,6 +138,7 @@ public final class PlanGroupDetailResponseData {
                 && defaultPlan.equals(other.defaultPlan)
                 && defaultPlanId.equals(other.defaultPlanId)
                 && id.equals(other.id)
+                && orderedPlanList.equals(other.orderedPlanList)
                 && plans.equals(other.plans)
                 && trialDays.equals(other.trialDays)
                 && trialPaymentMethodRequired.equals(other.trialPaymentMethodRequired);
@@ -143,6 +153,7 @@ public final class PlanGroupDetailResponseData {
                 this.defaultPlan,
                 this.defaultPlanId,
                 this.id,
+                this.orderedPlanList,
                 this.plans,
                 this.trialDays,
                 this.trialPaymentMethodRequired);
@@ -188,6 +199,12 @@ public final class PlanGroupDetailResponseData {
 
         _FinalStage defaultPlanId(String defaultPlanId);
 
+        _FinalStage orderedPlanList(List<PlanGroupPlanEntitlementsOrder> orderedPlanList);
+
+        _FinalStage addOrderedPlanList(PlanGroupPlanEntitlementsOrder orderedPlanList);
+
+        _FinalStage addAllOrderedPlanList(List<PlanGroupPlanEntitlementsOrder> orderedPlanList);
+
         _FinalStage plans(List<PlanGroupPlanDetailResponseData> plans);
 
         _FinalStage addPlans(PlanGroupPlanDetailResponseData plans);
@@ -213,6 +230,8 @@ public final class PlanGroupDetailResponseData {
 
         private List<PlanGroupPlanDetailResponseData> plans = new ArrayList<>();
 
+        private List<PlanGroupPlanEntitlementsOrder> orderedPlanList = new ArrayList<>();
+
         private Optional<String> defaultPlanId = Optional.empty();
 
         private Optional<PlanGroupPlanDetailResponseData> defaultPlan = Optional.empty();
@@ -236,6 +255,7 @@ public final class PlanGroupDetailResponseData {
             defaultPlan(other.getDefaultPlan());
             defaultPlanId(other.getDefaultPlanId());
             id(other.getId());
+            orderedPlanList(other.getOrderedPlanList());
             plans(other.getPlans());
             trialDays(other.getTrialDays());
             trialPaymentMethodRequired(other.getTrialPaymentMethodRequired());
@@ -292,6 +312,26 @@ public final class PlanGroupDetailResponseData {
         public _FinalStage plans(List<PlanGroupPlanDetailResponseData> plans) {
             this.plans.clear();
             this.plans.addAll(plans);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllOrderedPlanList(List<PlanGroupPlanEntitlementsOrder> orderedPlanList) {
+            this.orderedPlanList.addAll(orderedPlanList);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addOrderedPlanList(PlanGroupPlanEntitlementsOrder orderedPlanList) {
+            this.orderedPlanList.add(orderedPlanList);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "ordered_plan_list", nulls = Nulls.SKIP)
+        public _FinalStage orderedPlanList(List<PlanGroupPlanEntitlementsOrder> orderedPlanList) {
+            this.orderedPlanList.clear();
+            this.orderedPlanList.addAll(orderedPlanList);
             return this;
         }
 
@@ -376,6 +416,7 @@ public final class PlanGroupDetailResponseData {
                     defaultPlan,
                     defaultPlanId,
                     id,
+                    orderedPlanList,
                     plans,
                     trialDays,
                     trialPaymentMethodRequired,

@@ -34,6 +34,7 @@ import com.schematic.api.resources.billing.requests.ListProductPricesRequest;
 import com.schematic.api.resources.billing.requests.SearchBillingPricesRequest;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
+import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
 import com.schematic.api.resources.billing.types.ListCouponsResponse;
@@ -668,11 +669,6 @@ public class BillingClient {
             httpUrl.addQueryParameter("company_id", request.getCompanyId().get());
         }
         httpUrl.addQueryParameter("customer_external_id", request.getCustomerExternalId());
-        if (request.getSubscriptionExternalId().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "subscription_external_id",
-                    request.getSubscriptionExternalId().get());
-        }
         if (request.getLimit().isPresent()) {
             httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
         }
@@ -807,7 +803,7 @@ public class BillingClient {
             httpUrl.addQueryParameter("interval", request.getInterval().get());
         }
         if (request.getUsageType().isPresent()) {
-            httpUrl.addQueryParameter("usage_type", request.getUsageType().get());
+            httpUrl.addQueryParameter("usage_type", request.getUsageType().get().toString());
         }
         if (request.getPrice().isPresent()) {
             httpUrl.addQueryParameter("price", request.getPrice().get().toString());
@@ -894,6 +890,60 @@ public class BillingClient {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertBillingPriceResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public DeleteBillingProductResponse deleteBillingProduct(String billingId) {
+        return deleteBillingProduct(billingId, null);
+    }
+
+    public DeleteBillingProductResponse deleteBillingProduct(String billingId, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/product")
+                .addPathSegment(billingId)
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), DeleteBillingProductResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

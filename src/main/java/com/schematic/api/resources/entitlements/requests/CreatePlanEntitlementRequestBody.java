@@ -36,6 +36,8 @@ public final class CreatePlanEntitlementRequestBody {
 
     private final Optional<String> priceBehavior;
 
+    private final Optional<Integer> softLimit;
+
     private final Optional<Boolean> valueBool;
 
     private final Optional<Integer> valueNumeric;
@@ -55,6 +57,7 @@ public final class CreatePlanEntitlementRequestBody {
             Optional<String> monthlyMeteredPriceId,
             String planId,
             Optional<String> priceBehavior,
+            Optional<Integer> softLimit,
             Optional<Boolean> valueBool,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
@@ -67,6 +70,7 @@ public final class CreatePlanEntitlementRequestBody {
         this.monthlyMeteredPriceId = monthlyMeteredPriceId;
         this.planId = planId;
         this.priceBehavior = priceBehavior;
+        this.softLimit = softLimit;
         this.valueBool = valueBool;
         this.valueNumeric = valueNumeric;
         this.valueTraitId = valueTraitId;
@@ -103,6 +107,11 @@ public final class CreatePlanEntitlementRequestBody {
     @JsonProperty("price_behavior")
     public Optional<String> getPriceBehavior() {
         return priceBehavior;
+    }
+
+    @JsonProperty("soft_limit")
+    public Optional<Integer> getSoftLimit() {
+        return softLimit;
     }
 
     @JsonProperty("value_bool")
@@ -148,6 +157,7 @@ public final class CreatePlanEntitlementRequestBody {
                 && monthlyMeteredPriceId.equals(other.monthlyMeteredPriceId)
                 && planId.equals(other.planId)
                 && priceBehavior.equals(other.priceBehavior)
+                && softLimit.equals(other.softLimit)
                 && valueBool.equals(other.valueBool)
                 && valueNumeric.equals(other.valueNumeric)
                 && valueTraitId.equals(other.valueTraitId)
@@ -164,6 +174,7 @@ public final class CreatePlanEntitlementRequestBody {
                 this.monthlyMeteredPriceId,
                 this.planId,
                 this.priceBehavior,
+                this.softLimit,
                 this.valueBool,
                 this.valueNumeric,
                 this.valueTraitId,
@@ -215,6 +226,10 @@ public final class CreatePlanEntitlementRequestBody {
 
         _FinalStage priceBehavior(String priceBehavior);
 
+        _FinalStage softLimit(Optional<Integer> softLimit);
+
+        _FinalStage softLimit(Integer softLimit);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -248,6 +263,8 @@ public final class CreatePlanEntitlementRequestBody {
 
         private Optional<Boolean> valueBool = Optional.empty();
 
+        private Optional<Integer> softLimit = Optional.empty();
+
         private Optional<String> priceBehavior = Optional.empty();
 
         private Optional<String> monthlyMeteredPriceId = Optional.empty();
@@ -270,6 +287,7 @@ public final class CreatePlanEntitlementRequestBody {
             monthlyMeteredPriceId(other.getMonthlyMeteredPriceId());
             planId(other.getPlanId());
             priceBehavior(other.getPriceBehavior());
+            softLimit(other.getSoftLimit());
             valueBool(other.getValueBool());
             valueNumeric(other.getValueNumeric());
             valueTraitId(other.getValueTraitId());
@@ -352,6 +370,19 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage softLimit(Integer softLimit) {
+            this.softLimit = Optional.ofNullable(softLimit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
+        public _FinalStage softLimit(Optional<Integer> softLimit) {
+            this.softLimit = softLimit;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage priceBehavior(String priceBehavior) {
             this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
@@ -414,6 +445,7 @@ public final class CreatePlanEntitlementRequestBody {
                     monthlyMeteredPriceId,
                     planId,
                     priceBehavior,
+                    softLimit,
                     valueBool,
                     valueNumeric,
                     valueTraitId,

@@ -48,6 +48,8 @@ public final class FeatureUsageResponseData {
 
     private final Optional<String> priceBehavior;
 
+    private final Optional<Integer> softLimit;
+
     private final Optional<Integer> usage;
 
     private final Optional<BillingPriceView> yearlyUsageBasedPrice;
@@ -68,6 +70,7 @@ public final class FeatureUsageResponseData {
             Optional<String> period,
             Optional<PlanResponseData> plan,
             Optional<String> priceBehavior,
+            Optional<Integer> softLimit,
             Optional<Integer> usage,
             Optional<BillingPriceView> yearlyUsageBasedPrice,
             Map<String, Object> additionalProperties) {
@@ -84,6 +87,7 @@ public final class FeatureUsageResponseData {
         this.period = period;
         this.plan = plan;
         this.priceBehavior = priceBehavior;
+        this.softLimit = softLimit;
         this.usage = usage;
         this.yearlyUsageBasedPrice = yearlyUsageBasedPrice;
         this.additionalProperties = additionalProperties;
@@ -173,6 +177,14 @@ public final class FeatureUsageResponseData {
     }
 
     /**
+     * @return The soft limit for the feature usage. Available only for overage price behavior
+     */
+    @JsonProperty("soft_limit")
+    public Optional<Integer> getSoftLimit() {
+        return softLimit;
+    }
+
+    /**
      * @return The amount of usage that has been consumed; a null value indicates that usage is not being measured.
      */
     @JsonProperty("usage")
@@ -210,6 +222,7 @@ public final class FeatureUsageResponseData {
                 && period.equals(other.period)
                 && plan.equals(other.plan)
                 && priceBehavior.equals(other.priceBehavior)
+                && softLimit.equals(other.softLimit)
                 && usage.equals(other.usage)
                 && yearlyUsageBasedPrice.equals(other.yearlyUsageBasedPrice);
     }
@@ -230,6 +243,7 @@ public final class FeatureUsageResponseData {
                 this.period,
                 this.plan,
                 this.priceBehavior,
+                this.softLimit,
                 this.usage,
                 this.yearlyUsageBasedPrice);
     }
@@ -300,6 +314,10 @@ public final class FeatureUsageResponseData {
 
         _FinalStage priceBehavior(String priceBehavior);
 
+        _FinalStage softLimit(Optional<Integer> softLimit);
+
+        _FinalStage softLimit(Integer softLimit);
+
         _FinalStage usage(Optional<Integer> usage);
 
         _FinalStage usage(Integer usage);
@@ -323,6 +341,8 @@ public final class FeatureUsageResponseData {
         private Optional<BillingPriceView> yearlyUsageBasedPrice = Optional.empty();
 
         private Optional<Integer> usage = Optional.empty();
+
+        private Optional<Integer> softLimit = Optional.empty();
 
         private Optional<String> priceBehavior = Optional.empty();
 
@@ -362,6 +382,7 @@ public final class FeatureUsageResponseData {
             period(other.getPeriod());
             plan(other.getPlan());
             priceBehavior(other.getPriceBehavior());
+            softLimit(other.getSoftLimit());
             usage(other.getUsage());
             yearlyUsageBasedPrice(other.getYearlyUsageBasedPrice());
             return this;
@@ -430,6 +451,23 @@ public final class FeatureUsageResponseData {
         @JsonSetter(value = "usage", nulls = Nulls.SKIP)
         public _FinalStage usage(Optional<Integer> usage) {
             this.usage = usage;
+            return this;
+        }
+
+        /**
+         * <p>The soft limit for the feature usage. Available only for overage price behavior</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage softLimit(Integer softLimit) {
+            this.softLimit = Optional.ofNullable(softLimit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
+        public _FinalStage softLimit(Optional<Integer> softLimit) {
+            this.softLimit = softLimit;
             return this;
         }
 
@@ -582,6 +620,7 @@ public final class FeatureUsageResponseData {
                     period,
                     plan,
                     priceBehavior,
+                    softLimit,
                     usage,
                     yearlyUsageBasedPrice,
                     additionalProperties);

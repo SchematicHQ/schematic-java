@@ -31,6 +31,8 @@ public final class WebhookResponseData {
 
     private final List<String> requestTypes;
 
+    private final String secret;
+
     private final String status;
 
     private final OffsetDateTime updatedAt;
@@ -44,6 +46,7 @@ public final class WebhookResponseData {
             String id,
             String name,
             List<String> requestTypes,
+            String secret,
             String status,
             OffsetDateTime updatedAt,
             String url,
@@ -52,6 +55,7 @@ public final class WebhookResponseData {
         this.id = id;
         this.name = name;
         this.requestTypes = requestTypes;
+        this.secret = secret;
         this.status = status;
         this.updatedAt = updatedAt;
         this.url = url;
@@ -76,6 +80,11 @@ public final class WebhookResponseData {
     @JsonProperty("request_types")
     public List<String> getRequestTypes() {
         return requestTypes;
+    }
+
+    @JsonProperty("secret")
+    public String getSecret() {
+        return secret;
     }
 
     @JsonProperty("status")
@@ -109,6 +118,7 @@ public final class WebhookResponseData {
                 && id.equals(other.id)
                 && name.equals(other.name)
                 && requestTypes.equals(other.requestTypes)
+                && secret.equals(other.secret)
                 && status.equals(other.status)
                 && updatedAt.equals(other.updatedAt)
                 && url.equals(other.url);
@@ -117,7 +127,14 @@ public final class WebhookResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.createdAt, this.id, this.name, this.requestTypes, this.status, this.updatedAt, this.url);
+                this.createdAt,
+                this.id,
+                this.name,
+                this.requestTypes,
+                this.secret,
+                this.status,
+                this.updatedAt,
+                this.url);
     }
 
     @java.lang.Override
@@ -140,7 +157,11 @@ public final class WebhookResponseData {
     }
 
     public interface NameStage {
-        StatusStage name(@NotNull String name);
+        SecretStage name(@NotNull String name);
+    }
+
+    public interface SecretStage {
+        StatusStage secret(@NotNull String secret);
     }
 
     public interface StatusStage {
@@ -167,12 +188,21 @@ public final class WebhookResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CreatedAtStage, IdStage, NameStage, StatusStage, UpdatedAtStage, UrlStage, _FinalStage {
+            implements CreatedAtStage,
+                    IdStage,
+                    NameStage,
+                    SecretStage,
+                    StatusStage,
+                    UpdatedAtStage,
+                    UrlStage,
+                    _FinalStage {
         private OffsetDateTime createdAt;
 
         private String id;
 
         private String name;
+
+        private String secret;
 
         private String status;
 
@@ -193,6 +223,7 @@ public final class WebhookResponseData {
             id(other.getId());
             name(other.getName());
             requestTypes(other.getRequestTypes());
+            secret(other.getSecret());
             status(other.getStatus());
             updatedAt(other.getUpdatedAt());
             url(other.getUrl());
@@ -215,8 +246,15 @@ public final class WebhookResponseData {
 
         @java.lang.Override
         @JsonSetter("name")
-        public StatusStage name(@NotNull String name) {
+        public SecretStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("secret")
+        public StatusStage secret(@NotNull String secret) {
+            this.secret = Objects.requireNonNull(secret, "secret must not be null");
             return this;
         }
 
@@ -264,7 +302,7 @@ public final class WebhookResponseData {
         @java.lang.Override
         public WebhookResponseData build() {
             return new WebhookResponseData(
-                    createdAt, id, name, requestTypes, status, updatedAt, url, additionalProperties);
+                    createdAt, id, name, requestTypes, secret, status, updatedAt, url, additionalProperties);
         }
     }
 }

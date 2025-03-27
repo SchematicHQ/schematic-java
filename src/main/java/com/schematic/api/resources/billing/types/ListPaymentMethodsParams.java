@@ -28,8 +28,6 @@ public final class ListPaymentMethodsParams {
 
     private final Optional<Integer> offset;
 
-    private final Optional<String> subscriptionExternalId;
-
     private final Map<String, Object> additionalProperties;
 
     private ListPaymentMethodsParams(
@@ -37,13 +35,11 @@ public final class ListPaymentMethodsParams {
             Optional<String> customerExternalId,
             Optional<Integer> limit,
             Optional<Integer> offset,
-            Optional<String> subscriptionExternalId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.customerExternalId = customerExternalId;
         this.limit = limit;
         this.offset = offset;
-        this.subscriptionExternalId = subscriptionExternalId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -73,11 +69,6 @@ public final class ListPaymentMethodsParams {
         return offset;
     }
 
-    @JsonProperty("subscription_external_id")
-    public Optional<String> getSubscriptionExternalId() {
-        return subscriptionExternalId;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -93,14 +84,12 @@ public final class ListPaymentMethodsParams {
         return companyId.equals(other.companyId)
                 && customerExternalId.equals(other.customerExternalId)
                 && limit.equals(other.limit)
-                && offset.equals(other.offset)
-                && subscriptionExternalId.equals(other.subscriptionExternalId);
+                && offset.equals(other.offset);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.companyId, this.customerExternalId, this.limit, this.offset, this.subscriptionExternalId);
+        return Objects.hash(this.companyId, this.customerExternalId, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -122,8 +111,6 @@ public final class ListPaymentMethodsParams {
 
         private Optional<Integer> offset = Optional.empty();
 
-        private Optional<String> subscriptionExternalId = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -134,7 +121,6 @@ public final class ListPaymentMethodsParams {
             customerExternalId(other.getCustomerExternalId());
             limit(other.getLimit());
             offset(other.getOffset());
-            subscriptionExternalId(other.getSubscriptionExternalId());
             return this;
         }
 
@@ -182,20 +168,8 @@ public final class ListPaymentMethodsParams {
             return this;
         }
 
-        @JsonSetter(value = "subscription_external_id", nulls = Nulls.SKIP)
-        public Builder subscriptionExternalId(Optional<String> subscriptionExternalId) {
-            this.subscriptionExternalId = subscriptionExternalId;
-            return this;
-        }
-
-        public Builder subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
-            return this;
-        }
-
         public ListPaymentMethodsParams build() {
-            return new ListPaymentMethodsParams(
-                    companyId, customerExternalId, limit, offset, subscriptionExternalId, additionalProperties);
+            return new ListPaymentMethodsParams(companyId, customerExternalId, limit, offset, additionalProperties);
         }
     }
 }
