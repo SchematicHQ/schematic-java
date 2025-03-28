@@ -3,11 +3,9 @@ package com.schematic.webhook.server;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.schematic.webhook.WebhookSignatureException;
 import com.schematic.webhook.WebhookVerifier;
-
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -82,22 +80,19 @@ public class WebhookTestServer {
             }
 
             // Read request body
-            String body = new BufferedReader(
-                    new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8))
+            String body = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8))
                     .lines()
                     .collect(Collectors.joining("\n"));
 
             // Log headers
             System.out.println("\nHeaders:");
-            exchange.getRequestHeaders().forEach((key, values) ->
-                    System.out.println("  " + key + ": " + String.join(", ", values)));
+            exchange.getRequestHeaders()
+                    .forEach((key, values) -> System.out.println("  " + key + ": " + String.join(", ", values)));
 
             // Verify signature if secret is provided
             if (secret != null && !secret.isEmpty()) {
-                String signature = exchange.getRequestHeaders()
-                        .getFirst(WebhookVerifier.WEBHOOK_SIGNATURE_HEADER);
-                String timestamp = exchange.getRequestHeaders()
-                        .getFirst(WebhookVerifier.WEBHOOK_TIMESTAMP_HEADER);
+                String signature = exchange.getRequestHeaders().getFirst(WebhookVerifier.WEBHOOK_SIGNATURE_HEADER);
+                String timestamp = exchange.getRequestHeaders().getFirst(WebhookVerifier.WEBHOOK_TIMESTAMP_HEADER);
 
                 try {
                     WebhookVerifier.verifySignature(body, signature, timestamp, secret);
@@ -193,7 +188,8 @@ public class WebhookTestServer {
         System.out.println("  --help          Print this help message");
         System.out.println();
         System.out.println("Examples:");
-        System.out.println("  java -cp <classpath> com.schematic.webhook.server.WebhookTestServer --port 8080 --secret my_webhook_secret");
+        System.out.println(
+                "  java -cp <classpath> com.schematic.webhook.server.WebhookTestServer --port 8080 --secret my_webhook_secret");
         System.out.println();
         System.out.println("  # Or using environment variables:");
         System.out.println("  export SCHEMATIC_WEBHOOK_SECRET=my_webhook_secret");

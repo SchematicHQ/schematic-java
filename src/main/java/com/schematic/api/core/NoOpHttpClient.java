@@ -1,12 +1,9 @@
 package com.schematic.api.core;
 
-import okhttp3.*;
-import okio.Buffer;
-import okio.Timeout;
-
 import java.io.IOException;
-import java.net.ProtocolException;
 import java.util.concurrent.TimeUnit;
+import okhttp3.*;
+import okio.Timeout;
 
 /**
  * A no-operation OkHttpClient implementation that doesn't actually make HTTP requests.

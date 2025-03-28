@@ -1,11 +1,11 @@
 package com.schematic.webhook;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Utilities for verifying the signatures of Schematic webhooks.
@@ -109,10 +109,7 @@ public class WebhookVerifier {
             byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
 
             // Create HMAC-SHA256 instance
-            SecretKeySpec keySpec = new SecretKeySpec(
-                    secret.getBytes(StandardCharsets.UTF_8),
-                    HMAC_SHA256
-            );
+            SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), HMAC_SHA256);
             Mac mac = Mac.getInstance(HMAC_SHA256);
             mac.init(keySpec);
 
@@ -149,8 +146,8 @@ public class WebhookVerifier {
             int len = hex.length();
             byte[] data = new byte[len / 2];
             for (int i = 0; i < len; i += 2) {
-                data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                        + Character.digit(hex.charAt(i + 1), 16));
+                data[i / 2] =
+                        (byte) ((Character.digit(hex.charAt(i), 16) << 4) + Character.digit(hex.charAt(i + 1), 16));
             }
             return data;
         } catch (Exception e) {

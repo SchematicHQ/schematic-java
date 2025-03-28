@@ -1,20 +1,18 @@
 package com.schematic.api;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.Test;
 
 public class TestOfflineMode {
 
     @Test
     public void testOfflineModeDoesNotMakeRequests() {
         // Create a client in offline mode
-        Schematic schematic = Schematic.builder()
-                .apiKey("fake-api-key")
-                .offline(true)
-                .build();
+        Schematic schematic =
+                Schematic.builder().apiKey("fake-api-key").offline(true).build();
 
         try {
             // Setup test data
