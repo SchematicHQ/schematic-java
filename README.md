@@ -133,7 +133,7 @@ UpsertCompanyRequestBody request = UpsertCompanyRequestBody.builder()
     .traits(traits)
     .build();
 
-var response = schematic.companies.upsertCompany(request);
+var response = schematic.companies().upsertCompany(request);
 System.out.println("Company upserted: " + response.getData().getName());
 ```
 
@@ -333,7 +333,7 @@ will be thrown.
 import com.schematic.api.core.SchematicException;
 
 try {
-    schematic.companies.getCompany(...);
+    schematic.companies().getCompany(...);
 } catch (SchematicException e) {
     System.out.println(e.message());
 }
@@ -345,7 +345,7 @@ The SDK also supports error handling for first class exceptions with strongly ty
 import com.schematic.api.errors.InvalidRequestError;
 
 try {
-    schematic.companies.getCompany(...);
+    schematic.companies().getCompany(...);
 } catch (InvalidRequestError e) {
     System.out.println(e.message());
     System.out.println(e.getBody().getMissingField());
