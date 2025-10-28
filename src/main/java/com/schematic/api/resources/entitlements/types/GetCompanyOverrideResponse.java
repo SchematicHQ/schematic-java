@@ -87,6 +87,9 @@ public final class GetCompanyOverrideResponse {
     public interface _FinalStage {
         GetCompanyOverrideResponse build();
 
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(Map<String, JsonNode> params);
 
         _FinalStage putAllParams(Map<String, JsonNode> params);
@@ -135,10 +138,15 @@ public final class GetCompanyOverrideResponse {
          */
         @java.lang.Override
         public _FinalStage putAllParams(Map<String, JsonNode> params) {
-            this.params.putAll(params);
+            if (params != null) {
+                this.params.putAll(params);
+            }
             return this;
         }
 
+        /**
+         * <p>Input parameters</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "params", nulls = Nulls.SKIP)
         public _FinalStage params(Map<String, JsonNode> params) {

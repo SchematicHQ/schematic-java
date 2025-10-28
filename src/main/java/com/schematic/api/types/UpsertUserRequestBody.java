@@ -16,6 +16,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,9 +24,13 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpsertUserRequestBody.Builder.class)
 public final class UpsertUserRequestBody {
-    private final Map<String, String> company;
+    private final Optional<List<Map<String, String>>> companies;
+
+    private final Optional<Map<String, String>> company;
 
     private final Optional<String> companyId;
+
+    private final Optional<List<String>> companyIds;
 
     private final Optional<String> id;
 
@@ -42,8 +47,10 @@ public final class UpsertUserRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private UpsertUserRequestBody(
-            Map<String, String> company,
+            Optional<List<Map<String, String>>> companies,
+            Optional<Map<String, String>> company,
             Optional<String> companyId,
+            Optional<List<String>> companyIds,
             Optional<String> id,
             Map<String, String> keys,
             Optional<OffsetDateTime> lastSeenAt,
@@ -51,8 +58,10 @@ public final class UpsertUserRequestBody {
             Optional<Map<String, JsonNode>> traits,
             Optional<Boolean> updateOnly,
             Map<String, Object> additionalProperties) {
+        this.companies = companies;
         this.company = company;
         this.companyId = companyId;
+        this.companyIds = companyIds;
         this.id = id;
         this.keys = keys;
         this.lastSeenAt = lastSeenAt;
@@ -63,19 +72,35 @@ public final class UpsertUserRequestBody {
     }
 
     /**
-     * @return Optionally specify company using key/value pairs
+     * @return Optionally specify companies using array of key/value pairs
+     */
+    @JsonProperty("companies")
+    public Optional<List<Map<String, String>>> getCompanies() {
+        return companies;
+    }
+
+    /**
+     * @return Add user to this company. Takes priority over companies. For exhaustive list of companies, use companies
      */
     @JsonProperty("company")
-    public Map<String, String> getCompany() {
+    public Optional<Map<String, String>> getCompany() {
         return company;
     }
 
     /**
-     * @return Optionally specify company using Schematic company ID
+     * @return Add user to this company. Takes priority over company_ids. For exhaustive list of companies, use company_ids
      */
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
+    }
+
+    /**
+     * @return Optionally specify companies using Schematic company ID
+     */
+    @JsonProperty("company_ids")
+    public Optional<List<String>> getCompanyIds() {
+        return companyIds;
     }
 
     /**
@@ -86,6 +111,9 @@ public final class UpsertUserRequestBody {
         return id;
     }
 
+    /**
+     * @return See <a href="https://docs.schematichq.com/developer_resources/key_management">Key Management</a> for more information
+     */
     @JsonProperty("keys")
     public Map<String, String> getKeys() {
         return keys;
@@ -126,8 +154,10 @@ public final class UpsertUserRequestBody {
     }
 
     private boolean equalTo(UpsertUserRequestBody other) {
-        return company.equals(other.company)
+        return companies.equals(other.companies)
+                && company.equals(other.company)
                 && companyId.equals(other.companyId)
+                && companyIds.equals(other.companyIds)
                 && id.equals(other.id)
                 && keys.equals(other.keys)
                 && lastSeenAt.equals(other.lastSeenAt)
@@ -139,8 +169,10 @@ public final class UpsertUserRequestBody {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.companies,
                 this.company,
                 this.companyId,
+                this.companyIds,
                 this.id,
                 this.keys,
                 this.lastSeenAt,
@@ -160,9 +192,13 @@ public final class UpsertUserRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Map<String, String> company = new LinkedHashMap<>();
+        private Optional<List<Map<String, String>>> companies = Optional.empty();
+
+        private Optional<Map<String, String>> company = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
+
+        private Optional<List<String>> companyIds = Optional.empty();
 
         private Optional<String> id = Optional.empty();
 
@@ -182,8 +218,10 @@ public final class UpsertUserRequestBody {
         private Builder() {}
 
         public Builder from(UpsertUserRequestBody other) {
+            companies(other.getCompanies());
             company(other.getCompany());
             companyId(other.getCompanyId());
+            companyIds(other.getCompanyIds());
             id(other.getId());
             keys(other.getKeys());
             lastSeenAt(other.getLastSeenAt());
@@ -193,23 +231,37 @@ public final class UpsertUserRequestBody {
             return this;
         }
 
+        /**
+         * <p>Optionally specify companies using array of key/value pairs</p>
+         */
+        @JsonSetter(value = "companies", nulls = Nulls.SKIP)
+        public Builder companies(Optional<List<Map<String, String>>> companies) {
+            this.companies = companies;
+            return this;
+        }
+
+        public Builder companies(List<Map<String, String>> companies) {
+            this.companies = Optional.ofNullable(companies);
+            return this;
+        }
+
+        /**
+         * <p>Add user to this company. Takes priority over companies. For exhaustive list of companies, use companies</p>
+         */
         @JsonSetter(value = "company", nulls = Nulls.SKIP)
+        public Builder company(Optional<Map<String, String>> company) {
+            this.company = company;
+            return this;
+        }
+
         public Builder company(Map<String, String> company) {
-            this.company.clear();
-            this.company.putAll(company);
+            this.company = Optional.ofNullable(company);
             return this;
         }
 
-        public Builder putAllCompany(Map<String, String> company) {
-            this.company.putAll(company);
-            return this;
-        }
-
-        public Builder company(String key, String value) {
-            this.company.put(key, value);
-            return this;
-        }
-
+        /**
+         * <p>Add user to this company. Takes priority over company_ids. For exhaustive list of companies, use company_ids</p>
+         */
         @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
         public Builder companyId(Optional<String> companyId) {
             this.companyId = companyId;
@@ -221,6 +273,23 @@ public final class UpsertUserRequestBody {
             return this;
         }
 
+        /**
+         * <p>Optionally specify companies using Schematic company ID</p>
+         */
+        @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
+        public Builder companyIds(Optional<List<String>> companyIds) {
+            this.companyIds = companyIds;
+            return this;
+        }
+
+        public Builder companyIds(List<String> companyIds) {
+            this.companyIds = Optional.ofNullable(companyIds);
+            return this;
+        }
+
+        /**
+         * <p>If you know the Schematic ID, you can use that here instead of keys</p>
+         */
         @JsonSetter(value = "id", nulls = Nulls.SKIP)
         public Builder id(Optional<String> id) {
             this.id = id;
@@ -232,6 +301,9 @@ public final class UpsertUserRequestBody {
             return this;
         }
 
+        /**
+         * <p>See <a href="https://docs.schematichq.com/developer_resources/key_management">Key Management</a> for more information</p>
+         */
         @JsonSetter(value = "keys", nulls = Nulls.SKIP)
         public Builder keys(Map<String, String> keys) {
             this.keys.clear();
@@ -240,7 +312,9 @@ public final class UpsertUserRequestBody {
         }
 
         public Builder putAllKeys(Map<String, String> keys) {
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 
@@ -271,6 +345,9 @@ public final class UpsertUserRequestBody {
             return this;
         }
 
+        /**
+         * <p>A map of trait names to trait values</p>
+         */
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
         public Builder traits(Optional<Map<String, JsonNode>> traits) {
             this.traits = traits;
@@ -295,7 +372,17 @@ public final class UpsertUserRequestBody {
 
         public UpsertUserRequestBody build() {
             return new UpsertUserRequestBody(
-                    company, companyId, id, keys, lastSeenAt, name, traits, updateOnly, additionalProperties);
+                    companies,
+                    company,
+                    companyId,
+                    companyIds,
+                    id,
+                    keys,
+                    lastSeenAt,
+                    name,
+                    traits,
+                    updateOnly,
+                    additionalProperties);
         }
     }
 }

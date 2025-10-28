@@ -92,7 +92,9 @@ public final class CreateEventBatchRequestBody {
         }
 
         public Builder addAllEvents(List<CreateEventRequestBody> events) {
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 

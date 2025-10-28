@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,15 +22,15 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountPlanEntitlementsRequest.Builder.class)
 public final class CountPlanEntitlementsRequest {
+    private final Optional<List<String>> featureIds;
+
+    private final Optional<List<String>> ids;
+
+    private final Optional<List<String>> planIds;
+
     private final Optional<String> featureId;
 
-    private final Optional<String> featureIds;
-
-    private final Optional<String> ids;
-
     private final Optional<String> planId;
-
-    private final Optional<String> planIds;
 
     private final Optional<String> q;
 
@@ -41,26 +43,50 @@ public final class CountPlanEntitlementsRequest {
     private final Map<String, Object> additionalProperties;
 
     private CountPlanEntitlementsRequest(
+            Optional<List<String>> featureIds,
+            Optional<List<String>> ids,
+            Optional<List<String>> planIds,
             Optional<String> featureId,
-            Optional<String> featureIds,
-            Optional<String> ids,
             Optional<String> planId,
-            Optional<String> planIds,
             Optional<String> q,
             Optional<Boolean> withMeteredProducts,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
-        this.featureId = featureId;
         this.featureIds = featureIds;
         this.ids = ids;
-        this.planId = planId;
         this.planIds = planIds;
+        this.featureId = featureId;
+        this.planId = planId;
         this.q = q;
         this.withMeteredProducts = withMeteredProducts;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Filter plan entitlements by multiple feature IDs (starting with feat_)
+     */
+    @JsonProperty("feature_ids")
+    public Optional<List<String>> getFeatureIds() {
+        return featureIds;
+    }
+
+    /**
+     * @return Filter plan entitlements by multiple plan entitlement IDs (starting with pltl_)
+     */
+    @JsonProperty("ids")
+    public Optional<List<String>> getIds() {
+        return ids;
+    }
+
+    /**
+     * @return Filter plan entitlements by multiple plan IDs (starting with plan_)
+     */
+    @JsonProperty("plan_ids")
+    public Optional<List<String>> getPlanIds() {
+        return planIds;
     }
 
     /**
@@ -72,35 +98,11 @@ public final class CountPlanEntitlementsRequest {
     }
 
     /**
-     * @return Filter plan entitlements by multiple feature IDs (starting with feat_)
-     */
-    @JsonProperty("feature_ids")
-    public Optional<String> getFeatureIds() {
-        return featureIds;
-    }
-
-    /**
-     * @return Filter plan entitlements by multiple plan entitlement IDs (starting with pltl_)
-     */
-    @JsonProperty("ids")
-    public Optional<String> getIds() {
-        return ids;
-    }
-
-    /**
      * @return Filter plan entitlements by a single plan ID (starting with plan_)
      */
     @JsonProperty("plan_id")
     public Optional<String> getPlanId() {
         return planId;
-    }
-
-    /**
-     * @return Filter plan entitlements by multiple plan IDs (starting with plan_)
-     */
-    @JsonProperty("plan_ids")
-    public Optional<String> getPlanIds() {
-        return planIds;
     }
 
     /**
@@ -147,11 +149,11 @@ public final class CountPlanEntitlementsRequest {
     }
 
     private boolean equalTo(CountPlanEntitlementsRequest other) {
-        return featureId.equals(other.featureId)
-                && featureIds.equals(other.featureIds)
+        return featureIds.equals(other.featureIds)
                 && ids.equals(other.ids)
-                && planId.equals(other.planId)
                 && planIds.equals(other.planIds)
+                && featureId.equals(other.featureId)
+                && planId.equals(other.planId)
                 && q.equals(other.q)
                 && withMeteredProducts.equals(other.withMeteredProducts)
                 && limit.equals(other.limit)
@@ -161,11 +163,11 @@ public final class CountPlanEntitlementsRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.featureId,
                 this.featureIds,
                 this.ids,
-                this.planId,
                 this.planIds,
+                this.featureId,
+                this.planId,
                 this.q,
                 this.withMeteredProducts,
                 this.limit,
@@ -183,15 +185,15 @@ public final class CountPlanEntitlementsRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<List<String>> featureIds = Optional.empty();
+
+        private Optional<List<String>> ids = Optional.empty();
+
+        private Optional<List<String>> planIds = Optional.empty();
+
         private Optional<String> featureId = Optional.empty();
 
-        private Optional<String> featureIds = Optional.empty();
-
-        private Optional<String> ids = Optional.empty();
-
         private Optional<String> planId = Optional.empty();
-
-        private Optional<String> planIds = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -207,11 +209,11 @@ public final class CountPlanEntitlementsRequest {
         private Builder() {}
 
         public Builder from(CountPlanEntitlementsRequest other) {
-            featureId(other.getFeatureId());
             featureIds(other.getFeatureIds());
             ids(other.getIds());
-            planId(other.getPlanId());
             planIds(other.getPlanIds());
+            featureId(other.getFeatureId());
+            planId(other.getPlanId());
             q(other.getQ());
             withMeteredProducts(other.getWithMeteredProducts());
             limit(other.getLimit());
@@ -219,6 +221,66 @@ public final class CountPlanEntitlementsRequest {
             return this;
         }
 
+        /**
+         * <p>Filter plan entitlements by multiple feature IDs (starting with feat_)</p>
+         */
+        @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
+        public Builder featureIds(Optional<List<String>> featureIds) {
+            this.featureIds = featureIds;
+            return this;
+        }
+
+        public Builder featureIds(List<String> featureIds) {
+            this.featureIds = Optional.ofNullable(featureIds);
+            return this;
+        }
+
+        public Builder featureIds(String featureIds) {
+            this.featureIds = Optional.of(Collections.singletonList(featureIds));
+            return this;
+        }
+
+        /**
+         * <p>Filter plan entitlements by multiple plan entitlement IDs (starting with pltl_)</p>
+         */
+        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
+        public Builder ids(Optional<List<String>> ids) {
+            this.ids = ids;
+            return this;
+        }
+
+        public Builder ids(List<String> ids) {
+            this.ids = Optional.ofNullable(ids);
+            return this;
+        }
+
+        public Builder ids(String ids) {
+            this.ids = Optional.of(Collections.singletonList(ids));
+            return this;
+        }
+
+        /**
+         * <p>Filter plan entitlements by multiple plan IDs (starting with plan_)</p>
+         */
+        @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
+        public Builder planIds(Optional<List<String>> planIds) {
+            this.planIds = planIds;
+            return this;
+        }
+
+        public Builder planIds(List<String> planIds) {
+            this.planIds = Optional.ofNullable(planIds);
+            return this;
+        }
+
+        public Builder planIds(String planIds) {
+            this.planIds = Optional.of(Collections.singletonList(planIds));
+            return this;
+        }
+
+        /**
+         * <p>Filter plan entitlements by a single feature ID (starting with feat_)</p>
+         */
         @JsonSetter(value = "feature_id", nulls = Nulls.SKIP)
         public Builder featureId(Optional<String> featureId) {
             this.featureId = featureId;
@@ -230,28 +292,9 @@ public final class CountPlanEntitlementsRequest {
             return this;
         }
 
-        @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
-        public Builder featureIds(Optional<String> featureIds) {
-            this.featureIds = featureIds;
-            return this;
-        }
-
-        public Builder featureIds(String featureIds) {
-            this.featureIds = Optional.ofNullable(featureIds);
-            return this;
-        }
-
-        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
-        public Builder ids(Optional<String> ids) {
-            this.ids = ids;
-            return this;
-        }
-
-        public Builder ids(String ids) {
-            this.ids = Optional.ofNullable(ids);
-            return this;
-        }
-
+        /**
+         * <p>Filter plan entitlements by a single plan ID (starting with plan_)</p>
+         */
         @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
         public Builder planId(Optional<String> planId) {
             this.planId = planId;
@@ -263,17 +306,9 @@ public final class CountPlanEntitlementsRequest {
             return this;
         }
 
-        @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
-        public Builder planIds(Optional<String> planIds) {
-            this.planIds = planIds;
-            return this;
-        }
-
-        public Builder planIds(String planIds) {
-            this.planIds = Optional.ofNullable(planIds);
-            return this;
-        }
-
+        /**
+         * <p>Search for plan entitlements by feature or company name</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -285,6 +320,9 @@ public final class CountPlanEntitlementsRequest {
             return this;
         }
 
+        /**
+         * <p>Filter plan entitlements only with metered products</p>
+         */
         @JsonSetter(value = "with_metered_products", nulls = Nulls.SKIP)
         public Builder withMeteredProducts(Optional<Boolean> withMeteredProducts) {
             this.withMeteredProducts = withMeteredProducts;
@@ -296,6 +334,9 @@ public final class CountPlanEntitlementsRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -307,6 +348,9 @@ public final class CountPlanEntitlementsRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -320,11 +364,11 @@ public final class CountPlanEntitlementsRequest {
 
         public CountPlanEntitlementsRequest build() {
             return new CountPlanEntitlementsRequest(
-                    featureId,
                     featureIds,
                     ids,
-                    planId,
                     planIds,
+                    featureId,
+                    planId,
                     q,
                     withMeteredProducts,
                     limit,

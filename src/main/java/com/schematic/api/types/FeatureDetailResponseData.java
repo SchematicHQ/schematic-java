@@ -498,7 +498,9 @@ public final class FeatureDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllPlans(List<PreviewObject> plans) {
-            this.plans.addAll(plans);
+            if (plans != null) {
+                this.plans.addAll(plans);
+            }
             return this;
         }
 
@@ -544,7 +546,9 @@ public final class FeatureDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllFlags(List<FlagDetailResponseData> flags) {
-            this.flags.addAll(flags);
+            if (flags != null) {
+                this.flags.addAll(flags);
+            }
             return this;
         }
 

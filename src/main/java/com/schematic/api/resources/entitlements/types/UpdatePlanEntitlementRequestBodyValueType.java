@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum UpdatePlanEntitlementRequestBodyValueType {
     BOOLEAN("boolean"),
 
+    CREDIT("credit"),
+
     NUMERIC("numeric"),
 
     TRAIT("trait"),

@@ -28,20 +28,16 @@ public final class CreateOrUpdateConditionGroupRequestBody {
 
     private final Optional<String> id;
 
-    private final Optional<String> planId;
-
     private final Map<String, Object> additionalProperties;
 
     private CreateOrUpdateConditionGroupRequestBody(
             List<CreateOrUpdateConditionRequestBody> conditions,
             Optional<String> flagId,
             Optional<String> id,
-            Optional<String> planId,
             Map<String, Object> additionalProperties) {
         this.conditions = conditions;
         this.flagId = flagId;
         this.id = id;
-        this.planId = planId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -60,11 +56,6 @@ public final class CreateOrUpdateConditionGroupRequestBody {
         return id;
     }
 
-    @JsonProperty("plan_id")
-    public Optional<String> getPlanId() {
-        return planId;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -78,15 +69,12 @@ public final class CreateOrUpdateConditionGroupRequestBody {
     }
 
     private boolean equalTo(CreateOrUpdateConditionGroupRequestBody other) {
-        return conditions.equals(other.conditions)
-                && flagId.equals(other.flagId)
-                && id.equals(other.id)
-                && planId.equals(other.planId);
+        return conditions.equals(other.conditions) && flagId.equals(other.flagId) && id.equals(other.id);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conditions, this.flagId, this.id, this.planId);
+        return Objects.hash(this.conditions, this.flagId, this.id);
     }
 
     @java.lang.Override
@@ -106,8 +94,6 @@ public final class CreateOrUpdateConditionGroupRequestBody {
 
         private Optional<String> id = Optional.empty();
 
-        private Optional<String> planId = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -117,7 +103,6 @@ public final class CreateOrUpdateConditionGroupRequestBody {
             conditions(other.getConditions());
             flagId(other.getFlagId());
             id(other.getId());
-            planId(other.getPlanId());
             return this;
         }
 
@@ -134,7 +119,9 @@ public final class CreateOrUpdateConditionGroupRequestBody {
         }
 
         public Builder addAllConditions(List<CreateOrUpdateConditionRequestBody> conditions) {
-            this.conditions.addAll(conditions);
+            if (conditions != null) {
+                this.conditions.addAll(conditions);
+            }
             return this;
         }
 
@@ -160,19 +147,8 @@ public final class CreateOrUpdateConditionGroupRequestBody {
             return this;
         }
 
-        @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
-        public Builder planId(Optional<String> planId) {
-            this.planId = planId;
-            return this;
-        }
-
-        public Builder planId(String planId) {
-            this.planId = Optional.ofNullable(planId);
-            return this;
-        }
-
         public CreateOrUpdateConditionGroupRequestBody build() {
-            return new CreateOrUpdateConditionGroupRequestBody(conditions, flagId, id, planId, additionalProperties);
+            return new CreateOrUpdateConditionGroupRequestBody(conditions, flagId, id, additionalProperties);
         }
     }
 }

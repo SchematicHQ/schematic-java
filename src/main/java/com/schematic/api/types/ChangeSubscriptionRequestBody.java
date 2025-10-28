@@ -27,6 +27,8 @@ public final class ChangeSubscriptionRequestBody {
 
     private final Optional<String> couponExternalId;
 
+    private final List<UpdateCreditBundleRequestBody> creditBundles;
+
     private final String newPlanId;
 
     private final String newPriceId;
@@ -37,24 +39,30 @@ public final class ChangeSubscriptionRequestBody {
 
     private final Optional<String> promoCode;
 
+    private final boolean skipTrial;
+
     private final Map<String, Object> additionalProperties;
 
     private ChangeSubscriptionRequestBody(
             List<UpdateAddOnRequestBody> addOnIds,
             Optional<String> couponExternalId,
+            List<UpdateCreditBundleRequestBody> creditBundles,
             String newPlanId,
             String newPriceId,
             List<UpdatePayInAdvanceRequestBody> payInAdvance,
             Optional<String> paymentMethodId,
             Optional<String> promoCode,
+            boolean skipTrial,
             Map<String, Object> additionalProperties) {
         this.addOnIds = addOnIds;
         this.couponExternalId = couponExternalId;
+        this.creditBundles = creditBundles;
         this.newPlanId = newPlanId;
         this.newPriceId = newPriceId;
         this.payInAdvance = payInAdvance;
         this.paymentMethodId = paymentMethodId;
         this.promoCode = promoCode;
+        this.skipTrial = skipTrial;
         this.additionalProperties = additionalProperties;
     }
 
@@ -66,6 +74,11 @@ public final class ChangeSubscriptionRequestBody {
     @JsonProperty("coupon_external_id")
     public Optional<String> getCouponExternalId() {
         return couponExternalId;
+    }
+
+    @JsonProperty("credit_bundles")
+    public List<UpdateCreditBundleRequestBody> getCreditBundles() {
+        return creditBundles;
     }
 
     @JsonProperty("new_plan_id")
@@ -93,6 +106,11 @@ public final class ChangeSubscriptionRequestBody {
         return promoCode;
     }
 
+    @JsonProperty("skip_trial")
+    public boolean getSkipTrial() {
+        return skipTrial;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -107,11 +125,13 @@ public final class ChangeSubscriptionRequestBody {
     private boolean equalTo(ChangeSubscriptionRequestBody other) {
         return addOnIds.equals(other.addOnIds)
                 && couponExternalId.equals(other.couponExternalId)
+                && creditBundles.equals(other.creditBundles)
                 && newPlanId.equals(other.newPlanId)
                 && newPriceId.equals(other.newPriceId)
                 && payInAdvance.equals(other.payInAdvance)
                 && paymentMethodId.equals(other.paymentMethodId)
-                && promoCode.equals(other.promoCode);
+                && promoCode.equals(other.promoCode)
+                && skipTrial == other.skipTrial;
     }
 
     @java.lang.Override
@@ -119,11 +139,13 @@ public final class ChangeSubscriptionRequestBody {
         return Objects.hash(
                 this.addOnIds,
                 this.couponExternalId,
+                this.creditBundles,
                 this.newPlanId,
                 this.newPriceId,
                 this.payInAdvance,
                 this.paymentMethodId,
-                this.promoCode);
+                this.promoCode,
+                this.skipTrial);
     }
 
     @java.lang.Override
@@ -142,7 +164,11 @@ public final class ChangeSubscriptionRequestBody {
     }
 
     public interface NewPriceIdStage {
-        _FinalStage newPriceId(@NotNull String newPriceId);
+        SkipTrialStage newPriceId(@NotNull String newPriceId);
+    }
+
+    public interface SkipTrialStage {
+        _FinalStage skipTrial(boolean skipTrial);
     }
 
     public interface _FinalStage {
@@ -157,6 +183,12 @@ public final class ChangeSubscriptionRequestBody {
         _FinalStage couponExternalId(Optional<String> couponExternalId);
 
         _FinalStage couponExternalId(String couponExternalId);
+
+        _FinalStage creditBundles(List<UpdateCreditBundleRequestBody> creditBundles);
+
+        _FinalStage addCreditBundles(UpdateCreditBundleRequestBody creditBundles);
+
+        _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles);
 
         _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
 
@@ -174,16 +206,20 @@ public final class ChangeSubscriptionRequestBody {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NewPlanIdStage, NewPriceIdStage, _FinalStage {
+    public static final class Builder implements NewPlanIdStage, NewPriceIdStage, SkipTrialStage, _FinalStage {
         private String newPlanId;
 
         private String newPriceId;
+
+        private boolean skipTrial;
 
         private Optional<String> promoCode = Optional.empty();
 
         private Optional<String> paymentMethodId = Optional.empty();
 
         private List<UpdatePayInAdvanceRequestBody> payInAdvance = new ArrayList<>();
+
+        private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
         private Optional<String> couponExternalId = Optional.empty();
 
@@ -198,11 +234,13 @@ public final class ChangeSubscriptionRequestBody {
         public Builder from(ChangeSubscriptionRequestBody other) {
             addOnIds(other.getAddOnIds());
             couponExternalId(other.getCouponExternalId());
+            creditBundles(other.getCreditBundles());
             newPlanId(other.getNewPlanId());
             newPriceId(other.getNewPriceId());
             payInAdvance(other.getPayInAdvance());
             paymentMethodId(other.getPaymentMethodId());
             promoCode(other.getPromoCode());
+            skipTrial(other.getSkipTrial());
             return this;
         }
 
@@ -215,8 +253,15 @@ public final class ChangeSubscriptionRequestBody {
 
         @java.lang.Override
         @JsonSetter("new_price_id")
-        public _FinalStage newPriceId(@NotNull String newPriceId) {
+        public SkipTrialStage newPriceId(@NotNull String newPriceId) {
             this.newPriceId = Objects.requireNonNull(newPriceId, "newPriceId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("skip_trial")
+        public _FinalStage skipTrial(boolean skipTrial) {
+            this.skipTrial = skipTrial;
             return this;
         }
 
@@ -248,7 +293,9 @@ public final class ChangeSubscriptionRequestBody {
 
         @java.lang.Override
         public _FinalStage addAllPayInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance) {
-            this.payInAdvance.addAll(payInAdvance);
+            if (payInAdvance != null) {
+                this.payInAdvance.addAll(payInAdvance);
+            }
             return this;
         }
 
@@ -267,6 +314,28 @@ public final class ChangeSubscriptionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles) {
+            if (creditBundles != null) {
+                this.creditBundles.addAll(creditBundles);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCreditBundles(UpdateCreditBundleRequestBody creditBundles) {
+            this.creditBundles.add(creditBundles);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_bundles", nulls = Nulls.SKIP)
+        public _FinalStage creditBundles(List<UpdateCreditBundleRequestBody> creditBundles) {
+            this.creditBundles.clear();
+            this.creditBundles.addAll(creditBundles);
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage couponExternalId(String couponExternalId) {
             this.couponExternalId = Optional.ofNullable(couponExternalId);
             return this;
@@ -281,7 +350,9 @@ public final class ChangeSubscriptionRequestBody {
 
         @java.lang.Override
         public _FinalStage addAllAddOnIds(List<UpdateAddOnRequestBody> addOnIds) {
-            this.addOnIds.addAll(addOnIds);
+            if (addOnIds != null) {
+                this.addOnIds.addAll(addOnIds);
+            }
             return this;
         }
 
@@ -304,11 +375,13 @@ public final class ChangeSubscriptionRequestBody {
             return new ChangeSubscriptionRequestBody(
                     addOnIds,
                     couponExternalId,
+                    creditBundles,
                     newPlanId,
                     newPriceId,
                     payInAdvance,
                     paymentMethodId,
                     promoCode,
+                    skipTrial,
                     additionalProperties);
         }
     }

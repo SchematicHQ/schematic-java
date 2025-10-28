@@ -93,7 +93,9 @@ public final class UpdateFlagRulesRequestBody {
         }
 
         public Builder addAllRules(List<CreateOrUpdateRuleRequestBody> rules) {
-            this.rules.addAll(rules);
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
             return this;
         }
 

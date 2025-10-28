@@ -220,6 +220,9 @@ public final class CountPlanEntitlementsParams {
             return this;
         }
 
+        /**
+         * <p>Filter plan entitlements by a single feature ID (starting with feat_)</p>
+         */
         @JsonSetter(value = "feature_id", nulls = Nulls.SKIP)
         public Builder featureId(Optional<String> featureId) {
             this.featureId = featureId;
@@ -231,6 +234,9 @@ public final class CountPlanEntitlementsParams {
             return this;
         }
 
+        /**
+         * <p>Filter plan entitlements by multiple feature IDs (starting with feat_)</p>
+         */
         @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
         public Builder featureIds(Optional<List<String>> featureIds) {
             this.featureIds = featureIds;
@@ -242,6 +248,9 @@ public final class CountPlanEntitlementsParams {
             return this;
         }
 
+        /**
+         * <p>Filter plan entitlements by multiple plan entitlement IDs (starting with pltl_)</p>
+         */
         @JsonSetter(value = "ids", nulls = Nulls.SKIP)
         public Builder ids(Optional<List<String>> ids) {
             this.ids = ids;
@@ -253,6 +262,9 @@ public final class CountPlanEntitlementsParams {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -264,6 +276,9 @@ public final class CountPlanEntitlementsParams {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -275,6 +290,9 @@ public final class CountPlanEntitlementsParams {
             return this;
         }
 
+        /**
+         * <p>Filter plan entitlements by a single plan ID (starting with plan_)</p>
+         */
         @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
         public Builder planId(Optional<String> planId) {
             this.planId = planId;
@@ -286,6 +304,9 @@ public final class CountPlanEntitlementsParams {
             return this;
         }
 
+        /**
+         * <p>Filter plan entitlements by multiple plan IDs (starting with plan_)</p>
+         */
         @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
         public Builder planIds(Optional<List<String>> planIds) {
             this.planIds = planIds;
@@ -297,6 +318,9 @@ public final class CountPlanEntitlementsParams {
             return this;
         }
 
+        /**
+         * <p>Search for plan entitlements by feature or company name</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -308,6 +332,9 @@ public final class CountPlanEntitlementsParams {
             return this;
         }
 
+        /**
+         * <p>Filter plan entitlements only with metered products</p>
+         */
         @JsonSetter(value = "with_metered_products", nulls = Nulls.SKIP)
         public Builder withMeteredProducts(Optional<Boolean> withMeteredProducts) {
             this.withMeteredProducts = withMeteredProducts;

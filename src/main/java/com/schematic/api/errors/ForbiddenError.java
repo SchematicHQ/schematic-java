@@ -5,6 +5,7 @@ package com.schematic.api.errors;
 
 import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.types.ApiError;
+import okhttp3.Response;
 
 public final class ForbiddenError extends BaseSchematicApiException {
     /**
@@ -14,6 +15,11 @@ public final class ForbiddenError extends BaseSchematicApiException {
 
     public ForbiddenError(ApiError body) {
         super("ForbiddenError", 403, body);
+        this.body = body;
+    }
+
+    public ForbiddenError(ApiError body, Response rawResponse) {
+        super("ForbiddenError", 403, body, rawResponse);
         this.body = body;
     }
 

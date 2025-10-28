@@ -618,7 +618,9 @@ public final class EventDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllFeatures(List<PreviewObject> features) {
-            this.features.addAll(features);
+            if (features != null) {
+                this.features.addAll(features);
+            }
             return this;
         }
 
@@ -638,7 +640,9 @@ public final class EventDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllFeatureIds(List<String> featureIds) {
-            this.featureIds.addAll(featureIds);
+            if (featureIds != null) {
+                this.featureIds.addAll(featureIds);
+            }
             return this;
         }
 
@@ -729,7 +733,9 @@ public final class EventDetailResponseData {
 
         @java.lang.Override
         public _FinalStage putAllBody(Map<String, JsonNode> body) {
-            this.body.putAll(body);
+            if (body != null) {
+                this.body.putAll(body);
+            }
             return this;
         }
 

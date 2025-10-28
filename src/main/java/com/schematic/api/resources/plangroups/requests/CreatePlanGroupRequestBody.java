@@ -12,8 +12,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CompatiblePlans;
 import com.schematic.api.types.CustomPlanConfig;
 import com.schematic.api.types.OrderedPlansInGroup;
+import com.schematic.api.types.PlanGroupBundleOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,44 +26,131 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreatePlanGroupRequestBody.Builder.class)
 public final class CreatePlanGroupRequestBody {
+    private final Optional<List<CompatiblePlans>> addOnCompatibilities;
+
     private final List<String> addOnIds;
+
+    private final boolean checkoutCollectAddress;
+
+    private final boolean checkoutCollectEmail;
+
+    private final boolean checkoutCollectPhone;
 
     private final Optional<CustomPlanConfig> customPlanConfig;
 
     private final Optional<String> customPlanId;
 
-    private final Optional<String> defaultPlanId;
+    private final boolean enableTaxCollection;
+
+    private final Optional<String> fallbackPlanId;
+
+    private final Optional<String> initialPlanId;
+
+    private final Optional<String> initialPlanPriceId;
+
+    private final List<OrderedPlansInGroup> orderedAddOns;
+
+    private final List<PlanGroupBundleOrder> orderedBundleList;
 
     private final List<OrderedPlansInGroup> orderedPlans;
 
+    private final boolean preventDowngradesWhenOverLimit;
+
+    private final boolean showCredits;
+
+    private final boolean showPeriodToggle;
+
+    private final boolean showZeroPriceAsFree;
+
+    private final boolean syncCustomerBillingDetailsForTax;
+
     private final Optional<Integer> trialDays;
+
+    private final Optional<String> trialExpiryPlanId;
+
+    private final Optional<String> trialExpiryPlanPriceId;
 
     private final Optional<Boolean> trialPaymentMethodRequired;
 
     private final Map<String, Object> additionalProperties;
 
     private CreatePlanGroupRequestBody(
+            Optional<List<CompatiblePlans>> addOnCompatibilities,
             List<String> addOnIds,
+            boolean checkoutCollectAddress,
+            boolean checkoutCollectEmail,
+            boolean checkoutCollectPhone,
             Optional<CustomPlanConfig> customPlanConfig,
             Optional<String> customPlanId,
-            Optional<String> defaultPlanId,
+            boolean enableTaxCollection,
+            Optional<String> fallbackPlanId,
+            Optional<String> initialPlanId,
+            Optional<String> initialPlanPriceId,
+            List<OrderedPlansInGroup> orderedAddOns,
+            List<PlanGroupBundleOrder> orderedBundleList,
             List<OrderedPlansInGroup> orderedPlans,
+            boolean preventDowngradesWhenOverLimit,
+            boolean showCredits,
+            boolean showPeriodToggle,
+            boolean showZeroPriceAsFree,
+            boolean syncCustomerBillingDetailsForTax,
             Optional<Integer> trialDays,
+            Optional<String> trialExpiryPlanId,
+            Optional<String> trialExpiryPlanPriceId,
             Optional<Boolean> trialPaymentMethodRequired,
             Map<String, Object> additionalProperties) {
+        this.addOnCompatibilities = addOnCompatibilities;
         this.addOnIds = addOnIds;
+        this.checkoutCollectAddress = checkoutCollectAddress;
+        this.checkoutCollectEmail = checkoutCollectEmail;
+        this.checkoutCollectPhone = checkoutCollectPhone;
         this.customPlanConfig = customPlanConfig;
         this.customPlanId = customPlanId;
-        this.defaultPlanId = defaultPlanId;
+        this.enableTaxCollection = enableTaxCollection;
+        this.fallbackPlanId = fallbackPlanId;
+        this.initialPlanId = initialPlanId;
+        this.initialPlanPriceId = initialPlanPriceId;
+        this.orderedAddOns = orderedAddOns;
+        this.orderedBundleList = orderedBundleList;
         this.orderedPlans = orderedPlans;
+        this.preventDowngradesWhenOverLimit = preventDowngradesWhenOverLimit;
+        this.showCredits = showCredits;
+        this.showPeriodToggle = showPeriodToggle;
+        this.showZeroPriceAsFree = showZeroPriceAsFree;
+        this.syncCustomerBillingDetailsForTax = syncCustomerBillingDetailsForTax;
         this.trialDays = trialDays;
+        this.trialExpiryPlanId = trialExpiryPlanId;
+        this.trialExpiryPlanPriceId = trialExpiryPlanPriceId;
         this.trialPaymentMethodRequired = trialPaymentMethodRequired;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("add_on_compatibilities")
+    public Optional<List<CompatiblePlans>> getAddOnCompatibilities() {
+        return addOnCompatibilities;
+    }
+
+    /**
+     * @return Use OrderedAddOns instead
+     */
     @JsonProperty("add_on_ids")
     public List<String> getAddOnIds() {
         return addOnIds;
+    }
+
+    @JsonProperty("checkout_collect_address")
+    public boolean getCheckoutCollectAddress() {
+        return checkoutCollectAddress;
+    }
+
+    @JsonProperty("checkout_collect_email")
+    public boolean getCheckoutCollectEmail() {
+        return checkoutCollectEmail;
+    }
+
+    @JsonProperty("checkout_collect_phone")
+    public boolean getCheckoutCollectPhone() {
+        return checkoutCollectPhone;
     }
 
     @JsonProperty("custom_plan_config")
@@ -74,9 +163,34 @@ public final class CreatePlanGroupRequestBody {
         return customPlanId;
     }
 
-    @JsonProperty("default_plan_id")
-    public Optional<String> getDefaultPlanId() {
-        return defaultPlanId;
+    @JsonProperty("enable_tax_collection")
+    public boolean getEnableTaxCollection() {
+        return enableTaxCollection;
+    }
+
+    @JsonProperty("fallback_plan_id")
+    public Optional<String> getFallbackPlanId() {
+        return fallbackPlanId;
+    }
+
+    @JsonProperty("initial_plan_id")
+    public Optional<String> getInitialPlanId() {
+        return initialPlanId;
+    }
+
+    @JsonProperty("initial_plan_price_id")
+    public Optional<String> getInitialPlanPriceId() {
+        return initialPlanPriceId;
+    }
+
+    @JsonProperty("ordered_add_ons")
+    public List<OrderedPlansInGroup> getOrderedAddOns() {
+        return orderedAddOns;
+    }
+
+    @JsonProperty("ordered_bundle_list")
+    public List<PlanGroupBundleOrder> getOrderedBundleList() {
+        return orderedBundleList;
     }
 
     @JsonProperty("ordered_plans")
@@ -84,9 +198,44 @@ public final class CreatePlanGroupRequestBody {
         return orderedPlans;
     }
 
+    @JsonProperty("prevent_downgrades_when_over_limit")
+    public boolean getPreventDowngradesWhenOverLimit() {
+        return preventDowngradesWhenOverLimit;
+    }
+
+    @JsonProperty("show_credits")
+    public boolean getShowCredits() {
+        return showCredits;
+    }
+
+    @JsonProperty("show_period_toggle")
+    public boolean getShowPeriodToggle() {
+        return showPeriodToggle;
+    }
+
+    @JsonProperty("show_zero_price_as_free")
+    public boolean getShowZeroPriceAsFree() {
+        return showZeroPriceAsFree;
+    }
+
+    @JsonProperty("sync_customer_billing_details_for_tax")
+    public boolean getSyncCustomerBillingDetailsForTax() {
+        return syncCustomerBillingDetailsForTax;
+    }
+
     @JsonProperty("trial_days")
     public Optional<Integer> getTrialDays() {
         return trialDays;
+    }
+
+    @JsonProperty("trial_expiry_plan_id")
+    public Optional<String> getTrialExpiryPlanId() {
+        return trialExpiryPlanId;
+    }
+
+    @JsonProperty("trial_expiry_plan_price_id")
+    public Optional<String> getTrialExpiryPlanPriceId() {
+        return trialExpiryPlanPriceId;
     }
 
     @JsonProperty("trial_payment_method_required")
@@ -106,24 +255,56 @@ public final class CreatePlanGroupRequestBody {
     }
 
     private boolean equalTo(CreatePlanGroupRequestBody other) {
-        return addOnIds.equals(other.addOnIds)
+        return addOnCompatibilities.equals(other.addOnCompatibilities)
+                && addOnIds.equals(other.addOnIds)
+                && checkoutCollectAddress == other.checkoutCollectAddress
+                && checkoutCollectEmail == other.checkoutCollectEmail
+                && checkoutCollectPhone == other.checkoutCollectPhone
                 && customPlanConfig.equals(other.customPlanConfig)
                 && customPlanId.equals(other.customPlanId)
-                && defaultPlanId.equals(other.defaultPlanId)
+                && enableTaxCollection == other.enableTaxCollection
+                && fallbackPlanId.equals(other.fallbackPlanId)
+                && initialPlanId.equals(other.initialPlanId)
+                && initialPlanPriceId.equals(other.initialPlanPriceId)
+                && orderedAddOns.equals(other.orderedAddOns)
+                && orderedBundleList.equals(other.orderedBundleList)
                 && orderedPlans.equals(other.orderedPlans)
+                && preventDowngradesWhenOverLimit == other.preventDowngradesWhenOverLimit
+                && showCredits == other.showCredits
+                && showPeriodToggle == other.showPeriodToggle
+                && showZeroPriceAsFree == other.showZeroPriceAsFree
+                && syncCustomerBillingDetailsForTax == other.syncCustomerBillingDetailsForTax
                 && trialDays.equals(other.trialDays)
+                && trialExpiryPlanId.equals(other.trialExpiryPlanId)
+                && trialExpiryPlanPriceId.equals(other.trialExpiryPlanPriceId)
                 && trialPaymentMethodRequired.equals(other.trialPaymentMethodRequired);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.addOnCompatibilities,
                 this.addOnIds,
+                this.checkoutCollectAddress,
+                this.checkoutCollectEmail,
+                this.checkoutCollectPhone,
                 this.customPlanConfig,
                 this.customPlanId,
-                this.defaultPlanId,
+                this.enableTaxCollection,
+                this.fallbackPlanId,
+                this.initialPlanId,
+                this.initialPlanPriceId,
+                this.orderedAddOns,
+                this.orderedBundleList,
                 this.orderedPlans,
+                this.preventDowngradesWhenOverLimit,
+                this.showCredits,
+                this.showPeriodToggle,
+                this.showZeroPriceAsFree,
+                this.syncCustomerBillingDetailsForTax,
                 this.trialDays,
+                this.trialExpiryPlanId,
+                this.trialExpiryPlanPriceId,
                 this.trialPaymentMethodRequired);
     }
 
@@ -132,139 +313,527 @@ public final class CreatePlanGroupRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static CheckoutCollectAddressStage builder() {
         return new Builder();
     }
 
+    public interface CheckoutCollectAddressStage {
+        CheckoutCollectEmailStage checkoutCollectAddress(boolean checkoutCollectAddress);
+
+        Builder from(CreatePlanGroupRequestBody other);
+    }
+
+    public interface CheckoutCollectEmailStage {
+        CheckoutCollectPhoneStage checkoutCollectEmail(boolean checkoutCollectEmail);
+    }
+
+    public interface CheckoutCollectPhoneStage {
+        EnableTaxCollectionStage checkoutCollectPhone(boolean checkoutCollectPhone);
+    }
+
+    public interface EnableTaxCollectionStage {
+        PreventDowngradesWhenOverLimitStage enableTaxCollection(boolean enableTaxCollection);
+    }
+
+    public interface PreventDowngradesWhenOverLimitStage {
+        ShowCreditsStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit);
+    }
+
+    public interface ShowCreditsStage {
+        ShowPeriodToggleStage showCredits(boolean showCredits);
+    }
+
+    public interface ShowPeriodToggleStage {
+        ShowZeroPriceAsFreeStage showPeriodToggle(boolean showPeriodToggle);
+    }
+
+    public interface ShowZeroPriceAsFreeStage {
+        SyncCustomerBillingDetailsForTaxStage showZeroPriceAsFree(boolean showZeroPriceAsFree);
+    }
+
+    public interface SyncCustomerBillingDetailsForTaxStage {
+        _FinalStage syncCustomerBillingDetailsForTax(boolean syncCustomerBillingDetailsForTax);
+    }
+
+    public interface _FinalStage {
+        CreatePlanGroupRequestBody build();
+
+        _FinalStage addOnCompatibilities(Optional<List<CompatiblePlans>> addOnCompatibilities);
+
+        _FinalStage addOnCompatibilities(List<CompatiblePlans> addOnCompatibilities);
+
+        /**
+         * <p>Use OrderedAddOns instead</p>
+         */
+        _FinalStage addOnIds(List<String> addOnIds);
+
+        _FinalStage addAddOnIds(String addOnIds);
+
+        _FinalStage addAllAddOnIds(List<String> addOnIds);
+
+        _FinalStage customPlanConfig(Optional<CustomPlanConfig> customPlanConfig);
+
+        _FinalStage customPlanConfig(CustomPlanConfig customPlanConfig);
+
+        _FinalStage customPlanId(Optional<String> customPlanId);
+
+        _FinalStage customPlanId(String customPlanId);
+
+        _FinalStage fallbackPlanId(Optional<String> fallbackPlanId);
+
+        _FinalStage fallbackPlanId(String fallbackPlanId);
+
+        _FinalStage initialPlanId(Optional<String> initialPlanId);
+
+        _FinalStage initialPlanId(String initialPlanId);
+
+        _FinalStage initialPlanPriceId(Optional<String> initialPlanPriceId);
+
+        _FinalStage initialPlanPriceId(String initialPlanPriceId);
+
+        _FinalStage orderedAddOns(List<OrderedPlansInGroup> orderedAddOns);
+
+        _FinalStage addOrderedAddOns(OrderedPlansInGroup orderedAddOns);
+
+        _FinalStage addAllOrderedAddOns(List<OrderedPlansInGroup> orderedAddOns);
+
+        _FinalStage orderedBundleList(List<PlanGroupBundleOrder> orderedBundleList);
+
+        _FinalStage addOrderedBundleList(PlanGroupBundleOrder orderedBundleList);
+
+        _FinalStage addAllOrderedBundleList(List<PlanGroupBundleOrder> orderedBundleList);
+
+        _FinalStage orderedPlans(List<OrderedPlansInGroup> orderedPlans);
+
+        _FinalStage addOrderedPlans(OrderedPlansInGroup orderedPlans);
+
+        _FinalStage addAllOrderedPlans(List<OrderedPlansInGroup> orderedPlans);
+
+        _FinalStage trialDays(Optional<Integer> trialDays);
+
+        _FinalStage trialDays(Integer trialDays);
+
+        _FinalStage trialExpiryPlanId(Optional<String> trialExpiryPlanId);
+
+        _FinalStage trialExpiryPlanId(String trialExpiryPlanId);
+
+        _FinalStage trialExpiryPlanPriceId(Optional<String> trialExpiryPlanPriceId);
+
+        _FinalStage trialExpiryPlanPriceId(String trialExpiryPlanPriceId);
+
+        _FinalStage trialPaymentMethodRequired(Optional<Boolean> trialPaymentMethodRequired);
+
+        _FinalStage trialPaymentMethodRequired(Boolean trialPaymentMethodRequired);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private List<String> addOnIds = new ArrayList<>();
+    public static final class Builder
+            implements CheckoutCollectAddressStage,
+                    CheckoutCollectEmailStage,
+                    CheckoutCollectPhoneStage,
+                    EnableTaxCollectionStage,
+                    PreventDowngradesWhenOverLimitStage,
+                    ShowCreditsStage,
+                    ShowPeriodToggleStage,
+                    ShowZeroPriceAsFreeStage,
+                    SyncCustomerBillingDetailsForTaxStage,
+                    _FinalStage {
+        private boolean checkoutCollectAddress;
 
-        private Optional<CustomPlanConfig> customPlanConfig = Optional.empty();
+        private boolean checkoutCollectEmail;
 
-        private Optional<String> customPlanId = Optional.empty();
+        private boolean checkoutCollectPhone;
 
-        private Optional<String> defaultPlanId = Optional.empty();
+        private boolean enableTaxCollection;
 
-        private List<OrderedPlansInGroup> orderedPlans = new ArrayList<>();
+        private boolean preventDowngradesWhenOverLimit;
+
+        private boolean showCredits;
+
+        private boolean showPeriodToggle;
+
+        private boolean showZeroPriceAsFree;
+
+        private boolean syncCustomerBillingDetailsForTax;
+
+        private Optional<Boolean> trialPaymentMethodRequired = Optional.empty();
+
+        private Optional<String> trialExpiryPlanPriceId = Optional.empty();
+
+        private Optional<String> trialExpiryPlanId = Optional.empty();
 
         private Optional<Integer> trialDays = Optional.empty();
 
-        private Optional<Boolean> trialPaymentMethodRequired = Optional.empty();
+        private List<OrderedPlansInGroup> orderedPlans = new ArrayList<>();
+
+        private List<PlanGroupBundleOrder> orderedBundleList = new ArrayList<>();
+
+        private List<OrderedPlansInGroup> orderedAddOns = new ArrayList<>();
+
+        private Optional<String> initialPlanPriceId = Optional.empty();
+
+        private Optional<String> initialPlanId = Optional.empty();
+
+        private Optional<String> fallbackPlanId = Optional.empty();
+
+        private Optional<String> customPlanId = Optional.empty();
+
+        private Optional<CustomPlanConfig> customPlanConfig = Optional.empty();
+
+        private List<String> addOnIds = new ArrayList<>();
+
+        private Optional<List<CompatiblePlans>> addOnCompatibilities = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(CreatePlanGroupRequestBody other) {
+            addOnCompatibilities(other.getAddOnCompatibilities());
             addOnIds(other.getAddOnIds());
+            checkoutCollectAddress(other.getCheckoutCollectAddress());
+            checkoutCollectEmail(other.getCheckoutCollectEmail());
+            checkoutCollectPhone(other.getCheckoutCollectPhone());
             customPlanConfig(other.getCustomPlanConfig());
             customPlanId(other.getCustomPlanId());
-            defaultPlanId(other.getDefaultPlanId());
+            enableTaxCollection(other.getEnableTaxCollection());
+            fallbackPlanId(other.getFallbackPlanId());
+            initialPlanId(other.getInitialPlanId());
+            initialPlanPriceId(other.getInitialPlanPriceId());
+            orderedAddOns(other.getOrderedAddOns());
+            orderedBundleList(other.getOrderedBundleList());
             orderedPlans(other.getOrderedPlans());
+            preventDowngradesWhenOverLimit(other.getPreventDowngradesWhenOverLimit());
+            showCredits(other.getShowCredits());
+            showPeriodToggle(other.getShowPeriodToggle());
+            showZeroPriceAsFree(other.getShowZeroPriceAsFree());
+            syncCustomerBillingDetailsForTax(other.getSyncCustomerBillingDetailsForTax());
             trialDays(other.getTrialDays());
+            trialExpiryPlanId(other.getTrialExpiryPlanId());
+            trialExpiryPlanPriceId(other.getTrialExpiryPlanPriceId());
             trialPaymentMethodRequired(other.getTrialPaymentMethodRequired());
             return this;
         }
 
-        @JsonSetter(value = "add_on_ids", nulls = Nulls.SKIP)
-        public Builder addOnIds(List<String> addOnIds) {
-            this.addOnIds.clear();
-            this.addOnIds.addAll(addOnIds);
+        @java.lang.Override
+        @JsonSetter("checkout_collect_address")
+        public CheckoutCollectEmailStage checkoutCollectAddress(boolean checkoutCollectAddress) {
+            this.checkoutCollectAddress = checkoutCollectAddress;
             return this;
         }
 
-        public Builder addAddOnIds(String addOnIds) {
-            this.addOnIds.add(addOnIds);
+        @java.lang.Override
+        @JsonSetter("checkout_collect_email")
+        public CheckoutCollectPhoneStage checkoutCollectEmail(boolean checkoutCollectEmail) {
+            this.checkoutCollectEmail = checkoutCollectEmail;
             return this;
         }
 
-        public Builder addAllAddOnIds(List<String> addOnIds) {
-            this.addOnIds.addAll(addOnIds);
+        @java.lang.Override
+        @JsonSetter("checkout_collect_phone")
+        public EnableTaxCollectionStage checkoutCollectPhone(boolean checkoutCollectPhone) {
+            this.checkoutCollectPhone = checkoutCollectPhone;
             return this;
         }
 
-        @JsonSetter(value = "custom_plan_config", nulls = Nulls.SKIP)
-        public Builder customPlanConfig(Optional<CustomPlanConfig> customPlanConfig) {
-            this.customPlanConfig = customPlanConfig;
+        @java.lang.Override
+        @JsonSetter("enable_tax_collection")
+        public PreventDowngradesWhenOverLimitStage enableTaxCollection(boolean enableTaxCollection) {
+            this.enableTaxCollection = enableTaxCollection;
             return this;
         }
 
-        public Builder customPlanConfig(CustomPlanConfig customPlanConfig) {
-            this.customPlanConfig = Optional.ofNullable(customPlanConfig);
+        @java.lang.Override
+        @JsonSetter("prevent_downgrades_when_over_limit")
+        public ShowCreditsStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit) {
+            this.preventDowngradesWhenOverLimit = preventDowngradesWhenOverLimit;
             return this;
         }
 
-        @JsonSetter(value = "custom_plan_id", nulls = Nulls.SKIP)
-        public Builder customPlanId(Optional<String> customPlanId) {
-            this.customPlanId = customPlanId;
+        @java.lang.Override
+        @JsonSetter("show_credits")
+        public ShowPeriodToggleStage showCredits(boolean showCredits) {
+            this.showCredits = showCredits;
             return this;
         }
 
-        public Builder customPlanId(String customPlanId) {
-            this.customPlanId = Optional.ofNullable(customPlanId);
+        @java.lang.Override
+        @JsonSetter("show_period_toggle")
+        public ShowZeroPriceAsFreeStage showPeriodToggle(boolean showPeriodToggle) {
+            this.showPeriodToggle = showPeriodToggle;
             return this;
         }
 
-        @JsonSetter(value = "default_plan_id", nulls = Nulls.SKIP)
-        public Builder defaultPlanId(Optional<String> defaultPlanId) {
-            this.defaultPlanId = defaultPlanId;
+        @java.lang.Override
+        @JsonSetter("show_zero_price_as_free")
+        public SyncCustomerBillingDetailsForTaxStage showZeroPriceAsFree(boolean showZeroPriceAsFree) {
+            this.showZeroPriceAsFree = showZeroPriceAsFree;
             return this;
         }
 
-        public Builder defaultPlanId(String defaultPlanId) {
-            this.defaultPlanId = Optional.ofNullable(defaultPlanId);
+        @java.lang.Override
+        @JsonSetter("sync_customer_billing_details_for_tax")
+        public _FinalStage syncCustomerBillingDetailsForTax(boolean syncCustomerBillingDetailsForTax) {
+            this.syncCustomerBillingDetailsForTax = syncCustomerBillingDetailsForTax;
             return this;
         }
 
+        @java.lang.Override
+        public _FinalStage trialPaymentMethodRequired(Boolean trialPaymentMethodRequired) {
+            this.trialPaymentMethodRequired = Optional.ofNullable(trialPaymentMethodRequired);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_payment_method_required", nulls = Nulls.SKIP)
+        public _FinalStage trialPaymentMethodRequired(Optional<Boolean> trialPaymentMethodRequired) {
+            this.trialPaymentMethodRequired = trialPaymentMethodRequired;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage trialExpiryPlanPriceId(String trialExpiryPlanPriceId) {
+            this.trialExpiryPlanPriceId = Optional.ofNullable(trialExpiryPlanPriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_expiry_plan_price_id", nulls = Nulls.SKIP)
+        public _FinalStage trialExpiryPlanPriceId(Optional<String> trialExpiryPlanPriceId) {
+            this.trialExpiryPlanPriceId = trialExpiryPlanPriceId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage trialExpiryPlanId(String trialExpiryPlanId) {
+            this.trialExpiryPlanId = Optional.ofNullable(trialExpiryPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_expiry_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage trialExpiryPlanId(Optional<String> trialExpiryPlanId) {
+            this.trialExpiryPlanId = trialExpiryPlanId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage trialDays(Integer trialDays) {
+            this.trialDays = Optional.ofNullable(trialDays);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
+        public _FinalStage trialDays(Optional<Integer> trialDays) {
+            this.trialDays = trialDays;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllOrderedPlans(List<OrderedPlansInGroup> orderedPlans) {
+            if (orderedPlans != null) {
+                this.orderedPlans.addAll(orderedPlans);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addOrderedPlans(OrderedPlansInGroup orderedPlans) {
+            this.orderedPlans.add(orderedPlans);
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter(value = "ordered_plans", nulls = Nulls.SKIP)
-        public Builder orderedPlans(List<OrderedPlansInGroup> orderedPlans) {
+        public _FinalStage orderedPlans(List<OrderedPlansInGroup> orderedPlans) {
             this.orderedPlans.clear();
             this.orderedPlans.addAll(orderedPlans);
             return this;
         }
 
-        public Builder addOrderedPlans(OrderedPlansInGroup orderedPlans) {
-            this.orderedPlans.add(orderedPlans);
+        @java.lang.Override
+        public _FinalStage addAllOrderedBundleList(List<PlanGroupBundleOrder> orderedBundleList) {
+            if (orderedBundleList != null) {
+                this.orderedBundleList.addAll(orderedBundleList);
+            }
             return this;
         }
 
-        public Builder addAllOrderedPlans(List<OrderedPlansInGroup> orderedPlans) {
-            this.orderedPlans.addAll(orderedPlans);
+        @java.lang.Override
+        public _FinalStage addOrderedBundleList(PlanGroupBundleOrder orderedBundleList) {
+            this.orderedBundleList.add(orderedBundleList);
             return this;
         }
 
-        @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
-        public Builder trialDays(Optional<Integer> trialDays) {
-            this.trialDays = trialDays;
+        @java.lang.Override
+        @JsonSetter(value = "ordered_bundle_list", nulls = Nulls.SKIP)
+        public _FinalStage orderedBundleList(List<PlanGroupBundleOrder> orderedBundleList) {
+            this.orderedBundleList.clear();
+            this.orderedBundleList.addAll(orderedBundleList);
             return this;
         }
 
-        public Builder trialDays(Integer trialDays) {
-            this.trialDays = Optional.ofNullable(trialDays);
+        @java.lang.Override
+        public _FinalStage addAllOrderedAddOns(List<OrderedPlansInGroup> orderedAddOns) {
+            if (orderedAddOns != null) {
+                this.orderedAddOns.addAll(orderedAddOns);
+            }
             return this;
         }
 
-        @JsonSetter(value = "trial_payment_method_required", nulls = Nulls.SKIP)
-        public Builder trialPaymentMethodRequired(Optional<Boolean> trialPaymentMethodRequired) {
-            this.trialPaymentMethodRequired = trialPaymentMethodRequired;
+        @java.lang.Override
+        public _FinalStage addOrderedAddOns(OrderedPlansInGroup orderedAddOns) {
+            this.orderedAddOns.add(orderedAddOns);
             return this;
         }
 
-        public Builder trialPaymentMethodRequired(Boolean trialPaymentMethodRequired) {
-            this.trialPaymentMethodRequired = Optional.ofNullable(trialPaymentMethodRequired);
+        @java.lang.Override
+        @JsonSetter(value = "ordered_add_ons", nulls = Nulls.SKIP)
+        public _FinalStage orderedAddOns(List<OrderedPlansInGroup> orderedAddOns) {
+            this.orderedAddOns.clear();
+            this.orderedAddOns.addAll(orderedAddOns);
             return this;
         }
 
+        @java.lang.Override
+        public _FinalStage initialPlanPriceId(String initialPlanPriceId) {
+            this.initialPlanPriceId = Optional.ofNullable(initialPlanPriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "initial_plan_price_id", nulls = Nulls.SKIP)
+        public _FinalStage initialPlanPriceId(Optional<String> initialPlanPriceId) {
+            this.initialPlanPriceId = initialPlanPriceId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage initialPlanId(String initialPlanId) {
+            this.initialPlanId = Optional.ofNullable(initialPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "initial_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage initialPlanId(Optional<String> initialPlanId) {
+            this.initialPlanId = initialPlanId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage fallbackPlanId(String fallbackPlanId) {
+            this.fallbackPlanId = Optional.ofNullable(fallbackPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "fallback_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage fallbackPlanId(Optional<String> fallbackPlanId) {
+            this.fallbackPlanId = fallbackPlanId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage customPlanId(String customPlanId) {
+            this.customPlanId = Optional.ofNullable(customPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage customPlanId(Optional<String> customPlanId) {
+            this.customPlanId = customPlanId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage customPlanConfig(CustomPlanConfig customPlanConfig) {
+            this.customPlanConfig = Optional.ofNullable(customPlanConfig);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_plan_config", nulls = Nulls.SKIP)
+        public _FinalStage customPlanConfig(Optional<CustomPlanConfig> customPlanConfig) {
+            this.customPlanConfig = customPlanConfig;
+            return this;
+        }
+
+        /**
+         * <p>Use OrderedAddOns instead</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllAddOnIds(List<String> addOnIds) {
+            if (addOnIds != null) {
+                this.addOnIds.addAll(addOnIds);
+            }
+            return this;
+        }
+
+        /**
+         * <p>Use OrderedAddOns instead</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAddOnIds(String addOnIds) {
+            this.addOnIds.add(addOnIds);
+            return this;
+        }
+
+        /**
+         * <p>Use OrderedAddOns instead</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "add_on_ids", nulls = Nulls.SKIP)
+        public _FinalStage addOnIds(List<String> addOnIds) {
+            this.addOnIds.clear();
+            this.addOnIds.addAll(addOnIds);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addOnCompatibilities(List<CompatiblePlans> addOnCompatibilities) {
+            this.addOnCompatibilities = Optional.ofNullable(addOnCompatibilities);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "add_on_compatibilities", nulls = Nulls.SKIP)
+        public _FinalStage addOnCompatibilities(Optional<List<CompatiblePlans>> addOnCompatibilities) {
+            this.addOnCompatibilities = addOnCompatibilities;
+            return this;
+        }
+
+        @java.lang.Override
         public CreatePlanGroupRequestBody build() {
             return new CreatePlanGroupRequestBody(
+                    addOnCompatibilities,
                     addOnIds,
+                    checkoutCollectAddress,
+                    checkoutCollectEmail,
+                    checkoutCollectPhone,
                     customPlanConfig,
                     customPlanId,
-                    defaultPlanId,
+                    enableTaxCollection,
+                    fallbackPlanId,
+                    initialPlanId,
+                    initialPlanPriceId,
+                    orderedAddOns,
+                    orderedBundleList,
                     orderedPlans,
+                    preventDowngradesWhenOverLimit,
+                    showCredits,
+                    showPeriodToggle,
+                    showZeroPriceAsFree,
+                    syncCustomerBillingDetailsForTax,
                     trialDays,
+                    trialExpiryPlanId,
+                    trialExpiryPlanPriceId,
                     trialPaymentMethodRequired,
                     additionalProperties);
         }

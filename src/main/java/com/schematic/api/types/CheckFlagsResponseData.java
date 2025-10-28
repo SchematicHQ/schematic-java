@@ -91,7 +91,9 @@ public final class CheckFlagsResponseData {
         }
 
         public Builder addAllFlags(List<CheckFlagResponseData> flags) {
-            this.flags.addAll(flags);
+            if (flags != null) {
+                this.flags.addAll(flags);
+            }
             return this;
         }
 

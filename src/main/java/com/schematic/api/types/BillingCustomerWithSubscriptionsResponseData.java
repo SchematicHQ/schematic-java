@@ -293,7 +293,9 @@ public final class BillingCustomerWithSubscriptionsResponseData {
 
         @java.lang.Override
         public _FinalStage addAllSubscriptions(List<BillingCustomerSubscription> subscriptions) {
-            this.subscriptions.addAll(subscriptions);
+            if (subscriptions != null) {
+                this.subscriptions.addAll(subscriptions);
+            }
             return this;
         }
 

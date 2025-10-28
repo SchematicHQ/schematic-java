@@ -92,7 +92,9 @@ public final class FeatureUsageDetailResponseData {
         }
 
         public Builder addAllFeatures(List<FeatureUsageResponseData> features) {
-            this.features.addAll(features);
+            if (features != null) {
+                this.features.addAll(features);
+            }
             return this;
         }
 

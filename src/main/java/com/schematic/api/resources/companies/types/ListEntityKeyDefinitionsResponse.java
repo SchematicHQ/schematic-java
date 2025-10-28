@@ -38,9 +38,6 @@ public final class ListEntityKeyDefinitionsResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<EntityKeyDefinitionResponseData> getData() {
         return data;
@@ -84,6 +81,9 @@ public final class ListEntityKeyDefinitionsResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull ListEntityKeyDefinitionsParams params);
 
         Builder from(ListEntityKeyDefinitionsResponse other);
@@ -119,6 +119,7 @@ public final class ListEntityKeyDefinitionsResponse {
 
         /**
          * <p>Input parameters</p>
+         * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -128,20 +129,14 @@ public final class ListEntityKeyDefinitionsResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<EntityKeyDefinitionResponseData> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(EntityKeyDefinitionResponseData data) {
             this.data.add(data);

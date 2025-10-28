@@ -23,35 +23,96 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanGroupResponseData.Builder.class)
 public final class PlanGroupResponseData {
+    private final List<CompatiblePlansResponseData> addOnCompatibilities;
+
     private final List<String> addOnIds;
+
+    private final CheckoutSettingsResponseData checkoutSettings;
 
     private final Optional<String> defaultPlanId;
 
+    private final Optional<String> fallbackPlanId;
+
     private final String id;
+
+    private final Optional<String> initialPlanId;
+
+    private final Optional<String> initialPlanPriceId;
+
+    private final List<OrderedPlansInGroup> orderedAddOnIds;
 
     private final List<OrderedPlansInGroup> planIds;
 
+    private final boolean preventDowngradesWhenOverLimit;
+
+    private final boolean showCredits;
+
+    private final boolean showPeriodToggle;
+
+    private final boolean showZeroPriceAsFree;
+
+    private final boolean syncCustomerBillingDetailsForTax;
+
+    private final boolean taxCollectionEnabled;
+
     private final Optional<Integer> trialDays;
+
+    private final Optional<String> trialExpiryPlanId;
+
+    private final Optional<String> trialExpiryPlanPriceId;
 
     private final Optional<Boolean> trialPaymentMethodRequired;
 
     private final Map<String, Object> additionalProperties;
 
     private PlanGroupResponseData(
+            List<CompatiblePlansResponseData> addOnCompatibilities,
             List<String> addOnIds,
+            CheckoutSettingsResponseData checkoutSettings,
             Optional<String> defaultPlanId,
+            Optional<String> fallbackPlanId,
             String id,
+            Optional<String> initialPlanId,
+            Optional<String> initialPlanPriceId,
+            List<OrderedPlansInGroup> orderedAddOnIds,
             List<OrderedPlansInGroup> planIds,
+            boolean preventDowngradesWhenOverLimit,
+            boolean showCredits,
+            boolean showPeriodToggle,
+            boolean showZeroPriceAsFree,
+            boolean syncCustomerBillingDetailsForTax,
+            boolean taxCollectionEnabled,
             Optional<Integer> trialDays,
+            Optional<String> trialExpiryPlanId,
+            Optional<String> trialExpiryPlanPriceId,
             Optional<Boolean> trialPaymentMethodRequired,
             Map<String, Object> additionalProperties) {
+        this.addOnCompatibilities = addOnCompatibilities;
         this.addOnIds = addOnIds;
+        this.checkoutSettings = checkoutSettings;
         this.defaultPlanId = defaultPlanId;
+        this.fallbackPlanId = fallbackPlanId;
         this.id = id;
+        this.initialPlanId = initialPlanId;
+        this.initialPlanPriceId = initialPlanPriceId;
+        this.orderedAddOnIds = orderedAddOnIds;
         this.planIds = planIds;
+        this.preventDowngradesWhenOverLimit = preventDowngradesWhenOverLimit;
+        this.showCredits = showCredits;
+        this.showPeriodToggle = showPeriodToggle;
+        this.showZeroPriceAsFree = showZeroPriceAsFree;
+        this.syncCustomerBillingDetailsForTax = syncCustomerBillingDetailsForTax;
+        this.taxCollectionEnabled = taxCollectionEnabled;
         this.trialDays = trialDays;
+        this.trialExpiryPlanId = trialExpiryPlanId;
+        this.trialExpiryPlanPriceId = trialExpiryPlanPriceId;
         this.trialPaymentMethodRequired = trialPaymentMethodRequired;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("add_on_compatibilities")
+    public List<CompatiblePlansResponseData> getAddOnCompatibilities() {
+        return addOnCompatibilities;
     }
 
     @JsonProperty("add_on_ids")
@@ -59,9 +120,19 @@ public final class PlanGroupResponseData {
         return addOnIds;
     }
 
+    @JsonProperty("checkout_settings")
+    public CheckoutSettingsResponseData getCheckoutSettings() {
+        return checkoutSettings;
+    }
+
     @JsonProperty("default_plan_id")
     public Optional<String> getDefaultPlanId() {
         return defaultPlanId;
+    }
+
+    @JsonProperty("fallback_plan_id")
+    public Optional<String> getFallbackPlanId() {
+        return fallbackPlanId;
     }
 
     @JsonProperty("id")
@@ -69,14 +140,69 @@ public final class PlanGroupResponseData {
         return id;
     }
 
+    @JsonProperty("initial_plan_id")
+    public Optional<String> getInitialPlanId() {
+        return initialPlanId;
+    }
+
+    @JsonProperty("initial_plan_price_id")
+    public Optional<String> getInitialPlanPriceId() {
+        return initialPlanPriceId;
+    }
+
+    @JsonProperty("ordered_add_on_ids")
+    public List<OrderedPlansInGroup> getOrderedAddOnIds() {
+        return orderedAddOnIds;
+    }
+
     @JsonProperty("plan_ids")
     public List<OrderedPlansInGroup> getPlanIds() {
         return planIds;
     }
 
+    @JsonProperty("prevent_downgrades_when_over_limit")
+    public boolean getPreventDowngradesWhenOverLimit() {
+        return preventDowngradesWhenOverLimit;
+    }
+
+    @JsonProperty("show_credits")
+    public boolean getShowCredits() {
+        return showCredits;
+    }
+
+    @JsonProperty("show_period_toggle")
+    public boolean getShowPeriodToggle() {
+        return showPeriodToggle;
+    }
+
+    @JsonProperty("show_zero_price_as_free")
+    public boolean getShowZeroPriceAsFree() {
+        return showZeroPriceAsFree;
+    }
+
+    @JsonProperty("sync_customer_billing_details_for_tax")
+    public boolean getSyncCustomerBillingDetailsForTax() {
+        return syncCustomerBillingDetailsForTax;
+    }
+
+    @JsonProperty("tax_collection_enabled")
+    public boolean getTaxCollectionEnabled() {
+        return taxCollectionEnabled;
+    }
+
     @JsonProperty("trial_days")
     public Optional<Integer> getTrialDays() {
         return trialDays;
+    }
+
+    @JsonProperty("trial_expiry_plan_id")
+    public Optional<String> getTrialExpiryPlanId() {
+        return trialExpiryPlanId;
+    }
+
+    @JsonProperty("trial_expiry_plan_price_id")
+    public Optional<String> getTrialExpiryPlanPriceId() {
+        return trialExpiryPlanPriceId;
     }
 
     @JsonProperty("trial_payment_method_required")
@@ -96,22 +222,50 @@ public final class PlanGroupResponseData {
     }
 
     private boolean equalTo(PlanGroupResponseData other) {
-        return addOnIds.equals(other.addOnIds)
+        return addOnCompatibilities.equals(other.addOnCompatibilities)
+                && addOnIds.equals(other.addOnIds)
+                && checkoutSettings.equals(other.checkoutSettings)
                 && defaultPlanId.equals(other.defaultPlanId)
+                && fallbackPlanId.equals(other.fallbackPlanId)
                 && id.equals(other.id)
+                && initialPlanId.equals(other.initialPlanId)
+                && initialPlanPriceId.equals(other.initialPlanPriceId)
+                && orderedAddOnIds.equals(other.orderedAddOnIds)
                 && planIds.equals(other.planIds)
+                && preventDowngradesWhenOverLimit == other.preventDowngradesWhenOverLimit
+                && showCredits == other.showCredits
+                && showPeriodToggle == other.showPeriodToggle
+                && showZeroPriceAsFree == other.showZeroPriceAsFree
+                && syncCustomerBillingDetailsForTax == other.syncCustomerBillingDetailsForTax
+                && taxCollectionEnabled == other.taxCollectionEnabled
                 && trialDays.equals(other.trialDays)
+                && trialExpiryPlanId.equals(other.trialExpiryPlanId)
+                && trialExpiryPlanPriceId.equals(other.trialExpiryPlanPriceId)
                 && trialPaymentMethodRequired.equals(other.trialPaymentMethodRequired);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.addOnCompatibilities,
                 this.addOnIds,
+                this.checkoutSettings,
                 this.defaultPlanId,
+                this.fallbackPlanId,
                 this.id,
+                this.initialPlanId,
+                this.initialPlanPriceId,
+                this.orderedAddOnIds,
                 this.planIds,
+                this.preventDowngradesWhenOverLimit,
+                this.showCredits,
+                this.showPeriodToggle,
+                this.showZeroPriceAsFree,
+                this.syncCustomerBillingDetailsForTax,
+                this.taxCollectionEnabled,
                 this.trialDays,
+                this.trialExpiryPlanId,
+                this.trialExpiryPlanPriceId,
                 this.trialPaymentMethodRequired);
     }
 
@@ -120,18 +274,52 @@ public final class PlanGroupResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static IdStage builder() {
+    public static CheckoutSettingsStage builder() {
         return new Builder();
     }
 
-    public interface IdStage {
-        _FinalStage id(@NotNull String id);
+    public interface CheckoutSettingsStage {
+        IdStage checkoutSettings(@NotNull CheckoutSettingsResponseData checkoutSettings);
 
         Builder from(PlanGroupResponseData other);
     }
 
+    public interface IdStage {
+        PreventDowngradesWhenOverLimitStage id(@NotNull String id);
+    }
+
+    public interface PreventDowngradesWhenOverLimitStage {
+        ShowCreditsStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit);
+    }
+
+    public interface ShowCreditsStage {
+        ShowPeriodToggleStage showCredits(boolean showCredits);
+    }
+
+    public interface ShowPeriodToggleStage {
+        ShowZeroPriceAsFreeStage showPeriodToggle(boolean showPeriodToggle);
+    }
+
+    public interface ShowZeroPriceAsFreeStage {
+        SyncCustomerBillingDetailsForTaxStage showZeroPriceAsFree(boolean showZeroPriceAsFree);
+    }
+
+    public interface SyncCustomerBillingDetailsForTaxStage {
+        TaxCollectionEnabledStage syncCustomerBillingDetailsForTax(boolean syncCustomerBillingDetailsForTax);
+    }
+
+    public interface TaxCollectionEnabledStage {
+        _FinalStage taxCollectionEnabled(boolean taxCollectionEnabled);
+    }
+
     public interface _FinalStage {
         PlanGroupResponseData build();
+
+        _FinalStage addOnCompatibilities(List<CompatiblePlansResponseData> addOnCompatibilities);
+
+        _FinalStage addAddOnCompatibilities(CompatiblePlansResponseData addOnCompatibilities);
+
+        _FinalStage addAllAddOnCompatibilities(List<CompatiblePlansResponseData> addOnCompatibilities);
 
         _FinalStage addOnIds(List<String> addOnIds);
 
@@ -143,6 +331,24 @@ public final class PlanGroupResponseData {
 
         _FinalStage defaultPlanId(String defaultPlanId);
 
+        _FinalStage fallbackPlanId(Optional<String> fallbackPlanId);
+
+        _FinalStage fallbackPlanId(String fallbackPlanId);
+
+        _FinalStage initialPlanId(Optional<String> initialPlanId);
+
+        _FinalStage initialPlanId(String initialPlanId);
+
+        _FinalStage initialPlanPriceId(Optional<String> initialPlanPriceId);
+
+        _FinalStage initialPlanPriceId(String initialPlanPriceId);
+
+        _FinalStage orderedAddOnIds(List<OrderedPlansInGroup> orderedAddOnIds);
+
+        _FinalStage addOrderedAddOnIds(OrderedPlansInGroup orderedAddOnIds);
+
+        _FinalStage addAllOrderedAddOnIds(List<OrderedPlansInGroup> orderedAddOnIds);
+
         _FinalStage planIds(List<OrderedPlansInGroup> planIds);
 
         _FinalStage addPlanIds(OrderedPlansInGroup planIds);
@@ -153,24 +359,69 @@ public final class PlanGroupResponseData {
 
         _FinalStage trialDays(Integer trialDays);
 
+        _FinalStage trialExpiryPlanId(Optional<String> trialExpiryPlanId);
+
+        _FinalStage trialExpiryPlanId(String trialExpiryPlanId);
+
+        _FinalStage trialExpiryPlanPriceId(Optional<String> trialExpiryPlanPriceId);
+
+        _FinalStage trialExpiryPlanPriceId(String trialExpiryPlanPriceId);
+
         _FinalStage trialPaymentMethodRequired(Optional<Boolean> trialPaymentMethodRequired);
 
         _FinalStage trialPaymentMethodRequired(Boolean trialPaymentMethodRequired);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IdStage, _FinalStage {
+    public static final class Builder
+            implements CheckoutSettingsStage,
+                    IdStage,
+                    PreventDowngradesWhenOverLimitStage,
+                    ShowCreditsStage,
+                    ShowPeriodToggleStage,
+                    ShowZeroPriceAsFreeStage,
+                    SyncCustomerBillingDetailsForTaxStage,
+                    TaxCollectionEnabledStage,
+                    _FinalStage {
+        private CheckoutSettingsResponseData checkoutSettings;
+
         private String id;
 
+        private boolean preventDowngradesWhenOverLimit;
+
+        private boolean showCredits;
+
+        private boolean showPeriodToggle;
+
+        private boolean showZeroPriceAsFree;
+
+        private boolean syncCustomerBillingDetailsForTax;
+
+        private boolean taxCollectionEnabled;
+
         private Optional<Boolean> trialPaymentMethodRequired = Optional.empty();
+
+        private Optional<String> trialExpiryPlanPriceId = Optional.empty();
+
+        private Optional<String> trialExpiryPlanId = Optional.empty();
 
         private Optional<Integer> trialDays = Optional.empty();
 
         private List<OrderedPlansInGroup> planIds = new ArrayList<>();
 
+        private List<OrderedPlansInGroup> orderedAddOnIds = new ArrayList<>();
+
+        private Optional<String> initialPlanPriceId = Optional.empty();
+
+        private Optional<String> initialPlanId = Optional.empty();
+
+        private Optional<String> fallbackPlanId = Optional.empty();
+
         private Optional<String> defaultPlanId = Optional.empty();
 
         private List<String> addOnIds = new ArrayList<>();
+
+        private List<CompatiblePlansResponseData> addOnCompatibilities = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -179,19 +430,82 @@ public final class PlanGroupResponseData {
 
         @java.lang.Override
         public Builder from(PlanGroupResponseData other) {
+            addOnCompatibilities(other.getAddOnCompatibilities());
             addOnIds(other.getAddOnIds());
+            checkoutSettings(other.getCheckoutSettings());
             defaultPlanId(other.getDefaultPlanId());
+            fallbackPlanId(other.getFallbackPlanId());
             id(other.getId());
+            initialPlanId(other.getInitialPlanId());
+            initialPlanPriceId(other.getInitialPlanPriceId());
+            orderedAddOnIds(other.getOrderedAddOnIds());
             planIds(other.getPlanIds());
+            preventDowngradesWhenOverLimit(other.getPreventDowngradesWhenOverLimit());
+            showCredits(other.getShowCredits());
+            showPeriodToggle(other.getShowPeriodToggle());
+            showZeroPriceAsFree(other.getShowZeroPriceAsFree());
+            syncCustomerBillingDetailsForTax(other.getSyncCustomerBillingDetailsForTax());
+            taxCollectionEnabled(other.getTaxCollectionEnabled());
             trialDays(other.getTrialDays());
+            trialExpiryPlanId(other.getTrialExpiryPlanId());
+            trialExpiryPlanPriceId(other.getTrialExpiryPlanPriceId());
             trialPaymentMethodRequired(other.getTrialPaymentMethodRequired());
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("checkout_settings")
+        public IdStage checkoutSettings(@NotNull CheckoutSettingsResponseData checkoutSettings) {
+            this.checkoutSettings = Objects.requireNonNull(checkoutSettings, "checkoutSettings must not be null");
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("id")
-        public _FinalStage id(@NotNull String id) {
+        public PreventDowngradesWhenOverLimitStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("prevent_downgrades_when_over_limit")
+        public ShowCreditsStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit) {
+            this.preventDowngradesWhenOverLimit = preventDowngradesWhenOverLimit;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_credits")
+        public ShowPeriodToggleStage showCredits(boolean showCredits) {
+            this.showCredits = showCredits;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_period_toggle")
+        public ShowZeroPriceAsFreeStage showPeriodToggle(boolean showPeriodToggle) {
+            this.showPeriodToggle = showPeriodToggle;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_zero_price_as_free")
+        public SyncCustomerBillingDetailsForTaxStage showZeroPriceAsFree(boolean showZeroPriceAsFree) {
+            this.showZeroPriceAsFree = showZeroPriceAsFree;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("sync_customer_billing_details_for_tax")
+        public TaxCollectionEnabledStage syncCustomerBillingDetailsForTax(boolean syncCustomerBillingDetailsForTax) {
+            this.syncCustomerBillingDetailsForTax = syncCustomerBillingDetailsForTax;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("tax_collection_enabled")
+        public _FinalStage taxCollectionEnabled(boolean taxCollectionEnabled) {
+            this.taxCollectionEnabled = taxCollectionEnabled;
             return this;
         }
 
@@ -205,6 +519,32 @@ public final class PlanGroupResponseData {
         @JsonSetter(value = "trial_payment_method_required", nulls = Nulls.SKIP)
         public _FinalStage trialPaymentMethodRequired(Optional<Boolean> trialPaymentMethodRequired) {
             this.trialPaymentMethodRequired = trialPaymentMethodRequired;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage trialExpiryPlanPriceId(String trialExpiryPlanPriceId) {
+            this.trialExpiryPlanPriceId = Optional.ofNullable(trialExpiryPlanPriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_expiry_plan_price_id", nulls = Nulls.SKIP)
+        public _FinalStage trialExpiryPlanPriceId(Optional<String> trialExpiryPlanPriceId) {
+            this.trialExpiryPlanPriceId = trialExpiryPlanPriceId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage trialExpiryPlanId(String trialExpiryPlanId) {
+            this.trialExpiryPlanId = Optional.ofNullable(trialExpiryPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_expiry_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage trialExpiryPlanId(Optional<String> trialExpiryPlanId) {
+            this.trialExpiryPlanId = trialExpiryPlanId;
             return this;
         }
 
@@ -223,7 +563,9 @@ public final class PlanGroupResponseData {
 
         @java.lang.Override
         public _FinalStage addAllPlanIds(List<OrderedPlansInGroup> planIds) {
-            this.planIds.addAll(planIds);
+            if (planIds != null) {
+                this.planIds.addAll(planIds);
+            }
             return this;
         }
 
@@ -242,6 +584,67 @@ public final class PlanGroupResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllOrderedAddOnIds(List<OrderedPlansInGroup> orderedAddOnIds) {
+            if (orderedAddOnIds != null) {
+                this.orderedAddOnIds.addAll(orderedAddOnIds);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addOrderedAddOnIds(OrderedPlansInGroup orderedAddOnIds) {
+            this.orderedAddOnIds.add(orderedAddOnIds);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "ordered_add_on_ids", nulls = Nulls.SKIP)
+        public _FinalStage orderedAddOnIds(List<OrderedPlansInGroup> orderedAddOnIds) {
+            this.orderedAddOnIds.clear();
+            this.orderedAddOnIds.addAll(orderedAddOnIds);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage initialPlanPriceId(String initialPlanPriceId) {
+            this.initialPlanPriceId = Optional.ofNullable(initialPlanPriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "initial_plan_price_id", nulls = Nulls.SKIP)
+        public _FinalStage initialPlanPriceId(Optional<String> initialPlanPriceId) {
+            this.initialPlanPriceId = initialPlanPriceId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage initialPlanId(String initialPlanId) {
+            this.initialPlanId = Optional.ofNullable(initialPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "initial_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage initialPlanId(Optional<String> initialPlanId) {
+            this.initialPlanId = initialPlanId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage fallbackPlanId(String fallbackPlanId) {
+            this.fallbackPlanId = Optional.ofNullable(fallbackPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "fallback_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage fallbackPlanId(Optional<String> fallbackPlanId) {
+            this.fallbackPlanId = fallbackPlanId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage defaultPlanId(String defaultPlanId) {
             this.defaultPlanId = Optional.ofNullable(defaultPlanId);
             return this;
@@ -256,7 +659,9 @@ public final class PlanGroupResponseData {
 
         @java.lang.Override
         public _FinalStage addAllAddOnIds(List<String> addOnIds) {
-            this.addOnIds.addAll(addOnIds);
+            if (addOnIds != null) {
+                this.addOnIds.addAll(addOnIds);
+            }
             return this;
         }
 
@@ -275,9 +680,51 @@ public final class PlanGroupResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllAddOnCompatibilities(List<CompatiblePlansResponseData> addOnCompatibilities) {
+            if (addOnCompatibilities != null) {
+                this.addOnCompatibilities.addAll(addOnCompatibilities);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAddOnCompatibilities(CompatiblePlansResponseData addOnCompatibilities) {
+            this.addOnCompatibilities.add(addOnCompatibilities);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "add_on_compatibilities", nulls = Nulls.SKIP)
+        public _FinalStage addOnCompatibilities(List<CompatiblePlansResponseData> addOnCompatibilities) {
+            this.addOnCompatibilities.clear();
+            this.addOnCompatibilities.addAll(addOnCompatibilities);
+            return this;
+        }
+
+        @java.lang.Override
         public PlanGroupResponseData build() {
             return new PlanGroupResponseData(
-                    addOnIds, defaultPlanId, id, planIds, trialDays, trialPaymentMethodRequired, additionalProperties);
+                    addOnCompatibilities,
+                    addOnIds,
+                    checkoutSettings,
+                    defaultPlanId,
+                    fallbackPlanId,
+                    id,
+                    initialPlanId,
+                    initialPlanPriceId,
+                    orderedAddOnIds,
+                    planIds,
+                    preventDowngradesWhenOverLimit,
+                    showCredits,
+                    showPeriodToggle,
+                    showZeroPriceAsFree,
+                    syncCustomerBillingDetailsForTax,
+                    taxCollectionEnabled,
+                    trialDays,
+                    trialExpiryPlanId,
+                    trialExpiryPlanPriceId,
+                    trialPaymentMethodRequired,
+                    additionalProperties);
         }
     }
 }

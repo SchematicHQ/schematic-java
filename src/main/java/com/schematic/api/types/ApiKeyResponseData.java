@@ -253,7 +253,9 @@ public final class ApiKeyResponseData {
 
         @java.lang.Override
         public _FinalStage addAllScopes(List<String> scopes) {
-            this.scopes.addAll(scopes);
+            if (scopes != null) {
+                this.scopes.addAll(scopes);
+            }
             return this;
         }
 

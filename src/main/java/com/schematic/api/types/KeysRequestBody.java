@@ -85,7 +85,9 @@ public final class KeysRequestBody {
         }
 
         public Builder putAllKeys(Map<String, String> keys) {
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 

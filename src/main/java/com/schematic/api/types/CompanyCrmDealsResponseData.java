@@ -186,7 +186,9 @@ public final class CompanyCrmDealsResponseData {
 
         @java.lang.Override
         public _FinalStage addAllLineItems(List<CrmDealLineItem> lineItems) {
-            this.lineItems.addAll(lineItems);
+            if (lineItems != null) {
+                this.lineItems.addAll(lineItems);
+            }
             return this;
         }
 
