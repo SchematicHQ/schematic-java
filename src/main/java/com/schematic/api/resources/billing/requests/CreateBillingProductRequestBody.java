@@ -9,60 +9,49 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingProductRequestBody.Builder.class)
 public final class CreateBillingProductRequestBody {
-    private final boolean active;
-
-    private final String currency;
-
     private final String externalId;
+
+    private final Optional<Boolean> isActive;
 
     private final String name;
 
     private final double price;
 
-    private final int quantity;
-
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingProductRequestBody(
-            boolean active,
-            String currency,
             String externalId,
+            Optional<Boolean> isActive,
             String name,
             double price,
-            int quantity,
             Map<String, Object> additionalProperties) {
-        this.active = active;
-        this.currency = currency;
         this.externalId = externalId;
+        this.isActive = isActive;
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("active")
-    public boolean getActive() {
-        return active;
-    }
-
-    @JsonProperty("currency")
-    public String getCurrency() {
-        return currency;
     }
 
     @JsonProperty("external_id")
     public String getExternalId() {
         return externalId;
+    }
+
+    @JsonProperty("is_active")
+    public Optional<Boolean> getIsActive() {
+        return isActive;
     }
 
     @JsonProperty("name")
@@ -73,11 +62,6 @@ public final class CreateBillingProductRequestBody {
     @JsonProperty("price")
     public double getPrice() {
         return price;
-    }
-
-    @JsonProperty("quantity")
-    public int getQuantity() {
-        return quantity;
     }
 
     @java.lang.Override
@@ -92,17 +76,15 @@ public final class CreateBillingProductRequestBody {
     }
 
     private boolean equalTo(CreateBillingProductRequestBody other) {
-        return active == other.active
-                && currency.equals(other.currency)
-                && externalId.equals(other.externalId)
+        return externalId.equals(other.externalId)
+                && isActive.equals(other.isActive)
                 && name.equals(other.name)
-                && price == other.price
-                && quantity == other.quantity;
+                && price == other.price;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.active, this.currency, this.externalId, this.name, this.price, this.quantity);
+        return Objects.hash(this.externalId, this.isActive, this.name, this.price);
     }
 
     @java.lang.Override
@@ -110,22 +92,14 @@ public final class CreateBillingProductRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static ActiveStage builder() {
+    public static ExternalIdStage builder() {
         return new Builder();
-    }
-
-    public interface ActiveStage {
-        CurrencyStage active(boolean active);
-
-        Builder from(CreateBillingProductRequestBody other);
-    }
-
-    public interface CurrencyStage {
-        ExternalIdStage currency(@NotNull String currency);
     }
 
     public interface ExternalIdStage {
         NameStage externalId(@NotNull String externalId);
+
+        Builder from(CreateBillingProductRequestBody other);
     }
 
     public interface NameStage {
@@ -133,31 +107,26 @@ public final class CreateBillingProductRequestBody {
     }
 
     public interface PriceStage {
-        QuantityStage price(double price);
-    }
-
-    public interface QuantityStage {
-        _FinalStage quantity(int quantity);
+        _FinalStage price(double price);
     }
 
     public interface _FinalStage {
         CreateBillingProductRequestBody build();
+
+        _FinalStage isActive(Optional<Boolean> isActive);
+
+        _FinalStage isActive(Boolean isActive);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements ActiveStage, CurrencyStage, ExternalIdStage, NameStage, PriceStage, QuantityStage, _FinalStage {
-        private boolean active;
-
-        private String currency;
-
+    public static final class Builder implements ExternalIdStage, NameStage, PriceStage, _FinalStage {
         private String externalId;
 
         private String name;
 
         private double price;
 
-        private int quantity;
+        private Optional<Boolean> isActive = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -166,26 +135,10 @@ public final class CreateBillingProductRequestBody {
 
         @java.lang.Override
         public Builder from(CreateBillingProductRequestBody other) {
-            active(other.getActive());
-            currency(other.getCurrency());
             externalId(other.getExternalId());
+            isActive(other.getIsActive());
             name(other.getName());
             price(other.getPrice());
-            quantity(other.getQuantity());
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("active")
-        public CurrencyStage active(boolean active) {
-            this.active = active;
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("currency")
-        public ExternalIdStage currency(@NotNull String currency) {
-            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
@@ -205,22 +158,27 @@ public final class CreateBillingProductRequestBody {
 
         @java.lang.Override
         @JsonSetter("price")
-        public QuantityStage price(double price) {
+        public _FinalStage price(double price) {
             this.price = price;
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("quantity")
-        public _FinalStage quantity(int quantity) {
-            this.quantity = quantity;
+        public _FinalStage isActive(Boolean isActive) {
+            this.isActive = Optional.ofNullable(isActive);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "is_active", nulls = Nulls.SKIP)
+        public _FinalStage isActive(Optional<Boolean> isActive) {
+            this.isActive = isActive;
             return this;
         }
 
         @java.lang.Override
         public CreateBillingProductRequestBody build() {
-            return new CreateBillingProductRequestBody(
-                    active, currency, externalId, name, price, quantity, additionalProperties);
+            return new CreateBillingProductRequestBody(externalId, isActive, name, price, additionalProperties);
         }
     }
 }

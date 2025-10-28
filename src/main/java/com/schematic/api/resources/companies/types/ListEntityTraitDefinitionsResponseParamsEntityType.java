@@ -3,22 +3,84 @@
  */
 package com.schematic.api.resources.companies.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ListEntityTraitDefinitionsResponseParamsEntityType {
-    COMPANY("company"),
+public final class ListEntityTraitDefinitionsResponseParamsEntityType {
+    public static final ListEntityTraitDefinitionsResponseParamsEntityType USER =
+            new ListEntityTraitDefinitionsResponseParamsEntityType(Value.USER, "user");
 
-    USER("user");
+    public static final ListEntityTraitDefinitionsResponseParamsEntityType COMPANY =
+            new ListEntityTraitDefinitionsResponseParamsEntityType(Value.COMPANY, "company");
 
-    private final String value;
+    private final Value value;
 
-    ListEntityTraitDefinitionsResponseParamsEntityType(String value) {
+    private final String string;
+
+    ListEntityTraitDefinitionsResponseParamsEntityType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof ListEntityTraitDefinitionsResponseParamsEntityType
+                        && this.string.equals(((ListEntityTraitDefinitionsResponseParamsEntityType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case USER:
+                return visitor.visitUser();
+            case COMPANY:
+                return visitor.visitCompany();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ListEntityTraitDefinitionsResponseParamsEntityType valueOf(String value) {
+        switch (value) {
+            case "user":
+                return USER;
+            case "company":
+                return COMPANY;
+            default:
+                return new ListEntityTraitDefinitionsResponseParamsEntityType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        COMPANY,
+
+        USER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCompany();
+
+        T visitUser();
+
+        T visitUnknown(String unknownType);
     }
 }

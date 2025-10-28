@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -29,6 +31,10 @@ public final class BillingPriceResponseData {
 
     private final int price;
 
+    private final Optional<String> priceDecimal;
+
+    private final String scheme;
+
     private final Map<String, Object> additionalProperties;
 
     private BillingPriceResponseData(
@@ -37,12 +43,16 @@ public final class BillingPriceResponseData {
             String id,
             String interval,
             int price,
+            Optional<String> priceDecimal,
+            String scheme,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.externalPriceId = externalPriceId;
         this.id = id;
         this.interval = interval;
         this.price = price;
+        this.priceDecimal = priceDecimal;
+        this.scheme = scheme;
         this.additionalProperties = additionalProperties;
     }
 
@@ -71,6 +81,16 @@ public final class BillingPriceResponseData {
         return price;
     }
 
+    @JsonProperty("price_decimal")
+    public Optional<String> getPriceDecimal() {
+        return priceDecimal;
+    }
+
+    @JsonProperty("scheme")
+    public String getScheme() {
+        return scheme;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -87,12 +107,21 @@ public final class BillingPriceResponseData {
                 && externalPriceId.equals(other.externalPriceId)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
-                && price == other.price;
+                && price == other.price
+                && priceDecimal.equals(other.priceDecimal)
+                && scheme.equals(other.scheme);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.currency, this.externalPriceId, this.id, this.interval, this.price);
+        return Objects.hash(
+                this.currency,
+                this.externalPriceId,
+                this.id,
+                this.interval,
+                this.price,
+                this.priceDecimal,
+                this.scheme);
     }
 
     @java.lang.Override
@@ -123,16 +152,30 @@ public final class BillingPriceResponseData {
     }
 
     public interface PriceStage {
-        _FinalStage price(int price);
+        SchemeStage price(int price);
+    }
+
+    public interface SchemeStage {
+        _FinalStage scheme(@NotNull String scheme);
     }
 
     public interface _FinalStage {
         BillingPriceResponseData build();
+
+        _FinalStage priceDecimal(Optional<String> priceDecimal);
+
+        _FinalStage priceDecimal(String priceDecimal);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CurrencyStage, ExternalPriceIdStage, IdStage, IntervalStage, PriceStage, _FinalStage {
+            implements CurrencyStage,
+                    ExternalPriceIdStage,
+                    IdStage,
+                    IntervalStage,
+                    PriceStage,
+                    SchemeStage,
+                    _FinalStage {
         private String currency;
 
         private String externalPriceId;
@@ -142,6 +185,10 @@ public final class BillingPriceResponseData {
         private String interval;
 
         private int price;
+
+        private String scheme;
+
+        private Optional<String> priceDecimal = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -155,6 +202,8 @@ public final class BillingPriceResponseData {
             id(other.getId());
             interval(other.getInterval());
             price(other.getPrice());
+            priceDecimal(other.getPriceDecimal());
+            scheme(other.getScheme());
             return this;
         }
 
@@ -188,14 +237,35 @@ public final class BillingPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("price")
-        public _FinalStage price(int price) {
+        public SchemeStage price(int price) {
             this.price = price;
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("scheme")
+        public _FinalStage scheme(@NotNull String scheme) {
+            this.scheme = Objects.requireNonNull(scheme, "scheme must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage priceDecimal(String priceDecimal) {
+            this.priceDecimal = Optional.ofNullable(priceDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "price_decimal", nulls = Nulls.SKIP)
+        public _FinalStage priceDecimal(Optional<String> priceDecimal) {
+            this.priceDecimal = priceDecimal;
+            return this;
+        }
+
+        @java.lang.Override
         public BillingPriceResponseData build() {
-            return new BillingPriceResponseData(currency, externalPriceId, id, interval, price, additionalProperties);
+            return new BillingPriceResponseData(
+                    currency, externalPriceId, id, interval, price, priceDecimal, scheme, additionalProperties);
         }
     }
 }

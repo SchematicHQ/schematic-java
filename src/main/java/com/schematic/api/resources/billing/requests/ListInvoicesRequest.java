@@ -25,7 +25,7 @@ public final class ListInvoicesRequest {
 
     private final String customerExternalId;
 
-    private final Optional<String> subscriptionExternalId;
+    private final String subscriptionExternalId;
 
     private final Optional<Integer> limit;
 
@@ -36,7 +36,7 @@ public final class ListInvoicesRequest {
     private ListInvoicesRequest(
             Optional<String> companyId,
             String customerExternalId,
-            Optional<String> subscriptionExternalId,
+            String subscriptionExternalId,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
@@ -59,7 +59,7 @@ public final class ListInvoicesRequest {
     }
 
     @JsonProperty("subscription_external_id")
-    public Optional<String> getSubscriptionExternalId() {
+    public String getSubscriptionExternalId() {
         return subscriptionExternalId;
     }
 
@@ -114,9 +114,13 @@ public final class ListInvoicesRequest {
     }
 
     public interface CustomerExternalIdStage {
-        _FinalStage customerExternalId(@NotNull String customerExternalId);
+        SubscriptionExternalIdStage customerExternalId(@NotNull String customerExternalId);
 
         Builder from(ListInvoicesRequest other);
+    }
+
+    public interface SubscriptionExternalIdStage {
+        _FinalStage subscriptionExternalId(@NotNull String subscriptionExternalId);
     }
 
     public interface _FinalStage {
@@ -126,28 +130,30 @@ public final class ListInvoicesRequest {
 
         _FinalStage companyId(String companyId);
 
-        _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId);
-
-        _FinalStage subscriptionExternalId(String subscriptionExternalId);
-
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         _FinalStage limit(Optional<Integer> limit);
 
         _FinalStage limit(Integer limit);
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         _FinalStage offset(Optional<Integer> offset);
 
         _FinalStage offset(Integer offset);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CustomerExternalIdStage, _FinalStage {
+    public static final class Builder implements CustomerExternalIdStage, SubscriptionExternalIdStage, _FinalStage {
         private String customerExternalId;
+
+        private String subscriptionExternalId;
 
         private Optional<Integer> offset = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
-
-        private Optional<String> subscriptionExternalId = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
 
@@ -168,8 +174,16 @@ public final class ListInvoicesRequest {
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public _FinalStage customerExternalId(@NotNull String customerExternalId) {
+        public SubscriptionExternalIdStage customerExternalId(@NotNull String customerExternalId) {
             this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("subscription_external_id")
+        public _FinalStage subscriptionExternalId(@NotNull String subscriptionExternalId) {
+            this.subscriptionExternalId =
+                    Objects.requireNonNull(subscriptionExternalId, "subscriptionExternalId must not be null");
             return this;
         }
 
@@ -183,6 +197,9 @@ public final class ListInvoicesRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public _FinalStage offset(Optional<Integer> offset) {
@@ -200,23 +217,13 @@ public final class ListInvoicesRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public _FinalStage limit(Optional<Integer> limit) {
             this.limit = limit;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
-            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "subscription_external_id", nulls = Nulls.SKIP)
-        public _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId) {
-            this.subscriptionExternalId = subscriptionExternalId;
             return this;
         }
 

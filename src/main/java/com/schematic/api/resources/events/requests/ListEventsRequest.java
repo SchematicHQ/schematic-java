@@ -12,7 +12,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.resources.events.types.ListEventsRequestEventTypesItem;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,11 +23,11 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListEventsRequest.Builder.class)
 public final class ListEventsRequest {
+    private final Optional<List<ListEventsRequestEventTypesItem>> eventTypes;
+
     private final Optional<String> companyId;
 
     private final Optional<String> eventSubtype;
-
-    private final Optional<String> eventTypes;
 
     private final Optional<String> flagId;
 
@@ -37,22 +40,27 @@ public final class ListEventsRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListEventsRequest(
+            Optional<List<ListEventsRequestEventTypesItem>> eventTypes,
             Optional<String> companyId,
             Optional<String> eventSubtype,
-            Optional<String> eventTypes,
             Optional<String> flagId,
             Optional<String> userId,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
+        this.eventTypes = eventTypes;
         this.companyId = companyId;
         this.eventSubtype = eventSubtype;
-        this.eventTypes = eventTypes;
         this.flagId = flagId;
         this.userId = userId;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("event_types")
+    public Optional<List<ListEventsRequestEventTypesItem>> getEventTypes() {
+        return eventTypes;
     }
 
     @JsonProperty("company_id")
@@ -63,11 +71,6 @@ public final class ListEventsRequest {
     @JsonProperty("event_subtype")
     public Optional<String> getEventSubtype() {
         return eventSubtype;
-    }
-
-    @JsonProperty("event_types")
-    public Optional<String> getEventTypes() {
-        return eventTypes;
     }
 
     @JsonProperty("flag_id")
@@ -108,9 +111,9 @@ public final class ListEventsRequest {
     }
 
     private boolean equalTo(ListEventsRequest other) {
-        return companyId.equals(other.companyId)
+        return eventTypes.equals(other.eventTypes)
+                && companyId.equals(other.companyId)
                 && eventSubtype.equals(other.eventSubtype)
-                && eventTypes.equals(other.eventTypes)
                 && flagId.equals(other.flagId)
                 && userId.equals(other.userId)
                 && limit.equals(other.limit)
@@ -120,7 +123,7 @@ public final class ListEventsRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.companyId, this.eventSubtype, this.eventTypes, this.flagId, this.userId, this.limit, this.offset);
+                this.eventTypes, this.companyId, this.eventSubtype, this.flagId, this.userId, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -134,11 +137,11 @@ public final class ListEventsRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<List<ListEventsRequestEventTypesItem>> eventTypes = Optional.empty();
+
         private Optional<String> companyId = Optional.empty();
 
         private Optional<String> eventSubtype = Optional.empty();
-
-        private Optional<String> eventTypes = Optional.empty();
 
         private Optional<String> flagId = Optional.empty();
 
@@ -154,13 +157,29 @@ public final class ListEventsRequest {
         private Builder() {}
 
         public Builder from(ListEventsRequest other) {
+            eventTypes(other.getEventTypes());
             companyId(other.getCompanyId());
             eventSubtype(other.getEventSubtype());
-            eventTypes(other.getEventTypes());
             flagId(other.getFlagId());
             userId(other.getUserId());
             limit(other.getLimit());
             offset(other.getOffset());
+            return this;
+        }
+
+        @JsonSetter(value = "event_types", nulls = Nulls.SKIP)
+        public Builder eventTypes(Optional<List<ListEventsRequestEventTypesItem>> eventTypes) {
+            this.eventTypes = eventTypes;
+            return this;
+        }
+
+        public Builder eventTypes(List<ListEventsRequestEventTypesItem> eventTypes) {
+            this.eventTypes = Optional.ofNullable(eventTypes);
+            return this;
+        }
+
+        public Builder eventTypes(ListEventsRequestEventTypesItem eventTypes) {
+            this.eventTypes = Optional.of(Collections.singletonList(eventTypes));
             return this;
         }
 
@@ -186,17 +205,6 @@ public final class ListEventsRequest {
             return this;
         }
 
-        @JsonSetter(value = "event_types", nulls = Nulls.SKIP)
-        public Builder eventTypes(Optional<String> eventTypes) {
-            this.eventTypes = eventTypes;
-            return this;
-        }
-
-        public Builder eventTypes(String eventTypes) {
-            this.eventTypes = Optional.ofNullable(eventTypes);
-            return this;
-        }
-
         @JsonSetter(value = "flag_id", nulls = Nulls.SKIP)
         public Builder flagId(Optional<String> flagId) {
             this.flagId = flagId;
@@ -219,6 +227,9 @@ public final class ListEventsRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -230,6 +241,9 @@ public final class ListEventsRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -243,7 +257,7 @@ public final class ListEventsRequest {
 
         public ListEventsRequest build() {
             return new ListEventsRequest(
-                    companyId, eventSubtype, eventTypes, flagId, userId, limit, offset, additionalProperties);
+                    eventTypes, companyId, eventSubtype, flagId, userId, limit, offset, additionalProperties);
         }
     }
 }

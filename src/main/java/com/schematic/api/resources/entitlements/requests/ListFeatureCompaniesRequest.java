@@ -115,10 +115,16 @@ public final class ListFeatureCompaniesRequest {
 
         _FinalStage q(String q);
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         _FinalStage limit(Optional<Integer> limit);
 
         _FinalStage limit(Integer limit);
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         _FinalStage offset(Optional<Integer> offset);
 
         _FinalStage offset(Integer offset);
@@ -165,6 +171,9 @@ public final class ListFeatureCompaniesRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public _FinalStage offset(Optional<Integer> offset) {
@@ -182,6 +191,9 @@ public final class ListFeatureCompaniesRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public _FinalStage limit(Optional<Integer> limit) {

@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,7 +22,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListCrmProductsRequest.Builder.class)
 public final class ListCrmProductsRequest {
-    private final Optional<String> ids;
+    private final Optional<List<String>> ids;
 
     private final Optional<String> name;
 
@@ -31,7 +33,7 @@ public final class ListCrmProductsRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListCrmProductsRequest(
-            Optional<String> ids,
+            Optional<List<String>> ids,
             Optional<String> name,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -44,7 +46,7 @@ public final class ListCrmProductsRequest {
     }
 
     @JsonProperty("ids")
-    public Optional<String> getIds() {
+    public Optional<List<String>> getIds() {
         return ids;
     }
 
@@ -103,7 +105,7 @@ public final class ListCrmProductsRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> ids = Optional.empty();
+        private Optional<List<String>> ids = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -125,13 +127,18 @@ public final class ListCrmProductsRequest {
         }
 
         @JsonSetter(value = "ids", nulls = Nulls.SKIP)
-        public Builder ids(Optional<String> ids) {
+        public Builder ids(Optional<List<String>> ids) {
             this.ids = ids;
             return this;
         }
 
-        public Builder ids(String ids) {
+        public Builder ids(List<String> ids) {
             this.ids = Optional.ofNullable(ids);
+            return this;
+        }
+
+        public Builder ids(String ids) {
+            this.ids = Optional.of(Collections.singletonList(ids));
             return this;
         }
 
@@ -146,6 +153,9 @@ public final class ListCrmProductsRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -157,6 +167,9 @@ public final class ListCrmProductsRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;

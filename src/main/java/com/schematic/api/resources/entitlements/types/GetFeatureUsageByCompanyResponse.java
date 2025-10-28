@@ -84,6 +84,9 @@ public final class GetFeatureUsageByCompanyResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull GetFeatureUsageByCompanyParams params);
     }
 
@@ -117,6 +120,7 @@ public final class GetFeatureUsageByCompanyResponse {
         }
 
         /**
+         * <p>Input parameters</p>
          * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
