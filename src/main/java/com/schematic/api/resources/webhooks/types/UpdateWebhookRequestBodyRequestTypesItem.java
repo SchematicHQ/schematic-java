@@ -52,7 +52,25 @@ public enum UpdateWebhookRequestBodyRequestTypesItem {
 
     TEST_SEND("test.send"),
 
-    SUBSCRIPTION_TRIAL_ENDED("subscription.trial.ended");
+    SUBSCRIPTION_TRIAL_ENDED("subscription.trial.ended"),
+
+    ENTITLEMENT_LIMIT_WARNING("entitlement.limit.warning"),
+
+    ENTITLEMENT_LIMIT_REACHED("entitlement.limit.reached"),
+
+    ENTITLEMENT_SOFT_LIMIT_WARNING("entitlement.soft_limit.warning"),
+
+    ENTITLEMENT_SOFT_LIMIT_REACHED("entitlement.soft_limit.reached"),
+
+    ENTITLEMENT_TIER_LIMIT_WARNING("entitlement.tier_limit.warning"),
+
+    ENTITLEMENT_TIER_LIMIT_REACHED("entitlement.tier_limit.reached"),
+
+    CREDIT_LIMIT_WARNING("credit.limit.warning"),
+
+    CREDIT_LIMIT_REACHED("credit.limit.reached"),
+
+    COMPANY_PLAN_CHANGE("company.plan_change");
 
     private final String value;
 

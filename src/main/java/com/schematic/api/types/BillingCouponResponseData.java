@@ -48,7 +48,7 @@ public final class BillingCouponResponseData {
 
     private final String name;
 
-    private final Optional<Integer> percentOff;
+    private final Optional<Double> percentOff;
 
     private final int timesRedeemed;
 
@@ -71,7 +71,7 @@ public final class BillingCouponResponseData {
             Optional<Integer> maxRedemptions,
             Map<String, JsonNode> metadata,
             String name,
-            Optional<Integer> percentOff,
+            Optional<Double> percentOff,
             int timesRedeemed,
             Optional<OffsetDateTime> validFrom,
             Optional<OffsetDateTime> validUntil,
@@ -156,7 +156,7 @@ public final class BillingCouponResponseData {
     }
 
     @JsonProperty("percent_off")
-    public Optional<Integer> getPercentOff() {
+    public Optional<Double> getPercentOff() {
         return percentOff;
     }
 
@@ -294,9 +294,9 @@ public final class BillingCouponResponseData {
 
         _FinalStage metadata(String key, JsonNode value);
 
-        _FinalStage percentOff(Optional<Integer> percentOff);
+        _FinalStage percentOff(Optional<Double> percentOff);
 
-        _FinalStage percentOff(Integer percentOff);
+        _FinalStage percentOff(Double percentOff);
 
         _FinalStage validFrom(Optional<OffsetDateTime> validFrom);
 
@@ -335,7 +335,7 @@ public final class BillingCouponResponseData {
 
         private Optional<OffsetDateTime> validFrom = Optional.empty();
 
-        private Optional<Integer> percentOff = Optional.empty();
+        private Optional<Double> percentOff = Optional.empty();
 
         private Map<String, JsonNode> metadata = new LinkedHashMap<>();
 
@@ -451,14 +451,14 @@ public final class BillingCouponResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage percentOff(Integer percentOff) {
+        public _FinalStage percentOff(Double percentOff) {
             this.percentOff = Optional.ofNullable(percentOff);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "percent_off", nulls = Nulls.SKIP)
-        public _FinalStage percentOff(Optional<Integer> percentOff) {
+        public _FinalStage percentOff(Optional<Double> percentOff) {
             this.percentOff = percentOff;
             return this;
         }
@@ -471,7 +471,9 @@ public final class BillingCouponResponseData {
 
         @java.lang.Override
         public _FinalStage putAllMetadata(Map<String, JsonNode> metadata) {
-            this.metadata.putAll(metadata);
+            if (metadata != null) {
+                this.metadata.putAll(metadata);
+            }
             return this;
         }
 

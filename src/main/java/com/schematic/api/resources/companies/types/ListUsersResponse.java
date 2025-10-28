@@ -36,9 +36,6 @@ public final class ListUsersResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<UserDetailResponseData> getData() {
         return data;
@@ -82,6 +79,9 @@ public final class ListUsersResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull ListUsersParams params);
 
         Builder from(ListUsersResponse other);
@@ -117,6 +117,7 @@ public final class ListUsersResponse {
 
         /**
          * <p>Input parameters</p>
+         * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -126,20 +127,14 @@ public final class ListUsersResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<UserDetailResponseData> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(UserDetailResponseData data) {
             this.data.add(data);

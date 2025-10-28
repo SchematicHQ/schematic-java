@@ -104,7 +104,9 @@ public final class UpdateCompanyPlansRequestBody {
         }
 
         public Builder addAllAddOnIds(List<String> addOnIds) {
-            this.addOnIds.addAll(addOnIds);
+            if (addOnIds != null) {
+                this.addOnIds.addAll(addOnIds);
+            }
             return this;
         }
 

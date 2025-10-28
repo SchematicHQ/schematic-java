@@ -28,9 +28,15 @@ public final class CompanyPlanDetailResponseData {
 
     private final Optional<BillingProductDetailResponseData> billingProduct;
 
+    private final String chargeType;
+
     private final boolean companyCanTrial;
 
     private final int companyCount;
+
+    private final List<String> compatiblePlanIds;
+
+    private final String controlledBy;
 
     private final OffsetDateTime createdAt;
 
@@ -50,6 +56,8 @@ public final class CompanyPlanDetailResponseData {
 
     private final String id;
 
+    private final List<PlanCreditGrantView> includedCreditGrants;
+
     private final boolean isCustom;
 
     private final boolean isDefault;
@@ -62,11 +70,15 @@ public final class CompanyPlanDetailResponseData {
 
     private final String name;
 
+    private final Optional<BillingPriceResponseData> oneTimePrice;
+
     private final String planType;
 
     private final Optional<Integer> trialDays;
 
     private final OffsetDateTime updatedAt;
+
+    private final List<FeatureUsageResponseData> usageViolations;
 
     private final boolean valid;
 
@@ -77,8 +89,11 @@ public final class CompanyPlanDetailResponseData {
     private CompanyPlanDetailResponseData(
             Optional<String> audienceType,
             Optional<BillingProductDetailResponseData> billingProduct,
+            String chargeType,
             boolean companyCanTrial,
             int companyCount,
+            List<String> compatiblePlanIds,
+            String controlledBy,
             OffsetDateTime createdAt,
             boolean current,
             boolean custom,
@@ -88,22 +103,28 @@ public final class CompanyPlanDetailResponseData {
             List<FeatureDetailResponseData> features,
             String icon,
             String id,
+            List<PlanCreditGrantView> includedCreditGrants,
             boolean isCustom,
             boolean isDefault,
             boolean isFree,
             boolean isTrialable,
             Optional<BillingPriceResponseData> monthlyPrice,
             String name,
+            Optional<BillingPriceResponseData> oneTimePrice,
             String planType,
             Optional<Integer> trialDays,
             OffsetDateTime updatedAt,
+            List<FeatureUsageResponseData> usageViolations,
             boolean valid,
             Optional<BillingPriceResponseData> yearlyPrice,
             Map<String, Object> additionalProperties) {
         this.audienceType = audienceType;
         this.billingProduct = billingProduct;
+        this.chargeType = chargeType;
         this.companyCanTrial = companyCanTrial;
         this.companyCount = companyCount;
+        this.compatiblePlanIds = compatiblePlanIds;
+        this.controlledBy = controlledBy;
         this.createdAt = createdAt;
         this.current = current;
         this.custom = custom;
@@ -113,15 +134,18 @@ public final class CompanyPlanDetailResponseData {
         this.features = features;
         this.icon = icon;
         this.id = id;
+        this.includedCreditGrants = includedCreditGrants;
         this.isCustom = isCustom;
         this.isDefault = isDefault;
         this.isFree = isFree;
         this.isTrialable = isTrialable;
         this.monthlyPrice = monthlyPrice;
         this.name = name;
+        this.oneTimePrice = oneTimePrice;
         this.planType = planType;
         this.trialDays = trialDays;
         this.updatedAt = updatedAt;
+        this.usageViolations = usageViolations;
         this.valid = valid;
         this.yearlyPrice = yearlyPrice;
         this.additionalProperties = additionalProperties;
@@ -137,6 +161,11 @@ public final class CompanyPlanDetailResponseData {
         return billingProduct;
     }
 
+    @JsonProperty("charge_type")
+    public String getChargeType() {
+        return chargeType;
+    }
+
     @JsonProperty("company_can_trial")
     public boolean getCompanyCanTrial() {
         return companyCanTrial;
@@ -145,6 +174,16 @@ public final class CompanyPlanDetailResponseData {
     @JsonProperty("company_count")
     public int getCompanyCount() {
         return companyCount;
+    }
+
+    @JsonProperty("compatible_plan_ids")
+    public List<String> getCompatiblePlanIds() {
+        return compatiblePlanIds;
+    }
+
+    @JsonProperty("controlled_by")
+    public String getControlledBy() {
+        return controlledBy;
     }
 
     @JsonProperty("created_at")
@@ -192,6 +231,11 @@ public final class CompanyPlanDetailResponseData {
         return id;
     }
 
+    @JsonProperty("included_credit_grants")
+    public List<PlanCreditGrantView> getIncludedCreditGrants() {
+        return includedCreditGrants;
+    }
+
     @JsonProperty("is_custom")
     public boolean getIsCustom() {
         return isCustom;
@@ -222,6 +266,11 @@ public final class CompanyPlanDetailResponseData {
         return name;
     }
 
+    @JsonProperty("one_time_price")
+    public Optional<BillingPriceResponseData> getOneTimePrice() {
+        return oneTimePrice;
+    }
+
     @JsonProperty("plan_type")
     public String getPlanType() {
         return planType;
@@ -235,6 +284,11 @@ public final class CompanyPlanDetailResponseData {
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    @JsonProperty("usage_violations")
+    public List<FeatureUsageResponseData> getUsageViolations() {
+        return usageViolations;
     }
 
     @JsonProperty("valid")
@@ -261,8 +315,11 @@ public final class CompanyPlanDetailResponseData {
     private boolean equalTo(CompanyPlanDetailResponseData other) {
         return audienceType.equals(other.audienceType)
                 && billingProduct.equals(other.billingProduct)
+                && chargeType.equals(other.chargeType)
                 && companyCanTrial == other.companyCanTrial
                 && companyCount == other.companyCount
+                && compatiblePlanIds.equals(other.compatiblePlanIds)
+                && controlledBy.equals(other.controlledBy)
                 && createdAt.equals(other.createdAt)
                 && current == other.current
                 && custom == other.custom
@@ -272,15 +329,18 @@ public final class CompanyPlanDetailResponseData {
                 && features.equals(other.features)
                 && icon.equals(other.icon)
                 && id.equals(other.id)
+                && includedCreditGrants.equals(other.includedCreditGrants)
                 && isCustom == other.isCustom
                 && isDefault == other.isDefault
                 && isFree == other.isFree
                 && isTrialable == other.isTrialable
                 && monthlyPrice.equals(other.monthlyPrice)
                 && name.equals(other.name)
+                && oneTimePrice.equals(other.oneTimePrice)
                 && planType.equals(other.planType)
                 && trialDays.equals(other.trialDays)
                 && updatedAt.equals(other.updatedAt)
+                && usageViolations.equals(other.usageViolations)
                 && valid == other.valid
                 && yearlyPrice.equals(other.yearlyPrice);
     }
@@ -290,8 +350,11 @@ public final class CompanyPlanDetailResponseData {
         return Objects.hash(
                 this.audienceType,
                 this.billingProduct,
+                this.chargeType,
                 this.companyCanTrial,
                 this.companyCount,
+                this.compatiblePlanIds,
+                this.controlledBy,
                 this.createdAt,
                 this.current,
                 this.custom,
@@ -301,15 +364,18 @@ public final class CompanyPlanDetailResponseData {
                 this.features,
                 this.icon,
                 this.id,
+                this.includedCreditGrants,
                 this.isCustom,
                 this.isDefault,
                 this.isFree,
                 this.isTrialable,
                 this.monthlyPrice,
                 this.name,
+                this.oneTimePrice,
                 this.planType,
                 this.trialDays,
                 this.updatedAt,
+                this.usageViolations,
                 this.valid,
                 this.yearlyPrice);
     }
@@ -319,18 +385,26 @@ public final class CompanyPlanDetailResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static CompanyCanTrialStage builder() {
+    public static ChargeTypeStage builder() {
         return new Builder();
     }
 
-    public interface CompanyCanTrialStage {
-        CompanyCountStage companyCanTrial(boolean companyCanTrial);
+    public interface ChargeTypeStage {
+        CompanyCanTrialStage chargeType(@NotNull String chargeType);
 
         Builder from(CompanyPlanDetailResponseData other);
     }
 
+    public interface CompanyCanTrialStage {
+        CompanyCountStage companyCanTrial(boolean companyCanTrial);
+    }
+
     public interface CompanyCountStage {
-        CreatedAtStage companyCount(int companyCount);
+        ControlledByStage companyCount(int companyCount);
+    }
+
+    public interface ControlledByStage {
+        CreatedAtStage controlledBy(@NotNull String controlledBy);
     }
 
     public interface CreatedAtStage {
@@ -400,6 +474,12 @@ public final class CompanyPlanDetailResponseData {
 
         _FinalStage billingProduct(BillingProductDetailResponseData billingProduct);
 
+        _FinalStage compatiblePlanIds(List<String> compatiblePlanIds);
+
+        _FinalStage addCompatiblePlanIds(String compatiblePlanIds);
+
+        _FinalStage addAllCompatiblePlanIds(List<String> compatiblePlanIds);
+
         _FinalStage customPlanConfig(Optional<CustomPlanConfig> customPlanConfig);
 
         _FinalStage customPlanConfig(CustomPlanConfig customPlanConfig);
@@ -416,13 +496,29 @@ public final class CompanyPlanDetailResponseData {
 
         _FinalStage addAllFeatures(List<FeatureDetailResponseData> features);
 
+        _FinalStage includedCreditGrants(List<PlanCreditGrantView> includedCreditGrants);
+
+        _FinalStage addIncludedCreditGrants(PlanCreditGrantView includedCreditGrants);
+
+        _FinalStage addAllIncludedCreditGrants(List<PlanCreditGrantView> includedCreditGrants);
+
         _FinalStage monthlyPrice(Optional<BillingPriceResponseData> monthlyPrice);
 
         _FinalStage monthlyPrice(BillingPriceResponseData monthlyPrice);
 
+        _FinalStage oneTimePrice(Optional<BillingPriceResponseData> oneTimePrice);
+
+        _FinalStage oneTimePrice(BillingPriceResponseData oneTimePrice);
+
         _FinalStage trialDays(Optional<Integer> trialDays);
 
         _FinalStage trialDays(Integer trialDays);
+
+        _FinalStage usageViolations(List<FeatureUsageResponseData> usageViolations);
+
+        _FinalStage addUsageViolations(FeatureUsageResponseData usageViolations);
+
+        _FinalStage addAllUsageViolations(List<FeatureUsageResponseData> usageViolations);
 
         _FinalStage yearlyPrice(Optional<BillingPriceResponseData> yearlyPrice);
 
@@ -431,8 +527,10 @@ public final class CompanyPlanDetailResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CompanyCanTrialStage,
+            implements ChargeTypeStage,
+                    CompanyCanTrialStage,
                     CompanyCountStage,
+                    ControlledByStage,
                     CreatedAtStage,
                     CurrentStage,
                     CustomStage,
@@ -448,9 +546,13 @@ public final class CompanyPlanDetailResponseData {
                     UpdatedAtStage,
                     ValidStage,
                     _FinalStage {
+        private String chargeType;
+
         private boolean companyCanTrial;
 
         private int companyCount;
+
+        private String controlledBy;
 
         private OffsetDateTime createdAt;
 
@@ -482,15 +584,23 @@ public final class CompanyPlanDetailResponseData {
 
         private Optional<BillingPriceResponseData> yearlyPrice = Optional.empty();
 
+        private List<FeatureUsageResponseData> usageViolations = new ArrayList<>();
+
         private Optional<Integer> trialDays = Optional.empty();
 
+        private Optional<BillingPriceResponseData> oneTimePrice = Optional.empty();
+
         private Optional<BillingPriceResponseData> monthlyPrice = Optional.empty();
+
+        private List<PlanCreditGrantView> includedCreditGrants = new ArrayList<>();
 
         private List<FeatureDetailResponseData> features = new ArrayList<>();
 
         private List<PlanEntitlementResponseData> entitlements = new ArrayList<>();
 
         private Optional<CustomPlanConfig> customPlanConfig = Optional.empty();
+
+        private List<String> compatiblePlanIds = new ArrayList<>();
 
         private Optional<BillingProductDetailResponseData> billingProduct = Optional.empty();
 
@@ -505,8 +615,11 @@ public final class CompanyPlanDetailResponseData {
         public Builder from(CompanyPlanDetailResponseData other) {
             audienceType(other.getAudienceType());
             billingProduct(other.getBillingProduct());
+            chargeType(other.getChargeType());
             companyCanTrial(other.getCompanyCanTrial());
             companyCount(other.getCompanyCount());
+            compatiblePlanIds(other.getCompatiblePlanIds());
+            controlledBy(other.getControlledBy());
             createdAt(other.getCreatedAt());
             current(other.getCurrent());
             custom(other.getCustom());
@@ -516,17 +629,27 @@ public final class CompanyPlanDetailResponseData {
             features(other.getFeatures());
             icon(other.getIcon());
             id(other.getId());
+            includedCreditGrants(other.getIncludedCreditGrants());
             isCustom(other.getIsCustom());
             isDefault(other.getIsDefault());
             isFree(other.getIsFree());
             isTrialable(other.getIsTrialable());
             monthlyPrice(other.getMonthlyPrice());
             name(other.getName());
+            oneTimePrice(other.getOneTimePrice());
             planType(other.getPlanType());
             trialDays(other.getTrialDays());
             updatedAt(other.getUpdatedAt());
+            usageViolations(other.getUsageViolations());
             valid(other.getValid());
             yearlyPrice(other.getYearlyPrice());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("charge_type")
+        public CompanyCanTrialStage chargeType(@NotNull String chargeType) {
+            this.chargeType = Objects.requireNonNull(chargeType, "chargeType must not be null");
             return this;
         }
 
@@ -539,8 +662,15 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("company_count")
-        public CreatedAtStage companyCount(int companyCount) {
+        public ControlledByStage companyCount(int companyCount) {
             this.companyCount = companyCount;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("controlled_by")
+        public CreatedAtStage controlledBy(@NotNull String controlledBy) {
+            this.controlledBy = Objects.requireNonNull(controlledBy, "controlledBy must not be null");
             return this;
         }
 
@@ -656,6 +786,28 @@ public final class CompanyPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllUsageViolations(List<FeatureUsageResponseData> usageViolations) {
+            if (usageViolations != null) {
+                this.usageViolations.addAll(usageViolations);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addUsageViolations(FeatureUsageResponseData usageViolations) {
+            this.usageViolations.add(usageViolations);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "usage_violations", nulls = Nulls.SKIP)
+        public _FinalStage usageViolations(List<FeatureUsageResponseData> usageViolations) {
+            this.usageViolations.clear();
+            this.usageViolations.addAll(usageViolations);
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage trialDays(Integer trialDays) {
             this.trialDays = Optional.ofNullable(trialDays);
             return this;
@@ -665,6 +817,19 @@ public final class CompanyPlanDetailResponseData {
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
         public _FinalStage trialDays(Optional<Integer> trialDays) {
             this.trialDays = trialDays;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage oneTimePrice(BillingPriceResponseData oneTimePrice) {
+            this.oneTimePrice = Optional.ofNullable(oneTimePrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "one_time_price", nulls = Nulls.SKIP)
+        public _FinalStage oneTimePrice(Optional<BillingPriceResponseData> oneTimePrice) {
+            this.oneTimePrice = oneTimePrice;
             return this;
         }
 
@@ -682,8 +847,32 @@ public final class CompanyPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllIncludedCreditGrants(List<PlanCreditGrantView> includedCreditGrants) {
+            if (includedCreditGrants != null) {
+                this.includedCreditGrants.addAll(includedCreditGrants);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addIncludedCreditGrants(PlanCreditGrantView includedCreditGrants) {
+            this.includedCreditGrants.add(includedCreditGrants);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "included_credit_grants", nulls = Nulls.SKIP)
+        public _FinalStage includedCreditGrants(List<PlanCreditGrantView> includedCreditGrants) {
+            this.includedCreditGrants.clear();
+            this.includedCreditGrants.addAll(includedCreditGrants);
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllFeatures(List<FeatureDetailResponseData> features) {
-            this.features.addAll(features);
+            if (features != null) {
+                this.features.addAll(features);
+            }
             return this;
         }
 
@@ -703,7 +892,9 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllEntitlements(List<PlanEntitlementResponseData> entitlements) {
-            this.entitlements.addAll(entitlements);
+            if (entitlements != null) {
+                this.entitlements.addAll(entitlements);
+            }
             return this;
         }
 
@@ -731,6 +922,28 @@ public final class CompanyPlanDetailResponseData {
         @JsonSetter(value = "custom_plan_config", nulls = Nulls.SKIP)
         public _FinalStage customPlanConfig(Optional<CustomPlanConfig> customPlanConfig) {
             this.customPlanConfig = customPlanConfig;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCompatiblePlanIds(List<String> compatiblePlanIds) {
+            if (compatiblePlanIds != null) {
+                this.compatiblePlanIds.addAll(compatiblePlanIds);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCompatiblePlanIds(String compatiblePlanIds) {
+            this.compatiblePlanIds.add(compatiblePlanIds);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "compatible_plan_ids", nulls = Nulls.SKIP)
+        public _FinalStage compatiblePlanIds(List<String> compatiblePlanIds) {
+            this.compatiblePlanIds.clear();
+            this.compatiblePlanIds.addAll(compatiblePlanIds);
             return this;
         }
 
@@ -765,8 +978,11 @@ public final class CompanyPlanDetailResponseData {
             return new CompanyPlanDetailResponseData(
                     audienceType,
                     billingProduct,
+                    chargeType,
                     companyCanTrial,
                     companyCount,
+                    compatiblePlanIds,
+                    controlledBy,
                     createdAt,
                     current,
                     custom,
@@ -776,15 +992,18 @@ public final class CompanyPlanDetailResponseData {
                     features,
                     icon,
                     id,
+                    includedCreditGrants,
                     isCustom,
                     isDefault,
                     isFree,
                     isTrialable,
                     monthlyPrice,
                     name,
+                    oneTimePrice,
                     planType,
                     trialDays,
                     updatedAt,
+                    usageViolations,
                     valid,
                     yearlyPrice,
                     additionalProperties);

@@ -38,9 +38,6 @@ public final class ListCompanyMembershipsResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<CompanyMembershipDetailResponseData> getData() {
         return data;
@@ -84,6 +81,9 @@ public final class ListCompanyMembershipsResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull ListCompanyMembershipsParams params);
 
         Builder from(ListCompanyMembershipsResponse other);
@@ -119,6 +119,7 @@ public final class ListCompanyMembershipsResponse {
 
         /**
          * <p>Input parameters</p>
+         * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -128,20 +129,14 @@ public final class ListCompanyMembershipsResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<CompanyMembershipDetailResponseData> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(CompanyMembershipDetailResponseData data) {
             this.data.add(data);

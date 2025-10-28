@@ -380,7 +380,9 @@ public final class FlagDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllRules(List<RuleDetailResponseData> rules) {
-            this.rules.addAll(rules);
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
             return this;
         }
 

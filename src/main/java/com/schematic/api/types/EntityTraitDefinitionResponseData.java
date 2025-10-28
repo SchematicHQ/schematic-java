@@ -255,7 +255,9 @@ public final class EntityTraitDefinitionResponseData {
 
         @java.lang.Override
         public _FinalStage addAllHierarchy(List<String> hierarchy) {
-            this.hierarchy.addAll(hierarchy);
+            if (hierarchy != null) {
+                this.hierarchy.addAll(hierarchy);
+            }
             return this;
         }
 

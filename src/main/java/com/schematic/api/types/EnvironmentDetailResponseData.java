@@ -218,7 +218,9 @@ public final class EnvironmentDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllApiKeys(List<ApiKeyResponseData> apiKeys) {
-            this.apiKeys.addAll(apiKeys);
+            if (apiKeys != null) {
+                this.apiKeys.addAll(apiKeys);
+            }
             return this;
         }
 

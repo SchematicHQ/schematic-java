@@ -249,7 +249,9 @@ public final class CreateOrUpdateRuleRequestBody {
 
         @java.lang.Override
         public _FinalStage addAllConditions(List<CreateOrUpdateConditionRequestBody> conditions) {
-            this.conditions.addAll(conditions);
+            if (conditions != null) {
+                this.conditions.addAll(conditions);
+            }
             return this;
         }
 
@@ -269,7 +271,9 @@ public final class CreateOrUpdateRuleRequestBody {
 
         @java.lang.Override
         public _FinalStage addAllConditionGroups(List<CreateOrUpdateConditionGroupRequestBody> conditionGroups) {
-            this.conditionGroups.addAll(conditionGroups);
+            if (conditionGroups != null) {
+                this.conditionGroups.addAll(conditionGroups);
+            }
             return this;
         }
 

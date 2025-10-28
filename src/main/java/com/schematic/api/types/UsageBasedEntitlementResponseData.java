@@ -21,6 +21,10 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UsageBasedEntitlementResponseData.Builder.class)
 public final class UsageBasedEntitlementResponseData {
+    private final Optional<Integer> billingThreshold;
+
+    private final Optional<Double> consumptionRate;
+
     private final String featureId;
 
     private final Optional<BillingPriceView> meteredPrice;
@@ -44,6 +48,8 @@ public final class UsageBasedEntitlementResponseData {
     private final Map<String, Object> additionalProperties;
 
     private UsageBasedEntitlementResponseData(
+            Optional<Integer> billingThreshold,
+            Optional<Double> consumptionRate,
             String featureId,
             Optional<BillingPriceView> meteredPrice,
             Optional<String> metricPeriod,
@@ -55,6 +61,8 @@ public final class UsageBasedEntitlementResponseData {
             String valueType,
             Optional<BillingPriceView> yearlyUsageBasedPrice,
             Map<String, Object> additionalProperties) {
+        this.billingThreshold = billingThreshold;
+        this.consumptionRate = consumptionRate;
         this.featureId = featureId;
         this.meteredPrice = meteredPrice;
         this.metricPeriod = metricPeriod;
@@ -66,6 +74,16 @@ public final class UsageBasedEntitlementResponseData {
         this.valueType = valueType;
         this.yearlyUsageBasedPrice = yearlyUsageBasedPrice;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_threshold")
+    public Optional<Integer> getBillingThreshold() {
+        return billingThreshold;
+    }
+
+    @JsonProperty("consumption_rate")
+    public Optional<Double> getConsumptionRate() {
+        return consumptionRate;
     }
 
     @JsonProperty("feature_id")
@@ -130,7 +148,9 @@ public final class UsageBasedEntitlementResponseData {
     }
 
     private boolean equalTo(UsageBasedEntitlementResponseData other) {
-        return featureId.equals(other.featureId)
+        return billingThreshold.equals(other.billingThreshold)
+                && consumptionRate.equals(other.consumptionRate)
+                && featureId.equals(other.featureId)
                 && meteredPrice.equals(other.meteredPrice)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
@@ -145,6 +165,8 @@ public final class UsageBasedEntitlementResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingThreshold,
+                this.consumptionRate,
                 this.featureId,
                 this.meteredPrice,
                 this.metricPeriod,
@@ -178,6 +200,14 @@ public final class UsageBasedEntitlementResponseData {
 
     public interface _FinalStage {
         UsageBasedEntitlementResponseData build();
+
+        _FinalStage billingThreshold(Optional<Integer> billingThreshold);
+
+        _FinalStage billingThreshold(Integer billingThreshold);
+
+        _FinalStage consumptionRate(Optional<Double> consumptionRate);
+
+        _FinalStage consumptionRate(Double consumptionRate);
 
         _FinalStage meteredPrice(Optional<BillingPriceView> meteredPrice);
 
@@ -234,6 +264,10 @@ public final class UsageBasedEntitlementResponseData {
 
         private Optional<BillingPriceView> meteredPrice = Optional.empty();
 
+        private Optional<Double> consumptionRate = Optional.empty();
+
+        private Optional<Integer> billingThreshold = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -241,6 +275,8 @@ public final class UsageBasedEntitlementResponseData {
 
         @java.lang.Override
         public Builder from(UsageBasedEntitlementResponseData other) {
+            billingThreshold(other.getBillingThreshold());
+            consumptionRate(other.getConsumptionRate());
             featureId(other.getFeatureId());
             meteredPrice(other.getMeteredPrice());
             metricPeriod(other.getMetricPeriod());
@@ -373,8 +409,36 @@ public final class UsageBasedEntitlementResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage consumptionRate(Double consumptionRate) {
+            this.consumptionRate = Optional.ofNullable(consumptionRate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "consumption_rate", nulls = Nulls.SKIP)
+        public _FinalStage consumptionRate(Optional<Double> consumptionRate) {
+            this.consumptionRate = consumptionRate;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingThreshold(Integer billingThreshold) {
+            this.billingThreshold = Optional.ofNullable(billingThreshold);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_threshold", nulls = Nulls.SKIP)
+        public _FinalStage billingThreshold(Optional<Integer> billingThreshold) {
+            this.billingThreshold = billingThreshold;
+            return this;
+        }
+
+        @java.lang.Override
         public UsageBasedEntitlementResponseData build() {
             return new UsageBasedEntitlementResponseData(
+                    billingThreshold,
+                    consumptionRate,
                     featureId,
                     meteredPrice,
                     metricPeriod,

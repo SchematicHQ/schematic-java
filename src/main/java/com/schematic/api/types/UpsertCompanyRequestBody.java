@@ -62,6 +62,9 @@ public final class UpsertCompanyRequestBody {
         return id;
     }
 
+    /**
+     * @return See <a href="https://docs.schematichq.com/developer_resources/key_management">Key Management</a> for more information
+     */
     @JsonProperty("keys")
     public Map<String, String> getKeys() {
         return keys;
@@ -153,6 +156,9 @@ public final class UpsertCompanyRequestBody {
             return this;
         }
 
+        /**
+         * <p>If you know the Schematic ID, you can use that here instead of keys</p>
+         */
         @JsonSetter(value = "id", nulls = Nulls.SKIP)
         public Builder id(Optional<String> id) {
             this.id = id;
@@ -164,6 +170,9 @@ public final class UpsertCompanyRequestBody {
             return this;
         }
 
+        /**
+         * <p>See <a href="https://docs.schematichq.com/developer_resources/key_management">Key Management</a> for more information</p>
+         */
         @JsonSetter(value = "keys", nulls = Nulls.SKIP)
         public Builder keys(Map<String, String> keys) {
             this.keys.clear();
@@ -172,7 +181,9 @@ public final class UpsertCompanyRequestBody {
         }
 
         public Builder putAllKeys(Map<String, String> keys) {
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 
@@ -203,6 +214,9 @@ public final class UpsertCompanyRequestBody {
             return this;
         }
 
+        /**
+         * <p>A map of trait names to trait values</p>
+         */
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
         public Builder traits(Optional<Map<String, JsonNode>> traits) {
             this.traits = traits;

@@ -596,7 +596,9 @@ public final class BillingSubscriptionView {
 
         @java.lang.Override
         public _FinalStage addAllProducts(List<BillingProductForSubscriptionResponseData> products) {
-            this.products.addAll(products);
+            if (products != null) {
+                this.products.addAll(products);
+            }
             return this;
         }
 
@@ -668,7 +670,9 @@ public final class BillingSubscriptionView {
 
         @java.lang.Override
         public _FinalStage addAllDiscounts(List<BillingSubscriptionDiscountView> discounts) {
-            this.discounts.addAll(discounts);
+            if (discounts != null) {
+                this.discounts.addAll(discounts);
+            }
             return this;
         }
 

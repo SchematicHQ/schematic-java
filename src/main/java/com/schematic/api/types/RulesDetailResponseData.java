@@ -117,7 +117,9 @@ public final class RulesDetailResponseData {
         }
 
         public Builder addAllRules(List<RuleDetailResponseData> rules) {
-            this.rules.addAll(rules);
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
             return this;
         }
 

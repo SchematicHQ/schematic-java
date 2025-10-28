@@ -91,7 +91,9 @@ public final class RawEventBatchResponseData {
         }
 
         public Builder addAllEvents(List<RawEventResponseData> events) {
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 
