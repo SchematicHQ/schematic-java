@@ -18,12 +18,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WebhookResponseData.Builder.class)
 public final class WebhookResponseData {
     private final OffsetDateTime createdAt;
+
+    private final Optional<List<CreditTriggerConfig>> creditTriggerConfigs;
+
+    private final Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs;
 
     private final String id;
 
@@ -43,6 +48,8 @@ public final class WebhookResponseData {
 
     private WebhookResponseData(
             OffsetDateTime createdAt,
+            Optional<List<CreditTriggerConfig>> creditTriggerConfigs,
+            Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs,
             String id,
             String name,
             List<String> requestTypes,
@@ -52,6 +59,8 @@ public final class WebhookResponseData {
             String url,
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
+        this.creditTriggerConfigs = creditTriggerConfigs;
+        this.entitlementTriggerConfigs = entitlementTriggerConfigs;
         this.id = id;
         this.name = name;
         this.requestTypes = requestTypes;
@@ -65,6 +74,16 @@ public final class WebhookResponseData {
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("credit_trigger_configs")
+    public Optional<List<CreditTriggerConfig>> getCreditTriggerConfigs() {
+        return creditTriggerConfigs;
+    }
+
+    @JsonProperty("entitlement_trigger_configs")
+    public Optional<List<EntitlementTriggerConfig>> getEntitlementTriggerConfigs() {
+        return entitlementTriggerConfigs;
     }
 
     @JsonProperty("id")
@@ -115,6 +134,8 @@ public final class WebhookResponseData {
 
     private boolean equalTo(WebhookResponseData other) {
         return createdAt.equals(other.createdAt)
+                && creditTriggerConfigs.equals(other.creditTriggerConfigs)
+                && entitlementTriggerConfigs.equals(other.entitlementTriggerConfigs)
                 && id.equals(other.id)
                 && name.equals(other.name)
                 && requestTypes.equals(other.requestTypes)
@@ -128,6 +149,8 @@ public final class WebhookResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.createdAt,
+                this.creditTriggerConfigs,
+                this.entitlementTriggerConfigs,
                 this.id,
                 this.name,
                 this.requestTypes,
@@ -179,6 +202,14 @@ public final class WebhookResponseData {
     public interface _FinalStage {
         WebhookResponseData build();
 
+        _FinalStage creditTriggerConfigs(Optional<List<CreditTriggerConfig>> creditTriggerConfigs);
+
+        _FinalStage creditTriggerConfigs(List<CreditTriggerConfig> creditTriggerConfigs);
+
+        _FinalStage entitlementTriggerConfigs(Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs);
+
+        _FinalStage entitlementTriggerConfigs(List<EntitlementTriggerConfig> entitlementTriggerConfigs);
+
         _FinalStage requestTypes(List<String> requestTypes);
 
         _FinalStage addRequestTypes(String requestTypes);
@@ -212,6 +243,10 @@ public final class WebhookResponseData {
 
         private List<String> requestTypes = new ArrayList<>();
 
+        private Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs = Optional.empty();
+
+        private Optional<List<CreditTriggerConfig>> creditTriggerConfigs = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -220,6 +255,8 @@ public final class WebhookResponseData {
         @java.lang.Override
         public Builder from(WebhookResponseData other) {
             createdAt(other.getCreatedAt());
+            creditTriggerConfigs(other.getCreditTriggerConfigs());
+            entitlementTriggerConfigs(other.getEntitlementTriggerConfigs());
             id(other.getId());
             name(other.getName());
             requestTypes(other.getRequestTypes());
@@ -300,9 +337,46 @@ public final class WebhookResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage entitlementTriggerConfigs(List<EntitlementTriggerConfig> entitlementTriggerConfigs) {
+            this.entitlementTriggerConfigs = Optional.ofNullable(entitlementTriggerConfigs);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "entitlement_trigger_configs", nulls = Nulls.SKIP)
+        public _FinalStage entitlementTriggerConfigs(
+                Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs) {
+            this.entitlementTriggerConfigs = entitlementTriggerConfigs;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage creditTriggerConfigs(List<CreditTriggerConfig> creditTriggerConfigs) {
+            this.creditTriggerConfigs = Optional.ofNullable(creditTriggerConfigs);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_trigger_configs", nulls = Nulls.SKIP)
+        public _FinalStage creditTriggerConfigs(Optional<List<CreditTriggerConfig>> creditTriggerConfigs) {
+            this.creditTriggerConfigs = creditTriggerConfigs;
+            return this;
+        }
+
+        @java.lang.Override
         public WebhookResponseData build() {
             return new WebhookResponseData(
-                    createdAt, id, name, requestTypes, secret, status, updatedAt, url, additionalProperties);
+                    createdAt,
+                    creditTriggerConfigs,
+                    entitlementTriggerConfigs,
+                    id,
+                    name,
+                    requestTypes,
+                    secret,
+                    status,
+                    updatedAt,
+                    url,
+                    additionalProperties);
         }
     }
 }

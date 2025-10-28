@@ -12,7 +12,9 @@ public enum FeatureCompanyUserResponseDataAllocationType {
 
     TRAIT("trait"),
 
-    UNLIMITED("unlimited");
+    UNLIMITED("unlimited"),
+
+    UNKNOWN("unknown");
 
     private final String value;
 

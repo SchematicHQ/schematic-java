@@ -38,9 +38,6 @@ public final class ListApiRequestsResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<ApiKeyRequestListResponseData> getData() {
         return data;
@@ -128,20 +125,12 @@ public final class ListApiRequestsResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<ApiKeyRequestListResponseData> data) {
             this.data.addAll(data);
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(ApiKeyRequestListResponseData data) {
             this.data.add(data);

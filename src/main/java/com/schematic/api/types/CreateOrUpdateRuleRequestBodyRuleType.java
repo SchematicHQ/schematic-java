@@ -14,9 +14,7 @@ public enum CreateOrUpdateRuleRequestBodyRuleType {
 
     STANDARD("standard"),
 
-    DEFAULT("default"),
-
-    PLAN_AUDIENCE("plan_audience");
+    DEFAULT("default");
 
     private final String value;
 

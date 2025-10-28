@@ -21,6 +21,10 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListFeaturesParams.Builder.class)
 public final class ListFeaturesParams {
+    private final Optional<Boolean> booleanRequireEvent;
+
+    private final Optional<List<String>> featureType;
+
     private final Optional<List<String>> ids;
 
     private final Optional<Integer> limit;
@@ -36,6 +40,8 @@ public final class ListFeaturesParams {
     private final Map<String, Object> additionalProperties;
 
     private ListFeaturesParams(
+            Optional<Boolean> booleanRequireEvent,
+            Optional<List<String>> featureType,
             Optional<List<String>> ids,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -43,6 +49,8 @@ public final class ListFeaturesParams {
             Optional<String> withoutCompanyOverrideFor,
             Optional<String> withoutPlanEntitlementFor,
             Map<String, Object> additionalProperties) {
+        this.booleanRequireEvent = booleanRequireEvent;
+        this.featureType = featureType;
         this.ids = ids;
         this.limit = limit;
         this.offset = offset;
@@ -50,6 +58,22 @@ public final class ListFeaturesParams {
         this.withoutCompanyOverrideFor = withoutCompanyOverrideFor;
         this.withoutPlanEntitlementFor = withoutPlanEntitlementFor;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
+     */
+    @JsonProperty("boolean_require_event")
+    public Optional<Boolean> getBooleanRequireEvent() {
+        return booleanRequireEvent;
+    }
+
+    /**
+     * @return Filter by one or more feature types (boolean, event, trait)
+     */
+    @JsonProperty("feature_type")
+    public Optional<List<String>> getFeatureType() {
+        return featureType;
     }
 
     @JsonProperty("ids")
@@ -73,6 +97,9 @@ public final class ListFeaturesParams {
         return offset;
     }
 
+    /**
+     * @return Search by feature name or ID
+     */
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
@@ -106,7 +133,9 @@ public final class ListFeaturesParams {
     }
 
     private boolean equalTo(ListFeaturesParams other) {
-        return ids.equals(other.ids)
+        return booleanRequireEvent.equals(other.booleanRequireEvent)
+                && featureType.equals(other.featureType)
+                && ids.equals(other.ids)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
                 && q.equals(other.q)
@@ -117,6 +146,8 @@ public final class ListFeaturesParams {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.booleanRequireEvent,
+                this.featureType,
                 this.ids,
                 this.limit,
                 this.offset,
@@ -136,6 +167,10 @@ public final class ListFeaturesParams {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Boolean> booleanRequireEvent = Optional.empty();
+
+        private Optional<List<String>> featureType = Optional.empty();
+
         private Optional<List<String>> ids = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
@@ -154,12 +189,36 @@ public final class ListFeaturesParams {
         private Builder() {}
 
         public Builder from(ListFeaturesParams other) {
+            booleanRequireEvent(other.getBooleanRequireEvent());
+            featureType(other.getFeatureType());
             ids(other.getIds());
             limit(other.getLimit());
             offset(other.getOffset());
             q(other.getQ());
             withoutCompanyOverrideFor(other.getWithoutCompanyOverrideFor());
             withoutPlanEntitlementFor(other.getWithoutPlanEntitlementFor());
+            return this;
+        }
+
+        @JsonSetter(value = "boolean_require_event", nulls = Nulls.SKIP)
+        public Builder booleanRequireEvent(Optional<Boolean> booleanRequireEvent) {
+            this.booleanRequireEvent = booleanRequireEvent;
+            return this;
+        }
+
+        public Builder booleanRequireEvent(Boolean booleanRequireEvent) {
+            this.booleanRequireEvent = Optional.ofNullable(booleanRequireEvent);
+            return this;
+        }
+
+        @JsonSetter(value = "feature_type", nulls = Nulls.SKIP)
+        public Builder featureType(Optional<List<String>> featureType) {
+            this.featureType = featureType;
+            return this;
+        }
+
+        public Builder featureType(List<String> featureType) {
+            this.featureType = Optional.ofNullable(featureType);
             return this;
         }
 
@@ -231,7 +290,15 @@ public final class ListFeaturesParams {
 
         public ListFeaturesParams build() {
             return new ListFeaturesParams(
-                    ids, limit, offset, q, withoutCompanyOverrideFor, withoutPlanEntitlementFor, additionalProperties);
+                    booleanRequireEvent,
+                    featureType,
+                    ids,
+                    limit,
+                    offset,
+                    q,
+                    withoutCompanyOverrideFor,
+                    withoutPlanEntitlementFor,
+                    additionalProperties);
         }
     }
 }

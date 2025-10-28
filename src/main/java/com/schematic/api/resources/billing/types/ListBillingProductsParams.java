@@ -23,6 +23,8 @@ import java.util.Optional;
 public final class ListBillingProductsParams {
     private final Optional<List<String>> ids;
 
+    private final Optional<Boolean> isActive;
+
     private final Optional<Integer> limit;
 
     private final Optional<String> name;
@@ -32,6 +34,8 @@ public final class ListBillingProductsParams {
     private final Optional<ListBillingProductsResponseParamsPriceUsageType> priceUsageType;
 
     private final Optional<String> q;
+
+    private final Optional<Boolean> withOneTimeCharges;
 
     private final Optional<Boolean> withPricesOnly;
 
@@ -43,21 +47,25 @@ public final class ListBillingProductsParams {
 
     private ListBillingProductsParams(
             Optional<List<String>> ids,
+            Optional<Boolean> isActive,
             Optional<Integer> limit,
             Optional<String> name,
             Optional<Integer> offset,
             Optional<ListBillingProductsResponseParamsPriceUsageType> priceUsageType,
             Optional<String> q,
+            Optional<Boolean> withOneTimeCharges,
             Optional<Boolean> withPricesOnly,
             Optional<Boolean> withZeroPrice,
             Optional<Boolean> withoutLinkedToPlan,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
+        this.isActive = isActive;
         this.limit = limit;
         this.name = name;
         this.offset = offset;
         this.priceUsageType = priceUsageType;
         this.q = q;
+        this.withOneTimeCharges = withOneTimeCharges;
         this.withPricesOnly = withPricesOnly;
         this.withZeroPrice = withZeroPrice;
         this.withoutLinkedToPlan = withoutLinkedToPlan;
@@ -67,6 +75,14 @@ public final class ListBillingProductsParams {
     @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
+    }
+
+    /**
+     * @return Filter products that are active
+     */
+    @JsonProperty("is_active")
+    public Optional<Boolean> getIsActive() {
+        return isActive;
     }
 
     /**
@@ -98,6 +114,14 @@ public final class ListBillingProductsParams {
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
+    }
+
+    /**
+     * @return Filter products that are one time charges
+     */
+    @JsonProperty("with_one_time_charges")
+    public Optional<Boolean> getWithOneTimeCharges() {
+        return withOneTimeCharges;
     }
 
     /**
@@ -137,11 +161,13 @@ public final class ListBillingProductsParams {
 
     private boolean equalTo(ListBillingProductsParams other) {
         return ids.equals(other.ids)
+                && isActive.equals(other.isActive)
                 && limit.equals(other.limit)
                 && name.equals(other.name)
                 && offset.equals(other.offset)
                 && priceUsageType.equals(other.priceUsageType)
                 && q.equals(other.q)
+                && withOneTimeCharges.equals(other.withOneTimeCharges)
                 && withPricesOnly.equals(other.withPricesOnly)
                 && withZeroPrice.equals(other.withZeroPrice)
                 && withoutLinkedToPlan.equals(other.withoutLinkedToPlan);
@@ -151,11 +177,13 @@ public final class ListBillingProductsParams {
     public int hashCode() {
         return Objects.hash(
                 this.ids,
+                this.isActive,
                 this.limit,
                 this.name,
                 this.offset,
                 this.priceUsageType,
                 this.q,
+                this.withOneTimeCharges,
                 this.withPricesOnly,
                 this.withZeroPrice,
                 this.withoutLinkedToPlan);
@@ -174,6 +202,8 @@ public final class ListBillingProductsParams {
     public static final class Builder {
         private Optional<List<String>> ids = Optional.empty();
 
+        private Optional<Boolean> isActive = Optional.empty();
+
         private Optional<Integer> limit = Optional.empty();
 
         private Optional<String> name = Optional.empty();
@@ -183,6 +213,8 @@ public final class ListBillingProductsParams {
         private Optional<ListBillingProductsResponseParamsPriceUsageType> priceUsageType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
+
+        private Optional<Boolean> withOneTimeCharges = Optional.empty();
 
         private Optional<Boolean> withPricesOnly = Optional.empty();
 
@@ -197,11 +229,13 @@ public final class ListBillingProductsParams {
 
         public Builder from(ListBillingProductsParams other) {
             ids(other.getIds());
+            isActive(other.getIsActive());
             limit(other.getLimit());
             name(other.getName());
             offset(other.getOffset());
             priceUsageType(other.getPriceUsageType());
             q(other.getQ());
+            withOneTimeCharges(other.getWithOneTimeCharges());
             withPricesOnly(other.getWithPricesOnly());
             withZeroPrice(other.getWithZeroPrice());
             withoutLinkedToPlan(other.getWithoutLinkedToPlan());
@@ -216,6 +250,17 @@ public final class ListBillingProductsParams {
 
         public Builder ids(List<String> ids) {
             this.ids = Optional.ofNullable(ids);
+            return this;
+        }
+
+        @JsonSetter(value = "is_active", nulls = Nulls.SKIP)
+        public Builder isActive(Optional<Boolean> isActive) {
+            this.isActive = isActive;
+            return this;
+        }
+
+        public Builder isActive(Boolean isActive) {
+            this.isActive = Optional.ofNullable(isActive);
             return this;
         }
 
@@ -274,6 +319,17 @@ public final class ListBillingProductsParams {
             return this;
         }
 
+        @JsonSetter(value = "with_one_time_charges", nulls = Nulls.SKIP)
+        public Builder withOneTimeCharges(Optional<Boolean> withOneTimeCharges) {
+            this.withOneTimeCharges = withOneTimeCharges;
+            return this;
+        }
+
+        public Builder withOneTimeCharges(Boolean withOneTimeCharges) {
+            this.withOneTimeCharges = Optional.ofNullable(withOneTimeCharges);
+            return this;
+        }
+
         @JsonSetter(value = "with_prices_only", nulls = Nulls.SKIP)
         public Builder withPricesOnly(Optional<Boolean> withPricesOnly) {
             this.withPricesOnly = withPricesOnly;
@@ -310,11 +366,13 @@ public final class ListBillingProductsParams {
         public ListBillingProductsParams build() {
             return new ListBillingProductsParams(
                     ids,
+                    isActive,
                     limit,
                     name,
                     offset,
                     priceUsageType,
                     q,
+                    withOneTimeCharges,
                     withPricesOnly,
                     withZeroPrice,
                     withoutLinkedToPlan,

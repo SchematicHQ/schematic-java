@@ -36,9 +36,6 @@ public final class ListCouponsResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<BillingCouponResponseData> getData() {
         return data;
@@ -126,20 +123,12 @@ public final class ListCouponsResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<BillingCouponResponseData> data) {
             this.data.addAll(data);
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(BillingCouponResponseData data) {
             this.data.add(data);

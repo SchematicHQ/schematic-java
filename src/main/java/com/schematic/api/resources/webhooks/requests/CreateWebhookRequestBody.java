@@ -13,16 +13,23 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.resources.webhooks.types.CreateWebhookRequestBodyRequestTypesItem;
+import com.schematic.api.types.CreditTriggerConfig;
+import com.schematic.api.types.EntitlementTriggerConfig;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateWebhookRequestBody.Builder.class)
 public final class CreateWebhookRequestBody {
+    private final Optional<List<CreditTriggerConfig>> creditTriggerConfigs;
+
+    private final Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs;
+
     private final String name;
 
     private final List<CreateWebhookRequestBodyRequestTypesItem> requestTypes;
@@ -32,14 +39,28 @@ public final class CreateWebhookRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private CreateWebhookRequestBody(
+            Optional<List<CreditTriggerConfig>> creditTriggerConfigs,
+            Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs,
             String name,
             List<CreateWebhookRequestBodyRequestTypesItem> requestTypes,
             String url,
             Map<String, Object> additionalProperties) {
+        this.creditTriggerConfigs = creditTriggerConfigs;
+        this.entitlementTriggerConfigs = entitlementTriggerConfigs;
         this.name = name;
         this.requestTypes = requestTypes;
         this.url = url;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("credit_trigger_configs")
+    public Optional<List<CreditTriggerConfig>> getCreditTriggerConfigs() {
+        return creditTriggerConfigs;
+    }
+
+    @JsonProperty("entitlement_trigger_configs")
+    public Optional<List<EntitlementTriggerConfig>> getEntitlementTriggerConfigs() {
+        return entitlementTriggerConfigs;
     }
 
     @JsonProperty("name")
@@ -69,12 +90,17 @@ public final class CreateWebhookRequestBody {
     }
 
     private boolean equalTo(CreateWebhookRequestBody other) {
-        return name.equals(other.name) && requestTypes.equals(other.requestTypes) && url.equals(other.url);
+        return creditTriggerConfigs.equals(other.creditTriggerConfigs)
+                && entitlementTriggerConfigs.equals(other.entitlementTriggerConfigs)
+                && name.equals(other.name)
+                && requestTypes.equals(other.requestTypes)
+                && url.equals(other.url);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.requestTypes, this.url);
+        return Objects.hash(
+                this.creditTriggerConfigs, this.entitlementTriggerConfigs, this.name, this.requestTypes, this.url);
     }
 
     @java.lang.Override
@@ -99,6 +125,14 @@ public final class CreateWebhookRequestBody {
     public interface _FinalStage {
         CreateWebhookRequestBody build();
 
+        _FinalStage creditTriggerConfigs(Optional<List<CreditTriggerConfig>> creditTriggerConfigs);
+
+        _FinalStage creditTriggerConfigs(List<CreditTriggerConfig> creditTriggerConfigs);
+
+        _FinalStage entitlementTriggerConfigs(Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs);
+
+        _FinalStage entitlementTriggerConfigs(List<EntitlementTriggerConfig> entitlementTriggerConfigs);
+
         _FinalStage requestTypes(List<CreateWebhookRequestBodyRequestTypesItem> requestTypes);
 
         _FinalStage addRequestTypes(CreateWebhookRequestBodyRequestTypesItem requestTypes);
@@ -114,6 +148,10 @@ public final class CreateWebhookRequestBody {
 
         private List<CreateWebhookRequestBodyRequestTypesItem> requestTypes = new ArrayList<>();
 
+        private Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs = Optional.empty();
+
+        private Optional<List<CreditTriggerConfig>> creditTriggerConfigs = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -121,6 +159,8 @@ public final class CreateWebhookRequestBody {
 
         @java.lang.Override
         public Builder from(CreateWebhookRequestBody other) {
+            creditTriggerConfigs(other.getCreditTriggerConfigs());
+            entitlementTriggerConfigs(other.getEntitlementTriggerConfigs());
             name(other.getName());
             requestTypes(other.getRequestTypes());
             url(other.getUrl());
@@ -162,8 +202,36 @@ public final class CreateWebhookRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage entitlementTriggerConfigs(List<EntitlementTriggerConfig> entitlementTriggerConfigs) {
+            this.entitlementTriggerConfigs = Optional.ofNullable(entitlementTriggerConfigs);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "entitlement_trigger_configs", nulls = Nulls.SKIP)
+        public _FinalStage entitlementTriggerConfigs(
+                Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs) {
+            this.entitlementTriggerConfigs = entitlementTriggerConfigs;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage creditTriggerConfigs(List<CreditTriggerConfig> creditTriggerConfigs) {
+            this.creditTriggerConfigs = Optional.ofNullable(creditTriggerConfigs);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_trigger_configs", nulls = Nulls.SKIP)
+        public _FinalStage creditTriggerConfigs(Optional<List<CreditTriggerConfig>> creditTriggerConfigs) {
+            this.creditTriggerConfigs = creditTriggerConfigs;
+            return this;
+        }
+
+        @java.lang.Override
         public CreateWebhookRequestBody build() {
-            return new CreateWebhookRequestBody(name, requestTypes, url, additionalProperties);
+            return new CreateWebhookRequestBody(
+                    creditTriggerConfigs, entitlementTriggerConfigs, name, requestTypes, url, additionalProperties);
         }
     }
 }

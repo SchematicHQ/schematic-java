@@ -9,26 +9,31 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountResponse.Builder.class)
 public final class CountResponse {
-    private final int count;
+    private final Optional<Integer> count;
 
     private final Map<String, Object> additionalProperties;
 
-    private CountResponse(int count, Map<String, Object> additionalProperties) {
+    private CountResponse(Optional<Integer> count, Map<String, Object> additionalProperties) {
         this.count = count;
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return The number of resources
+     */
     @JsonProperty("count")
-    public int getCount() {
+    public Optional<Integer> getCount() {
         return count;
     }
 
@@ -44,7 +49,7 @@ public final class CountResponse {
     }
 
     private boolean equalTo(CountResponse other) {
-        return count == other.count;
+        return count.equals(other.count);
     }
 
     @java.lang.Override
@@ -57,43 +62,35 @@ public final class CountResponse {
         return ObjectMappers.stringify(this);
     }
 
-    public static CountStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface CountStage {
-        _FinalStage count(int count);
-
-        Builder from(CountResponse other);
-    }
-
-    public interface _FinalStage {
-        CountResponse build();
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CountStage, _FinalStage {
-        private int count;
+    public static final class Builder {
+        private Optional<Integer> count = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(CountResponse other) {
             count(other.getCount());
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("count")
-        public _FinalStage count(int count) {
+        @JsonSetter(value = "count", nulls = Nulls.SKIP)
+        public Builder count(Optional<Integer> count) {
             this.count = count;
             return this;
         }
 
-        @java.lang.Override
+        public Builder count(Integer count) {
+            this.count = Optional.ofNullable(count);
+            return this;
+        }
+
         public CountResponse build() {
             return new CountResponse(count, additionalProperties);
         }

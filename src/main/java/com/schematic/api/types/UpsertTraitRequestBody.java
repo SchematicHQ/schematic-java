@@ -58,7 +58,7 @@ public final class UpsertTraitRequestBody {
     }
 
     /**
-     * @return Key/value pairs too identify a company or user
+     * @return Key/value pairs to identify a company or user
      */
     @JsonProperty("keys")
     public Map<String, String> getKeys() {
@@ -223,7 +223,7 @@ public final class UpsertTraitRequestBody {
         }
 
         /**
-         * <p>Key/value pairs too identify a company or user</p>
+         * <p>Key/value pairs to identify a company or user</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -233,7 +233,7 @@ public final class UpsertTraitRequestBody {
         }
 
         /**
-         * <p>Key/value pairs too identify a company or user</p>
+         * <p>Key/value pairs to identify a company or user</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

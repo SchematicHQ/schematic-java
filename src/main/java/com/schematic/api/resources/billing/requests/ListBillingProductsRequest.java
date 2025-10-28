@@ -31,9 +31,13 @@ public final class ListBillingProductsRequest {
 
     private final Optional<Boolean> withoutLinkedToPlan;
 
+    private final Optional<Boolean> withOneTimeCharges;
+
     private final Optional<Boolean> withZeroPrice;
 
     private final Optional<Boolean> withPricesOnly;
+
+    private final Optional<Boolean> isActive;
 
     private final Optional<Integer> limit;
 
@@ -47,8 +51,10 @@ public final class ListBillingProductsRequest {
             Optional<String> q,
             Optional<ListBillingProductsRequestPriceUsageType> priceUsageType,
             Optional<Boolean> withoutLinkedToPlan,
+            Optional<Boolean> withOneTimeCharges,
             Optional<Boolean> withZeroPrice,
             Optional<Boolean> withPricesOnly,
+            Optional<Boolean> isActive,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
@@ -57,8 +63,10 @@ public final class ListBillingProductsRequest {
         this.q = q;
         this.priceUsageType = priceUsageType;
         this.withoutLinkedToPlan = withoutLinkedToPlan;
+        this.withOneTimeCharges = withOneTimeCharges;
         this.withZeroPrice = withZeroPrice;
         this.withPricesOnly = withPricesOnly;
+        this.isActive = isActive;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
@@ -93,6 +101,14 @@ public final class ListBillingProductsRequest {
     }
 
     /**
+     * @return Filter products that are one time charges
+     */
+    @JsonProperty("with_one_time_charges")
+    public Optional<Boolean> getWithOneTimeCharges() {
+        return withOneTimeCharges;
+    }
+
+    /**
      * @return Filter products that have zero price for free subscription type
      */
     @JsonProperty("with_zero_price")
@@ -106,6 +122,14 @@ public final class ListBillingProductsRequest {
     @JsonProperty("with_prices_only")
     public Optional<Boolean> getWithPricesOnly() {
         return withPricesOnly;
+    }
+
+    /**
+     * @return Filter products that are active
+     */
+    @JsonProperty("is_active")
+    public Optional<Boolean> getIsActive() {
+        return isActive;
     }
 
     /**
@@ -141,8 +165,10 @@ public final class ListBillingProductsRequest {
                 && q.equals(other.q)
                 && priceUsageType.equals(other.priceUsageType)
                 && withoutLinkedToPlan.equals(other.withoutLinkedToPlan)
+                && withOneTimeCharges.equals(other.withOneTimeCharges)
                 && withZeroPrice.equals(other.withZeroPrice)
                 && withPricesOnly.equals(other.withPricesOnly)
+                && isActive.equals(other.isActive)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
@@ -155,8 +181,10 @@ public final class ListBillingProductsRequest {
                 this.q,
                 this.priceUsageType,
                 this.withoutLinkedToPlan,
+                this.withOneTimeCharges,
                 this.withZeroPrice,
                 this.withPricesOnly,
+                this.isActive,
                 this.limit,
                 this.offset);
     }
@@ -182,9 +210,13 @@ public final class ListBillingProductsRequest {
 
         private Optional<Boolean> withoutLinkedToPlan = Optional.empty();
 
+        private Optional<Boolean> withOneTimeCharges = Optional.empty();
+
         private Optional<Boolean> withZeroPrice = Optional.empty();
 
         private Optional<Boolean> withPricesOnly = Optional.empty();
+
+        private Optional<Boolean> isActive = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
@@ -201,8 +233,10 @@ public final class ListBillingProductsRequest {
             q(other.getQ());
             priceUsageType(other.getPriceUsageType());
             withoutLinkedToPlan(other.getWithoutLinkedToPlan());
+            withOneTimeCharges(other.getWithOneTimeCharges());
             withZeroPrice(other.getWithZeroPrice());
             withPricesOnly(other.getWithPricesOnly());
+            isActive(other.getIsActive());
             limit(other.getLimit());
             offset(other.getOffset());
             return this;
@@ -263,6 +297,17 @@ public final class ListBillingProductsRequest {
             return this;
         }
 
+        @JsonSetter(value = "with_one_time_charges", nulls = Nulls.SKIP)
+        public Builder withOneTimeCharges(Optional<Boolean> withOneTimeCharges) {
+            this.withOneTimeCharges = withOneTimeCharges;
+            return this;
+        }
+
+        public Builder withOneTimeCharges(Boolean withOneTimeCharges) {
+            this.withOneTimeCharges = Optional.ofNullable(withOneTimeCharges);
+            return this;
+        }
+
         @JsonSetter(value = "with_zero_price", nulls = Nulls.SKIP)
         public Builder withZeroPrice(Optional<Boolean> withZeroPrice) {
             this.withZeroPrice = withZeroPrice;
@@ -282,6 +327,17 @@ public final class ListBillingProductsRequest {
 
         public Builder withPricesOnly(Boolean withPricesOnly) {
             this.withPricesOnly = Optional.ofNullable(withPricesOnly);
+            return this;
+        }
+
+        @JsonSetter(value = "is_active", nulls = Nulls.SKIP)
+        public Builder isActive(Optional<Boolean> isActive) {
+            this.isActive = isActive;
+            return this;
+        }
+
+        public Builder isActive(Boolean isActive) {
+            this.isActive = Optional.ofNullable(isActive);
             return this;
         }
 
@@ -314,8 +370,10 @@ public final class ListBillingProductsRequest {
                     q,
                     priceUsageType,
                     withoutLinkedToPlan,
+                    withOneTimeCharges,
                     withZeroPrice,
                     withPricesOnly,
+                    isActive,
                     limit,
                     offset,
                     additionalProperties);

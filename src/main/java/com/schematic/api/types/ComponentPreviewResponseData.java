@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ComponentPreviewResponseData.Builder.class)
@@ -28,17 +29,33 @@ public final class ComponentPreviewResponseData {
 
     private final List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements;
 
+    private final List<CompatiblePlans> addOnCompatibilities;
+
     private final Optional<ComponentCapabilities> capabilities;
+
+    private final ComponentCheckoutSettings checkoutSettings;
 
     private final Optional<CompanyDetailResponseData> company;
 
     private final Optional<ComponentResponseData> component;
+
+    private final List<BillingCreditBundleView> creditBundles;
+
+    private final List<CreditCompanyGrantView> creditGrants;
 
     private final Optional<PlanDetailResponseData> defaultPlan;
 
     private final Optional<FeatureUsageDetailResponseData> featureUsage;
 
     private final List<InvoiceResponseData> invoices;
+
+    private final Optional<PlanDetailResponseData> postTrialPlan;
+
+    private final boolean showCredits;
+
+    private final boolean showPeriodToggle;
+
+    private final boolean showZeroPriceAsFree;
 
     private final Optional<StripeEmbedInfo> stripeEmbed;
 
@@ -54,12 +71,20 @@ public final class ComponentPreviewResponseData {
             List<CompanyPlanDetailResponseData> activeAddOns,
             List<CompanyPlanDetailResponseData> activePlans,
             List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements,
+            List<CompatiblePlans> addOnCompatibilities,
             Optional<ComponentCapabilities> capabilities,
+            ComponentCheckoutSettings checkoutSettings,
             Optional<CompanyDetailResponseData> company,
             Optional<ComponentResponseData> component,
+            List<BillingCreditBundleView> creditBundles,
+            List<CreditCompanyGrantView> creditGrants,
             Optional<PlanDetailResponseData> defaultPlan,
             Optional<FeatureUsageDetailResponseData> featureUsage,
             List<InvoiceResponseData> invoices,
+            Optional<PlanDetailResponseData> postTrialPlan,
+            boolean showCredits,
+            boolean showPeriodToggle,
+            boolean showZeroPriceAsFree,
             Optional<StripeEmbedInfo> stripeEmbed,
             Optional<CompanySubscriptionResponseData> subscription,
             Optional<Boolean> trialPaymentMethodRequired,
@@ -68,12 +93,20 @@ public final class ComponentPreviewResponseData {
         this.activeAddOns = activeAddOns;
         this.activePlans = activePlans;
         this.activeUsageBasedEntitlements = activeUsageBasedEntitlements;
+        this.addOnCompatibilities = addOnCompatibilities;
         this.capabilities = capabilities;
+        this.checkoutSettings = checkoutSettings;
         this.company = company;
         this.component = component;
+        this.creditBundles = creditBundles;
+        this.creditGrants = creditGrants;
         this.defaultPlan = defaultPlan;
         this.featureUsage = featureUsage;
         this.invoices = invoices;
+        this.postTrialPlan = postTrialPlan;
+        this.showCredits = showCredits;
+        this.showPeriodToggle = showPeriodToggle;
+        this.showZeroPriceAsFree = showZeroPriceAsFree;
         this.stripeEmbed = stripeEmbed;
         this.subscription = subscription;
         this.trialPaymentMethodRequired = trialPaymentMethodRequired;
@@ -96,9 +129,19 @@ public final class ComponentPreviewResponseData {
         return activeUsageBasedEntitlements;
     }
 
+    @JsonProperty("add_on_compatibilities")
+    public List<CompatiblePlans> getAddOnCompatibilities() {
+        return addOnCompatibilities;
+    }
+
     @JsonProperty("capabilities")
     public Optional<ComponentCapabilities> getCapabilities() {
         return capabilities;
+    }
+
+    @JsonProperty("checkout_settings")
+    public ComponentCheckoutSettings getCheckoutSettings() {
+        return checkoutSettings;
     }
 
     @JsonProperty("company")
@@ -109,6 +152,16 @@ public final class ComponentPreviewResponseData {
     @JsonProperty("component")
     public Optional<ComponentResponseData> getComponent() {
         return component;
+    }
+
+    @JsonProperty("credit_bundles")
+    public List<BillingCreditBundleView> getCreditBundles() {
+        return creditBundles;
+    }
+
+    @JsonProperty("credit_grants")
+    public List<CreditCompanyGrantView> getCreditGrants() {
+        return creditGrants;
     }
 
     @JsonProperty("default_plan")
@@ -124,6 +177,26 @@ public final class ComponentPreviewResponseData {
     @JsonProperty("invoices")
     public List<InvoiceResponseData> getInvoices() {
         return invoices;
+    }
+
+    @JsonProperty("post_trial_plan")
+    public Optional<PlanDetailResponseData> getPostTrialPlan() {
+        return postTrialPlan;
+    }
+
+    @JsonProperty("show_credits")
+    public boolean getShowCredits() {
+        return showCredits;
+    }
+
+    @JsonProperty("show_period_toggle")
+    public boolean getShowPeriodToggle() {
+        return showPeriodToggle;
+    }
+
+    @JsonProperty("show_zero_price_as_free")
+    public boolean getShowZeroPriceAsFree() {
+        return showZeroPriceAsFree;
     }
 
     @JsonProperty("stripe_embed")
@@ -161,12 +234,20 @@ public final class ComponentPreviewResponseData {
         return activeAddOns.equals(other.activeAddOns)
                 && activePlans.equals(other.activePlans)
                 && activeUsageBasedEntitlements.equals(other.activeUsageBasedEntitlements)
+                && addOnCompatibilities.equals(other.addOnCompatibilities)
                 && capabilities.equals(other.capabilities)
+                && checkoutSettings.equals(other.checkoutSettings)
                 && company.equals(other.company)
                 && component.equals(other.component)
+                && creditBundles.equals(other.creditBundles)
+                && creditGrants.equals(other.creditGrants)
                 && defaultPlan.equals(other.defaultPlan)
                 && featureUsage.equals(other.featureUsage)
                 && invoices.equals(other.invoices)
+                && postTrialPlan.equals(other.postTrialPlan)
+                && showCredits == other.showCredits
+                && showPeriodToggle == other.showPeriodToggle
+                && showZeroPriceAsFree == other.showZeroPriceAsFree
                 && stripeEmbed.equals(other.stripeEmbed)
                 && subscription.equals(other.subscription)
                 && trialPaymentMethodRequired.equals(other.trialPaymentMethodRequired)
@@ -179,12 +260,20 @@ public final class ComponentPreviewResponseData {
                 this.activeAddOns,
                 this.activePlans,
                 this.activeUsageBasedEntitlements,
+                this.addOnCompatibilities,
                 this.capabilities,
+                this.checkoutSettings,
                 this.company,
                 this.component,
+                this.creditBundles,
+                this.creditGrants,
                 this.defaultPlan,
                 this.featureUsage,
                 this.invoices,
+                this.postTrialPlan,
+                this.showCredits,
+                this.showPeriodToggle,
+                this.showZeroPriceAsFree,
                 this.stripeEmbed,
                 this.subscription,
                 this.trialPaymentMethodRequired,
@@ -196,53 +285,188 @@ public final class ComponentPreviewResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static CheckoutSettingsStage builder() {
         return new Builder();
     }
 
+    public interface CheckoutSettingsStage {
+        ShowCreditsStage checkoutSettings(@NotNull ComponentCheckoutSettings checkoutSettings);
+
+        Builder from(ComponentPreviewResponseData other);
+    }
+
+    public interface ShowCreditsStage {
+        ShowPeriodToggleStage showCredits(boolean showCredits);
+    }
+
+    public interface ShowPeriodToggleStage {
+        ShowZeroPriceAsFreeStage showPeriodToggle(boolean showPeriodToggle);
+    }
+
+    public interface ShowZeroPriceAsFreeStage {
+        _FinalStage showZeroPriceAsFree(boolean showZeroPriceAsFree);
+    }
+
+    public interface _FinalStage {
+        ComponentPreviewResponseData build();
+
+        _FinalStage activeAddOns(List<CompanyPlanDetailResponseData> activeAddOns);
+
+        _FinalStage addActiveAddOns(CompanyPlanDetailResponseData activeAddOns);
+
+        _FinalStage addAllActiveAddOns(List<CompanyPlanDetailResponseData> activeAddOns);
+
+        _FinalStage activePlans(List<CompanyPlanDetailResponseData> activePlans);
+
+        _FinalStage addActivePlans(CompanyPlanDetailResponseData activePlans);
+
+        _FinalStage addAllActivePlans(List<CompanyPlanDetailResponseData> activePlans);
+
+        _FinalStage activeUsageBasedEntitlements(List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements);
+
+        _FinalStage addActiveUsageBasedEntitlements(UsageBasedEntitlementResponseData activeUsageBasedEntitlements);
+
+        _FinalStage addAllActiveUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements);
+
+        _FinalStage addOnCompatibilities(List<CompatiblePlans> addOnCompatibilities);
+
+        _FinalStage addAddOnCompatibilities(CompatiblePlans addOnCompatibilities);
+
+        _FinalStage addAllAddOnCompatibilities(List<CompatiblePlans> addOnCompatibilities);
+
+        _FinalStage capabilities(Optional<ComponentCapabilities> capabilities);
+
+        _FinalStage capabilities(ComponentCapabilities capabilities);
+
+        _FinalStage company(Optional<CompanyDetailResponseData> company);
+
+        _FinalStage company(CompanyDetailResponseData company);
+
+        _FinalStage component(Optional<ComponentResponseData> component);
+
+        _FinalStage component(ComponentResponseData component);
+
+        _FinalStage creditBundles(List<BillingCreditBundleView> creditBundles);
+
+        _FinalStage addCreditBundles(BillingCreditBundleView creditBundles);
+
+        _FinalStage addAllCreditBundles(List<BillingCreditBundleView> creditBundles);
+
+        _FinalStage creditGrants(List<CreditCompanyGrantView> creditGrants);
+
+        _FinalStage addCreditGrants(CreditCompanyGrantView creditGrants);
+
+        _FinalStage addAllCreditGrants(List<CreditCompanyGrantView> creditGrants);
+
+        _FinalStage defaultPlan(Optional<PlanDetailResponseData> defaultPlan);
+
+        _FinalStage defaultPlan(PlanDetailResponseData defaultPlan);
+
+        _FinalStage featureUsage(Optional<FeatureUsageDetailResponseData> featureUsage);
+
+        _FinalStage featureUsage(FeatureUsageDetailResponseData featureUsage);
+
+        _FinalStage invoices(List<InvoiceResponseData> invoices);
+
+        _FinalStage addInvoices(InvoiceResponseData invoices);
+
+        _FinalStage addAllInvoices(List<InvoiceResponseData> invoices);
+
+        _FinalStage postTrialPlan(Optional<PlanDetailResponseData> postTrialPlan);
+
+        _FinalStage postTrialPlan(PlanDetailResponseData postTrialPlan);
+
+        _FinalStage stripeEmbed(Optional<StripeEmbedInfo> stripeEmbed);
+
+        _FinalStage stripeEmbed(StripeEmbedInfo stripeEmbed);
+
+        _FinalStage subscription(Optional<CompanySubscriptionResponseData> subscription);
+
+        _FinalStage subscription(CompanySubscriptionResponseData subscription);
+
+        _FinalStage trialPaymentMethodRequired(Optional<Boolean> trialPaymentMethodRequired);
+
+        _FinalStage trialPaymentMethodRequired(Boolean trialPaymentMethodRequired);
+
+        _FinalStage upcomingInvoice(Optional<InvoiceResponseData> upcomingInvoice);
+
+        _FinalStage upcomingInvoice(InvoiceResponseData upcomingInvoice);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private List<CompanyPlanDetailResponseData> activeAddOns = new ArrayList<>();
+    public static final class Builder
+            implements CheckoutSettingsStage,
+                    ShowCreditsStage,
+                    ShowPeriodToggleStage,
+                    ShowZeroPriceAsFreeStage,
+                    _FinalStage {
+        private ComponentCheckoutSettings checkoutSettings;
 
-        private List<CompanyPlanDetailResponseData> activePlans = new ArrayList<>();
+        private boolean showCredits;
 
-        private List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements = new ArrayList<>();
+        private boolean showPeriodToggle;
 
-        private Optional<ComponentCapabilities> capabilities = Optional.empty();
+        private boolean showZeroPriceAsFree;
 
-        private Optional<CompanyDetailResponseData> company = Optional.empty();
-
-        private Optional<ComponentResponseData> component = Optional.empty();
-
-        private Optional<PlanDetailResponseData> defaultPlan = Optional.empty();
-
-        private Optional<FeatureUsageDetailResponseData> featureUsage = Optional.empty();
-
-        private List<InvoiceResponseData> invoices = new ArrayList<>();
-
-        private Optional<StripeEmbedInfo> stripeEmbed = Optional.empty();
-
-        private Optional<CompanySubscriptionResponseData> subscription = Optional.empty();
+        private Optional<InvoiceResponseData> upcomingInvoice = Optional.empty();
 
         private Optional<Boolean> trialPaymentMethodRequired = Optional.empty();
 
-        private Optional<InvoiceResponseData> upcomingInvoice = Optional.empty();
+        private Optional<CompanySubscriptionResponseData> subscription = Optional.empty();
+
+        private Optional<StripeEmbedInfo> stripeEmbed = Optional.empty();
+
+        private Optional<PlanDetailResponseData> postTrialPlan = Optional.empty();
+
+        private List<InvoiceResponseData> invoices = new ArrayList<>();
+
+        private Optional<FeatureUsageDetailResponseData> featureUsage = Optional.empty();
+
+        private Optional<PlanDetailResponseData> defaultPlan = Optional.empty();
+
+        private List<CreditCompanyGrantView> creditGrants = new ArrayList<>();
+
+        private List<BillingCreditBundleView> creditBundles = new ArrayList<>();
+
+        private Optional<ComponentResponseData> component = Optional.empty();
+
+        private Optional<CompanyDetailResponseData> company = Optional.empty();
+
+        private Optional<ComponentCapabilities> capabilities = Optional.empty();
+
+        private List<CompatiblePlans> addOnCompatibilities = new ArrayList<>();
+
+        private List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements = new ArrayList<>();
+
+        private List<CompanyPlanDetailResponseData> activePlans = new ArrayList<>();
+
+        private List<CompanyPlanDetailResponseData> activeAddOns = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(ComponentPreviewResponseData other) {
             activeAddOns(other.getActiveAddOns());
             activePlans(other.getActivePlans());
             activeUsageBasedEntitlements(other.getActiveUsageBasedEntitlements());
+            addOnCompatibilities(other.getAddOnCompatibilities());
             capabilities(other.getCapabilities());
+            checkoutSettings(other.getCheckoutSettings());
             company(other.getCompany());
             component(other.getComponent());
+            creditBundles(other.getCreditBundles());
+            creditGrants(other.getCreditGrants());
             defaultPlan(other.getDefaultPlan());
             featureUsage(other.getFeatureUsage());
             invoices(other.getInvoices());
+            postTrialPlan(other.getPostTrialPlan());
+            showCredits(other.getShowCredits());
+            showPeriodToggle(other.getShowPeriodToggle());
+            showZeroPriceAsFree(other.getShowZeroPriceAsFree());
             stripeEmbed(other.getStripeEmbed());
             subscription(other.getSubscription());
             trialPaymentMethodRequired(other.getTrialPaymentMethodRequired());
@@ -250,186 +474,327 @@ public final class ComponentPreviewResponseData {
             return this;
         }
 
-        @JsonSetter(value = "active_add_ons", nulls = Nulls.SKIP)
-        public Builder activeAddOns(List<CompanyPlanDetailResponseData> activeAddOns) {
-            this.activeAddOns.clear();
-            this.activeAddOns.addAll(activeAddOns);
+        @java.lang.Override
+        @JsonSetter("checkout_settings")
+        public ShowCreditsStage checkoutSettings(@NotNull ComponentCheckoutSettings checkoutSettings) {
+            this.checkoutSettings = Objects.requireNonNull(checkoutSettings, "checkoutSettings must not be null");
             return this;
         }
 
-        public Builder addActiveAddOns(CompanyPlanDetailResponseData activeAddOns) {
-            this.activeAddOns.add(activeAddOns);
+        @java.lang.Override
+        @JsonSetter("show_credits")
+        public ShowPeriodToggleStage showCredits(boolean showCredits) {
+            this.showCredits = showCredits;
             return this;
         }
 
-        public Builder addAllActiveAddOns(List<CompanyPlanDetailResponseData> activeAddOns) {
-            this.activeAddOns.addAll(activeAddOns);
+        @java.lang.Override
+        @JsonSetter("show_period_toggle")
+        public ShowZeroPriceAsFreeStage showPeriodToggle(boolean showPeriodToggle) {
+            this.showPeriodToggle = showPeriodToggle;
             return this;
         }
 
-        @JsonSetter(value = "active_plans", nulls = Nulls.SKIP)
-        public Builder activePlans(List<CompanyPlanDetailResponseData> activePlans) {
-            this.activePlans.clear();
-            this.activePlans.addAll(activePlans);
+        @java.lang.Override
+        @JsonSetter("show_zero_price_as_free")
+        public _FinalStage showZeroPriceAsFree(boolean showZeroPriceAsFree) {
+            this.showZeroPriceAsFree = showZeroPriceAsFree;
             return this;
         }
 
-        public Builder addActivePlans(CompanyPlanDetailResponseData activePlans) {
-            this.activePlans.add(activePlans);
+        @java.lang.Override
+        public _FinalStage upcomingInvoice(InvoiceResponseData upcomingInvoice) {
+            this.upcomingInvoice = Optional.ofNullable(upcomingInvoice);
             return this;
         }
 
-        public Builder addAllActivePlans(List<CompanyPlanDetailResponseData> activePlans) {
-            this.activePlans.addAll(activePlans);
+        @java.lang.Override
+        @JsonSetter(value = "upcoming_invoice", nulls = Nulls.SKIP)
+        public _FinalStage upcomingInvoice(Optional<InvoiceResponseData> upcomingInvoice) {
+            this.upcomingInvoice = upcomingInvoice;
             return this;
         }
 
+        @java.lang.Override
+        public _FinalStage trialPaymentMethodRequired(Boolean trialPaymentMethodRequired) {
+            this.trialPaymentMethodRequired = Optional.ofNullable(trialPaymentMethodRequired);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_payment_method_required", nulls = Nulls.SKIP)
+        public _FinalStage trialPaymentMethodRequired(Optional<Boolean> trialPaymentMethodRequired) {
+            this.trialPaymentMethodRequired = trialPaymentMethodRequired;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage subscription(CompanySubscriptionResponseData subscription) {
+            this.subscription = Optional.ofNullable(subscription);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "subscription", nulls = Nulls.SKIP)
+        public _FinalStage subscription(Optional<CompanySubscriptionResponseData> subscription) {
+            this.subscription = subscription;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage stripeEmbed(StripeEmbedInfo stripeEmbed) {
+            this.stripeEmbed = Optional.ofNullable(stripeEmbed);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "stripe_embed", nulls = Nulls.SKIP)
+        public _FinalStage stripeEmbed(Optional<StripeEmbedInfo> stripeEmbed) {
+            this.stripeEmbed = stripeEmbed;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage postTrialPlan(PlanDetailResponseData postTrialPlan) {
+            this.postTrialPlan = Optional.ofNullable(postTrialPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "post_trial_plan", nulls = Nulls.SKIP)
+        public _FinalStage postTrialPlan(Optional<PlanDetailResponseData> postTrialPlan) {
+            this.postTrialPlan = postTrialPlan;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllInvoices(List<InvoiceResponseData> invoices) {
+            this.invoices.addAll(invoices);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addInvoices(InvoiceResponseData invoices) {
+            this.invoices.add(invoices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "invoices", nulls = Nulls.SKIP)
+        public _FinalStage invoices(List<InvoiceResponseData> invoices) {
+            this.invoices.clear();
+            this.invoices.addAll(invoices);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage featureUsage(FeatureUsageDetailResponseData featureUsage) {
+            this.featureUsage = Optional.ofNullable(featureUsage);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
+        public _FinalStage featureUsage(Optional<FeatureUsageDetailResponseData> featureUsage) {
+            this.featureUsage = featureUsage;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage defaultPlan(PlanDetailResponseData defaultPlan) {
+            this.defaultPlan = Optional.ofNullable(defaultPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "default_plan", nulls = Nulls.SKIP)
+        public _FinalStage defaultPlan(Optional<PlanDetailResponseData> defaultPlan) {
+            this.defaultPlan = defaultPlan;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCreditGrants(List<CreditCompanyGrantView> creditGrants) {
+            this.creditGrants.addAll(creditGrants);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCreditGrants(CreditCompanyGrantView creditGrants) {
+            this.creditGrants.add(creditGrants);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_grants", nulls = Nulls.SKIP)
+        public _FinalStage creditGrants(List<CreditCompanyGrantView> creditGrants) {
+            this.creditGrants.clear();
+            this.creditGrants.addAll(creditGrants);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCreditBundles(List<BillingCreditBundleView> creditBundles) {
+            this.creditBundles.addAll(creditBundles);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCreditBundles(BillingCreditBundleView creditBundles) {
+            this.creditBundles.add(creditBundles);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_bundles", nulls = Nulls.SKIP)
+        public _FinalStage creditBundles(List<BillingCreditBundleView> creditBundles) {
+            this.creditBundles.clear();
+            this.creditBundles.addAll(creditBundles);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage component(ComponentResponseData component) {
+            this.component = Optional.ofNullable(component);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "component", nulls = Nulls.SKIP)
+        public _FinalStage component(Optional<ComponentResponseData> component) {
+            this.component = component;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage company(CompanyDetailResponseData company) {
+            this.company = Optional.ofNullable(company);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company", nulls = Nulls.SKIP)
+        public _FinalStage company(Optional<CompanyDetailResponseData> company) {
+            this.company = company;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage capabilities(ComponentCapabilities capabilities) {
+            this.capabilities = Optional.ofNullable(capabilities);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "capabilities", nulls = Nulls.SKIP)
+        public _FinalStage capabilities(Optional<ComponentCapabilities> capabilities) {
+            this.capabilities = capabilities;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllAddOnCompatibilities(List<CompatiblePlans> addOnCompatibilities) {
+            this.addOnCompatibilities.addAll(addOnCompatibilities);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAddOnCompatibilities(CompatiblePlans addOnCompatibilities) {
+            this.addOnCompatibilities.add(addOnCompatibilities);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "add_on_compatibilities", nulls = Nulls.SKIP)
+        public _FinalStage addOnCompatibilities(List<CompatiblePlans> addOnCompatibilities) {
+            this.addOnCompatibilities.clear();
+            this.addOnCompatibilities.addAll(addOnCompatibilities);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllActiveUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements) {
+            this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addActiveUsageBasedEntitlements(
+                UsageBasedEntitlementResponseData activeUsageBasedEntitlements) {
+            this.activeUsageBasedEntitlements.add(activeUsageBasedEntitlements);
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter(value = "active_usage_based_entitlements", nulls = Nulls.SKIP)
-        public Builder activeUsageBasedEntitlements(
+        public _FinalStage activeUsageBasedEntitlements(
                 List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements) {
             this.activeUsageBasedEntitlements.clear();
             this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
             return this;
         }
 
-        public Builder addActiveUsageBasedEntitlements(UsageBasedEntitlementResponseData activeUsageBasedEntitlements) {
-            this.activeUsageBasedEntitlements.add(activeUsageBasedEntitlements);
+        @java.lang.Override
+        public _FinalStage addAllActivePlans(List<CompanyPlanDetailResponseData> activePlans) {
+            this.activePlans.addAll(activePlans);
             return this;
         }
 
-        public Builder addAllActiveUsageBasedEntitlements(
-                List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements) {
-            this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
+        @java.lang.Override
+        public _FinalStage addActivePlans(CompanyPlanDetailResponseData activePlans) {
+            this.activePlans.add(activePlans);
             return this;
         }
 
-        @JsonSetter(value = "capabilities", nulls = Nulls.SKIP)
-        public Builder capabilities(Optional<ComponentCapabilities> capabilities) {
-            this.capabilities = capabilities;
+        @java.lang.Override
+        @JsonSetter(value = "active_plans", nulls = Nulls.SKIP)
+        public _FinalStage activePlans(List<CompanyPlanDetailResponseData> activePlans) {
+            this.activePlans.clear();
+            this.activePlans.addAll(activePlans);
             return this;
         }
 
-        public Builder capabilities(ComponentCapabilities capabilities) {
-            this.capabilities = Optional.ofNullable(capabilities);
+        @java.lang.Override
+        public _FinalStage addAllActiveAddOns(List<CompanyPlanDetailResponseData> activeAddOns) {
+            this.activeAddOns.addAll(activeAddOns);
             return this;
         }
 
-        @JsonSetter(value = "company", nulls = Nulls.SKIP)
-        public Builder company(Optional<CompanyDetailResponseData> company) {
-            this.company = company;
+        @java.lang.Override
+        public _FinalStage addActiveAddOns(CompanyPlanDetailResponseData activeAddOns) {
+            this.activeAddOns.add(activeAddOns);
             return this;
         }
 
-        public Builder company(CompanyDetailResponseData company) {
-            this.company = Optional.ofNullable(company);
+        @java.lang.Override
+        @JsonSetter(value = "active_add_ons", nulls = Nulls.SKIP)
+        public _FinalStage activeAddOns(List<CompanyPlanDetailResponseData> activeAddOns) {
+            this.activeAddOns.clear();
+            this.activeAddOns.addAll(activeAddOns);
             return this;
         }
 
-        @JsonSetter(value = "component", nulls = Nulls.SKIP)
-        public Builder component(Optional<ComponentResponseData> component) {
-            this.component = component;
-            return this;
-        }
-
-        public Builder component(ComponentResponseData component) {
-            this.component = Optional.ofNullable(component);
-            return this;
-        }
-
-        @JsonSetter(value = "default_plan", nulls = Nulls.SKIP)
-        public Builder defaultPlan(Optional<PlanDetailResponseData> defaultPlan) {
-            this.defaultPlan = defaultPlan;
-            return this;
-        }
-
-        public Builder defaultPlan(PlanDetailResponseData defaultPlan) {
-            this.defaultPlan = Optional.ofNullable(defaultPlan);
-            return this;
-        }
-
-        @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
-        public Builder featureUsage(Optional<FeatureUsageDetailResponseData> featureUsage) {
-            this.featureUsage = featureUsage;
-            return this;
-        }
-
-        public Builder featureUsage(FeatureUsageDetailResponseData featureUsage) {
-            this.featureUsage = Optional.ofNullable(featureUsage);
-            return this;
-        }
-
-        @JsonSetter(value = "invoices", nulls = Nulls.SKIP)
-        public Builder invoices(List<InvoiceResponseData> invoices) {
-            this.invoices.clear();
-            this.invoices.addAll(invoices);
-            return this;
-        }
-
-        public Builder addInvoices(InvoiceResponseData invoices) {
-            this.invoices.add(invoices);
-            return this;
-        }
-
-        public Builder addAllInvoices(List<InvoiceResponseData> invoices) {
-            this.invoices.addAll(invoices);
-            return this;
-        }
-
-        @JsonSetter(value = "stripe_embed", nulls = Nulls.SKIP)
-        public Builder stripeEmbed(Optional<StripeEmbedInfo> stripeEmbed) {
-            this.stripeEmbed = stripeEmbed;
-            return this;
-        }
-
-        public Builder stripeEmbed(StripeEmbedInfo stripeEmbed) {
-            this.stripeEmbed = Optional.ofNullable(stripeEmbed);
-            return this;
-        }
-
-        @JsonSetter(value = "subscription", nulls = Nulls.SKIP)
-        public Builder subscription(Optional<CompanySubscriptionResponseData> subscription) {
-            this.subscription = subscription;
-            return this;
-        }
-
-        public Builder subscription(CompanySubscriptionResponseData subscription) {
-            this.subscription = Optional.ofNullable(subscription);
-            return this;
-        }
-
-        @JsonSetter(value = "trial_payment_method_required", nulls = Nulls.SKIP)
-        public Builder trialPaymentMethodRequired(Optional<Boolean> trialPaymentMethodRequired) {
-            this.trialPaymentMethodRequired = trialPaymentMethodRequired;
-            return this;
-        }
-
-        public Builder trialPaymentMethodRequired(Boolean trialPaymentMethodRequired) {
-            this.trialPaymentMethodRequired = Optional.ofNullable(trialPaymentMethodRequired);
-            return this;
-        }
-
-        @JsonSetter(value = "upcoming_invoice", nulls = Nulls.SKIP)
-        public Builder upcomingInvoice(Optional<InvoiceResponseData> upcomingInvoice) {
-            this.upcomingInvoice = upcomingInvoice;
-            return this;
-        }
-
-        public Builder upcomingInvoice(InvoiceResponseData upcomingInvoice) {
-            this.upcomingInvoice = Optional.ofNullable(upcomingInvoice);
-            return this;
-        }
-
+        @java.lang.Override
         public ComponentPreviewResponseData build() {
             return new ComponentPreviewResponseData(
                     activeAddOns,
                     activePlans,
                     activeUsageBasedEntitlements,
+                    addOnCompatibilities,
                     capabilities,
+                    checkoutSettings,
                     company,
                     component,
+                    creditBundles,
+                    creditGrants,
                     defaultPlan,
                     featureUsage,
                     invoices,
+                    postTrialPlan,
+                    showCredits,
+                    showPeriodToggle,
+                    showZeroPriceAsFree,
                     stripeEmbed,
                     subscription,
                     trialPaymentMethodRequired,

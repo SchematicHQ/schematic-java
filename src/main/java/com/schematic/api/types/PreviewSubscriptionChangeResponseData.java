@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +28,11 @@ public final class PreviewSubscriptionChangeResponseData {
 
     private final int dueNow;
 
+    private final Optional<PreviewSubscriptionFinanceResponseData> finance;
+
     private final int newCharges;
+
+    private final boolean paymentMethodRequired;
 
     private final double percentOff;
 
@@ -38,26 +44,34 @@ public final class PreviewSubscriptionChangeResponseData {
 
     private final Optional<OffsetDateTime> trialEnd;
 
+    private final List<FeatureUsageResponseData> usageViolations;
+
     private final Map<String, Object> additionalProperties;
 
     private PreviewSubscriptionChangeResponseData(
             int amountOff,
             int dueNow,
+            Optional<PreviewSubscriptionFinanceResponseData> finance,
             int newCharges,
+            boolean paymentMethodRequired,
             double percentOff,
             OffsetDateTime periodStart,
             boolean promoCodeApplied,
             int proration,
             Optional<OffsetDateTime> trialEnd,
+            List<FeatureUsageResponseData> usageViolations,
             Map<String, Object> additionalProperties) {
         this.amountOff = amountOff;
         this.dueNow = dueNow;
+        this.finance = finance;
         this.newCharges = newCharges;
+        this.paymentMethodRequired = paymentMethodRequired;
         this.percentOff = percentOff;
         this.periodStart = periodStart;
         this.promoCodeApplied = promoCodeApplied;
         this.proration = proration;
         this.trialEnd = trialEnd;
+        this.usageViolations = usageViolations;
         this.additionalProperties = additionalProperties;
     }
 
@@ -71,9 +85,19 @@ public final class PreviewSubscriptionChangeResponseData {
         return dueNow;
     }
 
+    @JsonProperty("finance")
+    public Optional<PreviewSubscriptionFinanceResponseData> getFinance() {
+        return finance;
+    }
+
     @JsonProperty("new_charges")
     public int getNewCharges() {
         return newCharges;
+    }
+
+    @JsonProperty("payment_method_required")
+    public boolean getPaymentMethodRequired() {
+        return paymentMethodRequired;
     }
 
     @JsonProperty("percent_off")
@@ -101,6 +125,11 @@ public final class PreviewSubscriptionChangeResponseData {
         return trialEnd;
     }
 
+    @JsonProperty("usage_violations")
+    public List<FeatureUsageResponseData> getUsageViolations() {
+        return usageViolations;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -116,12 +145,15 @@ public final class PreviewSubscriptionChangeResponseData {
     private boolean equalTo(PreviewSubscriptionChangeResponseData other) {
         return amountOff == other.amountOff
                 && dueNow == other.dueNow
+                && finance.equals(other.finance)
                 && newCharges == other.newCharges
+                && paymentMethodRequired == other.paymentMethodRequired
                 && percentOff == other.percentOff
                 && periodStart.equals(other.periodStart)
                 && promoCodeApplied == other.promoCodeApplied
                 && proration == other.proration
-                && trialEnd.equals(other.trialEnd);
+                && trialEnd.equals(other.trialEnd)
+                && usageViolations.equals(other.usageViolations);
     }
 
     @java.lang.Override
@@ -129,12 +161,15 @@ public final class PreviewSubscriptionChangeResponseData {
         return Objects.hash(
                 this.amountOff,
                 this.dueNow,
+                this.finance,
                 this.newCharges,
+                this.paymentMethodRequired,
                 this.percentOff,
                 this.periodStart,
                 this.promoCodeApplied,
                 this.proration,
-                this.trialEnd);
+                this.trialEnd,
+                this.usageViolations);
     }
 
     @java.lang.Override
@@ -157,7 +192,11 @@ public final class PreviewSubscriptionChangeResponseData {
     }
 
     public interface NewChargesStage {
-        PercentOffStage newCharges(int newCharges);
+        PaymentMethodRequiredStage newCharges(int newCharges);
+    }
+
+    public interface PaymentMethodRequiredStage {
+        PercentOffStage paymentMethodRequired(boolean paymentMethodRequired);
     }
 
     public interface PercentOffStage {
@@ -179,9 +218,19 @@ public final class PreviewSubscriptionChangeResponseData {
     public interface _FinalStage {
         PreviewSubscriptionChangeResponseData build();
 
+        _FinalStage finance(Optional<PreviewSubscriptionFinanceResponseData> finance);
+
+        _FinalStage finance(PreviewSubscriptionFinanceResponseData finance);
+
         _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd);
 
         _FinalStage trialEnd(OffsetDateTime trialEnd);
+
+        _FinalStage usageViolations(List<FeatureUsageResponseData> usageViolations);
+
+        _FinalStage addUsageViolations(FeatureUsageResponseData usageViolations);
+
+        _FinalStage addAllUsageViolations(List<FeatureUsageResponseData> usageViolations);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -189,6 +238,7 @@ public final class PreviewSubscriptionChangeResponseData {
             implements AmountOffStage,
                     DueNowStage,
                     NewChargesStage,
+                    PaymentMethodRequiredStage,
                     PercentOffStage,
                     PeriodStartStage,
                     PromoCodeAppliedStage,
@@ -200,6 +250,8 @@ public final class PreviewSubscriptionChangeResponseData {
 
         private int newCharges;
 
+        private boolean paymentMethodRequired;
+
         private double percentOff;
 
         private OffsetDateTime periodStart;
@@ -208,7 +260,11 @@ public final class PreviewSubscriptionChangeResponseData {
 
         private int proration;
 
+        private List<FeatureUsageResponseData> usageViolations = new ArrayList<>();
+
         private Optional<OffsetDateTime> trialEnd = Optional.empty();
+
+        private Optional<PreviewSubscriptionFinanceResponseData> finance = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -219,12 +275,15 @@ public final class PreviewSubscriptionChangeResponseData {
         public Builder from(PreviewSubscriptionChangeResponseData other) {
             amountOff(other.getAmountOff());
             dueNow(other.getDueNow());
+            finance(other.getFinance());
             newCharges(other.getNewCharges());
+            paymentMethodRequired(other.getPaymentMethodRequired());
             percentOff(other.getPercentOff());
             periodStart(other.getPeriodStart());
             promoCodeApplied(other.getPromoCodeApplied());
             proration(other.getProration());
             trialEnd(other.getTrialEnd());
+            usageViolations(other.getUsageViolations());
             return this;
         }
 
@@ -244,8 +303,15 @@ public final class PreviewSubscriptionChangeResponseData {
 
         @java.lang.Override
         @JsonSetter("new_charges")
-        public PercentOffStage newCharges(int newCharges) {
+        public PaymentMethodRequiredStage newCharges(int newCharges) {
             this.newCharges = newCharges;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("payment_method_required")
+        public PercentOffStage paymentMethodRequired(boolean paymentMethodRequired) {
+            this.paymentMethodRequired = paymentMethodRequired;
             return this;
         }
 
@@ -278,6 +344,26 @@ public final class PreviewSubscriptionChangeResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllUsageViolations(List<FeatureUsageResponseData> usageViolations) {
+            this.usageViolations.addAll(usageViolations);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addUsageViolations(FeatureUsageResponseData usageViolations) {
+            this.usageViolations.add(usageViolations);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "usage_violations", nulls = Nulls.SKIP)
+        public _FinalStage usageViolations(List<FeatureUsageResponseData> usageViolations) {
+            this.usageViolations.clear();
+            this.usageViolations.addAll(usageViolations);
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage trialEnd(OffsetDateTime trialEnd) {
             this.trialEnd = Optional.ofNullable(trialEnd);
             return this;
@@ -291,16 +377,32 @@ public final class PreviewSubscriptionChangeResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage finance(PreviewSubscriptionFinanceResponseData finance) {
+            this.finance = Optional.ofNullable(finance);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "finance", nulls = Nulls.SKIP)
+        public _FinalStage finance(Optional<PreviewSubscriptionFinanceResponseData> finance) {
+            this.finance = finance;
+            return this;
+        }
+
+        @java.lang.Override
         public PreviewSubscriptionChangeResponseData build() {
             return new PreviewSubscriptionChangeResponseData(
                     amountOff,
                     dueNow,
+                    finance,
                     newCharges,
+                    paymentMethodRequired,
                     percentOff,
                     periodStart,
                     promoCodeApplied,
                     proration,
                     trialEnd,
+                    usageViolations,
                     additionalProperties);
         }
     }

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.resources.events.types.ListEventsRequestEventTypesItem;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,7 +25,7 @@ public final class ListEventsRequest {
 
     private final Optional<String> eventSubtype;
 
-    private final Optional<String> eventTypes;
+    private final Optional<ListEventsRequestEventTypesItem> eventTypes;
 
     private final Optional<String> flagId;
 
@@ -39,7 +40,7 @@ public final class ListEventsRequest {
     private ListEventsRequest(
             Optional<String> companyId,
             Optional<String> eventSubtype,
-            Optional<String> eventTypes,
+            Optional<ListEventsRequestEventTypesItem> eventTypes,
             Optional<String> flagId,
             Optional<String> userId,
             Optional<Integer> limit,
@@ -66,7 +67,7 @@ public final class ListEventsRequest {
     }
 
     @JsonProperty("event_types")
-    public Optional<String> getEventTypes() {
+    public Optional<ListEventsRequestEventTypesItem> getEventTypes() {
         return eventTypes;
     }
 
@@ -138,7 +139,7 @@ public final class ListEventsRequest {
 
         private Optional<String> eventSubtype = Optional.empty();
 
-        private Optional<String> eventTypes = Optional.empty();
+        private Optional<ListEventsRequestEventTypesItem> eventTypes = Optional.empty();
 
         private Optional<String> flagId = Optional.empty();
 
@@ -187,12 +188,12 @@ public final class ListEventsRequest {
         }
 
         @JsonSetter(value = "event_types", nulls = Nulls.SKIP)
-        public Builder eventTypes(Optional<String> eventTypes) {
+        public Builder eventTypes(Optional<ListEventsRequestEventTypesItem> eventTypes) {
             this.eventTypes = eventTypes;
             return this;
         }
 
-        public Builder eventTypes(String eventTypes) {
+        public Builder eventTypes(ListEventsRequestEventTypesItem eventTypes) {
             this.eventTypes = Optional.ofNullable(eventTypes);
             return this;
         }

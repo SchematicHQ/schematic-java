@@ -30,6 +30,8 @@ public final class CountCompaniesRequest {
 
     private final Optional<Boolean> withoutPlan;
 
+    private final Optional<Boolean> withSubscription;
+
     private final Optional<Integer> limit;
 
     private final Optional<Integer> offset;
@@ -42,6 +44,7 @@ public final class CountCompaniesRequest {
             Optional<String> q,
             Optional<String> withoutFeatureOverrideFor,
             Optional<Boolean> withoutPlan,
+            Optional<Boolean> withSubscription,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
@@ -50,6 +53,7 @@ public final class CountCompaniesRequest {
         this.q = q;
         this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
         this.withoutPlan = withoutPlan;
+        this.withSubscription = withSubscription;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
@@ -96,6 +100,14 @@ public final class CountCompaniesRequest {
     }
 
     /**
+     * @return Filter companies that have a subscription
+     */
+    @JsonProperty("with_subscription")
+    public Optional<Boolean> getWithSubscription() {
+        return withSubscription;
+    }
+
+    /**
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
@@ -128,6 +140,7 @@ public final class CountCompaniesRequest {
                 && q.equals(other.q)
                 && withoutFeatureOverrideFor.equals(other.withoutFeatureOverrideFor)
                 && withoutPlan.equals(other.withoutPlan)
+                && withSubscription.equals(other.withSubscription)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
@@ -140,6 +153,7 @@ public final class CountCompaniesRequest {
                 this.q,
                 this.withoutFeatureOverrideFor,
                 this.withoutPlan,
+                this.withSubscription,
                 this.limit,
                 this.offset);
     }
@@ -165,6 +179,8 @@ public final class CountCompaniesRequest {
 
         private Optional<Boolean> withoutPlan = Optional.empty();
 
+        private Optional<Boolean> withSubscription = Optional.empty();
+
         private Optional<Integer> limit = Optional.empty();
 
         private Optional<Integer> offset = Optional.empty();
@@ -180,6 +196,7 @@ public final class CountCompaniesRequest {
             q(other.getQ());
             withoutFeatureOverrideFor(other.getWithoutFeatureOverrideFor());
             withoutPlan(other.getWithoutPlan());
+            withSubscription(other.getWithSubscription());
             limit(other.getLimit());
             offset(other.getOffset());
             return this;
@@ -240,6 +257,17 @@ public final class CountCompaniesRequest {
             return this;
         }
 
+        @JsonSetter(value = "with_subscription", nulls = Nulls.SKIP)
+        public Builder withSubscription(Optional<Boolean> withSubscription) {
+            this.withSubscription = withSubscription;
+            return this;
+        }
+
+        public Builder withSubscription(Boolean withSubscription) {
+            this.withSubscription = Optional.ofNullable(withSubscription);
+            return this;
+        }
+
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -264,7 +292,15 @@ public final class CountCompaniesRequest {
 
         public CountCompaniesRequest build() {
             return new CountCompaniesRequest(
-                    ids, planId, q, withoutFeatureOverrideFor, withoutPlan, limit, offset, additionalProperties);
+                    ids,
+                    planId,
+                    q,
+                    withoutFeatureOverrideFor,
+                    withoutPlan,
+                    withSubscription,
+                    limit,
+                    offset,
+                    additionalProperties);
         }
     }
 }

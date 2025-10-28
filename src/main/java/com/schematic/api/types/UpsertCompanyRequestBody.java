@@ -62,6 +62,9 @@ public final class UpsertCompanyRequestBody {
         return id;
     }
 
+    /**
+     * @return See <a href="https://docs.schematichq.com/developer_resources/key_management">Key Management</a> for more information
+     */
     @JsonProperty("keys")
     public Map<String, String> getKeys() {
         return keys;

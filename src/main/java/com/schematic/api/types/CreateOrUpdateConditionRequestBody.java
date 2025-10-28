@@ -27,6 +27,10 @@ public final class CreateOrUpdateConditionRequestBody {
 
     private final CreateOrUpdateConditionRequestBodyConditionType conditionType;
 
+    private final Optional<Double> creditCost;
+
+    private final Optional<String> creditId;
+
     private final Optional<String> eventSubtype;
 
     private final Optional<String> id;
@@ -50,6 +54,8 @@ public final class CreateOrUpdateConditionRequestBody {
     private CreateOrUpdateConditionRequestBody(
             Optional<String> comparisonTraitId,
             CreateOrUpdateConditionRequestBodyConditionType conditionType,
+            Optional<Double> creditCost,
+            Optional<String> creditId,
             Optional<String> eventSubtype,
             Optional<String> id,
             Optional<CreateOrUpdateConditionRequestBodyMetricPeriod> metricPeriod,
@@ -62,6 +68,8 @@ public final class CreateOrUpdateConditionRequestBody {
             Map<String, Object> additionalProperties) {
         this.comparisonTraitId = comparisonTraitId;
         this.conditionType = conditionType;
+        this.creditCost = creditCost;
+        this.creditId = creditId;
         this.eventSubtype = eventSubtype;
         this.id = id;
         this.metricPeriod = metricPeriod;
@@ -85,6 +93,22 @@ public final class CreateOrUpdateConditionRequestBody {
     @JsonProperty("condition_type")
     public CreateOrUpdateConditionRequestBodyConditionType getConditionType() {
         return conditionType;
+    }
+
+    /**
+     * @return Cost of credit to use to measure this condition
+     */
+    @JsonProperty("credit_cost")
+    public Optional<Double> getCreditCost() {
+        return creditCost;
+    }
+
+    /**
+     * @return ID of credit to use to measure this condition
+     */
+    @JsonProperty("credit_id")
+    public Optional<String> getCreditId() {
+        return creditId;
     }
 
     /**
@@ -168,6 +192,8 @@ public final class CreateOrUpdateConditionRequestBody {
     private boolean equalTo(CreateOrUpdateConditionRequestBody other) {
         return comparisonTraitId.equals(other.comparisonTraitId)
                 && conditionType.equals(other.conditionType)
+                && creditCost.equals(other.creditCost)
+                && creditId.equals(other.creditId)
                 && eventSubtype.equals(other.eventSubtype)
                 && id.equals(other.id)
                 && metricPeriod.equals(other.metricPeriod)
@@ -184,6 +210,8 @@ public final class CreateOrUpdateConditionRequestBody {
         return Objects.hash(
                 this.comparisonTraitId,
                 this.conditionType,
+                this.creditCost,
+                this.creditId,
                 this.eventSubtype,
                 this.id,
                 this.metricPeriod,
@@ -220,6 +248,14 @@ public final class CreateOrUpdateConditionRequestBody {
         _FinalStage comparisonTraitId(Optional<String> comparisonTraitId);
 
         _FinalStage comparisonTraitId(String comparisonTraitId);
+
+        _FinalStage creditCost(Optional<Double> creditCost);
+
+        _FinalStage creditCost(Double creditCost);
+
+        _FinalStage creditId(Optional<String> creditId);
+
+        _FinalStage creditId(String creditId);
 
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
@@ -281,6 +317,10 @@ public final class CreateOrUpdateConditionRequestBody {
 
         private Optional<String> eventSubtype = Optional.empty();
 
+        private Optional<String> creditId = Optional.empty();
+
+        private Optional<Double> creditCost = Optional.empty();
+
         private Optional<String> comparisonTraitId = Optional.empty();
 
         @JsonAnySetter
@@ -292,6 +332,8 @@ public final class CreateOrUpdateConditionRequestBody {
         public Builder from(CreateOrUpdateConditionRequestBody other) {
             comparisonTraitId(other.getComparisonTraitId());
             conditionType(other.getConditionType());
+            creditCost(other.getCreditCost());
+            creditId(other.getCreditId());
             eventSubtype(other.getEventSubtype());
             id(other.getId());
             metricPeriod(other.getMetricPeriod());
@@ -464,6 +506,40 @@ public final class CreateOrUpdateConditionRequestBody {
         }
 
         /**
+         * <p>ID of credit to use to measure this condition</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage creditId(String creditId) {
+            this.creditId = Optional.ofNullable(creditId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_id", nulls = Nulls.SKIP)
+        public _FinalStage creditId(Optional<String> creditId) {
+            this.creditId = creditId;
+            return this;
+        }
+
+        /**
+         * <p>Cost of credit to use to measure this condition</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage creditCost(Double creditCost) {
+            this.creditCost = Optional.ofNullable(creditCost);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_cost", nulls = Nulls.SKIP)
+        public _FinalStage creditCost(Optional<Double> creditCost) {
+            this.creditCost = creditCost;
+            return this;
+        }
+
+        /**
          * <p>Optionally provide a trait ID to compare a metric or trait value against instead of a value</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -485,6 +561,8 @@ public final class CreateOrUpdateConditionRequestBody {
             return new CreateOrUpdateConditionRequestBody(
                     comparisonTraitId,
                     conditionType,
+                    creditCost,
+                    creditId,
                     eventSubtype,
                     id,
                     metricPeriod,

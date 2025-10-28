@@ -9,12 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -24,15 +26,19 @@ public final class BillingProductResponseData {
 
     private final OffsetDateTime createdAt;
 
-    private final String currency;
+    private final Optional<String> currency;
 
     private final String environmentId;
 
     private final String externalId;
 
+    private final boolean isActive;
+
     private final String name;
 
     private final double price;
+
+    private final Optional<String> priceDecimal;
 
     private final String productId;
 
@@ -45,11 +51,13 @@ public final class BillingProductResponseData {
     private BillingProductResponseData(
             String accountId,
             OffsetDateTime createdAt,
-            String currency,
+            Optional<String> currency,
             String environmentId,
             String externalId,
+            boolean isActive,
             String name,
             double price,
+            Optional<String> priceDecimal,
             String productId,
             double quantity,
             OffsetDateTime updatedAt,
@@ -59,8 +67,10 @@ public final class BillingProductResponseData {
         this.currency = currency;
         this.environmentId = environmentId;
         this.externalId = externalId;
+        this.isActive = isActive;
         this.name = name;
         this.price = price;
+        this.priceDecimal = priceDecimal;
         this.productId = productId;
         this.quantity = quantity;
         this.updatedAt = updatedAt;
@@ -77,8 +87,11 @@ public final class BillingProductResponseData {
         return createdAt;
     }
 
+    /**
+     * @return Deprecated; currencies are associated with prices, not products
+     */
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Optional<String> getCurrency() {
         return currency;
     }
 
@@ -92,6 +105,11 @@ public final class BillingProductResponseData {
         return externalId;
     }
 
+    @JsonProperty("is_active")
+    public boolean getIsActive() {
+        return isActive;
+    }
+
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -100,6 +118,11 @@ public final class BillingProductResponseData {
     @JsonProperty("price")
     public double getPrice() {
         return price;
+    }
+
+    @JsonProperty("price_decimal")
+    public Optional<String> getPriceDecimal() {
+        return priceDecimal;
     }
 
     @JsonProperty("product_id")
@@ -134,8 +157,10 @@ public final class BillingProductResponseData {
                 && currency.equals(other.currency)
                 && environmentId.equals(other.environmentId)
                 && externalId.equals(other.externalId)
+                && isActive == other.isActive
                 && name.equals(other.name)
                 && price == other.price
+                && priceDecimal.equals(other.priceDecimal)
                 && productId.equals(other.productId)
                 && quantity == other.quantity
                 && updatedAt.equals(other.updatedAt);
@@ -149,8 +174,10 @@ public final class BillingProductResponseData {
                 this.currency,
                 this.environmentId,
                 this.externalId,
+                this.isActive,
                 this.name,
                 this.price,
+                this.priceDecimal,
                 this.productId,
                 this.quantity,
                 this.updatedAt);
@@ -172,11 +199,7 @@ public final class BillingProductResponseData {
     }
 
     public interface CreatedAtStage {
-        CurrencyStage createdAt(@NotNull OffsetDateTime createdAt);
-    }
-
-    public interface CurrencyStage {
-        EnvironmentIdStage currency(@NotNull String currency);
+        EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface EnvironmentIdStage {
@@ -184,7 +207,11 @@ public final class BillingProductResponseData {
     }
 
     public interface ExternalIdStage {
-        NameStage externalId(@NotNull String externalId);
+        IsActiveStage externalId(@NotNull String externalId);
+    }
+
+    public interface IsActiveStage {
+        NameStage isActive(boolean isActive);
     }
 
     public interface NameStage {
@@ -209,15 +236,23 @@ public final class BillingProductResponseData {
 
     public interface _FinalStage {
         BillingProductResponseData build();
+
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
+
+        _FinalStage priceDecimal(Optional<String> priceDecimal);
+
+        _FinalStage priceDecimal(String priceDecimal);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements AccountIdStage,
                     CreatedAtStage,
-                    CurrencyStage,
                     EnvironmentIdStage,
                     ExternalIdStage,
+                    IsActiveStage,
                     NameStage,
                     PriceStage,
                     ProductIdStage,
@@ -228,11 +263,11 @@ public final class BillingProductResponseData {
 
         private OffsetDateTime createdAt;
 
-        private String currency;
-
         private String environmentId;
 
         private String externalId;
+
+        private boolean isActive;
 
         private String name;
 
@@ -243,6 +278,10 @@ public final class BillingProductResponseData {
         private double quantity;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<String> priceDecimal = Optional.empty();
+
+        private Optional<String> currency = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -256,8 +295,10 @@ public final class BillingProductResponseData {
             currency(other.getCurrency());
             environmentId(other.getEnvironmentId());
             externalId(other.getExternalId());
+            isActive(other.getIsActive());
             name(other.getName());
             price(other.getPrice());
+            priceDecimal(other.getPriceDecimal());
             productId(other.getProductId());
             quantity(other.getQuantity());
             updatedAt(other.getUpdatedAt());
@@ -273,15 +314,8 @@ public final class BillingProductResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public CurrencyStage createdAt(@NotNull OffsetDateTime createdAt) {
+        public EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt) {
             this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("currency")
-        public EnvironmentIdStage currency(@NotNull String currency) {
-            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
@@ -294,8 +328,15 @@ public final class BillingProductResponseData {
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public NameStage externalId(@NotNull String externalId) {
+        public IsActiveStage externalId(@NotNull String externalId) {
             this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("is_active")
+        public NameStage isActive(boolean isActive) {
+            this.isActive = isActive;
             return this;
         }
 
@@ -335,6 +376,36 @@ public final class BillingProductResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage priceDecimal(String priceDecimal) {
+            this.priceDecimal = Optional.ofNullable(priceDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "price_decimal", nulls = Nulls.SKIP)
+        public _FinalStage priceDecimal(Optional<String> priceDecimal) {
+            this.priceDecimal = priceDecimal;
+            return this;
+        }
+
+        /**
+         * <p>Deprecated; currencies are associated with prices, not products</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        @java.lang.Override
         public BillingProductResponseData build() {
             return new BillingProductResponseData(
                     accountId,
@@ -342,8 +413,10 @@ public final class BillingProductResponseData {
                     currency,
                     environmentId,
                     externalId,
+                    isActive,
                     name,
                     price,
+                    priceDecimal,
                     productId,
                     quantity,
                     updatedAt,

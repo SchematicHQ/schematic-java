@@ -74,6 +74,9 @@ public final class ListFlagsParams {
         return offset;
     }
 
+    /**
+     * @return Search by flag name, key, or ID
+     */
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;

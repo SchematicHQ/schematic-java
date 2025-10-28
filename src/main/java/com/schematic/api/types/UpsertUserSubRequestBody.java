@@ -16,6 +16,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,6 +25,8 @@ import java.util.Optional;
 @JsonDeserialize(builder = UpsertUserSubRequestBody.Builder.class)
 public final class UpsertUserSubRequestBody {
     private final Optional<String> companyId;
+
+    private final Optional<List<String>> companyIds;
 
     private final Optional<String> id;
 
@@ -41,6 +44,7 @@ public final class UpsertUserSubRequestBody {
 
     private UpsertUserSubRequestBody(
             Optional<String> companyId,
+            Optional<List<String>> companyIds,
             Optional<String> id,
             Map<String, String> keys,
             Optional<OffsetDateTime> lastSeenAt,
@@ -49,6 +53,7 @@ public final class UpsertUserSubRequestBody {
             Optional<Boolean> updateOnly,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
+        this.companyIds = companyIds;
         this.id = id;
         this.keys = keys;
         this.lastSeenAt = lastSeenAt;
@@ -59,11 +64,19 @@ public final class UpsertUserSubRequestBody {
     }
 
     /**
-     * @return Optionally specify company using Schematic company ID
+     * @return Add user to this company. Takes priority over company_ids. For exhaustive list of companies, use company_ids
      */
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
+    }
+
+    /**
+     * @return Optionally specify companies using Schematic company ID
+     */
+    @JsonProperty("company_ids")
+    public Optional<List<String>> getCompanyIds() {
+        return companyIds;
     }
 
     /**
@@ -74,6 +87,9 @@ public final class UpsertUserSubRequestBody {
         return id;
     }
 
+    /**
+     * @return See <a href="https://docs.schematichq.com/developer_resources/key_management">Key Management</a> for more information
+     */
     @JsonProperty("keys")
     public Map<String, String> getKeys() {
         return keys;
@@ -115,6 +131,7 @@ public final class UpsertUserSubRequestBody {
 
     private boolean equalTo(UpsertUserSubRequestBody other) {
         return companyId.equals(other.companyId)
+                && companyIds.equals(other.companyIds)
                 && id.equals(other.id)
                 && keys.equals(other.keys)
                 && lastSeenAt.equals(other.lastSeenAt)
@@ -126,7 +143,14 @@ public final class UpsertUserSubRequestBody {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.companyId, this.id, this.keys, this.lastSeenAt, this.name, this.traits, this.updateOnly);
+                this.companyId,
+                this.companyIds,
+                this.id,
+                this.keys,
+                this.lastSeenAt,
+                this.name,
+                this.traits,
+                this.updateOnly);
     }
 
     @java.lang.Override
@@ -141,6 +165,8 @@ public final class UpsertUserSubRequestBody {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<String> companyId = Optional.empty();
+
+        private Optional<List<String>> companyIds = Optional.empty();
 
         private Optional<String> id = Optional.empty();
 
@@ -161,6 +187,7 @@ public final class UpsertUserSubRequestBody {
 
         public Builder from(UpsertUserSubRequestBody other) {
             companyId(other.getCompanyId());
+            companyIds(other.getCompanyIds());
             id(other.getId());
             keys(other.getKeys());
             lastSeenAt(other.getLastSeenAt());
@@ -178,6 +205,17 @@ public final class UpsertUserSubRequestBody {
 
         public Builder companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
+        public Builder companyIds(Optional<List<String>> companyIds) {
+            this.companyIds = companyIds;
+            return this;
+        }
+
+        public Builder companyIds(List<String> companyIds) {
+            this.companyIds = Optional.ofNullable(companyIds);
             return this;
         }
 
@@ -255,7 +293,7 @@ public final class UpsertUserSubRequestBody {
 
         public UpsertUserSubRequestBody build() {
             return new UpsertUserSubRequestBody(
-                    companyId, id, keys, lastSeenAt, name, traits, updateOnly, additionalProperties);
+                    companyId, companyIds, id, keys, lastSeenAt, name, traits, updateOnly, additionalProperties);
         }
     }
 }

@@ -28,6 +28,10 @@ public final class CountFeaturesRequest {
 
     private final Optional<String> withoutPlanEntitlementFor;
 
+    private final Optional<String> featureType;
+
+    private final Optional<Boolean> booleanRequireEvent;
+
     private final Optional<Integer> limit;
 
     private final Optional<Integer> offset;
@@ -39,6 +43,8 @@ public final class CountFeaturesRequest {
             Optional<String> q,
             Optional<String> withoutCompanyOverrideFor,
             Optional<String> withoutPlanEntitlementFor,
+            Optional<String> featureType,
+            Optional<Boolean> booleanRequireEvent,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
@@ -46,6 +52,8 @@ public final class CountFeaturesRequest {
         this.q = q;
         this.withoutCompanyOverrideFor = withoutCompanyOverrideFor;
         this.withoutPlanEntitlementFor = withoutPlanEntitlementFor;
+        this.featureType = featureType;
+        this.booleanRequireEvent = booleanRequireEvent;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
@@ -56,6 +64,9 @@ public final class CountFeaturesRequest {
         return ids;
     }
 
+    /**
+     * @return Search by feature name or ID
+     */
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
@@ -75,6 +86,22 @@ public final class CountFeaturesRequest {
     @JsonProperty("without_plan_entitlement_for")
     public Optional<String> getWithoutPlanEntitlementFor() {
         return withoutPlanEntitlementFor;
+    }
+
+    /**
+     * @return Filter by one or more feature types (boolean, event, trait)
+     */
+    @JsonProperty("feature_type")
+    public Optional<String> getFeatureType() {
+        return featureType;
+    }
+
+    /**
+     * @return Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
+     */
+    @JsonProperty("boolean_require_event")
+    public Optional<Boolean> getBooleanRequireEvent() {
+        return booleanRequireEvent;
     }
 
     /**
@@ -109,6 +136,8 @@ public final class CountFeaturesRequest {
                 && q.equals(other.q)
                 && withoutCompanyOverrideFor.equals(other.withoutCompanyOverrideFor)
                 && withoutPlanEntitlementFor.equals(other.withoutPlanEntitlementFor)
+                && featureType.equals(other.featureType)
+                && booleanRequireEvent.equals(other.booleanRequireEvent)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
@@ -120,6 +149,8 @@ public final class CountFeaturesRequest {
                 this.q,
                 this.withoutCompanyOverrideFor,
                 this.withoutPlanEntitlementFor,
+                this.featureType,
+                this.booleanRequireEvent,
                 this.limit,
                 this.offset);
     }
@@ -143,6 +174,10 @@ public final class CountFeaturesRequest {
 
         private Optional<String> withoutPlanEntitlementFor = Optional.empty();
 
+        private Optional<String> featureType = Optional.empty();
+
+        private Optional<Boolean> booleanRequireEvent = Optional.empty();
+
         private Optional<Integer> limit = Optional.empty();
 
         private Optional<Integer> offset = Optional.empty();
@@ -157,6 +192,8 @@ public final class CountFeaturesRequest {
             q(other.getQ());
             withoutCompanyOverrideFor(other.getWithoutCompanyOverrideFor());
             withoutPlanEntitlementFor(other.getWithoutPlanEntitlementFor());
+            featureType(other.getFeatureType());
+            booleanRequireEvent(other.getBooleanRequireEvent());
             limit(other.getLimit());
             offset(other.getOffset());
             return this;
@@ -206,6 +243,28 @@ public final class CountFeaturesRequest {
             return this;
         }
 
+        @JsonSetter(value = "feature_type", nulls = Nulls.SKIP)
+        public Builder featureType(Optional<String> featureType) {
+            this.featureType = featureType;
+            return this;
+        }
+
+        public Builder featureType(String featureType) {
+            this.featureType = Optional.ofNullable(featureType);
+            return this;
+        }
+
+        @JsonSetter(value = "boolean_require_event", nulls = Nulls.SKIP)
+        public Builder booleanRequireEvent(Optional<Boolean> booleanRequireEvent) {
+            this.booleanRequireEvent = booleanRequireEvent;
+            return this;
+        }
+
+        public Builder booleanRequireEvent(Boolean booleanRequireEvent) {
+            this.booleanRequireEvent = Optional.ofNullable(booleanRequireEvent);
+            return this;
+        }
+
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -230,7 +289,15 @@ public final class CountFeaturesRequest {
 
         public CountFeaturesRequest build() {
             return new CountFeaturesRequest(
-                    ids, q, withoutCompanyOverrideFor, withoutPlanEntitlementFor, limit, offset, additionalProperties);
+                    ids,
+                    q,
+                    withoutCompanyOverrideFor,
+                    withoutPlanEntitlementFor,
+                    featureType,
+                    booleanRequireEvent,
+                    limit,
+                    offset,
+                    additionalProperties);
         }
     }
 }

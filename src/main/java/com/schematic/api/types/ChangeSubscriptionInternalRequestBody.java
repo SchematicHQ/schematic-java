@@ -29,6 +29,8 @@ public final class ChangeSubscriptionInternalRequestBody {
 
     private final Optional<String> couponExternalId;
 
+    private final List<UpdateCreditBundleRequestBody> creditBundles;
+
     private final String newPlanId;
 
     private final String newPriceId;
@@ -39,26 +41,32 @@ public final class ChangeSubscriptionInternalRequestBody {
 
     private final Optional<String> promoCode;
 
+    private final boolean skipTrial;
+
     private final Map<String, Object> additionalProperties;
 
     private ChangeSubscriptionInternalRequestBody(
             List<UpdateAddOnRequestBody> addOnIds,
             String companyId,
             Optional<String> couponExternalId,
+            List<UpdateCreditBundleRequestBody> creditBundles,
             String newPlanId,
             String newPriceId,
             List<UpdatePayInAdvanceRequestBody> payInAdvance,
             Optional<String> paymentMethodId,
             Optional<String> promoCode,
+            boolean skipTrial,
             Map<String, Object> additionalProperties) {
         this.addOnIds = addOnIds;
         this.companyId = companyId;
         this.couponExternalId = couponExternalId;
+        this.creditBundles = creditBundles;
         this.newPlanId = newPlanId;
         this.newPriceId = newPriceId;
         this.payInAdvance = payInAdvance;
         this.paymentMethodId = paymentMethodId;
         this.promoCode = promoCode;
+        this.skipTrial = skipTrial;
         this.additionalProperties = additionalProperties;
     }
 
@@ -75,6 +83,11 @@ public final class ChangeSubscriptionInternalRequestBody {
     @JsonProperty("coupon_external_id")
     public Optional<String> getCouponExternalId() {
         return couponExternalId;
+    }
+
+    @JsonProperty("credit_bundles")
+    public List<UpdateCreditBundleRequestBody> getCreditBundles() {
+        return creditBundles;
     }
 
     @JsonProperty("new_plan_id")
@@ -102,6 +115,11 @@ public final class ChangeSubscriptionInternalRequestBody {
         return promoCode;
     }
 
+    @JsonProperty("skip_trial")
+    public boolean getSkipTrial() {
+        return skipTrial;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -118,11 +136,13 @@ public final class ChangeSubscriptionInternalRequestBody {
         return addOnIds.equals(other.addOnIds)
                 && companyId.equals(other.companyId)
                 && couponExternalId.equals(other.couponExternalId)
+                && creditBundles.equals(other.creditBundles)
                 && newPlanId.equals(other.newPlanId)
                 && newPriceId.equals(other.newPriceId)
                 && payInAdvance.equals(other.payInAdvance)
                 && paymentMethodId.equals(other.paymentMethodId)
-                && promoCode.equals(other.promoCode);
+                && promoCode.equals(other.promoCode)
+                && skipTrial == other.skipTrial;
     }
 
     @java.lang.Override
@@ -131,11 +151,13 @@ public final class ChangeSubscriptionInternalRequestBody {
                 this.addOnIds,
                 this.companyId,
                 this.couponExternalId,
+                this.creditBundles,
                 this.newPlanId,
                 this.newPriceId,
                 this.payInAdvance,
                 this.paymentMethodId,
-                this.promoCode);
+                this.promoCode,
+                this.skipTrial);
     }
 
     @java.lang.Override
@@ -158,7 +180,11 @@ public final class ChangeSubscriptionInternalRequestBody {
     }
 
     public interface NewPriceIdStage {
-        _FinalStage newPriceId(@NotNull String newPriceId);
+        SkipTrialStage newPriceId(@NotNull String newPriceId);
+    }
+
+    public interface SkipTrialStage {
+        _FinalStage skipTrial(boolean skipTrial);
     }
 
     public interface _FinalStage {
@@ -173,6 +199,12 @@ public final class ChangeSubscriptionInternalRequestBody {
         _FinalStage couponExternalId(Optional<String> couponExternalId);
 
         _FinalStage couponExternalId(String couponExternalId);
+
+        _FinalStage creditBundles(List<UpdateCreditBundleRequestBody> creditBundles);
+
+        _FinalStage addCreditBundles(UpdateCreditBundleRequestBody creditBundles);
+
+        _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles);
 
         _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
 
@@ -190,18 +222,23 @@ public final class ChangeSubscriptionInternalRequestBody {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CompanyIdStage, NewPlanIdStage, NewPriceIdStage, _FinalStage {
+    public static final class Builder
+            implements CompanyIdStage, NewPlanIdStage, NewPriceIdStage, SkipTrialStage, _FinalStage {
         private String companyId;
 
         private String newPlanId;
 
         private String newPriceId;
 
+        private boolean skipTrial;
+
         private Optional<String> promoCode = Optional.empty();
 
         private Optional<String> paymentMethodId = Optional.empty();
 
         private List<UpdatePayInAdvanceRequestBody> payInAdvance = new ArrayList<>();
+
+        private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
         private Optional<String> couponExternalId = Optional.empty();
 
@@ -217,11 +254,13 @@ public final class ChangeSubscriptionInternalRequestBody {
             addOnIds(other.getAddOnIds());
             companyId(other.getCompanyId());
             couponExternalId(other.getCouponExternalId());
+            creditBundles(other.getCreditBundles());
             newPlanId(other.getNewPlanId());
             newPriceId(other.getNewPriceId());
             payInAdvance(other.getPayInAdvance());
             paymentMethodId(other.getPaymentMethodId());
             promoCode(other.getPromoCode());
+            skipTrial(other.getSkipTrial());
             return this;
         }
 
@@ -241,8 +280,15 @@ public final class ChangeSubscriptionInternalRequestBody {
 
         @java.lang.Override
         @JsonSetter("new_price_id")
-        public _FinalStage newPriceId(@NotNull String newPriceId) {
+        public SkipTrialStage newPriceId(@NotNull String newPriceId) {
             this.newPriceId = Objects.requireNonNull(newPriceId, "newPriceId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("skip_trial")
+        public _FinalStage skipTrial(boolean skipTrial) {
+            this.skipTrial = skipTrial;
             return this;
         }
 
@@ -293,6 +339,26 @@ public final class ChangeSubscriptionInternalRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles) {
+            this.creditBundles.addAll(creditBundles);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCreditBundles(UpdateCreditBundleRequestBody creditBundles) {
+            this.creditBundles.add(creditBundles);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_bundles", nulls = Nulls.SKIP)
+        public _FinalStage creditBundles(List<UpdateCreditBundleRequestBody> creditBundles) {
+            this.creditBundles.clear();
+            this.creditBundles.addAll(creditBundles);
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage couponExternalId(String couponExternalId) {
             this.couponExternalId = Optional.ofNullable(couponExternalId);
             return this;
@@ -331,11 +397,13 @@ public final class ChangeSubscriptionInternalRequestBody {
                     addOnIds,
                     companyId,
                     couponExternalId,
+                    creditBundles,
                     newPlanId,
                     newPriceId,
                     payInAdvance,
                     paymentMethodId,
                     promoCode,
+                    skipTrial,
                     additionalProperties);
         }
     }

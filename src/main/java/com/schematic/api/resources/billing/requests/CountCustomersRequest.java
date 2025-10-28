@@ -20,6 +20,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountCustomersRequest.Builder.class)
 public final class CountCustomersRequest {
+    private final Optional<String> companyIds;
+
     private final Optional<String> name;
 
     private final Optional<Boolean> failedToImport;
@@ -33,18 +35,25 @@ public final class CountCustomersRequest {
     private final Map<String, Object> additionalProperties;
 
     private CountCustomersRequest(
+            Optional<String> companyIds,
             Optional<String> name,
             Optional<Boolean> failedToImport,
             Optional<String> q,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
+        this.companyIds = companyIds;
         this.name = name;
         this.failedToImport = failedToImport;
         this.q = q;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("company_ids")
+    public Optional<String> getCompanyIds() {
+        return companyIds;
     }
 
     @JsonProperty("name")
@@ -90,7 +99,8 @@ public final class CountCustomersRequest {
     }
 
     private boolean equalTo(CountCustomersRequest other) {
-        return name.equals(other.name)
+        return companyIds.equals(other.companyIds)
+                && name.equals(other.name)
                 && failedToImport.equals(other.failedToImport)
                 && q.equals(other.q)
                 && limit.equals(other.limit)
@@ -99,7 +109,7 @@ public final class CountCustomersRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.failedToImport, this.q, this.limit, this.offset);
+        return Objects.hash(this.companyIds, this.name, this.failedToImport, this.q, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -113,6 +123,8 @@ public final class CountCustomersRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> companyIds = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<Boolean> failedToImport = Optional.empty();
@@ -129,11 +141,23 @@ public final class CountCustomersRequest {
         private Builder() {}
 
         public Builder from(CountCustomersRequest other) {
+            companyIds(other.getCompanyIds());
             name(other.getName());
             failedToImport(other.getFailedToImport());
             q(other.getQ());
             limit(other.getLimit());
             offset(other.getOffset());
+            return this;
+        }
+
+        @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
+        public Builder companyIds(Optional<String> companyIds) {
+            this.companyIds = companyIds;
+            return this;
+        }
+
+        public Builder companyIds(String companyIds) {
+            this.companyIds = Optional.ofNullable(companyIds);
             return this;
         }
 
@@ -193,7 +217,7 @@ public final class CountCustomersRequest {
         }
 
         public CountCustomersRequest build() {
-            return new CountCustomersRequest(name, failedToImport, q, limit, offset, additionalProperties);
+            return new CountCustomersRequest(companyIds, name, failedToImport, q, limit, offset, additionalProperties);
         }
     }
 }

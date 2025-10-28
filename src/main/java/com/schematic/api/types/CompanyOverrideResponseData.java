@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,6 +27,8 @@ public final class CompanyOverrideResponseData {
     private final Optional<CompanyDetailResponseData> company;
 
     private final String companyId;
+
+    private final Optional<Double> consumptionRate;
 
     private final OffsetDateTime createdAt;
 
@@ -41,6 +45,8 @@ public final class CompanyOverrideResponseData {
     private final Optional<String> metricPeriod;
 
     private final Optional<String> metricPeriodMonthReset;
+
+    private final List<CompanyOverrideNoteResponseData> notes;
 
     private final Optional<String> ruleId;
 
@@ -63,6 +69,7 @@ public final class CompanyOverrideResponseData {
     private CompanyOverrideResponseData(
             Optional<CompanyDetailResponseData> company,
             String companyId,
+            Optional<Double> consumptionRate,
             OffsetDateTime createdAt,
             String environmentId,
             Optional<OffsetDateTime> expirationDate,
@@ -71,6 +78,7 @@ public final class CompanyOverrideResponseData {
             String id,
             Optional<String> metricPeriod,
             Optional<String> metricPeriodMonthReset,
+            List<CompanyOverrideNoteResponseData> notes,
             Optional<String> ruleId,
             Optional<String> ruleIdUsageExceeded,
             OffsetDateTime updatedAt,
@@ -82,6 +90,7 @@ public final class CompanyOverrideResponseData {
             Map<String, Object> additionalProperties) {
         this.company = company;
         this.companyId = companyId;
+        this.consumptionRate = consumptionRate;
         this.createdAt = createdAt;
         this.environmentId = environmentId;
         this.expirationDate = expirationDate;
@@ -90,6 +99,7 @@ public final class CompanyOverrideResponseData {
         this.id = id;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.notes = notes;
         this.ruleId = ruleId;
         this.ruleIdUsageExceeded = ruleIdUsageExceeded;
         this.updatedAt = updatedAt;
@@ -109,6 +119,11 @@ public final class CompanyOverrideResponseData {
     @JsonProperty("company_id")
     public String getCompanyId() {
         return companyId;
+    }
+
+    @JsonProperty("consumption_rate")
+    public Optional<Double> getConsumptionRate() {
+        return consumptionRate;
     }
 
     @JsonProperty("created_at")
@@ -149,6 +164,11 @@ public final class CompanyOverrideResponseData {
     @JsonProperty("metric_period_month_reset")
     public Optional<String> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
+    }
+
+    @JsonProperty("notes")
+    public List<CompanyOverrideNoteResponseData> getNotes() {
+        return notes;
     }
 
     @JsonProperty("rule_id")
@@ -205,6 +225,7 @@ public final class CompanyOverrideResponseData {
     private boolean equalTo(CompanyOverrideResponseData other) {
         return company.equals(other.company)
                 && companyId.equals(other.companyId)
+                && consumptionRate.equals(other.consumptionRate)
                 && createdAt.equals(other.createdAt)
                 && environmentId.equals(other.environmentId)
                 && expirationDate.equals(other.expirationDate)
@@ -213,6 +234,7 @@ public final class CompanyOverrideResponseData {
                 && id.equals(other.id)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && notes.equals(other.notes)
                 && ruleId.equals(other.ruleId)
                 && ruleIdUsageExceeded.equals(other.ruleIdUsageExceeded)
                 && updatedAt.equals(other.updatedAt)
@@ -228,6 +250,7 @@ public final class CompanyOverrideResponseData {
         return Objects.hash(
                 this.company,
                 this.companyId,
+                this.consumptionRate,
                 this.createdAt,
                 this.environmentId,
                 this.expirationDate,
@@ -236,6 +259,7 @@ public final class CompanyOverrideResponseData {
                 this.id,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.notes,
                 this.ruleId,
                 this.ruleIdUsageExceeded,
                 this.updatedAt,
@@ -292,6 +316,10 @@ public final class CompanyOverrideResponseData {
 
         _FinalStage company(CompanyDetailResponseData company);
 
+        _FinalStage consumptionRate(Optional<Double> consumptionRate);
+
+        _FinalStage consumptionRate(Double consumptionRate);
+
         _FinalStage expirationDate(Optional<OffsetDateTime> expirationDate);
 
         _FinalStage expirationDate(OffsetDateTime expirationDate);
@@ -307,6 +335,12 @@ public final class CompanyOverrideResponseData {
         _FinalStage metricPeriodMonthReset(Optional<String> metricPeriodMonthReset);
 
         _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset);
+
+        _FinalStage notes(List<CompanyOverrideNoteResponseData> notes);
+
+        _FinalStage addNotes(CompanyOverrideNoteResponseData notes);
+
+        _FinalStage addAllNotes(List<CompanyOverrideNoteResponseData> notes);
 
         _FinalStage ruleId(Optional<String> ruleId);
 
@@ -369,6 +403,8 @@ public final class CompanyOverrideResponseData {
 
         private Optional<String> ruleId = Optional.empty();
 
+        private List<CompanyOverrideNoteResponseData> notes = new ArrayList<>();
+
         private Optional<String> metricPeriodMonthReset = Optional.empty();
 
         private Optional<String> metricPeriod = Optional.empty();
@@ -376,6 +412,8 @@ public final class CompanyOverrideResponseData {
         private Optional<FeatureResponseData> feature = Optional.empty();
 
         private Optional<OffsetDateTime> expirationDate = Optional.empty();
+
+        private Optional<Double> consumptionRate = Optional.empty();
 
         private Optional<CompanyDetailResponseData> company = Optional.empty();
 
@@ -388,6 +426,7 @@ public final class CompanyOverrideResponseData {
         public Builder from(CompanyOverrideResponseData other) {
             company(other.getCompany());
             companyId(other.getCompanyId());
+            consumptionRate(other.getConsumptionRate());
             createdAt(other.getCreatedAt());
             environmentId(other.getEnvironmentId());
             expirationDate(other.getExpirationDate());
@@ -396,6 +435,7 @@ public final class CompanyOverrideResponseData {
             id(other.getId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            notes(other.getNotes());
             ruleId(other.getRuleId());
             ruleIdUsageExceeded(other.getRuleIdUsageExceeded());
             updatedAt(other.getUpdatedAt());
@@ -535,6 +575,26 @@ public final class CompanyOverrideResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllNotes(List<CompanyOverrideNoteResponseData> notes) {
+            this.notes.addAll(notes);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addNotes(CompanyOverrideNoteResponseData notes) {
+            this.notes.add(notes);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "notes", nulls = Nulls.SKIP)
+        public _FinalStage notes(List<CompanyOverrideNoteResponseData> notes) {
+            this.notes.clear();
+            this.notes.addAll(notes);
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
@@ -587,6 +647,19 @@ public final class CompanyOverrideResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage consumptionRate(Double consumptionRate) {
+            this.consumptionRate = Optional.ofNullable(consumptionRate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "consumption_rate", nulls = Nulls.SKIP)
+        public _FinalStage consumptionRate(Optional<Double> consumptionRate) {
+            this.consumptionRate = consumptionRate;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage company(CompanyDetailResponseData company) {
             this.company = Optional.ofNullable(company);
             return this;
@@ -604,6 +677,7 @@ public final class CompanyOverrideResponseData {
             return new CompanyOverrideResponseData(
                     company,
                     companyId,
+                    consumptionRate,
                     createdAt,
                     environmentId,
                     expirationDate,
@@ -612,6 +686,7 @@ public final class CompanyOverrideResponseData {
                     id,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    notes,
                     ruleId,
                     ruleIdUsageExceeded,
                     updatedAt,

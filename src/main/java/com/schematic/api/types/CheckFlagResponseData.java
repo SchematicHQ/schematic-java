@@ -30,6 +30,8 @@ public final class CheckFlagResponseData {
 
     private final Optional<Integer> featureUsage;
 
+    private final Optional<String> featureUsageEvent;
+
     private final Optional<String> featureUsagePeriod;
 
     private final Optional<OffsetDateTime> featureUsageResetAt;
@@ -55,6 +57,7 @@ public final class CheckFlagResponseData {
             Optional<String> error,
             Optional<Integer> featureAllocation,
             Optional<Integer> featureUsage,
+            Optional<String> featureUsageEvent,
             Optional<String> featureUsagePeriod,
             Optional<OffsetDateTime> featureUsageResetAt,
             String flag,
@@ -69,6 +72,7 @@ public final class CheckFlagResponseData {
         this.error = error;
         this.featureAllocation = featureAllocation;
         this.featureUsage = featureUsage;
+        this.featureUsageEvent = featureUsageEvent;
         this.featureUsagePeriod = featureUsagePeriod;
         this.featureUsageResetAt = featureUsageResetAt;
         this.flag = flag;
@@ -111,6 +115,14 @@ public final class CheckFlagResponseData {
     @JsonProperty("feature_usage")
     public Optional<Integer> getFeatureUsage() {
         return featureUsage;
+    }
+
+    /**
+     * @return If an event-based numeric feature entitlement rule was matched, the event used to track its usage
+     */
+    @JsonProperty("feature_usage_event")
+    public Optional<String> getFeatureUsageEvent() {
+        return featureUsageEvent;
     }
 
     /**
@@ -201,6 +213,7 @@ public final class CheckFlagResponseData {
                 && error.equals(other.error)
                 && featureAllocation.equals(other.featureAllocation)
                 && featureUsage.equals(other.featureUsage)
+                && featureUsageEvent.equals(other.featureUsageEvent)
                 && featureUsagePeriod.equals(other.featureUsagePeriod)
                 && featureUsageResetAt.equals(other.featureUsageResetAt)
                 && flag.equals(other.flag)
@@ -219,6 +232,7 @@ public final class CheckFlagResponseData {
                 this.error,
                 this.featureAllocation,
                 this.featureUsage,
+                this.featureUsageEvent,
                 this.featureUsagePeriod,
                 this.featureUsageResetAt,
                 this.flag,
@@ -272,6 +286,10 @@ public final class CheckFlagResponseData {
 
         _FinalStage featureUsage(Integer featureUsage);
 
+        _FinalStage featureUsageEvent(Optional<String> featureUsageEvent);
+
+        _FinalStage featureUsageEvent(String featureUsageEvent);
+
         _FinalStage featureUsagePeriod(Optional<String> featureUsagePeriod);
 
         _FinalStage featureUsagePeriod(String featureUsagePeriod);
@@ -317,6 +335,8 @@ public final class CheckFlagResponseData {
 
         private Optional<String> featureUsagePeriod = Optional.empty();
 
+        private Optional<String> featureUsageEvent = Optional.empty();
+
         private Optional<Integer> featureUsage = Optional.empty();
 
         private Optional<Integer> featureAllocation = Optional.empty();
@@ -336,6 +356,7 @@ public final class CheckFlagResponseData {
             error(other.getError());
             featureAllocation(other.getFeatureAllocation());
             featureUsage(other.getFeatureUsage());
+            featureUsageEvent(other.getFeatureUsageEvent());
             featureUsagePeriod(other.getFeatureUsagePeriod());
             featureUsageResetAt(other.getFeatureUsageResetAt());
             flag(other.getFlag());
@@ -484,6 +505,23 @@ public final class CheckFlagResponseData {
         }
 
         /**
+         * <p>If an event-based numeric feature entitlement rule was matched, the event used to track its usage</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage featureUsageEvent(String featureUsageEvent) {
+            this.featureUsageEvent = Optional.ofNullable(featureUsageEvent);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "feature_usage_event", nulls = Nulls.SKIP)
+        public _FinalStage featureUsageEvent(Optional<String> featureUsageEvent) {
+            this.featureUsageEvent = featureUsageEvent;
+            return this;
+        }
+
+        /**
          * <p>If a numeric feature entitlement rule was matched, the company's usage</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -558,6 +596,7 @@ public final class CheckFlagResponseData {
                     error,
                     featureAllocation,
                     featureUsage,
+                    featureUsageEvent,
                     featureUsagePeriod,
                     featureUsageResetAt,
                     flag,

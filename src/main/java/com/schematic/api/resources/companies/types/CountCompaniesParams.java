@@ -31,6 +31,8 @@ public final class CountCompaniesParams {
 
     private final Optional<String> q;
 
+    private final Optional<Boolean> withSubscription;
+
     private final Optional<String> withoutFeatureOverrideFor;
 
     private final Optional<Boolean> withoutPlan;
@@ -43,6 +45,7 @@ public final class CountCompaniesParams {
             Optional<Integer> offset,
             Optional<String> planId,
             Optional<String> q,
+            Optional<Boolean> withSubscription,
             Optional<String> withoutFeatureOverrideFor,
             Optional<Boolean> withoutPlan,
             Map<String, Object> additionalProperties) {
@@ -51,6 +54,7 @@ public final class CountCompaniesParams {
         this.offset = offset;
         this.planId = planId;
         this.q = q;
+        this.withSubscription = withSubscription;
         this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
         this.withoutPlan = withoutPlan;
         this.additionalProperties = additionalProperties;
@@ -97,6 +101,14 @@ public final class CountCompaniesParams {
     }
 
     /**
+     * @return Filter companies that have a subscription
+     */
+    @JsonProperty("with_subscription")
+    public Optional<Boolean> getWithSubscription() {
+        return withSubscription;
+    }
+
+    /**
      * @return Filter out companies that already have a company override for the specified feature ID
      */
     @JsonProperty("without_feature_override_for")
@@ -129,6 +141,7 @@ public final class CountCompaniesParams {
                 && offset.equals(other.offset)
                 && planId.equals(other.planId)
                 && q.equals(other.q)
+                && withSubscription.equals(other.withSubscription)
                 && withoutFeatureOverrideFor.equals(other.withoutFeatureOverrideFor)
                 && withoutPlan.equals(other.withoutPlan);
     }
@@ -141,6 +154,7 @@ public final class CountCompaniesParams {
                 this.offset,
                 this.planId,
                 this.q,
+                this.withSubscription,
                 this.withoutFeatureOverrideFor,
                 this.withoutPlan);
     }
@@ -166,6 +180,8 @@ public final class CountCompaniesParams {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<Boolean> withSubscription = Optional.empty();
+
         private Optional<String> withoutFeatureOverrideFor = Optional.empty();
 
         private Optional<Boolean> withoutPlan = Optional.empty();
@@ -181,6 +197,7 @@ public final class CountCompaniesParams {
             offset(other.getOffset());
             planId(other.getPlanId());
             q(other.getQ());
+            withSubscription(other.getWithSubscription());
             withoutFeatureOverrideFor(other.getWithoutFeatureOverrideFor());
             withoutPlan(other.getWithoutPlan());
             return this;
@@ -241,6 +258,17 @@ public final class CountCompaniesParams {
             return this;
         }
 
+        @JsonSetter(value = "with_subscription", nulls = Nulls.SKIP)
+        public Builder withSubscription(Optional<Boolean> withSubscription) {
+            this.withSubscription = withSubscription;
+            return this;
+        }
+
+        public Builder withSubscription(Boolean withSubscription) {
+            this.withSubscription = Optional.ofNullable(withSubscription);
+            return this;
+        }
+
         @JsonSetter(value = "without_feature_override_for", nulls = Nulls.SKIP)
         public Builder withoutFeatureOverrideFor(Optional<String> withoutFeatureOverrideFor) {
             this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
@@ -265,7 +293,15 @@ public final class CountCompaniesParams {
 
         public CountCompaniesParams build() {
             return new CountCompaniesParams(
-                    ids, limit, offset, planId, q, withoutFeatureOverrideFor, withoutPlan, additionalProperties);
+                    ids,
+                    limit,
+                    offset,
+                    planId,
+                    q,
+                    withSubscription,
+                    withoutFeatureOverrideFor,
+                    withoutPlan,
+                    additionalProperties);
         }
     }
 }

@@ -23,6 +23,12 @@ import java.util.Optional;
 public final class CountPlansParams {
     private final Optional<String> companyId;
 
+    private final Optional<Boolean> forFallbackPlan;
+
+    private final Optional<Boolean> forInitialPlan;
+
+    private final Optional<Boolean> forTrialExpiryPlan;
+
     private final Optional<Boolean> hasProductId;
 
     private final Optional<List<String>> ids;
@@ -35,6 +41,8 @@ public final class CountPlansParams {
 
     private final Optional<String> q;
 
+    private final Optional<Boolean> requiresPaymentMethod;
+
     private final Optional<String> withoutEntitlementFor;
 
     private final Optional<Boolean> withoutPaidProductId;
@@ -45,23 +53,31 @@ public final class CountPlansParams {
 
     private CountPlansParams(
             Optional<String> companyId,
+            Optional<Boolean> forFallbackPlan,
+            Optional<Boolean> forInitialPlan,
+            Optional<Boolean> forTrialExpiryPlan,
             Optional<Boolean> hasProductId,
             Optional<List<String>> ids,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Optional<CountPlansResponseParamsPlanType> planType,
             Optional<String> q,
+            Optional<Boolean> requiresPaymentMethod,
             Optional<String> withoutEntitlementFor,
             Optional<Boolean> withoutPaidProductId,
             Optional<Boolean> withoutProductId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
+        this.forFallbackPlan = forFallbackPlan;
+        this.forInitialPlan = forInitialPlan;
+        this.forTrialExpiryPlan = forTrialExpiryPlan;
         this.hasProductId = hasProductId;
         this.ids = ids;
         this.limit = limit;
         this.offset = offset;
         this.planType = planType;
         this.q = q;
+        this.requiresPaymentMethod = requiresPaymentMethod;
         this.withoutEntitlementFor = withoutEntitlementFor;
         this.withoutPaidProductId = withoutPaidProductId;
         this.withoutProductId = withoutProductId;
@@ -71,6 +87,30 @@ public final class CountPlansParams {
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
+    }
+
+    /**
+     * @return Filter for plans valid as fallback plans (not linked to billing)
+     */
+    @JsonProperty("for_fallback_plan")
+    public Optional<Boolean> getForFallbackPlan() {
+        return forFallbackPlan;
+    }
+
+    /**
+     * @return Filter for plans valid as initial plans (not linked to billing, free, or auto-cancelling trial)
+     */
+    @JsonProperty("for_initial_plan")
+    public Optional<Boolean> getForInitialPlan() {
+        return forInitialPlan;
+    }
+
+    /**
+     * @return Filter for plans valid as trial expiry plans (not linked to billing or free)
+     */
+    @JsonProperty("for_trial_expiry_plan")
+    public Optional<Boolean> getForTrialExpiryPlan() {
+        return forTrialExpiryPlan;
     }
 
     /**
@@ -116,6 +156,14 @@ public final class CountPlansParams {
     }
 
     /**
+     * @return Filter for plans that require a payment method (inverse of ForInitialPlan)
+     */
+    @JsonProperty("requires_payment_method")
+    public Optional<Boolean> getRequiresPaymentMethod() {
+        return requiresPaymentMethod;
+    }
+
+    /**
      * @return Filter out plans that already have a plan entitlement for the specified feature ID
      */
     @JsonProperty("without_entitlement_for")
@@ -152,12 +200,16 @@ public final class CountPlansParams {
 
     private boolean equalTo(CountPlansParams other) {
         return companyId.equals(other.companyId)
+                && forFallbackPlan.equals(other.forFallbackPlan)
+                && forInitialPlan.equals(other.forInitialPlan)
+                && forTrialExpiryPlan.equals(other.forTrialExpiryPlan)
                 && hasProductId.equals(other.hasProductId)
                 && ids.equals(other.ids)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
                 && planType.equals(other.planType)
                 && q.equals(other.q)
+                && requiresPaymentMethod.equals(other.requiresPaymentMethod)
                 && withoutEntitlementFor.equals(other.withoutEntitlementFor)
                 && withoutPaidProductId.equals(other.withoutPaidProductId)
                 && withoutProductId.equals(other.withoutProductId);
@@ -167,12 +219,16 @@ public final class CountPlansParams {
     public int hashCode() {
         return Objects.hash(
                 this.companyId,
+                this.forFallbackPlan,
+                this.forInitialPlan,
+                this.forTrialExpiryPlan,
                 this.hasProductId,
                 this.ids,
                 this.limit,
                 this.offset,
                 this.planType,
                 this.q,
+                this.requiresPaymentMethod,
                 this.withoutEntitlementFor,
                 this.withoutPaidProductId,
                 this.withoutProductId);
@@ -191,6 +247,12 @@ public final class CountPlansParams {
     public static final class Builder {
         private Optional<String> companyId = Optional.empty();
 
+        private Optional<Boolean> forFallbackPlan = Optional.empty();
+
+        private Optional<Boolean> forInitialPlan = Optional.empty();
+
+        private Optional<Boolean> forTrialExpiryPlan = Optional.empty();
+
         private Optional<Boolean> hasProductId = Optional.empty();
 
         private Optional<List<String>> ids = Optional.empty();
@@ -202,6 +264,8 @@ public final class CountPlansParams {
         private Optional<CountPlansResponseParamsPlanType> planType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
+
+        private Optional<Boolean> requiresPaymentMethod = Optional.empty();
 
         private Optional<String> withoutEntitlementFor = Optional.empty();
 
@@ -216,12 +280,16 @@ public final class CountPlansParams {
 
         public Builder from(CountPlansParams other) {
             companyId(other.getCompanyId());
+            forFallbackPlan(other.getForFallbackPlan());
+            forInitialPlan(other.getForInitialPlan());
+            forTrialExpiryPlan(other.getForTrialExpiryPlan());
             hasProductId(other.getHasProductId());
             ids(other.getIds());
             limit(other.getLimit());
             offset(other.getOffset());
             planType(other.getPlanType());
             q(other.getQ());
+            requiresPaymentMethod(other.getRequiresPaymentMethod());
             withoutEntitlementFor(other.getWithoutEntitlementFor());
             withoutPaidProductId(other.getWithoutPaidProductId());
             withoutProductId(other.getWithoutProductId());
@@ -236,6 +304,39 @@ public final class CountPlansParams {
 
         public Builder companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        @JsonSetter(value = "for_fallback_plan", nulls = Nulls.SKIP)
+        public Builder forFallbackPlan(Optional<Boolean> forFallbackPlan) {
+            this.forFallbackPlan = forFallbackPlan;
+            return this;
+        }
+
+        public Builder forFallbackPlan(Boolean forFallbackPlan) {
+            this.forFallbackPlan = Optional.ofNullable(forFallbackPlan);
+            return this;
+        }
+
+        @JsonSetter(value = "for_initial_plan", nulls = Nulls.SKIP)
+        public Builder forInitialPlan(Optional<Boolean> forInitialPlan) {
+            this.forInitialPlan = forInitialPlan;
+            return this;
+        }
+
+        public Builder forInitialPlan(Boolean forInitialPlan) {
+            this.forInitialPlan = Optional.ofNullable(forInitialPlan);
+            return this;
+        }
+
+        @JsonSetter(value = "for_trial_expiry_plan", nulls = Nulls.SKIP)
+        public Builder forTrialExpiryPlan(Optional<Boolean> forTrialExpiryPlan) {
+            this.forTrialExpiryPlan = forTrialExpiryPlan;
+            return this;
+        }
+
+        public Builder forTrialExpiryPlan(Boolean forTrialExpiryPlan) {
+            this.forTrialExpiryPlan = Optional.ofNullable(forTrialExpiryPlan);
             return this;
         }
 
@@ -305,6 +406,17 @@ public final class CountPlansParams {
             return this;
         }
 
+        @JsonSetter(value = "requires_payment_method", nulls = Nulls.SKIP)
+        public Builder requiresPaymentMethod(Optional<Boolean> requiresPaymentMethod) {
+            this.requiresPaymentMethod = requiresPaymentMethod;
+            return this;
+        }
+
+        public Builder requiresPaymentMethod(Boolean requiresPaymentMethod) {
+            this.requiresPaymentMethod = Optional.ofNullable(requiresPaymentMethod);
+            return this;
+        }
+
         @JsonSetter(value = "without_entitlement_for", nulls = Nulls.SKIP)
         public Builder withoutEntitlementFor(Optional<String> withoutEntitlementFor) {
             this.withoutEntitlementFor = withoutEntitlementFor;
@@ -341,12 +453,16 @@ public final class CountPlansParams {
         public CountPlansParams build() {
             return new CountPlansParams(
                     companyId,
+                    forFallbackPlan,
+                    forInitialPlan,
+                    forTrialExpiryPlan,
                     hasProductId,
                     ids,
                     limit,
                     offset,
                     planType,
                     q,
+                    requiresPaymentMethod,
                     withoutEntitlementFor,
                     withoutPaidProductId,
                     withoutProductId,

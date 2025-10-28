@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingPriceView.Builder.class)
 public final class BillingPriceView {
+    private final String billingScheme;
+
     private final OffsetDateTime createdAt;
 
     private final String currency;
@@ -32,19 +36,31 @@ public final class BillingPriceView {
 
     private final boolean isActive;
 
+    private final Optional<String> meterEventName;
+
+    private final Optional<String> meterEventPayloadKey;
+
     private final Optional<String> meterId;
 
+    private final int packageSize;
+
     private final int price;
+
+    private final Optional<String> priceDecimal;
 
     private final String priceExternalId;
 
     private final String priceId;
+
+    private final List<BillingProductPriceTierResponseData> priceTier;
 
     private final String productExternalId;
 
     private final String productId;
 
     private final String productName;
+
+    private final Optional<String> tiersMode;
 
     private final OffsetDateTime updatedAt;
 
@@ -53,36 +69,55 @@ public final class BillingPriceView {
     private final Map<String, Object> additionalProperties;
 
     private BillingPriceView(
+            String billingScheme,
             OffsetDateTime createdAt,
             String currency,
             String id,
             String interval,
             boolean isActive,
+            Optional<String> meterEventName,
+            Optional<String> meterEventPayloadKey,
             Optional<String> meterId,
+            int packageSize,
             int price,
+            Optional<String> priceDecimal,
             String priceExternalId,
             String priceId,
+            List<BillingProductPriceTierResponseData> priceTier,
             String productExternalId,
             String productId,
             String productName,
+            Optional<String> tiersMode,
             OffsetDateTime updatedAt,
             String usageType,
             Map<String, Object> additionalProperties) {
+        this.billingScheme = billingScheme;
         this.createdAt = createdAt;
         this.currency = currency;
         this.id = id;
         this.interval = interval;
         this.isActive = isActive;
+        this.meterEventName = meterEventName;
+        this.meterEventPayloadKey = meterEventPayloadKey;
         this.meterId = meterId;
+        this.packageSize = packageSize;
         this.price = price;
+        this.priceDecimal = priceDecimal;
         this.priceExternalId = priceExternalId;
         this.priceId = priceId;
+        this.priceTier = priceTier;
         this.productExternalId = productExternalId;
         this.productId = productId;
         this.productName = productName;
+        this.tiersMode = tiersMode;
         this.updatedAt = updatedAt;
         this.usageType = usageType;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_scheme")
+    public String getBillingScheme() {
+        return billingScheme;
     }
 
     @JsonProperty("created_at")
@@ -110,14 +145,34 @@ public final class BillingPriceView {
         return isActive;
     }
 
+    @JsonProperty("meter_event_name")
+    public Optional<String> getMeterEventName() {
+        return meterEventName;
+    }
+
+    @JsonProperty("meter_event_payload_key")
+    public Optional<String> getMeterEventPayloadKey() {
+        return meterEventPayloadKey;
+    }
+
     @JsonProperty("meter_id")
     public Optional<String> getMeterId() {
         return meterId;
     }
 
+    @JsonProperty("package_size")
+    public int getPackageSize() {
+        return packageSize;
+    }
+
     @JsonProperty("price")
     public int getPrice() {
         return price;
+    }
+
+    @JsonProperty("price_decimal")
+    public Optional<String> getPriceDecimal() {
+        return priceDecimal;
     }
 
     @JsonProperty("price_external_id")
@@ -128,6 +183,11 @@ public final class BillingPriceView {
     @JsonProperty("price_id")
     public String getPriceId() {
         return priceId;
+    }
+
+    @JsonProperty("price_tier")
+    public List<BillingProductPriceTierResponseData> getPriceTier() {
+        return priceTier;
     }
 
     @JsonProperty("product_external_id")
@@ -143,6 +203,11 @@ public final class BillingPriceView {
     @JsonProperty("product_name")
     public String getProductName() {
         return productName;
+    }
+
+    @JsonProperty("tiers_mode")
+    public Optional<String> getTiersMode() {
+        return tiersMode;
     }
 
     @JsonProperty("updated_at")
@@ -167,18 +232,25 @@ public final class BillingPriceView {
     }
 
     private boolean equalTo(BillingPriceView other) {
-        return createdAt.equals(other.createdAt)
+        return billingScheme.equals(other.billingScheme)
+                && createdAt.equals(other.createdAt)
                 && currency.equals(other.currency)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
                 && isActive == other.isActive
+                && meterEventName.equals(other.meterEventName)
+                && meterEventPayloadKey.equals(other.meterEventPayloadKey)
                 && meterId.equals(other.meterId)
+                && packageSize == other.packageSize
                 && price == other.price
+                && priceDecimal.equals(other.priceDecimal)
                 && priceExternalId.equals(other.priceExternalId)
                 && priceId.equals(other.priceId)
+                && priceTier.equals(other.priceTier)
                 && productExternalId.equals(other.productExternalId)
                 && productId.equals(other.productId)
                 && productName.equals(other.productName)
+                && tiersMode.equals(other.tiersMode)
                 && updatedAt.equals(other.updatedAt)
                 && usageType.equals(other.usageType);
     }
@@ -186,18 +258,25 @@ public final class BillingPriceView {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingScheme,
                 this.createdAt,
                 this.currency,
                 this.id,
                 this.interval,
                 this.isActive,
+                this.meterEventName,
+                this.meterEventPayloadKey,
                 this.meterId,
+                this.packageSize,
                 this.price,
+                this.priceDecimal,
                 this.priceExternalId,
                 this.priceId,
+                this.priceTier,
                 this.productExternalId,
                 this.productId,
                 this.productName,
+                this.tiersMode,
                 this.updatedAt,
                 this.usageType);
     }
@@ -207,14 +286,18 @@ public final class BillingPriceView {
         return ObjectMappers.stringify(this);
     }
 
-    public static CreatedAtStage builder() {
+    public static BillingSchemeStage builder() {
         return new Builder();
+    }
+
+    public interface BillingSchemeStage {
+        CreatedAtStage billingScheme(@NotNull String billingScheme);
+
+        Builder from(BillingPriceView other);
     }
 
     public interface CreatedAtStage {
         CurrencyStage createdAt(@NotNull OffsetDateTime createdAt);
-
-        Builder from(BillingPriceView other);
     }
 
     public interface CurrencyStage {
@@ -230,7 +313,11 @@ public final class BillingPriceView {
     }
 
     public interface IsActiveStage {
-        PriceStage isActive(boolean isActive);
+        PackageSizeStage isActive(boolean isActive);
+    }
+
+    public interface PackageSizeStage {
+        PriceStage packageSize(int packageSize);
     }
 
     public interface PriceStage {
@@ -268,18 +355,42 @@ public final class BillingPriceView {
     public interface _FinalStage {
         BillingPriceView build();
 
+        _FinalStage meterEventName(Optional<String> meterEventName);
+
+        _FinalStage meterEventName(String meterEventName);
+
+        _FinalStage meterEventPayloadKey(Optional<String> meterEventPayloadKey);
+
+        _FinalStage meterEventPayloadKey(String meterEventPayloadKey);
+
         _FinalStage meterId(Optional<String> meterId);
 
         _FinalStage meterId(String meterId);
+
+        _FinalStage priceDecimal(Optional<String> priceDecimal);
+
+        _FinalStage priceDecimal(String priceDecimal);
+
+        _FinalStage priceTier(List<BillingProductPriceTierResponseData> priceTier);
+
+        _FinalStage addPriceTier(BillingProductPriceTierResponseData priceTier);
+
+        _FinalStage addAllPriceTier(List<BillingProductPriceTierResponseData> priceTier);
+
+        _FinalStage tiersMode(Optional<String> tiersMode);
+
+        _FinalStage tiersMode(String tiersMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CreatedAtStage,
+            implements BillingSchemeStage,
+                    CreatedAtStage,
                     CurrencyStage,
                     IdStage,
                     IntervalStage,
                     IsActiveStage,
+                    PackageSizeStage,
                     PriceStage,
                     PriceExternalIdStage,
                     PriceIdStage,
@@ -289,6 +400,8 @@ public final class BillingPriceView {
                     UpdatedAtStage,
                     UsageTypeStage,
                     _FinalStage {
+        private String billingScheme;
+
         private OffsetDateTime createdAt;
 
         private String currency;
@@ -298,6 +411,8 @@ public final class BillingPriceView {
         private String interval;
 
         private boolean isActive;
+
+        private int packageSize;
 
         private int price;
 
@@ -315,7 +430,17 @@ public final class BillingPriceView {
 
         private String usageType;
 
+        private Optional<String> tiersMode = Optional.empty();
+
+        private List<BillingProductPriceTierResponseData> priceTier = new ArrayList<>();
+
+        private Optional<String> priceDecimal = Optional.empty();
+
         private Optional<String> meterId = Optional.empty();
+
+        private Optional<String> meterEventPayloadKey = Optional.empty();
+
+        private Optional<String> meterEventName = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -324,20 +449,34 @@ public final class BillingPriceView {
 
         @java.lang.Override
         public Builder from(BillingPriceView other) {
+            billingScheme(other.getBillingScheme());
             createdAt(other.getCreatedAt());
             currency(other.getCurrency());
             id(other.getId());
             interval(other.getInterval());
             isActive(other.getIsActive());
+            meterEventName(other.getMeterEventName());
+            meterEventPayloadKey(other.getMeterEventPayloadKey());
             meterId(other.getMeterId());
+            packageSize(other.getPackageSize());
             price(other.getPrice());
+            priceDecimal(other.getPriceDecimal());
             priceExternalId(other.getPriceExternalId());
             priceId(other.getPriceId());
+            priceTier(other.getPriceTier());
             productExternalId(other.getProductExternalId());
             productId(other.getProductId());
             productName(other.getProductName());
+            tiersMode(other.getTiersMode());
             updatedAt(other.getUpdatedAt());
             usageType(other.getUsageType());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_scheme")
+        public CreatedAtStage billingScheme(@NotNull String billingScheme) {
+            this.billingScheme = Objects.requireNonNull(billingScheme, "billingScheme must not be null");
             return this;
         }
 
@@ -371,8 +510,15 @@ public final class BillingPriceView {
 
         @java.lang.Override
         @JsonSetter("is_active")
-        public PriceStage isActive(boolean isActive) {
+        public PackageSizeStage isActive(boolean isActive) {
             this.isActive = isActive;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("package_size")
+        public PriceStage packageSize(int packageSize) {
+            this.packageSize = packageSize;
             return this;
         }
 
@@ -433,6 +579,52 @@ public final class BillingPriceView {
         }
 
         @java.lang.Override
+        public _FinalStage tiersMode(String tiersMode) {
+            this.tiersMode = Optional.ofNullable(tiersMode);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "tiers_mode", nulls = Nulls.SKIP)
+        public _FinalStage tiersMode(Optional<String> tiersMode) {
+            this.tiersMode = tiersMode;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllPriceTier(List<BillingProductPriceTierResponseData> priceTier) {
+            this.priceTier.addAll(priceTier);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addPriceTier(BillingProductPriceTierResponseData priceTier) {
+            this.priceTier.add(priceTier);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "price_tier", nulls = Nulls.SKIP)
+        public _FinalStage priceTier(List<BillingProductPriceTierResponseData> priceTier) {
+            this.priceTier.clear();
+            this.priceTier.addAll(priceTier);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage priceDecimal(String priceDecimal) {
+            this.priceDecimal = Optional.ofNullable(priceDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "price_decimal", nulls = Nulls.SKIP)
+        public _FinalStage priceDecimal(Optional<String> priceDecimal) {
+            this.priceDecimal = priceDecimal;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage meterId(String meterId) {
             this.meterId = Optional.ofNullable(meterId);
             return this;
@@ -446,20 +638,53 @@ public final class BillingPriceView {
         }
 
         @java.lang.Override
+        public _FinalStage meterEventPayloadKey(String meterEventPayloadKey) {
+            this.meterEventPayloadKey = Optional.ofNullable(meterEventPayloadKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "meter_event_payload_key", nulls = Nulls.SKIP)
+        public _FinalStage meterEventPayloadKey(Optional<String> meterEventPayloadKey) {
+            this.meterEventPayloadKey = meterEventPayloadKey;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage meterEventName(String meterEventName) {
+            this.meterEventName = Optional.ofNullable(meterEventName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "meter_event_name", nulls = Nulls.SKIP)
+        public _FinalStage meterEventName(Optional<String> meterEventName) {
+            this.meterEventName = meterEventName;
+            return this;
+        }
+
+        @java.lang.Override
         public BillingPriceView build() {
             return new BillingPriceView(
+                    billingScheme,
                     createdAt,
                     currency,
                     id,
                     interval,
                     isActive,
+                    meterEventName,
+                    meterEventPayloadKey,
                     meterId,
+                    packageSize,
                     price,
+                    priceDecimal,
                     priceExternalId,
                     priceId,
+                    priceTier,
                     productExternalId,
                     productId,
                     productName,
+                    tiersMode,
                     updatedAt,
                     usageType,
                     additionalProperties);

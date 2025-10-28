@@ -38,9 +38,6 @@ public final class ListEntityTraitDefinitionsResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<EntityTraitDefinitionResponseData> getData() {
         return data;
@@ -129,20 +126,12 @@ public final class ListEntityTraitDefinitionsResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<EntityTraitDefinitionResponseData> data) {
             this.data.addAll(data);
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(EntityTraitDefinitionResponseData data) {
             this.data.add(data);
