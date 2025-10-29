@@ -92,6 +92,9 @@ public final class CreateEventRequestBody {
     }
 
     public interface EventTypeStage {
+        /**
+         * <p>Either 'identify' or 'track'</p>
+         */
         _FinalStage eventType(@NotNull CreateEventRequestBodyEventType eventType);
 
         Builder from(CreateEventRequestBody other);
@@ -104,6 +107,9 @@ public final class CreateEventRequestBody {
 
         _FinalStage body(EventBody body);
 
+        /**
+         * <p>Optionally provide a timestamp at which the event was sent to Schematic</p>
+         */
         _FinalStage sentAt(Optional<OffsetDateTime> sentAt);
 
         _FinalStage sentAt(OffsetDateTime sentAt);
@@ -132,6 +138,7 @@ public final class CreateEventRequestBody {
 
         /**
          * <p>Either 'identify' or 'track'</p>
+         * <p>Either 'identify' or 'track'</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -151,6 +158,9 @@ public final class CreateEventRequestBody {
             return this;
         }
 
+        /**
+         * <p>Optionally provide a timestamp at which the event was sent to Schematic</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "sent_at", nulls = Nulls.SKIP)
         public _FinalStage sentAt(Optional<OffsetDateTime> sentAt) {

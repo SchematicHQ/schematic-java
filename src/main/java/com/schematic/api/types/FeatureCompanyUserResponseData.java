@@ -222,12 +222,18 @@ public final class FeatureCompanyUserResponseData {
     }
 
     public interface AccessStage {
+        /**
+         * <p>Whether further usage is permitted.</p>
+         */
         AllocationTypeStage access(boolean access);
 
         Builder from(FeatureCompanyUserResponseData other);
     }
 
     public interface AllocationTypeStage {
+        /**
+         * <p>The type of allocation that is being used.</p>
+         */
         EntitlementIdStage allocationType(@NotNull FeatureCompanyUserResponseDataAllocationType allocationType);
     }
 
@@ -242,6 +248,9 @@ public final class FeatureCompanyUserResponseData {
     public interface _FinalStage {
         FeatureCompanyUserResponseData build();
 
+        /**
+         * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted.</p>
+         */
         _FinalStage allocation(Optional<Integer> allocation);
 
         _FinalStage allocation(Integer allocation);
@@ -254,14 +263,23 @@ public final class FeatureCompanyUserResponseData {
 
         _FinalStage feature(FeatureDetailResponseData feature);
 
+        /**
+         * <p>The time at which the metric will resets.</p>
+         */
         _FinalStage metricResetAt(Optional<OffsetDateTime> metricResetAt);
 
         _FinalStage metricResetAt(OffsetDateTime metricResetAt);
 
+        /**
+         * <p>If the period is current_month, when the month resets.</p>
+         */
         _FinalStage monthReset(Optional<String> monthReset);
 
         _FinalStage monthReset(String monthReset);
 
+        /**
+         * <p>The period over which usage is measured.</p>
+         */
         _FinalStage period(Optional<String> period);
 
         _FinalStage period(String period);
@@ -270,6 +288,9 @@ public final class FeatureCompanyUserResponseData {
 
         _FinalStage plan(PlanResponseData plan);
 
+        /**
+         * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured.</p>
+         */
         _FinalStage usage(Optional<Integer> usage);
 
         _FinalStage usage(Integer usage);
@@ -333,6 +354,7 @@ public final class FeatureCompanyUserResponseData {
 
         /**
          * <p>Whether further usage is permitted.</p>
+         * <p>Whether further usage is permitted.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -343,6 +365,7 @@ public final class FeatureCompanyUserResponseData {
         }
 
         /**
+         * <p>The type of allocation that is being used.</p>
          * <p>The type of allocation that is being used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -390,6 +413,9 @@ public final class FeatureCompanyUserResponseData {
             return this;
         }
 
+        /**
+         * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "usage", nulls = Nulls.SKIP)
         public _FinalStage usage(Optional<Integer> usage) {
@@ -420,6 +446,9 @@ public final class FeatureCompanyUserResponseData {
             return this;
         }
 
+        /**
+         * <p>The period over which usage is measured.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "period", nulls = Nulls.SKIP)
         public _FinalStage period(Optional<String> period) {
@@ -437,6 +466,9 @@ public final class FeatureCompanyUserResponseData {
             return this;
         }
 
+        /**
+         * <p>If the period is current_month, when the month resets.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "month_reset", nulls = Nulls.SKIP)
         public _FinalStage monthReset(Optional<String> monthReset) {
@@ -454,6 +486,9 @@ public final class FeatureCompanyUserResponseData {
             return this;
         }
 
+        /**
+         * <p>The time at which the metric will resets.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "metric_reset_at", nulls = Nulls.SKIP)
         public _FinalStage metricResetAt(Optional<OffsetDateTime> metricResetAt) {
@@ -497,6 +532,9 @@ public final class FeatureCompanyUserResponseData {
             return this;
         }
 
+        /**
+         * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "allocation", nulls = Nulls.SKIP)
         public _FinalStage allocation(Optional<Integer> allocation) {

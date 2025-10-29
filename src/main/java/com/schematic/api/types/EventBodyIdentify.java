@@ -132,6 +132,9 @@ public final class EventBodyIdentify {
             return this;
         }
 
+        /**
+         * <p>Information about the company associated with the user; required only if it is a new user</p>
+         */
         @JsonSetter(value = "company", nulls = Nulls.SKIP)
         public Builder company(Optional<EventBodyIdentifyCompany> company) {
             this.company = company;
@@ -143,15 +146,22 @@ public final class EventBodyIdentify {
             return this;
         }
 
+        /**
+         * <p>Key-value pairs to identify the user</p>
+         */
         @JsonSetter(value = "keys", nulls = Nulls.SKIP)
         public Builder keys(Map<String, String> keys) {
             this.keys.clear();
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 
         public Builder putAllKeys(Map<String, String> keys) {
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 
@@ -160,6 +170,9 @@ public final class EventBodyIdentify {
             return this;
         }
 
+        /**
+         * <p>The display name of the user being identified; required only if it is a new user</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -171,6 +184,9 @@ public final class EventBodyIdentify {
             return this;
         }
 
+        /**
+         * <p>A map of trait names to trait values</p>
+         */
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
         public Builder traits(Optional<Map<String, JsonNode>> traits) {
             this.traits = traits;

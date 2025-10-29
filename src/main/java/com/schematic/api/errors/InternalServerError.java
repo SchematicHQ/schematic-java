@@ -5,6 +5,7 @@ package com.schematic.api.errors;
 
 import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.types.ApiError;
+import okhttp3.Response;
 
 public final class InternalServerError extends BaseSchematicApiException {
     /**
@@ -14,6 +15,11 @@ public final class InternalServerError extends BaseSchematicApiException {
 
     public InternalServerError(ApiError body) {
         super("InternalServerError", 500, body);
+        this.body = body;
+    }
+
+    public InternalServerError(ApiError body, Response rawResponse) {
+        super("InternalServerError", 500, body, rawResponse);
         this.body = body;
     }
 

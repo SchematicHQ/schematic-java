@@ -3,26 +3,106 @@
  */
 package com.schematic.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UpdateEntitlementReqCommonMetricPeriod {
-    ALL_TIME("all_time"),
+public final class UpdateEntitlementReqCommonMetricPeriod {
+    public static final UpdateEntitlementReqCommonMetricPeriod CURRENT_DAY =
+            new UpdateEntitlementReqCommonMetricPeriod(Value.CURRENT_DAY, "current_day");
 
-    CURRENT_MONTH("current_month"),
+    public static final UpdateEntitlementReqCommonMetricPeriod ALL_TIME =
+            new UpdateEntitlementReqCommonMetricPeriod(Value.ALL_TIME, "all_time");
 
-    CURRENT_WEEK("current_week"),
+    public static final UpdateEntitlementReqCommonMetricPeriod CURRENT_WEEK =
+            new UpdateEntitlementReqCommonMetricPeriod(Value.CURRENT_WEEK, "current_week");
 
-    CURRENT_DAY("current_day");
+    public static final UpdateEntitlementReqCommonMetricPeriod CURRENT_MONTH =
+            new UpdateEntitlementReqCommonMetricPeriod(Value.CURRENT_MONTH, "current_month");
 
-    private final String value;
+    private final Value value;
 
-    UpdateEntitlementReqCommonMetricPeriod(String value) {
+    private final String string;
+
+    UpdateEntitlementReqCommonMetricPeriod(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UpdateEntitlementReqCommonMetricPeriod
+                        && this.string.equals(((UpdateEntitlementReqCommonMetricPeriod) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case CURRENT_DAY:
+                return visitor.visitCurrentDay();
+            case ALL_TIME:
+                return visitor.visitAllTime();
+            case CURRENT_WEEK:
+                return visitor.visitCurrentWeek();
+            case CURRENT_MONTH:
+                return visitor.visitCurrentMonth();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UpdateEntitlementReqCommonMetricPeriod valueOf(String value) {
+        switch (value) {
+            case "current_day":
+                return CURRENT_DAY;
+            case "all_time":
+                return ALL_TIME;
+            case "current_week":
+                return CURRENT_WEEK;
+            case "current_month":
+                return CURRENT_MONTH;
+            default:
+                return new UpdateEntitlementReqCommonMetricPeriod(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ALL_TIME,
+
+        CURRENT_MONTH,
+
+        CURRENT_WEEK,
+
+        CURRENT_DAY,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAllTime();
+
+        T visitCurrentMonth();
+
+        T visitCurrentWeek();
+
+        T visitCurrentDay();
+
+        T visitUnknown(String unknownType);
     }
 }
