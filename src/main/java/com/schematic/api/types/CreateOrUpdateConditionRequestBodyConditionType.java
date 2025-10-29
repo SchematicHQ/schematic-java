@@ -3,34 +3,150 @@
  */
 package com.schematic.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CreateOrUpdateConditionRequestBodyConditionType {
-    COMPANY("company"),
+public final class CreateOrUpdateConditionRequestBodyConditionType {
+    public static final CreateOrUpdateConditionRequestBodyConditionType CRM_PRODUCT =
+            new CreateOrUpdateConditionRequestBodyConditionType(Value.CRM_PRODUCT, "crm_product");
 
-    METRIC("metric"),
+    public static final CreateOrUpdateConditionRequestBodyConditionType METRIC =
+            new CreateOrUpdateConditionRequestBodyConditionType(Value.METRIC, "metric");
 
-    TRAIT("trait"),
+    public static final CreateOrUpdateConditionRequestBodyConditionType BASE_PLAN =
+            new CreateOrUpdateConditionRequestBodyConditionType(Value.BASE_PLAN, "base_plan");
 
-    USER("user"),
+    public static final CreateOrUpdateConditionRequestBodyConditionType PLAN =
+            new CreateOrUpdateConditionRequestBodyConditionType(Value.PLAN, "plan");
 
-    PLAN("plan"),
+    public static final CreateOrUpdateConditionRequestBodyConditionType TRAIT =
+            new CreateOrUpdateConditionRequestBodyConditionType(Value.TRAIT, "trait");
 
-    BILLING_PRODUCT("billing_product"),
+    public static final CreateOrUpdateConditionRequestBodyConditionType BILLING_PRODUCT =
+            new CreateOrUpdateConditionRequestBodyConditionType(Value.BILLING_PRODUCT, "billing_product");
 
-    CRM_PRODUCT("crm_product"),
+    public static final CreateOrUpdateConditionRequestBodyConditionType USER =
+            new CreateOrUpdateConditionRequestBodyConditionType(Value.USER, "user");
 
-    BASE_PLAN("base_plan");
+    public static final CreateOrUpdateConditionRequestBodyConditionType COMPANY =
+            new CreateOrUpdateConditionRequestBodyConditionType(Value.COMPANY, "company");
 
-    private final String value;
+    private final Value value;
 
-    CreateOrUpdateConditionRequestBodyConditionType(String value) {
+    private final String string;
+
+    CreateOrUpdateConditionRequestBodyConditionType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CreateOrUpdateConditionRequestBodyConditionType
+                        && this.string.equals(((CreateOrUpdateConditionRequestBodyConditionType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case CRM_PRODUCT:
+                return visitor.visitCrmProduct();
+            case METRIC:
+                return visitor.visitMetric();
+            case BASE_PLAN:
+                return visitor.visitBasePlan();
+            case PLAN:
+                return visitor.visitPlan();
+            case TRAIT:
+                return visitor.visitTrait();
+            case BILLING_PRODUCT:
+                return visitor.visitBillingProduct();
+            case USER:
+                return visitor.visitUser();
+            case COMPANY:
+                return visitor.visitCompany();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CreateOrUpdateConditionRequestBodyConditionType valueOf(String value) {
+        switch (value) {
+            case "crm_product":
+                return CRM_PRODUCT;
+            case "metric":
+                return METRIC;
+            case "base_plan":
+                return BASE_PLAN;
+            case "plan":
+                return PLAN;
+            case "trait":
+                return TRAIT;
+            case "billing_product":
+                return BILLING_PRODUCT;
+            case "user":
+                return USER;
+            case "company":
+                return COMPANY;
+            default:
+                return new CreateOrUpdateConditionRequestBodyConditionType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        COMPANY,
+
+        METRIC,
+
+        TRAIT,
+
+        USER,
+
+        PLAN,
+
+        BILLING_PRODUCT,
+
+        CRM_PRODUCT,
+
+        BASE_PLAN,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCompany();
+
+        T visitMetric();
+
+        T visitTrait();
+
+        T visitUser();
+
+        T visitPlan();
+
+        T visitBillingProduct();
+
+        T visitCrmProduct();
+
+        T visitBasePlan();
+
+        T visitUnknown(String unknownType);
     }
 }

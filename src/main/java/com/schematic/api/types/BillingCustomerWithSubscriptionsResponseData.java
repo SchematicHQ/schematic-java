@@ -293,7 +293,9 @@ public final class BillingCustomerWithSubscriptionsResponseData {
 
         @java.lang.Override
         public _FinalStage addAllSubscriptions(List<BillingCustomerSubscription> subscriptions) {
-            this.subscriptions.addAll(subscriptions);
+            if (subscriptions != null) {
+                this.subscriptions.addAll(subscriptions);
+            }
             return this;
         }
 
@@ -307,7 +309,9 @@ public final class BillingCustomerWithSubscriptionsResponseData {
         @JsonSetter(value = "subscriptions", nulls = Nulls.SKIP)
         public _FinalStage subscriptions(List<BillingCustomerSubscription> subscriptions) {
             this.subscriptions.clear();
-            this.subscriptions.addAll(subscriptions);
+            if (subscriptions != null) {
+                this.subscriptions.addAll(subscriptions);
+            }
             return this;
         }
 

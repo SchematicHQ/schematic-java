@@ -14,8 +14,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.resources.entitlements.types.UpdatePlanEntitlementRequestBodyMetricPeriod;
 import com.schematic.api.resources.entitlements.types.UpdatePlanEntitlementRequestBodyMetricPeriodMonthReset;
+import com.schematic.api.resources.entitlements.types.UpdatePlanEntitlementRequestBodyPriceBehavior;
 import com.schematic.api.resources.entitlements.types.UpdatePlanEntitlementRequestBodyValueType;
+import com.schematic.api.types.CreatePriceTierRequestBody;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,17 +27,39 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdatePlanEntitlementRequestBody.Builder.class)
 public final class UpdatePlanEntitlementRequestBody {
+    private final Optional<String> billingProductId;
+
+    private final Optional<Integer> billingThreshold;
+
+    private final Optional<Double> creditConsumptionRate;
+
+    private final Optional<String> currency;
+
     private final Optional<UpdatePlanEntitlementRequestBodyMetricPeriod> metricPeriod;
 
     private final Optional<UpdatePlanEntitlementRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final Optional<String> monthlyMeteredPriceId;
 
-    private final Optional<String> priceBehavior;
+    private final Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers;
+
+    private final Optional<Integer> monthlyUnitPrice;
+
+    private final Optional<String> monthlyUnitPriceDecimal;
+
+    private final Optional<String> overageBillingProductId;
+
+    private final Optional<UpdatePlanEntitlementRequestBodyPriceBehavior> priceBehavior;
+
+    private final Optional<List<CreatePriceTierRequestBody>> priceTiers;
 
     private final Optional<Integer> softLimit;
 
+    private final Optional<String> tierMode;
+
     private final Optional<Boolean> valueBool;
+
+    private final Optional<String> valueCreditId;
 
     private final Optional<Integer> valueNumeric;
 
@@ -44,31 +69,85 @@ public final class UpdatePlanEntitlementRequestBody {
 
     private final Optional<String> yearlyMeteredPriceId;
 
+    private final Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers;
+
+    private final Optional<Integer> yearlyUnitPrice;
+
+    private final Optional<String> yearlyUnitPriceDecimal;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdatePlanEntitlementRequestBody(
+            Optional<String> billingProductId,
+            Optional<Integer> billingThreshold,
+            Optional<Double> creditConsumptionRate,
+            Optional<String> currency,
             Optional<UpdatePlanEntitlementRequestBodyMetricPeriod> metricPeriod,
             Optional<UpdatePlanEntitlementRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<String> monthlyMeteredPriceId,
-            Optional<String> priceBehavior,
+            Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers,
+            Optional<Integer> monthlyUnitPrice,
+            Optional<String> monthlyUnitPriceDecimal,
+            Optional<String> overageBillingProductId,
+            Optional<UpdatePlanEntitlementRequestBodyPriceBehavior> priceBehavior,
+            Optional<List<CreatePriceTierRequestBody>> priceTiers,
             Optional<Integer> softLimit,
+            Optional<String> tierMode,
             Optional<Boolean> valueBool,
+            Optional<String> valueCreditId,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
             UpdatePlanEntitlementRequestBodyValueType valueType,
             Optional<String> yearlyMeteredPriceId,
+            Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers,
+            Optional<Integer> yearlyUnitPrice,
+            Optional<String> yearlyUnitPriceDecimal,
             Map<String, Object> additionalProperties) {
+        this.billingProductId = billingProductId;
+        this.billingThreshold = billingThreshold;
+        this.creditConsumptionRate = creditConsumptionRate;
+        this.currency = currency;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.monthlyMeteredPriceId = monthlyMeteredPriceId;
+        this.monthlyPriceTiers = monthlyPriceTiers;
+        this.monthlyUnitPrice = monthlyUnitPrice;
+        this.monthlyUnitPriceDecimal = monthlyUnitPriceDecimal;
+        this.overageBillingProductId = overageBillingProductId;
         this.priceBehavior = priceBehavior;
+        this.priceTiers = priceTiers;
         this.softLimit = softLimit;
+        this.tierMode = tierMode;
         this.valueBool = valueBool;
+        this.valueCreditId = valueCreditId;
         this.valueNumeric = valueNumeric;
         this.valueTraitId = valueTraitId;
         this.valueType = valueType;
         this.yearlyMeteredPriceId = yearlyMeteredPriceId;
+        this.yearlyPriceTiers = yearlyPriceTiers;
+        this.yearlyUnitPrice = yearlyUnitPrice;
+        this.yearlyUnitPriceDecimal = yearlyUnitPriceDecimal;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_product_id")
+    public Optional<String> getBillingProductId() {
+        return billingProductId;
+    }
+
+    @JsonProperty("billing_threshold")
+    public Optional<Integer> getBillingThreshold() {
+        return billingThreshold;
+    }
+
+    @JsonProperty("credit_consumption_rate")
+    public Optional<Double> getCreditConsumptionRate() {
+        return creditConsumptionRate;
+    }
+
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
     }
 
     @JsonProperty("metric_period")
@@ -86,9 +165,37 @@ public final class UpdatePlanEntitlementRequestBody {
         return monthlyMeteredPriceId;
     }
 
+    @JsonProperty("monthly_price_tiers")
+    public Optional<List<CreatePriceTierRequestBody>> getMonthlyPriceTiers() {
+        return monthlyPriceTiers;
+    }
+
+    @JsonProperty("monthly_unit_price")
+    public Optional<Integer> getMonthlyUnitPrice() {
+        return monthlyUnitPrice;
+    }
+
+    @JsonProperty("monthly_unit_price_decimal")
+    public Optional<String> getMonthlyUnitPriceDecimal() {
+        return monthlyUnitPriceDecimal;
+    }
+
+    @JsonProperty("overage_billing_product_id")
+    public Optional<String> getOverageBillingProductId() {
+        return overageBillingProductId;
+    }
+
     @JsonProperty("price_behavior")
-    public Optional<String> getPriceBehavior() {
+    public Optional<UpdatePlanEntitlementRequestBodyPriceBehavior> getPriceBehavior() {
         return priceBehavior;
+    }
+
+    /**
+     * @return Use MonthlyPriceTiers or YearlyPriceTiers instead
+     */
+    @JsonProperty("price_tiers")
+    public Optional<List<CreatePriceTierRequestBody>> getPriceTiers() {
+        return priceTiers;
     }
 
     @JsonProperty("soft_limit")
@@ -96,9 +203,19 @@ public final class UpdatePlanEntitlementRequestBody {
         return softLimit;
     }
 
+    @JsonProperty("tier_mode")
+    public Optional<String> getTierMode() {
+        return tierMode;
+    }
+
     @JsonProperty("value_bool")
     public Optional<Boolean> getValueBool() {
         return valueBool;
+    }
+
+    @JsonProperty("value_credit_id")
+    public Optional<String> getValueCreditId() {
+        return valueCreditId;
     }
 
     @JsonProperty("value_numeric")
@@ -121,6 +238,21 @@ public final class UpdatePlanEntitlementRequestBody {
         return yearlyMeteredPriceId;
     }
 
+    @JsonProperty("yearly_price_tiers")
+    public Optional<List<CreatePriceTierRequestBody>> getYearlyPriceTiers() {
+        return yearlyPriceTiers;
+    }
+
+    @JsonProperty("yearly_unit_price")
+    public Optional<Integer> getYearlyUnitPrice() {
+        return yearlyUnitPrice;
+    }
+
+    @JsonProperty("yearly_unit_price_decimal")
+    public Optional<String> getYearlyUnitPriceDecimal() {
+        return yearlyUnitPriceDecimal;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -133,31 +265,59 @@ public final class UpdatePlanEntitlementRequestBody {
     }
 
     private boolean equalTo(UpdatePlanEntitlementRequestBody other) {
-        return metricPeriod.equals(other.metricPeriod)
+        return billingProductId.equals(other.billingProductId)
+                && billingThreshold.equals(other.billingThreshold)
+                && creditConsumptionRate.equals(other.creditConsumptionRate)
+                && currency.equals(other.currency)
+                && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && monthlyMeteredPriceId.equals(other.monthlyMeteredPriceId)
+                && monthlyPriceTiers.equals(other.monthlyPriceTiers)
+                && monthlyUnitPrice.equals(other.monthlyUnitPrice)
+                && monthlyUnitPriceDecimal.equals(other.monthlyUnitPriceDecimal)
+                && overageBillingProductId.equals(other.overageBillingProductId)
                 && priceBehavior.equals(other.priceBehavior)
+                && priceTiers.equals(other.priceTiers)
                 && softLimit.equals(other.softLimit)
+                && tierMode.equals(other.tierMode)
                 && valueBool.equals(other.valueBool)
+                && valueCreditId.equals(other.valueCreditId)
                 && valueNumeric.equals(other.valueNumeric)
                 && valueTraitId.equals(other.valueTraitId)
                 && valueType.equals(other.valueType)
-                && yearlyMeteredPriceId.equals(other.yearlyMeteredPriceId);
+                && yearlyMeteredPriceId.equals(other.yearlyMeteredPriceId)
+                && yearlyPriceTiers.equals(other.yearlyPriceTiers)
+                && yearlyUnitPrice.equals(other.yearlyUnitPrice)
+                && yearlyUnitPriceDecimal.equals(other.yearlyUnitPriceDecimal);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingProductId,
+                this.billingThreshold,
+                this.creditConsumptionRate,
+                this.currency,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
                 this.monthlyMeteredPriceId,
+                this.monthlyPriceTiers,
+                this.monthlyUnitPrice,
+                this.monthlyUnitPriceDecimal,
+                this.overageBillingProductId,
                 this.priceBehavior,
+                this.priceTiers,
                 this.softLimit,
+                this.tierMode,
                 this.valueBool,
+                this.valueCreditId,
                 this.valueNumeric,
                 this.valueTraitId,
                 this.valueType,
-                this.yearlyMeteredPriceId);
+                this.yearlyMeteredPriceId,
+                this.yearlyPriceTiers,
+                this.yearlyUnitPrice,
+                this.yearlyUnitPriceDecimal);
     }
 
     @java.lang.Override
@@ -178,6 +338,22 @@ public final class UpdatePlanEntitlementRequestBody {
     public interface _FinalStage {
         UpdatePlanEntitlementRequestBody build();
 
+        _FinalStage billingProductId(Optional<String> billingProductId);
+
+        _FinalStage billingProductId(String billingProductId);
+
+        _FinalStage billingThreshold(Optional<Integer> billingThreshold);
+
+        _FinalStage billingThreshold(Integer billingThreshold);
+
+        _FinalStage creditConsumptionRate(Optional<Double> creditConsumptionRate);
+
+        _FinalStage creditConsumptionRate(Double creditConsumptionRate);
+
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
+
         _FinalStage metricPeriod(Optional<UpdatePlanEntitlementRequestBodyMetricPeriod> metricPeriod);
 
         _FinalStage metricPeriod(UpdatePlanEntitlementRequestBodyMetricPeriod metricPeriod);
@@ -192,17 +368,48 @@ public final class UpdatePlanEntitlementRequestBody {
 
         _FinalStage monthlyMeteredPriceId(String monthlyMeteredPriceId);
 
-        _FinalStage priceBehavior(Optional<String> priceBehavior);
+        _FinalStage monthlyPriceTiers(Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers);
 
-        _FinalStage priceBehavior(String priceBehavior);
+        _FinalStage monthlyPriceTiers(List<CreatePriceTierRequestBody> monthlyPriceTiers);
+
+        _FinalStage monthlyUnitPrice(Optional<Integer> monthlyUnitPrice);
+
+        _FinalStage monthlyUnitPrice(Integer monthlyUnitPrice);
+
+        _FinalStage monthlyUnitPriceDecimal(Optional<String> monthlyUnitPriceDecimal);
+
+        _FinalStage monthlyUnitPriceDecimal(String monthlyUnitPriceDecimal);
+
+        _FinalStage overageBillingProductId(Optional<String> overageBillingProductId);
+
+        _FinalStage overageBillingProductId(String overageBillingProductId);
+
+        _FinalStage priceBehavior(Optional<UpdatePlanEntitlementRequestBodyPriceBehavior> priceBehavior);
+
+        _FinalStage priceBehavior(UpdatePlanEntitlementRequestBodyPriceBehavior priceBehavior);
+
+        /**
+         * <p>Use MonthlyPriceTiers or YearlyPriceTiers instead</p>
+         */
+        _FinalStage priceTiers(Optional<List<CreatePriceTierRequestBody>> priceTiers);
+
+        _FinalStage priceTiers(List<CreatePriceTierRequestBody> priceTiers);
 
         _FinalStage softLimit(Optional<Integer> softLimit);
 
         _FinalStage softLimit(Integer softLimit);
 
+        _FinalStage tierMode(Optional<String> tierMode);
+
+        _FinalStage tierMode(String tierMode);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
+
+        _FinalStage valueCreditId(Optional<String> valueCreditId);
+
+        _FinalStage valueCreditId(String valueCreditId);
 
         _FinalStage valueNumeric(Optional<Integer> valueNumeric);
 
@@ -215,11 +422,29 @@ public final class UpdatePlanEntitlementRequestBody {
         _FinalStage yearlyMeteredPriceId(Optional<String> yearlyMeteredPriceId);
 
         _FinalStage yearlyMeteredPriceId(String yearlyMeteredPriceId);
+
+        _FinalStage yearlyPriceTiers(Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers);
+
+        _FinalStage yearlyPriceTiers(List<CreatePriceTierRequestBody> yearlyPriceTiers);
+
+        _FinalStage yearlyUnitPrice(Optional<Integer> yearlyUnitPrice);
+
+        _FinalStage yearlyUnitPrice(Integer yearlyUnitPrice);
+
+        _FinalStage yearlyUnitPriceDecimal(Optional<String> yearlyUnitPriceDecimal);
+
+        _FinalStage yearlyUnitPriceDecimal(String yearlyUnitPriceDecimal);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ValueTypeStage, _FinalStage {
         private UpdatePlanEntitlementRequestBodyValueType valueType;
+
+        private Optional<String> yearlyUnitPriceDecimal = Optional.empty();
+
+        private Optional<Integer> yearlyUnitPrice = Optional.empty();
+
+        private Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers = Optional.empty();
 
         private Optional<String> yearlyMeteredPriceId = Optional.empty();
 
@@ -227,11 +452,25 @@ public final class UpdatePlanEntitlementRequestBody {
 
         private Optional<Integer> valueNumeric = Optional.empty();
 
+        private Optional<String> valueCreditId = Optional.empty();
+
         private Optional<Boolean> valueBool = Optional.empty();
+
+        private Optional<String> tierMode = Optional.empty();
 
         private Optional<Integer> softLimit = Optional.empty();
 
-        private Optional<String> priceBehavior = Optional.empty();
+        private Optional<List<CreatePriceTierRequestBody>> priceTiers = Optional.empty();
+
+        private Optional<UpdatePlanEntitlementRequestBodyPriceBehavior> priceBehavior = Optional.empty();
+
+        private Optional<String> overageBillingProductId = Optional.empty();
+
+        private Optional<String> monthlyUnitPriceDecimal = Optional.empty();
+
+        private Optional<Integer> monthlyUnitPrice = Optional.empty();
+
+        private Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers = Optional.empty();
 
         private Optional<String> monthlyMeteredPriceId = Optional.empty();
 
@@ -240,6 +479,14 @@ public final class UpdatePlanEntitlementRequestBody {
 
         private Optional<UpdatePlanEntitlementRequestBodyMetricPeriod> metricPeriod = Optional.empty();
 
+        private Optional<String> currency = Optional.empty();
+
+        private Optional<Double> creditConsumptionRate = Optional.empty();
+
+        private Optional<Integer> billingThreshold = Optional.empty();
+
+        private Optional<String> billingProductId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -247,16 +494,30 @@ public final class UpdatePlanEntitlementRequestBody {
 
         @java.lang.Override
         public Builder from(UpdatePlanEntitlementRequestBody other) {
+            billingProductId(other.getBillingProductId());
+            billingThreshold(other.getBillingThreshold());
+            creditConsumptionRate(other.getCreditConsumptionRate());
+            currency(other.getCurrency());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             monthlyMeteredPriceId(other.getMonthlyMeteredPriceId());
+            monthlyPriceTiers(other.getMonthlyPriceTiers());
+            monthlyUnitPrice(other.getMonthlyUnitPrice());
+            monthlyUnitPriceDecimal(other.getMonthlyUnitPriceDecimal());
+            overageBillingProductId(other.getOverageBillingProductId());
             priceBehavior(other.getPriceBehavior());
+            priceTiers(other.getPriceTiers());
             softLimit(other.getSoftLimit());
+            tierMode(other.getTierMode());
             valueBool(other.getValueBool());
+            valueCreditId(other.getValueCreditId());
             valueNumeric(other.getValueNumeric());
             valueTraitId(other.getValueTraitId());
             valueType(other.getValueType());
             yearlyMeteredPriceId(other.getYearlyMeteredPriceId());
+            yearlyPriceTiers(other.getYearlyPriceTiers());
+            yearlyUnitPrice(other.getYearlyUnitPrice());
+            yearlyUnitPriceDecimal(other.getYearlyUnitPriceDecimal());
             return this;
         }
 
@@ -264,6 +525,45 @@ public final class UpdatePlanEntitlementRequestBody {
         @JsonSetter("value_type")
         public _FinalStage valueType(@NotNull UpdatePlanEntitlementRequestBodyValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage yearlyUnitPriceDecimal(String yearlyUnitPriceDecimal) {
+            this.yearlyUnitPriceDecimal = Optional.ofNullable(yearlyUnitPriceDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "yearly_unit_price_decimal", nulls = Nulls.SKIP)
+        public _FinalStage yearlyUnitPriceDecimal(Optional<String> yearlyUnitPriceDecimal) {
+            this.yearlyUnitPriceDecimal = yearlyUnitPriceDecimal;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage yearlyUnitPrice(Integer yearlyUnitPrice) {
+            this.yearlyUnitPrice = Optional.ofNullable(yearlyUnitPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "yearly_unit_price", nulls = Nulls.SKIP)
+        public _FinalStage yearlyUnitPrice(Optional<Integer> yearlyUnitPrice) {
+            this.yearlyUnitPrice = yearlyUnitPrice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage yearlyPriceTiers(List<CreatePriceTierRequestBody> yearlyPriceTiers) {
+            this.yearlyPriceTiers = Optional.ofNullable(yearlyPriceTiers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "yearly_price_tiers", nulls = Nulls.SKIP)
+        public _FinalStage yearlyPriceTiers(Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers) {
+            this.yearlyPriceTiers = yearlyPriceTiers;
             return this;
         }
 
@@ -307,6 +607,19 @@ public final class UpdatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage valueCreditId(String valueCreditId) {
+            this.valueCreditId = Optional.ofNullable(valueCreditId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "value_credit_id", nulls = Nulls.SKIP)
+        public _FinalStage valueCreditId(Optional<String> valueCreditId) {
+            this.valueCreditId = valueCreditId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage valueBool(Boolean valueBool) {
             this.valueBool = Optional.ofNullable(valueBool);
             return this;
@@ -316,6 +629,19 @@ public final class UpdatePlanEntitlementRequestBody {
         @JsonSetter(value = "value_bool", nulls = Nulls.SKIP)
         public _FinalStage valueBool(Optional<Boolean> valueBool) {
             this.valueBool = valueBool;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage tierMode(String tierMode) {
+            this.tierMode = Optional.ofNullable(tierMode);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "tier_mode", nulls = Nulls.SKIP)
+        public _FinalStage tierMode(Optional<String> tierMode) {
+            this.tierMode = tierMode;
             return this;
         }
 
@@ -332,16 +658,88 @@ public final class UpdatePlanEntitlementRequestBody {
             return this;
         }
 
+        /**
+         * <p>Use MonthlyPriceTiers or YearlyPriceTiers instead</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        public _FinalStage priceBehavior(String priceBehavior) {
+        public _FinalStage priceTiers(List<CreatePriceTierRequestBody> priceTiers) {
+            this.priceTiers = Optional.ofNullable(priceTiers);
+            return this;
+        }
+
+        /**
+         * <p>Use MonthlyPriceTiers or YearlyPriceTiers instead</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "price_tiers", nulls = Nulls.SKIP)
+        public _FinalStage priceTiers(Optional<List<CreatePriceTierRequestBody>> priceTiers) {
+            this.priceTiers = priceTiers;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage priceBehavior(UpdatePlanEntitlementRequestBodyPriceBehavior priceBehavior) {
             this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "price_behavior", nulls = Nulls.SKIP)
-        public _FinalStage priceBehavior(Optional<String> priceBehavior) {
+        public _FinalStage priceBehavior(Optional<UpdatePlanEntitlementRequestBodyPriceBehavior> priceBehavior) {
             this.priceBehavior = priceBehavior;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage overageBillingProductId(String overageBillingProductId) {
+            this.overageBillingProductId = Optional.ofNullable(overageBillingProductId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "overage_billing_product_id", nulls = Nulls.SKIP)
+        public _FinalStage overageBillingProductId(Optional<String> overageBillingProductId) {
+            this.overageBillingProductId = overageBillingProductId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage monthlyUnitPriceDecimal(String monthlyUnitPriceDecimal) {
+            this.monthlyUnitPriceDecimal = Optional.ofNullable(monthlyUnitPriceDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "monthly_unit_price_decimal", nulls = Nulls.SKIP)
+        public _FinalStage monthlyUnitPriceDecimal(Optional<String> monthlyUnitPriceDecimal) {
+            this.monthlyUnitPriceDecimal = monthlyUnitPriceDecimal;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage monthlyUnitPrice(Integer monthlyUnitPrice) {
+            this.monthlyUnitPrice = Optional.ofNullable(monthlyUnitPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "monthly_unit_price", nulls = Nulls.SKIP)
+        public _FinalStage monthlyUnitPrice(Optional<Integer> monthlyUnitPrice) {
+            this.monthlyUnitPrice = monthlyUnitPrice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage monthlyPriceTiers(List<CreatePriceTierRequestBody> monthlyPriceTiers) {
+            this.monthlyPriceTiers = Optional.ofNullable(monthlyPriceTiers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "monthly_price_tiers", nulls = Nulls.SKIP)
+        public _FinalStage monthlyPriceTiers(Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers) {
+            this.monthlyPriceTiers = monthlyPriceTiers;
             return this;
         }
 
@@ -387,18 +785,84 @@ public final class UpdatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage creditConsumptionRate(Double creditConsumptionRate) {
+            this.creditConsumptionRate = Optional.ofNullable(creditConsumptionRate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_consumption_rate", nulls = Nulls.SKIP)
+        public _FinalStage creditConsumptionRate(Optional<Double> creditConsumptionRate) {
+            this.creditConsumptionRate = creditConsumptionRate;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingThreshold(Integer billingThreshold) {
+            this.billingThreshold = Optional.ofNullable(billingThreshold);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_threshold", nulls = Nulls.SKIP)
+        public _FinalStage billingThreshold(Optional<Integer> billingThreshold) {
+            this.billingThreshold = billingThreshold;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingProductId(String billingProductId) {
+            this.billingProductId = Optional.ofNullable(billingProductId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_product_id", nulls = Nulls.SKIP)
+        public _FinalStage billingProductId(Optional<String> billingProductId) {
+            this.billingProductId = billingProductId;
+            return this;
+        }
+
+        @java.lang.Override
         public UpdatePlanEntitlementRequestBody build() {
             return new UpdatePlanEntitlementRequestBody(
+                    billingProductId,
+                    billingThreshold,
+                    creditConsumptionRate,
+                    currency,
                     metricPeriod,
                     metricPeriodMonthReset,
                     monthlyMeteredPriceId,
+                    monthlyPriceTiers,
+                    monthlyUnitPrice,
+                    monthlyUnitPriceDecimal,
+                    overageBillingProductId,
                     priceBehavior,
+                    priceTiers,
                     softLimit,
+                    tierMode,
                     valueBool,
+                    valueCreditId,
                     valueNumeric,
                     valueTraitId,
                     valueType,
                     yearlyMeteredPriceId,
+                    yearlyPriceTiers,
+                    yearlyUnitPrice,
+                    yearlyUnitPriceDecimal,
                     additionalProperties);
         }
     }
