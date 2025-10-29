@@ -3,24 +3,95 @@
  */
 package com.schematic.api.resources.accounts.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UpdateEnvironmentRequestBodyEnvironmentType {
-    DEVELOPMENT("development"),
+public final class UpdateEnvironmentRequestBodyEnvironmentType {
+    public static final UpdateEnvironmentRequestBodyEnvironmentType DEVELOPMENT =
+            new UpdateEnvironmentRequestBodyEnvironmentType(Value.DEVELOPMENT, "development");
 
-    STAGING("staging"),
+    public static final UpdateEnvironmentRequestBodyEnvironmentType STAGING =
+            new UpdateEnvironmentRequestBodyEnvironmentType(Value.STAGING, "staging");
 
-    PRODUCTION("production");
+    public static final UpdateEnvironmentRequestBodyEnvironmentType PRODUCTION =
+            new UpdateEnvironmentRequestBodyEnvironmentType(Value.PRODUCTION, "production");
 
-    private final String value;
+    private final Value value;
 
-    UpdateEnvironmentRequestBodyEnvironmentType(String value) {
+    private final String string;
+
+    UpdateEnvironmentRequestBodyEnvironmentType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UpdateEnvironmentRequestBodyEnvironmentType
+                        && this.string.equals(((UpdateEnvironmentRequestBodyEnvironmentType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case DEVELOPMENT:
+                return visitor.visitDevelopment();
+            case STAGING:
+                return visitor.visitStaging();
+            case PRODUCTION:
+                return visitor.visitProduction();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UpdateEnvironmentRequestBodyEnvironmentType valueOf(String value) {
+        switch (value) {
+            case "development":
+                return DEVELOPMENT;
+            case "staging":
+                return STAGING;
+            case "production":
+                return PRODUCTION;
+            default:
+                return new UpdateEnvironmentRequestBodyEnvironmentType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        DEVELOPMENT,
+
+        STAGING,
+
+        PRODUCTION,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitDevelopment();
+
+        T visitStaging();
+
+        T visitProduction();
+
+        T visitUnknown(String unknownType);
     }
 }

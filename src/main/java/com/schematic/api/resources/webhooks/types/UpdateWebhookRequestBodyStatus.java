@@ -3,22 +3,84 @@
  */
 package com.schematic.api.resources.webhooks.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UpdateWebhookRequestBodyStatus {
-    ACTIVE("active"),
+public final class UpdateWebhookRequestBodyStatus {
+    public static final UpdateWebhookRequestBodyStatus INACTIVE =
+            new UpdateWebhookRequestBodyStatus(Value.INACTIVE, "inactive");
 
-    INACTIVE("inactive");
+    public static final UpdateWebhookRequestBodyStatus ACTIVE =
+            new UpdateWebhookRequestBodyStatus(Value.ACTIVE, "active");
 
-    private final String value;
+    private final Value value;
 
-    UpdateWebhookRequestBodyStatus(String value) {
+    private final String string;
+
+    UpdateWebhookRequestBodyStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UpdateWebhookRequestBodyStatus
+                        && this.string.equals(((UpdateWebhookRequestBodyStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case INACTIVE:
+                return visitor.visitInactive();
+            case ACTIVE:
+                return visitor.visitActive();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UpdateWebhookRequestBodyStatus valueOf(String value) {
+        switch (value) {
+            case "inactive":
+                return INACTIVE;
+            case "active":
+                return ACTIVE;
+            default:
+                return new UpdateWebhookRequestBodyStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ACTIVE,
+
+        INACTIVE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitActive();
+
+        T visitInactive();
+
+        T visitUnknown(String unknownType);
     }
 }

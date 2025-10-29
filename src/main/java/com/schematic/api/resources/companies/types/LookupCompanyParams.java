@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
@@ -21,17 +20,17 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = LookupCompanyParams.Builder.class)
 public final class LookupCompanyParams {
-    private final Optional<Map<String, JsonNode>> keys;
+    private final Optional<Map<String, String>> keys;
 
     private final Map<String, Object> additionalProperties;
 
-    private LookupCompanyParams(Optional<Map<String, JsonNode>> keys, Map<String, Object> additionalProperties) {
+    private LookupCompanyParams(Optional<Map<String, String>> keys, Map<String, Object> additionalProperties) {
         this.keys = keys;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("keys")
-    public Optional<Map<String, JsonNode>> getKeys() {
+    public Optional<Map<String, String>> getKeys() {
         return keys;
     }
 
@@ -66,7 +65,7 @@ public final class LookupCompanyParams {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<Map<String, JsonNode>> keys = Optional.empty();
+        private Optional<Map<String, String>> keys = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -79,12 +78,12 @@ public final class LookupCompanyParams {
         }
 
         @JsonSetter(value = "keys", nulls = Nulls.SKIP)
-        public Builder keys(Optional<Map<String, JsonNode>> keys) {
+        public Builder keys(Optional<Map<String, String>> keys) {
             this.keys = keys;
             return this;
         }
 
-        public Builder keys(Map<String, JsonNode> keys) {
+        public Builder keys(Map<String, String> keys) {
             this.keys = Optional.ofNullable(keys);
             return this;
         }

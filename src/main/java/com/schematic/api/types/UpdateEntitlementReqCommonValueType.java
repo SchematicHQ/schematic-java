@@ -3,26 +3,117 @@
  */
 package com.schematic.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UpdateEntitlementReqCommonValueType {
-    BOOLEAN("boolean"),
+public final class UpdateEntitlementReqCommonValueType {
+    public static final UpdateEntitlementReqCommonValueType NUMERIC =
+            new UpdateEntitlementReqCommonValueType(Value.NUMERIC, "numeric");
 
-    NUMERIC("numeric"),
+    public static final UpdateEntitlementReqCommonValueType TRAIT =
+            new UpdateEntitlementReqCommonValueType(Value.TRAIT, "trait");
 
-    TRAIT("trait"),
+    public static final UpdateEntitlementReqCommonValueType BOOLEAN =
+            new UpdateEntitlementReqCommonValueType(Value.BOOLEAN, "boolean");
 
-    UNLIMITED("unlimited");
+    public static final UpdateEntitlementReqCommonValueType CREDIT =
+            new UpdateEntitlementReqCommonValueType(Value.CREDIT, "credit");
 
-    private final String value;
+    public static final UpdateEntitlementReqCommonValueType UNLIMITED =
+            new UpdateEntitlementReqCommonValueType(Value.UNLIMITED, "unlimited");
 
-    UpdateEntitlementReqCommonValueType(String value) {
+    private final Value value;
+
+    private final String string;
+
+    UpdateEntitlementReqCommonValueType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UpdateEntitlementReqCommonValueType
+                        && this.string.equals(((UpdateEntitlementReqCommonValueType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NUMERIC:
+                return visitor.visitNumeric();
+            case TRAIT:
+                return visitor.visitTrait();
+            case BOOLEAN:
+                return visitor.visitBoolean();
+            case CREDIT:
+                return visitor.visitCredit();
+            case UNLIMITED:
+                return visitor.visitUnlimited();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UpdateEntitlementReqCommonValueType valueOf(String value) {
+        switch (value) {
+            case "numeric":
+                return NUMERIC;
+            case "trait":
+                return TRAIT;
+            case "boolean":
+                return BOOLEAN;
+            case "credit":
+                return CREDIT;
+            case "unlimited":
+                return UNLIMITED;
+            default:
+                return new UpdateEntitlementReqCommonValueType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BOOLEAN,
+
+        CREDIT,
+
+        NUMERIC,
+
+        TRAIT,
+
+        UNLIMITED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitBoolean();
+
+        T visitCredit();
+
+        T visitNumeric();
+
+        T visitTrait();
+
+        T visitUnlimited();
+
+        T visitUnknown(String unknownType);
     }
 }

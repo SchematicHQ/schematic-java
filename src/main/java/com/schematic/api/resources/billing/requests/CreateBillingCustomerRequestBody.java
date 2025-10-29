@@ -240,7 +240,9 @@ public final class CreateBillingCustomerRequestBody {
 
         @java.lang.Override
         public _FinalStage putAllMeta(Map<String, String> meta) {
-            this.meta.putAll(meta);
+            if (meta != null) {
+                this.meta.putAll(meta);
+            }
             return this;
         }
 
@@ -248,7 +250,9 @@ public final class CreateBillingCustomerRequestBody {
         @JsonSetter(value = "meta", nulls = Nulls.SKIP)
         public _FinalStage meta(Map<String, String> meta) {
             this.meta.clear();
-            this.meta.putAll(meta);
+            if (meta != null) {
+                this.meta.putAll(meta);
+            }
             return this;
         }
 

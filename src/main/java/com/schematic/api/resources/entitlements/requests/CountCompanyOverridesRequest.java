@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,15 +22,15 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountCompanyOverridesRequest.Builder.class)
 public final class CountCompanyOverridesRequest {
+    private final Optional<List<String>> companyIds;
+
+    private final Optional<List<String>> featureIds;
+
+    private final Optional<List<String>> ids;
+
     private final Optional<String> companyId;
 
-    private final Optional<String> companyIds;
-
     private final Optional<String> featureId;
-
-    private final Optional<String> featureIds;
-
-    private final Optional<String> ids;
 
     private final Optional<Boolean> withoutExpired;
 
@@ -41,26 +43,50 @@ public final class CountCompanyOverridesRequest {
     private final Map<String, Object> additionalProperties;
 
     private CountCompanyOverridesRequest(
+            Optional<List<String>> companyIds,
+            Optional<List<String>> featureIds,
+            Optional<List<String>> ids,
             Optional<String> companyId,
-            Optional<String> companyIds,
             Optional<String> featureId,
-            Optional<String> featureIds,
-            Optional<String> ids,
             Optional<Boolean> withoutExpired,
             Optional<String> q,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
-        this.companyId = companyId;
         this.companyIds = companyIds;
-        this.featureId = featureId;
         this.featureIds = featureIds;
         this.ids = ids;
+        this.companyId = companyId;
+        this.featureId = featureId;
         this.withoutExpired = withoutExpired;
         this.q = q;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Filter company overrides by multiple company IDs (starting with comp_)
+     */
+    @JsonProperty("company_ids")
+    public Optional<List<String>> getCompanyIds() {
+        return companyIds;
+    }
+
+    /**
+     * @return Filter company overrides by multiple feature IDs (starting with feat_)
+     */
+    @JsonProperty("feature_ids")
+    public Optional<List<String>> getFeatureIds() {
+        return featureIds;
+    }
+
+    /**
+     * @return Filter company overrides by multiple company override IDs (starting with cmov_)
+     */
+    @JsonProperty("ids")
+    public Optional<List<String>> getIds() {
+        return ids;
     }
 
     /**
@@ -72,35 +98,11 @@ public final class CountCompanyOverridesRequest {
     }
 
     /**
-     * @return Filter company overrides by multiple company IDs (starting with comp_)
-     */
-    @JsonProperty("company_ids")
-    public Optional<String> getCompanyIds() {
-        return companyIds;
-    }
-
-    /**
      * @return Filter company overrides by a single feature ID (starting with feat_)
      */
     @JsonProperty("feature_id")
     public Optional<String> getFeatureId() {
         return featureId;
-    }
-
-    /**
-     * @return Filter company overrides by multiple feature IDs (starting with feat_)
-     */
-    @JsonProperty("feature_ids")
-    public Optional<String> getFeatureIds() {
-        return featureIds;
-    }
-
-    /**
-     * @return Filter company overrides by multiple company override IDs (starting with cmov_)
-     */
-    @JsonProperty("ids")
-    public Optional<String> getIds() {
-        return ids;
     }
 
     /**
@@ -147,11 +149,11 @@ public final class CountCompanyOverridesRequest {
     }
 
     private boolean equalTo(CountCompanyOverridesRequest other) {
-        return companyId.equals(other.companyId)
-                && companyIds.equals(other.companyIds)
-                && featureId.equals(other.featureId)
+        return companyIds.equals(other.companyIds)
                 && featureIds.equals(other.featureIds)
                 && ids.equals(other.ids)
+                && companyId.equals(other.companyId)
+                && featureId.equals(other.featureId)
                 && withoutExpired.equals(other.withoutExpired)
                 && q.equals(other.q)
                 && limit.equals(other.limit)
@@ -161,11 +163,11 @@ public final class CountCompanyOverridesRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.companyId,
                 this.companyIds,
-                this.featureId,
                 this.featureIds,
                 this.ids,
+                this.companyId,
+                this.featureId,
                 this.withoutExpired,
                 this.q,
                 this.limit,
@@ -183,15 +185,15 @@ public final class CountCompanyOverridesRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<List<String>> companyIds = Optional.empty();
+
+        private Optional<List<String>> featureIds = Optional.empty();
+
+        private Optional<List<String>> ids = Optional.empty();
+
         private Optional<String> companyId = Optional.empty();
 
-        private Optional<String> companyIds = Optional.empty();
-
         private Optional<String> featureId = Optional.empty();
-
-        private Optional<String> featureIds = Optional.empty();
-
-        private Optional<String> ids = Optional.empty();
 
         private Optional<Boolean> withoutExpired = Optional.empty();
 
@@ -207,11 +209,11 @@ public final class CountCompanyOverridesRequest {
         private Builder() {}
 
         public Builder from(CountCompanyOverridesRequest other) {
-            companyId(other.getCompanyId());
             companyIds(other.getCompanyIds());
-            featureId(other.getFeatureId());
             featureIds(other.getFeatureIds());
             ids(other.getIds());
+            companyId(other.getCompanyId());
+            featureId(other.getFeatureId());
             withoutExpired(other.getWithoutExpired());
             q(other.getQ());
             limit(other.getLimit());
@@ -219,6 +221,66 @@ public final class CountCompanyOverridesRequest {
             return this;
         }
 
+        /**
+         * <p>Filter company overrides by multiple company IDs (starting with comp_)</p>
+         */
+        @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
+        public Builder companyIds(Optional<List<String>> companyIds) {
+            this.companyIds = companyIds;
+            return this;
+        }
+
+        public Builder companyIds(List<String> companyIds) {
+            this.companyIds = Optional.ofNullable(companyIds);
+            return this;
+        }
+
+        public Builder companyIds(String companyIds) {
+            this.companyIds = Optional.of(Collections.singletonList(companyIds));
+            return this;
+        }
+
+        /**
+         * <p>Filter company overrides by multiple feature IDs (starting with feat_)</p>
+         */
+        @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
+        public Builder featureIds(Optional<List<String>> featureIds) {
+            this.featureIds = featureIds;
+            return this;
+        }
+
+        public Builder featureIds(List<String> featureIds) {
+            this.featureIds = Optional.ofNullable(featureIds);
+            return this;
+        }
+
+        public Builder featureIds(String featureIds) {
+            this.featureIds = Optional.of(Collections.singletonList(featureIds));
+            return this;
+        }
+
+        /**
+         * <p>Filter company overrides by multiple company override IDs (starting with cmov_)</p>
+         */
+        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
+        public Builder ids(Optional<List<String>> ids) {
+            this.ids = ids;
+            return this;
+        }
+
+        public Builder ids(List<String> ids) {
+            this.ids = Optional.ofNullable(ids);
+            return this;
+        }
+
+        public Builder ids(String ids) {
+            this.ids = Optional.of(Collections.singletonList(ids));
+            return this;
+        }
+
+        /**
+         * <p>Filter company overrides by a single company ID (starting with comp_)</p>
+         */
         @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
         public Builder companyId(Optional<String> companyId) {
             this.companyId = companyId;
@@ -230,17 +292,9 @@ public final class CountCompanyOverridesRequest {
             return this;
         }
 
-        @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
-        public Builder companyIds(Optional<String> companyIds) {
-            this.companyIds = companyIds;
-            return this;
-        }
-
-        public Builder companyIds(String companyIds) {
-            this.companyIds = Optional.ofNullable(companyIds);
-            return this;
-        }
-
+        /**
+         * <p>Filter company overrides by a single feature ID (starting with feat_)</p>
+         */
         @JsonSetter(value = "feature_id", nulls = Nulls.SKIP)
         public Builder featureId(Optional<String> featureId) {
             this.featureId = featureId;
@@ -252,28 +306,9 @@ public final class CountCompanyOverridesRequest {
             return this;
         }
 
-        @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
-        public Builder featureIds(Optional<String> featureIds) {
-            this.featureIds = featureIds;
-            return this;
-        }
-
-        public Builder featureIds(String featureIds) {
-            this.featureIds = Optional.ofNullable(featureIds);
-            return this;
-        }
-
-        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
-        public Builder ids(Optional<String> ids) {
-            this.ids = ids;
-            return this;
-        }
-
-        public Builder ids(String ids) {
-            this.ids = Optional.ofNullable(ids);
-            return this;
-        }
-
+        /**
+         * <p>Filter company overrides by whether they have not expired</p>
+         */
         @JsonSetter(value = "without_expired", nulls = Nulls.SKIP)
         public Builder withoutExpired(Optional<Boolean> withoutExpired) {
             this.withoutExpired = withoutExpired;
@@ -285,6 +320,9 @@ public final class CountCompanyOverridesRequest {
             return this;
         }
 
+        /**
+         * <p>Search for company overrides by feature or company name</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -296,6 +334,9 @@ public final class CountCompanyOverridesRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -307,6 +348,9 @@ public final class CountCompanyOverridesRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -320,11 +364,11 @@ public final class CountCompanyOverridesRequest {
 
         public CountCompanyOverridesRequest build() {
             return new CountCompanyOverridesRequest(
-                    companyId,
                     companyIds,
-                    featureId,
                     featureIds,
                     ids,
+                    companyId,
+                    featureId,
                     withoutExpired,
                     q,
                     limit,

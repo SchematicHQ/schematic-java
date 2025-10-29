@@ -3,18 +3,8 @@
  */
 package com.schematic.api.resources.events;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.schematic.api.core.BaseSchematicApiException;
-import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.ClientOptions;
-import com.schematic.api.core.MediaTypes;
-import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.core.RequestOptions;
-import com.schematic.api.errors.BadRequestError;
-import com.schematic.api.errors.ForbiddenError;
-import com.schematic.api.errors.InternalServerError;
-import com.schematic.api.errors.NotFoundError;
-import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.events.requests.CreateEventBatchRequestBody;
 import com.schematic.api.resources.events.requests.GetEventSummariesRequest;
 import com.schematic.api.resources.events.requests.ListEventsRequest;
@@ -24,397 +14,80 @@ import com.schematic.api.resources.events.types.GetEventResponse;
 import com.schematic.api.resources.events.types.GetEventSummariesResponse;
 import com.schematic.api.resources.events.types.GetSegmentIntegrationStatusResponse;
 import com.schematic.api.resources.events.types.ListEventsResponse;
-import com.schematic.api.types.ApiError;
 import com.schematic.api.types.CreateEventRequestBody;
-import java.io.IOException;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class EventsClient {
     protected final ClientOptions clientOptions;
 
+    private final RawEventsClient rawClient;
+
     public EventsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawEventsClient(clientOptions);
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawEventsClient withRawResponse() {
+        return this.rawClient;
     }
 
     public CreateEventBatchResponse createEventBatch(CreateEventBatchRequestBody request) {
-        return createEventBatch(request, null);
+        return this.rawClient.createEventBatch(request).body();
     }
 
     public CreateEventBatchResponse createEventBatch(
             CreateEventBatchRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("event-batch")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BaseSchematicException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateEventBatchResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.createEventBatch(request, requestOptions).body();
     }
 
     public GetEventSummariesResponse getEventSummaries() {
-        return getEventSummaries(GetEventSummariesRequest.builder().build());
+        return this.rawClient.getEventSummaries().body();
     }
 
     public GetEventSummariesResponse getEventSummaries(GetEventSummariesRequest request) {
-        return getEventSummaries(request, null);
+        return this.rawClient.getEventSummaries(request).body();
     }
 
     public GetEventSummariesResponse getEventSummaries(
             GetEventSummariesRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("event-types");
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getEventSubtypes().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "event_subtypes", request.getEventSubtypes().get());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetEventSummariesResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.getEventSummaries(request, requestOptions).body();
     }
 
     public ListEventsResponse listEvents() {
-        return listEvents(ListEventsRequest.builder().build());
+        return this.rawClient.listEvents().body();
     }
 
     public ListEventsResponse listEvents(ListEventsRequest request) {
-        return listEvents(request, null);
+        return this.rawClient.listEvents(request).body();
     }
 
     public ListEventsResponse listEvents(ListEventsRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("events");
-        if (request.getCompanyId().isPresent()) {
-            httpUrl.addQueryParameter("company_id", request.getCompanyId().get());
-        }
-        if (request.getEventSubtype().isPresent()) {
-            httpUrl.addQueryParameter("event_subtype", request.getEventSubtype().get());
-        }
-        if (request.getEventTypes().isPresent()) {
-            httpUrl.addQueryParameter("event_types", request.getEventTypes().get());
-        }
-        if (request.getFlagId().isPresent()) {
-            httpUrl.addQueryParameter("flag_id", request.getFlagId().get());
-        }
-        if (request.getUserId().isPresent()) {
-            httpUrl.addQueryParameter("user_id", request.getUserId().get());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListEventsResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.listEvents(request, requestOptions).body();
     }
 
     public CreateEventResponse createEvent(CreateEventRequestBody request) {
-        return createEvent(request, null);
+        return this.rawClient.createEvent(request).body();
     }
 
     public CreateEventResponse createEvent(CreateEventRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("events")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BaseSchematicException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateEventResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.createEvent(request, requestOptions).body();
     }
 
     public GetEventResponse getEvent(String eventId) {
-        return getEvent(eventId, null);
+        return this.rawClient.getEvent(eventId).body();
     }
 
     public GetEventResponse getEvent(String eventId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("events")
-                .addPathSegment(eventId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetEventResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.getEvent(eventId, requestOptions).body();
     }
 
     public GetSegmentIntegrationStatusResponse getSegmentIntegrationStatus() {
-        return getSegmentIntegrationStatus(null);
+        return this.rawClient.getSegmentIntegrationStatus().body();
     }
 
     public GetSegmentIntegrationStatusResponse getSegmentIntegrationStatus(RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("segment-integration")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(
-                        responseBody.string(), GetSegmentIntegrationStatusResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.getSegmentIntegrationStatus(requestOptions).body();
     }
 }

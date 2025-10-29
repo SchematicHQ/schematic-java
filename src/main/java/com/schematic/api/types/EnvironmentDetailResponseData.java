@@ -218,7 +218,9 @@ public final class EnvironmentDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllApiKeys(List<ApiKeyResponseData> apiKeys) {
-            this.apiKeys.addAll(apiKeys);
+            if (apiKeys != null) {
+                this.apiKeys.addAll(apiKeys);
+            }
             return this;
         }
 
@@ -232,7 +234,9 @@ public final class EnvironmentDetailResponseData {
         @JsonSetter(value = "api_keys", nulls = Nulls.SKIP)
         public _FinalStage apiKeys(List<ApiKeyResponseData> apiKeys) {
             this.apiKeys.clear();
-            this.apiKeys.addAll(apiKeys);
+            if (apiKeys != null) {
+                this.apiKeys.addAll(apiKeys);
+            }
             return this;
         }
 

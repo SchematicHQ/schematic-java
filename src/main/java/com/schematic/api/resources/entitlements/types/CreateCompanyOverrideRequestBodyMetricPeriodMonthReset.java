@@ -3,22 +3,84 @@
  */
 package com.schematic.api.resources.entitlements.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CreateCompanyOverrideRequestBodyMetricPeriodMonthReset {
-    FIRST_OF_MONTH("first_of_month"),
+public final class CreateCompanyOverrideRequestBodyMetricPeriodMonthReset {
+    public static final CreateCompanyOverrideRequestBodyMetricPeriodMonthReset FIRST_OF_MONTH =
+            new CreateCompanyOverrideRequestBodyMetricPeriodMonthReset(Value.FIRST_OF_MONTH, "first_of_month");
 
-    BILLING_CYCLE("billing_cycle");
+    public static final CreateCompanyOverrideRequestBodyMetricPeriodMonthReset BILLING_CYCLE =
+            new CreateCompanyOverrideRequestBodyMetricPeriodMonthReset(Value.BILLING_CYCLE, "billing_cycle");
 
-    private final String value;
+    private final Value value;
 
-    CreateCompanyOverrideRequestBodyMetricPeriodMonthReset(String value) {
+    private final String string;
+
+    CreateCompanyOverrideRequestBodyMetricPeriodMonthReset(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CreateCompanyOverrideRequestBodyMetricPeriodMonthReset
+                        && this.string.equals(((CreateCompanyOverrideRequestBodyMetricPeriodMonthReset) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case FIRST_OF_MONTH:
+                return visitor.visitFirstOfMonth();
+            case BILLING_CYCLE:
+                return visitor.visitBillingCycle();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CreateCompanyOverrideRequestBodyMetricPeriodMonthReset valueOf(String value) {
+        switch (value) {
+            case "first_of_month":
+                return FIRST_OF_MONTH;
+            case "billing_cycle":
+                return BILLING_CYCLE;
+            default:
+                return new CreateCompanyOverrideRequestBodyMetricPeriodMonthReset(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        FIRST_OF_MONTH,
+
+        BILLING_CYCLE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitFirstOfMonth();
+
+        T visitBillingCycle();
+
+        T visitUnknown(String unknownType);
     }
 }

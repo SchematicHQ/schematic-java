@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,11 +22,11 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListFeatureUsageRequest.Builder.class)
 public final class ListFeatureUsageRequest {
+    private final Optional<List<String>> featureIds;
+
     private final Optional<String> companyId;
 
     private final Optional<Map<String, String>> companyKeys;
-
-    private final Optional<String> featureIds;
 
     private final Optional<String> q;
 
@@ -37,22 +39,27 @@ public final class ListFeatureUsageRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListFeatureUsageRequest(
+            Optional<List<String>> featureIds,
             Optional<String> companyId,
             Optional<Map<String, String>> companyKeys,
-            Optional<String> featureIds,
             Optional<String> q,
             Optional<Boolean> withoutNegativeEntitlements,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
+        this.featureIds = featureIds;
         this.companyId = companyId;
         this.companyKeys = companyKeys;
-        this.featureIds = featureIds;
         this.q = q;
         this.withoutNegativeEntitlements = withoutNegativeEntitlements;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("feature_ids")
+    public Optional<List<String>> getFeatureIds() {
+        return featureIds;
     }
 
     @JsonProperty("company_id")
@@ -63,11 +70,6 @@ public final class ListFeatureUsageRequest {
     @JsonProperty("company_keys")
     public Optional<Map<String, String>> getCompanyKeys() {
         return companyKeys;
-    }
-
-    @JsonProperty("feature_ids")
-    public Optional<String> getFeatureIds() {
-        return featureIds;
     }
 
     @JsonProperty("q")
@@ -108,9 +110,9 @@ public final class ListFeatureUsageRequest {
     }
 
     private boolean equalTo(ListFeatureUsageRequest other) {
-        return companyId.equals(other.companyId)
+        return featureIds.equals(other.featureIds)
+                && companyId.equals(other.companyId)
                 && companyKeys.equals(other.companyKeys)
-                && featureIds.equals(other.featureIds)
                 && q.equals(other.q)
                 && withoutNegativeEntitlements.equals(other.withoutNegativeEntitlements)
                 && limit.equals(other.limit)
@@ -120,9 +122,9 @@ public final class ListFeatureUsageRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.featureIds,
                 this.companyId,
                 this.companyKeys,
-                this.featureIds,
                 this.q,
                 this.withoutNegativeEntitlements,
                 this.limit,
@@ -140,11 +142,11 @@ public final class ListFeatureUsageRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<List<String>> featureIds = Optional.empty();
+
         private Optional<String> companyId = Optional.empty();
 
         private Optional<Map<String, String>> companyKeys = Optional.empty();
-
-        private Optional<String> featureIds = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -160,13 +162,29 @@ public final class ListFeatureUsageRequest {
         private Builder() {}
 
         public Builder from(ListFeatureUsageRequest other) {
+            featureIds(other.getFeatureIds());
             companyId(other.getCompanyId());
             companyKeys(other.getCompanyKeys());
-            featureIds(other.getFeatureIds());
             q(other.getQ());
             withoutNegativeEntitlements(other.getWithoutNegativeEntitlements());
             limit(other.getLimit());
             offset(other.getOffset());
+            return this;
+        }
+
+        @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
+        public Builder featureIds(Optional<List<String>> featureIds) {
+            this.featureIds = featureIds;
+            return this;
+        }
+
+        public Builder featureIds(List<String> featureIds) {
+            this.featureIds = Optional.ofNullable(featureIds);
+            return this;
+        }
+
+        public Builder featureIds(String featureIds) {
+            this.featureIds = Optional.of(Collections.singletonList(featureIds));
             return this;
         }
 
@@ -192,17 +210,6 @@ public final class ListFeatureUsageRequest {
             return this;
         }
 
-        @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
-        public Builder featureIds(Optional<String> featureIds) {
-            this.featureIds = featureIds;
-            return this;
-        }
-
-        public Builder featureIds(String featureIds) {
-            this.featureIds = Optional.ofNullable(featureIds);
-            return this;
-        }
-
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -225,6 +232,9 @@ public final class ListFeatureUsageRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -236,6 +246,9 @@ public final class ListFeatureUsageRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -249,9 +262,9 @@ public final class ListFeatureUsageRequest {
 
         public ListFeatureUsageRequest build() {
             return new ListFeatureUsageRequest(
+                    featureIds,
                     companyId,
                     companyKeys,
-                    featureIds,
                     q,
                     withoutNegativeEntitlements,
                     limit,

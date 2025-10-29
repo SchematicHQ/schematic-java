@@ -38,8 +38,6 @@ public final class RuleDetailResponseData {
 
     private final String name;
 
-    private final Optional<String> planId;
-
     private final int priority;
 
     private final String ruleType;
@@ -58,7 +56,6 @@ public final class RuleDetailResponseData {
             Optional<String> flagId,
             String id,
             String name,
-            Optional<String> planId,
             int priority,
             String ruleType,
             OffsetDateTime updatedAt,
@@ -71,7 +68,6 @@ public final class RuleDetailResponseData {
         this.flagId = flagId;
         this.id = id;
         this.name = name;
-        this.planId = planId;
         this.priority = priority;
         this.ruleType = ruleType;
         this.updatedAt = updatedAt;
@@ -114,11 +110,6 @@ public final class RuleDetailResponseData {
         return name;
     }
 
-    @JsonProperty("plan_id")
-    public Optional<String> getPlanId() {
-        return planId;
-    }
-
     @JsonProperty("priority")
     public int getPriority() {
         return priority;
@@ -158,7 +149,6 @@ public final class RuleDetailResponseData {
                 && flagId.equals(other.flagId)
                 && id.equals(other.id)
                 && name.equals(other.name)
-                && planId.equals(other.planId)
                 && priority == other.priority
                 && ruleType.equals(other.ruleType)
                 && updatedAt.equals(other.updatedAt)
@@ -175,7 +165,6 @@ public final class RuleDetailResponseData {
                 this.flagId,
                 this.id,
                 this.name,
-                this.planId,
                 this.priority,
                 this.ruleType,
                 this.updatedAt,
@@ -243,10 +232,6 @@ public final class RuleDetailResponseData {
         _FinalStage flagId(Optional<String> flagId);
 
         _FinalStage flagId(String flagId);
-
-        _FinalStage planId(Optional<String> planId);
-
-        _FinalStage planId(String planId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -276,8 +261,6 @@ public final class RuleDetailResponseData {
 
         private boolean value;
 
-        private Optional<String> planId = Optional.empty();
-
         private Optional<String> flagId = Optional.empty();
 
         private List<RuleConditionDetailResponseData> conditions = new ArrayList<>();
@@ -298,7 +281,6 @@ public final class RuleDetailResponseData {
             flagId(other.getFlagId());
             id(other.getId());
             name(other.getName());
-            planId(other.getPlanId());
             priority(other.getPriority());
             ruleType(other.getRuleType());
             updatedAt(other.getUpdatedAt());
@@ -363,19 +345,6 @@ public final class RuleDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage planId(String planId) {
-            this.planId = Optional.ofNullable(planId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
-        public _FinalStage planId(Optional<String> planId) {
-            this.planId = planId;
-            return this;
-        }
-
-        @java.lang.Override
         public _FinalStage flagId(String flagId) {
             this.flagId = Optional.ofNullable(flagId);
             return this;
@@ -390,7 +359,9 @@ public final class RuleDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllConditions(List<RuleConditionDetailResponseData> conditions) {
-            this.conditions.addAll(conditions);
+            if (conditions != null) {
+                this.conditions.addAll(conditions);
+            }
             return this;
         }
 
@@ -404,13 +375,17 @@ public final class RuleDetailResponseData {
         @JsonSetter(value = "conditions", nulls = Nulls.SKIP)
         public _FinalStage conditions(List<RuleConditionDetailResponseData> conditions) {
             this.conditions.clear();
-            this.conditions.addAll(conditions);
+            if (conditions != null) {
+                this.conditions.addAll(conditions);
+            }
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllConditionGroups(List<RuleConditionGroupDetailResponseData> conditionGroups) {
-            this.conditionGroups.addAll(conditionGroups);
+            if (conditionGroups != null) {
+                this.conditionGroups.addAll(conditionGroups);
+            }
             return this;
         }
 
@@ -424,7 +399,9 @@ public final class RuleDetailResponseData {
         @JsonSetter(value = "condition_groups", nulls = Nulls.SKIP)
         public _FinalStage conditionGroups(List<RuleConditionGroupDetailResponseData> conditionGroups) {
             this.conditionGroups.clear();
-            this.conditionGroups.addAll(conditionGroups);
+            if (conditionGroups != null) {
+                this.conditionGroups.addAll(conditionGroups);
+            }
             return this;
         }
 
@@ -438,7 +415,6 @@ public final class RuleDetailResponseData {
                     flagId,
                     id,
                     name,
-                    planId,
                     priority,
                     ruleType,
                     updatedAt,
