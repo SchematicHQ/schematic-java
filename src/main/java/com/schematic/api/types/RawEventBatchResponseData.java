@@ -81,7 +81,9 @@ public final class RawEventBatchResponseData {
         @JsonSetter(value = "events", nulls = Nulls.SKIP)
         public Builder events(List<RawEventResponseData> events) {
             this.events.clear();
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class RawEventBatchResponseData {
         }
 
         public Builder addAllEvents(List<RawEventResponseData> events) {
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 

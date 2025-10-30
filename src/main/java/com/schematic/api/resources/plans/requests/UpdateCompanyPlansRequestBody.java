@@ -94,7 +94,9 @@ public final class UpdateCompanyPlansRequestBody {
         @JsonSetter(value = "add_on_ids", nulls = Nulls.SKIP)
         public Builder addOnIds(List<String> addOnIds) {
             this.addOnIds.clear();
-            this.addOnIds.addAll(addOnIds);
+            if (addOnIds != null) {
+                this.addOnIds.addAll(addOnIds);
+            }
             return this;
         }
 
@@ -104,7 +106,9 @@ public final class UpdateCompanyPlansRequestBody {
         }
 
         public Builder addAllAddOnIds(List<String> addOnIds) {
-            this.addOnIds.addAll(addOnIds);
+            if (addOnIds != null) {
+                this.addOnIds.addAll(addOnIds);
+            }
             return this;
         }
 

@@ -3,22 +3,84 @@
  */
 package com.schematic.api.resources.plans.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CountPlansResponseParamsPlanType {
-    PLAN("plan"),
+public final class CountPlansResponseParamsPlanType {
+    public static final CountPlansResponseParamsPlanType PLAN =
+            new CountPlansResponseParamsPlanType(Value.PLAN, "plan");
 
-    ADD_ON("add_on");
+    public static final CountPlansResponseParamsPlanType ADD_ON =
+            new CountPlansResponseParamsPlanType(Value.ADD_ON, "add_on");
 
-    private final String value;
+    private final Value value;
 
-    CountPlansResponseParamsPlanType(String value) {
+    private final String string;
+
+    CountPlansResponseParamsPlanType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CountPlansResponseParamsPlanType
+                        && this.string.equals(((CountPlansResponseParamsPlanType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case PLAN:
+                return visitor.visitPlan();
+            case ADD_ON:
+                return visitor.visitAddOn();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CountPlansResponseParamsPlanType valueOf(String value) {
+        switch (value) {
+            case "plan":
+                return PLAN;
+            case "add_on":
+                return ADD_ON;
+            default:
+                return new CountPlansResponseParamsPlanType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        PLAN,
+
+        ADD_ON,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitPlan();
+
+        T visitAddOn();
+
+        T visitUnknown(String unknownType);
     }
 }

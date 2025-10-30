@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
@@ -21,11 +20,11 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = LookupUserRequest.Builder.class)
 public final class LookupUserRequest {
-    private final Map<String, JsonNode> keys;
+    private final Map<String, String> keys;
 
     private final Map<String, Object> additionalProperties;
 
-    private LookupUserRequest(Map<String, JsonNode> keys, Map<String, Object> additionalProperties) {
+    private LookupUserRequest(Map<String, String> keys, Map<String, Object> additionalProperties) {
         this.keys = keys;
         this.additionalProperties = additionalProperties;
     }
@@ -34,7 +33,7 @@ public final class LookupUserRequest {
      * @return Key/value pairs
      */
     @JsonProperty("keys")
-    public Map<String, JsonNode> getKeys() {
+    public Map<String, String> getKeys() {
         return keys;
     }
 
@@ -69,7 +68,7 @@ public final class LookupUserRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Map<String, JsonNode> keys = new LinkedHashMap<>();
+        private Map<String, String> keys = new LinkedHashMap<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -81,19 +80,26 @@ public final class LookupUserRequest {
             return this;
         }
 
+        /**
+         * <p>Key/value pairs</p>
+         */
         @JsonSetter(value = "keys", nulls = Nulls.SKIP)
-        public Builder keys(Map<String, JsonNode> keys) {
+        public Builder keys(Map<String, String> keys) {
             this.keys.clear();
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 
-        public Builder putAllKeys(Map<String, JsonNode> keys) {
-            this.keys.putAll(keys);
+        public Builder putAllKeys(Map<String, String> keys) {
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 
-        public Builder keys(String key, JsonNode value) {
+        public Builder keys(String key, String value) {
             this.keys.put(key, value);
             return this;
         }

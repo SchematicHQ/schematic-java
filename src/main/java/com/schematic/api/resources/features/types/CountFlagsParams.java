@@ -74,6 +74,9 @@ public final class CountFlagsParams {
         return offset;
     }
 
+    /**
+     * @return Search by flag name, key, or ID
+     */
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
@@ -160,6 +163,9 @@ public final class CountFlagsParams {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -171,6 +177,9 @@ public final class CountFlagsParams {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -182,6 +191,9 @@ public final class CountFlagsParams {
             return this;
         }
 
+        /**
+         * <p>Search by flag name, key, or ID</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
