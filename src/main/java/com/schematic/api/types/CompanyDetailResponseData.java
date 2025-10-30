@@ -27,11 +27,15 @@ import org.jetbrains.annotations.NotNull;
 public final class CompanyDetailResponseData {
     private final List<CompanyPlanWithBillingSubView> addOns;
 
+    private final Optional<Map<String, Double>> billingCreditBalances;
+
     private final Optional<BillingSubscriptionView> billingSubscription;
 
     private final List<BillingSubscriptionView> billingSubscriptions;
 
     private final OffsetDateTime createdAt;
+
+    private final Optional<PaymentMethodResponseData> defaultPaymentMethod;
 
     private final List<EntityTraitDetailResponseData> entityTraits;
 
@@ -55,6 +59,8 @@ public final class CompanyDetailResponseData {
 
     private final List<GenericPreviewObject> plans;
 
+    private final List<Rule> rules;
+
     private final Optional<Map<String, JsonNode>> traits;
 
     private final OffsetDateTime updatedAt;
@@ -65,9 +71,11 @@ public final class CompanyDetailResponseData {
 
     private CompanyDetailResponseData(
             List<CompanyPlanWithBillingSubView> addOns,
+            Optional<Map<String, Double>> billingCreditBalances,
             Optional<BillingSubscriptionView> billingSubscription,
             List<BillingSubscriptionView> billingSubscriptions,
             OffsetDateTime createdAt,
+            Optional<PaymentMethodResponseData> defaultPaymentMethod,
             List<EntityTraitDetailResponseData> entityTraits,
             String environmentId,
             String id,
@@ -79,14 +87,17 @@ public final class CompanyDetailResponseData {
             List<PaymentMethodResponseData> paymentMethods,
             Optional<CompanyPlanWithBillingSubView> plan,
             List<GenericPreviewObject> plans,
+            List<Rule> rules,
             Optional<Map<String, JsonNode>> traits,
             OffsetDateTime updatedAt,
             int userCount,
             Map<String, Object> additionalProperties) {
         this.addOns = addOns;
+        this.billingCreditBalances = billingCreditBalances;
         this.billingSubscription = billingSubscription;
         this.billingSubscriptions = billingSubscriptions;
         this.createdAt = createdAt;
+        this.defaultPaymentMethod = defaultPaymentMethod;
         this.entityTraits = entityTraits;
         this.environmentId = environmentId;
         this.id = id;
@@ -98,6 +109,7 @@ public final class CompanyDetailResponseData {
         this.paymentMethods = paymentMethods;
         this.plan = plan;
         this.plans = plans;
+        this.rules = rules;
         this.traits = traits;
         this.updatedAt = updatedAt;
         this.userCount = userCount;
@@ -107,6 +119,11 @@ public final class CompanyDetailResponseData {
     @JsonProperty("add_ons")
     public List<CompanyPlanWithBillingSubView> getAddOns() {
         return addOns;
+    }
+
+    @JsonProperty("billing_credit_balances")
+    public Optional<Map<String, Double>> getBillingCreditBalances() {
+        return billingCreditBalances;
     }
 
     @JsonProperty("billing_subscription")
@@ -122,6 +139,11 @@ public final class CompanyDetailResponseData {
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("default_payment_method")
+    public Optional<PaymentMethodResponseData> getDefaultPaymentMethod() {
+        return defaultPaymentMethod;
     }
 
     @JsonProperty("entity_traits")
@@ -179,6 +201,11 @@ public final class CompanyDetailResponseData {
         return plans;
     }
 
+    @JsonProperty("rules")
+    public List<Rule> getRules() {
+        return rules;
+    }
+
     /**
      * @return A map of trait names to trait values
      */
@@ -210,9 +237,11 @@ public final class CompanyDetailResponseData {
 
     private boolean equalTo(CompanyDetailResponseData other) {
         return addOns.equals(other.addOns)
+                && billingCreditBalances.equals(other.billingCreditBalances)
                 && billingSubscription.equals(other.billingSubscription)
                 && billingSubscriptions.equals(other.billingSubscriptions)
                 && createdAt.equals(other.createdAt)
+                && defaultPaymentMethod.equals(other.defaultPaymentMethod)
                 && entityTraits.equals(other.entityTraits)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
@@ -224,6 +253,7 @@ public final class CompanyDetailResponseData {
                 && paymentMethods.equals(other.paymentMethods)
                 && plan.equals(other.plan)
                 && plans.equals(other.plans)
+                && rules.equals(other.rules)
                 && traits.equals(other.traits)
                 && updatedAt.equals(other.updatedAt)
                 && userCount == other.userCount;
@@ -233,9 +263,11 @@ public final class CompanyDetailResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.addOns,
+                this.billingCreditBalances,
                 this.billingSubscription,
                 this.billingSubscriptions,
                 this.createdAt,
+                this.defaultPaymentMethod,
                 this.entityTraits,
                 this.environmentId,
                 this.id,
@@ -247,6 +279,7 @@ public final class CompanyDetailResponseData {
                 this.paymentMethods,
                 this.plan,
                 this.plans,
+                this.rules,
                 this.traits,
                 this.updatedAt,
                 this.userCount);
@@ -296,6 +329,10 @@ public final class CompanyDetailResponseData {
 
         _FinalStage addAllAddOns(List<CompanyPlanWithBillingSubView> addOns);
 
+        _FinalStage billingCreditBalances(Optional<Map<String, Double>> billingCreditBalances);
+
+        _FinalStage billingCreditBalances(Map<String, Double> billingCreditBalances);
+
         _FinalStage billingSubscription(Optional<BillingSubscriptionView> billingSubscription);
 
         _FinalStage billingSubscription(BillingSubscriptionView billingSubscription);
@@ -305,6 +342,10 @@ public final class CompanyDetailResponseData {
         _FinalStage addBillingSubscriptions(BillingSubscriptionView billingSubscriptions);
 
         _FinalStage addAllBillingSubscriptions(List<BillingSubscriptionView> billingSubscriptions);
+
+        _FinalStage defaultPaymentMethod(Optional<PaymentMethodResponseData> defaultPaymentMethod);
+
+        _FinalStage defaultPaymentMethod(PaymentMethodResponseData defaultPaymentMethod);
 
         _FinalStage entityTraits(List<EntityTraitDetailResponseData> entityTraits);
 
@@ -348,6 +389,15 @@ public final class CompanyDetailResponseData {
 
         _FinalStage addAllPlans(List<GenericPreviewObject> plans);
 
+        _FinalStage rules(List<Rule> rules);
+
+        _FinalStage addRules(Rule rules);
+
+        _FinalStage addAllRules(List<Rule> rules);
+
+        /**
+         * <p>A map of trait names to trait values</p>
+         */
         _FinalStage traits(Optional<Map<String, JsonNode>> traits);
 
         _FinalStage traits(Map<String, JsonNode> traits);
@@ -376,6 +426,8 @@ public final class CompanyDetailResponseData {
 
         private Optional<Map<String, JsonNode>> traits = Optional.empty();
 
+        private List<Rule> rules = new ArrayList<>();
+
         private List<GenericPreviewObject> plans = new ArrayList<>();
 
         private Optional<CompanyPlanWithBillingSubView> plan = Optional.empty();
@@ -392,9 +444,13 @@ public final class CompanyDetailResponseData {
 
         private List<EntityTraitDetailResponseData> entityTraits = new ArrayList<>();
 
+        private Optional<PaymentMethodResponseData> defaultPaymentMethod = Optional.empty();
+
         private List<BillingSubscriptionView> billingSubscriptions = new ArrayList<>();
 
         private Optional<BillingSubscriptionView> billingSubscription = Optional.empty();
+
+        private Optional<Map<String, Double>> billingCreditBalances = Optional.empty();
 
         private List<CompanyPlanWithBillingSubView> addOns = new ArrayList<>();
 
@@ -406,9 +462,11 @@ public final class CompanyDetailResponseData {
         @java.lang.Override
         public Builder from(CompanyDetailResponseData other) {
             addOns(other.getAddOns());
+            billingCreditBalances(other.getBillingCreditBalances());
             billingSubscription(other.getBillingSubscription());
             billingSubscriptions(other.getBillingSubscriptions());
             createdAt(other.getCreatedAt());
+            defaultPaymentMethod(other.getDefaultPaymentMethod());
             entityTraits(other.getEntityTraits());
             environmentId(other.getEnvironmentId());
             id(other.getId());
@@ -420,6 +478,7 @@ public final class CompanyDetailResponseData {
             paymentMethods(other.getPaymentMethods());
             plan(other.getPlan());
             plans(other.getPlans());
+            rules(other.getRules());
             traits(other.getTraits());
             updatedAt(other.getUpdatedAt());
             userCount(other.getUserCount());
@@ -478,6 +537,9 @@ public final class CompanyDetailResponseData {
             return this;
         }
 
+        /**
+         * <p>A map of trait names to trait values</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
         public _FinalStage traits(Optional<Map<String, JsonNode>> traits) {
@@ -486,8 +548,34 @@ public final class CompanyDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllRules(List<Rule> rules) {
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addRules(Rule rules) {
+            this.rules.add(rules);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "rules", nulls = Nulls.SKIP)
+        public _FinalStage rules(List<Rule> rules) {
+            this.rules.clear();
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllPlans(List<GenericPreviewObject> plans) {
-            this.plans.addAll(plans);
+            if (plans != null) {
+                this.plans.addAll(plans);
+            }
             return this;
         }
 
@@ -501,7 +589,9 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "plans", nulls = Nulls.SKIP)
         public _FinalStage plans(List<GenericPreviewObject> plans) {
             this.plans.clear();
-            this.plans.addAll(plans);
+            if (plans != null) {
+                this.plans.addAll(plans);
+            }
             return this;
         }
 
@@ -520,7 +610,9 @@ public final class CompanyDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllPaymentMethods(List<PaymentMethodResponseData> paymentMethods) {
-            this.paymentMethods.addAll(paymentMethods);
+            if (paymentMethods != null) {
+                this.paymentMethods.addAll(paymentMethods);
+            }
             return this;
         }
 
@@ -534,13 +626,17 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "payment_methods", nulls = Nulls.SKIP)
         public _FinalStage paymentMethods(List<PaymentMethodResponseData> paymentMethods) {
             this.paymentMethods.clear();
-            this.paymentMethods.addAll(paymentMethods);
+            if (paymentMethods != null) {
+                this.paymentMethods.addAll(paymentMethods);
+            }
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllMetrics(List<CompanyEventPeriodMetricsResponseData> metrics) {
-            this.metrics.addAll(metrics);
+            if (metrics != null) {
+                this.metrics.addAll(metrics);
+            }
             return this;
         }
 
@@ -554,7 +650,9 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "metrics", nulls = Nulls.SKIP)
         public _FinalStage metrics(List<CompanyEventPeriodMetricsResponseData> metrics) {
             this.metrics.clear();
-            this.metrics.addAll(metrics);
+            if (metrics != null) {
+                this.metrics.addAll(metrics);
+            }
             return this;
         }
 
@@ -586,7 +684,9 @@ public final class CompanyDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllKeys(List<EntityKeyDetailResponseData> keys) {
-            this.keys.addAll(keys);
+            if (keys != null) {
+                this.keys.addAll(keys);
+            }
             return this;
         }
 
@@ -600,13 +700,17 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "keys", nulls = Nulls.SKIP)
         public _FinalStage keys(List<EntityKeyDetailResponseData> keys) {
             this.keys.clear();
-            this.keys.addAll(keys);
+            if (keys != null) {
+                this.keys.addAll(keys);
+            }
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllEntityTraits(List<EntityTraitDetailResponseData> entityTraits) {
-            this.entityTraits.addAll(entityTraits);
+            if (entityTraits != null) {
+                this.entityTraits.addAll(entityTraits);
+            }
             return this;
         }
 
@@ -620,13 +724,30 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "entity_traits", nulls = Nulls.SKIP)
         public _FinalStage entityTraits(List<EntityTraitDetailResponseData> entityTraits) {
             this.entityTraits.clear();
-            this.entityTraits.addAll(entityTraits);
+            if (entityTraits != null) {
+                this.entityTraits.addAll(entityTraits);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage defaultPaymentMethod(PaymentMethodResponseData defaultPaymentMethod) {
+            this.defaultPaymentMethod = Optional.ofNullable(defaultPaymentMethod);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "default_payment_method", nulls = Nulls.SKIP)
+        public _FinalStage defaultPaymentMethod(Optional<PaymentMethodResponseData> defaultPaymentMethod) {
+            this.defaultPaymentMethod = defaultPaymentMethod;
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllBillingSubscriptions(List<BillingSubscriptionView> billingSubscriptions) {
-            this.billingSubscriptions.addAll(billingSubscriptions);
+            if (billingSubscriptions != null) {
+                this.billingSubscriptions.addAll(billingSubscriptions);
+            }
             return this;
         }
 
@@ -640,7 +761,9 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "billing_subscriptions", nulls = Nulls.SKIP)
         public _FinalStage billingSubscriptions(List<BillingSubscriptionView> billingSubscriptions) {
             this.billingSubscriptions.clear();
-            this.billingSubscriptions.addAll(billingSubscriptions);
+            if (billingSubscriptions != null) {
+                this.billingSubscriptions.addAll(billingSubscriptions);
+            }
             return this;
         }
 
@@ -658,8 +781,23 @@ public final class CompanyDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage billingCreditBalances(Map<String, Double> billingCreditBalances) {
+            this.billingCreditBalances = Optional.ofNullable(billingCreditBalances);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_balances", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditBalances(Optional<Map<String, Double>> billingCreditBalances) {
+            this.billingCreditBalances = billingCreditBalances;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllAddOns(List<CompanyPlanWithBillingSubView> addOns) {
-            this.addOns.addAll(addOns);
+            if (addOns != null) {
+                this.addOns.addAll(addOns);
+            }
             return this;
         }
 
@@ -673,7 +811,9 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "add_ons", nulls = Nulls.SKIP)
         public _FinalStage addOns(List<CompanyPlanWithBillingSubView> addOns) {
             this.addOns.clear();
-            this.addOns.addAll(addOns);
+            if (addOns != null) {
+                this.addOns.addAll(addOns);
+            }
             return this;
         }
 
@@ -681,9 +821,11 @@ public final class CompanyDetailResponseData {
         public CompanyDetailResponseData build() {
             return new CompanyDetailResponseData(
                     addOns,
+                    billingCreditBalances,
                     billingSubscription,
                     billingSubscriptions,
                     createdAt,
+                    defaultPaymentMethod,
                     entityTraits,
                     environmentId,
                     id,
@@ -695,6 +837,7 @@ public final class CompanyDetailResponseData {
                     paymentMethods,
                     plan,
                     plans,
+                    rules,
                     traits,
                     updatedAt,
                     userCount,

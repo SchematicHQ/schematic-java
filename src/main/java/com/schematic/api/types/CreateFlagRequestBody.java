@@ -27,8 +27,6 @@ public final class CreateFlagRequestBody {
 
     private final Optional<String> featureId;
 
-    private final String flagType;
-
     private final String key;
 
     private final Optional<String> maintainerId;
@@ -41,7 +39,6 @@ public final class CreateFlagRequestBody {
             boolean defaultValue,
             String description,
             Optional<String> featureId,
-            String flagType,
             String key,
             Optional<String> maintainerId,
             String name,
@@ -49,7 +46,6 @@ public final class CreateFlagRequestBody {
         this.defaultValue = defaultValue;
         this.description = description;
         this.featureId = featureId;
-        this.flagType = flagType;
         this.key = key;
         this.maintainerId = maintainerId;
         this.name = name;
@@ -73,7 +69,7 @@ public final class CreateFlagRequestBody {
 
     @JsonProperty("flag_type")
     public String getFlagType() {
-        return flagType;
+        return "boolean";
     }
 
     @JsonProperty("key")
@@ -106,7 +102,6 @@ public final class CreateFlagRequestBody {
         return defaultValue == other.defaultValue
                 && description.equals(other.description)
                 && featureId.equals(other.featureId)
-                && flagType.equals(other.flagType)
                 && key.equals(other.key)
                 && maintainerId.equals(other.maintainerId)
                 && name.equals(other.name);
@@ -115,13 +110,7 @@ public final class CreateFlagRequestBody {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.defaultValue,
-                this.description,
-                this.featureId,
-                this.flagType,
-                this.key,
-                this.maintainerId,
-                this.name);
+                this.defaultValue, this.description, this.featureId, this.key, this.maintainerId, this.name);
     }
 
     @java.lang.Override
@@ -140,11 +129,7 @@ public final class CreateFlagRequestBody {
     }
 
     public interface DescriptionStage {
-        FlagTypeStage description(@NotNull String description);
-    }
-
-    public interface FlagTypeStage {
-        KeyStage flagType(@NotNull String flagType);
+        KeyStage description(@NotNull String description);
     }
 
     public interface KeyStage {
@@ -168,13 +153,10 @@ public final class CreateFlagRequestBody {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements DefaultValueStage, DescriptionStage, FlagTypeStage, KeyStage, NameStage, _FinalStage {
+    public static final class Builder implements DefaultValueStage, DescriptionStage, KeyStage, NameStage, _FinalStage {
         private boolean defaultValue;
 
         private String description;
-
-        private String flagType;
 
         private String key;
 
@@ -194,7 +176,6 @@ public final class CreateFlagRequestBody {
             defaultValue(other.getDefaultValue());
             description(other.getDescription());
             featureId(other.getFeatureId());
-            flagType(other.getFlagType());
             key(other.getKey());
             maintainerId(other.getMaintainerId());
             name(other.getName());
@@ -210,15 +191,8 @@ public final class CreateFlagRequestBody {
 
         @java.lang.Override
         @JsonSetter("description")
-        public FlagTypeStage description(@NotNull String description) {
+        public KeyStage description(@NotNull String description) {
             this.description = Objects.requireNonNull(description, "description must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("flag_type")
-        public KeyStage flagType(@NotNull String flagType) {
-            this.flagType = Objects.requireNonNull(flagType, "flagType must not be null");
             return this;
         }
 
@@ -265,7 +239,7 @@ public final class CreateFlagRequestBody {
         @java.lang.Override
         public CreateFlagRequestBody build() {
             return new CreateFlagRequestBody(
-                    defaultValue, description, featureId, flagType, key, maintainerId, name, additionalProperties);
+                    defaultValue, description, featureId, key, maintainerId, name, additionalProperties);
         }
     }
 }

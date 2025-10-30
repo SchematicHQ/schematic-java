@@ -38,9 +38,6 @@ public final class GetActiveDealsResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<CompanyCrmDealsResponseData> getData() {
         return data;
@@ -84,6 +81,9 @@ public final class GetActiveDealsResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull GetActiveDealsParams params);
 
         Builder from(GetActiveDealsResponse other);
@@ -119,6 +119,7 @@ public final class GetActiveDealsResponse {
 
         /**
          * <p>Input parameters</p>
+         * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -128,20 +129,14 @@ public final class GetActiveDealsResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<CompanyCrmDealsResponseData> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(CompanyCrmDealsResponseData data) {
             this.data.add(data);
@@ -152,7 +147,9 @@ public final class GetActiveDealsResponse {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(List<CompanyCrmDealsResponseData> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 

@@ -220,6 +220,9 @@ public final class ListCompanyOverridesParams {
             return this;
         }
 
+        /**
+         * <p>Filter company overrides by a single company ID (starting with comp_)</p>
+         */
         @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
         public Builder companyId(Optional<String> companyId) {
             this.companyId = companyId;
@@ -231,6 +234,9 @@ public final class ListCompanyOverridesParams {
             return this;
         }
 
+        /**
+         * <p>Filter company overrides by multiple company IDs (starting with comp_)</p>
+         */
         @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
         public Builder companyIds(Optional<List<String>> companyIds) {
             this.companyIds = companyIds;
@@ -242,6 +248,9 @@ public final class ListCompanyOverridesParams {
             return this;
         }
 
+        /**
+         * <p>Filter company overrides by a single feature ID (starting with feat_)</p>
+         */
         @JsonSetter(value = "feature_id", nulls = Nulls.SKIP)
         public Builder featureId(Optional<String> featureId) {
             this.featureId = featureId;
@@ -253,6 +262,9 @@ public final class ListCompanyOverridesParams {
             return this;
         }
 
+        /**
+         * <p>Filter company overrides by multiple feature IDs (starting with feat_)</p>
+         */
         @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
         public Builder featureIds(Optional<List<String>> featureIds) {
             this.featureIds = featureIds;
@@ -264,6 +276,9 @@ public final class ListCompanyOverridesParams {
             return this;
         }
 
+        /**
+         * <p>Filter company overrides by multiple company override IDs (starting with cmov_)</p>
+         */
         @JsonSetter(value = "ids", nulls = Nulls.SKIP)
         public Builder ids(Optional<List<String>> ids) {
             this.ids = ids;
@@ -275,6 +290,9 @@ public final class ListCompanyOverridesParams {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -286,6 +304,9 @@ public final class ListCompanyOverridesParams {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -297,6 +318,9 @@ public final class ListCompanyOverridesParams {
             return this;
         }
 
+        /**
+         * <p>Search for company overrides by feature or company name</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -308,6 +332,9 @@ public final class ListCompanyOverridesParams {
             return this;
         }
 
+        /**
+         * <p>Filter company overrides by whether they have not expired</p>
+         */
         @JsonSetter(value = "without_expired", nulls = Nulls.SKIP)
         public Builder withoutExpired(Optional<Boolean> withoutExpired) {
             this.withoutExpired = withoutExpired;

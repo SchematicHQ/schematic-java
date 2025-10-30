@@ -16,21 +16,16 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = IssueTemporaryAccessTokenRequestBody.Builder.class)
 public final class IssueTemporaryAccessTokenRequestBody {
     private final Map<String, String> lookup;
 
-    private final String resourceType;
-
     private final Map<String, Object> additionalProperties;
 
-    private IssueTemporaryAccessTokenRequestBody(
-            Map<String, String> lookup, String resourceType, Map<String, Object> additionalProperties) {
+    private IssueTemporaryAccessTokenRequestBody(Map<String, String> lookup, Map<String, Object> additionalProperties) {
         this.lookup = lookup;
-        this.resourceType = resourceType;
         this.additionalProperties = additionalProperties;
     }
 
@@ -41,7 +36,7 @@ public final class IssueTemporaryAccessTokenRequestBody {
 
     @JsonProperty("resource_type")
     public String getResourceType() {
-        return resourceType;
+        return "company";
     }
 
     @java.lang.Override
@@ -57,12 +52,12 @@ public final class IssueTemporaryAccessTokenRequestBody {
     }
 
     private boolean equalTo(IssueTemporaryAccessTokenRequestBody other) {
-        return lookup.equals(other.lookup) && resourceType.equals(other.resourceType);
+        return lookup.equals(other.lookup);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.lookup, this.resourceType);
+        return Objects.hash(this.lookup);
     }
 
     @java.lang.Override
@@ -70,30 +65,12 @@ public final class IssueTemporaryAccessTokenRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static ResourceTypeStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ResourceTypeStage {
-        _FinalStage resourceType(@NotNull String resourceType);
-
-        Builder from(IssueTemporaryAccessTokenRequestBody other);
-    }
-
-    public interface _FinalStage {
-        IssueTemporaryAccessTokenRequestBody build();
-
-        _FinalStage lookup(Map<String, String> lookup);
-
-        _FinalStage putAllLookup(Map<String, String> lookup);
-
-        _FinalStage lookup(String key, String value);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ResourceTypeStage, _FinalStage {
-        private String resourceType;
-
+    public static final class Builder {
         private Map<String, String> lookup = new LinkedHashMap<>();
 
         @JsonAnySetter
@@ -101,43 +78,34 @@ public final class IssueTemporaryAccessTokenRequestBody {
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(IssueTemporaryAccessTokenRequestBody other) {
             lookup(other.getLookup());
-            resourceType(other.getResourceType());
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("resource_type")
-        public _FinalStage resourceType(@NotNull String resourceType) {
-            this.resourceType = Objects.requireNonNull(resourceType, "resourceType must not be null");
+        @JsonSetter(value = "lookup", nulls = Nulls.SKIP)
+        public Builder lookup(Map<String, String> lookup) {
+            this.lookup.clear();
+            if (lookup != null) {
+                this.lookup.putAll(lookup);
+            }
             return this;
         }
 
-        @java.lang.Override
-        public _FinalStage lookup(String key, String value) {
+        public Builder putAllLookup(Map<String, String> lookup) {
+            if (lookup != null) {
+                this.lookup.putAll(lookup);
+            }
+            return this;
+        }
+
+        public Builder lookup(String key, String value) {
             this.lookup.put(key, value);
             return this;
         }
 
-        @java.lang.Override
-        public _FinalStage putAllLookup(Map<String, String> lookup) {
-            this.lookup.putAll(lookup);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "lookup", nulls = Nulls.SKIP)
-        public _FinalStage lookup(Map<String, String> lookup) {
-            this.lookup.clear();
-            this.lookup.putAll(lookup);
-            return this;
-        }
-
-        @java.lang.Override
         public IssueTemporaryAccessTokenRequestBody build() {
-            return new IssueTemporaryAccessTokenRequestBody(lookup, resourceType, additionalProperties);
+            return new IssueTemporaryAccessTokenRequestBody(lookup, additionalProperties);
         }
     }
 }

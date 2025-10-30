@@ -123,6 +123,9 @@ public final class EventBodyTrack {
     }
 
     public interface EventStage {
+        /**
+         * <p>The name of the type of track event</p>
+         */
         _FinalStage event(@NotNull String event);
 
         Builder from(EventBodyTrack other);
@@ -131,18 +134,30 @@ public final class EventBodyTrack {
     public interface _FinalStage {
         EventBodyTrack build();
 
+        /**
+         * <p>Key-value pairs to identify company associated with track event</p>
+         */
         _FinalStage company(Optional<Map<String, String>> company);
 
         _FinalStage company(Map<String, String> company);
 
+        /**
+         * <p>Optionally specify the quantity of the event</p>
+         */
         _FinalStage quantity(Optional<Integer> quantity);
 
         _FinalStage quantity(Integer quantity);
 
+        /**
+         * <p>A map of trait names to trait values</p>
+         */
         _FinalStage traits(Optional<Map<String, JsonNode>> traits);
 
         _FinalStage traits(Map<String, JsonNode> traits);
 
+        /**
+         * <p>Key-value pairs to identify user associated with track event</p>
+         */
         _FinalStage user(Optional<Map<String, String>> user);
 
         _FinalStage user(Map<String, String> user);
@@ -177,6 +192,7 @@ public final class EventBodyTrack {
 
         /**
          * <p>The name of the type of track event</p>
+         * <p>The name of the type of track event</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -196,6 +212,9 @@ public final class EventBodyTrack {
             return this;
         }
 
+        /**
+         * <p>Key-value pairs to identify user associated with track event</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "user", nulls = Nulls.SKIP)
         public _FinalStage user(Optional<Map<String, String>> user) {
@@ -213,6 +232,9 @@ public final class EventBodyTrack {
             return this;
         }
 
+        /**
+         * <p>A map of trait names to trait values</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
         public _FinalStage traits(Optional<Map<String, JsonNode>> traits) {
@@ -230,6 +252,9 @@ public final class EventBodyTrack {
             return this;
         }
 
+        /**
+         * <p>Optionally specify the quantity of the event</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "quantity", nulls = Nulls.SKIP)
         public _FinalStage quantity(Optional<Integer> quantity) {
@@ -247,6 +272,9 @@ public final class EventBodyTrack {
             return this;
         }
 
+        /**
+         * <p>Key-value pairs to identify company associated with track event</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "company", nulls = Nulls.SKIP)
         public _FinalStage company(Optional<Map<String, String>> company) {

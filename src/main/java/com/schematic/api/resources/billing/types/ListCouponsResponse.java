@@ -36,9 +36,6 @@ public final class ListCouponsResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<BillingCouponResponseData> getData() {
         return data;
@@ -82,6 +79,9 @@ public final class ListCouponsResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull ListCouponsParams params);
 
         Builder from(ListCouponsResponse other);
@@ -117,6 +117,7 @@ public final class ListCouponsResponse {
 
         /**
          * <p>Input parameters</p>
+         * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -126,20 +127,14 @@ public final class ListCouponsResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<BillingCouponResponseData> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(BillingCouponResponseData data) {
             this.data.add(data);
@@ -150,7 +145,9 @@ public final class ListCouponsResponse {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(List<BillingCouponResponseData> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 

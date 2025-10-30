@@ -220,6 +220,9 @@ public final class UserDetailResponseData {
 
         _FinalStage lastSeenAt(OffsetDateTime lastSeenAt);
 
+        /**
+         * <p>A map of trait names to trait values</p>
+         */
         _FinalStage traits(Optional<Map<String, JsonNode>> traits);
 
         _FinalStage traits(Map<String, JsonNode> traits);
@@ -313,6 +316,9 @@ public final class UserDetailResponseData {
             return this;
         }
 
+        /**
+         * <p>A map of trait names to trait values</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
         public _FinalStage traits(Optional<Map<String, JsonNode>> traits) {
@@ -335,7 +341,9 @@ public final class UserDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllKeys(List<EntityKeyDetailResponseData> keys) {
-            this.keys.addAll(keys);
+            if (keys != null) {
+                this.keys.addAll(keys);
+            }
             return this;
         }
 
@@ -349,13 +357,17 @@ public final class UserDetailResponseData {
         @JsonSetter(value = "keys", nulls = Nulls.SKIP)
         public _FinalStage keys(List<EntityKeyDetailResponseData> keys) {
             this.keys.clear();
-            this.keys.addAll(keys);
+            if (keys != null) {
+                this.keys.addAll(keys);
+            }
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllEntityTraits(List<EntityTraitDetailResponseData> entityTraits) {
-            this.entityTraits.addAll(entityTraits);
+            if (entityTraits != null) {
+                this.entityTraits.addAll(entityTraits);
+            }
             return this;
         }
 
@@ -369,13 +381,17 @@ public final class UserDetailResponseData {
         @JsonSetter(value = "entity_traits", nulls = Nulls.SKIP)
         public _FinalStage entityTraits(List<EntityTraitDetailResponseData> entityTraits) {
             this.entityTraits.clear();
-            this.entityTraits.addAll(entityTraits);
+            if (entityTraits != null) {
+                this.entityTraits.addAll(entityTraits);
+            }
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllCompanyMemberships(List<CompanyMembershipDetailResponseData> companyMemberships) {
-            this.companyMemberships.addAll(companyMemberships);
+            if (companyMemberships != null) {
+                this.companyMemberships.addAll(companyMemberships);
+            }
             return this;
         }
 
@@ -389,7 +405,9 @@ public final class UserDetailResponseData {
         @JsonSetter(value = "company_memberships", nulls = Nulls.SKIP)
         public _FinalStage companyMemberships(List<CompanyMembershipDetailResponseData> companyMemberships) {
             this.companyMemberships.clear();
-            this.companyMemberships.addAll(companyMemberships);
+            if (companyMemberships != null) {
+                this.companyMemberships.addAll(companyMemberships);
+            }
             return this;
         }
 
