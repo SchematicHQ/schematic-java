@@ -80,12 +80,16 @@ public final class KeysRequestBody {
         @JsonSetter(value = "keys", nulls = Nulls.SKIP)
         public Builder keys(Map<String, String> keys) {
             this.keys.clear();
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 
         public Builder putAllKeys(Map<String, String> keys) {
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 

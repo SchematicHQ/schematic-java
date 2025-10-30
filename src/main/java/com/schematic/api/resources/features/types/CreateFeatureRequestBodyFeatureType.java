@@ -3,24 +3,95 @@
  */
 package com.schematic.api.resources.features.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CreateFeatureRequestBodyFeatureType {
-    BOOLEAN("boolean"),
+public final class CreateFeatureRequestBodyFeatureType {
+    public static final CreateFeatureRequestBodyFeatureType TRAIT =
+            new CreateFeatureRequestBodyFeatureType(Value.TRAIT, "trait");
 
-    EVENT("event"),
+    public static final CreateFeatureRequestBodyFeatureType BOOLEAN =
+            new CreateFeatureRequestBodyFeatureType(Value.BOOLEAN, "boolean");
 
-    TRAIT("trait");
+    public static final CreateFeatureRequestBodyFeatureType EVENT =
+            new CreateFeatureRequestBodyFeatureType(Value.EVENT, "event");
 
-    private final String value;
+    private final Value value;
 
-    CreateFeatureRequestBodyFeatureType(String value) {
+    private final String string;
+
+    CreateFeatureRequestBodyFeatureType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CreateFeatureRequestBodyFeatureType
+                        && this.string.equals(((CreateFeatureRequestBodyFeatureType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case TRAIT:
+                return visitor.visitTrait();
+            case BOOLEAN:
+                return visitor.visitBoolean();
+            case EVENT:
+                return visitor.visitEvent();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CreateFeatureRequestBodyFeatureType valueOf(String value) {
+        switch (value) {
+            case "trait":
+                return TRAIT;
+            case "boolean":
+                return BOOLEAN;
+            case "event":
+                return EVENT;
+            default:
+                return new CreateFeatureRequestBodyFeatureType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BOOLEAN,
+
+        EVENT,
+
+        TRAIT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitBoolean();
+
+        T visitEvent();
+
+        T visitTrait();
+
+        T visitUnknown(String unknownType);
     }
 }

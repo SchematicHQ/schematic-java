@@ -107,7 +107,9 @@ public final class RulesDetailResponseData {
         @JsonSetter(value = "rules", nulls = Nulls.SKIP)
         public Builder rules(List<RuleDetailResponseData> rules) {
             this.rules.clear();
-            this.rules.addAll(rules);
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
             return this;
         }
 
@@ -117,7 +119,9 @@ public final class RulesDetailResponseData {
         }
 
         public Builder addAllRules(List<RuleDetailResponseData> rules) {
-            this.rules.addAll(rules);
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
             return this;
         }
 

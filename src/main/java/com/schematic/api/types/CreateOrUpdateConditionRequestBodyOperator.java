@@ -3,34 +3,150 @@
  */
 package com.schematic.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CreateOrUpdateConditionRequestBodyOperator {
-    EQ("eq"),
+public final class CreateOrUpdateConditionRequestBodyOperator {
+    public static final CreateOrUpdateConditionRequestBodyOperator GTE =
+            new CreateOrUpdateConditionRequestBodyOperator(Value.GTE, "gte");
 
-    NE("ne"),
+    public static final CreateOrUpdateConditionRequestBodyOperator LT =
+            new CreateOrUpdateConditionRequestBodyOperator(Value.LT, "lt");
 
-    GT("gt"),
+    public static final CreateOrUpdateConditionRequestBodyOperator GT =
+            new CreateOrUpdateConditionRequestBodyOperator(Value.GT, "gt");
 
-    GTE("gte"),
+    public static final CreateOrUpdateConditionRequestBodyOperator NOT_EMPTY =
+            new CreateOrUpdateConditionRequestBodyOperator(Value.NOT_EMPTY, "not_empty");
 
-    LT("lt"),
+    public static final CreateOrUpdateConditionRequestBodyOperator EQ =
+            new CreateOrUpdateConditionRequestBodyOperator(Value.EQ, "eq");
 
-    LTE("lte"),
+    public static final CreateOrUpdateConditionRequestBodyOperator NE =
+            new CreateOrUpdateConditionRequestBodyOperator(Value.NE, "ne");
 
-    IS_EMPTY("is_empty"),
+    public static final CreateOrUpdateConditionRequestBodyOperator LTE =
+            new CreateOrUpdateConditionRequestBodyOperator(Value.LTE, "lte");
 
-    NOT_EMPTY("not_empty");
+    public static final CreateOrUpdateConditionRequestBodyOperator IS_EMPTY =
+            new CreateOrUpdateConditionRequestBodyOperator(Value.IS_EMPTY, "is_empty");
 
-    private final String value;
+    private final Value value;
 
-    CreateOrUpdateConditionRequestBodyOperator(String value) {
+    private final String string;
+
+    CreateOrUpdateConditionRequestBodyOperator(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CreateOrUpdateConditionRequestBodyOperator
+                        && this.string.equals(((CreateOrUpdateConditionRequestBodyOperator) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case GTE:
+                return visitor.visitGte();
+            case LT:
+                return visitor.visitLt();
+            case GT:
+                return visitor.visitGt();
+            case NOT_EMPTY:
+                return visitor.visitNotEmpty();
+            case EQ:
+                return visitor.visitEq();
+            case NE:
+                return visitor.visitNe();
+            case LTE:
+                return visitor.visitLte();
+            case IS_EMPTY:
+                return visitor.visitIsEmpty();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CreateOrUpdateConditionRequestBodyOperator valueOf(String value) {
+        switch (value) {
+            case "gte":
+                return GTE;
+            case "lt":
+                return LT;
+            case "gt":
+                return GT;
+            case "not_empty":
+                return NOT_EMPTY;
+            case "eq":
+                return EQ;
+            case "ne":
+                return NE;
+            case "lte":
+                return LTE;
+            case "is_empty":
+                return IS_EMPTY;
+            default:
+                return new CreateOrUpdateConditionRequestBodyOperator(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        EQ,
+
+        NE,
+
+        GT,
+
+        GTE,
+
+        LT,
+
+        LTE,
+
+        IS_EMPTY,
+
+        NOT_EMPTY,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitEq();
+
+        T visitNe();
+
+        T visitGt();
+
+        T visitGte();
+
+        T visitLt();
+
+        T visitLte();
+
+        T visitIsEmpty();
+
+        T visitNotEmpty();
+
+        T visitUnknown(String unknownType);
     }
 }

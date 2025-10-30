@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,9 +22,9 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetActiveCompanySubscriptionRequest.Builder.class)
 public final class GetActiveCompanySubscriptionRequest {
-    private final Optional<String> companyId;
+    private final Optional<List<String>> companyIds;
 
-    private final Optional<String> companyIds;
+    private final Optional<String> companyId;
 
     private final Optional<Integer> limit;
 
@@ -31,26 +33,26 @@ public final class GetActiveCompanySubscriptionRequest {
     private final Map<String, Object> additionalProperties;
 
     private GetActiveCompanySubscriptionRequest(
+            Optional<List<String>> companyIds,
             Optional<String> companyId,
-            Optional<String> companyIds,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
-        this.companyId = companyId;
         this.companyIds = companyIds;
+        this.companyId = companyId;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("company_ids")
+    public Optional<List<String>> getCompanyIds() {
+        return companyIds;
+    }
+
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
-    }
-
-    @JsonProperty("company_ids")
-    public Optional<String> getCompanyIds() {
-        return companyIds;
     }
 
     /**
@@ -82,15 +84,15 @@ public final class GetActiveCompanySubscriptionRequest {
     }
 
     private boolean equalTo(GetActiveCompanySubscriptionRequest other) {
-        return companyId.equals(other.companyId)
-                && companyIds.equals(other.companyIds)
+        return companyIds.equals(other.companyIds)
+                && companyId.equals(other.companyId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.companyIds, this.limit, this.offset);
+        return Objects.hash(this.companyIds, this.companyId, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -104,9 +106,9 @@ public final class GetActiveCompanySubscriptionRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> companyId = Optional.empty();
+        private Optional<List<String>> companyIds = Optional.empty();
 
-        private Optional<String> companyIds = Optional.empty();
+        private Optional<String> companyId = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
@@ -118,10 +120,26 @@ public final class GetActiveCompanySubscriptionRequest {
         private Builder() {}
 
         public Builder from(GetActiveCompanySubscriptionRequest other) {
-            companyId(other.getCompanyId());
             companyIds(other.getCompanyIds());
+            companyId(other.getCompanyId());
             limit(other.getLimit());
             offset(other.getOffset());
+            return this;
+        }
+
+        @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
+        public Builder companyIds(Optional<List<String>> companyIds) {
+            this.companyIds = companyIds;
+            return this;
+        }
+
+        public Builder companyIds(List<String> companyIds) {
+            this.companyIds = Optional.ofNullable(companyIds);
+            return this;
+        }
+
+        public Builder companyIds(String companyIds) {
+            this.companyIds = Optional.of(Collections.singletonList(companyIds));
             return this;
         }
 
@@ -136,17 +154,9 @@ public final class GetActiveCompanySubscriptionRequest {
             return this;
         }
 
-        @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
-        public Builder companyIds(Optional<String> companyIds) {
-            this.companyIds = companyIds;
-            return this;
-        }
-
-        public Builder companyIds(String companyIds) {
-            this.companyIds = Optional.ofNullable(companyIds);
-            return this;
-        }
-
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -158,6 +168,9 @@ public final class GetActiveCompanySubscriptionRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -170,7 +183,7 @@ public final class GetActiveCompanySubscriptionRequest {
         }
 
         public GetActiveCompanySubscriptionRequest build() {
-            return new GetActiveCompanySubscriptionRequest(companyId, companyIds, limit, offset, additionalProperties);
+            return new GetActiveCompanySubscriptionRequest(companyIds, companyId, limit, offset, additionalProperties);
         }
     }
 }

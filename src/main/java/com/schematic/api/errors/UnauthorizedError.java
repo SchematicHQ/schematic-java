@@ -5,6 +5,7 @@ package com.schematic.api.errors;
 
 import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.types.ApiError;
+import okhttp3.Response;
 
 public final class UnauthorizedError extends BaseSchematicApiException {
     /**
@@ -14,6 +15,11 @@ public final class UnauthorizedError extends BaseSchematicApiException {
 
     public UnauthorizedError(ApiError body) {
         super("UnauthorizedError", 401, body);
+        this.body = body;
+    }
+
+    public UnauthorizedError(ApiError body, Response rawResponse) {
+        super("UnauthorizedError", 401, body, rawResponse);
         this.body = body;
     }
 

@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,9 +22,9 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListFlagsRequest.Builder.class)
 public final class ListFlagsRequest {
-    private final Optional<String> featureId;
+    private final Optional<List<String>> ids;
 
-    private final Optional<String> ids;
+    private final Optional<String> featureId;
 
     private final Optional<String> q;
 
@@ -33,18 +35,23 @@ public final class ListFlagsRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListFlagsRequest(
+            Optional<List<String>> ids,
             Optional<String> featureId,
-            Optional<String> ids,
             Optional<String> q,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
-        this.featureId = featureId;
         this.ids = ids;
+        this.featureId = featureId;
         this.q = q;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("ids")
+    public Optional<List<String>> getIds() {
+        return ids;
     }
 
     @JsonProperty("feature_id")
@@ -52,11 +59,9 @@ public final class ListFlagsRequest {
         return featureId;
     }
 
-    @JsonProperty("ids")
-    public Optional<String> getIds() {
-        return ids;
-    }
-
+    /**
+     * @return Search by flag name, key, or ID
+     */
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
@@ -90,8 +95,8 @@ public final class ListFlagsRequest {
     }
 
     private boolean equalTo(ListFlagsRequest other) {
-        return featureId.equals(other.featureId)
-                && ids.equals(other.ids)
+        return ids.equals(other.ids)
+                && featureId.equals(other.featureId)
                 && q.equals(other.q)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
@@ -99,7 +104,7 @@ public final class ListFlagsRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.featureId, this.ids, this.q, this.limit, this.offset);
+        return Objects.hash(this.ids, this.featureId, this.q, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -113,9 +118,9 @@ public final class ListFlagsRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> featureId = Optional.empty();
+        private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<String> ids = Optional.empty();
+        private Optional<String> featureId = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -129,11 +134,27 @@ public final class ListFlagsRequest {
         private Builder() {}
 
         public Builder from(ListFlagsRequest other) {
-            featureId(other.getFeatureId());
             ids(other.getIds());
+            featureId(other.getFeatureId());
             q(other.getQ());
             limit(other.getLimit());
             offset(other.getOffset());
+            return this;
+        }
+
+        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
+        public Builder ids(Optional<List<String>> ids) {
+            this.ids = ids;
+            return this;
+        }
+
+        public Builder ids(List<String> ids) {
+            this.ids = Optional.ofNullable(ids);
+            return this;
+        }
+
+        public Builder ids(String ids) {
+            this.ids = Optional.of(Collections.singletonList(ids));
             return this;
         }
 
@@ -148,17 +169,9 @@ public final class ListFlagsRequest {
             return this;
         }
 
-        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
-        public Builder ids(Optional<String> ids) {
-            this.ids = ids;
-            return this;
-        }
-
-        public Builder ids(String ids) {
-            this.ids = Optional.ofNullable(ids);
-            return this;
-        }
-
+        /**
+         * <p>Search by flag name, key, or ID</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -170,6 +183,9 @@ public final class ListFlagsRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -181,6 +197,9 @@ public final class ListFlagsRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -193,7 +212,7 @@ public final class ListFlagsRequest {
         }
 
         public ListFlagsRequest build() {
-            return new ListFlagsRequest(featureId, ids, q, limit, offset, additionalProperties);
+            return new ListFlagsRequest(ids, featureId, q, limit, offset, additionalProperties);
         }
     }
 }

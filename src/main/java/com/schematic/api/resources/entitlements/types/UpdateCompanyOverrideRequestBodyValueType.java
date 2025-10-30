@@ -3,26 +3,117 @@
  */
 package com.schematic.api.resources.entitlements.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UpdateCompanyOverrideRequestBodyValueType {
-    BOOLEAN("boolean"),
+public final class UpdateCompanyOverrideRequestBodyValueType {
+    public static final UpdateCompanyOverrideRequestBodyValueType NUMERIC =
+            new UpdateCompanyOverrideRequestBodyValueType(Value.NUMERIC, "numeric");
 
-    NUMERIC("numeric"),
+    public static final UpdateCompanyOverrideRequestBodyValueType TRAIT =
+            new UpdateCompanyOverrideRequestBodyValueType(Value.TRAIT, "trait");
 
-    TRAIT("trait"),
+    public static final UpdateCompanyOverrideRequestBodyValueType BOOLEAN =
+            new UpdateCompanyOverrideRequestBodyValueType(Value.BOOLEAN, "boolean");
 
-    UNLIMITED("unlimited");
+    public static final UpdateCompanyOverrideRequestBodyValueType CREDIT =
+            new UpdateCompanyOverrideRequestBodyValueType(Value.CREDIT, "credit");
 
-    private final String value;
+    public static final UpdateCompanyOverrideRequestBodyValueType UNLIMITED =
+            new UpdateCompanyOverrideRequestBodyValueType(Value.UNLIMITED, "unlimited");
 
-    UpdateCompanyOverrideRequestBodyValueType(String value) {
+    private final Value value;
+
+    private final String string;
+
+    UpdateCompanyOverrideRequestBodyValueType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UpdateCompanyOverrideRequestBodyValueType
+                        && this.string.equals(((UpdateCompanyOverrideRequestBodyValueType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NUMERIC:
+                return visitor.visitNumeric();
+            case TRAIT:
+                return visitor.visitTrait();
+            case BOOLEAN:
+                return visitor.visitBoolean();
+            case CREDIT:
+                return visitor.visitCredit();
+            case UNLIMITED:
+                return visitor.visitUnlimited();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UpdateCompanyOverrideRequestBodyValueType valueOf(String value) {
+        switch (value) {
+            case "numeric":
+                return NUMERIC;
+            case "trait":
+                return TRAIT;
+            case "boolean":
+                return BOOLEAN;
+            case "credit":
+                return CREDIT;
+            case "unlimited":
+                return UNLIMITED;
+            default:
+                return new UpdateCompanyOverrideRequestBodyValueType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BOOLEAN,
+
+        CREDIT,
+
+        NUMERIC,
+
+        TRAIT,
+
+        UNLIMITED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitBoolean();
+
+        T visitCredit();
+
+        T visitNumeric();
+
+        T visitTrait();
+
+        T visitUnlimited();
+
+        T visitUnknown(String unknownType);
     }
 }

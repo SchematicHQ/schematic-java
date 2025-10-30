@@ -618,7 +618,9 @@ public final class EventDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllFeatures(List<PreviewObject> features) {
-            this.features.addAll(features);
+            if (features != null) {
+                this.features.addAll(features);
+            }
             return this;
         }
 
@@ -632,13 +634,17 @@ public final class EventDetailResponseData {
         @JsonSetter(value = "features", nulls = Nulls.SKIP)
         public _FinalStage features(List<PreviewObject> features) {
             this.features.clear();
-            this.features.addAll(features);
+            if (features != null) {
+                this.features.addAll(features);
+            }
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllFeatureIds(List<String> featureIds) {
-            this.featureIds.addAll(featureIds);
+            if (featureIds != null) {
+                this.featureIds.addAll(featureIds);
+            }
             return this;
         }
 
@@ -652,7 +658,9 @@ public final class EventDetailResponseData {
         @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
         public _FinalStage featureIds(List<String> featureIds) {
             this.featureIds.clear();
-            this.featureIds.addAll(featureIds);
+            if (featureIds != null) {
+                this.featureIds.addAll(featureIds);
+            }
             return this;
         }
 
@@ -729,7 +737,9 @@ public final class EventDetailResponseData {
 
         @java.lang.Override
         public _FinalStage putAllBody(Map<String, JsonNode> body) {
-            this.body.putAll(body);
+            if (body != null) {
+                this.body.putAll(body);
+            }
             return this;
         }
 
@@ -737,7 +747,9 @@ public final class EventDetailResponseData {
         @JsonSetter(value = "body", nulls = Nulls.SKIP)
         public _FinalStage body(Map<String, JsonNode> body) {
             this.body.clear();
-            this.body.putAll(body);
+            if (body != null) {
+                this.body.putAll(body);
+            }
             return this;
         }
 

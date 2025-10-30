@@ -58,7 +58,7 @@ public final class UpsertTraitRequestBody {
     }
 
     /**
-     * @return Key/value pairs too identify a company or user
+     * @return Key/value pairs to identify a company or user
      */
     @JsonProperty("keys")
     public Map<String, String> getKeys() {
@@ -123,6 +123,9 @@ public final class UpsertTraitRequestBody {
     }
 
     public interface TraitStage {
+        /**
+         * <p>Name of the trait to update</p>
+         */
         _FinalStage trait(@NotNull String trait);
 
         Builder from(UpsertTraitRequestBody other);
@@ -131,20 +134,32 @@ public final class UpsertTraitRequestBody {
     public interface _FinalStage {
         UpsertTraitRequestBody build();
 
+        /**
+         * <p>Amount to increment the trait by (positive or negative)</p>
+         */
         _FinalStage incr(Optional<Integer> incr);
 
         _FinalStage incr(Integer incr);
 
+        /**
+         * <p>Key/value pairs to identify a company or user</p>
+         */
         _FinalStage keys(Map<String, String> keys);
 
         _FinalStage putAllKeys(Map<String, String> keys);
 
         _FinalStage keys(String key, String value);
 
+        /**
+         * <p>Value to set the trait to</p>
+         */
         _FinalStage set(Optional<String> set);
 
         _FinalStage set(String set);
 
+        /**
+         * <p>Unless this is set, the company or user will be created if it does not already exist</p>
+         */
         _FinalStage updateOnly(Optional<Boolean> updateOnly);
 
         _FinalStage updateOnly(Boolean updateOnly);
@@ -179,6 +194,7 @@ public final class UpsertTraitRequestBody {
 
         /**
          * <p>Name of the trait to update</p>
+         * <p>Name of the trait to update</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -198,6 +214,9 @@ public final class UpsertTraitRequestBody {
             return this;
         }
 
+        /**
+         * <p>Unless this is set, the company or user will be created if it does not already exist</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "update_only", nulls = Nulls.SKIP)
         public _FinalStage updateOnly(Optional<Boolean> updateOnly) {
@@ -215,6 +234,9 @@ public final class UpsertTraitRequestBody {
             return this;
         }
 
+        /**
+         * <p>Value to set the trait to</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "set", nulls = Nulls.SKIP)
         public _FinalStage set(Optional<String> set) {
@@ -223,7 +245,7 @@ public final class UpsertTraitRequestBody {
         }
 
         /**
-         * <p>Key/value pairs too identify a company or user</p>
+         * <p>Key/value pairs to identify a company or user</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -233,20 +255,27 @@ public final class UpsertTraitRequestBody {
         }
 
         /**
-         * <p>Key/value pairs too identify a company or user</p>
+         * <p>Key/value pairs to identify a company or user</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         public _FinalStage putAllKeys(Map<String, String> keys) {
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 
+        /**
+         * <p>Key/value pairs to identify a company or user</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "keys", nulls = Nulls.SKIP)
         public _FinalStage keys(Map<String, String> keys) {
             this.keys.clear();
-            this.keys.putAll(keys);
+            if (keys != null) {
+                this.keys.putAll(keys);
+            }
             return this;
         }
 
@@ -260,6 +289,9 @@ public final class UpsertTraitRequestBody {
             return this;
         }
 
+        /**
+         * <p>Amount to increment the trait by (positive or negative)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "incr", nulls = Nulls.SKIP)
         public _FinalStage incr(Optional<Integer> incr) {
