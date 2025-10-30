@@ -3,30 +3,128 @@
  */
 package com.schematic.api.resources.companies.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CountEntityTraitDefinitionsResponseParamsTraitType {
-    BOOLEAN("boolean"),
+public final class CountEntityTraitDefinitionsResponseParamsTraitType {
+    public static final CountEntityTraitDefinitionsResponseParamsTraitType NUMBER =
+            new CountEntityTraitDefinitionsResponseParamsTraitType(Value.NUMBER, "number");
 
-    CURRENCY("currency"),
+    public static final CountEntityTraitDefinitionsResponseParamsTraitType STRING =
+            new CountEntityTraitDefinitionsResponseParamsTraitType(Value.STRING, "string");
 
-    DATE("date"),
+    public static final CountEntityTraitDefinitionsResponseParamsTraitType BOOLEAN =
+            new CountEntityTraitDefinitionsResponseParamsTraitType(Value.BOOLEAN, "boolean");
 
-    NUMBER("number"),
+    public static final CountEntityTraitDefinitionsResponseParamsTraitType CURRENCY =
+            new CountEntityTraitDefinitionsResponseParamsTraitType(Value.CURRENCY, "currency");
 
-    STRING("string"),
+    public static final CountEntityTraitDefinitionsResponseParamsTraitType DATE =
+            new CountEntityTraitDefinitionsResponseParamsTraitType(Value.DATE, "date");
 
-    URL("url");
+    public static final CountEntityTraitDefinitionsResponseParamsTraitType URL =
+            new CountEntityTraitDefinitionsResponseParamsTraitType(Value.URL, "url");
 
-    private final String value;
+    private final Value value;
 
-    CountEntityTraitDefinitionsResponseParamsTraitType(String value) {
+    private final String string;
+
+    CountEntityTraitDefinitionsResponseParamsTraitType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CountEntityTraitDefinitionsResponseParamsTraitType
+                        && this.string.equals(((CountEntityTraitDefinitionsResponseParamsTraitType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NUMBER:
+                return visitor.visitNumber();
+            case STRING:
+                return visitor.visitString();
+            case BOOLEAN:
+                return visitor.visitBoolean();
+            case CURRENCY:
+                return visitor.visitCurrency();
+            case DATE:
+                return visitor.visitDate();
+            case URL:
+                return visitor.visitUrl();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CountEntityTraitDefinitionsResponseParamsTraitType valueOf(String value) {
+        switch (value) {
+            case "number":
+                return NUMBER;
+            case "string":
+                return STRING;
+            case "boolean":
+                return BOOLEAN;
+            case "currency":
+                return CURRENCY;
+            case "date":
+                return DATE;
+            case "url":
+                return URL;
+            default:
+                return new CountEntityTraitDefinitionsResponseParamsTraitType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BOOLEAN,
+
+        CURRENCY,
+
+        DATE,
+
+        NUMBER,
+
+        STRING,
+
+        URL,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitBoolean();
+
+        T visitCurrency();
+
+        T visitDate();
+
+        T visitNumber();
+
+        T visitString();
+
+        T visitUrl();
+
+        T visitUnknown(String unknownType);
     }
 }

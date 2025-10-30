@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.resources.webhooks.types.UpdateWebhookRequestBodyRequestTypesItem;
 import com.schematic.api.resources.webhooks.types.UpdateWebhookRequestBodyStatus;
+import com.schematic.api.types.CreditTriggerConfig;
+import com.schematic.api.types.EntitlementTriggerConfig;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,10 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateWebhookRequestBody.Builder.class)
 public final class UpdateWebhookRequestBody {
+    private final Optional<List<CreditTriggerConfig>> creditTriggerConfigs;
+
+    private final Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs;
+
     private final Optional<String> name;
 
     private final Optional<List<UpdateWebhookRequestBodyRequestTypesItem>> requestTypes;
@@ -34,16 +40,30 @@ public final class UpdateWebhookRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private UpdateWebhookRequestBody(
+            Optional<List<CreditTriggerConfig>> creditTriggerConfigs,
+            Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs,
             Optional<String> name,
             Optional<List<UpdateWebhookRequestBodyRequestTypesItem>> requestTypes,
             Optional<UpdateWebhookRequestBodyStatus> status,
             Optional<String> url,
             Map<String, Object> additionalProperties) {
+        this.creditTriggerConfigs = creditTriggerConfigs;
+        this.entitlementTriggerConfigs = entitlementTriggerConfigs;
         this.name = name;
         this.requestTypes = requestTypes;
         this.status = status;
         this.url = url;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("credit_trigger_configs")
+    public Optional<List<CreditTriggerConfig>> getCreditTriggerConfigs() {
+        return creditTriggerConfigs;
+    }
+
+    @JsonProperty("entitlement_trigger_configs")
+    public Optional<List<EntitlementTriggerConfig>> getEntitlementTriggerConfigs() {
+        return entitlementTriggerConfigs;
     }
 
     @JsonProperty("name")
@@ -78,7 +98,9 @@ public final class UpdateWebhookRequestBody {
     }
 
     private boolean equalTo(UpdateWebhookRequestBody other) {
-        return name.equals(other.name)
+        return creditTriggerConfigs.equals(other.creditTriggerConfigs)
+                && entitlementTriggerConfigs.equals(other.entitlementTriggerConfigs)
+                && name.equals(other.name)
                 && requestTypes.equals(other.requestTypes)
                 && status.equals(other.status)
                 && url.equals(other.url);
@@ -86,7 +108,13 @@ public final class UpdateWebhookRequestBody {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.requestTypes, this.status, this.url);
+        return Objects.hash(
+                this.creditTriggerConfigs,
+                this.entitlementTriggerConfigs,
+                this.name,
+                this.requestTypes,
+                this.status,
+                this.url);
     }
 
     @java.lang.Override
@@ -100,6 +128,10 @@ public final class UpdateWebhookRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<List<CreditTriggerConfig>> creditTriggerConfigs = Optional.empty();
+
+        private Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<List<UpdateWebhookRequestBodyRequestTypesItem>> requestTypes = Optional.empty();
@@ -114,10 +146,34 @@ public final class UpdateWebhookRequestBody {
         private Builder() {}
 
         public Builder from(UpdateWebhookRequestBody other) {
+            creditTriggerConfigs(other.getCreditTriggerConfigs());
+            entitlementTriggerConfigs(other.getEntitlementTriggerConfigs());
             name(other.getName());
             requestTypes(other.getRequestTypes());
             status(other.getStatus());
             url(other.getUrl());
+            return this;
+        }
+
+        @JsonSetter(value = "credit_trigger_configs", nulls = Nulls.SKIP)
+        public Builder creditTriggerConfigs(Optional<List<CreditTriggerConfig>> creditTriggerConfigs) {
+            this.creditTriggerConfigs = creditTriggerConfigs;
+            return this;
+        }
+
+        public Builder creditTriggerConfigs(List<CreditTriggerConfig> creditTriggerConfigs) {
+            this.creditTriggerConfigs = Optional.ofNullable(creditTriggerConfigs);
+            return this;
+        }
+
+        @JsonSetter(value = "entitlement_trigger_configs", nulls = Nulls.SKIP)
+        public Builder entitlementTriggerConfigs(Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs) {
+            this.entitlementTriggerConfigs = entitlementTriggerConfigs;
+            return this;
+        }
+
+        public Builder entitlementTriggerConfigs(List<EntitlementTriggerConfig> entitlementTriggerConfigs) {
+            this.entitlementTriggerConfigs = Optional.ofNullable(entitlementTriggerConfigs);
             return this;
         }
 
@@ -166,7 +222,14 @@ public final class UpdateWebhookRequestBody {
         }
 
         public UpdateWebhookRequestBody build() {
-            return new UpdateWebhookRequestBody(name, requestTypes, status, url, additionalProperties);
+            return new UpdateWebhookRequestBody(
+                    creditTriggerConfigs,
+                    entitlementTriggerConfigs,
+                    name,
+                    requestTypes,
+                    status,
+                    url,
+                    additionalProperties);
         }
     }
 }

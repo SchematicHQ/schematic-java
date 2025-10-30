@@ -3,22 +3,84 @@
  */
 package com.schematic.api.resources.components.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CreateComponentRequestBodyEntityType {
-    ENTITLEMENT("entitlement"),
+public final class CreateComponentRequestBodyEntityType {
+    public static final CreateComponentRequestBodyEntityType BILLING =
+            new CreateComponentRequestBodyEntityType(Value.BILLING, "billing");
 
-    BILLING("billing");
+    public static final CreateComponentRequestBodyEntityType ENTITLEMENT =
+            new CreateComponentRequestBodyEntityType(Value.ENTITLEMENT, "entitlement");
 
-    private final String value;
+    private final Value value;
 
-    CreateComponentRequestBodyEntityType(String value) {
+    private final String string;
+
+    CreateComponentRequestBodyEntityType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CreateComponentRequestBodyEntityType
+                        && this.string.equals(((CreateComponentRequestBodyEntityType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case BILLING:
+                return visitor.visitBilling();
+            case ENTITLEMENT:
+                return visitor.visitEntitlement();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CreateComponentRequestBodyEntityType valueOf(String value) {
+        switch (value) {
+            case "billing":
+                return BILLING;
+            case "entitlement":
+                return ENTITLEMENT;
+            default:
+                return new CreateComponentRequestBodyEntityType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ENTITLEMENT,
+
+        BILLING,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitEntitlement();
+
+        T visitBilling();
+
+        T visitUnknown(String unknownType);
     }
 }

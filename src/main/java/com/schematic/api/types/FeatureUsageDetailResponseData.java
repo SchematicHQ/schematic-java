@@ -82,7 +82,9 @@ public final class FeatureUsageDetailResponseData {
         @JsonSetter(value = "features", nulls = Nulls.SKIP)
         public Builder features(List<FeatureUsageResponseData> features) {
             this.features.clear();
-            this.features.addAll(features);
+            if (features != null) {
+                this.features.addAll(features);
+            }
             return this;
         }
 
@@ -92,7 +94,9 @@ public final class FeatureUsageDetailResponseData {
         }
 
         public Builder addAllFeatures(List<FeatureUsageResponseData> features) {
-            this.features.addAll(features);
+            if (features != null) {
+                this.features.addAll(features);
+            }
             return this;
         }
 

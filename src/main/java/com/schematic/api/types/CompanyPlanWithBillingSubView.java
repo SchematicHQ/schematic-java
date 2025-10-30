@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,6 +22,10 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyPlanWithBillingSubView.Builder.class)
 public final class CompanyPlanWithBillingSubView {
+    private final Optional<OffsetDateTime> addedOn;
+
+    private final Optional<String> billingProductExternalId;
+
     private final Optional<String> billingProductId;
 
     private final Optional<String> description;
@@ -38,6 +43,8 @@ public final class CompanyPlanWithBillingSubView {
     private final Map<String, Object> additionalProperties;
 
     private CompanyPlanWithBillingSubView(
+            Optional<OffsetDateTime> addedOn,
+            Optional<String> billingProductExternalId,
             Optional<String> billingProductId,
             Optional<String> description,
             String id,
@@ -46,6 +53,8 @@ public final class CompanyPlanWithBillingSubView {
             Optional<String> planPeriod,
             Optional<Integer> planPrice,
             Map<String, Object> additionalProperties) {
+        this.addedOn = addedOn;
+        this.billingProductExternalId = billingProductExternalId;
         this.billingProductId = billingProductId;
         this.description = description;
         this.id = id;
@@ -54,6 +63,16 @@ public final class CompanyPlanWithBillingSubView {
         this.planPeriod = planPeriod;
         this.planPrice = planPrice;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("added_on")
+    public Optional<OffsetDateTime> getAddedOn() {
+        return addedOn;
+    }
+
+    @JsonProperty("billing_product_external_id")
+    public Optional<String> getBillingProductExternalId() {
+        return billingProductExternalId;
     }
 
     @JsonProperty("billing_product_id")
@@ -103,7 +122,9 @@ public final class CompanyPlanWithBillingSubView {
     }
 
     private boolean equalTo(CompanyPlanWithBillingSubView other) {
-        return billingProductId.equals(other.billingProductId)
+        return addedOn.equals(other.addedOn)
+                && billingProductExternalId.equals(other.billingProductExternalId)
+                && billingProductId.equals(other.billingProductId)
                 && description.equals(other.description)
                 && id.equals(other.id)
                 && imageUrl.equals(other.imageUrl)
@@ -115,6 +136,8 @@ public final class CompanyPlanWithBillingSubView {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.addedOn,
+                this.billingProductExternalId,
                 this.billingProductId,
                 this.description,
                 this.id,
@@ -145,6 +168,14 @@ public final class CompanyPlanWithBillingSubView {
 
     public interface _FinalStage {
         CompanyPlanWithBillingSubView build();
+
+        _FinalStage addedOn(Optional<OffsetDateTime> addedOn);
+
+        _FinalStage addedOn(OffsetDateTime addedOn);
+
+        _FinalStage billingProductExternalId(Optional<String> billingProductExternalId);
+
+        _FinalStage billingProductExternalId(String billingProductExternalId);
 
         _FinalStage billingProductId(Optional<String> billingProductId);
 
@@ -183,6 +214,10 @@ public final class CompanyPlanWithBillingSubView {
 
         private Optional<String> billingProductId = Optional.empty();
 
+        private Optional<String> billingProductExternalId = Optional.empty();
+
+        private Optional<OffsetDateTime> addedOn = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -190,6 +225,8 @@ public final class CompanyPlanWithBillingSubView {
 
         @java.lang.Override
         public Builder from(CompanyPlanWithBillingSubView other) {
+            addedOn(other.getAddedOn());
+            billingProductExternalId(other.getBillingProductExternalId());
             billingProductId(other.getBillingProductId());
             description(other.getDescription());
             id(other.getId());
@@ -280,9 +317,44 @@ public final class CompanyPlanWithBillingSubView {
         }
 
         @java.lang.Override
+        public _FinalStage billingProductExternalId(String billingProductExternalId) {
+            this.billingProductExternalId = Optional.ofNullable(billingProductExternalId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_product_external_id", nulls = Nulls.SKIP)
+        public _FinalStage billingProductExternalId(Optional<String> billingProductExternalId) {
+            this.billingProductExternalId = billingProductExternalId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addedOn(OffsetDateTime addedOn) {
+            this.addedOn = Optional.ofNullable(addedOn);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "added_on", nulls = Nulls.SKIP)
+        public _FinalStage addedOn(Optional<OffsetDateTime> addedOn) {
+            this.addedOn = addedOn;
+            return this;
+        }
+
+        @java.lang.Override
         public CompanyPlanWithBillingSubView build() {
             return new CompanyPlanWithBillingSubView(
-                    billingProductId, description, id, imageUrl, name, planPeriod, planPrice, additionalProperties);
+                    addedOn,
+                    billingProductExternalId,
+                    billingProductId,
+                    description,
+                    id,
+                    imageUrl,
+                    name,
+                    planPeriod,
+                    planPrice,
+                    additionalProperties);
         }
     }
 }

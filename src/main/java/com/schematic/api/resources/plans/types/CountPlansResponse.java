@@ -81,6 +81,9 @@ public final class CountPlansResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull CountPlansParams params);
     }
 
@@ -114,6 +117,7 @@ public final class CountPlansResponse {
         }
 
         /**
+         * <p>Input parameters</p>
          * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

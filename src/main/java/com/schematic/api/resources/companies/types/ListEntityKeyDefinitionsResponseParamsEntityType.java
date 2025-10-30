@@ -3,22 +3,84 @@
  */
 package com.schematic.api.resources.companies.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ListEntityKeyDefinitionsResponseParamsEntityType {
-    COMPANY("company"),
+public final class ListEntityKeyDefinitionsResponseParamsEntityType {
+    public static final ListEntityKeyDefinitionsResponseParamsEntityType USER =
+            new ListEntityKeyDefinitionsResponseParamsEntityType(Value.USER, "user");
 
-    USER("user");
+    public static final ListEntityKeyDefinitionsResponseParamsEntityType COMPANY =
+            new ListEntityKeyDefinitionsResponseParamsEntityType(Value.COMPANY, "company");
 
-    private final String value;
+    private final Value value;
 
-    ListEntityKeyDefinitionsResponseParamsEntityType(String value) {
+    private final String string;
+
+    ListEntityKeyDefinitionsResponseParamsEntityType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof ListEntityKeyDefinitionsResponseParamsEntityType
+                        && this.string.equals(((ListEntityKeyDefinitionsResponseParamsEntityType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case USER:
+                return visitor.visitUser();
+            case COMPANY:
+                return visitor.visitCompany();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ListEntityKeyDefinitionsResponseParamsEntityType valueOf(String value) {
+        switch (value) {
+            case "user":
+                return USER;
+            case "company":
+                return COMPANY;
+            default:
+                return new ListEntityKeyDefinitionsResponseParamsEntityType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        COMPANY,
+
+        USER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCompany();
+
+        T visitUser();
+
+        T visitUnknown(String unknownType);
     }
 }

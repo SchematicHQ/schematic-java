@@ -549,7 +549,9 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage addAllFeatureIds(List<String> featureIds) {
-            this.featureIds.addAll(featureIds);
+            if (featureIds != null) {
+                this.featureIds.addAll(featureIds);
+            }
             return this;
         }
 
@@ -563,7 +565,9 @@ public final class EventResponseData {
         @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
         public _FinalStage featureIds(List<String> featureIds) {
             this.featureIds.clear();
-            this.featureIds.addAll(featureIds);
+            if (featureIds != null) {
+                this.featureIds.addAll(featureIds);
+            }
             return this;
         }
 
@@ -627,7 +631,9 @@ public final class EventResponseData {
 
         @java.lang.Override
         public _FinalStage putAllBody(Map<String, JsonNode> body) {
-            this.body.putAll(body);
+            if (body != null) {
+                this.body.putAll(body);
+            }
             return this;
         }
 
@@ -635,7 +641,9 @@ public final class EventResponseData {
         @JsonSetter(value = "body", nulls = Nulls.SKIP)
         public _FinalStage body(Map<String, JsonNode> body) {
             this.body.clear();
-            this.body.putAll(body);
+            if (body != null) {
+                this.body.putAll(body);
+            }
             return this;
         }
 

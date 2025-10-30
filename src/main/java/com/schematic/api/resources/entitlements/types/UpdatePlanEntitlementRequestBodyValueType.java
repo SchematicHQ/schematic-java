@@ -3,26 +3,117 @@
  */
 package com.schematic.api.resources.entitlements.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UpdatePlanEntitlementRequestBodyValueType {
-    BOOLEAN("boolean"),
+public final class UpdatePlanEntitlementRequestBodyValueType {
+    public static final UpdatePlanEntitlementRequestBodyValueType NUMERIC =
+            new UpdatePlanEntitlementRequestBodyValueType(Value.NUMERIC, "numeric");
 
-    NUMERIC("numeric"),
+    public static final UpdatePlanEntitlementRequestBodyValueType TRAIT =
+            new UpdatePlanEntitlementRequestBodyValueType(Value.TRAIT, "trait");
 
-    TRAIT("trait"),
+    public static final UpdatePlanEntitlementRequestBodyValueType BOOLEAN =
+            new UpdatePlanEntitlementRequestBodyValueType(Value.BOOLEAN, "boolean");
 
-    UNLIMITED("unlimited");
+    public static final UpdatePlanEntitlementRequestBodyValueType CREDIT =
+            new UpdatePlanEntitlementRequestBodyValueType(Value.CREDIT, "credit");
 
-    private final String value;
+    public static final UpdatePlanEntitlementRequestBodyValueType UNLIMITED =
+            new UpdatePlanEntitlementRequestBodyValueType(Value.UNLIMITED, "unlimited");
 
-    UpdatePlanEntitlementRequestBodyValueType(String value) {
+    private final Value value;
+
+    private final String string;
+
+    UpdatePlanEntitlementRequestBodyValueType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UpdatePlanEntitlementRequestBodyValueType
+                        && this.string.equals(((UpdatePlanEntitlementRequestBodyValueType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NUMERIC:
+                return visitor.visitNumeric();
+            case TRAIT:
+                return visitor.visitTrait();
+            case BOOLEAN:
+                return visitor.visitBoolean();
+            case CREDIT:
+                return visitor.visitCredit();
+            case UNLIMITED:
+                return visitor.visitUnlimited();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UpdatePlanEntitlementRequestBodyValueType valueOf(String value) {
+        switch (value) {
+            case "numeric":
+                return NUMERIC;
+            case "trait":
+                return TRAIT;
+            case "boolean":
+                return BOOLEAN;
+            case "credit":
+                return CREDIT;
+            case "unlimited":
+                return UNLIMITED;
+            default:
+                return new UpdatePlanEntitlementRequestBodyValueType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BOOLEAN,
+
+        CREDIT,
+
+        NUMERIC,
+
+        TRAIT,
+
+        UNLIMITED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitBoolean();
+
+        T visitCredit();
+
+        T visitNumeric();
+
+        T visitTrait();
+
+        T visitUnlimited();
+
+        T visitUnknown(String unknownType);
     }
 }

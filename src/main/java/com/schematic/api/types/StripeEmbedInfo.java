@@ -21,22 +21,42 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = StripeEmbedInfo.Builder.class)
 public final class StripeEmbedInfo {
-    private final String publishableKey;
+    private final Optional<String> accountId;
+
+    private final Optional<String> publishableKey;
+
+    private final String schematicPublishableKey;
 
     private final Optional<String> setupIntentClientSecret;
 
     private final Map<String, Object> additionalProperties;
 
     private StripeEmbedInfo(
-            String publishableKey, Optional<String> setupIntentClientSecret, Map<String, Object> additionalProperties) {
+            Optional<String> accountId,
+            Optional<String> publishableKey,
+            String schematicPublishableKey,
+            Optional<String> setupIntentClientSecret,
+            Map<String, Object> additionalProperties) {
+        this.accountId = accountId;
         this.publishableKey = publishableKey;
+        this.schematicPublishableKey = schematicPublishableKey;
         this.setupIntentClientSecret = setupIntentClientSecret;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("account_id")
+    public Optional<String> getAccountId() {
+        return accountId;
+    }
+
     @JsonProperty("publishable_key")
-    public String getPublishableKey() {
+    public Optional<String> getPublishableKey() {
         return publishableKey;
+    }
+
+    @JsonProperty("schematic_publishable_key")
+    public String getSchematicPublishableKey() {
+        return schematicPublishableKey;
     }
 
     @JsonProperty("setup_intent_client_secret")
@@ -56,13 +76,16 @@ public final class StripeEmbedInfo {
     }
 
     private boolean equalTo(StripeEmbedInfo other) {
-        return publishableKey.equals(other.publishableKey)
+        return accountId.equals(other.accountId)
+                && publishableKey.equals(other.publishableKey)
+                && schematicPublishableKey.equals(other.schematicPublishableKey)
                 && setupIntentClientSecret.equals(other.setupIntentClientSecret);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.publishableKey, this.setupIntentClientSecret);
+        return Objects.hash(
+                this.accountId, this.publishableKey, this.schematicPublishableKey, this.setupIntentClientSecret);
     }
 
     @java.lang.Override
@@ -70,12 +93,12 @@ public final class StripeEmbedInfo {
         return ObjectMappers.stringify(this);
     }
 
-    public static PublishableKeyStage builder() {
+    public static SchematicPublishableKeyStage builder() {
         return new Builder();
     }
 
-    public interface PublishableKeyStage {
-        _FinalStage publishableKey(@NotNull String publishableKey);
+    public interface SchematicPublishableKeyStage {
+        _FinalStage schematicPublishableKey(@NotNull String schematicPublishableKey);
 
         Builder from(StripeEmbedInfo other);
     }
@@ -83,16 +106,28 @@ public final class StripeEmbedInfo {
     public interface _FinalStage {
         StripeEmbedInfo build();
 
+        _FinalStage accountId(Optional<String> accountId);
+
+        _FinalStage accountId(String accountId);
+
+        _FinalStage publishableKey(Optional<String> publishableKey);
+
+        _FinalStage publishableKey(String publishableKey);
+
         _FinalStage setupIntentClientSecret(Optional<String> setupIntentClientSecret);
 
         _FinalStage setupIntentClientSecret(String setupIntentClientSecret);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements PublishableKeyStage, _FinalStage {
-        private String publishableKey;
+    public static final class Builder implements SchematicPublishableKeyStage, _FinalStage {
+        private String schematicPublishableKey;
 
         private Optional<String> setupIntentClientSecret = Optional.empty();
+
+        private Optional<String> publishableKey = Optional.empty();
+
+        private Optional<String> accountId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -101,15 +136,18 @@ public final class StripeEmbedInfo {
 
         @java.lang.Override
         public Builder from(StripeEmbedInfo other) {
+            accountId(other.getAccountId());
             publishableKey(other.getPublishableKey());
+            schematicPublishableKey(other.getSchematicPublishableKey());
             setupIntentClientSecret(other.getSetupIntentClientSecret());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("publishable_key")
-        public _FinalStage publishableKey(@NotNull String publishableKey) {
-            this.publishableKey = Objects.requireNonNull(publishableKey, "publishableKey must not be null");
+        @JsonSetter("schematic_publishable_key")
+        public _FinalStage schematicPublishableKey(@NotNull String schematicPublishableKey) {
+            this.schematicPublishableKey =
+                    Objects.requireNonNull(schematicPublishableKey, "schematicPublishableKey must not be null");
             return this;
         }
 
@@ -127,8 +165,35 @@ public final class StripeEmbedInfo {
         }
 
         @java.lang.Override
+        public _FinalStage publishableKey(String publishableKey) {
+            this.publishableKey = Optional.ofNullable(publishableKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "publishable_key", nulls = Nulls.SKIP)
+        public _FinalStage publishableKey(Optional<String> publishableKey) {
+            this.publishableKey = publishableKey;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage accountId(String accountId) {
+            this.accountId = Optional.ofNullable(accountId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "account_id", nulls = Nulls.SKIP)
+        public _FinalStage accountId(Optional<String> accountId) {
+            this.accountId = accountId;
+            return this;
+        }
+
+        @java.lang.Override
         public StripeEmbedInfo build() {
-            return new StripeEmbedInfo(publishableKey, setupIntentClientSecret, additionalProperties);
+            return new StripeEmbedInfo(
+                    accountId, publishableKey, schematicPublishableKey, setupIntentClientSecret, additionalProperties);
         }
     }
 }
