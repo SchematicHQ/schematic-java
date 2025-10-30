@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ApiKeyRequestResponseData.Builder.class)
 public final class ApiKeyRequestResponseData {
+    private final Optional<ApiKeyResponseData> apiKey;
+
     private final String apiKeyId;
 
     private final Optional<OffsetDateTime> endedAt;
@@ -63,6 +65,7 @@ public final class ApiKeyRequestResponseData {
     private final Map<String, Object> additionalProperties;
 
     private ApiKeyRequestResponseData(
+            Optional<ApiKeyResponseData> apiKey,
             String apiKeyId,
             Optional<OffsetDateTime> endedAt,
             Optional<String> environmentId,
@@ -83,6 +86,7 @@ public final class ApiKeyRequestResponseData {
             Optional<String> userId,
             Optional<String> userName,
             Map<String, Object> additionalProperties) {
+        this.apiKey = apiKey;
         this.apiKeyId = apiKeyId;
         this.endedAt = endedAt;
         this.environmentId = environmentId;
@@ -103,6 +107,11 @@ public final class ApiKeyRequestResponseData {
         this.userId = userId;
         this.userName = userName;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("api_key")
+    public Optional<ApiKeyResponseData> getApiKey() {
+        return apiKey;
     }
 
     @JsonProperty("api_key_id")
@@ -212,7 +221,8 @@ public final class ApiKeyRequestResponseData {
     }
 
     private boolean equalTo(ApiKeyRequestResponseData other) {
-        return apiKeyId.equals(other.apiKeyId)
+        return apiKey.equals(other.apiKey)
+                && apiKeyId.equals(other.apiKeyId)
                 && endedAt.equals(other.endedAt)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
@@ -236,6 +246,7 @@ public final class ApiKeyRequestResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.apiKey,
                 this.apiKeyId,
                 this.endedAt,
                 this.environmentId,
@@ -290,6 +301,10 @@ public final class ApiKeyRequestResponseData {
 
     public interface _FinalStage {
         ApiKeyRequestResponseData build();
+
+        _FinalStage apiKey(Optional<ApiKeyResponseData> apiKey);
+
+        _FinalStage apiKey(ApiKeyResponseData apiKey);
 
         _FinalStage endedAt(Optional<OffsetDateTime> endedAt);
 
@@ -389,6 +404,8 @@ public final class ApiKeyRequestResponseData {
 
         private Optional<OffsetDateTime> endedAt = Optional.empty();
 
+        private Optional<ApiKeyResponseData> apiKey = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -396,6 +413,7 @@ public final class ApiKeyRequestResponseData {
 
         @java.lang.Override
         public Builder from(ApiKeyRequestResponseData other) {
+            apiKey(other.getApiKey());
             apiKeyId(other.getApiKeyId());
             endedAt(other.getEndedAt());
             environmentId(other.getEnvironmentId());
@@ -636,8 +654,22 @@ public final class ApiKeyRequestResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage apiKey(ApiKeyResponseData apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "api_key", nulls = Nulls.SKIP)
+        public _FinalStage apiKey(Optional<ApiKeyResponseData> apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        @java.lang.Override
         public ApiKeyRequestResponseData build() {
             return new ApiKeyRequestResponseData(
+                    apiKey,
                     apiKeyId,
                     endedAt,
                     environmentId,

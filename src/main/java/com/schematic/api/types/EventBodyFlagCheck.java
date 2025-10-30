@@ -197,46 +197,76 @@ public final class EventBodyFlagCheck {
     }
 
     public interface FlagKeyStage {
+        /**
+         * <p>The key of the flag being checked</p>
+         */
         ReasonStage flagKey(@NotNull String flagKey);
 
         Builder from(EventBodyFlagCheck other);
     }
 
     public interface ReasonStage {
+        /**
+         * <p>The reason why the value was returned</p>
+         */
         ValueStage reason(@NotNull String reason);
     }
 
     public interface ValueStage {
+        /**
+         * <p>The value of the flag for the given company and/or user</p>
+         */
         _FinalStage value(boolean value);
     }
 
     public interface _FinalStage {
         EventBodyFlagCheck build();
 
+        /**
+         * <p>Schematic company ID (starting with 'comp_') of the company evaluated, if any</p>
+         */
         _FinalStage companyId(Optional<String> companyId);
 
         _FinalStage companyId(String companyId);
 
+        /**
+         * <p>Report an error that occurred during the flag check</p>
+         */
         _FinalStage error(Optional<String> error);
 
         _FinalStage error(String error);
 
+        /**
+         * <p>Schematic flag ID (starting with 'flag_') for the flag matching the key, if any</p>
+         */
         _FinalStage flagId(Optional<String> flagId);
 
         _FinalStage flagId(String flagId);
 
+        /**
+         * <p>Key-value pairs used to to identify company for which the flag was checked</p>
+         */
         _FinalStage reqCompany(Optional<Map<String, String>> reqCompany);
 
         _FinalStage reqCompany(Map<String, String> reqCompany);
 
+        /**
+         * <p>Key-value pairs used to to identify user for which the flag was checked</p>
+         */
         _FinalStage reqUser(Optional<Map<String, String>> reqUser);
 
         _FinalStage reqUser(Map<String, String> reqUser);
 
+        /**
+         * <p>Schematic rule ID (starting with 'rule_') of the rule that matched for the flag, if any</p>
+         */
         _FinalStage ruleId(Optional<String> ruleId);
 
         _FinalStage ruleId(String ruleId);
 
+        /**
+         * <p>Schematic user ID (starting with 'user_') of the user evaluated, if any</p>
+         */
         _FinalStage userId(Optional<String> userId);
 
         _FinalStage userId(String userId);
@@ -286,6 +316,7 @@ public final class EventBodyFlagCheck {
 
         /**
          * <p>The key of the flag being checked</p>
+         * <p>The key of the flag being checked</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -297,6 +328,7 @@ public final class EventBodyFlagCheck {
 
         /**
          * <p>The reason why the value was returned</p>
+         * <p>The reason why the value was returned</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -307,6 +339,7 @@ public final class EventBodyFlagCheck {
         }
 
         /**
+         * <p>The value of the flag for the given company and/or user</p>
          * <p>The value of the flag for the given company and/or user</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -327,6 +360,9 @@ public final class EventBodyFlagCheck {
             return this;
         }
 
+        /**
+         * <p>Schematic user ID (starting with 'user_') of the user evaluated, if any</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
         public _FinalStage userId(Optional<String> userId) {
@@ -344,6 +380,9 @@ public final class EventBodyFlagCheck {
             return this;
         }
 
+        /**
+         * <p>Schematic rule ID (starting with 'rule_') of the rule that matched for the flag, if any</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "rule_id", nulls = Nulls.SKIP)
         public _FinalStage ruleId(Optional<String> ruleId) {
@@ -361,6 +400,9 @@ public final class EventBodyFlagCheck {
             return this;
         }
 
+        /**
+         * <p>Key-value pairs used to to identify user for which the flag was checked</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "req_user", nulls = Nulls.SKIP)
         public _FinalStage reqUser(Optional<Map<String, String>> reqUser) {
@@ -378,6 +420,9 @@ public final class EventBodyFlagCheck {
             return this;
         }
 
+        /**
+         * <p>Key-value pairs used to to identify company for which the flag was checked</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "req_company", nulls = Nulls.SKIP)
         public _FinalStage reqCompany(Optional<Map<String, String>> reqCompany) {
@@ -395,6 +440,9 @@ public final class EventBodyFlagCheck {
             return this;
         }
 
+        /**
+         * <p>Schematic flag ID (starting with 'flag_') for the flag matching the key, if any</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "flag_id", nulls = Nulls.SKIP)
         public _FinalStage flagId(Optional<String> flagId) {
@@ -412,6 +460,9 @@ public final class EventBodyFlagCheck {
             return this;
         }
 
+        /**
+         * <p>Report an error that occurred during the flag check</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "error", nulls = Nulls.SKIP)
         public _FinalStage error(Optional<String> error) {
@@ -429,6 +480,9 @@ public final class EventBodyFlagCheck {
             return this;
         }
 
+        /**
+         * <p>Schematic company ID (starting with 'comp_') of the company evaluated, if any</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
         public _FinalStage companyId(Optional<String> companyId) {

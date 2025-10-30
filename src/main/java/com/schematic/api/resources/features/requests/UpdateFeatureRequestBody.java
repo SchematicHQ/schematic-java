@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.resources.features.types.UpdateFeatureRequestBodyFeatureType;
+import com.schematic.api.resources.features.types.UpdateFeatureRequestBodyLifecyclePhase;
 import com.schematic.api.types.CreateOrUpdateFlagRequestBody;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public final class UpdateFeatureRequestBody {
 
     private final Optional<String> icon;
 
-    private final Optional<String> lifecyclePhase;
+    private final Optional<UpdateFeatureRequestBodyLifecyclePhase> lifecyclePhase;
 
     private final Optional<String> maintainerId;
 
@@ -52,7 +53,7 @@ public final class UpdateFeatureRequestBody {
             Optional<UpdateFeatureRequestBodyFeatureType> featureType,
             Optional<CreateOrUpdateFlagRequestBody> flag,
             Optional<String> icon,
-            Optional<String> lifecyclePhase,
+            Optional<UpdateFeatureRequestBodyLifecyclePhase> lifecyclePhase,
             Optional<String> maintainerId,
             Optional<String> name,
             Optional<String> pluralName,
@@ -99,7 +100,7 @@ public final class UpdateFeatureRequestBody {
     }
 
     @JsonProperty("lifecycle_phase")
-    public Optional<String> getLifecyclePhase() {
+    public Optional<UpdateFeatureRequestBodyLifecyclePhase> getLifecyclePhase() {
         return lifecyclePhase;
     }
 
@@ -190,7 +191,7 @@ public final class UpdateFeatureRequestBody {
 
         private Optional<String> icon = Optional.empty();
 
-        private Optional<String> lifecyclePhase = Optional.empty();
+        private Optional<UpdateFeatureRequestBodyLifecyclePhase> lifecyclePhase = Optional.empty();
 
         private Optional<String> maintainerId = Optional.empty();
 
@@ -278,12 +279,12 @@ public final class UpdateFeatureRequestBody {
         }
 
         @JsonSetter(value = "lifecycle_phase", nulls = Nulls.SKIP)
-        public Builder lifecyclePhase(Optional<String> lifecyclePhase) {
+        public Builder lifecyclePhase(Optional<UpdateFeatureRequestBodyLifecyclePhase> lifecyclePhase) {
             this.lifecyclePhase = lifecyclePhase;
             return this;
         }
 
-        public Builder lifecyclePhase(String lifecyclePhase) {
+        public Builder lifecyclePhase(UpdateFeatureRequestBodyLifecyclePhase lifecyclePhase) {
             this.lifecyclePhase = Optional.ofNullable(lifecyclePhase);
             return this;
         }

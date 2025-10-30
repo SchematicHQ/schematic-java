@@ -3,26 +3,106 @@
  */
 package com.schematic.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum FeatureUsageResponseDataAllocationType {
-    BOOLEAN("boolean"),
+public final class FeatureUsageResponseDataAllocationType {
+    public static final FeatureUsageResponseDataAllocationType NUMERIC =
+            new FeatureUsageResponseDataAllocationType(Value.NUMERIC, "numeric");
 
-    NUMERIC("numeric"),
+    public static final FeatureUsageResponseDataAllocationType TRAIT =
+            new FeatureUsageResponseDataAllocationType(Value.TRAIT, "trait");
 
-    TRAIT("trait"),
+    public static final FeatureUsageResponseDataAllocationType BOOLEAN =
+            new FeatureUsageResponseDataAllocationType(Value.BOOLEAN, "boolean");
 
-    UNLIMITED("unlimited");
+    public static final FeatureUsageResponseDataAllocationType UNLIMITED =
+            new FeatureUsageResponseDataAllocationType(Value.UNLIMITED, "unlimited");
 
-    private final String value;
+    private final Value value;
 
-    FeatureUsageResponseDataAllocationType(String value) {
+    private final String string;
+
+    FeatureUsageResponseDataAllocationType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof FeatureUsageResponseDataAllocationType
+                        && this.string.equals(((FeatureUsageResponseDataAllocationType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NUMERIC:
+                return visitor.visitNumeric();
+            case TRAIT:
+                return visitor.visitTrait();
+            case BOOLEAN:
+                return visitor.visitBoolean();
+            case UNLIMITED:
+                return visitor.visitUnlimited();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static FeatureUsageResponseDataAllocationType valueOf(String value) {
+        switch (value) {
+            case "numeric":
+                return NUMERIC;
+            case "trait":
+                return TRAIT;
+            case "boolean":
+                return BOOLEAN;
+            case "unlimited":
+                return UNLIMITED;
+            default:
+                return new FeatureUsageResponseDataAllocationType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BOOLEAN,
+
+        NUMERIC,
+
+        TRAIT,
+
+        UNLIMITED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitBoolean();
+
+        T visitNumeric();
+
+        T visitTrait();
+
+        T visitUnlimited();
+
+        T visitUnknown(String unknownType);
     }
 }

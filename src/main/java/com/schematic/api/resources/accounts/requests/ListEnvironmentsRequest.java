@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,7 +22,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListEnvironmentsRequest.Builder.class)
 public final class ListEnvironmentsRequest {
-    private final Optional<String> ids;
+    private final Optional<List<String>> ids;
 
     private final Optional<Integer> limit;
 
@@ -29,7 +31,7 @@ public final class ListEnvironmentsRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListEnvironmentsRequest(
-            Optional<String> ids,
+            Optional<List<String>> ids,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
@@ -40,7 +42,7 @@ public final class ListEnvironmentsRequest {
     }
 
     @JsonProperty("ids")
-    public Optional<String> getIds() {
+    public Optional<List<String>> getIds() {
         return ids;
     }
 
@@ -91,7 +93,7 @@ public final class ListEnvironmentsRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> ids = Optional.empty();
+        private Optional<List<String>> ids = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
@@ -110,16 +112,24 @@ public final class ListEnvironmentsRequest {
         }
 
         @JsonSetter(value = "ids", nulls = Nulls.SKIP)
-        public Builder ids(Optional<String> ids) {
+        public Builder ids(Optional<List<String>> ids) {
             this.ids = ids;
             return this;
         }
 
-        public Builder ids(String ids) {
+        public Builder ids(List<String> ids) {
             this.ids = Optional.ofNullable(ids);
             return this;
         }
 
+        public Builder ids(String ids) {
+            this.ids = Optional.of(Collections.singletonList(ids));
+            return this;
+        }
+
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -131,6 +141,9 @@ public final class ListEnvironmentsRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;

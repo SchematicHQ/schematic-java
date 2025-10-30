@@ -3,22 +3,84 @@
  */
 package com.schematic.api.resources.companies.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CountEntityKeyDefinitionsRequestEntityType {
-    COMPANY("company"),
+public final class CountEntityKeyDefinitionsRequestEntityType {
+    public static final CountEntityKeyDefinitionsRequestEntityType USER =
+            new CountEntityKeyDefinitionsRequestEntityType(Value.USER, "user");
 
-    USER("user");
+    public static final CountEntityKeyDefinitionsRequestEntityType COMPANY =
+            new CountEntityKeyDefinitionsRequestEntityType(Value.COMPANY, "company");
 
-    private final String value;
+    private final Value value;
 
-    CountEntityKeyDefinitionsRequestEntityType(String value) {
+    private final String string;
+
+    CountEntityKeyDefinitionsRequestEntityType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CountEntityKeyDefinitionsRequestEntityType
+                        && this.string.equals(((CountEntityKeyDefinitionsRequestEntityType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case USER:
+                return visitor.visitUser();
+            case COMPANY:
+                return visitor.visitCompany();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CountEntityKeyDefinitionsRequestEntityType valueOf(String value) {
+        switch (value) {
+            case "user":
+                return USER;
+            case "company":
+                return COMPANY;
+            default:
+                return new CountEntityKeyDefinitionsRequestEntityType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        COMPANY,
+
+        USER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCompany();
+
+        T visitUser();
+
+        T visitUnknown(String unknownType);
     }
 }

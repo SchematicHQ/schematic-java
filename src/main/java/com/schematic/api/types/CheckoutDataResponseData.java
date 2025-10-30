@@ -28,9 +28,13 @@ public final class CheckoutDataResponseData {
 
     private final List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements;
 
+    private final List<BillingCreditBundleResponseData> availableCreditBundles;
+
     private final Optional<CompanyDetailResponseData> company;
 
     private final Optional<FeatureUsageDetailResponseData> featureUsage;
+
+    private final List<CreditBundlePurchaseResponseData> selectedCreditBundles;
 
     private final Optional<PlanDetailResponseData> selectedPlan;
 
@@ -44,8 +48,10 @@ public final class CheckoutDataResponseData {
             List<PlanDetailResponseData> activeAddOns,
             Optional<PlanDetailResponseData> activePlan,
             List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements,
+            List<BillingCreditBundleResponseData> availableCreditBundles,
             Optional<CompanyDetailResponseData> company,
             Optional<FeatureUsageDetailResponseData> featureUsage,
+            List<CreditBundlePurchaseResponseData> selectedCreditBundles,
             Optional<PlanDetailResponseData> selectedPlan,
             List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements,
             Optional<CompanySubscriptionResponseData> subscription,
@@ -53,8 +59,10 @@ public final class CheckoutDataResponseData {
         this.activeAddOns = activeAddOns;
         this.activePlan = activePlan;
         this.activeUsageBasedEntitlements = activeUsageBasedEntitlements;
+        this.availableCreditBundles = availableCreditBundles;
         this.company = company;
         this.featureUsage = featureUsage;
+        this.selectedCreditBundles = selectedCreditBundles;
         this.selectedPlan = selectedPlan;
         this.selectedUsageBasedEntitlements = selectedUsageBasedEntitlements;
         this.subscription = subscription;
@@ -76,6 +84,11 @@ public final class CheckoutDataResponseData {
         return activeUsageBasedEntitlements;
     }
 
+    @JsonProperty("available_credit_bundles")
+    public List<BillingCreditBundleResponseData> getAvailableCreditBundles() {
+        return availableCreditBundles;
+    }
+
     @JsonProperty("company")
     public Optional<CompanyDetailResponseData> getCompany() {
         return company;
@@ -84,6 +97,11 @@ public final class CheckoutDataResponseData {
     @JsonProperty("feature_usage")
     public Optional<FeatureUsageDetailResponseData> getFeatureUsage() {
         return featureUsage;
+    }
+
+    @JsonProperty("selected_credit_bundles")
+    public List<CreditBundlePurchaseResponseData> getSelectedCreditBundles() {
+        return selectedCreditBundles;
     }
 
     @JsonProperty("selected_plan")
@@ -116,8 +134,10 @@ public final class CheckoutDataResponseData {
         return activeAddOns.equals(other.activeAddOns)
                 && activePlan.equals(other.activePlan)
                 && activeUsageBasedEntitlements.equals(other.activeUsageBasedEntitlements)
+                && availableCreditBundles.equals(other.availableCreditBundles)
                 && company.equals(other.company)
                 && featureUsage.equals(other.featureUsage)
+                && selectedCreditBundles.equals(other.selectedCreditBundles)
                 && selectedPlan.equals(other.selectedPlan)
                 && selectedUsageBasedEntitlements.equals(other.selectedUsageBasedEntitlements)
                 && subscription.equals(other.subscription);
@@ -129,8 +149,10 @@ public final class CheckoutDataResponseData {
                 this.activeAddOns,
                 this.activePlan,
                 this.activeUsageBasedEntitlements,
+                this.availableCreditBundles,
                 this.company,
                 this.featureUsage,
+                this.selectedCreditBundles,
                 this.selectedPlan,
                 this.selectedUsageBasedEntitlements,
                 this.subscription);
@@ -153,9 +175,13 @@ public final class CheckoutDataResponseData {
 
         private List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements = new ArrayList<>();
 
+        private List<BillingCreditBundleResponseData> availableCreditBundles = new ArrayList<>();
+
         private Optional<CompanyDetailResponseData> company = Optional.empty();
 
         private Optional<FeatureUsageDetailResponseData> featureUsage = Optional.empty();
+
+        private List<CreditBundlePurchaseResponseData> selectedCreditBundles = new ArrayList<>();
 
         private Optional<PlanDetailResponseData> selectedPlan = Optional.empty();
 
@@ -172,8 +198,10 @@ public final class CheckoutDataResponseData {
             activeAddOns(other.getActiveAddOns());
             activePlan(other.getActivePlan());
             activeUsageBasedEntitlements(other.getActiveUsageBasedEntitlements());
+            availableCreditBundles(other.getAvailableCreditBundles());
             company(other.getCompany());
             featureUsage(other.getFeatureUsage());
+            selectedCreditBundles(other.getSelectedCreditBundles());
             selectedPlan(other.getSelectedPlan());
             selectedUsageBasedEntitlements(other.getSelectedUsageBasedEntitlements());
             subscription(other.getSubscription());
@@ -183,7 +211,9 @@ public final class CheckoutDataResponseData {
         @JsonSetter(value = "active_add_ons", nulls = Nulls.SKIP)
         public Builder activeAddOns(List<PlanDetailResponseData> activeAddOns) {
             this.activeAddOns.clear();
-            this.activeAddOns.addAll(activeAddOns);
+            if (activeAddOns != null) {
+                this.activeAddOns.addAll(activeAddOns);
+            }
             return this;
         }
 
@@ -193,7 +223,9 @@ public final class CheckoutDataResponseData {
         }
 
         public Builder addAllActiveAddOns(List<PlanDetailResponseData> activeAddOns) {
-            this.activeAddOns.addAll(activeAddOns);
+            if (activeAddOns != null) {
+                this.activeAddOns.addAll(activeAddOns);
+            }
             return this;
         }
 
@@ -212,7 +244,9 @@ public final class CheckoutDataResponseData {
         public Builder activeUsageBasedEntitlements(
                 List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements) {
             this.activeUsageBasedEntitlements.clear();
-            this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
+            if (activeUsageBasedEntitlements != null) {
+                this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
+            }
             return this;
         }
 
@@ -223,7 +257,30 @@ public final class CheckoutDataResponseData {
 
         public Builder addAllActiveUsageBasedEntitlements(
                 List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements) {
-            this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
+            if (activeUsageBasedEntitlements != null) {
+                this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
+            }
+            return this;
+        }
+
+        @JsonSetter(value = "available_credit_bundles", nulls = Nulls.SKIP)
+        public Builder availableCreditBundles(List<BillingCreditBundleResponseData> availableCreditBundles) {
+            this.availableCreditBundles.clear();
+            if (availableCreditBundles != null) {
+                this.availableCreditBundles.addAll(availableCreditBundles);
+            }
+            return this;
+        }
+
+        public Builder addAvailableCreditBundles(BillingCreditBundleResponseData availableCreditBundles) {
+            this.availableCreditBundles.add(availableCreditBundles);
+            return this;
+        }
+
+        public Builder addAllAvailableCreditBundles(List<BillingCreditBundleResponseData> availableCreditBundles) {
+            if (availableCreditBundles != null) {
+                this.availableCreditBundles.addAll(availableCreditBundles);
+            }
             return this;
         }
 
@@ -249,6 +306,27 @@ public final class CheckoutDataResponseData {
             return this;
         }
 
+        @JsonSetter(value = "selected_credit_bundles", nulls = Nulls.SKIP)
+        public Builder selectedCreditBundles(List<CreditBundlePurchaseResponseData> selectedCreditBundles) {
+            this.selectedCreditBundles.clear();
+            if (selectedCreditBundles != null) {
+                this.selectedCreditBundles.addAll(selectedCreditBundles);
+            }
+            return this;
+        }
+
+        public Builder addSelectedCreditBundles(CreditBundlePurchaseResponseData selectedCreditBundles) {
+            this.selectedCreditBundles.add(selectedCreditBundles);
+            return this;
+        }
+
+        public Builder addAllSelectedCreditBundles(List<CreditBundlePurchaseResponseData> selectedCreditBundles) {
+            if (selectedCreditBundles != null) {
+                this.selectedCreditBundles.addAll(selectedCreditBundles);
+            }
+            return this;
+        }
+
         @JsonSetter(value = "selected_plan", nulls = Nulls.SKIP)
         public Builder selectedPlan(Optional<PlanDetailResponseData> selectedPlan) {
             this.selectedPlan = selectedPlan;
@@ -264,7 +342,9 @@ public final class CheckoutDataResponseData {
         public Builder selectedUsageBasedEntitlements(
                 List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements) {
             this.selectedUsageBasedEntitlements.clear();
-            this.selectedUsageBasedEntitlements.addAll(selectedUsageBasedEntitlements);
+            if (selectedUsageBasedEntitlements != null) {
+                this.selectedUsageBasedEntitlements.addAll(selectedUsageBasedEntitlements);
+            }
             return this;
         }
 
@@ -276,7 +356,9 @@ public final class CheckoutDataResponseData {
 
         public Builder addAllSelectedUsageBasedEntitlements(
                 List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements) {
-            this.selectedUsageBasedEntitlements.addAll(selectedUsageBasedEntitlements);
+            if (selectedUsageBasedEntitlements != null) {
+                this.selectedUsageBasedEntitlements.addAll(selectedUsageBasedEntitlements);
+            }
             return this;
         }
 
@@ -296,8 +378,10 @@ public final class CheckoutDataResponseData {
                     activeAddOns,
                     activePlan,
                     activeUsageBasedEntitlements,
+                    availableCreditBundles,
                     company,
                     featureUsage,
+                    selectedCreditBundles,
                     selectedPlan,
                     selectedUsageBasedEntitlements,
                     subscription,
