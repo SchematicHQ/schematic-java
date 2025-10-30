@@ -38,9 +38,6 @@ public final class ListWebhookEventsResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<WebhookEventDetailResponseData> getData() {
         return data;
@@ -84,6 +81,9 @@ public final class ListWebhookEventsResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull ListWebhookEventsParams params);
 
         Builder from(ListWebhookEventsResponse other);
@@ -119,6 +119,7 @@ public final class ListWebhookEventsResponse {
 
         /**
          * <p>Input parameters</p>
+         * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -128,20 +129,14 @@ public final class ListWebhookEventsResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<WebhookEventDetailResponseData> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(WebhookEventDetailResponseData data) {
             this.data.add(data);
@@ -152,7 +147,9 @@ public final class ListWebhookEventsResponse {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(List<WebhookEventDetailResponseData> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 

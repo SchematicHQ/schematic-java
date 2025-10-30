@@ -81,7 +81,9 @@ public final class CheckFlagsResponseData {
         @JsonSetter(value = "flags", nulls = Nulls.SKIP)
         public Builder flags(List<CheckFlagResponseData> flags) {
             this.flags.clear();
-            this.flags.addAll(flags);
+            if (flags != null) {
+                this.flags.addAll(flags);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class CheckFlagsResponseData {
         }
 
         public Builder addAllFlags(List<CheckFlagResponseData> flags) {
-            this.flags.addAll(flags);
+            if (flags != null) {
+                this.flags.addAll(flags);
+            }
             return this;
         }
 

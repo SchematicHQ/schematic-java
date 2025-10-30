@@ -30,8 +30,6 @@ public final class RuleConditionGroupResponseData {
 
     private final String id;
 
-    private final Optional<String> planId;
-
     private final String ruleId;
 
     private final OffsetDateTime updatedAt;
@@ -43,7 +41,6 @@ public final class RuleConditionGroupResponseData {
             String environmentId,
             Optional<String> flagId,
             String id,
-            Optional<String> planId,
             String ruleId,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -51,7 +48,6 @@ public final class RuleConditionGroupResponseData {
         this.environmentId = environmentId;
         this.flagId = flagId;
         this.id = id;
-        this.planId = planId;
         this.ruleId = ruleId;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -75,11 +71,6 @@ public final class RuleConditionGroupResponseData {
     @JsonProperty("id")
     public String getId() {
         return id;
-    }
-
-    @JsonProperty("plan_id")
-    public Optional<String> getPlanId() {
-        return planId;
     }
 
     @JsonProperty("rule_id")
@@ -108,15 +99,13 @@ public final class RuleConditionGroupResponseData {
                 && environmentId.equals(other.environmentId)
                 && flagId.equals(other.flagId)
                 && id.equals(other.id)
-                && planId.equals(other.planId)
                 && ruleId.equals(other.ruleId)
                 && updatedAt.equals(other.updatedAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.createdAt, this.environmentId, this.flagId, this.id, this.planId, this.ruleId, this.updatedAt);
+        return Objects.hash(this.createdAt, this.environmentId, this.flagId, this.id, this.ruleId, this.updatedAt);
     }
 
     @java.lang.Override
@@ -156,10 +145,6 @@ public final class RuleConditionGroupResponseData {
         _FinalStage flagId(Optional<String> flagId);
 
         _FinalStage flagId(String flagId);
-
-        _FinalStage planId(Optional<String> planId);
-
-        _FinalStage planId(String planId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -175,8 +160,6 @@ public final class RuleConditionGroupResponseData {
 
         private OffsetDateTime updatedAt;
 
-        private Optional<String> planId = Optional.empty();
-
         private Optional<String> flagId = Optional.empty();
 
         @JsonAnySetter
@@ -190,7 +173,6 @@ public final class RuleConditionGroupResponseData {
             environmentId(other.getEnvironmentId());
             flagId(other.getFlagId());
             id(other.getId());
-            planId(other.getPlanId());
             ruleId(other.getRuleId());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -232,19 +214,6 @@ public final class RuleConditionGroupResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage planId(String planId) {
-            this.planId = Optional.ofNullable(planId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
-        public _FinalStage planId(Optional<String> planId) {
-            this.planId = planId;
-            return this;
-        }
-
-        @java.lang.Override
         public _FinalStage flagId(String flagId) {
             this.flagId = Optional.ofNullable(flagId);
             return this;
@@ -260,7 +229,7 @@ public final class RuleConditionGroupResponseData {
         @java.lang.Override
         public RuleConditionGroupResponseData build() {
             return new RuleConditionGroupResponseData(
-                    createdAt, environmentId, flagId, id, planId, ruleId, updatedAt, additionalProperties);
+                    createdAt, environmentId, flagId, id, ruleId, updatedAt, additionalProperties);
         }
     }
 }

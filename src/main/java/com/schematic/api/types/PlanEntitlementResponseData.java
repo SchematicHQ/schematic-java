@@ -22,6 +22,10 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanEntitlementResponseData.Builder.class)
 public final class PlanEntitlementResponseData {
+    private final Optional<Integer> billingThreshold;
+
+    private final Optional<Double> consumptionRate;
+
     private final OffsetDateTime createdAt;
 
     private final String environmentId;
@@ -54,7 +58,11 @@ public final class PlanEntitlementResponseData {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<BillingProductResponseData> usageBasedProduct;
+
     private final Optional<Boolean> valueBool;
+
+    private final Optional<BillingCreditResponseData> valueCredit;
 
     private final Optional<Integer> valueNumeric;
 
@@ -67,6 +75,8 @@ public final class PlanEntitlementResponseData {
     private final Map<String, Object> additionalProperties;
 
     private PlanEntitlementResponseData(
+            Optional<Integer> billingThreshold,
+            Optional<Double> consumptionRate,
             OffsetDateTime createdAt,
             String environmentId,
             Optional<FeatureResponseData> feature,
@@ -83,12 +93,16 @@ public final class PlanEntitlementResponseData {
             Optional<String> ruleIdUsageExceeded,
             Optional<Integer> softLimit,
             OffsetDateTime updatedAt,
+            Optional<BillingProductResponseData> usageBasedProduct,
             Optional<Boolean> valueBool,
+            Optional<BillingCreditResponseData> valueCredit,
             Optional<Integer> valueNumeric,
             Optional<EntityTraitDefinitionResponseData> valueTrait,
             Optional<String> valueTraitId,
             String valueType,
             Map<String, Object> additionalProperties) {
+        this.billingThreshold = billingThreshold;
+        this.consumptionRate = consumptionRate;
         this.createdAt = createdAt;
         this.environmentId = environmentId;
         this.feature = feature;
@@ -105,12 +119,24 @@ public final class PlanEntitlementResponseData {
         this.ruleIdUsageExceeded = ruleIdUsageExceeded;
         this.softLimit = softLimit;
         this.updatedAt = updatedAt;
+        this.usageBasedProduct = usageBasedProduct;
         this.valueBool = valueBool;
+        this.valueCredit = valueCredit;
         this.valueNumeric = valueNumeric;
         this.valueTrait = valueTrait;
         this.valueTraitId = valueTraitId;
         this.valueType = valueType;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_threshold")
+    public Optional<Integer> getBillingThreshold() {
+        return billingThreshold;
+    }
+
+    @JsonProperty("consumption_rate")
+    public Optional<Double> getConsumptionRate() {
+        return consumptionRate;
     }
 
     @JsonProperty("created_at")
@@ -193,9 +219,19 @@ public final class PlanEntitlementResponseData {
         return updatedAt;
     }
 
+    @JsonProperty("usage_based_product")
+    public Optional<BillingProductResponseData> getUsageBasedProduct() {
+        return usageBasedProduct;
+    }
+
     @JsonProperty("value_bool")
     public Optional<Boolean> getValueBool() {
         return valueBool;
+    }
+
+    @JsonProperty("value_credit")
+    public Optional<BillingCreditResponseData> getValueCredit() {
+        return valueCredit;
     }
 
     @JsonProperty("value_numeric")
@@ -230,7 +266,9 @@ public final class PlanEntitlementResponseData {
     }
 
     private boolean equalTo(PlanEntitlementResponseData other) {
-        return createdAt.equals(other.createdAt)
+        return billingThreshold.equals(other.billingThreshold)
+                && consumptionRate.equals(other.consumptionRate)
+                && createdAt.equals(other.createdAt)
                 && environmentId.equals(other.environmentId)
                 && feature.equals(other.feature)
                 && featureId.equals(other.featureId)
@@ -246,7 +284,9 @@ public final class PlanEntitlementResponseData {
                 && ruleIdUsageExceeded.equals(other.ruleIdUsageExceeded)
                 && softLimit.equals(other.softLimit)
                 && updatedAt.equals(other.updatedAt)
+                && usageBasedProduct.equals(other.usageBasedProduct)
                 && valueBool.equals(other.valueBool)
+                && valueCredit.equals(other.valueCredit)
                 && valueNumeric.equals(other.valueNumeric)
                 && valueTrait.equals(other.valueTrait)
                 && valueTraitId.equals(other.valueTraitId)
@@ -256,6 +296,8 @@ public final class PlanEntitlementResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingThreshold,
+                this.consumptionRate,
                 this.createdAt,
                 this.environmentId,
                 this.feature,
@@ -272,7 +314,9 @@ public final class PlanEntitlementResponseData {
                 this.ruleIdUsageExceeded,
                 this.softLimit,
                 this.updatedAt,
+                this.usageBasedProduct,
                 this.valueBool,
+                this.valueCredit,
                 this.valueNumeric,
                 this.valueTrait,
                 this.valueTraitId,
@@ -325,6 +369,14 @@ public final class PlanEntitlementResponseData {
     public interface _FinalStage {
         PlanEntitlementResponseData build();
 
+        _FinalStage billingThreshold(Optional<Integer> billingThreshold);
+
+        _FinalStage billingThreshold(Integer billingThreshold);
+
+        _FinalStage consumptionRate(Optional<Double> consumptionRate);
+
+        _FinalStage consumptionRate(Double consumptionRate);
+
         _FinalStage feature(Optional<FeatureResponseData> feature);
 
         _FinalStage feature(FeatureResponseData feature);
@@ -361,9 +413,17 @@ public final class PlanEntitlementResponseData {
 
         _FinalStage softLimit(Integer softLimit);
 
+        _FinalStage usageBasedProduct(Optional<BillingProductResponseData> usageBasedProduct);
+
+        _FinalStage usageBasedProduct(BillingProductResponseData usageBasedProduct);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
+
+        _FinalStage valueCredit(Optional<BillingCreditResponseData> valueCredit);
+
+        _FinalStage valueCredit(BillingCreditResponseData valueCredit);
 
         _FinalStage valueNumeric(Optional<Integer> valueNumeric);
 
@@ -411,7 +471,11 @@ public final class PlanEntitlementResponseData {
 
         private Optional<Integer> valueNumeric = Optional.empty();
 
+        private Optional<BillingCreditResponseData> valueCredit = Optional.empty();
+
         private Optional<Boolean> valueBool = Optional.empty();
+
+        private Optional<BillingProductResponseData> usageBasedProduct = Optional.empty();
 
         private Optional<Integer> softLimit = Optional.empty();
 
@@ -431,6 +495,10 @@ public final class PlanEntitlementResponseData {
 
         private Optional<FeatureResponseData> feature = Optional.empty();
 
+        private Optional<Double> consumptionRate = Optional.empty();
+
+        private Optional<Integer> billingThreshold = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -438,6 +506,8 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public Builder from(PlanEntitlementResponseData other) {
+            billingThreshold(other.getBillingThreshold());
+            consumptionRate(other.getConsumptionRate());
             createdAt(other.getCreatedAt());
             environmentId(other.getEnvironmentId());
             feature(other.getFeature());
@@ -454,7 +524,9 @@ public final class PlanEntitlementResponseData {
             ruleIdUsageExceeded(other.getRuleIdUsageExceeded());
             softLimit(other.getSoftLimit());
             updatedAt(other.getUpdatedAt());
+            usageBasedProduct(other.getUsageBasedProduct());
             valueBool(other.getValueBool());
+            valueCredit(other.getValueCredit());
             valueNumeric(other.getValueNumeric());
             valueTrait(other.getValueTrait());
             valueTraitId(other.getValueTraitId());
@@ -558,6 +630,19 @@ public final class PlanEntitlementResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage valueCredit(BillingCreditResponseData valueCredit) {
+            this.valueCredit = Optional.ofNullable(valueCredit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "value_credit", nulls = Nulls.SKIP)
+        public _FinalStage valueCredit(Optional<BillingCreditResponseData> valueCredit) {
+            this.valueCredit = valueCredit;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage valueBool(Boolean valueBool) {
             this.valueBool = Optional.ofNullable(valueBool);
             return this;
@@ -567,6 +652,19 @@ public final class PlanEntitlementResponseData {
         @JsonSetter(value = "value_bool", nulls = Nulls.SKIP)
         public _FinalStage valueBool(Optional<Boolean> valueBool) {
             this.valueBool = valueBool;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage usageBasedProduct(BillingProductResponseData usageBasedProduct) {
+            this.usageBasedProduct = Optional.ofNullable(usageBasedProduct);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "usage_based_product", nulls = Nulls.SKIP)
+        public _FinalStage usageBasedProduct(Optional<BillingProductResponseData> usageBasedProduct) {
+            this.usageBasedProduct = usageBasedProduct;
             return this;
         }
 
@@ -688,8 +786,36 @@ public final class PlanEntitlementResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage consumptionRate(Double consumptionRate) {
+            this.consumptionRate = Optional.ofNullable(consumptionRate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "consumption_rate", nulls = Nulls.SKIP)
+        public _FinalStage consumptionRate(Optional<Double> consumptionRate) {
+            this.consumptionRate = consumptionRate;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingThreshold(Integer billingThreshold) {
+            this.billingThreshold = Optional.ofNullable(billingThreshold);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_threshold", nulls = Nulls.SKIP)
+        public _FinalStage billingThreshold(Optional<Integer> billingThreshold) {
+            this.billingThreshold = billingThreshold;
+            return this;
+        }
+
+        @java.lang.Override
         public PlanEntitlementResponseData build() {
             return new PlanEntitlementResponseData(
+                    billingThreshold,
+                    consumptionRate,
                     createdAt,
                     environmentId,
                     feature,
@@ -706,7 +832,9 @@ public final class PlanEntitlementResponseData {
                     ruleIdUsageExceeded,
                     softLimit,
                     updatedAt,
+                    usageBasedProduct,
                     valueBool,
+                    valueCredit,
                     valueNumeric,
                     valueTrait,
                     valueTraitId,
