@@ -31,6 +31,8 @@ public final class ListCompaniesParams {
 
     private final Optional<String> q;
 
+    private final Optional<Boolean> withSubscription;
+
     private final Optional<String> withoutFeatureOverrideFor;
 
     private final Optional<Boolean> withoutPlan;
@@ -43,6 +45,7 @@ public final class ListCompaniesParams {
             Optional<Integer> offset,
             Optional<String> planId,
             Optional<String> q,
+            Optional<Boolean> withSubscription,
             Optional<String> withoutFeatureOverrideFor,
             Optional<Boolean> withoutPlan,
             Map<String, Object> additionalProperties) {
@@ -51,6 +54,7 @@ public final class ListCompaniesParams {
         this.offset = offset;
         this.planId = planId;
         this.q = q;
+        this.withSubscription = withSubscription;
         this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
         this.withoutPlan = withoutPlan;
         this.additionalProperties = additionalProperties;
@@ -97,6 +101,14 @@ public final class ListCompaniesParams {
     }
 
     /**
+     * @return Filter companies that have a subscription
+     */
+    @JsonProperty("with_subscription")
+    public Optional<Boolean> getWithSubscription() {
+        return withSubscription;
+    }
+
+    /**
      * @return Filter out companies that already have a company override for the specified feature ID
      */
     @JsonProperty("without_feature_override_for")
@@ -129,6 +141,7 @@ public final class ListCompaniesParams {
                 && offset.equals(other.offset)
                 && planId.equals(other.planId)
                 && q.equals(other.q)
+                && withSubscription.equals(other.withSubscription)
                 && withoutFeatureOverrideFor.equals(other.withoutFeatureOverrideFor)
                 && withoutPlan.equals(other.withoutPlan);
     }
@@ -141,6 +154,7 @@ public final class ListCompaniesParams {
                 this.offset,
                 this.planId,
                 this.q,
+                this.withSubscription,
                 this.withoutFeatureOverrideFor,
                 this.withoutPlan);
     }
@@ -166,6 +180,8 @@ public final class ListCompaniesParams {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<Boolean> withSubscription = Optional.empty();
+
         private Optional<String> withoutFeatureOverrideFor = Optional.empty();
 
         private Optional<Boolean> withoutPlan = Optional.empty();
@@ -181,11 +197,15 @@ public final class ListCompaniesParams {
             offset(other.getOffset());
             planId(other.getPlanId());
             q(other.getQ());
+            withSubscription(other.getWithSubscription());
             withoutFeatureOverrideFor(other.getWithoutFeatureOverrideFor());
             withoutPlan(other.getWithoutPlan());
             return this;
         }
 
+        /**
+         * <p>Filter companies by multiple company IDs (starts with comp_)</p>
+         */
         @JsonSetter(value = "ids", nulls = Nulls.SKIP)
         public Builder ids(Optional<List<String>> ids) {
             this.ids = ids;
@@ -197,6 +217,9 @@ public final class ListCompaniesParams {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -208,6 +231,9 @@ public final class ListCompaniesParams {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -219,6 +245,9 @@ public final class ListCompaniesParams {
             return this;
         }
 
+        /**
+         * <p>Filter companies by plan ID (starts with plan_)</p>
+         */
         @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
         public Builder planId(Optional<String> planId) {
             this.planId = planId;
@@ -230,6 +259,9 @@ public final class ListCompaniesParams {
             return this;
         }
 
+        /**
+         * <p>Search for companies by name, keys or string traits</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -241,6 +273,23 @@ public final class ListCompaniesParams {
             return this;
         }
 
+        /**
+         * <p>Filter companies that have a subscription</p>
+         */
+        @JsonSetter(value = "with_subscription", nulls = Nulls.SKIP)
+        public Builder withSubscription(Optional<Boolean> withSubscription) {
+            this.withSubscription = withSubscription;
+            return this;
+        }
+
+        public Builder withSubscription(Boolean withSubscription) {
+            this.withSubscription = Optional.ofNullable(withSubscription);
+            return this;
+        }
+
+        /**
+         * <p>Filter out companies that already have a company override for the specified feature ID</p>
+         */
         @JsonSetter(value = "without_feature_override_for", nulls = Nulls.SKIP)
         public Builder withoutFeatureOverrideFor(Optional<String> withoutFeatureOverrideFor) {
             this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
@@ -252,6 +301,9 @@ public final class ListCompaniesParams {
             return this;
         }
 
+        /**
+         * <p>Filter out companies that have a plan</p>
+         */
         @JsonSetter(value = "without_plan", nulls = Nulls.SKIP)
         public Builder withoutPlan(Optional<Boolean> withoutPlan) {
             this.withoutPlan = withoutPlan;
@@ -265,7 +317,15 @@ public final class ListCompaniesParams {
 
         public ListCompaniesParams build() {
             return new ListCompaniesParams(
-                    ids, limit, offset, planId, q, withoutFeatureOverrideFor, withoutPlan, additionalProperties);
+                    ids,
+                    limit,
+                    offset,
+                    planId,
+                    q,
+                    withSubscription,
+                    withoutFeatureOverrideFor,
+                    withoutPlan,
+                    additionalProperties);
         }
     }
 }

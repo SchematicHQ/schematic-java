@@ -5,6 +5,7 @@ package com.schematic.api.errors;
 
 import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.types.ApiError;
+import okhttp3.Response;
 
 public final class NotFoundError extends BaseSchematicApiException {
     /**
@@ -14,6 +15,11 @@ public final class NotFoundError extends BaseSchematicApiException {
 
     public NotFoundError(ApiError body) {
         super("NotFoundError", 404, body);
+        this.body = body;
+    }
+
+    public NotFoundError(ApiError body, Response rawResponse) {
+        super("NotFoundError", 404, body, rawResponse);
         this.body = body;
     }
 

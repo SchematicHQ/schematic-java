@@ -3,26 +3,117 @@
  */
 package com.schematic.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum FeatureCompanyUserResponseDataAllocationType {
-    BOOLEAN("boolean"),
+public final class FeatureCompanyUserResponseDataAllocationType {
+    public static final FeatureCompanyUserResponseDataAllocationType NUMERIC =
+            new FeatureCompanyUserResponseDataAllocationType(Value.NUMERIC, "numeric");
 
-    NUMERIC("numeric"),
+    public static final FeatureCompanyUserResponseDataAllocationType TRAIT =
+            new FeatureCompanyUserResponseDataAllocationType(Value.TRAIT, "trait");
 
-    TRAIT("trait"),
+    public static final FeatureCompanyUserResponseDataAllocationType BOOLEAN =
+            new FeatureCompanyUserResponseDataAllocationType(Value.BOOLEAN, "boolean");
 
-    UNLIMITED("unlimited");
+    public static final FeatureCompanyUserResponseDataAllocationType UNKNOWN =
+            new FeatureCompanyUserResponseDataAllocationType(Value.UNKNOWN, "unknown");
 
-    private final String value;
+    public static final FeatureCompanyUserResponseDataAllocationType UNLIMITED =
+            new FeatureCompanyUserResponseDataAllocationType(Value.UNLIMITED, "unlimited");
 
-    FeatureCompanyUserResponseDataAllocationType(String value) {
+    private final Value value;
+
+    private final String string;
+
+    FeatureCompanyUserResponseDataAllocationType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof FeatureCompanyUserResponseDataAllocationType
+                        && this.string.equals(((FeatureCompanyUserResponseDataAllocationType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NUMERIC:
+                return visitor.visitNumeric();
+            case TRAIT:
+                return visitor.visitTrait();
+            case BOOLEAN:
+                return visitor.visitBoolean();
+            case UNKNOWN:
+                return visitor.visitUnknown();
+            case UNLIMITED:
+                return visitor.visitUnlimited();
+            case _UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static FeatureCompanyUserResponseDataAllocationType valueOf(String value) {
+        switch (value) {
+            case "numeric":
+                return NUMERIC;
+            case "trait":
+                return TRAIT;
+            case "boolean":
+                return BOOLEAN;
+            case "unknown":
+                return UNKNOWN;
+            case "unlimited":
+                return UNLIMITED;
+            default:
+                return new FeatureCompanyUserResponseDataAllocationType(Value._UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BOOLEAN,
+
+        NUMERIC,
+
+        TRAIT,
+
+        UNLIMITED,
+
+        UNKNOWN,
+
+        _UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitBoolean();
+
+        T visitNumeric();
+
+        T visitTrait();
+
+        T visitUnlimited();
+
+        T visitUnknown();
+
+        T visitUnknown(String unknownType);
     }
 }

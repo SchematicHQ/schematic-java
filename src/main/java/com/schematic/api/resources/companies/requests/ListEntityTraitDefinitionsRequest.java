@@ -14,7 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.resources.companies.types.ListEntityTraitDefinitionsRequestEntityType;
 import com.schematic.api.resources.companies.types.ListEntityTraitDefinitionsRequestTraitType;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,9 +24,9 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListEntityTraitDefinitionsRequest.Builder.class)
 public final class ListEntityTraitDefinitionsRequest {
-    private final Optional<ListEntityTraitDefinitionsRequestEntityType> entityType;
+    private final Optional<List<String>> ids;
 
-    private final Optional<String> ids;
+    private final Optional<ListEntityTraitDefinitionsRequestEntityType> entityType;
 
     private final Optional<String> q;
 
@@ -37,15 +39,15 @@ public final class ListEntityTraitDefinitionsRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListEntityTraitDefinitionsRequest(
+            Optional<List<String>> ids,
             Optional<ListEntityTraitDefinitionsRequestEntityType> entityType,
-            Optional<String> ids,
             Optional<String> q,
             Optional<ListEntityTraitDefinitionsRequestTraitType> traitType,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
-        this.entityType = entityType;
         this.ids = ids;
+        this.entityType = entityType;
         this.q = q;
         this.traitType = traitType;
         this.limit = limit;
@@ -53,14 +55,14 @@ public final class ListEntityTraitDefinitionsRequest {
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("ids")
+    public Optional<List<String>> getIds() {
+        return ids;
+    }
+
     @JsonProperty("entity_type")
     public Optional<ListEntityTraitDefinitionsRequestEntityType> getEntityType() {
         return entityType;
-    }
-
-    @JsonProperty("ids")
-    public Optional<String> getIds() {
-        return ids;
     }
 
     @JsonProperty("q")
@@ -101,8 +103,8 @@ public final class ListEntityTraitDefinitionsRequest {
     }
 
     private boolean equalTo(ListEntityTraitDefinitionsRequest other) {
-        return entityType.equals(other.entityType)
-                && ids.equals(other.ids)
+        return ids.equals(other.ids)
+                && entityType.equals(other.entityType)
                 && q.equals(other.q)
                 && traitType.equals(other.traitType)
                 && limit.equals(other.limit)
@@ -111,7 +113,7 @@ public final class ListEntityTraitDefinitionsRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.entityType, this.ids, this.q, this.traitType, this.limit, this.offset);
+        return Objects.hash(this.ids, this.entityType, this.q, this.traitType, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -125,9 +127,9 @@ public final class ListEntityTraitDefinitionsRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<ListEntityTraitDefinitionsRequestEntityType> entityType = Optional.empty();
+        private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<String> ids = Optional.empty();
+        private Optional<ListEntityTraitDefinitionsRequestEntityType> entityType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -143,12 +145,28 @@ public final class ListEntityTraitDefinitionsRequest {
         private Builder() {}
 
         public Builder from(ListEntityTraitDefinitionsRequest other) {
-            entityType(other.getEntityType());
             ids(other.getIds());
+            entityType(other.getEntityType());
             q(other.getQ());
             traitType(other.getTraitType());
             limit(other.getLimit());
             offset(other.getOffset());
+            return this;
+        }
+
+        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
+        public Builder ids(Optional<List<String>> ids) {
+            this.ids = ids;
+            return this;
+        }
+
+        public Builder ids(List<String> ids) {
+            this.ids = Optional.ofNullable(ids);
+            return this;
+        }
+
+        public Builder ids(String ids) {
+            this.ids = Optional.of(Collections.singletonList(ids));
             return this;
         }
 
@@ -160,17 +178,6 @@ public final class ListEntityTraitDefinitionsRequest {
 
         public Builder entityType(ListEntityTraitDefinitionsRequestEntityType entityType) {
             this.entityType = Optional.ofNullable(entityType);
-            return this;
-        }
-
-        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
-        public Builder ids(Optional<String> ids) {
-            this.ids = ids;
-            return this;
-        }
-
-        public Builder ids(String ids) {
-            this.ids = Optional.ofNullable(ids);
             return this;
         }
 
@@ -196,6 +203,9 @@ public final class ListEntityTraitDefinitionsRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -207,6 +217,9 @@ public final class ListEntityTraitDefinitionsRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -220,7 +233,7 @@ public final class ListEntityTraitDefinitionsRequest {
 
         public ListEntityTraitDefinitionsRequest build() {
             return new ListEntityTraitDefinitionsRequest(
-                    entityType, ids, q, traitType, limit, offset, additionalProperties);
+                    ids, entityType, q, traitType, limit, offset, additionalProperties);
         }
     }
 }

@@ -498,7 +498,9 @@ public final class FeatureDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllPlans(List<PreviewObject> plans) {
-            this.plans.addAll(plans);
+            if (plans != null) {
+                this.plans.addAll(plans);
+            }
             return this;
         }
 
@@ -512,7 +514,9 @@ public final class FeatureDetailResponseData {
         @JsonSetter(value = "plans", nulls = Nulls.SKIP)
         public _FinalStage plans(List<PreviewObject> plans) {
             this.plans.clear();
-            this.plans.addAll(plans);
+            if (plans != null) {
+                this.plans.addAll(plans);
+            }
             return this;
         }
 
@@ -544,7 +548,9 @@ public final class FeatureDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllFlags(List<FlagDetailResponseData> flags) {
-            this.flags.addAll(flags);
+            if (flags != null) {
+                this.flags.addAll(flags);
+            }
             return this;
         }
 
@@ -558,7 +564,9 @@ public final class FeatureDetailResponseData {
         @JsonSetter(value = "flags", nulls = Nulls.SKIP)
         public _FinalStage flags(List<FlagDetailResponseData> flags) {
             this.flags.clear();
-            this.flags.addAll(flags);
+            if (flags != null) {
+                this.flags.addAll(flags);
+            }
             return this;
         }
 

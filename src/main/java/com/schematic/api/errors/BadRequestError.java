@@ -5,6 +5,7 @@ package com.schematic.api.errors;
 
 import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.types.ApiError;
+import okhttp3.Response;
 
 public final class BadRequestError extends BaseSchematicApiException {
     /**
@@ -14,6 +15,11 @@ public final class BadRequestError extends BaseSchematicApiException {
 
     public BadRequestError(ApiError body) {
         super("BadRequestError", 400, body);
+        this.body = body;
+    }
+
+    public BadRequestError(ApiError body, Response rawResponse) {
+        super("BadRequestError", 400, body, rawResponse);
         this.body = body;
     }
 

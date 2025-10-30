@@ -12,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyTierMode;
+import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyBillingScheme;
+import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyTiersMode;
 import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyUsageType;
 import com.schematic.api.types.CreateBillingPriceTierRequestBody;
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingPriceRequestBody.Builder.class)
 public final class CreateBillingPriceRequestBody {
+    private final CreateBillingPriceRequestBodyBillingScheme billingScheme;
+
     private final String currency;
 
     private final String externalAccountId;
@@ -36,7 +39,11 @@ public final class CreateBillingPriceRequestBody {
 
     private final Optional<String> meterId;
 
+    private final Optional<Integer> packageSize;
+
     private final int price;
+
+    private final Optional<String> priceDecimal;
 
     private final String priceExternalId;
 
@@ -44,37 +51,48 @@ public final class CreateBillingPriceRequestBody {
 
     private final String productExternalId;
 
-    private final Optional<CreateBillingPriceRequestBodyTierMode> tierMode;
+    private final Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode;
 
     private final CreateBillingPriceRequestBodyUsageType usageType;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingPriceRequestBody(
+            CreateBillingPriceRequestBodyBillingScheme billingScheme,
             String currency,
             String externalAccountId,
             String interval,
             boolean isActive,
             Optional<String> meterId,
+            Optional<Integer> packageSize,
             int price,
+            Optional<String> priceDecimal,
             String priceExternalId,
             List<CreateBillingPriceTierRequestBody> priceTiers,
             String productExternalId,
-            Optional<CreateBillingPriceRequestBodyTierMode> tierMode,
+            Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode,
             CreateBillingPriceRequestBodyUsageType usageType,
             Map<String, Object> additionalProperties) {
+        this.billingScheme = billingScheme;
         this.currency = currency;
         this.externalAccountId = externalAccountId;
         this.interval = interval;
         this.isActive = isActive;
         this.meterId = meterId;
+        this.packageSize = packageSize;
         this.price = price;
+        this.priceDecimal = priceDecimal;
         this.priceExternalId = priceExternalId;
         this.priceTiers = priceTiers;
         this.productExternalId = productExternalId;
-        this.tierMode = tierMode;
+        this.tiersMode = tiersMode;
         this.usageType = usageType;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_scheme")
+    public CreateBillingPriceRequestBodyBillingScheme getBillingScheme() {
+        return billingScheme;
     }
 
     @JsonProperty("currency")
@@ -102,9 +120,19 @@ public final class CreateBillingPriceRequestBody {
         return meterId;
     }
 
+    @JsonProperty("package_size")
+    public Optional<Integer> getPackageSize() {
+        return packageSize;
+    }
+
     @JsonProperty("price")
     public int getPrice() {
         return price;
+    }
+
+    @JsonProperty("price_decimal")
+    public Optional<String> getPriceDecimal() {
+        return priceDecimal;
     }
 
     @JsonProperty("price_external_id")
@@ -122,9 +150,9 @@ public final class CreateBillingPriceRequestBody {
         return productExternalId;
     }
 
-    @JsonProperty("tier_mode")
-    public Optional<CreateBillingPriceRequestBodyTierMode> getTierMode() {
-        return tierMode;
+    @JsonProperty("tiers_mode")
+    public Optional<CreateBillingPriceRequestBodyTiersMode> getTiersMode() {
+        return tiersMode;
     }
 
     @JsonProperty("usage_type")
@@ -144,32 +172,38 @@ public final class CreateBillingPriceRequestBody {
     }
 
     private boolean equalTo(CreateBillingPriceRequestBody other) {
-        return currency.equals(other.currency)
+        return billingScheme.equals(other.billingScheme)
+                && currency.equals(other.currency)
                 && externalAccountId.equals(other.externalAccountId)
                 && interval.equals(other.interval)
                 && isActive == other.isActive
                 && meterId.equals(other.meterId)
+                && packageSize.equals(other.packageSize)
                 && price == other.price
+                && priceDecimal.equals(other.priceDecimal)
                 && priceExternalId.equals(other.priceExternalId)
                 && priceTiers.equals(other.priceTiers)
                 && productExternalId.equals(other.productExternalId)
-                && tierMode.equals(other.tierMode)
+                && tiersMode.equals(other.tiersMode)
                 && usageType.equals(other.usageType);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingScheme,
                 this.currency,
                 this.externalAccountId,
                 this.interval,
                 this.isActive,
                 this.meterId,
+                this.packageSize,
                 this.price,
+                this.priceDecimal,
                 this.priceExternalId,
                 this.priceTiers,
                 this.productExternalId,
-                this.tierMode,
+                this.tiersMode,
                 this.usageType);
     }
 
@@ -178,14 +212,18 @@ public final class CreateBillingPriceRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static CurrencyStage builder() {
+    public static BillingSchemeStage builder() {
         return new Builder();
+    }
+
+    public interface BillingSchemeStage {
+        CurrencyStage billingScheme(@NotNull CreateBillingPriceRequestBodyBillingScheme billingScheme);
+
+        Builder from(CreateBillingPriceRequestBody other);
     }
 
     public interface CurrencyStage {
         ExternalAccountIdStage currency(@NotNull String currency);
-
-        Builder from(CreateBillingPriceRequestBody other);
     }
 
     public interface ExternalAccountIdStage {
@@ -223,20 +261,29 @@ public final class CreateBillingPriceRequestBody {
 
         _FinalStage meterId(String meterId);
 
+        _FinalStage packageSize(Optional<Integer> packageSize);
+
+        _FinalStage packageSize(Integer packageSize);
+
+        _FinalStage priceDecimal(Optional<String> priceDecimal);
+
+        _FinalStage priceDecimal(String priceDecimal);
+
         _FinalStage priceTiers(List<CreateBillingPriceTierRequestBody> priceTiers);
 
         _FinalStage addPriceTiers(CreateBillingPriceTierRequestBody priceTiers);
 
         _FinalStage addAllPriceTiers(List<CreateBillingPriceTierRequestBody> priceTiers);
 
-        _FinalStage tierMode(Optional<CreateBillingPriceRequestBodyTierMode> tierMode);
+        _FinalStage tiersMode(Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode);
 
-        _FinalStage tierMode(CreateBillingPriceRequestBodyTierMode tierMode);
+        _FinalStage tiersMode(CreateBillingPriceRequestBodyTiersMode tiersMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CurrencyStage,
+            implements BillingSchemeStage,
+                    CurrencyStage,
                     ExternalAccountIdStage,
                     IntervalStage,
                     IsActiveStage,
@@ -245,6 +292,8 @@ public final class CreateBillingPriceRequestBody {
                     ProductExternalIdStage,
                     UsageTypeStage,
                     _FinalStage {
+        private CreateBillingPriceRequestBodyBillingScheme billingScheme;
+
         private String currency;
 
         private String externalAccountId;
@@ -261,9 +310,13 @@ public final class CreateBillingPriceRequestBody {
 
         private CreateBillingPriceRequestBodyUsageType usageType;
 
-        private Optional<CreateBillingPriceRequestBodyTierMode> tierMode = Optional.empty();
+        private Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode = Optional.empty();
 
         private List<CreateBillingPriceTierRequestBody> priceTiers = new ArrayList<>();
+
+        private Optional<String> priceDecimal = Optional.empty();
+
+        private Optional<Integer> packageSize = Optional.empty();
 
         private Optional<String> meterId = Optional.empty();
 
@@ -274,17 +327,27 @@ public final class CreateBillingPriceRequestBody {
 
         @java.lang.Override
         public Builder from(CreateBillingPriceRequestBody other) {
+            billingScheme(other.getBillingScheme());
             currency(other.getCurrency());
             externalAccountId(other.getExternalAccountId());
             interval(other.getInterval());
             isActive(other.getIsActive());
             meterId(other.getMeterId());
+            packageSize(other.getPackageSize());
             price(other.getPrice());
+            priceDecimal(other.getPriceDecimal());
             priceExternalId(other.getPriceExternalId());
             priceTiers(other.getPriceTiers());
             productExternalId(other.getProductExternalId());
-            tierMode(other.getTierMode());
+            tiersMode(other.getTiersMode());
             usageType(other.getUsageType());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_scheme")
+        public CurrencyStage billingScheme(@NotNull CreateBillingPriceRequestBodyBillingScheme billingScheme) {
+            this.billingScheme = Objects.requireNonNull(billingScheme, "billingScheme must not be null");
             return this;
         }
 
@@ -345,21 +408,23 @@ public final class CreateBillingPriceRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage tierMode(CreateBillingPriceRequestBodyTierMode tierMode) {
-            this.tierMode = Optional.ofNullable(tierMode);
+        public _FinalStage tiersMode(CreateBillingPriceRequestBodyTiersMode tiersMode) {
+            this.tiersMode = Optional.ofNullable(tiersMode);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "tier_mode", nulls = Nulls.SKIP)
-        public _FinalStage tierMode(Optional<CreateBillingPriceRequestBodyTierMode> tierMode) {
-            this.tierMode = tierMode;
+        @JsonSetter(value = "tiers_mode", nulls = Nulls.SKIP)
+        public _FinalStage tiersMode(Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode) {
+            this.tiersMode = tiersMode;
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllPriceTiers(List<CreateBillingPriceTierRequestBody> priceTiers) {
-            this.priceTiers.addAll(priceTiers);
+            if (priceTiers != null) {
+                this.priceTiers.addAll(priceTiers);
+            }
             return this;
         }
 
@@ -373,7 +438,35 @@ public final class CreateBillingPriceRequestBody {
         @JsonSetter(value = "price_tiers", nulls = Nulls.SKIP)
         public _FinalStage priceTiers(List<CreateBillingPriceTierRequestBody> priceTiers) {
             this.priceTiers.clear();
-            this.priceTiers.addAll(priceTiers);
+            if (priceTiers != null) {
+                this.priceTiers.addAll(priceTiers);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage priceDecimal(String priceDecimal) {
+            this.priceDecimal = Optional.ofNullable(priceDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "price_decimal", nulls = Nulls.SKIP)
+        public _FinalStage priceDecimal(Optional<String> priceDecimal) {
+            this.priceDecimal = priceDecimal;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage packageSize(Integer packageSize) {
+            this.packageSize = Optional.ofNullable(packageSize);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "package_size", nulls = Nulls.SKIP)
+        public _FinalStage packageSize(Optional<Integer> packageSize) {
+            this.packageSize = packageSize;
             return this;
         }
 
@@ -393,16 +486,19 @@ public final class CreateBillingPriceRequestBody {
         @java.lang.Override
         public CreateBillingPriceRequestBody build() {
             return new CreateBillingPriceRequestBody(
+                    billingScheme,
                     currency,
                     externalAccountId,
                     interval,
                     isActive,
                     meterId,
+                    packageSize,
                     price,
+                    priceDecimal,
                     priceExternalId,
                     priceTiers,
                     productExternalId,
-                    tierMode,
+                    tiersMode,
                     usageType,
                     additionalProperties);
         }

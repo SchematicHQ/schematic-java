@@ -82,6 +82,9 @@ public final class CountWebhookEventsResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull CountWebhookEventsParams params);
     }
 
@@ -115,6 +118,7 @@ public final class CountWebhookEventsResponse {
         }
 
         /**
+         * <p>Input parameters</p>
          * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

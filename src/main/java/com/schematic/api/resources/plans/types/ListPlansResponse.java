@@ -36,9 +36,6 @@ public final class ListPlansResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<PlanDetailResponseData> getData() {
         return data;
@@ -82,6 +79,9 @@ public final class ListPlansResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull ListPlansParams params);
 
         Builder from(ListPlansResponse other);
@@ -117,6 +117,7 @@ public final class ListPlansResponse {
 
         /**
          * <p>Input parameters</p>
+         * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -126,20 +127,14 @@ public final class ListPlansResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<PlanDetailResponseData> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(PlanDetailResponseData data) {
             this.data.add(data);
@@ -150,7 +145,9 @@ public final class ListPlansResponse {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(List<PlanDetailResponseData> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 

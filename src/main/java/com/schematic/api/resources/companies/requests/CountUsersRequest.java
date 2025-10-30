@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,9 +22,9 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountUsersRequest.Builder.class)
 public final class CountUsersRequest {
-    private final Optional<String> companyId;
+    private final Optional<List<String>> ids;
 
-    private final Optional<String> ids;
+    private final Optional<String> companyId;
 
     private final Optional<String> planId;
 
@@ -35,15 +37,15 @@ public final class CountUsersRequest {
     private final Map<String, Object> additionalProperties;
 
     private CountUsersRequest(
+            Optional<List<String>> ids,
             Optional<String> companyId,
-            Optional<String> ids,
             Optional<String> planId,
             Optional<String> q,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
-        this.companyId = companyId;
         this.ids = ids;
+        this.companyId = companyId;
         this.planId = planId;
         this.q = q;
         this.limit = limit;
@@ -52,19 +54,19 @@ public final class CountUsersRequest {
     }
 
     /**
+     * @return Filter users by multiple user IDs (starts with user_)
+     */
+    @JsonProperty("ids")
+    public Optional<List<String>> getIds() {
+        return ids;
+    }
+
+    /**
      * @return Filter users by company ID (starts with comp_)
      */
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
-    }
-
-    /**
-     * @return Filter users by multiple user IDs (starts with user_)
-     */
-    @JsonProperty("ids")
-    public Optional<String> getIds() {
-        return ids;
     }
 
     /**
@@ -111,8 +113,8 @@ public final class CountUsersRequest {
     }
 
     private boolean equalTo(CountUsersRequest other) {
-        return companyId.equals(other.companyId)
-                && ids.equals(other.ids)
+        return ids.equals(other.ids)
+                && companyId.equals(other.companyId)
                 && planId.equals(other.planId)
                 && q.equals(other.q)
                 && limit.equals(other.limit)
@@ -121,7 +123,7 @@ public final class CountUsersRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.ids, this.planId, this.q, this.limit, this.offset);
+        return Objects.hash(this.ids, this.companyId, this.planId, this.q, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -135,9 +137,9 @@ public final class CountUsersRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> companyId = Optional.empty();
+        private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<String> ids = Optional.empty();
+        private Optional<String> companyId = Optional.empty();
 
         private Optional<String> planId = Optional.empty();
 
@@ -153,8 +155,8 @@ public final class CountUsersRequest {
         private Builder() {}
 
         public Builder from(CountUsersRequest other) {
-            companyId(other.getCompanyId());
             ids(other.getIds());
+            companyId(other.getCompanyId());
             planId(other.getPlanId());
             q(other.getQ());
             limit(other.getLimit());
@@ -162,6 +164,28 @@ public final class CountUsersRequest {
             return this;
         }
 
+        /**
+         * <p>Filter users by multiple user IDs (starts with user_)</p>
+         */
+        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
+        public Builder ids(Optional<List<String>> ids) {
+            this.ids = ids;
+            return this;
+        }
+
+        public Builder ids(List<String> ids) {
+            this.ids = Optional.ofNullable(ids);
+            return this;
+        }
+
+        public Builder ids(String ids) {
+            this.ids = Optional.of(Collections.singletonList(ids));
+            return this;
+        }
+
+        /**
+         * <p>Filter users by company ID (starts with comp_)</p>
+         */
         @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
         public Builder companyId(Optional<String> companyId) {
             this.companyId = companyId;
@@ -173,17 +197,9 @@ public final class CountUsersRequest {
             return this;
         }
 
-        @JsonSetter(value = "ids", nulls = Nulls.SKIP)
-        public Builder ids(Optional<String> ids) {
-            this.ids = ids;
-            return this;
-        }
-
-        public Builder ids(String ids) {
-            this.ids = Optional.ofNullable(ids);
-            return this;
-        }
-
+        /**
+         * <p>Filter users by plan ID (starts with plan_)</p>
+         */
         @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
         public Builder planId(Optional<String> planId) {
             this.planId = planId;
@@ -195,6 +211,9 @@ public final class CountUsersRequest {
             return this;
         }
 
+        /**
+         * <p>Search for users by name, keys or string traits</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -206,6 +225,9 @@ public final class CountUsersRequest {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -217,6 +239,9 @@ public final class CountUsersRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -229,7 +254,7 @@ public final class CountUsersRequest {
         }
 
         public CountUsersRequest build() {
-            return new CountUsersRequest(companyId, ids, planId, q, limit, offset, additionalProperties);
+            return new CountUsersRequest(ids, companyId, planId, q, limit, offset, additionalProperties);
         }
     }
 }

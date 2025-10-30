@@ -12,8 +12,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.resources.billing.types.SearchBillingPricesRequestTiersMode;
 import com.schematic.api.resources.billing.types.SearchBillingPricesRequestUsageType;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,15 +24,25 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SearchBillingPricesRequest.Builder.class)
 public final class SearchBillingPricesRequest {
-    private final Optional<String> ids;
+    private final Optional<List<String>> ids;
 
-    private final Optional<String> q;
+    private final Optional<Boolean> forInitialPlan;
+
+    private final Optional<Boolean> forTrialExpiryPlan;
+
+    private final Optional<String> productId;
 
     private final Optional<String> interval;
 
-    private final Optional<SearchBillingPricesRequestUsageType> usageType;
-
     private final Optional<Integer> price;
+
+    private final Optional<String> q;
+
+    private final Optional<Boolean> requiresPaymentMethod;
+
+    private final Optional<SearchBillingPricesRequestTiersMode> tiersMode;
+
+    private final Optional<SearchBillingPricesRequestUsageType> usageType;
 
     private final Optional<Integer> limit;
 
@@ -38,32 +51,58 @@ public final class SearchBillingPricesRequest {
     private final Map<String, Object> additionalProperties;
 
     private SearchBillingPricesRequest(
-            Optional<String> ids,
-            Optional<String> q,
+            Optional<List<String>> ids,
+            Optional<Boolean> forInitialPlan,
+            Optional<Boolean> forTrialExpiryPlan,
+            Optional<String> productId,
             Optional<String> interval,
-            Optional<SearchBillingPricesRequestUsageType> usageType,
             Optional<Integer> price,
+            Optional<String> q,
+            Optional<Boolean> requiresPaymentMethod,
+            Optional<SearchBillingPricesRequestTiersMode> tiersMode,
+            Optional<SearchBillingPricesRequestUsageType> usageType,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
-        this.q = q;
+        this.forInitialPlan = forInitialPlan;
+        this.forTrialExpiryPlan = forTrialExpiryPlan;
+        this.productId = productId;
         this.interval = interval;
-        this.usageType = usageType;
         this.price = price;
+        this.q = q;
+        this.requiresPaymentMethod = requiresPaymentMethod;
+        this.tiersMode = tiersMode;
+        this.usageType = usageType;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("ids")
-    public Optional<String> getIds() {
+    public Optional<List<String>> getIds() {
         return ids;
     }
 
-    @JsonProperty("q")
-    public Optional<String> getQ() {
-        return q;
+    /**
+     * @return Filter for prices valid for initial plans (free prices only)
+     */
+    @JsonProperty("for_initial_plan")
+    public Optional<Boolean> getForInitialPlan() {
+        return forInitialPlan;
+    }
+
+    /**
+     * @return Filter for prices valid for trial expiry plans (free prices only)
+     */
+    @JsonProperty("for_trial_expiry_plan")
+    public Optional<Boolean> getForTrialExpiryPlan() {
+        return forTrialExpiryPlan;
+    }
+
+    @JsonProperty("product_id")
+    public Optional<String> getProductId() {
+        return productId;
     }
 
     @JsonProperty("interval")
@@ -71,14 +110,32 @@ public final class SearchBillingPricesRequest {
         return interval;
     }
 
-    @JsonProperty("usage_type")
-    public Optional<SearchBillingPricesRequestUsageType> getUsageType() {
-        return usageType;
-    }
-
     @JsonProperty("price")
     public Optional<Integer> getPrice() {
         return price;
+    }
+
+    @JsonProperty("q")
+    public Optional<String> getQ() {
+        return q;
+    }
+
+    /**
+     * @return Filter for prices that require a payment method (inverse of ForInitialPlan)
+     */
+    @JsonProperty("requires_payment_method")
+    public Optional<Boolean> getRequiresPaymentMethod() {
+        return requiresPaymentMethod;
+    }
+
+    @JsonProperty("tiers_mode")
+    public Optional<SearchBillingPricesRequestTiersMode> getTiersMode() {
+        return tiersMode;
+    }
+
+    @JsonProperty("usage_type")
+    public Optional<SearchBillingPricesRequestUsageType> getUsageType() {
+        return usageType;
     }
 
     /**
@@ -110,17 +167,34 @@ public final class SearchBillingPricesRequest {
 
     private boolean equalTo(SearchBillingPricesRequest other) {
         return ids.equals(other.ids)
-                && q.equals(other.q)
+                && forInitialPlan.equals(other.forInitialPlan)
+                && forTrialExpiryPlan.equals(other.forTrialExpiryPlan)
+                && productId.equals(other.productId)
                 && interval.equals(other.interval)
-                && usageType.equals(other.usageType)
                 && price.equals(other.price)
+                && q.equals(other.q)
+                && requiresPaymentMethod.equals(other.requiresPaymentMethod)
+                && tiersMode.equals(other.tiersMode)
+                && usageType.equals(other.usageType)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.ids, this.q, this.interval, this.usageType, this.price, this.limit, this.offset);
+        return Objects.hash(
+                this.ids,
+                this.forInitialPlan,
+                this.forTrialExpiryPlan,
+                this.productId,
+                this.interval,
+                this.price,
+                this.q,
+                this.requiresPaymentMethod,
+                this.tiersMode,
+                this.usageType,
+                this.limit,
+                this.offset);
     }
 
     @java.lang.Override
@@ -134,15 +208,25 @@ public final class SearchBillingPricesRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> ids = Optional.empty();
+        private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<String> q = Optional.empty();
+        private Optional<Boolean> forInitialPlan = Optional.empty();
+
+        private Optional<Boolean> forTrialExpiryPlan = Optional.empty();
+
+        private Optional<String> productId = Optional.empty();
 
         private Optional<String> interval = Optional.empty();
 
-        private Optional<SearchBillingPricesRequestUsageType> usageType = Optional.empty();
-
         private Optional<Integer> price = Optional.empty();
+
+        private Optional<String> q = Optional.empty();
+
+        private Optional<Boolean> requiresPaymentMethod = Optional.empty();
+
+        private Optional<SearchBillingPricesRequestTiersMode> tiersMode = Optional.empty();
+
+        private Optional<SearchBillingPricesRequestUsageType> usageType = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
@@ -155,34 +239,72 @@ public final class SearchBillingPricesRequest {
 
         public Builder from(SearchBillingPricesRequest other) {
             ids(other.getIds());
-            q(other.getQ());
+            forInitialPlan(other.getForInitialPlan());
+            forTrialExpiryPlan(other.getForTrialExpiryPlan());
+            productId(other.getProductId());
             interval(other.getInterval());
-            usageType(other.getUsageType());
             price(other.getPrice());
+            q(other.getQ());
+            requiresPaymentMethod(other.getRequiresPaymentMethod());
+            tiersMode(other.getTiersMode());
+            usageType(other.getUsageType());
             limit(other.getLimit());
             offset(other.getOffset());
             return this;
         }
 
         @JsonSetter(value = "ids", nulls = Nulls.SKIP)
-        public Builder ids(Optional<String> ids) {
+        public Builder ids(Optional<List<String>> ids) {
             this.ids = ids;
             return this;
         }
 
-        public Builder ids(String ids) {
+        public Builder ids(List<String> ids) {
             this.ids = Optional.ofNullable(ids);
             return this;
         }
 
-        @JsonSetter(value = "q", nulls = Nulls.SKIP)
-        public Builder q(Optional<String> q) {
-            this.q = q;
+        public Builder ids(String ids) {
+            this.ids = Optional.of(Collections.singletonList(ids));
             return this;
         }
 
-        public Builder q(String q) {
-            this.q = Optional.ofNullable(q);
+        /**
+         * <p>Filter for prices valid for initial plans (free prices only)</p>
+         */
+        @JsonSetter(value = "for_initial_plan", nulls = Nulls.SKIP)
+        public Builder forInitialPlan(Optional<Boolean> forInitialPlan) {
+            this.forInitialPlan = forInitialPlan;
+            return this;
+        }
+
+        public Builder forInitialPlan(Boolean forInitialPlan) {
+            this.forInitialPlan = Optional.ofNullable(forInitialPlan);
+            return this;
+        }
+
+        /**
+         * <p>Filter for prices valid for trial expiry plans (free prices only)</p>
+         */
+        @JsonSetter(value = "for_trial_expiry_plan", nulls = Nulls.SKIP)
+        public Builder forTrialExpiryPlan(Optional<Boolean> forTrialExpiryPlan) {
+            this.forTrialExpiryPlan = forTrialExpiryPlan;
+            return this;
+        }
+
+        public Builder forTrialExpiryPlan(Boolean forTrialExpiryPlan) {
+            this.forTrialExpiryPlan = Optional.ofNullable(forTrialExpiryPlan);
+            return this;
+        }
+
+        @JsonSetter(value = "product_id", nulls = Nulls.SKIP)
+        public Builder productId(Optional<String> productId) {
+            this.productId = productId;
+            return this;
+        }
+
+        public Builder productId(String productId) {
+            this.productId = Optional.ofNullable(productId);
             return this;
         }
 
@@ -197,17 +319,6 @@ public final class SearchBillingPricesRequest {
             return this;
         }
 
-        @JsonSetter(value = "usage_type", nulls = Nulls.SKIP)
-        public Builder usageType(Optional<SearchBillingPricesRequestUsageType> usageType) {
-            this.usageType = usageType;
-            return this;
-        }
-
-        public Builder usageType(SearchBillingPricesRequestUsageType usageType) {
-            this.usageType = Optional.ofNullable(usageType);
-            return this;
-        }
-
         @JsonSetter(value = "price", nulls = Nulls.SKIP)
         public Builder price(Optional<Integer> price) {
             this.price = price;
@@ -219,6 +330,56 @@ public final class SearchBillingPricesRequest {
             return this;
         }
 
+        @JsonSetter(value = "q", nulls = Nulls.SKIP)
+        public Builder q(Optional<String> q) {
+            this.q = q;
+            return this;
+        }
+
+        public Builder q(String q) {
+            this.q = Optional.ofNullable(q);
+            return this;
+        }
+
+        /**
+         * <p>Filter for prices that require a payment method (inverse of ForInitialPlan)</p>
+         */
+        @JsonSetter(value = "requires_payment_method", nulls = Nulls.SKIP)
+        public Builder requiresPaymentMethod(Optional<Boolean> requiresPaymentMethod) {
+            this.requiresPaymentMethod = requiresPaymentMethod;
+            return this;
+        }
+
+        public Builder requiresPaymentMethod(Boolean requiresPaymentMethod) {
+            this.requiresPaymentMethod = Optional.ofNullable(requiresPaymentMethod);
+            return this;
+        }
+
+        @JsonSetter(value = "tiers_mode", nulls = Nulls.SKIP)
+        public Builder tiersMode(Optional<SearchBillingPricesRequestTiersMode> tiersMode) {
+            this.tiersMode = tiersMode;
+            return this;
+        }
+
+        public Builder tiersMode(SearchBillingPricesRequestTiersMode tiersMode) {
+            this.tiersMode = Optional.ofNullable(tiersMode);
+            return this;
+        }
+
+        @JsonSetter(value = "usage_type", nulls = Nulls.SKIP)
+        public Builder usageType(Optional<SearchBillingPricesRequestUsageType> usageType) {
+            this.usageType = usageType;
+            return this;
+        }
+
+        public Builder usageType(SearchBillingPricesRequestUsageType usageType) {
+            this.usageType = Optional.ofNullable(usageType);
+            return this;
+        }
+
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -230,6 +391,9 @@ public final class SearchBillingPricesRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -243,7 +407,19 @@ public final class SearchBillingPricesRequest {
 
         public SearchBillingPricesRequest build() {
             return new SearchBillingPricesRequest(
-                    ids, q, interval, usageType, price, limit, offset, additionalProperties);
+                    ids,
+                    forInitialPlan,
+                    forTrialExpiryPlan,
+                    productId,
+                    interval,
+                    price,
+                    q,
+                    requiresPaymentMethod,
+                    tiersMode,
+                    usageType,
+                    limit,
+                    offset,
+                    additionalProperties);
         }
     }
 }
