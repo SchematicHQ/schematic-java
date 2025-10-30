@@ -27,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateCompanyOverrideRequestBody {
     private final String companyId;
 
+    private final Optional<Double> creditConsumptionRate;
+
     private final Optional<OffsetDateTime> expirationDate;
 
     private final String featureId;
@@ -35,7 +37,11 @@ public final class CreateCompanyOverrideRequestBody {
 
     private final Optional<CreateCompanyOverrideRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset;
 
+    private final Optional<String> note;
+
     private final Optional<Boolean> valueBool;
+
+    private final Optional<String> valueCreditId;
 
     private final Optional<Integer> valueNumeric;
 
@@ -47,21 +53,27 @@ public final class CreateCompanyOverrideRequestBody {
 
     private CreateCompanyOverrideRequestBody(
             String companyId,
+            Optional<Double> creditConsumptionRate,
             Optional<OffsetDateTime> expirationDate,
             String featureId,
             Optional<CreateCompanyOverrideRequestBodyMetricPeriod> metricPeriod,
             Optional<CreateCompanyOverrideRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<String> note,
             Optional<Boolean> valueBool,
+            Optional<String> valueCreditId,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
             CreateCompanyOverrideRequestBodyValueType valueType,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
+        this.creditConsumptionRate = creditConsumptionRate;
         this.expirationDate = expirationDate;
         this.featureId = featureId;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.note = note;
         this.valueBool = valueBool;
+        this.valueCreditId = valueCreditId;
         this.valueNumeric = valueNumeric;
         this.valueTraitId = valueTraitId;
         this.valueType = valueType;
@@ -71,6 +83,11 @@ public final class CreateCompanyOverrideRequestBody {
     @JsonProperty("company_id")
     public String getCompanyId() {
         return companyId;
+    }
+
+    @JsonProperty("credit_consumption_rate")
+    public Optional<Double> getCreditConsumptionRate() {
+        return creditConsumptionRate;
     }
 
     @JsonProperty("expiration_date")
@@ -93,9 +110,19 @@ public final class CreateCompanyOverrideRequestBody {
         return metricPeriodMonthReset;
     }
 
+    @JsonProperty("note")
+    public Optional<String> getNote() {
+        return note;
+    }
+
     @JsonProperty("value_bool")
     public Optional<Boolean> getValueBool() {
         return valueBool;
+    }
+
+    @JsonProperty("value_credit_id")
+    public Optional<String> getValueCreditId() {
+        return valueCreditId;
     }
 
     @JsonProperty("value_numeric")
@@ -126,11 +153,14 @@ public final class CreateCompanyOverrideRequestBody {
 
     private boolean equalTo(CreateCompanyOverrideRequestBody other) {
         return companyId.equals(other.companyId)
+                && creditConsumptionRate.equals(other.creditConsumptionRate)
                 && expirationDate.equals(other.expirationDate)
                 && featureId.equals(other.featureId)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && note.equals(other.note)
                 && valueBool.equals(other.valueBool)
+                && valueCreditId.equals(other.valueCreditId)
                 && valueNumeric.equals(other.valueNumeric)
                 && valueTraitId.equals(other.valueTraitId)
                 && valueType.equals(other.valueType);
@@ -140,11 +170,14 @@ public final class CreateCompanyOverrideRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.companyId,
+                this.creditConsumptionRate,
                 this.expirationDate,
                 this.featureId,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.note,
                 this.valueBool,
+                this.valueCreditId,
                 this.valueNumeric,
                 this.valueTraitId,
                 this.valueType);
@@ -176,6 +209,10 @@ public final class CreateCompanyOverrideRequestBody {
     public interface _FinalStage {
         CreateCompanyOverrideRequestBody build();
 
+        _FinalStage creditConsumptionRate(Optional<Double> creditConsumptionRate);
+
+        _FinalStage creditConsumptionRate(Double creditConsumptionRate);
+
         _FinalStage expirationDate(Optional<OffsetDateTime> expirationDate);
 
         _FinalStage expirationDate(OffsetDateTime expirationDate);
@@ -190,9 +227,17 @@ public final class CreateCompanyOverrideRequestBody {
         _FinalStage metricPeriodMonthReset(
                 CreateCompanyOverrideRequestBodyMetricPeriodMonthReset metricPeriodMonthReset);
 
+        _FinalStage note(Optional<String> note);
+
+        _FinalStage note(String note);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
+
+        _FinalStage valueCreditId(Optional<String> valueCreditId);
+
+        _FinalStage valueCreditId(String valueCreditId);
 
         _FinalStage valueNumeric(Optional<Integer> valueNumeric);
 
@@ -215,7 +260,11 @@ public final class CreateCompanyOverrideRequestBody {
 
         private Optional<Integer> valueNumeric = Optional.empty();
 
+        private Optional<String> valueCreditId = Optional.empty();
+
         private Optional<Boolean> valueBool = Optional.empty();
+
+        private Optional<String> note = Optional.empty();
 
         private Optional<CreateCompanyOverrideRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset =
                 Optional.empty();
@@ -223,6 +272,8 @@ public final class CreateCompanyOverrideRequestBody {
         private Optional<CreateCompanyOverrideRequestBodyMetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<OffsetDateTime> expirationDate = Optional.empty();
+
+        private Optional<Double> creditConsumptionRate = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -232,11 +283,14 @@ public final class CreateCompanyOverrideRequestBody {
         @java.lang.Override
         public Builder from(CreateCompanyOverrideRequestBody other) {
             companyId(other.getCompanyId());
+            creditConsumptionRate(other.getCreditConsumptionRate());
             expirationDate(other.getExpirationDate());
             featureId(other.getFeatureId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            note(other.getNote());
             valueBool(other.getValueBool());
+            valueCreditId(other.getValueCreditId());
             valueNumeric(other.getValueNumeric());
             valueTraitId(other.getValueTraitId());
             valueType(other.getValueType());
@@ -291,6 +345,19 @@ public final class CreateCompanyOverrideRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage valueCreditId(String valueCreditId) {
+            this.valueCreditId = Optional.ofNullable(valueCreditId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "value_credit_id", nulls = Nulls.SKIP)
+        public _FinalStage valueCreditId(Optional<String> valueCreditId) {
+            this.valueCreditId = valueCreditId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage valueBool(Boolean valueBool) {
             this.valueBool = Optional.ofNullable(valueBool);
             return this;
@@ -300,6 +367,19 @@ public final class CreateCompanyOverrideRequestBody {
         @JsonSetter(value = "value_bool", nulls = Nulls.SKIP)
         public _FinalStage valueBool(Optional<Boolean> valueBool) {
             this.valueBool = valueBool;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage note(String note) {
+            this.note = Optional.ofNullable(note);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "note", nulls = Nulls.SKIP)
+        public _FinalStage note(Optional<String> note) {
+            this.note = note;
             return this;
         }
 
@@ -345,14 +425,30 @@ public final class CreateCompanyOverrideRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage creditConsumptionRate(Double creditConsumptionRate) {
+            this.creditConsumptionRate = Optional.ofNullable(creditConsumptionRate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_consumption_rate", nulls = Nulls.SKIP)
+        public _FinalStage creditConsumptionRate(Optional<Double> creditConsumptionRate) {
+            this.creditConsumptionRate = creditConsumptionRate;
+            return this;
+        }
+
+        @java.lang.Override
         public CreateCompanyOverrideRequestBody build() {
             return new CreateCompanyOverrideRequestBody(
                     companyId,
+                    creditConsumptionRate,
                     expirationDate,
                     featureId,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    note,
                     valueBool,
+                    valueCreditId,
                     valueNumeric,
                     valueTraitId,
                     valueType,

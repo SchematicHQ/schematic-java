@@ -3,30 +3,117 @@
  */
 package com.schematic.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CreateOrUpdateRuleRequestBodyRuleType {
-    GLOBAL_OVERRIDE("global_override"),
+public final class CreateOrUpdateRuleRequestBodyRuleType {
+    public static final CreateOrUpdateRuleRequestBodyRuleType GLOBAL_OVERRIDE =
+            new CreateOrUpdateRuleRequestBodyRuleType(Value.GLOBAL_OVERRIDE, "global_override");
 
-    COMPANY_OVERRIDE("company_override"),
+    public static final CreateOrUpdateRuleRequestBodyRuleType COMPANY_OVERRIDE =
+            new CreateOrUpdateRuleRequestBodyRuleType(Value.COMPANY_OVERRIDE, "company_override");
 
-    PLAN_ENTITLEMENT("plan_entitlement"),
+    public static final CreateOrUpdateRuleRequestBodyRuleType STANDARD =
+            new CreateOrUpdateRuleRequestBodyRuleType(Value.STANDARD, "standard");
 
-    STANDARD("standard"),
+    public static final CreateOrUpdateRuleRequestBodyRuleType PLAN_ENTITLEMENT =
+            new CreateOrUpdateRuleRequestBodyRuleType(Value.PLAN_ENTITLEMENT, "plan_entitlement");
 
-    DEFAULT("default"),
+    public static final CreateOrUpdateRuleRequestBodyRuleType DEFAULT =
+            new CreateOrUpdateRuleRequestBodyRuleType(Value.DEFAULT, "default");
 
-    PLAN_AUDIENCE("plan_audience");
+    private final Value value;
 
-    private final String value;
+    private final String string;
 
-    CreateOrUpdateRuleRequestBodyRuleType(String value) {
+    CreateOrUpdateRuleRequestBodyRuleType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CreateOrUpdateRuleRequestBodyRuleType
+                        && this.string.equals(((CreateOrUpdateRuleRequestBodyRuleType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case GLOBAL_OVERRIDE:
+                return visitor.visitGlobalOverride();
+            case COMPANY_OVERRIDE:
+                return visitor.visitCompanyOverride();
+            case STANDARD:
+                return visitor.visitStandard();
+            case PLAN_ENTITLEMENT:
+                return visitor.visitPlanEntitlement();
+            case DEFAULT:
+                return visitor.visitDefault();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CreateOrUpdateRuleRequestBodyRuleType valueOf(String value) {
+        switch (value) {
+            case "global_override":
+                return GLOBAL_OVERRIDE;
+            case "company_override":
+                return COMPANY_OVERRIDE;
+            case "standard":
+                return STANDARD;
+            case "plan_entitlement":
+                return PLAN_ENTITLEMENT;
+            case "default":
+                return DEFAULT;
+            default:
+                return new CreateOrUpdateRuleRequestBodyRuleType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        GLOBAL_OVERRIDE,
+
+        COMPANY_OVERRIDE,
+
+        PLAN_ENTITLEMENT,
+
+        STANDARD,
+
+        DEFAULT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitGlobalOverride();
+
+        T visitCompanyOverride();
+
+        T visitPlanEntitlement();
+
+        T visitStandard();
+
+        T visitDefault();
+
+        T visitUnknown(String unknownType);
     }
 }

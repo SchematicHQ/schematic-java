@@ -25,11 +25,17 @@ public final class BillingProductPlanResponseData {
 
     private final String billingProductId;
 
+    private final String chargeType;
+
+    private final String controlledBy;
+
     private final String environmentId;
 
     private final boolean isTrialable;
 
     private final Optional<String> monthlyPriceId;
+
+    private final Optional<String> oneTimePriceId;
 
     private final String planId;
 
@@ -42,18 +48,24 @@ public final class BillingProductPlanResponseData {
     private BillingProductPlanResponseData(
             String accountId,
             String billingProductId,
+            String chargeType,
+            String controlledBy,
             String environmentId,
             boolean isTrialable,
             Optional<String> monthlyPriceId,
+            Optional<String> oneTimePriceId,
             String planId,
             Optional<Integer> trialDays,
             Optional<String> yearlyPriceId,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.billingProductId = billingProductId;
+        this.chargeType = chargeType;
+        this.controlledBy = controlledBy;
         this.environmentId = environmentId;
         this.isTrialable = isTrialable;
         this.monthlyPriceId = monthlyPriceId;
+        this.oneTimePriceId = oneTimePriceId;
         this.planId = planId;
         this.trialDays = trialDays;
         this.yearlyPriceId = yearlyPriceId;
@@ -70,6 +82,16 @@ public final class BillingProductPlanResponseData {
         return billingProductId;
     }
 
+    @JsonProperty("charge_type")
+    public String getChargeType() {
+        return chargeType;
+    }
+
+    @JsonProperty("controlled_by")
+    public String getControlledBy() {
+        return controlledBy;
+    }
+
     @JsonProperty("environment_id")
     public String getEnvironmentId() {
         return environmentId;
@@ -83,6 +105,11 @@ public final class BillingProductPlanResponseData {
     @JsonProperty("monthly_price_id")
     public Optional<String> getMonthlyPriceId() {
         return monthlyPriceId;
+    }
+
+    @JsonProperty("one_time_price_id")
+    public Optional<String> getOneTimePriceId() {
+        return oneTimePriceId;
     }
 
     @JsonProperty("plan_id")
@@ -114,9 +141,12 @@ public final class BillingProductPlanResponseData {
     private boolean equalTo(BillingProductPlanResponseData other) {
         return accountId.equals(other.accountId)
                 && billingProductId.equals(other.billingProductId)
+                && chargeType.equals(other.chargeType)
+                && controlledBy.equals(other.controlledBy)
                 && environmentId.equals(other.environmentId)
                 && isTrialable == other.isTrialable
                 && monthlyPriceId.equals(other.monthlyPriceId)
+                && oneTimePriceId.equals(other.oneTimePriceId)
                 && planId.equals(other.planId)
                 && trialDays.equals(other.trialDays)
                 && yearlyPriceId.equals(other.yearlyPriceId);
@@ -127,9 +157,12 @@ public final class BillingProductPlanResponseData {
         return Objects.hash(
                 this.accountId,
                 this.billingProductId,
+                this.chargeType,
+                this.controlledBy,
                 this.environmentId,
                 this.isTrialable,
                 this.monthlyPriceId,
+                this.oneTimePriceId,
                 this.planId,
                 this.trialDays,
                 this.yearlyPriceId);
@@ -151,7 +184,15 @@ public final class BillingProductPlanResponseData {
     }
 
     public interface BillingProductIdStage {
-        EnvironmentIdStage billingProductId(@NotNull String billingProductId);
+        ChargeTypeStage billingProductId(@NotNull String billingProductId);
+    }
+
+    public interface ChargeTypeStage {
+        ControlledByStage chargeType(@NotNull String chargeType);
+    }
+
+    public interface ControlledByStage {
+        EnvironmentIdStage controlledBy(@NotNull String controlledBy);
     }
 
     public interface EnvironmentIdStage {
@@ -173,6 +214,10 @@ public final class BillingProductPlanResponseData {
 
         _FinalStage monthlyPriceId(String monthlyPriceId);
 
+        _FinalStage oneTimePriceId(Optional<String> oneTimePriceId);
+
+        _FinalStage oneTimePriceId(String oneTimePriceId);
+
         _FinalStage trialDays(Optional<Integer> trialDays);
 
         _FinalStage trialDays(Integer trialDays);
@@ -186,6 +231,8 @@ public final class BillingProductPlanResponseData {
     public static final class Builder
             implements AccountIdStage,
                     BillingProductIdStage,
+                    ChargeTypeStage,
+                    ControlledByStage,
                     EnvironmentIdStage,
                     IsTrialableStage,
                     PlanIdStage,
@@ -193,6 +240,10 @@ public final class BillingProductPlanResponseData {
         private String accountId;
 
         private String billingProductId;
+
+        private String chargeType;
+
+        private String controlledBy;
 
         private String environmentId;
 
@@ -203,6 +254,8 @@ public final class BillingProductPlanResponseData {
         private Optional<String> yearlyPriceId = Optional.empty();
 
         private Optional<Integer> trialDays = Optional.empty();
+
+        private Optional<String> oneTimePriceId = Optional.empty();
 
         private Optional<String> monthlyPriceId = Optional.empty();
 
@@ -215,9 +268,12 @@ public final class BillingProductPlanResponseData {
         public Builder from(BillingProductPlanResponseData other) {
             accountId(other.getAccountId());
             billingProductId(other.getBillingProductId());
+            chargeType(other.getChargeType());
+            controlledBy(other.getControlledBy());
             environmentId(other.getEnvironmentId());
             isTrialable(other.getIsTrialable());
             monthlyPriceId(other.getMonthlyPriceId());
+            oneTimePriceId(other.getOneTimePriceId());
             planId(other.getPlanId());
             trialDays(other.getTrialDays());
             yearlyPriceId(other.getYearlyPriceId());
@@ -233,8 +289,22 @@ public final class BillingProductPlanResponseData {
 
         @java.lang.Override
         @JsonSetter("billing_product_id")
-        public EnvironmentIdStage billingProductId(@NotNull String billingProductId) {
+        public ChargeTypeStage billingProductId(@NotNull String billingProductId) {
             this.billingProductId = Objects.requireNonNull(billingProductId, "billingProductId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("charge_type")
+        public ControlledByStage chargeType(@NotNull String chargeType) {
+            this.chargeType = Objects.requireNonNull(chargeType, "chargeType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("controlled_by")
+        public EnvironmentIdStage controlledBy(@NotNull String controlledBy) {
+            this.controlledBy = Objects.requireNonNull(controlledBy, "controlledBy must not be null");
             return this;
         }
 
@@ -286,6 +356,19 @@ public final class BillingProductPlanResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage oneTimePriceId(String oneTimePriceId) {
+            this.oneTimePriceId = Optional.ofNullable(oneTimePriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "one_time_price_id", nulls = Nulls.SKIP)
+        public _FinalStage oneTimePriceId(Optional<String> oneTimePriceId) {
+            this.oneTimePriceId = oneTimePriceId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage monthlyPriceId(String monthlyPriceId) {
             this.monthlyPriceId = Optional.ofNullable(monthlyPriceId);
             return this;
@@ -303,9 +386,12 @@ public final class BillingProductPlanResponseData {
             return new BillingProductPlanResponseData(
                     accountId,
                     billingProductId,
+                    chargeType,
+                    controlledBy,
                     environmentId,
                     isTrialable,
                     monthlyPriceId,
+                    oneTimePriceId,
                     planId,
                     trialDays,
                     yearlyPriceId,

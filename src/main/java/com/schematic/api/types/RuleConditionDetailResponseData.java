@@ -50,8 +50,6 @@ public final class RuleConditionDetailResponseData {
 
     private final String operator;
 
-    private final Optional<String> planId;
-
     private final List<String> resourceIds;
 
     private final List<PreviewObjectResponseData> resources;
@@ -84,7 +82,6 @@ public final class RuleConditionDetailResponseData {
             Optional<String> metricPeriodMonthReset,
             Optional<Integer> metricValue,
             String operator,
-            Optional<String> planId,
             List<String> resourceIds,
             List<PreviewObjectResponseData> resources,
             String ruleId,
@@ -107,7 +104,6 @@ public final class RuleConditionDetailResponseData {
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.metricValue = metricValue;
         this.operator = operator;
-        this.planId = planId;
         this.resourceIds = resourceIds;
         this.resources = resources;
         this.ruleId = ruleId;
@@ -184,11 +180,6 @@ public final class RuleConditionDetailResponseData {
         return operator;
     }
 
-    @JsonProperty("plan_id")
-    public Optional<String> getPlanId() {
-        return planId;
-    }
-
     @JsonProperty("resource_ids")
     public List<String> getResourceIds() {
         return resourceIds;
@@ -254,7 +245,6 @@ public final class RuleConditionDetailResponseData {
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && metricValue.equals(other.metricValue)
                 && operator.equals(other.operator)
-                && planId.equals(other.planId)
                 && resourceIds.equals(other.resourceIds)
                 && resources.equals(other.resources)
                 && ruleId.equals(other.ruleId)
@@ -281,7 +271,6 @@ public final class RuleConditionDetailResponseData {
                 this.metricPeriodMonthReset,
                 this.metricValue,
                 this.operator,
-                this.planId,
                 this.resourceIds,
                 this.resources,
                 this.ruleId,
@@ -370,10 +359,6 @@ public final class RuleConditionDetailResponseData {
 
         _FinalStage metricValue(Integer metricValue);
 
-        _FinalStage planId(Optional<String> planId);
-
-        _FinalStage planId(String planId);
-
         _FinalStage resourceIds(List<String> resourceIds);
 
         _FinalStage addResourceIds(String resourceIds);
@@ -436,8 +421,6 @@ public final class RuleConditionDetailResponseData {
 
         private List<String> resourceIds = new ArrayList<>();
 
-        private Optional<String> planId = Optional.empty();
-
         private Optional<Integer> metricValue = Optional.empty();
 
         private Optional<String> metricPeriodMonthReset = Optional.empty();
@@ -474,7 +457,6 @@ public final class RuleConditionDetailResponseData {
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             metricValue(other.getMetricValue());
             operator(other.getOperator());
-            planId(other.getPlanId());
             resourceIds(other.getResourceIds());
             resources(other.getResources());
             ruleId(other.getRuleId());
@@ -583,7 +565,9 @@ public final class RuleConditionDetailResponseData {
 
         @java.lang.Override
         public _FinalStage addAllResources(List<PreviewObjectResponseData> resources) {
-            this.resources.addAll(resources);
+            if (resources != null) {
+                this.resources.addAll(resources);
+            }
             return this;
         }
 
@@ -597,13 +581,17 @@ public final class RuleConditionDetailResponseData {
         @JsonSetter(value = "resources", nulls = Nulls.SKIP)
         public _FinalStage resources(List<PreviewObjectResponseData> resources) {
             this.resources.clear();
-            this.resources.addAll(resources);
+            if (resources != null) {
+                this.resources.addAll(resources);
+            }
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllResourceIds(List<String> resourceIds) {
-            this.resourceIds.addAll(resourceIds);
+            if (resourceIds != null) {
+                this.resourceIds.addAll(resourceIds);
+            }
             return this;
         }
 
@@ -617,20 +605,9 @@ public final class RuleConditionDetailResponseData {
         @JsonSetter(value = "resource_ids", nulls = Nulls.SKIP)
         public _FinalStage resourceIds(List<String> resourceIds) {
             this.resourceIds.clear();
-            this.resourceIds.addAll(resourceIds);
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage planId(String planId) {
-            this.planId = Optional.ofNullable(planId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
-        public _FinalStage planId(Optional<String> planId) {
-            this.planId = planId;
+            if (resourceIds != null) {
+                this.resourceIds.addAll(resourceIds);
+            }
             return this;
         }
 
@@ -754,7 +731,6 @@ public final class RuleConditionDetailResponseData {
                     metricPeriodMonthReset,
                     metricValue,
                     operator,
-                    planId,
                     resourceIds,
                     resources,
                     ruleId,

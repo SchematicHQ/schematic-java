@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,9 +22,9 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetEventSummariesRequest.Builder.class)
 public final class GetEventSummariesRequest {
-    private final Optional<String> q;
+    private final Optional<List<String>> eventSubtypes;
 
-    private final Optional<String> eventSubtypes;
+    private final Optional<String> q;
 
     private final Optional<Integer> limit;
 
@@ -31,26 +33,26 @@ public final class GetEventSummariesRequest {
     private final Map<String, Object> additionalProperties;
 
     private GetEventSummariesRequest(
+            Optional<List<String>> eventSubtypes,
             Optional<String> q,
-            Optional<String> eventSubtypes,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
-        this.q = q;
         this.eventSubtypes = eventSubtypes;
+        this.q = q;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("event_subtypes")
+    public Optional<List<String>> getEventSubtypes() {
+        return eventSubtypes;
+    }
+
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
-    }
-
-    @JsonProperty("event_subtypes")
-    public Optional<String> getEventSubtypes() {
-        return eventSubtypes;
     }
 
     /**
@@ -81,15 +83,15 @@ public final class GetEventSummariesRequest {
     }
 
     private boolean equalTo(GetEventSummariesRequest other) {
-        return q.equals(other.q)
-                && eventSubtypes.equals(other.eventSubtypes)
+        return eventSubtypes.equals(other.eventSubtypes)
+                && q.equals(other.q)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.q, this.eventSubtypes, this.limit, this.offset);
+        return Objects.hash(this.eventSubtypes, this.q, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -103,9 +105,9 @@ public final class GetEventSummariesRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> q = Optional.empty();
+        private Optional<List<String>> eventSubtypes = Optional.empty();
 
-        private Optional<String> eventSubtypes = Optional.empty();
+        private Optional<String> q = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
@@ -117,10 +119,26 @@ public final class GetEventSummariesRequest {
         private Builder() {}
 
         public Builder from(GetEventSummariesRequest other) {
-            q(other.getQ());
             eventSubtypes(other.getEventSubtypes());
+            q(other.getQ());
             limit(other.getLimit());
             offset(other.getOffset());
+            return this;
+        }
+
+        @JsonSetter(value = "event_subtypes", nulls = Nulls.SKIP)
+        public Builder eventSubtypes(Optional<List<String>> eventSubtypes) {
+            this.eventSubtypes = eventSubtypes;
+            return this;
+        }
+
+        public Builder eventSubtypes(List<String> eventSubtypes) {
+            this.eventSubtypes = Optional.ofNullable(eventSubtypes);
+            return this;
+        }
+
+        public Builder eventSubtypes(String eventSubtypes) {
+            this.eventSubtypes = Optional.of(Collections.singletonList(eventSubtypes));
             return this;
         }
 
@@ -135,17 +153,9 @@ public final class GetEventSummariesRequest {
             return this;
         }
 
-        @JsonSetter(value = "event_subtypes", nulls = Nulls.SKIP)
-        public Builder eventSubtypes(Optional<String> eventSubtypes) {
-            this.eventSubtypes = eventSubtypes;
-            return this;
-        }
-
-        public Builder eventSubtypes(String eventSubtypes) {
-            this.eventSubtypes = Optional.ofNullable(eventSubtypes);
-            return this;
-        }
-
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -157,6 +167,9 @@ public final class GetEventSummariesRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -169,7 +182,7 @@ public final class GetEventSummariesRequest {
         }
 
         public GetEventSummariesRequest build() {
-            return new GetEventSummariesRequest(q, eventSubtypes, limit, offset, additionalProperties);
+            return new GetEventSummariesRequest(eventSubtypes, q, limit, offset, additionalProperties);
         }
     }
 }

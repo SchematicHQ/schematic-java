@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,7 +22,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountCompaniesRequest.Builder.class)
 public final class CountCompaniesRequest {
-    private final Optional<String> ids;
+    private final Optional<List<String>> ids;
 
     private final Optional<String> planId;
 
@@ -30,6 +32,8 @@ public final class CountCompaniesRequest {
 
     private final Optional<Boolean> withoutPlan;
 
+    private final Optional<Boolean> withSubscription;
+
     private final Optional<Integer> limit;
 
     private final Optional<Integer> offset;
@@ -37,11 +41,12 @@ public final class CountCompaniesRequest {
     private final Map<String, Object> additionalProperties;
 
     private CountCompaniesRequest(
-            Optional<String> ids,
+            Optional<List<String>> ids,
             Optional<String> planId,
             Optional<String> q,
             Optional<String> withoutFeatureOverrideFor,
             Optional<Boolean> withoutPlan,
+            Optional<Boolean> withSubscription,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
@@ -50,6 +55,7 @@ public final class CountCompaniesRequest {
         this.q = q;
         this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
         this.withoutPlan = withoutPlan;
+        this.withSubscription = withSubscription;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
@@ -59,7 +65,7 @@ public final class CountCompaniesRequest {
      * @return Filter companies by multiple company IDs (starts with comp_)
      */
     @JsonProperty("ids")
-    public Optional<String> getIds() {
+    public Optional<List<String>> getIds() {
         return ids;
     }
 
@@ -96,6 +102,14 @@ public final class CountCompaniesRequest {
     }
 
     /**
+     * @return Filter companies that have a subscription
+     */
+    @JsonProperty("with_subscription")
+    public Optional<Boolean> getWithSubscription() {
+        return withSubscription;
+    }
+
+    /**
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
@@ -128,6 +142,7 @@ public final class CountCompaniesRequest {
                 && q.equals(other.q)
                 && withoutFeatureOverrideFor.equals(other.withoutFeatureOverrideFor)
                 && withoutPlan.equals(other.withoutPlan)
+                && withSubscription.equals(other.withSubscription)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
@@ -140,6 +155,7 @@ public final class CountCompaniesRequest {
                 this.q,
                 this.withoutFeatureOverrideFor,
                 this.withoutPlan,
+                this.withSubscription,
                 this.limit,
                 this.offset);
     }
@@ -155,7 +171,7 @@ public final class CountCompaniesRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> ids = Optional.empty();
+        private Optional<List<String>> ids = Optional.empty();
 
         private Optional<String> planId = Optional.empty();
 
@@ -164,6 +180,8 @@ public final class CountCompaniesRequest {
         private Optional<String> withoutFeatureOverrideFor = Optional.empty();
 
         private Optional<Boolean> withoutPlan = Optional.empty();
+
+        private Optional<Boolean> withSubscription = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
@@ -180,22 +198,34 @@ public final class CountCompaniesRequest {
             q(other.getQ());
             withoutFeatureOverrideFor(other.getWithoutFeatureOverrideFor());
             withoutPlan(other.getWithoutPlan());
+            withSubscription(other.getWithSubscription());
             limit(other.getLimit());
             offset(other.getOffset());
             return this;
         }
 
+        /**
+         * <p>Filter companies by multiple company IDs (starts with comp_)</p>
+         */
         @JsonSetter(value = "ids", nulls = Nulls.SKIP)
-        public Builder ids(Optional<String> ids) {
+        public Builder ids(Optional<List<String>> ids) {
             this.ids = ids;
             return this;
         }
 
-        public Builder ids(String ids) {
+        public Builder ids(List<String> ids) {
             this.ids = Optional.ofNullable(ids);
             return this;
         }
 
+        public Builder ids(String ids) {
+            this.ids = Optional.of(Collections.singletonList(ids));
+            return this;
+        }
+
+        /**
+         * <p>Filter companies by plan ID (starts with plan_)</p>
+         */
         @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
         public Builder planId(Optional<String> planId) {
             this.planId = planId;
@@ -207,6 +237,9 @@ public final class CountCompaniesRequest {
             return this;
         }
 
+        /**
+         * <p>Search for companies by name, keys or string traits</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -218,6 +251,9 @@ public final class CountCompaniesRequest {
             return this;
         }
 
+        /**
+         * <p>Filter out companies that already have a company override for the specified feature ID</p>
+         */
         @JsonSetter(value = "without_feature_override_for", nulls = Nulls.SKIP)
         public Builder withoutFeatureOverrideFor(Optional<String> withoutFeatureOverrideFor) {
             this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
@@ -229,6 +265,9 @@ public final class CountCompaniesRequest {
             return this;
         }
 
+        /**
+         * <p>Filter out companies that have a plan</p>
+         */
         @JsonSetter(value = "without_plan", nulls = Nulls.SKIP)
         public Builder withoutPlan(Optional<Boolean> withoutPlan) {
             this.withoutPlan = withoutPlan;
@@ -240,6 +279,23 @@ public final class CountCompaniesRequest {
             return this;
         }
 
+        /**
+         * <p>Filter companies that have a subscription</p>
+         */
+        @JsonSetter(value = "with_subscription", nulls = Nulls.SKIP)
+        public Builder withSubscription(Optional<Boolean> withSubscription) {
+            this.withSubscription = withSubscription;
+            return this;
+        }
+
+        public Builder withSubscription(Boolean withSubscription) {
+            this.withSubscription = Optional.ofNullable(withSubscription);
+            return this;
+        }
+
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -251,6 +307,9 @@ public final class CountCompaniesRequest {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -264,7 +323,15 @@ public final class CountCompaniesRequest {
 
         public CountCompaniesRequest build() {
             return new CountCompaniesRequest(
-                    ids, planId, q, withoutFeatureOverrideFor, withoutPlan, limit, offset, additionalProperties);
+                    ids,
+                    planId,
+                    q,
+                    withoutFeatureOverrideFor,
+                    withoutPlan,
+                    withSubscription,
+                    limit,
+                    offset,
+                    additionalProperties);
         }
     }
 }

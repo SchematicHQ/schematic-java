@@ -3,24 +3,95 @@
  */
 package com.schematic.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CreateEventRequestBodyEventType {
-    IDENTIFY("identify"),
+public final class CreateEventRequestBodyEventType {
+    public static final CreateEventRequestBodyEventType FLAG_CHECK =
+            new CreateEventRequestBodyEventType(Value.FLAG_CHECK, "flag_check");
 
-    TRACK("track"),
+    public static final CreateEventRequestBodyEventType TRACK =
+            new CreateEventRequestBodyEventType(Value.TRACK, "track");
 
-    FLAG_CHECK("flag_check");
+    public static final CreateEventRequestBodyEventType IDENTIFY =
+            new CreateEventRequestBodyEventType(Value.IDENTIFY, "identify");
 
-    private final String value;
+    private final Value value;
 
-    CreateEventRequestBodyEventType(String value) {
+    private final String string;
+
+    CreateEventRequestBodyEventType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof CreateEventRequestBodyEventType
+                        && this.string.equals(((CreateEventRequestBodyEventType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case FLAG_CHECK:
+                return visitor.visitFlagCheck();
+            case TRACK:
+                return visitor.visitTrack();
+            case IDENTIFY:
+                return visitor.visitIdentify();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CreateEventRequestBodyEventType valueOf(String value) {
+        switch (value) {
+            case "flag_check":
+                return FLAG_CHECK;
+            case "track":
+                return TRACK;
+            case "identify":
+                return IDENTIFY;
+            default:
+                return new CreateEventRequestBodyEventType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        IDENTIFY,
+
+        TRACK,
+
+        FLAG_CHECK,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitIdentify();
+
+        T visitTrack();
+
+        T visitFlagCheck();
+
+        T visitUnknown(String unknownType);
     }
 }

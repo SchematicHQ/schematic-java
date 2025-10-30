@@ -21,11 +21,15 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateEntitlementReqCommon.Builder.class)
 public final class UpdateEntitlementReqCommon {
+    private final Optional<Double> creditConsumptionRate;
+
     private final Optional<UpdateEntitlementReqCommonMetricPeriod> metricPeriod;
 
     private final Optional<UpdateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final Optional<Boolean> valueBool;
+
+    private final Optional<String> valueCreditId;
 
     private final Optional<Integer> valueNumeric;
 
@@ -36,20 +40,29 @@ public final class UpdateEntitlementReqCommon {
     private final Map<String, Object> additionalProperties;
 
     private UpdateEntitlementReqCommon(
+            Optional<Double> creditConsumptionRate,
             Optional<UpdateEntitlementReqCommonMetricPeriod> metricPeriod,
             Optional<UpdateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Boolean> valueBool,
+            Optional<String> valueCreditId,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
             UpdateEntitlementReqCommonValueType valueType,
             Map<String, Object> additionalProperties) {
+        this.creditConsumptionRate = creditConsumptionRate;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.valueBool = valueBool;
+        this.valueCreditId = valueCreditId;
         this.valueNumeric = valueNumeric;
         this.valueTraitId = valueTraitId;
         this.valueType = valueType;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("credit_consumption_rate")
+    public Optional<Double> getCreditConsumptionRate() {
+        return creditConsumptionRate;
     }
 
     @JsonProperty("metric_period")
@@ -65,6 +78,11 @@ public final class UpdateEntitlementReqCommon {
     @JsonProperty("value_bool")
     public Optional<Boolean> getValueBool() {
         return valueBool;
+    }
+
+    @JsonProperty("value_credit_id")
+    public Optional<String> getValueCreditId() {
+        return valueCreditId;
     }
 
     @JsonProperty("value_numeric")
@@ -94,9 +112,11 @@ public final class UpdateEntitlementReqCommon {
     }
 
     private boolean equalTo(UpdateEntitlementReqCommon other) {
-        return metricPeriod.equals(other.metricPeriod)
+        return creditConsumptionRate.equals(other.creditConsumptionRate)
+                && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && valueBool.equals(other.valueBool)
+                && valueCreditId.equals(other.valueCreditId)
                 && valueNumeric.equals(other.valueNumeric)
                 && valueTraitId.equals(other.valueTraitId)
                 && valueType.equals(other.valueType);
@@ -105,9 +125,11 @@ public final class UpdateEntitlementReqCommon {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.creditConsumptionRate,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
                 this.valueBool,
+                this.valueCreditId,
                 this.valueNumeric,
                 this.valueTraitId,
                 this.valueType);
@@ -131,6 +153,10 @@ public final class UpdateEntitlementReqCommon {
     public interface _FinalStage {
         UpdateEntitlementReqCommon build();
 
+        _FinalStage creditConsumptionRate(Optional<Double> creditConsumptionRate);
+
+        _FinalStage creditConsumptionRate(Double creditConsumptionRate);
+
         _FinalStage metricPeriod(Optional<UpdateEntitlementReqCommonMetricPeriod> metricPeriod);
 
         _FinalStage metricPeriod(UpdateEntitlementReqCommonMetricPeriod metricPeriod);
@@ -143,6 +169,10 @@ public final class UpdateEntitlementReqCommon {
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
+
+        _FinalStage valueCreditId(Optional<String> valueCreditId);
+
+        _FinalStage valueCreditId(String valueCreditId);
 
         _FinalStage valueNumeric(Optional<Integer> valueNumeric);
 
@@ -161,11 +191,15 @@ public final class UpdateEntitlementReqCommon {
 
         private Optional<Integer> valueNumeric = Optional.empty();
 
+        private Optional<String> valueCreditId = Optional.empty();
+
         private Optional<Boolean> valueBool = Optional.empty();
 
         private Optional<UpdateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
         private Optional<UpdateEntitlementReqCommonMetricPeriod> metricPeriod = Optional.empty();
+
+        private Optional<Double> creditConsumptionRate = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -174,9 +208,11 @@ public final class UpdateEntitlementReqCommon {
 
         @java.lang.Override
         public Builder from(UpdateEntitlementReqCommon other) {
+            creditConsumptionRate(other.getCreditConsumptionRate());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             valueBool(other.getValueBool());
+            valueCreditId(other.getValueCreditId());
             valueNumeric(other.getValueNumeric());
             valueTraitId(other.getValueTraitId());
             valueType(other.getValueType());
@@ -213,6 +249,19 @@ public final class UpdateEntitlementReqCommon {
         @JsonSetter(value = "value_numeric", nulls = Nulls.SKIP)
         public _FinalStage valueNumeric(Optional<Integer> valueNumeric) {
             this.valueNumeric = valueNumeric;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage valueCreditId(String valueCreditId) {
+            this.valueCreditId = Optional.ofNullable(valueCreditId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "value_credit_id", nulls = Nulls.SKIP)
+        public _FinalStage valueCreditId(Optional<String> valueCreditId) {
+            this.valueCreditId = valueCreditId;
             return this;
         }
 
@@ -258,11 +307,26 @@ public final class UpdateEntitlementReqCommon {
         }
 
         @java.lang.Override
+        public _FinalStage creditConsumptionRate(Double creditConsumptionRate) {
+            this.creditConsumptionRate = Optional.ofNullable(creditConsumptionRate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_consumption_rate", nulls = Nulls.SKIP)
+        public _FinalStage creditConsumptionRate(Optional<Double> creditConsumptionRate) {
+            this.creditConsumptionRate = creditConsumptionRate;
+            return this;
+        }
+
+        @java.lang.Override
         public UpdateEntitlementReqCommon build() {
             return new UpdateEntitlementReqCommon(
+                    creditConsumptionRate,
                     metricPeriod,
                     metricPeriodMonthReset,
                     valueBool,
+                    valueCreditId,
                     valueNumeric,
                     valueTraitId,
                     valueType,
