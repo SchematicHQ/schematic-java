@@ -163,6 +163,9 @@ public final class CountUsersParams {
             return this;
         }
 
+        /**
+         * <p>Filter users by company ID (starts with comp_)</p>
+         */
         @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
         public Builder companyId(Optional<String> companyId) {
             this.companyId = companyId;
@@ -174,6 +177,9 @@ public final class CountUsersParams {
             return this;
         }
 
+        /**
+         * <p>Filter users by multiple user IDs (starts with user_)</p>
+         */
         @JsonSetter(value = "ids", nulls = Nulls.SKIP)
         public Builder ids(Optional<List<String>> ids) {
             this.ids = ids;
@@ -185,6 +191,9 @@ public final class CountUsersParams {
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -196,6 +205,9 @@ public final class CountUsersParams {
             return this;
         }
 
+        /**
+         * <p>Page offset (default 0)</p>
+         */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
         public Builder offset(Optional<Integer> offset) {
             this.offset = offset;
@@ -207,6 +219,9 @@ public final class CountUsersParams {
             return this;
         }
 
+        /**
+         * <p>Filter users by plan ID (starts with plan_)</p>
+         */
         @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
         public Builder planId(Optional<String> planId) {
             this.planId = planId;
@@ -218,6 +233,9 @@ public final class CountUsersParams {
             return this;
         }
 
+        /**
+         * <p>Search for users by name, keys or string traits</p>
+         */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;

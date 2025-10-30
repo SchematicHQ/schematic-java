@@ -30,6 +30,8 @@ public final class CheckFlagResponseData {
 
     private final Optional<Integer> featureUsage;
 
+    private final Optional<String> featureUsageEvent;
+
     private final Optional<String> featureUsagePeriod;
 
     private final Optional<OffsetDateTime> featureUsageResetAt;
@@ -55,6 +57,7 @@ public final class CheckFlagResponseData {
             Optional<String> error,
             Optional<Integer> featureAllocation,
             Optional<Integer> featureUsage,
+            Optional<String> featureUsageEvent,
             Optional<String> featureUsagePeriod,
             Optional<OffsetDateTime> featureUsageResetAt,
             String flag,
@@ -69,6 +72,7 @@ public final class CheckFlagResponseData {
         this.error = error;
         this.featureAllocation = featureAllocation;
         this.featureUsage = featureUsage;
+        this.featureUsageEvent = featureUsageEvent;
         this.featureUsagePeriod = featureUsagePeriod;
         this.featureUsageResetAt = featureUsageResetAt;
         this.flag = flag;
@@ -111,6 +115,14 @@ public final class CheckFlagResponseData {
     @JsonProperty("feature_usage")
     public Optional<Integer> getFeatureUsage() {
         return featureUsage;
+    }
+
+    /**
+     * @return If an event-based numeric feature entitlement rule was matched, the event used to track its usage
+     */
+    @JsonProperty("feature_usage_event")
+    public Optional<String> getFeatureUsageEvent() {
+        return featureUsageEvent;
     }
 
     /**
@@ -201,6 +213,7 @@ public final class CheckFlagResponseData {
                 && error.equals(other.error)
                 && featureAllocation.equals(other.featureAllocation)
                 && featureUsage.equals(other.featureUsage)
+                && featureUsageEvent.equals(other.featureUsageEvent)
                 && featureUsagePeriod.equals(other.featureUsagePeriod)
                 && featureUsageResetAt.equals(other.featureUsageResetAt)
                 && flag.equals(other.flag)
@@ -219,6 +232,7 @@ public final class CheckFlagResponseData {
                 this.error,
                 this.featureAllocation,
                 this.featureUsage,
+                this.featureUsageEvent,
                 this.featureUsagePeriod,
                 this.featureUsageResetAt,
                 this.flag,
@@ -240,58 +254,104 @@ public final class CheckFlagResponseData {
     }
 
     public interface FlagStage {
+        /**
+         * <p>The key used to check the flag</p>
+         */
         ReasonStage flag(@NotNull String flag);
 
         Builder from(CheckFlagResponseData other);
     }
 
     public interface ReasonStage {
+        /**
+         * <p>A human-readable explanation of the result</p>
+         */
         ValueStage reason(@NotNull String reason);
     }
 
     public interface ValueStage {
+        /**
+         * <p>A boolean flag check result; for feature entitlements, this represents whether further consumption of the feature is permitted</p>
+         */
         _FinalStage value(boolean value);
     }
 
     public interface _FinalStage {
         CheckFlagResponseData build();
 
+        /**
+         * <p>If company keys were provided and matched a company, its ID</p>
+         */
         _FinalStage companyId(Optional<String> companyId);
 
         _FinalStage companyId(String companyId);
 
+        /**
+         * <p>If an error occurred while checking the flag, the error message</p>
+         */
         _FinalStage error(Optional<String> error);
 
         _FinalStage error(String error);
 
+        /**
+         * <p>If a numeric feature entitlement rule was matched, its allocation</p>
+         */
         _FinalStage featureAllocation(Optional<Integer> featureAllocation);
 
         _FinalStage featureAllocation(Integer featureAllocation);
 
+        /**
+         * <p>If a numeric feature entitlement rule was matched, the company's usage</p>
+         */
         _FinalStage featureUsage(Optional<Integer> featureUsage);
 
         _FinalStage featureUsage(Integer featureUsage);
 
+        /**
+         * <p>If an event-based numeric feature entitlement rule was matched, the event used to track its usage</p>
+         */
+        _FinalStage featureUsageEvent(Optional<String> featureUsageEvent);
+
+        _FinalStage featureUsageEvent(String featureUsageEvent);
+
+        /**
+         * <p>For event-based feature entitlement rules, the period over which usage is tracked (current_month, current_day, current_week, all_time)</p>
+         */
         _FinalStage featureUsagePeriod(Optional<String> featureUsagePeriod);
 
         _FinalStage featureUsagePeriod(String featureUsagePeriod);
 
+        /**
+         * <p>For event-based feature entitlement rules, when the usage period will reset</p>
+         */
         _FinalStage featureUsageResetAt(Optional<OffsetDateTime> featureUsageResetAt);
 
         _FinalStage featureUsageResetAt(OffsetDateTime featureUsageResetAt);
 
+        /**
+         * <p>If a flag was found, its ID</p>
+         */
         _FinalStage flagId(Optional<String> flagId);
 
         _FinalStage flagId(String flagId);
 
+        /**
+         * <p>If a rule was found, its ID</p>
+         */
         _FinalStage ruleId(Optional<String> ruleId);
 
         _FinalStage ruleId(String ruleId);
 
+        /**
+         * <p>If a rule was found, its type</p>
+         */
         _FinalStage ruleType(Optional<String> ruleType);
 
         _FinalStage ruleType(String ruleType);
 
+        /**
+         * <p>If user keys were provided and matched a user, its ID</p>
+         */
         _FinalStage userId(Optional<String> userId);
 
         _FinalStage userId(String userId);
@@ -317,6 +377,8 @@ public final class CheckFlagResponseData {
 
         private Optional<String> featureUsagePeriod = Optional.empty();
 
+        private Optional<String> featureUsageEvent = Optional.empty();
+
         private Optional<Integer> featureUsage = Optional.empty();
 
         private Optional<Integer> featureAllocation = Optional.empty();
@@ -336,6 +398,7 @@ public final class CheckFlagResponseData {
             error(other.getError());
             featureAllocation(other.getFeatureAllocation());
             featureUsage(other.getFeatureUsage());
+            featureUsageEvent(other.getFeatureUsageEvent());
             featureUsagePeriod(other.getFeatureUsagePeriod());
             featureUsageResetAt(other.getFeatureUsageResetAt());
             flag(other.getFlag());
@@ -350,6 +413,7 @@ public final class CheckFlagResponseData {
 
         /**
          * <p>The key used to check the flag</p>
+         * <p>The key used to check the flag</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -361,6 +425,7 @@ public final class CheckFlagResponseData {
 
         /**
          * <p>A human-readable explanation of the result</p>
+         * <p>A human-readable explanation of the result</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -371,6 +436,7 @@ public final class CheckFlagResponseData {
         }
 
         /**
+         * <p>A boolean flag check result; for feature entitlements, this represents whether further consumption of the feature is permitted</p>
          * <p>A boolean flag check result; for feature entitlements, this represents whether further consumption of the feature is permitted</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -391,6 +457,9 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>If user keys were provided and matched a user, its ID</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
         public _FinalStage userId(Optional<String> userId) {
@@ -408,6 +477,9 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>If a rule was found, its type</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "rule_type", nulls = Nulls.SKIP)
         public _FinalStage ruleType(Optional<String> ruleType) {
@@ -425,6 +497,9 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>If a rule was found, its ID</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "rule_id", nulls = Nulls.SKIP)
         public _FinalStage ruleId(Optional<String> ruleId) {
@@ -442,6 +517,9 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>If a flag was found, its ID</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "flag_id", nulls = Nulls.SKIP)
         public _FinalStage flagId(Optional<String> flagId) {
@@ -459,6 +537,9 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>For event-based feature entitlement rules, when the usage period will reset</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "feature_usage_reset_at", nulls = Nulls.SKIP)
         public _FinalStage featureUsageResetAt(Optional<OffsetDateTime> featureUsageResetAt) {
@@ -476,10 +557,33 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>For event-based feature entitlement rules, the period over which usage is tracked (current_month, current_day, current_week, all_time)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "feature_usage_period", nulls = Nulls.SKIP)
         public _FinalStage featureUsagePeriod(Optional<String> featureUsagePeriod) {
             this.featureUsagePeriod = featureUsagePeriod;
+            return this;
+        }
+
+        /**
+         * <p>If an event-based numeric feature entitlement rule was matched, the event used to track its usage</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage featureUsageEvent(String featureUsageEvent) {
+            this.featureUsageEvent = Optional.ofNullable(featureUsageEvent);
+            return this;
+        }
+
+        /**
+         * <p>If an event-based numeric feature entitlement rule was matched, the event used to track its usage</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "feature_usage_event", nulls = Nulls.SKIP)
+        public _FinalStage featureUsageEvent(Optional<String> featureUsageEvent) {
+            this.featureUsageEvent = featureUsageEvent;
             return this;
         }
 
@@ -493,6 +597,9 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>If a numeric feature entitlement rule was matched, the company's usage</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
         public _FinalStage featureUsage(Optional<Integer> featureUsage) {
@@ -510,6 +617,9 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>If a numeric feature entitlement rule was matched, its allocation</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "feature_allocation", nulls = Nulls.SKIP)
         public _FinalStage featureAllocation(Optional<Integer> featureAllocation) {
@@ -527,6 +637,9 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>If an error occurred while checking the flag, the error message</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "error", nulls = Nulls.SKIP)
         public _FinalStage error(Optional<String> error) {
@@ -544,6 +657,9 @@ public final class CheckFlagResponseData {
             return this;
         }
 
+        /**
+         * <p>If company keys were provided and matched a company, its ID</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
         public _FinalStage companyId(Optional<String> companyId) {
@@ -558,6 +674,7 @@ public final class CheckFlagResponseData {
                     error,
                     featureAllocation,
                     featureUsage,
+                    featureUsageEvent,
                     featureUsagePeriod,
                     featureUsageResetAt,
                     flag,
