@@ -12,11 +12,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyExpiryType;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyExpiryUnit;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyResetCadence;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyResetStart;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyResetType;
+import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantRequestBodyExpiryType;
+import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantRequestBodyExpiryUnit;
+import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantRequestBodyResetCadence;
+import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantRequestBodyResetStart;
+import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantRequestBodyResetType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,49 +24,41 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = CreateBillingPlanCreditGrantRequestBody.Builder.class)
-public final class CreateBillingPlanCreditGrantRequestBody {
+@JsonDeserialize(builder = UpdateBillingPlanCreditGrantRequestBody.Builder.class)
+public final class UpdateBillingPlanCreditGrantRequestBody {
     private final Optional<Boolean> applyToExisting;
 
-    private final int creditAmount;
+    private final Optional<Integer> creditAmount;
 
-    private final String creditId;
+    private final Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryType> expiryType;
 
-    private final Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType;
-
-    private final Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit;
+    private final Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit;
 
     private final Optional<Integer> expiryUnitCount;
 
-    private final String planId;
+    private final UpdateBillingPlanCreditGrantRequestBodyResetCadence resetCadence;
 
-    private final CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence;
+    private final UpdateBillingPlanCreditGrantRequestBodyResetStart resetStart;
 
-    private final CreateBillingPlanCreditGrantRequestBodyResetStart resetStart;
-
-    private final Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType;
+    private final Optional<UpdateBillingPlanCreditGrantRequestBodyResetType> resetType;
 
     private final Map<String, Object> additionalProperties;
 
-    private CreateBillingPlanCreditGrantRequestBody(
+    private UpdateBillingPlanCreditGrantRequestBody(
             Optional<Boolean> applyToExisting,
-            int creditAmount,
-            String creditId,
-            Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType,
-            Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit,
+            Optional<Integer> creditAmount,
+            Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryType> expiryType,
+            Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit,
             Optional<Integer> expiryUnitCount,
-            String planId,
-            CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence,
-            CreateBillingPlanCreditGrantRequestBodyResetStart resetStart,
-            Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType,
+            UpdateBillingPlanCreditGrantRequestBodyResetCadence resetCadence,
+            UpdateBillingPlanCreditGrantRequestBodyResetStart resetStart,
+            Optional<UpdateBillingPlanCreditGrantRequestBodyResetType> resetType,
             Map<String, Object> additionalProperties) {
         this.applyToExisting = applyToExisting;
         this.creditAmount = creditAmount;
-        this.creditId = creditId;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
         this.expiryUnitCount = expiryUnitCount;
-        this.planId = planId;
         this.resetCadence = resetCadence;
         this.resetStart = resetStart;
         this.resetType = resetType;
@@ -79,22 +71,17 @@ public final class CreateBillingPlanCreditGrantRequestBody {
     }
 
     @JsonProperty("credit_amount")
-    public int getCreditAmount() {
+    public Optional<Integer> getCreditAmount() {
         return creditAmount;
     }
 
-    @JsonProperty("credit_id")
-    public String getCreditId() {
-        return creditId;
-    }
-
     @JsonProperty("expiry_type")
-    public Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> getExpiryType() {
+    public Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryType> getExpiryType() {
         return expiryType;
     }
 
     @JsonProperty("expiry_unit")
-    public Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> getExpiryUnit() {
+    public Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryUnit> getExpiryUnit() {
         return expiryUnit;
     }
 
@@ -103,31 +90,26 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         return expiryUnitCount;
     }
 
-    @JsonProperty("plan_id")
-    public String getPlanId() {
-        return planId;
-    }
-
     @JsonProperty("reset_cadence")
-    public CreateBillingPlanCreditGrantRequestBodyResetCadence getResetCadence() {
+    public UpdateBillingPlanCreditGrantRequestBodyResetCadence getResetCadence() {
         return resetCadence;
     }
 
     @JsonProperty("reset_start")
-    public CreateBillingPlanCreditGrantRequestBodyResetStart getResetStart() {
+    public UpdateBillingPlanCreditGrantRequestBodyResetStart getResetStart() {
         return resetStart;
     }
 
     @JsonProperty("reset_type")
-    public Optional<CreateBillingPlanCreditGrantRequestBodyResetType> getResetType() {
+    public Optional<UpdateBillingPlanCreditGrantRequestBodyResetType> getResetType() {
         return resetType;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof CreateBillingPlanCreditGrantRequestBody
-                && equalTo((CreateBillingPlanCreditGrantRequestBody) other);
+        return other instanceof UpdateBillingPlanCreditGrantRequestBody
+                && equalTo((UpdateBillingPlanCreditGrantRequestBody) other);
     }
 
     @JsonAnyGetter
@@ -135,14 +117,12 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(CreateBillingPlanCreditGrantRequestBody other) {
+    private boolean equalTo(UpdateBillingPlanCreditGrantRequestBody other) {
         return applyToExisting.equals(other.applyToExisting)
-                && creditAmount == other.creditAmount
-                && creditId.equals(other.creditId)
+                && creditAmount.equals(other.creditAmount)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
                 && expiryUnitCount.equals(other.expiryUnitCount)
-                && planId.equals(other.planId)
                 && resetCadence.equals(other.resetCadence)
                 && resetStart.equals(other.resetStart)
                 && resetType.equals(other.resetType);
@@ -153,11 +133,9 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         return Objects.hash(
                 this.applyToExisting,
                 this.creditAmount,
-                this.creditId,
                 this.expiryType,
                 this.expiryUnit,
                 this.expiryUnitCount,
-                this.planId,
                 this.resetCadence,
                 this.resetStart,
                 this.resetType);
@@ -168,76 +146,63 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static CreditAmountStage builder() {
+    public static ResetCadenceStage builder() {
         return new Builder();
     }
 
-    public interface CreditAmountStage {
-        CreditIdStage creditAmount(int creditAmount);
-
-        Builder from(CreateBillingPlanCreditGrantRequestBody other);
-    }
-
-    public interface CreditIdStage {
-        PlanIdStage creditId(@NotNull String creditId);
-    }
-
-    public interface PlanIdStage {
-        ResetCadenceStage planId(@NotNull String planId);
-    }
-
     public interface ResetCadenceStage {
-        ResetStartStage resetCadence(@NotNull CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence);
+        ResetStartStage resetCadence(@NotNull UpdateBillingPlanCreditGrantRequestBodyResetCadence resetCadence);
+
+        Builder from(UpdateBillingPlanCreditGrantRequestBody other);
     }
 
     public interface ResetStartStage {
-        _FinalStage resetStart(@NotNull CreateBillingPlanCreditGrantRequestBodyResetStart resetStart);
+        _FinalStage resetStart(@NotNull UpdateBillingPlanCreditGrantRequestBodyResetStart resetStart);
     }
 
     public interface _FinalStage {
-        CreateBillingPlanCreditGrantRequestBody build();
+        UpdateBillingPlanCreditGrantRequestBody build();
 
         _FinalStage applyToExisting(Optional<Boolean> applyToExisting);
 
         _FinalStage applyToExisting(Boolean applyToExisting);
 
-        _FinalStage expiryType(Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType);
+        _FinalStage creditAmount(Optional<Integer> creditAmount);
 
-        _FinalStage expiryType(CreateBillingPlanCreditGrantRequestBodyExpiryType expiryType);
+        _FinalStage creditAmount(Integer creditAmount);
 
-        _FinalStage expiryUnit(Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit);
+        _FinalStage expiryType(Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryType> expiryType);
 
-        _FinalStage expiryUnit(CreateBillingPlanCreditGrantRequestBodyExpiryUnit expiryUnit);
+        _FinalStage expiryType(UpdateBillingPlanCreditGrantRequestBodyExpiryType expiryType);
+
+        _FinalStage expiryUnit(Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit);
+
+        _FinalStage expiryUnit(UpdateBillingPlanCreditGrantRequestBodyExpiryUnit expiryUnit);
 
         _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
 
         _FinalStage expiryUnitCount(Integer expiryUnitCount);
 
-        _FinalStage resetType(Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType);
+        _FinalStage resetType(Optional<UpdateBillingPlanCreditGrantRequestBodyResetType> resetType);
 
-        _FinalStage resetType(CreateBillingPlanCreditGrantRequestBodyResetType resetType);
+        _FinalStage resetType(UpdateBillingPlanCreditGrantRequestBodyResetType resetType);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements CreditAmountStage, CreditIdStage, PlanIdStage, ResetCadenceStage, ResetStartStage, _FinalStage {
-        private int creditAmount;
+    public static final class Builder implements ResetCadenceStage, ResetStartStage, _FinalStage {
+        private UpdateBillingPlanCreditGrantRequestBodyResetCadence resetCadence;
 
-        private String creditId;
+        private UpdateBillingPlanCreditGrantRequestBodyResetStart resetStart;
 
-        private String planId;
-
-        private CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence;
-
-        private CreateBillingPlanCreditGrantRequestBodyResetStart resetStart;
-
-        private Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType = Optional.empty();
+        private Optional<UpdateBillingPlanCreditGrantRequestBodyResetType> resetType = Optional.empty();
 
         private Optional<Integer> expiryUnitCount = Optional.empty();
 
-        private Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit = Optional.empty();
+        private Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit = Optional.empty();
 
-        private Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType = Optional.empty();
+        private Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryType> expiryType = Optional.empty();
+
+        private Optional<Integer> creditAmount = Optional.empty();
 
         private Optional<Boolean> applyToExisting = Optional.empty();
 
@@ -247,14 +212,12 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(CreateBillingPlanCreditGrantRequestBody other) {
+        public Builder from(UpdateBillingPlanCreditGrantRequestBody other) {
             applyToExisting(other.getApplyToExisting());
             creditAmount(other.getCreditAmount());
-            creditId(other.getCreditId());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
             expiryUnitCount(other.getExpiryUnitCount());
-            planId(other.getPlanId());
             resetCadence(other.getResetCadence());
             resetStart(other.getResetStart());
             resetType(other.getResetType());
@@ -262,49 +225,28 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         }
 
         @java.lang.Override
-        @JsonSetter("credit_amount")
-        public CreditIdStage creditAmount(int creditAmount) {
-            this.creditAmount = creditAmount;
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("credit_id")
-        public PlanIdStage creditId(@NotNull String creditId) {
-            this.creditId = Objects.requireNonNull(creditId, "creditId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("plan_id")
-        public ResetCadenceStage planId(@NotNull String planId) {
-            this.planId = Objects.requireNonNull(planId, "planId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter("reset_cadence")
-        public ResetStartStage resetCadence(@NotNull CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence) {
+        public ResetStartStage resetCadence(@NotNull UpdateBillingPlanCreditGrantRequestBodyResetCadence resetCadence) {
             this.resetCadence = Objects.requireNonNull(resetCadence, "resetCadence must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("reset_start")
-        public _FinalStage resetStart(@NotNull CreateBillingPlanCreditGrantRequestBodyResetStart resetStart) {
+        public _FinalStage resetStart(@NotNull UpdateBillingPlanCreditGrantRequestBodyResetStart resetStart) {
             this.resetStart = Objects.requireNonNull(resetStart, "resetStart must not be null");
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage resetType(CreateBillingPlanCreditGrantRequestBodyResetType resetType) {
+        public _FinalStage resetType(UpdateBillingPlanCreditGrantRequestBodyResetType resetType) {
             this.resetType = Optional.ofNullable(resetType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "reset_type", nulls = Nulls.SKIP)
-        public _FinalStage resetType(Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType) {
+        public _FinalStage resetType(Optional<UpdateBillingPlanCreditGrantRequestBodyResetType> resetType) {
             this.resetType = resetType;
             return this;
         }
@@ -323,28 +265,41 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnit(CreateBillingPlanCreditGrantRequestBodyExpiryUnit expiryUnit) {
+        public _FinalStage expiryUnit(UpdateBillingPlanCreditGrantRequestBodyExpiryUnit expiryUnit) {
             this.expiryUnit = Optional.ofNullable(expiryUnit);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnit(Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit) {
+        public _FinalStage expiryUnit(Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit) {
             this.expiryUnit = expiryUnit;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage expiryType(CreateBillingPlanCreditGrantRequestBodyExpiryType expiryType) {
+        public _FinalStage expiryType(UpdateBillingPlanCreditGrantRequestBodyExpiryType expiryType) {
             this.expiryType = Optional.ofNullable(expiryType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_type", nulls = Nulls.SKIP)
-        public _FinalStage expiryType(Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType) {
+        public _FinalStage expiryType(Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryType> expiryType) {
             this.expiryType = expiryType;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage creditAmount(Integer creditAmount) {
+            this.creditAmount = Optional.ofNullable(creditAmount);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_amount", nulls = Nulls.SKIP)
+        public _FinalStage creditAmount(Optional<Integer> creditAmount) {
+            this.creditAmount = creditAmount;
             return this;
         }
 
@@ -362,15 +317,13 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         }
 
         @java.lang.Override
-        public CreateBillingPlanCreditGrantRequestBody build() {
-            return new CreateBillingPlanCreditGrantRequestBody(
+        public UpdateBillingPlanCreditGrantRequestBody build() {
+            return new UpdateBillingPlanCreditGrantRequestBody(
                     applyToExisting,
                     creditAmount,
-                    creditId,
                     expiryType,
                     expiryUnit,
                     expiryUnitCount,
-                    planId,
                     resetCadence,
                     resetStart,
                     resetType,

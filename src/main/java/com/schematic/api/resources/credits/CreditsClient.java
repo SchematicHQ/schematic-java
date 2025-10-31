@@ -14,6 +14,7 @@ import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBo
 import com.schematic.api.resources.credits.requests.CreateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
 import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBody;
+import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
 import com.schematic.api.resources.credits.requests.GetEnrichedCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
@@ -21,6 +22,7 @@ import com.schematic.api.resources.credits.requests.ListCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
+import com.schematic.api.resources.credits.requests.UpdateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
 import com.schematic.api.resources.credits.requests.ZeroOutGrantRequestBody;
 import com.schematic.api.resources.credits.types.CountBillingCreditsGrantsResponse;
@@ -44,6 +46,7 @@ import com.schematic.api.resources.credits.types.ListCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.ListGrantsForCreditResponse;
 import com.schematic.api.resources.credits.types.SoftDeleteBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingCreditResponse;
+import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.UpdateCreditBundleDetailsResponse;
 import com.schematic.api.resources.credits.types.ZeroOutGrantResponse;
 
@@ -297,14 +300,31 @@ public class CreditsClient {
                 .body();
     }
 
+    public UpdateBillingPlanCreditGrantResponse updateBillingPlanCreditGrant(
+            String planGrantId, UpdateBillingPlanCreditGrantRequestBody request) {
+        return this.rawClient.updateBillingPlanCreditGrant(planGrantId, request).body();
+    }
+
+    public UpdateBillingPlanCreditGrantResponse updateBillingPlanCreditGrant(
+            String planGrantId, UpdateBillingPlanCreditGrantRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateBillingPlanCreditGrant(planGrantId, request, requestOptions)
+                .body();
+    }
+
     public DeleteBillingPlanCreditGrantResponse deleteBillingPlanCreditGrant(String planGrantId) {
         return this.rawClient.deleteBillingPlanCreditGrant(planGrantId).body();
     }
 
     public DeleteBillingPlanCreditGrantResponse deleteBillingPlanCreditGrant(
-            String planGrantId, RequestOptions requestOptions) {
+            String planGrantId, DeleteBillingPlanCreditGrantRequest request) {
+        return this.rawClient.deleteBillingPlanCreditGrant(planGrantId, request).body();
+    }
+
+    public DeleteBillingPlanCreditGrantResponse deleteBillingPlanCreditGrant(
+            String planGrantId, DeleteBillingPlanCreditGrantRequest request, RequestOptions requestOptions) {
         return this.rawClient
-                .deleteBillingPlanCreditGrant(planGrantId, requestOptions)
+                .deleteBillingPlanCreditGrant(planGrantId, request, requestOptions)
                 .body();
     }
 

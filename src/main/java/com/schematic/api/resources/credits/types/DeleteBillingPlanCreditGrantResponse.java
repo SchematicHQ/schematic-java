@@ -9,13 +9,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.DeleteResponse;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -25,12 +22,12 @@ import org.jetbrains.annotations.NotNull;
 public final class DeleteBillingPlanCreditGrantResponse {
     private final DeleteResponse data;
 
-    private final Map<String, JsonNode> params;
+    private final DeleteBillingPlanCreditGrantParams params;
 
     private final Map<String, Object> additionalProperties;
 
     private DeleteBillingPlanCreditGrantResponse(
-            DeleteResponse data, Map<String, JsonNode> params, Map<String, Object> additionalProperties) {
+            DeleteResponse data, DeleteBillingPlanCreditGrantParams params, Map<String, Object> additionalProperties) {
         this.data = data;
         this.params = params;
         this.additionalProperties = additionalProperties;
@@ -45,7 +42,7 @@ public final class DeleteBillingPlanCreditGrantResponse {
      * @return Input parameters
      */
     @JsonProperty("params")
-    public Map<String, JsonNode> getParams() {
+    public DeleteBillingPlanCreditGrantParams getParams() {
         return params;
     }
 
@@ -80,29 +77,27 @@ public final class DeleteBillingPlanCreditGrantResponse {
     }
 
     public interface DataStage {
-        _FinalStage data(@NotNull DeleteResponse data);
+        ParamsStage data(@NotNull DeleteResponse data);
 
         Builder from(DeleteBillingPlanCreditGrantResponse other);
     }
 
-    public interface _FinalStage {
-        DeleteBillingPlanCreditGrantResponse build();
-
+    public interface ParamsStage {
         /**
          * <p>Input parameters</p>
          */
-        _FinalStage params(Map<String, JsonNode> params);
+        _FinalStage params(@NotNull DeleteBillingPlanCreditGrantParams params);
+    }
 
-        _FinalStage putAllParams(Map<String, JsonNode> params);
-
-        _FinalStage params(String key, JsonNode value);
+    public interface _FinalStage {
+        DeleteBillingPlanCreditGrantResponse build();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements DataStage, _FinalStage {
+    public static final class Builder implements DataStage, ParamsStage, _FinalStage {
         private DeleteResponse data;
 
-        private Map<String, JsonNode> params = new LinkedHashMap<>();
+        private DeleteBillingPlanCreditGrantParams params;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -118,43 +113,20 @@ public final class DeleteBillingPlanCreditGrantResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public _FinalStage data(@NotNull DeleteResponse data) {
+        public ParamsStage data(@NotNull DeleteResponse data) {
             this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
 
         /**
          * <p>Input parameters</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage params(String key, JsonNode value) {
-            this.params.put(key, value);
-            return this;
-        }
-
-        /**
          * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage putAllParams(Map<String, JsonNode> params) {
-            if (params != null) {
-                this.params.putAll(params);
-            }
-            return this;
-        }
-
-        /**
-         * <p>Input parameters</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "params", nulls = Nulls.SKIP)
-        public _FinalStage params(Map<String, JsonNode> params) {
-            this.params.clear();
-            if (params != null) {
-                this.params.putAll(params);
-            }
+        @JsonSetter("params")
+        public _FinalStage params(@NotNull DeleteBillingPlanCreditGrantParams params) {
+            this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
 
