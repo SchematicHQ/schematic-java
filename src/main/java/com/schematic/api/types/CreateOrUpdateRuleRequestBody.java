@@ -249,7 +249,9 @@ public final class CreateOrUpdateRuleRequestBody {
 
         @java.lang.Override
         public _FinalStage addAllConditions(List<CreateOrUpdateConditionRequestBody> conditions) {
-            this.conditions.addAll(conditions);
+            if (conditions != null) {
+                this.conditions.addAll(conditions);
+            }
             return this;
         }
 
@@ -263,13 +265,17 @@ public final class CreateOrUpdateRuleRequestBody {
         @JsonSetter(value = "conditions", nulls = Nulls.SKIP)
         public _FinalStage conditions(List<CreateOrUpdateConditionRequestBody> conditions) {
             this.conditions.clear();
-            this.conditions.addAll(conditions);
+            if (conditions != null) {
+                this.conditions.addAll(conditions);
+            }
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllConditionGroups(List<CreateOrUpdateConditionGroupRequestBody> conditionGroups) {
-            this.conditionGroups.addAll(conditionGroups);
+            if (conditionGroups != null) {
+                this.conditionGroups.addAll(conditionGroups);
+            }
             return this;
         }
 
@@ -283,7 +289,9 @@ public final class CreateOrUpdateRuleRequestBody {
         @JsonSetter(value = "condition_groups", nulls = Nulls.SKIP)
         public _FinalStage conditionGroups(List<CreateOrUpdateConditionGroupRequestBody> conditionGroups) {
             this.conditionGroups.clear();
-            this.conditionGroups.addAll(conditionGroups);
+            if (conditionGroups != null) {
+                this.conditionGroups.addAll(conditionGroups);
+            }
             return this;
         }
 

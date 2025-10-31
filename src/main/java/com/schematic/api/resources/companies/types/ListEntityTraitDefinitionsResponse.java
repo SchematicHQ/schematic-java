@@ -38,9 +38,6 @@ public final class ListEntityTraitDefinitionsResponse {
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return The returned resources
-     */
     @JsonProperty("data")
     public List<EntityTraitDefinitionResponseData> getData() {
         return data;
@@ -85,6 +82,9 @@ public final class ListEntityTraitDefinitionsResponse {
     }
 
     public interface ParamsStage {
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(@NotNull ListEntityTraitDefinitionsParams params);
 
         Builder from(ListEntityTraitDefinitionsResponse other);
@@ -120,6 +120,7 @@ public final class ListEntityTraitDefinitionsResponse {
 
         /**
          * <p>Input parameters</p>
+         * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -129,20 +130,14 @@ public final class ListEntityTraitDefinitionsResponse {
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addAllData(List<EntityTraitDefinitionResponseData> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
-        /**
-         * <p>The returned resources</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage addData(EntityTraitDefinitionResponseData data) {
             this.data.add(data);
@@ -153,7 +148,9 @@ public final class ListEntityTraitDefinitionsResponse {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(List<EntityTraitDefinitionResponseData> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 

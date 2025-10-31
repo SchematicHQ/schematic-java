@@ -80,6 +80,9 @@ public final class DeleteResponse {
             return this;
         }
 
+        /**
+         * <p>Whether the delete was successful</p>
+         */
         @JsonSetter(value = "deleted", nulls = Nulls.SKIP)
         public Builder deleted(Optional<Boolean> deleted) {
             this.deleted = deleted;

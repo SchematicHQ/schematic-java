@@ -3,66 +3,429 @@
  */
 package com.schematic.api.resources.webhooks.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UpdateWebhookRequestBodyRequestTypesItem {
-    COMPANY_UPDATED("company.updated"),
+public final class UpdateWebhookRequestBodyRequestTypesItem {
+    public static final UpdateWebhookRequestBodyRequestTypesItem COMPANY_DELETED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.COMPANY_DELETED, "company.deleted");
 
-    USER_UPDATED("user.updated"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem COMPANY_OVERRIDE_UPDATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.COMPANY_OVERRIDE_UPDATED, "company.override.updated");
 
-    PLAN_UPDATED("plan.updated"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem FLAG_UPDATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.FLAG_UPDATED, "flag.updated");
 
-    PLAN_ENTITLEMENT_UPDATED("plan.entitlement.updated"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem FEATURE_UPDATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.FEATURE_UPDATED, "feature.updated");
 
-    COMPANY_OVERRIDE_UPDATED("company.override.updated"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem FLAG_RULES_UPDATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.FLAG_RULES_UPDATED, "flag_rules.updated");
 
-    FEATURE_UPDATED("feature.updated"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem USER_UPDATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.USER_UPDATED, "user.updated");
 
-    FLAG_UPDATED("flag.updated"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem PLAN_DELETED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.PLAN_DELETED, "plan.deleted");
 
-    FLAG_RULES_UPDATED("flag_rules.updated"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem PLAN_ENTITLEMENT_UPDATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.PLAN_ENTITLEMENT_UPDATED, "plan.entitlement.updated");
 
-    COMPANY_CREATED("company.created"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem COMPANY_OVERRIDE_DELETED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.COMPANY_OVERRIDE_DELETED, "company.override.deleted");
 
-    USER_CREATED("user.created"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem USER_CREATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.USER_CREATED, "user.created");
 
-    PLAN_CREATED("plan.created"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem FEATURE_DELETED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.FEATURE_DELETED, "feature.deleted");
 
-    PLAN_ENTITLEMENT_CREATED("plan.entitlement.created"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem CREDIT_LIMIT_REACHED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.CREDIT_LIMIT_REACHED, "credit.limit.reached");
 
-    COMPANY_OVERRIDE_CREATED("company.override.created"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem ENTITLEMENT_SOFT_LIMIT_REACHED =
+            new UpdateWebhookRequestBodyRequestTypesItem(
+                    Value.ENTITLEMENT_SOFT_LIMIT_REACHED, "entitlement.soft_limit.reached");
 
-    FEATURE_CREATED("feature.created"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem SUBSCRIPTION_TRIAL_ENDED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.SUBSCRIPTION_TRIAL_ENDED, "subscription.trial.ended");
 
-    FLAG_CREATED("flag.created"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem ENTITLEMENT_LIMIT_REACHED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.ENTITLEMENT_LIMIT_REACHED, "entitlement.limit.reached");
 
-    COMPANY_DELETED("company.deleted"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem COMPANY_OVERRIDE_CREATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.COMPANY_OVERRIDE_CREATED, "company.override.created");
 
-    USER_DELETED("user.deleted"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem FLAG_CREATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.FLAG_CREATED, "flag.created");
 
-    PLAN_DELETED("plan.deleted"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem PLAN_ENTITLEMENT_DELETED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.PLAN_ENTITLEMENT_DELETED, "plan.entitlement.deleted");
 
-    PLAN_ENTITLEMENT_DELETED("plan.entitlement.deleted"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem USER_DELETED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.USER_DELETED, "user.deleted");
 
-    COMPANY_OVERRIDE_DELETED("company.override.deleted"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem PLAN_UPDATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.PLAN_UPDATED, "plan.updated");
 
-    FEATURE_DELETED("feature.deleted"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem ENTITLEMENT_LIMIT_WARNING =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.ENTITLEMENT_LIMIT_WARNING, "entitlement.limit.warning");
 
-    FLAG_DELETED("flag.deleted"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem CREDIT_LIMIT_WARNING =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.CREDIT_LIMIT_WARNING, "credit.limit.warning");
 
-    TEST_SEND("test.send"),
+    public static final UpdateWebhookRequestBodyRequestTypesItem FEATURE_CREATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.FEATURE_CREATED, "feature.created");
 
-    SUBSCRIPTION_TRIAL_ENDED("subscription.trial.ended");
+    public static final UpdateWebhookRequestBodyRequestTypesItem ENTITLEMENT_SOFT_LIMIT_WARNING =
+            new UpdateWebhookRequestBodyRequestTypesItem(
+                    Value.ENTITLEMENT_SOFT_LIMIT_WARNING, "entitlement.soft_limit.warning");
 
-    private final String value;
+    public static final UpdateWebhookRequestBodyRequestTypesItem COMPANY_UPDATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.COMPANY_UPDATED, "company.updated");
 
-    UpdateWebhookRequestBodyRequestTypesItem(String value) {
+    public static final UpdateWebhookRequestBodyRequestTypesItem ENTITLEMENT_TIER_LIMIT_REACHED =
+            new UpdateWebhookRequestBodyRequestTypesItem(
+                    Value.ENTITLEMENT_TIER_LIMIT_REACHED, "entitlement.tier_limit.reached");
+
+    public static final UpdateWebhookRequestBodyRequestTypesItem FLAG_DELETED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.FLAG_DELETED, "flag.deleted");
+
+    public static final UpdateWebhookRequestBodyRequestTypesItem COMPANY_CREATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.COMPANY_CREATED, "company.created");
+
+    public static final UpdateWebhookRequestBodyRequestTypesItem PLAN_ENTITLEMENT_CREATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.PLAN_ENTITLEMENT_CREATED, "plan.entitlement.created");
+
+    public static final UpdateWebhookRequestBodyRequestTypesItem ENTITLEMENT_TIER_LIMIT_WARNING =
+            new UpdateWebhookRequestBodyRequestTypesItem(
+                    Value.ENTITLEMENT_TIER_LIMIT_WARNING, "entitlement.tier_limit.warning");
+
+    public static final UpdateWebhookRequestBodyRequestTypesItem COMPANY_PLAN_CHANGE =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.COMPANY_PLAN_CHANGE, "company.plan_change");
+
+    public static final UpdateWebhookRequestBodyRequestTypesItem PLAN_CREATED =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.PLAN_CREATED, "plan.created");
+
+    public static final UpdateWebhookRequestBodyRequestTypesItem TEST_SEND =
+            new UpdateWebhookRequestBodyRequestTypesItem(Value.TEST_SEND, "test.send");
+
+    private final Value value;
+
+    private final String string;
+
+    UpdateWebhookRequestBodyRequestTypesItem(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UpdateWebhookRequestBodyRequestTypesItem
+                        && this.string.equals(((UpdateWebhookRequestBodyRequestTypesItem) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case COMPANY_DELETED:
+                return visitor.visitCompanyDeleted();
+            case COMPANY_OVERRIDE_UPDATED:
+                return visitor.visitCompanyOverrideUpdated();
+            case FLAG_UPDATED:
+                return visitor.visitFlagUpdated();
+            case FEATURE_UPDATED:
+                return visitor.visitFeatureUpdated();
+            case FLAG_RULES_UPDATED:
+                return visitor.visitFlagRulesUpdated();
+            case USER_UPDATED:
+                return visitor.visitUserUpdated();
+            case PLAN_DELETED:
+                return visitor.visitPlanDeleted();
+            case PLAN_ENTITLEMENT_UPDATED:
+                return visitor.visitPlanEntitlementUpdated();
+            case COMPANY_OVERRIDE_DELETED:
+                return visitor.visitCompanyOverrideDeleted();
+            case USER_CREATED:
+                return visitor.visitUserCreated();
+            case FEATURE_DELETED:
+                return visitor.visitFeatureDeleted();
+            case CREDIT_LIMIT_REACHED:
+                return visitor.visitCreditLimitReached();
+            case ENTITLEMENT_SOFT_LIMIT_REACHED:
+                return visitor.visitEntitlementSoftLimitReached();
+            case SUBSCRIPTION_TRIAL_ENDED:
+                return visitor.visitSubscriptionTrialEnded();
+            case ENTITLEMENT_LIMIT_REACHED:
+                return visitor.visitEntitlementLimitReached();
+            case COMPANY_OVERRIDE_CREATED:
+                return visitor.visitCompanyOverrideCreated();
+            case FLAG_CREATED:
+                return visitor.visitFlagCreated();
+            case PLAN_ENTITLEMENT_DELETED:
+                return visitor.visitPlanEntitlementDeleted();
+            case USER_DELETED:
+                return visitor.visitUserDeleted();
+            case PLAN_UPDATED:
+                return visitor.visitPlanUpdated();
+            case ENTITLEMENT_LIMIT_WARNING:
+                return visitor.visitEntitlementLimitWarning();
+            case CREDIT_LIMIT_WARNING:
+                return visitor.visitCreditLimitWarning();
+            case FEATURE_CREATED:
+                return visitor.visitFeatureCreated();
+            case ENTITLEMENT_SOFT_LIMIT_WARNING:
+                return visitor.visitEntitlementSoftLimitWarning();
+            case COMPANY_UPDATED:
+                return visitor.visitCompanyUpdated();
+            case ENTITLEMENT_TIER_LIMIT_REACHED:
+                return visitor.visitEntitlementTierLimitReached();
+            case FLAG_DELETED:
+                return visitor.visitFlagDeleted();
+            case COMPANY_CREATED:
+                return visitor.visitCompanyCreated();
+            case PLAN_ENTITLEMENT_CREATED:
+                return visitor.visitPlanEntitlementCreated();
+            case ENTITLEMENT_TIER_LIMIT_WARNING:
+                return visitor.visitEntitlementTierLimitWarning();
+            case COMPANY_PLAN_CHANGE:
+                return visitor.visitCompanyPlanChange();
+            case PLAN_CREATED:
+                return visitor.visitPlanCreated();
+            case TEST_SEND:
+                return visitor.visitTestSend();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UpdateWebhookRequestBodyRequestTypesItem valueOf(String value) {
+        switch (value) {
+            case "company.deleted":
+                return COMPANY_DELETED;
+            case "company.override.updated":
+                return COMPANY_OVERRIDE_UPDATED;
+            case "flag.updated":
+                return FLAG_UPDATED;
+            case "feature.updated":
+                return FEATURE_UPDATED;
+            case "flag_rules.updated":
+                return FLAG_RULES_UPDATED;
+            case "user.updated":
+                return USER_UPDATED;
+            case "plan.deleted":
+                return PLAN_DELETED;
+            case "plan.entitlement.updated":
+                return PLAN_ENTITLEMENT_UPDATED;
+            case "company.override.deleted":
+                return COMPANY_OVERRIDE_DELETED;
+            case "user.created":
+                return USER_CREATED;
+            case "feature.deleted":
+                return FEATURE_DELETED;
+            case "credit.limit.reached":
+                return CREDIT_LIMIT_REACHED;
+            case "entitlement.soft_limit.reached":
+                return ENTITLEMENT_SOFT_LIMIT_REACHED;
+            case "subscription.trial.ended":
+                return SUBSCRIPTION_TRIAL_ENDED;
+            case "entitlement.limit.reached":
+                return ENTITLEMENT_LIMIT_REACHED;
+            case "company.override.created":
+                return COMPANY_OVERRIDE_CREATED;
+            case "flag.created":
+                return FLAG_CREATED;
+            case "plan.entitlement.deleted":
+                return PLAN_ENTITLEMENT_DELETED;
+            case "user.deleted":
+                return USER_DELETED;
+            case "plan.updated":
+                return PLAN_UPDATED;
+            case "entitlement.limit.warning":
+                return ENTITLEMENT_LIMIT_WARNING;
+            case "credit.limit.warning":
+                return CREDIT_LIMIT_WARNING;
+            case "feature.created":
+                return FEATURE_CREATED;
+            case "entitlement.soft_limit.warning":
+                return ENTITLEMENT_SOFT_LIMIT_WARNING;
+            case "company.updated":
+                return COMPANY_UPDATED;
+            case "entitlement.tier_limit.reached":
+                return ENTITLEMENT_TIER_LIMIT_REACHED;
+            case "flag.deleted":
+                return FLAG_DELETED;
+            case "company.created":
+                return COMPANY_CREATED;
+            case "plan.entitlement.created":
+                return PLAN_ENTITLEMENT_CREATED;
+            case "entitlement.tier_limit.warning":
+                return ENTITLEMENT_TIER_LIMIT_WARNING;
+            case "company.plan_change":
+                return COMPANY_PLAN_CHANGE;
+            case "plan.created":
+                return PLAN_CREATED;
+            case "test.send":
+                return TEST_SEND;
+            default:
+                return new UpdateWebhookRequestBodyRequestTypesItem(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        COMPANY_UPDATED,
+
+        USER_UPDATED,
+
+        PLAN_UPDATED,
+
+        PLAN_ENTITLEMENT_UPDATED,
+
+        COMPANY_OVERRIDE_UPDATED,
+
+        FEATURE_UPDATED,
+
+        FLAG_UPDATED,
+
+        FLAG_RULES_UPDATED,
+
+        COMPANY_CREATED,
+
+        USER_CREATED,
+
+        PLAN_CREATED,
+
+        PLAN_ENTITLEMENT_CREATED,
+
+        COMPANY_OVERRIDE_CREATED,
+
+        FEATURE_CREATED,
+
+        FLAG_CREATED,
+
+        COMPANY_DELETED,
+
+        USER_DELETED,
+
+        PLAN_DELETED,
+
+        PLAN_ENTITLEMENT_DELETED,
+
+        COMPANY_OVERRIDE_DELETED,
+
+        FEATURE_DELETED,
+
+        FLAG_DELETED,
+
+        TEST_SEND,
+
+        SUBSCRIPTION_TRIAL_ENDED,
+
+        ENTITLEMENT_LIMIT_WARNING,
+
+        ENTITLEMENT_LIMIT_REACHED,
+
+        ENTITLEMENT_SOFT_LIMIT_WARNING,
+
+        ENTITLEMENT_SOFT_LIMIT_REACHED,
+
+        ENTITLEMENT_TIER_LIMIT_WARNING,
+
+        ENTITLEMENT_TIER_LIMIT_REACHED,
+
+        CREDIT_LIMIT_WARNING,
+
+        CREDIT_LIMIT_REACHED,
+
+        COMPANY_PLAN_CHANGE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCompanyUpdated();
+
+        T visitUserUpdated();
+
+        T visitPlanUpdated();
+
+        T visitPlanEntitlementUpdated();
+
+        T visitCompanyOverrideUpdated();
+
+        T visitFeatureUpdated();
+
+        T visitFlagUpdated();
+
+        T visitFlagRulesUpdated();
+
+        T visitCompanyCreated();
+
+        T visitUserCreated();
+
+        T visitPlanCreated();
+
+        T visitPlanEntitlementCreated();
+
+        T visitCompanyOverrideCreated();
+
+        T visitFeatureCreated();
+
+        T visitFlagCreated();
+
+        T visitCompanyDeleted();
+
+        T visitUserDeleted();
+
+        T visitPlanDeleted();
+
+        T visitPlanEntitlementDeleted();
+
+        T visitCompanyOverrideDeleted();
+
+        T visitFeatureDeleted();
+
+        T visitFlagDeleted();
+
+        T visitTestSend();
+
+        T visitSubscriptionTrialEnded();
+
+        T visitEntitlementLimitWarning();
+
+        T visitEntitlementLimitReached();
+
+        T visitEntitlementSoftLimitWarning();
+
+        T visitEntitlementSoftLimitReached();
+
+        T visitEntitlementTierLimitWarning();
+
+        T visitEntitlementTierLimitReached();
+
+        T visitCreditLimitWarning();
+
+        T visitCreditLimitReached();
+
+        T visitCompanyPlanChange();
+
+        T visitUnknown(String unknownType);
     }
 }

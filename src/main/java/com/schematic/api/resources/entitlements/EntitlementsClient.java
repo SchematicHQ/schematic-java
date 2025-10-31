@@ -3,18 +3,8 @@
  */
 package com.schematic.api.resources.entitlements;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.schematic.api.core.BaseSchematicApiException;
-import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.ClientOptions;
-import com.schematic.api.core.MediaTypes;
-import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.core.RequestOptions;
-import com.schematic.api.errors.BadRequestError;
-import com.schematic.api.errors.ForbiddenError;
-import com.schematic.api.errors.InternalServerError;
-import com.schematic.api.errors.NotFoundError;
-import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.entitlements.requests.CountCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.CountFeatureCompaniesRequest;
 import com.schematic.api.resources.entitlements.requests.CountFeatureUsageRequest;
@@ -49,1274 +39,226 @@ import com.schematic.api.resources.entitlements.types.ListFeatureUsersResponse;
 import com.schematic.api.resources.entitlements.types.ListPlanEntitlementsResponse;
 import com.schematic.api.resources.entitlements.types.UpdateCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.UpdatePlanEntitlementResponse;
-import com.schematic.api.types.ApiError;
-import java.io.IOException;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class EntitlementsClient {
     protected final ClientOptions clientOptions;
 
+    private final RawEntitlementsClient rawClient;
+
     public EntitlementsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawEntitlementsClient(clientOptions);
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawEntitlementsClient withRawResponse() {
+        return this.rawClient;
     }
 
     public ListCompanyOverridesResponse listCompanyOverrides() {
-        return listCompanyOverrides(ListCompanyOverridesRequest.builder().build());
+        return this.rawClient.listCompanyOverrides().body();
     }
 
     public ListCompanyOverridesResponse listCompanyOverrides(ListCompanyOverridesRequest request) {
-        return listCompanyOverrides(request, null);
+        return this.rawClient.listCompanyOverrides(request).body();
     }
 
     public ListCompanyOverridesResponse listCompanyOverrides(
             ListCompanyOverridesRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("company-overrides");
-        if (request.getCompanyId().isPresent()) {
-            httpUrl.addQueryParameter("company_id", request.getCompanyId().get());
-        }
-        if (request.getCompanyIds().isPresent()) {
-            httpUrl.addQueryParameter("company_ids", request.getCompanyIds().get());
-        }
-        if (request.getFeatureId().isPresent()) {
-            httpUrl.addQueryParameter("feature_id", request.getFeatureId().get());
-        }
-        if (request.getFeatureIds().isPresent()) {
-            httpUrl.addQueryParameter("feature_ids", request.getFeatureIds().get());
-        }
-        if (request.getIds().isPresent()) {
-            httpUrl.addQueryParameter("ids", request.getIds().get());
-        }
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListCompanyOverridesResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.listCompanyOverrides(request, requestOptions).body();
     }
 
     public CreateCompanyOverrideResponse createCompanyOverride(CreateCompanyOverrideRequestBody request) {
-        return createCompanyOverride(request, null);
+        return this.rawClient.createCompanyOverride(request).body();
     }
 
     public CreateCompanyOverrideResponse createCompanyOverride(
             CreateCompanyOverrideRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("company-overrides")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BaseSchematicException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateCompanyOverrideResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.createCompanyOverride(request, requestOptions).body();
     }
 
     public GetCompanyOverrideResponse getCompanyOverride(String companyOverrideId) {
-        return getCompanyOverride(companyOverrideId, null);
+        return this.rawClient.getCompanyOverride(companyOverrideId).body();
     }
 
     public GetCompanyOverrideResponse getCompanyOverride(String companyOverrideId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("company-overrides")
-                .addPathSegment(companyOverrideId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetCompanyOverrideResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .getCompanyOverride(companyOverrideId, requestOptions)
+                .body();
     }
 
     public UpdateCompanyOverrideResponse updateCompanyOverride(
             String companyOverrideId, UpdateCompanyOverrideRequestBody request) {
-        return updateCompanyOverride(companyOverrideId, request, null);
+        return this.rawClient.updateCompanyOverride(companyOverrideId, request).body();
     }
 
     public UpdateCompanyOverrideResponse updateCompanyOverride(
             String companyOverrideId, UpdateCompanyOverrideRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("company-overrides")
-                .addPathSegment(companyOverrideId)
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BaseSchematicException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PUT", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateCompanyOverrideResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .updateCompanyOverride(companyOverrideId, request, requestOptions)
+                .body();
     }
 
     public DeleteCompanyOverrideResponse deleteCompanyOverride(String companyOverrideId) {
-        return deleteCompanyOverride(companyOverrideId, null);
+        return this.rawClient.deleteCompanyOverride(companyOverrideId).body();
     }
 
     public DeleteCompanyOverrideResponse deleteCompanyOverride(
             String companyOverrideId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("company-overrides")
-                .addPathSegment(companyOverrideId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), DeleteCompanyOverrideResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .deleteCompanyOverride(companyOverrideId, requestOptions)
+                .body();
     }
 
     public CountCompanyOverridesResponse countCompanyOverrides() {
-        return countCompanyOverrides(CountCompanyOverridesRequest.builder().build());
+        return this.rawClient.countCompanyOverrides().body();
     }
 
     public CountCompanyOverridesResponse countCompanyOverrides(CountCompanyOverridesRequest request) {
-        return countCompanyOverrides(request, null);
+        return this.rawClient.countCompanyOverrides(request).body();
     }
 
     public CountCompanyOverridesResponse countCompanyOverrides(
             CountCompanyOverridesRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("company-overrides/count");
-        if (request.getCompanyId().isPresent()) {
-            httpUrl.addQueryParameter("company_id", request.getCompanyId().get());
-        }
-        if (request.getCompanyIds().isPresent()) {
-            httpUrl.addQueryParameter("company_ids", request.getCompanyIds().get());
-        }
-        if (request.getFeatureId().isPresent()) {
-            httpUrl.addQueryParameter("feature_id", request.getFeatureId().get());
-        }
-        if (request.getFeatureIds().isPresent()) {
-            httpUrl.addQueryParameter("feature_ids", request.getFeatureIds().get());
-        }
-        if (request.getIds().isPresent()) {
-            httpUrl.addQueryParameter("ids", request.getIds().get());
-        }
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountCompanyOverridesResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.countCompanyOverrides(request, requestOptions).body();
     }
 
     public ListFeatureCompaniesResponse listFeatureCompanies(ListFeatureCompaniesRequest request) {
-        return listFeatureCompanies(request, null);
+        return this.rawClient.listFeatureCompanies(request).body();
     }
 
     public ListFeatureCompaniesResponse listFeatureCompanies(
             ListFeatureCompaniesRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("feature-companies");
-        httpUrl.addQueryParameter("feature_id", request.getFeatureId());
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListFeatureCompaniesResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.listFeatureCompanies(request, requestOptions).body();
     }
 
     public CountFeatureCompaniesResponse countFeatureCompanies(CountFeatureCompaniesRequest request) {
-        return countFeatureCompanies(request, null);
+        return this.rawClient.countFeatureCompanies(request).body();
     }
 
     public CountFeatureCompaniesResponse countFeatureCompanies(
             CountFeatureCompaniesRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("feature-companies/count");
-        httpUrl.addQueryParameter("feature_id", request.getFeatureId());
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountFeatureCompaniesResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.countFeatureCompanies(request, requestOptions).body();
     }
 
     public ListFeatureUsageResponse listFeatureUsage() {
-        return listFeatureUsage(ListFeatureUsageRequest.builder().build());
+        return this.rawClient.listFeatureUsage().body();
     }
 
     public ListFeatureUsageResponse listFeatureUsage(ListFeatureUsageRequest request) {
-        return listFeatureUsage(request, null);
+        return this.rawClient.listFeatureUsage(request).body();
     }
 
     public ListFeatureUsageResponse listFeatureUsage(ListFeatureUsageRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("feature-usage");
-        if (request.getCompanyId().isPresent()) {
-            httpUrl.addQueryParameter("company_id", request.getCompanyId().get());
-        }
-        if (request.getCompanyKeys().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "company_keys", request.getCompanyKeys().get().toString());
-        }
-        if (request.getFeatureIds().isPresent()) {
-            httpUrl.addQueryParameter("feature_ids", request.getFeatureIds().get());
-        }
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getWithoutNegativeEntitlements().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "without_negative_entitlements",
-                    request.getWithoutNegativeEntitlements().get().toString());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListFeatureUsageResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.listFeatureUsage(request, requestOptions).body();
     }
 
     public CountFeatureUsageResponse countFeatureUsage() {
-        return countFeatureUsage(CountFeatureUsageRequest.builder().build());
+        return this.rawClient.countFeatureUsage().body();
     }
 
     public CountFeatureUsageResponse countFeatureUsage(CountFeatureUsageRequest request) {
-        return countFeatureUsage(request, null);
+        return this.rawClient.countFeatureUsage(request).body();
     }
 
     public CountFeatureUsageResponse countFeatureUsage(
             CountFeatureUsageRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("feature-usage/count");
-        if (request.getCompanyId().isPresent()) {
-            httpUrl.addQueryParameter("company_id", request.getCompanyId().get());
-        }
-        if (request.getCompanyKeys().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "company_keys", request.getCompanyKeys().get().toString());
-        }
-        if (request.getFeatureIds().isPresent()) {
-            httpUrl.addQueryParameter("feature_ids", request.getFeatureIds().get());
-        }
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getWithoutNegativeEntitlements().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "without_negative_entitlements",
-                    request.getWithoutNegativeEntitlements().get().toString());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountFeatureUsageResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.countFeatureUsage(request, requestOptions).body();
     }
 
     public ListFeatureUsersResponse listFeatureUsers(ListFeatureUsersRequest request) {
-        return listFeatureUsers(request, null);
+        return this.rawClient.listFeatureUsers(request).body();
     }
 
     public ListFeatureUsersResponse listFeatureUsers(ListFeatureUsersRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("feature-users");
-        httpUrl.addQueryParameter("feature_id", request.getFeatureId());
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListFeatureUsersResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.listFeatureUsers(request, requestOptions).body();
     }
 
     public CountFeatureUsersResponse countFeatureUsers(CountFeatureUsersRequest request) {
-        return countFeatureUsers(request, null);
+        return this.rawClient.countFeatureUsers(request).body();
     }
 
     public CountFeatureUsersResponse countFeatureUsers(
             CountFeatureUsersRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("feature-users/count");
-        httpUrl.addQueryParameter("feature_id", request.getFeatureId());
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountFeatureUsersResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.countFeatureUsers(request, requestOptions).body();
     }
 
     public ListPlanEntitlementsResponse listPlanEntitlements() {
-        return listPlanEntitlements(ListPlanEntitlementsRequest.builder().build());
+        return this.rawClient.listPlanEntitlements().body();
     }
 
     public ListPlanEntitlementsResponse listPlanEntitlements(ListPlanEntitlementsRequest request) {
-        return listPlanEntitlements(request, null);
+        return this.rawClient.listPlanEntitlements(request).body();
     }
 
     public ListPlanEntitlementsResponse listPlanEntitlements(
             ListPlanEntitlementsRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("plan-entitlements");
-        if (request.getFeatureId().isPresent()) {
-            httpUrl.addQueryParameter("feature_id", request.getFeatureId().get());
-        }
-        if (request.getFeatureIds().isPresent()) {
-            httpUrl.addQueryParameter("feature_ids", request.getFeatureIds().get());
-        }
-        if (request.getIds().isPresent()) {
-            httpUrl.addQueryParameter("ids", request.getIds().get());
-        }
-        if (request.getPlanId().isPresent()) {
-            httpUrl.addQueryParameter("plan_id", request.getPlanId().get());
-        }
-        if (request.getPlanIds().isPresent()) {
-            httpUrl.addQueryParameter("plan_ids", request.getPlanIds().get());
-        }
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getWithMeteredProducts().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "with_metered_products",
-                    request.getWithMeteredProducts().get().toString());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListPlanEntitlementsResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.listPlanEntitlements(request, requestOptions).body();
     }
 
     public CreatePlanEntitlementResponse createPlanEntitlement(CreatePlanEntitlementRequestBody request) {
-        return createPlanEntitlement(request, null);
+        return this.rawClient.createPlanEntitlement(request).body();
     }
 
     public CreatePlanEntitlementResponse createPlanEntitlement(
             CreatePlanEntitlementRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("plan-entitlements")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BaseSchematicException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreatePlanEntitlementResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.createPlanEntitlement(request, requestOptions).body();
     }
 
     public GetPlanEntitlementResponse getPlanEntitlement(String planEntitlementId) {
-        return getPlanEntitlement(planEntitlementId, null);
+        return this.rawClient.getPlanEntitlement(planEntitlementId).body();
     }
 
     public GetPlanEntitlementResponse getPlanEntitlement(String planEntitlementId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("plan-entitlements")
-                .addPathSegment(planEntitlementId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetPlanEntitlementResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .getPlanEntitlement(planEntitlementId, requestOptions)
+                .body();
     }
 
     public UpdatePlanEntitlementResponse updatePlanEntitlement(
             String planEntitlementId, UpdatePlanEntitlementRequestBody request) {
-        return updatePlanEntitlement(planEntitlementId, request, null);
+        return this.rawClient.updatePlanEntitlement(planEntitlementId, request).body();
     }
 
     public UpdatePlanEntitlementResponse updatePlanEntitlement(
             String planEntitlementId, UpdatePlanEntitlementRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("plan-entitlements")
-                .addPathSegment(planEntitlementId)
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BaseSchematicException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PUT", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdatePlanEntitlementResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .updatePlanEntitlement(planEntitlementId, request, requestOptions)
+                .body();
     }
 
     public DeletePlanEntitlementResponse deletePlanEntitlement(String planEntitlementId) {
-        return deletePlanEntitlement(planEntitlementId, null);
+        return this.rawClient.deletePlanEntitlement(planEntitlementId).body();
     }
 
     public DeletePlanEntitlementResponse deletePlanEntitlement(
             String planEntitlementId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("plan-entitlements")
-                .addPathSegment(planEntitlementId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), DeletePlanEntitlementResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .deletePlanEntitlement(planEntitlementId, requestOptions)
+                .body();
     }
 
     public CountPlanEntitlementsResponse countPlanEntitlements() {
-        return countPlanEntitlements(CountPlanEntitlementsRequest.builder().build());
+        return this.rawClient.countPlanEntitlements().body();
     }
 
     public CountPlanEntitlementsResponse countPlanEntitlements(CountPlanEntitlementsRequest request) {
-        return countPlanEntitlements(request, null);
+        return this.rawClient.countPlanEntitlements(request).body();
     }
 
     public CountPlanEntitlementsResponse countPlanEntitlements(
             CountPlanEntitlementsRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("plan-entitlements/count");
-        if (request.getFeatureId().isPresent()) {
-            httpUrl.addQueryParameter("feature_id", request.getFeatureId().get());
-        }
-        if (request.getFeatureIds().isPresent()) {
-            httpUrl.addQueryParameter("feature_ids", request.getFeatureIds().get());
-        }
-        if (request.getIds().isPresent()) {
-            httpUrl.addQueryParameter("ids", request.getIds().get());
-        }
-        if (request.getPlanId().isPresent()) {
-            httpUrl.addQueryParameter("plan_id", request.getPlanId().get());
-        }
-        if (request.getPlanIds().isPresent()) {
-            httpUrl.addQueryParameter("plan_ids", request.getPlanIds().get());
-        }
-        if (request.getQ().isPresent()) {
-            httpUrl.addQueryParameter("q", request.getQ().get());
-        }
-        if (request.getWithMeteredProducts().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "with_metered_products",
-                    request.getWithMeteredProducts().get().toString());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getOffset().isPresent()) {
-            httpUrl.addQueryParameter("offset", request.getOffset().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountPlanEntitlementsResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.countPlanEntitlements(request, requestOptions).body();
     }
 
     public GetFeatureUsageByCompanyResponse getFeatureUsageByCompany(GetFeatureUsageByCompanyRequest request) {
-        return getFeatureUsageByCompany(request, null);
+        return this.rawClient.getFeatureUsageByCompany(request).body();
     }
 
     public GetFeatureUsageByCompanyResponse getFeatureUsageByCompany(
             GetFeatureUsageByCompanyRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("usage-by-company");
-        // httpUrl.addQueryParameter("keys", request.getKeys());
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(
-                        responseBody.string(), GetFeatureUsageByCompanyResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
+        return this.rawClient.getFeatureUsageByCompany(request, requestOptions).body();
     }
 }

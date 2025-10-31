@@ -83,7 +83,9 @@ public final class UpdateFlagRulesRequestBody {
         @JsonSetter(value = "rules", nulls = Nulls.SKIP)
         public Builder rules(List<CreateOrUpdateRuleRequestBody> rules) {
             this.rules.clear();
-            this.rules.addAll(rules);
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
             return this;
         }
 
@@ -93,7 +95,9 @@ public final class UpdateFlagRulesRequestBody {
         }
 
         public Builder addAllRules(List<CreateOrUpdateRuleRequestBody> rules) {
-            this.rules.addAll(rules);
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
             return this;
         }
 

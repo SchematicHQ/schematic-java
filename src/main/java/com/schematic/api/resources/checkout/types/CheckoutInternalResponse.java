@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.types.BillingSubscriptionResponseData;
+import com.schematic.api.types.CheckoutSubscription;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,23 +23,21 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CheckoutInternalResponse.Builder.class)
 public final class CheckoutInternalResponse {
-    private final BillingSubscriptionResponseData data;
+    private final CheckoutSubscription data;
 
     private final Map<String, JsonNode> params;
 
     private final Map<String, Object> additionalProperties;
 
     private CheckoutInternalResponse(
-            BillingSubscriptionResponseData data,
-            Map<String, JsonNode> params,
-            Map<String, Object> additionalProperties) {
+            CheckoutSubscription data, Map<String, JsonNode> params, Map<String, Object> additionalProperties) {
         this.data = data;
         this.params = params;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("data")
-    public BillingSubscriptionResponseData getData() {
+    public CheckoutSubscription getData() {
         return data;
     }
 
@@ -81,7 +79,7 @@ public final class CheckoutInternalResponse {
     }
 
     public interface DataStage {
-        _FinalStage data(@NotNull BillingSubscriptionResponseData data);
+        _FinalStage data(@NotNull CheckoutSubscription data);
 
         Builder from(CheckoutInternalResponse other);
     }
@@ -89,6 +87,9 @@ public final class CheckoutInternalResponse {
     public interface _FinalStage {
         CheckoutInternalResponse build();
 
+        /**
+         * <p>Input parameters</p>
+         */
         _FinalStage params(Map<String, JsonNode> params);
 
         _FinalStage putAllParams(Map<String, JsonNode> params);
@@ -98,7 +99,7 @@ public final class CheckoutInternalResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements DataStage, _FinalStage {
-        private BillingSubscriptionResponseData data;
+        private CheckoutSubscription data;
 
         private Map<String, JsonNode> params = new LinkedHashMap<>();
 
@@ -116,7 +117,7 @@ public final class CheckoutInternalResponse {
 
         @java.lang.Override
         @JsonSetter("data")
-        public _FinalStage data(@NotNull BillingSubscriptionResponseData data) {
+        public _FinalStage data(@NotNull CheckoutSubscription data) {
             this.data = Objects.requireNonNull(data, "data must not be null");
             return this;
         }
@@ -137,15 +138,22 @@ public final class CheckoutInternalResponse {
          */
         @java.lang.Override
         public _FinalStage putAllParams(Map<String, JsonNode> params) {
-            this.params.putAll(params);
+            if (params != null) {
+                this.params.putAll(params);
+            }
             return this;
         }
 
+        /**
+         * <p>Input parameters</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "params", nulls = Nulls.SKIP)
         public _FinalStage params(Map<String, JsonNode> params) {
             this.params.clear();
-            this.params.putAll(params);
+            if (params != null) {
+                this.params.putAll(params);
+            }
             return this;
         }
 

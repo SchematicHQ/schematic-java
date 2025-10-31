@@ -82,7 +82,9 @@ public final class CreateEventBatchRequestBody {
         @JsonSetter(value = "events", nulls = Nulls.SKIP)
         public Builder events(List<CreateEventRequestBody> events) {
             this.events.clear();
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 
@@ -92,7 +94,9 @@ public final class CreateEventBatchRequestBody {
         }
 
         public Builder addAllEvents(List<CreateEventRequestBody> events) {
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 
