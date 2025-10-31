@@ -4731,6 +4731,14 @@ client.credits().createBillingPlanCreditGrant(
 <dl>
 <dd>
 
+**applyToExisting:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **creditAmount:** `Integer` 
     
 </dd>
@@ -4807,7 +4815,7 @@ client.credits().createBillingPlanCreditGrant(
 </dl>
 </details>
 
-<details><summary><code>client.credits.deleteBillingPlanCreditGrant(planGrantId) -> DeleteBillingPlanCreditGrantResponse</code></summary>
+<details><summary><code>client.credits.updateBillingPlanCreditGrant(planGrantId, request) -> UpdateBillingPlanCreditGrantResponse</code></summary>
 <dl>
 <dd>
 
@@ -4820,7 +4828,14 @@ client.credits().createBillingPlanCreditGrant(
 <dd>
 
 ```java
-client.credits().deleteBillingPlanCreditGrant("plan_grant_id");
+client.credits().updateBillingPlanCreditGrant(
+    "plan_grant_id",
+    UpdateBillingPlanCreditGrantRequestBody
+        .builder()
+        .resetCadence(UpdateBillingPlanCreditGrantRequestBodyResetCadence.MONTHLY)
+        .resetStart(UpdateBillingPlanCreditGrantRequestBodyResetStart.BILLING_PERIOD)
+        .build()
+);
 ```
 </dd>
 </dl>
@@ -4836,6 +4851,124 @@ client.credits().deleteBillingPlanCreditGrant("plan_grant_id");
 <dd>
 
 **planGrantId:** `String` — plan_grant_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**applyToExisting:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditAmount:** `Optional<Integer>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expiryType:** `Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expiryUnit:** `Optional<UpdateBillingPlanCreditGrantRequestBodyExpiryUnit>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expiryUnitCount:** `Optional<Integer>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**resetCadence:** `UpdateBillingPlanCreditGrantRequestBodyResetCadence` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**resetStart:** `UpdateBillingPlanCreditGrantRequestBodyResetStart` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**resetType:** `Optional<UpdateBillingPlanCreditGrantRequestBodyResetType>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.deleteBillingPlanCreditGrant(planGrantId) -> DeleteBillingPlanCreditGrantResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().deleteBillingPlanCreditGrant(
+    "plan_grant_id",
+    DeleteBillingPlanCreditGrantRequest
+        .builder()
+        .applyToExisting(true)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planGrantId:** `String` — plan_grant_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**applyToExisting:** `Optional<Boolean>` 
     
 </dd>
 </dl>

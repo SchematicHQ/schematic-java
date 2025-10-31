@@ -26,6 +26,7 @@ import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBo
 import com.schematic.api.resources.credits.requests.CreateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
 import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBody;
+import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
 import com.schematic.api.resources.credits.requests.GetEnrichedCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
@@ -33,6 +34,7 @@ import com.schematic.api.resources.credits.requests.ListCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
+import com.schematic.api.resources.credits.requests.UpdateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
 import com.schematic.api.resources.credits.requests.ZeroOutGrantRequestBody;
 import com.schematic.api.resources.credits.types.CountBillingCreditsGrantsResponse;
@@ -56,6 +58,7 @@ import com.schematic.api.resources.credits.types.ListCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.ListGrantsForCreditResponse;
 import com.schematic.api.resources.credits.types.SoftDeleteBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingCreditResponse;
+import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.UpdateCreditBundleDetailsResponse;
 import com.schematic.api.resources.credits.types.ZeroOutGrantResponse;
 import com.schematic.api.types.ApiError;
@@ -1620,24 +1623,103 @@ public class RawCreditsClient {
         }
     }
 
-    public BaseSchematicHttpResponse<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
-            String planGrantId) {
-        return deleteBillingPlanCreditGrant(planGrantId, null);
+    public BaseSchematicHttpResponse<UpdateBillingPlanCreditGrantResponse> updateBillingPlanCreditGrant(
+            String planGrantId, UpdateBillingPlanCreditGrantRequestBody request) {
+        return updateBillingPlanCreditGrant(planGrantId, request, null);
     }
 
-    public BaseSchematicHttpResponse<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
-            String planGrantId, RequestOptions requestOptions) {
+    public BaseSchematicHttpResponse<UpdateBillingPlanCreditGrantResponse> updateBillingPlanCreditGrant(
+            String planGrantId, UpdateBillingPlanCreditGrantRequestBody request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/plan-grants")
                 .addPathSegment(planGrantId)
                 .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("DELETE", null)
+                .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBody.string(), UpdateBillingPlanCreditGrantResponse.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
+            String planGrantId) {
+        return deleteBillingPlanCreditGrant(
+                planGrantId, DeleteBillingPlanCreditGrantRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
+            String planGrantId, DeleteBillingPlanCreditGrantRequest request) {
+        return deleteBillingPlanCreditGrant(planGrantId, request, null);
+    }
+
+    public BaseSchematicHttpResponse<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
+            String planGrantId, DeleteBillingPlanCreditGrantRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/credits/plan-grants")
+                .addPathSegment(planGrantId);
+        if (request.getApplyToExisting().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "apply_to_existing", request.getApplyToExisting().get(), false);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
