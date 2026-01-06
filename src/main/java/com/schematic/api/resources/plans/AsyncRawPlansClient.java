@@ -190,23 +190,12 @@ public class AsyncRawPlansClient {
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
-        if (request.getRequiresPaymentMethod().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl,
-                    "requires_payment_method",
-                    request.getRequiresPaymentMethod().get(),
-                    false);
-        }
         if (request.getWithoutEntitlementFor().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
                     "without_entitlement_for",
                     request.getWithoutEntitlementFor().get(),
                     false);
-        }
-        if (request.getWithoutProductId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "without_product_id", request.getWithoutProductId().get(), false);
         }
         if (request.getWithoutPaidProductId().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -779,23 +768,12 @@ public class AsyncRawPlansClient {
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
-        if (request.getRequiresPaymentMethod().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl,
-                    "requires_payment_method",
-                    request.getRequiresPaymentMethod().get(),
-                    false);
-        }
         if (request.getWithoutEntitlementFor().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
                     "without_entitlement_for",
                     request.getWithoutEntitlementFor().get(),
                     false);
-        }
-        if (request.getWithoutProductId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "without_product_id", request.getWithoutProductId().get(), false);
         }
         if (request.getWithoutPaidProductId().isPresent()) {
             QueryStringMapper.addQueryParameter(

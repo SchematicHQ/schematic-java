@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.companies.types.CountEntityKeyDefinitionsRequestEntityType;
+import com.schematic.api.types.EntityType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.Optional;
 public final class CountEntityKeyDefinitionsRequest {
     private final Optional<List<String>> ids;
 
-    private final Optional<CountEntityKeyDefinitionsRequestEntityType> entityType;
+    private final Optional<EntityType> entityType;
 
     private final Optional<String> q;
 
@@ -37,7 +37,7 @@ public final class CountEntityKeyDefinitionsRequest {
 
     private CountEntityKeyDefinitionsRequest(
             Optional<List<String>> ids,
-            Optional<CountEntityKeyDefinitionsRequestEntityType> entityType,
+            Optional<EntityType> entityType,
             Optional<String> q,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -56,7 +56,7 @@ public final class CountEntityKeyDefinitionsRequest {
     }
 
     @JsonProperty("entity_type")
-    public Optional<CountEntityKeyDefinitionsRequestEntityType> getEntityType() {
+    public Optional<EntityType> getEntityType() {
         return entityType;
     }
 
@@ -118,7 +118,7 @@ public final class CountEntityKeyDefinitionsRequest {
     public static final class Builder {
         private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<CountEntityKeyDefinitionsRequestEntityType> entityType = Optional.empty();
+        private Optional<EntityType> entityType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -157,12 +157,12 @@ public final class CountEntityKeyDefinitionsRequest {
         }
 
         @JsonSetter(value = "entity_type", nulls = Nulls.SKIP)
-        public Builder entityType(Optional<CountEntityKeyDefinitionsRequestEntityType> entityType) {
+        public Builder entityType(Optional<EntityType> entityType) {
             this.entityType = entityType;
             return this;
         }
 
-        public Builder entityType(CountEntityKeyDefinitionsRequestEntityType entityType) {
+        public Builder entityType(EntityType entityType) {
             this.entityType = Optional.ofNullable(entityType);
             return this;
         }

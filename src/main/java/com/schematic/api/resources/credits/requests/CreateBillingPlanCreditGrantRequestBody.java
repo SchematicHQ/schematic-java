@@ -12,11 +12,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyExpiryType;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyExpiryUnit;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyResetCadence;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyResetStart;
-import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRequestBodyResetType;
+import com.schematic.api.types.BillingCreditExpiryType;
+import com.schematic.api.types.BillingCreditExpiryUnit;
+import com.schematic.api.types.BillingPlanCreditGrantResetCadence;
+import com.schematic.api.types.BillingPlanCreditGrantResetStart;
+import com.schematic.api.types.BillingPlanCreditGrantResetType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,39 +28,67 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateBillingPlanCreditGrantRequestBody {
     private final Optional<Boolean> applyToExisting;
 
+    private final Optional<Integer> autoTopupAmount;
+
+    private final Optional<String> autoTopupAmountType;
+
+    private final Optional<Boolean> autoTopupEnabled;
+
+    private final Optional<BillingCreditExpiryType> autoTopupExpiryType;
+
+    private final Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit;
+
+    private final Optional<Integer> autoTopupExpiryUnitCount;
+
+    private final Optional<Integer> autoTopupThresholdPercent;
+
     private final int creditAmount;
 
     private final String creditId;
 
-    private final Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType;
+    private final Optional<BillingCreditExpiryType> expiryType;
 
-    private final Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit;
+    private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
     private final Optional<Integer> expiryUnitCount;
 
     private final String planId;
 
-    private final CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence;
+    private final BillingPlanCreditGrantResetCadence resetCadence;
 
-    private final CreateBillingPlanCreditGrantRequestBodyResetStart resetStart;
+    private final BillingPlanCreditGrantResetStart resetStart;
 
-    private final Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType;
+    private final Optional<BillingPlanCreditGrantResetType> resetType;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingPlanCreditGrantRequestBody(
             Optional<Boolean> applyToExisting,
+            Optional<Integer> autoTopupAmount,
+            Optional<String> autoTopupAmountType,
+            Optional<Boolean> autoTopupEnabled,
+            Optional<BillingCreditExpiryType> autoTopupExpiryType,
+            Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit,
+            Optional<Integer> autoTopupExpiryUnitCount,
+            Optional<Integer> autoTopupThresholdPercent,
             int creditAmount,
             String creditId,
-            Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType,
-            Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit,
+            Optional<BillingCreditExpiryType> expiryType,
+            Optional<BillingCreditExpiryUnit> expiryUnit,
             Optional<Integer> expiryUnitCount,
             String planId,
-            CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence,
-            CreateBillingPlanCreditGrantRequestBodyResetStart resetStart,
-            Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType,
+            BillingPlanCreditGrantResetCadence resetCadence,
+            BillingPlanCreditGrantResetStart resetStart,
+            Optional<BillingPlanCreditGrantResetType> resetType,
             Map<String, Object> additionalProperties) {
         this.applyToExisting = applyToExisting;
+        this.autoTopupAmount = autoTopupAmount;
+        this.autoTopupAmountType = autoTopupAmountType;
+        this.autoTopupEnabled = autoTopupEnabled;
+        this.autoTopupExpiryType = autoTopupExpiryType;
+        this.autoTopupExpiryUnit = autoTopupExpiryUnit;
+        this.autoTopupExpiryUnitCount = autoTopupExpiryUnitCount;
+        this.autoTopupThresholdPercent = autoTopupThresholdPercent;
         this.creditAmount = creditAmount;
         this.creditId = creditId;
         this.expiryType = expiryType;
@@ -78,6 +106,41 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         return applyToExisting;
     }
 
+    @JsonProperty("auto_topup_amount")
+    public Optional<Integer> getAutoTopupAmount() {
+        return autoTopupAmount;
+    }
+
+    @JsonProperty("auto_topup_amount_type")
+    public Optional<String> getAutoTopupAmountType() {
+        return autoTopupAmountType;
+    }
+
+    @JsonProperty("auto_topup_enabled")
+    public Optional<Boolean> getAutoTopupEnabled() {
+        return autoTopupEnabled;
+    }
+
+    @JsonProperty("auto_topup_expiry_type")
+    public Optional<BillingCreditExpiryType> getAutoTopupExpiryType() {
+        return autoTopupExpiryType;
+    }
+
+    @JsonProperty("auto_topup_expiry_unit")
+    public Optional<BillingCreditExpiryUnit> getAutoTopupExpiryUnit() {
+        return autoTopupExpiryUnit;
+    }
+
+    @JsonProperty("auto_topup_expiry_unit_count")
+    public Optional<Integer> getAutoTopupExpiryUnitCount() {
+        return autoTopupExpiryUnitCount;
+    }
+
+    @JsonProperty("auto_topup_threshold_percent")
+    public Optional<Integer> getAutoTopupThresholdPercent() {
+        return autoTopupThresholdPercent;
+    }
+
     @JsonProperty("credit_amount")
     public int getCreditAmount() {
         return creditAmount;
@@ -89,12 +152,12 @@ public final class CreateBillingPlanCreditGrantRequestBody {
     }
 
     @JsonProperty("expiry_type")
-    public Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> getExpiryType() {
+    public Optional<BillingCreditExpiryType> getExpiryType() {
         return expiryType;
     }
 
     @JsonProperty("expiry_unit")
-    public Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> getExpiryUnit() {
+    public Optional<BillingCreditExpiryUnit> getExpiryUnit() {
         return expiryUnit;
     }
 
@@ -109,17 +172,17 @@ public final class CreateBillingPlanCreditGrantRequestBody {
     }
 
     @JsonProperty("reset_cadence")
-    public CreateBillingPlanCreditGrantRequestBodyResetCadence getResetCadence() {
+    public BillingPlanCreditGrantResetCadence getResetCadence() {
         return resetCadence;
     }
 
     @JsonProperty("reset_start")
-    public CreateBillingPlanCreditGrantRequestBodyResetStart getResetStart() {
+    public BillingPlanCreditGrantResetStart getResetStart() {
         return resetStart;
     }
 
     @JsonProperty("reset_type")
-    public Optional<CreateBillingPlanCreditGrantRequestBodyResetType> getResetType() {
+    public Optional<BillingPlanCreditGrantResetType> getResetType() {
         return resetType;
     }
 
@@ -137,6 +200,13 @@ public final class CreateBillingPlanCreditGrantRequestBody {
 
     private boolean equalTo(CreateBillingPlanCreditGrantRequestBody other) {
         return applyToExisting.equals(other.applyToExisting)
+                && autoTopupAmount.equals(other.autoTopupAmount)
+                && autoTopupAmountType.equals(other.autoTopupAmountType)
+                && autoTopupEnabled.equals(other.autoTopupEnabled)
+                && autoTopupExpiryType.equals(other.autoTopupExpiryType)
+                && autoTopupExpiryUnit.equals(other.autoTopupExpiryUnit)
+                && autoTopupExpiryUnitCount.equals(other.autoTopupExpiryUnitCount)
+                && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
                 && creditAmount == other.creditAmount
                 && creditId.equals(other.creditId)
                 && expiryType.equals(other.expiryType)
@@ -152,6 +222,13 @@ public final class CreateBillingPlanCreditGrantRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.applyToExisting,
+                this.autoTopupAmount,
+                this.autoTopupAmountType,
+                this.autoTopupEnabled,
+                this.autoTopupExpiryType,
+                this.autoTopupExpiryUnit,
+                this.autoTopupExpiryUnitCount,
+                this.autoTopupThresholdPercent,
                 this.creditAmount,
                 this.creditId,
                 this.expiryType,
@@ -187,11 +264,11 @@ public final class CreateBillingPlanCreditGrantRequestBody {
     }
 
     public interface ResetCadenceStage {
-        ResetStartStage resetCadence(@NotNull CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence);
+        ResetStartStage resetCadence(@NotNull BillingPlanCreditGrantResetCadence resetCadence);
     }
 
     public interface ResetStartStage {
-        _FinalStage resetStart(@NotNull CreateBillingPlanCreditGrantRequestBodyResetStart resetStart);
+        _FinalStage resetStart(@NotNull BillingPlanCreditGrantResetStart resetStart);
     }
 
     public interface _FinalStage {
@@ -201,21 +278,49 @@ public final class CreateBillingPlanCreditGrantRequestBody {
 
         _FinalStage applyToExisting(Boolean applyToExisting);
 
-        _FinalStage expiryType(Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType);
+        _FinalStage autoTopupAmount(Optional<Integer> autoTopupAmount);
 
-        _FinalStage expiryType(CreateBillingPlanCreditGrantRequestBodyExpiryType expiryType);
+        _FinalStage autoTopupAmount(Integer autoTopupAmount);
 
-        _FinalStage expiryUnit(Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit);
+        _FinalStage autoTopupAmountType(Optional<String> autoTopupAmountType);
 
-        _FinalStage expiryUnit(CreateBillingPlanCreditGrantRequestBodyExpiryUnit expiryUnit);
+        _FinalStage autoTopupAmountType(String autoTopupAmountType);
+
+        _FinalStage autoTopupEnabled(Optional<Boolean> autoTopupEnabled);
+
+        _FinalStage autoTopupEnabled(Boolean autoTopupEnabled);
+
+        _FinalStage autoTopupExpiryType(Optional<BillingCreditExpiryType> autoTopupExpiryType);
+
+        _FinalStage autoTopupExpiryType(BillingCreditExpiryType autoTopupExpiryType);
+
+        _FinalStage autoTopupExpiryUnit(Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit);
+
+        _FinalStage autoTopupExpiryUnit(BillingCreditExpiryUnit autoTopupExpiryUnit);
+
+        _FinalStage autoTopupExpiryUnitCount(Optional<Integer> autoTopupExpiryUnitCount);
+
+        _FinalStage autoTopupExpiryUnitCount(Integer autoTopupExpiryUnitCount);
+
+        _FinalStage autoTopupThresholdPercent(Optional<Integer> autoTopupThresholdPercent);
+
+        _FinalStage autoTopupThresholdPercent(Integer autoTopupThresholdPercent);
+
+        _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
+
+        _FinalStage expiryType(BillingCreditExpiryType expiryType);
+
+        _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit);
+
+        _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
         _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
 
         _FinalStage expiryUnitCount(Integer expiryUnitCount);
 
-        _FinalStage resetType(Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType);
+        _FinalStage resetType(Optional<BillingPlanCreditGrantResetType> resetType);
 
-        _FinalStage resetType(CreateBillingPlanCreditGrantRequestBodyResetType resetType);
+        _FinalStage resetType(BillingPlanCreditGrantResetType resetType);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -227,17 +332,31 @@ public final class CreateBillingPlanCreditGrantRequestBody {
 
         private String planId;
 
-        private CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence;
+        private BillingPlanCreditGrantResetCadence resetCadence;
 
-        private CreateBillingPlanCreditGrantRequestBodyResetStart resetStart;
+        private BillingPlanCreditGrantResetStart resetStart;
 
-        private Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType = Optional.empty();
+        private Optional<BillingPlanCreditGrantResetType> resetType = Optional.empty();
 
         private Optional<Integer> expiryUnitCount = Optional.empty();
 
-        private Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit = Optional.empty();
+        private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
-        private Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType = Optional.empty();
+        private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
+
+        private Optional<Integer> autoTopupThresholdPercent = Optional.empty();
+
+        private Optional<Integer> autoTopupExpiryUnitCount = Optional.empty();
+
+        private Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit = Optional.empty();
+
+        private Optional<BillingCreditExpiryType> autoTopupExpiryType = Optional.empty();
+
+        private Optional<Boolean> autoTopupEnabled = Optional.empty();
+
+        private Optional<String> autoTopupAmountType = Optional.empty();
+
+        private Optional<Integer> autoTopupAmount = Optional.empty();
 
         private Optional<Boolean> applyToExisting = Optional.empty();
 
@@ -249,6 +368,13 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         @java.lang.Override
         public Builder from(CreateBillingPlanCreditGrantRequestBody other) {
             applyToExisting(other.getApplyToExisting());
+            autoTopupAmount(other.getAutoTopupAmount());
+            autoTopupAmountType(other.getAutoTopupAmountType());
+            autoTopupEnabled(other.getAutoTopupEnabled());
+            autoTopupExpiryType(other.getAutoTopupExpiryType());
+            autoTopupExpiryUnit(other.getAutoTopupExpiryUnit());
+            autoTopupExpiryUnitCount(other.getAutoTopupExpiryUnitCount());
+            autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
             creditAmount(other.getCreditAmount());
             creditId(other.getCreditId());
             expiryType(other.getExpiryType());
@@ -284,27 +410,27 @@ public final class CreateBillingPlanCreditGrantRequestBody {
 
         @java.lang.Override
         @JsonSetter("reset_cadence")
-        public ResetStartStage resetCadence(@NotNull CreateBillingPlanCreditGrantRequestBodyResetCadence resetCadence) {
+        public ResetStartStage resetCadence(@NotNull BillingPlanCreditGrantResetCadence resetCadence) {
             this.resetCadence = Objects.requireNonNull(resetCadence, "resetCadence must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("reset_start")
-        public _FinalStage resetStart(@NotNull CreateBillingPlanCreditGrantRequestBodyResetStart resetStart) {
+        public _FinalStage resetStart(@NotNull BillingPlanCreditGrantResetStart resetStart) {
             this.resetStart = Objects.requireNonNull(resetStart, "resetStart must not be null");
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage resetType(CreateBillingPlanCreditGrantRequestBodyResetType resetType) {
+        public _FinalStage resetType(BillingPlanCreditGrantResetType resetType) {
             this.resetType = Optional.ofNullable(resetType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "reset_type", nulls = Nulls.SKIP)
-        public _FinalStage resetType(Optional<CreateBillingPlanCreditGrantRequestBodyResetType> resetType) {
+        public _FinalStage resetType(Optional<BillingPlanCreditGrantResetType> resetType) {
             this.resetType = resetType;
             return this;
         }
@@ -323,28 +449,119 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnit(CreateBillingPlanCreditGrantRequestBodyExpiryUnit expiryUnit) {
+        public _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit) {
             this.expiryUnit = Optional.ofNullable(expiryUnit);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnit(Optional<CreateBillingPlanCreditGrantRequestBodyExpiryUnit> expiryUnit) {
+        public _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit) {
             this.expiryUnit = expiryUnit;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage expiryType(CreateBillingPlanCreditGrantRequestBodyExpiryType expiryType) {
+        public _FinalStage expiryType(BillingCreditExpiryType expiryType) {
             this.expiryType = Optional.ofNullable(expiryType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_type", nulls = Nulls.SKIP)
-        public _FinalStage expiryType(Optional<CreateBillingPlanCreditGrantRequestBodyExpiryType> expiryType) {
+        public _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType) {
             this.expiryType = expiryType;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage autoTopupThresholdPercent(Integer autoTopupThresholdPercent) {
+            this.autoTopupThresholdPercent = Optional.ofNullable(autoTopupThresholdPercent);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_threshold_percent", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupThresholdPercent(Optional<Integer> autoTopupThresholdPercent) {
+            this.autoTopupThresholdPercent = autoTopupThresholdPercent;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage autoTopupExpiryUnitCount(Integer autoTopupExpiryUnitCount) {
+            this.autoTopupExpiryUnitCount = Optional.ofNullable(autoTopupExpiryUnitCount);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_expiry_unit_count", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupExpiryUnitCount(Optional<Integer> autoTopupExpiryUnitCount) {
+            this.autoTopupExpiryUnitCount = autoTopupExpiryUnitCount;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage autoTopupExpiryUnit(BillingCreditExpiryUnit autoTopupExpiryUnit) {
+            this.autoTopupExpiryUnit = Optional.ofNullable(autoTopupExpiryUnit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_expiry_unit", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupExpiryUnit(Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit) {
+            this.autoTopupExpiryUnit = autoTopupExpiryUnit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage autoTopupExpiryType(BillingCreditExpiryType autoTopupExpiryType) {
+            this.autoTopupExpiryType = Optional.ofNullable(autoTopupExpiryType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_expiry_type", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupExpiryType(Optional<BillingCreditExpiryType> autoTopupExpiryType) {
+            this.autoTopupExpiryType = autoTopupExpiryType;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage autoTopupEnabled(Boolean autoTopupEnabled) {
+            this.autoTopupEnabled = Optional.ofNullable(autoTopupEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_enabled", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupEnabled(Optional<Boolean> autoTopupEnabled) {
+            this.autoTopupEnabled = autoTopupEnabled;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage autoTopupAmountType(String autoTopupAmountType) {
+            this.autoTopupAmountType = Optional.ofNullable(autoTopupAmountType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_amount_type", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupAmountType(Optional<String> autoTopupAmountType) {
+            this.autoTopupAmountType = autoTopupAmountType;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage autoTopupAmount(Integer autoTopupAmount) {
+            this.autoTopupAmount = Optional.ofNullable(autoTopupAmount);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_amount", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupAmount(Optional<Integer> autoTopupAmount) {
+            this.autoTopupAmount = autoTopupAmount;
             return this;
         }
 
@@ -365,6 +582,13 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         public CreateBillingPlanCreditGrantRequestBody build() {
             return new CreateBillingPlanCreditGrantRequestBody(
                     applyToExisting,
+                    autoTopupAmount,
+                    autoTopupAmountType,
+                    autoTopupEnabled,
+                    autoTopupExpiryType,
+                    autoTopupExpiryUnit,
+                    autoTopupExpiryUnitCount,
+                    autoTopupThresholdPercent,
                     creditAmount,
                     creditId,
                     expiryType,

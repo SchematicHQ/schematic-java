@@ -32,7 +32,7 @@ public final class SubscriptionTraitUpdate {
 
     private final String traitName;
 
-    private final String traitType;
+    private final TraitType traitType;
 
     private final String value;
 
@@ -44,7 +44,7 @@ public final class SubscriptionTraitUpdate {
             String reason,
             String traitId,
             String traitName,
-            String traitType,
+            TraitType traitType,
             String value,
             Map<String, Object> additionalProperties) {
         this.featureId = featureId;
@@ -83,7 +83,7 @@ public final class SubscriptionTraitUpdate {
     }
 
     @JsonProperty("trait_type")
-    public String getTraitType() {
+    public TraitType getTraitType() {
         return traitType;
     }
 
@@ -147,7 +147,7 @@ public final class SubscriptionTraitUpdate {
     }
 
     public interface TraitTypeStage {
-        ValueStage traitType(@NotNull String traitType);
+        ValueStage traitType(@NotNull TraitType traitType);
     }
 
     public interface ValueStage {
@@ -181,7 +181,7 @@ public final class SubscriptionTraitUpdate {
 
         private String traitName;
 
-        private String traitType;
+        private TraitType traitType;
 
         private String value;
 
@@ -234,7 +234,7 @@ public final class SubscriptionTraitUpdate {
 
         @java.lang.Override
         @JsonSetter("trait_type")
-        public ValueStage traitType(@NotNull String traitType) {
+        public ValueStage traitType(@NotNull TraitType traitType) {
             this.traitType = Objects.requireNonNull(traitType, "traitType must not be null");
             return this;
         }

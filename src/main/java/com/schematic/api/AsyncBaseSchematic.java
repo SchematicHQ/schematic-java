@@ -13,7 +13,6 @@ import com.schematic.api.resources.checkout.AsyncCheckoutClient;
 import com.schematic.api.resources.companies.AsyncCompaniesClient;
 import com.schematic.api.resources.components.AsyncComponentsClient;
 import com.schematic.api.resources.credits.AsyncCreditsClient;
-import com.schematic.api.resources.crm.AsyncCrmClient;
 import com.schematic.api.resources.dataexports.AsyncDataexportsClient;
 import com.schematic.api.resources.entitlements.AsyncEntitlementsClient;
 import com.schematic.api.resources.events.AsyncEventsClient;
@@ -45,8 +44,6 @@ public class AsyncBaseSchematic {
 
     protected final Supplier<AsyncComponentsClient> componentsClient;
 
-    protected final Supplier<AsyncCrmClient> crmClient;
-
     protected final Supplier<AsyncDataexportsClient> dataexportsClient;
 
     protected final Supplier<AsyncEventsClient> eventsClient;
@@ -70,7 +67,6 @@ public class AsyncBaseSchematic {
         this.entitlementsClient = Suppliers.memoize(() -> new AsyncEntitlementsClient(clientOptions));
         this.plansClient = Suppliers.memoize(() -> new AsyncPlansClient(clientOptions));
         this.componentsClient = Suppliers.memoize(() -> new AsyncComponentsClient(clientOptions));
-        this.crmClient = Suppliers.memoize(() -> new AsyncCrmClient(clientOptions));
         this.dataexportsClient = Suppliers.memoize(() -> new AsyncDataexportsClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new AsyncEventsClient(clientOptions));
         this.featuresClient = Suppliers.memoize(() -> new AsyncFeaturesClient(clientOptions));
@@ -138,10 +134,6 @@ public class AsyncBaseSchematic {
 
     public AsyncComponentsClient components() {
         return this.componentsClient.get();
-    }
-
-    public AsyncCrmClient crm() {
-        return this.crmClient.get();
     }
 
     public AsyncDataexportsClient dataexports() {

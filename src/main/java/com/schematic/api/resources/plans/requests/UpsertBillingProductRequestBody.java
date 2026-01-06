@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.plans.types.UpsertBillingProductRequestBodyChargeType;
+import com.schematic.api.types.ChargeType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class UpsertBillingProductRequestBody {
     private final Optional<String> billingProductId;
 
-    private final UpsertBillingProductRequestBodyChargeType chargeType;
+    private final ChargeType chargeType;
 
     private final Optional<String> currency;
 
@@ -48,7 +48,7 @@ public final class UpsertBillingProductRequestBody {
 
     private UpsertBillingProductRequestBody(
             Optional<String> billingProductId,
-            UpsertBillingProductRequestBodyChargeType chargeType,
+            ChargeType chargeType,
             Optional<String> currency,
             boolean isTrialable,
             Optional<Integer> monthlyPrice,
@@ -79,7 +79,7 @@ public final class UpsertBillingProductRequestBody {
     }
 
     @JsonProperty("charge_type")
-    public UpsertBillingProductRequestBodyChargeType getChargeType() {
+    public ChargeType getChargeType() {
         return chargeType;
     }
 
@@ -179,7 +179,7 @@ public final class UpsertBillingProductRequestBody {
     }
 
     public interface ChargeTypeStage {
-        IsTrialableStage chargeType(@NotNull UpsertBillingProductRequestBodyChargeType chargeType);
+        IsTrialableStage chargeType(@NotNull ChargeType chargeType);
 
         Builder from(UpsertBillingProductRequestBody other);
     }
@@ -230,7 +230,7 @@ public final class UpsertBillingProductRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ChargeTypeStage, IsTrialableStage, _FinalStage {
-        private UpsertBillingProductRequestBodyChargeType chargeType;
+        private ChargeType chargeType;
 
         private boolean isTrialable;
 
@@ -275,7 +275,7 @@ public final class UpsertBillingProductRequestBody {
 
         @java.lang.Override
         @JsonSetter("charge_type")
-        public IsTrialableStage chargeType(@NotNull UpsertBillingProductRequestBodyChargeType chargeType) {
+        public IsTrialableStage chargeType(@NotNull ChargeType chargeType) {
             this.chargeType = Objects.requireNonNull(chargeType, "chargeType must not be null");
             return this;
         }

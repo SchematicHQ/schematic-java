@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,15 +39,17 @@ public final class CreditCompanyGrantView {
 
     private final String creditName;
 
+    private final Optional<OffsetDateTime> exhaustedAt;
+
     private final Optional<OffsetDateTime> expiresAt;
 
-    private final Optional<String> expiryType;
+    private final Optional<BillingCreditExpiryType> expiryType;
 
-    private final Optional<String> expiryUnit;
+    private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
     private final Optional<Integer> expiryUnitCount;
 
-    private final String grantReason;
+    private final BillingCreditGrantReason grantReason;
 
     private final String id;
 
@@ -64,9 +67,15 @@ public final class CreditCompanyGrantView {
 
     private final double quantityUsed;
 
+    private final boolean renewalEnabled;
+
+    private final Optional<BillingPlanCreditGrantResetCadence> renewalPeriod;
+
     private final Optional<String> singularName;
 
     private final String sourceLabel;
+
+    private final Optional<List<CreditTransferView>> transfers;
 
     private final OffsetDateTime updatedAt;
 
@@ -74,7 +83,7 @@ public final class CreditCompanyGrantView {
 
     private final Optional<OffsetDateTime> zeroedOutDate;
 
-    private final Optional<String> zeroedOutReason;
+    private final Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason;
 
     private final Map<String, Object> additionalProperties;
 
@@ -87,11 +96,12 @@ public final class CreditCompanyGrantView {
             String creditDescription,
             Optional<String> creditIcon,
             String creditName,
+            Optional<OffsetDateTime> exhaustedAt,
             Optional<OffsetDateTime> expiresAt,
-            Optional<String> expiryType,
-            Optional<String> expiryUnit,
+            Optional<BillingCreditExpiryType> expiryType,
+            Optional<BillingCreditExpiryUnit> expiryUnit,
             Optional<Integer> expiryUnitCount,
-            String grantReason,
+            BillingCreditGrantReason grantReason,
             String id,
             Optional<String> planId,
             Optional<String> planName,
@@ -100,12 +110,15 @@ public final class CreditCompanyGrantView {
             int quantity,
             double quantityRemaining,
             double quantityUsed,
+            boolean renewalEnabled,
+            Optional<BillingPlanCreditGrantResetCadence> renewalPeriod,
             Optional<String> singularName,
             String sourceLabel,
+            Optional<List<CreditTransferView>> transfers,
             OffsetDateTime updatedAt,
             Optional<OffsetDateTime> validFrom,
             Optional<OffsetDateTime> zeroedOutDate,
-            Optional<String> zeroedOutReason,
+            Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason,
             Map<String, Object> additionalProperties) {
         this.billingCreditBundleId = billingCreditBundleId;
         this.billingCreditId = billingCreditId;
@@ -115,6 +128,7 @@ public final class CreditCompanyGrantView {
         this.creditDescription = creditDescription;
         this.creditIcon = creditIcon;
         this.creditName = creditName;
+        this.exhaustedAt = exhaustedAt;
         this.expiresAt = expiresAt;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
@@ -128,8 +142,11 @@ public final class CreditCompanyGrantView {
         this.quantity = quantity;
         this.quantityRemaining = quantityRemaining;
         this.quantityUsed = quantityUsed;
+        this.renewalEnabled = renewalEnabled;
+        this.renewalPeriod = renewalPeriod;
         this.singularName = singularName;
         this.sourceLabel = sourceLabel;
+        this.transfers = transfers;
         this.updatedAt = updatedAt;
         this.validFrom = validFrom;
         this.zeroedOutDate = zeroedOutDate;
@@ -177,18 +194,23 @@ public final class CreditCompanyGrantView {
         return creditName;
     }
 
+    @JsonProperty("exhausted_at")
+    public Optional<OffsetDateTime> getExhaustedAt() {
+        return exhaustedAt;
+    }
+
     @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
         return expiresAt;
     }
 
     @JsonProperty("expiry_type")
-    public Optional<String> getExpiryType() {
+    public Optional<BillingCreditExpiryType> getExpiryType() {
         return expiryType;
     }
 
     @JsonProperty("expiry_unit")
-    public Optional<String> getExpiryUnit() {
+    public Optional<BillingCreditExpiryUnit> getExpiryUnit() {
         return expiryUnit;
     }
 
@@ -198,7 +220,7 @@ public final class CreditCompanyGrantView {
     }
 
     @JsonProperty("grant_reason")
-    public String getGrantReason() {
+    public BillingCreditGrantReason getGrantReason() {
         return grantReason;
     }
 
@@ -242,6 +264,16 @@ public final class CreditCompanyGrantView {
         return quantityUsed;
     }
 
+    @JsonProperty("renewal_enabled")
+    public boolean getRenewalEnabled() {
+        return renewalEnabled;
+    }
+
+    @JsonProperty("renewal_period")
+    public Optional<BillingPlanCreditGrantResetCadence> getRenewalPeriod() {
+        return renewalPeriod;
+    }
+
     @JsonProperty("singular_name")
     public Optional<String> getSingularName() {
         return singularName;
@@ -250,6 +282,11 @@ public final class CreditCompanyGrantView {
     @JsonProperty("source_label")
     public String getSourceLabel() {
         return sourceLabel;
+    }
+
+    @JsonProperty("transfers")
+    public Optional<List<CreditTransferView>> getTransfers() {
+        return transfers;
     }
 
     @JsonProperty("updated_at")
@@ -268,7 +305,7 @@ public final class CreditCompanyGrantView {
     }
 
     @JsonProperty("zeroed_out_reason")
-    public Optional<String> getZeroedOutReason() {
+    public Optional<BillingCreditGrantZeroedOutReason> getZeroedOutReason() {
         return zeroedOutReason;
     }
 
@@ -292,6 +329,7 @@ public final class CreditCompanyGrantView {
                 && creditDescription.equals(other.creditDescription)
                 && creditIcon.equals(other.creditIcon)
                 && creditName.equals(other.creditName)
+                && exhaustedAt.equals(other.exhaustedAt)
                 && expiresAt.equals(other.expiresAt)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
@@ -305,8 +343,11 @@ public final class CreditCompanyGrantView {
                 && quantity == other.quantity
                 && quantityRemaining == other.quantityRemaining
                 && quantityUsed == other.quantityUsed
+                && renewalEnabled == other.renewalEnabled
+                && renewalPeriod.equals(other.renewalPeriod)
                 && singularName.equals(other.singularName)
                 && sourceLabel.equals(other.sourceLabel)
+                && transfers.equals(other.transfers)
                 && updatedAt.equals(other.updatedAt)
                 && validFrom.equals(other.validFrom)
                 && zeroedOutDate.equals(other.zeroedOutDate)
@@ -324,6 +365,7 @@ public final class CreditCompanyGrantView {
                 this.creditDescription,
                 this.creditIcon,
                 this.creditName,
+                this.exhaustedAt,
                 this.expiresAt,
                 this.expiryType,
                 this.expiryUnit,
@@ -337,8 +379,11 @@ public final class CreditCompanyGrantView {
                 this.quantity,
                 this.quantityRemaining,
                 this.quantityUsed,
+                this.renewalEnabled,
+                this.renewalPeriod,
                 this.singularName,
                 this.sourceLabel,
+                this.transfers,
                 this.updatedAt,
                 this.validFrom,
                 this.zeroedOutDate,
@@ -381,7 +426,7 @@ public final class CreditCompanyGrantView {
     }
 
     public interface GrantReasonStage {
-        IdStage grantReason(@NotNull String grantReason);
+        IdStage grantReason(@NotNull BillingCreditGrantReason grantReason);
     }
 
     public interface IdStage {
@@ -397,7 +442,11 @@ public final class CreditCompanyGrantView {
     }
 
     public interface QuantityUsedStage {
-        SourceLabelStage quantityUsed(double quantityUsed);
+        RenewalEnabledStage quantityUsed(double quantityUsed);
+    }
+
+    public interface RenewalEnabledStage {
+        SourceLabelStage renewalEnabled(boolean renewalEnabled);
     }
 
     public interface SourceLabelStage {
@@ -419,17 +468,21 @@ public final class CreditCompanyGrantView {
 
         _FinalStage creditIcon(String creditIcon);
 
+        _FinalStage exhaustedAt(Optional<OffsetDateTime> exhaustedAt);
+
+        _FinalStage exhaustedAt(OffsetDateTime exhaustedAt);
+
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
         _FinalStage expiresAt(OffsetDateTime expiresAt);
 
-        _FinalStage expiryType(Optional<String> expiryType);
+        _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
 
-        _FinalStage expiryType(String expiryType);
+        _FinalStage expiryType(BillingCreditExpiryType expiryType);
 
-        _FinalStage expiryUnit(Optional<String> expiryUnit);
+        _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit);
 
-        _FinalStage expiryUnit(String expiryUnit);
+        _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
         _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
 
@@ -451,9 +504,17 @@ public final class CreditCompanyGrantView {
 
         _FinalStage price(BillingProductPriceResponseData price);
 
+        _FinalStage renewalPeriod(Optional<BillingPlanCreditGrantResetCadence> renewalPeriod);
+
+        _FinalStage renewalPeriod(BillingPlanCreditGrantResetCadence renewalPeriod);
+
         _FinalStage singularName(Optional<String> singularName);
 
         _FinalStage singularName(String singularName);
+
+        _FinalStage transfers(Optional<List<CreditTransferView>> transfers);
+
+        _FinalStage transfers(List<CreditTransferView> transfers);
 
         _FinalStage validFrom(Optional<OffsetDateTime> validFrom);
 
@@ -463,9 +524,9 @@ public final class CreditCompanyGrantView {
 
         _FinalStage zeroedOutDate(OffsetDateTime zeroedOutDate);
 
-        _FinalStage zeroedOutReason(Optional<String> zeroedOutReason);
+        _FinalStage zeroedOutReason(Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason);
 
-        _FinalStage zeroedOutReason(String zeroedOutReason);
+        _FinalStage zeroedOutReason(BillingCreditGrantZeroedOutReason zeroedOutReason);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -481,6 +542,7 @@ public final class CreditCompanyGrantView {
                     QuantityStage,
                     QuantityRemainingStage,
                     QuantityUsedStage,
+                    RenewalEnabledStage,
                     SourceLabelStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -496,7 +558,7 @@ public final class CreditCompanyGrantView {
 
         private String creditName;
 
-        private String grantReason;
+        private BillingCreditGrantReason grantReason;
 
         private String id;
 
@@ -506,17 +568,23 @@ public final class CreditCompanyGrantView {
 
         private double quantityUsed;
 
+        private boolean renewalEnabled;
+
         private String sourceLabel;
 
         private OffsetDateTime updatedAt;
 
-        private Optional<String> zeroedOutReason = Optional.empty();
+        private Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason = Optional.empty();
 
         private Optional<OffsetDateTime> zeroedOutDate = Optional.empty();
 
         private Optional<OffsetDateTime> validFrom = Optional.empty();
 
+        private Optional<List<CreditTransferView>> transfers = Optional.empty();
+
         private Optional<String> singularName = Optional.empty();
+
+        private Optional<BillingPlanCreditGrantResetCadence> renewalPeriod = Optional.empty();
 
         private Optional<BillingProductPriceResponseData> price = Optional.empty();
 
@@ -528,11 +596,13 @@ public final class CreditCompanyGrantView {
 
         private Optional<Integer> expiryUnitCount = Optional.empty();
 
-        private Optional<String> expiryUnit = Optional.empty();
+        private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
-        private Optional<String> expiryType = Optional.empty();
+        private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
+
+        private Optional<OffsetDateTime> exhaustedAt = Optional.empty();
 
         private Optional<String> creditIcon = Optional.empty();
 
@@ -553,6 +623,7 @@ public final class CreditCompanyGrantView {
             creditDescription(other.getCreditDescription());
             creditIcon(other.getCreditIcon());
             creditName(other.getCreditName());
+            exhaustedAt(other.getExhaustedAt());
             expiresAt(other.getExpiresAt());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
@@ -566,8 +637,11 @@ public final class CreditCompanyGrantView {
             quantity(other.getQuantity());
             quantityRemaining(other.getQuantityRemaining());
             quantityUsed(other.getQuantityUsed());
+            renewalEnabled(other.getRenewalEnabled());
+            renewalPeriod(other.getRenewalPeriod());
             singularName(other.getSingularName());
             sourceLabel(other.getSourceLabel());
+            transfers(other.getTransfers());
             updatedAt(other.getUpdatedAt());
             validFrom(other.getValidFrom());
             zeroedOutDate(other.getZeroedOutDate());
@@ -619,7 +693,7 @@ public final class CreditCompanyGrantView {
 
         @java.lang.Override
         @JsonSetter("grant_reason")
-        public IdStage grantReason(@NotNull String grantReason) {
+        public IdStage grantReason(@NotNull BillingCreditGrantReason grantReason) {
             this.grantReason = Objects.requireNonNull(grantReason, "grantReason must not be null");
             return this;
         }
@@ -647,8 +721,15 @@ public final class CreditCompanyGrantView {
 
         @java.lang.Override
         @JsonSetter("quantity_used")
-        public SourceLabelStage quantityUsed(double quantityUsed) {
+        public RenewalEnabledStage quantityUsed(double quantityUsed) {
             this.quantityUsed = quantityUsed;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("renewal_enabled")
+        public SourceLabelStage renewalEnabled(boolean renewalEnabled) {
+            this.renewalEnabled = renewalEnabled;
             return this;
         }
 
@@ -667,14 +748,14 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
-        public _FinalStage zeroedOutReason(String zeroedOutReason) {
+        public _FinalStage zeroedOutReason(BillingCreditGrantZeroedOutReason zeroedOutReason) {
             this.zeroedOutReason = Optional.ofNullable(zeroedOutReason);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "zeroed_out_reason", nulls = Nulls.SKIP)
-        public _FinalStage zeroedOutReason(Optional<String> zeroedOutReason) {
+        public _FinalStage zeroedOutReason(Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason) {
             this.zeroedOutReason = zeroedOutReason;
             return this;
         }
@@ -706,6 +787,19 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage transfers(List<CreditTransferView> transfers) {
+            this.transfers = Optional.ofNullable(transfers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "transfers", nulls = Nulls.SKIP)
+        public _FinalStage transfers(Optional<List<CreditTransferView>> transfers) {
+            this.transfers = transfers;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage singularName(String singularName) {
             this.singularName = Optional.ofNullable(singularName);
             return this;
@@ -715,6 +809,19 @@ public final class CreditCompanyGrantView {
         @JsonSetter(value = "singular_name", nulls = Nulls.SKIP)
         public _FinalStage singularName(Optional<String> singularName) {
             this.singularName = singularName;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage renewalPeriod(BillingPlanCreditGrantResetCadence renewalPeriod) {
+            this.renewalPeriod = Optional.ofNullable(renewalPeriod);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "renewal_period", nulls = Nulls.SKIP)
+        public _FinalStage renewalPeriod(Optional<BillingPlanCreditGrantResetCadence> renewalPeriod) {
+            this.renewalPeriod = renewalPeriod;
             return this;
         }
 
@@ -784,27 +891,27 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnit(String expiryUnit) {
+        public _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit) {
             this.expiryUnit = Optional.ofNullable(expiryUnit);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnit(Optional<String> expiryUnit) {
+        public _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit) {
             this.expiryUnit = expiryUnit;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage expiryType(String expiryType) {
+        public _FinalStage expiryType(BillingCreditExpiryType expiryType) {
             this.expiryType = Optional.ofNullable(expiryType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_type", nulls = Nulls.SKIP)
-        public _FinalStage expiryType(Optional<String> expiryType) {
+        public _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType) {
             this.expiryType = expiryType;
             return this;
         }
@@ -819,6 +926,19 @@ public final class CreditCompanyGrantView {
         @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt) {
             this.expiresAt = expiresAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage exhaustedAt(OffsetDateTime exhaustedAt) {
+            this.exhaustedAt = Optional.ofNullable(exhaustedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "exhausted_at", nulls = Nulls.SKIP)
+        public _FinalStage exhaustedAt(Optional<OffsetDateTime> exhaustedAt) {
+            this.exhaustedAt = exhaustedAt;
             return this;
         }
 
@@ -859,6 +979,7 @@ public final class CreditCompanyGrantView {
                     creditDescription,
                     creditIcon,
                     creditName,
+                    exhaustedAt,
                     expiresAt,
                     expiryType,
                     expiryUnit,
@@ -872,8 +993,11 @@ public final class CreditCompanyGrantView {
                     quantity,
                     quantityRemaining,
                     quantityUsed,
+                    renewalEnabled,
+                    renewalPeriod,
                     singularName,
                     sourceLabel,
+                    transfers,
                     updatedAt,
                     validFrom,
                     zeroedOutDate,

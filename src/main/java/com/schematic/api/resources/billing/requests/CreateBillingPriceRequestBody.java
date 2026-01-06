@@ -12,9 +12,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyBillingScheme;
-import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyTiersMode;
-import com.schematic.api.resources.billing.types.CreateBillingPriceRequestBodyUsageType;
+import com.schematic.api.types.BillingPriceScheme;
+import com.schematic.api.types.BillingPriceUsageType;
+import com.schematic.api.types.BillingProviderType;
+import com.schematic.api.types.BillingTiersMode;
 import com.schematic.api.types.CreateBillingPriceTierRequestBody;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingPriceRequestBody.Builder.class)
 public final class CreateBillingPriceRequestBody {
-    private final CreateBillingPriceRequestBodyBillingScheme billingScheme;
+    private final BillingPriceScheme billingScheme;
 
     private final String currency;
 
@@ -51,14 +52,16 @@ public final class CreateBillingPriceRequestBody {
 
     private final String productExternalId;
 
-    private final Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode;
+    private final Optional<BillingProviderType> providerType;
 
-    private final CreateBillingPriceRequestBodyUsageType usageType;
+    private final Optional<BillingTiersMode> tiersMode;
+
+    private final BillingPriceUsageType usageType;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingPriceRequestBody(
-            CreateBillingPriceRequestBodyBillingScheme billingScheme,
+            BillingPriceScheme billingScheme,
             String currency,
             String externalAccountId,
             String interval,
@@ -70,8 +73,9 @@ public final class CreateBillingPriceRequestBody {
             String priceExternalId,
             List<CreateBillingPriceTierRequestBody> priceTiers,
             String productExternalId,
-            Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode,
-            CreateBillingPriceRequestBodyUsageType usageType,
+            Optional<BillingProviderType> providerType,
+            Optional<BillingTiersMode> tiersMode,
+            BillingPriceUsageType usageType,
             Map<String, Object> additionalProperties) {
         this.billingScheme = billingScheme;
         this.currency = currency;
@@ -85,13 +89,14 @@ public final class CreateBillingPriceRequestBody {
         this.priceExternalId = priceExternalId;
         this.priceTiers = priceTiers;
         this.productExternalId = productExternalId;
+        this.providerType = providerType;
         this.tiersMode = tiersMode;
         this.usageType = usageType;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("billing_scheme")
-    public CreateBillingPriceRequestBodyBillingScheme getBillingScheme() {
+    public BillingPriceScheme getBillingScheme() {
         return billingScheme;
     }
 
@@ -150,13 +155,18 @@ public final class CreateBillingPriceRequestBody {
         return productExternalId;
     }
 
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("tiers_mode")
-    public Optional<CreateBillingPriceRequestBodyTiersMode> getTiersMode() {
+    public Optional<BillingTiersMode> getTiersMode() {
         return tiersMode;
     }
 
     @JsonProperty("usage_type")
-    public CreateBillingPriceRequestBodyUsageType getUsageType() {
+    public BillingPriceUsageType getUsageType() {
         return usageType;
     }
 
@@ -184,6 +194,7 @@ public final class CreateBillingPriceRequestBody {
                 && priceExternalId.equals(other.priceExternalId)
                 && priceTiers.equals(other.priceTiers)
                 && productExternalId.equals(other.productExternalId)
+                && providerType.equals(other.providerType)
                 && tiersMode.equals(other.tiersMode)
                 && usageType.equals(other.usageType);
     }
@@ -203,6 +214,7 @@ public final class CreateBillingPriceRequestBody {
                 this.priceExternalId,
                 this.priceTiers,
                 this.productExternalId,
+                this.providerType,
                 this.tiersMode,
                 this.usageType);
     }
@@ -217,7 +229,7 @@ public final class CreateBillingPriceRequestBody {
     }
 
     public interface BillingSchemeStage {
-        CurrencyStage billingScheme(@NotNull CreateBillingPriceRequestBodyBillingScheme billingScheme);
+        CurrencyStage billingScheme(@NotNull BillingPriceScheme billingScheme);
 
         Builder from(CreateBillingPriceRequestBody other);
     }
@@ -251,7 +263,7 @@ public final class CreateBillingPriceRequestBody {
     }
 
     public interface UsageTypeStage {
-        _FinalStage usageType(@NotNull CreateBillingPriceRequestBodyUsageType usageType);
+        _FinalStage usageType(@NotNull BillingPriceUsageType usageType);
     }
 
     public interface _FinalStage {
@@ -275,9 +287,13 @@ public final class CreateBillingPriceRequestBody {
 
         _FinalStage addAllPriceTiers(List<CreateBillingPriceTierRequestBody> priceTiers);
 
-        _FinalStage tiersMode(Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode);
+        _FinalStage providerType(Optional<BillingProviderType> providerType);
 
-        _FinalStage tiersMode(CreateBillingPriceRequestBodyTiersMode tiersMode);
+        _FinalStage providerType(BillingProviderType providerType);
+
+        _FinalStage tiersMode(Optional<BillingTiersMode> tiersMode);
+
+        _FinalStage tiersMode(BillingTiersMode tiersMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -292,7 +308,7 @@ public final class CreateBillingPriceRequestBody {
                     ProductExternalIdStage,
                     UsageTypeStage,
                     _FinalStage {
-        private CreateBillingPriceRequestBodyBillingScheme billingScheme;
+        private BillingPriceScheme billingScheme;
 
         private String currency;
 
@@ -308,9 +324,11 @@ public final class CreateBillingPriceRequestBody {
 
         private String productExternalId;
 
-        private CreateBillingPriceRequestBodyUsageType usageType;
+        private BillingPriceUsageType usageType;
 
-        private Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode = Optional.empty();
+        private Optional<BillingTiersMode> tiersMode = Optional.empty();
+
+        private Optional<BillingProviderType> providerType = Optional.empty();
 
         private List<CreateBillingPriceTierRequestBody> priceTiers = new ArrayList<>();
 
@@ -339,6 +357,7 @@ public final class CreateBillingPriceRequestBody {
             priceExternalId(other.getPriceExternalId());
             priceTiers(other.getPriceTiers());
             productExternalId(other.getProductExternalId());
+            providerType(other.getProviderType());
             tiersMode(other.getTiersMode());
             usageType(other.getUsageType());
             return this;
@@ -346,7 +365,7 @@ public final class CreateBillingPriceRequestBody {
 
         @java.lang.Override
         @JsonSetter("billing_scheme")
-        public CurrencyStage billingScheme(@NotNull CreateBillingPriceRequestBodyBillingScheme billingScheme) {
+        public CurrencyStage billingScheme(@NotNull BillingPriceScheme billingScheme) {
             this.billingScheme = Objects.requireNonNull(billingScheme, "billingScheme must not be null");
             return this;
         }
@@ -402,21 +421,34 @@ public final class CreateBillingPriceRequestBody {
 
         @java.lang.Override
         @JsonSetter("usage_type")
-        public _FinalStage usageType(@NotNull CreateBillingPriceRequestBodyUsageType usageType) {
+        public _FinalStage usageType(@NotNull BillingPriceUsageType usageType) {
             this.usageType = Objects.requireNonNull(usageType, "usageType must not be null");
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage tiersMode(CreateBillingPriceRequestBodyTiersMode tiersMode) {
+        public _FinalStage tiersMode(BillingTiersMode tiersMode) {
             this.tiersMode = Optional.ofNullable(tiersMode);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "tiers_mode", nulls = Nulls.SKIP)
-        public _FinalStage tiersMode(Optional<CreateBillingPriceRequestBodyTiersMode> tiersMode) {
+        public _FinalStage tiersMode(Optional<BillingTiersMode> tiersMode) {
             this.tiersMode = tiersMode;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public _FinalStage providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
             return this;
         }
 
@@ -498,6 +530,7 @@ public final class CreateBillingPriceRequestBody {
                     priceExternalId,
                     priceTiers,
                     productExternalId,
+                    providerType,
                     tiersMode,
                     usageType,
                     additionalProperties);

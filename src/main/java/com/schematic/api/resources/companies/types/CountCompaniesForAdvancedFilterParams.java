@@ -12,6 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.SortDirection;
+import com.schematic.api.types.SubscriptionStatus;
+import com.schematic.api.types.SubscriptionType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +44,11 @@ public final class CountCompaniesForAdvancedFilterParams {
 
     private final Optional<String> sortOrderColumn;
 
-    private final Optional<CountCompaniesForAdvancedFilterResponseParamsSortOrderDirection> sortOrderDirection;
+    private final Optional<SortDirection> sortOrderDirection;
 
-    private final Optional<List<String>> subscriptionStatuses;
+    private final Optional<List<SubscriptionStatus>> subscriptionStatuses;
 
-    private final Optional<List<String>> subscriptionTypes;
+    private final Optional<List<SubscriptionType>> subscriptionTypes;
 
     private final Optional<Boolean> withoutPlan;
 
@@ -64,9 +67,9 @@ public final class CountCompaniesForAdvancedFilterParams {
             Optional<List<String>> planIds,
             Optional<String> q,
             Optional<String> sortOrderColumn,
-            Optional<CountCompaniesForAdvancedFilterResponseParamsSortOrderDirection> sortOrderDirection,
-            Optional<List<String>> subscriptionStatuses,
-            Optional<List<String>> subscriptionTypes,
+            Optional<SortDirection> sortOrderDirection,
+            Optional<List<SubscriptionStatus>> subscriptionStatuses,
+            Optional<List<SubscriptionType>> subscriptionTypes,
             Optional<Boolean> withoutPlan,
             Optional<Boolean> withoutSubscription,
             Map<String, Object> additionalProperties) {
@@ -168,11 +171,8 @@ public final class CountCompaniesForAdvancedFilterParams {
         return sortOrderColumn;
     }
 
-    /**
-     * @return Direction to sort by (asc or desc)
-     */
     @JsonProperty("sort_order_direction")
-    public Optional<CountCompaniesForAdvancedFilterResponseParamsSortOrderDirection> getSortOrderDirection() {
+    public Optional<SortDirection> getSortOrderDirection() {
         return sortOrderDirection;
     }
 
@@ -180,7 +180,7 @@ public final class CountCompaniesForAdvancedFilterParams {
      * @return Filter companies by one or more subscription statuses (active, canceled, expired, incomplete, incomplete_expired, past_due, paused, trialing, unpaid)
      */
     @JsonProperty("subscription_statuses")
-    public Optional<List<String>> getSubscriptionStatuses() {
+    public Optional<List<SubscriptionStatus>> getSubscriptionStatuses() {
         return subscriptionStatuses;
     }
 
@@ -188,7 +188,7 @@ public final class CountCompaniesForAdvancedFilterParams {
      * @return Filter companies by one or more subscription types (paid, free, trial)
      */
     @JsonProperty("subscription_types")
-    public Optional<List<String>> getSubscriptionTypes() {
+    public Optional<List<SubscriptionType>> getSubscriptionTypes() {
         return subscriptionTypes;
     }
 
@@ -289,12 +289,11 @@ public final class CountCompaniesForAdvancedFilterParams {
 
         private Optional<String> sortOrderColumn = Optional.empty();
 
-        private Optional<CountCompaniesForAdvancedFilterResponseParamsSortOrderDirection> sortOrderDirection =
-                Optional.empty();
+        private Optional<SortDirection> sortOrderDirection = Optional.empty();
 
-        private Optional<List<String>> subscriptionStatuses = Optional.empty();
+        private Optional<List<SubscriptionStatus>> subscriptionStatuses = Optional.empty();
 
-        private Optional<List<String>> subscriptionTypes = Optional.empty();
+        private Optional<List<SubscriptionType>> subscriptionTypes = Optional.empty();
 
         private Optional<Boolean> withoutPlan = Optional.empty();
 
@@ -464,18 +463,13 @@ public final class CountCompaniesForAdvancedFilterParams {
             return this;
         }
 
-        /**
-         * <p>Direction to sort by (asc or desc)</p>
-         */
         @JsonSetter(value = "sort_order_direction", nulls = Nulls.SKIP)
-        public Builder sortOrderDirection(
-                Optional<CountCompaniesForAdvancedFilterResponseParamsSortOrderDirection> sortOrderDirection) {
+        public Builder sortOrderDirection(Optional<SortDirection> sortOrderDirection) {
             this.sortOrderDirection = sortOrderDirection;
             return this;
         }
 
-        public Builder sortOrderDirection(
-                CountCompaniesForAdvancedFilterResponseParamsSortOrderDirection sortOrderDirection) {
+        public Builder sortOrderDirection(SortDirection sortOrderDirection) {
             this.sortOrderDirection = Optional.ofNullable(sortOrderDirection);
             return this;
         }
@@ -484,12 +478,12 @@ public final class CountCompaniesForAdvancedFilterParams {
          * <p>Filter companies by one or more subscription statuses (active, canceled, expired, incomplete, incomplete_expired, past_due, paused, trialing, unpaid)</p>
          */
         @JsonSetter(value = "subscription_statuses", nulls = Nulls.SKIP)
-        public Builder subscriptionStatuses(Optional<List<String>> subscriptionStatuses) {
+        public Builder subscriptionStatuses(Optional<List<SubscriptionStatus>> subscriptionStatuses) {
             this.subscriptionStatuses = subscriptionStatuses;
             return this;
         }
 
-        public Builder subscriptionStatuses(List<String> subscriptionStatuses) {
+        public Builder subscriptionStatuses(List<SubscriptionStatus> subscriptionStatuses) {
             this.subscriptionStatuses = Optional.ofNullable(subscriptionStatuses);
             return this;
         }
@@ -498,12 +492,12 @@ public final class CountCompaniesForAdvancedFilterParams {
          * <p>Filter companies by one or more subscription types (paid, free, trial)</p>
          */
         @JsonSetter(value = "subscription_types", nulls = Nulls.SKIP)
-        public Builder subscriptionTypes(Optional<List<String>> subscriptionTypes) {
+        public Builder subscriptionTypes(Optional<List<SubscriptionType>> subscriptionTypes) {
             this.subscriptionTypes = subscriptionTypes;
             return this;
         }
 
-        public Builder subscriptionTypes(List<String> subscriptionTypes) {
+        public Builder subscriptionTypes(List<SubscriptionType> subscriptionTypes) {
             this.subscriptionTypes = Optional.ofNullable(subscriptionTypes);
             return this;
         }

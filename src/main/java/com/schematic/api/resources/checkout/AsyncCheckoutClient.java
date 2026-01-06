@@ -5,8 +5,10 @@ package com.schematic.api.resources.checkout;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.checkout.requests.CancelSubscriptionRequest;
 import com.schematic.api.resources.checkout.requests.CheckoutDataRequestBody;
 import com.schematic.api.resources.checkout.requests.UpdateTrialEndRequestBody;
+import com.schematic.api.resources.checkout.types.CancelSubscriptionResponse;
 import com.schematic.api.resources.checkout.types.CheckoutInternalResponse;
 import com.schematic.api.resources.checkout.types.GetCheckoutDataResponse;
 import com.schematic.api.resources.checkout.types.ManagePlanResponse;
@@ -77,6 +79,15 @@ public class AsyncCheckoutClient {
     public CompletableFuture<PreviewManagePlanResponse> previewManagePlan(
             ManagePlanRequest request, RequestOptions requestOptions) {
         return this.rawClient.previewManagePlan(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CancelSubscriptionResponse> cancelSubscription(CancelSubscriptionRequest request) {
+        return this.rawClient.cancelSubscription(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CancelSubscriptionResponse> cancelSubscription(
+            CancelSubscriptionRequest request, RequestOptions requestOptions) {
+        return this.rawClient.cancelSubscription(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<UpdateCustomerSubscriptionTrialEndResponse> updateCustomerSubscriptionTrialEnd(

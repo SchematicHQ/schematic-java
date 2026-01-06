@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateEventRequestBody {
     private final Optional<EventBody> body;
 
-    private final CreateEventRequestBodyEventType eventType;
+    private final EventType eventType;
 
     private final Optional<OffsetDateTime> sentAt;
 
@@ -32,7 +32,7 @@ public final class CreateEventRequestBody {
 
     private CreateEventRequestBody(
             Optional<EventBody> body,
-            CreateEventRequestBodyEventType eventType,
+            EventType eventType,
             Optional<OffsetDateTime> sentAt,
             Map<String, Object> additionalProperties) {
         this.body = body;
@@ -46,11 +46,8 @@ public final class CreateEventRequestBody {
         return body;
     }
 
-    /**
-     * @return Either 'identify' or 'track'
-     */
     @JsonProperty("event_type")
-    public CreateEventRequestBodyEventType getEventType() {
+    public EventType getEventType() {
         return eventType;
     }
 
@@ -92,10 +89,7 @@ public final class CreateEventRequestBody {
     }
 
     public interface EventTypeStage {
-        /**
-         * <p>Either 'identify' or 'track'</p>
-         */
-        _FinalStage eventType(@NotNull CreateEventRequestBodyEventType eventType);
+        _FinalStage eventType(@NotNull EventType eventType);
 
         Builder from(CreateEventRequestBody other);
     }
@@ -117,7 +111,7 @@ public final class CreateEventRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements EventTypeStage, _FinalStage {
-        private CreateEventRequestBodyEventType eventType;
+        private EventType eventType;
 
         private Optional<OffsetDateTime> sentAt = Optional.empty();
 
@@ -136,14 +130,9 @@ public final class CreateEventRequestBody {
             return this;
         }
 
-        /**
-         * <p>Either 'identify' or 'track'</p>
-         * <p>Either 'identify' or 'track'</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         @JsonSetter("event_type")
-        public _FinalStage eventType(@NotNull CreateEventRequestBodyEventType eventType) {
+        public _FinalStage eventType(@NotNull EventType eventType) {
             this.eventType = Objects.requireNonNull(eventType, "eventType must not be null");
             return this;
         }

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.resources.entitlements.types.CreateCompanyOverrideRequestBodyMetricPeriod;
 import com.schematic.api.resources.entitlements.types.CreateCompanyOverrideRequestBodyMetricPeriodMonthReset;
-import com.schematic.api.resources.entitlements.types.CreateCompanyOverrideRequestBodyValueType;
+import com.schematic.api.types.EntitlementValueType;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,7 @@ public final class CreateCompanyOverrideRequestBody {
 
     private final Optional<String> valueTraitId;
 
-    private final CreateCompanyOverrideRequestBodyValueType valueType;
+    private final EntitlementValueType valueType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -63,7 +63,7 @@ public final class CreateCompanyOverrideRequestBody {
             Optional<String> valueCreditId,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
-            CreateCompanyOverrideRequestBodyValueType valueType,
+            EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.creditConsumptionRate = creditConsumptionRate;
@@ -136,7 +136,7 @@ public final class CreateCompanyOverrideRequestBody {
     }
 
     @JsonProperty("value_type")
-    public CreateCompanyOverrideRequestBodyValueType getValueType() {
+    public EntitlementValueType getValueType() {
         return valueType;
     }
 
@@ -203,7 +203,7 @@ public final class CreateCompanyOverrideRequestBody {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(@NotNull CreateCompanyOverrideRequestBodyValueType valueType);
+        _FinalStage valueType(@NotNull EntitlementValueType valueType);
     }
 
     public interface _FinalStage {
@@ -254,7 +254,7 @@ public final class CreateCompanyOverrideRequestBody {
 
         private String featureId;
 
-        private CreateCompanyOverrideRequestBodyValueType valueType;
+        private EntitlementValueType valueType;
 
         private Optional<String> valueTraitId = Optional.empty();
 
@@ -313,7 +313,7 @@ public final class CreateCompanyOverrideRequestBody {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(@NotNull CreateCompanyOverrideRequestBodyValueType valueType) {
+        public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }

@@ -28,13 +28,13 @@ public final class WebhookEventResponseData {
 
     private final Optional<String> payload;
 
-    private final String requestType;
+    private final WebhookRequestType requestType;
 
     private final Optional<Integer> responseCode;
 
     private final Optional<OffsetDateTime> sentAt;
 
-    private final String status;
+    private final WebhookEventStatus status;
 
     private final OffsetDateTime updatedAt;
 
@@ -46,10 +46,10 @@ public final class WebhookEventResponseData {
             OffsetDateTime createdAt,
             String id,
             Optional<String> payload,
-            String requestType,
+            WebhookRequestType requestType,
             Optional<Integer> responseCode,
             Optional<OffsetDateTime> sentAt,
-            String status,
+            WebhookEventStatus status,
             OffsetDateTime updatedAt,
             String webhookId,
             Map<String, Object> additionalProperties) {
@@ -81,7 +81,7 @@ public final class WebhookEventResponseData {
     }
 
     @JsonProperty("request_type")
-    public String getRequestType() {
+    public WebhookRequestType getRequestType() {
         return requestType;
     }
 
@@ -96,7 +96,7 @@ public final class WebhookEventResponseData {
     }
 
     @JsonProperty("status")
-    public String getStatus() {
+    public WebhookEventStatus getStatus() {
         return status;
     }
 
@@ -167,11 +167,11 @@ public final class WebhookEventResponseData {
     }
 
     public interface RequestTypeStage {
-        StatusStage requestType(@NotNull String requestType);
+        StatusStage requestType(@NotNull WebhookRequestType requestType);
     }
 
     public interface StatusStage {
-        UpdatedAtStage status(@NotNull String status);
+        UpdatedAtStage status(@NotNull WebhookEventStatus status);
     }
 
     public interface UpdatedAtStage {
@@ -211,9 +211,9 @@ public final class WebhookEventResponseData {
 
         private String id;
 
-        private String requestType;
+        private WebhookRequestType requestType;
 
-        private String status;
+        private WebhookEventStatus status;
 
         private OffsetDateTime updatedAt;
 
@@ -260,14 +260,14 @@ public final class WebhookEventResponseData {
 
         @java.lang.Override
         @JsonSetter("request_type")
-        public StatusStage requestType(@NotNull String requestType) {
+        public StatusStage requestType(@NotNull WebhookRequestType requestType) {
             this.requestType = Objects.requireNonNull(requestType, "requestType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("status")
-        public UpdatedAtStage status(@NotNull String status) {
+        public UpdatedAtStage status(@NotNull WebhookEventStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }

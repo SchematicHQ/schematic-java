@@ -27,13 +27,15 @@ public final class BillingPriceResponseData {
 
     private final String id;
 
-    private final String interval;
+    private final BillingProductPriceInterval interval;
 
     private final int price;
 
     private final Optional<String> priceDecimal;
 
-    private final String scheme;
+    private final BillingProviderType providerType;
+
+    private final BillingPriceScheme scheme;
 
     private final Map<String, Object> additionalProperties;
 
@@ -41,10 +43,11 @@ public final class BillingPriceResponseData {
             String currency,
             String externalPriceId,
             String id,
-            String interval,
+            BillingProductPriceInterval interval,
             int price,
             Optional<String> priceDecimal,
-            String scheme,
+            BillingProviderType providerType,
+            BillingPriceScheme scheme,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.externalPriceId = externalPriceId;
@@ -52,6 +55,7 @@ public final class BillingPriceResponseData {
         this.interval = interval;
         this.price = price;
         this.priceDecimal = priceDecimal;
+        this.providerType = providerType;
         this.scheme = scheme;
         this.additionalProperties = additionalProperties;
     }
@@ -72,7 +76,7 @@ public final class BillingPriceResponseData {
     }
 
     @JsonProperty("interval")
-    public String getInterval() {
+    public BillingProductPriceInterval getInterval() {
         return interval;
     }
 
@@ -86,8 +90,13 @@ public final class BillingPriceResponseData {
         return priceDecimal;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("scheme")
-    public String getScheme() {
+    public BillingPriceScheme getScheme() {
         return scheme;
     }
 
@@ -109,6 +118,7 @@ public final class BillingPriceResponseData {
                 && interval.equals(other.interval)
                 && price == other.price
                 && priceDecimal.equals(other.priceDecimal)
+                && providerType.equals(other.providerType)
                 && scheme.equals(other.scheme);
     }
 
@@ -121,6 +131,7 @@ public final class BillingPriceResponseData {
                 this.interval,
                 this.price,
                 this.priceDecimal,
+                this.providerType,
                 this.scheme);
     }
 
@@ -148,15 +159,19 @@ public final class BillingPriceResponseData {
     }
 
     public interface IntervalStage {
-        PriceStage interval(@NotNull String interval);
+        PriceStage interval(@NotNull BillingProductPriceInterval interval);
     }
 
     public interface PriceStage {
-        SchemeStage price(int price);
+        ProviderTypeStage price(int price);
+    }
+
+    public interface ProviderTypeStage {
+        SchemeStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface SchemeStage {
-        _FinalStage scheme(@NotNull String scheme);
+        _FinalStage scheme(@NotNull BillingPriceScheme scheme);
     }
 
     public interface _FinalStage {
@@ -174,6 +189,7 @@ public final class BillingPriceResponseData {
                     IdStage,
                     IntervalStage,
                     PriceStage,
+                    ProviderTypeStage,
                     SchemeStage,
                     _FinalStage {
         private String currency;
@@ -182,11 +198,13 @@ public final class BillingPriceResponseData {
 
         private String id;
 
-        private String interval;
+        private BillingProductPriceInterval interval;
 
         private int price;
 
-        private String scheme;
+        private BillingProviderType providerType;
+
+        private BillingPriceScheme scheme;
 
         private Optional<String> priceDecimal = Optional.empty();
 
@@ -203,6 +221,7 @@ public final class BillingPriceResponseData {
             interval(other.getInterval());
             price(other.getPrice());
             priceDecimal(other.getPriceDecimal());
+            providerType(other.getProviderType());
             scheme(other.getScheme());
             return this;
         }
@@ -230,21 +249,28 @@ public final class BillingPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public PriceStage interval(@NotNull String interval) {
+        public PriceStage interval(@NotNull BillingProductPriceInterval interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("price")
-        public SchemeStage price(int price) {
+        public ProviderTypeStage price(int price) {
             this.price = price;
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("provider_type")
+        public SchemeStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("scheme")
-        public _FinalStage scheme(@NotNull String scheme) {
+        public _FinalStage scheme(@NotNull BillingPriceScheme scheme) {
             this.scheme = Objects.requireNonNull(scheme, "scheme must not be null");
             return this;
         }
@@ -265,7 +291,15 @@ public final class BillingPriceResponseData {
         @java.lang.Override
         public BillingPriceResponseData build() {
             return new BillingPriceResponseData(
-                    currency, externalPriceId, id, interval, price, priceDecimal, scheme, additionalProperties);
+                    currency,
+                    externalPriceId,
+                    id,
+                    interval,
+                    price,
+                    priceDecimal,
+                    providerType,
+                    scheme,
+                    additionalProperties);
         }
     }
 }
