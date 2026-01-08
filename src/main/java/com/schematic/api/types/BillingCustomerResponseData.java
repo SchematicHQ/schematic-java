@@ -30,11 +30,11 @@ public final class BillingCustomerResponseData {
 
     private final String externalId;
 
-    private final boolean failedToImport;
-
     private final String id;
 
     private final String name;
+
+    private final BillingProviderType providerType;
 
     private final OffsetDateTime updatedAt;
 
@@ -45,18 +45,18 @@ public final class BillingCustomerResponseData {
             Optional<OffsetDateTime> deletedAt,
             String email,
             String externalId,
-            boolean failedToImport,
             String id,
             String name,
+            BillingProviderType providerType,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.deletedAt = deletedAt;
         this.email = email;
         this.externalId = externalId;
-        this.failedToImport = failedToImport;
         this.id = id;
         this.name = name;
+        this.providerType = providerType;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -81,11 +81,6 @@ public final class BillingCustomerResponseData {
         return externalId;
     }
 
-    @JsonProperty("failed_to_import")
-    public boolean getFailedToImport() {
-        return failedToImport;
-    }
-
     @JsonProperty("id")
     public String getId() {
         return id;
@@ -94,6 +89,11 @@ public final class BillingCustomerResponseData {
     @JsonProperty("name")
     public String getName() {
         return name;
+    }
+
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
     }
 
     @JsonProperty("updated_at")
@@ -117,9 +117,9 @@ public final class BillingCustomerResponseData {
                 && deletedAt.equals(other.deletedAt)
                 && email.equals(other.email)
                 && externalId.equals(other.externalId)
-                && failedToImport == other.failedToImport
                 && id.equals(other.id)
                 && name.equals(other.name)
+                && providerType.equals(other.providerType)
                 && updatedAt.equals(other.updatedAt);
     }
 
@@ -130,9 +130,9 @@ public final class BillingCustomerResponseData {
                 this.deletedAt,
                 this.email,
                 this.externalId,
-                this.failedToImport,
                 this.id,
                 this.name,
+                this.providerType,
                 this.updatedAt);
     }
 
@@ -152,11 +152,7 @@ public final class BillingCustomerResponseData {
     }
 
     public interface ExternalIdStage {
-        FailedToImportStage externalId(@NotNull String externalId);
-    }
-
-    public interface FailedToImportStage {
-        IdStage failedToImport(boolean failedToImport);
+        IdStage externalId(@NotNull String externalId);
     }
 
     public interface IdStage {
@@ -164,7 +160,11 @@ public final class BillingCustomerResponseData {
     }
 
     public interface NameStage {
-        UpdatedAtStage name(@NotNull String name);
+        ProviderTypeStage name(@NotNull String name);
+    }
+
+    public interface ProviderTypeStage {
+        UpdatedAtStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface UpdatedAtStage {
@@ -185,22 +185,16 @@ public final class BillingCustomerResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements EmailStage,
-                    ExternalIdStage,
-                    FailedToImportStage,
-                    IdStage,
-                    NameStage,
-                    UpdatedAtStage,
-                    _FinalStage {
+            implements EmailStage, ExternalIdStage, IdStage, NameStage, ProviderTypeStage, UpdatedAtStage, _FinalStage {
         private String email;
 
         private String externalId;
 
-        private boolean failedToImport;
-
         private String id;
 
         private String name;
+
+        private BillingProviderType providerType;
 
         private OffsetDateTime updatedAt;
 
@@ -219,9 +213,9 @@ public final class BillingCustomerResponseData {
             deletedAt(other.getDeletedAt());
             email(other.getEmail());
             externalId(other.getExternalId());
-            failedToImport(other.getFailedToImport());
             id(other.getId());
             name(other.getName());
+            providerType(other.getProviderType());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -235,15 +229,8 @@ public final class BillingCustomerResponseData {
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public FailedToImportStage externalId(@NotNull String externalId) {
+        public IdStage externalId(@NotNull String externalId) {
             this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("failed_to_import")
-        public IdStage failedToImport(boolean failedToImport) {
-            this.failedToImport = failedToImport;
             return this;
         }
 
@@ -256,8 +243,15 @@ public final class BillingCustomerResponseData {
 
         @java.lang.Override
         @JsonSetter("name")
-        public UpdatedAtStage name(@NotNull String name) {
+        public ProviderTypeStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public UpdatedAtStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -297,7 +291,7 @@ public final class BillingCustomerResponseData {
         @java.lang.Override
         public BillingCustomerResponseData build() {
             return new BillingCustomerResponseData(
-                    companyId, deletedAt, email, externalId, failedToImport, id, name, updatedAt, additionalProperties);
+                    companyId, deletedAt, email, externalId, id, name, providerType, updatedAt, additionalProperties);
         }
     }
 }

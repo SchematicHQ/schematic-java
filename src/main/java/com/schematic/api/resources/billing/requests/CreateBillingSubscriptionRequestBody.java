@@ -13,9 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.billing.types.CreateBillingSubscriptionRequestBodyTrialEndSetting;
 import com.schematic.api.types.BillingProductPricing;
 import com.schematic.api.types.BillingSubscriptionDiscount;
+import com.schematic.api.types.BillingSubscriptionTrialEndSetting;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingSubscriptionRequestBody.Builder.class)
 public final class CreateBillingSubscriptionRequestBody {
+    private final Optional<String> applicationId;
+
     private final Optional<Integer> cancelAt;
 
     private final boolean cancelAtPeriodEnd;
@@ -62,11 +64,12 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private final Optional<Integer> trialEnd;
 
-    private final Optional<CreateBillingSubscriptionRequestBodyTrialEndSetting> trialEndSetting;
+    private final Optional<BillingSubscriptionTrialEndSetting> trialEndSetting;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingSubscriptionRequestBody(
+            Optional<String> applicationId,
             Optional<Integer> cancelAt,
             boolean cancelAtPeriodEnd,
             String currency,
@@ -84,8 +87,9 @@ public final class CreateBillingSubscriptionRequestBody {
             String subscriptionExternalId,
             int totalPrice,
             Optional<Integer> trialEnd,
-            Optional<CreateBillingSubscriptionRequestBodyTrialEndSetting> trialEndSetting,
+            Optional<BillingSubscriptionTrialEndSetting> trialEndSetting,
             Map<String, Object> additionalProperties) {
+        this.applicationId = applicationId;
         this.cancelAt = cancelAt;
         this.cancelAtPeriodEnd = cancelAtPeriodEnd;
         this.currency = currency;
@@ -105,6 +109,11 @@ public final class CreateBillingSubscriptionRequestBody {
         this.trialEnd = trialEnd;
         this.trialEndSetting = trialEndSetting;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("application_id")
+    public Optional<String> getApplicationId() {
+        return applicationId;
     }
 
     @JsonProperty("cancel_at")
@@ -193,7 +202,7 @@ public final class CreateBillingSubscriptionRequestBody {
     }
 
     @JsonProperty("trial_end_setting")
-    public Optional<CreateBillingSubscriptionRequestBodyTrialEndSetting> getTrialEndSetting() {
+    public Optional<BillingSubscriptionTrialEndSetting> getTrialEndSetting() {
         return trialEndSetting;
     }
 
@@ -210,7 +219,8 @@ public final class CreateBillingSubscriptionRequestBody {
     }
 
     private boolean equalTo(CreateBillingSubscriptionRequestBody other) {
-        return cancelAt.equals(other.cancelAt)
+        return applicationId.equals(other.applicationId)
+                && cancelAt.equals(other.cancelAt)
                 && cancelAtPeriodEnd == other.cancelAtPeriodEnd
                 && currency.equals(other.currency)
                 && customerExternalId.equals(other.customerExternalId)
@@ -233,6 +243,7 @@ public final class CreateBillingSubscriptionRequestBody {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.applicationId,
                 this.cancelAt,
                 this.cancelAtPeriodEnd,
                 this.currency,
@@ -291,6 +302,10 @@ public final class CreateBillingSubscriptionRequestBody {
     public interface _FinalStage {
         CreateBillingSubscriptionRequestBody build();
 
+        _FinalStage applicationId(Optional<String> applicationId);
+
+        _FinalStage applicationId(String applicationId);
+
         _FinalStage cancelAt(Optional<Integer> cancelAt);
 
         _FinalStage cancelAt(Integer cancelAt);
@@ -339,9 +354,9 @@ public final class CreateBillingSubscriptionRequestBody {
 
         _FinalStage trialEnd(Integer trialEnd);
 
-        _FinalStage trialEndSetting(Optional<CreateBillingSubscriptionRequestBodyTrialEndSetting> trialEndSetting);
+        _FinalStage trialEndSetting(Optional<BillingSubscriptionTrialEndSetting> trialEndSetting);
 
-        _FinalStage trialEndSetting(CreateBillingSubscriptionRequestBodyTrialEndSetting trialEndSetting);
+        _FinalStage trialEndSetting(BillingSubscriptionTrialEndSetting trialEndSetting);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -365,7 +380,7 @@ public final class CreateBillingSubscriptionRequestBody {
 
         private int totalPrice;
 
-        private Optional<CreateBillingSubscriptionRequestBodyTrialEndSetting> trialEndSetting = Optional.empty();
+        private Optional<BillingSubscriptionTrialEndSetting> trialEndSetting = Optional.empty();
 
         private Optional<Integer> trialEnd = Optional.empty();
 
@@ -389,6 +404,8 @@ public final class CreateBillingSubscriptionRequestBody {
 
         private Optional<Integer> cancelAt = Optional.empty();
 
+        private Optional<String> applicationId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -396,6 +413,7 @@ public final class CreateBillingSubscriptionRequestBody {
 
         @java.lang.Override
         public Builder from(CreateBillingSubscriptionRequestBody other) {
+            applicationId(other.getApplicationId());
             cancelAt(other.getCancelAt());
             cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
             currency(other.getCurrency());
@@ -461,15 +479,14 @@ public final class CreateBillingSubscriptionRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage trialEndSetting(CreateBillingSubscriptionRequestBodyTrialEndSetting trialEndSetting) {
+        public _FinalStage trialEndSetting(BillingSubscriptionTrialEndSetting trialEndSetting) {
             this.trialEndSetting = Optional.ofNullable(trialEndSetting);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trial_end_setting", nulls = Nulls.SKIP)
-        public _FinalStage trialEndSetting(
-                Optional<CreateBillingSubscriptionRequestBodyTrialEndSetting> trialEndSetting) {
+        public _FinalStage trialEndSetting(Optional<BillingSubscriptionTrialEndSetting> trialEndSetting) {
             this.trialEndSetting = trialEndSetting;
             return this;
         }
@@ -640,8 +657,22 @@ public final class CreateBillingSubscriptionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage applicationId(String applicationId) {
+            this.applicationId = Optional.ofNullable(applicationId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "application_id", nulls = Nulls.SKIP)
+        public _FinalStage applicationId(Optional<String> applicationId) {
+            this.applicationId = applicationId;
+            return this;
+        }
+
+        @java.lang.Override
         public CreateBillingSubscriptionRequestBody build() {
             return new CreateBillingSubscriptionRequestBody(
+                    applicationId,
                     cancelAt,
                     cancelAtPeriodEnd,
                     currency,

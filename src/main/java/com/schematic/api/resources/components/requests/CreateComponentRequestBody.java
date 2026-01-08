@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.components.types.CreateComponentRequestBodyEntityType;
+import com.schematic.api.types.ComponentEntityType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateComponentRequestBody {
     private final Optional<Map<String, Double>> ast;
 
-    private final CreateComponentRequestBodyEntityType entityType;
+    private final ComponentEntityType entityType;
 
     private final String name;
 
@@ -32,7 +32,7 @@ public final class CreateComponentRequestBody {
 
     private CreateComponentRequestBody(
             Optional<Map<String, Double>> ast,
-            CreateComponentRequestBodyEntityType entityType,
+            ComponentEntityType entityType,
             String name,
             Map<String, Object> additionalProperties) {
         this.ast = ast;
@@ -47,7 +47,7 @@ public final class CreateComponentRequestBody {
     }
 
     @JsonProperty("entity_type")
-    public CreateComponentRequestBodyEntityType getEntityType() {
+    public ComponentEntityType getEntityType() {
         return entityType;
     }
 
@@ -86,7 +86,7 @@ public final class CreateComponentRequestBody {
     }
 
     public interface EntityTypeStage {
-        NameStage entityType(@NotNull CreateComponentRequestBodyEntityType entityType);
+        NameStage entityType(@NotNull ComponentEntityType entityType);
 
         Builder from(CreateComponentRequestBody other);
     }
@@ -105,7 +105,7 @@ public final class CreateComponentRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements EntityTypeStage, NameStage, _FinalStage {
-        private CreateComponentRequestBodyEntityType entityType;
+        private ComponentEntityType entityType;
 
         private String name;
 
@@ -126,7 +126,7 @@ public final class CreateComponentRequestBody {
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public NameStage entityType(@NotNull CreateComponentRequestBodyEntityType entityType) {
+        public NameStage entityType(@NotNull ComponentEntityType entityType) {
             this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }

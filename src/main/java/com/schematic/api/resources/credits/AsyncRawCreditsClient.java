@@ -20,6 +20,7 @@ import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrantsRequest;
+import com.schematic.api.resources.credits.requests.CountCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.CountCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBody;
@@ -40,6 +41,7 @@ import com.schematic.api.resources.credits.requests.ZeroOutGrantRequestBody;
 import com.schematic.api.resources.credits.types.CountBillingCreditsGrantsResponse;
 import com.schematic.api.resources.credits.types.CountBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsResponse;
+import com.schematic.api.resources.credits.types.CountCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.CountCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.CreateBillingCreditResponse;
@@ -1343,6 +1345,112 @@ public class AsyncRawCreditsClient {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBody.string(), GrantBillingCreditsToCompanyResponse.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountCompanyGrantsResponse>> countCompanyGrants() {
+        return countCompanyGrants(CountCompanyGrantsRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountCompanyGrantsResponse>> countCompanyGrants(
+            CountCompanyGrantsRequest request) {
+        return countCompanyGrants(request, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountCompanyGrantsResponse>> countCompanyGrants(
+            CountCompanyGrantsRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/credits/grants/company/count");
+        if (request.getCompanyId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "company_id", request.getCompanyId().get(), false);
+        }
+        if (request.getOrder().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "order", request.getOrder().get(), false);
+        }
+        if (request.getDir().isPresent()) {
+            QueryStringMapper.addQueryParameter(httpUrl, "dir", request.getDir().get(), false);
+        }
+        if (request.getLimit().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "limit", request.getLimit().get(), false);
+        }
+        if (request.getOffset().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "offset", request.getOffset().get(), false);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<BaseSchematicHttpResponse<CountCompanyGrantsResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBody.string(), CountCompanyGrantsResponse.class),
                                 response));
                         return;
                     }

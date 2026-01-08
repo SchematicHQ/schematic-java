@@ -8,6 +8,7 @@ import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrantsRequest;
+import com.schematic.api.resources.credits.requests.CountCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.CountCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBody;
@@ -28,6 +29,7 @@ import com.schematic.api.resources.credits.requests.ZeroOutGrantRequestBody;
 import com.schematic.api.resources.credits.types.CountBillingCreditsGrantsResponse;
 import com.schematic.api.resources.credits.types.CountBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsResponse;
+import com.schematic.api.resources.credits.types.CountCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.CountCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.CreateBillingCreditResponse;
@@ -214,6 +216,19 @@ public class CreditsClient {
         return this.rawClient
                 .grantBillingCreditsToCompany(request, requestOptions)
                 .body();
+    }
+
+    public CountCompanyGrantsResponse countCompanyGrants() {
+        return this.rawClient.countCompanyGrants().body();
+    }
+
+    public CountCompanyGrantsResponse countCompanyGrants(CountCompanyGrantsRequest request) {
+        return this.rawClient.countCompanyGrants(request).body();
+    }
+
+    public CountCompanyGrantsResponse countCompanyGrants(
+            CountCompanyGrantsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countCompanyGrants(request, requestOptions).body();
     }
 
     public ListCompanyGrantsResponse listCompanyGrants() {

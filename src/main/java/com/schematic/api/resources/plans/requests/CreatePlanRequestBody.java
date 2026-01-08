@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.plans.types.CreatePlanRequestBodyPlanType;
+import com.schematic.api.types.PlanType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +28,7 @@ public final class CreatePlanRequestBody {
 
     private final String name;
 
-    private final CreatePlanRequestBodyPlanType planType;
+    private final PlanType planType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -36,7 +36,7 @@ public final class CreatePlanRequestBody {
             String description,
             Optional<String> icon,
             String name,
-            CreatePlanRequestBodyPlanType planType,
+            PlanType planType,
             Map<String, Object> additionalProperties) {
         this.description = description;
         this.icon = icon;
@@ -61,7 +61,7 @@ public final class CreatePlanRequestBody {
     }
 
     @JsonProperty("plan_type")
-    public CreatePlanRequestBodyPlanType getPlanType() {
+    public PlanType getPlanType() {
         return planType;
     }
 
@@ -108,7 +108,7 @@ public final class CreatePlanRequestBody {
     }
 
     public interface PlanTypeStage {
-        _FinalStage planType(@NotNull CreatePlanRequestBodyPlanType planType);
+        _FinalStage planType(@NotNull PlanType planType);
     }
 
     public interface _FinalStage {
@@ -125,7 +125,7 @@ public final class CreatePlanRequestBody {
 
         private String name;
 
-        private CreatePlanRequestBodyPlanType planType;
+        private PlanType planType;
 
         private Optional<String> icon = Optional.empty();
 
@@ -159,7 +159,7 @@ public final class CreatePlanRequestBody {
 
         @java.lang.Override
         @JsonSetter("plan_type")
-        public _FinalStage planType(@NotNull CreatePlanRequestBodyPlanType planType) {
+        public _FinalStage planType(@NotNull PlanType planType) {
             this.planType = Objects.requireNonNull(planType, "planType must not be null");
             return this;
         }

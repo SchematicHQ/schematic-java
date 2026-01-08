@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.companies.types.CountEntityTraitDefinitionsRequestEntityType;
-import com.schematic.api.resources.companies.types.CountEntityTraitDefinitionsRequestTraitType;
+import com.schematic.api.types.EntityType;
+import com.schematic.api.types.TraitType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -26,11 +26,13 @@ import java.util.Optional;
 public final class CountEntityTraitDefinitionsRequest {
     private final Optional<List<String>> ids;
 
-    private final Optional<CountEntityTraitDefinitionsRequestEntityType> entityType;
+    private final Optional<List<TraitType>> traitTypes;
+
+    private final Optional<EntityType> entityType;
 
     private final Optional<String> q;
 
-    private final Optional<CountEntityTraitDefinitionsRequestTraitType> traitType;
+    private final Optional<TraitType> traitType;
 
     private final Optional<Integer> limit;
 
@@ -40,13 +42,15 @@ public final class CountEntityTraitDefinitionsRequest {
 
     private CountEntityTraitDefinitionsRequest(
             Optional<List<String>> ids,
-            Optional<CountEntityTraitDefinitionsRequestEntityType> entityType,
+            Optional<List<TraitType>> traitTypes,
+            Optional<EntityType> entityType,
             Optional<String> q,
-            Optional<CountEntityTraitDefinitionsRequestTraitType> traitType,
+            Optional<TraitType> traitType,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
+        this.traitTypes = traitTypes;
         this.entityType = entityType;
         this.q = q;
         this.traitType = traitType;
@@ -60,8 +64,13 @@ public final class CountEntityTraitDefinitionsRequest {
         return ids;
     }
 
+    @JsonProperty("trait_types")
+    public Optional<List<TraitType>> getTraitTypes() {
+        return traitTypes;
+    }
+
     @JsonProperty("entity_type")
-    public Optional<CountEntityTraitDefinitionsRequestEntityType> getEntityType() {
+    public Optional<EntityType> getEntityType() {
         return entityType;
     }
 
@@ -71,7 +80,7 @@ public final class CountEntityTraitDefinitionsRequest {
     }
 
     @JsonProperty("trait_type")
-    public Optional<CountEntityTraitDefinitionsRequestTraitType> getTraitType() {
+    public Optional<TraitType> getTraitType() {
         return traitType;
     }
 
@@ -105,6 +114,7 @@ public final class CountEntityTraitDefinitionsRequest {
 
     private boolean equalTo(CountEntityTraitDefinitionsRequest other) {
         return ids.equals(other.ids)
+                && traitTypes.equals(other.traitTypes)
                 && entityType.equals(other.entityType)
                 && q.equals(other.q)
                 && traitType.equals(other.traitType)
@@ -114,7 +124,8 @@ public final class CountEntityTraitDefinitionsRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.ids, this.entityType, this.q, this.traitType, this.limit, this.offset);
+        return Objects.hash(
+                this.ids, this.traitTypes, this.entityType, this.q, this.traitType, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -130,11 +141,13 @@ public final class CountEntityTraitDefinitionsRequest {
     public static final class Builder {
         private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<CountEntityTraitDefinitionsRequestEntityType> entityType = Optional.empty();
+        private Optional<List<TraitType>> traitTypes = Optional.empty();
+
+        private Optional<EntityType> entityType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
-        private Optional<CountEntityTraitDefinitionsRequestTraitType> traitType = Optional.empty();
+        private Optional<TraitType> traitType = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
@@ -147,6 +160,7 @@ public final class CountEntityTraitDefinitionsRequest {
 
         public Builder from(CountEntityTraitDefinitionsRequest other) {
             ids(other.getIds());
+            traitTypes(other.getTraitTypes());
             entityType(other.getEntityType());
             q(other.getQ());
             traitType(other.getTraitType());
@@ -171,13 +185,29 @@ public final class CountEntityTraitDefinitionsRequest {
             return this;
         }
 
+        @JsonSetter(value = "trait_types", nulls = Nulls.SKIP)
+        public Builder traitTypes(Optional<List<TraitType>> traitTypes) {
+            this.traitTypes = traitTypes;
+            return this;
+        }
+
+        public Builder traitTypes(List<TraitType> traitTypes) {
+            this.traitTypes = Optional.ofNullable(traitTypes);
+            return this;
+        }
+
+        public Builder traitTypes(TraitType traitTypes) {
+            this.traitTypes = Optional.of(Collections.singletonList(traitTypes));
+            return this;
+        }
+
         @JsonSetter(value = "entity_type", nulls = Nulls.SKIP)
-        public Builder entityType(Optional<CountEntityTraitDefinitionsRequestEntityType> entityType) {
+        public Builder entityType(Optional<EntityType> entityType) {
             this.entityType = entityType;
             return this;
         }
 
-        public Builder entityType(CountEntityTraitDefinitionsRequestEntityType entityType) {
+        public Builder entityType(EntityType entityType) {
             this.entityType = Optional.ofNullable(entityType);
             return this;
         }
@@ -194,12 +224,12 @@ public final class CountEntityTraitDefinitionsRequest {
         }
 
         @JsonSetter(value = "trait_type", nulls = Nulls.SKIP)
-        public Builder traitType(Optional<CountEntityTraitDefinitionsRequestTraitType> traitType) {
+        public Builder traitType(Optional<TraitType> traitType) {
             this.traitType = traitType;
             return this;
         }
 
-        public Builder traitType(CountEntityTraitDefinitionsRequestTraitType traitType) {
+        public Builder traitType(TraitType traitType) {
             this.traitType = Optional.ofNullable(traitType);
             return this;
         }
@@ -234,7 +264,7 @@ public final class CountEntityTraitDefinitionsRequest {
 
         public CountEntityTraitDefinitionsRequest build() {
             return new CountEntityTraitDefinitionsRequest(
-                    ids, entityType, q, traitType, limit, offset, additionalProperties);
+                    ids, traitTypes, entityType, q, traitType, limit, offset, additionalProperties);
         }
     }
 }

@@ -25,8 +25,8 @@ import com.schematic.api.resources.companies.requests.CountPlanTraitsRequest;
 import com.schematic.api.resources.companies.requests.CountUsersRequest;
 import com.schematic.api.resources.companies.requests.CreateEntityTraitDefinitionRequestBody;
 import com.schematic.api.resources.companies.requests.CreatePlanTraitRequestBody;
+import com.schematic.api.resources.companies.requests.DeleteCompanyRequest;
 import com.schematic.api.resources.companies.requests.GetActiveCompanySubscriptionRequest;
-import com.schematic.api.resources.companies.requests.GetActiveDealsRequest;
 import com.schematic.api.resources.companies.requests.GetEntityTraitValuesRequest;
 import com.schematic.api.resources.companies.requests.GetOrCreateCompanyMembershipRequestBody;
 import com.schematic.api.resources.companies.requests.ListCompaniesForAdvancedFilterRequest;
@@ -58,7 +58,6 @@ import com.schematic.api.resources.companies.types.DeletePlanTraitResponse;
 import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
-import com.schematic.api.resources.companies.types.GetActiveDealsResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitValuesResponse;
@@ -323,22 +322,37 @@ public class RawCompaniesClient {
     }
 
     public BaseSchematicHttpResponse<DeleteCompanyResponse> deleteCompany(String companyId) {
-        return deleteCompany(companyId, null);
+        return deleteCompany(companyId, DeleteCompanyRequest.builder().build());
     }
 
     public BaseSchematicHttpResponse<DeleteCompanyResponse> deleteCompany(
-            String companyId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+            String companyId, DeleteCompanyRequest request) {
+        return deleteCompany(companyId, request, null);
+    }
+
+    public BaseSchematicHttpResponse<DeleteCompanyResponse> deleteCompany(
+            String companyId, DeleteCompanyRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("companies")
-                .addPathSegment(companyId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .addPathSegment(companyId);
+        if (request.getCancelSubscription().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "cancel_subscription",
+                    request.getCancelSubscription().get(),
+                    false);
+        }
+        if (request.getProrate().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "prorate", request.getProrate().get(), false);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json")
-                .build();
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
@@ -949,74 +963,6 @@ public class RawCompaniesClient {
         }
     }
 
-    public BaseSchematicHttpResponse<GetActiveDealsResponse> getActiveDeals(GetActiveDealsRequest request) {
-        return getActiveDeals(request, null);
-    }
-
-    public BaseSchematicHttpResponse<GetActiveDealsResponse> getActiveDeals(
-            GetActiveDealsRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("company-crm-deals");
-        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
-        QueryStringMapper.addQueryParameter(httpUrl, "deal_stage", request.getDealStage(), false);
-        if (request.getLimit().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "limit", request.getLimit().get(), false);
-        }
-        if (request.getOffset().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "offset", request.getOffset().get(), false);
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetActiveDealsResponse.class),
-                        response);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
-                    case 500:
-                        throw new InternalServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
-        } catch (IOException e) {
-            throw new BaseSchematicException("Network error executing HTTP request", e);
-        }
-    }
-
     public BaseSchematicHttpResponse<ListCompanyMembershipsResponse> listCompanyMemberships() {
         return listCompanyMemberships(ListCompanyMembershipsRequest.builder().build());
     }
@@ -1579,6 +1525,10 @@ public class RawCompaniesClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (request.getTraitTypes().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "trait_types", request.getTraitTypes().get(), true);
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1865,6 +1815,10 @@ public class RawCompaniesClient {
         }
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
+        }
+        if (request.getTraitTypes().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "trait_types", request.getTraitTypes().get(), true);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())

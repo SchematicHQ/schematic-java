@@ -30,9 +30,9 @@ public final class ComponentResponseData {
 
     private final String name;
 
-    private final String state;
+    private final ComponentState state;
 
-    private final String type;
+    private final ComponentEntityType type;
 
     private final OffsetDateTime updatedAt;
 
@@ -43,8 +43,8 @@ public final class ComponentResponseData {
             OffsetDateTime createdAt,
             String id,
             String name,
-            String state,
-            String type,
+            ComponentState state,
+            ComponentEntityType type,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.ast = ast;
@@ -78,12 +78,12 @@ public final class ComponentResponseData {
     }
 
     @JsonProperty("state")
-    public String getState() {
+    public ComponentState getState() {
         return state;
     }
 
     @JsonProperty("type")
-    public String getType() {
+    public ComponentEntityType getType() {
         return type;
     }
 
@@ -142,11 +142,11 @@ public final class ComponentResponseData {
     }
 
     public interface StateStage {
-        TypeStage state(@NotNull String state);
+        TypeStage state(@NotNull ComponentState state);
     }
 
     public interface TypeStage {
-        UpdatedAtStage type(@NotNull String type);
+        UpdatedAtStage type(@NotNull ComponentEntityType type);
     }
 
     public interface UpdatedAtStage {
@@ -170,9 +170,9 @@ public final class ComponentResponseData {
 
         private String name;
 
-        private String state;
+        private ComponentState state;
 
-        private String type;
+        private ComponentEntityType type;
 
         private OffsetDateTime updatedAt;
 
@@ -218,14 +218,14 @@ public final class ComponentResponseData {
 
         @java.lang.Override
         @JsonSetter("state")
-        public TypeStage state(@NotNull String state) {
+        public TypeStage state(@NotNull ComponentState state) {
             this.state = Objects.requireNonNull(state, "state must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("type")
-        public UpdatedAtStage type(@NotNull String type) {
+        public UpdatedAtStage type(@NotNull ComponentEntityType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }

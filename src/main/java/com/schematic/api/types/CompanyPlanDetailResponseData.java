@@ -28,7 +28,7 @@ public final class CompanyPlanDetailResponseData {
 
     private final Optional<BillingProductDetailResponseData> billingProduct;
 
-    private final String chargeType;
+    private final ChargeType chargeType;
 
     private final boolean companyCanTrial;
 
@@ -36,7 +36,7 @@ public final class CompanyPlanDetailResponseData {
 
     private final List<String> compatiblePlanIds;
 
-    private final String controlledBy;
+    private final PlanControlledByType controlledBy;
 
     private final OffsetDateTime createdAt;
 
@@ -58,6 +58,8 @@ public final class CompanyPlanDetailResponseData {
 
     private final List<PlanCreditGrantView> includedCreditGrants;
 
+    private final Optional<CompanyPlanInvalidReason> invalidReason;
+
     private final boolean isCustom;
 
     private final boolean isDefault;
@@ -72,7 +74,7 @@ public final class CompanyPlanDetailResponseData {
 
     private final Optional<BillingPriceResponseData> oneTimePrice;
 
-    private final String planType;
+    private final PlanType planType;
 
     private final Optional<Integer> trialDays;
 
@@ -89,11 +91,11 @@ public final class CompanyPlanDetailResponseData {
     private CompanyPlanDetailResponseData(
             Optional<String> audienceType,
             Optional<BillingProductDetailResponseData> billingProduct,
-            String chargeType,
+            ChargeType chargeType,
             boolean companyCanTrial,
             int companyCount,
             List<String> compatiblePlanIds,
-            String controlledBy,
+            PlanControlledByType controlledBy,
             OffsetDateTime createdAt,
             boolean current,
             boolean custom,
@@ -104,6 +106,7 @@ public final class CompanyPlanDetailResponseData {
             String icon,
             String id,
             List<PlanCreditGrantView> includedCreditGrants,
+            Optional<CompanyPlanInvalidReason> invalidReason,
             boolean isCustom,
             boolean isDefault,
             boolean isFree,
@@ -111,7 +114,7 @@ public final class CompanyPlanDetailResponseData {
             Optional<BillingPriceResponseData> monthlyPrice,
             String name,
             Optional<BillingPriceResponseData> oneTimePrice,
-            String planType,
+            PlanType planType,
             Optional<Integer> trialDays,
             OffsetDateTime updatedAt,
             List<FeatureUsageResponseData> usageViolations,
@@ -135,6 +138,7 @@ public final class CompanyPlanDetailResponseData {
         this.icon = icon;
         this.id = id;
         this.includedCreditGrants = includedCreditGrants;
+        this.invalidReason = invalidReason;
         this.isCustom = isCustom;
         this.isDefault = isDefault;
         this.isFree = isFree;
@@ -162,7 +166,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     @JsonProperty("charge_type")
-    public String getChargeType() {
+    public ChargeType getChargeType() {
         return chargeType;
     }
 
@@ -182,7 +186,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     @JsonProperty("controlled_by")
-    public String getControlledBy() {
+    public PlanControlledByType getControlledBy() {
         return controlledBy;
     }
 
@@ -236,6 +240,11 @@ public final class CompanyPlanDetailResponseData {
         return includedCreditGrants;
     }
 
+    @JsonProperty("invalid_reason")
+    public Optional<CompanyPlanInvalidReason> getInvalidReason() {
+        return invalidReason;
+    }
+
     @JsonProperty("is_custom")
     public boolean getIsCustom() {
         return isCustom;
@@ -272,7 +281,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     @JsonProperty("plan_type")
-    public String getPlanType() {
+    public PlanType getPlanType() {
         return planType;
     }
 
@@ -330,6 +339,7 @@ public final class CompanyPlanDetailResponseData {
                 && icon.equals(other.icon)
                 && id.equals(other.id)
                 && includedCreditGrants.equals(other.includedCreditGrants)
+                && invalidReason.equals(other.invalidReason)
                 && isCustom == other.isCustom
                 && isDefault == other.isDefault
                 && isFree == other.isFree
@@ -365,6 +375,7 @@ public final class CompanyPlanDetailResponseData {
                 this.icon,
                 this.id,
                 this.includedCreditGrants,
+                this.invalidReason,
                 this.isCustom,
                 this.isDefault,
                 this.isFree,
@@ -390,7 +401,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface ChargeTypeStage {
-        CompanyCanTrialStage chargeType(@NotNull String chargeType);
+        CompanyCanTrialStage chargeType(@NotNull ChargeType chargeType);
 
         Builder from(CompanyPlanDetailResponseData other);
     }
@@ -404,7 +415,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface ControlledByStage {
-        CreatedAtStage controlledBy(@NotNull String controlledBy);
+        CreatedAtStage controlledBy(@NotNull PlanControlledByType controlledBy);
     }
 
     public interface CreatedAtStage {
@@ -452,7 +463,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface PlanTypeStage {
-        UpdatedAtStage planType(@NotNull String planType);
+        UpdatedAtStage planType(@NotNull PlanType planType);
     }
 
     public interface UpdatedAtStage {
@@ -502,6 +513,10 @@ public final class CompanyPlanDetailResponseData {
 
         _FinalStage addAllIncludedCreditGrants(List<PlanCreditGrantView> includedCreditGrants);
 
+        _FinalStage invalidReason(Optional<CompanyPlanInvalidReason> invalidReason);
+
+        _FinalStage invalidReason(CompanyPlanInvalidReason invalidReason);
+
         _FinalStage monthlyPrice(Optional<BillingPriceResponseData> monthlyPrice);
 
         _FinalStage monthlyPrice(BillingPriceResponseData monthlyPrice);
@@ -546,13 +561,13 @@ public final class CompanyPlanDetailResponseData {
                     UpdatedAtStage,
                     ValidStage,
                     _FinalStage {
-        private String chargeType;
+        private ChargeType chargeType;
 
         private boolean companyCanTrial;
 
         private int companyCount;
 
-        private String controlledBy;
+        private PlanControlledByType controlledBy;
 
         private OffsetDateTime createdAt;
 
@@ -576,7 +591,7 @@ public final class CompanyPlanDetailResponseData {
 
         private String name;
 
-        private String planType;
+        private PlanType planType;
 
         private OffsetDateTime updatedAt;
 
@@ -591,6 +606,8 @@ public final class CompanyPlanDetailResponseData {
         private Optional<BillingPriceResponseData> oneTimePrice = Optional.empty();
 
         private Optional<BillingPriceResponseData> monthlyPrice = Optional.empty();
+
+        private Optional<CompanyPlanInvalidReason> invalidReason = Optional.empty();
 
         private List<PlanCreditGrantView> includedCreditGrants = new ArrayList<>();
 
@@ -630,6 +647,7 @@ public final class CompanyPlanDetailResponseData {
             icon(other.getIcon());
             id(other.getId());
             includedCreditGrants(other.getIncludedCreditGrants());
+            invalidReason(other.getInvalidReason());
             isCustom(other.getIsCustom());
             isDefault(other.getIsDefault());
             isFree(other.getIsFree());
@@ -648,7 +666,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("charge_type")
-        public CompanyCanTrialStage chargeType(@NotNull String chargeType) {
+        public CompanyCanTrialStage chargeType(@NotNull ChargeType chargeType) {
             this.chargeType = Objects.requireNonNull(chargeType, "chargeType must not be null");
             return this;
         }
@@ -669,7 +687,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("controlled_by")
-        public CreatedAtStage controlledBy(@NotNull String controlledBy) {
+        public CreatedAtStage controlledBy(@NotNull PlanControlledByType controlledBy) {
             this.controlledBy = Objects.requireNonNull(controlledBy, "controlledBy must not be null");
             return this;
         }
@@ -753,7 +771,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("plan_type")
-        public UpdatedAtStage planType(@NotNull String planType) {
+        public UpdatedAtStage planType(@NotNull PlanType planType) {
             this.planType = Objects.requireNonNull(planType, "planType must not be null");
             return this;
         }
@@ -845,6 +863,19 @@ public final class CompanyPlanDetailResponseData {
         @JsonSetter(value = "monthly_price", nulls = Nulls.SKIP)
         public _FinalStage monthlyPrice(Optional<BillingPriceResponseData> monthlyPrice) {
             this.monthlyPrice = monthlyPrice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage invalidReason(CompanyPlanInvalidReason invalidReason) {
+            this.invalidReason = Optional.ofNullable(invalidReason);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "invalid_reason", nulls = Nulls.SKIP)
+        public _FinalStage invalidReason(Optional<CompanyPlanInvalidReason> invalidReason) {
+            this.invalidReason = invalidReason;
             return this;
         }
 
@@ -1003,6 +1034,7 @@ public final class CompanyPlanDetailResponseData {
                     icon,
                     id,
                     includedCreditGrants,
+                    invalidReason,
                     isCustom,
                     isDefault,
                     isFree,

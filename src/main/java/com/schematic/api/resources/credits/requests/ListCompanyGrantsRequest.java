@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.credits.types.ListCompanyGrantsRequestDir;
-import com.schematic.api.resources.credits.types.ListCompanyGrantsRequestOrder;
+import com.schematic.api.types.CreditGrantSortOrder;
+import com.schematic.api.types.SortDirection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,9 +24,9 @@ import java.util.Optional;
 public final class ListCompanyGrantsRequest {
     private final Optional<String> companyId;
 
-    private final Optional<ListCompanyGrantsRequestOrder> order;
+    private final Optional<CreditGrantSortOrder> order;
 
-    private final Optional<ListCompanyGrantsRequestDir> dir;
+    private final Optional<SortDirection> dir;
 
     private final Optional<Integer> limit;
 
@@ -36,8 +36,8 @@ public final class ListCompanyGrantsRequest {
 
     private ListCompanyGrantsRequest(
             Optional<String> companyId,
-            Optional<ListCompanyGrantsRequestOrder> order,
-            Optional<ListCompanyGrantsRequestDir> dir,
+            Optional<CreditGrantSortOrder> order,
+            Optional<SortDirection> dir,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
@@ -55,12 +55,12 @@ public final class ListCompanyGrantsRequest {
     }
 
     @JsonProperty("order")
-    public Optional<ListCompanyGrantsRequestOrder> getOrder() {
+    public Optional<CreditGrantSortOrder> getOrder() {
         return order;
     }
 
     @JsonProperty("dir")
-    public Optional<ListCompanyGrantsRequestDir> getDir() {
+    public Optional<SortDirection> getDir() {
         return dir;
     }
 
@@ -117,9 +117,9 @@ public final class ListCompanyGrantsRequest {
     public static final class Builder {
         private Optional<String> companyId = Optional.empty();
 
-        private Optional<ListCompanyGrantsRequestOrder> order = Optional.empty();
+        private Optional<CreditGrantSortOrder> order = Optional.empty();
 
-        private Optional<ListCompanyGrantsRequestDir> dir = Optional.empty();
+        private Optional<SortDirection> dir = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
@@ -151,23 +151,23 @@ public final class ListCompanyGrantsRequest {
         }
 
         @JsonSetter(value = "order", nulls = Nulls.SKIP)
-        public Builder order(Optional<ListCompanyGrantsRequestOrder> order) {
+        public Builder order(Optional<CreditGrantSortOrder> order) {
             this.order = order;
             return this;
         }
 
-        public Builder order(ListCompanyGrantsRequestOrder order) {
+        public Builder order(CreditGrantSortOrder order) {
             this.order = Optional.ofNullable(order);
             return this;
         }
 
         @JsonSetter(value = "dir", nulls = Nulls.SKIP)
-        public Builder dir(Optional<ListCompanyGrantsRequestDir> dir) {
+        public Builder dir(Optional<SortDirection> dir) {
             this.dir = dir;
             return this;
         }
 
-        public Builder dir(ListCompanyGrantsRequestDir dir) {
+        public Builder dir(SortDirection dir) {
             this.dir = Optional.ofNullable(dir);
             return this;
         }

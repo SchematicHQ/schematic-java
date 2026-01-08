@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.credits.types.CountCreditLedgerRequestPeriod;
+import com.schematic.api.types.CreditLedgerPeriod;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +28,7 @@ public final class CountCreditLedgerRequest {
 
     private final Optional<String> featureId;
 
-    private final CountCreditLedgerRequestPeriod period;
+    private final CreditLedgerPeriod period;
 
     private final Optional<String> startTime;
 
@@ -44,7 +44,7 @@ public final class CountCreditLedgerRequest {
             String companyId,
             Optional<String> billingCreditId,
             Optional<String> featureId,
-            CountCreditLedgerRequestPeriod period,
+            CreditLedgerPeriod period,
             Optional<String> startTime,
             Optional<String> endTime,
             Optional<Integer> limit,
@@ -77,7 +77,7 @@ public final class CountCreditLedgerRequest {
     }
 
     @JsonProperty("period")
-    public CountCreditLedgerRequestPeriod getPeriod() {
+    public CreditLedgerPeriod getPeriod() {
         return period;
     }
 
@@ -158,7 +158,7 @@ public final class CountCreditLedgerRequest {
     }
 
     public interface PeriodStage {
-        _FinalStage period(@NotNull CountCreditLedgerRequestPeriod period);
+        _FinalStage period(@NotNull CreditLedgerPeriod period);
     }
 
     public interface _FinalStage {
@@ -199,7 +199,7 @@ public final class CountCreditLedgerRequest {
     public static final class Builder implements CompanyIdStage, PeriodStage, _FinalStage {
         private String companyId;
 
-        private CountCreditLedgerRequestPeriod period;
+        private CreditLedgerPeriod period;
 
         private Optional<Integer> offset = Optional.empty();
 
@@ -240,7 +240,7 @@ public final class CountCreditLedgerRequest {
 
         @java.lang.Override
         @JsonSetter("period")
-        public _FinalStage period(@NotNull CountCreditLedgerRequestPeriod period) {
+        public _FinalStage period(@NotNull CreditLedgerPeriod period) {
             this.period = Objects.requireNonNull(period, "period must not be null");
             return this;
         }

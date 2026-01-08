@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.EntityType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountEntityKeyDefinitionsParams.Builder.class)
 public final class CountEntityKeyDefinitionsParams {
-    private final Optional<CountEntityKeyDefinitionsResponseParamsEntityType> entityType;
+    private final Optional<EntityType> entityType;
 
     private final Optional<List<String>> ids;
 
@@ -34,7 +35,7 @@ public final class CountEntityKeyDefinitionsParams {
     private final Map<String, Object> additionalProperties;
 
     private CountEntityKeyDefinitionsParams(
-            Optional<CountEntityKeyDefinitionsResponseParamsEntityType> entityType,
+            Optional<EntityType> entityType,
             Optional<List<String>> ids,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -49,7 +50,7 @@ public final class CountEntityKeyDefinitionsParams {
     }
 
     @JsonProperty("entity_type")
-    public Optional<CountEntityKeyDefinitionsResponseParamsEntityType> getEntityType() {
+    public Optional<EntityType> getEntityType() {
         return entityType;
     }
 
@@ -114,7 +115,7 @@ public final class CountEntityKeyDefinitionsParams {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<CountEntityKeyDefinitionsResponseParamsEntityType> entityType = Optional.empty();
+        private Optional<EntityType> entityType = Optional.empty();
 
         private Optional<List<String>> ids = Optional.empty();
 
@@ -139,12 +140,12 @@ public final class CountEntityKeyDefinitionsParams {
         }
 
         @JsonSetter(value = "entity_type", nulls = Nulls.SKIP)
-        public Builder entityType(Optional<CountEntityKeyDefinitionsResponseParamsEntityType> entityType) {
+        public Builder entityType(Optional<EntityType> entityType) {
             this.entityType = entityType;
             return this;
         }
 
-        public Builder entityType(CountEntityKeyDefinitionsResponseParamsEntityType entityType) {
+        public Builder entityType(EntityType entityType) {
             this.entityType = Optional.ofNullable(entityType);
             return this;
         }

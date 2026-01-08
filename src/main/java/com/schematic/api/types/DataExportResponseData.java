@@ -34,7 +34,7 @@ public final class DataExportResponseData {
 
     private final String outputFileType;
 
-    private final String status;
+    private final DataExportStatus status;
 
     private final OffsetDateTime updatedAt;
 
@@ -48,7 +48,7 @@ public final class DataExportResponseData {
             String id,
             String metadata,
             String outputFileType,
-            String status,
+            DataExportStatus status,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
@@ -99,7 +99,7 @@ public final class DataExportResponseData {
     }
 
     @JsonProperty("status")
-    public String getStatus() {
+    public DataExportStatus getStatus() {
         return status;
     }
 
@@ -185,7 +185,7 @@ public final class DataExportResponseData {
     }
 
     public interface StatusStage {
-        UpdatedAtStage status(@NotNull String status);
+        UpdatedAtStage status(@NotNull DataExportStatus status);
     }
 
     public interface UpdatedAtStage {
@@ -222,7 +222,7 @@ public final class DataExportResponseData {
 
         private String outputFileType;
 
-        private String status;
+        private DataExportStatus status;
 
         private OffsetDateTime updatedAt;
 
@@ -296,7 +296,7 @@ public final class DataExportResponseData {
 
         @java.lang.Override
         @JsonSetter("status")
-        public UpdatedAtStage status(@NotNull String status) {
+        public UpdatedAtStage status(@NotNull DataExportStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }

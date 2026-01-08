@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.accounts.types.CreateEnvironmentRequestBodyEnvironmentType;
+import com.schematic.api.types.EnvironmentType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -20,23 +20,21 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateEnvironmentRequestBody.Builder.class)
 public final class CreateEnvironmentRequestBody {
-    private final CreateEnvironmentRequestBodyEnvironmentType environmentType;
+    private final EnvironmentType environmentType;
 
     private final String name;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateEnvironmentRequestBody(
-            CreateEnvironmentRequestBodyEnvironmentType environmentType,
-            String name,
-            Map<String, Object> additionalProperties) {
+            EnvironmentType environmentType, String name, Map<String, Object> additionalProperties) {
         this.environmentType = environmentType;
         this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("environment_type")
-    public CreateEnvironmentRequestBodyEnvironmentType getEnvironmentType() {
+    public EnvironmentType getEnvironmentType() {
         return environmentType;
     }
 
@@ -75,7 +73,7 @@ public final class CreateEnvironmentRequestBody {
     }
 
     public interface EnvironmentTypeStage {
-        NameStage environmentType(@NotNull CreateEnvironmentRequestBodyEnvironmentType environmentType);
+        NameStage environmentType(@NotNull EnvironmentType environmentType);
 
         Builder from(CreateEnvironmentRequestBody other);
     }
@@ -90,7 +88,7 @@ public final class CreateEnvironmentRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements EnvironmentTypeStage, NameStage, _FinalStage {
-        private CreateEnvironmentRequestBodyEnvironmentType environmentType;
+        private EnvironmentType environmentType;
 
         private String name;
 
@@ -108,7 +106,7 @@ public final class CreateEnvironmentRequestBody {
 
         @java.lang.Override
         @JsonSetter("environment_type")
-        public NameStage environmentType(@NotNull CreateEnvironmentRequestBodyEnvironmentType environmentType) {
+        public NameStage environmentType(@NotNull EnvironmentType environmentType) {
             this.environmentType = Objects.requireNonNull(environmentType, "environmentType must not be null");
             return this;
         }

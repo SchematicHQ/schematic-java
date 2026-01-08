@@ -12,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.billing.types.CountBillingProductsRequestPriceUsageType;
+import com.schematic.api.types.BillingPriceUsageType;
+import com.schematic.api.types.BillingProviderType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,21 +26,23 @@ import java.util.Optional;
 public final class CountBillingProductsRequest {
     private final Optional<List<String>> ids;
 
+    private final Optional<Boolean> isActive;
+
     private final Optional<String> name;
+
+    private final Optional<BillingPriceUsageType> priceUsageType;
+
+    private final Optional<BillingProviderType> providerType;
 
     private final Optional<String> q;
 
-    private final Optional<CountBillingProductsRequestPriceUsageType> priceUsageType;
-
-    private final Optional<Boolean> withoutLinkedToPlan;
-
     private final Optional<Boolean> withOneTimeCharges;
-
-    private final Optional<Boolean> withZeroPrice;
 
     private final Optional<Boolean> withPricesOnly;
 
-    private final Optional<Boolean> isActive;
+    private final Optional<Boolean> withZeroPrice;
+
+    private final Optional<Boolean> withoutLinkedToPlan;
 
     private final Optional<Integer> limit;
 
@@ -49,26 +52,28 @@ public final class CountBillingProductsRequest {
 
     private CountBillingProductsRequest(
             Optional<List<String>> ids,
-            Optional<String> name,
-            Optional<String> q,
-            Optional<CountBillingProductsRequestPriceUsageType> priceUsageType,
-            Optional<Boolean> withoutLinkedToPlan,
-            Optional<Boolean> withOneTimeCharges,
-            Optional<Boolean> withZeroPrice,
-            Optional<Boolean> withPricesOnly,
             Optional<Boolean> isActive,
+            Optional<String> name,
+            Optional<BillingPriceUsageType> priceUsageType,
+            Optional<BillingProviderType> providerType,
+            Optional<String> q,
+            Optional<Boolean> withOneTimeCharges,
+            Optional<Boolean> withPricesOnly,
+            Optional<Boolean> withZeroPrice,
+            Optional<Boolean> withoutLinkedToPlan,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
-        this.name = name;
-        this.q = q;
-        this.priceUsageType = priceUsageType;
-        this.withoutLinkedToPlan = withoutLinkedToPlan;
-        this.withOneTimeCharges = withOneTimeCharges;
-        this.withZeroPrice = withZeroPrice;
-        this.withPricesOnly = withPricesOnly;
         this.isActive = isActive;
+        this.name = name;
+        this.priceUsageType = priceUsageType;
+        this.providerType = providerType;
+        this.q = q;
+        this.withOneTimeCharges = withOneTimeCharges;
+        this.withPricesOnly = withPricesOnly;
+        this.withZeroPrice = withZeroPrice;
+        this.withoutLinkedToPlan = withoutLinkedToPlan;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
@@ -79,27 +84,32 @@ public final class CountBillingProductsRequest {
         return ids;
     }
 
+    /**
+     * @return Filter products that are active. Defaults to true if not specified
+     */
+    @JsonProperty("is_active")
+    public Optional<Boolean> getIsActive() {
+        return isActive;
+    }
+
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
     }
 
-    @JsonProperty("q")
-    public Optional<String> getQ() {
-        return q;
-    }
-
     @JsonProperty("price_usage_type")
-    public Optional<CountBillingProductsRequestPriceUsageType> getPriceUsageType() {
+    public Optional<BillingPriceUsageType> getPriceUsageType() {
         return priceUsageType;
     }
 
-    /**
-     * @return Filter products that are not linked to any plan
-     */
-    @JsonProperty("without_linked_to_plan")
-    public Optional<Boolean> getWithoutLinkedToPlan() {
-        return withoutLinkedToPlan;
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
+    }
+
+    @JsonProperty("q")
+    public Optional<String> getQ() {
+        return q;
     }
 
     /**
@@ -111,14 +121,6 @@ public final class CountBillingProductsRequest {
     }
 
     /**
-     * @return Filter products that have zero price for free subscription type
-     */
-    @JsonProperty("with_zero_price")
-    public Optional<Boolean> getWithZeroPrice() {
-        return withZeroPrice;
-    }
-
-    /**
      * @return Filter products that have prices
      */
     @JsonProperty("with_prices_only")
@@ -127,11 +129,19 @@ public final class CountBillingProductsRequest {
     }
 
     /**
-     * @return Filter products that are active
+     * @return Filter products that have zero price for free subscription type
      */
-    @JsonProperty("is_active")
-    public Optional<Boolean> getIsActive() {
-        return isActive;
+    @JsonProperty("with_zero_price")
+    public Optional<Boolean> getWithZeroPrice() {
+        return withZeroPrice;
+    }
+
+    /**
+     * @return Filter products that are not linked to any plan
+     */
+    @JsonProperty("without_linked_to_plan")
+    public Optional<Boolean> getWithoutLinkedToPlan() {
+        return withoutLinkedToPlan;
     }
 
     /**
@@ -163,14 +173,15 @@ public final class CountBillingProductsRequest {
 
     private boolean equalTo(CountBillingProductsRequest other) {
         return ids.equals(other.ids)
-                && name.equals(other.name)
-                && q.equals(other.q)
-                && priceUsageType.equals(other.priceUsageType)
-                && withoutLinkedToPlan.equals(other.withoutLinkedToPlan)
-                && withOneTimeCharges.equals(other.withOneTimeCharges)
-                && withZeroPrice.equals(other.withZeroPrice)
-                && withPricesOnly.equals(other.withPricesOnly)
                 && isActive.equals(other.isActive)
+                && name.equals(other.name)
+                && priceUsageType.equals(other.priceUsageType)
+                && providerType.equals(other.providerType)
+                && q.equals(other.q)
+                && withOneTimeCharges.equals(other.withOneTimeCharges)
+                && withPricesOnly.equals(other.withPricesOnly)
+                && withZeroPrice.equals(other.withZeroPrice)
+                && withoutLinkedToPlan.equals(other.withoutLinkedToPlan)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
@@ -179,14 +190,15 @@ public final class CountBillingProductsRequest {
     public int hashCode() {
         return Objects.hash(
                 this.ids,
-                this.name,
-                this.q,
-                this.priceUsageType,
-                this.withoutLinkedToPlan,
-                this.withOneTimeCharges,
-                this.withZeroPrice,
-                this.withPricesOnly,
                 this.isActive,
+                this.name,
+                this.priceUsageType,
+                this.providerType,
+                this.q,
+                this.withOneTimeCharges,
+                this.withPricesOnly,
+                this.withZeroPrice,
+                this.withoutLinkedToPlan,
                 this.limit,
                 this.offset);
     }
@@ -204,21 +216,23 @@ public final class CountBillingProductsRequest {
     public static final class Builder {
         private Optional<List<String>> ids = Optional.empty();
 
+        private Optional<Boolean> isActive = Optional.empty();
+
         private Optional<String> name = Optional.empty();
+
+        private Optional<BillingPriceUsageType> priceUsageType = Optional.empty();
+
+        private Optional<BillingProviderType> providerType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
-        private Optional<CountBillingProductsRequestPriceUsageType> priceUsageType = Optional.empty();
-
-        private Optional<Boolean> withoutLinkedToPlan = Optional.empty();
-
         private Optional<Boolean> withOneTimeCharges = Optional.empty();
-
-        private Optional<Boolean> withZeroPrice = Optional.empty();
 
         private Optional<Boolean> withPricesOnly = Optional.empty();
 
-        private Optional<Boolean> isActive = Optional.empty();
+        private Optional<Boolean> withZeroPrice = Optional.empty();
+
+        private Optional<Boolean> withoutLinkedToPlan = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
@@ -231,14 +245,15 @@ public final class CountBillingProductsRequest {
 
         public Builder from(CountBillingProductsRequest other) {
             ids(other.getIds());
-            name(other.getName());
-            q(other.getQ());
-            priceUsageType(other.getPriceUsageType());
-            withoutLinkedToPlan(other.getWithoutLinkedToPlan());
-            withOneTimeCharges(other.getWithOneTimeCharges());
-            withZeroPrice(other.getWithZeroPrice());
-            withPricesOnly(other.getWithPricesOnly());
             isActive(other.getIsActive());
+            name(other.getName());
+            priceUsageType(other.getPriceUsageType());
+            providerType(other.getProviderType());
+            q(other.getQ());
+            withOneTimeCharges(other.getWithOneTimeCharges());
+            withPricesOnly(other.getWithPricesOnly());
+            withZeroPrice(other.getWithZeroPrice());
+            withoutLinkedToPlan(other.getWithoutLinkedToPlan());
             limit(other.getLimit());
             offset(other.getOffset());
             return this;
@@ -260,6 +275,20 @@ public final class CountBillingProductsRequest {
             return this;
         }
 
+        /**
+         * <p>Filter products that are active. Defaults to true if not specified</p>
+         */
+        @JsonSetter(value = "is_active", nulls = Nulls.SKIP)
+        public Builder isActive(Optional<Boolean> isActive) {
+            this.isActive = isActive;
+            return this;
+        }
+
+        public Builder isActive(Boolean isActive) {
+            this.isActive = Optional.ofNullable(isActive);
+            return this;
+        }
+
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -271,6 +300,28 @@ public final class CountBillingProductsRequest {
             return this;
         }
 
+        @JsonSetter(value = "price_usage_type", nulls = Nulls.SKIP)
+        public Builder priceUsageType(Optional<BillingPriceUsageType> priceUsageType) {
+            this.priceUsageType = priceUsageType;
+            return this;
+        }
+
+        public Builder priceUsageType(BillingPriceUsageType priceUsageType) {
+            this.priceUsageType = Optional.ofNullable(priceUsageType);
+            return this;
+        }
+
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public Builder providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
+            return this;
+        }
+
+        public Builder providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
+            return this;
+        }
+
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -279,31 +330,6 @@ public final class CountBillingProductsRequest {
 
         public Builder q(String q) {
             this.q = Optional.ofNullable(q);
-            return this;
-        }
-
-        @JsonSetter(value = "price_usage_type", nulls = Nulls.SKIP)
-        public Builder priceUsageType(Optional<CountBillingProductsRequestPriceUsageType> priceUsageType) {
-            this.priceUsageType = priceUsageType;
-            return this;
-        }
-
-        public Builder priceUsageType(CountBillingProductsRequestPriceUsageType priceUsageType) {
-            this.priceUsageType = Optional.ofNullable(priceUsageType);
-            return this;
-        }
-
-        /**
-         * <p>Filter products that are not linked to any plan</p>
-         */
-        @JsonSetter(value = "without_linked_to_plan", nulls = Nulls.SKIP)
-        public Builder withoutLinkedToPlan(Optional<Boolean> withoutLinkedToPlan) {
-            this.withoutLinkedToPlan = withoutLinkedToPlan;
-            return this;
-        }
-
-        public Builder withoutLinkedToPlan(Boolean withoutLinkedToPlan) {
-            this.withoutLinkedToPlan = Optional.ofNullable(withoutLinkedToPlan);
             return this;
         }
 
@@ -322,20 +348,6 @@ public final class CountBillingProductsRequest {
         }
 
         /**
-         * <p>Filter products that have zero price for free subscription type</p>
-         */
-        @JsonSetter(value = "with_zero_price", nulls = Nulls.SKIP)
-        public Builder withZeroPrice(Optional<Boolean> withZeroPrice) {
-            this.withZeroPrice = withZeroPrice;
-            return this;
-        }
-
-        public Builder withZeroPrice(Boolean withZeroPrice) {
-            this.withZeroPrice = Optional.ofNullable(withZeroPrice);
-            return this;
-        }
-
-        /**
          * <p>Filter products that have prices</p>
          */
         @JsonSetter(value = "with_prices_only", nulls = Nulls.SKIP)
@@ -350,16 +362,30 @@ public final class CountBillingProductsRequest {
         }
 
         /**
-         * <p>Filter products that are active</p>
+         * <p>Filter products that have zero price for free subscription type</p>
          */
-        @JsonSetter(value = "is_active", nulls = Nulls.SKIP)
-        public Builder isActive(Optional<Boolean> isActive) {
-            this.isActive = isActive;
+        @JsonSetter(value = "with_zero_price", nulls = Nulls.SKIP)
+        public Builder withZeroPrice(Optional<Boolean> withZeroPrice) {
+            this.withZeroPrice = withZeroPrice;
             return this;
         }
 
-        public Builder isActive(Boolean isActive) {
-            this.isActive = Optional.ofNullable(isActive);
+        public Builder withZeroPrice(Boolean withZeroPrice) {
+            this.withZeroPrice = Optional.ofNullable(withZeroPrice);
+            return this;
+        }
+
+        /**
+         * <p>Filter products that are not linked to any plan</p>
+         */
+        @JsonSetter(value = "without_linked_to_plan", nulls = Nulls.SKIP)
+        public Builder withoutLinkedToPlan(Optional<Boolean> withoutLinkedToPlan) {
+            this.withoutLinkedToPlan = withoutLinkedToPlan;
+            return this;
+        }
+
+        public Builder withoutLinkedToPlan(Boolean withoutLinkedToPlan) {
+            this.withoutLinkedToPlan = Optional.ofNullable(withoutLinkedToPlan);
             return this;
         }
 
@@ -394,14 +420,15 @@ public final class CountBillingProductsRequest {
         public CountBillingProductsRequest build() {
             return new CountBillingProductsRequest(
                     ids,
-                    name,
-                    q,
-                    priceUsageType,
-                    withoutLinkedToPlan,
-                    withOneTimeCharges,
-                    withZeroPrice,
-                    withPricesOnly,
                     isActive,
+                    name,
+                    priceUsageType,
+                    providerType,
+                    q,
+                    withOneTimeCharges,
+                    withPricesOnly,
+                    withZeroPrice,
+                    withoutLinkedToPlan,
                     limit,
                     offset,
                     additionalProperties);

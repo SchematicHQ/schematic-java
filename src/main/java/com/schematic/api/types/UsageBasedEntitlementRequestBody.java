@@ -37,13 +37,13 @@ public final class UsageBasedEntitlementRequestBody {
 
     private final Optional<String> overageBillingProductId;
 
-    private final Optional<UsageBasedEntitlementRequestBodyPriceBehavior> priceBehavior;
+    private final Optional<EntitlementPriceBehavior> priceBehavior;
 
     private final Optional<List<CreatePriceTierRequestBody>> priceTiers;
 
     private final Optional<Integer> softLimit;
 
-    private final Optional<String> tierMode;
+    private final Optional<BillingTiersMode> tierMode;
 
     private final Optional<String> yearlyMeteredPriceId;
 
@@ -64,10 +64,10 @@ public final class UsageBasedEntitlementRequestBody {
             Optional<Integer> monthlyUnitPrice,
             Optional<String> monthlyUnitPriceDecimal,
             Optional<String> overageBillingProductId,
-            Optional<UsageBasedEntitlementRequestBodyPriceBehavior> priceBehavior,
+            Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<List<CreatePriceTierRequestBody>> priceTiers,
             Optional<Integer> softLimit,
-            Optional<String> tierMode,
+            Optional<BillingTiersMode> tierMode,
             Optional<String> yearlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers,
             Optional<Integer> yearlyUnitPrice,
@@ -133,7 +133,7 @@ public final class UsageBasedEntitlementRequestBody {
     }
 
     @JsonProperty("price_behavior")
-    public Optional<UsageBasedEntitlementRequestBodyPriceBehavior> getPriceBehavior() {
+    public Optional<EntitlementPriceBehavior> getPriceBehavior() {
         return priceBehavior;
     }
 
@@ -151,7 +151,7 @@ public final class UsageBasedEntitlementRequestBody {
     }
 
     @JsonProperty("tier_mode")
-    public Optional<String> getTierMode() {
+    public Optional<BillingTiersMode> getTierMode() {
         return tierMode;
     }
 
@@ -253,13 +253,13 @@ public final class UsageBasedEntitlementRequestBody {
 
         private Optional<String> overageBillingProductId = Optional.empty();
 
-        private Optional<UsageBasedEntitlementRequestBodyPriceBehavior> priceBehavior = Optional.empty();
+        private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
         private Optional<List<CreatePriceTierRequestBody>> priceTiers = Optional.empty();
 
         private Optional<Integer> softLimit = Optional.empty();
 
-        private Optional<String> tierMode = Optional.empty();
+        private Optional<BillingTiersMode> tierMode = Optional.empty();
 
         private Optional<String> yearlyMeteredPriceId = Optional.empty();
 
@@ -383,12 +383,12 @@ public final class UsageBasedEntitlementRequestBody {
         }
 
         @JsonSetter(value = "price_behavior", nulls = Nulls.SKIP)
-        public Builder priceBehavior(Optional<UsageBasedEntitlementRequestBodyPriceBehavior> priceBehavior) {
+        public Builder priceBehavior(Optional<EntitlementPriceBehavior> priceBehavior) {
             this.priceBehavior = priceBehavior;
             return this;
         }
 
-        public Builder priceBehavior(UsageBasedEntitlementRequestBodyPriceBehavior priceBehavior) {
+        public Builder priceBehavior(EntitlementPriceBehavior priceBehavior) {
             this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
         }
@@ -419,12 +419,12 @@ public final class UsageBasedEntitlementRequestBody {
         }
 
         @JsonSetter(value = "tier_mode", nulls = Nulls.SKIP)
-        public Builder tierMode(Optional<String> tierMode) {
+        public Builder tierMode(Optional<BillingTiersMode> tierMode) {
             this.tierMode = tierMode;
             return this;
         }
 
-        public Builder tierMode(String tierMode) {
+        public Builder tierMode(BillingTiersMode tierMode) {
             this.tierMode = Optional.ofNullable(tierMode);
             return this;
         }
