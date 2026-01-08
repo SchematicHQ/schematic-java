@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.events.types.ListEventsRequestEventTypesItem;
+import com.schematic.api.types.EventType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListEventsRequest.Builder.class)
 public final class ListEventsRequest {
-    private final Optional<List<ListEventsRequestEventTypesItem>> eventTypes;
+    private final Optional<List<EventType>> eventTypes;
 
     private final Optional<String> companyId;
 
@@ -40,7 +40,7 @@ public final class ListEventsRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListEventsRequest(
-            Optional<List<ListEventsRequestEventTypesItem>> eventTypes,
+            Optional<List<EventType>> eventTypes,
             Optional<String> companyId,
             Optional<String> eventSubtype,
             Optional<String> flagId,
@@ -59,7 +59,7 @@ public final class ListEventsRequest {
     }
 
     @JsonProperty("event_types")
-    public Optional<List<ListEventsRequestEventTypesItem>> getEventTypes() {
+    public Optional<List<EventType>> getEventTypes() {
         return eventTypes;
     }
 
@@ -137,7 +137,7 @@ public final class ListEventsRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<List<ListEventsRequestEventTypesItem>> eventTypes = Optional.empty();
+        private Optional<List<EventType>> eventTypes = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
 
@@ -168,17 +168,17 @@ public final class ListEventsRequest {
         }
 
         @JsonSetter(value = "event_types", nulls = Nulls.SKIP)
-        public Builder eventTypes(Optional<List<ListEventsRequestEventTypesItem>> eventTypes) {
+        public Builder eventTypes(Optional<List<EventType>> eventTypes) {
             this.eventTypes = eventTypes;
             return this;
         }
 
-        public Builder eventTypes(List<ListEventsRequestEventTypesItem> eventTypes) {
+        public Builder eventTypes(List<EventType> eventTypes) {
             this.eventTypes = Optional.ofNullable(eventTypes);
             return this;
         }
 
-        public Builder eventTypes(ListEventsRequestEventTypesItem eventTypes) {
+        public Builder eventTypes(EventType eventTypes) {
             this.eventTypes = Optional.of(Collections.singletonList(eventTypes));
             return this;
         }

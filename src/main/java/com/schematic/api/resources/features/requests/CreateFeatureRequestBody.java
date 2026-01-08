@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.features.types.CreateFeatureRequestBodyFeatureType;
-import com.schematic.api.resources.features.types.CreateFeatureRequestBodyLifecyclePhase;
 import com.schematic.api.types.CreateOrUpdateFlagRequestBody;
+import com.schematic.api.types.FeatureLifecyclePhase;
+import com.schematic.api.types.FeatureType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,13 +28,13 @@ public final class CreateFeatureRequestBody {
 
     private final Optional<String> eventSubtype;
 
-    private final CreateFeatureRequestBodyFeatureType featureType;
+    private final FeatureType featureType;
 
     private final Optional<CreateOrUpdateFlagRequestBody> flag;
 
     private final Optional<String> icon;
 
-    private final Optional<CreateFeatureRequestBodyLifecyclePhase> lifecyclePhase;
+    private final Optional<FeatureLifecyclePhase> lifecyclePhase;
 
     private final Optional<String> maintainerId;
 
@@ -51,10 +51,10 @@ public final class CreateFeatureRequestBody {
     private CreateFeatureRequestBody(
             String description,
             Optional<String> eventSubtype,
-            CreateFeatureRequestBodyFeatureType featureType,
+            FeatureType featureType,
             Optional<CreateOrUpdateFlagRequestBody> flag,
             Optional<String> icon,
-            Optional<CreateFeatureRequestBodyLifecyclePhase> lifecyclePhase,
+            Optional<FeatureLifecyclePhase> lifecyclePhase,
             Optional<String> maintainerId,
             String name,
             Optional<String> pluralName,
@@ -86,7 +86,7 @@ public final class CreateFeatureRequestBody {
     }
 
     @JsonProperty("feature_type")
-    public CreateFeatureRequestBodyFeatureType getFeatureType() {
+    public FeatureType getFeatureType() {
         return featureType;
     }
 
@@ -101,7 +101,7 @@ public final class CreateFeatureRequestBody {
     }
 
     @JsonProperty("lifecycle_phase")
-    public Optional<CreateFeatureRequestBodyLifecyclePhase> getLifecyclePhase() {
+    public Optional<FeatureLifecyclePhase> getLifecyclePhase() {
         return lifecyclePhase;
     }
 
@@ -187,7 +187,7 @@ public final class CreateFeatureRequestBody {
     }
 
     public interface FeatureTypeStage {
-        NameStage featureType(@NotNull CreateFeatureRequestBodyFeatureType featureType);
+        NameStage featureType(@NotNull FeatureType featureType);
     }
 
     public interface NameStage {
@@ -209,9 +209,9 @@ public final class CreateFeatureRequestBody {
 
         _FinalStage icon(String icon);
 
-        _FinalStage lifecyclePhase(Optional<CreateFeatureRequestBodyLifecyclePhase> lifecyclePhase);
+        _FinalStage lifecyclePhase(Optional<FeatureLifecyclePhase> lifecyclePhase);
 
-        _FinalStage lifecyclePhase(CreateFeatureRequestBodyLifecyclePhase lifecyclePhase);
+        _FinalStage lifecyclePhase(FeatureLifecyclePhase lifecyclePhase);
 
         _FinalStage maintainerId(Optional<String> maintainerId);
 
@@ -234,7 +234,7 @@ public final class CreateFeatureRequestBody {
     public static final class Builder implements DescriptionStage, FeatureTypeStage, NameStage, _FinalStage {
         private String description;
 
-        private CreateFeatureRequestBodyFeatureType featureType;
+        private FeatureType featureType;
 
         private String name;
 
@@ -246,7 +246,7 @@ public final class CreateFeatureRequestBody {
 
         private Optional<String> maintainerId = Optional.empty();
 
-        private Optional<CreateFeatureRequestBodyLifecyclePhase> lifecyclePhase = Optional.empty();
+        private Optional<FeatureLifecyclePhase> lifecyclePhase = Optional.empty();
 
         private Optional<String> icon = Optional.empty();
 
@@ -284,7 +284,7 @@ public final class CreateFeatureRequestBody {
 
         @java.lang.Override
         @JsonSetter("feature_type")
-        public NameStage featureType(@NotNull CreateFeatureRequestBodyFeatureType featureType) {
+        public NameStage featureType(@NotNull FeatureType featureType) {
             this.featureType = Objects.requireNonNull(featureType, "featureType must not be null");
             return this;
         }
@@ -349,14 +349,14 @@ public final class CreateFeatureRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage lifecyclePhase(CreateFeatureRequestBodyLifecyclePhase lifecyclePhase) {
+        public _FinalStage lifecyclePhase(FeatureLifecyclePhase lifecyclePhase) {
             this.lifecyclePhase = Optional.ofNullable(lifecyclePhase);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "lifecycle_phase", nulls = Nulls.SKIP)
-        public _FinalStage lifecyclePhase(Optional<CreateFeatureRequestBodyLifecyclePhase> lifecyclePhase) {
+        public _FinalStage lifecyclePhase(Optional<FeatureLifecyclePhase> lifecyclePhase) {
             this.lifecyclePhase = lifecyclePhase;
             return this;
         }

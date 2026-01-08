@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.EntityType;
+import com.schematic.api.types.TraitType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListEntityTraitDefinitionsParams.Builder.class)
 public final class ListEntityTraitDefinitionsParams {
-    private final Optional<ListEntityTraitDefinitionsResponseParamsEntityType> entityType;
+    private final Optional<EntityType> entityType;
 
     private final Optional<List<String>> ids;
 
@@ -31,17 +33,20 @@ public final class ListEntityTraitDefinitionsParams {
 
     private final Optional<String> q;
 
-    private final Optional<ListEntityTraitDefinitionsResponseParamsTraitType> traitType;
+    private final Optional<TraitType> traitType;
+
+    private final Optional<List<TraitType>> traitTypes;
 
     private final Map<String, Object> additionalProperties;
 
     private ListEntityTraitDefinitionsParams(
-            Optional<ListEntityTraitDefinitionsResponseParamsEntityType> entityType,
+            Optional<EntityType> entityType,
             Optional<List<String>> ids,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Optional<String> q,
-            Optional<ListEntityTraitDefinitionsResponseParamsTraitType> traitType,
+            Optional<TraitType> traitType,
+            Optional<List<TraitType>> traitTypes,
             Map<String, Object> additionalProperties) {
         this.entityType = entityType;
         this.ids = ids;
@@ -49,11 +54,12 @@ public final class ListEntityTraitDefinitionsParams {
         this.offset = offset;
         this.q = q;
         this.traitType = traitType;
+        this.traitTypes = traitTypes;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("entity_type")
-    public Optional<ListEntityTraitDefinitionsResponseParamsEntityType> getEntityType() {
+    public Optional<EntityType> getEntityType() {
         return entityType;
     }
 
@@ -84,8 +90,13 @@ public final class ListEntityTraitDefinitionsParams {
     }
 
     @JsonProperty("trait_type")
-    public Optional<ListEntityTraitDefinitionsResponseParamsTraitType> getTraitType() {
+    public Optional<TraitType> getTraitType() {
         return traitType;
+    }
+
+    @JsonProperty("trait_types")
+    public Optional<List<TraitType>> getTraitTypes() {
+        return traitTypes;
     }
 
     @java.lang.Override
@@ -105,12 +116,14 @@ public final class ListEntityTraitDefinitionsParams {
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
                 && q.equals(other.q)
-                && traitType.equals(other.traitType);
+                && traitType.equals(other.traitType)
+                && traitTypes.equals(other.traitTypes);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.entityType, this.ids, this.limit, this.offset, this.q, this.traitType);
+        return Objects.hash(
+                this.entityType, this.ids, this.limit, this.offset, this.q, this.traitType, this.traitTypes);
     }
 
     @java.lang.Override
@@ -124,7 +137,7 @@ public final class ListEntityTraitDefinitionsParams {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<ListEntityTraitDefinitionsResponseParamsEntityType> entityType = Optional.empty();
+        private Optional<EntityType> entityType = Optional.empty();
 
         private Optional<List<String>> ids = Optional.empty();
 
@@ -134,7 +147,9 @@ public final class ListEntityTraitDefinitionsParams {
 
         private Optional<String> q = Optional.empty();
 
-        private Optional<ListEntityTraitDefinitionsResponseParamsTraitType> traitType = Optional.empty();
+        private Optional<TraitType> traitType = Optional.empty();
+
+        private Optional<List<TraitType>> traitTypes = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -148,16 +163,17 @@ public final class ListEntityTraitDefinitionsParams {
             offset(other.getOffset());
             q(other.getQ());
             traitType(other.getTraitType());
+            traitTypes(other.getTraitTypes());
             return this;
         }
 
         @JsonSetter(value = "entity_type", nulls = Nulls.SKIP)
-        public Builder entityType(Optional<ListEntityTraitDefinitionsResponseParamsEntityType> entityType) {
+        public Builder entityType(Optional<EntityType> entityType) {
             this.entityType = entityType;
             return this;
         }
 
-        public Builder entityType(ListEntityTraitDefinitionsResponseParamsEntityType entityType) {
+        public Builder entityType(EntityType entityType) {
             this.entityType = Optional.ofNullable(entityType);
             return this;
         }
@@ -213,19 +229,30 @@ public final class ListEntityTraitDefinitionsParams {
         }
 
         @JsonSetter(value = "trait_type", nulls = Nulls.SKIP)
-        public Builder traitType(Optional<ListEntityTraitDefinitionsResponseParamsTraitType> traitType) {
+        public Builder traitType(Optional<TraitType> traitType) {
             this.traitType = traitType;
             return this;
         }
 
-        public Builder traitType(ListEntityTraitDefinitionsResponseParamsTraitType traitType) {
+        public Builder traitType(TraitType traitType) {
             this.traitType = Optional.ofNullable(traitType);
+            return this;
+        }
+
+        @JsonSetter(value = "trait_types", nulls = Nulls.SKIP)
+        public Builder traitTypes(Optional<List<TraitType>> traitTypes) {
+            this.traitTypes = traitTypes;
+            return this;
+        }
+
+        public Builder traitTypes(List<TraitType> traitTypes) {
+            this.traitTypes = Optional.ofNullable(traitTypes);
             return this;
         }
 
         public ListEntityTraitDefinitionsParams build() {
             return new ListEntityTraitDefinitionsParams(
-                    entityType, ids, limit, offset, q, traitType, additionalProperties);
+                    entityType, ids, limit, offset, q, traitType, traitTypes, additionalProperties);
         }
     }
 }

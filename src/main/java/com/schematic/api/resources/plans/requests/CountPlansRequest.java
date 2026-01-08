@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.plans.types.CountPlansRequestPlanType;
+import com.schematic.api.types.PlanType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -35,15 +35,11 @@ public final class CountPlansRequest {
 
     private final Optional<Boolean> hasProductId;
 
-    private final Optional<CountPlansRequestPlanType> planType;
+    private final Optional<PlanType> planType;
 
     private final Optional<String> q;
 
-    private final Optional<Boolean> requiresPaymentMethod;
-
     private final Optional<String> withoutEntitlementFor;
-
-    private final Optional<Boolean> withoutProductId;
 
     private final Optional<Boolean> withoutPaidProductId;
 
@@ -60,11 +56,9 @@ public final class CountPlansRequest {
             Optional<Boolean> forInitialPlan,
             Optional<Boolean> forTrialExpiryPlan,
             Optional<Boolean> hasProductId,
-            Optional<CountPlansRequestPlanType> planType,
+            Optional<PlanType> planType,
             Optional<String> q,
-            Optional<Boolean> requiresPaymentMethod,
             Optional<String> withoutEntitlementFor,
-            Optional<Boolean> withoutProductId,
             Optional<Boolean> withoutPaidProductId,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -77,9 +71,7 @@ public final class CountPlansRequest {
         this.hasProductId = hasProductId;
         this.planType = planType;
         this.q = q;
-        this.requiresPaymentMethod = requiresPaymentMethod;
         this.withoutEntitlementFor = withoutEntitlementFor;
-        this.withoutProductId = withoutProductId;
         this.withoutPaidProductId = withoutPaidProductId;
         this.limit = limit;
         this.offset = offset;
@@ -132,7 +124,7 @@ public final class CountPlansRequest {
      * @return Filter by plan type
      */
     @JsonProperty("plan_type")
-    public Optional<CountPlansRequestPlanType> getPlanType() {
+    public Optional<PlanType> getPlanType() {
         return planType;
     }
 
@@ -142,27 +134,11 @@ public final class CountPlansRequest {
     }
 
     /**
-     * @return Filter for plans that require a payment method (inverse of ForInitialPlan)
-     */
-    @JsonProperty("requires_payment_method")
-    public Optional<Boolean> getRequiresPaymentMethod() {
-        return requiresPaymentMethod;
-    }
-
-    /**
      * @return Filter out plans that already have a plan entitlement for the specified feature ID
      */
     @JsonProperty("without_entitlement_for")
     public Optional<String> getWithoutEntitlementFor() {
         return withoutEntitlementFor;
-    }
-
-    /**
-     * @return Filter out plans that have a billing product ID
-     */
-    @JsonProperty("without_product_id")
-    public Optional<Boolean> getWithoutProductId() {
-        return withoutProductId;
     }
 
     /**
@@ -209,9 +185,7 @@ public final class CountPlansRequest {
                 && hasProductId.equals(other.hasProductId)
                 && planType.equals(other.planType)
                 && q.equals(other.q)
-                && requiresPaymentMethod.equals(other.requiresPaymentMethod)
                 && withoutEntitlementFor.equals(other.withoutEntitlementFor)
-                && withoutProductId.equals(other.withoutProductId)
                 && withoutPaidProductId.equals(other.withoutPaidProductId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
@@ -228,9 +202,7 @@ public final class CountPlansRequest {
                 this.hasProductId,
                 this.planType,
                 this.q,
-                this.requiresPaymentMethod,
                 this.withoutEntitlementFor,
-                this.withoutProductId,
                 this.withoutPaidProductId,
                 this.limit,
                 this.offset);
@@ -259,15 +231,11 @@ public final class CountPlansRequest {
 
         private Optional<Boolean> hasProductId = Optional.empty();
 
-        private Optional<CountPlansRequestPlanType> planType = Optional.empty();
+        private Optional<PlanType> planType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
-        private Optional<Boolean> requiresPaymentMethod = Optional.empty();
-
         private Optional<String> withoutEntitlementFor = Optional.empty();
-
-        private Optional<Boolean> withoutProductId = Optional.empty();
 
         private Optional<Boolean> withoutPaidProductId = Optional.empty();
 
@@ -289,9 +257,7 @@ public final class CountPlansRequest {
             hasProductId(other.getHasProductId());
             planType(other.getPlanType());
             q(other.getQ());
-            requiresPaymentMethod(other.getRequiresPaymentMethod());
             withoutEntitlementFor(other.getWithoutEntitlementFor());
-            withoutProductId(other.getWithoutProductId());
             withoutPaidProductId(other.getWithoutPaidProductId());
             limit(other.getLimit());
             offset(other.getOffset());
@@ -385,12 +351,12 @@ public final class CountPlansRequest {
          * <p>Filter by plan type</p>
          */
         @JsonSetter(value = "plan_type", nulls = Nulls.SKIP)
-        public Builder planType(Optional<CountPlansRequestPlanType> planType) {
+        public Builder planType(Optional<PlanType> planType) {
             this.planType = planType;
             return this;
         }
 
-        public Builder planType(CountPlansRequestPlanType planType) {
+        public Builder planType(PlanType planType) {
             this.planType = Optional.ofNullable(planType);
             return this;
         }
@@ -407,20 +373,6 @@ public final class CountPlansRequest {
         }
 
         /**
-         * <p>Filter for plans that require a payment method (inverse of ForInitialPlan)</p>
-         */
-        @JsonSetter(value = "requires_payment_method", nulls = Nulls.SKIP)
-        public Builder requiresPaymentMethod(Optional<Boolean> requiresPaymentMethod) {
-            this.requiresPaymentMethod = requiresPaymentMethod;
-            return this;
-        }
-
-        public Builder requiresPaymentMethod(Boolean requiresPaymentMethod) {
-            this.requiresPaymentMethod = Optional.ofNullable(requiresPaymentMethod);
-            return this;
-        }
-
-        /**
          * <p>Filter out plans that already have a plan entitlement for the specified feature ID</p>
          */
         @JsonSetter(value = "without_entitlement_for", nulls = Nulls.SKIP)
@@ -431,20 +383,6 @@ public final class CountPlansRequest {
 
         public Builder withoutEntitlementFor(String withoutEntitlementFor) {
             this.withoutEntitlementFor = Optional.ofNullable(withoutEntitlementFor);
-            return this;
-        }
-
-        /**
-         * <p>Filter out plans that have a billing product ID</p>
-         */
-        @JsonSetter(value = "without_product_id", nulls = Nulls.SKIP)
-        public Builder withoutProductId(Optional<Boolean> withoutProductId) {
-            this.withoutProductId = withoutProductId;
-            return this;
-        }
-
-        public Builder withoutProductId(Boolean withoutProductId) {
-            this.withoutProductId = Optional.ofNullable(withoutProductId);
             return this;
         }
 
@@ -500,9 +438,7 @@ public final class CountPlansRequest {
                     hasProductId,
                     planType,
                     q,
-                    requiresPaymentMethod,
                     withoutEntitlementFor,
-                    withoutProductId,
                     withoutPaidProductId,
                     limit,
                     offset,

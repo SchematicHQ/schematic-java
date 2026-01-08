@@ -22,15 +22,15 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingCreditResponseData.Builder.class)
 public final class BillingCreditResponseData {
-    private final String burnStrategy;
+    private final BillingCreditBurnStrategy burnStrategy;
 
     private final OffsetDateTime createdAt;
 
-    private final String defaultExpiryUnit;
+    private final BillingCreditExpiryUnit defaultExpiryUnit;
 
     private final Optional<Integer> defaultExpiryUnitCount;
 
-    private final String defaultRolloverPolicy;
+    private final BillingCreditRolloverPolicy defaultRolloverPolicy;
 
     private final String description;
 
@@ -53,11 +53,11 @@ public final class BillingCreditResponseData {
     private final Map<String, Object> additionalProperties;
 
     private BillingCreditResponseData(
-            String burnStrategy,
+            BillingCreditBurnStrategy burnStrategy,
             OffsetDateTime createdAt,
-            String defaultExpiryUnit,
+            BillingCreditExpiryUnit defaultExpiryUnit,
             Optional<Integer> defaultExpiryUnitCount,
-            String defaultRolloverPolicy,
+            BillingCreditRolloverPolicy defaultRolloverPolicy,
             String description,
             Optional<String> icon,
             String id,
@@ -86,7 +86,7 @@ public final class BillingCreditResponseData {
     }
 
     @JsonProperty("burn_strategy")
-    public String getBurnStrategy() {
+    public BillingCreditBurnStrategy getBurnStrategy() {
         return burnStrategy;
     }
 
@@ -96,7 +96,7 @@ public final class BillingCreditResponseData {
     }
 
     @JsonProperty("default_expiry_unit")
-    public String getDefaultExpiryUnit() {
+    public BillingCreditExpiryUnit getDefaultExpiryUnit() {
         return defaultExpiryUnit;
     }
 
@@ -106,7 +106,7 @@ public final class BillingCreditResponseData {
     }
 
     @JsonProperty("default_rollover_policy")
-    public String getDefaultRolloverPolicy() {
+    public BillingCreditRolloverPolicy getDefaultRolloverPolicy() {
         return defaultRolloverPolicy;
     }
 
@@ -212,7 +212,7 @@ public final class BillingCreditResponseData {
     }
 
     public interface BurnStrategyStage {
-        CreatedAtStage burnStrategy(@NotNull String burnStrategy);
+        CreatedAtStage burnStrategy(@NotNull BillingCreditBurnStrategy burnStrategy);
 
         Builder from(BillingCreditResponseData other);
     }
@@ -222,11 +222,11 @@ public final class BillingCreditResponseData {
     }
 
     public interface DefaultExpiryUnitStage {
-        DefaultRolloverPolicyStage defaultExpiryUnit(@NotNull String defaultExpiryUnit);
+        DefaultRolloverPolicyStage defaultExpiryUnit(@NotNull BillingCreditExpiryUnit defaultExpiryUnit);
     }
 
     public interface DefaultRolloverPolicyStage {
-        DescriptionStage defaultRolloverPolicy(@NotNull String defaultRolloverPolicy);
+        DescriptionStage defaultRolloverPolicy(@NotNull BillingCreditRolloverPolicy defaultRolloverPolicy);
     }
 
     public interface DescriptionStage {
@@ -284,13 +284,13 @@ public final class BillingCreditResponseData {
                     NameStage,
                     UpdatedAtStage,
                     _FinalStage {
-        private String burnStrategy;
+        private BillingCreditBurnStrategy burnStrategy;
 
         private OffsetDateTime createdAt;
 
-        private String defaultExpiryUnit;
+        private BillingCreditExpiryUnit defaultExpiryUnit;
 
-        private String defaultRolloverPolicy;
+        private BillingCreditRolloverPolicy defaultRolloverPolicy;
 
         private String description;
 
@@ -338,7 +338,7 @@ public final class BillingCreditResponseData {
 
         @java.lang.Override
         @JsonSetter("burn_strategy")
-        public CreatedAtStage burnStrategy(@NotNull String burnStrategy) {
+        public CreatedAtStage burnStrategy(@NotNull BillingCreditBurnStrategy burnStrategy) {
             this.burnStrategy = Objects.requireNonNull(burnStrategy, "burnStrategy must not be null");
             return this;
         }
@@ -352,14 +352,14 @@ public final class BillingCreditResponseData {
 
         @java.lang.Override
         @JsonSetter("default_expiry_unit")
-        public DefaultRolloverPolicyStage defaultExpiryUnit(@NotNull String defaultExpiryUnit) {
+        public DefaultRolloverPolicyStage defaultExpiryUnit(@NotNull BillingCreditExpiryUnit defaultExpiryUnit) {
             this.defaultExpiryUnit = Objects.requireNonNull(defaultExpiryUnit, "defaultExpiryUnit must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("default_rollover_policy")
-        public DescriptionStage defaultRolloverPolicy(@NotNull String defaultRolloverPolicy) {
+        public DescriptionStage defaultRolloverPolicy(@NotNull BillingCreditRolloverPolicy defaultRolloverPolicy) {
             this.defaultRolloverPolicy =
                     Objects.requireNonNull(defaultRolloverPolicy, "defaultRolloverPolicy must not be null");
             return this;

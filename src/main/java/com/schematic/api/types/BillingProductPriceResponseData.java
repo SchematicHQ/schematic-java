@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductPriceResponseData.Builder.class)
 public final class BillingProductPriceResponseData {
-    private final String billingScheme;
+    private final BillingPriceScheme billingScheme;
 
     private final OffsetDateTime createdAt;
 
@@ -30,7 +30,7 @@ public final class BillingProductPriceResponseData {
 
     private final String id;
 
-    private final String interval;
+    private final BillingProductPriceInterval interval;
 
     private final boolean isActive;
 
@@ -46,20 +46,22 @@ public final class BillingProductPriceResponseData {
 
     private final String productExternalId;
 
-    private final Optional<String> tiersMode;
+    private final BillingProviderType providerType;
+
+    private final Optional<BillingTiersMode> tiersMode;
 
     private final OffsetDateTime updatedAt;
 
-    private final String usageType;
+    private final BillingPriceUsageType usageType;
 
     private final Map<String, Object> additionalProperties;
 
     private BillingProductPriceResponseData(
-            String billingScheme,
+            BillingPriceScheme billingScheme,
             OffsetDateTime createdAt,
             String currency,
             String id,
-            String interval,
+            BillingProductPriceInterval interval,
             boolean isActive,
             Optional<String> meterId,
             int packageSize,
@@ -67,9 +69,10 @@ public final class BillingProductPriceResponseData {
             Optional<String> priceDecimal,
             String priceExternalId,
             String productExternalId,
-            Optional<String> tiersMode,
+            BillingProviderType providerType,
+            Optional<BillingTiersMode> tiersMode,
             OffsetDateTime updatedAt,
-            String usageType,
+            BillingPriceUsageType usageType,
             Map<String, Object> additionalProperties) {
         this.billingScheme = billingScheme;
         this.createdAt = createdAt;
@@ -83,6 +86,7 @@ public final class BillingProductPriceResponseData {
         this.priceDecimal = priceDecimal;
         this.priceExternalId = priceExternalId;
         this.productExternalId = productExternalId;
+        this.providerType = providerType;
         this.tiersMode = tiersMode;
         this.updatedAt = updatedAt;
         this.usageType = usageType;
@@ -90,7 +94,7 @@ public final class BillingProductPriceResponseData {
     }
 
     @JsonProperty("billing_scheme")
-    public String getBillingScheme() {
+    public BillingPriceScheme getBillingScheme() {
         return billingScheme;
     }
 
@@ -110,7 +114,7 @@ public final class BillingProductPriceResponseData {
     }
 
     @JsonProperty("interval")
-    public String getInterval() {
+    public BillingProductPriceInterval getInterval() {
         return interval;
     }
 
@@ -149,8 +153,13 @@ public final class BillingProductPriceResponseData {
         return productExternalId;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("tiers_mode")
-    public Optional<String> getTiersMode() {
+    public Optional<BillingTiersMode> getTiersMode() {
         return tiersMode;
     }
 
@@ -160,7 +169,7 @@ public final class BillingProductPriceResponseData {
     }
 
     @JsonProperty("usage_type")
-    public String getUsageType() {
+    public BillingPriceUsageType getUsageType() {
         return usageType;
     }
 
@@ -188,6 +197,7 @@ public final class BillingProductPriceResponseData {
                 && priceDecimal.equals(other.priceDecimal)
                 && priceExternalId.equals(other.priceExternalId)
                 && productExternalId.equals(other.productExternalId)
+                && providerType.equals(other.providerType)
                 && tiersMode.equals(other.tiersMode)
                 && updatedAt.equals(other.updatedAt)
                 && usageType.equals(other.usageType);
@@ -208,6 +218,7 @@ public final class BillingProductPriceResponseData {
                 this.priceDecimal,
                 this.priceExternalId,
                 this.productExternalId,
+                this.providerType,
                 this.tiersMode,
                 this.updatedAt,
                 this.usageType);
@@ -223,7 +234,7 @@ public final class BillingProductPriceResponseData {
     }
 
     public interface BillingSchemeStage {
-        CreatedAtStage billingScheme(@NotNull String billingScheme);
+        CreatedAtStage billingScheme(@NotNull BillingPriceScheme billingScheme);
 
         Builder from(BillingProductPriceResponseData other);
     }
@@ -241,7 +252,7 @@ public final class BillingProductPriceResponseData {
     }
 
     public interface IntervalStage {
-        IsActiveStage interval(@NotNull String interval);
+        IsActiveStage interval(@NotNull BillingProductPriceInterval interval);
     }
 
     public interface IsActiveStage {
@@ -261,7 +272,11 @@ public final class BillingProductPriceResponseData {
     }
 
     public interface ProductExternalIdStage {
-        UpdatedAtStage productExternalId(@NotNull String productExternalId);
+        ProviderTypeStage productExternalId(@NotNull String productExternalId);
+    }
+
+    public interface ProviderTypeStage {
+        UpdatedAtStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface UpdatedAtStage {
@@ -269,7 +284,7 @@ public final class BillingProductPriceResponseData {
     }
 
     public interface UsageTypeStage {
-        _FinalStage usageType(@NotNull String usageType);
+        _FinalStage usageType(@NotNull BillingPriceUsageType usageType);
     }
 
     public interface _FinalStage {
@@ -283,9 +298,9 @@ public final class BillingProductPriceResponseData {
 
         _FinalStage priceDecimal(String priceDecimal);
 
-        _FinalStage tiersMode(Optional<String> tiersMode);
+        _FinalStage tiersMode(Optional<BillingTiersMode> tiersMode);
 
-        _FinalStage tiersMode(String tiersMode);
+        _FinalStage tiersMode(BillingTiersMode tiersMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -300,10 +315,11 @@ public final class BillingProductPriceResponseData {
                     PriceStage,
                     PriceExternalIdStage,
                     ProductExternalIdStage,
+                    ProviderTypeStage,
                     UpdatedAtStage,
                     UsageTypeStage,
                     _FinalStage {
-        private String billingScheme;
+        private BillingPriceScheme billingScheme;
 
         private OffsetDateTime createdAt;
 
@@ -311,7 +327,7 @@ public final class BillingProductPriceResponseData {
 
         private String id;
 
-        private String interval;
+        private BillingProductPriceInterval interval;
 
         private boolean isActive;
 
@@ -323,11 +339,13 @@ public final class BillingProductPriceResponseData {
 
         private String productExternalId;
 
+        private BillingProviderType providerType;
+
         private OffsetDateTime updatedAt;
 
-        private String usageType;
+        private BillingPriceUsageType usageType;
 
-        private Optional<String> tiersMode = Optional.empty();
+        private Optional<BillingTiersMode> tiersMode = Optional.empty();
 
         private Optional<String> priceDecimal = Optional.empty();
 
@@ -352,6 +370,7 @@ public final class BillingProductPriceResponseData {
             priceDecimal(other.getPriceDecimal());
             priceExternalId(other.getPriceExternalId());
             productExternalId(other.getProductExternalId());
+            providerType(other.getProviderType());
             tiersMode(other.getTiersMode());
             updatedAt(other.getUpdatedAt());
             usageType(other.getUsageType());
@@ -360,7 +379,7 @@ public final class BillingProductPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("billing_scheme")
-        public CreatedAtStage billingScheme(@NotNull String billingScheme) {
+        public CreatedAtStage billingScheme(@NotNull BillingPriceScheme billingScheme) {
             this.billingScheme = Objects.requireNonNull(billingScheme, "billingScheme must not be null");
             return this;
         }
@@ -388,7 +407,7 @@ public final class BillingProductPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public IsActiveStage interval(@NotNull String interval) {
+        public IsActiveStage interval(@NotNull BillingProductPriceInterval interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
             return this;
         }
@@ -423,8 +442,15 @@ public final class BillingProductPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("product_external_id")
-        public UpdatedAtStage productExternalId(@NotNull String productExternalId) {
+        public ProviderTypeStage productExternalId(@NotNull String productExternalId) {
             this.productExternalId = Objects.requireNonNull(productExternalId, "productExternalId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public UpdatedAtStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -437,20 +463,20 @@ public final class BillingProductPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("usage_type")
-        public _FinalStage usageType(@NotNull String usageType) {
+        public _FinalStage usageType(@NotNull BillingPriceUsageType usageType) {
             this.usageType = Objects.requireNonNull(usageType, "usageType must not be null");
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage tiersMode(String tiersMode) {
+        public _FinalStage tiersMode(BillingTiersMode tiersMode) {
             this.tiersMode = Optional.ofNullable(tiersMode);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "tiers_mode", nulls = Nulls.SKIP)
-        public _FinalStage tiersMode(Optional<String> tiersMode) {
+        public _FinalStage tiersMode(Optional<BillingTiersMode> tiersMode) {
             this.tiersMode = tiersMode;
             return this;
         }
@@ -496,6 +522,7 @@ public final class BillingProductPriceResponseData {
                     priceDecimal,
                     priceExternalId,
                     productExternalId,
+                    providerType,
                     tiersMode,
                     updatedAt,
                     usageType,

@@ -45,11 +45,21 @@ public final class ComponentPreviewResponseData {
 
     private final Optional<PlanDetailResponseData> defaultPlan;
 
+    private final ComponentDisplaySettings displaySettings;
+
     private final Optional<FeatureUsageDetailResponseData> featureUsage;
 
     private final List<InvoiceResponseData> invoices;
 
     private final Optional<PlanDetailResponseData> postTrialPlan;
+
+    private final boolean preventSelfServiceDowngrade;
+
+    private final Optional<String> preventSelfServiceDowngradeButtonText;
+
+    private final Optional<String> preventSelfServiceDowngradeUrl;
+
+    private final boolean showAsMonthlyPrices;
 
     private final boolean showCredits;
 
@@ -79,9 +89,14 @@ public final class ComponentPreviewResponseData {
             List<BillingCreditBundleView> creditBundles,
             List<CreditCompanyGrantView> creditGrants,
             Optional<PlanDetailResponseData> defaultPlan,
+            ComponentDisplaySettings displaySettings,
             Optional<FeatureUsageDetailResponseData> featureUsage,
             List<InvoiceResponseData> invoices,
             Optional<PlanDetailResponseData> postTrialPlan,
+            boolean preventSelfServiceDowngrade,
+            Optional<String> preventSelfServiceDowngradeButtonText,
+            Optional<String> preventSelfServiceDowngradeUrl,
+            boolean showAsMonthlyPrices,
             boolean showCredits,
             boolean showPeriodToggle,
             boolean showZeroPriceAsFree,
@@ -101,9 +116,14 @@ public final class ComponentPreviewResponseData {
         this.creditBundles = creditBundles;
         this.creditGrants = creditGrants;
         this.defaultPlan = defaultPlan;
+        this.displaySettings = displaySettings;
         this.featureUsage = featureUsage;
         this.invoices = invoices;
         this.postTrialPlan = postTrialPlan;
+        this.preventSelfServiceDowngrade = preventSelfServiceDowngrade;
+        this.preventSelfServiceDowngradeButtonText = preventSelfServiceDowngradeButtonText;
+        this.preventSelfServiceDowngradeUrl = preventSelfServiceDowngradeUrl;
+        this.showAsMonthlyPrices = showAsMonthlyPrices;
         this.showCredits = showCredits;
         this.showPeriodToggle = showPeriodToggle;
         this.showZeroPriceAsFree = showZeroPriceAsFree;
@@ -169,6 +189,11 @@ public final class ComponentPreviewResponseData {
         return defaultPlan;
     }
 
+    @JsonProperty("display_settings")
+    public ComponentDisplaySettings getDisplaySettings() {
+        return displaySettings;
+    }
+
     @JsonProperty("feature_usage")
     public Optional<FeatureUsageDetailResponseData> getFeatureUsage() {
         return featureUsage;
@@ -182,6 +207,26 @@ public final class ComponentPreviewResponseData {
     @JsonProperty("post_trial_plan")
     public Optional<PlanDetailResponseData> getPostTrialPlan() {
         return postTrialPlan;
+    }
+
+    @JsonProperty("prevent_self_service_downgrade")
+    public boolean getPreventSelfServiceDowngrade() {
+        return preventSelfServiceDowngrade;
+    }
+
+    @JsonProperty("prevent_self_service_downgrade_button_text")
+    public Optional<String> getPreventSelfServiceDowngradeButtonText() {
+        return preventSelfServiceDowngradeButtonText;
+    }
+
+    @JsonProperty("prevent_self_service_downgrade_url")
+    public Optional<String> getPreventSelfServiceDowngradeUrl() {
+        return preventSelfServiceDowngradeUrl;
+    }
+
+    @JsonProperty("show_as_monthly_prices")
+    public boolean getShowAsMonthlyPrices() {
+        return showAsMonthlyPrices;
     }
 
     @JsonProperty("show_credits")
@@ -242,9 +287,14 @@ public final class ComponentPreviewResponseData {
                 && creditBundles.equals(other.creditBundles)
                 && creditGrants.equals(other.creditGrants)
                 && defaultPlan.equals(other.defaultPlan)
+                && displaySettings.equals(other.displaySettings)
                 && featureUsage.equals(other.featureUsage)
                 && invoices.equals(other.invoices)
                 && postTrialPlan.equals(other.postTrialPlan)
+                && preventSelfServiceDowngrade == other.preventSelfServiceDowngrade
+                && preventSelfServiceDowngradeButtonText.equals(other.preventSelfServiceDowngradeButtonText)
+                && preventSelfServiceDowngradeUrl.equals(other.preventSelfServiceDowngradeUrl)
+                && showAsMonthlyPrices == other.showAsMonthlyPrices
                 && showCredits == other.showCredits
                 && showPeriodToggle == other.showPeriodToggle
                 && showZeroPriceAsFree == other.showZeroPriceAsFree
@@ -268,9 +318,14 @@ public final class ComponentPreviewResponseData {
                 this.creditBundles,
                 this.creditGrants,
                 this.defaultPlan,
+                this.displaySettings,
                 this.featureUsage,
                 this.invoices,
                 this.postTrialPlan,
+                this.preventSelfServiceDowngrade,
+                this.preventSelfServiceDowngradeButtonText,
+                this.preventSelfServiceDowngradeUrl,
+                this.showAsMonthlyPrices,
                 this.showCredits,
                 this.showPeriodToggle,
                 this.showZeroPriceAsFree,
@@ -290,9 +345,21 @@ public final class ComponentPreviewResponseData {
     }
 
     public interface CheckoutSettingsStage {
-        ShowCreditsStage checkoutSettings(@NotNull ComponentCheckoutSettings checkoutSettings);
+        DisplaySettingsStage checkoutSettings(@NotNull ComponentCheckoutSettings checkoutSettings);
 
         Builder from(ComponentPreviewResponseData other);
+    }
+
+    public interface DisplaySettingsStage {
+        PreventSelfServiceDowngradeStage displaySettings(@NotNull ComponentDisplaySettings displaySettings);
+    }
+
+    public interface PreventSelfServiceDowngradeStage {
+        ShowAsMonthlyPricesStage preventSelfServiceDowngrade(boolean preventSelfServiceDowngrade);
+    }
+
+    public interface ShowAsMonthlyPricesStage {
+        ShowCreditsStage showAsMonthlyPrices(boolean showAsMonthlyPrices);
     }
 
     public interface ShowCreditsStage {
@@ -377,6 +444,14 @@ public final class ComponentPreviewResponseData {
 
         _FinalStage postTrialPlan(PlanDetailResponseData postTrialPlan);
 
+        _FinalStage preventSelfServiceDowngradeButtonText(Optional<String> preventSelfServiceDowngradeButtonText);
+
+        _FinalStage preventSelfServiceDowngradeButtonText(String preventSelfServiceDowngradeButtonText);
+
+        _FinalStage preventSelfServiceDowngradeUrl(Optional<String> preventSelfServiceDowngradeUrl);
+
+        _FinalStage preventSelfServiceDowngradeUrl(String preventSelfServiceDowngradeUrl);
+
         _FinalStage stripeEmbed(Optional<StripeEmbedInfo> stripeEmbed);
 
         _FinalStage stripeEmbed(StripeEmbedInfo stripeEmbed);
@@ -397,11 +472,20 @@ public final class ComponentPreviewResponseData {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements CheckoutSettingsStage,
+                    DisplaySettingsStage,
+                    PreventSelfServiceDowngradeStage,
+                    ShowAsMonthlyPricesStage,
                     ShowCreditsStage,
                     ShowPeriodToggleStage,
                     ShowZeroPriceAsFreeStage,
                     _FinalStage {
         private ComponentCheckoutSettings checkoutSettings;
+
+        private ComponentDisplaySettings displaySettings;
+
+        private boolean preventSelfServiceDowngrade;
+
+        private boolean showAsMonthlyPrices;
 
         private boolean showCredits;
 
@@ -416,6 +500,10 @@ public final class ComponentPreviewResponseData {
         private Optional<CompanySubscriptionResponseData> subscription = Optional.empty();
 
         private Optional<StripeEmbedInfo> stripeEmbed = Optional.empty();
+
+        private Optional<String> preventSelfServiceDowngradeUrl = Optional.empty();
+
+        private Optional<String> preventSelfServiceDowngradeButtonText = Optional.empty();
 
         private Optional<PlanDetailResponseData> postTrialPlan = Optional.empty();
 
@@ -461,9 +549,14 @@ public final class ComponentPreviewResponseData {
             creditBundles(other.getCreditBundles());
             creditGrants(other.getCreditGrants());
             defaultPlan(other.getDefaultPlan());
+            displaySettings(other.getDisplaySettings());
             featureUsage(other.getFeatureUsage());
             invoices(other.getInvoices());
             postTrialPlan(other.getPostTrialPlan());
+            preventSelfServiceDowngrade(other.getPreventSelfServiceDowngrade());
+            preventSelfServiceDowngradeButtonText(other.getPreventSelfServiceDowngradeButtonText());
+            preventSelfServiceDowngradeUrl(other.getPreventSelfServiceDowngradeUrl());
+            showAsMonthlyPrices(other.getShowAsMonthlyPrices());
             showCredits(other.getShowCredits());
             showPeriodToggle(other.getShowPeriodToggle());
             showZeroPriceAsFree(other.getShowZeroPriceAsFree());
@@ -476,8 +569,29 @@ public final class ComponentPreviewResponseData {
 
         @java.lang.Override
         @JsonSetter("checkout_settings")
-        public ShowCreditsStage checkoutSettings(@NotNull ComponentCheckoutSettings checkoutSettings) {
+        public DisplaySettingsStage checkoutSettings(@NotNull ComponentCheckoutSettings checkoutSettings) {
             this.checkoutSettings = Objects.requireNonNull(checkoutSettings, "checkoutSettings must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("display_settings")
+        public PreventSelfServiceDowngradeStage displaySettings(@NotNull ComponentDisplaySettings displaySettings) {
+            this.displaySettings = Objects.requireNonNull(displaySettings, "displaySettings must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("prevent_self_service_downgrade")
+        public ShowAsMonthlyPricesStage preventSelfServiceDowngrade(boolean preventSelfServiceDowngrade) {
+            this.preventSelfServiceDowngrade = preventSelfServiceDowngrade;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_as_monthly_prices")
+        public ShowCreditsStage showAsMonthlyPrices(boolean showAsMonthlyPrices) {
+            this.showAsMonthlyPrices = showAsMonthlyPrices;
             return this;
         }
 
@@ -551,6 +665,33 @@ public final class ComponentPreviewResponseData {
         @JsonSetter(value = "stripe_embed", nulls = Nulls.SKIP)
         public _FinalStage stripeEmbed(Optional<StripeEmbedInfo> stripeEmbed) {
             this.stripeEmbed = stripeEmbed;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage preventSelfServiceDowngradeUrl(String preventSelfServiceDowngradeUrl) {
+            this.preventSelfServiceDowngradeUrl = Optional.ofNullable(preventSelfServiceDowngradeUrl);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "prevent_self_service_downgrade_url", nulls = Nulls.SKIP)
+        public _FinalStage preventSelfServiceDowngradeUrl(Optional<String> preventSelfServiceDowngradeUrl) {
+            this.preventSelfServiceDowngradeUrl = preventSelfServiceDowngradeUrl;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage preventSelfServiceDowngradeButtonText(String preventSelfServiceDowngradeButtonText) {
+            this.preventSelfServiceDowngradeButtonText = Optional.ofNullable(preventSelfServiceDowngradeButtonText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "prevent_self_service_downgrade_button_text", nulls = Nulls.SKIP)
+        public _FinalStage preventSelfServiceDowngradeButtonText(
+                Optional<String> preventSelfServiceDowngradeButtonText) {
+            this.preventSelfServiceDowngradeButtonText = preventSelfServiceDowngradeButtonText;
             return this;
         }
 
@@ -817,9 +958,14 @@ public final class ComponentPreviewResponseData {
                     creditBundles,
                     creditGrants,
                     defaultPlan,
+                    displaySettings,
                     featureUsage,
                     invoices,
                     postTrialPlan,
+                    preventSelfServiceDowngrade,
+                    preventSelfServiceDowngradeButtonText,
+                    preventSelfServiceDowngradeUrl,
+                    showAsMonthlyPrices,
                     showCredits,
                     showPeriodToggle,
                     showZeroPriceAsFree,

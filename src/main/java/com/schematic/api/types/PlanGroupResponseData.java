@@ -29,6 +29,8 @@ public final class PlanGroupResponseData {
 
     private final CheckoutSettingsResponseData checkoutSettings;
 
+    private final ComponentSettingsResponseData componentSettings;
+
     private final Optional<String> defaultPlanId;
 
     private final Optional<String> fallbackPlanId;
@@ -45,13 +47,23 @@ public final class PlanGroupResponseData {
 
     private final boolean preventDowngradesWhenOverLimit;
 
+    private final boolean preventSelfServiceDowngrade;
+
+    private final Optional<String> preventSelfServiceDowngradeButtonText;
+
+    private final Optional<String> preventSelfServiceDowngradeUrl;
+
+    private final String prorationBehavior;
+
+    private final boolean showAsMonthlyPrices;
+
     private final boolean showCredits;
 
     private final boolean showPeriodToggle;
 
     private final boolean showZeroPriceAsFree;
 
-    private final boolean syncCustomerBillingDetailsForTax;
+    private final boolean syncCustomerBillingDetails;
 
     private final boolean taxCollectionEnabled;
 
@@ -69,6 +81,7 @@ public final class PlanGroupResponseData {
             List<CompatiblePlansResponseData> addOnCompatibilities,
             List<String> addOnIds,
             CheckoutSettingsResponseData checkoutSettings,
+            ComponentSettingsResponseData componentSettings,
             Optional<String> defaultPlanId,
             Optional<String> fallbackPlanId,
             String id,
@@ -77,10 +90,15 @@ public final class PlanGroupResponseData {
             List<OrderedPlansInGroup> orderedAddOnIds,
             List<OrderedPlansInGroup> planIds,
             boolean preventDowngradesWhenOverLimit,
+            boolean preventSelfServiceDowngrade,
+            Optional<String> preventSelfServiceDowngradeButtonText,
+            Optional<String> preventSelfServiceDowngradeUrl,
+            String prorationBehavior,
+            boolean showAsMonthlyPrices,
             boolean showCredits,
             boolean showPeriodToggle,
             boolean showZeroPriceAsFree,
-            boolean syncCustomerBillingDetailsForTax,
+            boolean syncCustomerBillingDetails,
             boolean taxCollectionEnabled,
             Optional<Integer> trialDays,
             Optional<String> trialExpiryPlanId,
@@ -90,6 +108,7 @@ public final class PlanGroupResponseData {
         this.addOnCompatibilities = addOnCompatibilities;
         this.addOnIds = addOnIds;
         this.checkoutSettings = checkoutSettings;
+        this.componentSettings = componentSettings;
         this.defaultPlanId = defaultPlanId;
         this.fallbackPlanId = fallbackPlanId;
         this.id = id;
@@ -98,10 +117,15 @@ public final class PlanGroupResponseData {
         this.orderedAddOnIds = orderedAddOnIds;
         this.planIds = planIds;
         this.preventDowngradesWhenOverLimit = preventDowngradesWhenOverLimit;
+        this.preventSelfServiceDowngrade = preventSelfServiceDowngrade;
+        this.preventSelfServiceDowngradeButtonText = preventSelfServiceDowngradeButtonText;
+        this.preventSelfServiceDowngradeUrl = preventSelfServiceDowngradeUrl;
+        this.prorationBehavior = prorationBehavior;
+        this.showAsMonthlyPrices = showAsMonthlyPrices;
         this.showCredits = showCredits;
         this.showPeriodToggle = showPeriodToggle;
         this.showZeroPriceAsFree = showZeroPriceAsFree;
-        this.syncCustomerBillingDetailsForTax = syncCustomerBillingDetailsForTax;
+        this.syncCustomerBillingDetails = syncCustomerBillingDetails;
         this.taxCollectionEnabled = taxCollectionEnabled;
         this.trialDays = trialDays;
         this.trialExpiryPlanId = trialExpiryPlanId;
@@ -123,6 +147,11 @@ public final class PlanGroupResponseData {
     @JsonProperty("checkout_settings")
     public CheckoutSettingsResponseData getCheckoutSettings() {
         return checkoutSettings;
+    }
+
+    @JsonProperty("component_settings")
+    public ComponentSettingsResponseData getComponentSettings() {
+        return componentSettings;
     }
 
     @JsonProperty("default_plan_id")
@@ -165,6 +194,31 @@ public final class PlanGroupResponseData {
         return preventDowngradesWhenOverLimit;
     }
 
+    @JsonProperty("prevent_self_service_downgrade")
+    public boolean getPreventSelfServiceDowngrade() {
+        return preventSelfServiceDowngrade;
+    }
+
+    @JsonProperty("prevent_self_service_downgrade_button_text")
+    public Optional<String> getPreventSelfServiceDowngradeButtonText() {
+        return preventSelfServiceDowngradeButtonText;
+    }
+
+    @JsonProperty("prevent_self_service_downgrade_url")
+    public Optional<String> getPreventSelfServiceDowngradeUrl() {
+        return preventSelfServiceDowngradeUrl;
+    }
+
+    @JsonProperty("proration_behavior")
+    public String getProrationBehavior() {
+        return prorationBehavior;
+    }
+
+    @JsonProperty("show_as_monthly_prices")
+    public boolean getShowAsMonthlyPrices() {
+        return showAsMonthlyPrices;
+    }
+
     @JsonProperty("show_credits")
     public boolean getShowCredits() {
         return showCredits;
@@ -180,9 +234,9 @@ public final class PlanGroupResponseData {
         return showZeroPriceAsFree;
     }
 
-    @JsonProperty("sync_customer_billing_details_for_tax")
-    public boolean getSyncCustomerBillingDetailsForTax() {
-        return syncCustomerBillingDetailsForTax;
+    @JsonProperty("sync_customer_billing_details")
+    public boolean getSyncCustomerBillingDetails() {
+        return syncCustomerBillingDetails;
     }
 
     @JsonProperty("tax_collection_enabled")
@@ -225,6 +279,7 @@ public final class PlanGroupResponseData {
         return addOnCompatibilities.equals(other.addOnCompatibilities)
                 && addOnIds.equals(other.addOnIds)
                 && checkoutSettings.equals(other.checkoutSettings)
+                && componentSettings.equals(other.componentSettings)
                 && defaultPlanId.equals(other.defaultPlanId)
                 && fallbackPlanId.equals(other.fallbackPlanId)
                 && id.equals(other.id)
@@ -233,10 +288,15 @@ public final class PlanGroupResponseData {
                 && orderedAddOnIds.equals(other.orderedAddOnIds)
                 && planIds.equals(other.planIds)
                 && preventDowngradesWhenOverLimit == other.preventDowngradesWhenOverLimit
+                && preventSelfServiceDowngrade == other.preventSelfServiceDowngrade
+                && preventSelfServiceDowngradeButtonText.equals(other.preventSelfServiceDowngradeButtonText)
+                && preventSelfServiceDowngradeUrl.equals(other.preventSelfServiceDowngradeUrl)
+                && prorationBehavior.equals(other.prorationBehavior)
+                && showAsMonthlyPrices == other.showAsMonthlyPrices
                 && showCredits == other.showCredits
                 && showPeriodToggle == other.showPeriodToggle
                 && showZeroPriceAsFree == other.showZeroPriceAsFree
-                && syncCustomerBillingDetailsForTax == other.syncCustomerBillingDetailsForTax
+                && syncCustomerBillingDetails == other.syncCustomerBillingDetails
                 && taxCollectionEnabled == other.taxCollectionEnabled
                 && trialDays.equals(other.trialDays)
                 && trialExpiryPlanId.equals(other.trialExpiryPlanId)
@@ -250,6 +310,7 @@ public final class PlanGroupResponseData {
                 this.addOnCompatibilities,
                 this.addOnIds,
                 this.checkoutSettings,
+                this.componentSettings,
                 this.defaultPlanId,
                 this.fallbackPlanId,
                 this.id,
@@ -258,10 +319,15 @@ public final class PlanGroupResponseData {
                 this.orderedAddOnIds,
                 this.planIds,
                 this.preventDowngradesWhenOverLimit,
+                this.preventSelfServiceDowngrade,
+                this.preventSelfServiceDowngradeButtonText,
+                this.preventSelfServiceDowngradeUrl,
+                this.prorationBehavior,
+                this.showAsMonthlyPrices,
                 this.showCredits,
                 this.showPeriodToggle,
                 this.showZeroPriceAsFree,
-                this.syncCustomerBillingDetailsForTax,
+                this.syncCustomerBillingDetails,
                 this.taxCollectionEnabled,
                 this.trialDays,
                 this.trialExpiryPlanId,
@@ -279,9 +345,13 @@ public final class PlanGroupResponseData {
     }
 
     public interface CheckoutSettingsStage {
-        IdStage checkoutSettings(@NotNull CheckoutSettingsResponseData checkoutSettings);
+        ComponentSettingsStage checkoutSettings(@NotNull CheckoutSettingsResponseData checkoutSettings);
 
         Builder from(PlanGroupResponseData other);
+    }
+
+    public interface ComponentSettingsStage {
+        IdStage componentSettings(@NotNull ComponentSettingsResponseData componentSettings);
     }
 
     public interface IdStage {
@@ -289,7 +359,19 @@ public final class PlanGroupResponseData {
     }
 
     public interface PreventDowngradesWhenOverLimitStage {
-        ShowCreditsStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit);
+        PreventSelfServiceDowngradeStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit);
+    }
+
+    public interface PreventSelfServiceDowngradeStage {
+        ProrationBehaviorStage preventSelfServiceDowngrade(boolean preventSelfServiceDowngrade);
+    }
+
+    public interface ProrationBehaviorStage {
+        ShowAsMonthlyPricesStage prorationBehavior(@NotNull String prorationBehavior);
+    }
+
+    public interface ShowAsMonthlyPricesStage {
+        ShowCreditsStage showAsMonthlyPrices(boolean showAsMonthlyPrices);
     }
 
     public interface ShowCreditsStage {
@@ -301,11 +383,11 @@ public final class PlanGroupResponseData {
     }
 
     public interface ShowZeroPriceAsFreeStage {
-        SyncCustomerBillingDetailsForTaxStage showZeroPriceAsFree(boolean showZeroPriceAsFree);
+        SyncCustomerBillingDetailsStage showZeroPriceAsFree(boolean showZeroPriceAsFree);
     }
 
-    public interface SyncCustomerBillingDetailsForTaxStage {
-        TaxCollectionEnabledStage syncCustomerBillingDetailsForTax(boolean syncCustomerBillingDetailsForTax);
+    public interface SyncCustomerBillingDetailsStage {
+        TaxCollectionEnabledStage syncCustomerBillingDetails(boolean syncCustomerBillingDetails);
     }
 
     public interface TaxCollectionEnabledStage {
@@ -355,6 +437,14 @@ public final class PlanGroupResponseData {
 
         _FinalStage addAllPlanIds(List<OrderedPlansInGroup> planIds);
 
+        _FinalStage preventSelfServiceDowngradeButtonText(Optional<String> preventSelfServiceDowngradeButtonText);
+
+        _FinalStage preventSelfServiceDowngradeButtonText(String preventSelfServiceDowngradeButtonText);
+
+        _FinalStage preventSelfServiceDowngradeUrl(Optional<String> preventSelfServiceDowngradeUrl);
+
+        _FinalStage preventSelfServiceDowngradeUrl(String preventSelfServiceDowngradeUrl);
+
         _FinalStage trialDays(Optional<Integer> trialDays);
 
         _FinalStage trialDays(Integer trialDays);
@@ -375,19 +465,31 @@ public final class PlanGroupResponseData {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements CheckoutSettingsStage,
+                    ComponentSettingsStage,
                     IdStage,
                     PreventDowngradesWhenOverLimitStage,
+                    PreventSelfServiceDowngradeStage,
+                    ProrationBehaviorStage,
+                    ShowAsMonthlyPricesStage,
                     ShowCreditsStage,
                     ShowPeriodToggleStage,
                     ShowZeroPriceAsFreeStage,
-                    SyncCustomerBillingDetailsForTaxStage,
+                    SyncCustomerBillingDetailsStage,
                     TaxCollectionEnabledStage,
                     _FinalStage {
         private CheckoutSettingsResponseData checkoutSettings;
 
+        private ComponentSettingsResponseData componentSettings;
+
         private String id;
 
         private boolean preventDowngradesWhenOverLimit;
+
+        private boolean preventSelfServiceDowngrade;
+
+        private String prorationBehavior;
+
+        private boolean showAsMonthlyPrices;
 
         private boolean showCredits;
 
@@ -395,7 +497,7 @@ public final class PlanGroupResponseData {
 
         private boolean showZeroPriceAsFree;
 
-        private boolean syncCustomerBillingDetailsForTax;
+        private boolean syncCustomerBillingDetails;
 
         private boolean taxCollectionEnabled;
 
@@ -406,6 +508,10 @@ public final class PlanGroupResponseData {
         private Optional<String> trialExpiryPlanId = Optional.empty();
 
         private Optional<Integer> trialDays = Optional.empty();
+
+        private Optional<String> preventSelfServiceDowngradeUrl = Optional.empty();
+
+        private Optional<String> preventSelfServiceDowngradeButtonText = Optional.empty();
 
         private List<OrderedPlansInGroup> planIds = new ArrayList<>();
 
@@ -433,6 +539,7 @@ public final class PlanGroupResponseData {
             addOnCompatibilities(other.getAddOnCompatibilities());
             addOnIds(other.getAddOnIds());
             checkoutSettings(other.getCheckoutSettings());
+            componentSettings(other.getComponentSettings());
             defaultPlanId(other.getDefaultPlanId());
             fallbackPlanId(other.getFallbackPlanId());
             id(other.getId());
@@ -441,10 +548,15 @@ public final class PlanGroupResponseData {
             orderedAddOnIds(other.getOrderedAddOnIds());
             planIds(other.getPlanIds());
             preventDowngradesWhenOverLimit(other.getPreventDowngradesWhenOverLimit());
+            preventSelfServiceDowngrade(other.getPreventSelfServiceDowngrade());
+            preventSelfServiceDowngradeButtonText(other.getPreventSelfServiceDowngradeButtonText());
+            preventSelfServiceDowngradeUrl(other.getPreventSelfServiceDowngradeUrl());
+            prorationBehavior(other.getProrationBehavior());
+            showAsMonthlyPrices(other.getShowAsMonthlyPrices());
             showCredits(other.getShowCredits());
             showPeriodToggle(other.getShowPeriodToggle());
             showZeroPriceAsFree(other.getShowZeroPriceAsFree());
-            syncCustomerBillingDetailsForTax(other.getSyncCustomerBillingDetailsForTax());
+            syncCustomerBillingDetails(other.getSyncCustomerBillingDetails());
             taxCollectionEnabled(other.getTaxCollectionEnabled());
             trialDays(other.getTrialDays());
             trialExpiryPlanId(other.getTrialExpiryPlanId());
@@ -455,8 +567,15 @@ public final class PlanGroupResponseData {
 
         @java.lang.Override
         @JsonSetter("checkout_settings")
-        public IdStage checkoutSettings(@NotNull CheckoutSettingsResponseData checkoutSettings) {
+        public ComponentSettingsStage checkoutSettings(@NotNull CheckoutSettingsResponseData checkoutSettings) {
             this.checkoutSettings = Objects.requireNonNull(checkoutSettings, "checkoutSettings must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("component_settings")
+        public IdStage componentSettings(@NotNull ComponentSettingsResponseData componentSettings) {
+            this.componentSettings = Objects.requireNonNull(componentSettings, "componentSettings must not be null");
             return this;
         }
 
@@ -469,8 +588,29 @@ public final class PlanGroupResponseData {
 
         @java.lang.Override
         @JsonSetter("prevent_downgrades_when_over_limit")
-        public ShowCreditsStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit) {
+        public PreventSelfServiceDowngradeStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit) {
             this.preventDowngradesWhenOverLimit = preventDowngradesWhenOverLimit;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("prevent_self_service_downgrade")
+        public ProrationBehaviorStage preventSelfServiceDowngrade(boolean preventSelfServiceDowngrade) {
+            this.preventSelfServiceDowngrade = preventSelfServiceDowngrade;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("proration_behavior")
+        public ShowAsMonthlyPricesStage prorationBehavior(@NotNull String prorationBehavior) {
+            this.prorationBehavior = Objects.requireNonNull(prorationBehavior, "prorationBehavior must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_as_monthly_prices")
+        public ShowCreditsStage showAsMonthlyPrices(boolean showAsMonthlyPrices) {
+            this.showAsMonthlyPrices = showAsMonthlyPrices;
             return this;
         }
 
@@ -490,15 +630,15 @@ public final class PlanGroupResponseData {
 
         @java.lang.Override
         @JsonSetter("show_zero_price_as_free")
-        public SyncCustomerBillingDetailsForTaxStage showZeroPriceAsFree(boolean showZeroPriceAsFree) {
+        public SyncCustomerBillingDetailsStage showZeroPriceAsFree(boolean showZeroPriceAsFree) {
             this.showZeroPriceAsFree = showZeroPriceAsFree;
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("sync_customer_billing_details_for_tax")
-        public TaxCollectionEnabledStage syncCustomerBillingDetailsForTax(boolean syncCustomerBillingDetailsForTax) {
-            this.syncCustomerBillingDetailsForTax = syncCustomerBillingDetailsForTax;
+        @JsonSetter("sync_customer_billing_details")
+        public TaxCollectionEnabledStage syncCustomerBillingDetails(boolean syncCustomerBillingDetails) {
+            this.syncCustomerBillingDetails = syncCustomerBillingDetails;
             return this;
         }
 
@@ -558,6 +698,33 @@ public final class PlanGroupResponseData {
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
         public _FinalStage trialDays(Optional<Integer> trialDays) {
             this.trialDays = trialDays;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage preventSelfServiceDowngradeUrl(String preventSelfServiceDowngradeUrl) {
+            this.preventSelfServiceDowngradeUrl = Optional.ofNullable(preventSelfServiceDowngradeUrl);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "prevent_self_service_downgrade_url", nulls = Nulls.SKIP)
+        public _FinalStage preventSelfServiceDowngradeUrl(Optional<String> preventSelfServiceDowngradeUrl) {
+            this.preventSelfServiceDowngradeUrl = preventSelfServiceDowngradeUrl;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage preventSelfServiceDowngradeButtonText(String preventSelfServiceDowngradeButtonText) {
+            this.preventSelfServiceDowngradeButtonText = Optional.ofNullable(preventSelfServiceDowngradeButtonText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "prevent_self_service_downgrade_button_text", nulls = Nulls.SKIP)
+        public _FinalStage preventSelfServiceDowngradeButtonText(
+                Optional<String> preventSelfServiceDowngradeButtonText) {
+            this.preventSelfServiceDowngradeButtonText = preventSelfServiceDowngradeButtonText;
             return this;
         }
 
@@ -715,6 +882,7 @@ public final class PlanGroupResponseData {
                     addOnCompatibilities,
                     addOnIds,
                     checkoutSettings,
+                    componentSettings,
                     defaultPlanId,
                     fallbackPlanId,
                     id,
@@ -723,10 +891,15 @@ public final class PlanGroupResponseData {
                     orderedAddOnIds,
                     planIds,
                     preventDowngradesWhenOverLimit,
+                    preventSelfServiceDowngrade,
+                    preventSelfServiceDowngradeButtonText,
+                    preventSelfServiceDowngradeUrl,
+                    prorationBehavior,
+                    showAsMonthlyPrices,
                     showCredits,
                     showPeriodToggle,
                     showZeroPriceAsFree,
-                    syncCustomerBillingDetailsForTax,
+                    syncCustomerBillingDetails,
                     taxCollectionEnabled,
                     trialDays,
                     trialExpiryPlanId,

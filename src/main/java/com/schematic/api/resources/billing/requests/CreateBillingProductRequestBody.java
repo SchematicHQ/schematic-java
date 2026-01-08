@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,6 +30,8 @@ public final class CreateBillingProductRequestBody {
 
     private final double price;
 
+    private final Optional<BillingProviderType> providerType;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingProductRequestBody(
@@ -36,11 +39,13 @@ public final class CreateBillingProductRequestBody {
             Optional<Boolean> isActive,
             String name,
             double price,
+            Optional<BillingProviderType> providerType,
             Map<String, Object> additionalProperties) {
         this.externalId = externalId;
         this.isActive = isActive;
         this.name = name;
         this.price = price;
+        this.providerType = providerType;
         this.additionalProperties = additionalProperties;
     }
 
@@ -64,6 +69,11 @@ public final class CreateBillingProductRequestBody {
         return price;
     }
 
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -79,12 +89,13 @@ public final class CreateBillingProductRequestBody {
         return externalId.equals(other.externalId)
                 && isActive.equals(other.isActive)
                 && name.equals(other.name)
-                && price == other.price;
+                && price == other.price
+                && providerType.equals(other.providerType);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.externalId, this.isActive, this.name, this.price);
+        return Objects.hash(this.externalId, this.isActive, this.name, this.price, this.providerType);
     }
 
     @java.lang.Override
@@ -116,6 +127,10 @@ public final class CreateBillingProductRequestBody {
         _FinalStage isActive(Optional<Boolean> isActive);
 
         _FinalStage isActive(Boolean isActive);
+
+        _FinalStage providerType(Optional<BillingProviderType> providerType);
+
+        _FinalStage providerType(BillingProviderType providerType);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -125,6 +140,8 @@ public final class CreateBillingProductRequestBody {
         private String name;
 
         private double price;
+
+        private Optional<BillingProviderType> providerType = Optional.empty();
 
         private Optional<Boolean> isActive = Optional.empty();
 
@@ -139,6 +156,7 @@ public final class CreateBillingProductRequestBody {
             isActive(other.getIsActive());
             name(other.getName());
             price(other.getPrice());
+            providerType(other.getProviderType());
             return this;
         }
 
@@ -164,6 +182,19 @@ public final class CreateBillingProductRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public _FinalStage providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage isActive(Boolean isActive) {
             this.isActive = Optional.ofNullable(isActive);
             return this;
@@ -178,7 +209,8 @@ public final class CreateBillingProductRequestBody {
 
         @java.lang.Override
         public CreateBillingProductRequestBody build() {
-            return new CreateBillingProductRequestBody(externalId, isActive, name, price, additionalProperties);
+            return new CreateBillingProductRequestBody(
+                    externalId, isActive, name, price, providerType, additionalProperties);
         }
     }
 }

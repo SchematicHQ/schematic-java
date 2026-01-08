@@ -19,3 +19,4 @@ src/test/java/com/schematic/api/TestOfflineMode.java
 src/test/java/com/schematic/api/TestReadme.java
 src/test/java/com/schematic/api/TestSchematic.java
 src/test/java/com/schematic/webhook/
+changelog.md

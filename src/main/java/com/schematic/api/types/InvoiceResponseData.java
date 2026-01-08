@@ -48,6 +48,8 @@ public final class InvoiceResponseData {
 
     private final Optional<String> paymentMethodExternalId;
 
+    private final BillingProviderType providerType;
+
     private final Optional<String> subscriptionExternalId;
 
     private final int subtotal;
@@ -72,6 +74,7 @@ public final class InvoiceResponseData {
             Optional<String> externalId,
             String id,
             Optional<String> paymentMethodExternalId,
+            BillingProviderType providerType,
             Optional<String> subscriptionExternalId,
             int subtotal,
             OffsetDateTime updatedAt,
@@ -90,6 +93,7 @@ public final class InvoiceResponseData {
         this.externalId = externalId;
         this.id = id;
         this.paymentMethodExternalId = paymentMethodExternalId;
+        this.providerType = providerType;
         this.subscriptionExternalId = subscriptionExternalId;
         this.subtotal = subtotal;
         this.updatedAt = updatedAt;
@@ -162,6 +166,11 @@ public final class InvoiceResponseData {
         return paymentMethodExternalId;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("subscription_external_id")
     public Optional<String> getSubscriptionExternalId() {
         return subscriptionExternalId;
@@ -207,6 +216,7 @@ public final class InvoiceResponseData {
                 && externalId.equals(other.externalId)
                 && id.equals(other.id)
                 && paymentMethodExternalId.equals(other.paymentMethodExternalId)
+                && providerType.equals(other.providerType)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && subtotal == other.subtotal
                 && updatedAt.equals(other.updatedAt)
@@ -229,6 +239,7 @@ public final class InvoiceResponseData {
                 this.externalId,
                 this.id,
                 this.paymentMethodExternalId,
+                this.providerType,
                 this.subscriptionExternalId,
                 this.subtotal,
                 this.updatedAt,
@@ -279,7 +290,11 @@ public final class InvoiceResponseData {
     }
 
     public interface IdStage {
-        SubtotalStage id(@NotNull String id);
+        ProviderTypeStage id(@NotNull String id);
+    }
+
+    public interface ProviderTypeStage {
+        SubtotalStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface SubtotalStage {
@@ -329,6 +344,7 @@ public final class InvoiceResponseData {
                     CustomerExternalIdStage,
                     EnvironmentIdStage,
                     IdStage,
+                    ProviderTypeStage,
                     SubtotalStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -349,6 +365,8 @@ public final class InvoiceResponseData {
         private String environmentId;
 
         private String id;
+
+        private BillingProviderType providerType;
 
         private int subtotal;
 
@@ -386,6 +404,7 @@ public final class InvoiceResponseData {
             externalId(other.getExternalId());
             id(other.getId());
             paymentMethodExternalId(other.getPaymentMethodExternalId());
+            providerType(other.getProviderType());
             subscriptionExternalId(other.getSubscriptionExternalId());
             subtotal(other.getSubtotal());
             updatedAt(other.getUpdatedAt());
@@ -451,8 +470,15 @@ public final class InvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public SubtotalStage id(@NotNull String id) {
+        public ProviderTypeStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public SubtotalStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -564,6 +590,7 @@ public final class InvoiceResponseData {
                     externalId,
                     id,
                     paymentMethodExternalId,
+                    providerType,
                     subscriptionExternalId,
                     subtotal,
                     updatedAt,

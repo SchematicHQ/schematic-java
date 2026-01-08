@@ -34,7 +34,7 @@ public final class FeatureUsageDataResponseData {
 
     private final String featureName;
 
-    private final String featureType;
+    private final FeatureType featureType;
 
     private final String hardLimit;
 
@@ -63,7 +63,7 @@ public final class FeatureUsageDataResponseData {
             String entitlementValueType,
             String featureId,
             String featureName,
-            String featureType,
+            FeatureType featureType,
             String hardLimit,
             boolean hasAccess,
             Optional<OffsetDateTime> metricResetAt,
@@ -124,7 +124,7 @@ public final class FeatureUsageDataResponseData {
     }
 
     @JsonProperty("feature_type")
-    public String getFeatureType() {
+    public FeatureType getFeatureType() {
         return featureType;
     }
 
@@ -252,7 +252,7 @@ public final class FeatureUsageDataResponseData {
     }
 
     public interface FeatureTypeStage {
-        HardLimitStage featureType(@NotNull String featureType);
+        HardLimitStage featureType(@NotNull FeatureType featureType);
     }
 
     public interface HardLimitStage {
@@ -323,7 +323,7 @@ public final class FeatureUsageDataResponseData {
 
         private String featureName;
 
-        private String featureType;
+        private FeatureType featureType;
 
         private String hardLimit;
 
@@ -404,7 +404,7 @@ public final class FeatureUsageDataResponseData {
 
         @java.lang.Override
         @JsonSetter("feature_type")
-        public HardLimitStage featureType(@NotNull String featureType) {
+        public HardLimitStage featureType(@NotNull FeatureType featureType) {
             this.featureType = Objects.requireNonNull(featureType, "featureType must not be null");
             return this;
         }

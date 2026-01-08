@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.webhooks.types.CreateWebhookRequestBodyRequestTypesItem;
 import com.schematic.api.types.CreditTriggerConfig;
 import com.schematic.api.types.EntitlementTriggerConfig;
+import com.schematic.api.types.WebhookRequestType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +32,7 @@ public final class CreateWebhookRequestBody {
 
     private final String name;
 
-    private final List<CreateWebhookRequestBodyRequestTypesItem> requestTypes;
+    private final List<WebhookRequestType> requestTypes;
 
     private final String url;
 
@@ -42,7 +42,7 @@ public final class CreateWebhookRequestBody {
             Optional<List<CreditTriggerConfig>> creditTriggerConfigs,
             Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs,
             String name,
-            List<CreateWebhookRequestBodyRequestTypesItem> requestTypes,
+            List<WebhookRequestType> requestTypes,
             String url,
             Map<String, Object> additionalProperties) {
         this.creditTriggerConfigs = creditTriggerConfigs;
@@ -69,7 +69,7 @@ public final class CreateWebhookRequestBody {
     }
 
     @JsonProperty("request_types")
-    public List<CreateWebhookRequestBodyRequestTypesItem> getRequestTypes() {
+    public List<WebhookRequestType> getRequestTypes() {
         return requestTypes;
     }
 
@@ -133,11 +133,11 @@ public final class CreateWebhookRequestBody {
 
         _FinalStage entitlementTriggerConfigs(List<EntitlementTriggerConfig> entitlementTriggerConfigs);
 
-        _FinalStage requestTypes(List<CreateWebhookRequestBodyRequestTypesItem> requestTypes);
+        _FinalStage requestTypes(List<WebhookRequestType> requestTypes);
 
-        _FinalStage addRequestTypes(CreateWebhookRequestBodyRequestTypesItem requestTypes);
+        _FinalStage addRequestTypes(WebhookRequestType requestTypes);
 
-        _FinalStage addAllRequestTypes(List<CreateWebhookRequestBodyRequestTypesItem> requestTypes);
+        _FinalStage addAllRequestTypes(List<WebhookRequestType> requestTypes);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -146,7 +146,7 @@ public final class CreateWebhookRequestBody {
 
         private String url;
 
-        private List<CreateWebhookRequestBodyRequestTypesItem> requestTypes = new ArrayList<>();
+        private List<WebhookRequestType> requestTypes = new ArrayList<>();
 
         private Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs = Optional.empty();
 
@@ -182,7 +182,7 @@ public final class CreateWebhookRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage addAllRequestTypes(List<CreateWebhookRequestBodyRequestTypesItem> requestTypes) {
+        public _FinalStage addAllRequestTypes(List<WebhookRequestType> requestTypes) {
             if (requestTypes != null) {
                 this.requestTypes.addAll(requestTypes);
             }
@@ -190,14 +190,14 @@ public final class CreateWebhookRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage addRequestTypes(CreateWebhookRequestBodyRequestTypesItem requestTypes) {
+        public _FinalStage addRequestTypes(WebhookRequestType requestTypes) {
             this.requestTypes.add(requestTypes);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "request_types", nulls = Nulls.SKIP)
-        public _FinalStage requestTypes(List<CreateWebhookRequestBodyRequestTypesItem> requestTypes) {
+        public _FinalStage requestTypes(List<WebhookRequestType> requestTypes) {
             this.requestTypes.clear();
             if (requestTypes != null) {
                 this.requestTypes.addAll(requestTypes);

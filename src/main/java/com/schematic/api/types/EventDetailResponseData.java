@@ -58,13 +58,13 @@ public final class EventDetailResponseData {
 
     private final Optional<OffsetDateTime> sentAt;
 
-    private final String status;
+    private final EventStatus status;
 
     private final Optional<String> subtype;
 
-    private final String type;
+    private final EventType type;
 
-    private final OffsetDateTime updatedAt;
+    private final Optional<OffsetDateTime> updatedAt;
 
     private final Optional<PreviewObject> user;
 
@@ -89,10 +89,10 @@ public final class EventDetailResponseData {
             Optional<OffsetDateTime> processedAt,
             int quantity,
             Optional<OffsetDateTime> sentAt,
-            String status,
+            EventStatus status,
             Optional<String> subtype,
-            String type,
-            OffsetDateTime updatedAt,
+            EventType type,
+            Optional<OffsetDateTime> updatedAt,
             Optional<PreviewObject> user,
             Optional<String> userId,
             Map<String, Object> additionalProperties) {
@@ -202,7 +202,7 @@ public final class EventDetailResponseData {
     }
 
     @JsonProperty("status")
-    public String getStatus() {
+    public EventStatus getStatus() {
         return status;
     }
 
@@ -212,12 +212,12 @@ public final class EventDetailResponseData {
     }
 
     @JsonProperty("type")
-    public String getType() {
+    public EventType getType() {
         return type;
     }
 
     @JsonProperty("updated_at")
-    public OffsetDateTime getUpdatedAt() {
+    public Optional<OffsetDateTime> getUpdatedAt() {
         return updatedAt;
     }
 
@@ -322,15 +322,11 @@ public final class EventDetailResponseData {
     }
 
     public interface StatusStage {
-        TypeStage status(@NotNull String status);
+        TypeStage status(@NotNull EventStatus status);
     }
 
     public interface TypeStage {
-        UpdatedAtStage type(@NotNull String type);
-    }
-
-    public interface UpdatedAtStage {
-        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
+        _FinalStage type(@NotNull EventType type);
     }
 
     public interface _FinalStage {
@@ -394,6 +390,10 @@ public final class EventDetailResponseData {
 
         _FinalStage subtype(String subtype);
 
+        _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt);
+
+        _FinalStage updatedAt(OffsetDateTime updatedAt);
+
         _FinalStage user(Optional<PreviewObject> user);
 
         _FinalStage user(PreviewObject user);
@@ -405,14 +405,7 @@ public final class EventDetailResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements BodyPreviewStage,
-                    CapturedAtStage,
-                    IdStage,
-                    QuantityStage,
-                    StatusStage,
-                    TypeStage,
-                    UpdatedAtStage,
-                    _FinalStage {
+            implements BodyPreviewStage, CapturedAtStage, IdStage, QuantityStage, StatusStage, TypeStage, _FinalStage {
         private String bodyPreview;
 
         private OffsetDateTime capturedAt;
@@ -421,15 +414,15 @@ public final class EventDetailResponseData {
 
         private int quantity;
 
-        private String status;
+        private EventStatus status;
 
-        private String type;
-
-        private OffsetDateTime updatedAt;
+        private EventType type;
 
         private Optional<String> userId = Optional.empty();
 
         private Optional<PreviewObject> user = Optional.empty();
+
+        private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
         private Optional<String> subtype = Optional.empty();
 
@@ -519,22 +512,15 @@ public final class EventDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("status")
-        public TypeStage status(@NotNull String status) {
+        public TypeStage status(@NotNull EventStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("type")
-        public UpdatedAtStage type(@NotNull String type) {
+        public _FinalStage type(@NotNull EventType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("updated_at")
-        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
-            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
@@ -561,6 +547,19 @@ public final class EventDetailResponseData {
         @JsonSetter(value = "user", nulls = Nulls.SKIP)
         public _FinalStage user(Optional<PreviewObject> user) {
             this.user = user;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
+            this.updatedAt = Optional.ofNullable(updatedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "updated_at", nulls = Nulls.SKIP)
+        public _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt) {
+            this.updatedAt = updatedAt;
             return this;
         }
 

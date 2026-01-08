@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingSubscriptionView.Builder.class)
 public final class BillingSubscriptionView {
+    private final Optional<String> applicationId;
+
     private final Optional<Integer> cancelAt;
 
     private final boolean cancelAtPeriodEnd;
@@ -59,6 +61,8 @@ public final class BillingSubscriptionView {
 
     private final List<BillingProductForSubscriptionResponseData> products;
 
+    private final BillingProviderType providerType;
+
     private final String status;
 
     private final String subscriptionExternalId;
@@ -67,11 +71,12 @@ public final class BillingSubscriptionView {
 
     private final Optional<Integer> trialEnd;
 
-    private final Optional<String> trialEndSetting;
+    private final Optional<BillingSubscriptionTrialEndSetting> trialEndSetting;
 
     private final Map<String, Object> additionalProperties;
 
     private BillingSubscriptionView(
+            Optional<String> applicationId,
             Optional<Integer> cancelAt,
             boolean cancelAtPeriodEnd,
             Optional<String> companyId,
@@ -89,12 +94,14 @@ public final class BillingSubscriptionView {
             int periodEnd,
             int periodStart,
             List<BillingProductForSubscriptionResponseData> products,
+            BillingProviderType providerType,
             String status,
             String subscriptionExternalId,
             int totalPrice,
             Optional<Integer> trialEnd,
-            Optional<String> trialEndSetting,
+            Optional<BillingSubscriptionTrialEndSetting> trialEndSetting,
             Map<String, Object> additionalProperties) {
+        this.applicationId = applicationId;
         this.cancelAt = cancelAt;
         this.cancelAtPeriodEnd = cancelAtPeriodEnd;
         this.companyId = companyId;
@@ -112,12 +119,18 @@ public final class BillingSubscriptionView {
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
         this.products = products;
+        this.providerType = providerType;
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.totalPrice = totalPrice;
         this.trialEnd = trialEnd;
         this.trialEndSetting = trialEndSetting;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("application_id")
+    public Optional<String> getApplicationId() {
+        return applicationId;
     }
 
     @JsonProperty("cancel_at")
@@ -205,6 +218,11 @@ public final class BillingSubscriptionView {
         return products;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("status")
     public String getStatus() {
         return status;
@@ -226,7 +244,7 @@ public final class BillingSubscriptionView {
     }
 
     @JsonProperty("trial_end_setting")
-    public Optional<String> getTrialEndSetting() {
+    public Optional<BillingSubscriptionTrialEndSetting> getTrialEndSetting() {
         return trialEndSetting;
     }
 
@@ -242,7 +260,8 @@ public final class BillingSubscriptionView {
     }
 
     private boolean equalTo(BillingSubscriptionView other) {
-        return cancelAt.equals(other.cancelAt)
+        return applicationId.equals(other.applicationId)
+                && cancelAt.equals(other.cancelAt)
                 && cancelAtPeriodEnd == other.cancelAtPeriodEnd
                 && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
@@ -259,6 +278,7 @@ public final class BillingSubscriptionView {
                 && periodEnd == other.periodEnd
                 && periodStart == other.periodStart
                 && products.equals(other.products)
+                && providerType.equals(other.providerType)
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && totalPrice == other.totalPrice
@@ -269,6 +289,7 @@ public final class BillingSubscriptionView {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.applicationId,
                 this.cancelAt,
                 this.cancelAtPeriodEnd,
                 this.companyId,
@@ -286,6 +307,7 @@ public final class BillingSubscriptionView {
                 this.periodEnd,
                 this.periodStart,
                 this.products,
+                this.providerType,
                 this.status,
                 this.subscriptionExternalId,
                 this.totalPrice,
@@ -333,7 +355,11 @@ public final class BillingSubscriptionView {
     }
 
     public interface PeriodStartStage {
-        StatusStage periodStart(int periodStart);
+        ProviderTypeStage periodStart(int periodStart);
+    }
+
+    public interface ProviderTypeStage {
+        StatusStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface StatusStage {
@@ -350,6 +376,10 @@ public final class BillingSubscriptionView {
 
     public interface _FinalStage {
         BillingSubscriptionView build();
+
+        _FinalStage applicationId(Optional<String> applicationId);
+
+        _FinalStage applicationId(String applicationId);
 
         _FinalStage cancelAt(Optional<Integer> cancelAt);
 
@@ -395,9 +425,9 @@ public final class BillingSubscriptionView {
 
         _FinalStage trialEnd(Integer trialEnd);
 
-        _FinalStage trialEndSetting(Optional<String> trialEndSetting);
+        _FinalStage trialEndSetting(Optional<BillingSubscriptionTrialEndSetting> trialEndSetting);
 
-        _FinalStage trialEndSetting(String trialEndSetting);
+        _FinalStage trialEndSetting(BillingSubscriptionTrialEndSetting trialEndSetting);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -410,6 +440,7 @@ public final class BillingSubscriptionView {
                     IntervalStage,
                     PeriodEndStage,
                     PeriodStartStage,
+                    ProviderTypeStage,
                     StatusStage,
                     SubscriptionExternalIdStage,
                     TotalPriceStage,
@@ -430,13 +461,15 @@ public final class BillingSubscriptionView {
 
         private int periodStart;
 
+        private BillingProviderType providerType;
+
         private String status;
 
         private String subscriptionExternalId;
 
         private int totalPrice;
 
-        private Optional<String> trialEndSetting = Optional.empty();
+        private Optional<BillingSubscriptionTrialEndSetting> trialEndSetting = Optional.empty();
 
         private Optional<Integer> trialEnd = Optional.empty();
 
@@ -458,6 +491,8 @@ public final class BillingSubscriptionView {
 
         private Optional<Integer> cancelAt = Optional.empty();
 
+        private Optional<String> applicationId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -465,6 +500,7 @@ public final class BillingSubscriptionView {
 
         @java.lang.Override
         public Builder from(BillingSubscriptionView other) {
+            applicationId(other.getApplicationId());
             cancelAt(other.getCancelAt());
             cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
             companyId(other.getCompanyId());
@@ -482,6 +518,7 @@ public final class BillingSubscriptionView {
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
             products(other.getProducts());
+            providerType(other.getProviderType());
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             totalPrice(other.getTotalPrice());
@@ -541,8 +578,15 @@ public final class BillingSubscriptionView {
 
         @java.lang.Override
         @JsonSetter("period_start")
-        public StatusStage periodStart(int periodStart) {
+        public ProviderTypeStage periodStart(int periodStart) {
             this.periodStart = periodStart;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public StatusStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -569,14 +613,14 @@ public final class BillingSubscriptionView {
         }
 
         @java.lang.Override
-        public _FinalStage trialEndSetting(String trialEndSetting) {
+        public _FinalStage trialEndSetting(BillingSubscriptionTrialEndSetting trialEndSetting) {
             this.trialEndSetting = Optional.ofNullable(trialEndSetting);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trial_end_setting", nulls = Nulls.SKIP)
-        public _FinalStage trialEndSetting(Optional<String> trialEndSetting) {
+        public _FinalStage trialEndSetting(Optional<BillingSubscriptionTrialEndSetting> trialEndSetting) {
             this.trialEndSetting = trialEndSetting;
             return this;
         }
@@ -734,8 +778,22 @@ public final class BillingSubscriptionView {
         }
 
         @java.lang.Override
+        public _FinalStage applicationId(String applicationId) {
+            this.applicationId = Optional.ofNullable(applicationId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "application_id", nulls = Nulls.SKIP)
+        public _FinalStage applicationId(Optional<String> applicationId) {
+            this.applicationId = applicationId;
+            return this;
+        }
+
+        @java.lang.Override
         public BillingSubscriptionView build() {
             return new BillingSubscriptionView(
+                    applicationId,
                     cancelAt,
                     cancelAtPeriodEnd,
                     companyId,
@@ -753,6 +811,7 @@ public final class BillingSubscriptionView {
                     periodEnd,
                     periodStart,
                     products,
+                    providerType,
                     status,
                     subscriptionExternalId,
                     totalPrice,

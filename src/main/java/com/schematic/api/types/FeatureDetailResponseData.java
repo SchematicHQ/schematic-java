@@ -32,7 +32,7 @@ public final class FeatureDetailResponseData {
 
     private final Optional<EventSummaryResponseData> eventSummary;
 
-    private final String featureType;
+    private final FeatureType featureType;
 
     private final List<FlagDetailResponseData> flags;
 
@@ -40,7 +40,7 @@ public final class FeatureDetailResponseData {
 
     private final String id;
 
-    private final Optional<String> lifecyclePhase;
+    private final Optional<FeatureLifecyclePhase> lifecyclePhase;
 
     private final Optional<String> maintainerId;
 
@@ -65,11 +65,11 @@ public final class FeatureDetailResponseData {
             String description,
             Optional<String> eventSubtype,
             Optional<EventSummaryResponseData> eventSummary,
-            String featureType,
+            FeatureType featureType,
             List<FlagDetailResponseData> flags,
             String icon,
             String id,
-            Optional<String> lifecyclePhase,
+            Optional<FeatureLifecyclePhase> lifecyclePhase,
             Optional<String> maintainerId,
             String name,
             List<PreviewObject> plans,
@@ -120,7 +120,7 @@ public final class FeatureDetailResponseData {
     }
 
     @JsonProperty("feature_type")
-    public String getFeatureType() {
+    public FeatureType getFeatureType() {
         return featureType;
     }
 
@@ -140,7 +140,7 @@ public final class FeatureDetailResponseData {
     }
 
     @JsonProperty("lifecycle_phase")
-    public Optional<String> getLifecyclePhase() {
+    public Optional<FeatureLifecyclePhase> getLifecyclePhase() {
         return lifecyclePhase;
     }
 
@@ -257,7 +257,7 @@ public final class FeatureDetailResponseData {
     }
 
     public interface FeatureTypeStage {
-        IconStage featureType(@NotNull String featureType);
+        IconStage featureType(@NotNull FeatureType featureType);
     }
 
     public interface IconStage {
@@ -293,9 +293,9 @@ public final class FeatureDetailResponseData {
 
         _FinalStage addAllFlags(List<FlagDetailResponseData> flags);
 
-        _FinalStage lifecyclePhase(Optional<String> lifecyclePhase);
+        _FinalStage lifecyclePhase(Optional<FeatureLifecyclePhase> lifecyclePhase);
 
-        _FinalStage lifecyclePhase(String lifecyclePhase);
+        _FinalStage lifecyclePhase(FeatureLifecyclePhase lifecyclePhase);
 
         _FinalStage maintainerId(Optional<String> maintainerId);
 
@@ -338,7 +338,7 @@ public final class FeatureDetailResponseData {
 
         private String description;
 
-        private String featureType;
+        private FeatureType featureType;
 
         private String icon;
 
@@ -360,7 +360,7 @@ public final class FeatureDetailResponseData {
 
         private Optional<String> maintainerId = Optional.empty();
 
-        private Optional<String> lifecyclePhase = Optional.empty();
+        private Optional<FeatureLifecyclePhase> lifecyclePhase = Optional.empty();
 
         private List<FlagDetailResponseData> flags = new ArrayList<>();
 
@@ -411,7 +411,7 @@ public final class FeatureDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("feature_type")
-        public IconStage featureType(@NotNull String featureType) {
+        public IconStage featureType(@NotNull FeatureType featureType) {
             this.featureType = Objects.requireNonNull(featureType, "featureType must not be null");
             return this;
         }
@@ -534,14 +534,14 @@ public final class FeatureDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage lifecyclePhase(String lifecyclePhase) {
+        public _FinalStage lifecyclePhase(FeatureLifecyclePhase lifecyclePhase) {
             this.lifecyclePhase = Optional.ofNullable(lifecyclePhase);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "lifecycle_phase", nulls = Nulls.SKIP)
-        public _FinalStage lifecyclePhase(Optional<String> lifecyclePhase) {
+        public _FinalStage lifecyclePhase(Optional<FeatureLifecyclePhase> lifecyclePhase) {
             this.lifecyclePhase = lifecyclePhase;
             return this;
         }

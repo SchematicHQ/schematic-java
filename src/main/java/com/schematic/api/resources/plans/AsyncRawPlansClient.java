@@ -18,12 +18,9 @@ import com.schematic.api.errors.InternalServerError;
 import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.plans.requests.CountPlansRequest;
-import com.schematic.api.resources.plans.requests.CreatePlanRequestBody;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
 import com.schematic.api.resources.plans.requests.ListPlansRequest;
 import com.schematic.api.resources.plans.requests.UpdateCompanyPlansRequestBody;
-import com.schematic.api.resources.plans.requests.UpdatePlanRequestBody;
-import com.schematic.api.resources.plans.requests.UpsertBillingProductRequestBody;
 import com.schematic.api.resources.plans.types.CountPlansResponse;
 import com.schematic.api.resources.plans.types.CreatePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanResponse;
@@ -34,6 +31,9 @@ import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
 import com.schematic.api.resources.plans.types.UpdatePlanResponse;
 import com.schematic.api.resources.plans.types.UpsertBillingProductPlanResponse;
 import com.schematic.api.types.ApiError;
+import com.schematic.api.types.CreatePlanRequestBody;
+import com.schematic.api.types.UpdatePlanRequestBody;
+import com.schematic.api.types.UpsertBillingProductRequestBody;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.Call;
@@ -190,23 +190,12 @@ public class AsyncRawPlansClient {
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
-        if (request.getRequiresPaymentMethod().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl,
-                    "requires_payment_method",
-                    request.getRequiresPaymentMethod().get(),
-                    false);
-        }
         if (request.getWithoutEntitlementFor().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
                     "without_entitlement_for",
                     request.getWithoutEntitlementFor().get(),
                     false);
-        }
-        if (request.getWithoutProductId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "without_product_id", request.getWithoutProductId().get(), false);
         }
         if (request.getWithoutPaidProductId().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -779,23 +768,12 @@ public class AsyncRawPlansClient {
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
-        if (request.getRequiresPaymentMethod().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl,
-                    "requires_payment_method",
-                    request.getRequiresPaymentMethod().get(),
-                    false);
-        }
         if (request.getWithoutEntitlementFor().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
                     "without_entitlement_for",
                     request.getWithoutEntitlementFor().get(),
                     false);
-        }
-        if (request.getWithoutProductId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "without_product_id", request.getWithoutProductId().get(), false);
         }
         if (request.getWithoutPaidProductId().isPresent()) {
             QueryStringMapper.addQueryParameter(

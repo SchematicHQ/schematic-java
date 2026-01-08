@@ -7,9 +7,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class CreateOrUpdateConditionRequestBodyConditionType {
-    public static final CreateOrUpdateConditionRequestBodyConditionType CRM_PRODUCT =
-            new CreateOrUpdateConditionRequestBodyConditionType(Value.CRM_PRODUCT, "crm_product");
-
     public static final CreateOrUpdateConditionRequestBodyConditionType METRIC =
             new CreateOrUpdateConditionRequestBodyConditionType(Value.METRIC, "metric");
 
@@ -64,8 +61,6 @@ public final class CreateOrUpdateConditionRequestBodyConditionType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case CRM_PRODUCT:
-                return visitor.visitCrmProduct();
             case METRIC:
                 return visitor.visitMetric();
             case BASE_PLAN:
@@ -89,8 +84,6 @@ public final class CreateOrUpdateConditionRequestBodyConditionType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static CreateOrUpdateConditionRequestBodyConditionType valueOf(String value) {
         switch (value) {
-            case "crm_product":
-                return CRM_PRODUCT;
             case "metric":
                 return METRIC;
             case "base_plan":
@@ -123,8 +116,6 @@ public final class CreateOrUpdateConditionRequestBodyConditionType {
 
         BILLING_PRODUCT,
 
-        CRM_PRODUCT,
-
         BASE_PLAN,
 
         UNKNOWN
@@ -142,8 +133,6 @@ public final class CreateOrUpdateConditionRequestBodyConditionType {
         T visitPlan();
 
         T visitBillingProduct();
-
-        T visitCrmProduct();
 
         T visitBasePlan();
 

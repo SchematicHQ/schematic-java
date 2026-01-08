@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.companies.types.ListEntityKeyDefinitionsRequestEntityType;
+import com.schematic.api.types.EntityType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.Optional;
 public final class ListEntityKeyDefinitionsRequest {
     private final Optional<List<String>> ids;
 
-    private final Optional<ListEntityKeyDefinitionsRequestEntityType> entityType;
+    private final Optional<EntityType> entityType;
 
     private final Optional<String> q;
 
@@ -37,7 +37,7 @@ public final class ListEntityKeyDefinitionsRequest {
 
     private ListEntityKeyDefinitionsRequest(
             Optional<List<String>> ids,
-            Optional<ListEntityKeyDefinitionsRequestEntityType> entityType,
+            Optional<EntityType> entityType,
             Optional<String> q,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -56,7 +56,7 @@ public final class ListEntityKeyDefinitionsRequest {
     }
 
     @JsonProperty("entity_type")
-    public Optional<ListEntityKeyDefinitionsRequestEntityType> getEntityType() {
+    public Optional<EntityType> getEntityType() {
         return entityType;
     }
 
@@ -118,7 +118,7 @@ public final class ListEntityKeyDefinitionsRequest {
     public static final class Builder {
         private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<ListEntityKeyDefinitionsRequestEntityType> entityType = Optional.empty();
+        private Optional<EntityType> entityType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -157,12 +157,12 @@ public final class ListEntityKeyDefinitionsRequest {
         }
 
         @JsonSetter(value = "entity_type", nulls = Nulls.SKIP)
-        public Builder entityType(Optional<ListEntityKeyDefinitionsRequestEntityType> entityType) {
+        public Builder entityType(Optional<EntityType> entityType) {
             this.entityType = entityType;
             return this;
         }
 
-        public Builder entityType(ListEntityKeyDefinitionsRequestEntityType entityType) {
+        public Builder entityType(EntityType entityType) {
             this.entityType = Optional.ofNullable(entityType);
             return this;
         }

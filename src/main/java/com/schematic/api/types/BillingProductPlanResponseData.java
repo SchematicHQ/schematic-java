@@ -25,9 +25,9 @@ public final class BillingProductPlanResponseData {
 
     private final String billingProductId;
 
-    private final String chargeType;
+    private final ChargeType chargeType;
 
-    private final String controlledBy;
+    private final PlanControlledByType controlledBy;
 
     private final String environmentId;
 
@@ -48,8 +48,8 @@ public final class BillingProductPlanResponseData {
     private BillingProductPlanResponseData(
             String accountId,
             String billingProductId,
-            String chargeType,
-            String controlledBy,
+            ChargeType chargeType,
+            PlanControlledByType controlledBy,
             String environmentId,
             boolean isTrialable,
             Optional<String> monthlyPriceId,
@@ -83,12 +83,12 @@ public final class BillingProductPlanResponseData {
     }
 
     @JsonProperty("charge_type")
-    public String getChargeType() {
+    public ChargeType getChargeType() {
         return chargeType;
     }
 
     @JsonProperty("controlled_by")
-    public String getControlledBy() {
+    public PlanControlledByType getControlledBy() {
         return controlledBy;
     }
 
@@ -188,11 +188,11 @@ public final class BillingProductPlanResponseData {
     }
 
     public interface ChargeTypeStage {
-        ControlledByStage chargeType(@NotNull String chargeType);
+        ControlledByStage chargeType(@NotNull ChargeType chargeType);
     }
 
     public interface ControlledByStage {
-        EnvironmentIdStage controlledBy(@NotNull String controlledBy);
+        EnvironmentIdStage controlledBy(@NotNull PlanControlledByType controlledBy);
     }
 
     public interface EnvironmentIdStage {
@@ -241,9 +241,9 @@ public final class BillingProductPlanResponseData {
 
         private String billingProductId;
 
-        private String chargeType;
+        private ChargeType chargeType;
 
-        private String controlledBy;
+        private PlanControlledByType controlledBy;
 
         private String environmentId;
 
@@ -296,14 +296,14 @@ public final class BillingProductPlanResponseData {
 
         @java.lang.Override
         @JsonSetter("charge_type")
-        public ControlledByStage chargeType(@NotNull String chargeType) {
+        public ControlledByStage chargeType(@NotNull ChargeType chargeType) {
             this.chargeType = Objects.requireNonNull(chargeType, "chargeType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("controlled_by")
-        public EnvironmentIdStage controlledBy(@NotNull String controlledBy) {
+        public EnvironmentIdStage controlledBy(@NotNull PlanControlledByType controlledBy) {
             this.controlledBy = Objects.requireNonNull(controlledBy, "controlledBy must not be null");
             return this;
         }

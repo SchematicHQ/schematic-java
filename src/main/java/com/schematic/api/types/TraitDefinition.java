@@ -19,16 +19,19 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TraitDefinition.Builder.class)
 public final class TraitDefinition {
-    private final String comparableType;
+    private final TraitDefinitionComparableType comparableType;
 
-    private final String entityType;
+    private final EntityType entityType;
 
     private final String id;
 
     private final Map<String, Object> additionalProperties;
 
     private TraitDefinition(
-            String comparableType, String entityType, String id, Map<String, Object> additionalProperties) {
+            TraitDefinitionComparableType comparableType,
+            EntityType entityType,
+            String id,
+            Map<String, Object> additionalProperties) {
         this.comparableType = comparableType;
         this.entityType = entityType;
         this.id = id;
@@ -36,12 +39,12 @@ public final class TraitDefinition {
     }
 
     @JsonProperty("comparable_type")
-    public String getComparableType() {
+    public TraitDefinitionComparableType getComparableType() {
         return comparableType;
     }
 
     @JsonProperty("entity_type")
-    public String getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
     }
 
@@ -82,13 +85,13 @@ public final class TraitDefinition {
     }
 
     public interface ComparableTypeStage {
-        EntityTypeStage comparableType(@NotNull String comparableType);
+        EntityTypeStage comparableType(@NotNull TraitDefinitionComparableType comparableType);
 
         Builder from(TraitDefinition other);
     }
 
     public interface EntityTypeStage {
-        IdStage entityType(@NotNull String entityType);
+        IdStage entityType(@NotNull EntityType entityType);
     }
 
     public interface IdStage {
@@ -101,9 +104,9 @@ public final class TraitDefinition {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ComparableTypeStage, EntityTypeStage, IdStage, _FinalStage {
-        private String comparableType;
+        private TraitDefinitionComparableType comparableType;
 
-        private String entityType;
+        private EntityType entityType;
 
         private String id;
 
@@ -122,14 +125,14 @@ public final class TraitDefinition {
 
         @java.lang.Override
         @JsonSetter("comparable_type")
-        public EntityTypeStage comparableType(@NotNull String comparableType) {
+        public EntityTypeStage comparableType(@NotNull TraitDefinitionComparableType comparableType) {
             this.comparableType = Objects.requireNonNull(comparableType, "comparableType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public IdStage entityType(@NotNull String entityType) {
+        public IdStage entityType(@NotNull EntityType entityType) {
             this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }

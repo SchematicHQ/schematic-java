@@ -12,10 +12,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.webhooks.types.UpdateWebhookRequestBodyRequestTypesItem;
-import com.schematic.api.resources.webhooks.types.UpdateWebhookRequestBodyStatus;
 import com.schematic.api.types.CreditTriggerConfig;
 import com.schematic.api.types.EntitlementTriggerConfig;
+import com.schematic.api.types.WebhookRequestType;
+import com.schematic.api.types.WebhookStatus;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +31,9 @@ public final class UpdateWebhookRequestBody {
 
     private final Optional<String> name;
 
-    private final Optional<List<UpdateWebhookRequestBodyRequestTypesItem>> requestTypes;
+    private final Optional<List<WebhookRequestType>> requestTypes;
 
-    private final Optional<UpdateWebhookRequestBodyStatus> status;
+    private final Optional<WebhookStatus> status;
 
     private final Optional<String> url;
 
@@ -43,8 +43,8 @@ public final class UpdateWebhookRequestBody {
             Optional<List<CreditTriggerConfig>> creditTriggerConfigs,
             Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs,
             Optional<String> name,
-            Optional<List<UpdateWebhookRequestBodyRequestTypesItem>> requestTypes,
-            Optional<UpdateWebhookRequestBodyStatus> status,
+            Optional<List<WebhookRequestType>> requestTypes,
+            Optional<WebhookStatus> status,
             Optional<String> url,
             Map<String, Object> additionalProperties) {
         this.creditTriggerConfigs = creditTriggerConfigs;
@@ -72,12 +72,12 @@ public final class UpdateWebhookRequestBody {
     }
 
     @JsonProperty("request_types")
-    public Optional<List<UpdateWebhookRequestBodyRequestTypesItem>> getRequestTypes() {
+    public Optional<List<WebhookRequestType>> getRequestTypes() {
         return requestTypes;
     }
 
     @JsonProperty("status")
-    public Optional<UpdateWebhookRequestBodyStatus> getStatus() {
+    public Optional<WebhookStatus> getStatus() {
         return status;
     }
 
@@ -134,9 +134,9 @@ public final class UpdateWebhookRequestBody {
 
         private Optional<String> name = Optional.empty();
 
-        private Optional<List<UpdateWebhookRequestBodyRequestTypesItem>> requestTypes = Optional.empty();
+        private Optional<List<WebhookRequestType>> requestTypes = Optional.empty();
 
-        private Optional<UpdateWebhookRequestBodyStatus> status = Optional.empty();
+        private Optional<WebhookStatus> status = Optional.empty();
 
         private Optional<String> url = Optional.empty();
 
@@ -189,23 +189,23 @@ public final class UpdateWebhookRequestBody {
         }
 
         @JsonSetter(value = "request_types", nulls = Nulls.SKIP)
-        public Builder requestTypes(Optional<List<UpdateWebhookRequestBodyRequestTypesItem>> requestTypes) {
+        public Builder requestTypes(Optional<List<WebhookRequestType>> requestTypes) {
             this.requestTypes = requestTypes;
             return this;
         }
 
-        public Builder requestTypes(List<UpdateWebhookRequestBodyRequestTypesItem> requestTypes) {
+        public Builder requestTypes(List<WebhookRequestType> requestTypes) {
             this.requestTypes = Optional.ofNullable(requestTypes);
             return this;
         }
 
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
-        public Builder status(Optional<UpdateWebhookRequestBodyStatus> status) {
+        public Builder status(Optional<WebhookStatus> status) {
             this.status = status;
             return this;
         }
 
-        public Builder status(UpdateWebhookRequestBodyStatus status) {
+        public Builder status(WebhookStatus status) {
             this.status = Optional.ofNullable(status);
             return this;
         }
