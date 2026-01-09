@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductForSubscriptionResponseData.Builder.class)
 public final class BillingProductForSubscriptionResponseData {
-    private final String billingScheme;
+    private final BillingPriceScheme billingScheme;
 
     private final Optional<Integer> billingThreshold;
 
@@ -56,6 +56,8 @@ public final class BillingProductForSubscriptionResponseData {
 
     private final List<BillingProductPriceTierResponseData> priceTier;
 
+    private final BillingProviderType providerType;
+
     private final double quantity;
 
     private final String subscriptionId;
@@ -64,12 +66,12 @@ public final class BillingProductForSubscriptionResponseData {
 
     private final OffsetDateTime updatedAt;
 
-    private final String usageType;
+    private final BillingPriceUsageType usageType;
 
     private final Map<String, Object> additionalProperties;
 
     private BillingProductForSubscriptionResponseData(
-            String billingScheme,
+            BillingPriceScheme billingScheme,
             Optional<Integer> billingThreshold,
             OffsetDateTime createdAt,
             String currency,
@@ -85,11 +87,12 @@ public final class BillingProductForSubscriptionResponseData {
             String priceExternalId,
             String priceId,
             List<BillingProductPriceTierResponseData> priceTier,
+            BillingProviderType providerType,
             double quantity,
             String subscriptionId,
             Optional<String> subscriptionItemExternalId,
             OffsetDateTime updatedAt,
-            String usageType,
+            BillingPriceUsageType usageType,
             Map<String, Object> additionalProperties) {
         this.billingScheme = billingScheme;
         this.billingThreshold = billingThreshold;
@@ -107,6 +110,7 @@ public final class BillingProductForSubscriptionResponseData {
         this.priceExternalId = priceExternalId;
         this.priceId = priceId;
         this.priceTier = priceTier;
+        this.providerType = providerType;
         this.quantity = quantity;
         this.subscriptionId = subscriptionId;
         this.subscriptionItemExternalId = subscriptionItemExternalId;
@@ -116,7 +120,7 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     @JsonProperty("billing_scheme")
-    public String getBillingScheme() {
+    public BillingPriceScheme getBillingScheme() {
         return billingScheme;
     }
 
@@ -195,6 +199,11 @@ public final class BillingProductForSubscriptionResponseData {
         return priceTier;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("quantity")
     public double getQuantity() {
         return quantity;
@@ -216,7 +225,7 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     @JsonProperty("usage_type")
-    public String getUsageType() {
+    public BillingPriceUsageType getUsageType() {
         return usageType;
     }
 
@@ -249,6 +258,7 @@ public final class BillingProductForSubscriptionResponseData {
                 && priceExternalId.equals(other.priceExternalId)
                 && priceId.equals(other.priceId)
                 && priceTier.equals(other.priceTier)
+                && providerType.equals(other.providerType)
                 && quantity == other.quantity
                 && subscriptionId.equals(other.subscriptionId)
                 && subscriptionItemExternalId.equals(other.subscriptionItemExternalId)
@@ -275,6 +285,7 @@ public final class BillingProductForSubscriptionResponseData {
                 this.priceExternalId,
                 this.priceId,
                 this.priceTier,
+                this.providerType,
                 this.quantity,
                 this.subscriptionId,
                 this.subscriptionItemExternalId,
@@ -292,7 +303,7 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     public interface BillingSchemeStage {
-        CreatedAtStage billingScheme(@NotNull String billingScheme);
+        CreatedAtStage billingScheme(@NotNull BillingPriceScheme billingScheme);
 
         Builder from(BillingProductForSubscriptionResponseData other);
     }
@@ -338,7 +349,11 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     public interface PriceIdStage {
-        QuantityStage priceId(@NotNull String priceId);
+        ProviderTypeStage priceId(@NotNull String priceId);
+    }
+
+    public interface ProviderTypeStage {
+        QuantityStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface QuantityStage {
@@ -354,7 +369,7 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     public interface UsageTypeStage {
-        _FinalStage usageType(@NotNull String usageType);
+        _FinalStage usageType(@NotNull BillingPriceUsageType usageType);
     }
 
     public interface _FinalStage {
@@ -397,12 +412,13 @@ public final class BillingProductForSubscriptionResponseData {
                     PriceStage,
                     PriceExternalIdStage,
                     PriceIdStage,
+                    ProviderTypeStage,
                     QuantityStage,
                     SubscriptionIdStage,
                     UpdatedAtStage,
                     UsageTypeStage,
                     _FinalStage {
-        private String billingScheme;
+        private BillingPriceScheme billingScheme;
 
         private OffsetDateTime createdAt;
 
@@ -426,13 +442,15 @@ public final class BillingProductForSubscriptionResponseData {
 
         private String priceId;
 
+        private BillingProviderType providerType;
+
         private double quantity;
 
         private String subscriptionId;
 
         private OffsetDateTime updatedAt;
 
-        private String usageType;
+        private BillingPriceUsageType usageType;
 
         private Optional<String> subscriptionItemExternalId = Optional.empty();
 
@@ -467,6 +485,7 @@ public final class BillingProductForSubscriptionResponseData {
             priceExternalId(other.getPriceExternalId());
             priceId(other.getPriceId());
             priceTier(other.getPriceTier());
+            providerType(other.getProviderType());
             quantity(other.getQuantity());
             subscriptionId(other.getSubscriptionId());
             subscriptionItemExternalId(other.getSubscriptionItemExternalId());
@@ -477,7 +496,7 @@ public final class BillingProductForSubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("billing_scheme")
-        public CreatedAtStage billingScheme(@NotNull String billingScheme) {
+        public CreatedAtStage billingScheme(@NotNull BillingPriceScheme billingScheme) {
             this.billingScheme = Objects.requireNonNull(billingScheme, "billingScheme must not be null");
             return this;
         }
@@ -554,8 +573,15 @@ public final class BillingProductForSubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("price_id")
-        public QuantityStage priceId(@NotNull String priceId) {
+        public ProviderTypeStage priceId(@NotNull String priceId) {
             this.priceId = Objects.requireNonNull(priceId, "priceId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public QuantityStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -582,7 +608,7 @@ public final class BillingProductForSubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("usage_type")
-        public _FinalStage usageType(@NotNull String usageType) {
+        public _FinalStage usageType(@NotNull BillingPriceUsageType usageType) {
             this.usageType = Objects.requireNonNull(usageType, "usageType must not be null");
             return this;
         }
@@ -682,6 +708,7 @@ public final class BillingProductForSubscriptionResponseData {
                     priceExternalId,
                     priceId,
                     priceTier,
+                    providerType,
                     quantity,
                     subscriptionId,
                     subscriptionItemExternalId,

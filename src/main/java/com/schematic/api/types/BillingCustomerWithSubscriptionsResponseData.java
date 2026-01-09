@@ -32,11 +32,11 @@ public final class BillingCustomerWithSubscriptionsResponseData {
 
     private final String externalId;
 
-    private final boolean failedToImport;
-
     private final String id;
 
     private final String name;
+
+    private final BillingProviderType providerType;
 
     private final List<BillingCustomerSubscription> subscriptions;
 
@@ -49,9 +49,9 @@ public final class BillingCustomerWithSubscriptionsResponseData {
             Optional<OffsetDateTime> deletedAt,
             String email,
             String externalId,
-            boolean failedToImport,
             String id,
             String name,
+            BillingProviderType providerType,
             List<BillingCustomerSubscription> subscriptions,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -59,9 +59,9 @@ public final class BillingCustomerWithSubscriptionsResponseData {
         this.deletedAt = deletedAt;
         this.email = email;
         this.externalId = externalId;
-        this.failedToImport = failedToImport;
         this.id = id;
         this.name = name;
+        this.providerType = providerType;
         this.subscriptions = subscriptions;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -87,11 +87,6 @@ public final class BillingCustomerWithSubscriptionsResponseData {
         return externalId;
     }
 
-    @JsonProperty("failed_to_import")
-    public boolean getFailedToImport() {
-        return failedToImport;
-    }
-
     @JsonProperty("id")
     public String getId() {
         return id;
@@ -100,6 +95,11 @@ public final class BillingCustomerWithSubscriptionsResponseData {
     @JsonProperty("name")
     public String getName() {
         return name;
+    }
+
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
     }
 
     @JsonProperty("subscriptions")
@@ -129,9 +129,9 @@ public final class BillingCustomerWithSubscriptionsResponseData {
                 && deletedAt.equals(other.deletedAt)
                 && email.equals(other.email)
                 && externalId.equals(other.externalId)
-                && failedToImport == other.failedToImport
                 && id.equals(other.id)
                 && name.equals(other.name)
+                && providerType.equals(other.providerType)
                 && subscriptions.equals(other.subscriptions)
                 && updatedAt.equals(other.updatedAt);
     }
@@ -143,9 +143,9 @@ public final class BillingCustomerWithSubscriptionsResponseData {
                 this.deletedAt,
                 this.email,
                 this.externalId,
-                this.failedToImport,
                 this.id,
                 this.name,
+                this.providerType,
                 this.subscriptions,
                 this.updatedAt);
     }
@@ -166,11 +166,7 @@ public final class BillingCustomerWithSubscriptionsResponseData {
     }
 
     public interface ExternalIdStage {
-        FailedToImportStage externalId(@NotNull String externalId);
-    }
-
-    public interface FailedToImportStage {
-        IdStage failedToImport(boolean failedToImport);
+        IdStage externalId(@NotNull String externalId);
     }
 
     public interface IdStage {
@@ -178,7 +174,11 @@ public final class BillingCustomerWithSubscriptionsResponseData {
     }
 
     public interface NameStage {
-        UpdatedAtStage name(@NotNull String name);
+        ProviderTypeStage name(@NotNull String name);
+    }
+
+    public interface ProviderTypeStage {
+        UpdatedAtStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface UpdatedAtStage {
@@ -205,22 +205,16 @@ public final class BillingCustomerWithSubscriptionsResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements EmailStage,
-                    ExternalIdStage,
-                    FailedToImportStage,
-                    IdStage,
-                    NameStage,
-                    UpdatedAtStage,
-                    _FinalStage {
+            implements EmailStage, ExternalIdStage, IdStage, NameStage, ProviderTypeStage, UpdatedAtStage, _FinalStage {
         private String email;
 
         private String externalId;
 
-        private boolean failedToImport;
-
         private String id;
 
         private String name;
+
+        private BillingProviderType providerType;
 
         private OffsetDateTime updatedAt;
 
@@ -241,9 +235,9 @@ public final class BillingCustomerWithSubscriptionsResponseData {
             deletedAt(other.getDeletedAt());
             email(other.getEmail());
             externalId(other.getExternalId());
-            failedToImport(other.getFailedToImport());
             id(other.getId());
             name(other.getName());
+            providerType(other.getProviderType());
             subscriptions(other.getSubscriptions());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -258,15 +252,8 @@ public final class BillingCustomerWithSubscriptionsResponseData {
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public FailedToImportStage externalId(@NotNull String externalId) {
+        public IdStage externalId(@NotNull String externalId) {
             this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("failed_to_import")
-        public IdStage failedToImport(boolean failedToImport) {
-            this.failedToImport = failedToImport;
             return this;
         }
 
@@ -279,8 +266,15 @@ public final class BillingCustomerWithSubscriptionsResponseData {
 
         @java.lang.Override
         @JsonSetter("name")
-        public UpdatedAtStage name(@NotNull String name) {
+        public ProviderTypeStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public UpdatedAtStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -348,9 +342,9 @@ public final class BillingCustomerWithSubscriptionsResponseData {
                     deletedAt,
                     email,
                     externalId,
-                    failedToImport,
                     id,
                     name,
+                    providerType,
                     subscriptions,
                     updatedAt,
                     additionalProperties);

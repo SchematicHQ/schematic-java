@@ -26,7 +26,7 @@ public final class RawEventResponseData {
 
     private final Optional<String> eventId;
 
-    private final String remoteAddr;
+    private final Optional<String> remoteAddr;
 
     private final String remoteIp;
 
@@ -37,7 +37,7 @@ public final class RawEventResponseData {
     private RawEventResponseData(
             OffsetDateTime capturedAt,
             Optional<String> eventId,
-            String remoteAddr,
+            Optional<String> remoteAddr,
             String remoteIp,
             String userAgent,
             Map<String, Object> additionalProperties) {
@@ -60,7 +60,7 @@ public final class RawEventResponseData {
     }
 
     @JsonProperty("remote_addr")
-    public String getRemoteAddr() {
+    public Optional<String> getRemoteAddr() {
         return remoteAddr;
     }
 
@@ -108,13 +108,9 @@ public final class RawEventResponseData {
     }
 
     public interface CapturedAtStage {
-        RemoteAddrStage capturedAt(@NotNull OffsetDateTime capturedAt);
+        RemoteIpStage capturedAt(@NotNull OffsetDateTime capturedAt);
 
         Builder from(RawEventResponseData other);
-    }
-
-    public interface RemoteAddrStage {
-        RemoteIpStage remoteAddr(@NotNull String remoteAddr);
     }
 
     public interface RemoteIpStage {
@@ -131,18 +127,21 @@ public final class RawEventResponseData {
         _FinalStage eventId(Optional<String> eventId);
 
         _FinalStage eventId(String eventId);
+
+        _FinalStage remoteAddr(Optional<String> remoteAddr);
+
+        _FinalStage remoteAddr(String remoteAddr);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements CapturedAtStage, RemoteAddrStage, RemoteIpStage, UserAgentStage, _FinalStage {
+    public static final class Builder implements CapturedAtStage, RemoteIpStage, UserAgentStage, _FinalStage {
         private OffsetDateTime capturedAt;
-
-        private String remoteAddr;
 
         private String remoteIp;
 
         private String userAgent;
+
+        private Optional<String> remoteAddr = Optional.empty();
 
         private Optional<String> eventId = Optional.empty();
 
@@ -163,15 +162,8 @@ public final class RawEventResponseData {
 
         @java.lang.Override
         @JsonSetter("captured_at")
-        public RemoteAddrStage capturedAt(@NotNull OffsetDateTime capturedAt) {
+        public RemoteIpStage capturedAt(@NotNull OffsetDateTime capturedAt) {
             this.capturedAt = Objects.requireNonNull(capturedAt, "capturedAt must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("remote_addr")
-        public RemoteIpStage remoteAddr(@NotNull String remoteAddr) {
-            this.remoteAddr = Objects.requireNonNull(remoteAddr, "remoteAddr must not be null");
             return this;
         }
 
@@ -186,6 +178,19 @@ public final class RawEventResponseData {
         @JsonSetter("user_agent")
         public _FinalStage userAgent(@NotNull String userAgent) {
             this.userAgent = Objects.requireNonNull(userAgent, "userAgent must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage remoteAddr(String remoteAddr) {
+            this.remoteAddr = Optional.ofNullable(remoteAddr);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "remote_addr", nulls = Nulls.SKIP)
+        public _FinalStage remoteAddr(Optional<String> remoteAddr) {
+            this.remoteAddr = remoteAddr;
             return this;
         }
 

@@ -15,26 +15,26 @@ import com.schematic.api.resources.billing.requests.CreateCouponRequestBody;
 import com.schematic.api.resources.billing.requests.CreateInvoiceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateMeterRequestBody;
 import com.schematic.api.resources.billing.requests.CreatePaymentMethodRequestBody;
+import com.schematic.api.resources.billing.requests.ListBillingPricesRequest;
+import com.schematic.api.resources.billing.requests.ListBillingProductPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductsRequest;
 import com.schematic.api.resources.billing.requests.ListCouponsRequest;
 import com.schematic.api.resources.billing.requests.ListCustomersWithSubscriptionsRequest;
 import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
-import com.schematic.api.resources.billing.requests.ListProductPricesRequest;
-import com.schematic.api.resources.billing.requests.SearchBillingPricesRequest;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
+import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
+import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
 import com.schematic.api.resources.billing.types.ListCouponsResponse;
 import com.schematic.api.resources.billing.types.ListCustomersWithSubscriptionsResponse;
 import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
-import com.schematic.api.resources.billing.types.ListProductPricesResponse;
-import com.schematic.api.resources.billing.types.SearchBillingPricesResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingMeterResponse;
@@ -180,17 +180,17 @@ public class AsyncBillingClient {
         return this.rawClient.upsertPaymentMethod(request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<SearchBillingPricesResponse> searchBillingPrices() {
-        return this.rawClient.searchBillingPrices().thenApply(response -> response.body());
+    public CompletableFuture<ListBillingPricesResponse> listBillingPrices() {
+        return this.rawClient.listBillingPrices().thenApply(response -> response.body());
     }
 
-    public CompletableFuture<SearchBillingPricesResponse> searchBillingPrices(SearchBillingPricesRequest request) {
-        return this.rawClient.searchBillingPrices(request).thenApply(response -> response.body());
+    public CompletableFuture<ListBillingPricesResponse> listBillingPrices(ListBillingPricesRequest request) {
+        return this.rawClient.listBillingPrices(request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<SearchBillingPricesResponse> searchBillingPrices(
-            SearchBillingPricesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.searchBillingPrices(request, requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<ListBillingPricesResponse> listBillingPrices(
+            ListBillingPricesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listBillingPrices(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<UpsertBillingPriceResponse> upsertBillingPrice(CreateBillingPriceRequestBody request) {
@@ -211,17 +211,18 @@ public class AsyncBillingClient {
         return this.rawClient.deleteBillingProduct(billingId, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<ListProductPricesResponse> listProductPrices() {
-        return this.rawClient.listProductPrices().thenApply(response -> response.body());
+    public CompletableFuture<ListBillingProductPricesResponse> listBillingProductPrices() {
+        return this.rawClient.listBillingProductPrices().thenApply(response -> response.body());
     }
 
-    public CompletableFuture<ListProductPricesResponse> listProductPrices(ListProductPricesRequest request) {
-        return this.rawClient.listProductPrices(request).thenApply(response -> response.body());
+    public CompletableFuture<ListBillingProductPricesResponse> listBillingProductPrices(
+            ListBillingProductPricesRequest request) {
+        return this.rawClient.listBillingProductPrices(request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<ListProductPricesResponse> listProductPrices(
-            ListProductPricesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listProductPrices(request, requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<ListBillingProductPricesResponse> listBillingProductPrices(
+            ListBillingProductPricesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listBillingProductPrices(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DeleteProductPriceResponse> deleteProductPrice(String billingId) {

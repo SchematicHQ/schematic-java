@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingCreditBundleStatus;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public final class CountCreditBundlesParams {
 
     private final Optional<Integer> offset;
 
-    private final Optional<CountCreditBundlesResponseParamsStatus> status;
+    private final Optional<BillingCreditBundleStatus> status;
 
     private final Map<String, Object> additionalProperties;
 
@@ -41,7 +42,7 @@ public final class CountCreditBundlesParams {
             Optional<List<String>> ids,
             Optional<Integer> limit,
             Optional<Integer> offset,
-            Optional<CountCreditBundlesResponseParamsStatus> status,
+            Optional<BillingCreditBundleStatus> status,
             Map<String, Object> additionalProperties) {
         this.bundleType = bundleType;
         this.creditId = creditId;
@@ -84,7 +85,7 @@ public final class CountCreditBundlesParams {
     }
 
     @JsonProperty("status")
-    public Optional<CountCreditBundlesResponseParamsStatus> getStatus() {
+    public Optional<BillingCreditBundleStatus> getStatus() {
         return status;
     }
 
@@ -134,7 +135,7 @@ public final class CountCreditBundlesParams {
 
         private Optional<Integer> offset = Optional.empty();
 
-        private Optional<CountCreditBundlesResponseParamsStatus> status = Optional.empty();
+        private Optional<BillingCreditBundleStatus> status = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -213,12 +214,12 @@ public final class CountCreditBundlesParams {
         }
 
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
-        public Builder status(Optional<CountCreditBundlesResponseParamsStatus> status) {
+        public Builder status(Optional<BillingCreditBundleStatus> status) {
             this.status = status;
             return this;
         }
 
-        public Builder status(CountCreditBundlesResponseParamsStatus status) {
+        public Builder status(BillingCreditBundleStatus status) {
             this.status = Optional.ofNullable(status);
             return this;
         }

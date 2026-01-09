@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public final class BillingCreditGrantResponseData {
 
     private final Optional<OffsetDateTime> expiresAt;
 
-    private final String grantReason;
+    private final BillingCreditGrantReason grantReason;
 
     private final String id;
 
@@ -52,7 +53,13 @@ public final class BillingCreditGrantResponseData {
 
     private final double quantityUsed;
 
+    private final boolean renewalEnabled;
+
+    private final Optional<BillingPlanCreditGrantResetCadence> renewalPeriod;
+
     private final String sourceLabel;
+
+    private final Optional<List<CreditTransferResponseData>> transfers;
 
     private final OffsetDateTime updatedAt;
 
@@ -60,7 +67,7 @@ public final class BillingCreditGrantResponseData {
 
     private final Optional<OffsetDateTime> zeroedOutDate;
 
-    private final Optional<String> zeroedOutReason;
+    private final Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason;
 
     private final Map<String, Object> additionalProperties;
 
@@ -72,7 +79,7 @@ public final class BillingCreditGrantResponseData {
             String creditId,
             String creditName,
             Optional<OffsetDateTime> expiresAt,
-            String grantReason,
+            BillingCreditGrantReason grantReason,
             String id,
             Optional<String> planId,
             Optional<String> planName,
@@ -80,11 +87,14 @@ public final class BillingCreditGrantResponseData {
             int quantity,
             double quantityRemaining,
             double quantityUsed,
+            boolean renewalEnabled,
+            Optional<BillingPlanCreditGrantResetCadence> renewalPeriod,
             String sourceLabel,
+            Optional<List<CreditTransferResponseData>> transfers,
             OffsetDateTime updatedAt,
             Optional<OffsetDateTime> validFrom,
             Optional<OffsetDateTime> zeroedOutDate,
-            Optional<String> zeroedOutReason,
+            Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.companyName = companyName;
@@ -101,7 +111,10 @@ public final class BillingCreditGrantResponseData {
         this.quantity = quantity;
         this.quantityRemaining = quantityRemaining;
         this.quantityUsed = quantityUsed;
+        this.renewalEnabled = renewalEnabled;
+        this.renewalPeriod = renewalPeriod;
         this.sourceLabel = sourceLabel;
+        this.transfers = transfers;
         this.updatedAt = updatedAt;
         this.validFrom = validFrom;
         this.zeroedOutDate = zeroedOutDate;
@@ -145,7 +158,7 @@ public final class BillingCreditGrantResponseData {
     }
 
     @JsonProperty("grant_reason")
-    public String getGrantReason() {
+    public BillingCreditGrantReason getGrantReason() {
         return grantReason;
     }
 
@@ -184,9 +197,24 @@ public final class BillingCreditGrantResponseData {
         return quantityUsed;
     }
 
+    @JsonProperty("renewal_enabled")
+    public boolean getRenewalEnabled() {
+        return renewalEnabled;
+    }
+
+    @JsonProperty("renewal_period")
+    public Optional<BillingPlanCreditGrantResetCadence> getRenewalPeriod() {
+        return renewalPeriod;
+    }
+
     @JsonProperty("source_label")
     public String getSourceLabel() {
         return sourceLabel;
+    }
+
+    @JsonProperty("transfers")
+    public Optional<List<CreditTransferResponseData>> getTransfers() {
+        return transfers;
     }
 
     @JsonProperty("updated_at")
@@ -205,7 +233,7 @@ public final class BillingCreditGrantResponseData {
     }
 
     @JsonProperty("zeroed_out_reason")
-    public Optional<String> getZeroedOutReason() {
+    public Optional<BillingCreditGrantZeroedOutReason> getZeroedOutReason() {
         return zeroedOutReason;
     }
 
@@ -236,7 +264,10 @@ public final class BillingCreditGrantResponseData {
                 && quantity == other.quantity
                 && quantityRemaining == other.quantityRemaining
                 && quantityUsed == other.quantityUsed
+                && renewalEnabled == other.renewalEnabled
+                && renewalPeriod.equals(other.renewalPeriod)
                 && sourceLabel.equals(other.sourceLabel)
+                && transfers.equals(other.transfers)
                 && updatedAt.equals(other.updatedAt)
                 && validFrom.equals(other.validFrom)
                 && zeroedOutDate.equals(other.zeroedOutDate)
@@ -261,7 +292,10 @@ public final class BillingCreditGrantResponseData {
                 this.quantity,
                 this.quantityRemaining,
                 this.quantityUsed,
+                this.renewalEnabled,
+                this.renewalPeriod,
                 this.sourceLabel,
+                this.transfers,
                 this.updatedAt,
                 this.validFrom,
                 this.zeroedOutDate,
@@ -300,7 +334,7 @@ public final class BillingCreditGrantResponseData {
     }
 
     public interface GrantReasonStage {
-        IdStage grantReason(@NotNull String grantReason);
+        IdStage grantReason(@NotNull BillingCreditGrantReason grantReason);
     }
 
     public interface IdStage {
@@ -316,7 +350,11 @@ public final class BillingCreditGrantResponseData {
     }
 
     public interface QuantityUsedStage {
-        SourceLabelStage quantityUsed(double quantityUsed);
+        RenewalEnabledStage quantityUsed(double quantityUsed);
+    }
+
+    public interface RenewalEnabledStage {
+        SourceLabelStage renewalEnabled(boolean renewalEnabled);
     }
 
     public interface SourceLabelStage {
@@ -350,6 +388,14 @@ public final class BillingCreditGrantResponseData {
 
         _FinalStage price(BillingPriceResponseData price);
 
+        _FinalStage renewalPeriod(Optional<BillingPlanCreditGrantResetCadence> renewalPeriod);
+
+        _FinalStage renewalPeriod(BillingPlanCreditGrantResetCadence renewalPeriod);
+
+        _FinalStage transfers(Optional<List<CreditTransferResponseData>> transfers);
+
+        _FinalStage transfers(List<CreditTransferResponseData> transfers);
+
         _FinalStage validFrom(Optional<OffsetDateTime> validFrom);
 
         _FinalStage validFrom(OffsetDateTime validFrom);
@@ -358,9 +404,9 @@ public final class BillingCreditGrantResponseData {
 
         _FinalStage zeroedOutDate(OffsetDateTime zeroedOutDate);
 
-        _FinalStage zeroedOutReason(Optional<String> zeroedOutReason);
+        _FinalStage zeroedOutReason(Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason);
 
-        _FinalStage zeroedOutReason(String zeroedOutReason);
+        _FinalStage zeroedOutReason(BillingCreditGrantZeroedOutReason zeroedOutReason);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -375,6 +421,7 @@ public final class BillingCreditGrantResponseData {
                     QuantityStage,
                     QuantityRemainingStage,
                     QuantityUsedStage,
+                    RenewalEnabledStage,
                     SourceLabelStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -388,7 +435,7 @@ public final class BillingCreditGrantResponseData {
 
         private String creditName;
 
-        private String grantReason;
+        private BillingCreditGrantReason grantReason;
 
         private String id;
 
@@ -398,15 +445,21 @@ public final class BillingCreditGrantResponseData {
 
         private double quantityUsed;
 
+        private boolean renewalEnabled;
+
         private String sourceLabel;
 
         private OffsetDateTime updatedAt;
 
-        private Optional<String> zeroedOutReason = Optional.empty();
+        private Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason = Optional.empty();
 
         private Optional<OffsetDateTime> zeroedOutDate = Optional.empty();
 
         private Optional<OffsetDateTime> validFrom = Optional.empty();
+
+        private Optional<List<CreditTransferResponseData>> transfers = Optional.empty();
+
+        private Optional<BillingPlanCreditGrantResetCadence> renewalPeriod = Optional.empty();
 
         private Optional<BillingPriceResponseData> price = Optional.empty();
 
@@ -440,7 +493,10 @@ public final class BillingCreditGrantResponseData {
             quantity(other.getQuantity());
             quantityRemaining(other.getQuantityRemaining());
             quantityUsed(other.getQuantityUsed());
+            renewalEnabled(other.getRenewalEnabled());
+            renewalPeriod(other.getRenewalPeriod());
             sourceLabel(other.getSourceLabel());
+            transfers(other.getTransfers());
             updatedAt(other.getUpdatedAt());
             validFrom(other.getValidFrom());
             zeroedOutDate(other.getZeroedOutDate());
@@ -485,7 +541,7 @@ public final class BillingCreditGrantResponseData {
 
         @java.lang.Override
         @JsonSetter("grant_reason")
-        public IdStage grantReason(@NotNull String grantReason) {
+        public IdStage grantReason(@NotNull BillingCreditGrantReason grantReason) {
             this.grantReason = Objects.requireNonNull(grantReason, "grantReason must not be null");
             return this;
         }
@@ -513,8 +569,15 @@ public final class BillingCreditGrantResponseData {
 
         @java.lang.Override
         @JsonSetter("quantity_used")
-        public SourceLabelStage quantityUsed(double quantityUsed) {
+        public RenewalEnabledStage quantityUsed(double quantityUsed) {
             this.quantityUsed = quantityUsed;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("renewal_enabled")
+        public SourceLabelStage renewalEnabled(boolean renewalEnabled) {
+            this.renewalEnabled = renewalEnabled;
             return this;
         }
 
@@ -533,14 +596,14 @@ public final class BillingCreditGrantResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage zeroedOutReason(String zeroedOutReason) {
+        public _FinalStage zeroedOutReason(BillingCreditGrantZeroedOutReason zeroedOutReason) {
             this.zeroedOutReason = Optional.ofNullable(zeroedOutReason);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "zeroed_out_reason", nulls = Nulls.SKIP)
-        public _FinalStage zeroedOutReason(Optional<String> zeroedOutReason) {
+        public _FinalStage zeroedOutReason(Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason) {
             this.zeroedOutReason = zeroedOutReason;
             return this;
         }
@@ -568,6 +631,32 @@ public final class BillingCreditGrantResponseData {
         @JsonSetter(value = "valid_from", nulls = Nulls.SKIP)
         public _FinalStage validFrom(Optional<OffsetDateTime> validFrom) {
             this.validFrom = validFrom;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage transfers(List<CreditTransferResponseData> transfers) {
+            this.transfers = Optional.ofNullable(transfers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "transfers", nulls = Nulls.SKIP)
+        public _FinalStage transfers(Optional<List<CreditTransferResponseData>> transfers) {
+            this.transfers = transfers;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage renewalPeriod(BillingPlanCreditGrantResetCadence renewalPeriod) {
+            this.renewalPeriod = Optional.ofNullable(renewalPeriod);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "renewal_period", nulls = Nulls.SKIP)
+        public _FinalStage renewalPeriod(Optional<BillingPlanCreditGrantResetCadence> renewalPeriod) {
+            this.renewalPeriod = renewalPeriod;
             return this;
         }
 
@@ -654,7 +743,10 @@ public final class BillingCreditGrantResponseData {
                     quantity,
                     quantityRemaining,
                     quantityUsed,
+                    renewalEnabled,
+                    renewalPeriod,
                     sourceLabel,
+                    transfers,
                     updatedAt,
                     validFrom,
                     zeroedOutDate,

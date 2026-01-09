@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdatePlanTraitBulkRequestBody.Builder.class)
 public final class UpdatePlanTraitBulkRequestBody {
+    private final boolean applyToExistingCompanies;
+
     private final String planId;
 
     private final List<UpdatePlanTraitTraitRequestBody> traits;
@@ -30,10 +32,19 @@ public final class UpdatePlanTraitBulkRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private UpdatePlanTraitBulkRequestBody(
-            String planId, List<UpdatePlanTraitTraitRequestBody> traits, Map<String, Object> additionalProperties) {
+            boolean applyToExistingCompanies,
+            String planId,
+            List<UpdatePlanTraitTraitRequestBody> traits,
+            Map<String, Object> additionalProperties) {
+        this.applyToExistingCompanies = applyToExistingCompanies;
         this.planId = planId;
         this.traits = traits;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("apply_to_existing_companies")
+    public boolean getApplyToExistingCompanies() {
+        return applyToExistingCompanies;
     }
 
     @JsonProperty("plan_id")
@@ -58,12 +69,14 @@ public final class UpdatePlanTraitBulkRequestBody {
     }
 
     private boolean equalTo(UpdatePlanTraitBulkRequestBody other) {
-        return planId.equals(other.planId) && traits.equals(other.traits);
+        return applyToExistingCompanies == other.applyToExistingCompanies
+                && planId.equals(other.planId)
+                && traits.equals(other.traits);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.planId, this.traits);
+        return Objects.hash(this.applyToExistingCompanies, this.planId, this.traits);
     }
 
     @java.lang.Override
@@ -71,14 +84,18 @@ public final class UpdatePlanTraitBulkRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static PlanIdStage builder() {
+    public static ApplyToExistingCompaniesStage builder() {
         return new Builder();
+    }
+
+    public interface ApplyToExistingCompaniesStage {
+        PlanIdStage applyToExistingCompanies(boolean applyToExistingCompanies);
+
+        Builder from(UpdatePlanTraitBulkRequestBody other);
     }
 
     public interface PlanIdStage {
         _FinalStage planId(@NotNull String planId);
-
-        Builder from(UpdatePlanTraitBulkRequestBody other);
     }
 
     public interface _FinalStage {
@@ -92,7 +109,9 @@ public final class UpdatePlanTraitBulkRequestBody {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements PlanIdStage, _FinalStage {
+    public static final class Builder implements ApplyToExistingCompaniesStage, PlanIdStage, _FinalStage {
+        private boolean applyToExistingCompanies;
+
         private String planId;
 
         private List<UpdatePlanTraitTraitRequestBody> traits = new ArrayList<>();
@@ -104,8 +123,16 @@ public final class UpdatePlanTraitBulkRequestBody {
 
         @java.lang.Override
         public Builder from(UpdatePlanTraitBulkRequestBody other) {
+            applyToExistingCompanies(other.getApplyToExistingCompanies());
             planId(other.getPlanId());
             traits(other.getTraits());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("apply_to_existing_companies")
+        public PlanIdStage applyToExistingCompanies(boolean applyToExistingCompanies) {
+            this.applyToExistingCompanies = applyToExistingCompanies;
             return this;
         }
 
@@ -142,7 +169,7 @@ public final class UpdatePlanTraitBulkRequestBody {
 
         @java.lang.Override
         public UpdatePlanTraitBulkRequestBody build() {
-            return new UpdatePlanTraitBulkRequestBody(planId, traits, additionalProperties);
+            return new UpdatePlanTraitBulkRequestBody(applyToExistingCompanies, planId, traits, additionalProperties);
         }
     }
 }

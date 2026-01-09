@@ -24,9 +24,9 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanChangeResponseData.Builder.class)
 public final class PlanChangeResponseData {
-    private final PlanChangeResponseDataAction action;
+    private final PlanChangeAction action;
 
-    private final PlanChangeResponseDataActorType actorType;
+    private final PlanChangeActorType actorType;
 
     private final List<PlanSnapshotView> addOnsAdded;
 
@@ -38,7 +38,7 @@ public final class PlanChangeResponseData {
 
     private final Optional<PlanSnapshotView> basePlan;
 
-    private final Optional<PlanChangeResponseDataBasePlanAction> basePlanAction;
+    private final Optional<PlanChangeBasePlanAction> basePlanAction;
 
     private final Optional<CompanyResponseData> company;
 
@@ -54,7 +54,7 @@ public final class PlanChangeResponseData {
 
     private final Optional<String> requestId;
 
-    private final Optional<PlanChangeResponseDataSubscriptionChangeAction> subscriptionChangeAction;
+    private final Optional<PlanChangeSubscriptionAction> subscriptionChangeAction;
 
     private final List<SubscriptionTraitUpdate> traitsUpdated;
 
@@ -67,14 +67,14 @@ public final class PlanChangeResponseData {
     private final Map<String, Object> additionalProperties;
 
     private PlanChangeResponseData(
-            PlanChangeResponseDataAction action,
-            PlanChangeResponseDataActorType actorType,
+            PlanChangeAction action,
+            PlanChangeActorType actorType,
             List<PlanSnapshotView> addOnsAdded,
             List<PlanSnapshotView> addOnsRemoved,
             Optional<ApiKeyResponseData> apiKey,
             Optional<ApiKeyRequestListResponseData> apiKeyRequest,
             Optional<PlanSnapshotView> basePlan,
-            Optional<PlanChangeResponseDataBasePlanAction> basePlanAction,
+            Optional<PlanChangeBasePlanAction> basePlanAction,
             Optional<CompanyResponseData> company,
             String companyId,
             OffsetDateTime createdAt,
@@ -82,7 +82,7 @@ public final class PlanChangeResponseData {
             String id,
             Optional<PlanSnapshotView> previousBasePlan,
             Optional<String> requestId,
-            Optional<PlanChangeResponseDataSubscriptionChangeAction> subscriptionChangeAction,
+            Optional<PlanChangeSubscriptionAction> subscriptionChangeAction,
             List<SubscriptionTraitUpdate> traitsUpdated,
             OffsetDateTime updatedAt,
             Optional<String> userId,
@@ -112,12 +112,12 @@ public final class PlanChangeResponseData {
     }
 
     @JsonProperty("action")
-    public PlanChangeResponseDataAction getAction() {
+    public PlanChangeAction getAction() {
         return action;
     }
 
     @JsonProperty("actor_type")
-    public PlanChangeResponseDataActorType getActorType() {
+    public PlanChangeActorType getActorType() {
         return actorType;
     }
 
@@ -146,11 +146,8 @@ public final class PlanChangeResponseData {
         return basePlan;
     }
 
-    /**
-     * @return Any special behavior that affected the assignment of the base plan during this change.
-     */
     @JsonProperty("base_plan_action")
-    public Optional<PlanChangeResponseDataBasePlanAction> getBasePlanAction() {
+    public Optional<PlanChangeBasePlanAction> getBasePlanAction() {
         return basePlanAction;
     }
 
@@ -189,11 +186,8 @@ public final class PlanChangeResponseData {
         return requestId;
     }
 
-    /**
-     * @return If a subscription was changed as a part of this plan change, indicates the type of change that was made.
-     */
     @JsonProperty("subscription_change_action")
-    public Optional<PlanChangeResponseDataSubscriptionChangeAction> getSubscriptionChangeAction() {
+    public Optional<PlanChangeSubscriptionAction> getSubscriptionChangeAction() {
         return subscriptionChangeAction;
     }
 
@@ -289,13 +283,13 @@ public final class PlanChangeResponseData {
     }
 
     public interface ActionStage {
-        ActorTypeStage action(@NotNull PlanChangeResponseDataAction action);
+        ActorTypeStage action(@NotNull PlanChangeAction action);
 
         Builder from(PlanChangeResponseData other);
     }
 
     public interface ActorTypeStage {
-        CompanyIdStage actorType(@NotNull PlanChangeResponseDataActorType actorType);
+        CompanyIdStage actorType(@NotNull PlanChangeActorType actorType);
     }
 
     public interface CompanyIdStage {
@@ -345,12 +339,9 @@ public final class PlanChangeResponseData {
 
         _FinalStage basePlan(PlanSnapshotView basePlan);
 
-        /**
-         * <p>Any special behavior that affected the assignment of the base plan during this change.</p>
-         */
-        _FinalStage basePlanAction(Optional<PlanChangeResponseDataBasePlanAction> basePlanAction);
+        _FinalStage basePlanAction(Optional<PlanChangeBasePlanAction> basePlanAction);
 
-        _FinalStage basePlanAction(PlanChangeResponseDataBasePlanAction basePlanAction);
+        _FinalStage basePlanAction(PlanChangeBasePlanAction basePlanAction);
 
         _FinalStage company(Optional<CompanyResponseData> company);
 
@@ -364,13 +355,9 @@ public final class PlanChangeResponseData {
 
         _FinalStage requestId(String requestId);
 
-        /**
-         * <p>If a subscription was changed as a part of this plan change, indicates the type of change that was made.</p>
-         */
-        _FinalStage subscriptionChangeAction(
-                Optional<PlanChangeResponseDataSubscriptionChangeAction> subscriptionChangeAction);
+        _FinalStage subscriptionChangeAction(Optional<PlanChangeSubscriptionAction> subscriptionChangeAction);
 
-        _FinalStage subscriptionChangeAction(PlanChangeResponseDataSubscriptionChangeAction subscriptionChangeAction);
+        _FinalStage subscriptionChangeAction(PlanChangeSubscriptionAction subscriptionChangeAction);
 
         /**
          * <p>Any traits were updated as part of this plan change (via pay-in-advance entitlements).</p>
@@ -400,9 +387,9 @@ public final class PlanChangeResponseData {
                     IdStage,
                     UpdatedAtStage,
                     _FinalStage {
-        private PlanChangeResponseDataAction action;
+        private PlanChangeAction action;
 
-        private PlanChangeResponseDataActorType actorType;
+        private PlanChangeActorType actorType;
 
         private String companyId;
 
@@ -420,7 +407,7 @@ public final class PlanChangeResponseData {
 
         private List<SubscriptionTraitUpdate> traitsUpdated = new ArrayList<>();
 
-        private Optional<PlanChangeResponseDataSubscriptionChangeAction> subscriptionChangeAction = Optional.empty();
+        private Optional<PlanChangeSubscriptionAction> subscriptionChangeAction = Optional.empty();
 
         private Optional<String> requestId = Optional.empty();
 
@@ -428,7 +415,7 @@ public final class PlanChangeResponseData {
 
         private Optional<CompanyResponseData> company = Optional.empty();
 
-        private Optional<PlanChangeResponseDataBasePlanAction> basePlanAction = Optional.empty();
+        private Optional<PlanChangeBasePlanAction> basePlanAction = Optional.empty();
 
         private Optional<PlanSnapshotView> basePlan = Optional.empty();
 
@@ -472,14 +459,14 @@ public final class PlanChangeResponseData {
 
         @java.lang.Override
         @JsonSetter("action")
-        public ActorTypeStage action(@NotNull PlanChangeResponseDataAction action) {
+        public ActorTypeStage action(@NotNull PlanChangeAction action) {
             this.action = Objects.requireNonNull(action, "action must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("actor_type")
-        public CompanyIdStage actorType(@NotNull PlanChangeResponseDataActorType actorType) {
+        public CompanyIdStage actorType(@NotNull PlanChangeActorType actorType) {
             this.actorType = Objects.requireNonNull(actorType, "actorType must not be null");
             return this;
         }
@@ -580,24 +567,15 @@ public final class PlanChangeResponseData {
             return this;
         }
 
-        /**
-         * <p>If a subscription was changed as a part of this plan change, indicates the type of change that was made.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
-        public _FinalStage subscriptionChangeAction(
-                PlanChangeResponseDataSubscriptionChangeAction subscriptionChangeAction) {
+        public _FinalStage subscriptionChangeAction(PlanChangeSubscriptionAction subscriptionChangeAction) {
             this.subscriptionChangeAction = Optional.ofNullable(subscriptionChangeAction);
             return this;
         }
 
-        /**
-         * <p>If a subscription was changed as a part of this plan change, indicates the type of change that was made.</p>
-         */
         @java.lang.Override
         @JsonSetter(value = "subscription_change_action", nulls = Nulls.SKIP)
-        public _FinalStage subscriptionChangeAction(
-                Optional<PlanChangeResponseDataSubscriptionChangeAction> subscriptionChangeAction) {
+        public _FinalStage subscriptionChangeAction(Optional<PlanChangeSubscriptionAction> subscriptionChangeAction) {
             this.subscriptionChangeAction = subscriptionChangeAction;
             return this;
         }
@@ -641,22 +619,15 @@ public final class PlanChangeResponseData {
             return this;
         }
 
-        /**
-         * <p>Any special behavior that affected the assignment of the base plan during this change.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
-        public _FinalStage basePlanAction(PlanChangeResponseDataBasePlanAction basePlanAction) {
+        public _FinalStage basePlanAction(PlanChangeBasePlanAction basePlanAction) {
             this.basePlanAction = Optional.ofNullable(basePlanAction);
             return this;
         }
 
-        /**
-         * <p>Any special behavior that affected the assignment of the base plan during this change.</p>
-         */
         @java.lang.Override
         @JsonSetter(value = "base_plan_action", nulls = Nulls.SKIP)
-        public _FinalStage basePlanAction(Optional<PlanChangeResponseDataBasePlanAction> basePlanAction) {
+        public _FinalStage basePlanAction(Optional<PlanChangeBasePlanAction> basePlanAction) {
             this.basePlanAction = basePlanAction;
             return this;
         }

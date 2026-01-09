@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.accounts.types.UpdateEnvironmentRequestBodyEnvironmentType;
+import com.schematic.api.types.EnvironmentType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,14 +21,14 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateEnvironmentRequestBody.Builder.class)
 public final class UpdateEnvironmentRequestBody {
-    private final Optional<UpdateEnvironmentRequestBodyEnvironmentType> environmentType;
+    private final Optional<EnvironmentType> environmentType;
 
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateEnvironmentRequestBody(
-            Optional<UpdateEnvironmentRequestBodyEnvironmentType> environmentType,
+            Optional<EnvironmentType> environmentType,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.environmentType = environmentType;
@@ -37,7 +37,7 @@ public final class UpdateEnvironmentRequestBody {
     }
 
     @JsonProperty("environment_type")
-    public Optional<UpdateEnvironmentRequestBodyEnvironmentType> getEnvironmentType() {
+    public Optional<EnvironmentType> getEnvironmentType() {
         return environmentType;
     }
 
@@ -77,7 +77,7 @@ public final class UpdateEnvironmentRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<UpdateEnvironmentRequestBodyEnvironmentType> environmentType = Optional.empty();
+        private Optional<EnvironmentType> environmentType = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -93,12 +93,12 @@ public final class UpdateEnvironmentRequestBody {
         }
 
         @JsonSetter(value = "environment_type", nulls = Nulls.SKIP)
-        public Builder environmentType(Optional<UpdateEnvironmentRequestBodyEnvironmentType> environmentType) {
+        public Builder environmentType(Optional<EnvironmentType> environmentType) {
             this.environmentType = environmentType;
             return this;
         }
 
-        public Builder environmentType(UpdateEnvironmentRequestBodyEnvironmentType environmentType) {
+        public Builder environmentType(EnvironmentType environmentType) {
             this.environmentType = Optional.ofNullable(environmentType);
             return this;
         }

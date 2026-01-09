@@ -26,7 +26,7 @@ public final class CreditGrantDetail {
 
     private final Optional<OffsetDateTime> expiresAt;
 
-    private final CreditGrantDetailGrantReason grantReason;
+    private final BillingCreditGrantReason grantReason;
 
     private final double quantity;
 
@@ -35,7 +35,7 @@ public final class CreditGrantDetail {
     private CreditGrantDetail(
             Optional<String> creditTypeIcon,
             Optional<OffsetDateTime> expiresAt,
-            CreditGrantDetailGrantReason grantReason,
+            BillingCreditGrantReason grantReason,
             double quantity,
             Map<String, Object> additionalProperties) {
         this.creditTypeIcon = creditTypeIcon;
@@ -56,7 +56,7 @@ public final class CreditGrantDetail {
     }
 
     @JsonProperty("grant_reason")
-    public CreditGrantDetailGrantReason getGrantReason() {
+    public BillingCreditGrantReason getGrantReason() {
         return grantReason;
     }
 
@@ -98,7 +98,7 @@ public final class CreditGrantDetail {
     }
 
     public interface GrantReasonStage {
-        QuantityStage grantReason(@NotNull CreditGrantDetailGrantReason grantReason);
+        QuantityStage grantReason(@NotNull BillingCreditGrantReason grantReason);
 
         Builder from(CreditGrantDetail other);
     }
@@ -121,7 +121,7 @@ public final class CreditGrantDetail {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements GrantReasonStage, QuantityStage, _FinalStage {
-        private CreditGrantDetailGrantReason grantReason;
+        private BillingCreditGrantReason grantReason;
 
         private double quantity;
 
@@ -145,7 +145,7 @@ public final class CreditGrantDetail {
 
         @java.lang.Override
         @JsonSetter("grant_reason")
-        public QuantityStage grantReason(@NotNull CreditGrantDetailGrantReason grantReason) {
+        public QuantityStage grantReason(@NotNull BillingCreditGrantReason grantReason) {
             this.grantReason = Objects.requireNonNull(grantReason, "grantReason must not be null");
             return this;
         }
