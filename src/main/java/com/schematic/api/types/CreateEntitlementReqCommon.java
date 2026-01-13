@@ -37,7 +37,7 @@ public final class CreateEntitlementReqCommon {
 
     private final Optional<String> valueTraitId;
 
-    private final CreateEntitlementReqCommonValueType valueType;
+    private final EntitlementValueType valueType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -50,7 +50,7 @@ public final class CreateEntitlementReqCommon {
             Optional<String> valueCreditId,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
-            CreateEntitlementReqCommonValueType valueType,
+            EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
         this.creditConsumptionRate = creditConsumptionRate;
         this.featureId = featureId;
@@ -105,7 +105,7 @@ public final class CreateEntitlementReqCommon {
     }
 
     @JsonProperty("value_type")
-    public CreateEntitlementReqCommonValueType getValueType() {
+    public EntitlementValueType getValueType() {
         return valueType;
     }
 
@@ -162,7 +162,7 @@ public final class CreateEntitlementReqCommon {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(@NotNull CreateEntitlementReqCommonValueType valueType);
+        _FinalStage valueType(@NotNull EntitlementValueType valueType);
     }
 
     public interface _FinalStage {
@@ -202,7 +202,7 @@ public final class CreateEntitlementReqCommon {
     public static final class Builder implements FeatureIdStage, ValueTypeStage, _FinalStage {
         private String featureId;
 
-        private CreateEntitlementReqCommonValueType valueType;
+        private EntitlementValueType valueType;
 
         private Optional<String> valueTraitId = Optional.empty();
 
@@ -246,7 +246,7 @@ public final class CreateEntitlementReqCommon {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(@NotNull CreateEntitlementReqCommonValueType valueType) {
+        public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }

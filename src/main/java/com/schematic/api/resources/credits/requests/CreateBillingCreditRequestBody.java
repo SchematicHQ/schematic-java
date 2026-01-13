@@ -12,8 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.credits.types.CreateBillingCreditRequestBodyBurnStrategy;
-import com.schematic.api.resources.credits.types.CreateBillingCreditRequestBodyDefaultRolloverPolicy;
+import com.schematic.api.types.BillingCreditBurnStrategy;
+import com.schematic.api.types.BillingCreditExpiryUnit;
+import com.schematic.api.types.BillingCreditRolloverPolicy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,15 +24,15 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingCreditRequestBody.Builder.class)
 public final class CreateBillingCreditRequestBody {
-    private final Optional<CreateBillingCreditRequestBodyBurnStrategy> burnStrategy;
+    private final Optional<BillingCreditBurnStrategy> burnStrategy;
 
     private final String currency;
 
-    private final Optional<String> defaultExpiryUnit;
+    private final Optional<BillingCreditExpiryUnit> defaultExpiryUnit;
 
     private final Optional<Integer> defaultExpiryUnitCount;
 
-    private final Optional<CreateBillingCreditRequestBodyDefaultRolloverPolicy> defaultRolloverPolicy;
+    private final Optional<BillingCreditRolloverPolicy> defaultRolloverPolicy;
 
     private final String description;
 
@@ -50,11 +51,11 @@ public final class CreateBillingCreditRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingCreditRequestBody(
-            Optional<CreateBillingCreditRequestBodyBurnStrategy> burnStrategy,
+            Optional<BillingCreditBurnStrategy> burnStrategy,
             String currency,
-            Optional<String> defaultExpiryUnit,
+            Optional<BillingCreditExpiryUnit> defaultExpiryUnit,
             Optional<Integer> defaultExpiryUnitCount,
-            Optional<CreateBillingCreditRequestBodyDefaultRolloverPolicy> defaultRolloverPolicy,
+            Optional<BillingCreditRolloverPolicy> defaultRolloverPolicy,
             String description,
             Optional<String> icon,
             String name,
@@ -79,7 +80,7 @@ public final class CreateBillingCreditRequestBody {
     }
 
     @JsonProperty("burn_strategy")
-    public Optional<CreateBillingCreditRequestBodyBurnStrategy> getBurnStrategy() {
+    public Optional<BillingCreditBurnStrategy> getBurnStrategy() {
         return burnStrategy;
     }
 
@@ -89,7 +90,7 @@ public final class CreateBillingCreditRequestBody {
     }
 
     @JsonProperty("default_expiry_unit")
-    public Optional<String> getDefaultExpiryUnit() {
+    public Optional<BillingCreditExpiryUnit> getDefaultExpiryUnit() {
         return defaultExpiryUnit;
     }
 
@@ -99,7 +100,7 @@ public final class CreateBillingCreditRequestBody {
     }
 
     @JsonProperty("default_rollover_policy")
-    public Optional<CreateBillingCreditRequestBodyDefaultRolloverPolicy> getDefaultRolloverPolicy() {
+    public Optional<BillingCreditRolloverPolicy> getDefaultRolloverPolicy() {
         return defaultRolloverPolicy;
     }
 
@@ -207,22 +208,21 @@ public final class CreateBillingCreditRequestBody {
     public interface _FinalStage {
         CreateBillingCreditRequestBody build();
 
-        _FinalStage burnStrategy(Optional<CreateBillingCreditRequestBodyBurnStrategy> burnStrategy);
+        _FinalStage burnStrategy(Optional<BillingCreditBurnStrategy> burnStrategy);
 
-        _FinalStage burnStrategy(CreateBillingCreditRequestBodyBurnStrategy burnStrategy);
+        _FinalStage burnStrategy(BillingCreditBurnStrategy burnStrategy);
 
-        _FinalStage defaultExpiryUnit(Optional<String> defaultExpiryUnit);
+        _FinalStage defaultExpiryUnit(Optional<BillingCreditExpiryUnit> defaultExpiryUnit);
 
-        _FinalStage defaultExpiryUnit(String defaultExpiryUnit);
+        _FinalStage defaultExpiryUnit(BillingCreditExpiryUnit defaultExpiryUnit);
 
         _FinalStage defaultExpiryUnitCount(Optional<Integer> defaultExpiryUnitCount);
 
         _FinalStage defaultExpiryUnitCount(Integer defaultExpiryUnitCount);
 
-        _FinalStage defaultRolloverPolicy(
-                Optional<CreateBillingCreditRequestBodyDefaultRolloverPolicy> defaultRolloverPolicy);
+        _FinalStage defaultRolloverPolicy(Optional<BillingCreditRolloverPolicy> defaultRolloverPolicy);
 
-        _FinalStage defaultRolloverPolicy(CreateBillingCreditRequestBodyDefaultRolloverPolicy defaultRolloverPolicy);
+        _FinalStage defaultRolloverPolicy(BillingCreditRolloverPolicy defaultRolloverPolicy);
 
         _FinalStage icon(Optional<String> icon);
 
@@ -263,13 +263,13 @@ public final class CreateBillingCreditRequestBody {
 
         private Optional<String> icon = Optional.empty();
 
-        private Optional<CreateBillingCreditRequestBodyDefaultRolloverPolicy> defaultRolloverPolicy = Optional.empty();
+        private Optional<BillingCreditRolloverPolicy> defaultRolloverPolicy = Optional.empty();
 
         private Optional<Integer> defaultExpiryUnitCount = Optional.empty();
 
-        private Optional<String> defaultExpiryUnit = Optional.empty();
+        private Optional<BillingCreditExpiryUnit> defaultExpiryUnit = Optional.empty();
 
-        private Optional<CreateBillingCreditRequestBodyBurnStrategy> burnStrategy = Optional.empty();
+        private Optional<BillingCreditBurnStrategy> burnStrategy = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -380,16 +380,14 @@ public final class CreateBillingCreditRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage defaultRolloverPolicy(
-                CreateBillingCreditRequestBodyDefaultRolloverPolicy defaultRolloverPolicy) {
+        public _FinalStage defaultRolloverPolicy(BillingCreditRolloverPolicy defaultRolloverPolicy) {
             this.defaultRolloverPolicy = Optional.ofNullable(defaultRolloverPolicy);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "default_rollover_policy", nulls = Nulls.SKIP)
-        public _FinalStage defaultRolloverPolicy(
-                Optional<CreateBillingCreditRequestBodyDefaultRolloverPolicy> defaultRolloverPolicy) {
+        public _FinalStage defaultRolloverPolicy(Optional<BillingCreditRolloverPolicy> defaultRolloverPolicy) {
             this.defaultRolloverPolicy = defaultRolloverPolicy;
             return this;
         }
@@ -408,27 +406,27 @@ public final class CreateBillingCreditRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage defaultExpiryUnit(String defaultExpiryUnit) {
+        public _FinalStage defaultExpiryUnit(BillingCreditExpiryUnit defaultExpiryUnit) {
             this.defaultExpiryUnit = Optional.ofNullable(defaultExpiryUnit);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "default_expiry_unit", nulls = Nulls.SKIP)
-        public _FinalStage defaultExpiryUnit(Optional<String> defaultExpiryUnit) {
+        public _FinalStage defaultExpiryUnit(Optional<BillingCreditExpiryUnit> defaultExpiryUnit) {
             this.defaultExpiryUnit = defaultExpiryUnit;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage burnStrategy(CreateBillingCreditRequestBodyBurnStrategy burnStrategy) {
+        public _FinalStage burnStrategy(BillingCreditBurnStrategy burnStrategy) {
             this.burnStrategy = Optional.ofNullable(burnStrategy);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "burn_strategy", nulls = Nulls.SKIP)
-        public _FinalStage burnStrategy(Optional<CreateBillingCreditRequestBodyBurnStrategy> burnStrategy) {
+        public _FinalStage burnStrategy(Optional<BillingCreditBurnStrategy> burnStrategy) {
             this.burnStrategy = burnStrategy;
             return this;
         }

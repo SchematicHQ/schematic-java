@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.EntityType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListEntityKeyDefinitionsParams.Builder.class)
 public final class ListEntityKeyDefinitionsParams {
-    private final Optional<ListEntityKeyDefinitionsResponseParamsEntityType> entityType;
+    private final Optional<EntityType> entityType;
 
     private final Optional<List<String>> ids;
 
@@ -34,7 +35,7 @@ public final class ListEntityKeyDefinitionsParams {
     private final Map<String, Object> additionalProperties;
 
     private ListEntityKeyDefinitionsParams(
-            Optional<ListEntityKeyDefinitionsResponseParamsEntityType> entityType,
+            Optional<EntityType> entityType,
             Optional<List<String>> ids,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -49,7 +50,7 @@ public final class ListEntityKeyDefinitionsParams {
     }
 
     @JsonProperty("entity_type")
-    public Optional<ListEntityKeyDefinitionsResponseParamsEntityType> getEntityType() {
+    public Optional<EntityType> getEntityType() {
         return entityType;
     }
 
@@ -114,7 +115,7 @@ public final class ListEntityKeyDefinitionsParams {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<ListEntityKeyDefinitionsResponseParamsEntityType> entityType = Optional.empty();
+        private Optional<EntityType> entityType = Optional.empty();
 
         private Optional<List<String>> ids = Optional.empty();
 
@@ -139,12 +140,12 @@ public final class ListEntityKeyDefinitionsParams {
         }
 
         @JsonSetter(value = "entity_type", nulls = Nulls.SKIP)
-        public Builder entityType(Optional<ListEntityKeyDefinitionsResponseParamsEntityType> entityType) {
+        public Builder entityType(Optional<EntityType> entityType) {
             this.entityType = entityType;
             return this;
         }
 
-        public Builder entityType(ListEntityKeyDefinitionsResponseParamsEntityType entityType) {
+        public Builder entityType(EntityType entityType) {
             this.entityType = Optional.ofNullable(entityType);
             return this;
         }

@@ -54,6 +54,8 @@ public final class PaymentMethodResponseData {
 
     private final String paymentMethodType;
 
+    private final BillingProviderType providerType;
+
     private final OffsetDateTime updatedAt;
 
     private final Map<String, Object> additionalProperties;
@@ -75,6 +77,7 @@ public final class PaymentMethodResponseData {
             String externalId,
             String id,
             String paymentMethodType,
+            BillingProviderType providerType,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.accountLast4 = accountLast4;
@@ -93,6 +96,7 @@ public final class PaymentMethodResponseData {
         this.externalId = externalId;
         this.id = id;
         this.paymentMethodType = paymentMethodType;
+        this.providerType = providerType;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -177,6 +181,11 @@ public final class PaymentMethodResponseData {
         return paymentMethodType;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -210,6 +219,7 @@ public final class PaymentMethodResponseData {
                 && externalId.equals(other.externalId)
                 && id.equals(other.id)
                 && paymentMethodType.equals(other.paymentMethodType)
+                && providerType.equals(other.providerType)
                 && updatedAt.equals(other.updatedAt);
     }
 
@@ -232,6 +242,7 @@ public final class PaymentMethodResponseData {
                 this.externalId,
                 this.id,
                 this.paymentMethodType,
+                this.providerType,
                 this.updatedAt);
     }
 
@@ -267,7 +278,11 @@ public final class PaymentMethodResponseData {
     }
 
     public interface PaymentMethodTypeStage {
-        UpdatedAtStage paymentMethodType(@NotNull String paymentMethodType);
+        ProviderTypeStage paymentMethodType(@NotNull String paymentMethodType);
+    }
+
+    public interface ProviderTypeStage {
+        UpdatedAtStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface UpdatedAtStage {
@@ -326,6 +341,7 @@ public final class PaymentMethodResponseData {
                     ExternalIdStage,
                     IdStage,
                     PaymentMethodTypeStage,
+                    ProviderTypeStage,
                     UpdatedAtStage,
                     _FinalStage {
         private OffsetDateTime createdAt;
@@ -339,6 +355,8 @@ public final class PaymentMethodResponseData {
         private String id;
 
         private String paymentMethodType;
+
+        private BillingProviderType providerType;
 
         private OffsetDateTime updatedAt;
 
@@ -385,6 +403,7 @@ public final class PaymentMethodResponseData {
             externalId(other.getExternalId());
             id(other.getId());
             paymentMethodType(other.getPaymentMethodType());
+            providerType(other.getProviderType());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -426,8 +445,15 @@ public final class PaymentMethodResponseData {
 
         @java.lang.Override
         @JsonSetter("payment_method_type")
-        public UpdatedAtStage paymentMethodType(@NotNull String paymentMethodType) {
+        public ProviderTypeStage paymentMethodType(@NotNull String paymentMethodType) {
             this.paymentMethodType = Objects.requireNonNull(paymentMethodType, "paymentMethodType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public UpdatedAtStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -587,6 +613,7 @@ public final class PaymentMethodResponseData {
                     externalId,
                     id,
                     paymentMethodType,
+                    providerType,
                     updatedAt,
                     additionalProperties);
         }

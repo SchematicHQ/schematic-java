@@ -81,6 +81,9 @@ public final class CreditUsageResponseData {
         return creditRemaining;
     }
 
+    /**
+     * @return Deprecated: Use credit_remaining instead.
+     */
     @JsonProperty("credit_total")
     public Optional<Double> getCreditTotal() {
         return creditTotal;
@@ -234,6 +237,9 @@ public final class CreditUsageResponseData {
             return this;
         }
 
+        /**
+         * <p>Deprecated: Use credit_remaining instead.</p>
+         */
         @JsonSetter(value = "credit_total", nulls = Nulls.SKIP)
         public Builder creditTotal(Optional<Double> creditTotal) {
             this.creditTotal = creditTotal;

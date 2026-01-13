@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.credits.types.ZeroOutGrantRequestBodyReason;
+import com.schematic.api.types.BillingCreditGrantZeroedOutReason;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,18 +21,18 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ZeroOutGrantRequestBody.Builder.class)
 public final class ZeroOutGrantRequestBody {
-    private final Optional<ZeroOutGrantRequestBodyReason> reason;
+    private final Optional<BillingCreditGrantZeroedOutReason> reason;
 
     private final Map<String, Object> additionalProperties;
 
     private ZeroOutGrantRequestBody(
-            Optional<ZeroOutGrantRequestBodyReason> reason, Map<String, Object> additionalProperties) {
+            Optional<BillingCreditGrantZeroedOutReason> reason, Map<String, Object> additionalProperties) {
         this.reason = reason;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("reason")
-    public Optional<ZeroOutGrantRequestBodyReason> getReason() {
+    public Optional<BillingCreditGrantZeroedOutReason> getReason() {
         return reason;
     }
 
@@ -67,7 +67,7 @@ public final class ZeroOutGrantRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<ZeroOutGrantRequestBodyReason> reason = Optional.empty();
+        private Optional<BillingCreditGrantZeroedOutReason> reason = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -80,12 +80,12 @@ public final class ZeroOutGrantRequestBody {
         }
 
         @JsonSetter(value = "reason", nulls = Nulls.SKIP)
-        public Builder reason(Optional<ZeroOutGrantRequestBodyReason> reason) {
+        public Builder reason(Optional<BillingCreditGrantZeroedOutReason> reason) {
             this.reason = reason;
             return this;
         }
 
-        public Builder reason(ZeroOutGrantRequestBodyReason reason) {
+        public Builder reason(BillingCreditGrantZeroedOutReason reason) {
             this.reason = Optional.ofNullable(reason);
             return this;
         }

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,11 +31,11 @@ public final class CreateBillingCustomerRequestBody {
 
     private final String externalId;
 
-    private final boolean failedToImport;
-
     private final Map<String, String> meta;
 
     private final String name;
+
+    private final Optional<BillingProviderType> providerType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -43,17 +44,17 @@ public final class CreateBillingCustomerRequestBody {
             Optional<String> defaultPaymentMethodId,
             String email,
             String externalId,
-            boolean failedToImport,
             Map<String, String> meta,
             String name,
+            Optional<BillingProviderType> providerType,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.defaultPaymentMethodId = defaultPaymentMethodId;
         this.email = email;
         this.externalId = externalId;
-        this.failedToImport = failedToImport;
         this.meta = meta;
         this.name = name;
+        this.providerType = providerType;
         this.additionalProperties = additionalProperties;
     }
 
@@ -77,11 +78,6 @@ public final class CreateBillingCustomerRequestBody {
         return externalId;
     }
 
-    @JsonProperty("failed_to_import")
-    public boolean getFailedToImport() {
-        return failedToImport;
-    }
-
     @JsonProperty("meta")
     public Map<String, String> getMeta() {
         return meta;
@@ -90,6 +86,11 @@ public final class CreateBillingCustomerRequestBody {
     @JsonProperty("name")
     public String getName() {
         return name;
+    }
+
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
     }
 
     @java.lang.Override
@@ -108,9 +109,9 @@ public final class CreateBillingCustomerRequestBody {
                 && defaultPaymentMethodId.equals(other.defaultPaymentMethodId)
                 && email.equals(other.email)
                 && externalId.equals(other.externalId)
-                && failedToImport == other.failedToImport
                 && meta.equals(other.meta)
-                && name.equals(other.name);
+                && name.equals(other.name)
+                && providerType.equals(other.providerType);
     }
 
     @java.lang.Override
@@ -120,9 +121,9 @@ public final class CreateBillingCustomerRequestBody {
                 this.defaultPaymentMethodId,
                 this.email,
                 this.externalId,
-                this.failedToImport,
                 this.meta,
-                this.name);
+                this.name,
+                this.providerType);
     }
 
     @java.lang.Override
@@ -141,11 +142,7 @@ public final class CreateBillingCustomerRequestBody {
     }
 
     public interface ExternalIdStage {
-        FailedToImportStage externalId(@NotNull String externalId);
-    }
-
-    public interface FailedToImportStage {
-        NameStage failedToImport(boolean failedToImport);
+        NameStage externalId(@NotNull String externalId);
     }
 
     public interface NameStage {
@@ -168,18 +165,21 @@ public final class CreateBillingCustomerRequestBody {
         _FinalStage putAllMeta(Map<String, String> meta);
 
         _FinalStage meta(String key, String value);
+
+        _FinalStage providerType(Optional<BillingProviderType> providerType);
+
+        _FinalStage providerType(BillingProviderType providerType);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements EmailStage, ExternalIdStage, FailedToImportStage, NameStage, _FinalStage {
+    public static final class Builder implements EmailStage, ExternalIdStage, NameStage, _FinalStage {
         private String email;
 
         private String externalId;
 
-        private boolean failedToImport;
-
         private String name;
+
+        private Optional<BillingProviderType> providerType = Optional.empty();
 
         private Map<String, String> meta = new LinkedHashMap<>();
 
@@ -198,9 +198,9 @@ public final class CreateBillingCustomerRequestBody {
             defaultPaymentMethodId(other.getDefaultPaymentMethodId());
             email(other.getEmail());
             externalId(other.getExternalId());
-            failedToImport(other.getFailedToImport());
             meta(other.getMeta());
             name(other.getName());
+            providerType(other.getProviderType());
             return this;
         }
 
@@ -213,15 +213,8 @@ public final class CreateBillingCustomerRequestBody {
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public FailedToImportStage externalId(@NotNull String externalId) {
+        public NameStage externalId(@NotNull String externalId) {
             this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("failed_to_import")
-        public NameStage failedToImport(boolean failedToImport) {
-            this.failedToImport = failedToImport;
             return this;
         }
 
@@ -229,6 +222,19 @@ public final class CreateBillingCustomerRequestBody {
         @JsonSetter("name")
         public _FinalStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public _FinalStage providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
             return this;
         }
 
@@ -289,9 +295,9 @@ public final class CreateBillingCustomerRequestBody {
                     defaultPaymentMethodId,
                     email,
                     externalId,
-                    failedToImport,
                     meta,
                     name,
+                    providerType,
                     additionalProperties);
         }
     }
