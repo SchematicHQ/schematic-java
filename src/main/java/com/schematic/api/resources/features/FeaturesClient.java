@@ -5,6 +5,7 @@ package com.schematic.api.resources.features;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.features.requests.CheckFlagsBulkRequestBody;
 import com.schematic.api.resources.features.requests.CountFeaturesRequest;
 import com.schematic.api.resources.features.requests.CountFlagsRequest;
 import com.schematic.api.resources.features.requests.CreateFeatureRequestBody;
@@ -13,6 +14,7 @@ import com.schematic.api.resources.features.requests.ListFlagsRequest;
 import com.schematic.api.resources.features.requests.UpdateFeatureRequestBody;
 import com.schematic.api.resources.features.requests.UpdateFlagRulesRequestBody;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
+import com.schematic.api.resources.features.types.CheckFlagsBulkResponse;
 import com.schematic.api.resources.features.types.CheckFlagsResponse;
 import com.schematic.api.resources.features.types.CountFeaturesResponse;
 import com.schematic.api.resources.features.types.CountFlagsResponse;
@@ -183,6 +185,14 @@ public class FeaturesClient {
 
     public CheckFlagsResponse checkFlags(CheckFlagRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.checkFlags(request, requestOptions).body();
+    }
+
+    public CheckFlagsBulkResponse checkFlagsBulk(CheckFlagsBulkRequestBody request) {
+        return this.rawClient.checkFlagsBulk(request).body();
+    }
+
+    public CheckFlagsBulkResponse checkFlagsBulk(CheckFlagsBulkRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.checkFlagsBulk(request, requestOptions).body();
     }
 
     public CountFlagsResponse countFlags() {

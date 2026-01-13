@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreditLedgerEnrichedEntryResponseData.Builder.class)
 public final class CreditLedgerEnrichedEntryResponseData {
+    private final int billingCreditAutoTopupGrantCount;
+
     private final String billingCreditId;
 
     private final Optional<CompanyLedgerResponseData> company;
@@ -67,6 +69,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
     private final Map<String, Object> additionalProperties;
 
     private CreditLedgerEnrichedEntryResponseData(
+            int billingCreditAutoTopupGrantCount,
             String billingCreditId,
             Optional<CompanyLedgerResponseData> company,
             String companyId,
@@ -89,6 +92,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
             int usageCount,
             int zeroedOutCount,
             Map<String, Object> additionalProperties) {
+        this.billingCreditAutoTopupGrantCount = billingCreditAutoTopupGrantCount;
         this.billingCreditId = billingCreditId;
         this.company = company;
         this.companyId = companyId;
@@ -111,6 +115,11 @@ public final class CreditLedgerEnrichedEntryResponseData {
         this.usageCount = usageCount;
         this.zeroedOutCount = zeroedOutCount;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_grant_count")
+    public int getBillingCreditAutoTopupGrantCount() {
+        return billingCreditAutoTopupGrantCount;
     }
 
     @JsonProperty("billing_credit_id")
@@ -231,7 +240,8 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     private boolean equalTo(CreditLedgerEnrichedEntryResponseData other) {
-        return billingCreditId.equals(other.billingCreditId)
+        return billingCreditAutoTopupGrantCount == other.billingCreditAutoTopupGrantCount
+                && billingCreditId.equals(other.billingCreditId)
                 && company.equals(other.company)
                 && companyId.equals(other.companyId)
                 && credit.equals(other.credit)
@@ -257,6 +267,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingCreditAutoTopupGrantCount,
                 this.billingCreditId,
                 this.company,
                 this.companyId,
@@ -285,14 +296,18 @@ public final class CreditLedgerEnrichedEntryResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static BillingCreditIdStage builder() {
+    public static BillingCreditAutoTopupGrantCountStage builder() {
         return new Builder();
+    }
+
+    public interface BillingCreditAutoTopupGrantCountStage {
+        BillingCreditIdStage billingCreditAutoTopupGrantCount(int billingCreditAutoTopupGrantCount);
+
+        Builder from(CreditLedgerEnrichedEntryResponseData other);
     }
 
     public interface BillingCreditIdStage {
         CompanyIdStage billingCreditId(@NotNull String billingCreditId);
-
-        Builder from(CreditLedgerEnrichedEntryResponseData other);
     }
 
     public interface CompanyIdStage {
@@ -381,7 +396,8 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements BillingCreditIdStage,
+            implements BillingCreditAutoTopupGrantCountStage,
+                    BillingCreditIdStage,
                     CompanyIdStage,
                     ExpiredGrantCountStage,
                     FirstTransactionAtStage,
@@ -399,6 +415,8 @@ public final class CreditLedgerEnrichedEntryResponseData {
                     UsageCountStage,
                     ZeroedOutCountStage,
                     _FinalStage {
+        private int billingCreditAutoTopupGrantCount;
+
         private String billingCreditId;
 
         private String companyId;
@@ -448,6 +466,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
         @java.lang.Override
         public Builder from(CreditLedgerEnrichedEntryResponseData other) {
+            billingCreditAutoTopupGrantCount(other.getBillingCreditAutoTopupGrantCount());
             billingCreditId(other.getBillingCreditId());
             company(other.getCompany());
             companyId(other.getCompanyId());
@@ -469,6 +488,13 @@ public final class CreditLedgerEnrichedEntryResponseData {
             transactionCount(other.getTransactionCount());
             usageCount(other.getUsageCount());
             zeroedOutCount(other.getZeroedOutCount());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_credit_auto_topup_grant_count")
+        public BillingCreditIdStage billingCreditAutoTopupGrantCount(int billingCreditAutoTopupGrantCount) {
+            this.billingCreditAutoTopupGrantCount = billingCreditAutoTopupGrantCount;
             return this;
         }
 
@@ -646,6 +672,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
         @java.lang.Override
         public CreditLedgerEnrichedEntryResponseData build() {
             return new CreditLedgerEnrichedEntryResponseData(
+                    billingCreditAutoTopupGrantCount,
                     billingCreditId,
                     company,
                     companyId,

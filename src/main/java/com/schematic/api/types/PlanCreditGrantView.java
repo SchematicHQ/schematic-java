@@ -22,6 +22,20 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanCreditGrantView.Builder.class)
 public final class PlanCreditGrantView {
+    private final Optional<Integer> billingCreditAutoTopupAmount;
+
+    private final Optional<String> billingCreditAutoTopupAmountType;
+
+    private final boolean billingCreditAutoTopupEnabled;
+
+    private final Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType;
+
+    private final Optional<BillingCreditExpiryUnit> billingCreditAutoTopupExpiryUnit;
+
+    private final Optional<Integer> billingCreditAutoTopupExpiryUnitCount;
+
+    private final Optional<Integer> billingCreditAutoTopupThresholdPercent;
+
     private final OffsetDateTime createdAt;
 
     private final int creditAmount;
@@ -34,9 +48,9 @@ public final class PlanCreditGrantView {
 
     private final String creditName;
 
-    private final Optional<String> expiryType;
+    private final Optional<BillingCreditExpiryType> expiryType;
 
-    private final Optional<String> expiryUnit;
+    private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
     private final Optional<Integer> expiryUnitCount;
 
@@ -48,11 +62,11 @@ public final class PlanCreditGrantView {
 
     private final Optional<String> pluralName;
 
-    private final String resetCadence;
+    private final BillingPlanCreditGrantResetCadence resetCadence;
 
-    private final String resetStart;
+    private final BillingPlanCreditGrantResetStart resetStart;
 
-    private final String resetType;
+    private final BillingPlanCreditGrantResetType resetType;
 
     private final Optional<String> singularName;
 
@@ -61,25 +75,39 @@ public final class PlanCreditGrantView {
     private final Map<String, Object> additionalProperties;
 
     private PlanCreditGrantView(
+            Optional<Integer> billingCreditAutoTopupAmount,
+            Optional<String> billingCreditAutoTopupAmountType,
+            boolean billingCreditAutoTopupEnabled,
+            Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType,
+            Optional<BillingCreditExpiryUnit> billingCreditAutoTopupExpiryUnit,
+            Optional<Integer> billingCreditAutoTopupExpiryUnitCount,
+            Optional<Integer> billingCreditAutoTopupThresholdPercent,
             OffsetDateTime createdAt,
             int creditAmount,
             String creditDescription,
             Optional<String> creditIcon,
             String creditId,
             String creditName,
-            Optional<String> expiryType,
-            Optional<String> expiryUnit,
+            Optional<BillingCreditExpiryType> expiryType,
+            Optional<BillingCreditExpiryUnit> expiryUnit,
             Optional<Integer> expiryUnitCount,
             String id,
             String planId,
             String planName,
             Optional<String> pluralName,
-            String resetCadence,
-            String resetStart,
-            String resetType,
+            BillingPlanCreditGrantResetCadence resetCadence,
+            BillingPlanCreditGrantResetStart resetStart,
+            BillingPlanCreditGrantResetType resetType,
             Optional<String> singularName,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
+        this.billingCreditAutoTopupAmount = billingCreditAutoTopupAmount;
+        this.billingCreditAutoTopupAmountType = billingCreditAutoTopupAmountType;
+        this.billingCreditAutoTopupEnabled = billingCreditAutoTopupEnabled;
+        this.billingCreditAutoTopupExpiryType = billingCreditAutoTopupExpiryType;
+        this.billingCreditAutoTopupExpiryUnit = billingCreditAutoTopupExpiryUnit;
+        this.billingCreditAutoTopupExpiryUnitCount = billingCreditAutoTopupExpiryUnitCount;
+        this.billingCreditAutoTopupThresholdPercent = billingCreditAutoTopupThresholdPercent;
         this.createdAt = createdAt;
         this.creditAmount = creditAmount;
         this.creditDescription = creditDescription;
@@ -99,6 +127,41 @@ public final class PlanCreditGrantView {
         this.singularName = singularName;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_amount")
+    public Optional<Integer> getBillingCreditAutoTopupAmount() {
+        return billingCreditAutoTopupAmount;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_amount_type")
+    public Optional<String> getBillingCreditAutoTopupAmountType() {
+        return billingCreditAutoTopupAmountType;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_enabled")
+    public boolean getBillingCreditAutoTopupEnabled() {
+        return billingCreditAutoTopupEnabled;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_expiry_type")
+    public Optional<BillingCreditExpiryType> getBillingCreditAutoTopupExpiryType() {
+        return billingCreditAutoTopupExpiryType;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_expiry_unit")
+    public Optional<BillingCreditExpiryUnit> getBillingCreditAutoTopupExpiryUnit() {
+        return billingCreditAutoTopupExpiryUnit;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_expiry_unit_count")
+    public Optional<Integer> getBillingCreditAutoTopupExpiryUnitCount() {
+        return billingCreditAutoTopupExpiryUnitCount;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_threshold_percent")
+    public Optional<Integer> getBillingCreditAutoTopupThresholdPercent() {
+        return billingCreditAutoTopupThresholdPercent;
     }
 
     @JsonProperty("created_at")
@@ -132,12 +195,12 @@ public final class PlanCreditGrantView {
     }
 
     @JsonProperty("expiry_type")
-    public Optional<String> getExpiryType() {
+    public Optional<BillingCreditExpiryType> getExpiryType() {
         return expiryType;
     }
 
     @JsonProperty("expiry_unit")
-    public Optional<String> getExpiryUnit() {
+    public Optional<BillingCreditExpiryUnit> getExpiryUnit() {
         return expiryUnit;
     }
 
@@ -167,17 +230,17 @@ public final class PlanCreditGrantView {
     }
 
     @JsonProperty("reset_cadence")
-    public String getResetCadence() {
+    public BillingPlanCreditGrantResetCadence getResetCadence() {
         return resetCadence;
     }
 
     @JsonProperty("reset_start")
-    public String getResetStart() {
+    public BillingPlanCreditGrantResetStart getResetStart() {
         return resetStart;
     }
 
     @JsonProperty("reset_type")
-    public String getResetType() {
+    public BillingPlanCreditGrantResetType getResetType() {
         return resetType;
     }
 
@@ -203,7 +266,14 @@ public final class PlanCreditGrantView {
     }
 
     private boolean equalTo(PlanCreditGrantView other) {
-        return createdAt.equals(other.createdAt)
+        return billingCreditAutoTopupAmount.equals(other.billingCreditAutoTopupAmount)
+                && billingCreditAutoTopupAmountType.equals(other.billingCreditAutoTopupAmountType)
+                && billingCreditAutoTopupEnabled == other.billingCreditAutoTopupEnabled
+                && billingCreditAutoTopupExpiryType.equals(other.billingCreditAutoTopupExpiryType)
+                && billingCreditAutoTopupExpiryUnit.equals(other.billingCreditAutoTopupExpiryUnit)
+                && billingCreditAutoTopupExpiryUnitCount.equals(other.billingCreditAutoTopupExpiryUnitCount)
+                && billingCreditAutoTopupThresholdPercent.equals(other.billingCreditAutoTopupThresholdPercent)
+                && createdAt.equals(other.createdAt)
                 && creditAmount == other.creditAmount
                 && creditDescription.equals(other.creditDescription)
                 && creditIcon.equals(other.creditIcon)
@@ -226,6 +296,13 @@ public final class PlanCreditGrantView {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingCreditAutoTopupAmount,
+                this.billingCreditAutoTopupAmountType,
+                this.billingCreditAutoTopupEnabled,
+                this.billingCreditAutoTopupExpiryType,
+                this.billingCreditAutoTopupExpiryUnit,
+                this.billingCreditAutoTopupExpiryUnitCount,
+                this.billingCreditAutoTopupThresholdPercent,
                 this.createdAt,
                 this.creditAmount,
                 this.creditDescription,
@@ -251,14 +328,18 @@ public final class PlanCreditGrantView {
         return ObjectMappers.stringify(this);
     }
 
-    public static CreatedAtStage builder() {
+    public static BillingCreditAutoTopupEnabledStage builder() {
         return new Builder();
+    }
+
+    public interface BillingCreditAutoTopupEnabledStage {
+        CreatedAtStage billingCreditAutoTopupEnabled(boolean billingCreditAutoTopupEnabled);
+
+        Builder from(PlanCreditGrantView other);
     }
 
     public interface CreatedAtStage {
         CreditAmountStage createdAt(@NotNull OffsetDateTime createdAt);
-
-        Builder from(PlanCreditGrantView other);
     }
 
     public interface CreditAmountStage {
@@ -290,15 +371,15 @@ public final class PlanCreditGrantView {
     }
 
     public interface ResetCadenceStage {
-        ResetStartStage resetCadence(@NotNull String resetCadence);
+        ResetStartStage resetCadence(@NotNull BillingPlanCreditGrantResetCadence resetCadence);
     }
 
     public interface ResetStartStage {
-        ResetTypeStage resetStart(@NotNull String resetStart);
+        ResetTypeStage resetStart(@NotNull BillingPlanCreditGrantResetStart resetStart);
     }
 
     public interface ResetTypeStage {
-        UpdatedAtStage resetType(@NotNull String resetType);
+        UpdatedAtStage resetType(@NotNull BillingPlanCreditGrantResetType resetType);
     }
 
     public interface UpdatedAtStage {
@@ -308,17 +389,43 @@ public final class PlanCreditGrantView {
     public interface _FinalStage {
         PlanCreditGrantView build();
 
+        _FinalStage billingCreditAutoTopupAmount(Optional<Integer> billingCreditAutoTopupAmount);
+
+        _FinalStage billingCreditAutoTopupAmount(Integer billingCreditAutoTopupAmount);
+
+        _FinalStage billingCreditAutoTopupAmountType(Optional<String> billingCreditAutoTopupAmountType);
+
+        _FinalStage billingCreditAutoTopupAmountType(String billingCreditAutoTopupAmountType);
+
+        _FinalStage billingCreditAutoTopupExpiryType(
+                Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType);
+
+        _FinalStage billingCreditAutoTopupExpiryType(BillingCreditExpiryType billingCreditAutoTopupExpiryType);
+
+        _FinalStage billingCreditAutoTopupExpiryUnit(
+                Optional<BillingCreditExpiryUnit> billingCreditAutoTopupExpiryUnit);
+
+        _FinalStage billingCreditAutoTopupExpiryUnit(BillingCreditExpiryUnit billingCreditAutoTopupExpiryUnit);
+
+        _FinalStage billingCreditAutoTopupExpiryUnitCount(Optional<Integer> billingCreditAutoTopupExpiryUnitCount);
+
+        _FinalStage billingCreditAutoTopupExpiryUnitCount(Integer billingCreditAutoTopupExpiryUnitCount);
+
+        _FinalStage billingCreditAutoTopupThresholdPercent(Optional<Integer> billingCreditAutoTopupThresholdPercent);
+
+        _FinalStage billingCreditAutoTopupThresholdPercent(Integer billingCreditAutoTopupThresholdPercent);
+
         _FinalStage creditIcon(Optional<String> creditIcon);
 
         _FinalStage creditIcon(String creditIcon);
 
-        _FinalStage expiryType(Optional<String> expiryType);
+        _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
 
-        _FinalStage expiryType(String expiryType);
+        _FinalStage expiryType(BillingCreditExpiryType expiryType);
 
-        _FinalStage expiryUnit(Optional<String> expiryUnit);
+        _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit);
 
-        _FinalStage expiryUnit(String expiryUnit);
+        _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
         _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
 
@@ -335,7 +442,8 @@ public final class PlanCreditGrantView {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CreatedAtStage,
+            implements BillingCreditAutoTopupEnabledStage,
+                    CreatedAtStage,
                     CreditAmountStage,
                     CreditDescriptionStage,
                     CreditIdStage,
@@ -348,6 +456,8 @@ public final class PlanCreditGrantView {
                     ResetTypeStage,
                     UpdatedAtStage,
                     _FinalStage {
+        private boolean billingCreditAutoTopupEnabled;
+
         private OffsetDateTime createdAt;
 
         private int creditAmount;
@@ -364,11 +474,11 @@ public final class PlanCreditGrantView {
 
         private String planName;
 
-        private String resetCadence;
+        private BillingPlanCreditGrantResetCadence resetCadence;
 
-        private String resetStart;
+        private BillingPlanCreditGrantResetStart resetStart;
 
-        private String resetType;
+        private BillingPlanCreditGrantResetType resetType;
 
         private OffsetDateTime updatedAt;
 
@@ -378,11 +488,23 @@ public final class PlanCreditGrantView {
 
         private Optional<Integer> expiryUnitCount = Optional.empty();
 
-        private Optional<String> expiryUnit = Optional.empty();
+        private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
-        private Optional<String> expiryType = Optional.empty();
+        private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
 
         private Optional<String> creditIcon = Optional.empty();
+
+        private Optional<Integer> billingCreditAutoTopupThresholdPercent = Optional.empty();
+
+        private Optional<Integer> billingCreditAutoTopupExpiryUnitCount = Optional.empty();
+
+        private Optional<BillingCreditExpiryUnit> billingCreditAutoTopupExpiryUnit = Optional.empty();
+
+        private Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType = Optional.empty();
+
+        private Optional<String> billingCreditAutoTopupAmountType = Optional.empty();
+
+        private Optional<Integer> billingCreditAutoTopupAmount = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -391,6 +513,13 @@ public final class PlanCreditGrantView {
 
         @java.lang.Override
         public Builder from(PlanCreditGrantView other) {
+            billingCreditAutoTopupAmount(other.getBillingCreditAutoTopupAmount());
+            billingCreditAutoTopupAmountType(other.getBillingCreditAutoTopupAmountType());
+            billingCreditAutoTopupEnabled(other.getBillingCreditAutoTopupEnabled());
+            billingCreditAutoTopupExpiryType(other.getBillingCreditAutoTopupExpiryType());
+            billingCreditAutoTopupExpiryUnit(other.getBillingCreditAutoTopupExpiryUnit());
+            billingCreditAutoTopupExpiryUnitCount(other.getBillingCreditAutoTopupExpiryUnitCount());
+            billingCreditAutoTopupThresholdPercent(other.getBillingCreditAutoTopupThresholdPercent());
             createdAt(other.getCreatedAt());
             creditAmount(other.getCreditAmount());
             creditDescription(other.getCreditDescription());
@@ -409,6 +538,13 @@ public final class PlanCreditGrantView {
             resetType(other.getResetType());
             singularName(other.getSingularName());
             updatedAt(other.getUpdatedAt());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_credit_auto_topup_enabled")
+        public CreatedAtStage billingCreditAutoTopupEnabled(boolean billingCreditAutoTopupEnabled) {
+            this.billingCreditAutoTopupEnabled = billingCreditAutoTopupEnabled;
             return this;
         }
 
@@ -470,21 +606,21 @@ public final class PlanCreditGrantView {
 
         @java.lang.Override
         @JsonSetter("reset_cadence")
-        public ResetStartStage resetCadence(@NotNull String resetCadence) {
+        public ResetStartStage resetCadence(@NotNull BillingPlanCreditGrantResetCadence resetCadence) {
             this.resetCadence = Objects.requireNonNull(resetCadence, "resetCadence must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("reset_start")
-        public ResetTypeStage resetStart(@NotNull String resetStart) {
+        public ResetTypeStage resetStart(@NotNull BillingPlanCreditGrantResetStart resetStart) {
             this.resetStart = Objects.requireNonNull(resetStart, "resetStart must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("reset_type")
-        public UpdatedAtStage resetType(@NotNull String resetType) {
+        public UpdatedAtStage resetType(@NotNull BillingPlanCreditGrantResetType resetType) {
             this.resetType = Objects.requireNonNull(resetType, "resetType must not be null");
             return this;
         }
@@ -536,27 +672,27 @@ public final class PlanCreditGrantView {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnit(String expiryUnit) {
+        public _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit) {
             this.expiryUnit = Optional.ofNullable(expiryUnit);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnit(Optional<String> expiryUnit) {
+        public _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit) {
             this.expiryUnit = expiryUnit;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage expiryType(String expiryType) {
+        public _FinalStage expiryType(BillingCreditExpiryType expiryType) {
             this.expiryType = Optional.ofNullable(expiryType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_type", nulls = Nulls.SKIP)
-        public _FinalStage expiryType(Optional<String> expiryType) {
+        public _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType) {
             this.expiryType = expiryType;
             return this;
         }
@@ -575,8 +711,97 @@ public final class PlanCreditGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage billingCreditAutoTopupThresholdPercent(Integer billingCreditAutoTopupThresholdPercent) {
+            this.billingCreditAutoTopupThresholdPercent = Optional.ofNullable(billingCreditAutoTopupThresholdPercent);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_auto_topup_threshold_percent", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditAutoTopupThresholdPercent(
+                Optional<Integer> billingCreditAutoTopupThresholdPercent) {
+            this.billingCreditAutoTopupThresholdPercent = billingCreditAutoTopupThresholdPercent;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingCreditAutoTopupExpiryUnitCount(Integer billingCreditAutoTopupExpiryUnitCount) {
+            this.billingCreditAutoTopupExpiryUnitCount = Optional.ofNullable(billingCreditAutoTopupExpiryUnitCount);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_auto_topup_expiry_unit_count", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditAutoTopupExpiryUnitCount(
+                Optional<Integer> billingCreditAutoTopupExpiryUnitCount) {
+            this.billingCreditAutoTopupExpiryUnitCount = billingCreditAutoTopupExpiryUnitCount;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingCreditAutoTopupExpiryUnit(BillingCreditExpiryUnit billingCreditAutoTopupExpiryUnit) {
+            this.billingCreditAutoTopupExpiryUnit = Optional.ofNullable(billingCreditAutoTopupExpiryUnit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_auto_topup_expiry_unit", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditAutoTopupExpiryUnit(
+                Optional<BillingCreditExpiryUnit> billingCreditAutoTopupExpiryUnit) {
+            this.billingCreditAutoTopupExpiryUnit = billingCreditAutoTopupExpiryUnit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingCreditAutoTopupExpiryType(BillingCreditExpiryType billingCreditAutoTopupExpiryType) {
+            this.billingCreditAutoTopupExpiryType = Optional.ofNullable(billingCreditAutoTopupExpiryType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_auto_topup_expiry_type", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditAutoTopupExpiryType(
+                Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType) {
+            this.billingCreditAutoTopupExpiryType = billingCreditAutoTopupExpiryType;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingCreditAutoTopupAmountType(String billingCreditAutoTopupAmountType) {
+            this.billingCreditAutoTopupAmountType = Optional.ofNullable(billingCreditAutoTopupAmountType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_auto_topup_amount_type", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditAutoTopupAmountType(Optional<String> billingCreditAutoTopupAmountType) {
+            this.billingCreditAutoTopupAmountType = billingCreditAutoTopupAmountType;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingCreditAutoTopupAmount(Integer billingCreditAutoTopupAmount) {
+            this.billingCreditAutoTopupAmount = Optional.ofNullable(billingCreditAutoTopupAmount);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_auto_topup_amount", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditAutoTopupAmount(Optional<Integer> billingCreditAutoTopupAmount) {
+            this.billingCreditAutoTopupAmount = billingCreditAutoTopupAmount;
+            return this;
+        }
+
+        @java.lang.Override
         public PlanCreditGrantView build() {
             return new PlanCreditGrantView(
+                    billingCreditAutoTopupAmount,
+                    billingCreditAutoTopupAmountType,
+                    billingCreditAutoTopupEnabled,
+                    billingCreditAutoTopupExpiryType,
+                    billingCreditAutoTopupExpiryUnit,
+                    billingCreditAutoTopupExpiryUnitCount,
+                    billingCreditAutoTopupThresholdPercent,
                     createdAt,
                     creditAmount,
                     creditDescription,

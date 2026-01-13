@@ -46,6 +46,8 @@ public final class BillingProductDetailResponseData {
 
     private final String productId;
 
+    private final BillingProviderType providerType;
+
     private final double quantity;
 
     private final int subscriptionCount;
@@ -66,6 +68,7 @@ public final class BillingProductDetailResponseData {
             Optional<String> priceDecimal,
             List<BillingPriceResponseData> prices,
             String productId,
+            BillingProviderType providerType,
             double quantity,
             int subscriptionCount,
             OffsetDateTime updatedAt,
@@ -81,6 +84,7 @@ public final class BillingProductDetailResponseData {
         this.priceDecimal = priceDecimal;
         this.prices = prices;
         this.productId = productId;
+        this.providerType = providerType;
         this.quantity = quantity;
         this.subscriptionCount = subscriptionCount;
         this.updatedAt = updatedAt;
@@ -145,6 +149,11 @@ public final class BillingProductDetailResponseData {
         return productId;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("quantity")
     public double getQuantity() {
         return quantity;
@@ -183,6 +192,7 @@ public final class BillingProductDetailResponseData {
                 && priceDecimal.equals(other.priceDecimal)
                 && prices.equals(other.prices)
                 && productId.equals(other.productId)
+                && providerType.equals(other.providerType)
                 && quantity == other.quantity
                 && subscriptionCount == other.subscriptionCount
                 && updatedAt.equals(other.updatedAt);
@@ -202,6 +212,7 @@ public final class BillingProductDetailResponseData {
                 this.priceDecimal,
                 this.prices,
                 this.productId,
+                this.providerType,
                 this.quantity,
                 this.subscriptionCount,
                 this.updatedAt);
@@ -247,7 +258,11 @@ public final class BillingProductDetailResponseData {
     }
 
     public interface ProductIdStage {
-        QuantityStage productId(@NotNull String productId);
+        ProviderTypeStage productId(@NotNull String productId);
+    }
+
+    public interface ProviderTypeStage {
+        QuantityStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface QuantityStage {
@@ -293,6 +308,7 @@ public final class BillingProductDetailResponseData {
                     NameStage,
                     PriceStage,
                     ProductIdStage,
+                    ProviderTypeStage,
                     QuantityStage,
                     SubscriptionCountStage,
                     UpdatedAtStage,
@@ -312,6 +328,8 @@ public final class BillingProductDetailResponseData {
         private double price;
 
         private String productId;
+
+        private BillingProviderType providerType;
 
         private double quantity;
 
@@ -343,6 +361,7 @@ public final class BillingProductDetailResponseData {
             priceDecimal(other.getPriceDecimal());
             prices(other.getPrices());
             productId(other.getProductId());
+            providerType(other.getProviderType());
             quantity(other.getQuantity());
             subscriptionCount(other.getSubscriptionCount());
             updatedAt(other.getUpdatedAt());
@@ -400,8 +419,15 @@ public final class BillingProductDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("product_id")
-        public QuantityStage productId(@NotNull String productId) {
+        public ProviderTypeStage productId(@NotNull String productId) {
             this.productId = Objects.requireNonNull(productId, "productId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public QuantityStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -497,6 +523,7 @@ public final class BillingProductDetailResponseData {
                     priceDecimal,
                     prices,
                     productId,
+                    providerType,
                     quantity,
                     subscriptionCount,
                     updatedAt,

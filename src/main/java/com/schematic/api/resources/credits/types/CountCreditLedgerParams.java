@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CreditLedgerPeriod;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,7 +33,7 @@ public final class CountCreditLedgerParams {
 
     private final Optional<Integer> offset;
 
-    private final Optional<CountCreditLedgerResponseParamsPeriod> period;
+    private final Optional<CreditLedgerPeriod> period;
 
     private final Optional<String> startTime;
 
@@ -45,7 +46,7 @@ public final class CountCreditLedgerParams {
             Optional<String> featureId,
             Optional<Integer> limit,
             Optional<Integer> offset,
-            Optional<CountCreditLedgerResponseParamsPeriod> period,
+            Optional<CreditLedgerPeriod> period,
             Optional<String> startTime,
             Map<String, Object> additionalProperties) {
         this.billingCreditId = billingCreditId;
@@ -96,7 +97,7 @@ public final class CountCreditLedgerParams {
     }
 
     @JsonProperty("period")
-    public Optional<CountCreditLedgerResponseParamsPeriod> getPeriod() {
+    public Optional<CreditLedgerPeriod> getPeriod() {
         return period;
     }
 
@@ -163,7 +164,7 @@ public final class CountCreditLedgerParams {
 
         private Optional<Integer> offset = Optional.empty();
 
-        private Optional<CountCreditLedgerResponseParamsPeriod> period = Optional.empty();
+        private Optional<CreditLedgerPeriod> period = Optional.empty();
 
         private Optional<String> startTime = Optional.empty();
 
@@ -257,12 +258,12 @@ public final class CountCreditLedgerParams {
         }
 
         @JsonSetter(value = "period", nulls = Nulls.SKIP)
-        public Builder period(Optional<CountCreditLedgerResponseParamsPeriod> period) {
+        public Builder period(Optional<CreditLedgerPeriod> period) {
             this.period = period;
             return this;
         }
 
-        public Builder period(CountCreditLedgerResponseParamsPeriod period) {
+        public Builder period(CreditLedgerPeriod period) {
             this.period = Optional.ofNullable(period);
             return this;
         }

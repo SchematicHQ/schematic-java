@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingPriceUsageType;
+import com.schematic.api.types.BillingProviderType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,9 @@ public final class ListBillingProductsParams {
 
     private final Optional<Integer> offset;
 
-    private final Optional<ListBillingProductsResponseParamsPriceUsageType> priceUsageType;
+    private final Optional<BillingPriceUsageType> priceUsageType;
+
+    private final Optional<BillingProviderType> providerType;
 
     private final Optional<String> q;
 
@@ -51,7 +55,8 @@ public final class ListBillingProductsParams {
             Optional<Integer> limit,
             Optional<String> name,
             Optional<Integer> offset,
-            Optional<ListBillingProductsResponseParamsPriceUsageType> priceUsageType,
+            Optional<BillingPriceUsageType> priceUsageType,
+            Optional<BillingProviderType> providerType,
             Optional<String> q,
             Optional<Boolean> withOneTimeCharges,
             Optional<Boolean> withPricesOnly,
@@ -64,6 +69,7 @@ public final class ListBillingProductsParams {
         this.name = name;
         this.offset = offset;
         this.priceUsageType = priceUsageType;
+        this.providerType = providerType;
         this.q = q;
         this.withOneTimeCharges = withOneTimeCharges;
         this.withPricesOnly = withPricesOnly;
@@ -78,7 +84,7 @@ public final class ListBillingProductsParams {
     }
 
     /**
-     * @return Filter products that are active
+     * @return Filter products that are active. Defaults to true if not specified
      */
     @JsonProperty("is_active")
     public Optional<Boolean> getIsActive() {
@@ -107,8 +113,13 @@ public final class ListBillingProductsParams {
     }
 
     @JsonProperty("price_usage_type")
-    public Optional<ListBillingProductsResponseParamsPriceUsageType> getPriceUsageType() {
+    public Optional<BillingPriceUsageType> getPriceUsageType() {
         return priceUsageType;
+    }
+
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
     }
 
     @JsonProperty("q")
@@ -166,6 +177,7 @@ public final class ListBillingProductsParams {
                 && name.equals(other.name)
                 && offset.equals(other.offset)
                 && priceUsageType.equals(other.priceUsageType)
+                && providerType.equals(other.providerType)
                 && q.equals(other.q)
                 && withOneTimeCharges.equals(other.withOneTimeCharges)
                 && withPricesOnly.equals(other.withPricesOnly)
@@ -182,6 +194,7 @@ public final class ListBillingProductsParams {
                 this.name,
                 this.offset,
                 this.priceUsageType,
+                this.providerType,
                 this.q,
                 this.withOneTimeCharges,
                 this.withPricesOnly,
@@ -210,7 +223,9 @@ public final class ListBillingProductsParams {
 
         private Optional<Integer> offset = Optional.empty();
 
-        private Optional<ListBillingProductsResponseParamsPriceUsageType> priceUsageType = Optional.empty();
+        private Optional<BillingPriceUsageType> priceUsageType = Optional.empty();
+
+        private Optional<BillingProviderType> providerType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -234,6 +249,7 @@ public final class ListBillingProductsParams {
             name(other.getName());
             offset(other.getOffset());
             priceUsageType(other.getPriceUsageType());
+            providerType(other.getProviderType());
             q(other.getQ());
             withOneTimeCharges(other.getWithOneTimeCharges());
             withPricesOnly(other.getWithPricesOnly());
@@ -254,7 +270,7 @@ public final class ListBillingProductsParams {
         }
 
         /**
-         * <p>Filter products that are active</p>
+         * <p>Filter products that are active. Defaults to true if not specified</p>
          */
         @JsonSetter(value = "is_active", nulls = Nulls.SKIP)
         public Builder isActive(Optional<Boolean> isActive) {
@@ -307,13 +323,24 @@ public final class ListBillingProductsParams {
         }
 
         @JsonSetter(value = "price_usage_type", nulls = Nulls.SKIP)
-        public Builder priceUsageType(Optional<ListBillingProductsResponseParamsPriceUsageType> priceUsageType) {
+        public Builder priceUsageType(Optional<BillingPriceUsageType> priceUsageType) {
             this.priceUsageType = priceUsageType;
             return this;
         }
 
-        public Builder priceUsageType(ListBillingProductsResponseParamsPriceUsageType priceUsageType) {
+        public Builder priceUsageType(BillingPriceUsageType priceUsageType) {
             this.priceUsageType = Optional.ofNullable(priceUsageType);
+            return this;
+        }
+
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public Builder providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
+            return this;
+        }
+
+        public Builder providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
             return this;
         }
 
@@ -392,6 +419,7 @@ public final class ListBillingProductsParams {
                     name,
                     offset,
                     priceUsageType,
+                    providerType,
                     q,
                     withOneTimeCharges,
                     withPricesOnly,

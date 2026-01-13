@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,7 @@ public final class CountCustomersRequest {
 
     private final Optional<String> name;
 
-    private final Optional<Boolean> failedToImport;
+    private final Optional<BillingProviderType> providerType;
 
     private final Optional<String> q;
 
@@ -39,14 +40,14 @@ public final class CountCustomersRequest {
     private CountCustomersRequest(
             Optional<List<String>> companyIds,
             Optional<String> name,
-            Optional<Boolean> failedToImport,
+            Optional<BillingProviderType> providerType,
             Optional<String> q,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
         this.companyIds = companyIds;
         this.name = name;
-        this.failedToImport = failedToImport;
+        this.providerType = providerType;
         this.q = q;
         this.limit = limit;
         this.offset = offset;
@@ -63,9 +64,9 @@ public final class CountCustomersRequest {
         return name;
     }
 
-    @JsonProperty("failed_to_import")
-    public Optional<Boolean> getFailedToImport() {
-        return failedToImport;
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
     }
 
     @JsonProperty("q")
@@ -103,7 +104,7 @@ public final class CountCustomersRequest {
     private boolean equalTo(CountCustomersRequest other) {
         return companyIds.equals(other.companyIds)
                 && name.equals(other.name)
-                && failedToImport.equals(other.failedToImport)
+                && providerType.equals(other.providerType)
                 && q.equals(other.q)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
@@ -111,7 +112,7 @@ public final class CountCustomersRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyIds, this.name, this.failedToImport, this.q, this.limit, this.offset);
+        return Objects.hash(this.companyIds, this.name, this.providerType, this.q, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -129,7 +130,7 @@ public final class CountCustomersRequest {
 
         private Optional<String> name = Optional.empty();
 
-        private Optional<Boolean> failedToImport = Optional.empty();
+        private Optional<BillingProviderType> providerType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -145,7 +146,7 @@ public final class CountCustomersRequest {
         public Builder from(CountCustomersRequest other) {
             companyIds(other.getCompanyIds());
             name(other.getName());
-            failedToImport(other.getFailedToImport());
+            providerType(other.getProviderType());
             q(other.getQ());
             limit(other.getLimit());
             offset(other.getOffset());
@@ -179,14 +180,14 @@ public final class CountCustomersRequest {
             return this;
         }
 
-        @JsonSetter(value = "failed_to_import", nulls = Nulls.SKIP)
-        public Builder failedToImport(Optional<Boolean> failedToImport) {
-            this.failedToImport = failedToImport;
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public Builder providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
             return this;
         }
 
-        public Builder failedToImport(Boolean failedToImport) {
-            this.failedToImport = Optional.ofNullable(failedToImport);
+        public Builder providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
             return this;
         }
 
@@ -230,7 +231,7 @@ public final class CountCustomersRequest {
         }
 
         public CountCustomersRequest build() {
-            return new CountCustomersRequest(companyIds, name, failedToImport, q, limit, offset, additionalProperties);
+            return new CountCustomersRequest(companyIds, name, providerType, q, limit, offset, additionalProperties);
         }
     }
 }

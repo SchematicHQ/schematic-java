@@ -34,11 +34,11 @@ public final class WebhookResponseData {
 
     private final String name;
 
-    private final List<String> requestTypes;
+    private final List<WebhookRequestType> requestTypes;
 
     private final String secret;
 
-    private final String status;
+    private final WebhookStatus status;
 
     private final OffsetDateTime updatedAt;
 
@@ -52,9 +52,9 @@ public final class WebhookResponseData {
             Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs,
             String id,
             String name,
-            List<String> requestTypes,
+            List<WebhookRequestType> requestTypes,
             String secret,
-            String status,
+            WebhookStatus status,
             OffsetDateTime updatedAt,
             String url,
             Map<String, Object> additionalProperties) {
@@ -97,7 +97,7 @@ public final class WebhookResponseData {
     }
 
     @JsonProperty("request_types")
-    public List<String> getRequestTypes() {
+    public List<WebhookRequestType> getRequestTypes() {
         return requestTypes;
     }
 
@@ -107,7 +107,7 @@ public final class WebhookResponseData {
     }
 
     @JsonProperty("status")
-    public String getStatus() {
+    public WebhookStatus getStatus() {
         return status;
     }
 
@@ -188,7 +188,7 @@ public final class WebhookResponseData {
     }
 
     public interface StatusStage {
-        UpdatedAtStage status(@NotNull String status);
+        UpdatedAtStage status(@NotNull WebhookStatus status);
     }
 
     public interface UpdatedAtStage {
@@ -210,11 +210,11 @@ public final class WebhookResponseData {
 
         _FinalStage entitlementTriggerConfigs(List<EntitlementTriggerConfig> entitlementTriggerConfigs);
 
-        _FinalStage requestTypes(List<String> requestTypes);
+        _FinalStage requestTypes(List<WebhookRequestType> requestTypes);
 
-        _FinalStage addRequestTypes(String requestTypes);
+        _FinalStage addRequestTypes(WebhookRequestType requestTypes);
 
-        _FinalStage addAllRequestTypes(List<String> requestTypes);
+        _FinalStage addAllRequestTypes(List<WebhookRequestType> requestTypes);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -235,13 +235,13 @@ public final class WebhookResponseData {
 
         private String secret;
 
-        private String status;
+        private WebhookStatus status;
 
         private OffsetDateTime updatedAt;
 
         private String url;
 
-        private List<String> requestTypes = new ArrayList<>();
+        private List<WebhookRequestType> requestTypes = new ArrayList<>();
 
         private Optional<List<EntitlementTriggerConfig>> entitlementTriggerConfigs = Optional.empty();
 
@@ -297,7 +297,7 @@ public final class WebhookResponseData {
 
         @java.lang.Override
         @JsonSetter("status")
-        public UpdatedAtStage status(@NotNull String status) {
+        public UpdatedAtStage status(@NotNull WebhookStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
@@ -317,7 +317,7 @@ public final class WebhookResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage addAllRequestTypes(List<String> requestTypes) {
+        public _FinalStage addAllRequestTypes(List<WebhookRequestType> requestTypes) {
             if (requestTypes != null) {
                 this.requestTypes.addAll(requestTypes);
             }
@@ -325,14 +325,14 @@ public final class WebhookResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage addRequestTypes(String requestTypes) {
+        public _FinalStage addRequestTypes(WebhookRequestType requestTypes) {
             this.requestTypes.add(requestTypes);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "request_types", nulls = Nulls.SKIP)
-        public _FinalStage requestTypes(List<String> requestTypes) {
+        public _FinalStage requestTypes(List<WebhookRequestType> requestTypes) {
             this.requestTypes.clear();
             if (requestTypes != null) {
                 this.requestTypes.addAll(requestTypes);

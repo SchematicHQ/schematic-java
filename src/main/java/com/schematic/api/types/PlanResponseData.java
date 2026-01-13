@@ -34,7 +34,7 @@ public final class PlanResponseData {
 
     private final String name;
 
-    private final String planType;
+    private final PlanType planType;
 
     private final OffsetDateTime updatedAt;
 
@@ -47,7 +47,7 @@ public final class PlanResponseData {
             String icon,
             String id,
             String name,
-            String planType,
+            PlanType planType,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.audienceType = audienceType;
@@ -92,7 +92,7 @@ public final class PlanResponseData {
     }
 
     @JsonProperty("plan_type")
-    public String getPlanType() {
+    public PlanType getPlanType() {
         return planType;
     }
 
@@ -168,7 +168,7 @@ public final class PlanResponseData {
     }
 
     public interface PlanTypeStage {
-        UpdatedAtStage planType(@NotNull String planType);
+        UpdatedAtStage planType(@NotNull PlanType planType);
     }
 
     public interface UpdatedAtStage {
@@ -203,7 +203,7 @@ public final class PlanResponseData {
 
         private String name;
 
-        private String planType;
+        private PlanType planType;
 
         private OffsetDateTime updatedAt;
 
@@ -264,7 +264,7 @@ public final class PlanResponseData {
 
         @java.lang.Override
         @JsonSetter("plan_type")
-        public UpdatedAtStage planType(@NotNull String planType) {
+        public UpdatedAtStage planType(@NotNull PlanType planType) {
             this.planType = Objects.requireNonNull(planType, "planType must not be null");
             return this;
         }

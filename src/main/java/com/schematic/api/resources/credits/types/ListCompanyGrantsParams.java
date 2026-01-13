@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CreditGrantSortOrder;
+import com.schematic.api.types.SortDirection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,22 +24,22 @@ import java.util.Optional;
 public final class ListCompanyGrantsParams {
     private final Optional<String> companyId;
 
-    private final Optional<ListCompanyGrantsResponseParamsDir> dir;
+    private final Optional<SortDirection> dir;
 
     private final Optional<Integer> limit;
 
     private final Optional<Integer> offset;
 
-    private final Optional<ListCompanyGrantsResponseParamsOrder> order;
+    private final Optional<CreditGrantSortOrder> order;
 
     private final Map<String, Object> additionalProperties;
 
     private ListCompanyGrantsParams(
             Optional<String> companyId,
-            Optional<ListCompanyGrantsResponseParamsDir> dir,
+            Optional<SortDirection> dir,
             Optional<Integer> limit,
             Optional<Integer> offset,
-            Optional<ListCompanyGrantsResponseParamsOrder> order,
+            Optional<CreditGrantSortOrder> order,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.dir = dir;
@@ -53,7 +55,7 @@ public final class ListCompanyGrantsParams {
     }
 
     @JsonProperty("dir")
-    public Optional<ListCompanyGrantsResponseParamsDir> getDir() {
+    public Optional<SortDirection> getDir() {
         return dir;
     }
 
@@ -74,7 +76,7 @@ public final class ListCompanyGrantsParams {
     }
 
     @JsonProperty("order")
-    public Optional<ListCompanyGrantsResponseParamsOrder> getOrder() {
+    public Optional<CreditGrantSortOrder> getOrder() {
         return order;
     }
 
@@ -115,13 +117,13 @@ public final class ListCompanyGrantsParams {
     public static final class Builder {
         private Optional<String> companyId = Optional.empty();
 
-        private Optional<ListCompanyGrantsResponseParamsDir> dir = Optional.empty();
+        private Optional<SortDirection> dir = Optional.empty();
 
         private Optional<Integer> limit = Optional.empty();
 
         private Optional<Integer> offset = Optional.empty();
 
-        private Optional<ListCompanyGrantsResponseParamsOrder> order = Optional.empty();
+        private Optional<CreditGrantSortOrder> order = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -149,12 +151,12 @@ public final class ListCompanyGrantsParams {
         }
 
         @JsonSetter(value = "dir", nulls = Nulls.SKIP)
-        public Builder dir(Optional<ListCompanyGrantsResponseParamsDir> dir) {
+        public Builder dir(Optional<SortDirection> dir) {
             this.dir = dir;
             return this;
         }
 
-        public Builder dir(ListCompanyGrantsResponseParamsDir dir) {
+        public Builder dir(SortDirection dir) {
             this.dir = Optional.ofNullable(dir);
             return this;
         }
@@ -188,12 +190,12 @@ public final class ListCompanyGrantsParams {
         }
 
         @JsonSetter(value = "order", nulls = Nulls.SKIP)
-        public Builder order(Optional<ListCompanyGrantsResponseParamsOrder> order) {
+        public Builder order(Optional<CreditGrantSortOrder> order) {
             this.order = order;
             return this;
         }
 
-        public Builder order(ListCompanyGrantsResponseParamsOrder order) {
+        public Builder order(CreditGrantSortOrder order) {
             this.order = Optional.ofNullable(order);
             return this;
         }

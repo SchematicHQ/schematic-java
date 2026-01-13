@@ -24,6 +24,7 @@ import com.schematic.api.resources.entitlements.requests.CountFeatureUsersReques
 import com.schematic.api.resources.entitlements.requests.CountPlanEntitlementsRequest;
 import com.schematic.api.resources.entitlements.requests.CreateCompanyOverrideRequestBody;
 import com.schematic.api.resources.entitlements.requests.CreatePlanEntitlementRequestBody;
+import com.schematic.api.resources.entitlements.requests.DuplicatePlanEntitlementsRequestBody;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageByCompanyRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
@@ -41,6 +42,7 @@ import com.schematic.api.resources.entitlements.types.CreateCompanyOverrideRespo
 import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementResponse;
 import com.schematic.api.resources.entitlements.types.DeleteCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.DeletePlanEntitlementResponse;
+import com.schematic.api.resources.entitlements.types.DuplicatePlanEntitlementsResponse;
 import com.schematic.api.resources.entitlements.types.GetCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageByCompanyResponse;
 import com.schematic.api.resources.entitlements.types.GetPlanEntitlementResponse;
@@ -876,6 +878,13 @@ public class AsyncRawEntitlementsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_keys", request.getCompanyKeys().get(), false);
         }
+        if (request.getIncludeUsageAggregation().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "include_usage_aggregation",
+                    request.getIncludeUsageAggregation().get(),
+                    false);
+        }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -992,6 +1001,13 @@ public class AsyncRawEntitlementsClient {
         if (request.getCompanyKeys().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_keys", request.getCompanyKeys().get(), false);
+        }
+        if (request.getIncludeUsageAggregation().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "include_usage_aggregation",
+                    request.getIncludeUsageAggregation().get(),
+                    false);
         }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
@@ -1822,6 +1838,99 @@ public class AsyncRawEntitlementsClient {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBody.string(), CountPlanEntitlementsResponse.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<DuplicatePlanEntitlementsResponse>> duplicatePlanEntitlements(
+            DuplicatePlanEntitlementsRequestBody request) {
+        return duplicatePlanEntitlements(request, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<DuplicatePlanEntitlementsResponse>> duplicatePlanEntitlements(
+            DuplicatePlanEntitlementsRequestBody request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("plan-entitlements/duplicate")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<BaseSchematicHttpResponse<DuplicatePlanEntitlementsResponse>> future =
+                new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBody.string(), DuplicatePlanEntitlementsResponse.class),
                                 response));
                         return;
                     }

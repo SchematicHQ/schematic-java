@@ -27,6 +27,8 @@ public final class CreateOrUpdateFlagRequestBody {
 
     private final Optional<String> featureId;
 
+    private final String flagType;
+
     private final Optional<String> id;
 
     private final String key;
@@ -41,6 +43,7 @@ public final class CreateOrUpdateFlagRequestBody {
             boolean defaultValue,
             String description,
             Optional<String> featureId,
+            String flagType,
             Optional<String> id,
             String key,
             Optional<String> maintainerId,
@@ -49,6 +52,7 @@ public final class CreateOrUpdateFlagRequestBody {
         this.defaultValue = defaultValue;
         this.description = description;
         this.featureId = featureId;
+        this.flagType = flagType;
         this.id = id;
         this.key = key;
         this.maintainerId = maintainerId;
@@ -73,7 +77,7 @@ public final class CreateOrUpdateFlagRequestBody {
 
     @JsonProperty("flag_type")
     public String getFlagType() {
-        return "boolean";
+        return flagType;
     }
 
     @JsonProperty("id")
@@ -111,6 +115,7 @@ public final class CreateOrUpdateFlagRequestBody {
         return defaultValue == other.defaultValue
                 && description.equals(other.description)
                 && featureId.equals(other.featureId)
+                && flagType.equals(other.flagType)
                 && id.equals(other.id)
                 && key.equals(other.key)
                 && maintainerId.equals(other.maintainerId)
@@ -120,7 +125,14 @@ public final class CreateOrUpdateFlagRequestBody {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.defaultValue, this.description, this.featureId, this.id, this.key, this.maintainerId, this.name);
+                this.defaultValue,
+                this.description,
+                this.featureId,
+                this.flagType,
+                this.id,
+                this.key,
+                this.maintainerId,
+                this.name);
     }
 
     @java.lang.Override
@@ -139,7 +151,11 @@ public final class CreateOrUpdateFlagRequestBody {
     }
 
     public interface DescriptionStage {
-        KeyStage description(@NotNull String description);
+        FlagTypeStage description(@NotNull String description);
+    }
+
+    public interface FlagTypeStage {
+        KeyStage flagType(@NotNull String flagType);
     }
 
     public interface KeyStage {
@@ -167,10 +183,13 @@ public final class CreateOrUpdateFlagRequestBody {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements DefaultValueStage, DescriptionStage, KeyStage, NameStage, _FinalStage {
+    public static final class Builder
+            implements DefaultValueStage, DescriptionStage, FlagTypeStage, KeyStage, NameStage, _FinalStage {
         private boolean defaultValue;
 
         private String description;
+
+        private String flagType;
 
         private String key;
 
@@ -192,6 +211,7 @@ public final class CreateOrUpdateFlagRequestBody {
             defaultValue(other.getDefaultValue());
             description(other.getDescription());
             featureId(other.getFeatureId());
+            flagType(other.getFlagType());
             id(other.getId());
             key(other.getKey());
             maintainerId(other.getMaintainerId());
@@ -208,8 +228,15 @@ public final class CreateOrUpdateFlagRequestBody {
 
         @java.lang.Override
         @JsonSetter("description")
-        public KeyStage description(@NotNull String description) {
+        public FlagTypeStage description(@NotNull String description) {
             this.description = Objects.requireNonNull(description, "description must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("flag_type")
+        public KeyStage flagType(@NotNull String flagType) {
+            this.flagType = Objects.requireNonNull(flagType, "flagType must not be null");
             return this;
         }
 
@@ -269,7 +296,7 @@ public final class CreateOrUpdateFlagRequestBody {
         @java.lang.Override
         public CreateOrUpdateFlagRequestBody build() {
             return new CreateOrUpdateFlagRequestBody(
-                    defaultValue, description, featureId, id, key, maintainerId, name, additionalProperties);
+                    defaultValue, description, featureId, flagType, id, key, maintainerId, name, additionalProperties);
         }
     }
 }

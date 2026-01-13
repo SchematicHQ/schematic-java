@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.companies.types.CreateEntityTraitDefinitionRequestBodyEntityType;
-import com.schematic.api.resources.companies.types.CreateEntityTraitDefinitionRequestBodyTraitType;
+import com.schematic.api.types.EntityType;
+import com.schematic.api.types.TraitType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,19 +27,19 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateEntityTraitDefinitionRequestBody {
     private final Optional<String> displayName;
 
-    private final CreateEntityTraitDefinitionRequestBodyEntityType entityType;
+    private final EntityType entityType;
 
     private final List<String> hierarchy;
 
-    private final CreateEntityTraitDefinitionRequestBodyTraitType traitType;
+    private final TraitType traitType;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateEntityTraitDefinitionRequestBody(
             Optional<String> displayName,
-            CreateEntityTraitDefinitionRequestBodyEntityType entityType,
+            EntityType entityType,
             List<String> hierarchy,
-            CreateEntityTraitDefinitionRequestBodyTraitType traitType,
+            TraitType traitType,
             Map<String, Object> additionalProperties) {
         this.displayName = displayName;
         this.entityType = entityType;
@@ -54,7 +54,7 @@ public final class CreateEntityTraitDefinitionRequestBody {
     }
 
     @JsonProperty("entity_type")
-    public CreateEntityTraitDefinitionRequestBodyEntityType getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
     }
 
@@ -64,7 +64,7 @@ public final class CreateEntityTraitDefinitionRequestBody {
     }
 
     @JsonProperty("trait_type")
-    public CreateEntityTraitDefinitionRequestBodyTraitType getTraitType() {
+    public TraitType getTraitType() {
         return traitType;
     }
 
@@ -102,13 +102,13 @@ public final class CreateEntityTraitDefinitionRequestBody {
     }
 
     public interface EntityTypeStage {
-        TraitTypeStage entityType(@NotNull CreateEntityTraitDefinitionRequestBodyEntityType entityType);
+        TraitTypeStage entityType(@NotNull EntityType entityType);
 
         Builder from(CreateEntityTraitDefinitionRequestBody other);
     }
 
     public interface TraitTypeStage {
-        _FinalStage traitType(@NotNull CreateEntityTraitDefinitionRequestBodyTraitType traitType);
+        _FinalStage traitType(@NotNull TraitType traitType);
     }
 
     public interface _FinalStage {
@@ -127,9 +127,9 @@ public final class CreateEntityTraitDefinitionRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements EntityTypeStage, TraitTypeStage, _FinalStage {
-        private CreateEntityTraitDefinitionRequestBodyEntityType entityType;
+        private EntityType entityType;
 
-        private CreateEntityTraitDefinitionRequestBodyTraitType traitType;
+        private TraitType traitType;
 
         private List<String> hierarchy = new ArrayList<>();
 
@@ -151,14 +151,14 @@ public final class CreateEntityTraitDefinitionRequestBody {
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public TraitTypeStage entityType(@NotNull CreateEntityTraitDefinitionRequestBodyEntityType entityType) {
+        public TraitTypeStage entityType(@NotNull EntityType entityType) {
             this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("trait_type")
-        public _FinalStage traitType(@NotNull CreateEntityTraitDefinitionRequestBodyTraitType traitType) {
+        public _FinalStage traitType(@NotNull TraitType traitType) {
             this.traitType = Objects.requireNonNull(traitType, "traitType must not be null");
             return this;
         }
