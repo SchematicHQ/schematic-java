@@ -27,13 +27,13 @@ public final class EntityTraitDefinitionResponseData {
 
     private final String displayName;
 
-    private final String entityType;
+    private final EntityType entityType;
 
     private final List<String> hierarchy;
 
     private final String id;
 
-    private final String traitType;
+    private final TraitType traitType;
 
     private final OffsetDateTime updatedAt;
 
@@ -42,10 +42,10 @@ public final class EntityTraitDefinitionResponseData {
     private EntityTraitDefinitionResponseData(
             OffsetDateTime createdAt,
             String displayName,
-            String entityType,
+            EntityType entityType,
             List<String> hierarchy,
             String id,
-            String traitType,
+            TraitType traitType,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
@@ -69,7 +69,7 @@ public final class EntityTraitDefinitionResponseData {
     }
 
     @JsonProperty("entity_type")
-    public String getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
     }
 
@@ -84,7 +84,7 @@ public final class EntityTraitDefinitionResponseData {
     }
 
     @JsonProperty("trait_type")
-    public String getTraitType() {
+    public TraitType getTraitType() {
         return traitType;
     }
 
@@ -146,7 +146,7 @@ public final class EntityTraitDefinitionResponseData {
     }
 
     public interface EntityTypeStage {
-        IdStage entityType(@NotNull String entityType);
+        IdStage entityType(@NotNull EntityType entityType);
     }
 
     public interface IdStage {
@@ -154,7 +154,7 @@ public final class EntityTraitDefinitionResponseData {
     }
 
     public interface TraitTypeStage {
-        UpdatedAtStage traitType(@NotNull String traitType);
+        UpdatedAtStage traitType(@NotNull TraitType traitType);
     }
 
     public interface UpdatedAtStage {
@@ -184,11 +184,11 @@ public final class EntityTraitDefinitionResponseData {
 
         private String displayName;
 
-        private String entityType;
+        private EntityType entityType;
 
         private String id;
 
-        private String traitType;
+        private TraitType traitType;
 
         private OffsetDateTime updatedAt;
 
@@ -227,7 +227,7 @@ public final class EntityTraitDefinitionResponseData {
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public IdStage entityType(@NotNull String entityType) {
+        public IdStage entityType(@NotNull EntityType entityType) {
             this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }
@@ -241,7 +241,7 @@ public final class EntityTraitDefinitionResponseData {
 
         @java.lang.Override
         @JsonSetter("trait_type")
-        public UpdatedAtStage traitType(@NotNull String traitType) {
+        public UpdatedAtStage traitType(@NotNull TraitType traitType) {
             this.traitType = Objects.requireNonNull(traitType, "traitType must not be null");
             return this;
         }

@@ -12,6 +12,7 @@ import com.schematic.api.resources.entitlements.requests.CountFeatureUsersReques
 import com.schematic.api.resources.entitlements.requests.CountPlanEntitlementsRequest;
 import com.schematic.api.resources.entitlements.requests.CreateCompanyOverrideRequestBody;
 import com.schematic.api.resources.entitlements.requests.CreatePlanEntitlementRequestBody;
+import com.schematic.api.resources.entitlements.requests.DuplicatePlanEntitlementsRequestBody;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageByCompanyRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
@@ -29,6 +30,7 @@ import com.schematic.api.resources.entitlements.types.CreateCompanyOverrideRespo
 import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementResponse;
 import com.schematic.api.resources.entitlements.types.DeleteCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.DeletePlanEntitlementResponse;
+import com.schematic.api.resources.entitlements.types.DuplicatePlanEntitlementsResponse;
 import com.schematic.api.resources.entitlements.types.GetCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageByCompanyResponse;
 import com.schematic.api.resources.entitlements.types.GetPlanEntitlementResponse;
@@ -261,6 +263,16 @@ public class AsyncEntitlementsClient {
     public CompletableFuture<CountPlanEntitlementsResponse> countPlanEntitlements(
             CountPlanEntitlementsRequest request, RequestOptions requestOptions) {
         return this.rawClient.countPlanEntitlements(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DuplicatePlanEntitlementsResponse> duplicatePlanEntitlements(
+            DuplicatePlanEntitlementsRequestBody request) {
+        return this.rawClient.duplicatePlanEntitlements(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DuplicatePlanEntitlementsResponse> duplicatePlanEntitlements(
+            DuplicatePlanEntitlementsRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.duplicatePlanEntitlements(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<GetFeatureUsageByCompanyResponse> getFeatureUsageByCompany(

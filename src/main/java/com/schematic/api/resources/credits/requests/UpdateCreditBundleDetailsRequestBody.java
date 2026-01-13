@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.credits.types.UpdateCreditBundleDetailsRequestBodyExpiryType;
-import com.schematic.api.resources.credits.types.UpdateCreditBundleDetailsRequestBodyExpiryUnit;
-import com.schematic.api.resources.credits.types.UpdateCreditBundleDetailsRequestBodyStatus;
+import com.schematic.api.types.BillingCreditBundleStatus;
+import com.schematic.api.types.BillingCreditExpiryType;
+import com.schematic.api.types.BillingCreditExpiryUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -26,9 +26,9 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdateCreditBundleDetailsRequestBody {
     private final String bundleName;
 
-    private final Optional<UpdateCreditBundleDetailsRequestBodyExpiryType> expiryType;
+    private final Optional<BillingCreditExpiryType> expiryType;
 
-    private final Optional<UpdateCreditBundleDetailsRequestBodyExpiryUnit> expiryUnit;
+    private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
     private final Optional<Integer> expiryUnitCount;
 
@@ -38,19 +38,19 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
     private final Optional<Integer> quantity;
 
-    private final Optional<UpdateCreditBundleDetailsRequestBodyStatus> status;
+    private final Optional<BillingCreditBundleStatus> status;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateCreditBundleDetailsRequestBody(
             String bundleName,
-            Optional<UpdateCreditBundleDetailsRequestBodyExpiryType> expiryType,
-            Optional<UpdateCreditBundleDetailsRequestBodyExpiryUnit> expiryUnit,
+            Optional<BillingCreditExpiryType> expiryType,
+            Optional<BillingCreditExpiryUnit> expiryUnit,
             Optional<Integer> expiryUnitCount,
             int pricePerUnit,
             Optional<String> pricePerUnitDecimal,
             Optional<Integer> quantity,
-            Optional<UpdateCreditBundleDetailsRequestBodyStatus> status,
+            Optional<BillingCreditBundleStatus> status,
             Map<String, Object> additionalProperties) {
         this.bundleName = bundleName;
         this.expiryType = expiryType;
@@ -69,12 +69,12 @@ public final class UpdateCreditBundleDetailsRequestBody {
     }
 
     @JsonProperty("expiry_type")
-    public Optional<UpdateCreditBundleDetailsRequestBodyExpiryType> getExpiryType() {
+    public Optional<BillingCreditExpiryType> getExpiryType() {
         return expiryType;
     }
 
     @JsonProperty("expiry_unit")
-    public Optional<UpdateCreditBundleDetailsRequestBodyExpiryUnit> getExpiryUnit() {
+    public Optional<BillingCreditExpiryUnit> getExpiryUnit() {
         return expiryUnit;
     }
 
@@ -99,7 +99,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
     }
 
     @JsonProperty("status")
-    public Optional<UpdateCreditBundleDetailsRequestBodyStatus> getStatus() {
+    public Optional<BillingCreditBundleStatus> getStatus() {
         return status;
     }
 
@@ -161,13 +161,13 @@ public final class UpdateCreditBundleDetailsRequestBody {
     public interface _FinalStage {
         UpdateCreditBundleDetailsRequestBody build();
 
-        _FinalStage expiryType(Optional<UpdateCreditBundleDetailsRequestBodyExpiryType> expiryType);
+        _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
 
-        _FinalStage expiryType(UpdateCreditBundleDetailsRequestBodyExpiryType expiryType);
+        _FinalStage expiryType(BillingCreditExpiryType expiryType);
 
-        _FinalStage expiryUnit(Optional<UpdateCreditBundleDetailsRequestBodyExpiryUnit> expiryUnit);
+        _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit);
 
-        _FinalStage expiryUnit(UpdateCreditBundleDetailsRequestBodyExpiryUnit expiryUnit);
+        _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
         _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
 
@@ -181,9 +181,9 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
         _FinalStage quantity(Integer quantity);
 
-        _FinalStage status(Optional<UpdateCreditBundleDetailsRequestBodyStatus> status);
+        _FinalStage status(Optional<BillingCreditBundleStatus> status);
 
-        _FinalStage status(UpdateCreditBundleDetailsRequestBodyStatus status);
+        _FinalStage status(BillingCreditBundleStatus status);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -192,7 +192,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
         private int pricePerUnit;
 
-        private Optional<UpdateCreditBundleDetailsRequestBodyStatus> status = Optional.empty();
+        private Optional<BillingCreditBundleStatus> status = Optional.empty();
 
         private Optional<Integer> quantity = Optional.empty();
 
@@ -200,9 +200,9 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
         private Optional<Integer> expiryUnitCount = Optional.empty();
 
-        private Optional<UpdateCreditBundleDetailsRequestBodyExpiryUnit> expiryUnit = Optional.empty();
+        private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
-        private Optional<UpdateCreditBundleDetailsRequestBodyExpiryType> expiryType = Optional.empty();
+        private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -237,14 +237,14 @@ public final class UpdateCreditBundleDetailsRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage status(UpdateCreditBundleDetailsRequestBodyStatus status) {
+        public _FinalStage status(BillingCreditBundleStatus status) {
             this.status = Optional.ofNullable(status);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
-        public _FinalStage status(Optional<UpdateCreditBundleDetailsRequestBodyStatus> status) {
+        public _FinalStage status(Optional<BillingCreditBundleStatus> status) {
             this.status = status;
             return this;
         }
@@ -289,27 +289,27 @@ public final class UpdateCreditBundleDetailsRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnit(UpdateCreditBundleDetailsRequestBodyExpiryUnit expiryUnit) {
+        public _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit) {
             this.expiryUnit = Optional.ofNullable(expiryUnit);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnit(Optional<UpdateCreditBundleDetailsRequestBodyExpiryUnit> expiryUnit) {
+        public _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit) {
             this.expiryUnit = expiryUnit;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage expiryType(UpdateCreditBundleDetailsRequestBodyExpiryType expiryType) {
+        public _FinalStage expiryType(BillingCreditExpiryType expiryType) {
             this.expiryType = Optional.ofNullable(expiryType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_type", nulls = Nulls.SKIP)
-        public _FinalStage expiryType(Optional<UpdateCreditBundleDetailsRequestBodyExpiryType> expiryType) {
+        public _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType) {
             this.expiryType = expiryType;
             return this;
         }

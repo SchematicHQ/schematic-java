@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,8 @@ public final class ManagePlanRequest {
 
     private final Optional<String> basePlanPriceId;
 
+    private final Optional<Boolean> cancelImmediately;
+
     private final String companyId;
 
     private final Optional<String> couponExternalId;
@@ -41,28 +44,38 @@ public final class ManagePlanRequest {
 
     private final Optional<String> promoCode;
 
+    private final Optional<Boolean> prorate;
+
+    private final Optional<OffsetDateTime> trialEnd;
+
     private final Map<String, Object> additionalProperties;
 
     private ManagePlanRequest(
             List<PlanSelection> addOnSelections,
             Optional<String> basePlanId,
             Optional<String> basePlanPriceId,
+            Optional<Boolean> cancelImmediately,
             String companyId,
             Optional<String> couponExternalId,
             List<UpdateCreditBundleRequestBody> creditBundles,
             List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements,
             Optional<String> paymentMethodExternalId,
             Optional<String> promoCode,
+            Optional<Boolean> prorate,
+            Optional<OffsetDateTime> trialEnd,
             Map<String, Object> additionalProperties) {
         this.addOnSelections = addOnSelections;
         this.basePlanId = basePlanId;
         this.basePlanPriceId = basePlanPriceId;
+        this.cancelImmediately = cancelImmediately;
         this.companyId = companyId;
         this.couponExternalId = couponExternalId;
         this.creditBundles = creditBundles;
         this.payInAdvanceEntitlements = payInAdvanceEntitlements;
         this.paymentMethodExternalId = paymentMethodExternalId;
         this.promoCode = promoCode;
+        this.prorate = prorate;
+        this.trialEnd = trialEnd;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,6 +92,14 @@ public final class ManagePlanRequest {
     @JsonProperty("base_plan_price_id")
     public Optional<String> getBasePlanPriceId() {
         return basePlanPriceId;
+    }
+
+    /**
+     * @return If false, subscription cancels at period end. Only applies when removing all plans. Defaults to true.
+     */
+    @JsonProperty("cancel_immediately")
+    public Optional<Boolean> getCancelImmediately() {
+        return cancelImmediately;
     }
 
     @JsonProperty("company_id")
@@ -111,6 +132,19 @@ public final class ManagePlanRequest {
         return promoCode;
     }
 
+    /**
+     * @return If true and cancel_immediately is true, issue prorated credit. Only applies when removing all plans. Defaults to true.
+     */
+    @JsonProperty("prorate")
+    public Optional<Boolean> getProrate() {
+        return prorate;
+    }
+
+    @JsonProperty("trial_end")
+    public Optional<OffsetDateTime> getTrialEnd() {
+        return trialEnd;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -126,12 +160,15 @@ public final class ManagePlanRequest {
         return addOnSelections.equals(other.addOnSelections)
                 && basePlanId.equals(other.basePlanId)
                 && basePlanPriceId.equals(other.basePlanPriceId)
+                && cancelImmediately.equals(other.cancelImmediately)
                 && companyId.equals(other.companyId)
                 && couponExternalId.equals(other.couponExternalId)
                 && creditBundles.equals(other.creditBundles)
                 && payInAdvanceEntitlements.equals(other.payInAdvanceEntitlements)
                 && paymentMethodExternalId.equals(other.paymentMethodExternalId)
-                && promoCode.equals(other.promoCode);
+                && promoCode.equals(other.promoCode)
+                && prorate.equals(other.prorate)
+                && trialEnd.equals(other.trialEnd);
     }
 
     @java.lang.Override
@@ -140,12 +177,15 @@ public final class ManagePlanRequest {
                 this.addOnSelections,
                 this.basePlanId,
                 this.basePlanPriceId,
+                this.cancelImmediately,
                 this.companyId,
                 this.couponExternalId,
                 this.creditBundles,
                 this.payInAdvanceEntitlements,
                 this.paymentMethodExternalId,
-                this.promoCode);
+                this.promoCode,
+                this.prorate,
+                this.trialEnd);
     }
 
     @java.lang.Override
@@ -180,6 +220,13 @@ public final class ManagePlanRequest {
 
         _FinalStage basePlanPriceId(String basePlanPriceId);
 
+        /**
+         * <p>If false, subscription cancels at period end. Only applies when removing all plans. Defaults to true.</p>
+         */
+        _FinalStage cancelImmediately(Optional<Boolean> cancelImmediately);
+
+        _FinalStage cancelImmediately(Boolean cancelImmediately);
+
         _FinalStage couponExternalId(Optional<String> couponExternalId);
 
         _FinalStage couponExternalId(String couponExternalId);
@@ -203,11 +250,26 @@ public final class ManagePlanRequest {
         _FinalStage promoCode(Optional<String> promoCode);
 
         _FinalStage promoCode(String promoCode);
+
+        /**
+         * <p>If true and cancel_immediately is true, issue prorated credit. Only applies when removing all plans. Defaults to true.</p>
+         */
+        _FinalStage prorate(Optional<Boolean> prorate);
+
+        _FinalStage prorate(Boolean prorate);
+
+        _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd);
+
+        _FinalStage trialEnd(OffsetDateTime trialEnd);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements CompanyIdStage, _FinalStage {
         private String companyId;
+
+        private Optional<OffsetDateTime> trialEnd = Optional.empty();
+
+        private Optional<Boolean> prorate = Optional.empty();
 
         private Optional<String> promoCode = Optional.empty();
 
@@ -218,6 +280,8 @@ public final class ManagePlanRequest {
         private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
         private Optional<String> couponExternalId = Optional.empty();
+
+        private Optional<Boolean> cancelImmediately = Optional.empty();
 
         private Optional<String> basePlanPriceId = Optional.empty();
 
@@ -235,12 +299,15 @@ public final class ManagePlanRequest {
             addOnSelections(other.getAddOnSelections());
             basePlanId(other.getBasePlanId());
             basePlanPriceId(other.getBasePlanPriceId());
+            cancelImmediately(other.getCancelImmediately());
             companyId(other.getCompanyId());
             couponExternalId(other.getCouponExternalId());
             creditBundles(other.getCreditBundles());
             payInAdvanceEntitlements(other.getPayInAdvanceEntitlements());
             paymentMethodExternalId(other.getPaymentMethodExternalId());
             promoCode(other.getPromoCode());
+            prorate(other.getProrate());
+            trialEnd(other.getTrialEnd());
             return this;
         }
 
@@ -248,6 +315,39 @@ public final class ManagePlanRequest {
         @JsonSetter("company_id")
         public _FinalStage companyId(@NotNull String companyId) {
             this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage trialEnd(OffsetDateTime trialEnd) {
+            this.trialEnd = Optional.ofNullable(trialEnd);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_end", nulls = Nulls.SKIP)
+        public _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd) {
+            this.trialEnd = trialEnd;
+            return this;
+        }
+
+        /**
+         * <p>If true and cancel_immediately is true, issue prorated credit. Only applies when removing all plans. Defaults to true.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage prorate(Boolean prorate) {
+            this.prorate = Optional.ofNullable(prorate);
+            return this;
+        }
+
+        /**
+         * <p>If true and cancel_immediately is true, issue prorated credit. Only applies when removing all plans. Defaults to true.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "prorate", nulls = Nulls.SKIP)
+        public _FinalStage prorate(Optional<Boolean> prorate) {
+            this.prorate = prorate;
             return this;
         }
 
@@ -339,6 +439,26 @@ public final class ManagePlanRequest {
             return this;
         }
 
+        /**
+         * <p>If false, subscription cancels at period end. Only applies when removing all plans. Defaults to true.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cancelImmediately(Boolean cancelImmediately) {
+            this.cancelImmediately = Optional.ofNullable(cancelImmediately);
+            return this;
+        }
+
+        /**
+         * <p>If false, subscription cancels at period end. Only applies when removing all plans. Defaults to true.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "cancel_immediately", nulls = Nulls.SKIP)
+        public _FinalStage cancelImmediately(Optional<Boolean> cancelImmediately) {
+            this.cancelImmediately = cancelImmediately;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage basePlanPriceId(String basePlanPriceId) {
             this.basePlanPriceId = Optional.ofNullable(basePlanPriceId);
@@ -395,12 +515,15 @@ public final class ManagePlanRequest {
                     addOnSelections,
                     basePlanId,
                     basePlanPriceId,
+                    cancelImmediately,
                     companyId,
                     couponExternalId,
                     creditBundles,
                     payInAdvanceEntitlements,
                     paymentMethodExternalId,
                     promoCode,
+                    prorate,
+                    trialEnd,
                     additionalProperties);
         }
     }

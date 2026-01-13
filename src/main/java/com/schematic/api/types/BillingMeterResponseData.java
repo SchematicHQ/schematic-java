@@ -29,6 +29,8 @@ public final class BillingMeterResponseData {
 
     private final String id;
 
+    private final BillingProviderType providerType;
+
     private final Map<String, Object> additionalProperties;
 
     private BillingMeterResponseData(
@@ -37,12 +39,14 @@ public final class BillingMeterResponseData {
             String eventPayloadKey,
             String externalPriceId,
             String id,
+            BillingProviderType providerType,
             Map<String, Object> additionalProperties) {
         this.dispalyName = dispalyName;
         this.eventName = eventName;
         this.eventPayloadKey = eventPayloadKey;
         this.externalPriceId = externalPriceId;
         this.id = id;
+        this.providerType = providerType;
         this.additionalProperties = additionalProperties;
     }
 
@@ -71,6 +75,11 @@ public final class BillingMeterResponseData {
         return id;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -87,12 +96,19 @@ public final class BillingMeterResponseData {
                 && eventName.equals(other.eventName)
                 && eventPayloadKey.equals(other.eventPayloadKey)
                 && externalPriceId.equals(other.externalPriceId)
-                && id.equals(other.id);
+                && id.equals(other.id)
+                && providerType.equals(other.providerType);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.dispalyName, this.eventName, this.eventPayloadKey, this.externalPriceId, this.id);
+        return Objects.hash(
+                this.dispalyName,
+                this.eventName,
+                this.eventPayloadKey,
+                this.externalPriceId,
+                this.id,
+                this.providerType);
     }
 
     @java.lang.Override
@@ -123,7 +139,11 @@ public final class BillingMeterResponseData {
     }
 
     public interface IdStage {
-        _FinalStage id(@NotNull String id);
+        ProviderTypeStage id(@NotNull String id);
+    }
+
+    public interface ProviderTypeStage {
+        _FinalStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface _FinalStage {
@@ -137,6 +157,7 @@ public final class BillingMeterResponseData {
                     EventPayloadKeyStage,
                     ExternalPriceIdStage,
                     IdStage,
+                    ProviderTypeStage,
                     _FinalStage {
         private String dispalyName;
 
@@ -147,6 +168,8 @@ public final class BillingMeterResponseData {
         private String externalPriceId;
 
         private String id;
+
+        private BillingProviderType providerType;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -160,6 +183,7 @@ public final class BillingMeterResponseData {
             eventPayloadKey(other.getEventPayloadKey());
             externalPriceId(other.getExternalPriceId());
             id(other.getId());
+            providerType(other.getProviderType());
             return this;
         }
 
@@ -193,15 +217,22 @@ public final class BillingMeterResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public _FinalStage id(@NotNull String id) {
+        public ProviderTypeStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public _FinalStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
         @java.lang.Override
         public BillingMeterResponseData build() {
             return new BillingMeterResponseData(
-                    dispalyName, eventName, eventPayloadKey, externalPriceId, id, additionalProperties);
+                    dispalyName, eventName, eventPayloadKey, externalPriceId, id, providerType, additionalProperties);
         }
     }
 }

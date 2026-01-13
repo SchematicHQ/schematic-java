@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.components.types.UpdateComponentRequestBodyEntityType;
-import com.schematic.api.resources.components.types.UpdateComponentRequestBodyState;
+import com.schematic.api.types.ComponentEntityType;
+import com.schematic.api.types.ComponentState;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,19 +24,19 @@ import java.util.Optional;
 public final class UpdateComponentRequestBody {
     private final Optional<Map<String, Double>> ast;
 
-    private final Optional<UpdateComponentRequestBodyEntityType> entityType;
+    private final Optional<ComponentEntityType> entityType;
 
     private final Optional<String> name;
 
-    private final Optional<UpdateComponentRequestBodyState> state;
+    private final Optional<ComponentState> state;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateComponentRequestBody(
             Optional<Map<String, Double>> ast,
-            Optional<UpdateComponentRequestBodyEntityType> entityType,
+            Optional<ComponentEntityType> entityType,
             Optional<String> name,
-            Optional<UpdateComponentRequestBodyState> state,
+            Optional<ComponentState> state,
             Map<String, Object> additionalProperties) {
         this.ast = ast;
         this.entityType = entityType;
@@ -51,7 +51,7 @@ public final class UpdateComponentRequestBody {
     }
 
     @JsonProperty("entity_type")
-    public Optional<UpdateComponentRequestBodyEntityType> getEntityType() {
+    public Optional<ComponentEntityType> getEntityType() {
         return entityType;
     }
 
@@ -61,7 +61,7 @@ public final class UpdateComponentRequestBody {
     }
 
     @JsonProperty("state")
-    public Optional<UpdateComponentRequestBodyState> getState() {
+    public Optional<ComponentState> getState() {
         return state;
     }
 
@@ -101,11 +101,11 @@ public final class UpdateComponentRequestBody {
     public static final class Builder {
         private Optional<Map<String, Double>> ast = Optional.empty();
 
-        private Optional<UpdateComponentRequestBodyEntityType> entityType = Optional.empty();
+        private Optional<ComponentEntityType> entityType = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
-        private Optional<UpdateComponentRequestBodyState> state = Optional.empty();
+        private Optional<ComponentState> state = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -132,12 +132,12 @@ public final class UpdateComponentRequestBody {
         }
 
         @JsonSetter(value = "entity_type", nulls = Nulls.SKIP)
-        public Builder entityType(Optional<UpdateComponentRequestBodyEntityType> entityType) {
+        public Builder entityType(Optional<ComponentEntityType> entityType) {
             this.entityType = entityType;
             return this;
         }
 
-        public Builder entityType(UpdateComponentRequestBodyEntityType entityType) {
+        public Builder entityType(ComponentEntityType entityType) {
             this.entityType = Optional.ofNullable(entityType);
             return this;
         }
@@ -154,12 +154,12 @@ public final class UpdateComponentRequestBody {
         }
 
         @JsonSetter(value = "state", nulls = Nulls.SKIP)
-        public Builder state(Optional<UpdateComponentRequestBodyState> state) {
+        public Builder state(Optional<ComponentState> state) {
             this.state = state;
             return this;
         }
 
-        public Builder state(UpdateComponentRequestBodyState state) {
+        public Builder state(ComponentState state) {
             this.state = Optional.ofNullable(state);
             return this;
         }

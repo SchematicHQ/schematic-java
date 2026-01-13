@@ -8,10 +8,10 @@ import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrantsRequest;
+import com.schematic.api.resources.credits.requests.CountCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.CountCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBody;
-import com.schematic.api.resources.credits.requests.CreateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
 import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
@@ -22,12 +22,12 @@ import com.schematic.api.resources.credits.requests.ListCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
-import com.schematic.api.resources.credits.requests.UpdateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
 import com.schematic.api.resources.credits.requests.ZeroOutGrantRequestBody;
 import com.schematic.api.resources.credits.types.CountBillingCreditsGrantsResponse;
 import com.schematic.api.resources.credits.types.CountBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsResponse;
+import com.schematic.api.resources.credits.types.CountCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.CountCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.CreateBillingCreditResponse;
@@ -49,6 +49,8 @@ import com.schematic.api.resources.credits.types.UpdateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.UpdateCreditBundleDetailsResponse;
 import com.schematic.api.resources.credits.types.ZeroOutGrantResponse;
+import com.schematic.api.types.CreateBillingPlanCreditGrantRequestBody;
+import com.schematic.api.types.UpdateBillingPlanCreditGrantRequestBody;
 
 public class CreditsClient {
     protected final ClientOptions clientOptions;
@@ -214,6 +216,19 @@ public class CreditsClient {
         return this.rawClient
                 .grantBillingCreditsToCompany(request, requestOptions)
                 .body();
+    }
+
+    public CountCompanyGrantsResponse countCompanyGrants() {
+        return this.rawClient.countCompanyGrants().body();
+    }
+
+    public CountCompanyGrantsResponse countCompanyGrants(CountCompanyGrantsRequest request) {
+        return this.rawClient.countCompanyGrants(request).body();
+    }
+
+    public CountCompanyGrantsResponse countCompanyGrants(
+            CountCompanyGrantsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countCompanyGrants(request, requestOptions).body();
     }
 
     public ListCompanyGrantsResponse listCompanyGrants() {

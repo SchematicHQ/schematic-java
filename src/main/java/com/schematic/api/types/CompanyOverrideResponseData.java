@@ -62,7 +62,7 @@ public final class CompanyOverrideResponseData {
 
     private final Optional<String> valueTraitId;
 
-    private final String valueType;
+    private final EntitlementValueType valueType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -86,7 +86,7 @@ public final class CompanyOverrideResponseData {
             Optional<Integer> valueNumeric,
             Optional<EntityTraitDefinitionResponseData> valueTrait,
             Optional<String> valueTraitId,
-            String valueType,
+            EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
         this.company = company;
         this.companyId = companyId;
@@ -207,7 +207,7 @@ public final class CompanyOverrideResponseData {
     }
 
     @JsonProperty("value_type")
-    public String getValueType() {
+    public EntitlementValueType getValueType() {
         return valueType;
     }
 
@@ -306,7 +306,7 @@ public final class CompanyOverrideResponseData {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(@NotNull String valueType);
+        _FinalStage valueType(@NotNull EntitlementValueType valueType);
     }
 
     public interface _FinalStage {
@@ -389,7 +389,7 @@ public final class CompanyOverrideResponseData {
 
         private OffsetDateTime updatedAt;
 
-        private String valueType;
+        private EntitlementValueType valueType;
 
         private Optional<String> valueTraitId = Optional.empty();
 
@@ -491,7 +491,7 @@ public final class CompanyOverrideResponseData {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(@NotNull String valueType) {
+        public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }

@@ -28,13 +28,13 @@ public final class PlanGroupPlanDetailResponseData {
 
     private final Optional<BillingProductDetailResponseData> billingProduct;
 
-    private final String chargeType;
+    private final ChargeType chargeType;
 
     private final int companyCount;
 
     private final List<String> compatiblePlanIds;
 
-    private final String controlledBy;
+    private final PlanControlledByType controlledBy;
 
     private final OffsetDateTime createdAt;
 
@@ -66,11 +66,13 @@ public final class PlanGroupPlanDetailResponseData {
 
     private final Optional<BillingPriceResponseData> oneTimePrice;
 
-    private final String planType;
+    private final PlanType planType;
 
     private final Optional<Integer> trialDays;
 
     private final OffsetDateTime updatedAt;
+
+    private final List<PlanVersionResponseData> versions;
 
     private final Optional<BillingPriceResponseData> yearlyPrice;
 
@@ -79,10 +81,10 @@ public final class PlanGroupPlanDetailResponseData {
     private PlanGroupPlanDetailResponseData(
             Optional<String> audienceType,
             Optional<BillingProductDetailResponseData> billingProduct,
-            String chargeType,
+            ChargeType chargeType,
             int companyCount,
             List<String> compatiblePlanIds,
-            String controlledBy,
+            PlanControlledByType controlledBy,
             OffsetDateTime createdAt,
             Optional<CustomPlanViewConfigResponseData> customPlanConfig,
             String description,
@@ -98,9 +100,10 @@ public final class PlanGroupPlanDetailResponseData {
             Optional<BillingPriceResponseData> monthlyPrice,
             String name,
             Optional<BillingPriceResponseData> oneTimePrice,
-            String planType,
+            PlanType planType,
             Optional<Integer> trialDays,
             OffsetDateTime updatedAt,
+            List<PlanVersionResponseData> versions,
             Optional<BillingPriceResponseData> yearlyPrice,
             Map<String, Object> additionalProperties) {
         this.audienceType = audienceType;
@@ -127,6 +130,7 @@ public final class PlanGroupPlanDetailResponseData {
         this.planType = planType;
         this.trialDays = trialDays;
         this.updatedAt = updatedAt;
+        this.versions = versions;
         this.yearlyPrice = yearlyPrice;
         this.additionalProperties = additionalProperties;
     }
@@ -142,7 +146,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     @JsonProperty("charge_type")
-    public String getChargeType() {
+    public ChargeType getChargeType() {
         return chargeType;
     }
 
@@ -157,7 +161,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     @JsonProperty("controlled_by")
-    public String getControlledBy() {
+    public PlanControlledByType getControlledBy() {
         return controlledBy;
     }
 
@@ -237,7 +241,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     @JsonProperty("plan_type")
-    public String getPlanType() {
+    public PlanType getPlanType() {
         return planType;
     }
 
@@ -249,6 +253,11 @@ public final class PlanGroupPlanDetailResponseData {
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    @JsonProperty("versions")
+    public List<PlanVersionResponseData> getVersions() {
+        return versions;
     }
 
     @JsonProperty("yearly_price")
@@ -292,6 +301,7 @@ public final class PlanGroupPlanDetailResponseData {
                 && planType.equals(other.planType)
                 && trialDays.equals(other.trialDays)
                 && updatedAt.equals(other.updatedAt)
+                && versions.equals(other.versions)
                 && yearlyPrice.equals(other.yearlyPrice);
     }
 
@@ -322,6 +332,7 @@ public final class PlanGroupPlanDetailResponseData {
                 this.planType,
                 this.trialDays,
                 this.updatedAt,
+                this.versions,
                 this.yearlyPrice);
     }
 
@@ -335,7 +346,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     public interface ChargeTypeStage {
-        CompanyCountStage chargeType(@NotNull String chargeType);
+        CompanyCountStage chargeType(@NotNull ChargeType chargeType);
 
         Builder from(PlanGroupPlanDetailResponseData other);
     }
@@ -345,7 +356,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     public interface ControlledByStage {
-        CreatedAtStage controlledBy(@NotNull String controlledBy);
+        CreatedAtStage controlledBy(@NotNull PlanControlledByType controlledBy);
     }
 
     public interface CreatedAtStage {
@@ -385,7 +396,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     public interface PlanTypeStage {
-        UpdatedAtStage planType(@NotNull String planType);
+        UpdatedAtStage planType(@NotNull PlanType planType);
     }
 
     public interface UpdatedAtStage {
@@ -441,6 +452,12 @@ public final class PlanGroupPlanDetailResponseData {
 
         _FinalStage trialDays(Integer trialDays);
 
+        _FinalStage versions(List<PlanVersionResponseData> versions);
+
+        _FinalStage addVersions(PlanVersionResponseData versions);
+
+        _FinalStage addAllVersions(List<PlanVersionResponseData> versions);
+
         _FinalStage yearlyPrice(Optional<BillingPriceResponseData> yearlyPrice);
 
         _FinalStage yearlyPrice(BillingPriceResponseData yearlyPrice);
@@ -463,11 +480,11 @@ public final class PlanGroupPlanDetailResponseData {
                     PlanTypeStage,
                     UpdatedAtStage,
                     _FinalStage {
-        private String chargeType;
+        private ChargeType chargeType;
 
         private int companyCount;
 
-        private String controlledBy;
+        private PlanControlledByType controlledBy;
 
         private OffsetDateTime createdAt;
 
@@ -487,11 +504,13 @@ public final class PlanGroupPlanDetailResponseData {
 
         private String name;
 
-        private String planType;
+        private PlanType planType;
 
         private OffsetDateTime updatedAt;
 
         private Optional<BillingPriceResponseData> yearlyPrice = Optional.empty();
+
+        private List<PlanVersionResponseData> versions = new ArrayList<>();
 
         private Optional<Integer> trialDays = Optional.empty();
 
@@ -544,13 +563,14 @@ public final class PlanGroupPlanDetailResponseData {
             planType(other.getPlanType());
             trialDays(other.getTrialDays());
             updatedAt(other.getUpdatedAt());
+            versions(other.getVersions());
             yearlyPrice(other.getYearlyPrice());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("charge_type")
-        public CompanyCountStage chargeType(@NotNull String chargeType) {
+        public CompanyCountStage chargeType(@NotNull ChargeType chargeType) {
             this.chargeType = Objects.requireNonNull(chargeType, "chargeType must not be null");
             return this;
         }
@@ -564,7 +584,7 @@ public final class PlanGroupPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("controlled_by")
-        public CreatedAtStage controlledBy(@NotNull String controlledBy) {
+        public CreatedAtStage controlledBy(@NotNull PlanControlledByType controlledBy) {
             this.controlledBy = Objects.requireNonNull(controlledBy, "controlledBy must not be null");
             return this;
         }
@@ -634,7 +654,7 @@ public final class PlanGroupPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("plan_type")
-        public UpdatedAtStage planType(@NotNull String planType) {
+        public UpdatedAtStage planType(@NotNull PlanType planType) {
             this.planType = Objects.requireNonNull(planType, "planType must not be null");
             return this;
         }
@@ -656,6 +676,30 @@ public final class PlanGroupPlanDetailResponseData {
         @JsonSetter(value = "yearly_price", nulls = Nulls.SKIP)
         public _FinalStage yearlyPrice(Optional<BillingPriceResponseData> yearlyPrice) {
             this.yearlyPrice = yearlyPrice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllVersions(List<PlanVersionResponseData> versions) {
+            if (versions != null) {
+                this.versions.addAll(versions);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addVersions(PlanVersionResponseData versions) {
+            this.versions.add(versions);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "versions", nulls = Nulls.SKIP)
+        public _FinalStage versions(List<PlanVersionResponseData> versions) {
+            this.versions.clear();
+            if (versions != null) {
+                this.versions.addAll(versions);
+            }
             return this;
         }
 
@@ -850,6 +894,7 @@ public final class PlanGroupPlanDetailResponseData {
                     planType,
                     trialDays,
                     updatedAt,
+                    versions,
                     yearlyPrice,
                     additionalProperties);
         }

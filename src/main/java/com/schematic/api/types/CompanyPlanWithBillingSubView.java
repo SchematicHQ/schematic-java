@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +36,8 @@ public final class CompanyPlanWithBillingSubView {
 
     private final Optional<String> imageUrl;
 
+    private final List<PlanCreditGrantView> includedCreditGrants;
+
     private final String name;
 
     private final Optional<String> planPeriod;
@@ -49,6 +53,7 @@ public final class CompanyPlanWithBillingSubView {
             Optional<String> description,
             String id,
             Optional<String> imageUrl,
+            List<PlanCreditGrantView> includedCreditGrants,
             String name,
             Optional<String> planPeriod,
             Optional<Integer> planPrice,
@@ -59,6 +64,7 @@ public final class CompanyPlanWithBillingSubView {
         this.description = description;
         this.id = id;
         this.imageUrl = imageUrl;
+        this.includedCreditGrants = includedCreditGrants;
         this.name = name;
         this.planPeriod = planPeriod;
         this.planPrice = planPrice;
@@ -95,6 +101,11 @@ public final class CompanyPlanWithBillingSubView {
         return imageUrl;
     }
 
+    @JsonProperty("included_credit_grants")
+    public List<PlanCreditGrantView> getIncludedCreditGrants() {
+        return includedCreditGrants;
+    }
+
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -128,6 +139,7 @@ public final class CompanyPlanWithBillingSubView {
                 && description.equals(other.description)
                 && id.equals(other.id)
                 && imageUrl.equals(other.imageUrl)
+                && includedCreditGrants.equals(other.includedCreditGrants)
                 && name.equals(other.name)
                 && planPeriod.equals(other.planPeriod)
                 && planPrice.equals(other.planPrice);
@@ -142,6 +154,7 @@ public final class CompanyPlanWithBillingSubView {
                 this.description,
                 this.id,
                 this.imageUrl,
+                this.includedCreditGrants,
                 this.name,
                 this.planPeriod,
                 this.planPrice);
@@ -189,6 +202,12 @@ public final class CompanyPlanWithBillingSubView {
 
         _FinalStage imageUrl(String imageUrl);
 
+        _FinalStage includedCreditGrants(List<PlanCreditGrantView> includedCreditGrants);
+
+        _FinalStage addIncludedCreditGrants(PlanCreditGrantView includedCreditGrants);
+
+        _FinalStage addAllIncludedCreditGrants(List<PlanCreditGrantView> includedCreditGrants);
+
         _FinalStage planPeriod(Optional<String> planPeriod);
 
         _FinalStage planPeriod(String planPeriod);
@@ -207,6 +226,8 @@ public final class CompanyPlanWithBillingSubView {
         private Optional<Integer> planPrice = Optional.empty();
 
         private Optional<String> planPeriod = Optional.empty();
+
+        private List<PlanCreditGrantView> includedCreditGrants = new ArrayList<>();
 
         private Optional<String> imageUrl = Optional.empty();
 
@@ -231,6 +252,7 @@ public final class CompanyPlanWithBillingSubView {
             description(other.getDescription());
             id(other.getId());
             imageUrl(other.getImageUrl());
+            includedCreditGrants(other.getIncludedCreditGrants());
             name(other.getName());
             planPeriod(other.getPlanPeriod());
             planPrice(other.getPlanPrice());
@@ -274,6 +296,30 @@ public final class CompanyPlanWithBillingSubView {
         @JsonSetter(value = "plan_period", nulls = Nulls.SKIP)
         public _FinalStage planPeriod(Optional<String> planPeriod) {
             this.planPeriod = planPeriod;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllIncludedCreditGrants(List<PlanCreditGrantView> includedCreditGrants) {
+            if (includedCreditGrants != null) {
+                this.includedCreditGrants.addAll(includedCreditGrants);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addIncludedCreditGrants(PlanCreditGrantView includedCreditGrants) {
+            this.includedCreditGrants.add(includedCreditGrants);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "included_credit_grants", nulls = Nulls.SKIP)
+        public _FinalStage includedCreditGrants(List<PlanCreditGrantView> includedCreditGrants) {
+            this.includedCreditGrants.clear();
+            if (includedCreditGrants != null) {
+                this.includedCreditGrants.addAll(includedCreditGrants);
+            }
             return this;
         }
 
@@ -351,6 +397,7 @@ public final class CompanyPlanWithBillingSubView {
                     description,
                     id,
                     imageUrl,
+                    includedCreditGrants,
                     name,
                     planPeriod,
                     planPrice,

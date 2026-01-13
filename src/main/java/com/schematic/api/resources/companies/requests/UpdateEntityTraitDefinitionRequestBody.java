@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.companies.types.UpdateEntityTraitDefinitionRequestBodyTraitType;
+import com.schematic.api.types.TraitType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,14 +24,12 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdateEntityTraitDefinitionRequestBody {
     private final Optional<String> displayName;
 
-    private final UpdateEntityTraitDefinitionRequestBodyTraitType traitType;
+    private final TraitType traitType;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateEntityTraitDefinitionRequestBody(
-            Optional<String> displayName,
-            UpdateEntityTraitDefinitionRequestBodyTraitType traitType,
-            Map<String, Object> additionalProperties) {
+            Optional<String> displayName, TraitType traitType, Map<String, Object> additionalProperties) {
         this.displayName = displayName;
         this.traitType = traitType;
         this.additionalProperties = additionalProperties;
@@ -43,7 +41,7 @@ public final class UpdateEntityTraitDefinitionRequestBody {
     }
 
     @JsonProperty("trait_type")
-    public UpdateEntityTraitDefinitionRequestBodyTraitType getTraitType() {
+    public TraitType getTraitType() {
         return traitType;
     }
 
@@ -78,7 +76,7 @@ public final class UpdateEntityTraitDefinitionRequestBody {
     }
 
     public interface TraitTypeStage {
-        _FinalStage traitType(@NotNull UpdateEntityTraitDefinitionRequestBodyTraitType traitType);
+        _FinalStage traitType(@NotNull TraitType traitType);
 
         Builder from(UpdateEntityTraitDefinitionRequestBody other);
     }
@@ -93,7 +91,7 @@ public final class UpdateEntityTraitDefinitionRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements TraitTypeStage, _FinalStage {
-        private UpdateEntityTraitDefinitionRequestBodyTraitType traitType;
+        private TraitType traitType;
 
         private Optional<String> displayName = Optional.empty();
 
@@ -111,7 +109,7 @@ public final class UpdateEntityTraitDefinitionRequestBody {
 
         @java.lang.Override
         @JsonSetter("trait_type")
-        public _FinalStage traitType(@NotNull UpdateEntityTraitDefinitionRequestBodyTraitType traitType) {
+        public _FinalStage traitType(@NotNull TraitType traitType) {
             this.traitType = Objects.requireNonNull(traitType, "traitType must not be null");
             return this;
         }

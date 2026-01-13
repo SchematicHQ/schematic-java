@@ -48,7 +48,7 @@ public final class PlanEntitlementResponseData {
 
     private final String planId;
 
-    private final Optional<String> priceBehavior;
+    private final Optional<EntitlementPriceBehavior> priceBehavior;
 
     private final String ruleId;
 
@@ -70,7 +70,7 @@ public final class PlanEntitlementResponseData {
 
     private final Optional<String> valueTraitId;
 
-    private final String valueType;
+    private final EntitlementValueType valueType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -88,7 +88,7 @@ public final class PlanEntitlementResponseData {
             Optional<String> metricPeriodMonthReset,
             Optional<PlanResponseData> plan,
             String planId,
-            Optional<String> priceBehavior,
+            Optional<EntitlementPriceBehavior> priceBehavior,
             String ruleId,
             Optional<String> ruleIdUsageExceeded,
             Optional<Integer> softLimit,
@@ -99,7 +99,7 @@ public final class PlanEntitlementResponseData {
             Optional<Integer> valueNumeric,
             Optional<EntityTraitDefinitionResponseData> valueTrait,
             Optional<String> valueTraitId,
-            String valueType,
+            EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
         this.billingThreshold = billingThreshold;
         this.consumptionRate = consumptionRate;
@@ -195,7 +195,7 @@ public final class PlanEntitlementResponseData {
     }
 
     @JsonProperty("price_behavior")
-    public Optional<String> getPriceBehavior() {
+    public Optional<EntitlementPriceBehavior> getPriceBehavior() {
         return priceBehavior;
     }
 
@@ -250,7 +250,7 @@ public final class PlanEntitlementResponseData {
     }
 
     @JsonProperty("value_type")
-    public String getValueType() {
+    public EntitlementValueType getValueType() {
         return valueType;
     }
 
@@ -363,7 +363,7 @@ public final class PlanEntitlementResponseData {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(@NotNull String valueType);
+        _FinalStage valueType(@NotNull EntitlementValueType valueType);
     }
 
     public interface _FinalStage {
@@ -401,9 +401,9 @@ public final class PlanEntitlementResponseData {
 
         _FinalStage plan(PlanResponseData plan);
 
-        _FinalStage priceBehavior(Optional<String> priceBehavior);
+        _FinalStage priceBehavior(Optional<EntitlementPriceBehavior> priceBehavior);
 
-        _FinalStage priceBehavior(String priceBehavior);
+        _FinalStage priceBehavior(EntitlementPriceBehavior priceBehavior);
 
         _FinalStage ruleIdUsageExceeded(Optional<String> ruleIdUsageExceeded);
 
@@ -463,7 +463,7 @@ public final class PlanEntitlementResponseData {
 
         private OffsetDateTime updatedAt;
 
-        private String valueType;
+        private EntitlementValueType valueType;
 
         private Optional<String> valueTraitId = Optional.empty();
 
@@ -481,7 +481,7 @@ public final class PlanEntitlementResponseData {
 
         private Optional<String> ruleIdUsageExceeded = Optional.empty();
 
-        private Optional<String> priceBehavior = Optional.empty();
+        private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
         private Optional<PlanResponseData> plan = Optional.empty();
 
@@ -585,7 +585,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(@NotNull String valueType) {
+        public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }
@@ -695,14 +695,14 @@ public final class PlanEntitlementResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage priceBehavior(String priceBehavior) {
+        public _FinalStage priceBehavior(EntitlementPriceBehavior priceBehavior) {
             this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "price_behavior", nulls = Nulls.SKIP)
-        public _FinalStage priceBehavior(Optional<String> priceBehavior) {
+        public _FinalStage priceBehavior(Optional<EntitlementPriceBehavior> priceBehavior) {
             this.priceBehavior = priceBehavior;
             return this;
         }

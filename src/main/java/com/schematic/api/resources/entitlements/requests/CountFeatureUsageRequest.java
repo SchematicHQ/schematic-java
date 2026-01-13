@@ -28,6 +28,8 @@ public final class CountFeatureUsageRequest {
 
     private final Optional<Map<String, String>> companyKeys;
 
+    private final Optional<Boolean> includeUsageAggregation;
+
     private final Optional<String> q;
 
     private final Optional<Boolean> withoutNegativeEntitlements;
@@ -42,6 +44,7 @@ public final class CountFeatureUsageRequest {
             Optional<List<String>> featureIds,
             Optional<String> companyId,
             Optional<Map<String, String>> companyKeys,
+            Optional<Boolean> includeUsageAggregation,
             Optional<String> q,
             Optional<Boolean> withoutNegativeEntitlements,
             Optional<Integer> limit,
@@ -50,6 +53,7 @@ public final class CountFeatureUsageRequest {
         this.featureIds = featureIds;
         this.companyId = companyId;
         this.companyKeys = companyKeys;
+        this.includeUsageAggregation = includeUsageAggregation;
         this.q = q;
         this.withoutNegativeEntitlements = withoutNegativeEntitlements;
         this.limit = limit;
@@ -70,6 +74,14 @@ public final class CountFeatureUsageRequest {
     @JsonProperty("company_keys")
     public Optional<Map<String, String>> getCompanyKeys() {
         return companyKeys;
+    }
+
+    /**
+     * @return Include time-bucketed usage aggregation (today, this week, this month, billing period) for credit-based entitlements. Defaults to false for performance.
+     */
+    @JsonProperty("include_usage_aggregation")
+    public Optional<Boolean> getIncludeUsageAggregation() {
+        return includeUsageAggregation;
     }
 
     @JsonProperty("q")
@@ -113,6 +125,7 @@ public final class CountFeatureUsageRequest {
         return featureIds.equals(other.featureIds)
                 && companyId.equals(other.companyId)
                 && companyKeys.equals(other.companyKeys)
+                && includeUsageAggregation.equals(other.includeUsageAggregation)
                 && q.equals(other.q)
                 && withoutNegativeEntitlements.equals(other.withoutNegativeEntitlements)
                 && limit.equals(other.limit)
@@ -125,6 +138,7 @@ public final class CountFeatureUsageRequest {
                 this.featureIds,
                 this.companyId,
                 this.companyKeys,
+                this.includeUsageAggregation,
                 this.q,
                 this.withoutNegativeEntitlements,
                 this.limit,
@@ -148,6 +162,8 @@ public final class CountFeatureUsageRequest {
 
         private Optional<Map<String, String>> companyKeys = Optional.empty();
 
+        private Optional<Boolean> includeUsageAggregation = Optional.empty();
+
         private Optional<String> q = Optional.empty();
 
         private Optional<Boolean> withoutNegativeEntitlements = Optional.empty();
@@ -165,6 +181,7 @@ public final class CountFeatureUsageRequest {
             featureIds(other.getFeatureIds());
             companyId(other.getCompanyId());
             companyKeys(other.getCompanyKeys());
+            includeUsageAggregation(other.getIncludeUsageAggregation());
             q(other.getQ());
             withoutNegativeEntitlements(other.getWithoutNegativeEntitlements());
             limit(other.getLimit());
@@ -207,6 +224,20 @@ public final class CountFeatureUsageRequest {
 
         public Builder companyKeys(Map<String, String> companyKeys) {
             this.companyKeys = Optional.ofNullable(companyKeys);
+            return this;
+        }
+
+        /**
+         * <p>Include time-bucketed usage aggregation (today, this week, this month, billing period) for credit-based entitlements. Defaults to false for performance.</p>
+         */
+        @JsonSetter(value = "include_usage_aggregation", nulls = Nulls.SKIP)
+        public Builder includeUsageAggregation(Optional<Boolean> includeUsageAggregation) {
+            this.includeUsageAggregation = includeUsageAggregation;
+            return this;
+        }
+
+        public Builder includeUsageAggregation(Boolean includeUsageAggregation) {
+            this.includeUsageAggregation = Optional.ofNullable(includeUsageAggregation);
             return this;
         }
 
@@ -265,6 +296,7 @@ public final class CountFeatureUsageRequest {
                     featureIds,
                     companyId,
                     companyKeys,
+                    includeUsageAggregation,
                     q,
                     withoutNegativeEntitlements,
                     limit,

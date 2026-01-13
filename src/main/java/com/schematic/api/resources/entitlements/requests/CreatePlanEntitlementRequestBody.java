@@ -14,9 +14,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementRequestBodyMetricPeriod;
 import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementRequestBodyMetricPeriodMonthReset;
-import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementRequestBodyPriceBehavior;
-import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementRequestBodyValueType;
+import com.schematic.api.types.BillingTiersMode;
 import com.schematic.api.types.CreatePriceTierRequestBody;
+import com.schematic.api.types.EntitlementPriceBehavior;
+import com.schematic.api.types.EntitlementValueType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,13 +54,13 @@ public final class CreatePlanEntitlementRequestBody {
 
     private final String planId;
 
-    private final Optional<CreatePlanEntitlementRequestBodyPriceBehavior> priceBehavior;
+    private final Optional<EntitlementPriceBehavior> priceBehavior;
 
     private final Optional<List<CreatePriceTierRequestBody>> priceTiers;
 
     private final Optional<Integer> softLimit;
 
-    private final Optional<String> tierMode;
+    private final Optional<BillingTiersMode> tierMode;
 
     private final Optional<Boolean> valueBool;
 
@@ -69,7 +70,7 @@ public final class CreatePlanEntitlementRequestBody {
 
     private final Optional<String> valueTraitId;
 
-    private final CreatePlanEntitlementRequestBodyValueType valueType;
+    private final EntitlementValueType valueType;
 
     private final Optional<String> yearlyMeteredPriceId;
 
@@ -95,15 +96,15 @@ public final class CreatePlanEntitlementRequestBody {
             Optional<String> monthlyUnitPriceDecimal,
             Optional<String> overageBillingProductId,
             String planId,
-            Optional<CreatePlanEntitlementRequestBodyPriceBehavior> priceBehavior,
+            Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<List<CreatePriceTierRequestBody>> priceTiers,
             Optional<Integer> softLimit,
-            Optional<String> tierMode,
+            Optional<BillingTiersMode> tierMode,
             Optional<Boolean> valueBool,
             Optional<String> valueCreditId,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
-            CreatePlanEntitlementRequestBodyValueType valueType,
+            EntitlementValueType valueType,
             Optional<String> yearlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers,
             Optional<Integer> yearlyUnitPrice,
@@ -204,7 +205,7 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     @JsonProperty("price_behavior")
-    public Optional<CreatePlanEntitlementRequestBodyPriceBehavior> getPriceBehavior() {
+    public Optional<EntitlementPriceBehavior> getPriceBehavior() {
         return priceBehavior;
     }
 
@@ -222,7 +223,7 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     @JsonProperty("tier_mode")
-    public Optional<String> getTierMode() {
+    public Optional<BillingTiersMode> getTierMode() {
         return tierMode;
     }
 
@@ -247,7 +248,7 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     @JsonProperty("value_type")
-    public CreatePlanEntitlementRequestBodyValueType getValueType() {
+    public EntitlementValueType getValueType() {
         return valueType;
     }
 
@@ -362,7 +363,7 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(@NotNull CreatePlanEntitlementRequestBodyValueType valueType);
+        _FinalStage valueType(@NotNull EntitlementValueType valueType);
     }
 
     public interface _FinalStage {
@@ -414,9 +415,9 @@ public final class CreatePlanEntitlementRequestBody {
 
         _FinalStage overageBillingProductId(String overageBillingProductId);
 
-        _FinalStage priceBehavior(Optional<CreatePlanEntitlementRequestBodyPriceBehavior> priceBehavior);
+        _FinalStage priceBehavior(Optional<EntitlementPriceBehavior> priceBehavior);
 
-        _FinalStage priceBehavior(CreatePlanEntitlementRequestBodyPriceBehavior priceBehavior);
+        _FinalStage priceBehavior(EntitlementPriceBehavior priceBehavior);
 
         /**
          * <p>Use MonthlyPriceTiers or YearlyPriceTiers instead</p>
@@ -429,9 +430,9 @@ public final class CreatePlanEntitlementRequestBody {
 
         _FinalStage softLimit(Integer softLimit);
 
-        _FinalStage tierMode(Optional<String> tierMode);
+        _FinalStage tierMode(Optional<BillingTiersMode> tierMode);
 
-        _FinalStage tierMode(String tierMode);
+        _FinalStage tierMode(BillingTiersMode tierMode);
 
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
@@ -472,7 +473,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         private String planId;
 
-        private CreatePlanEntitlementRequestBodyValueType valueType;
+        private EntitlementValueType valueType;
 
         private Optional<String> yearlyUnitPriceDecimal = Optional.empty();
 
@@ -490,13 +491,13 @@ public final class CreatePlanEntitlementRequestBody {
 
         private Optional<Boolean> valueBool = Optional.empty();
 
-        private Optional<String> tierMode = Optional.empty();
+        private Optional<BillingTiersMode> tierMode = Optional.empty();
 
         private Optional<Integer> softLimit = Optional.empty();
 
         private Optional<List<CreatePriceTierRequestBody>> priceTiers = Optional.empty();
 
-        private Optional<CreatePlanEntitlementRequestBodyPriceBehavior> priceBehavior = Optional.empty();
+        private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
         private Optional<String> overageBillingProductId = Optional.empty();
 
@@ -573,7 +574,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(@NotNull CreatePlanEntitlementRequestBodyValueType valueType) {
+        public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }
@@ -683,14 +684,14 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage tierMode(String tierMode) {
+        public _FinalStage tierMode(BillingTiersMode tierMode) {
             this.tierMode = Optional.ofNullable(tierMode);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "tier_mode", nulls = Nulls.SKIP)
-        public _FinalStage tierMode(Optional<String> tierMode) {
+        public _FinalStage tierMode(Optional<BillingTiersMode> tierMode) {
             this.tierMode = tierMode;
             return this;
         }
@@ -729,14 +730,14 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage priceBehavior(CreatePlanEntitlementRequestBodyPriceBehavior priceBehavior) {
+        public _FinalStage priceBehavior(EntitlementPriceBehavior priceBehavior) {
             this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "price_behavior", nulls = Nulls.SKIP)
-        public _FinalStage priceBehavior(Optional<CreatePlanEntitlementRequestBodyPriceBehavior> priceBehavior) {
+        public _FinalStage priceBehavior(Optional<EntitlementPriceBehavior> priceBehavior) {
             this.priceBehavior = priceBehavior;
             return this;
         }

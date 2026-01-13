@@ -13,8 +13,8 @@ import com.schematic.api.resources.companies.requests.CountPlanTraitsRequest;
 import com.schematic.api.resources.companies.requests.CountUsersRequest;
 import com.schematic.api.resources.companies.requests.CreateEntityTraitDefinitionRequestBody;
 import com.schematic.api.resources.companies.requests.CreatePlanTraitRequestBody;
+import com.schematic.api.resources.companies.requests.DeleteCompanyRequest;
 import com.schematic.api.resources.companies.requests.GetActiveCompanySubscriptionRequest;
-import com.schematic.api.resources.companies.requests.GetActiveDealsRequest;
 import com.schematic.api.resources.companies.requests.GetEntityTraitValuesRequest;
 import com.schematic.api.resources.companies.requests.GetOrCreateCompanyMembershipRequestBody;
 import com.schematic.api.resources.companies.requests.ListCompaniesForAdvancedFilterRequest;
@@ -46,7 +46,6 @@ import com.schematic.api.resources.companies.types.DeletePlanTraitResponse;
 import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
-import com.schematic.api.resources.companies.types.GetActiveDealsResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitValuesResponse;
@@ -126,8 +125,13 @@ public class CompaniesClient {
         return this.rawClient.deleteCompany(companyId).body();
     }
 
-    public DeleteCompanyResponse deleteCompany(String companyId, RequestOptions requestOptions) {
-        return this.rawClient.deleteCompany(companyId, requestOptions).body();
+    public DeleteCompanyResponse deleteCompany(String companyId, DeleteCompanyRequest request) {
+        return this.rawClient.deleteCompany(companyId, request).body();
+    }
+
+    public DeleteCompanyResponse deleteCompany(
+            String companyId, DeleteCompanyRequest request, RequestOptions requestOptions) {
+        return this.rawClient.deleteCompany(companyId, request, requestOptions).body();
     }
 
     public CountCompaniesResponse countCompanies() {
@@ -196,14 +200,6 @@ public class CompaniesClient {
 
     public LookupCompanyResponse lookupCompany(LookupCompanyRequest request, RequestOptions requestOptions) {
         return this.rawClient.lookupCompany(request, requestOptions).body();
-    }
-
-    public GetActiveDealsResponse getActiveDeals(GetActiveDealsRequest request) {
-        return this.rawClient.getActiveDeals(request).body();
-    }
-
-    public GetActiveDealsResponse getActiveDeals(GetActiveDealsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getActiveDeals(request, requestOptions).body();
     }
 
     public ListCompanyMembershipsResponse listCompanyMemberships() {

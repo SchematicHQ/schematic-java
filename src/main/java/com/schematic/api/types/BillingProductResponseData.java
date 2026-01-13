@@ -42,6 +42,8 @@ public final class BillingProductResponseData {
 
     private final String productId;
 
+    private final BillingProviderType providerType;
+
     private final double quantity;
 
     private final OffsetDateTime updatedAt;
@@ -59,6 +61,7 @@ public final class BillingProductResponseData {
             double price,
             Optional<String> priceDecimal,
             String productId,
+            BillingProviderType providerType,
             double quantity,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -72,6 +75,7 @@ public final class BillingProductResponseData {
         this.price = price;
         this.priceDecimal = priceDecimal;
         this.productId = productId;
+        this.providerType = providerType;
         this.quantity = quantity;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -130,6 +134,11 @@ public final class BillingProductResponseData {
         return productId;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("quantity")
     public double getQuantity() {
         return quantity;
@@ -162,6 +171,7 @@ public final class BillingProductResponseData {
                 && price == other.price
                 && priceDecimal.equals(other.priceDecimal)
                 && productId.equals(other.productId)
+                && providerType.equals(other.providerType)
                 && quantity == other.quantity
                 && updatedAt.equals(other.updatedAt);
     }
@@ -179,6 +189,7 @@ public final class BillingProductResponseData {
                 this.price,
                 this.priceDecimal,
                 this.productId,
+                this.providerType,
                 this.quantity,
                 this.updatedAt);
     }
@@ -223,7 +234,11 @@ public final class BillingProductResponseData {
     }
 
     public interface ProductIdStage {
-        QuantityStage productId(@NotNull String productId);
+        ProviderTypeStage productId(@NotNull String productId);
+    }
+
+    public interface ProviderTypeStage {
+        QuantityStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface QuantityStage {
@@ -259,6 +274,7 @@ public final class BillingProductResponseData {
                     NameStage,
                     PriceStage,
                     ProductIdStage,
+                    ProviderTypeStage,
                     QuantityStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -277,6 +293,8 @@ public final class BillingProductResponseData {
         private double price;
 
         private String productId;
+
+        private BillingProviderType providerType;
 
         private double quantity;
 
@@ -303,6 +321,7 @@ public final class BillingProductResponseData {
             price(other.getPrice());
             priceDecimal(other.getPriceDecimal());
             productId(other.getProductId());
+            providerType(other.getProviderType());
             quantity(other.getQuantity());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -359,8 +378,15 @@ public final class BillingProductResponseData {
 
         @java.lang.Override
         @JsonSetter("product_id")
-        public QuantityStage productId(@NotNull String productId) {
+        public ProviderTypeStage productId(@NotNull String productId) {
             this.productId = Objects.requireNonNull(productId, "productId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public QuantityStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -424,6 +450,7 @@ public final class BillingProductResponseData {
                     price,
                     priceDecimal,
                     productId,
+                    providerType,
                     quantity,
                     updatedAt,
                     additionalProperties);

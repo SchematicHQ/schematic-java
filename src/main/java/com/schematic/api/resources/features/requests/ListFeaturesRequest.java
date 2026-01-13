@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.FeatureType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.Optional;
 public final class ListFeaturesRequest {
     private final Optional<List<String>> ids;
 
-    private final Optional<List<String>> featureType;
+    private final Optional<List<FeatureType>> featureType;
 
     private final Optional<String> q;
 
@@ -42,7 +43,7 @@ public final class ListFeaturesRequest {
 
     private ListFeaturesRequest(
             Optional<List<String>> ids,
-            Optional<List<String>> featureType,
+            Optional<List<FeatureType>> featureType,
             Optional<String> q,
             Optional<String> withoutCompanyOverrideFor,
             Optional<String> withoutPlanEntitlementFor,
@@ -70,7 +71,7 @@ public final class ListFeaturesRequest {
      * @return Filter by one or more feature types (boolean, event, trait)
      */
     @JsonProperty("feature_type")
-    public Optional<List<String>> getFeatureType() {
+    public Optional<List<FeatureType>> getFeatureType() {
         return featureType;
     }
 
@@ -170,7 +171,7 @@ public final class ListFeaturesRequest {
     public static final class Builder {
         private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<List<String>> featureType = Optional.empty();
+        private Optional<List<FeatureType>> featureType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -221,17 +222,17 @@ public final class ListFeaturesRequest {
          * <p>Filter by one or more feature types (boolean, event, trait)</p>
          */
         @JsonSetter(value = "feature_type", nulls = Nulls.SKIP)
-        public Builder featureType(Optional<List<String>> featureType) {
+        public Builder featureType(Optional<List<FeatureType>> featureType) {
             this.featureType = featureType;
             return this;
         }
 
-        public Builder featureType(List<String> featureType) {
+        public Builder featureType(List<FeatureType> featureType) {
             this.featureType = Optional.ofNullable(featureType);
             return this;
         }
 
-        public Builder featureType(String featureType) {
+        public Builder featureType(FeatureType featureType) {
             this.featureType = Optional.of(Collections.singletonList(featureType));
             return this;
         }
