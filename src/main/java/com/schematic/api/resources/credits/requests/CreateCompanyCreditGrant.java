@@ -12,8 +12,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.credits.types.CreateCompanyCreditGrantExpiryType;
-import com.schematic.api.resources.credits.types.CreateCompanyCreditGrantExpiryUnit;
+import com.schematic.api.types.BillingCreditExpiryType;
+import com.schematic.api.types.BillingCreditExpiryUnit;
+import com.schematic.api.types.BillingCreditGrantReason;
+import com.schematic.api.types.BillingPlanCreditGrantResetStart;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,15 +34,19 @@ public final class CreateCompanyCreditGrant {
 
     private final Optional<OffsetDateTime> expiresAt;
 
-    private final Optional<CreateCompanyCreditGrantExpiryType> expiryType;
+    private final Optional<BillingCreditExpiryType> expiryType;
 
-    private final Optional<CreateCompanyCreditGrantExpiryUnit> expiryUnit;
+    private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
     private final Optional<Integer> expiryUnitCount;
 
     private final int quantity;
 
-    private final String reason;
+    private final BillingCreditGrantReason reason;
+
+    private final Optional<Boolean> renewalEnabled;
+
+    private final Optional<BillingPlanCreditGrantResetStart> renewalPeriod;
 
     private final Map<String, Object> additionalProperties;
 
@@ -49,11 +55,13 @@ public final class CreateCompanyCreditGrant {
             String companyId,
             String creditId,
             Optional<OffsetDateTime> expiresAt,
-            Optional<CreateCompanyCreditGrantExpiryType> expiryType,
-            Optional<CreateCompanyCreditGrantExpiryUnit> expiryUnit,
+            Optional<BillingCreditExpiryType> expiryType,
+            Optional<BillingCreditExpiryUnit> expiryUnit,
             Optional<Integer> expiryUnitCount,
             int quantity,
-            String reason,
+            BillingCreditGrantReason reason,
+            Optional<Boolean> renewalEnabled,
+            Optional<BillingPlanCreditGrantResetStart> renewalPeriod,
             Map<String, Object> additionalProperties) {
         this.billingPeriodsCount = billingPeriodsCount;
         this.companyId = companyId;
@@ -64,6 +72,8 @@ public final class CreateCompanyCreditGrant {
         this.expiryUnitCount = expiryUnitCount;
         this.quantity = quantity;
         this.reason = reason;
+        this.renewalEnabled = renewalEnabled;
+        this.renewalPeriod = renewalPeriod;
         this.additionalProperties = additionalProperties;
     }
 
@@ -88,12 +98,12 @@ public final class CreateCompanyCreditGrant {
     }
 
     @JsonProperty("expiry_type")
-    public Optional<CreateCompanyCreditGrantExpiryType> getExpiryType() {
+    public Optional<BillingCreditExpiryType> getExpiryType() {
         return expiryType;
     }
 
     @JsonProperty("expiry_unit")
-    public Optional<CreateCompanyCreditGrantExpiryUnit> getExpiryUnit() {
+    public Optional<BillingCreditExpiryUnit> getExpiryUnit() {
         return expiryUnit;
     }
 
@@ -108,8 +118,18 @@ public final class CreateCompanyCreditGrant {
     }
 
     @JsonProperty("reason")
-    public String getReason() {
+    public BillingCreditGrantReason getReason() {
         return reason;
+    }
+
+    @JsonProperty("renewal_enabled")
+    public Optional<Boolean> getRenewalEnabled() {
+        return renewalEnabled;
+    }
+
+    @JsonProperty("renewal_period")
+    public Optional<BillingPlanCreditGrantResetStart> getRenewalPeriod() {
+        return renewalPeriod;
     }
 
     @java.lang.Override
@@ -132,7 +152,9 @@ public final class CreateCompanyCreditGrant {
                 && expiryUnit.equals(other.expiryUnit)
                 && expiryUnitCount.equals(other.expiryUnitCount)
                 && quantity == other.quantity
-                && reason.equals(other.reason);
+                && reason.equals(other.reason)
+                && renewalEnabled.equals(other.renewalEnabled)
+                && renewalPeriod.equals(other.renewalPeriod);
     }
 
     @java.lang.Override
@@ -146,7 +168,9 @@ public final class CreateCompanyCreditGrant {
                 this.expiryUnit,
                 this.expiryUnitCount,
                 this.quantity,
-                this.reason);
+                this.reason,
+                this.renewalEnabled,
+                this.renewalPeriod);
     }
 
     @java.lang.Override
@@ -173,7 +197,7 @@ public final class CreateCompanyCreditGrant {
     }
 
     public interface ReasonStage {
-        _FinalStage reason(@NotNull String reason);
+        _FinalStage reason(@NotNull BillingCreditGrantReason reason);
     }
 
     public interface _FinalStage {
@@ -187,17 +211,25 @@ public final class CreateCompanyCreditGrant {
 
         _FinalStage expiresAt(OffsetDateTime expiresAt);
 
-        _FinalStage expiryType(Optional<CreateCompanyCreditGrantExpiryType> expiryType);
+        _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
 
-        _FinalStage expiryType(CreateCompanyCreditGrantExpiryType expiryType);
+        _FinalStage expiryType(BillingCreditExpiryType expiryType);
 
-        _FinalStage expiryUnit(Optional<CreateCompanyCreditGrantExpiryUnit> expiryUnit);
+        _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit);
 
-        _FinalStage expiryUnit(CreateCompanyCreditGrantExpiryUnit expiryUnit);
+        _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
         _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
 
         _FinalStage expiryUnitCount(Integer expiryUnitCount);
+
+        _FinalStage renewalEnabled(Optional<Boolean> renewalEnabled);
+
+        _FinalStage renewalEnabled(Boolean renewalEnabled);
+
+        _FinalStage renewalPeriod(Optional<BillingPlanCreditGrantResetStart> renewalPeriod);
+
+        _FinalStage renewalPeriod(BillingPlanCreditGrantResetStart renewalPeriod);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -209,13 +241,17 @@ public final class CreateCompanyCreditGrant {
 
         private int quantity;
 
-        private String reason;
+        private BillingCreditGrantReason reason;
+
+        private Optional<BillingPlanCreditGrantResetStart> renewalPeriod = Optional.empty();
+
+        private Optional<Boolean> renewalEnabled = Optional.empty();
 
         private Optional<Integer> expiryUnitCount = Optional.empty();
 
-        private Optional<CreateCompanyCreditGrantExpiryUnit> expiryUnit = Optional.empty();
+        private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
-        private Optional<CreateCompanyCreditGrantExpiryType> expiryType = Optional.empty();
+        private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
@@ -237,6 +273,8 @@ public final class CreateCompanyCreditGrant {
             expiryUnitCount(other.getExpiryUnitCount());
             quantity(other.getQuantity());
             reason(other.getReason());
+            renewalEnabled(other.getRenewalEnabled());
+            renewalPeriod(other.getRenewalPeriod());
             return this;
         }
 
@@ -263,8 +301,34 @@ public final class CreateCompanyCreditGrant {
 
         @java.lang.Override
         @JsonSetter("reason")
-        public _FinalStage reason(@NotNull String reason) {
+        public _FinalStage reason(@NotNull BillingCreditGrantReason reason) {
             this.reason = Objects.requireNonNull(reason, "reason must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage renewalPeriod(BillingPlanCreditGrantResetStart renewalPeriod) {
+            this.renewalPeriod = Optional.ofNullable(renewalPeriod);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "renewal_period", nulls = Nulls.SKIP)
+        public _FinalStage renewalPeriod(Optional<BillingPlanCreditGrantResetStart> renewalPeriod) {
+            this.renewalPeriod = renewalPeriod;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage renewalEnabled(Boolean renewalEnabled) {
+            this.renewalEnabled = Optional.ofNullable(renewalEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "renewal_enabled", nulls = Nulls.SKIP)
+        public _FinalStage renewalEnabled(Optional<Boolean> renewalEnabled) {
+            this.renewalEnabled = renewalEnabled;
             return this;
         }
 
@@ -282,27 +346,27 @@ public final class CreateCompanyCreditGrant {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnit(CreateCompanyCreditGrantExpiryUnit expiryUnit) {
+        public _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit) {
             this.expiryUnit = Optional.ofNullable(expiryUnit);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnit(Optional<CreateCompanyCreditGrantExpiryUnit> expiryUnit) {
+        public _FinalStage expiryUnit(Optional<BillingCreditExpiryUnit> expiryUnit) {
             this.expiryUnit = expiryUnit;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage expiryType(CreateCompanyCreditGrantExpiryType expiryType) {
+        public _FinalStage expiryType(BillingCreditExpiryType expiryType) {
             this.expiryType = Optional.ofNullable(expiryType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_type", nulls = Nulls.SKIP)
-        public _FinalStage expiryType(Optional<CreateCompanyCreditGrantExpiryType> expiryType) {
+        public _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType) {
             this.expiryType = expiryType;
             return this;
         }
@@ -345,6 +409,8 @@ public final class CreateCompanyCreditGrant {
                     expiryUnitCount,
                     quantity,
                     reason,
+                    renewalEnabled,
+                    renewalPeriod,
                     additionalProperties);
         }
     }

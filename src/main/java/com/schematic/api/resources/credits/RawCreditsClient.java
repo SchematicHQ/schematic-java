@@ -20,10 +20,10 @@ import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrantsRequest;
+import com.schematic.api.resources.credits.requests.CountCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.CountCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBody;
-import com.schematic.api.resources.credits.requests.CreateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
 import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
@@ -34,12 +34,12 @@ import com.schematic.api.resources.credits.requests.ListCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
-import com.schematic.api.resources.credits.requests.UpdateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
 import com.schematic.api.resources.credits.requests.ZeroOutGrantRequestBody;
 import com.schematic.api.resources.credits.types.CountBillingCreditsGrantsResponse;
 import com.schematic.api.resources.credits.types.CountBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsResponse;
+import com.schematic.api.resources.credits.types.CountCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.CountCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.CreateBillingCreditResponse;
@@ -62,6 +62,8 @@ import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantRes
 import com.schematic.api.resources.credits.types.UpdateCreditBundleDetailsResponse;
 import com.schematic.api.resources.credits.types.ZeroOutGrantResponse;
 import com.schematic.api.types.ApiError;
+import com.schematic.api.types.CreateBillingPlanCreditGrantRequestBody;
+import com.schematic.api.types.UpdateBillingPlanCreditGrantRequestBody;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -1023,6 +1025,87 @@ public class RawCreditsClient {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(
                                 responseBody.string(), GrantBillingCreditsToCompanyResponse.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<CountCompanyGrantsResponse> countCompanyGrants() {
+        return countCompanyGrants(CountCompanyGrantsRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<CountCompanyGrantsResponse> countCompanyGrants(CountCompanyGrantsRequest request) {
+        return countCompanyGrants(request, null);
+    }
+
+    public BaseSchematicHttpResponse<CountCompanyGrantsResponse> countCompanyGrants(
+            CountCompanyGrantsRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/credits/grants/company/count");
+        if (request.getCompanyId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "company_id", request.getCompanyId().get(), false);
+        }
+        if (request.getOrder().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "order", request.getOrder().get(), false);
+        }
+        if (request.getDir().isPresent()) {
+            QueryStringMapper.addQueryParameter(httpUrl, "dir", request.getDir().get(), false);
+        }
+        if (request.getLimit().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "limit", request.getLimit().get(), false);
+        }
+        if (request.getOffset().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "offset", request.getOffset().get(), false);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountCompanyGrantsResponse.class),
                         response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";

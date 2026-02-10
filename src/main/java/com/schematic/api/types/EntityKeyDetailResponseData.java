@@ -30,7 +30,7 @@ public final class EntityKeyDetailResponseData {
 
     private final String entityId;
 
-    private final String entityType;
+    private final EntityType entityType;
 
     private final String environmentId;
 
@@ -49,7 +49,7 @@ public final class EntityKeyDetailResponseData {
             Optional<EntityKeyDefinitionResponseData> definition,
             String definitionId,
             String entityId,
-            String entityType,
+            EntityType entityType,
             String environmentId,
             String id,
             String key,
@@ -90,7 +90,7 @@ public final class EntityKeyDetailResponseData {
     }
 
     @JsonProperty("entity_type")
-    public String getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
     }
 
@@ -182,7 +182,7 @@ public final class EntityKeyDetailResponseData {
     }
 
     public interface EntityTypeStage {
-        EnvironmentIdStage entityType(@NotNull String entityType);
+        EnvironmentIdStage entityType(@NotNull EntityType entityType);
     }
 
     public interface EnvironmentIdStage {
@@ -231,7 +231,7 @@ public final class EntityKeyDetailResponseData {
 
         private String entityId;
 
-        private String entityType;
+        private EntityType entityType;
 
         private String environmentId;
 
@@ -288,7 +288,7 @@ public final class EntityKeyDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public EnvironmentIdStage entityType(@NotNull String entityType) {
+        public EnvironmentIdStage entityType(@NotNull EntityType entityType) {
             this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }

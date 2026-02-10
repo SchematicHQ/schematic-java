@@ -12,7 +12,9 @@ import com.schematic.api.resources.entitlements.requests.CountFeatureUsersReques
 import com.schematic.api.resources.entitlements.requests.CountPlanEntitlementsRequest;
 import com.schematic.api.resources.entitlements.requests.CreateCompanyOverrideRequestBody;
 import com.schematic.api.resources.entitlements.requests.CreatePlanEntitlementRequestBody;
+import com.schematic.api.resources.entitlements.requests.DuplicatePlanEntitlementsRequestBody;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageByCompanyRequest;
+import com.schematic.api.resources.entitlements.requests.GetFeatureUsageTimeSeriesRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsageRequest;
@@ -29,8 +31,10 @@ import com.schematic.api.resources.entitlements.types.CreateCompanyOverrideRespo
 import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementResponse;
 import com.schematic.api.resources.entitlements.types.DeleteCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.DeletePlanEntitlementResponse;
+import com.schematic.api.resources.entitlements.types.DuplicatePlanEntitlementsResponse;
 import com.schematic.api.resources.entitlements.types.GetCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageByCompanyResponse;
+import com.schematic.api.resources.entitlements.types.GetFeatureUsageTimeSeriesResponse;
 import com.schematic.api.resources.entitlements.types.GetPlanEntitlementResponse;
 import com.schematic.api.resources.entitlements.types.ListCompanyOverridesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureCompaniesResponse;
@@ -155,6 +159,15 @@ public class EntitlementsClient {
         return this.rawClient.listFeatureUsage(request, requestOptions).body();
     }
 
+    public GetFeatureUsageTimeSeriesResponse getFeatureUsageTimeSeries(GetFeatureUsageTimeSeriesRequest request) {
+        return this.rawClient.getFeatureUsageTimeSeries(request).body();
+    }
+
+    public GetFeatureUsageTimeSeriesResponse getFeatureUsageTimeSeries(
+            GetFeatureUsageTimeSeriesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getFeatureUsageTimeSeries(request, requestOptions).body();
+    }
+
     public CountFeatureUsageResponse countFeatureUsage() {
         return this.rawClient.countFeatureUsage().body();
     }
@@ -251,6 +264,15 @@ public class EntitlementsClient {
     public CountPlanEntitlementsResponse countPlanEntitlements(
             CountPlanEntitlementsRequest request, RequestOptions requestOptions) {
         return this.rawClient.countPlanEntitlements(request, requestOptions).body();
+    }
+
+    public DuplicatePlanEntitlementsResponse duplicatePlanEntitlements(DuplicatePlanEntitlementsRequestBody request) {
+        return this.rawClient.duplicatePlanEntitlements(request).body();
+    }
+
+    public DuplicatePlanEntitlementsResponse duplicatePlanEntitlements(
+            DuplicatePlanEntitlementsRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.duplicatePlanEntitlements(request, requestOptions).body();
     }
 
     public GetFeatureUsageByCompanyResponse getFeatureUsageByCompany(GetFeatureUsageByCompanyRequest request) {

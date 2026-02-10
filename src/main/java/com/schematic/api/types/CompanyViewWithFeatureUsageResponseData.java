@@ -37,6 +37,8 @@ public final class CompanyViewWithFeatureUsageResponseData {
 
     private final Optional<PaymentMethodResponseData> defaultPaymentMethod;
 
+    private final List<FeatureEntitlement> entitlements;
+
     private final List<EntityTraitDetailResponseData> entityTraits;
 
     private final String environmentId;
@@ -78,6 +80,7 @@ public final class CompanyViewWithFeatureUsageResponseData {
             List<BillingSubscriptionView> billingSubscriptions,
             OffsetDateTime createdAt,
             Optional<PaymentMethodResponseData> defaultPaymentMethod,
+            List<FeatureEntitlement> entitlements,
             List<EntityTraitDetailResponseData> entityTraits,
             String environmentId,
             List<FeatureUsageDataResponseData> featureUsage,
@@ -101,6 +104,7 @@ public final class CompanyViewWithFeatureUsageResponseData {
         this.billingSubscriptions = billingSubscriptions;
         this.createdAt = createdAt;
         this.defaultPaymentMethod = defaultPaymentMethod;
+        this.entitlements = entitlements;
         this.entityTraits = entityTraits;
         this.environmentId = environmentId;
         this.featureUsage = featureUsage;
@@ -148,6 +152,11 @@ public final class CompanyViewWithFeatureUsageResponseData {
     @JsonProperty("default_payment_method")
     public Optional<PaymentMethodResponseData> getDefaultPaymentMethod() {
         return defaultPaymentMethod;
+    }
+
+    @JsonProperty("entitlements")
+    public List<FeatureEntitlement> getEntitlements() {
+        return entitlements;
     }
 
     @JsonProperty("entity_traits")
@@ -252,6 +261,7 @@ public final class CompanyViewWithFeatureUsageResponseData {
                 && billingSubscriptions.equals(other.billingSubscriptions)
                 && createdAt.equals(other.createdAt)
                 && defaultPaymentMethod.equals(other.defaultPaymentMethod)
+                && entitlements.equals(other.entitlements)
                 && entityTraits.equals(other.entityTraits)
                 && environmentId.equals(other.environmentId)
                 && featureUsage.equals(other.featureUsage)
@@ -279,6 +289,7 @@ public final class CompanyViewWithFeatureUsageResponseData {
                 this.billingSubscriptions,
                 this.createdAt,
                 this.defaultPaymentMethod,
+                this.entitlements,
                 this.entityTraits,
                 this.environmentId,
                 this.featureUsage,
@@ -358,6 +369,12 @@ public final class CompanyViewWithFeatureUsageResponseData {
         _FinalStage defaultPaymentMethod(Optional<PaymentMethodResponseData> defaultPaymentMethod);
 
         _FinalStage defaultPaymentMethod(PaymentMethodResponseData defaultPaymentMethod);
+
+        _FinalStage entitlements(List<FeatureEntitlement> entitlements);
+
+        _FinalStage addEntitlements(FeatureEntitlement entitlements);
+
+        _FinalStage addAllEntitlements(List<FeatureEntitlement> entitlements);
 
         _FinalStage entityTraits(List<EntityTraitDetailResponseData> entityTraits);
 
@@ -464,6 +481,8 @@ public final class CompanyViewWithFeatureUsageResponseData {
 
         private List<EntityTraitDetailResponseData> entityTraits = new ArrayList<>();
 
+        private List<FeatureEntitlement> entitlements = new ArrayList<>();
+
         private Optional<PaymentMethodResponseData> defaultPaymentMethod = Optional.empty();
 
         private List<BillingSubscriptionView> billingSubscriptions = new ArrayList<>();
@@ -487,6 +506,7 @@ public final class CompanyViewWithFeatureUsageResponseData {
             billingSubscriptions(other.getBillingSubscriptions());
             createdAt(other.getCreatedAt());
             defaultPaymentMethod(other.getDefaultPaymentMethod());
+            entitlements(other.getEntitlements());
             entityTraits(other.getEntityTraits());
             environmentId(other.getEnvironmentId());
             featureUsage(other.getFeatureUsage());
@@ -776,6 +796,30 @@ public final class CompanyViewWithFeatureUsageResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllEntitlements(List<FeatureEntitlement> entitlements) {
+            if (entitlements != null) {
+                this.entitlements.addAll(entitlements);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addEntitlements(FeatureEntitlement entitlements) {
+            this.entitlements.add(entitlements);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "entitlements", nulls = Nulls.SKIP)
+        public _FinalStage entitlements(List<FeatureEntitlement> entitlements) {
+            this.entitlements.clear();
+            if (entitlements != null) {
+                this.entitlements.addAll(entitlements);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage defaultPaymentMethod(PaymentMethodResponseData defaultPaymentMethod) {
             this.defaultPaymentMethod = Optional.ofNullable(defaultPaymentMethod);
             return this;
@@ -871,6 +915,7 @@ public final class CompanyViewWithFeatureUsageResponseData {
                     billingSubscriptions,
                     createdAt,
                     defaultPaymentMethod,
+                    entitlements,
                     entityTraits,
                     environmentId,
                     featureUsage,

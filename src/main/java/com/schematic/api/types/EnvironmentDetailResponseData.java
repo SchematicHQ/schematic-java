@@ -27,7 +27,7 @@ public final class EnvironmentDetailResponseData {
 
     private final OffsetDateTime createdAt;
 
-    private final String environmentType;
+    private final EnvironmentType environmentType;
 
     private final String id;
 
@@ -40,7 +40,7 @@ public final class EnvironmentDetailResponseData {
     private EnvironmentDetailResponseData(
             List<ApiKeyResponseData> apiKeys,
             OffsetDateTime createdAt,
-            String environmentType,
+            EnvironmentType environmentType,
             String id,
             String name,
             OffsetDateTime updatedAt,
@@ -65,7 +65,7 @@ public final class EnvironmentDetailResponseData {
     }
 
     @JsonProperty("environment_type")
-    public String getEnvironmentType() {
+    public EnvironmentType getEnvironmentType() {
         return environmentType;
     }
 
@@ -125,7 +125,7 @@ public final class EnvironmentDetailResponseData {
     }
 
     public interface EnvironmentTypeStage {
-        IdStage environmentType(@NotNull String environmentType);
+        IdStage environmentType(@NotNull EnvironmentType environmentType);
     }
 
     public interface IdStage {
@@ -155,7 +155,7 @@ public final class EnvironmentDetailResponseData {
             implements CreatedAtStage, EnvironmentTypeStage, IdStage, NameStage, UpdatedAtStage, _FinalStage {
         private OffsetDateTime createdAt;
 
-        private String environmentType;
+        private EnvironmentType environmentType;
 
         private String id;
 
@@ -190,7 +190,7 @@ public final class EnvironmentDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("environment_type")
-        public IdStage environmentType(@NotNull String environmentType) {
+        public IdStage environmentType(@NotNull EnvironmentType environmentType) {
             this.environmentType = Objects.requireNonNull(environmentType, "environmentType must not be null");
             return this;
         }

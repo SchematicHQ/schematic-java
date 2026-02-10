@@ -12,6 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.SortDirection;
+import com.schematic.api.types.SubscriptionStatus;
+import com.schematic.api.types.SubscriptionType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,15 +25,31 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListCompaniesRequest.Builder.class)
 public final class ListCompaniesRequest {
+    private final Optional<List<String>> creditTypeIds;
+
     private final Optional<List<String>> ids;
+
+    private final Optional<List<String>> planIds;
+
+    private final Optional<List<SubscriptionStatus>> subscriptionStatuses;
+
+    private final Optional<List<SubscriptionType>> subscriptionTypes;
+
+    private final Optional<Boolean> monetizedSubscriptions;
 
     private final Optional<String> planId;
 
     private final Optional<String> q;
 
+    private final Optional<String> sortOrderColumn;
+
+    private final Optional<SortDirection> sortOrderDirection;
+
     private final Optional<String> withoutFeatureOverrideFor;
 
     private final Optional<Boolean> withoutPlan;
+
+    private final Optional<Boolean> withoutSubscription;
 
     private final Optional<Boolean> withSubscription;
 
@@ -41,24 +60,48 @@ public final class ListCompaniesRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListCompaniesRequest(
+            Optional<List<String>> creditTypeIds,
             Optional<List<String>> ids,
+            Optional<List<String>> planIds,
+            Optional<List<SubscriptionStatus>> subscriptionStatuses,
+            Optional<List<SubscriptionType>> subscriptionTypes,
+            Optional<Boolean> monetizedSubscriptions,
             Optional<String> planId,
             Optional<String> q,
+            Optional<String> sortOrderColumn,
+            Optional<SortDirection> sortOrderDirection,
             Optional<String> withoutFeatureOverrideFor,
             Optional<Boolean> withoutPlan,
+            Optional<Boolean> withoutSubscription,
             Optional<Boolean> withSubscription,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Map<String, Object> additionalProperties) {
+        this.creditTypeIds = creditTypeIds;
         this.ids = ids;
+        this.planIds = planIds;
+        this.subscriptionStatuses = subscriptionStatuses;
+        this.subscriptionTypes = subscriptionTypes;
+        this.monetizedSubscriptions = monetizedSubscriptions;
         this.planId = planId;
         this.q = q;
+        this.sortOrderColumn = sortOrderColumn;
+        this.sortOrderDirection = sortOrderDirection;
         this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
         this.withoutPlan = withoutPlan;
+        this.withoutSubscription = withoutSubscription;
         this.withSubscription = withSubscription;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Filter companies by one or more credit type IDs (each ID starts with bcrd_)
+     */
+    @JsonProperty("credit_type_ids")
+    public Optional<List<String>> getCreditTypeIds() {
+        return creditTypeIds;
     }
 
     /**
@@ -67,6 +110,38 @@ public final class ListCompaniesRequest {
     @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
+    }
+
+    /**
+     * @return Filter companies by one or more plan IDs (each ID starts with plan_)
+     */
+    @JsonProperty("plan_ids")
+    public Optional<List<String>> getPlanIds() {
+        return planIds;
+    }
+
+    /**
+     * @return Filter companies by one or more subscription statuses
+     */
+    @JsonProperty("subscription_statuses")
+    public Optional<List<SubscriptionStatus>> getSubscriptionStatuses() {
+        return subscriptionStatuses;
+    }
+
+    /**
+     * @return Filter companies by one or more subscription types
+     */
+    @JsonProperty("subscription_types")
+    public Optional<List<SubscriptionType>> getSubscriptionTypes() {
+        return subscriptionTypes;
+    }
+
+    /**
+     * @return Filter companies that have monetized subscriptions
+     */
+    @JsonProperty("monetized_subscriptions")
+    public Optional<Boolean> getMonetizedSubscriptions() {
+        return monetizedSubscriptions;
     }
 
     /**
@@ -86,6 +161,22 @@ public final class ListCompaniesRequest {
     }
 
     /**
+     * @return Column to sort by (e.g. name, created_at, last_seen_at)
+     */
+    @JsonProperty("sort_order_column")
+    public Optional<String> getSortOrderColumn() {
+        return sortOrderColumn;
+    }
+
+    /**
+     * @return Direction to sort by (asc or desc)
+     */
+    @JsonProperty("sort_order_direction")
+    public Optional<SortDirection> getSortOrderDirection() {
+        return sortOrderDirection;
+    }
+
+    /**
      * @return Filter out companies that already have a company override for the specified feature ID
      */
     @JsonProperty("without_feature_override_for")
@@ -99,6 +190,14 @@ public final class ListCompaniesRequest {
     @JsonProperty("without_plan")
     public Optional<Boolean> getWithoutPlan() {
         return withoutPlan;
+    }
+
+    /**
+     * @return Filter out companies that have a subscription
+     */
+    @JsonProperty("without_subscription")
+    public Optional<Boolean> getWithoutSubscription() {
+        return withoutSubscription;
     }
 
     /**
@@ -137,11 +236,19 @@ public final class ListCompaniesRequest {
     }
 
     private boolean equalTo(ListCompaniesRequest other) {
-        return ids.equals(other.ids)
+        return creditTypeIds.equals(other.creditTypeIds)
+                && ids.equals(other.ids)
+                && planIds.equals(other.planIds)
+                && subscriptionStatuses.equals(other.subscriptionStatuses)
+                && subscriptionTypes.equals(other.subscriptionTypes)
+                && monetizedSubscriptions.equals(other.monetizedSubscriptions)
                 && planId.equals(other.planId)
                 && q.equals(other.q)
+                && sortOrderColumn.equals(other.sortOrderColumn)
+                && sortOrderDirection.equals(other.sortOrderDirection)
                 && withoutFeatureOverrideFor.equals(other.withoutFeatureOverrideFor)
                 && withoutPlan.equals(other.withoutPlan)
+                && withoutSubscription.equals(other.withoutSubscription)
                 && withSubscription.equals(other.withSubscription)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
@@ -150,11 +257,19 @@ public final class ListCompaniesRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.creditTypeIds,
                 this.ids,
+                this.planIds,
+                this.subscriptionStatuses,
+                this.subscriptionTypes,
+                this.monetizedSubscriptions,
                 this.planId,
                 this.q,
+                this.sortOrderColumn,
+                this.sortOrderDirection,
                 this.withoutFeatureOverrideFor,
                 this.withoutPlan,
+                this.withoutSubscription,
                 this.withSubscription,
                 this.limit,
                 this.offset);
@@ -171,15 +286,31 @@ public final class ListCompaniesRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<List<String>> creditTypeIds = Optional.empty();
+
         private Optional<List<String>> ids = Optional.empty();
+
+        private Optional<List<String>> planIds = Optional.empty();
+
+        private Optional<List<SubscriptionStatus>> subscriptionStatuses = Optional.empty();
+
+        private Optional<List<SubscriptionType>> subscriptionTypes = Optional.empty();
+
+        private Optional<Boolean> monetizedSubscriptions = Optional.empty();
 
         private Optional<String> planId = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<String> sortOrderColumn = Optional.empty();
+
+        private Optional<SortDirection> sortOrderDirection = Optional.empty();
+
         private Optional<String> withoutFeatureOverrideFor = Optional.empty();
 
         private Optional<Boolean> withoutPlan = Optional.empty();
+
+        private Optional<Boolean> withoutSubscription = Optional.empty();
 
         private Optional<Boolean> withSubscription = Optional.empty();
 
@@ -193,14 +324,41 @@ public final class ListCompaniesRequest {
         private Builder() {}
 
         public Builder from(ListCompaniesRequest other) {
+            creditTypeIds(other.getCreditTypeIds());
             ids(other.getIds());
+            planIds(other.getPlanIds());
+            subscriptionStatuses(other.getSubscriptionStatuses());
+            subscriptionTypes(other.getSubscriptionTypes());
+            monetizedSubscriptions(other.getMonetizedSubscriptions());
             planId(other.getPlanId());
             q(other.getQ());
+            sortOrderColumn(other.getSortOrderColumn());
+            sortOrderDirection(other.getSortOrderDirection());
             withoutFeatureOverrideFor(other.getWithoutFeatureOverrideFor());
             withoutPlan(other.getWithoutPlan());
+            withoutSubscription(other.getWithoutSubscription());
             withSubscription(other.getWithSubscription());
             limit(other.getLimit());
             offset(other.getOffset());
+            return this;
+        }
+
+        /**
+         * <p>Filter companies by one or more credit type IDs (each ID starts with bcrd_)</p>
+         */
+        @JsonSetter(value = "credit_type_ids", nulls = Nulls.SKIP)
+        public Builder creditTypeIds(Optional<List<String>> creditTypeIds) {
+            this.creditTypeIds = creditTypeIds;
+            return this;
+        }
+
+        public Builder creditTypeIds(List<String> creditTypeIds) {
+            this.creditTypeIds = Optional.ofNullable(creditTypeIds);
+            return this;
+        }
+
+        public Builder creditTypeIds(String creditTypeIds) {
+            this.creditTypeIds = Optional.of(Collections.singletonList(creditTypeIds));
             return this;
         }
 
@@ -220,6 +378,77 @@ public final class ListCompaniesRequest {
 
         public Builder ids(String ids) {
             this.ids = Optional.of(Collections.singletonList(ids));
+            return this;
+        }
+
+        /**
+         * <p>Filter companies by one or more plan IDs (each ID starts with plan_)</p>
+         */
+        @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
+        public Builder planIds(Optional<List<String>> planIds) {
+            this.planIds = planIds;
+            return this;
+        }
+
+        public Builder planIds(List<String> planIds) {
+            this.planIds = Optional.ofNullable(planIds);
+            return this;
+        }
+
+        public Builder planIds(String planIds) {
+            this.planIds = Optional.of(Collections.singletonList(planIds));
+            return this;
+        }
+
+        /**
+         * <p>Filter companies by one or more subscription statuses</p>
+         */
+        @JsonSetter(value = "subscription_statuses", nulls = Nulls.SKIP)
+        public Builder subscriptionStatuses(Optional<List<SubscriptionStatus>> subscriptionStatuses) {
+            this.subscriptionStatuses = subscriptionStatuses;
+            return this;
+        }
+
+        public Builder subscriptionStatuses(List<SubscriptionStatus> subscriptionStatuses) {
+            this.subscriptionStatuses = Optional.ofNullable(subscriptionStatuses);
+            return this;
+        }
+
+        public Builder subscriptionStatuses(SubscriptionStatus subscriptionStatuses) {
+            this.subscriptionStatuses = Optional.of(Collections.singletonList(subscriptionStatuses));
+            return this;
+        }
+
+        /**
+         * <p>Filter companies by one or more subscription types</p>
+         */
+        @JsonSetter(value = "subscription_types", nulls = Nulls.SKIP)
+        public Builder subscriptionTypes(Optional<List<SubscriptionType>> subscriptionTypes) {
+            this.subscriptionTypes = subscriptionTypes;
+            return this;
+        }
+
+        public Builder subscriptionTypes(List<SubscriptionType> subscriptionTypes) {
+            this.subscriptionTypes = Optional.ofNullable(subscriptionTypes);
+            return this;
+        }
+
+        public Builder subscriptionTypes(SubscriptionType subscriptionTypes) {
+            this.subscriptionTypes = Optional.of(Collections.singletonList(subscriptionTypes));
+            return this;
+        }
+
+        /**
+         * <p>Filter companies that have monetized subscriptions</p>
+         */
+        @JsonSetter(value = "monetized_subscriptions", nulls = Nulls.SKIP)
+        public Builder monetizedSubscriptions(Optional<Boolean> monetizedSubscriptions) {
+            this.monetizedSubscriptions = monetizedSubscriptions;
+            return this;
+        }
+
+        public Builder monetizedSubscriptions(Boolean monetizedSubscriptions) {
+            this.monetizedSubscriptions = Optional.ofNullable(monetizedSubscriptions);
             return this;
         }
 
@@ -252,6 +481,34 @@ public final class ListCompaniesRequest {
         }
 
         /**
+         * <p>Column to sort by (e.g. name, created_at, last_seen_at)</p>
+         */
+        @JsonSetter(value = "sort_order_column", nulls = Nulls.SKIP)
+        public Builder sortOrderColumn(Optional<String> sortOrderColumn) {
+            this.sortOrderColumn = sortOrderColumn;
+            return this;
+        }
+
+        public Builder sortOrderColumn(String sortOrderColumn) {
+            this.sortOrderColumn = Optional.ofNullable(sortOrderColumn);
+            return this;
+        }
+
+        /**
+         * <p>Direction to sort by (asc or desc)</p>
+         */
+        @JsonSetter(value = "sort_order_direction", nulls = Nulls.SKIP)
+        public Builder sortOrderDirection(Optional<SortDirection> sortOrderDirection) {
+            this.sortOrderDirection = sortOrderDirection;
+            return this;
+        }
+
+        public Builder sortOrderDirection(SortDirection sortOrderDirection) {
+            this.sortOrderDirection = Optional.ofNullable(sortOrderDirection);
+            return this;
+        }
+
+        /**
          * <p>Filter out companies that already have a company override for the specified feature ID</p>
          */
         @JsonSetter(value = "without_feature_override_for", nulls = Nulls.SKIP)
@@ -276,6 +533,20 @@ public final class ListCompaniesRequest {
 
         public Builder withoutPlan(Boolean withoutPlan) {
             this.withoutPlan = Optional.ofNullable(withoutPlan);
+            return this;
+        }
+
+        /**
+         * <p>Filter out companies that have a subscription</p>
+         */
+        @JsonSetter(value = "without_subscription", nulls = Nulls.SKIP)
+        public Builder withoutSubscription(Optional<Boolean> withoutSubscription) {
+            this.withoutSubscription = withoutSubscription;
+            return this;
+        }
+
+        public Builder withoutSubscription(Boolean withoutSubscription) {
+            this.withoutSubscription = Optional.ofNullable(withoutSubscription);
             return this;
         }
 
@@ -323,11 +594,19 @@ public final class ListCompaniesRequest {
 
         public ListCompaniesRequest build() {
             return new ListCompaniesRequest(
+                    creditTypeIds,
                     ids,
+                    planIds,
+                    subscriptionStatuses,
+                    subscriptionTypes,
+                    monetizedSubscriptions,
                     planId,
                     q,
+                    sortOrderColumn,
+                    sortOrderDirection,
                     withoutFeatureOverrideFor,
                     withoutPlan,
+                    withoutSubscription,
                     withSubscription,
                     limit,
                     offset,

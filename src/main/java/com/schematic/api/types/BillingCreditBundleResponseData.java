@@ -36,9 +36,9 @@ public final class BillingCreditBundleResponseData {
 
     private final String creditName;
 
-    private final String expiryType;
+    private final BillingCreditExpiryType expiryType;
 
-    private final String expiryUnit;
+    private final BillingCreditExpiryUnit expiryUnit;
 
     private final Optional<Integer> expiryUnitCount;
 
@@ -56,7 +56,7 @@ public final class BillingCreditBundleResponseData {
 
     private final Optional<String> singularName;
 
-    private final String status;
+    private final BillingCreditBundleStatus status;
 
     private final Optional<BillingPriceResponseData> unitPrice;
 
@@ -72,8 +72,8 @@ public final class BillingCreditBundleResponseData {
             Optional<String> creditIcon,
             String creditId,
             String creditName,
-            String expiryType,
-            String expiryUnit,
+            BillingCreditExpiryType expiryType,
+            BillingCreditExpiryUnit expiryUnit,
             Optional<Integer> expiryUnitCount,
             boolean hasGrants,
             String id,
@@ -82,7 +82,7 @@ public final class BillingCreditBundleResponseData {
             Optional<BillingPriceResponseData> price,
             Optional<Integer> quantity,
             Optional<String> singularName,
-            String status,
+            BillingCreditBundleStatus status,
             Optional<BillingPriceResponseData> unitPrice,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -145,12 +145,12 @@ public final class BillingCreditBundleResponseData {
     }
 
     @JsonProperty("expiry_type")
-    public String getExpiryType() {
+    public BillingCreditExpiryType getExpiryType() {
         return expiryType;
     }
 
     @JsonProperty("expiry_unit")
-    public String getExpiryUnit() {
+    public BillingCreditExpiryUnit getExpiryUnit() {
         return expiryUnit;
     }
 
@@ -195,7 +195,7 @@ public final class BillingCreditBundleResponseData {
     }
 
     @JsonProperty("status")
-    public String getStatus() {
+    public BillingCreditBundleStatus getStatus() {
         return status;
     }
 
@@ -296,11 +296,11 @@ public final class BillingCreditBundleResponseData {
     }
 
     public interface ExpiryTypeStage {
-        ExpiryUnitStage expiryType(@NotNull String expiryType);
+        ExpiryUnitStage expiryType(@NotNull BillingCreditExpiryType expiryType);
     }
 
     public interface ExpiryUnitStage {
-        HasGrantsStage expiryUnit(@NotNull String expiryUnit);
+        HasGrantsStage expiryUnit(@NotNull BillingCreditExpiryUnit expiryUnit);
     }
 
     public interface HasGrantsStage {
@@ -316,7 +316,7 @@ public final class BillingCreditBundleResponseData {
     }
 
     public interface StatusStage {
-        UpdatedAtStage status(@NotNull String status);
+        UpdatedAtStage status(@NotNull BillingCreditBundleStatus status);
     }
 
     public interface UpdatedAtStage {
@@ -385,9 +385,9 @@ public final class BillingCreditBundleResponseData {
 
         private String creditName;
 
-        private String expiryType;
+        private BillingCreditExpiryType expiryType;
 
-        private String expiryUnit;
+        private BillingCreditExpiryUnit expiryUnit;
 
         private boolean hasGrants;
 
@@ -395,7 +395,7 @@ public final class BillingCreditBundleResponseData {
 
         private String name;
 
-        private String status;
+        private BillingCreditBundleStatus status;
 
         private OffsetDateTime updatedAt;
 
@@ -477,14 +477,14 @@ public final class BillingCreditBundleResponseData {
 
         @java.lang.Override
         @JsonSetter("expiry_type")
-        public ExpiryUnitStage expiryType(@NotNull String expiryType) {
+        public ExpiryUnitStage expiryType(@NotNull BillingCreditExpiryType expiryType) {
             this.expiryType = Objects.requireNonNull(expiryType, "expiryType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("expiry_unit")
-        public HasGrantsStage expiryUnit(@NotNull String expiryUnit) {
+        public HasGrantsStage expiryUnit(@NotNull BillingCreditExpiryUnit expiryUnit) {
             this.expiryUnit = Objects.requireNonNull(expiryUnit, "expiryUnit must not be null");
             return this;
         }
@@ -512,7 +512,7 @@ public final class BillingCreditBundleResponseData {
 
         @java.lang.Override
         @JsonSetter("status")
-        public UpdatedAtStage status(@NotNull String status) {
+        public UpdatedAtStage status(@NotNull BillingCreditBundleStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }

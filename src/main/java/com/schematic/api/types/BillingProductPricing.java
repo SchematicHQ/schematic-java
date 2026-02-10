@@ -43,7 +43,7 @@ public final class BillingProductPricing {
 
     private final Optional<String> subscriptionItemExternalId;
 
-    private final BillingProductPricingUsageType usageType;
+    private final BillingPriceUsageType usageType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -59,7 +59,7 @@ public final class BillingProductPricing {
             String productExternalId,
             int quantity,
             Optional<String> subscriptionItemExternalId,
-            BillingProductPricingUsageType usageType,
+            BillingPriceUsageType usageType,
             Map<String, Object> additionalProperties) {
         this.billingThreshold = billingThreshold;
         this.currency = currency;
@@ -132,7 +132,7 @@ public final class BillingProductPricing {
     }
 
     @JsonProperty("usage_type")
-    public BillingProductPricingUsageType getUsageType() {
+    public BillingPriceUsageType getUsageType() {
         return usageType;
     }
 
@@ -215,7 +215,7 @@ public final class BillingProductPricing {
     }
 
     public interface UsageTypeStage {
-        _FinalStage usageType(@NotNull BillingProductPricingUsageType usageType);
+        _FinalStage usageType(@NotNull BillingPriceUsageType usageType);
     }
 
     public interface _FinalStage {
@@ -264,7 +264,7 @@ public final class BillingProductPricing {
 
         private int quantity;
 
-        private BillingProductPricingUsageType usageType;
+        private BillingPriceUsageType usageType;
 
         private Optional<String> subscriptionItemExternalId = Optional.empty();
 
@@ -342,7 +342,7 @@ public final class BillingProductPricing {
 
         @java.lang.Override
         @JsonSetter("usage_type")
-        public _FinalStage usageType(@NotNull BillingProductPricingUsageType usageType) {
+        public _FinalStage usageType(@NotNull BillingPriceUsageType usageType) {
             this.usageType = Objects.requireNonNull(usageType, "usageType must not be null");
             return this;
         }

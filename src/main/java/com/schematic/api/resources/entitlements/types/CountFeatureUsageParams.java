@@ -27,6 +27,8 @@ public final class CountFeatureUsageParams {
 
     private final Optional<List<String>> featureIds;
 
+    private final Optional<Boolean> includeUsageAggregation;
+
     private final Optional<Integer> limit;
 
     private final Optional<Integer> offset;
@@ -41,6 +43,7 @@ public final class CountFeatureUsageParams {
             Optional<String> companyId,
             Optional<Map<String, String>> companyKeys,
             Optional<List<String>> featureIds,
+            Optional<Boolean> includeUsageAggregation,
             Optional<Integer> limit,
             Optional<Integer> offset,
             Optional<String> q,
@@ -49,6 +52,7 @@ public final class CountFeatureUsageParams {
         this.companyId = companyId;
         this.companyKeys = companyKeys;
         this.featureIds = featureIds;
+        this.includeUsageAggregation = includeUsageAggregation;
         this.limit = limit;
         this.offset = offset;
         this.q = q;
@@ -69,6 +73,14 @@ public final class CountFeatureUsageParams {
     @JsonProperty("feature_ids")
     public Optional<List<String>> getFeatureIds() {
         return featureIds;
+    }
+
+    /**
+     * @return Include time-bucketed usage aggregation (today, this week, this month, billing period) for credit-based entitlements. Defaults to false for performance.
+     */
+    @JsonProperty("include_usage_aggregation")
+    public Optional<Boolean> getIncludeUsageAggregation() {
+        return includeUsageAggregation;
     }
 
     /**
@@ -112,6 +124,7 @@ public final class CountFeatureUsageParams {
         return companyId.equals(other.companyId)
                 && companyKeys.equals(other.companyKeys)
                 && featureIds.equals(other.featureIds)
+                && includeUsageAggregation.equals(other.includeUsageAggregation)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
                 && q.equals(other.q)
@@ -124,6 +137,7 @@ public final class CountFeatureUsageParams {
                 this.companyId,
                 this.companyKeys,
                 this.featureIds,
+                this.includeUsageAggregation,
                 this.limit,
                 this.offset,
                 this.q,
@@ -147,6 +161,8 @@ public final class CountFeatureUsageParams {
 
         private Optional<List<String>> featureIds = Optional.empty();
 
+        private Optional<Boolean> includeUsageAggregation = Optional.empty();
+
         private Optional<Integer> limit = Optional.empty();
 
         private Optional<Integer> offset = Optional.empty();
@@ -164,6 +180,7 @@ public final class CountFeatureUsageParams {
             companyId(other.getCompanyId());
             companyKeys(other.getCompanyKeys());
             featureIds(other.getFeatureIds());
+            includeUsageAggregation(other.getIncludeUsageAggregation());
             limit(other.getLimit());
             offset(other.getOffset());
             q(other.getQ());
@@ -201,6 +218,20 @@ public final class CountFeatureUsageParams {
 
         public Builder featureIds(List<String> featureIds) {
             this.featureIds = Optional.ofNullable(featureIds);
+            return this;
+        }
+
+        /**
+         * <p>Include time-bucketed usage aggregation (today, this week, this month, billing period) for credit-based entitlements. Defaults to false for performance.</p>
+         */
+        @JsonSetter(value = "include_usage_aggregation", nulls = Nulls.SKIP)
+        public Builder includeUsageAggregation(Optional<Boolean> includeUsageAggregation) {
+            this.includeUsageAggregation = includeUsageAggregation;
+            return this;
+        }
+
+        public Builder includeUsageAggregation(Boolean includeUsageAggregation) {
+            this.includeUsageAggregation = Optional.ofNullable(includeUsageAggregation);
             return this;
         }
 
@@ -259,6 +290,7 @@ public final class CountFeatureUsageParams {
                     companyId,
                     companyKeys,
                     featureIds,
+                    includeUsageAggregation,
                     limit,
                     offset,
                     q,

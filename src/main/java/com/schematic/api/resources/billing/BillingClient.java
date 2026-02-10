@@ -15,26 +15,26 @@ import com.schematic.api.resources.billing.requests.CreateCouponRequestBody;
 import com.schematic.api.resources.billing.requests.CreateInvoiceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateMeterRequestBody;
 import com.schematic.api.resources.billing.requests.CreatePaymentMethodRequestBody;
+import com.schematic.api.resources.billing.requests.ListBillingPricesRequest;
+import com.schematic.api.resources.billing.requests.ListBillingProductPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductsRequest;
 import com.schematic.api.resources.billing.requests.ListCouponsRequest;
 import com.schematic.api.resources.billing.requests.ListCustomersWithSubscriptionsRequest;
 import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
-import com.schematic.api.resources.billing.requests.ListProductPricesRequest;
-import com.schematic.api.resources.billing.requests.SearchBillingPricesRequest;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
+import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
+import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
 import com.schematic.api.resources.billing.types.ListCouponsResponse;
 import com.schematic.api.resources.billing.types.ListCustomersWithSubscriptionsResponse;
 import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
-import com.schematic.api.resources.billing.types.ListProductPricesResponse;
-import com.schematic.api.resources.billing.types.SearchBillingPricesResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingMeterResponse;
@@ -174,17 +174,17 @@ public class BillingClient {
         return this.rawClient.upsertPaymentMethod(request, requestOptions).body();
     }
 
-    public SearchBillingPricesResponse searchBillingPrices() {
-        return this.rawClient.searchBillingPrices().body();
+    public ListBillingPricesResponse listBillingPrices() {
+        return this.rawClient.listBillingPrices().body();
     }
 
-    public SearchBillingPricesResponse searchBillingPrices(SearchBillingPricesRequest request) {
-        return this.rawClient.searchBillingPrices(request).body();
+    public ListBillingPricesResponse listBillingPrices(ListBillingPricesRequest request) {
+        return this.rawClient.listBillingPrices(request).body();
     }
 
-    public SearchBillingPricesResponse searchBillingPrices(
-            SearchBillingPricesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.searchBillingPrices(request, requestOptions).body();
+    public ListBillingPricesResponse listBillingPrices(
+            ListBillingPricesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listBillingPrices(request, requestOptions).body();
     }
 
     public UpsertBillingPriceResponse upsertBillingPrice(CreateBillingPriceRequestBody request) {
@@ -204,17 +204,17 @@ public class BillingClient {
         return this.rawClient.deleteBillingProduct(billingId, requestOptions).body();
     }
 
-    public ListProductPricesResponse listProductPrices() {
-        return this.rawClient.listProductPrices().body();
+    public ListBillingProductPricesResponse listBillingProductPrices() {
+        return this.rawClient.listBillingProductPrices().body();
     }
 
-    public ListProductPricesResponse listProductPrices(ListProductPricesRequest request) {
-        return this.rawClient.listProductPrices(request).body();
+    public ListBillingProductPricesResponse listBillingProductPrices(ListBillingProductPricesRequest request) {
+        return this.rawClient.listBillingProductPrices(request).body();
     }
 
-    public ListProductPricesResponse listProductPrices(
-            ListProductPricesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listProductPrices(request, requestOptions).body();
+    public ListBillingProductPricesResponse listBillingProductPrices(
+            ListBillingProductPricesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listBillingProductPrices(request, requestOptions).body();
     }
 
     public DeleteProductPriceResponse deleteProductPrice(String billingId) {

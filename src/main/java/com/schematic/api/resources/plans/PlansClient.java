@@ -6,12 +6,9 @@ package com.schematic.api.resources.plans;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.plans.requests.CountPlansRequest;
-import com.schematic.api.resources.plans.requests.CreatePlanRequestBody;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
 import com.schematic.api.resources.plans.requests.ListPlansRequest;
 import com.schematic.api.resources.plans.requests.UpdateCompanyPlansRequestBody;
-import com.schematic.api.resources.plans.requests.UpdatePlanRequestBody;
-import com.schematic.api.resources.plans.requests.UpsertBillingProductRequestBody;
 import com.schematic.api.resources.plans.types.CountPlansResponse;
 import com.schematic.api.resources.plans.types.CreatePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanResponse;
@@ -21,6 +18,9 @@ import com.schematic.api.resources.plans.types.ListPlansResponse;
 import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
 import com.schematic.api.resources.plans.types.UpdatePlanResponse;
 import com.schematic.api.resources.plans.types.UpsertBillingProductPlanResponse;
+import com.schematic.api.types.CreatePlanRequestBody;
+import com.schematic.api.types.UpdatePlanRequestBody;
+import com.schematic.api.types.UpsertBillingProductRequestBody;
 
 public class PlansClient {
     protected final ClientOptions clientOptions;

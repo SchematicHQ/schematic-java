@@ -26,13 +26,13 @@ public final class FeatureCompanyUserResponseData {
 
     private final Optional<Integer> allocation;
 
-    private final FeatureCompanyUserResponseDataAllocationType allocationType;
+    private final EntitlementValueType allocationType;
 
     private final Optional<CompanyDetailResponseData> company;
 
     private final String entitlementId;
 
-    private final String entitlementType;
+    private final EntitlementType entitlementType;
 
     private final Optional<FeatureDetailResponseData> feature;
 
@@ -53,10 +53,10 @@ public final class FeatureCompanyUserResponseData {
     private FeatureCompanyUserResponseData(
             boolean access,
             Optional<Integer> allocation,
-            FeatureCompanyUserResponseDataAllocationType allocationType,
+            EntitlementValueType allocationType,
             Optional<CompanyDetailResponseData> company,
             String entitlementId,
-            String entitlementType,
+            EntitlementType entitlementType,
             Optional<FeatureDetailResponseData> feature,
             Optional<OffsetDateTime> metricResetAt,
             Optional<String> monthReset,
@@ -97,11 +97,8 @@ public final class FeatureCompanyUserResponseData {
         return allocation;
     }
 
-    /**
-     * @return The type of allocation that is being used.
-     */
     @JsonProperty("allocation_type")
-    public FeatureCompanyUserResponseDataAllocationType getAllocationType() {
+    public EntitlementValueType getAllocationType() {
         return allocationType;
     }
 
@@ -116,7 +113,7 @@ public final class FeatureCompanyUserResponseData {
     }
 
     @JsonProperty("entitlement_type")
-    public String getEntitlementType() {
+    public EntitlementType getEntitlementType() {
         return entitlementType;
     }
 
@@ -231,10 +228,7 @@ public final class FeatureCompanyUserResponseData {
     }
 
     public interface AllocationTypeStage {
-        /**
-         * <p>The type of allocation that is being used.</p>
-         */
-        EntitlementIdStage allocationType(@NotNull FeatureCompanyUserResponseDataAllocationType allocationType);
+        EntitlementIdStage allocationType(@NotNull EntitlementValueType allocationType);
     }
 
     public interface EntitlementIdStage {
@@ -242,7 +236,7 @@ public final class FeatureCompanyUserResponseData {
     }
 
     public interface EntitlementTypeStage {
-        _FinalStage entitlementType(@NotNull String entitlementType);
+        _FinalStage entitlementType(@NotNull EntitlementType entitlementType);
     }
 
     public interface _FinalStage {
@@ -305,11 +299,11 @@ public final class FeatureCompanyUserResponseData {
             implements AccessStage, AllocationTypeStage, EntitlementIdStage, EntitlementTypeStage, _FinalStage {
         private boolean access;
 
-        private FeatureCompanyUserResponseDataAllocationType allocationType;
+        private EntitlementValueType allocationType;
 
         private String entitlementId;
 
-        private String entitlementType;
+        private EntitlementType entitlementType;
 
         private Optional<UserResponseData> user = Optional.empty();
 
@@ -364,14 +358,9 @@ public final class FeatureCompanyUserResponseData {
             return this;
         }
 
-        /**
-         * <p>The type of allocation that is being used.</p>
-         * <p>The type of allocation that is being used.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         @JsonSetter("allocation_type")
-        public EntitlementIdStage allocationType(@NotNull FeatureCompanyUserResponseDataAllocationType allocationType) {
+        public EntitlementIdStage allocationType(@NotNull EntitlementValueType allocationType) {
             this.allocationType = Objects.requireNonNull(allocationType, "allocationType must not be null");
             return this;
         }
@@ -385,7 +374,7 @@ public final class FeatureCompanyUserResponseData {
 
         @java.lang.Override
         @JsonSetter("entitlement_type")
-        public _FinalStage entitlementType(@NotNull String entitlementType) {
+        public _FinalStage entitlementType(@NotNull EntitlementType entitlementType) {
             this.entitlementType = Objects.requireNonNull(entitlementType, "entitlementType must not be null");
             return this;
         }

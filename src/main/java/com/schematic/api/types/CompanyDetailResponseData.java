@@ -37,6 +37,8 @@ public final class CompanyDetailResponseData {
 
     private final Optional<PaymentMethodResponseData> defaultPaymentMethod;
 
+    private final List<FeatureEntitlement> entitlements;
+
     private final List<EntityTraitDetailResponseData> entityTraits;
 
     private final String environmentId;
@@ -76,6 +78,7 @@ public final class CompanyDetailResponseData {
             List<BillingSubscriptionView> billingSubscriptions,
             OffsetDateTime createdAt,
             Optional<PaymentMethodResponseData> defaultPaymentMethod,
+            List<FeatureEntitlement> entitlements,
             List<EntityTraitDetailResponseData> entityTraits,
             String environmentId,
             String id,
@@ -98,6 +101,7 @@ public final class CompanyDetailResponseData {
         this.billingSubscriptions = billingSubscriptions;
         this.createdAt = createdAt;
         this.defaultPaymentMethod = defaultPaymentMethod;
+        this.entitlements = entitlements;
         this.entityTraits = entityTraits;
         this.environmentId = environmentId;
         this.id = id;
@@ -144,6 +148,11 @@ public final class CompanyDetailResponseData {
     @JsonProperty("default_payment_method")
     public Optional<PaymentMethodResponseData> getDefaultPaymentMethod() {
         return defaultPaymentMethod;
+    }
+
+    @JsonProperty("entitlements")
+    public List<FeatureEntitlement> getEntitlements() {
+        return entitlements;
     }
 
     @JsonProperty("entity_traits")
@@ -242,6 +251,7 @@ public final class CompanyDetailResponseData {
                 && billingSubscriptions.equals(other.billingSubscriptions)
                 && createdAt.equals(other.createdAt)
                 && defaultPaymentMethod.equals(other.defaultPaymentMethod)
+                && entitlements.equals(other.entitlements)
                 && entityTraits.equals(other.entityTraits)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
@@ -268,6 +278,7 @@ public final class CompanyDetailResponseData {
                 this.billingSubscriptions,
                 this.createdAt,
                 this.defaultPaymentMethod,
+                this.entitlements,
                 this.entityTraits,
                 this.environmentId,
                 this.id,
@@ -346,6 +357,12 @@ public final class CompanyDetailResponseData {
         _FinalStage defaultPaymentMethod(Optional<PaymentMethodResponseData> defaultPaymentMethod);
 
         _FinalStage defaultPaymentMethod(PaymentMethodResponseData defaultPaymentMethod);
+
+        _FinalStage entitlements(List<FeatureEntitlement> entitlements);
+
+        _FinalStage addEntitlements(FeatureEntitlement entitlements);
+
+        _FinalStage addAllEntitlements(List<FeatureEntitlement> entitlements);
 
         _FinalStage entityTraits(List<EntityTraitDetailResponseData> entityTraits);
 
@@ -444,6 +461,8 @@ public final class CompanyDetailResponseData {
 
         private List<EntityTraitDetailResponseData> entityTraits = new ArrayList<>();
 
+        private List<FeatureEntitlement> entitlements = new ArrayList<>();
+
         private Optional<PaymentMethodResponseData> defaultPaymentMethod = Optional.empty();
 
         private List<BillingSubscriptionView> billingSubscriptions = new ArrayList<>();
@@ -467,6 +486,7 @@ public final class CompanyDetailResponseData {
             billingSubscriptions(other.getBillingSubscriptions());
             createdAt(other.getCreatedAt());
             defaultPaymentMethod(other.getDefaultPaymentMethod());
+            entitlements(other.getEntitlements());
             entityTraits(other.getEntityTraits());
             environmentId(other.getEnvironmentId());
             id(other.getId());
@@ -731,6 +751,30 @@ public final class CompanyDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllEntitlements(List<FeatureEntitlement> entitlements) {
+            if (entitlements != null) {
+                this.entitlements.addAll(entitlements);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addEntitlements(FeatureEntitlement entitlements) {
+            this.entitlements.add(entitlements);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "entitlements", nulls = Nulls.SKIP)
+        public _FinalStage entitlements(List<FeatureEntitlement> entitlements) {
+            this.entitlements.clear();
+            if (entitlements != null) {
+                this.entitlements.addAll(entitlements);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage defaultPaymentMethod(PaymentMethodResponseData defaultPaymentMethod) {
             this.defaultPaymentMethod = Optional.ofNullable(defaultPaymentMethod);
             return this;
@@ -826,6 +870,7 @@ public final class CompanyDetailResponseData {
                     billingSubscriptions,
                     createdAt,
                     defaultPaymentMethod,
+                    entitlements,
                     entityTraits,
                     environmentId,
                     id,

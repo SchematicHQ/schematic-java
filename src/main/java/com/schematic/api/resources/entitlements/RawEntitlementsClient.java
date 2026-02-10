@@ -24,7 +24,9 @@ import com.schematic.api.resources.entitlements.requests.CountFeatureUsersReques
 import com.schematic.api.resources.entitlements.requests.CountPlanEntitlementsRequest;
 import com.schematic.api.resources.entitlements.requests.CreateCompanyOverrideRequestBody;
 import com.schematic.api.resources.entitlements.requests.CreatePlanEntitlementRequestBody;
+import com.schematic.api.resources.entitlements.requests.DuplicatePlanEntitlementsRequestBody;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageByCompanyRequest;
+import com.schematic.api.resources.entitlements.requests.GetFeatureUsageTimeSeriesRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsageRequest;
@@ -41,8 +43,10 @@ import com.schematic.api.resources.entitlements.types.CreateCompanyOverrideRespo
 import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementResponse;
 import com.schematic.api.resources.entitlements.types.DeleteCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.DeletePlanEntitlementResponse;
+import com.schematic.api.resources.entitlements.types.DuplicatePlanEntitlementsResponse;
 import com.schematic.api.resources.entitlements.types.GetCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageByCompanyResponse;
+import com.schematic.api.resources.entitlements.types.GetFeatureUsageTimeSeriesResponse;
 import com.schematic.api.resources.entitlements.types.GetPlanEntitlementResponse;
 import com.schematic.api.resources.entitlements.types.ListCompanyOverridesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureCompaniesResponse;
@@ -679,6 +683,13 @@ public class RawEntitlementsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_keys", request.getCompanyKeys().get(), false);
         }
+        if (request.getIncludeUsageAggregation().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "include_usage_aggregation",
+                    request.getIncludeUsageAggregation().get(),
+                    false);
+        }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -750,6 +761,71 @@ public class RawEntitlementsClient {
         }
     }
 
+    public BaseSchematicHttpResponse<GetFeatureUsageTimeSeriesResponse> getFeatureUsageTimeSeries(
+            GetFeatureUsageTimeSeriesRequest request) {
+        return getFeatureUsageTimeSeries(request, null);
+    }
+
+    public BaseSchematicHttpResponse<GetFeatureUsageTimeSeriesResponse> getFeatureUsageTimeSeries(
+            GetFeatureUsageTimeSeriesRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("feature-usage-timeseries");
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
+        QueryStringMapper.addQueryParameter(httpUrl, "end_time", request.getEndTime(), false);
+        QueryStringMapper.addQueryParameter(httpUrl, "feature_id", request.getFeatureId(), false);
+        if (request.getGranularity().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "granularity", request.getGranularity().get(), false);
+        }
+        QueryStringMapper.addQueryParameter(httpUrl, "start_time", request.getStartTime(), false);
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBody.string(), GetFeatureUsageTimeSeriesResponse.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
     public BaseSchematicHttpResponse<CountFeatureUsageResponse> countFeatureUsage() {
         return countFeatureUsage(CountFeatureUsageRequest.builder().build());
     }
@@ -770,6 +846,13 @@ public class RawEntitlementsClient {
         if (request.getCompanyKeys().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_keys", request.getCompanyKeys().get(), false);
+        }
+        if (request.getIncludeUsageAggregation().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "include_usage_aggregation",
+                    request.getIncludeUsageAggregation().get(),
+                    false);
         }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
@@ -1004,6 +1087,10 @@ public class RawEntitlementsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_id", request.getPlanId().get(), false);
         }
+        if (request.getPlanVersionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
+        }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -1032,6 +1119,10 @@ public class RawEntitlementsClient {
         if (request.getPlanIds().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_ids", request.getPlanIds().get(), true);
+        }
+        if (request.getPlanVersionIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_ids", request.getPlanVersionIds().get(), true);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
@@ -1358,6 +1449,10 @@ public class RawEntitlementsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_id", request.getPlanId().get(), false);
         }
+        if (request.getPlanVersionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
+        }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -1387,6 +1482,10 @@ public class RawEntitlementsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_ids", request.getPlanIds().get(), true);
         }
+        if (request.getPlanVersionIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_ids", request.getPlanVersionIds().get(), true);
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1402,6 +1501,75 @@ public class RawEntitlementsClient {
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountPlanEntitlementsResponse.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<DuplicatePlanEntitlementsResponse> duplicatePlanEntitlements(
+            DuplicatePlanEntitlementsRequestBody request) {
+        return duplicatePlanEntitlements(request, null);
+    }
+
+    public BaseSchematicHttpResponse<DuplicatePlanEntitlementsResponse> duplicatePlanEntitlements(
+            DuplicatePlanEntitlementsRequestBody request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("plan-entitlements/duplicate")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBody.string(), DuplicatePlanEntitlementsResponse.class),
                         response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";

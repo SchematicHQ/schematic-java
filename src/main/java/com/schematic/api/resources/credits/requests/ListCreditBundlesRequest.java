@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.credits.types.ListCreditBundlesRequestStatus;
+import com.schematic.api.types.BillingCreditBundleStatus;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public final class ListCreditBundlesRequest {
 
     private final Optional<String> creditId;
 
-    private final Optional<ListCreditBundlesRequestStatus> status;
+    private final Optional<BillingCreditBundleStatus> status;
 
     private final Optional<String> bundleType;
 
@@ -40,7 +40,7 @@ public final class ListCreditBundlesRequest {
     private ListCreditBundlesRequest(
             Optional<List<String>> ids,
             Optional<String> creditId,
-            Optional<ListCreditBundlesRequestStatus> status,
+            Optional<BillingCreditBundleStatus> status,
             Optional<String> bundleType,
             Optional<Integer> limit,
             Optional<Integer> offset,
@@ -65,7 +65,7 @@ public final class ListCreditBundlesRequest {
     }
 
     @JsonProperty("status")
-    public Optional<ListCreditBundlesRequestStatus> getStatus() {
+    public Optional<BillingCreditBundleStatus> getStatus() {
         return status;
     }
 
@@ -130,7 +130,7 @@ public final class ListCreditBundlesRequest {
 
         private Optional<String> creditId = Optional.empty();
 
-        private Optional<ListCreditBundlesRequestStatus> status = Optional.empty();
+        private Optional<BillingCreditBundleStatus> status = Optional.empty();
 
         private Optional<String> bundleType = Optional.empty();
 
@@ -181,12 +181,12 @@ public final class ListCreditBundlesRequest {
         }
 
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
-        public Builder status(Optional<ListCreditBundlesRequestStatus> status) {
+        public Builder status(Optional<BillingCreditBundleStatus> status) {
             this.status = status;
             return this;
         }
 
-        public Builder status(ListCreditBundlesRequestStatus status) {
+        public Builder status(BillingCreditBundleStatus status) {
             this.status = Optional.ofNullable(status);
             return this;
         }

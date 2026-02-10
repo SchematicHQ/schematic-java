@@ -44,6 +44,8 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private final boolean taxRequireBillingDetails;
 
+    private final int totalPerBillingPeriod;
+
     private final Optional<OffsetDateTime> trialEnd;
 
     private final List<PreviewSubscriptionUpcomingInvoiceLineItems> upcomingInvoiceLineItems;
@@ -61,6 +63,7 @@ public final class PreviewSubscriptionFinanceResponseData {
             Optional<Integer> taxAmount,
             Optional<String> taxDisplayName,
             boolean taxRequireBillingDetails,
+            int totalPerBillingPeriod,
             Optional<OffsetDateTime> trialEnd,
             List<PreviewSubscriptionUpcomingInvoiceLineItems> upcomingInvoiceLineItems,
             Map<String, Object> additionalProperties) {
@@ -74,6 +77,7 @@ public final class PreviewSubscriptionFinanceResponseData {
         this.taxAmount = taxAmount;
         this.taxDisplayName = taxDisplayName;
         this.taxRequireBillingDetails = taxRequireBillingDetails;
+        this.totalPerBillingPeriod = totalPerBillingPeriod;
         this.trialEnd = trialEnd;
         this.upcomingInvoiceLineItems = upcomingInvoiceLineItems;
         this.additionalProperties = additionalProperties;
@@ -129,6 +133,11 @@ public final class PreviewSubscriptionFinanceResponseData {
         return taxRequireBillingDetails;
     }
 
+    @JsonProperty("total_per_billing_period")
+    public int getTotalPerBillingPeriod() {
+        return totalPerBillingPeriod;
+    }
+
     @JsonProperty("trial_end")
     public Optional<OffsetDateTime> getTrialEnd() {
         return trialEnd;
@@ -162,6 +171,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                 && taxAmount.equals(other.taxAmount)
                 && taxDisplayName.equals(other.taxDisplayName)
                 && taxRequireBillingDetails == other.taxRequireBillingDetails
+                && totalPerBillingPeriod == other.totalPerBillingPeriod
                 && trialEnd.equals(other.trialEnd)
                 && upcomingInvoiceLineItems.equals(other.upcomingInvoiceLineItems);
     }
@@ -179,6 +189,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                 this.taxAmount,
                 this.taxDisplayName,
                 this.taxRequireBillingDetails,
+                this.totalPerBillingPeriod,
                 this.trialEnd,
                 this.upcomingInvoiceLineItems);
     }
@@ -223,7 +234,11 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     public interface TaxRequireBillingDetailsStage {
-        _FinalStage taxRequireBillingDetails(boolean taxRequireBillingDetails);
+        TotalPerBillingPeriodStage taxRequireBillingDetails(boolean taxRequireBillingDetails);
+    }
+
+    public interface TotalPerBillingPeriodStage {
+        _FinalStage totalPerBillingPeriod(int totalPerBillingPeriod);
     }
 
     public interface _FinalStage {
@@ -260,6 +275,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                     PromoCodeAppliedStage,
                     ProrationStage,
                     TaxRequireBillingDetailsStage,
+                    TotalPerBillingPeriodStage,
                     _FinalStage {
         private int amountOff;
 
@@ -276,6 +292,8 @@ public final class PreviewSubscriptionFinanceResponseData {
         private int proration;
 
         private boolean taxRequireBillingDetails;
+
+        private int totalPerBillingPeriod;
 
         private List<PreviewSubscriptionUpcomingInvoiceLineItems> upcomingInvoiceLineItems = new ArrayList<>();
 
@@ -302,6 +320,7 @@ public final class PreviewSubscriptionFinanceResponseData {
             taxAmount(other.getTaxAmount());
             taxDisplayName(other.getTaxDisplayName());
             taxRequireBillingDetails(other.getTaxRequireBillingDetails());
+            totalPerBillingPeriod(other.getTotalPerBillingPeriod());
             trialEnd(other.getTrialEnd());
             upcomingInvoiceLineItems(other.getUpcomingInvoiceLineItems());
             return this;
@@ -358,8 +377,15 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         @java.lang.Override
         @JsonSetter("tax_require_billing_details")
-        public _FinalStage taxRequireBillingDetails(boolean taxRequireBillingDetails) {
+        public TotalPerBillingPeriodStage taxRequireBillingDetails(boolean taxRequireBillingDetails) {
             this.taxRequireBillingDetails = taxRequireBillingDetails;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("total_per_billing_period")
+        public _FinalStage totalPerBillingPeriod(int totalPerBillingPeriod) {
+            this.totalPerBillingPeriod = totalPerBillingPeriod;
             return this;
         }
 
@@ -442,6 +468,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                     taxAmount,
                     taxDisplayName,
                     taxRequireBillingDetails,
+                    totalPerBillingPeriod,
                     trialEnd,
                     upcomingInvoiceLineItems,
                     additionalProperties);
