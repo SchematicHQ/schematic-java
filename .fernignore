@@ -2,6 +2,7 @@
 CLAUDE.md
 LICENSE
 README.md
+.github/CODEOWNERS
 src/main/java/com/schematic/api/BaseSchematic.java
 src/main/java/com/schematic/api/EventBuffer.java
 src/main/java/com/schematic/api/Schematic.java

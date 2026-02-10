@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +24,13 @@ import java.util.Optional;
 public final class CountCustomersParams {
     private final Optional<List<String>> companyIds;
 
-    private final Optional<Boolean> failedToImport;
-
     private final Optional<Integer> limit;
 
     private final Optional<String> name;
 
     private final Optional<Integer> offset;
+
+    private final Optional<BillingProviderType> providerType;
 
     private final Optional<String> q;
 
@@ -37,17 +38,17 @@ public final class CountCustomersParams {
 
     private CountCustomersParams(
             Optional<List<String>> companyIds,
-            Optional<Boolean> failedToImport,
             Optional<Integer> limit,
             Optional<String> name,
             Optional<Integer> offset,
+            Optional<BillingProviderType> providerType,
             Optional<String> q,
             Map<String, Object> additionalProperties) {
         this.companyIds = companyIds;
-        this.failedToImport = failedToImport;
         this.limit = limit;
         this.name = name;
         this.offset = offset;
+        this.providerType = providerType;
         this.q = q;
         this.additionalProperties = additionalProperties;
     }
@@ -55,11 +56,6 @@ public final class CountCustomersParams {
     @JsonProperty("company_ids")
     public Optional<List<String>> getCompanyIds() {
         return companyIds;
-    }
-
-    @JsonProperty("failed_to_import")
-    public Optional<Boolean> getFailedToImport() {
-        return failedToImport;
     }
 
     /**
@@ -83,6 +79,11 @@ public final class CountCustomersParams {
         return offset;
     }
 
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
@@ -101,16 +102,16 @@ public final class CountCustomersParams {
 
     private boolean equalTo(CountCustomersParams other) {
         return companyIds.equals(other.companyIds)
-                && failedToImport.equals(other.failedToImport)
                 && limit.equals(other.limit)
                 && name.equals(other.name)
                 && offset.equals(other.offset)
+                && providerType.equals(other.providerType)
                 && q.equals(other.q);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyIds, this.failedToImport, this.limit, this.name, this.offset, this.q);
+        return Objects.hash(this.companyIds, this.limit, this.name, this.offset, this.providerType, this.q);
     }
 
     @java.lang.Override
@@ -126,13 +127,13 @@ public final class CountCustomersParams {
     public static final class Builder {
         private Optional<List<String>> companyIds = Optional.empty();
 
-        private Optional<Boolean> failedToImport = Optional.empty();
-
         private Optional<Integer> limit = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
         private Optional<Integer> offset = Optional.empty();
+
+        private Optional<BillingProviderType> providerType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -143,10 +144,10 @@ public final class CountCustomersParams {
 
         public Builder from(CountCustomersParams other) {
             companyIds(other.getCompanyIds());
-            failedToImport(other.getFailedToImport());
             limit(other.getLimit());
             name(other.getName());
             offset(other.getOffset());
+            providerType(other.getProviderType());
             q(other.getQ());
             return this;
         }
@@ -159,17 +160,6 @@ public final class CountCustomersParams {
 
         public Builder companyIds(List<String> companyIds) {
             this.companyIds = Optional.ofNullable(companyIds);
-            return this;
-        }
-
-        @JsonSetter(value = "failed_to_import", nulls = Nulls.SKIP)
-        public Builder failedToImport(Optional<Boolean> failedToImport) {
-            this.failedToImport = failedToImport;
-            return this;
-        }
-
-        public Builder failedToImport(Boolean failedToImport) {
-            this.failedToImport = Optional.ofNullable(failedToImport);
             return this;
         }
 
@@ -212,6 +202,17 @@ public final class CountCustomersParams {
             return this;
         }
 
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public Builder providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
+            return this;
+        }
+
+        public Builder providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
+            return this;
+        }
+
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -224,7 +225,7 @@ public final class CountCustomersParams {
         }
 
         public CountCustomersParams build() {
-            return new CountCustomersParams(companyIds, failedToImport, limit, name, offset, q, additionalProperties);
+            return new CountCustomersParams(companyIds, limit, name, offset, providerType, q, additionalProperties);
         }
     }
 }

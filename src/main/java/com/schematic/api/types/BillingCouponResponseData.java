@@ -50,6 +50,8 @@ public final class BillingCouponResponseData {
 
     private final Optional<Double> percentOff;
 
+    private final BillingProviderType providerType;
+
     private final int timesRedeemed;
 
     private final Optional<OffsetDateTime> validFrom;
@@ -72,6 +74,7 @@ public final class BillingCouponResponseData {
             Map<String, JsonNode> metadata,
             String name,
             Optional<Double> percentOff,
+            BillingProviderType providerType,
             int timesRedeemed,
             Optional<OffsetDateTime> validFrom,
             Optional<OffsetDateTime> validUntil,
@@ -89,6 +92,7 @@ public final class BillingCouponResponseData {
         this.metadata = metadata;
         this.name = name;
         this.percentOff = percentOff;
+        this.providerType = providerType;
         this.timesRedeemed = timesRedeemed;
         this.validFrom = validFrom;
         this.validUntil = validUntil;
@@ -160,6 +164,11 @@ public final class BillingCouponResponseData {
         return percentOff;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("times_redeemed")
     public int getTimesRedeemed() {
         return timesRedeemed;
@@ -200,6 +209,7 @@ public final class BillingCouponResponseData {
                 && metadata.equals(other.metadata)
                 && name.equals(other.name)
                 && percentOff.equals(other.percentOff)
+                && providerType.equals(other.providerType)
                 && timesRedeemed == other.timesRedeemed
                 && validFrom.equals(other.validFrom)
                 && validUntil.equals(other.validUntil);
@@ -221,6 +231,7 @@ public final class BillingCouponResponseData {
                 this.metadata,
                 this.name,
                 this.percentOff,
+                this.providerType,
                 this.timesRedeemed,
                 this.validFrom,
                 this.validUntil);
@@ -258,7 +269,11 @@ public final class BillingCouponResponseData {
     }
 
     public interface NameStage {
-        TimesRedeemedStage name(@NotNull String name);
+        ProviderTypeStage name(@NotNull String name);
+    }
+
+    public interface ProviderTypeStage {
+        TimesRedeemedStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface TimesRedeemedStage {
@@ -315,6 +330,7 @@ public final class BillingCouponResponseData {
                     IdStage,
                     IsActiveStage,
                     NameStage,
+                    ProviderTypeStage,
                     TimesRedeemedStage,
                     _FinalStage {
         private String accountId;
@@ -328,6 +344,8 @@ public final class BillingCouponResponseData {
         private boolean isActive;
 
         private String name;
+
+        private BillingProviderType providerType;
 
         private int timesRedeemed;
 
@@ -369,6 +387,7 @@ public final class BillingCouponResponseData {
             metadata(other.getMetadata());
             name(other.getName());
             percentOff(other.getPercentOff());
+            providerType(other.getProviderType());
             timesRedeemed(other.getTimesRedeemed());
             validFrom(other.getValidFrom());
             validUntil(other.getValidUntil());
@@ -412,8 +431,15 @@ public final class BillingCouponResponseData {
 
         @java.lang.Override
         @JsonSetter("name")
-        public TimesRedeemedStage name(@NotNull String name) {
+        public ProviderTypeStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public TimesRedeemedStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -568,6 +594,7 @@ public final class BillingCouponResponseData {
                     metadata,
                     name,
                     percentOff,
+                    providerType,
                     timesRedeemed,
                     validFrom,
                     validUntil,

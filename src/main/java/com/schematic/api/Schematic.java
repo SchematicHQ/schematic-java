@@ -12,11 +12,11 @@ import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
 import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.CreateEventRequestBody;
-import com.schematic.api.types.CreateEventRequestBodyEventType;
 import com.schematic.api.types.EventBody;
 import com.schematic.api.types.EventBodyIdentify;
 import com.schematic.api.types.EventBodyIdentifyCompany;
 import com.schematic.api.types.EventBodyTrack;
+import com.schematic.api.types.EventType;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -212,7 +212,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .build();
 
             CreateEventRequestBody event = CreateEventRequestBody.builder()
-                    .eventType(CreateEventRequestBodyEventType.IDENTIFY)
+                    .eventType(EventType.IDENTIFY)
                     .body(EventBody.of(body))
                     .sentAt(OffsetDateTime.now())
                     .build();
@@ -246,7 +246,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .build();
 
             CreateEventRequestBody event = CreateEventRequestBody.builder()
-                    .eventType(CreateEventRequestBodyEventType.TRACK)
+                    .eventType(EventType.TRACK)
                     .body(EventBody.of(body))
                     .sentAt(OffsetDateTime.now())
                     .build();

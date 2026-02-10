@@ -27,7 +27,7 @@ public final class FeatureCompanyResponseData {
 
     private final Optional<Integer> allocation;
 
-    private final FeatureCompanyResponseDataAllocationType allocationType;
+    private final EntitlementValueType allocationType;
 
     private final Optional<CompanyDetailResponseData> company;
 
@@ -39,7 +39,7 @@ public final class FeatureCompanyResponseData {
 
     private final Optional<List<CreditGrantDetail>> creditGrantDetails;
 
-    private final Optional<FeatureCompanyResponseDataCreditGrantReason> creditGrantReason;
+    private final Optional<BillingCreditGrantReason> creditGrantReason;
 
     private final Optional<Double> creditRemaining;
 
@@ -48,6 +48,8 @@ public final class FeatureCompanyResponseData {
     private final Optional<String> creditTypeIcon;
 
     private final Optional<CreditUsage> creditUsage;
+
+    private final Optional<CreditUsageAggregation> creditUsageAggregation;
 
     private final Optional<Double> creditUsed;
 
@@ -61,7 +63,7 @@ public final class FeatureCompanyResponseData {
 
     private final Optional<String> entitlementSource;
 
-    private final String entitlementType;
+    private final EntitlementType entitlementType;
 
     private final Optional<FeatureDetailResponseData> feature;
 
@@ -85,7 +87,7 @@ public final class FeatureCompanyResponseData {
 
     private final Optional<PlanEntitlementResponseData> planEntitlement;
 
-    private final Optional<String> priceBehavior;
+    private final Optional<EntitlementPriceBehavior> priceBehavior;
 
     private final Optional<Integer> softLimit;
 
@@ -98,24 +100,25 @@ public final class FeatureCompanyResponseData {
     private FeatureCompanyResponseData(
             boolean access,
             Optional<Integer> allocation,
-            FeatureCompanyResponseDataAllocationType allocationType,
+            EntitlementValueType allocationType,
             Optional<CompanyDetailResponseData> company,
             Optional<CompanyOverrideResponseData> companyOverride,
             Optional<Double> creditConsumptionRate,
             Optional<Map<String, Double>> creditGrantCounts,
             Optional<List<CreditGrantDetail>> creditGrantDetails,
-            Optional<FeatureCompanyResponseDataCreditGrantReason> creditGrantReason,
+            Optional<BillingCreditGrantReason> creditGrantReason,
             Optional<Double> creditRemaining,
             Optional<Double> creditTotal,
             Optional<String> creditTypeIcon,
             Optional<CreditUsage> creditUsage,
+            Optional<CreditUsageAggregation> creditUsageAggregation,
             Optional<Double> creditUsed,
             Optional<Integer> effectiveLimit,
             Optional<Double> effectivePrice,
             Optional<OffsetDateTime> entitlementExpirationDate,
             String entitlementId,
             Optional<String> entitlementSource,
-            String entitlementType,
+            EntitlementType entitlementType,
             Optional<FeatureDetailResponseData> feature,
             Optional<Boolean> hasValidAllocation,
             Optional<Boolean> isUnlimited,
@@ -127,7 +130,7 @@ public final class FeatureCompanyResponseData {
             Optional<String> period,
             Optional<PlanResponseData> plan,
             Optional<PlanEntitlementResponseData> planEntitlement,
-            Optional<String> priceBehavior,
+            Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<Integer> softLimit,
             Optional<Integer> usage,
             Optional<BillingPriceView> yearlyUsageBasedPrice,
@@ -145,6 +148,7 @@ public final class FeatureCompanyResponseData {
         this.creditTotal = creditTotal;
         this.creditTypeIcon = creditTypeIcon;
         this.creditUsage = creditUsage;
+        this.creditUsageAggregation = creditUsageAggregation;
         this.creditUsed = creditUsed;
         this.effectiveLimit = effectiveLimit;
         this.effectivePrice = effectivePrice;
@@ -179,18 +183,15 @@ public final class FeatureCompanyResponseData {
     }
 
     /**
-     * @return The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted.
+     * @return The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted or that this is a credit-based entitlement (use credit_remaining instead).
      */
     @JsonProperty("allocation")
     public Optional<Integer> getAllocation() {
         return allocation;
     }
 
-    /**
-     * @return The type of allocation that is being used.
-     */
     @JsonProperty("allocation_type")
-    public FeatureCompanyResponseDataAllocationType getAllocationType() {
+    public EntitlementValueType getAllocationType() {
         return allocationType;
     }
 
@@ -222,11 +223,8 @@ public final class FeatureCompanyResponseData {
         return creditGrantDetails;
     }
 
-    /**
-     * @return Reason for the credit grant
-     */
     @JsonProperty("credit_grant_reason")
-    public Optional<FeatureCompanyResponseDataCreditGrantReason> getCreditGrantReason() {
+    public Optional<BillingCreditGrantReason> getCreditGrantReason() {
         return creditGrantReason;
     }
 
@@ -235,6 +233,9 @@ public final class FeatureCompanyResponseData {
         return creditRemaining;
     }
 
+    /**
+     * @return Deprecated: Use credit_remaining instead.
+     */
     @JsonProperty("credit_total")
     public Optional<Double> getCreditTotal() {
         return creditTotal;
@@ -251,6 +252,11 @@ public final class FeatureCompanyResponseData {
     @JsonProperty("credit_usage")
     public Optional<CreditUsage> getCreditUsage() {
         return creditUsage;
+    }
+
+    @JsonProperty("credit_usage_aggregation")
+    public Optional<CreditUsageAggregation> getCreditUsageAggregation() {
+        return creditUsageAggregation;
     }
 
     @JsonProperty("credit_used")
@@ -293,7 +299,7 @@ public final class FeatureCompanyResponseData {
     }
 
     @JsonProperty("entitlement_type")
-    public String getEntitlementType() {
+    public EntitlementType getEntitlementType() {
         return entitlementType;
     }
 
@@ -374,7 +380,7 @@ public final class FeatureCompanyResponseData {
     }
 
     @JsonProperty("price_behavior")
-    public Optional<String> getPriceBehavior() {
+    public Optional<EntitlementPriceBehavior> getPriceBehavior() {
         return priceBehavior;
     }
 
@@ -387,7 +393,7 @@ public final class FeatureCompanyResponseData {
     }
 
     /**
-     * @return The amount of usage that has been consumed; a null value indicates that usage is not being measured.
+     * @return The amount of usage that has been consumed; a null value indicates that usage is not being measured or that this is a credit-based entitlement (use credit_used instead).
      */
     @JsonProperty("usage")
     public Optional<Integer> getUsage() {
@@ -424,6 +430,7 @@ public final class FeatureCompanyResponseData {
                 && creditTotal.equals(other.creditTotal)
                 && creditTypeIcon.equals(other.creditTypeIcon)
                 && creditUsage.equals(other.creditUsage)
+                && creditUsageAggregation.equals(other.creditUsageAggregation)
                 && creditUsed.equals(other.creditUsed)
                 && effectiveLimit.equals(other.effectiveLimit)
                 && effectivePrice.equals(other.effectivePrice)
@@ -464,6 +471,7 @@ public final class FeatureCompanyResponseData {
                 this.creditTotal,
                 this.creditTypeIcon,
                 this.creditUsage,
+                this.creditUsageAggregation,
                 this.creditUsed,
                 this.effectiveLimit,
                 this.effectivePrice,
@@ -507,10 +515,7 @@ public final class FeatureCompanyResponseData {
     }
 
     public interface AllocationTypeStage {
-        /**
-         * <p>The type of allocation that is being used.</p>
-         */
-        EntitlementIdStage allocationType(@NotNull FeatureCompanyResponseDataAllocationType allocationType);
+        EntitlementIdStage allocationType(@NotNull EntitlementValueType allocationType);
     }
 
     public interface EntitlementIdStage {
@@ -518,14 +523,14 @@ public final class FeatureCompanyResponseData {
     }
 
     public interface EntitlementTypeStage {
-        _FinalStage entitlementType(@NotNull String entitlementType);
+        _FinalStage entitlementType(@NotNull EntitlementType entitlementType);
     }
 
     public interface _FinalStage {
         FeatureCompanyResponseData build();
 
         /**
-         * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted.</p>
+         * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted or that this is a credit-based entitlement (use credit_remaining instead).</p>
          */
         _FinalStage allocation(Optional<Integer> allocation);
 
@@ -554,17 +559,17 @@ public final class FeatureCompanyResponseData {
 
         _FinalStage creditGrantDetails(List<CreditGrantDetail> creditGrantDetails);
 
-        /**
-         * <p>Reason for the credit grant</p>
-         */
-        _FinalStage creditGrantReason(Optional<FeatureCompanyResponseDataCreditGrantReason> creditGrantReason);
+        _FinalStage creditGrantReason(Optional<BillingCreditGrantReason> creditGrantReason);
 
-        _FinalStage creditGrantReason(FeatureCompanyResponseDataCreditGrantReason creditGrantReason);
+        _FinalStage creditGrantReason(BillingCreditGrantReason creditGrantReason);
 
         _FinalStage creditRemaining(Optional<Double> creditRemaining);
 
         _FinalStage creditRemaining(Double creditRemaining);
 
+        /**
+         * <p>Deprecated: Use credit_remaining instead.</p>
+         */
         _FinalStage creditTotal(Optional<Double> creditTotal);
 
         _FinalStage creditTotal(Double creditTotal);
@@ -579,6 +584,10 @@ public final class FeatureCompanyResponseData {
         _FinalStage creditUsage(Optional<CreditUsage> creditUsage);
 
         _FinalStage creditUsage(CreditUsage creditUsage);
+
+        _FinalStage creditUsageAggregation(Optional<CreditUsageAggregation> creditUsageAggregation);
+
+        _FinalStage creditUsageAggregation(CreditUsageAggregation creditUsageAggregation);
 
         _FinalStage creditUsed(Optional<Double> creditUsed);
 
@@ -674,9 +683,9 @@ public final class FeatureCompanyResponseData {
 
         _FinalStage planEntitlement(PlanEntitlementResponseData planEntitlement);
 
-        _FinalStage priceBehavior(Optional<String> priceBehavior);
+        _FinalStage priceBehavior(Optional<EntitlementPriceBehavior> priceBehavior);
 
-        _FinalStage priceBehavior(String priceBehavior);
+        _FinalStage priceBehavior(EntitlementPriceBehavior priceBehavior);
 
         /**
          * <p>The soft limit for the feature usage. Available only for overage price behavior</p>
@@ -686,7 +695,7 @@ public final class FeatureCompanyResponseData {
         _FinalStage softLimit(Integer softLimit);
 
         /**
-         * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured.</p>
+         * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured or that this is a credit-based entitlement (use credit_used instead).</p>
          */
         _FinalStage usage(Optional<Integer> usage);
 
@@ -702,11 +711,11 @@ public final class FeatureCompanyResponseData {
             implements AccessStage, AllocationTypeStage, EntitlementIdStage, EntitlementTypeStage, _FinalStage {
         private boolean access;
 
-        private FeatureCompanyResponseDataAllocationType allocationType;
+        private EntitlementValueType allocationType;
 
         private String entitlementId;
 
-        private String entitlementType;
+        private EntitlementType entitlementType;
 
         private Optional<BillingPriceView> yearlyUsageBasedPrice = Optional.empty();
 
@@ -714,7 +723,7 @@ public final class FeatureCompanyResponseData {
 
         private Optional<Integer> softLimit = Optional.empty();
 
-        private Optional<String> priceBehavior = Optional.empty();
+        private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
         private Optional<PlanEntitlementResponseData> planEntitlement = Optional.empty();
 
@@ -748,6 +757,8 @@ public final class FeatureCompanyResponseData {
 
         private Optional<Double> creditUsed = Optional.empty();
 
+        private Optional<CreditUsageAggregation> creditUsageAggregation = Optional.empty();
+
         private Optional<CreditUsage> creditUsage = Optional.empty();
 
         private Optional<String> creditTypeIcon = Optional.empty();
@@ -756,7 +767,7 @@ public final class FeatureCompanyResponseData {
 
         private Optional<Double> creditRemaining = Optional.empty();
 
-        private Optional<FeatureCompanyResponseDataCreditGrantReason> creditGrantReason = Optional.empty();
+        private Optional<BillingCreditGrantReason> creditGrantReason = Optional.empty();
 
         private Optional<List<CreditGrantDetail>> creditGrantDetails = Optional.empty();
 
@@ -790,6 +801,7 @@ public final class FeatureCompanyResponseData {
             creditTotal(other.getCreditTotal());
             creditTypeIcon(other.getCreditTypeIcon());
             creditUsage(other.getCreditUsage());
+            creditUsageAggregation(other.getCreditUsageAggregation());
             creditUsed(other.getCreditUsed());
             effectiveLimit(other.getEffectiveLimit());
             effectivePrice(other.getEffectivePrice());
@@ -827,14 +839,9 @@ public final class FeatureCompanyResponseData {
             return this;
         }
 
-        /**
-         * <p>The type of allocation that is being used.</p>
-         * <p>The type of allocation that is being used.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         @JsonSetter("allocation_type")
-        public EntitlementIdStage allocationType(@NotNull FeatureCompanyResponseDataAllocationType allocationType) {
+        public EntitlementIdStage allocationType(@NotNull EntitlementValueType allocationType) {
             this.allocationType = Objects.requireNonNull(allocationType, "allocationType must not be null");
             return this;
         }
@@ -848,7 +855,7 @@ public final class FeatureCompanyResponseData {
 
         @java.lang.Override
         @JsonSetter("entitlement_type")
-        public _FinalStage entitlementType(@NotNull String entitlementType) {
+        public _FinalStage entitlementType(@NotNull EntitlementType entitlementType) {
             this.entitlementType = Objects.requireNonNull(entitlementType, "entitlementType must not be null");
             return this;
         }
@@ -867,7 +874,7 @@ public final class FeatureCompanyResponseData {
         }
 
         /**
-         * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured.</p>
+         * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured or that this is a credit-based entitlement (use credit_used instead).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -877,7 +884,7 @@ public final class FeatureCompanyResponseData {
         }
 
         /**
-         * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured.</p>
+         * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured or that this is a credit-based entitlement (use credit_used instead).</p>
          */
         @java.lang.Override
         @JsonSetter(value = "usage", nulls = Nulls.SKIP)
@@ -907,14 +914,14 @@ public final class FeatureCompanyResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage priceBehavior(String priceBehavior) {
+        public _FinalStage priceBehavior(EntitlementPriceBehavior priceBehavior) {
             this.priceBehavior = Optional.ofNullable(priceBehavior);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "price_behavior", nulls = Nulls.SKIP)
-        public _FinalStage priceBehavior(Optional<String> priceBehavior) {
+        public _FinalStage priceBehavior(Optional<EntitlementPriceBehavior> priceBehavior) {
             this.priceBehavior = priceBehavior;
             return this;
         }
@@ -1198,6 +1205,19 @@ public final class FeatureCompanyResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage creditUsageAggregation(CreditUsageAggregation creditUsageAggregation) {
+            this.creditUsageAggregation = Optional.ofNullable(creditUsageAggregation);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_usage_aggregation", nulls = Nulls.SKIP)
+        public _FinalStage creditUsageAggregation(Optional<CreditUsageAggregation> creditUsageAggregation) {
+            this.creditUsageAggregation = creditUsageAggregation;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage creditUsage(CreditUsage creditUsage) {
             this.creditUsage = Optional.ofNullable(creditUsage);
             return this;
@@ -1230,12 +1250,19 @@ public final class FeatureCompanyResponseData {
             return this;
         }
 
+        /**
+         * <p>Deprecated: Use credit_remaining instead.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage creditTotal(Double creditTotal) {
             this.creditTotal = Optional.ofNullable(creditTotal);
             return this;
         }
 
+        /**
+         * <p>Deprecated: Use credit_remaining instead.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "credit_total", nulls = Nulls.SKIP)
         public _FinalStage creditTotal(Optional<Double> creditTotal) {
@@ -1256,22 +1283,15 @@ public final class FeatureCompanyResponseData {
             return this;
         }
 
-        /**
-         * <p>Reason for the credit grant</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
-        public _FinalStage creditGrantReason(FeatureCompanyResponseDataCreditGrantReason creditGrantReason) {
+        public _FinalStage creditGrantReason(BillingCreditGrantReason creditGrantReason) {
             this.creditGrantReason = Optional.ofNullable(creditGrantReason);
             return this;
         }
 
-        /**
-         * <p>Reason for the credit grant</p>
-         */
         @java.lang.Override
         @JsonSetter(value = "credit_grant_reason", nulls = Nulls.SKIP)
-        public _FinalStage creditGrantReason(Optional<FeatureCompanyResponseDataCreditGrantReason> creditGrantReason) {
+        public _FinalStage creditGrantReason(Optional<BillingCreditGrantReason> creditGrantReason) {
             this.creditGrantReason = creditGrantReason;
             return this;
         }
@@ -1349,7 +1369,7 @@ public final class FeatureCompanyResponseData {
         }
 
         /**
-         * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted.</p>
+         * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted or that this is a credit-based entitlement (use credit_remaining instead).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1359,7 +1379,7 @@ public final class FeatureCompanyResponseData {
         }
 
         /**
-         * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted.</p>
+         * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted or that this is a credit-based entitlement (use credit_remaining instead).</p>
          */
         @java.lang.Override
         @JsonSetter(value = "allocation", nulls = Nulls.SKIP)
@@ -1384,6 +1404,7 @@ public final class FeatureCompanyResponseData {
                     creditTotal,
                     creditTypeIcon,
                     creditUsage,
+                    creditUsageAggregation,
                     creditUsed,
                     effectiveLimit,
                     effectivePrice,

@@ -7,24 +7,29 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.accounts.requests.CountApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.CountApiRequestsRequest;
+import com.schematic.api.resources.accounts.requests.CountAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.CreateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.CreateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.requests.ListApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.ListApiRequestsRequest;
+import com.schematic.api.resources.accounts.requests.ListAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.ListEnvironmentsRequest;
 import com.schematic.api.resources.accounts.requests.UpdateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.UpdateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.types.CountApiKeysResponse;
 import com.schematic.api.resources.accounts.types.CountApiRequestsResponse;
+import com.schematic.api.resources.accounts.types.CountAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.CreateApiKeyResponse;
 import com.schematic.api.resources.accounts.types.CreateEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.DeleteApiKeyResponse;
 import com.schematic.api.resources.accounts.types.DeleteEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.GetApiKeyResponse;
 import com.schematic.api.resources.accounts.types.GetApiRequestResponse;
+import com.schematic.api.resources.accounts.types.GetAuditLogResponse;
 import com.schematic.api.resources.accounts.types.GetEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.ListApiKeysResponse;
 import com.schematic.api.resources.accounts.types.ListApiRequestsResponse;
+import com.schematic.api.resources.accounts.types.ListAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.ListEnvironmentsResponse;
 import com.schematic.api.resources.accounts.types.QuickstartResponse;
 import com.schematic.api.resources.accounts.types.UpdateApiKeyResponse;
@@ -136,6 +141,40 @@ public class AsyncAccountsClient {
     public CompletableFuture<CountApiRequestsResponse> countApiRequests(
             CountApiRequestsRequest request, RequestOptions requestOptions) {
         return this.rawClient.countApiRequests(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListAuditLogsResponse> listAuditLogs() {
+        return this.rawClient.listAuditLogs().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListAuditLogsResponse> listAuditLogs(ListAuditLogsRequest request) {
+        return this.rawClient.listAuditLogs(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListAuditLogsResponse> listAuditLogs(
+            ListAuditLogsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listAuditLogs(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetAuditLogResponse> getAuditLog(String auditLogId) {
+        return this.rawClient.getAuditLog(auditLogId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetAuditLogResponse> getAuditLog(String auditLogId, RequestOptions requestOptions) {
+        return this.rawClient.getAuditLog(auditLogId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountAuditLogsResponse> countAuditLogs() {
+        return this.rawClient.countAuditLogs().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountAuditLogsResponse> countAuditLogs(CountAuditLogsRequest request) {
+        return this.rawClient.countAuditLogs(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountAuditLogsResponse> countAuditLogs(
+            CountAuditLogsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countAuditLogs(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListEnvironmentsResponse> listEnvironments() {

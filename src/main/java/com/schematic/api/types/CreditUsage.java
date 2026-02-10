@@ -37,6 +37,8 @@ public final class CreditUsage {
 
     private final Optional<Double> creditUsed;
 
+    private final Optional<CreditUsageAggregation> usageAggregation;
+
     private final Map<String, Object> additionalProperties;
 
     private CreditUsage(
@@ -48,6 +50,7 @@ public final class CreditUsage {
             Optional<String> creditTypeIcon,
             Optional<String> creditTypeName,
             Optional<Double> creditUsed,
+            Optional<CreditUsageAggregation> usageAggregation,
             Map<String, Object> additionalProperties) {
         this.creditConsumptionRate = creditConsumptionRate;
         this.creditGrantCounts = creditGrantCounts;
@@ -57,6 +60,7 @@ public final class CreditUsage {
         this.creditTypeIcon = creditTypeIcon;
         this.creditTypeName = creditTypeName;
         this.creditUsed = creditUsed;
+        this.usageAggregation = usageAggregation;
         this.additionalProperties = additionalProperties;
     }
 
@@ -100,6 +104,11 @@ public final class CreditUsage {
         return creditUsed;
     }
 
+    @JsonProperty("usage_aggregation")
+    public Optional<CreditUsageAggregation> getUsageAggregation() {
+        return usageAggregation;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -119,7 +128,8 @@ public final class CreditUsage {
                 && creditTotal.equals(other.creditTotal)
                 && creditTypeIcon.equals(other.creditTypeIcon)
                 && creditTypeName.equals(other.creditTypeName)
-                && creditUsed.equals(other.creditUsed);
+                && creditUsed.equals(other.creditUsed)
+                && usageAggregation.equals(other.usageAggregation);
     }
 
     @java.lang.Override
@@ -132,7 +142,8 @@ public final class CreditUsage {
                 this.creditTotal,
                 this.creditTypeIcon,
                 this.creditTypeName,
-                this.creditUsed);
+                this.creditUsed,
+                this.usageAggregation);
     }
 
     @java.lang.Override
@@ -162,6 +173,8 @@ public final class CreditUsage {
 
         private Optional<Double> creditUsed = Optional.empty();
 
+        private Optional<CreditUsageAggregation> usageAggregation = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -176,6 +189,7 @@ public final class CreditUsage {
             creditTypeIcon(other.getCreditTypeIcon());
             creditTypeName(other.getCreditTypeName());
             creditUsed(other.getCreditUsed());
+            usageAggregation(other.getUsageAggregation());
             return this;
         }
 
@@ -267,6 +281,17 @@ public final class CreditUsage {
             return this;
         }
 
+        @JsonSetter(value = "usage_aggregation", nulls = Nulls.SKIP)
+        public Builder usageAggregation(Optional<CreditUsageAggregation> usageAggregation) {
+            this.usageAggregation = usageAggregation;
+            return this;
+        }
+
+        public Builder usageAggregation(CreditUsageAggregation usageAggregation) {
+            this.usageAggregation = Optional.ofNullable(usageAggregation);
+            return this;
+        }
+
         public CreditUsage build() {
             return new CreditUsage(
                     creditConsumptionRate,
@@ -277,6 +302,7 @@ public final class CreditUsage {
                     creditTypeIcon,
                     creditTypeName,
                     creditUsed,
+                    usageAggregation,
                     additionalProperties);
         }
     }

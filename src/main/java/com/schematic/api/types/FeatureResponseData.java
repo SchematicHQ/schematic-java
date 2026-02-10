@@ -28,13 +28,13 @@ public final class FeatureResponseData {
 
     private final Optional<String> eventSubtype;
 
-    private final String featureType;
+    private final FeatureType featureType;
 
     private final String icon;
 
     private final String id;
 
-    private final Optional<String> lifecyclePhase;
+    private final Optional<FeatureLifecyclePhase> lifecyclePhase;
 
     private final Optional<String> maintainerId;
 
@@ -54,10 +54,10 @@ public final class FeatureResponseData {
             OffsetDateTime createdAt,
             String description,
             Optional<String> eventSubtype,
-            String featureType,
+            FeatureType featureType,
             String icon,
             String id,
-            Optional<String> lifecyclePhase,
+            Optional<FeatureLifecyclePhase> lifecyclePhase,
             Optional<String> maintainerId,
             String name,
             Optional<String> pluralName,
@@ -97,7 +97,7 @@ public final class FeatureResponseData {
     }
 
     @JsonProperty("feature_type")
-    public String getFeatureType() {
+    public FeatureType getFeatureType() {
         return featureType;
     }
 
@@ -112,7 +112,7 @@ public final class FeatureResponseData {
     }
 
     @JsonProperty("lifecycle_phase")
-    public Optional<String> getLifecyclePhase() {
+    public Optional<FeatureLifecyclePhase> getLifecyclePhase() {
         return lifecyclePhase;
     }
 
@@ -211,7 +211,7 @@ public final class FeatureResponseData {
     }
 
     public interface FeatureTypeStage {
-        IconStage featureType(@NotNull String featureType);
+        IconStage featureType(@NotNull FeatureType featureType);
     }
 
     public interface IconStage {
@@ -237,9 +237,9 @@ public final class FeatureResponseData {
 
         _FinalStage eventSubtype(String eventSubtype);
 
-        _FinalStage lifecyclePhase(Optional<String> lifecyclePhase);
+        _FinalStage lifecyclePhase(Optional<FeatureLifecyclePhase> lifecyclePhase);
 
-        _FinalStage lifecyclePhase(String lifecyclePhase);
+        _FinalStage lifecyclePhase(FeatureLifecyclePhase lifecyclePhase);
 
         _FinalStage maintainerId(Optional<String> maintainerId);
 
@@ -272,7 +272,7 @@ public final class FeatureResponseData {
 
         private String description;
 
-        private String featureType;
+        private FeatureType featureType;
 
         private String icon;
 
@@ -290,7 +290,7 @@ public final class FeatureResponseData {
 
         private Optional<String> maintainerId = Optional.empty();
 
-        private Optional<String> lifecyclePhase = Optional.empty();
+        private Optional<FeatureLifecyclePhase> lifecyclePhase = Optional.empty();
 
         private Optional<String> eventSubtype = Optional.empty();
 
@@ -333,7 +333,7 @@ public final class FeatureResponseData {
 
         @java.lang.Override
         @JsonSetter("feature_type")
-        public IconStage featureType(@NotNull String featureType) {
+        public IconStage featureType(@NotNull FeatureType featureType) {
             this.featureType = Objects.requireNonNull(featureType, "featureType must not be null");
             return this;
         }
@@ -419,14 +419,14 @@ public final class FeatureResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage lifecyclePhase(String lifecyclePhase) {
+        public _FinalStage lifecyclePhase(FeatureLifecyclePhase lifecyclePhase) {
             this.lifecyclePhase = Optional.ofNullable(lifecyclePhase);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "lifecycle_phase", nulls = Nulls.SKIP)
-        public _FinalStage lifecyclePhase(Optional<String> lifecyclePhase) {
+        public _FinalStage lifecyclePhase(Optional<FeatureLifecyclePhase> lifecyclePhase) {
             this.lifecyclePhase = lifecyclePhase;
             return this;
         }

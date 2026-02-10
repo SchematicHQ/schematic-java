@@ -58,7 +58,7 @@ public final class RuleConditionDetailResponseData {
 
     private final Optional<EntityTraitDefinitionResponseData> trait;
 
-    private final Optional<String> traitEntityType;
+    private final Optional<EntityType> traitEntityType;
 
     private final Optional<String> traitId;
 
@@ -86,7 +86,7 @@ public final class RuleConditionDetailResponseData {
             List<PreviewObjectResponseData> resources,
             String ruleId,
             Optional<EntityTraitDefinitionResponseData> trait,
-            Optional<String> traitEntityType,
+            Optional<EntityType> traitEntityType,
             Optional<String> traitId,
             String traitValue,
             OffsetDateTime updatedAt,
@@ -201,7 +201,7 @@ public final class RuleConditionDetailResponseData {
     }
 
     @JsonProperty("trait_entity_type")
-    public Optional<String> getTraitEntityType() {
+    public Optional<EntityType> getTraitEntityType() {
         return traitEntityType;
     }
 
@@ -375,9 +375,9 @@ public final class RuleConditionDetailResponseData {
 
         _FinalStage trait(EntityTraitDefinitionResponseData trait);
 
-        _FinalStage traitEntityType(Optional<String> traitEntityType);
+        _FinalStage traitEntityType(Optional<EntityType> traitEntityType);
 
-        _FinalStage traitEntityType(String traitEntityType);
+        _FinalStage traitEntityType(EntityType traitEntityType);
 
         _FinalStage traitId(Optional<String> traitId);
 
@@ -413,7 +413,7 @@ public final class RuleConditionDetailResponseData {
 
         private Optional<String> traitId = Optional.empty();
 
-        private Optional<String> traitEntityType = Optional.empty();
+        private Optional<EntityType> traitEntityType = Optional.empty();
 
         private Optional<EntityTraitDefinitionResponseData> trait = Optional.empty();
 
@@ -538,14 +538,14 @@ public final class RuleConditionDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage traitEntityType(String traitEntityType) {
+        public _FinalStage traitEntityType(EntityType traitEntityType) {
             this.traitEntityType = Optional.ofNullable(traitEntityType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trait_entity_type", nulls = Nulls.SKIP)
-        public _FinalStage traitEntityType(Optional<String> traitEntityType) {
+        public _FinalStage traitEntityType(Optional<EntityType> traitEntityType) {
             this.traitEntityType = traitEntityType;
             return this;
         }

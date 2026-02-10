@@ -11,10 +11,12 @@ import com.schematic.api.resources.billing.BillingClient;
 import com.schematic.api.resources.checkout.CheckoutClient;
 import com.schematic.api.resources.companies.CompaniesClient;
 import com.schematic.api.resources.components.ComponentsClient;
-import com.schematic.api.resources.crm.CrmClient;
+import com.schematic.api.resources.credits.CreditsClient;
+import com.schematic.api.resources.dataexports.DataexportsClient;
 import com.schematic.api.resources.entitlements.EntitlementsClient;
 import com.schematic.api.resources.events.EventsClient;
 import com.schematic.api.resources.features.FeaturesClient;
+import com.schematic.api.resources.planbundle.PlanbundleClient;
 import com.schematic.api.resources.plangroups.PlangroupsClient;
 import com.schematic.api.resources.plans.PlansClient;
 import com.schematic.api.resources.webhooks.WebhooksClient;
@@ -35,13 +37,17 @@ public class BaseSchematic {
 
     protected final Supplier<EntitlementsClient> entitlementsClient;
 
+    protected final Supplier<CreditsClient> creditsClient;
+
     protected final Supplier<ComponentsClient> componentsClient;
 
-    protected final Supplier<CrmClient> crmClient;
+    protected final Supplier<DataexportsClient> dataexportsClient;
 
     protected final Supplier<EventsClient> eventsClient;
 
     protected final Supplier<PlansClient> plansClient;
+
+    protected final Supplier<PlanbundleClient> planbundleClient;
 
     protected final Supplier<PlangroupsClient> plangroupsClient;
 
@@ -58,9 +64,11 @@ public class BaseSchematic {
         this.companiesClient = Suppliers.memoize(() -> new CompaniesClient(clientOptions));
         this.entitlementsClient = Suppliers.memoize(() -> new EntitlementsClient(clientOptions));
         this.componentsClient = Suppliers.memoize(() -> new ComponentsClient(clientOptions));
-        this.crmClient = Suppliers.memoize(() -> new CrmClient(clientOptions));
+        this.creditsClient = Suppliers.memoize(() -> new CreditsClient(clientOptions));
+        this.dataexportsClient = Suppliers.memoize(() -> new DataexportsClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new EventsClient(clientOptions));
         this.plansClient = Suppliers.memoize(() -> new PlansClient(clientOptions));
+        this.planbundleClient = Suppliers.memoize(() -> new PlanbundleClient(clientOptions));
         this.plangroupsClient = Suppliers.memoize(() -> new PlangroupsClient(clientOptions));
         this.accesstokensClient = Suppliers.memoize(() -> new AccesstokensClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
@@ -94,8 +102,12 @@ public class BaseSchematic {
         return this.componentsClient.get();
     }
 
-    public CrmClient crm() {
-        return this.crmClient.get();
+    public CreditsClient credits() {
+        return this.creditsClient.get();
+    }
+
+    public DataexportsClient dataexports() {
+        return this.dataexportsClient.get();
     }
 
     public EventsClient events() {
@@ -104,6 +116,10 @@ public class BaseSchematic {
 
     public PlansClient plans() {
         return this.plansClient.get();
+    }
+
+    public PlanbundleClient planbundle() {
+        return this.planbundleClient.get();
     }
 
     public PlangroupsClient plangroups() {

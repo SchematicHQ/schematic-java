@@ -35,7 +35,7 @@ public final class UpdateEntitlementReqCommon {
 
     private final Optional<String> valueTraitId;
 
-    private final UpdateEntitlementReqCommonValueType valueType;
+    private final EntitlementValueType valueType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -47,7 +47,7 @@ public final class UpdateEntitlementReqCommon {
             Optional<String> valueCreditId,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
-            UpdateEntitlementReqCommonValueType valueType,
+            EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
         this.creditConsumptionRate = creditConsumptionRate;
         this.metricPeriod = metricPeriod;
@@ -96,7 +96,7 @@ public final class UpdateEntitlementReqCommon {
     }
 
     @JsonProperty("value_type")
-    public UpdateEntitlementReqCommonValueType getValueType() {
+    public EntitlementValueType getValueType() {
         return valueType;
     }
 
@@ -145,7 +145,7 @@ public final class UpdateEntitlementReqCommon {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(@NotNull UpdateEntitlementReqCommonValueType valueType);
+        _FinalStage valueType(@NotNull EntitlementValueType valueType);
 
         Builder from(UpdateEntitlementReqCommon other);
     }
@@ -185,7 +185,7 @@ public final class UpdateEntitlementReqCommon {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ValueTypeStage, _FinalStage {
-        private UpdateEntitlementReqCommonValueType valueType;
+        private EntitlementValueType valueType;
 
         private Optional<String> valueTraitId = Optional.empty();
 
@@ -221,7 +221,7 @@ public final class UpdateEntitlementReqCommon {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(@NotNull UpdateEntitlementReqCommonValueType valueType) {
+        public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }

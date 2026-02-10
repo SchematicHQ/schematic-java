@@ -29,6 +29,8 @@ public final class CreateBillingPriceTierRequestBody {
 
     private final String priceExternalId;
 
+    private final Optional<BillingProviderType> providerType;
+
     private final Optional<Integer> upTo;
 
     private final Map<String, Object> additionalProperties;
@@ -38,12 +40,14 @@ public final class CreateBillingPriceTierRequestBody {
             Optional<String> perUnitDecimal,
             Optional<Integer> perUnitPrice,
             String priceExternalId,
+            Optional<BillingProviderType> providerType,
             Optional<Integer> upTo,
             Map<String, Object> additionalProperties) {
         this.flatAmount = flatAmount;
         this.perUnitDecimal = perUnitDecimal;
         this.perUnitPrice = perUnitPrice;
         this.priceExternalId = priceExternalId;
+        this.providerType = providerType;
         this.upTo = upTo;
         this.additionalProperties = additionalProperties;
     }
@@ -68,6 +72,11 @@ public final class CreateBillingPriceTierRequestBody {
         return priceExternalId;
     }
 
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("up_to")
     public Optional<Integer> getUpTo() {
         return upTo;
@@ -89,12 +98,19 @@ public final class CreateBillingPriceTierRequestBody {
                 && perUnitDecimal.equals(other.perUnitDecimal)
                 && perUnitPrice.equals(other.perUnitPrice)
                 && priceExternalId.equals(other.priceExternalId)
+                && providerType.equals(other.providerType)
                 && upTo.equals(other.upTo);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.flatAmount, this.perUnitDecimal, this.perUnitPrice, this.priceExternalId, this.upTo);
+        return Objects.hash(
+                this.flatAmount,
+                this.perUnitDecimal,
+                this.perUnitPrice,
+                this.priceExternalId,
+                this.providerType,
+                this.upTo);
     }
 
     @java.lang.Override
@@ -127,6 +143,10 @@ public final class CreateBillingPriceTierRequestBody {
 
         _FinalStage perUnitPrice(Integer perUnitPrice);
 
+        _FinalStage providerType(Optional<BillingProviderType> providerType);
+
+        _FinalStage providerType(BillingProviderType providerType);
+
         _FinalStage upTo(Optional<Integer> upTo);
 
         _FinalStage upTo(Integer upTo);
@@ -137,6 +157,8 @@ public final class CreateBillingPriceTierRequestBody {
         private String priceExternalId;
 
         private Optional<Integer> upTo = Optional.empty();
+
+        private Optional<BillingProviderType> providerType = Optional.empty();
 
         private Optional<Integer> perUnitPrice = Optional.empty();
 
@@ -155,6 +177,7 @@ public final class CreateBillingPriceTierRequestBody {
             perUnitDecimal(other.getPerUnitDecimal());
             perUnitPrice(other.getPerUnitPrice());
             priceExternalId(other.getPriceExternalId());
+            providerType(other.getProviderType());
             upTo(other.getUpTo());
             return this;
         }
@@ -176,6 +199,19 @@ public final class CreateBillingPriceTierRequestBody {
         @JsonSetter(value = "up_to", nulls = Nulls.SKIP)
         public _FinalStage upTo(Optional<Integer> upTo) {
             this.upTo = upTo;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public _FinalStage providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
             return this;
         }
 
@@ -221,7 +257,13 @@ public final class CreateBillingPriceTierRequestBody {
         @java.lang.Override
         public CreateBillingPriceTierRequestBody build() {
             return new CreateBillingPriceTierRequestBody(
-                    flatAmount, perUnitDecimal, perUnitPrice, priceExternalId, upTo, additionalProperties);
+                    flatAmount,
+                    perUnitDecimal,
+                    perUnitPrice,
+                    priceExternalId,
+                    providerType,
+                    upTo,
+                    additionalProperties);
         }
     }
 }

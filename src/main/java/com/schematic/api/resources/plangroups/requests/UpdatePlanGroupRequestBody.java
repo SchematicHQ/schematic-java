@@ -16,12 +16,15 @@ import com.schematic.api.types.CompatiblePlans;
 import com.schematic.api.types.CustomPlanConfig;
 import com.schematic.api.types.OrderedPlansInGroup;
 import com.schematic.api.types.PlanGroupBundleOrder;
+import com.schematic.api.types.ProrationBehavior;
+import com.schematic.api.types.ScheduledDowngradeConfigBehavior;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdatePlanGroupRequestBody.Builder.class)
@@ -56,13 +59,29 @@ public final class UpdatePlanGroupRequestBody {
 
     private final boolean preventDowngradesWhenOverLimit;
 
+    private final boolean preventSelfServiceDowngrade;
+
+    private final Optional<String> preventSelfServiceDowngradeButtonText;
+
+    private final Optional<String> preventSelfServiceDowngradeUrl;
+
+    private final ProrationBehavior prorationBehavior;
+
+    private final Optional<ScheduledDowngradeConfigBehavior> scheduledDowngradeBehavior;
+
+    private final Optional<Boolean> scheduledDowngradePreventWhenOverLimit;
+
+    private final boolean showAsMonthlyPrices;
+
     private final boolean showCredits;
+
+    private final boolean showFeatureDescription;
 
     private final boolean showPeriodToggle;
 
     private final boolean showZeroPriceAsFree;
 
-    private final boolean syncCustomerBillingDetailsForTax;
+    private final boolean syncCustomerBillingDetails;
 
     private final Optional<Integer> trialDays;
 
@@ -90,10 +109,18 @@ public final class UpdatePlanGroupRequestBody {
             List<PlanGroupBundleOrder> orderedBundleList,
             List<OrderedPlansInGroup> orderedPlans,
             boolean preventDowngradesWhenOverLimit,
+            boolean preventSelfServiceDowngrade,
+            Optional<String> preventSelfServiceDowngradeButtonText,
+            Optional<String> preventSelfServiceDowngradeUrl,
+            ProrationBehavior prorationBehavior,
+            Optional<ScheduledDowngradeConfigBehavior> scheduledDowngradeBehavior,
+            Optional<Boolean> scheduledDowngradePreventWhenOverLimit,
+            boolean showAsMonthlyPrices,
             boolean showCredits,
+            boolean showFeatureDescription,
             boolean showPeriodToggle,
             boolean showZeroPriceAsFree,
-            boolean syncCustomerBillingDetailsForTax,
+            boolean syncCustomerBillingDetails,
             Optional<Integer> trialDays,
             Optional<String> trialExpiryPlanId,
             Optional<String> trialExpiryPlanPriceId,
@@ -114,10 +141,18 @@ public final class UpdatePlanGroupRequestBody {
         this.orderedBundleList = orderedBundleList;
         this.orderedPlans = orderedPlans;
         this.preventDowngradesWhenOverLimit = preventDowngradesWhenOverLimit;
+        this.preventSelfServiceDowngrade = preventSelfServiceDowngrade;
+        this.preventSelfServiceDowngradeButtonText = preventSelfServiceDowngradeButtonText;
+        this.preventSelfServiceDowngradeUrl = preventSelfServiceDowngradeUrl;
+        this.prorationBehavior = prorationBehavior;
+        this.scheduledDowngradeBehavior = scheduledDowngradeBehavior;
+        this.scheduledDowngradePreventWhenOverLimit = scheduledDowngradePreventWhenOverLimit;
+        this.showAsMonthlyPrices = showAsMonthlyPrices;
         this.showCredits = showCredits;
+        this.showFeatureDescription = showFeatureDescription;
         this.showPeriodToggle = showPeriodToggle;
         this.showZeroPriceAsFree = showZeroPriceAsFree;
-        this.syncCustomerBillingDetailsForTax = syncCustomerBillingDetailsForTax;
+        this.syncCustomerBillingDetails = syncCustomerBillingDetails;
         this.trialDays = trialDays;
         this.trialExpiryPlanId = trialExpiryPlanId;
         this.trialExpiryPlanPriceId = trialExpiryPlanPriceId;
@@ -203,9 +238,49 @@ public final class UpdatePlanGroupRequestBody {
         return preventDowngradesWhenOverLimit;
     }
 
+    @JsonProperty("prevent_self_service_downgrade")
+    public boolean getPreventSelfServiceDowngrade() {
+        return preventSelfServiceDowngrade;
+    }
+
+    @JsonProperty("prevent_self_service_downgrade_button_text")
+    public Optional<String> getPreventSelfServiceDowngradeButtonText() {
+        return preventSelfServiceDowngradeButtonText;
+    }
+
+    @JsonProperty("prevent_self_service_downgrade_url")
+    public Optional<String> getPreventSelfServiceDowngradeUrl() {
+        return preventSelfServiceDowngradeUrl;
+    }
+
+    @JsonProperty("proration_behavior")
+    public ProrationBehavior getProrationBehavior() {
+        return prorationBehavior;
+    }
+
+    @JsonProperty("scheduled_downgrade_behavior")
+    public Optional<ScheduledDowngradeConfigBehavior> getScheduledDowngradeBehavior() {
+        return scheduledDowngradeBehavior;
+    }
+
+    @JsonProperty("scheduled_downgrade_prevent_when_over_limit")
+    public Optional<Boolean> getScheduledDowngradePreventWhenOverLimit() {
+        return scheduledDowngradePreventWhenOverLimit;
+    }
+
+    @JsonProperty("show_as_monthly_prices")
+    public boolean getShowAsMonthlyPrices() {
+        return showAsMonthlyPrices;
+    }
+
     @JsonProperty("show_credits")
     public boolean getShowCredits() {
         return showCredits;
+    }
+
+    @JsonProperty("show_feature_description")
+    public boolean getShowFeatureDescription() {
+        return showFeatureDescription;
     }
 
     @JsonProperty("show_period_toggle")
@@ -218,9 +293,9 @@ public final class UpdatePlanGroupRequestBody {
         return showZeroPriceAsFree;
     }
 
-    @JsonProperty("sync_customer_billing_details_for_tax")
-    public boolean getSyncCustomerBillingDetailsForTax() {
-        return syncCustomerBillingDetailsForTax;
+    @JsonProperty("sync_customer_billing_details")
+    public boolean getSyncCustomerBillingDetails() {
+        return syncCustomerBillingDetails;
     }
 
     @JsonProperty("trial_days")
@@ -270,10 +345,18 @@ public final class UpdatePlanGroupRequestBody {
                 && orderedBundleList.equals(other.orderedBundleList)
                 && orderedPlans.equals(other.orderedPlans)
                 && preventDowngradesWhenOverLimit == other.preventDowngradesWhenOverLimit
+                && preventSelfServiceDowngrade == other.preventSelfServiceDowngrade
+                && preventSelfServiceDowngradeButtonText.equals(other.preventSelfServiceDowngradeButtonText)
+                && preventSelfServiceDowngradeUrl.equals(other.preventSelfServiceDowngradeUrl)
+                && prorationBehavior.equals(other.prorationBehavior)
+                && scheduledDowngradeBehavior.equals(other.scheduledDowngradeBehavior)
+                && scheduledDowngradePreventWhenOverLimit.equals(other.scheduledDowngradePreventWhenOverLimit)
+                && showAsMonthlyPrices == other.showAsMonthlyPrices
                 && showCredits == other.showCredits
+                && showFeatureDescription == other.showFeatureDescription
                 && showPeriodToggle == other.showPeriodToggle
                 && showZeroPriceAsFree == other.showZeroPriceAsFree
-                && syncCustomerBillingDetailsForTax == other.syncCustomerBillingDetailsForTax
+                && syncCustomerBillingDetails == other.syncCustomerBillingDetails
                 && trialDays.equals(other.trialDays)
                 && trialExpiryPlanId.equals(other.trialExpiryPlanId)
                 && trialExpiryPlanPriceId.equals(other.trialExpiryPlanPriceId)
@@ -298,10 +381,18 @@ public final class UpdatePlanGroupRequestBody {
                 this.orderedBundleList,
                 this.orderedPlans,
                 this.preventDowngradesWhenOverLimit,
+                this.preventSelfServiceDowngrade,
+                this.preventSelfServiceDowngradeButtonText,
+                this.preventSelfServiceDowngradeUrl,
+                this.prorationBehavior,
+                this.scheduledDowngradeBehavior,
+                this.scheduledDowngradePreventWhenOverLimit,
+                this.showAsMonthlyPrices,
                 this.showCredits,
+                this.showFeatureDescription,
                 this.showPeriodToggle,
                 this.showZeroPriceAsFree,
-                this.syncCustomerBillingDetailsForTax,
+                this.syncCustomerBillingDetails,
                 this.trialDays,
                 this.trialExpiryPlanId,
                 this.trialExpiryPlanPriceId,
@@ -336,11 +427,27 @@ public final class UpdatePlanGroupRequestBody {
     }
 
     public interface PreventDowngradesWhenOverLimitStage {
-        ShowCreditsStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit);
+        PreventSelfServiceDowngradeStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit);
+    }
+
+    public interface PreventSelfServiceDowngradeStage {
+        ProrationBehaviorStage preventSelfServiceDowngrade(boolean preventSelfServiceDowngrade);
+    }
+
+    public interface ProrationBehaviorStage {
+        ShowAsMonthlyPricesStage prorationBehavior(@NotNull ProrationBehavior prorationBehavior);
+    }
+
+    public interface ShowAsMonthlyPricesStage {
+        ShowCreditsStage showAsMonthlyPrices(boolean showAsMonthlyPrices);
     }
 
     public interface ShowCreditsStage {
-        ShowPeriodToggleStage showCredits(boolean showCredits);
+        ShowFeatureDescriptionStage showCredits(boolean showCredits);
+    }
+
+    public interface ShowFeatureDescriptionStage {
+        ShowPeriodToggleStage showFeatureDescription(boolean showFeatureDescription);
     }
 
     public interface ShowPeriodToggleStage {
@@ -348,11 +455,11 @@ public final class UpdatePlanGroupRequestBody {
     }
 
     public interface ShowZeroPriceAsFreeStage {
-        SyncCustomerBillingDetailsForTaxStage showZeroPriceAsFree(boolean showZeroPriceAsFree);
+        SyncCustomerBillingDetailsStage showZeroPriceAsFree(boolean showZeroPriceAsFree);
     }
 
-    public interface SyncCustomerBillingDetailsForTaxStage {
-        _FinalStage syncCustomerBillingDetailsForTax(boolean syncCustomerBillingDetailsForTax);
+    public interface SyncCustomerBillingDetailsStage {
+        _FinalStage syncCustomerBillingDetails(boolean syncCustomerBillingDetails);
     }
 
     public interface _FinalStage {
@@ -409,6 +516,22 @@ public final class UpdatePlanGroupRequestBody {
 
         _FinalStage addAllOrderedPlans(List<OrderedPlansInGroup> orderedPlans);
 
+        _FinalStage preventSelfServiceDowngradeButtonText(Optional<String> preventSelfServiceDowngradeButtonText);
+
+        _FinalStage preventSelfServiceDowngradeButtonText(String preventSelfServiceDowngradeButtonText);
+
+        _FinalStage preventSelfServiceDowngradeUrl(Optional<String> preventSelfServiceDowngradeUrl);
+
+        _FinalStage preventSelfServiceDowngradeUrl(String preventSelfServiceDowngradeUrl);
+
+        _FinalStage scheduledDowngradeBehavior(Optional<ScheduledDowngradeConfigBehavior> scheduledDowngradeBehavior);
+
+        _FinalStage scheduledDowngradeBehavior(ScheduledDowngradeConfigBehavior scheduledDowngradeBehavior);
+
+        _FinalStage scheduledDowngradePreventWhenOverLimit(Optional<Boolean> scheduledDowngradePreventWhenOverLimit);
+
+        _FinalStage scheduledDowngradePreventWhenOverLimit(Boolean scheduledDowngradePreventWhenOverLimit);
+
         _FinalStage trialDays(Optional<Integer> trialDays);
 
         _FinalStage trialDays(Integer trialDays);
@@ -433,10 +556,14 @@ public final class UpdatePlanGroupRequestBody {
                     CheckoutCollectPhoneStage,
                     EnableTaxCollectionStage,
                     PreventDowngradesWhenOverLimitStage,
+                    PreventSelfServiceDowngradeStage,
+                    ProrationBehaviorStage,
+                    ShowAsMonthlyPricesStage,
                     ShowCreditsStage,
+                    ShowFeatureDescriptionStage,
                     ShowPeriodToggleStage,
                     ShowZeroPriceAsFreeStage,
-                    SyncCustomerBillingDetailsForTaxStage,
+                    SyncCustomerBillingDetailsStage,
                     _FinalStage {
         private boolean checkoutCollectAddress;
 
@@ -448,13 +575,21 @@ public final class UpdatePlanGroupRequestBody {
 
         private boolean preventDowngradesWhenOverLimit;
 
+        private boolean preventSelfServiceDowngrade;
+
+        private ProrationBehavior prorationBehavior;
+
+        private boolean showAsMonthlyPrices;
+
         private boolean showCredits;
+
+        private boolean showFeatureDescription;
 
         private boolean showPeriodToggle;
 
         private boolean showZeroPriceAsFree;
 
-        private boolean syncCustomerBillingDetailsForTax;
+        private boolean syncCustomerBillingDetails;
 
         private Optional<Boolean> trialPaymentMethodRequired = Optional.empty();
 
@@ -463,6 +598,14 @@ public final class UpdatePlanGroupRequestBody {
         private Optional<String> trialExpiryPlanId = Optional.empty();
 
         private Optional<Integer> trialDays = Optional.empty();
+
+        private Optional<Boolean> scheduledDowngradePreventWhenOverLimit = Optional.empty();
+
+        private Optional<ScheduledDowngradeConfigBehavior> scheduledDowngradeBehavior = Optional.empty();
+
+        private Optional<String> preventSelfServiceDowngradeUrl = Optional.empty();
+
+        private Optional<String> preventSelfServiceDowngradeButtonText = Optional.empty();
 
         private List<OrderedPlansInGroup> orderedPlans = new ArrayList<>();
 
@@ -506,10 +649,18 @@ public final class UpdatePlanGroupRequestBody {
             orderedBundleList(other.getOrderedBundleList());
             orderedPlans(other.getOrderedPlans());
             preventDowngradesWhenOverLimit(other.getPreventDowngradesWhenOverLimit());
+            preventSelfServiceDowngrade(other.getPreventSelfServiceDowngrade());
+            preventSelfServiceDowngradeButtonText(other.getPreventSelfServiceDowngradeButtonText());
+            preventSelfServiceDowngradeUrl(other.getPreventSelfServiceDowngradeUrl());
+            prorationBehavior(other.getProrationBehavior());
+            scheduledDowngradeBehavior(other.getScheduledDowngradeBehavior());
+            scheduledDowngradePreventWhenOverLimit(other.getScheduledDowngradePreventWhenOverLimit());
+            showAsMonthlyPrices(other.getShowAsMonthlyPrices());
             showCredits(other.getShowCredits());
+            showFeatureDescription(other.getShowFeatureDescription());
             showPeriodToggle(other.getShowPeriodToggle());
             showZeroPriceAsFree(other.getShowZeroPriceAsFree());
-            syncCustomerBillingDetailsForTax(other.getSyncCustomerBillingDetailsForTax());
+            syncCustomerBillingDetails(other.getSyncCustomerBillingDetails());
             trialDays(other.getTrialDays());
             trialExpiryPlanId(other.getTrialExpiryPlanId());
             trialExpiryPlanPriceId(other.getTrialExpiryPlanPriceId());
@@ -547,15 +698,43 @@ public final class UpdatePlanGroupRequestBody {
 
         @java.lang.Override
         @JsonSetter("prevent_downgrades_when_over_limit")
-        public ShowCreditsStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit) {
+        public PreventSelfServiceDowngradeStage preventDowngradesWhenOverLimit(boolean preventDowngradesWhenOverLimit) {
             this.preventDowngradesWhenOverLimit = preventDowngradesWhenOverLimit;
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("prevent_self_service_downgrade")
+        public ProrationBehaviorStage preventSelfServiceDowngrade(boolean preventSelfServiceDowngrade) {
+            this.preventSelfServiceDowngrade = preventSelfServiceDowngrade;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("proration_behavior")
+        public ShowAsMonthlyPricesStage prorationBehavior(@NotNull ProrationBehavior prorationBehavior) {
+            this.prorationBehavior = Objects.requireNonNull(prorationBehavior, "prorationBehavior must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_as_monthly_prices")
+        public ShowCreditsStage showAsMonthlyPrices(boolean showAsMonthlyPrices) {
+            this.showAsMonthlyPrices = showAsMonthlyPrices;
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("show_credits")
-        public ShowPeriodToggleStage showCredits(boolean showCredits) {
+        public ShowFeatureDescriptionStage showCredits(boolean showCredits) {
             this.showCredits = showCredits;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_feature_description")
+        public ShowPeriodToggleStage showFeatureDescription(boolean showFeatureDescription) {
+            this.showFeatureDescription = showFeatureDescription;
             return this;
         }
 
@@ -568,15 +747,15 @@ public final class UpdatePlanGroupRequestBody {
 
         @java.lang.Override
         @JsonSetter("show_zero_price_as_free")
-        public SyncCustomerBillingDetailsForTaxStage showZeroPriceAsFree(boolean showZeroPriceAsFree) {
+        public SyncCustomerBillingDetailsStage showZeroPriceAsFree(boolean showZeroPriceAsFree) {
             this.showZeroPriceAsFree = showZeroPriceAsFree;
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("sync_customer_billing_details_for_tax")
-        public _FinalStage syncCustomerBillingDetailsForTax(boolean syncCustomerBillingDetailsForTax) {
-            this.syncCustomerBillingDetailsForTax = syncCustomerBillingDetailsForTax;
+        @JsonSetter("sync_customer_billing_details")
+        public _FinalStage syncCustomerBillingDetails(boolean syncCustomerBillingDetails) {
+            this.syncCustomerBillingDetails = syncCustomerBillingDetails;
             return this;
         }
 
@@ -629,6 +808,61 @@ public final class UpdatePlanGroupRequestBody {
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
         public _FinalStage trialDays(Optional<Integer> trialDays) {
             this.trialDays = trialDays;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage scheduledDowngradePreventWhenOverLimit(Boolean scheduledDowngradePreventWhenOverLimit) {
+            this.scheduledDowngradePreventWhenOverLimit = Optional.ofNullable(scheduledDowngradePreventWhenOverLimit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_downgrade_prevent_when_over_limit", nulls = Nulls.SKIP)
+        public _FinalStage scheduledDowngradePreventWhenOverLimit(
+                Optional<Boolean> scheduledDowngradePreventWhenOverLimit) {
+            this.scheduledDowngradePreventWhenOverLimit = scheduledDowngradePreventWhenOverLimit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage scheduledDowngradeBehavior(ScheduledDowngradeConfigBehavior scheduledDowngradeBehavior) {
+            this.scheduledDowngradeBehavior = Optional.ofNullable(scheduledDowngradeBehavior);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_downgrade_behavior", nulls = Nulls.SKIP)
+        public _FinalStage scheduledDowngradeBehavior(
+                Optional<ScheduledDowngradeConfigBehavior> scheduledDowngradeBehavior) {
+            this.scheduledDowngradeBehavior = scheduledDowngradeBehavior;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage preventSelfServiceDowngradeUrl(String preventSelfServiceDowngradeUrl) {
+            this.preventSelfServiceDowngradeUrl = Optional.ofNullable(preventSelfServiceDowngradeUrl);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "prevent_self_service_downgrade_url", nulls = Nulls.SKIP)
+        public _FinalStage preventSelfServiceDowngradeUrl(Optional<String> preventSelfServiceDowngradeUrl) {
+            this.preventSelfServiceDowngradeUrl = preventSelfServiceDowngradeUrl;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage preventSelfServiceDowngradeButtonText(String preventSelfServiceDowngradeButtonText) {
+            this.preventSelfServiceDowngradeButtonText = Optional.ofNullable(preventSelfServiceDowngradeButtonText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "prevent_self_service_downgrade_button_text", nulls = Nulls.SKIP)
+        public _FinalStage preventSelfServiceDowngradeButtonText(
+                Optional<String> preventSelfServiceDowngradeButtonText) {
+            this.preventSelfServiceDowngradeButtonText = preventSelfServiceDowngradeButtonText;
             return this;
         }
 
@@ -835,10 +1069,18 @@ public final class UpdatePlanGroupRequestBody {
                     orderedBundleList,
                     orderedPlans,
                     preventDowngradesWhenOverLimit,
+                    preventSelfServiceDowngrade,
+                    preventSelfServiceDowngradeButtonText,
+                    preventSelfServiceDowngradeUrl,
+                    prorationBehavior,
+                    scheduledDowngradeBehavior,
+                    scheduledDowngradePreventWhenOverLimit,
+                    showAsMonthlyPrices,
                     showCredits,
+                    showFeatureDescription,
                     showPeriodToggle,
                     showZeroPriceAsFree,
-                    syncCustomerBillingDetailsForTax,
+                    syncCustomerBillingDetails,
                     trialDays,
                     trialExpiryPlanId,
                     trialExpiryPlanPriceId,

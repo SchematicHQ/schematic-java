@@ -36,7 +36,7 @@ public final class ApiKeyCreateResponseData {
 
     private final String name;
 
-    private final List<String> scopes;
+    private final List<ApiKeyScope> scopes;
 
     private final String secret;
 
@@ -51,7 +51,7 @@ public final class ApiKeyCreateResponseData {
             String id,
             Optional<OffsetDateTime> lastUsedAt,
             String name,
-            List<String> scopes,
+            List<ApiKeyScope> scopes,
             String secret,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -98,7 +98,7 @@ public final class ApiKeyCreateResponseData {
     }
 
     @JsonProperty("scopes")
-    public List<String> getScopes() {
+    public List<ApiKeyScope> getScopes() {
         return scopes;
     }
 
@@ -195,11 +195,11 @@ public final class ApiKeyCreateResponseData {
 
         _FinalStage lastUsedAt(OffsetDateTime lastUsedAt);
 
-        _FinalStage scopes(List<String> scopes);
+        _FinalStage scopes(List<ApiKeyScope> scopes);
 
-        _FinalStage addScopes(String scopes);
+        _FinalStage addScopes(ApiKeyScope scopes);
 
-        _FinalStage addAllScopes(List<String> scopes);
+        _FinalStage addAllScopes(List<ApiKeyScope> scopes);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -215,7 +215,7 @@ public final class ApiKeyCreateResponseData {
 
         private OffsetDateTime updatedAt;
 
-        private List<String> scopes = new ArrayList<>();
+        private List<ApiKeyScope> scopes = new ArrayList<>();
 
         private Optional<OffsetDateTime> lastUsedAt = Optional.empty();
 
@@ -278,7 +278,7 @@ public final class ApiKeyCreateResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage addAllScopes(List<String> scopes) {
+        public _FinalStage addAllScopes(List<ApiKeyScope> scopes) {
             if (scopes != null) {
                 this.scopes.addAll(scopes);
             }
@@ -286,14 +286,14 @@ public final class ApiKeyCreateResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage addScopes(String scopes) {
+        public _FinalStage addScopes(ApiKeyScope scopes) {
             this.scopes.add(scopes);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "scopes", nulls = Nulls.SKIP)
-        public _FinalStage scopes(List<String> scopes) {
+        public _FinalStage scopes(List<ApiKeyScope> scopes) {
             this.scopes.clear();
             if (scopes != null) {
                 this.scopes.addAll(scopes);

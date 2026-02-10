@@ -27,26 +27,26 @@ import com.schematic.api.resources.billing.requests.CreateCouponRequestBody;
 import com.schematic.api.resources.billing.requests.CreateInvoiceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateMeterRequestBody;
 import com.schematic.api.resources.billing.requests.CreatePaymentMethodRequestBody;
+import com.schematic.api.resources.billing.requests.ListBillingPricesRequest;
+import com.schematic.api.resources.billing.requests.ListBillingProductPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductsRequest;
 import com.schematic.api.resources.billing.requests.ListCouponsRequest;
 import com.schematic.api.resources.billing.requests.ListCustomersWithSubscriptionsRequest;
 import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
-import com.schematic.api.resources.billing.requests.ListProductPricesRequest;
-import com.schematic.api.resources.billing.requests.SearchBillingPricesRequest;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
+import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
+import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
 import com.schematic.api.resources.billing.types.ListCouponsResponse;
 import com.schematic.api.resources.billing.types.ListCustomersWithSubscriptionsResponse;
 import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
-import com.schematic.api.resources.billing.types.ListProductPricesResponse;
-import com.schematic.api.resources.billing.types.SearchBillingPricesResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingMeterResponse;
@@ -381,9 +381,9 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "name", request.getName().get(), false);
         }
-        if (request.getFailedToImport().isPresent()) {
+        if (request.getProviderType().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "failed_to_import", request.getFailedToImport().get(), false);
+                    httpUrl, "provider_type", request.getProviderType().get(), false);
         }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
@@ -492,9 +492,9 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "name", request.getName().get(), false);
         }
-        if (request.getFailedToImport().isPresent()) {
+        if (request.getProviderType().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "failed_to_import", request.getFailedToImport().get(), false);
+                    httpUrl, "provider_type", request.getProviderType().get(), false);
         }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
@@ -1149,17 +1149,17 @@ public class AsyncRawBillingClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<SearchBillingPricesResponse>> searchBillingPrices() {
-        return searchBillingPrices(SearchBillingPricesRequest.builder().build());
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingPricesResponse>> listBillingPrices() {
+        return listBillingPrices(ListBillingPricesRequest.builder().build());
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<SearchBillingPricesResponse>> searchBillingPrices(
-            SearchBillingPricesRequest request) {
-        return searchBillingPrices(request, null);
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingPricesResponse>> listBillingPrices(
+            ListBillingPricesRequest request) {
+        return listBillingPrices(request, null);
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<SearchBillingPricesResponse>> searchBillingPrices(
-            SearchBillingPricesRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingPricesResponse>> listBillingPrices(
+            ListBillingPricesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/price");
@@ -1174,27 +1174,28 @@ public class AsyncRawBillingClient {
                     request.getForTrialExpiryPlan().get(),
                     false);
         }
-        if (request.getProductId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "product_id", request.getProductId().get(), false);
-        }
         if (request.getInterval().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "interval", request.getInterval().get(), false);
+        }
+        if (request.getIsActive().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "is_active", request.getIsActive().get(), false);
         }
         if (request.getPrice().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "price", request.getPrice().get(), false);
         }
+        if (request.getProductId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "product_id", request.getProductId().get(), false);
+        }
+        if (request.getProviderType().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "provider_type", request.getProviderType().get(), false);
+        }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
-        }
-        if (request.getRequiresPaymentMethod().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl,
-                    "requires_payment_method",
-                    request.getRequiresPaymentMethod().get(),
-                    false);
         }
         if (request.getTiersMode().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1203,6 +1204,10 @@ public class AsyncRawBillingClient {
         if (request.getUsageType().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "usage_type", request.getUsageType().get(), false);
+        }
+        if (request.getWithMeter().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "with_meter", request.getWithMeter().get(), false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1215,6 +1220,10 @@ public class AsyncRawBillingClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (request.getProductIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "product_ids", request.getProductIds().get(), true);
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1225,7 +1234,7 @@ public class AsyncRawBillingClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<BaseSchematicHttpResponse<SearchBillingPricesResponse>> future = new CompletableFuture<>();
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingPricesResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -1233,7 +1242,7 @@ public class AsyncRawBillingClient {
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), SearchBillingPricesResponse.class),
+                                        responseBody.string(), ListBillingPricesResponse.class),
                                 response));
                         return;
                     }
@@ -1465,56 +1474,66 @@ public class AsyncRawBillingClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<ListProductPricesResponse>> listProductPrices() {
-        return listProductPrices(ListProductPricesRequest.builder().build());
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingProductPricesResponse>> listBillingProductPrices() {
+        return listBillingProductPrices(
+                ListBillingProductPricesRequest.builder().build());
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<ListProductPricesResponse>> listProductPrices(
-            ListProductPricesRequest request) {
-        return listProductPrices(request, null);
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingProductPricesResponse>> listBillingProductPrices(
+            ListBillingProductPricesRequest request) {
+        return listBillingProductPrices(request, null);
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<ListProductPricesResponse>> listProductPrices(
-            ListProductPricesRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingProductPricesResponse>> listBillingProductPrices(
+            ListBillingProductPricesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/product/prices");
-        if (request.getName().isPresent()) {
+        if (request.getForInitialPlan().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "name", request.getName().get(), false);
+                    httpUrl, "for_initial_plan", request.getForInitialPlan().get(), false);
         }
-        if (request.getQ().isPresent()) {
-            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
-        }
-        if (request.getPriceUsageType().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "price_usage_type", request.getPriceUsageType().get(), false);
-        }
-        if (request.getWithoutLinkedToPlan().isPresent()) {
+        if (request.getForTrialExpiryPlan().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
-                    "without_linked_to_plan",
-                    request.getWithoutLinkedToPlan().get(),
+                    "for_trial_expiry_plan",
+                    request.getForTrialExpiryPlan().get(),
                     false);
         }
-        if (request.getWithOneTimeCharges().isPresent()) {
+        if (request.getInterval().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl,
-                    "with_one_time_charges",
-                    request.getWithOneTimeCharges().get(),
-                    false);
-        }
-        if (request.getWithZeroPrice().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "with_zero_price", request.getWithZeroPrice().get(), false);
-        }
-        if (request.getWithPricesOnly().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "with_prices_only", request.getWithPricesOnly().get(), false);
+                    httpUrl, "interval", request.getInterval().get(), false);
         }
         if (request.getIsActive().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "is_active", request.getIsActive().get(), false);
+        }
+        if (request.getPrice().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "price", request.getPrice().get(), false);
+        }
+        if (request.getProductId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "product_id", request.getProductId().get(), false);
+        }
+        if (request.getProviderType().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "provider_type", request.getProviderType().get(), false);
+        }
+        if (request.getQ().isPresent()) {
+            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
+        }
+        if (request.getTiersMode().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "tiers_mode", request.getTiersMode().get(), false);
+        }
+        if (request.getUsageType().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "usage_type", request.getUsageType().get(), false);
+        }
+        if (request.getWithMeter().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "with_meter", request.getWithMeter().get(), false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1527,6 +1546,10 @@ public class AsyncRawBillingClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (request.getProductIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "product_ids", request.getProductIds().get(), true);
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1537,7 +1560,8 @@ public class AsyncRawBillingClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<BaseSchematicHttpResponse<ListProductPricesResponse>> future = new CompletableFuture<>();
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingProductPricesResponse>> future =
+                new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -1545,7 +1569,7 @@ public class AsyncRawBillingClient {
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), ListProductPricesResponse.class),
+                                        responseBody.string(), ListBillingProductPricesResponse.class),
                                 response));
                         return;
                     }
@@ -1791,23 +1815,24 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/products");
+        if (request.getIsActive().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "is_active", request.getIsActive().get(), false);
+        }
         if (request.getName().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "name", request.getName().get(), false);
-        }
-        if (request.getQ().isPresent()) {
-            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
         if (request.getPriceUsageType().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "price_usage_type", request.getPriceUsageType().get(), false);
         }
-        if (request.getWithoutLinkedToPlan().isPresent()) {
+        if (request.getProviderType().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl,
-                    "without_linked_to_plan",
-                    request.getWithoutLinkedToPlan().get(),
-                    false);
+                    httpUrl, "provider_type", request.getProviderType().get(), false);
+        }
+        if (request.getQ().isPresent()) {
+            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
         if (request.getWithOneTimeCharges().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1816,17 +1841,20 @@ public class AsyncRawBillingClient {
                     request.getWithOneTimeCharges().get(),
                     false);
         }
-        if (request.getWithZeroPrice().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "with_zero_price", request.getWithZeroPrice().get(), false);
-        }
         if (request.getWithPricesOnly().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "with_prices_only", request.getWithPricesOnly().get(), false);
         }
-        if (request.getIsActive().isPresent()) {
+        if (request.getWithZeroPrice().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "is_active", request.getIsActive().get(), false);
+                    httpUrl, "with_zero_price", request.getWithZeroPrice().get(), false);
+        }
+        if (request.getWithoutLinkedToPlan().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "without_linked_to_plan",
+                    request.getWithoutLinkedToPlan().get(),
+                    false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1926,23 +1954,24 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/products/count");
+        if (request.getIsActive().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "is_active", request.getIsActive().get(), false);
+        }
         if (request.getName().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "name", request.getName().get(), false);
-        }
-        if (request.getQ().isPresent()) {
-            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
         if (request.getPriceUsageType().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "price_usage_type", request.getPriceUsageType().get(), false);
         }
-        if (request.getWithoutLinkedToPlan().isPresent()) {
+        if (request.getProviderType().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl,
-                    "without_linked_to_plan",
-                    request.getWithoutLinkedToPlan().get(),
-                    false);
+                    httpUrl, "provider_type", request.getProviderType().get(), false);
+        }
+        if (request.getQ().isPresent()) {
+            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
         if (request.getWithOneTimeCharges().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1951,17 +1980,20 @@ public class AsyncRawBillingClient {
                     request.getWithOneTimeCharges().get(),
                     false);
         }
-        if (request.getWithZeroPrice().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "with_zero_price", request.getWithZeroPrice().get(), false);
-        }
         if (request.getWithPricesOnly().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "with_prices_only", request.getWithPricesOnly().get(), false);
         }
-        if (request.getIsActive().isPresent()) {
+        if (request.getWithZeroPrice().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "is_active", request.getIsActive().get(), false);
+                    httpUrl, "with_zero_price", request.getWithZeroPrice().get(), false);
+        }
+        if (request.getWithoutLinkedToPlan().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "without_linked_to_plan",
+                    request.getWithoutLinkedToPlan().get(),
+                    false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(

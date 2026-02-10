@@ -28,9 +28,13 @@ public final class CountPlanEntitlementsRequest {
 
     private final Optional<List<String>> planIds;
 
+    private final Optional<List<String>> planVersionIds;
+
     private final Optional<String> featureId;
 
     private final Optional<String> planId;
+
+    private final Optional<String> planVersionId;
 
     private final Optional<String> q;
 
@@ -46,8 +50,10 @@ public final class CountPlanEntitlementsRequest {
             Optional<List<String>> featureIds,
             Optional<List<String>> ids,
             Optional<List<String>> planIds,
+            Optional<List<String>> planVersionIds,
             Optional<String> featureId,
             Optional<String> planId,
+            Optional<String> planVersionId,
             Optional<String> q,
             Optional<Boolean> withMeteredProducts,
             Optional<Integer> limit,
@@ -56,8 +62,10 @@ public final class CountPlanEntitlementsRequest {
         this.featureIds = featureIds;
         this.ids = ids;
         this.planIds = planIds;
+        this.planVersionIds = planVersionIds;
         this.featureId = featureId;
         this.planId = planId;
+        this.planVersionId = planVersionId;
         this.q = q;
         this.withMeteredProducts = withMeteredProducts;
         this.limit = limit;
@@ -90,6 +98,14 @@ public final class CountPlanEntitlementsRequest {
     }
 
     /**
+     * @return Filter plan entitlements by multiple plan version IDs (starting with plvr_)
+     */
+    @JsonProperty("plan_version_ids")
+    public Optional<List<String>> getPlanVersionIds() {
+        return planVersionIds;
+    }
+
+    /**
      * @return Filter plan entitlements by a single feature ID (starting with feat_)
      */
     @JsonProperty("feature_id")
@@ -103,6 +119,14 @@ public final class CountPlanEntitlementsRequest {
     @JsonProperty("plan_id")
     public Optional<String> getPlanId() {
         return planId;
+    }
+
+    /**
+     * @return Filter plan entitlements by a single plan version ID (starting with plvr_)
+     */
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
     }
 
     /**
@@ -152,8 +176,10 @@ public final class CountPlanEntitlementsRequest {
         return featureIds.equals(other.featureIds)
                 && ids.equals(other.ids)
                 && planIds.equals(other.planIds)
+                && planVersionIds.equals(other.planVersionIds)
                 && featureId.equals(other.featureId)
                 && planId.equals(other.planId)
+                && planVersionId.equals(other.planVersionId)
                 && q.equals(other.q)
                 && withMeteredProducts.equals(other.withMeteredProducts)
                 && limit.equals(other.limit)
@@ -166,8 +192,10 @@ public final class CountPlanEntitlementsRequest {
                 this.featureIds,
                 this.ids,
                 this.planIds,
+                this.planVersionIds,
                 this.featureId,
                 this.planId,
+                this.planVersionId,
                 this.q,
                 this.withMeteredProducts,
                 this.limit,
@@ -191,9 +219,13 @@ public final class CountPlanEntitlementsRequest {
 
         private Optional<List<String>> planIds = Optional.empty();
 
+        private Optional<List<String>> planVersionIds = Optional.empty();
+
         private Optional<String> featureId = Optional.empty();
 
         private Optional<String> planId = Optional.empty();
+
+        private Optional<String> planVersionId = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -212,8 +244,10 @@ public final class CountPlanEntitlementsRequest {
             featureIds(other.getFeatureIds());
             ids(other.getIds());
             planIds(other.getPlanIds());
+            planVersionIds(other.getPlanVersionIds());
             featureId(other.getFeatureId());
             planId(other.getPlanId());
+            planVersionId(other.getPlanVersionId());
             q(other.getQ());
             withMeteredProducts(other.getWithMeteredProducts());
             limit(other.getLimit());
@@ -279,6 +313,25 @@ public final class CountPlanEntitlementsRequest {
         }
 
         /**
+         * <p>Filter plan entitlements by multiple plan version IDs (starting with plvr_)</p>
+         */
+        @JsonSetter(value = "plan_version_ids", nulls = Nulls.SKIP)
+        public Builder planVersionIds(Optional<List<String>> planVersionIds) {
+            this.planVersionIds = planVersionIds;
+            return this;
+        }
+
+        public Builder planVersionIds(List<String> planVersionIds) {
+            this.planVersionIds = Optional.ofNullable(planVersionIds);
+            return this;
+        }
+
+        public Builder planVersionIds(String planVersionIds) {
+            this.planVersionIds = Optional.of(Collections.singletonList(planVersionIds));
+            return this;
+        }
+
+        /**
          * <p>Filter plan entitlements by a single feature ID (starting with feat_)</p>
          */
         @JsonSetter(value = "feature_id", nulls = Nulls.SKIP)
@@ -303,6 +356,20 @@ public final class CountPlanEntitlementsRequest {
 
         public Builder planId(String planId) {
             this.planId = Optional.ofNullable(planId);
+            return this;
+        }
+
+        /**
+         * <p>Filter plan entitlements by a single plan version ID (starting with plvr_)</p>
+         */
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
             return this;
         }
 
@@ -367,8 +434,10 @@ public final class CountPlanEntitlementsRequest {
                     featureIds,
                     ids,
                     planIds,
+                    planVersionIds,
                     featureId,
                     planId,
+                    planVersionId,
                     q,
                     withMeteredProducts,
                     limit,

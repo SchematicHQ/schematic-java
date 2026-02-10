@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.resources.entitlements.types.UpdateCompanyOverrideRequestBodyMetricPeriod;
 import com.schematic.api.resources.entitlements.types.UpdateCompanyOverrideRequestBodyMetricPeriodMonthReset;
-import com.schematic.api.resources.entitlements.types.UpdateCompanyOverrideRequestBodyValueType;
+import com.schematic.api.types.EntitlementValueType;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +43,7 @@ public final class UpdateCompanyOverrideRequestBody {
 
     private final Optional<String> valueTraitId;
 
-    private final UpdateCompanyOverrideRequestBodyValueType valueType;
+    private final EntitlementValueType valueType;
 
     private final Map<String, Object> additionalProperties;
 
@@ -57,7 +57,7 @@ public final class UpdateCompanyOverrideRequestBody {
             Optional<String> valueCreditId,
             Optional<Integer> valueNumeric,
             Optional<String> valueTraitId,
-            UpdateCompanyOverrideRequestBodyValueType valueType,
+            EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
         this.creditConsumptionRate = creditConsumptionRate;
         this.expirationDate = expirationDate;
@@ -118,7 +118,7 @@ public final class UpdateCompanyOverrideRequestBody {
     }
 
     @JsonProperty("value_type")
-    public UpdateCompanyOverrideRequestBodyValueType getValueType() {
+    public EntitlementValueType getValueType() {
         return valueType;
     }
 
@@ -171,7 +171,7 @@ public final class UpdateCompanyOverrideRequestBody {
     }
 
     public interface ValueTypeStage {
-        _FinalStage valueType(@NotNull UpdateCompanyOverrideRequestBodyValueType valueType);
+        _FinalStage valueType(@NotNull EntitlementValueType valueType);
 
         Builder from(UpdateCompanyOverrideRequestBody other);
     }
@@ -220,7 +220,7 @@ public final class UpdateCompanyOverrideRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ValueTypeStage, _FinalStage {
-        private UpdateCompanyOverrideRequestBodyValueType valueType;
+        private EntitlementValueType valueType;
 
         private Optional<String> valueTraitId = Optional.empty();
 
@@ -263,7 +263,7 @@ public final class UpdateCompanyOverrideRequestBody {
 
         @java.lang.Override
         @JsonSetter("value_type")
-        public _FinalStage valueType(@NotNull UpdateCompanyOverrideRequestBodyValueType valueType) {
+        public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
             return this;
         }

@@ -35,6 +35,10 @@ public final class ListPlanEntitlementsParams {
 
     private final Optional<List<String>> planIds;
 
+    private final Optional<String> planVersionId;
+
+    private final Optional<List<String>> planVersionIds;
+
     private final Optional<String> q;
 
     private final Optional<Boolean> withMeteredProducts;
@@ -49,6 +53,8 @@ public final class ListPlanEntitlementsParams {
             Optional<Integer> offset,
             Optional<String> planId,
             Optional<List<String>> planIds,
+            Optional<String> planVersionId,
+            Optional<List<String>> planVersionIds,
             Optional<String> q,
             Optional<Boolean> withMeteredProducts,
             Map<String, Object> additionalProperties) {
@@ -59,6 +65,8 @@ public final class ListPlanEntitlementsParams {
         this.offset = offset;
         this.planId = planId;
         this.planIds = planIds;
+        this.planVersionId = planVersionId;
+        this.planVersionIds = planVersionIds;
         this.q = q;
         this.withMeteredProducts = withMeteredProducts;
         this.additionalProperties = additionalProperties;
@@ -121,6 +129,22 @@ public final class ListPlanEntitlementsParams {
     }
 
     /**
+     * @return Filter plan entitlements by a single plan version ID (starting with plvr_)
+     */
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
+    }
+
+    /**
+     * @return Filter plan entitlements by multiple plan version IDs (starting with plvr_)
+     */
+    @JsonProperty("plan_version_ids")
+    public Optional<List<String>> getPlanVersionIds() {
+        return planVersionIds;
+    }
+
+    /**
      * @return Search for plan entitlements by feature or company name
      */
     @JsonProperty("q")
@@ -155,6 +179,8 @@ public final class ListPlanEntitlementsParams {
                 && offset.equals(other.offset)
                 && planId.equals(other.planId)
                 && planIds.equals(other.planIds)
+                && planVersionId.equals(other.planVersionId)
+                && planVersionIds.equals(other.planVersionIds)
                 && q.equals(other.q)
                 && withMeteredProducts.equals(other.withMeteredProducts);
     }
@@ -169,6 +195,8 @@ public final class ListPlanEntitlementsParams {
                 this.offset,
                 this.planId,
                 this.planIds,
+                this.planVersionId,
+                this.planVersionIds,
                 this.q,
                 this.withMeteredProducts);
     }
@@ -198,6 +226,10 @@ public final class ListPlanEntitlementsParams {
 
         private Optional<List<String>> planIds = Optional.empty();
 
+        private Optional<String> planVersionId = Optional.empty();
+
+        private Optional<List<String>> planVersionIds = Optional.empty();
+
         private Optional<String> q = Optional.empty();
 
         private Optional<Boolean> withMeteredProducts = Optional.empty();
@@ -215,6 +247,8 @@ public final class ListPlanEntitlementsParams {
             offset(other.getOffset());
             planId(other.getPlanId());
             planIds(other.getPlanIds());
+            planVersionId(other.getPlanVersionId());
+            planVersionIds(other.getPlanVersionIds());
             q(other.getQ());
             withMeteredProducts(other.getWithMeteredProducts());
             return this;
@@ -319,6 +353,34 @@ public final class ListPlanEntitlementsParams {
         }
 
         /**
+         * <p>Filter plan entitlements by a single plan version ID (starting with plvr_)</p>
+         */
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
+        /**
+         * <p>Filter plan entitlements by multiple plan version IDs (starting with plvr_)</p>
+         */
+        @JsonSetter(value = "plan_version_ids", nulls = Nulls.SKIP)
+        public Builder planVersionIds(Optional<List<String>> planVersionIds) {
+            this.planVersionIds = planVersionIds;
+            return this;
+        }
+
+        public Builder planVersionIds(List<String> planVersionIds) {
+            this.planVersionIds = Optional.ofNullable(planVersionIds);
+            return this;
+        }
+
+        /**
          * <p>Search for plan entitlements by feature or company name</p>
          */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
@@ -355,6 +417,8 @@ public final class ListPlanEntitlementsParams {
                     offset,
                     planId,
                     planIds,
+                    planVersionId,
+                    planVersionIds,
                     q,
                     withMeteredProducts,
                     additionalProperties);

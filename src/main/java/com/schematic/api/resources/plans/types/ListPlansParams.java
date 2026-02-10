@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.PlanType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,17 +38,13 @@ public final class ListPlansParams {
 
     private final Optional<Integer> offset;
 
-    private final Optional<ListPlansResponseParamsPlanType> planType;
+    private final Optional<PlanType> planType;
 
     private final Optional<String> q;
-
-    private final Optional<Boolean> requiresPaymentMethod;
 
     private final Optional<String> withoutEntitlementFor;
 
     private final Optional<Boolean> withoutPaidProductId;
-
-    private final Optional<Boolean> withoutProductId;
 
     private final Map<String, Object> additionalProperties;
 
@@ -60,12 +57,10 @@ public final class ListPlansParams {
             Optional<List<String>> ids,
             Optional<Integer> limit,
             Optional<Integer> offset,
-            Optional<ListPlansResponseParamsPlanType> planType,
+            Optional<PlanType> planType,
             Optional<String> q,
-            Optional<Boolean> requiresPaymentMethod,
             Optional<String> withoutEntitlementFor,
             Optional<Boolean> withoutPaidProductId,
-            Optional<Boolean> withoutProductId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.forFallbackPlan = forFallbackPlan;
@@ -77,10 +72,8 @@ public final class ListPlansParams {
         this.offset = offset;
         this.planType = planType;
         this.q = q;
-        this.requiresPaymentMethod = requiresPaymentMethod;
         this.withoutEntitlementFor = withoutEntitlementFor;
         this.withoutPaidProductId = withoutPaidProductId;
-        this.withoutProductId = withoutProductId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -142,25 +135,14 @@ public final class ListPlansParams {
         return offset;
     }
 
-    /**
-     * @return Filter by plan type
-     */
     @JsonProperty("plan_type")
-    public Optional<ListPlansResponseParamsPlanType> getPlanType() {
+    public Optional<PlanType> getPlanType() {
         return planType;
     }
 
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
-    }
-
-    /**
-     * @return Filter for plans that require a payment method (inverse of ForInitialPlan)
-     */
-    @JsonProperty("requires_payment_method")
-    public Optional<Boolean> getRequiresPaymentMethod() {
-        return requiresPaymentMethod;
     }
 
     /**
@@ -177,14 +159,6 @@ public final class ListPlansParams {
     @JsonProperty("without_paid_product_id")
     public Optional<Boolean> getWithoutPaidProductId() {
         return withoutPaidProductId;
-    }
-
-    /**
-     * @return Filter out plans that have a billing product ID
-     */
-    @JsonProperty("without_product_id")
-    public Optional<Boolean> getWithoutProductId() {
-        return withoutProductId;
     }
 
     @java.lang.Override
@@ -209,10 +183,8 @@ public final class ListPlansParams {
                 && offset.equals(other.offset)
                 && planType.equals(other.planType)
                 && q.equals(other.q)
-                && requiresPaymentMethod.equals(other.requiresPaymentMethod)
                 && withoutEntitlementFor.equals(other.withoutEntitlementFor)
-                && withoutPaidProductId.equals(other.withoutPaidProductId)
-                && withoutProductId.equals(other.withoutProductId);
+                && withoutPaidProductId.equals(other.withoutPaidProductId);
     }
 
     @java.lang.Override
@@ -228,10 +200,8 @@ public final class ListPlansParams {
                 this.offset,
                 this.planType,
                 this.q,
-                this.requiresPaymentMethod,
                 this.withoutEntitlementFor,
-                this.withoutPaidProductId,
-                this.withoutProductId);
+                this.withoutPaidProductId);
     }
 
     @java.lang.Override
@@ -261,17 +231,13 @@ public final class ListPlansParams {
 
         private Optional<Integer> offset = Optional.empty();
 
-        private Optional<ListPlansResponseParamsPlanType> planType = Optional.empty();
+        private Optional<PlanType> planType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
-
-        private Optional<Boolean> requiresPaymentMethod = Optional.empty();
 
         private Optional<String> withoutEntitlementFor = Optional.empty();
 
         private Optional<Boolean> withoutPaidProductId = Optional.empty();
-
-        private Optional<Boolean> withoutProductId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -289,10 +255,8 @@ public final class ListPlansParams {
             offset(other.getOffset());
             planType(other.getPlanType());
             q(other.getQ());
-            requiresPaymentMethod(other.getRequiresPaymentMethod());
             withoutEntitlementFor(other.getWithoutEntitlementFor());
             withoutPaidProductId(other.getWithoutPaidProductId());
-            withoutProductId(other.getWithoutProductId());
             return this;
         }
 
@@ -402,16 +366,13 @@ public final class ListPlansParams {
             return this;
         }
 
-        /**
-         * <p>Filter by plan type</p>
-         */
         @JsonSetter(value = "plan_type", nulls = Nulls.SKIP)
-        public Builder planType(Optional<ListPlansResponseParamsPlanType> planType) {
+        public Builder planType(Optional<PlanType> planType) {
             this.planType = planType;
             return this;
         }
 
-        public Builder planType(ListPlansResponseParamsPlanType planType) {
+        public Builder planType(PlanType planType) {
             this.planType = Optional.ofNullable(planType);
             return this;
         }
@@ -424,20 +385,6 @@ public final class ListPlansParams {
 
         public Builder q(String q) {
             this.q = Optional.ofNullable(q);
-            return this;
-        }
-
-        /**
-         * <p>Filter for plans that require a payment method (inverse of ForInitialPlan)</p>
-         */
-        @JsonSetter(value = "requires_payment_method", nulls = Nulls.SKIP)
-        public Builder requiresPaymentMethod(Optional<Boolean> requiresPaymentMethod) {
-            this.requiresPaymentMethod = requiresPaymentMethod;
-            return this;
-        }
-
-        public Builder requiresPaymentMethod(Boolean requiresPaymentMethod) {
-            this.requiresPaymentMethod = Optional.ofNullable(requiresPaymentMethod);
             return this;
         }
 
@@ -469,20 +416,6 @@ public final class ListPlansParams {
             return this;
         }
 
-        /**
-         * <p>Filter out plans that have a billing product ID</p>
-         */
-        @JsonSetter(value = "without_product_id", nulls = Nulls.SKIP)
-        public Builder withoutProductId(Optional<Boolean> withoutProductId) {
-            this.withoutProductId = withoutProductId;
-            return this;
-        }
-
-        public Builder withoutProductId(Boolean withoutProductId) {
-            this.withoutProductId = Optional.ofNullable(withoutProductId);
-            return this;
-        }
-
         public ListPlansParams build() {
             return new ListPlansParams(
                     companyId,
@@ -495,10 +428,8 @@ public final class ListPlansParams {
                     offset,
                     planType,
                     q,
-                    requiresPaymentMethod,
                     withoutEntitlementFor,
                     withoutPaidProductId,
-                    withoutProductId,
                     additionalProperties);
         }
     }

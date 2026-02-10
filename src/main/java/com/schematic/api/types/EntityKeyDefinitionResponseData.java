@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 public final class EntityKeyDefinitionResponseData {
     private final OffsetDateTime createdAt;
 
-    private final String entityType;
+    private final EntityType entityType;
 
     private final String id;
 
@@ -34,7 +34,7 @@ public final class EntityKeyDefinitionResponseData {
 
     private EntityKeyDefinitionResponseData(
             OffsetDateTime createdAt,
-            String entityType,
+            EntityType entityType,
             String id,
             String key,
             OffsetDateTime updatedAt,
@@ -53,7 +53,7 @@ public final class EntityKeyDefinitionResponseData {
     }
 
     @JsonProperty("entity_type")
-    public String getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
     }
 
@@ -112,7 +112,7 @@ public final class EntityKeyDefinitionResponseData {
     }
 
     public interface EntityTypeStage {
-        IdStage entityType(@NotNull String entityType);
+        IdStage entityType(@NotNull EntityType entityType);
     }
 
     public interface IdStage {
@@ -136,7 +136,7 @@ public final class EntityKeyDefinitionResponseData {
             implements CreatedAtStage, EntityTypeStage, IdStage, KeyStage, UpdatedAtStage, _FinalStage {
         private OffsetDateTime createdAt;
 
-        private String entityType;
+        private EntityType entityType;
 
         private String id;
 
@@ -168,7 +168,7 @@ public final class EntityKeyDefinitionResponseData {
 
         @java.lang.Override
         @JsonSetter("entity_type")
-        public IdStage entityType(@NotNull String entityType) {
+        public IdStage entityType(@NotNull EntityType entityType) {
             this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
             return this;
         }
