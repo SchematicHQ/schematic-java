@@ -11,7 +11,6 @@ import com.schematic.api.resources.billing.BillingClient;
 import com.schematic.api.resources.checkout.CheckoutClient;
 import com.schematic.api.resources.companies.CompaniesClient;
 import com.schematic.api.resources.components.ComponentsClient;
-import com.schematic.api.resources.crm.CrmClient;
 import com.schematic.api.resources.entitlements.EntitlementsClient;
 import com.schematic.api.resources.events.EventsClient;
 import com.schematic.api.resources.features.FeaturesClient;
@@ -37,8 +36,6 @@ public class BaseSchematic {
 
     protected final Supplier<ComponentsClient> componentsClient;
 
-    protected final Supplier<CrmClient> crmClient;
-
     protected final Supplier<EventsClient> eventsClient;
 
     protected final Supplier<PlansClient> plansClient;
@@ -58,7 +55,6 @@ public class BaseSchematic {
         this.companiesClient = Suppliers.memoize(() -> new CompaniesClient(clientOptions));
         this.entitlementsClient = Suppliers.memoize(() -> new EntitlementsClient(clientOptions));
         this.componentsClient = Suppliers.memoize(() -> new ComponentsClient(clientOptions));
-        this.crmClient = Suppliers.memoize(() -> new CrmClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new EventsClient(clientOptions));
         this.plansClient = Suppliers.memoize(() -> new PlansClient(clientOptions));
         this.plangroupsClient = Suppliers.memoize(() -> new PlangroupsClient(clientOptions));
@@ -92,10 +88,6 @@ public class BaseSchematic {
 
     public ComponentsClient components() {
         return this.componentsClient.get();
-    }
-
-    public CrmClient crm() {
-        return this.crmClient.get();
     }
 
     public EventsClient events() {
