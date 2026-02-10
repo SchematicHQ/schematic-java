@@ -225,6 +225,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     public void track(
             String eventName, Map<String, String> company, Map<String, String> user, Map<String, Object> traits) {
+        track(eventName, company, user, traits, 1);
+    }
+
+    public void track(
+            String eventName,
+            Map<String, String> company,
+            Map<String, String> user,
+            Map<String, Object> traits,
+            Integer quantity) {
         if (offline) return;
 
         try {
@@ -233,6 +242,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .company(company)
                     .user(user)
                     .traits(objectMapToJsonNode(traits))
+                    .quantity(quantity)
                     .build();
 
             CreateEventRequestBody event = CreateEventRequestBody.builder()
