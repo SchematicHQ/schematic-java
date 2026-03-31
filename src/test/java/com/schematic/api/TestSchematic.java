@@ -11,6 +11,7 @@ import com.schematic.api.cache.LocalCache;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.FeaturesClient;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
+import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.CheckFlagResponseData;
 import com.schematic.api.types.EventBodyIdentifyCompany;
 import java.time.Duration;
@@ -49,7 +50,7 @@ class SchematicTest {
 
         CheckFlagResponse response = mock(CheckFlagResponse.class);
         when(response.getData()).thenReturn(null);
-        when(featuresClient.checkFlag(any(), any())).thenReturn(response);
+        when(featuresClient.checkFlag(any(), any(CheckFlagRequestBody.class))).thenReturn(response);
 
         boolean result = spySchematic.checkFlag("test_flag", null, null);
 
@@ -71,7 +72,8 @@ class SchematicTest {
                         .build())
                 .build();
 
-        when(featuresClient.checkFlag(eq("test_flag"), any())).thenReturn(response);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(response);
 
         boolean result = spySchematic.checkFlag("test_flag", null, null);
 
@@ -118,7 +120,8 @@ class SchematicTest {
                 .logger(logger)
                 .build());
         when(spySchematic.features()).thenReturn(featuresClient);
-        when(featuresClient.checkFlag(any(), any())).thenThrow(new RuntimeException("API Error"));
+        when(featuresClient.checkFlag(any(), any(CheckFlagRequestBody.class)))
+                .thenThrow(new RuntimeException("API Error"));
 
         boolean result = spySchematic.checkFlag("error_flag", null, null);
 
