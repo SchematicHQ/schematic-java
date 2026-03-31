@@ -22,27 +22,27 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventSummaryResponseData.Builder.class)
 public final class EventSummaryResponseData {
-    private final int companyCount;
+    private final long companyCount;
 
     private final String environmentId;
 
-    private final int eventCount;
+    private final long eventCount;
 
     private final String eventSubtype;
 
     private final Optional<OffsetDateTime> lastSeenAt;
 
-    private final int userCount;
+    private final long userCount;
 
     private final Map<String, Object> additionalProperties;
 
     private EventSummaryResponseData(
-            int companyCount,
+            long companyCount,
             String environmentId,
-            int eventCount,
+            long eventCount,
             String eventSubtype,
             Optional<OffsetDateTime> lastSeenAt,
-            int userCount,
+            long userCount,
             Map<String, Object> additionalProperties) {
         this.companyCount = companyCount;
         this.environmentId = environmentId;
@@ -54,7 +54,7 @@ public final class EventSummaryResponseData {
     }
 
     @JsonProperty("company_count")
-    public int getCompanyCount() {
+    public long getCompanyCount() {
         return companyCount;
     }
 
@@ -64,7 +64,7 @@ public final class EventSummaryResponseData {
     }
 
     @JsonProperty("event_count")
-    public int getEventCount() {
+    public long getEventCount() {
         return eventCount;
     }
 
@@ -79,7 +79,7 @@ public final class EventSummaryResponseData {
     }
 
     @JsonProperty("user_count")
-    public int getUserCount() {
+    public long getUserCount() {
         return userCount;
     }
 
@@ -124,7 +124,7 @@ public final class EventSummaryResponseData {
     }
 
     public interface CompanyCountStage {
-        EnvironmentIdStage companyCount(int companyCount);
+        EnvironmentIdStage companyCount(long companyCount);
 
         Builder from(EventSummaryResponseData other);
     }
@@ -134,7 +134,7 @@ public final class EventSummaryResponseData {
     }
 
     public interface EventCountStage {
-        EventSubtypeStage eventCount(int eventCount);
+        EventSubtypeStage eventCount(long eventCount);
     }
 
     public interface EventSubtypeStage {
@@ -142,11 +142,15 @@ public final class EventSummaryResponseData {
     }
 
     public interface UserCountStage {
-        _FinalStage userCount(int userCount);
+        _FinalStage userCount(long userCount);
     }
 
     public interface _FinalStage {
         EventSummaryResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage lastSeenAt(Optional<OffsetDateTime> lastSeenAt);
 
@@ -161,15 +165,15 @@ public final class EventSummaryResponseData {
                     EventSubtypeStage,
                     UserCountStage,
                     _FinalStage {
-        private int companyCount;
+        private long companyCount;
 
         private String environmentId;
 
-        private int eventCount;
+        private long eventCount;
 
         private String eventSubtype;
 
-        private int userCount;
+        private long userCount;
 
         private Optional<OffsetDateTime> lastSeenAt = Optional.empty();
 
@@ -191,7 +195,7 @@ public final class EventSummaryResponseData {
 
         @java.lang.Override
         @JsonSetter("company_count")
-        public EnvironmentIdStage companyCount(int companyCount) {
+        public EnvironmentIdStage companyCount(long companyCount) {
             this.companyCount = companyCount;
             return this;
         }
@@ -205,7 +209,7 @@ public final class EventSummaryResponseData {
 
         @java.lang.Override
         @JsonSetter("event_count")
-        public EventSubtypeStage eventCount(int eventCount) {
+        public EventSubtypeStage eventCount(long eventCount) {
             this.eventCount = eventCount;
             return this;
         }
@@ -219,7 +223,7 @@ public final class EventSummaryResponseData {
 
         @java.lang.Override
         @JsonSetter("user_count")
-        public _FinalStage userCount(int userCount) {
+        public _FinalStage userCount(long userCount) {
             this.userCount = userCount;
             return this;
         }
@@ -241,6 +245,18 @@ public final class EventSummaryResponseData {
         public EventSummaryResponseData build() {
             return new EventSummaryResponseData(
                     companyCount, environmentId, eventCount, eventSubtype, lastSeenAt, userCount, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

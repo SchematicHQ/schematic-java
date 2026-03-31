@@ -29,6 +29,8 @@ public final class ListBillingPricesRequest {
 
     private final Optional<List<String>> productIds;
 
+    private final Optional<String> currency;
+
     private final Optional<Boolean> forInitialPlan;
 
     private final Optional<Boolean> forTrialExpiryPlan;
@@ -37,7 +39,7 @@ public final class ListBillingPricesRequest {
 
     private final Optional<Boolean> isActive;
 
-    private final Optional<Integer> price;
+    private final Optional<Long> price;
 
     private final Optional<String> productId;
 
@@ -51,31 +53,33 @@ public final class ListBillingPricesRequest {
 
     private final Optional<Boolean> withMeter;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Map<String, Object> additionalProperties;
 
     private ListBillingPricesRequest(
             Optional<List<String>> ids,
             Optional<List<String>> productIds,
+            Optional<String> currency,
             Optional<Boolean> forInitialPlan,
             Optional<Boolean> forTrialExpiryPlan,
             Optional<String> interval,
             Optional<Boolean> isActive,
-            Optional<Integer> price,
+            Optional<Long> price,
             Optional<String> productId,
             Optional<BillingProviderType> providerType,
             Optional<String> q,
             Optional<BillingTiersMode> tiersMode,
             Optional<BillingPriceUsageType> usageType,
             Optional<Boolean> withMeter,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
         this.productIds = productIds;
+        this.currency = currency;
         this.forInitialPlan = forInitialPlan;
         this.forTrialExpiryPlan = forTrialExpiryPlan;
         this.interval = interval;
@@ -100,6 +104,14 @@ public final class ListBillingPricesRequest {
     @JsonProperty("product_ids")
     public Optional<List<String>> getProductIds() {
         return productIds;
+    }
+
+    /**
+     * @return Filter for prices in a specific currency (e.g. usd, eur)
+     */
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
     }
 
     /**
@@ -132,7 +144,7 @@ public final class ListBillingPricesRequest {
     }
 
     @JsonProperty("price")
-    public Optional<Integer> getPrice() {
+    public Optional<Long> getPrice() {
         return price;
     }
 
@@ -173,7 +185,7 @@ public final class ListBillingPricesRequest {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -181,7 +193,7 @@ public final class ListBillingPricesRequest {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -199,6 +211,7 @@ public final class ListBillingPricesRequest {
     private boolean equalTo(ListBillingPricesRequest other) {
         return ids.equals(other.ids)
                 && productIds.equals(other.productIds)
+                && currency.equals(other.currency)
                 && forInitialPlan.equals(other.forInitialPlan)
                 && forTrialExpiryPlan.equals(other.forTrialExpiryPlan)
                 && interval.equals(other.interval)
@@ -219,6 +232,7 @@ public final class ListBillingPricesRequest {
         return Objects.hash(
                 this.ids,
                 this.productIds,
+                this.currency,
                 this.forInitialPlan,
                 this.forTrialExpiryPlan,
                 this.interval,
@@ -249,6 +263,8 @@ public final class ListBillingPricesRequest {
 
         private Optional<List<String>> productIds = Optional.empty();
 
+        private Optional<String> currency = Optional.empty();
+
         private Optional<Boolean> forInitialPlan = Optional.empty();
 
         private Optional<Boolean> forTrialExpiryPlan = Optional.empty();
@@ -257,7 +273,7 @@ public final class ListBillingPricesRequest {
 
         private Optional<Boolean> isActive = Optional.empty();
 
-        private Optional<Integer> price = Optional.empty();
+        private Optional<Long> price = Optional.empty();
 
         private Optional<String> productId = Optional.empty();
 
@@ -271,9 +287,9 @@ public final class ListBillingPricesRequest {
 
         private Optional<Boolean> withMeter = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -283,6 +299,7 @@ public final class ListBillingPricesRequest {
         public Builder from(ListBillingPricesRequest other) {
             ids(other.getIds());
             productIds(other.getProductIds());
+            currency(other.getCurrency());
             forInitialPlan(other.getForInitialPlan());
             forTrialExpiryPlan(other.getForTrialExpiryPlan());
             interval(other.getInterval());
@@ -328,6 +345,20 @@ public final class ListBillingPricesRequest {
 
         public Builder productIds(String productIds) {
             this.productIds = Optional.of(Collections.singletonList(productIds));
+            return this;
+        }
+
+        /**
+         * <p>Filter for prices in a specific currency (e.g. usd, eur)</p>
+         */
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public Builder currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        public Builder currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
             return this;
         }
 
@@ -385,12 +416,12 @@ public final class ListBillingPricesRequest {
         }
 
         @JsonSetter(value = "price", nulls = Nulls.SKIP)
-        public Builder price(Optional<Integer> price) {
+        public Builder price(Optional<Long> price) {
             this.price = price;
             return this;
         }
 
-        public Builder price(Integer price) {
+        public Builder price(Long price) {
             this.price = Optional.ofNullable(price);
             return this;
         }
@@ -468,12 +499,12 @@ public final class ListBillingPricesRequest {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -482,12 +513,12 @@ public final class ListBillingPricesRequest {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -496,6 +527,7 @@ public final class ListBillingPricesRequest {
             return new ListBillingPricesRequest(
                     ids,
                     productIds,
+                    currency,
                     forInitialPlan,
                     forTrialExpiryPlan,
                     interval,
@@ -510,6 +542,16 @@ public final class ListBillingPricesRequest {
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

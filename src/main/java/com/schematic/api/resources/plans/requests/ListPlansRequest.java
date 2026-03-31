@@ -35,6 +35,8 @@ public final class ListPlansRequest {
 
     private final Optional<Boolean> hasProductId;
 
+    private final Optional<Boolean> includeDraftVersions;
+
     private final Optional<PlanType> planType;
 
     private final Optional<String> q;
@@ -43,9 +45,9 @@ public final class ListPlansRequest {
 
     private final Optional<Boolean> withoutPaidProductId;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Map<String, Object> additionalProperties;
 
@@ -56,12 +58,13 @@ public final class ListPlansRequest {
             Optional<Boolean> forInitialPlan,
             Optional<Boolean> forTrialExpiryPlan,
             Optional<Boolean> hasProductId,
+            Optional<Boolean> includeDraftVersions,
             Optional<PlanType> planType,
             Optional<String> q,
             Optional<String> withoutEntitlementFor,
             Optional<Boolean> withoutPaidProductId,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
         this.companyId = companyId;
@@ -69,6 +72,7 @@ public final class ListPlansRequest {
         this.forInitialPlan = forInitialPlan;
         this.forTrialExpiryPlan = forTrialExpiryPlan;
         this.hasProductId = hasProductId;
+        this.includeDraftVersions = includeDraftVersions;
         this.planType = planType;
         this.q = q;
         this.withoutEntitlementFor = withoutEntitlementFor;
@@ -121,6 +125,14 @@ public final class ListPlansRequest {
     }
 
     /**
+     * @return Include billing settings from draft versions for plans which have draft version
+     */
+    @JsonProperty("include_draft_versions")
+    public Optional<Boolean> getIncludeDraftVersions() {
+        return includeDraftVersions;
+    }
+
+    /**
      * @return Filter by plan type
      */
     @JsonProperty("plan_type")
@@ -153,7 +165,7 @@ public final class ListPlansRequest {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -161,7 +173,7 @@ public final class ListPlansRequest {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -183,6 +195,7 @@ public final class ListPlansRequest {
                 && forInitialPlan.equals(other.forInitialPlan)
                 && forTrialExpiryPlan.equals(other.forTrialExpiryPlan)
                 && hasProductId.equals(other.hasProductId)
+                && includeDraftVersions.equals(other.includeDraftVersions)
                 && planType.equals(other.planType)
                 && q.equals(other.q)
                 && withoutEntitlementFor.equals(other.withoutEntitlementFor)
@@ -200,6 +213,7 @@ public final class ListPlansRequest {
                 this.forInitialPlan,
                 this.forTrialExpiryPlan,
                 this.hasProductId,
+                this.includeDraftVersions,
                 this.planType,
                 this.q,
                 this.withoutEntitlementFor,
@@ -231,6 +245,8 @@ public final class ListPlansRequest {
 
         private Optional<Boolean> hasProductId = Optional.empty();
 
+        private Optional<Boolean> includeDraftVersions = Optional.empty();
+
         private Optional<PlanType> planType = Optional.empty();
 
         private Optional<String> q = Optional.empty();
@@ -239,9 +255,9 @@ public final class ListPlansRequest {
 
         private Optional<Boolean> withoutPaidProductId = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -255,6 +271,7 @@ public final class ListPlansRequest {
             forInitialPlan(other.getForInitialPlan());
             forTrialExpiryPlan(other.getForTrialExpiryPlan());
             hasProductId(other.getHasProductId());
+            includeDraftVersions(other.getIncludeDraftVersions());
             planType(other.getPlanType());
             q(other.getQ());
             withoutEntitlementFor(other.getWithoutEntitlementFor());
@@ -348,6 +365,20 @@ public final class ListPlansRequest {
         }
 
         /**
+         * <p>Include billing settings from draft versions for plans which have draft version</p>
+         */
+        @JsonSetter(value = "include_draft_versions", nulls = Nulls.SKIP)
+        public Builder includeDraftVersions(Optional<Boolean> includeDraftVersions) {
+            this.includeDraftVersions = includeDraftVersions;
+            return this;
+        }
+
+        public Builder includeDraftVersions(Boolean includeDraftVersions) {
+            this.includeDraftVersions = Optional.ofNullable(includeDraftVersions);
+            return this;
+        }
+
+        /**
          * <p>Filter by plan type</p>
          */
         @JsonSetter(value = "plan_type", nulls = Nulls.SKIP)
@@ -404,12 +435,12 @@ public final class ListPlansRequest {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -418,12 +449,12 @@ public final class ListPlansRequest {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -436,6 +467,7 @@ public final class ListPlansRequest {
                     forInitialPlan,
                     forTrialExpiryPlan,
                     hasProductId,
+                    includeDraftVersions,
                     planType,
                     q,
                     withoutEntitlementFor,
@@ -443,6 +475,16 @@ public final class ListPlansRequest {
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

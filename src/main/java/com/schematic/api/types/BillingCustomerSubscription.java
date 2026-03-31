@@ -30,9 +30,9 @@ public final class BillingCustomerSubscription {
 
     private final boolean meteredUsage;
 
-    private final int perUnitPrice;
+    private final long perUnitPrice;
 
-    private final int totalPrice;
+    private final long totalPrice;
 
     private final Map<String, Object> additionalProperties;
 
@@ -41,8 +41,8 @@ public final class BillingCustomerSubscription {
             Optional<OffsetDateTime> expiredAt,
             String interval,
             boolean meteredUsage,
-            int perUnitPrice,
-            int totalPrice,
+            long perUnitPrice,
+            long totalPrice,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.expiredAt = expiredAt;
@@ -74,12 +74,12 @@ public final class BillingCustomerSubscription {
     }
 
     @JsonProperty("per_unit_price")
-    public int getPerUnitPrice() {
+    public long getPerUnitPrice() {
         return perUnitPrice;
     }
 
     @JsonProperty("total_price")
-    public int getTotalPrice() {
+    public long getTotalPrice() {
         return totalPrice;
     }
 
@@ -133,15 +133,19 @@ public final class BillingCustomerSubscription {
     }
 
     public interface PerUnitPriceStage {
-        TotalPriceStage perUnitPrice(int perUnitPrice);
+        TotalPriceStage perUnitPrice(long perUnitPrice);
     }
 
     public interface TotalPriceStage {
-        _FinalStage totalPrice(int totalPrice);
+        _FinalStage totalPrice(long totalPrice);
     }
 
     public interface _FinalStage {
         BillingCustomerSubscription build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage expiredAt(Optional<OffsetDateTime> expiredAt);
 
@@ -162,9 +166,9 @@ public final class BillingCustomerSubscription {
 
         private boolean meteredUsage;
 
-        private int perUnitPrice;
+        private long perUnitPrice;
 
-        private int totalPrice;
+        private long totalPrice;
 
         private Optional<OffsetDateTime> expiredAt = Optional.empty();
 
@@ -207,14 +211,14 @@ public final class BillingCustomerSubscription {
 
         @java.lang.Override
         @JsonSetter("per_unit_price")
-        public TotalPriceStage perUnitPrice(int perUnitPrice) {
+        public TotalPriceStage perUnitPrice(long perUnitPrice) {
             this.perUnitPrice = perUnitPrice;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("total_price")
-        public _FinalStage totalPrice(int totalPrice) {
+        public _FinalStage totalPrice(long totalPrice) {
             this.totalPrice = totalPrice;
             return this;
         }
@@ -236,6 +240,18 @@ public final class BillingCustomerSubscription {
         public BillingCustomerSubscription build() {
             return new BillingCustomerSubscription(
                     currency, expiredAt, interval, meteredUsage, perUnitPrice, totalPrice, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

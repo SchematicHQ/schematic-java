@@ -43,7 +43,7 @@ public final class Condition {
 
     private final Optional<ConditionMetricPeriodMonthReset> metricPeriodMonthReset;
 
-    private final Optional<Integer> metricValue;
+    private final Optional<Long> metricValue;
 
     private final ConditionOperator operator;
 
@@ -66,7 +66,7 @@ public final class Condition {
             String id,
             Optional<ConditionMetricPeriod> metricPeriod,
             Optional<ConditionMetricPeriodMonthReset> metricPeriodMonthReset,
-            Optional<Integer> metricValue,
+            Optional<Long> metricValue,
             ConditionOperator operator,
             List<String> resourceIds,
             Optional<TraitDefinition> traitDefinition,
@@ -141,7 +141,7 @@ public final class Condition {
     }
 
     @JsonProperty("metric_value")
-    public Optional<Integer> getMetricValue() {
+    public Optional<Long> getMetricValue() {
         return metricValue;
     }
 
@@ -252,6 +252,10 @@ public final class Condition {
     public interface _FinalStage {
         Condition build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage comparisonTraitDefinition(Optional<TraitDefinition> comparisonTraitDefinition);
 
         _FinalStage comparisonTraitDefinition(TraitDefinition comparisonTraitDefinition);
@@ -276,9 +280,9 @@ public final class Condition {
 
         _FinalStage metricPeriodMonthReset(ConditionMetricPeriodMonthReset metricPeriodMonthReset);
 
-        _FinalStage metricValue(Optional<Integer> metricValue);
+        _FinalStage metricValue(Optional<Long> metricValue);
 
-        _FinalStage metricValue(Integer metricValue);
+        _FinalStage metricValue(Long metricValue);
 
         _FinalStage resourceIds(List<String> resourceIds);
 
@@ -316,7 +320,7 @@ public final class Condition {
 
         private List<String> resourceIds = new ArrayList<>();
 
-        private Optional<Integer> metricValue = Optional.empty();
+        private Optional<Long> metricValue = Optional.empty();
 
         private Optional<ConditionMetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
@@ -435,14 +439,14 @@ public final class Condition {
         }
 
         @java.lang.Override
-        public _FinalStage metricValue(Integer metricValue) {
+        public _FinalStage metricValue(Long metricValue) {
             this.metricValue = Optional.ofNullable(metricValue);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_value", nulls = Nulls.SKIP)
-        public _FinalStage metricValue(Optional<Integer> metricValue) {
+        public _FinalStage metricValue(Optional<Long> metricValue) {
             this.metricValue = metricValue;
             return this;
         }
@@ -544,6 +548,18 @@ public final class Condition {
                     traitDefinition,
                     traitValue,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

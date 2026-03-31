@@ -83,6 +83,10 @@ public final class CompatiblePlans {
     public interface _FinalStage {
         CompatiblePlans build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage compatiblePlanIds(List<String> compatiblePlanIds);
 
         _FinalStage addCompatiblePlanIds(String compatiblePlanIds);
@@ -142,6 +146,18 @@ public final class CompatiblePlans {
         @java.lang.Override
         public CompatiblePlans build() {
             return new CompatiblePlans(compatiblePlanIds, sourcePlanId, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

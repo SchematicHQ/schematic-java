@@ -82,6 +82,10 @@ public final class CheckoutDataRequestBody {
     public interface _FinalStage {
         CheckoutDataRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage selectedPlanId(Optional<String> selectedPlanId);
 
         _FinalStage selectedPlanId(String selectedPlanId);
@@ -128,6 +132,18 @@ public final class CheckoutDataRequestBody {
         @java.lang.Override
         public CheckoutDataRequestBody build() {
             return new CheckoutDataRequestBody(companyId, selectedPlanId, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

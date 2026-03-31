@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.ActorType;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,34 +24,47 @@ import java.util.Optional;
 public final class CountAuditLogsParams {
     private final Optional<ActorType> actorType;
 
+    private final Optional<OffsetDateTime> endTime;
+
     private final Optional<String> environmentId;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Optional<String> q;
+
+    private final Optional<OffsetDateTime> startTime;
 
     private final Map<String, Object> additionalProperties;
 
     private CountAuditLogsParams(
             Optional<ActorType> actorType,
+            Optional<OffsetDateTime> endTime,
             Optional<String> environmentId,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Optional<String> q,
+            Optional<OffsetDateTime> startTime,
             Map<String, Object> additionalProperties) {
         this.actorType = actorType;
+        this.endTime = endTime;
         this.environmentId = environmentId;
         this.limit = limit;
         this.offset = offset;
         this.q = q;
+        this.startTime = startTime;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("actor_type")
     public Optional<ActorType> getActorType() {
         return actorType;
+    }
+
+    @JsonProperty("end_time")
+    public Optional<OffsetDateTime> getEndTime() {
+        return endTime;
     }
 
     @JsonProperty("environment_id")
@@ -62,7 +76,7 @@ public final class CountAuditLogsParams {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -70,13 +84,18 @@ public final class CountAuditLogsParams {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
     @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
+    }
+
+    @JsonProperty("start_time")
+    public Optional<OffsetDateTime> getStartTime() {
+        return startTime;
     }
 
     @java.lang.Override
@@ -92,15 +111,18 @@ public final class CountAuditLogsParams {
 
     private boolean equalTo(CountAuditLogsParams other) {
         return actorType.equals(other.actorType)
+                && endTime.equals(other.endTime)
                 && environmentId.equals(other.environmentId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
-                && q.equals(other.q);
+                && q.equals(other.q)
+                && startTime.equals(other.startTime);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.actorType, this.environmentId, this.limit, this.offset, this.q);
+        return Objects.hash(
+                this.actorType, this.endTime, this.environmentId, this.limit, this.offset, this.q, this.startTime);
     }
 
     @java.lang.Override
@@ -116,13 +138,17 @@ public final class CountAuditLogsParams {
     public static final class Builder {
         private Optional<ActorType> actorType = Optional.empty();
 
+        private Optional<OffsetDateTime> endTime = Optional.empty();
+
         private Optional<String> environmentId = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         private Optional<String> q = Optional.empty();
+
+        private Optional<OffsetDateTime> startTime = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -131,10 +157,12 @@ public final class CountAuditLogsParams {
 
         public Builder from(CountAuditLogsParams other) {
             actorType(other.getActorType());
+            endTime(other.getEndTime());
             environmentId(other.getEnvironmentId());
             limit(other.getLimit());
             offset(other.getOffset());
             q(other.getQ());
+            startTime(other.getStartTime());
             return this;
         }
 
@@ -146,6 +174,17 @@ public final class CountAuditLogsParams {
 
         public Builder actorType(ActorType actorType) {
             this.actorType = Optional.ofNullable(actorType);
+            return this;
+        }
+
+        @JsonSetter(value = "end_time", nulls = Nulls.SKIP)
+        public Builder endTime(Optional<OffsetDateTime> endTime) {
+            this.endTime = endTime;
+            return this;
+        }
+
+        public Builder endTime(OffsetDateTime endTime) {
+            this.endTime = Optional.ofNullable(endTime);
             return this;
         }
 
@@ -164,12 +203,12 @@ public final class CountAuditLogsParams {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -178,12 +217,12 @@ public final class CountAuditLogsParams {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -199,8 +238,30 @@ public final class CountAuditLogsParams {
             return this;
         }
 
+        @JsonSetter(value = "start_time", nulls = Nulls.SKIP)
+        public Builder startTime(Optional<OffsetDateTime> startTime) {
+            this.startTime = startTime;
+            return this;
+        }
+
+        public Builder startTime(OffsetDateTime startTime) {
+            this.startTime = Optional.ofNullable(startTime);
+            return this;
+        }
+
         public CountAuditLogsParams build() {
-            return new CountAuditLogsParams(actorType, environmentId, limit, offset, q, additionalProperties);
+            return new CountAuditLogsParams(
+                    actorType, endTime, environmentId, limit, offset, q, startTime, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

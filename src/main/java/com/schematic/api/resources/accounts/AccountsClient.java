@@ -6,29 +6,25 @@ package com.schematic.api.resources.accounts;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.accounts.requests.CountApiKeysRequest;
-import com.schematic.api.resources.accounts.requests.CountApiRequestsRequest;
 import com.schematic.api.resources.accounts.requests.CountAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.CreateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.CreateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.requests.ListApiKeysRequest;
-import com.schematic.api.resources.accounts.requests.ListApiRequestsRequest;
 import com.schematic.api.resources.accounts.requests.ListAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.ListEnvironmentsRequest;
 import com.schematic.api.resources.accounts.requests.UpdateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.UpdateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.types.CountApiKeysResponse;
-import com.schematic.api.resources.accounts.types.CountApiRequestsResponse;
 import com.schematic.api.resources.accounts.types.CountAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.CreateApiKeyResponse;
 import com.schematic.api.resources.accounts.types.CreateEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.DeleteApiKeyResponse;
 import com.schematic.api.resources.accounts.types.DeleteEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.GetApiKeyResponse;
-import com.schematic.api.resources.accounts.types.GetApiRequestResponse;
 import com.schematic.api.resources.accounts.types.GetAuditLogResponse;
 import com.schematic.api.resources.accounts.types.GetEnvironmentResponse;
+import com.schematic.api.resources.accounts.types.GetWhoAmIResponse;
 import com.schematic.api.resources.accounts.types.ListApiKeysResponse;
-import com.schematic.api.resources.accounts.types.ListApiRequestsResponse;
 import com.schematic.api.resources.accounts.types.ListAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.ListEnvironmentsResponse;
 import com.schematic.api.resources.accounts.types.QuickstartResponse;
@@ -80,6 +76,10 @@ public class AccountsClient {
         return this.rawClient.updateApiKey(apiKeyId).body();
     }
 
+    public UpdateApiKeyResponse updateApiKey(String apiKeyId, RequestOptions requestOptions) {
+        return this.rawClient.updateApiKey(apiKeyId, requestOptions).body();
+    }
+
     public UpdateApiKeyResponse updateApiKey(String apiKeyId, UpdateApiKeyRequestBody request) {
         return this.rawClient.updateApiKey(apiKeyId, request).body();
     }
@@ -105,40 +105,12 @@ public class AccountsClient {
         return this.rawClient.countApiKeys(request, requestOptions).body();
     }
 
-    public ListApiRequestsResponse listApiRequests() {
-        return this.rawClient.listApiRequests().body();
-    }
-
-    public ListApiRequestsResponse listApiRequests(ListApiRequestsRequest request) {
-        return this.rawClient.listApiRequests(request).body();
-    }
-
-    public ListApiRequestsResponse listApiRequests(ListApiRequestsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listApiRequests(request, requestOptions).body();
-    }
-
-    public GetApiRequestResponse getApiRequest(String apiRequestId) {
-        return this.rawClient.getApiRequest(apiRequestId).body();
-    }
-
-    public GetApiRequestResponse getApiRequest(String apiRequestId, RequestOptions requestOptions) {
-        return this.rawClient.getApiRequest(apiRequestId, requestOptions).body();
-    }
-
-    public CountApiRequestsResponse countApiRequests() {
-        return this.rawClient.countApiRequests().body();
-    }
-
-    public CountApiRequestsResponse countApiRequests(CountApiRequestsRequest request) {
-        return this.rawClient.countApiRequests(request).body();
-    }
-
-    public CountApiRequestsResponse countApiRequests(CountApiRequestsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countApiRequests(request, requestOptions).body();
-    }
-
     public ListAuditLogsResponse listAuditLogs() {
         return this.rawClient.listAuditLogs().body();
+    }
+
+    public ListAuditLogsResponse listAuditLogs(RequestOptions requestOptions) {
+        return this.rawClient.listAuditLogs(requestOptions).body();
     }
 
     public ListAuditLogsResponse listAuditLogs(ListAuditLogsRequest request) {
@@ -161,6 +133,10 @@ public class AccountsClient {
         return this.rawClient.countAuditLogs().body();
     }
 
+    public CountAuditLogsResponse countAuditLogs(RequestOptions requestOptions) {
+        return this.rawClient.countAuditLogs(requestOptions).body();
+    }
+
     public CountAuditLogsResponse countAuditLogs(CountAuditLogsRequest request) {
         return this.rawClient.countAuditLogs(request).body();
     }
@@ -171,6 +147,10 @@ public class AccountsClient {
 
     public ListEnvironmentsResponse listEnvironments() {
         return this.rawClient.listEnvironments().body();
+    }
+
+    public ListEnvironmentsResponse listEnvironments(RequestOptions requestOptions) {
+        return this.rawClient.listEnvironments(requestOptions).body();
     }
 
     public ListEnvironmentsResponse listEnvironments(ListEnvironmentsRequest request) {
@@ -202,6 +182,10 @@ public class AccountsClient {
         return this.rawClient.updateEnvironment(environmentId).body();
     }
 
+    public UpdateEnvironmentResponse updateEnvironment(String environmentId, RequestOptions requestOptions) {
+        return this.rawClient.updateEnvironment(environmentId, requestOptions).body();
+    }
+
     public UpdateEnvironmentResponse updateEnvironment(String environmentId, UpdateEnvironmentRequestBody request) {
         return this.rawClient.updateEnvironment(environmentId, request).body();
     }
@@ -227,5 +211,13 @@ public class AccountsClient {
 
     public QuickstartResponse quickstart(RequestOptions requestOptions) {
         return this.rawClient.quickstart(requestOptions).body();
+    }
+
+    public GetWhoAmIResponse getWhoAmI() {
+        return this.rawClient.getWhoAmI().body();
+    }
+
+    public GetWhoAmIResponse getWhoAmI(RequestOptions requestOptions) {
+        return this.rawClient.getWhoAmI(requestOptions).body();
     }
 }

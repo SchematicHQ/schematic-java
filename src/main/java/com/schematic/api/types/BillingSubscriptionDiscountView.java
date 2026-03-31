@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingSubscriptionDiscountView.Builder.class)
 public final class BillingSubscriptionDiscountView {
-    private final Optional<Integer> amountOff;
+    private final Optional<Long> amountOff;
 
     private final String couponId;
 
@@ -36,7 +36,7 @@ public final class BillingSubscriptionDiscountView {
 
     private final String duration;
 
-    private final Optional<Integer> durationInMonths;
+    private final Optional<Long> durationInMonths;
 
     private final Optional<OffsetDateTime> endedAt;
 
@@ -53,14 +53,14 @@ public final class BillingSubscriptionDiscountView {
     private final Map<String, Object> additionalProperties;
 
     private BillingSubscriptionDiscountView(
-            Optional<Integer> amountOff,
+            Optional<Long> amountOff,
             String couponId,
             String couponName,
             Optional<String> currency,
             Optional<String> customerFacingCode,
             String discountExternalId,
             String duration,
-            Optional<Integer> durationInMonths,
+            Optional<Long> durationInMonths,
             Optional<OffsetDateTime> endedAt,
             boolean isActive,
             Optional<Double> percentOff,
@@ -86,7 +86,7 @@ public final class BillingSubscriptionDiscountView {
     }
 
     @JsonProperty("amount_off")
-    public Optional<Integer> getAmountOff() {
+    public Optional<Long> getAmountOff() {
         return amountOff;
     }
 
@@ -121,7 +121,7 @@ public final class BillingSubscriptionDiscountView {
     }
 
     @JsonProperty("duration_in_months")
-    public Optional<Integer> getDurationInMonths() {
+    public Optional<Long> getDurationInMonths() {
         return durationInMonths;
     }
 
@@ -244,9 +244,13 @@ public final class BillingSubscriptionDiscountView {
     public interface _FinalStage {
         BillingSubscriptionDiscountView build();
 
-        _FinalStage amountOff(Optional<Integer> amountOff);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage amountOff(Integer amountOff);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage amountOff(Optional<Long> amountOff);
+
+        _FinalStage amountOff(Long amountOff);
 
         _FinalStage currency(Optional<String> currency);
 
@@ -256,9 +260,9 @@ public final class BillingSubscriptionDiscountView {
 
         _FinalStage customerFacingCode(String customerFacingCode);
 
-        _FinalStage durationInMonths(Optional<Integer> durationInMonths);
+        _FinalStage durationInMonths(Optional<Long> durationInMonths);
 
-        _FinalStage durationInMonths(Integer durationInMonths);
+        _FinalStage durationInMonths(Long durationInMonths);
 
         _FinalStage endedAt(Optional<OffsetDateTime> endedAt);
 
@@ -303,13 +307,13 @@ public final class BillingSubscriptionDiscountView {
 
         private Optional<OffsetDateTime> endedAt = Optional.empty();
 
-        private Optional<Integer> durationInMonths = Optional.empty();
+        private Optional<Long> durationInMonths = Optional.empty();
 
         private Optional<String> customerFacingCode = Optional.empty();
 
         private Optional<String> currency = Optional.empty();
 
-        private Optional<Integer> amountOff = Optional.empty();
+        private Optional<Long> amountOff = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -425,14 +429,14 @@ public final class BillingSubscriptionDiscountView {
         }
 
         @java.lang.Override
-        public _FinalStage durationInMonths(Integer durationInMonths) {
+        public _FinalStage durationInMonths(Long durationInMonths) {
             this.durationInMonths = Optional.ofNullable(durationInMonths);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "duration_in_months", nulls = Nulls.SKIP)
-        public _FinalStage durationInMonths(Optional<Integer> durationInMonths) {
+        public _FinalStage durationInMonths(Optional<Long> durationInMonths) {
             this.durationInMonths = durationInMonths;
             return this;
         }
@@ -464,14 +468,14 @@ public final class BillingSubscriptionDiscountView {
         }
 
         @java.lang.Override
-        public _FinalStage amountOff(Integer amountOff) {
+        public _FinalStage amountOff(Long amountOff) {
             this.amountOff = Optional.ofNullable(amountOff);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "amount_off", nulls = Nulls.SKIP)
-        public _FinalStage amountOff(Optional<Integer> amountOff) {
+        public _FinalStage amountOff(Optional<Long> amountOff) {
             this.amountOff = amountOff;
             return this;
         }
@@ -494,6 +498,18 @@ public final class BillingSubscriptionDiscountView {
                     startedAt,
                     subscriptionExternalId,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

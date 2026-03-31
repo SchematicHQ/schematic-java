@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CheckoutSubscription {
     private final Optional<String> applicationId;
 
-    private final Optional<Integer> cancelAt;
+    private final Optional<Long> cancelAt;
 
     private final boolean cancelAtPeriodEnd;
 
@@ -51,9 +51,9 @@ public final class CheckoutSubscription {
 
     private final Optional<Map<String, JsonNode>> metadata;
 
-    private final int periodEnd;
+    private final long periodEnd;
 
-    private final int periodStart;
+    private final long periodStart;
 
     private final BillingProviderType providerType;
 
@@ -61,9 +61,9 @@ public final class CheckoutSubscription {
 
     private final String subscriptionExternalId;
 
-    private final int totalPrice;
+    private final long totalPrice;
 
-    private final Optional<Integer> trialEnd;
+    private final Optional<Long> trialEnd;
 
     private final Optional<BillingSubscriptionTrialEndSetting> trialEndSetting;
 
@@ -71,7 +71,7 @@ public final class CheckoutSubscription {
 
     private CheckoutSubscription(
             Optional<String> applicationId,
-            Optional<Integer> cancelAt,
+            Optional<Long> cancelAt,
             boolean cancelAtPeriodEnd,
             Optional<String> companyId,
             Optional<String> confirmPaymentIntentClientSecret,
@@ -84,13 +84,13 @@ public final class CheckoutSubscription {
             String id,
             String interval,
             Optional<Map<String, JsonNode>> metadata,
-            int periodEnd,
-            int periodStart,
+            long periodEnd,
+            long periodStart,
             BillingProviderType providerType,
             String status,
             String subscriptionExternalId,
-            int totalPrice,
-            Optional<Integer> trialEnd,
+            long totalPrice,
+            Optional<Long> trialEnd,
             Optional<BillingSubscriptionTrialEndSetting> trialEndSetting,
             Map<String, Object> additionalProperties) {
         this.applicationId = applicationId;
@@ -124,7 +124,7 @@ public final class CheckoutSubscription {
     }
 
     @JsonProperty("cancel_at")
-    public Optional<Integer> getCancelAt() {
+    public Optional<Long> getCancelAt() {
         return cancelAt;
     }
 
@@ -189,12 +189,12 @@ public final class CheckoutSubscription {
     }
 
     @JsonProperty("period_end")
-    public int getPeriodEnd() {
+    public long getPeriodEnd() {
         return periodEnd;
     }
 
     @JsonProperty("period_start")
-    public int getPeriodStart() {
+    public long getPeriodStart() {
         return periodStart;
     }
 
@@ -214,12 +214,12 @@ public final class CheckoutSubscription {
     }
 
     @JsonProperty("total_price")
-    public int getTotalPrice() {
+    public long getTotalPrice() {
         return totalPrice;
     }
 
     @JsonProperty("trial_end")
-    public Optional<Integer> getTrialEnd() {
+    public Optional<Long> getTrialEnd() {
         return trialEnd;
     }
 
@@ -327,11 +327,11 @@ public final class CheckoutSubscription {
     }
 
     public interface PeriodEndStage {
-        PeriodStartStage periodEnd(int periodEnd);
+        PeriodStartStage periodEnd(long periodEnd);
     }
 
     public interface PeriodStartStage {
-        ProviderTypeStage periodStart(int periodStart);
+        ProviderTypeStage periodStart(long periodStart);
     }
 
     public interface ProviderTypeStage {
@@ -347,19 +347,23 @@ public final class CheckoutSubscription {
     }
 
     public interface TotalPriceStage {
-        _FinalStage totalPrice(int totalPrice);
+        _FinalStage totalPrice(long totalPrice);
     }
 
     public interface _FinalStage {
         CheckoutSubscription build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage applicationId(Optional<String> applicationId);
 
         _FinalStage applicationId(String applicationId);
 
-        _FinalStage cancelAt(Optional<Integer> cancelAt);
+        _FinalStage cancelAt(Optional<Long> cancelAt);
 
-        _FinalStage cancelAt(Integer cancelAt);
+        _FinalStage cancelAt(Long cancelAt);
 
         _FinalStage companyId(Optional<String> companyId);
 
@@ -385,9 +389,9 @@ public final class CheckoutSubscription {
 
         _FinalStage metadata(Map<String, JsonNode> metadata);
 
-        _FinalStage trialEnd(Optional<Integer> trialEnd);
+        _FinalStage trialEnd(Optional<Long> trialEnd);
 
-        _FinalStage trialEnd(Integer trialEnd);
+        _FinalStage trialEnd(Long trialEnd);
 
         _FinalStage trialEndSetting(Optional<BillingSubscriptionTrialEndSetting> trialEndSetting);
 
@@ -421,9 +425,9 @@ public final class CheckoutSubscription {
 
         private String interval;
 
-        private int periodEnd;
+        private long periodEnd;
 
-        private int periodStart;
+        private long periodStart;
 
         private BillingProviderType providerType;
 
@@ -431,11 +435,11 @@ public final class CheckoutSubscription {
 
         private String subscriptionExternalId;
 
-        private int totalPrice;
+        private long totalPrice;
 
         private Optional<BillingSubscriptionTrialEndSetting> trialEndSetting = Optional.empty();
 
-        private Optional<Integer> trialEnd = Optional.empty();
+        private Optional<Long> trialEnd = Optional.empty();
 
         private Optional<Map<String, JsonNode>> metadata = Optional.empty();
 
@@ -449,7 +453,7 @@ public final class CheckoutSubscription {
 
         private Optional<String> companyId = Optional.empty();
 
-        private Optional<Integer> cancelAt = Optional.empty();
+        private Optional<Long> cancelAt = Optional.empty();
 
         private Optional<String> applicationId = Optional.empty();
 
@@ -529,14 +533,14 @@ public final class CheckoutSubscription {
 
         @java.lang.Override
         @JsonSetter("period_end")
-        public PeriodStartStage periodEnd(int periodEnd) {
+        public PeriodStartStage periodEnd(long periodEnd) {
             this.periodEnd = periodEnd;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("period_start")
-        public ProviderTypeStage periodStart(int periodStart) {
+        public ProviderTypeStage periodStart(long periodStart) {
             this.periodStart = periodStart;
             return this;
         }
@@ -565,7 +569,7 @@ public final class CheckoutSubscription {
 
         @java.lang.Override
         @JsonSetter("total_price")
-        public _FinalStage totalPrice(int totalPrice) {
+        public _FinalStage totalPrice(long totalPrice) {
             this.totalPrice = totalPrice;
             return this;
         }
@@ -584,14 +588,14 @@ public final class CheckoutSubscription {
         }
 
         @java.lang.Override
-        public _FinalStage trialEnd(Integer trialEnd) {
+        public _FinalStage trialEnd(Long trialEnd) {
             this.trialEnd = Optional.ofNullable(trialEnd);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trial_end", nulls = Nulls.SKIP)
-        public _FinalStage trialEnd(Optional<Integer> trialEnd) {
+        public _FinalStage trialEnd(Optional<Long> trialEnd) {
             this.trialEnd = trialEnd;
             return this;
         }
@@ -675,14 +679,14 @@ public final class CheckoutSubscription {
         }
 
         @java.lang.Override
-        public _FinalStage cancelAt(Integer cancelAt) {
+        public _FinalStage cancelAt(Long cancelAt) {
             this.cancelAt = Optional.ofNullable(cancelAt);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "cancel_at", nulls = Nulls.SKIP)
-        public _FinalStage cancelAt(Optional<Integer> cancelAt) {
+        public _FinalStage cancelAt(Optional<Long> cancelAt) {
             this.cancelAt = cancelAt;
             return this;
         }
@@ -726,6 +730,18 @@ public final class CheckoutSubscription {
                     trialEnd,
                     trialEndSetting,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

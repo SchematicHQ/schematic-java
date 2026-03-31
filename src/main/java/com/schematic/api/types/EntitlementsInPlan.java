@@ -82,6 +82,10 @@ public final class EntitlementsInPlan {
     public interface _FinalStage {
         EntitlementsInPlan build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage visible(Optional<Boolean> visible);
 
         _FinalStage visible(Boolean visible);
@@ -128,6 +132,18 @@ public final class EntitlementsInPlan {
         @java.lang.Override
         public EntitlementsInPlan build() {
             return new EntitlementsInPlan(entitlementId, visible, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

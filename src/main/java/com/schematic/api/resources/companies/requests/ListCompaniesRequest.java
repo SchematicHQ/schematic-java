@@ -39,11 +39,15 @@ public final class ListCompaniesRequest {
 
     private final Optional<String> planId;
 
+    private final Optional<String> planVersionId;
+
     private final Optional<String> q;
 
     private final Optional<String> sortOrderColumn;
 
     private final Optional<SortDirection> sortOrderDirection;
+
+    private final Optional<String> withEntitlementFor;
 
     private final Optional<String> withoutFeatureOverrideFor;
 
@@ -53,9 +57,9 @@ public final class ListCompaniesRequest {
 
     private final Optional<Boolean> withSubscription;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Map<String, Object> additionalProperties;
 
@@ -67,15 +71,17 @@ public final class ListCompaniesRequest {
             Optional<List<SubscriptionType>> subscriptionTypes,
             Optional<Boolean> monetizedSubscriptions,
             Optional<String> planId,
+            Optional<String> planVersionId,
             Optional<String> q,
             Optional<String> sortOrderColumn,
             Optional<SortDirection> sortOrderDirection,
+            Optional<String> withEntitlementFor,
             Optional<String> withoutFeatureOverrideFor,
             Optional<Boolean> withoutPlan,
             Optional<Boolean> withoutSubscription,
             Optional<Boolean> withSubscription,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Map<String, Object> additionalProperties) {
         this.creditTypeIds = creditTypeIds;
         this.ids = ids;
@@ -84,9 +90,11 @@ public final class ListCompaniesRequest {
         this.subscriptionTypes = subscriptionTypes;
         this.monetizedSubscriptions = monetizedSubscriptions;
         this.planId = planId;
+        this.planVersionId = planVersionId;
         this.q = q;
         this.sortOrderColumn = sortOrderColumn;
         this.sortOrderDirection = sortOrderDirection;
+        this.withEntitlementFor = withEntitlementFor;
         this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
         this.withoutPlan = withoutPlan;
         this.withoutSubscription = withoutSubscription;
@@ -153,6 +161,14 @@ public final class ListCompaniesRequest {
     }
 
     /**
+     * @return Filter companies by plan version ID (starts with plvr_)
+     */
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
+    }
+
+    /**
      * @return Search for companies by name, keys or string traits
      */
     @JsonProperty("q")
@@ -174,6 +190,14 @@ public final class ListCompaniesRequest {
     @JsonProperty("sort_order_direction")
     public Optional<SortDirection> getSortOrderDirection() {
         return sortOrderDirection;
+    }
+
+    /**
+     * @return Filter companies that have an entitlement (plan entitlement or company override) for the specified feature ID
+     */
+    @JsonProperty("with_entitlement_for")
+    public Optional<String> getWithEntitlementFor() {
+        return withEntitlementFor;
     }
 
     /**
@@ -212,7 +236,7 @@ public final class ListCompaniesRequest {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -220,7 +244,7 @@ public final class ListCompaniesRequest {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -243,9 +267,11 @@ public final class ListCompaniesRequest {
                 && subscriptionTypes.equals(other.subscriptionTypes)
                 && monetizedSubscriptions.equals(other.monetizedSubscriptions)
                 && planId.equals(other.planId)
+                && planVersionId.equals(other.planVersionId)
                 && q.equals(other.q)
                 && sortOrderColumn.equals(other.sortOrderColumn)
                 && sortOrderDirection.equals(other.sortOrderDirection)
+                && withEntitlementFor.equals(other.withEntitlementFor)
                 && withoutFeatureOverrideFor.equals(other.withoutFeatureOverrideFor)
                 && withoutPlan.equals(other.withoutPlan)
                 && withoutSubscription.equals(other.withoutSubscription)
@@ -264,9 +290,11 @@ public final class ListCompaniesRequest {
                 this.subscriptionTypes,
                 this.monetizedSubscriptions,
                 this.planId,
+                this.planVersionId,
                 this.q,
                 this.sortOrderColumn,
                 this.sortOrderDirection,
+                this.withEntitlementFor,
                 this.withoutFeatureOverrideFor,
                 this.withoutPlan,
                 this.withoutSubscription,
@@ -300,11 +328,15 @@ public final class ListCompaniesRequest {
 
         private Optional<String> planId = Optional.empty();
 
+        private Optional<String> planVersionId = Optional.empty();
+
         private Optional<String> q = Optional.empty();
 
         private Optional<String> sortOrderColumn = Optional.empty();
 
         private Optional<SortDirection> sortOrderDirection = Optional.empty();
+
+        private Optional<String> withEntitlementFor = Optional.empty();
 
         private Optional<String> withoutFeatureOverrideFor = Optional.empty();
 
@@ -314,9 +346,9 @@ public final class ListCompaniesRequest {
 
         private Optional<Boolean> withSubscription = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -331,9 +363,11 @@ public final class ListCompaniesRequest {
             subscriptionTypes(other.getSubscriptionTypes());
             monetizedSubscriptions(other.getMonetizedSubscriptions());
             planId(other.getPlanId());
+            planVersionId(other.getPlanVersionId());
             q(other.getQ());
             sortOrderColumn(other.getSortOrderColumn());
             sortOrderDirection(other.getSortOrderDirection());
+            withEntitlementFor(other.getWithEntitlementFor());
             withoutFeatureOverrideFor(other.getWithoutFeatureOverrideFor());
             withoutPlan(other.getWithoutPlan());
             withoutSubscription(other.getWithoutSubscription());
@@ -467,6 +501,20 @@ public final class ListCompaniesRequest {
         }
 
         /**
+         * <p>Filter companies by plan version ID (starts with plvr_)</p>
+         */
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
+        /**
          * <p>Search for companies by name, keys or string traits</p>
          */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
@@ -505,6 +553,20 @@ public final class ListCompaniesRequest {
 
         public Builder sortOrderDirection(SortDirection sortOrderDirection) {
             this.sortOrderDirection = Optional.ofNullable(sortOrderDirection);
+            return this;
+        }
+
+        /**
+         * <p>Filter companies that have an entitlement (plan entitlement or company override) for the specified feature ID</p>
+         */
+        @JsonSetter(value = "with_entitlement_for", nulls = Nulls.SKIP)
+        public Builder withEntitlementFor(Optional<String> withEntitlementFor) {
+            this.withEntitlementFor = withEntitlementFor;
+            return this;
+        }
+
+        public Builder withEntitlementFor(String withEntitlementFor) {
+            this.withEntitlementFor = Optional.ofNullable(withEntitlementFor);
             return this;
         }
 
@@ -568,12 +630,12 @@ public final class ListCompaniesRequest {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -582,12 +644,12 @@ public final class ListCompaniesRequest {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -601,9 +663,11 @@ public final class ListCompaniesRequest {
                     subscriptionTypes,
                     monetizedSubscriptions,
                     planId,
+                    planVersionId,
                     q,
                     sortOrderColumn,
                     sortOrderDirection,
+                    withEntitlementFor,
                     withoutFeatureOverrideFor,
                     withoutPlan,
                     withoutSubscription,
@@ -611,6 +675,16 @@ public final class ListCompaniesRequest {
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -76,6 +76,10 @@ public class RawBillingClient {
         return listCoupons(ListCouponsRequest.builder().build());
     }
 
+    public BaseSchematicHttpResponse<ListCouponsResponse> listCoupons(RequestOptions requestOptions) {
+        return listCoupons(ListCouponsRequest.builder().build(), requestOptions);
+    }
+
     public BaseSchematicHttpResponse<ListCouponsResponse> listCoupons(ListCouponsRequest request) {
         return listCoupons(request, null);
     }
@@ -100,6 +104,11 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -112,12 +121,11 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListCouponsResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListCouponsResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -139,11 +147,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -155,10 +161,14 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<UpsertBillingCouponResponse> upsertBillingCoupon(
             CreateCouponRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/coupons")
-                .build();
+                .addPathSegments("billing/coupons");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -167,7 +177,7 @@ public class RawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -179,12 +189,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertBillingCouponResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpsertBillingCouponResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -206,11 +216,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -223,10 +231,14 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<UpsertBillingCustomerResponse> upsertBillingCustomer(
             CreateBillingCustomerRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/customer/upsert")
-                .build();
+                .addPathSegments("billing/customer/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -235,7 +247,7 @@ public class RawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -247,12 +259,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertBillingCustomerResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpsertBillingCustomerResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -274,11 +286,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -287,6 +297,12 @@ public class RawBillingClient {
     public BaseSchematicHttpResponse<ListCustomersWithSubscriptionsResponse> listCustomersWithSubscriptions() {
         return listCustomersWithSubscriptions(
                 ListCustomersWithSubscriptionsRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<ListCustomersWithSubscriptionsResponse> listCustomersWithSubscriptions(
+            RequestOptions requestOptions) {
+        return listCustomersWithSubscriptions(
+                ListCustomersWithSubscriptionsRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<ListCustomersWithSubscriptionsResponse> listCustomersWithSubscriptions(
@@ -322,6 +338,11 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_ids", request.getCompanyIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -334,13 +355,13 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(
-                                responseBody.string(), ListCustomersWithSubscriptionsResponse.class),
+                                responseBodyString, ListCustomersWithSubscriptionsResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -362,11 +383,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -374,6 +393,10 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<CountCustomersResponse> countCustomers() {
         return countCustomers(CountCustomersRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<CountCustomersResponse> countCustomers(RequestOptions requestOptions) {
+        return countCustomers(CountCustomersRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<CountCustomersResponse> countCustomers(CountCustomersRequest request) {
@@ -408,6 +431,11 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_ids", request.getCompanyIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -420,12 +448,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountCustomersResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountCustomersResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -447,11 +475,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -481,6 +507,11 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -493,12 +524,11 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListInvoicesResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListInvoicesResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -520,11 +550,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -536,10 +564,14 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<UpsertInvoiceResponse> upsertInvoice(
             CreateInvoiceRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/invoices")
-                .build();
+                .addPathSegments("billing/invoices");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -548,7 +580,7 @@ public class RawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -560,12 +592,11 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertInvoiceResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpsertInvoiceResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -587,11 +618,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -599,6 +628,10 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<ListMetersResponse> listMeters() {
         return listMeters(ListMetersRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<ListMetersResponse> listMeters(RequestOptions requestOptions) {
+        return listMeters(ListMetersRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<ListMetersResponse> listMeters(ListMetersRequest request) {
@@ -622,6 +655,11 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -634,11 +672,11 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListMetersResponse.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListMetersResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -660,11 +698,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -676,10 +712,14 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<UpsertBillingMeterResponse> upsertBillingMeter(
             CreateMeterRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/meter/upsert")
-                .build();
+                .addPathSegments("billing/meter/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -688,7 +728,7 @@ public class RawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -700,12 +740,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertBillingMeterResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpsertBillingMeterResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -727,11 +767,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -759,6 +797,11 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -771,12 +814,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListPaymentMethodsResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListPaymentMethodsResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -798,11 +841,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -815,10 +856,14 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<UpsertPaymentMethodResponse> upsertPaymentMethod(
             CreatePaymentMethodRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/payment-methods")
-                .build();
+                .addPathSegments("billing/payment-methods");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -827,7 +872,7 @@ public class RawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -839,12 +884,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertPaymentMethodResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpsertPaymentMethodResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -866,11 +911,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -878,6 +921,10 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<ListBillingPricesResponse> listBillingPrices() {
         return listBillingPrices(ListBillingPricesRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<ListBillingPricesResponse> listBillingPrices(RequestOptions requestOptions) {
+        return listBillingPrices(ListBillingPricesRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<ListBillingPricesResponse> listBillingPrices(ListBillingPricesRequest request) {
@@ -889,6 +936,10 @@ public class RawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/price");
+        if (request.getCurrency().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "currency", request.getCurrency().get(), false);
+        }
         if (request.getForInitialPlan().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "for_initial_plan", request.getForInitialPlan().get(), false);
@@ -950,6 +1001,11 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "product_ids", request.getProductIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -962,12 +1018,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListBillingPricesResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListBillingPricesResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -989,11 +1045,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -1006,10 +1060,14 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<UpsertBillingPriceResponse> upsertBillingPrice(
             CreateBillingPriceRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/price/upsert")
-                .build();
+                .addPathSegments("billing/price/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -1018,7 +1076,7 @@ public class RawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -1030,12 +1088,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertBillingPriceResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpsertBillingPriceResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -1057,11 +1115,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -1073,13 +1129,17 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<DeleteBillingProductResponse> deleteBillingProduct(
             String billingId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/product")
-                .addPathSegment(billingId)
-                .build();
+                .addPathSegment(billingId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -1090,12 +1150,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), DeleteBillingProductResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DeleteBillingProductResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -1117,11 +1177,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -1130,6 +1188,12 @@ public class RawBillingClient {
     public BaseSchematicHttpResponse<ListBillingProductPricesResponse> listBillingProductPrices() {
         return listBillingProductPrices(
                 ListBillingProductPricesRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<ListBillingProductPricesResponse> listBillingProductPrices(
+            RequestOptions requestOptions) {
+        return listBillingProductPrices(
+                ListBillingProductPricesRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<ListBillingProductPricesResponse> listBillingProductPrices(
@@ -1142,6 +1206,10 @@ public class RawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/product/prices");
+        if (request.getCurrency().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "currency", request.getCurrency().get(), false);
+        }
         if (request.getForInitialPlan().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "for_initial_plan", request.getForInitialPlan().get(), false);
@@ -1203,6 +1271,11 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "product_ids", request.getProductIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1215,13 +1288,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(
-                                responseBody.string(), ListBillingProductPricesResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListBillingProductPricesResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -1243,11 +1315,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -1259,13 +1329,17 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<DeleteProductPriceResponse> deleteProductPrice(
             String billingId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/product/prices")
-                .addPathSegment(billingId)
-                .build();
+                .addPathSegment(billingId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -1276,12 +1350,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), DeleteProductPriceResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DeleteProductPriceResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -1303,11 +1377,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -1320,10 +1392,14 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<UpsertBillingProductResponse> upsertBillingProduct(
             CreateBillingProductRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/product/upsert")
-                .build();
+                .addPathSegments("billing/product/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -1332,7 +1408,7 @@ public class RawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -1344,12 +1420,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertBillingProductResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpsertBillingProductResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -1371,11 +1447,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -1383,6 +1457,10 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<ListBillingProductsResponse> listBillingProducts() {
         return listBillingProducts(ListBillingProductsRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<ListBillingProductsResponse> listBillingProducts(RequestOptions requestOptions) {
+        return listBillingProducts(ListBillingProductsRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<ListBillingProductsResponse> listBillingProducts(
@@ -1447,6 +1525,11 @@ public class RawBillingClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1459,12 +1542,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListBillingProductsResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListBillingProductsResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -1486,11 +1569,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -1498,6 +1579,10 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<CountBillingProductsResponse> countBillingProducts() {
         return countBillingProducts(CountBillingProductsRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<CountBillingProductsResponse> countBillingProducts(RequestOptions requestOptions) {
+        return countBillingProducts(CountBillingProductsRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<CountBillingProductsResponse> countBillingProducts(
@@ -1562,6 +1647,11 @@ public class RawBillingClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1574,12 +1664,12 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountBillingProductsResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountBillingProductsResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -1601,11 +1691,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -1618,10 +1706,14 @@ public class RawBillingClient {
 
     public BaseSchematicHttpResponse<UpsertBillingSubscriptionResponse> upsertBillingSubscription(
             CreateBillingSubscriptionRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/subscription/upsert")
-                .build();
+                .addPathSegments("billing/subscription/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -1630,7 +1722,7 @@ public class RawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -1642,13 +1734,13 @@ public class RawBillingClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(
-                                responseBody.string(), UpsertBillingSubscriptionResponse.class),
+                                responseBodyString, UpsertBillingSubscriptionResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -1670,11 +1762,9 @@ public class RawBillingClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }

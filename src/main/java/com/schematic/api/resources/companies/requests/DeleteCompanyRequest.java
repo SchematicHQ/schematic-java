@@ -114,5 +114,15 @@ public final class DeleteCompanyRequest {
         public DeleteCompanyRequest build() {
             return new DeleteCompanyRequest(cancelSubscription, prorate, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

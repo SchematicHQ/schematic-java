@@ -53,6 +53,10 @@ public class RawWebhooksClient {
         return listWebhookEvents(ListWebhookEventsRequest.builder().build());
     }
 
+    public BaseSchematicHttpResponse<ListWebhookEventsResponse> listWebhookEvents(RequestOptions requestOptions) {
+        return listWebhookEvents(ListWebhookEventsRequest.builder().build(), requestOptions);
+    }
+
     public BaseSchematicHttpResponse<ListWebhookEventsResponse> listWebhookEvents(ListWebhookEventsRequest request) {
         return listWebhookEvents(request, null);
     }
@@ -80,6 +84,11 @@ public class RawWebhooksClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -92,12 +101,12 @@ public class RawWebhooksClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListWebhookEventsResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListWebhookEventsResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -119,11 +128,9 @@ public class RawWebhooksClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -135,13 +142,17 @@ public class RawWebhooksClient {
 
     public BaseSchematicHttpResponse<GetWebhookEventResponse> getWebhookEvent(
             String webhookEventId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhook-events")
-                .addPathSegment(webhookEventId)
-                .build();
+                .addPathSegment(webhookEventId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -152,12 +163,12 @@ public class RawWebhooksClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetWebhookEventResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetWebhookEventResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -176,11 +187,9 @@ public class RawWebhooksClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -188,6 +197,10 @@ public class RawWebhooksClient {
 
     public BaseSchematicHttpResponse<CountWebhookEventsResponse> countWebhookEvents() {
         return countWebhookEvents(CountWebhookEventsRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<CountWebhookEventsResponse> countWebhookEvents(RequestOptions requestOptions) {
+        return countWebhookEvents(CountWebhookEventsRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<CountWebhookEventsResponse> countWebhookEvents(CountWebhookEventsRequest request) {
@@ -217,6 +230,11 @@ public class RawWebhooksClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -229,12 +247,12 @@ public class RawWebhooksClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountWebhookEventsResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountWebhookEventsResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -256,11 +274,9 @@ public class RawWebhooksClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -268,6 +284,10 @@ public class RawWebhooksClient {
 
     public BaseSchematicHttpResponse<ListWebhooksResponse> listWebhooks() {
         return listWebhooks(ListWebhooksRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<ListWebhooksResponse> listWebhooks(RequestOptions requestOptions) {
+        return listWebhooks(ListWebhooksRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<ListWebhooksResponse> listWebhooks(ListWebhooksRequest request) {
@@ -290,6 +310,11 @@ public class RawWebhooksClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -302,12 +327,11 @@ public class RawWebhooksClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListWebhooksResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListWebhooksResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -329,11 +353,9 @@ public class RawWebhooksClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -345,10 +367,14 @@ public class RawWebhooksClient {
 
     public BaseSchematicHttpResponse<CreateWebhookResponse> createWebhook(
             CreateWebhookRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("webhooks")
-                .build();
+                .addPathSegments("webhooks");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -357,7 +383,7 @@ public class RawWebhooksClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -369,12 +395,11 @@ public class RawWebhooksClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateWebhookResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CreateWebhookResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -396,11 +421,9 @@ public class RawWebhooksClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -411,13 +434,17 @@ public class RawWebhooksClient {
     }
 
     public BaseSchematicHttpResponse<GetWebhookResponse> getWebhook(String webhookId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
-                .addPathSegment(webhookId)
-                .build();
+                .addPathSegment(webhookId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -428,11 +455,11 @@ public class RawWebhooksClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetWebhookResponse.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetWebhookResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -451,11 +478,9 @@ public class RawWebhooksClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -466,17 +491,26 @@ public class RawWebhooksClient {
     }
 
     public BaseSchematicHttpResponse<UpdateWebhookResponse> updateWebhook(
+            String webhookId, RequestOptions requestOptions) {
+        return updateWebhook(webhookId, UpdateWebhookRequestBody.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<UpdateWebhookResponse> updateWebhook(
             String webhookId, UpdateWebhookRequestBody request) {
         return updateWebhook(webhookId, request, null);
     }
 
     public BaseSchematicHttpResponse<UpdateWebhookResponse> updateWebhook(
             String webhookId, UpdateWebhookRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
-                .addPathSegment(webhookId)
-                .build();
+                .addPathSegment(webhookId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -485,7 +519,7 @@ public class RawWebhooksClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -497,12 +531,11 @@ public class RawWebhooksClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateWebhookResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpdateWebhookResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -524,11 +557,9 @@ public class RawWebhooksClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -540,13 +571,17 @@ public class RawWebhooksClient {
 
     public BaseSchematicHttpResponse<DeleteWebhookResponse> deleteWebhook(
             String webhookId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
-                .addPathSegment(webhookId)
-                .build();
+                .addPathSegment(webhookId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -557,12 +592,11 @@ public class RawWebhooksClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), DeleteWebhookResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DeleteWebhookResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -584,11 +618,9 @@ public class RawWebhooksClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -596,6 +628,10 @@ public class RawWebhooksClient {
 
     public BaseSchematicHttpResponse<CountWebhooksResponse> countWebhooks() {
         return countWebhooks(CountWebhooksRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<CountWebhooksResponse> countWebhooks(RequestOptions requestOptions) {
+        return countWebhooks(CountWebhooksRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<CountWebhooksResponse> countWebhooks(CountWebhooksRequest request) {
@@ -618,6 +654,11 @@ public class RawWebhooksClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -630,12 +671,11 @@ public class RawWebhooksClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountWebhooksResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountWebhooksResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -657,11 +697,9 @@ public class RawWebhooksClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,19 +28,21 @@ public final class UpsertBillingProductRequestBody {
 
     private final Optional<String> currency;
 
+    private final Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices;
+
     private final boolean isTrialable;
 
-    private final Optional<Integer> monthlyPrice;
+    private final Optional<Long> monthlyPrice;
 
     private final Optional<String> monthlyPriceId;
 
-    private final Optional<Integer> oneTimePrice;
+    private final Optional<Long> oneTimePrice;
 
     private final Optional<String> oneTimePriceId;
 
-    private final Optional<Integer> trialDays;
+    private final Optional<Long> trialDays;
 
-    private final Optional<Integer> yearlyPrice;
+    private final Optional<Long> yearlyPrice;
 
     private final Optional<String> yearlyPriceId;
 
@@ -49,18 +52,20 @@ public final class UpsertBillingProductRequestBody {
             Optional<String> billingProductId,
             ChargeType chargeType,
             Optional<String> currency,
+            Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices,
             boolean isTrialable,
-            Optional<Integer> monthlyPrice,
+            Optional<Long> monthlyPrice,
             Optional<String> monthlyPriceId,
-            Optional<Integer> oneTimePrice,
+            Optional<Long> oneTimePrice,
             Optional<String> oneTimePriceId,
-            Optional<Integer> trialDays,
-            Optional<Integer> yearlyPrice,
+            Optional<Long> trialDays,
+            Optional<Long> yearlyPrice,
             Optional<String> yearlyPriceId,
             Map<String, Object> additionalProperties) {
         this.billingProductId = billingProductId;
         this.chargeType = chargeType;
         this.currency = currency;
+        this.currencyPrices = currencyPrices;
         this.isTrialable = isTrialable;
         this.monthlyPrice = monthlyPrice;
         this.monthlyPriceId = monthlyPriceId;
@@ -87,13 +92,18 @@ public final class UpsertBillingProductRequestBody {
         return currency;
     }
 
+    @JsonProperty("currency_prices")
+    public Optional<List<PlanCurrencyPriceRequestBody>> getCurrencyPrices() {
+        return currencyPrices;
+    }
+
     @JsonProperty("is_trialable")
     public boolean getIsTrialable() {
         return isTrialable;
     }
 
     @JsonProperty("monthly_price")
-    public Optional<Integer> getMonthlyPrice() {
+    public Optional<Long> getMonthlyPrice() {
         return monthlyPrice;
     }
 
@@ -103,7 +113,7 @@ public final class UpsertBillingProductRequestBody {
     }
 
     @JsonProperty("one_time_price")
-    public Optional<Integer> getOneTimePrice() {
+    public Optional<Long> getOneTimePrice() {
         return oneTimePrice;
     }
 
@@ -113,12 +123,12 @@ public final class UpsertBillingProductRequestBody {
     }
 
     @JsonProperty("trial_days")
-    public Optional<Integer> getTrialDays() {
+    public Optional<Long> getTrialDays() {
         return trialDays;
     }
 
     @JsonProperty("yearly_price")
-    public Optional<Integer> getYearlyPrice() {
+    public Optional<Long> getYearlyPrice() {
         return yearlyPrice;
     }
 
@@ -142,6 +152,7 @@ public final class UpsertBillingProductRequestBody {
         return billingProductId.equals(other.billingProductId)
                 && chargeType.equals(other.chargeType)
                 && currency.equals(other.currency)
+                && currencyPrices.equals(other.currencyPrices)
                 && isTrialable == other.isTrialable
                 && monthlyPrice.equals(other.monthlyPrice)
                 && monthlyPriceId.equals(other.monthlyPriceId)
@@ -158,6 +169,7 @@ public final class UpsertBillingProductRequestBody {
                 this.billingProductId,
                 this.chargeType,
                 this.currency,
+                this.currencyPrices,
                 this.isTrialable,
                 this.monthlyPrice,
                 this.monthlyPriceId,
@@ -190,6 +202,10 @@ public final class UpsertBillingProductRequestBody {
     public interface _FinalStage {
         UpsertBillingProductRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage billingProductId(Optional<String> billingProductId);
 
         _FinalStage billingProductId(String billingProductId);
@@ -198,29 +214,33 @@ public final class UpsertBillingProductRequestBody {
 
         _FinalStage currency(String currency);
 
-        _FinalStage monthlyPrice(Optional<Integer> monthlyPrice);
+        _FinalStage currencyPrices(Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices);
 
-        _FinalStage monthlyPrice(Integer monthlyPrice);
+        _FinalStage currencyPrices(List<PlanCurrencyPriceRequestBody> currencyPrices);
+
+        _FinalStage monthlyPrice(Optional<Long> monthlyPrice);
+
+        _FinalStage monthlyPrice(Long monthlyPrice);
 
         _FinalStage monthlyPriceId(Optional<String> monthlyPriceId);
 
         _FinalStage monthlyPriceId(String monthlyPriceId);
 
-        _FinalStage oneTimePrice(Optional<Integer> oneTimePrice);
+        _FinalStage oneTimePrice(Optional<Long> oneTimePrice);
 
-        _FinalStage oneTimePrice(Integer oneTimePrice);
+        _FinalStage oneTimePrice(Long oneTimePrice);
 
         _FinalStage oneTimePriceId(Optional<String> oneTimePriceId);
 
         _FinalStage oneTimePriceId(String oneTimePriceId);
 
-        _FinalStage trialDays(Optional<Integer> trialDays);
+        _FinalStage trialDays(Optional<Long> trialDays);
 
-        _FinalStage trialDays(Integer trialDays);
+        _FinalStage trialDays(Long trialDays);
 
-        _FinalStage yearlyPrice(Optional<Integer> yearlyPrice);
+        _FinalStage yearlyPrice(Optional<Long> yearlyPrice);
 
-        _FinalStage yearlyPrice(Integer yearlyPrice);
+        _FinalStage yearlyPrice(Long yearlyPrice);
 
         _FinalStage yearlyPriceId(Optional<String> yearlyPriceId);
 
@@ -235,17 +255,19 @@ public final class UpsertBillingProductRequestBody {
 
         private Optional<String> yearlyPriceId = Optional.empty();
 
-        private Optional<Integer> yearlyPrice = Optional.empty();
+        private Optional<Long> yearlyPrice = Optional.empty();
 
-        private Optional<Integer> trialDays = Optional.empty();
+        private Optional<Long> trialDays = Optional.empty();
 
         private Optional<String> oneTimePriceId = Optional.empty();
 
-        private Optional<Integer> oneTimePrice = Optional.empty();
+        private Optional<Long> oneTimePrice = Optional.empty();
 
         private Optional<String> monthlyPriceId = Optional.empty();
 
-        private Optional<Integer> monthlyPrice = Optional.empty();
+        private Optional<Long> monthlyPrice = Optional.empty();
+
+        private Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices = Optional.empty();
 
         private Optional<String> currency = Optional.empty();
 
@@ -261,6 +283,7 @@ public final class UpsertBillingProductRequestBody {
             billingProductId(other.getBillingProductId());
             chargeType(other.getChargeType());
             currency(other.getCurrency());
+            currencyPrices(other.getCurrencyPrices());
             isTrialable(other.getIsTrialable());
             monthlyPrice(other.getMonthlyPrice());
             monthlyPriceId(other.getMonthlyPriceId());
@@ -300,27 +323,27 @@ public final class UpsertBillingProductRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage yearlyPrice(Integer yearlyPrice) {
+        public _FinalStage yearlyPrice(Long yearlyPrice) {
             this.yearlyPrice = Optional.ofNullable(yearlyPrice);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "yearly_price", nulls = Nulls.SKIP)
-        public _FinalStage yearlyPrice(Optional<Integer> yearlyPrice) {
+        public _FinalStage yearlyPrice(Optional<Long> yearlyPrice) {
             this.yearlyPrice = yearlyPrice;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage trialDays(Integer trialDays) {
+        public _FinalStage trialDays(Long trialDays) {
             this.trialDays = Optional.ofNullable(trialDays);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
-        public _FinalStage trialDays(Optional<Integer> trialDays) {
+        public _FinalStage trialDays(Optional<Long> trialDays) {
             this.trialDays = trialDays;
             return this;
         }
@@ -339,14 +362,14 @@ public final class UpsertBillingProductRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage oneTimePrice(Integer oneTimePrice) {
+        public _FinalStage oneTimePrice(Long oneTimePrice) {
             this.oneTimePrice = Optional.ofNullable(oneTimePrice);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "one_time_price", nulls = Nulls.SKIP)
-        public _FinalStage oneTimePrice(Optional<Integer> oneTimePrice) {
+        public _FinalStage oneTimePrice(Optional<Long> oneTimePrice) {
             this.oneTimePrice = oneTimePrice;
             return this;
         }
@@ -365,15 +388,28 @@ public final class UpsertBillingProductRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage monthlyPrice(Integer monthlyPrice) {
+        public _FinalStage monthlyPrice(Long monthlyPrice) {
             this.monthlyPrice = Optional.ofNullable(monthlyPrice);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "monthly_price", nulls = Nulls.SKIP)
-        public _FinalStage monthlyPrice(Optional<Integer> monthlyPrice) {
+        public _FinalStage monthlyPrice(Optional<Long> monthlyPrice) {
             this.monthlyPrice = monthlyPrice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage currencyPrices(List<PlanCurrencyPriceRequestBody> currencyPrices) {
+            this.currencyPrices = Optional.ofNullable(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices) {
+            this.currencyPrices = currencyPrices;
             return this;
         }
 
@@ -409,6 +445,7 @@ public final class UpsertBillingProductRequestBody {
                     billingProductId,
                     chargeType,
                     currency,
+                    currencyPrices,
                     isTrialable,
                     monthlyPrice,
                     monthlyPriceId,
@@ -418,6 +455,18 @@ public final class UpsertBillingProductRequestBody {
                     yearlyPrice,
                     yearlyPriceId,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -32,9 +32,9 @@ public final class ListPlanChangesRequest {
 
     private final Optional<String> companyId;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Map<String, Object> additionalProperties;
 
@@ -44,8 +44,8 @@ public final class ListPlanChangesRequest {
             Optional<String> action,
             Optional<String> basePlanAction,
             Optional<String> companyId,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Map<String, Object> additionalProperties) {
         this.companyIds = companyIds;
         this.planIds = planIds;
@@ -86,7 +86,7 @@ public final class ListPlanChangesRequest {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -94,7 +94,7 @@ public final class ListPlanChangesRequest {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -152,9 +152,9 @@ public final class ListPlanChangesRequest {
 
         private Optional<String> companyId = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -241,12 +241,12 @@ public final class ListPlanChangesRequest {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -255,12 +255,12 @@ public final class ListPlanChangesRequest {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -268,6 +268,16 @@ public final class ListPlanChangesRequest {
         public ListPlanChangesRequest build() {
             return new ListPlanChangesRequest(
                     companyIds, planIds, action, basePlanAction, companyId, limit, offset, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

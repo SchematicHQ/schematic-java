@@ -48,7 +48,7 @@ public final class CompanySubscriptionResponseData {
 
     private final String subscriptionExternalId;
 
-    private final int totalPrice;
+    private final long totalPrice;
 
     private final Optional<OffsetDateTime> trialEnd;
 
@@ -67,7 +67,7 @@ public final class CompanySubscriptionResponseData {
             List<BillingProductForSubscriptionResponseData> products,
             String status,
             String subscriptionExternalId,
-            int totalPrice,
+            long totalPrice,
             Optional<OffsetDateTime> trialEnd,
             Map<String, Object> additionalProperties) {
         this.cancelAt = cancelAt;
@@ -148,7 +148,7 @@ public final class CompanySubscriptionResponseData {
     }
 
     @JsonProperty("total_price")
-    public int getTotalPrice() {
+    public long getTotalPrice() {
         return totalPrice;
     }
 
@@ -240,11 +240,15 @@ public final class CompanySubscriptionResponseData {
     }
 
     public interface TotalPriceStage {
-        _FinalStage totalPrice(int totalPrice);
+        _FinalStage totalPrice(long totalPrice);
     }
 
     public interface _FinalStage {
         CompanySubscriptionResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage cancelAt(Optional<OffsetDateTime> cancelAt);
 
@@ -301,7 +305,7 @@ public final class CompanySubscriptionResponseData {
 
         private String subscriptionExternalId;
 
-        private int totalPrice;
+        private long totalPrice;
 
         private Optional<OffsetDateTime> trialEnd = Optional.empty();
 
@@ -386,7 +390,7 @@ public final class CompanySubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("total_price")
-        public _FinalStage totalPrice(int totalPrice) {
+        public _FinalStage totalPrice(long totalPrice) {
             this.totalPrice = totalPrice;
             return this;
         }
@@ -522,6 +526,18 @@ public final class CompanySubscriptionResponseData {
                     totalPrice,
                     trialEnd,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

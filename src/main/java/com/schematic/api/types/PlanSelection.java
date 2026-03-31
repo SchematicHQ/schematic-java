@@ -25,11 +25,18 @@ public final class PlanSelection {
 
     private final Optional<String> priceId;
 
+    private final Optional<String> versionId;
+
     private final Map<String, Object> additionalProperties;
 
-    private PlanSelection(String planId, Optional<String> priceId, Map<String, Object> additionalProperties) {
+    private PlanSelection(
+            String planId,
+            Optional<String> priceId,
+            Optional<String> versionId,
+            Map<String, Object> additionalProperties) {
         this.planId = planId;
         this.priceId = priceId;
+        this.versionId = versionId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -41,6 +48,11 @@ public final class PlanSelection {
     @JsonProperty("price_id")
     public Optional<String> getPriceId() {
         return priceId;
+    }
+
+    @JsonProperty("version_id")
+    public Optional<String> getVersionId() {
+        return versionId;
     }
 
     @java.lang.Override
@@ -55,12 +67,12 @@ public final class PlanSelection {
     }
 
     private boolean equalTo(PlanSelection other) {
-        return planId.equals(other.planId) && priceId.equals(other.priceId);
+        return planId.equals(other.planId) && priceId.equals(other.priceId) && versionId.equals(other.versionId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.planId, this.priceId);
+        return Objects.hash(this.planId, this.priceId, this.versionId);
     }
 
     @java.lang.Override
@@ -81,14 +93,24 @@ public final class PlanSelection {
     public interface _FinalStage {
         PlanSelection build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage priceId(Optional<String> priceId);
 
         _FinalStage priceId(String priceId);
+
+        _FinalStage versionId(Optional<String> versionId);
+
+        _FinalStage versionId(String versionId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements PlanIdStage, _FinalStage {
         private String planId;
+
+        private Optional<String> versionId = Optional.empty();
 
         private Optional<String> priceId = Optional.empty();
 
@@ -101,6 +123,7 @@ public final class PlanSelection {
         public Builder from(PlanSelection other) {
             planId(other.getPlanId());
             priceId(other.getPriceId());
+            versionId(other.getVersionId());
             return this;
         }
 
@@ -108,6 +131,19 @@ public final class PlanSelection {
         @JsonSetter("plan_id")
         public _FinalStage planId(@NotNull String planId) {
             this.planId = Objects.requireNonNull(planId, "planId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage versionId(String versionId) {
+            this.versionId = Optional.ofNullable(versionId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "version_id", nulls = Nulls.SKIP)
+        public _FinalStage versionId(Optional<String> versionId) {
+            this.versionId = versionId;
             return this;
         }
 
@@ -126,7 +162,19 @@ public final class PlanSelection {
 
         @java.lang.Override
         public PlanSelection build() {
-            return new PlanSelection(planId, priceId, additionalProperties);
+            return new PlanSelection(planId, priceId, versionId, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -90,6 +90,10 @@ public final class ListApiKeysResponse {
     public interface _FinalStage {
         ListApiKeysResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<ApiKeyResponseData> data);
 
         _FinalStage addData(ApiKeyResponseData data);
@@ -154,6 +158,18 @@ public final class ListApiKeysResponse {
         @java.lang.Override
         public ListApiKeysResponse build() {
             return new ListApiKeysResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

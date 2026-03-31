@@ -21,36 +21,36 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateCouponRequestBody.Builder.class)
 public final class CreateCouponRequestBody {
-    private final int amountOff;
+    private final long amountOff;
 
     private final Optional<String> currency;
 
     private final String duration;
 
-    private final int durationInMonths;
+    private final long durationInMonths;
 
     private final String externalId;
 
-    private final int maxRedemptions;
+    private final long maxRedemptions;
 
     private final String name;
 
     private final double percentOff;
 
-    private final int timesRedeemed;
+    private final long timesRedeemed;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateCouponRequestBody(
-            int amountOff,
+            long amountOff,
             Optional<String> currency,
             String duration,
-            int durationInMonths,
+            long durationInMonths,
             String externalId,
-            int maxRedemptions,
+            long maxRedemptions,
             String name,
             double percentOff,
-            int timesRedeemed,
+            long timesRedeemed,
             Map<String, Object> additionalProperties) {
         this.amountOff = amountOff;
         this.currency = currency;
@@ -65,7 +65,7 @@ public final class CreateCouponRequestBody {
     }
 
     @JsonProperty("amount_off")
-    public int getAmountOff() {
+    public long getAmountOff() {
         return amountOff;
     }
 
@@ -80,7 +80,7 @@ public final class CreateCouponRequestBody {
     }
 
     @JsonProperty("duration_in_months")
-    public int getDurationInMonths() {
+    public long getDurationInMonths() {
         return durationInMonths;
     }
 
@@ -90,7 +90,7 @@ public final class CreateCouponRequestBody {
     }
 
     @JsonProperty("max_redemptions")
-    public int getMaxRedemptions() {
+    public long getMaxRedemptions() {
         return maxRedemptions;
     }
 
@@ -105,7 +105,7 @@ public final class CreateCouponRequestBody {
     }
 
     @JsonProperty("times_redeemed")
-    public int getTimesRedeemed() {
+    public long getTimesRedeemed() {
         return timesRedeemed;
     }
 
@@ -156,7 +156,7 @@ public final class CreateCouponRequestBody {
     }
 
     public interface AmountOffStage {
-        DurationStage amountOff(int amountOff);
+        DurationStage amountOff(long amountOff);
 
         Builder from(CreateCouponRequestBody other);
     }
@@ -166,7 +166,7 @@ public final class CreateCouponRequestBody {
     }
 
     public interface DurationInMonthsStage {
-        ExternalIdStage durationInMonths(int durationInMonths);
+        ExternalIdStage durationInMonths(long durationInMonths);
     }
 
     public interface ExternalIdStage {
@@ -174,7 +174,7 @@ public final class CreateCouponRequestBody {
     }
 
     public interface MaxRedemptionsStage {
-        NameStage maxRedemptions(int maxRedemptions);
+        NameStage maxRedemptions(long maxRedemptions);
     }
 
     public interface NameStage {
@@ -186,11 +186,15 @@ public final class CreateCouponRequestBody {
     }
 
     public interface TimesRedeemedStage {
-        _FinalStage timesRedeemed(int timesRedeemed);
+        _FinalStage timesRedeemed(long timesRedeemed);
     }
 
     public interface _FinalStage {
         CreateCouponRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage currency(Optional<String> currency);
 
@@ -208,21 +212,21 @@ public final class CreateCouponRequestBody {
                     PercentOffStage,
                     TimesRedeemedStage,
                     _FinalStage {
-        private int amountOff;
+        private long amountOff;
 
         private String duration;
 
-        private int durationInMonths;
+        private long durationInMonths;
 
         private String externalId;
 
-        private int maxRedemptions;
+        private long maxRedemptions;
 
         private String name;
 
         private double percentOff;
 
-        private int timesRedeemed;
+        private long timesRedeemed;
 
         private Optional<String> currency = Optional.empty();
 
@@ -247,7 +251,7 @@ public final class CreateCouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("amount_off")
-        public DurationStage amountOff(int amountOff) {
+        public DurationStage amountOff(long amountOff) {
             this.amountOff = amountOff;
             return this;
         }
@@ -261,7 +265,7 @@ public final class CreateCouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("duration_in_months")
-        public ExternalIdStage durationInMonths(int durationInMonths) {
+        public ExternalIdStage durationInMonths(long durationInMonths) {
             this.durationInMonths = durationInMonths;
             return this;
         }
@@ -275,7 +279,7 @@ public final class CreateCouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("max_redemptions")
-        public NameStage maxRedemptions(int maxRedemptions) {
+        public NameStage maxRedemptions(long maxRedemptions) {
             this.maxRedemptions = maxRedemptions;
             return this;
         }
@@ -296,7 +300,7 @@ public final class CreateCouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("times_redeemed")
-        public _FinalStage timesRedeemed(int timesRedeemed) {
+        public _FinalStage timesRedeemed(long timesRedeemed) {
             this.timesRedeemed = timesRedeemed;
             return this;
         }
@@ -327,6 +331,18 @@ public final class CreateCouponRequestBody {
                     percentOff,
                     timesRedeemed,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

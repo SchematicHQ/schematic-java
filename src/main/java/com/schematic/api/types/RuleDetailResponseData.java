@@ -38,7 +38,7 @@ public final class RuleDetailResponseData {
 
     private final String name;
 
-    private final int priority;
+    private final long priority;
 
     private final String ruleType;
 
@@ -56,7 +56,7 @@ public final class RuleDetailResponseData {
             Optional<String> flagId,
             String id,
             String name,
-            int priority,
+            long priority,
             String ruleType,
             OffsetDateTime updatedAt,
             boolean value,
@@ -111,7 +111,7 @@ public final class RuleDetailResponseData {
     }
 
     @JsonProperty("priority")
-    public int getPriority() {
+    public long getPriority() {
         return priority;
     }
 
@@ -199,7 +199,7 @@ public final class RuleDetailResponseData {
     }
 
     public interface PriorityStage {
-        RuleTypeStage priority(int priority);
+        RuleTypeStage priority(long priority);
     }
 
     public interface RuleTypeStage {
@@ -216,6 +216,10 @@ public final class RuleDetailResponseData {
 
     public interface _FinalStage {
         RuleDetailResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage conditionGroups(List<RuleConditionGroupDetailResponseData> conditionGroups);
 
@@ -253,7 +257,7 @@ public final class RuleDetailResponseData {
 
         private String name;
 
-        private int priority;
+        private long priority;
 
         private String ruleType;
 
@@ -318,7 +322,7 @@ public final class RuleDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("priority")
-        public RuleTypeStage priority(int priority) {
+        public RuleTypeStage priority(long priority) {
             this.priority = priority;
             return this;
         }
@@ -420,6 +424,18 @@ public final class RuleDetailResponseData {
                     updatedAt,
                     value,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

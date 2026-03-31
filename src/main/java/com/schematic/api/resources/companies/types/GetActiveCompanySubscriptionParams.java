@@ -25,17 +25,17 @@ public final class GetActiveCompanySubscriptionParams {
 
     private final Optional<List<String>> companyIds;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Map<String, Object> additionalProperties;
 
     private GetActiveCompanySubscriptionParams(
             Optional<String> companyId,
             Optional<List<String>> companyIds,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.companyIds = companyIds;
@@ -58,7 +58,7 @@ public final class GetActiveCompanySubscriptionParams {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -66,7 +66,7 @@ public final class GetActiveCompanySubscriptionParams {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -109,9 +109,9 @@ public final class GetActiveCompanySubscriptionParams {
 
         private Optional<List<String>> companyIds = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -152,12 +152,12 @@ public final class GetActiveCompanySubscriptionParams {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -166,18 +166,28 @@ public final class GetActiveCompanySubscriptionParams {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
 
         public GetActiveCompanySubscriptionParams build() {
             return new GetActiveCompanySubscriptionParams(companyId, companyIds, limit, offset, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

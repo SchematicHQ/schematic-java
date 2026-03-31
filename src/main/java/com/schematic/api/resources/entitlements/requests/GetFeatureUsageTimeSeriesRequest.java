@@ -129,6 +129,10 @@ public final class GetFeatureUsageTimeSeriesRequest {
     public interface _FinalStage {
         GetFeatureUsageTimeSeriesRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage granularity(Optional<TimeSeriesGranularity> granularity);
 
         _FinalStage granularity(TimeSeriesGranularity granularity);
@@ -207,6 +211,18 @@ public final class GetFeatureUsageTimeSeriesRequest {
         public GetFeatureUsageTimeSeriesRequest build() {
             return new GetFeatureUsageTimeSeriesRequest(
                     companyId, endTime, featureId, granularity, startTime, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

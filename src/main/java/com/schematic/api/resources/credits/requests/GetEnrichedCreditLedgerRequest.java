@@ -34,9 +34,9 @@ public final class GetEnrichedCreditLedgerRequest {
 
     private final Optional<String> endTime;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Map<String, Object> additionalProperties;
 
@@ -47,8 +47,8 @@ public final class GetEnrichedCreditLedgerRequest {
             CreditLedgerPeriod period,
             Optional<String> startTime,
             Optional<String> endTime,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.billingCreditId = billingCreditId;
@@ -95,7 +95,7 @@ public final class GetEnrichedCreditLedgerRequest {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -103,7 +103,7 @@ public final class GetEnrichedCreditLedgerRequest {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -164,6 +164,10 @@ public final class GetEnrichedCreditLedgerRequest {
     public interface _FinalStage {
         GetEnrichedCreditLedgerRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage billingCreditId(Optional<String> billingCreditId);
 
         _FinalStage billingCreditId(String billingCreditId);
@@ -183,16 +187,16 @@ public final class GetEnrichedCreditLedgerRequest {
         /**
          * <p>Page limit (default 100)</p>
          */
-        _FinalStage limit(Optional<Integer> limit);
+        _FinalStage limit(Optional<Long> limit);
 
-        _FinalStage limit(Integer limit);
+        _FinalStage limit(Long limit);
 
         /**
          * <p>Page offset (default 0)</p>
          */
-        _FinalStage offset(Optional<Integer> offset);
+        _FinalStage offset(Optional<Long> offset);
 
-        _FinalStage offset(Integer offset);
+        _FinalStage offset(Long offset);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -201,9 +205,9 @@ public final class GetEnrichedCreditLedgerRequest {
 
         private CreditLedgerPeriod period;
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
         private Optional<String> endTime = Optional.empty();
 
@@ -250,7 +254,7 @@ public final class GetEnrichedCreditLedgerRequest {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage offset(Integer offset) {
+        public _FinalStage offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -260,7 +264,7 @@ public final class GetEnrichedCreditLedgerRequest {
          */
         @java.lang.Override
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public _FinalStage offset(Optional<Integer> offset) {
+        public _FinalStage offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
@@ -270,7 +274,7 @@ public final class GetEnrichedCreditLedgerRequest {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage limit(Integer limit) {
+        public _FinalStage limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -280,7 +284,7 @@ public final class GetEnrichedCreditLedgerRequest {
          */
         @java.lang.Override
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public _FinalStage limit(Optional<Integer> limit) {
+        public _FinalStage limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
@@ -349,6 +353,18 @@ public final class GetEnrichedCreditLedgerRequest {
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

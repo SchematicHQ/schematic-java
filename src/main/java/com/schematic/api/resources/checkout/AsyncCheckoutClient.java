@@ -96,6 +96,13 @@ public class AsyncCheckoutClient {
     }
 
     public CompletableFuture<UpdateCustomerSubscriptionTrialEndResponse> updateCustomerSubscriptionTrialEnd(
+            String subscriptionId, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateCustomerSubscriptionTrialEnd(subscriptionId, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpdateCustomerSubscriptionTrialEndResponse> updateCustomerSubscriptionTrialEnd(
             String subscriptionId, UpdateTrialEndRequestBody request) {
         return this.rawClient
                 .updateCustomerSubscriptionTrialEnd(subscriptionId, request)

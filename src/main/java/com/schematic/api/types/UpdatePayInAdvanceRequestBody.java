@@ -21,11 +21,11 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdatePayInAdvanceRequestBody {
     private final String priceId;
 
-    private final int quantity;
+    private final long quantity;
 
     private final Map<String, Object> additionalProperties;
 
-    private UpdatePayInAdvanceRequestBody(String priceId, int quantity, Map<String, Object> additionalProperties) {
+    private UpdatePayInAdvanceRequestBody(String priceId, long quantity, Map<String, Object> additionalProperties) {
         this.priceId = priceId;
         this.quantity = quantity;
         this.additionalProperties = additionalProperties;
@@ -37,7 +37,7 @@ public final class UpdatePayInAdvanceRequestBody {
     }
 
     @JsonProperty("quantity")
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
@@ -77,18 +77,22 @@ public final class UpdatePayInAdvanceRequestBody {
     }
 
     public interface QuantityStage {
-        _FinalStage quantity(int quantity);
+        _FinalStage quantity(long quantity);
     }
 
     public interface _FinalStage {
         UpdatePayInAdvanceRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements PriceIdStage, QuantityStage, _FinalStage {
         private String priceId;
 
-        private int quantity;
+        private long quantity;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -111,7 +115,7 @@ public final class UpdatePayInAdvanceRequestBody {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public _FinalStage quantity(int quantity) {
+        public _FinalStage quantity(long quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -119,6 +123,18 @@ public final class UpdatePayInAdvanceRequestBody {
         @java.lang.Override
         public UpdatePayInAdvanceRequestBody build() {
             return new UpdatePayInAdvanceRequestBody(priceId, quantity, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

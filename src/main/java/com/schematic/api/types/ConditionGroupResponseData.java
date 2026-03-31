@@ -32,8 +32,6 @@ public final class ConditionGroupResponseData {
 
     private final String id;
 
-    private final Optional<String> planVersionId;
-
     private final String ruleId;
 
     private final OffsetDateTime updatedAt;
@@ -46,7 +44,6 @@ public final class ConditionGroupResponseData {
             String environmentId,
             Optional<String> flagId,
             String id,
-            Optional<String> planVersionId,
             String ruleId,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -55,7 +52,6 @@ public final class ConditionGroupResponseData {
         this.environmentId = environmentId;
         this.flagId = flagId;
         this.id = id;
-        this.planVersionId = planVersionId;
         this.ruleId = ruleId;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -86,11 +82,6 @@ public final class ConditionGroupResponseData {
         return id;
     }
 
-    @JsonProperty("plan_version_id")
-    public Optional<String> getPlanVersionId() {
-        return planVersionId;
-    }
-
     @JsonProperty("rule_id")
     public String getRuleId() {
         return ruleId;
@@ -118,7 +109,6 @@ public final class ConditionGroupResponseData {
                 && environmentId.equals(other.environmentId)
                 && flagId.equals(other.flagId)
                 && id.equals(other.id)
-                && planVersionId.equals(other.planVersionId)
                 && ruleId.equals(other.ruleId)
                 && updatedAt.equals(other.updatedAt);
     }
@@ -126,14 +116,7 @@ public final class ConditionGroupResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.accountId,
-                this.createdAt,
-                this.environmentId,
-                this.flagId,
-                this.id,
-                this.planVersionId,
-                this.ruleId,
-                this.updatedAt);
+                this.accountId, this.createdAt, this.environmentId, this.flagId, this.id, this.ruleId, this.updatedAt);
     }
 
     @java.lang.Override
@@ -174,13 +157,13 @@ public final class ConditionGroupResponseData {
     public interface _FinalStage {
         ConditionGroupResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage flagId(Optional<String> flagId);
 
         _FinalStage flagId(String flagId);
-
-        _FinalStage planVersionId(Optional<String> planVersionId);
-
-        _FinalStage planVersionId(String planVersionId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -204,8 +187,6 @@ public final class ConditionGroupResponseData {
 
         private OffsetDateTime updatedAt;
 
-        private Optional<String> planVersionId = Optional.empty();
-
         private Optional<String> flagId = Optional.empty();
 
         @JsonAnySetter
@@ -220,7 +201,6 @@ public final class ConditionGroupResponseData {
             environmentId(other.getEnvironmentId());
             flagId(other.getFlagId());
             id(other.getId());
-            planVersionId(other.getPlanVersionId());
             ruleId(other.getRuleId());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -269,19 +249,6 @@ public final class ConditionGroupResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage planVersionId(String planVersionId) {
-            this.planVersionId = Optional.ofNullable(planVersionId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
-        public _FinalStage planVersionId(Optional<String> planVersionId) {
-            this.planVersionId = planVersionId;
-            return this;
-        }
-
-        @java.lang.Override
         public _FinalStage flagId(String flagId) {
             this.flagId = Optional.ofNullable(flagId);
             return this;
@@ -297,15 +264,19 @@ public final class ConditionGroupResponseData {
         @java.lang.Override
         public ConditionGroupResponseData build() {
             return new ConditionGroupResponseData(
-                    accountId,
-                    createdAt,
-                    environmentId,
-                    flagId,
-                    id,
-                    planVersionId,
-                    ruleId,
-                    updatedAt,
-                    additionalProperties);
+                    accountId, createdAt, environmentId, flagId, id, ruleId, updatedAt, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

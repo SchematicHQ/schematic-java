@@ -29,7 +29,7 @@ public final class BillingPriceResponseData {
 
     private final BillingProductPriceInterval interval;
 
-    private final int price;
+    private final long price;
 
     private final Optional<String> priceDecimal;
 
@@ -44,7 +44,7 @@ public final class BillingPriceResponseData {
             String externalPriceId,
             String id,
             BillingProductPriceInterval interval,
-            int price,
+            long price,
             Optional<String> priceDecimal,
             BillingProviderType providerType,
             BillingPriceScheme scheme,
@@ -81,7 +81,7 @@ public final class BillingPriceResponseData {
     }
 
     @JsonProperty("price")
-    public int getPrice() {
+    public long getPrice() {
         return price;
     }
 
@@ -163,7 +163,7 @@ public final class BillingPriceResponseData {
     }
 
     public interface PriceStage {
-        ProviderTypeStage price(int price);
+        ProviderTypeStage price(long price);
     }
 
     public interface ProviderTypeStage {
@@ -176,6 +176,10 @@ public final class BillingPriceResponseData {
 
     public interface _FinalStage {
         BillingPriceResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage priceDecimal(Optional<String> priceDecimal);
 
@@ -200,7 +204,7 @@ public final class BillingPriceResponseData {
 
         private BillingProductPriceInterval interval;
 
-        private int price;
+        private long price;
 
         private BillingProviderType providerType;
 
@@ -256,7 +260,7 @@ public final class BillingPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("price")
-        public ProviderTypeStage price(int price) {
+        public ProviderTypeStage price(long price) {
             this.price = price;
             return this;
         }
@@ -300,6 +304,18 @@ public final class BillingPriceResponseData {
                     providerType,
                     scheme,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

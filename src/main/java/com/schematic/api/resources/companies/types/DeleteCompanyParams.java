@@ -114,5 +114,15 @@ public final class DeleteCompanyParams {
         public DeleteCompanyParams build() {
             return new DeleteCompanyParams(cancelSubscription, prorate, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

@@ -27,11 +27,11 @@ public final class CountBillingProductsParams {
 
     private final Optional<Boolean> isActive;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
     private final Optional<String> name;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Optional<BillingPriceUsageType> priceUsageType;
 
@@ -52,9 +52,9 @@ public final class CountBillingProductsParams {
     private CountBillingProductsParams(
             Optional<List<String>> ids,
             Optional<Boolean> isActive,
-            Optional<Integer> limit,
+            Optional<Long> limit,
             Optional<String> name,
-            Optional<Integer> offset,
+            Optional<Long> offset,
             Optional<BillingPriceUsageType> priceUsageType,
             Optional<BillingProviderType> providerType,
             Optional<String> q,
@@ -95,7 +95,7 @@ public final class CountBillingProductsParams {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -108,7 +108,7 @@ public final class CountBillingProductsParams {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -217,11 +217,11 @@ public final class CountBillingProductsParams {
 
         private Optional<Boolean> isActive = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         private Optional<BillingPriceUsageType> priceUsageType = Optional.empty();
 
@@ -287,12 +287,12 @@ public final class CountBillingProductsParams {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -312,12 +312,12 @@ public final class CountBillingProductsParams {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -426,6 +426,16 @@ public final class CountBillingProductsParams {
                     withZeroPrice,
                     withoutLinkedToPlan,
                     additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

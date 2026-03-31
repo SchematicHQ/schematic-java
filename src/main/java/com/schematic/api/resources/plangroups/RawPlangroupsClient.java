@@ -10,6 +10,7 @@ import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.errors.BadRequestError;
 import com.schematic.api.errors.ForbiddenError;
@@ -17,6 +18,7 @@ import com.schematic.api.errors.InternalServerError;
 import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.plangroups.requests.CreatePlanGroupRequestBody;
+import com.schematic.api.resources.plangroups.requests.GetPlanGroupRequest;
 import com.schematic.api.resources.plangroups.requests.UpdatePlanGroupRequestBody;
 import com.schematic.api.resources.plangroups.types.CreatePlanGroupResponse;
 import com.schematic.api.resources.plangroups.types.GetPlanGroupResponse;
@@ -39,32 +41,51 @@ public class RawPlangroupsClient {
     }
 
     public BaseSchematicHttpResponse<GetPlanGroupResponse> getPlanGroup() {
-        return getPlanGroup(null);
+        return getPlanGroup(GetPlanGroupRequest.builder().build());
     }
 
     public BaseSchematicHttpResponse<GetPlanGroupResponse> getPlanGroup(RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        return getPlanGroup(GetPlanGroupRequest.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<GetPlanGroupResponse> getPlanGroup(GetPlanGroupRequest request) {
+        return getPlanGroup(request, null);
+    }
+
+    public BaseSchematicHttpResponse<GetPlanGroupResponse> getPlanGroup(
+            GetPlanGroupRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("plan-groups")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .addPathSegments("plan-groups");
+        if (request.getIncludeCompanyCounts().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "include_company_counts",
+                    request.getIncludeCompanyCounts().get(),
+                    false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json")
-                .build();
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetPlanGroupResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetPlanGroupResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -83,11 +104,9 @@ public class RawPlangroupsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -99,10 +118,14 @@ public class RawPlangroupsClient {
 
     public BaseSchematicHttpResponse<CreatePlanGroupResponse> createPlanGroup(
             CreatePlanGroupRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("plan-groups")
-                .build();
+                .addPathSegments("plan-groups");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -111,7 +134,7 @@ public class RawPlangroupsClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -123,12 +146,12 @@ public class RawPlangroupsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreatePlanGroupResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CreatePlanGroupResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -150,11 +173,9 @@ public class RawPlangroupsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }
@@ -167,11 +188,15 @@ public class RawPlangroupsClient {
 
     public BaseSchematicHttpResponse<UpdatePlanGroupResponse> updatePlanGroup(
             String planGroupId, UpdatePlanGroupRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-groups")
-                .addPathSegment(planGroupId)
-                .build();
+                .addPathSegment(planGroupId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -180,7 +205,7 @@ public class RawPlangroupsClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -192,12 +217,12 @@ public class RawPlangroupsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdatePlanGroupResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpdatePlanGroupResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -219,11 +244,9 @@ public class RawPlangroupsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }

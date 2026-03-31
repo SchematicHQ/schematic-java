@@ -42,7 +42,7 @@ public final class CompanyEventPeriodMetricsResponseData {
 
     private final Optional<OffsetDateTime> validUntil;
 
-    private final int value;
+    private final long value;
 
     private final Map<String, Object> additionalProperties;
 
@@ -57,7 +57,7 @@ public final class CompanyEventPeriodMetricsResponseData {
             String monthReset,
             String period,
             Optional<OffsetDateTime> validUntil,
-            int value,
+            long value,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.capturedAtMax = capturedAtMax;
@@ -124,7 +124,7 @@ public final class CompanyEventPeriodMetricsResponseData {
     }
 
     @JsonProperty("value")
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
@@ -218,11 +218,15 @@ public final class CompanyEventPeriodMetricsResponseData {
     }
 
     public interface ValueStage {
-        _FinalStage value(int value);
+        _FinalStage value(long value);
     }
 
     public interface _FinalStage {
         CompanyEventPeriodMetricsResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage validUntil(Optional<OffsetDateTime> validUntil);
 
@@ -260,7 +264,7 @@ public final class CompanyEventPeriodMetricsResponseData {
 
         private String period;
 
-        private int value;
+        private long value;
 
         private Optional<OffsetDateTime> validUntil = Optional.empty();
 
@@ -350,7 +354,7 @@ public final class CompanyEventPeriodMetricsResponseData {
 
         @java.lang.Override
         @JsonSetter("value")
-        public _FinalStage value(int value) {
+        public _FinalStage value(long value) {
             this.value = value;
             return this;
         }
@@ -383,6 +387,18 @@ public final class CompanyEventPeriodMetricsResponseData {
                     validUntil,
                     value,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WebFeatureUsageWebhookOutput.Builder.class)
 public final class WebFeatureUsageWebhookOutput {
-    private final Optional<Integer> allocation;
+    private final Optional<Long> allocation;
 
     private final Optional<CreditUsage> creditUsage;
 
@@ -32,19 +32,19 @@ public final class WebFeatureUsageWebhookOutput {
 
     private final Optional<OffsetDateTime> metricResetAt;
 
-    private final Optional<Integer> usage;
+    private final Optional<Long> usage;
 
     private final Optional<CompanyDetailResponseData> company;
 
     private final Map<String, Object> additionalProperties;
 
     private WebFeatureUsageWebhookOutput(
-            Optional<Integer> allocation,
+            Optional<Long> allocation,
             Optional<CreditUsage> creditUsage,
             String entitlement,
             Optional<FeatureView> feature,
             Optional<OffsetDateTime> metricResetAt,
-            Optional<Integer> usage,
+            Optional<Long> usage,
             Optional<CompanyDetailResponseData> company,
             Map<String, Object> additionalProperties) {
         this.allocation = allocation;
@@ -58,7 +58,7 @@ public final class WebFeatureUsageWebhookOutput {
     }
 
     @JsonProperty("Allocation")
-    public Optional<Integer> getAllocation() {
+    public Optional<Long> getAllocation() {
         return allocation;
     }
 
@@ -83,7 +83,7 @@ public final class WebFeatureUsageWebhookOutput {
     }
 
     @JsonProperty("Usage")
-    public Optional<Integer> getUsage() {
+    public Optional<Long> getUsage() {
         return usage;
     }
 
@@ -143,9 +143,13 @@ public final class WebFeatureUsageWebhookOutput {
     public interface _FinalStage {
         WebFeatureUsageWebhookOutput build();
 
-        _FinalStage allocation(Optional<Integer> allocation);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage allocation(Integer allocation);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage allocation(Optional<Long> allocation);
+
+        _FinalStage allocation(Long allocation);
 
         _FinalStage creditUsage(Optional<CreditUsage> creditUsage);
 
@@ -159,9 +163,9 @@ public final class WebFeatureUsageWebhookOutput {
 
         _FinalStage metricResetAt(OffsetDateTime metricResetAt);
 
-        _FinalStage usage(Optional<Integer> usage);
+        _FinalStage usage(Optional<Long> usage);
 
-        _FinalStage usage(Integer usage);
+        _FinalStage usage(Long usage);
 
         _FinalStage company(Optional<CompanyDetailResponseData> company);
 
@@ -174,7 +178,7 @@ public final class WebFeatureUsageWebhookOutput {
 
         private Optional<CompanyDetailResponseData> company = Optional.empty();
 
-        private Optional<Integer> usage = Optional.empty();
+        private Optional<Long> usage = Optional.empty();
 
         private Optional<OffsetDateTime> metricResetAt = Optional.empty();
 
@@ -182,7 +186,7 @@ public final class WebFeatureUsageWebhookOutput {
 
         private Optional<CreditUsage> creditUsage = Optional.empty();
 
-        private Optional<Integer> allocation = Optional.empty();
+        private Optional<Long> allocation = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -222,14 +226,14 @@ public final class WebFeatureUsageWebhookOutput {
         }
 
         @java.lang.Override
-        public _FinalStage usage(Integer usage) {
+        public _FinalStage usage(Long usage) {
             this.usage = Optional.ofNullable(usage);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "Usage", nulls = Nulls.SKIP)
-        public _FinalStage usage(Optional<Integer> usage) {
+        public _FinalStage usage(Optional<Long> usage) {
             this.usage = usage;
             return this;
         }
@@ -274,14 +278,14 @@ public final class WebFeatureUsageWebhookOutput {
         }
 
         @java.lang.Override
-        public _FinalStage allocation(Integer allocation) {
+        public _FinalStage allocation(Long allocation) {
             this.allocation = Optional.ofNullable(allocation);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "Allocation", nulls = Nulls.SKIP)
-        public _FinalStage allocation(Optional<Integer> allocation) {
+        public _FinalStage allocation(Optional<Long> allocation) {
             this.allocation = allocation;
             return this;
         }
@@ -290,6 +294,18 @@ public final class WebFeatureUsageWebhookOutput {
         public WebFeatureUsageWebhookOutput build() {
             return new WebFeatureUsageWebhookOutput(
                     allocation, creditUsage, entitlement, feature, metricResetAt, usage, company, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

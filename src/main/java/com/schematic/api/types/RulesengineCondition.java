@@ -43,7 +43,7 @@ public final class RulesengineCondition {
 
     private final Optional<RulesengineConditionMetricPeriodMonthReset> metricPeriodMonthReset;
 
-    private final Optional<Integer> metricValue;
+    private final Optional<Long> metricValue;
 
     private final RulesengineConditionOperator operator;
 
@@ -66,7 +66,7 @@ public final class RulesengineCondition {
             String id,
             Optional<RulesengineConditionMetricPeriod> metricPeriod,
             Optional<RulesengineConditionMetricPeriodMonthReset> metricPeriodMonthReset,
-            Optional<Integer> metricValue,
+            Optional<Long> metricValue,
             RulesengineConditionOperator operator,
             List<String> resourceIds,
             Optional<RulesengineTraitDefinition> traitDefinition,
@@ -141,7 +141,7 @@ public final class RulesengineCondition {
     }
 
     @JsonProperty("metric_value")
-    public Optional<Integer> getMetricValue() {
+    public Optional<Long> getMetricValue() {
         return metricValue;
     }
 
@@ -252,6 +252,10 @@ public final class RulesengineCondition {
     public interface _FinalStage {
         RulesengineCondition build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage comparisonTraitDefinition(Optional<RulesengineTraitDefinition> comparisonTraitDefinition);
 
         _FinalStage comparisonTraitDefinition(RulesengineTraitDefinition comparisonTraitDefinition);
@@ -276,9 +280,9 @@ public final class RulesengineCondition {
 
         _FinalStage metricPeriodMonthReset(RulesengineConditionMetricPeriodMonthReset metricPeriodMonthReset);
 
-        _FinalStage metricValue(Optional<Integer> metricValue);
+        _FinalStage metricValue(Optional<Long> metricValue);
 
-        _FinalStage metricValue(Integer metricValue);
+        _FinalStage metricValue(Long metricValue);
 
         _FinalStage resourceIds(List<String> resourceIds);
 
@@ -316,7 +320,7 @@ public final class RulesengineCondition {
 
         private List<String> resourceIds = new ArrayList<>();
 
-        private Optional<Integer> metricValue = Optional.empty();
+        private Optional<Long> metricValue = Optional.empty();
 
         private Optional<RulesengineConditionMetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
@@ -435,14 +439,14 @@ public final class RulesengineCondition {
         }
 
         @java.lang.Override
-        public _FinalStage metricValue(Integer metricValue) {
+        public _FinalStage metricValue(Long metricValue) {
             this.metricValue = Optional.ofNullable(metricValue);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_value", nulls = Nulls.SKIP)
-        public _FinalStage metricValue(Optional<Integer> metricValue) {
+        public _FinalStage metricValue(Optional<Long> metricValue) {
             this.metricValue = metricValue;
             return this;
         }
@@ -545,6 +549,18 @@ public final class RulesengineCondition {
                     traitDefinition,
                     traitValue,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

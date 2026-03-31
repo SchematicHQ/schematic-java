@@ -115,6 +115,10 @@ public final class PlanBundleCreditGrantRequestBody {
     public interface _FinalStage {
         PlanBundleCreditGrantRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage createReq(Optional<CreateBillingPlanCreditGrantRequestBody> createReq);
 
         _FinalStage createReq(CreateBillingPlanCreditGrantRequestBody createReq);
@@ -222,6 +226,18 @@ public final class PlanBundleCreditGrantRequestBody {
         public PlanBundleCreditGrantRequestBody build() {
             return new PlanBundleCreditGrantRequestBody(
                     action, createReq, creditGrantId, deleteReq, updateReq, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

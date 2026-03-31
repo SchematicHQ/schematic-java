@@ -18,29 +18,25 @@ import com.schematic.api.errors.InternalServerError;
 import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.accounts.requests.CountApiKeysRequest;
-import com.schematic.api.resources.accounts.requests.CountApiRequestsRequest;
 import com.schematic.api.resources.accounts.requests.CountAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.CreateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.CreateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.requests.ListApiKeysRequest;
-import com.schematic.api.resources.accounts.requests.ListApiRequestsRequest;
 import com.schematic.api.resources.accounts.requests.ListAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.ListEnvironmentsRequest;
 import com.schematic.api.resources.accounts.requests.UpdateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.UpdateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.types.CountApiKeysResponse;
-import com.schematic.api.resources.accounts.types.CountApiRequestsResponse;
 import com.schematic.api.resources.accounts.types.CountAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.CreateApiKeyResponse;
 import com.schematic.api.resources.accounts.types.CreateEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.DeleteApiKeyResponse;
 import com.schematic.api.resources.accounts.types.DeleteEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.GetApiKeyResponse;
-import com.schematic.api.resources.accounts.types.GetApiRequestResponse;
 import com.schematic.api.resources.accounts.types.GetAuditLogResponse;
 import com.schematic.api.resources.accounts.types.GetEnvironmentResponse;
+import com.schematic.api.resources.accounts.types.GetWhoAmIResponse;
 import com.schematic.api.resources.accounts.types.ListApiKeysResponse;
-import com.schematic.api.resources.accounts.types.ListApiRequestsResponse;
 import com.schematic.api.resources.accounts.types.ListAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.ListEnvironmentsResponse;
 import com.schematic.api.resources.accounts.types.QuickstartResponse;
@@ -89,6 +85,11 @@ public class AsyncRawAccountsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -104,13 +105,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListApiKeysResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListApiKeysResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -142,11 +143,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -168,10 +167,14 @@ public class AsyncRawAccountsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<CreateApiKeyResponse>> createApiKey(
             CreateApiKeyRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("api-keys")
-                .build();
+                .addPathSegments("api-keys");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -180,7 +183,7 @@ public class AsyncRawAccountsClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -195,13 +198,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateApiKeyResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CreateApiKeyResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -233,11 +236,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -258,13 +259,17 @@ public class AsyncRawAccountsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<GetApiKeyResponse>> getApiKey(
             String apiKeyId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("api-keys")
-                .addPathSegment(apiKeyId)
-                .build();
+                .addPathSegment(apiKeyId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -278,13 +283,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetApiKeyResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetApiKeyResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -311,11 +316,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -335,17 +338,26 @@ public class AsyncRawAccountsClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> updateApiKey(
+            String apiKeyId, RequestOptions requestOptions) {
+        return updateApiKey(apiKeyId, UpdateApiKeyRequestBody.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> updateApiKey(
             String apiKeyId, UpdateApiKeyRequestBody request) {
         return updateApiKey(apiKeyId, request, null);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> updateApiKey(
             String apiKeyId, UpdateApiKeyRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("api-keys")
-                .addPathSegment(apiKeyId)
-                .build();
+                .addPathSegment(apiKeyId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -354,7 +366,7 @@ public class AsyncRawAccountsClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -369,13 +381,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateApiKeyResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpdateApiKeyResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -407,11 +419,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -432,13 +442,17 @@ public class AsyncRawAccountsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<DeleteApiKeyResponse>> deleteApiKey(
             String apiKeyId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("api-keys")
-                .addPathSegment(apiKeyId)
-                .build();
+                .addPathSegment(apiKeyId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -452,13 +466,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), DeleteApiKeyResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DeleteApiKeyResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -490,11 +504,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -532,6 +544,11 @@ public class AsyncRawAccountsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -547,13 +564,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CountApiKeysResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountApiKeysResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -585,301 +602,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
-                    return;
-                } catch (IOException e) {
-                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<ListApiRequestsResponse>> listApiRequests() {
-        return listApiRequests(ListApiRequestsRequest.builder().build());
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<ListApiRequestsResponse>> listApiRequests(
-            ListApiRequestsRequest request) {
-        return listApiRequests(request, null);
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<ListApiRequestsResponse>> listApiRequests(
-            ListApiRequestsRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("api-requests");
-        if (request.getQ().isPresent()) {
-            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
-        }
-        if (request.getRequestType().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "request_type", request.getRequestType().get(), false);
-        }
-        if (request.getEnvironmentId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "environment_id", request.getEnvironmentId().get(), false);
-        }
-        if (request.getLimit().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "limit", request.getLimit().get(), false);
-        }
-        if (request.getOffset().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "offset", request.getOffset().get(), false);
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        CompletableFuture<BaseSchematicHttpResponse<ListApiRequestsResponse>> future = new CompletableFuture<>();
-        client.newCall(okhttpRequest).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
-                    if (response.isSuccessful()) {
-                        future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), ListApiRequestsResponse.class),
-                                response));
-                        return;
-                    }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-                    try {
-                        switch (response.code()) {
-                            case 400:
-                                future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 401:
-                                future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 403:
-                                future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 404:
-                                future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 500:
-                                future.completeExceptionally(new InternalServerError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                        }
-                    } catch (JsonProcessingException ignored) {
-                        // unable to map error response, throwing generic error
-                    }
-                    future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
-                    return;
-                } catch (IOException e) {
-                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<GetApiRequestResponse>> getApiRequest(String apiRequestId) {
-        return getApiRequest(apiRequestId, null);
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<GetApiRequestResponse>> getApiRequest(
-            String apiRequestId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("api-requests")
-                .addPathSegment(apiRequestId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        CompletableFuture<BaseSchematicHttpResponse<GetApiRequestResponse>> future = new CompletableFuture<>();
-        client.newCall(okhttpRequest).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
-                    if (response.isSuccessful()) {
-                        future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetApiRequestResponse.class),
-                                response));
-                        return;
-                    }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-                    try {
-                        switch (response.code()) {
-                            case 401:
-                                future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 403:
-                                future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 404:
-                                future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 500:
-                                future.completeExceptionally(new InternalServerError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                        }
-                    } catch (JsonProcessingException ignored) {
-                        // unable to map error response, throwing generic error
-                    }
-                    future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
-                    return;
-                } catch (IOException e) {
-                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<CountApiRequestsResponse>> countApiRequests() {
-        return countApiRequests(CountApiRequestsRequest.builder().build());
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<CountApiRequestsResponse>> countApiRequests(
-            CountApiRequestsRequest request) {
-        return countApiRequests(request, null);
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<CountApiRequestsResponse>> countApiRequests(
-            CountApiRequestsRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("api-requests/count");
-        if (request.getQ().isPresent()) {
-            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
-        }
-        if (request.getRequestType().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "request_type", request.getRequestType().get(), false);
-        }
-        if (request.getEnvironmentId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "environment_id", request.getEnvironmentId().get(), false);
-        }
-        if (request.getLimit().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "limit", request.getLimit().get(), false);
-        }
-        if (request.getOffset().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "offset", request.getOffset().get(), false);
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        CompletableFuture<BaseSchematicHttpResponse<CountApiRequestsResponse>> future = new CompletableFuture<>();
-        client.newCall(okhttpRequest).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
-                    if (response.isSuccessful()) {
-                        future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), CountApiRequestsResponse.class),
-                                response));
-                        return;
-                    }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-                    try {
-                        switch (response.code()) {
-                            case 400:
-                                future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 401:
-                                future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 403:
-                                future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 404:
-                                future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 500:
-                                future.completeExceptionally(new InternalServerError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                        }
-                    } catch (JsonProcessingException ignored) {
-                        // unable to map error response, throwing generic error
-                    }
-                    future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -899,6 +624,11 @@ public class AsyncRawAccountsClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<ListAuditLogsResponse>> listAuditLogs(
+            RequestOptions requestOptions) {
+        return listAuditLogs(ListAuditLogsRequest.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListAuditLogsResponse>> listAuditLogs(
             ListAuditLogsRequest request) {
         return listAuditLogs(request, null);
     }
@@ -912,12 +642,20 @@ public class AsyncRawAccountsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "actor_type", request.getActorType().get(), false);
         }
+        if (request.getEndTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_time", request.getEndTime().get(), false);
+        }
         if (request.getEnvironmentId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "environment_id", request.getEnvironmentId().get(), false);
         }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
+        }
+        if (request.getStartTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start_time", request.getStartTime().get(), false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -926,6 +664,11 @@ public class AsyncRawAccountsClient {
         if (request.getOffset().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
@@ -942,13 +685,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListAuditLogsResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListAuditLogsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -980,11 +723,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1005,13 +746,17 @@ public class AsyncRawAccountsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<GetAuditLogResponse>> getAuditLog(
             String auditLogId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("audit-log")
-                .addPathSegment(auditLogId)
-                .build();
+                .addPathSegment(auditLogId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -1025,13 +770,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetAuditLogResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetAuditLogResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -1058,11 +803,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1082,6 +825,11 @@ public class AsyncRawAccountsClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<CountAuditLogsResponse>> countAuditLogs(
+            RequestOptions requestOptions) {
+        return countAuditLogs(CountAuditLogsRequest.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountAuditLogsResponse>> countAuditLogs(
             CountAuditLogsRequest request) {
         return countAuditLogs(request, null);
     }
@@ -1095,12 +843,20 @@ public class AsyncRawAccountsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "actor_type", request.getActorType().get(), false);
         }
+        if (request.getEndTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_time", request.getEndTime().get(), false);
+        }
         if (request.getEnvironmentId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "environment_id", request.getEnvironmentId().get(), false);
         }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
+        }
+        if (request.getStartTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start_time", request.getStartTime().get(), false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1109,6 +865,11 @@ public class AsyncRawAccountsClient {
         if (request.getOffset().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
@@ -1125,14 +886,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), CountAuditLogsResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountAuditLogsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1164,11 +924,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1185,6 +943,11 @@ public class AsyncRawAccountsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<ListEnvironmentsResponse>> listEnvironments() {
         return listEnvironments(ListEnvironmentsRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListEnvironmentsResponse>> listEnvironments(
+            RequestOptions requestOptions) {
+        return listEnvironments(ListEnvironmentsRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<ListEnvironmentsResponse>> listEnvironments(
@@ -1208,6 +971,11 @@ public class AsyncRawAccountsClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1223,14 +991,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), ListEnvironmentsResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListEnvironmentsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1262,11 +1029,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1288,10 +1053,14 @@ public class AsyncRawAccountsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<CreateEnvironmentResponse>> createEnvironment(
             CreateEnvironmentRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("environments")
-                .build();
+                .addPathSegments("environments");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -1300,7 +1069,7 @@ public class AsyncRawAccountsClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -1315,14 +1084,14 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), CreateEnvironmentResponse.class),
+                                        responseBodyString, CreateEnvironmentResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1354,11 +1123,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1379,13 +1146,17 @@ public class AsyncRawAccountsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<GetEnvironmentResponse>> getEnvironment(
             String environmentId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("environments")
-                .addPathSegment(environmentId)
-                .build();
+                .addPathSegment(environmentId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -1399,14 +1170,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), GetEnvironmentResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetEnvironmentResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -1433,11 +1203,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1459,17 +1227,27 @@ public class AsyncRawAccountsClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> updateEnvironment(
+            String environmentId, RequestOptions requestOptions) {
+        return updateEnvironment(
+                environmentId, UpdateEnvironmentRequestBody.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> updateEnvironment(
             String environmentId, UpdateEnvironmentRequestBody request) {
         return updateEnvironment(environmentId, request, null);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> updateEnvironment(
             String environmentId, UpdateEnvironmentRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("environments")
-                .addPathSegment(environmentId)
-                .build();
+                .addPathSegment(environmentId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -1478,7 +1256,7 @@ public class AsyncRawAccountsClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -1493,14 +1271,14 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), UpdateEnvironmentResponse.class),
+                                        responseBodyString, UpdateEnvironmentResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1532,11 +1310,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1558,13 +1334,17 @@ public class AsyncRawAccountsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<DeleteEnvironmentResponse>> deleteEnvironment(
             String environmentId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("environments")
-                .addPathSegment(environmentId)
-                .build();
+                .addPathSegment(environmentId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -1578,14 +1358,14 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), DeleteEnvironmentResponse.class),
+                                        responseBodyString, DeleteEnvironmentResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1617,11 +1397,9 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1641,12 +1419,16 @@ public class AsyncRawAccountsClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<QuickstartResponse>> quickstart(RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("quickstart")
-                .build();
+                .addPathSegments("quickstart");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", RequestBody.create("", null))
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -1660,13 +1442,13 @@ public class AsyncRawAccountsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), QuickstartResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, QuickstartResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1698,11 +1480,87 @@ public class AsyncRawAccountsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<GetWhoAmIResponse>> getWhoAmI() {
+        return getWhoAmI(null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<GetWhoAmIResponse>> getWhoAmI(RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("whoami");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<BaseSchematicHttpResponse<GetWhoAmIResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetWhoAmIResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));

@@ -110,6 +110,10 @@ public final class CreditGrantDetail {
     public interface _FinalStage {
         CreditGrantDetail build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage creditTypeIcon(Optional<String> creditTypeIcon);
 
         _FinalStage creditTypeIcon(String creditTypeIcon);
@@ -186,6 +190,18 @@ public final class CreditGrantDetail {
         @java.lang.Override
         public CreditGrantDetail build() {
             return new CreditGrantDetail(creditTypeIcon, expiresAt, grantReason, quantity, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

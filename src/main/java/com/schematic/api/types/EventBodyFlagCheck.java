@@ -222,6 +222,10 @@ public final class EventBodyFlagCheck {
     public interface _FinalStage {
         EventBodyFlagCheck build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Schematic company ID (starting with 'comp_') of the company evaluated, if any</p>
          */
@@ -504,6 +508,18 @@ public final class EventBodyFlagCheck {
                     userId,
                     value,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

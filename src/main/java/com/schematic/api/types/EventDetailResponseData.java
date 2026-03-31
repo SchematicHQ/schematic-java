@@ -54,7 +54,7 @@ public final class EventDetailResponseData {
 
     private final Optional<OffsetDateTime> processedAt;
 
-    private final int quantity;
+    private final long quantity;
 
     private final Optional<OffsetDateTime> sentAt;
 
@@ -87,7 +87,7 @@ public final class EventDetailResponseData {
             String id,
             Optional<OffsetDateTime> loadedAt,
             Optional<OffsetDateTime> processedAt,
-            int quantity,
+            long quantity,
             Optional<OffsetDateTime> sentAt,
             EventStatus status,
             Optional<String> subtype,
@@ -192,7 +192,7 @@ public final class EventDetailResponseData {
     }
 
     @JsonProperty("quantity")
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
@@ -318,7 +318,7 @@ public final class EventDetailResponseData {
     }
 
     public interface QuantityStage {
-        StatusStage quantity(int quantity);
+        StatusStage quantity(long quantity);
     }
 
     public interface StatusStage {
@@ -331,6 +331,10 @@ public final class EventDetailResponseData {
 
     public interface _FinalStage {
         EventDetailResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage apiKey(Optional<String> apiKey);
 
@@ -412,7 +416,7 @@ public final class EventDetailResponseData {
 
         private String id;
 
-        private int quantity;
+        private long quantity;
 
         private EventStatus status;
 
@@ -505,7 +509,7 @@ public final class EventDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public StatusStage quantity(int quantity) {
+        public StatusStage quantity(long quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -791,6 +795,18 @@ public final class EventDetailResponseData {
                     user,
                     userId,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

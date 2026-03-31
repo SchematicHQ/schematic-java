@@ -35,6 +35,8 @@ public final class UpdatePlanBundleRequestBody {
 
     private final Optional<UpdatePlanRequestBody> plan;
 
+    private final Optional<String> planVersionId;
+
     private final Optional<List<UpdatePlanTraitTraitRequestBody>> traits;
 
     private final Map<String, Object> additionalProperties;
@@ -44,12 +46,14 @@ public final class UpdatePlanBundleRequestBody {
             Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants,
             List<PlanBundleEntitlementRequestBody> entitlements,
             Optional<UpdatePlanRequestBody> plan,
+            Optional<String> planVersionId,
             Optional<List<UpdatePlanTraitTraitRequestBody>> traits,
             Map<String, Object> additionalProperties) {
         this.billingProduct = billingProduct;
         this.creditGrants = creditGrants;
         this.entitlements = entitlements;
         this.plan = plan;
+        this.planVersionId = planVersionId;
         this.traits = traits;
         this.additionalProperties = additionalProperties;
     }
@@ -74,6 +78,11 @@ public final class UpdatePlanBundleRequestBody {
         return plan;
     }
 
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
+    }
+
     @JsonProperty("traits")
     public Optional<List<UpdatePlanTraitTraitRequestBody>> getTraits() {
         return traits;
@@ -95,12 +104,14 @@ public final class UpdatePlanBundleRequestBody {
                 && creditGrants.equals(other.creditGrants)
                 && entitlements.equals(other.entitlements)
                 && plan.equals(other.plan)
+                && planVersionId.equals(other.planVersionId)
                 && traits.equals(other.traits);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.billingProduct, this.creditGrants, this.entitlements, this.plan, this.traits);
+        return Objects.hash(
+                this.billingProduct, this.creditGrants, this.entitlements, this.plan, this.planVersionId, this.traits);
     }
 
     @java.lang.Override
@@ -122,6 +133,8 @@ public final class UpdatePlanBundleRequestBody {
 
         private Optional<UpdatePlanRequestBody> plan = Optional.empty();
 
+        private Optional<String> planVersionId = Optional.empty();
+
         private Optional<List<UpdatePlanTraitTraitRequestBody>> traits = Optional.empty();
 
         @JsonAnySetter
@@ -134,6 +147,7 @@ public final class UpdatePlanBundleRequestBody {
             creditGrants(other.getCreditGrants());
             entitlements(other.getEntitlements());
             plan(other.getPlan());
+            planVersionId(other.getPlanVersionId());
             traits(other.getTraits());
             return this;
         }
@@ -192,6 +206,17 @@ public final class UpdatePlanBundleRequestBody {
             return this;
         }
 
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
         public Builder traits(Optional<List<UpdatePlanTraitTraitRequestBody>> traits) {
             this.traits = traits;
@@ -205,7 +230,17 @@ public final class UpdatePlanBundleRequestBody {
 
         public UpdatePlanBundleRequestBody build() {
             return new UpdatePlanBundleRequestBody(
-                    billingProduct, creditGrants, entitlements, plan, traits, additionalProperties);
+                    billingProduct, creditGrants, entitlements, plan, planVersionId, traits, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

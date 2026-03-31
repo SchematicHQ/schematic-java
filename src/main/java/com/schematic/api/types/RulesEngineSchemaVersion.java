@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class RulesEngineSchemaVersion {
+    public static final RulesEngineSchemaVersion V_5_F_633_CC_3 =
+            new RulesEngineSchemaVersion(Value.V_5_F_633_CC_3, "v5f633cc3");
+
     public static final RulesEngineSchemaVersion PLACEHOLDER_FOR_FERN_COMPATIBILITY = new RulesEngineSchemaVersion(
             Value.PLACEHOLDER_FOR_FERN_COMPATIBILITY, "placeholder-for-fern-compatibility");
-
-    public static final RulesEngineSchemaVersion V_0_F_048_DD_3 =
-            new RulesEngineSchemaVersion(Value.V_0_F_048_DD_3, "v0f048dd3");
 
     private final Value value;
 
@@ -46,10 +46,10 @@ public final class RulesEngineSchemaVersion {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case V_5_F_633_CC_3:
+                return visitor.visitV5F633Cc3();
             case PLACEHOLDER_FOR_FERN_COMPATIBILITY:
                 return visitor.visitPlaceholderForFernCompatibility();
-            case V_0_F_048_DD_3:
-                return visitor.visitV0F048Dd3();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -59,17 +59,17 @@ public final class RulesEngineSchemaVersion {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static RulesEngineSchemaVersion valueOf(String value) {
         switch (value) {
+            case "v5f633cc3":
+                return V_5_F_633_CC_3;
             case "placeholder-for-fern-compatibility":
                 return PLACEHOLDER_FOR_FERN_COMPATIBILITY;
-            case "v0f048dd3":
-                return V_0_F_048_DD_3;
             default:
                 return new RulesEngineSchemaVersion(Value.UNKNOWN, value);
         }
     }
 
     public enum Value {
-        V_0_F_048_DD_3,
+        V_5_F_633_CC_3,
 
         PLACEHOLDER_FOR_FERN_COMPATIBILITY,
 
@@ -77,7 +77,7 @@ public final class RulesEngineSchemaVersion {
     }
 
     public interface Visitor<T> {
-        T visitV0F048Dd3();
+        T visitV5F633Cc3();
 
         T visitPlaceholderForFernCompatibility();
 

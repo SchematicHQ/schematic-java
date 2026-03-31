@@ -80,6 +80,11 @@ public class AsyncRawBillingClient {
         return listCoupons(ListCouponsRequest.builder().build());
     }
 
+    public CompletableFuture<BaseSchematicHttpResponse<ListCouponsResponse>> listCoupons(
+            RequestOptions requestOptions) {
+        return listCoupons(ListCouponsRequest.builder().build(), requestOptions);
+    }
+
     public CompletableFuture<BaseSchematicHttpResponse<ListCouponsResponse>> listCoupons(ListCouponsRequest request) {
         return listCoupons(request, null);
     }
@@ -104,6 +109,11 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -119,13 +129,13 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListCouponsResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListCouponsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -157,11 +167,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -183,10 +191,14 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<UpsertBillingCouponResponse>> upsertBillingCoupon(
             CreateCouponRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/coupons")
-                .build();
+                .addPathSegments("billing/coupons");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -195,7 +207,7 @@ public class AsyncRawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -210,14 +222,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), UpsertBillingCouponResponse.class),
+                                        responseBodyString, UpsertBillingCouponResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -249,11 +261,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -275,10 +285,14 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<UpsertBillingCustomerResponse>> upsertBillingCustomer(
             CreateBillingCustomerRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/customer/upsert")
-                .build();
+                .addPathSegments("billing/customer/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -287,7 +301,7 @@ public class AsyncRawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -302,14 +316,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), UpsertBillingCustomerResponse.class),
+                                        responseBodyString, UpsertBillingCustomerResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -341,11 +355,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -364,6 +376,12 @@ public class AsyncRawBillingClient {
             listCustomersWithSubscriptions() {
         return listCustomersWithSubscriptions(
                 ListCustomersWithSubscriptionsRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListCustomersWithSubscriptionsResponse>>
+            listCustomersWithSubscriptions(RequestOptions requestOptions) {
+        return listCustomersWithSubscriptions(
+                ListCustomersWithSubscriptionsRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<ListCustomersWithSubscriptionsResponse>>
@@ -400,6 +418,11 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_ids", request.getCompanyIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -416,14 +439,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), ListCustomersWithSubscriptionsResponse.class),
+                                        responseBodyString, ListCustomersWithSubscriptionsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -455,11 +478,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -476,6 +497,11 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<CountCustomersResponse>> countCustomers() {
         return countCustomers(CountCustomersRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountCustomersResponse>> countCustomers(
+            RequestOptions requestOptions) {
+        return countCustomers(CountCustomersRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<CountCustomersResponse>> countCustomers(
@@ -511,6 +537,11 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_ids", request.getCompanyIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -526,14 +557,13 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), CountCustomersResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountCustomersResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -565,11 +595,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -609,6 +637,11 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -624,13 +657,13 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListInvoicesResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListInvoicesResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -662,11 +695,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -688,10 +719,14 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<UpsertInvoiceResponse>> upsertInvoice(
             CreateInvoiceRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/invoices")
-                .build();
+                .addPathSegments("billing/invoices");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -700,7 +735,7 @@ public class AsyncRawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -715,13 +750,13 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpsertInvoiceResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpsertInvoiceResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -753,11 +788,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -774,6 +807,10 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<ListMetersResponse>> listMeters() {
         return listMeters(ListMetersRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListMetersResponse>> listMeters(RequestOptions requestOptions) {
+        return listMeters(ListMetersRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<ListMetersResponse>> listMeters(ListMetersRequest request) {
@@ -797,6 +834,11 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -812,13 +854,13 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListMetersResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListMetersResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -850,11 +892,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -876,10 +916,14 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<UpsertBillingMeterResponse>> upsertBillingMeter(
             CreateMeterRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/meter/upsert")
-                .build();
+                .addPathSegments("billing/meter/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -888,7 +932,7 @@ public class AsyncRawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -903,14 +947,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), UpsertBillingMeterResponse.class),
+                                        responseBodyString, UpsertBillingMeterResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -942,11 +986,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -984,6 +1026,11 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -999,14 +1046,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), ListPaymentMethodsResponse.class),
+                                        responseBodyString, ListPaymentMethodsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1038,11 +1085,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1064,10 +1109,14 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<UpsertPaymentMethodResponse>> upsertPaymentMethod(
             CreatePaymentMethodRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/payment-methods")
-                .build();
+                .addPathSegments("billing/payment-methods");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -1076,7 +1125,7 @@ public class AsyncRawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -1091,14 +1140,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), UpsertPaymentMethodResponse.class),
+                                        responseBodyString, UpsertPaymentMethodResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1130,11 +1179,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1154,6 +1201,11 @@ public class AsyncRawBillingClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<ListBillingPricesResponse>> listBillingPrices(
+            RequestOptions requestOptions) {
+        return listBillingPrices(ListBillingPricesRequest.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingPricesResponse>> listBillingPrices(
             ListBillingPricesRequest request) {
         return listBillingPrices(request, null);
     }
@@ -1163,6 +1215,10 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/price");
+        if (request.getCurrency().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "currency", request.getCurrency().get(), false);
+        }
         if (request.getForInitialPlan().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "for_initial_plan", request.getForInitialPlan().get(), false);
@@ -1224,6 +1280,11 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "product_ids", request.getProductIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1239,14 +1300,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), ListBillingPricesResponse.class),
+                                        responseBodyString, ListBillingPricesResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1278,11 +1339,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1304,10 +1363,14 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<UpsertBillingPriceResponse>> upsertBillingPrice(
             CreateBillingPriceRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/price/upsert")
-                .build();
+                .addPathSegments("billing/price/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -1316,7 +1379,7 @@ public class AsyncRawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -1331,14 +1394,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), UpsertBillingPriceResponse.class),
+                                        responseBodyString, UpsertBillingPriceResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1370,11 +1433,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1396,13 +1457,17 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<DeleteBillingProductResponse>> deleteBillingProduct(
             String billingId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/product")
-                .addPathSegment(billingId)
-                .build();
+                .addPathSegment(billingId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -1416,14 +1481,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), DeleteBillingProductResponse.class),
+                                        responseBodyString, DeleteBillingProductResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1455,11 +1520,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1480,6 +1543,12 @@ public class AsyncRawBillingClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<ListBillingProductPricesResponse>> listBillingProductPrices(
+            RequestOptions requestOptions) {
+        return listBillingProductPrices(
+                ListBillingProductPricesRequest.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingProductPricesResponse>> listBillingProductPrices(
             ListBillingProductPricesRequest request) {
         return listBillingProductPrices(request, null);
     }
@@ -1489,6 +1558,10 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/product/prices");
+        if (request.getCurrency().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "currency", request.getCurrency().get(), false);
+        }
         if (request.getForInitialPlan().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "for_initial_plan", request.getForInitialPlan().get(), false);
@@ -1550,6 +1623,11 @@ public class AsyncRawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "product_ids", request.getProductIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1566,14 +1644,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), ListBillingProductPricesResponse.class),
+                                        responseBodyString, ListBillingProductPricesResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1605,11 +1683,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1631,13 +1707,17 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<DeleteProductPriceResponse>> deleteProductPrice(
             String billingId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/product/prices")
-                .addPathSegment(billingId)
-                .build();
+                .addPathSegment(billingId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -1651,14 +1731,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), DeleteProductPriceResponse.class),
+                                        responseBodyString, DeleteProductPriceResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1690,11 +1770,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1716,10 +1794,14 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<UpsertBillingProductResponse>> upsertBillingProduct(
             CreateBillingProductRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/product/upsert")
-                .build();
+                .addPathSegments("billing/product/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -1728,7 +1810,7 @@ public class AsyncRawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -1743,14 +1825,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), UpsertBillingProductResponse.class),
+                                        responseBodyString, UpsertBillingProductResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1782,11 +1864,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1803,6 +1883,11 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<ListBillingProductsResponse>> listBillingProducts() {
         return listBillingProducts(ListBillingProductsRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingProductsResponse>> listBillingProducts(
+            RequestOptions requestOptions) {
+        return listBillingProducts(ListBillingProductsRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<ListBillingProductsResponse>> listBillingProducts(
@@ -1867,6 +1952,11 @@ public class AsyncRawBillingClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1882,14 +1972,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), ListBillingProductsResponse.class),
+                                        responseBodyString, ListBillingProductsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -1921,11 +2011,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -1942,6 +2030,11 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<CountBillingProductsResponse>> countBillingProducts() {
         return countBillingProducts(CountBillingProductsRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountBillingProductsResponse>> countBillingProducts(
+            RequestOptions requestOptions) {
+        return countBillingProducts(CountBillingProductsRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<CountBillingProductsResponse>> countBillingProducts(
@@ -2006,6 +2099,11 @@ public class AsyncRawBillingClient {
         if (request.getIds().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "ids", request.getIds().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -2021,14 +2119,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), CountBillingProductsResponse.class),
+                                        responseBodyString, CountBillingProductsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -2060,11 +2158,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -2086,10 +2182,14 @@ public class AsyncRawBillingClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<UpsertBillingSubscriptionResponse>> upsertBillingSubscription(
             CreateBillingSubscriptionRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("billing/subscription/upsert")
-                .build();
+                .addPathSegments("billing/subscription/upsert");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -2098,7 +2198,7 @@ public class AsyncRawBillingClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -2114,14 +2214,14 @@ public class AsyncRawBillingClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), UpsertBillingSubscriptionResponse.class),
+                                        responseBodyString, UpsertBillingSubscriptionResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -2153,11 +2253,9 @@ public class AsyncRawBillingClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));

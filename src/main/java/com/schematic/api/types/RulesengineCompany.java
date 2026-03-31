@@ -230,6 +230,10 @@ public final class RulesengineCompany {
     public interface _FinalStage {
         RulesengineCompany build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage basePlanId(Optional<String> basePlanId);
 
         _FinalStage basePlanId(String basePlanId);
@@ -615,6 +619,18 @@ public final class RulesengineCompany {
                     subscription,
                     traits,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

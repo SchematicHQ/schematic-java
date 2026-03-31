@@ -30,7 +30,7 @@ public final class WebhookEventResponseData {
 
     private final WebhookRequestType requestType;
 
-    private final Optional<Integer> responseCode;
+    private final Optional<Long> responseCode;
 
     private final Optional<OffsetDateTime> sentAt;
 
@@ -47,7 +47,7 @@ public final class WebhookEventResponseData {
             String id,
             Optional<String> payload,
             WebhookRequestType requestType,
-            Optional<Integer> responseCode,
+            Optional<Long> responseCode,
             Optional<OffsetDateTime> sentAt,
             WebhookEventStatus status,
             OffsetDateTime updatedAt,
@@ -86,7 +86,7 @@ public final class WebhookEventResponseData {
     }
 
     @JsonProperty("response_code")
-    public Optional<Integer> getResponseCode() {
+    public Optional<Long> getResponseCode() {
         return responseCode;
     }
 
@@ -185,13 +185,17 @@ public final class WebhookEventResponseData {
     public interface _FinalStage {
         WebhookEventResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage payload(Optional<String> payload);
 
         _FinalStage payload(String payload);
 
-        _FinalStage responseCode(Optional<Integer> responseCode);
+        _FinalStage responseCode(Optional<Long> responseCode);
 
-        _FinalStage responseCode(Integer responseCode);
+        _FinalStage responseCode(Long responseCode);
 
         _FinalStage sentAt(Optional<OffsetDateTime> sentAt);
 
@@ -221,7 +225,7 @@ public final class WebhookEventResponseData {
 
         private Optional<OffsetDateTime> sentAt = Optional.empty();
 
-        private Optional<Integer> responseCode = Optional.empty();
+        private Optional<Long> responseCode = Optional.empty();
 
         private Optional<String> payload = Optional.empty();
 
@@ -300,14 +304,14 @@ public final class WebhookEventResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage responseCode(Integer responseCode) {
+        public _FinalStage responseCode(Long responseCode) {
             this.responseCode = Optional.ofNullable(responseCode);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "response_code", nulls = Nulls.SKIP)
-        public _FinalStage responseCode(Optional<Integer> responseCode) {
+        public _FinalStage responseCode(Optional<Long> responseCode) {
             this.responseCode = responseCode;
             return this;
         }
@@ -338,6 +342,18 @@ public final class WebhookEventResponseData {
                     updatedAt,
                     webhookId,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

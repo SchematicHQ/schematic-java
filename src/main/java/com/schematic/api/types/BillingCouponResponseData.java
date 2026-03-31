@@ -26,13 +26,13 @@ import org.jetbrains.annotations.NotNull;
 public final class BillingCouponResponseData {
     private final String accountId;
 
-    private final Optional<Integer> amountOff;
+    private final Optional<Long> amountOff;
 
     private final Optional<String> currency;
 
     private final Optional<String> duration;
 
-    private final Optional<Integer> durationInMonths;
+    private final Optional<Long> durationInMonths;
 
     private final String environmentId;
 
@@ -42,7 +42,7 @@ public final class BillingCouponResponseData {
 
     private final boolean isActive;
 
-    private final Optional<Integer> maxRedemptions;
+    private final Optional<Long> maxRedemptions;
 
     private final Map<String, JsonNode> metadata;
 
@@ -52,7 +52,7 @@ public final class BillingCouponResponseData {
 
     private final BillingProviderType providerType;
 
-    private final int timesRedeemed;
+    private final long timesRedeemed;
 
     private final Optional<OffsetDateTime> validFrom;
 
@@ -62,20 +62,20 @@ public final class BillingCouponResponseData {
 
     private BillingCouponResponseData(
             String accountId,
-            Optional<Integer> amountOff,
+            Optional<Long> amountOff,
             Optional<String> currency,
             Optional<String> duration,
-            Optional<Integer> durationInMonths,
+            Optional<Long> durationInMonths,
             String environmentId,
             String externalId,
             String id,
             boolean isActive,
-            Optional<Integer> maxRedemptions,
+            Optional<Long> maxRedemptions,
             Map<String, JsonNode> metadata,
             String name,
             Optional<Double> percentOff,
             BillingProviderType providerType,
-            int timesRedeemed,
+            long timesRedeemed,
             Optional<OffsetDateTime> validFrom,
             Optional<OffsetDateTime> validUntil,
             Map<String, Object> additionalProperties) {
@@ -105,7 +105,7 @@ public final class BillingCouponResponseData {
     }
 
     @JsonProperty("amount_off")
-    public Optional<Integer> getAmountOff() {
+    public Optional<Long> getAmountOff() {
         return amountOff;
     }
 
@@ -120,7 +120,7 @@ public final class BillingCouponResponseData {
     }
 
     @JsonProperty("duration_in_months")
-    public Optional<Integer> getDurationInMonths() {
+    public Optional<Long> getDurationInMonths() {
         return durationInMonths;
     }
 
@@ -145,7 +145,7 @@ public final class BillingCouponResponseData {
     }
 
     @JsonProperty("max_redemptions")
-    public Optional<Integer> getMaxRedemptions() {
+    public Optional<Long> getMaxRedemptions() {
         return maxRedemptions;
     }
 
@@ -170,7 +170,7 @@ public final class BillingCouponResponseData {
     }
 
     @JsonProperty("times_redeemed")
-    public int getTimesRedeemed() {
+    public long getTimesRedeemed() {
         return timesRedeemed;
     }
 
@@ -277,15 +277,19 @@ public final class BillingCouponResponseData {
     }
 
     public interface TimesRedeemedStage {
-        _FinalStage timesRedeemed(int timesRedeemed);
+        _FinalStage timesRedeemed(long timesRedeemed);
     }
 
     public interface _FinalStage {
         BillingCouponResponseData build();
 
-        _FinalStage amountOff(Optional<Integer> amountOff);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage amountOff(Integer amountOff);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage amountOff(Optional<Long> amountOff);
+
+        _FinalStage amountOff(Long amountOff);
 
         _FinalStage currency(Optional<String> currency);
 
@@ -295,13 +299,13 @@ public final class BillingCouponResponseData {
 
         _FinalStage duration(String duration);
 
-        _FinalStage durationInMonths(Optional<Integer> durationInMonths);
+        _FinalStage durationInMonths(Optional<Long> durationInMonths);
 
-        _FinalStage durationInMonths(Integer durationInMonths);
+        _FinalStage durationInMonths(Long durationInMonths);
 
-        _FinalStage maxRedemptions(Optional<Integer> maxRedemptions);
+        _FinalStage maxRedemptions(Optional<Long> maxRedemptions);
 
-        _FinalStage maxRedemptions(Integer maxRedemptions);
+        _FinalStage maxRedemptions(Long maxRedemptions);
 
         _FinalStage metadata(Map<String, JsonNode> metadata);
 
@@ -347,7 +351,7 @@ public final class BillingCouponResponseData {
 
         private BillingProviderType providerType;
 
-        private int timesRedeemed;
+        private long timesRedeemed;
 
         private Optional<OffsetDateTime> validUntil = Optional.empty();
 
@@ -357,15 +361,15 @@ public final class BillingCouponResponseData {
 
         private Map<String, JsonNode> metadata = new LinkedHashMap<>();
 
-        private Optional<Integer> maxRedemptions = Optional.empty();
+        private Optional<Long> maxRedemptions = Optional.empty();
 
-        private Optional<Integer> durationInMonths = Optional.empty();
+        private Optional<Long> durationInMonths = Optional.empty();
 
         private Optional<String> duration = Optional.empty();
 
         private Optional<String> currency = Optional.empty();
 
-        private Optional<Integer> amountOff = Optional.empty();
+        private Optional<Long> amountOff = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -445,7 +449,7 @@ public final class BillingCouponResponseData {
 
         @java.lang.Override
         @JsonSetter("times_redeemed")
-        public _FinalStage timesRedeemed(int timesRedeemed) {
+        public _FinalStage timesRedeemed(long timesRedeemed) {
             this.timesRedeemed = timesRedeemed;
             return this;
         }
@@ -514,27 +518,27 @@ public final class BillingCouponResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage maxRedemptions(Integer maxRedemptions) {
+        public _FinalStage maxRedemptions(Long maxRedemptions) {
             this.maxRedemptions = Optional.ofNullable(maxRedemptions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "max_redemptions", nulls = Nulls.SKIP)
-        public _FinalStage maxRedemptions(Optional<Integer> maxRedemptions) {
+        public _FinalStage maxRedemptions(Optional<Long> maxRedemptions) {
             this.maxRedemptions = maxRedemptions;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage durationInMonths(Integer durationInMonths) {
+        public _FinalStage durationInMonths(Long durationInMonths) {
             this.durationInMonths = Optional.ofNullable(durationInMonths);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "duration_in_months", nulls = Nulls.SKIP)
-        public _FinalStage durationInMonths(Optional<Integer> durationInMonths) {
+        public _FinalStage durationInMonths(Optional<Long> durationInMonths) {
             this.durationInMonths = durationInMonths;
             return this;
         }
@@ -566,14 +570,14 @@ public final class BillingCouponResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage amountOff(Integer amountOff) {
+        public _FinalStage amountOff(Long amountOff) {
             this.amountOff = Optional.ofNullable(amountOff);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "amount_off", nulls = Nulls.SKIP)
-        public _FinalStage amountOff(Optional<Integer> amountOff) {
+        public _FinalStage amountOff(Optional<Long> amountOff) {
             this.amountOff = amountOff;
             return this;
         }
@@ -599,6 +603,18 @@ public final class BillingCouponResponseData {
                     validFrom,
                     validUntil,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

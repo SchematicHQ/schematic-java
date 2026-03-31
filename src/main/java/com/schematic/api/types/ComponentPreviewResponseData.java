@@ -59,6 +59,8 @@ public final class ComponentPreviewResponseData {
 
     private final Optional<String> preventSelfServiceDowngradeUrl;
 
+    private final Optional<ScheduledDowngradeResponseData> scheduledDowngrade;
+
     private final boolean showAsMonthlyPrices;
 
     private final boolean showCredits;
@@ -96,6 +98,7 @@ public final class ComponentPreviewResponseData {
             boolean preventSelfServiceDowngrade,
             Optional<String> preventSelfServiceDowngradeButtonText,
             Optional<String> preventSelfServiceDowngradeUrl,
+            Optional<ScheduledDowngradeResponseData> scheduledDowngrade,
             boolean showAsMonthlyPrices,
             boolean showCredits,
             boolean showPeriodToggle,
@@ -123,6 +126,7 @@ public final class ComponentPreviewResponseData {
         this.preventSelfServiceDowngrade = preventSelfServiceDowngrade;
         this.preventSelfServiceDowngradeButtonText = preventSelfServiceDowngradeButtonText;
         this.preventSelfServiceDowngradeUrl = preventSelfServiceDowngradeUrl;
+        this.scheduledDowngrade = scheduledDowngrade;
         this.showAsMonthlyPrices = showAsMonthlyPrices;
         this.showCredits = showCredits;
         this.showPeriodToggle = showPeriodToggle;
@@ -224,6 +228,11 @@ public final class ComponentPreviewResponseData {
         return preventSelfServiceDowngradeUrl;
     }
 
+    @JsonProperty("scheduled_downgrade")
+    public Optional<ScheduledDowngradeResponseData> getScheduledDowngrade() {
+        return scheduledDowngrade;
+    }
+
     @JsonProperty("show_as_monthly_prices")
     public boolean getShowAsMonthlyPrices() {
         return showAsMonthlyPrices;
@@ -294,6 +303,7 @@ public final class ComponentPreviewResponseData {
                 && preventSelfServiceDowngrade == other.preventSelfServiceDowngrade
                 && preventSelfServiceDowngradeButtonText.equals(other.preventSelfServiceDowngradeButtonText)
                 && preventSelfServiceDowngradeUrl.equals(other.preventSelfServiceDowngradeUrl)
+                && scheduledDowngrade.equals(other.scheduledDowngrade)
                 && showAsMonthlyPrices == other.showAsMonthlyPrices
                 && showCredits == other.showCredits
                 && showPeriodToggle == other.showPeriodToggle
@@ -325,6 +335,7 @@ public final class ComponentPreviewResponseData {
                 this.preventSelfServiceDowngrade,
                 this.preventSelfServiceDowngradeButtonText,
                 this.preventSelfServiceDowngradeUrl,
+                this.scheduledDowngrade,
                 this.showAsMonthlyPrices,
                 this.showCredits,
                 this.showPeriodToggle,
@@ -376,6 +387,10 @@ public final class ComponentPreviewResponseData {
 
     public interface _FinalStage {
         ComponentPreviewResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage activeAddOns(List<CompanyPlanDetailResponseData> activeAddOns);
 
@@ -452,6 +467,10 @@ public final class ComponentPreviewResponseData {
 
         _FinalStage preventSelfServiceDowngradeUrl(String preventSelfServiceDowngradeUrl);
 
+        _FinalStage scheduledDowngrade(Optional<ScheduledDowngradeResponseData> scheduledDowngrade);
+
+        _FinalStage scheduledDowngrade(ScheduledDowngradeResponseData scheduledDowngrade);
+
         _FinalStage stripeEmbed(Optional<StripeEmbedInfo> stripeEmbed);
 
         _FinalStage stripeEmbed(StripeEmbedInfo stripeEmbed);
@@ -500,6 +519,8 @@ public final class ComponentPreviewResponseData {
         private Optional<CompanySubscriptionResponseData> subscription = Optional.empty();
 
         private Optional<StripeEmbedInfo> stripeEmbed = Optional.empty();
+
+        private Optional<ScheduledDowngradeResponseData> scheduledDowngrade = Optional.empty();
 
         private Optional<String> preventSelfServiceDowngradeUrl = Optional.empty();
 
@@ -556,6 +577,7 @@ public final class ComponentPreviewResponseData {
             preventSelfServiceDowngrade(other.getPreventSelfServiceDowngrade());
             preventSelfServiceDowngradeButtonText(other.getPreventSelfServiceDowngradeButtonText());
             preventSelfServiceDowngradeUrl(other.getPreventSelfServiceDowngradeUrl());
+            scheduledDowngrade(other.getScheduledDowngrade());
             showAsMonthlyPrices(other.getShowAsMonthlyPrices());
             showCredits(other.getShowCredits());
             showPeriodToggle(other.getShowPeriodToggle());
@@ -665,6 +687,19 @@ public final class ComponentPreviewResponseData {
         @JsonSetter(value = "stripe_embed", nulls = Nulls.SKIP)
         public _FinalStage stripeEmbed(Optional<StripeEmbedInfo> stripeEmbed) {
             this.stripeEmbed = stripeEmbed;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage scheduledDowngrade(ScheduledDowngradeResponseData scheduledDowngrade) {
+            this.scheduledDowngrade = Optional.ofNullable(scheduledDowngrade);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_downgrade", nulls = Nulls.SKIP)
+        public _FinalStage scheduledDowngrade(Optional<ScheduledDowngradeResponseData> scheduledDowngrade) {
+            this.scheduledDowngrade = scheduledDowngrade;
             return this;
         }
 
@@ -965,6 +1000,7 @@ public final class ComponentPreviewResponseData {
                     preventSelfServiceDowngrade,
                     preventSelfServiceDowngradeButtonText,
                     preventSelfServiceDowngradeUrl,
+                    scheduledDowngrade,
                     showAsMonthlyPrices,
                     showCredits,
                     showPeriodToggle,
@@ -974,6 +1010,18 @@ public final class ComponentPreviewResponseData {
                     trialPaymentMethodRequired,
                     upcomingInvoice,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

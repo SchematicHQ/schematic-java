@@ -28,9 +28,9 @@ public final class RulesengineCheckFlagResult {
 
     private final Optional<String> err;
 
-    private final Optional<Integer> featureAllocation;
+    private final Optional<Long> featureAllocation;
 
-    private final Optional<Integer> featureUsage;
+    private final Optional<Long> featureUsage;
 
     private final Optional<String> featureUsageEvent;
 
@@ -58,8 +58,8 @@ public final class RulesengineCheckFlagResult {
             Optional<String> companyId,
             Optional<RulesengineFeatureEntitlement> entitlement,
             Optional<String> err,
-            Optional<Integer> featureAllocation,
-            Optional<Integer> featureUsage,
+            Optional<Long> featureAllocation,
+            Optional<Long> featureUsage,
             Optional<String> featureUsageEvent,
             Optional<RulesengineCheckFlagResultFeatureUsagePeriod> featureUsagePeriod,
             Optional<OffsetDateTime> featureUsageResetAt,
@@ -105,12 +105,12 @@ public final class RulesengineCheckFlagResult {
     }
 
     @JsonProperty("feature_allocation")
-    public Optional<Integer> getFeatureAllocation() {
+    public Optional<Long> getFeatureAllocation() {
         return featureAllocation;
     }
 
     @JsonProperty("feature_usage")
-    public Optional<Integer> getFeatureUsage() {
+    public Optional<Long> getFeatureUsage() {
         return featureUsage;
     }
 
@@ -239,6 +239,10 @@ public final class RulesengineCheckFlagResult {
     public interface _FinalStage {
         RulesengineCheckFlagResult build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage companyId(Optional<String> companyId);
 
         _FinalStage companyId(String companyId);
@@ -251,13 +255,13 @@ public final class RulesengineCheckFlagResult {
 
         _FinalStage err(String err);
 
-        _FinalStage featureAllocation(Optional<Integer> featureAllocation);
+        _FinalStage featureAllocation(Optional<Long> featureAllocation);
 
-        _FinalStage featureAllocation(Integer featureAllocation);
+        _FinalStage featureAllocation(Long featureAllocation);
 
-        _FinalStage featureUsage(Optional<Integer> featureUsage);
+        _FinalStage featureUsage(Optional<Long> featureUsage);
 
-        _FinalStage featureUsage(Integer featureUsage);
+        _FinalStage featureUsage(Long featureUsage);
 
         _FinalStage featureUsageEvent(Optional<String> featureUsageEvent);
 
@@ -310,9 +314,9 @@ public final class RulesengineCheckFlagResult {
 
         private Optional<String> featureUsageEvent = Optional.empty();
 
-        private Optional<Integer> featureUsage = Optional.empty();
+        private Optional<Long> featureUsage = Optional.empty();
 
-        private Optional<Integer> featureAllocation = Optional.empty();
+        private Optional<Long> featureAllocation = Optional.empty();
 
         private Optional<String> err = Optional.empty();
 
@@ -459,27 +463,27 @@ public final class RulesengineCheckFlagResult {
         }
 
         @java.lang.Override
-        public _FinalStage featureUsage(Integer featureUsage) {
+        public _FinalStage featureUsage(Long featureUsage) {
             this.featureUsage = Optional.ofNullable(featureUsage);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
-        public _FinalStage featureUsage(Optional<Integer> featureUsage) {
+        public _FinalStage featureUsage(Optional<Long> featureUsage) {
             this.featureUsage = featureUsage;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage featureAllocation(Integer featureAllocation) {
+        public _FinalStage featureAllocation(Long featureAllocation) {
             this.featureAllocation = Optional.ofNullable(featureAllocation);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "feature_allocation", nulls = Nulls.SKIP)
-        public _FinalStage featureAllocation(Optional<Integer> featureAllocation) {
+        public _FinalStage featureAllocation(Optional<Long> featureAllocation) {
             this.featureAllocation = featureAllocation;
             return this;
         }
@@ -542,6 +546,18 @@ public final class RulesengineCheckFlagResult {
                     userId,
                     value,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

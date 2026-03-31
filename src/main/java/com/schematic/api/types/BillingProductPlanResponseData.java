@@ -39,7 +39,7 @@ public final class BillingProductPlanResponseData {
 
     private final String planId;
 
-    private final Optional<Integer> trialDays;
+    private final Optional<Long> trialDays;
 
     private final Optional<String> yearlyPriceId;
 
@@ -55,7 +55,7 @@ public final class BillingProductPlanResponseData {
             Optional<String> monthlyPriceId,
             Optional<String> oneTimePriceId,
             String planId,
-            Optional<Integer> trialDays,
+            Optional<Long> trialDays,
             Optional<String> yearlyPriceId,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
@@ -118,7 +118,7 @@ public final class BillingProductPlanResponseData {
     }
 
     @JsonProperty("trial_days")
-    public Optional<Integer> getTrialDays() {
+    public Optional<Long> getTrialDays() {
         return trialDays;
     }
 
@@ -210,6 +210,10 @@ public final class BillingProductPlanResponseData {
     public interface _FinalStage {
         BillingProductPlanResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage monthlyPriceId(Optional<String> monthlyPriceId);
 
         _FinalStage monthlyPriceId(String monthlyPriceId);
@@ -218,9 +222,9 @@ public final class BillingProductPlanResponseData {
 
         _FinalStage oneTimePriceId(String oneTimePriceId);
 
-        _FinalStage trialDays(Optional<Integer> trialDays);
+        _FinalStage trialDays(Optional<Long> trialDays);
 
-        _FinalStage trialDays(Integer trialDays);
+        _FinalStage trialDays(Long trialDays);
 
         _FinalStage yearlyPriceId(Optional<String> yearlyPriceId);
 
@@ -253,7 +257,7 @@ public final class BillingProductPlanResponseData {
 
         private Optional<String> yearlyPriceId = Optional.empty();
 
-        private Optional<Integer> trialDays = Optional.empty();
+        private Optional<Long> trialDays = Optional.empty();
 
         private Optional<String> oneTimePriceId = Optional.empty();
 
@@ -343,14 +347,14 @@ public final class BillingProductPlanResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage trialDays(Integer trialDays) {
+        public _FinalStage trialDays(Long trialDays) {
             this.trialDays = Optional.ofNullable(trialDays);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
-        public _FinalStage trialDays(Optional<Integer> trialDays) {
+        public _FinalStage trialDays(Optional<Long> trialDays) {
             this.trialDays = trialDays;
             return this;
         }
@@ -396,6 +400,18 @@ public final class BillingProductPlanResponseData {
                     trialDays,
                     yearlyPriceId,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

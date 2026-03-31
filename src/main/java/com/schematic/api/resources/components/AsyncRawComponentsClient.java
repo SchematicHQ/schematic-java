@@ -55,6 +55,11 @@ public class AsyncRawComponentsClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<ListComponentsResponse>> listComponents(
+            RequestOptions requestOptions) {
+        return listComponents(ListComponentsRequest.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListComponentsResponse>> listComponents(
             ListComponentsRequest request) {
         return listComponents(request, null);
     }
@@ -75,6 +80,11 @@ public class AsyncRawComponentsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -90,14 +100,13 @@ public class AsyncRawComponentsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), ListComponentsResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListComponentsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -129,11 +138,9 @@ public class AsyncRawComponentsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -155,10 +162,14 @@ public class AsyncRawComponentsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<CreateComponentResponse>> createComponent(
             CreateComponentRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("components")
-                .build();
+                .addPathSegments("components");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -167,7 +178,7 @@ public class AsyncRawComponentsClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -182,14 +193,13 @@ public class AsyncRawComponentsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), CreateComponentResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CreateComponentResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -221,11 +231,9 @@ public class AsyncRawComponentsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -246,13 +254,17 @@ public class AsyncRawComponentsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<GetComponentResponse>> getComponent(
             String componentId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("components")
-                .addPathSegment(componentId)
-                .build();
+                .addPathSegment(componentId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -266,13 +278,13 @@ public class AsyncRawComponentsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetComponentResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetComponentResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -299,11 +311,9 @@ public class AsyncRawComponentsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -323,17 +333,26 @@ public class AsyncRawComponentsClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<UpdateComponentResponse>> updateComponent(
+            String componentId, RequestOptions requestOptions) {
+        return updateComponent(componentId, UpdateComponentRequestBody.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<UpdateComponentResponse>> updateComponent(
             String componentId, UpdateComponentRequestBody request) {
         return updateComponent(componentId, request, null);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<UpdateComponentResponse>> updateComponent(
             String componentId, UpdateComponentRequestBody request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("components")
-                .addPathSegment(componentId)
-                .build();
+                .addPathSegment(componentId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -342,7 +361,7 @@ public class AsyncRawComponentsClient {
             throw new BaseSchematicException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -357,14 +376,13 @@ public class AsyncRawComponentsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), UpdateComponentResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, UpdateComponentResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -396,11 +414,9 @@ public class AsyncRawComponentsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -421,13 +437,17 @@ public class AsyncRawComponentsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<DeleteComponentResponse>> deleteComponent(
             String componentId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("components")
-                .addPathSegment(componentId)
-                .build();
+                .addPathSegment(componentId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -441,14 +461,13 @@ public class AsyncRawComponentsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), DeleteComponentResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DeleteComponentResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -480,11 +499,9 @@ public class AsyncRawComponentsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -501,6 +518,11 @@ public class AsyncRawComponentsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<CountComponentsResponse>> countComponents() {
         return countComponents(CountComponentsRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountComponentsResponse>> countComponents(
+            RequestOptions requestOptions) {
+        return countComponents(CountComponentsRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<CountComponentsResponse>> countComponents(
@@ -524,6 +546,11 @@ public class AsyncRawComponentsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -539,14 +566,13 @@ public class AsyncRawComponentsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), CountComponentsResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountComponentsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -578,11 +604,9 @@ public class AsyncRawComponentsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
@@ -599,6 +623,11 @@ public class AsyncRawComponentsClient {
 
     public CompletableFuture<BaseSchematicHttpResponse<PreviewComponentDataResponse>> previewComponentData() {
         return previewComponentData(PreviewComponentDataRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<PreviewComponentDataResponse>> previewComponentData(
+            RequestOptions requestOptions) {
+        return previewComponentData(PreviewComponentDataRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<PreviewComponentDataResponse>> previewComponentData(
@@ -619,6 +648,11 @@ public class AsyncRawComponentsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "component_id", request.getComponentId().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -634,14 +668,14 @@ public class AsyncRawComponentsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), PreviewComponentDataResponse.class),
+                                        responseBodyString, PreviewComponentDataResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -668,11 +702,9 @@ public class AsyncRawComponentsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));

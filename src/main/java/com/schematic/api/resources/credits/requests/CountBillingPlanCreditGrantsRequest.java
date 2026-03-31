@@ -22,45 +22,49 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountBillingPlanCreditGrantsRequest.Builder.class)
 public final class CountBillingPlanCreditGrantsRequest {
-    private final Optional<List<String>> planIds;
-
     private final Optional<List<String>> ids;
+
+    private final Optional<List<String>> planIds;
 
     private final Optional<String> creditId;
 
     private final Optional<String> planId;
 
-    private final Optional<Integer> limit;
+    private final Optional<String> planVersionId;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> limit;
+
+    private final Optional<Long> offset;
 
     private final Map<String, Object> additionalProperties;
 
     private CountBillingPlanCreditGrantsRequest(
-            Optional<List<String>> planIds,
             Optional<List<String>> ids,
+            Optional<List<String>> planIds,
             Optional<String> creditId,
             Optional<String> planId,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<String> planVersionId,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Map<String, Object> additionalProperties) {
-        this.planIds = planIds;
         this.ids = ids;
+        this.planIds = planIds;
         this.creditId = creditId;
         this.planId = planId;
+        this.planVersionId = planVersionId;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("plan_ids")
-    public Optional<List<String>> getPlanIds() {
-        return planIds;
-    }
-
     @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
+    }
+
+    @JsonProperty("plan_ids")
+    public Optional<List<String>> getPlanIds() {
+        return planIds;
     }
 
     @JsonProperty("credit_id")
@@ -73,11 +77,16 @@ public final class CountBillingPlanCreditGrantsRequest {
         return planId;
     }
 
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
+    }
+
     /**
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -85,7 +94,7 @@ public final class CountBillingPlanCreditGrantsRequest {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -102,17 +111,19 @@ public final class CountBillingPlanCreditGrantsRequest {
     }
 
     private boolean equalTo(CountBillingPlanCreditGrantsRequest other) {
-        return planIds.equals(other.planIds)
-                && ids.equals(other.ids)
+        return ids.equals(other.ids)
+                && planIds.equals(other.planIds)
                 && creditId.equals(other.creditId)
                 && planId.equals(other.planId)
+                && planVersionId.equals(other.planVersionId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.planIds, this.ids, this.creditId, this.planId, this.limit, this.offset);
+        return Objects.hash(
+                this.ids, this.planIds, this.creditId, this.planId, this.planVersionId, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -126,17 +137,19 @@ public final class CountBillingPlanCreditGrantsRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<List<String>> planIds = Optional.empty();
-
         private Optional<List<String>> ids = Optional.empty();
+
+        private Optional<List<String>> planIds = Optional.empty();
 
         private Optional<String> creditId = Optional.empty();
 
         private Optional<String> planId = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<String> planVersionId = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
+
+        private Optional<Long> offset = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -144,28 +157,13 @@ public final class CountBillingPlanCreditGrantsRequest {
         private Builder() {}
 
         public Builder from(CountBillingPlanCreditGrantsRequest other) {
-            planIds(other.getPlanIds());
             ids(other.getIds());
+            planIds(other.getPlanIds());
             creditId(other.getCreditId());
             planId(other.getPlanId());
+            planVersionId(other.getPlanVersionId());
             limit(other.getLimit());
             offset(other.getOffset());
-            return this;
-        }
-
-        @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
-        public Builder planIds(Optional<List<String>> planIds) {
-            this.planIds = planIds;
-            return this;
-        }
-
-        public Builder planIds(List<String> planIds) {
-            this.planIds = Optional.ofNullable(planIds);
-            return this;
-        }
-
-        public Builder planIds(String planIds) {
-            this.planIds = Optional.of(Collections.singletonList(planIds));
             return this;
         }
 
@@ -182,6 +180,22 @@ public final class CountBillingPlanCreditGrantsRequest {
 
         public Builder ids(String ids) {
             this.ids = Optional.of(Collections.singletonList(ids));
+            return this;
+        }
+
+        @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
+        public Builder planIds(Optional<List<String>> planIds) {
+            this.planIds = planIds;
+            return this;
+        }
+
+        public Builder planIds(List<String> planIds) {
+            this.planIds = Optional.ofNullable(planIds);
+            return this;
+        }
+
+        public Builder planIds(String planIds) {
+            this.planIds = Optional.of(Collections.singletonList(planIds));
             return this;
         }
 
@@ -207,16 +221,27 @@ public final class CountBillingPlanCreditGrantsRequest {
             return this;
         }
 
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
         /**
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -225,19 +250,29 @@ public final class CountBillingPlanCreditGrantsRequest {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
 
         public CountBillingPlanCreditGrantsRequest build() {
             return new CountBillingPlanCreditGrantsRequest(
-                    planIds, ids, creditId, planId, limit, offset, additionalProperties);
+                    ids, planIds, creditId, planId, planVersionId, limit, offset, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

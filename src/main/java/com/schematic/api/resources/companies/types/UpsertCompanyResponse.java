@@ -87,6 +87,10 @@ public final class UpsertCompanyResponse {
     public interface _FinalStage {
         UpsertCompanyResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Input parameters</p>
          */
@@ -160,6 +164,18 @@ public final class UpsertCompanyResponse {
         @java.lang.Override
         public UpsertCompanyResponse build() {
             return new UpsertCompanyResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

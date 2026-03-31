@@ -85,7 +85,7 @@ public final class PlanGroupDetailResponseData {
 
     private final boolean taxCollectionEnabled;
 
-    private final Optional<Integer> trialDays;
+    private final Optional<Long> trialDays;
 
     private final Optional<PlanGroupPlanDetailResponseData> trialExpiryPlan;
 
@@ -131,7 +131,7 @@ public final class PlanGroupDetailResponseData {
             boolean showZeroPriceAsFree,
             boolean syncCustomerBillingDetails,
             boolean taxCollectionEnabled,
-            Optional<Integer> trialDays,
+            Optional<Long> trialDays,
             Optional<PlanGroupPlanDetailResponseData> trialExpiryPlan,
             Optional<String> trialExpiryPlanId,
             Optional<BillingPriceView> trialExpiryPlanPrice,
@@ -334,7 +334,7 @@ public final class PlanGroupDetailResponseData {
     }
 
     @JsonProperty("trial_days")
-    public Optional<Integer> getTrialDays() {
+    public Optional<Long> getTrialDays() {
         return trialDays;
     }
 
@@ -518,6 +518,10 @@ public final class PlanGroupDetailResponseData {
     public interface _FinalStage {
         PlanGroupDetailResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage addOns(List<PlanGroupPlanDetailResponseData> addOns);
 
         _FinalStage addAddOns(PlanGroupPlanDetailResponseData addOns);
@@ -604,9 +608,9 @@ public final class PlanGroupDetailResponseData {
 
         _FinalStage scheduledDowngradePreventWhenOverLimit(Boolean scheduledDowngradePreventWhenOverLimit);
 
-        _FinalStage trialDays(Optional<Integer> trialDays);
+        _FinalStage trialDays(Optional<Long> trialDays);
 
-        _FinalStage trialDays(Integer trialDays);
+        _FinalStage trialDays(Long trialDays);
 
         _FinalStage trialExpiryPlan(Optional<PlanGroupPlanDetailResponseData> trialExpiryPlan);
 
@@ -678,7 +682,7 @@ public final class PlanGroupDetailResponseData {
 
         private Optional<PlanGroupPlanDetailResponseData> trialExpiryPlan = Optional.empty();
 
-        private Optional<Integer> trialDays = Optional.empty();
+        private Optional<Long> trialDays = Optional.empty();
 
         private Optional<Boolean> scheduledDowngradePreventWhenOverLimit = Optional.empty();
 
@@ -915,14 +919,14 @@ public final class PlanGroupDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage trialDays(Integer trialDays) {
+        public _FinalStage trialDays(Long trialDays) {
             this.trialDays = Optional.ofNullable(trialDays);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
-        public _FinalStage trialDays(Optional<Integer> trialDays) {
+        public _FinalStage trialDays(Optional<Long> trialDays) {
             this.trialDays = trialDays;
             return this;
         }
@@ -1272,6 +1276,18 @@ public final class PlanGroupDetailResponseData {
                     trialExpiryPlanPriceId,
                     trialPaymentMethodRequired,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

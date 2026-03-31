@@ -24,11 +24,13 @@ import org.jetbrains.annotations.NotNull;
 public final class CheckFlagResponseData {
     private final Optional<String> companyId;
 
+    private final Optional<FeatureEntitlement> entitlement;
+
     private final Optional<String> error;
 
-    private final Optional<Integer> featureAllocation;
+    private final Optional<Long> featureAllocation;
 
-    private final Optional<Integer> featureUsage;
+    private final Optional<Long> featureUsage;
 
     private final Optional<String> featureUsageEvent;
 
@@ -54,9 +56,10 @@ public final class CheckFlagResponseData {
 
     private CheckFlagResponseData(
             Optional<String> companyId,
+            Optional<FeatureEntitlement> entitlement,
             Optional<String> error,
-            Optional<Integer> featureAllocation,
-            Optional<Integer> featureUsage,
+            Optional<Long> featureAllocation,
+            Optional<Long> featureUsage,
             Optional<String> featureUsageEvent,
             Optional<String> featureUsagePeriod,
             Optional<OffsetDateTime> featureUsageResetAt,
@@ -69,6 +72,7 @@ public final class CheckFlagResponseData {
             boolean value,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
+        this.entitlement = entitlement;
         this.error = error;
         this.featureAllocation = featureAllocation;
         this.featureUsage = featureUsage;
@@ -94,6 +98,14 @@ public final class CheckFlagResponseData {
     }
 
     /**
+     * @return If a feature entitlement rule was matched, its entitlement details
+     */
+    @JsonProperty("entitlement")
+    public Optional<FeatureEntitlement> getEntitlement() {
+        return entitlement;
+    }
+
+    /**
      * @return If an error occurred while checking the flag, the error message
      */
     @JsonProperty("error")
@@ -102,23 +114,23 @@ public final class CheckFlagResponseData {
     }
 
     /**
-     * @return If a numeric feature entitlement rule was matched, its allocation
+     * @return Deprecated: Use Entitlement.Allocation instead.
      */
     @JsonProperty("feature_allocation")
-    public Optional<Integer> getFeatureAllocation() {
+    public Optional<Long> getFeatureAllocation() {
         return featureAllocation;
     }
 
     /**
-     * @return If a numeric feature entitlement rule was matched, the company's usage
+     * @return Deprecated: Use Entitlement.Usage instead.
      */
     @JsonProperty("feature_usage")
-    public Optional<Integer> getFeatureUsage() {
+    public Optional<Long> getFeatureUsage() {
         return featureUsage;
     }
 
     /**
-     * @return If an event-based numeric feature entitlement rule was matched, the event used to track its usage
+     * @return Deprecated: Use Entitlement.EventName instead.
      */
     @JsonProperty("feature_usage_event")
     public Optional<String> getFeatureUsageEvent() {
@@ -126,7 +138,7 @@ public final class CheckFlagResponseData {
     }
 
     /**
-     * @return For event-based feature entitlement rules, the period over which usage is tracked (current_month, current_day, current_week, all_time)
+     * @return Deprecated: Use Entitlement.MetricPeriod instead.
      */
     @JsonProperty("feature_usage_period")
     public Optional<String> getFeatureUsagePeriod() {
@@ -134,7 +146,7 @@ public final class CheckFlagResponseData {
     }
 
     /**
-     * @return For event-based feature entitlement rules, when the usage period will reset
+     * @return Deprecated: Use Entitlement.MetricResetAt instead.
      */
     @JsonProperty("feature_usage_reset_at")
     public Optional<OffsetDateTime> getFeatureUsageResetAt() {
@@ -210,6 +222,7 @@ public final class CheckFlagResponseData {
 
     private boolean equalTo(CheckFlagResponseData other) {
         return companyId.equals(other.companyId)
+                && entitlement.equals(other.entitlement)
                 && error.equals(other.error)
                 && featureAllocation.equals(other.featureAllocation)
                 && featureUsage.equals(other.featureUsage)
@@ -229,6 +242,7 @@ public final class CheckFlagResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.companyId,
+                this.entitlement,
                 this.error,
                 this.featureAllocation,
                 this.featureUsage,
@@ -279,12 +293,23 @@ public final class CheckFlagResponseData {
     public interface _FinalStage {
         CheckFlagResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>If company keys were provided and matched a company, its ID</p>
          */
         _FinalStage companyId(Optional<String> companyId);
 
         _FinalStage companyId(String companyId);
+
+        /**
+         * <p>If a feature entitlement rule was matched, its entitlement details</p>
+         */
+        _FinalStage entitlement(Optional<FeatureEntitlement> entitlement);
+
+        _FinalStage entitlement(FeatureEntitlement entitlement);
 
         /**
          * <p>If an error occurred while checking the flag, the error message</p>
@@ -294,35 +319,35 @@ public final class CheckFlagResponseData {
         _FinalStage error(String error);
 
         /**
-         * <p>If a numeric feature entitlement rule was matched, its allocation</p>
+         * <p>Deprecated: Use Entitlement.Allocation instead.</p>
          */
-        _FinalStage featureAllocation(Optional<Integer> featureAllocation);
+        _FinalStage featureAllocation(Optional<Long> featureAllocation);
 
-        _FinalStage featureAllocation(Integer featureAllocation);
+        _FinalStage featureAllocation(Long featureAllocation);
 
         /**
-         * <p>If a numeric feature entitlement rule was matched, the company's usage</p>
+         * <p>Deprecated: Use Entitlement.Usage instead.</p>
          */
-        _FinalStage featureUsage(Optional<Integer> featureUsage);
+        _FinalStage featureUsage(Optional<Long> featureUsage);
 
-        _FinalStage featureUsage(Integer featureUsage);
+        _FinalStage featureUsage(Long featureUsage);
 
         /**
-         * <p>If an event-based numeric feature entitlement rule was matched, the event used to track its usage</p>
+         * <p>Deprecated: Use Entitlement.EventName instead.</p>
          */
         _FinalStage featureUsageEvent(Optional<String> featureUsageEvent);
 
         _FinalStage featureUsageEvent(String featureUsageEvent);
 
         /**
-         * <p>For event-based feature entitlement rules, the period over which usage is tracked (current_month, current_day, current_week, all_time)</p>
+         * <p>Deprecated: Use Entitlement.MetricPeriod instead.</p>
          */
         _FinalStage featureUsagePeriod(Optional<String> featureUsagePeriod);
 
         _FinalStage featureUsagePeriod(String featureUsagePeriod);
 
         /**
-         * <p>For event-based feature entitlement rules, when the usage period will reset</p>
+         * <p>Deprecated: Use Entitlement.MetricResetAt instead.</p>
          */
         _FinalStage featureUsageResetAt(Optional<OffsetDateTime> featureUsageResetAt);
 
@@ -379,11 +404,13 @@ public final class CheckFlagResponseData {
 
         private Optional<String> featureUsageEvent = Optional.empty();
 
-        private Optional<Integer> featureUsage = Optional.empty();
+        private Optional<Long> featureUsage = Optional.empty();
 
-        private Optional<Integer> featureAllocation = Optional.empty();
+        private Optional<Long> featureAllocation = Optional.empty();
 
         private Optional<String> error = Optional.empty();
+
+        private Optional<FeatureEntitlement> entitlement = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
 
@@ -395,6 +422,7 @@ public final class CheckFlagResponseData {
         @java.lang.Override
         public Builder from(CheckFlagResponseData other) {
             companyId(other.getCompanyId());
+            entitlement(other.getEntitlement());
             error(other.getError());
             featureAllocation(other.getFeatureAllocation());
             featureUsage(other.getFeatureUsage());
@@ -528,7 +556,7 @@ public final class CheckFlagResponseData {
         }
 
         /**
-         * <p>For event-based feature entitlement rules, when the usage period will reset</p>
+         * <p>Deprecated: Use Entitlement.MetricResetAt instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -538,7 +566,7 @@ public final class CheckFlagResponseData {
         }
 
         /**
-         * <p>For event-based feature entitlement rules, when the usage period will reset</p>
+         * <p>Deprecated: Use Entitlement.MetricResetAt instead.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "feature_usage_reset_at", nulls = Nulls.SKIP)
@@ -548,7 +576,7 @@ public final class CheckFlagResponseData {
         }
 
         /**
-         * <p>For event-based feature entitlement rules, the period over which usage is tracked (current_month, current_day, current_week, all_time)</p>
+         * <p>Deprecated: Use Entitlement.MetricPeriod instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -558,7 +586,7 @@ public final class CheckFlagResponseData {
         }
 
         /**
-         * <p>For event-based feature entitlement rules, the period over which usage is tracked (current_month, current_day, current_week, all_time)</p>
+         * <p>Deprecated: Use Entitlement.MetricPeriod instead.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "feature_usage_period", nulls = Nulls.SKIP)
@@ -568,7 +596,7 @@ public final class CheckFlagResponseData {
         }
 
         /**
-         * <p>If an event-based numeric feature entitlement rule was matched, the event used to track its usage</p>
+         * <p>Deprecated: Use Entitlement.EventName instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -578,7 +606,7 @@ public final class CheckFlagResponseData {
         }
 
         /**
-         * <p>If an event-based numeric feature entitlement rule was matched, the event used to track its usage</p>
+         * <p>Deprecated: Use Entitlement.EventName instead.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "feature_usage_event", nulls = Nulls.SKIP)
@@ -588,41 +616,41 @@ public final class CheckFlagResponseData {
         }
 
         /**
-         * <p>If a numeric feature entitlement rule was matched, the company's usage</p>
+         * <p>Deprecated: Use Entitlement.Usage instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage featureUsage(Integer featureUsage) {
+        public _FinalStage featureUsage(Long featureUsage) {
             this.featureUsage = Optional.ofNullable(featureUsage);
             return this;
         }
 
         /**
-         * <p>If a numeric feature entitlement rule was matched, the company's usage</p>
+         * <p>Deprecated: Use Entitlement.Usage instead.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
-        public _FinalStage featureUsage(Optional<Integer> featureUsage) {
+        public _FinalStage featureUsage(Optional<Long> featureUsage) {
             this.featureUsage = featureUsage;
             return this;
         }
 
         /**
-         * <p>If a numeric feature entitlement rule was matched, its allocation</p>
+         * <p>Deprecated: Use Entitlement.Allocation instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage featureAllocation(Integer featureAllocation) {
+        public _FinalStage featureAllocation(Long featureAllocation) {
             this.featureAllocation = Optional.ofNullable(featureAllocation);
             return this;
         }
 
         /**
-         * <p>If a numeric feature entitlement rule was matched, its allocation</p>
+         * <p>Deprecated: Use Entitlement.Allocation instead.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "feature_allocation", nulls = Nulls.SKIP)
-        public _FinalStage featureAllocation(Optional<Integer> featureAllocation) {
+        public _FinalStage featureAllocation(Optional<Long> featureAllocation) {
             this.featureAllocation = featureAllocation;
             return this;
         }
@@ -644,6 +672,26 @@ public final class CheckFlagResponseData {
         @JsonSetter(value = "error", nulls = Nulls.SKIP)
         public _FinalStage error(Optional<String> error) {
             this.error = error;
+            return this;
+        }
+
+        /**
+         * <p>If a feature entitlement rule was matched, its entitlement details</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage entitlement(FeatureEntitlement entitlement) {
+            this.entitlement = Optional.ofNullable(entitlement);
+            return this;
+        }
+
+        /**
+         * <p>If a feature entitlement rule was matched, its entitlement details</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "entitlement", nulls = Nulls.SKIP)
+        public _FinalStage entitlement(Optional<FeatureEntitlement> entitlement) {
+            this.entitlement = entitlement;
             return this;
         }
 
@@ -671,6 +719,7 @@ public final class CheckFlagResponseData {
         public CheckFlagResponseData build() {
             return new CheckFlagResponseData(
                     companyId,
+                    entitlement,
                     error,
                     featureAllocation,
                     featureUsage,
@@ -685,6 +734,18 @@ public final class CheckFlagResponseData {
                     userId,
                     value,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UsageBasedEntitlementResponseData.Builder.class)
 public final class UsageBasedEntitlementResponseData {
-    private final Optional<Integer> billingThreshold;
+    private final Optional<Long> billingThreshold;
 
     private final Optional<Double> consumptionRate;
 
@@ -39,7 +39,7 @@ public final class UsageBasedEntitlementResponseData {
 
     private final Optional<Boolean> valueBool;
 
-    private final Optional<Integer> valueNumeric;
+    private final Optional<Long> valueNumeric;
 
     private final EntitlementValueType valueType;
 
@@ -48,7 +48,7 @@ public final class UsageBasedEntitlementResponseData {
     private final Map<String, Object> additionalProperties;
 
     private UsageBasedEntitlementResponseData(
-            Optional<Integer> billingThreshold,
+            Optional<Long> billingThreshold,
             Optional<Double> consumptionRate,
             String featureId,
             Optional<BillingPriceView> meteredPrice,
@@ -57,7 +57,7 @@ public final class UsageBasedEntitlementResponseData {
             Optional<BillingPriceView> monthlyUsageBasedPrice,
             Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<Boolean> valueBool,
-            Optional<Integer> valueNumeric,
+            Optional<Long> valueNumeric,
             EntitlementValueType valueType,
             Optional<BillingPriceView> yearlyUsageBasedPrice,
             Map<String, Object> additionalProperties) {
@@ -77,7 +77,7 @@ public final class UsageBasedEntitlementResponseData {
     }
 
     @JsonProperty("billing_threshold")
-    public Optional<Integer> getBillingThreshold() {
+    public Optional<Long> getBillingThreshold() {
         return billingThreshold;
     }
 
@@ -122,7 +122,7 @@ public final class UsageBasedEntitlementResponseData {
     }
 
     @JsonProperty("value_numeric")
-    public Optional<Integer> getValueNumeric() {
+    public Optional<Long> getValueNumeric() {
         return valueNumeric;
     }
 
@@ -201,9 +201,13 @@ public final class UsageBasedEntitlementResponseData {
     public interface _FinalStage {
         UsageBasedEntitlementResponseData build();
 
-        _FinalStage billingThreshold(Optional<Integer> billingThreshold);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage billingThreshold(Integer billingThreshold);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage billingThreshold(Optional<Long> billingThreshold);
+
+        _FinalStage billingThreshold(Long billingThreshold);
 
         _FinalStage consumptionRate(Optional<Double> consumptionRate);
 
@@ -233,9 +237,9 @@ public final class UsageBasedEntitlementResponseData {
 
         _FinalStage valueBool(Boolean valueBool);
 
-        _FinalStage valueNumeric(Optional<Integer> valueNumeric);
+        _FinalStage valueNumeric(Optional<Long> valueNumeric);
 
-        _FinalStage valueNumeric(Integer valueNumeric);
+        _FinalStage valueNumeric(Long valueNumeric);
 
         _FinalStage yearlyUsageBasedPrice(Optional<BillingPriceView> yearlyUsageBasedPrice);
 
@@ -250,7 +254,7 @@ public final class UsageBasedEntitlementResponseData {
 
         private Optional<BillingPriceView> yearlyUsageBasedPrice = Optional.empty();
 
-        private Optional<Integer> valueNumeric = Optional.empty();
+        private Optional<Long> valueNumeric = Optional.empty();
 
         private Optional<Boolean> valueBool = Optional.empty();
 
@@ -266,7 +270,7 @@ public final class UsageBasedEntitlementResponseData {
 
         private Optional<Double> consumptionRate = Optional.empty();
 
-        private Optional<Integer> billingThreshold = Optional.empty();
+        private Optional<Long> billingThreshold = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -318,14 +322,14 @@ public final class UsageBasedEntitlementResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage valueNumeric(Integer valueNumeric) {
+        public _FinalStage valueNumeric(Long valueNumeric) {
             this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "value_numeric", nulls = Nulls.SKIP)
-        public _FinalStage valueNumeric(Optional<Integer> valueNumeric) {
+        public _FinalStage valueNumeric(Optional<Long> valueNumeric) {
             this.valueNumeric = valueNumeric;
             return this;
         }
@@ -422,14 +426,14 @@ public final class UsageBasedEntitlementResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage billingThreshold(Integer billingThreshold) {
+        public _FinalStage billingThreshold(Long billingThreshold) {
             this.billingThreshold = Optional.ofNullable(billingThreshold);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "billing_threshold", nulls = Nulls.SKIP)
-        public _FinalStage billingThreshold(Optional<Integer> billingThreshold) {
+        public _FinalStage billingThreshold(Optional<Long> billingThreshold) {
             this.billingThreshold = billingThreshold;
             return this;
         }
@@ -450,6 +454,18 @@ public final class UsageBasedEntitlementResponseData {
                     valueType,
                     yearlyUsageBasedPrice,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

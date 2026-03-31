@@ -26,11 +26,13 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateCompanyCreditGrant.Builder.class)
 public final class CreateCompanyCreditGrant {
-    private final Optional<Integer> billingPeriodsCount;
+    private final Optional<Long> billingPeriodsCount;
 
     private final String companyId;
 
     private final String creditId;
+
+    private final Optional<String> currency;
 
     private final Optional<OffsetDateTime> expiresAt;
 
@@ -38,9 +40,9 @@ public final class CreateCompanyCreditGrant {
 
     private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
-    private final Optional<Integer> expiryUnitCount;
+    private final Optional<Long> expiryUnitCount;
 
-    private final int quantity;
+    private final long quantity;
 
     private final BillingCreditGrantReason reason;
 
@@ -51,14 +53,15 @@ public final class CreateCompanyCreditGrant {
     private final Map<String, Object> additionalProperties;
 
     private CreateCompanyCreditGrant(
-            Optional<Integer> billingPeriodsCount,
+            Optional<Long> billingPeriodsCount,
             String companyId,
             String creditId,
+            Optional<String> currency,
             Optional<OffsetDateTime> expiresAt,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
-            Optional<Integer> expiryUnitCount,
-            int quantity,
+            Optional<Long> expiryUnitCount,
+            long quantity,
             BillingCreditGrantReason reason,
             Optional<Boolean> renewalEnabled,
             Optional<BillingPlanCreditGrantResetStart> renewalPeriod,
@@ -66,6 +69,7 @@ public final class CreateCompanyCreditGrant {
         this.billingPeriodsCount = billingPeriodsCount;
         this.companyId = companyId;
         this.creditId = creditId;
+        this.currency = currency;
         this.expiresAt = expiresAt;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
@@ -78,7 +82,7 @@ public final class CreateCompanyCreditGrant {
     }
 
     @JsonProperty("billing_periods_count")
-    public Optional<Integer> getBillingPeriodsCount() {
+    public Optional<Long> getBillingPeriodsCount() {
         return billingPeriodsCount;
     }
 
@@ -90,6 +94,11 @@ public final class CreateCompanyCreditGrant {
     @JsonProperty("credit_id")
     public String getCreditId() {
         return creditId;
+    }
+
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
     }
 
     @JsonProperty("expires_at")
@@ -108,12 +117,12 @@ public final class CreateCompanyCreditGrant {
     }
 
     @JsonProperty("expiry_unit_count")
-    public Optional<Integer> getExpiryUnitCount() {
+    public Optional<Long> getExpiryUnitCount() {
         return expiryUnitCount;
     }
 
     @JsonProperty("quantity")
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
@@ -147,6 +156,7 @@ public final class CreateCompanyCreditGrant {
         return billingPeriodsCount.equals(other.billingPeriodsCount)
                 && companyId.equals(other.companyId)
                 && creditId.equals(other.creditId)
+                && currency.equals(other.currency)
                 && expiresAt.equals(other.expiresAt)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
@@ -163,6 +173,7 @@ public final class CreateCompanyCreditGrant {
                 this.billingPeriodsCount,
                 this.companyId,
                 this.creditId,
+                this.currency,
                 this.expiresAt,
                 this.expiryType,
                 this.expiryUnit,
@@ -193,7 +204,7 @@ public final class CreateCompanyCreditGrant {
     }
 
     public interface QuantityStage {
-        ReasonStage quantity(int quantity);
+        ReasonStage quantity(long quantity);
     }
 
     public interface ReasonStage {
@@ -203,9 +214,17 @@ public final class CreateCompanyCreditGrant {
     public interface _FinalStage {
         CreateCompanyCreditGrant build();
 
-        _FinalStage billingPeriodsCount(Optional<Integer> billingPeriodsCount);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage billingPeriodsCount(Integer billingPeriodsCount);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage billingPeriodsCount(Optional<Long> billingPeriodsCount);
+
+        _FinalStage billingPeriodsCount(Long billingPeriodsCount);
+
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
 
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
@@ -219,9 +238,9 @@ public final class CreateCompanyCreditGrant {
 
         _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
-        _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
+        _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount);
 
-        _FinalStage expiryUnitCount(Integer expiryUnitCount);
+        _FinalStage expiryUnitCount(Long expiryUnitCount);
 
         _FinalStage renewalEnabled(Optional<Boolean> renewalEnabled);
 
@@ -239,7 +258,7 @@ public final class CreateCompanyCreditGrant {
 
         private String creditId;
 
-        private int quantity;
+        private long quantity;
 
         private BillingCreditGrantReason reason;
 
@@ -247,7 +266,7 @@ public final class CreateCompanyCreditGrant {
 
         private Optional<Boolean> renewalEnabled = Optional.empty();
 
-        private Optional<Integer> expiryUnitCount = Optional.empty();
+        private Optional<Long> expiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
@@ -255,7 +274,9 @@ public final class CreateCompanyCreditGrant {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
-        private Optional<Integer> billingPeriodsCount = Optional.empty();
+        private Optional<String> currency = Optional.empty();
+
+        private Optional<Long> billingPeriodsCount = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -267,6 +288,7 @@ public final class CreateCompanyCreditGrant {
             billingPeriodsCount(other.getBillingPeriodsCount());
             companyId(other.getCompanyId());
             creditId(other.getCreditId());
+            currency(other.getCurrency());
             expiresAt(other.getExpiresAt());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
@@ -294,7 +316,7 @@ public final class CreateCompanyCreditGrant {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public ReasonStage quantity(int quantity) {
+        public ReasonStage quantity(long quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -333,14 +355,14 @@ public final class CreateCompanyCreditGrant {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnitCount(Integer expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Long expiryUnitCount) {
             this.expiryUnitCount = Optional.ofNullable(expiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount) {
             this.expiryUnitCount = expiryUnitCount;
             return this;
         }
@@ -385,14 +407,27 @@ public final class CreateCompanyCreditGrant {
         }
 
         @java.lang.Override
-        public _FinalStage billingPeriodsCount(Integer billingPeriodsCount) {
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingPeriodsCount(Long billingPeriodsCount) {
             this.billingPeriodsCount = Optional.ofNullable(billingPeriodsCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "billing_periods_count", nulls = Nulls.SKIP)
-        public _FinalStage billingPeriodsCount(Optional<Integer> billingPeriodsCount) {
+        public _FinalStage billingPeriodsCount(Optional<Long> billingPeriodsCount) {
             this.billingPeriodsCount = billingPeriodsCount;
             return this;
         }
@@ -403,6 +438,7 @@ public final class CreateCompanyCreditGrant {
                     billingPeriodsCount,
                     companyId,
                     creditId,
+                    currency,
                     expiresAt,
                     expiryType,
                     expiryUnit,
@@ -412,6 +448,18 @@ public final class CreateCompanyCreditGrant {
                     renewalEnabled,
                     renewalPeriod,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

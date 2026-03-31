@@ -142,6 +142,10 @@ public final class UserResponseData {
     public interface _FinalStage {
         UserResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage lastSeenAt(Optional<OffsetDateTime> lastSeenAt);
 
         _FinalStage lastSeenAt(OffsetDateTime lastSeenAt);
@@ -230,6 +234,18 @@ public final class UserResponseData {
         public UserResponseData build() {
             return new UserResponseData(
                     createdAt, environmentId, id, lastSeenAt, name, updatedAt, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,11 +26,15 @@ import org.jetbrains.annotations.NotNull;
 public final class BillingCreditResponseData {
     private final BillingCreditBurnStrategy burnStrategy;
 
+    private final boolean costEditable;
+
     private final OffsetDateTime createdAt;
+
+    private final List<CreditCurrencyPriceResponseData> currencyPrices;
 
     private final BillingCreditExpiryUnit defaultExpiryUnit;
 
-    private final Optional<Integer> defaultExpiryUnitCount;
+    private final Optional<Long> defaultExpiryUnitCount;
 
     private final BillingCreditRolloverPolicy defaultRolloverPolicy;
 
@@ -54,9 +60,11 @@ public final class BillingCreditResponseData {
 
     private BillingCreditResponseData(
             BillingCreditBurnStrategy burnStrategy,
+            boolean costEditable,
             OffsetDateTime createdAt,
+            List<CreditCurrencyPriceResponseData> currencyPrices,
             BillingCreditExpiryUnit defaultExpiryUnit,
-            Optional<Integer> defaultExpiryUnitCount,
+            Optional<Long> defaultExpiryUnitCount,
             BillingCreditRolloverPolicy defaultRolloverPolicy,
             String description,
             Optional<String> icon,
@@ -69,7 +77,9 @@ public final class BillingCreditResponseData {
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.burnStrategy = burnStrategy;
+        this.costEditable = costEditable;
         this.createdAt = createdAt;
+        this.currencyPrices = currencyPrices;
         this.defaultExpiryUnit = defaultExpiryUnit;
         this.defaultExpiryUnitCount = defaultExpiryUnitCount;
         this.defaultRolloverPolicy = defaultRolloverPolicy;
@@ -90,9 +100,19 @@ public final class BillingCreditResponseData {
         return burnStrategy;
     }
 
+    @JsonProperty("cost_editable")
+    public boolean getCostEditable() {
+        return costEditable;
+    }
+
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("currency_prices")
+    public List<CreditCurrencyPriceResponseData> getCurrencyPrices() {
+        return currencyPrices;
     }
 
     @JsonProperty("default_expiry_unit")
@@ -101,7 +121,7 @@ public final class BillingCreditResponseData {
     }
 
     @JsonProperty("default_expiry_unit_count")
-    public Optional<Integer> getDefaultExpiryUnitCount() {
+    public Optional<Long> getDefaultExpiryUnitCount() {
         return defaultExpiryUnitCount;
     }
 
@@ -168,7 +188,9 @@ public final class BillingCreditResponseData {
 
     private boolean equalTo(BillingCreditResponseData other) {
         return burnStrategy.equals(other.burnStrategy)
+                && costEditable == other.costEditable
                 && createdAt.equals(other.createdAt)
+                && currencyPrices.equals(other.currencyPrices)
                 && defaultExpiryUnit.equals(other.defaultExpiryUnit)
                 && defaultExpiryUnitCount.equals(other.defaultExpiryUnitCount)
                 && defaultRolloverPolicy.equals(other.defaultRolloverPolicy)
@@ -187,7 +209,9 @@ public final class BillingCreditResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.burnStrategy,
+                this.costEditable,
                 this.createdAt,
+                this.currencyPrices,
                 this.defaultExpiryUnit,
                 this.defaultExpiryUnitCount,
                 this.defaultRolloverPolicy,
@@ -212,9 +236,13 @@ public final class BillingCreditResponseData {
     }
 
     public interface BurnStrategyStage {
-        CreatedAtStage burnStrategy(@NotNull BillingCreditBurnStrategy burnStrategy);
+        CostEditableStage burnStrategy(@NotNull BillingCreditBurnStrategy burnStrategy);
 
         Builder from(BillingCreditResponseData other);
+    }
+
+    public interface CostEditableStage {
+        CreatedAtStage costEditable(boolean costEditable);
     }
 
     public interface CreatedAtStage {
@@ -248,9 +276,19 @@ public final class BillingCreditResponseData {
     public interface _FinalStage {
         BillingCreditResponseData build();
 
-        _FinalStage defaultExpiryUnitCount(Optional<Integer> defaultExpiryUnitCount);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage defaultExpiryUnitCount(Integer defaultExpiryUnitCount);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage currencyPrices(List<CreditCurrencyPriceResponseData> currencyPrices);
+
+        _FinalStage addCurrencyPrices(CreditCurrencyPriceResponseData currencyPrices);
+
+        _FinalStage addAllCurrencyPrices(List<CreditCurrencyPriceResponseData> currencyPrices);
+
+        _FinalStage defaultExpiryUnitCount(Optional<Long> defaultExpiryUnitCount);
+
+        _FinalStage defaultExpiryUnitCount(Long defaultExpiryUnitCount);
 
         _FinalStage icon(Optional<String> icon);
 
@@ -276,6 +314,7 @@ public final class BillingCreditResponseData {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements BurnStrategyStage,
+                    CostEditableStage,
                     CreatedAtStage,
                     DefaultExpiryUnitStage,
                     DefaultRolloverPolicyStage,
@@ -285,6 +324,8 @@ public final class BillingCreditResponseData {
                     UpdatedAtStage,
                     _FinalStage {
         private BillingCreditBurnStrategy burnStrategy;
+
+        private boolean costEditable;
 
         private OffsetDateTime createdAt;
 
@@ -310,7 +351,9 @@ public final class BillingCreditResponseData {
 
         private Optional<String> icon = Optional.empty();
 
-        private Optional<Integer> defaultExpiryUnitCount = Optional.empty();
+        private Optional<Long> defaultExpiryUnitCount = Optional.empty();
+
+        private List<CreditCurrencyPriceResponseData> currencyPrices = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -320,7 +363,9 @@ public final class BillingCreditResponseData {
         @java.lang.Override
         public Builder from(BillingCreditResponseData other) {
             burnStrategy(other.getBurnStrategy());
+            costEditable(other.getCostEditable());
             createdAt(other.getCreatedAt());
+            currencyPrices(other.getCurrencyPrices());
             defaultExpiryUnit(other.getDefaultExpiryUnit());
             defaultExpiryUnitCount(other.getDefaultExpiryUnitCount());
             defaultRolloverPolicy(other.getDefaultRolloverPolicy());
@@ -338,8 +383,15 @@ public final class BillingCreditResponseData {
 
         @java.lang.Override
         @JsonSetter("burn_strategy")
-        public CreatedAtStage burnStrategy(@NotNull BillingCreditBurnStrategy burnStrategy) {
+        public CostEditableStage burnStrategy(@NotNull BillingCreditBurnStrategy burnStrategy) {
             this.burnStrategy = Objects.requireNonNull(burnStrategy, "burnStrategy must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("cost_editable")
+        public CreatedAtStage costEditable(boolean costEditable) {
+            this.costEditable = costEditable;
             return this;
         }
 
@@ -459,15 +511,39 @@ public final class BillingCreditResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage defaultExpiryUnitCount(Integer defaultExpiryUnitCount) {
+        public _FinalStage defaultExpiryUnitCount(Long defaultExpiryUnitCount) {
             this.defaultExpiryUnitCount = Optional.ofNullable(defaultExpiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "default_expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage defaultExpiryUnitCount(Optional<Integer> defaultExpiryUnitCount) {
+        public _FinalStage defaultExpiryUnitCount(Optional<Long> defaultExpiryUnitCount) {
             this.defaultExpiryUnitCount = defaultExpiryUnitCount;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCurrencyPrices(List<CreditCurrencyPriceResponseData> currencyPrices) {
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCurrencyPrices(CreditCurrencyPriceResponseData currencyPrices) {
+            this.currencyPrices.add(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(List<CreditCurrencyPriceResponseData> currencyPrices) {
+            this.currencyPrices.clear();
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
             return this;
         }
 
@@ -475,7 +551,9 @@ public final class BillingCreditResponseData {
         public BillingCreditResponseData build() {
             return new BillingCreditResponseData(
                     burnStrategy,
+                    costEditable,
                     createdAt,
+                    currencyPrices,
                     defaultExpiryUnit,
                     defaultExpiryUnitCount,
                     defaultRolloverPolicy,
@@ -489,6 +567,18 @@ public final class BillingCreditResponseData {
                     singularName,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

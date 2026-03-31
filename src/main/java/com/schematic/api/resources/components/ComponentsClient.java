@@ -39,6 +39,10 @@ public class ComponentsClient {
         return this.rawClient.listComponents().body();
     }
 
+    public ListComponentsResponse listComponents(RequestOptions requestOptions) {
+        return this.rawClient.listComponents(requestOptions).body();
+    }
+
     public ListComponentsResponse listComponents(ListComponentsRequest request) {
         return this.rawClient.listComponents(request).body();
     }
@@ -67,6 +71,10 @@ public class ComponentsClient {
         return this.rawClient.updateComponent(componentId).body();
     }
 
+    public UpdateComponentResponse updateComponent(String componentId, RequestOptions requestOptions) {
+        return this.rawClient.updateComponent(componentId, requestOptions).body();
+    }
+
     public UpdateComponentResponse updateComponent(String componentId, UpdateComponentRequestBody request) {
         return this.rawClient.updateComponent(componentId, request).body();
     }
@@ -90,6 +98,10 @@ public class ComponentsClient {
         return this.rawClient.countComponents().body();
     }
 
+    public CountComponentsResponse countComponents(RequestOptions requestOptions) {
+        return this.rawClient.countComponents(requestOptions).body();
+    }
+
     public CountComponentsResponse countComponents(CountComponentsRequest request) {
         return this.rawClient.countComponents(request).body();
     }
@@ -100,6 +112,10 @@ public class ComponentsClient {
 
     public PreviewComponentDataResponse previewComponentData() {
         return this.rawClient.previewComponentData().body();
+    }
+
+    public PreviewComponentDataResponse previewComponentData(RequestOptions requestOptions) {
+        return this.rawClient.previewComponentData(requestOptions).body();
     }
 
     public PreviewComponentDataResponse previewComponentData(PreviewComponentDataRequest request) {

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpsertTraitRequestBody.Builder.class)
 public final class UpsertTraitRequestBody {
-    private final Optional<Integer> incr;
+    private final Optional<Long> incr;
 
     private final Map<String, String> keys;
 
@@ -35,7 +35,7 @@ public final class UpsertTraitRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private UpsertTraitRequestBody(
-            Optional<Integer> incr,
+            Optional<Long> incr,
             Map<String, String> keys,
             Optional<String> set,
             String trait,
@@ -53,7 +53,7 @@ public final class UpsertTraitRequestBody {
      * @return Amount to increment the trait by (positive or negative)
      */
     @JsonProperty("incr")
-    public Optional<Integer> getIncr() {
+    public Optional<Long> getIncr() {
         return incr;
     }
 
@@ -134,12 +134,16 @@ public final class UpsertTraitRequestBody {
     public interface _FinalStage {
         UpsertTraitRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Amount to increment the trait by (positive or negative)</p>
          */
-        _FinalStage incr(Optional<Integer> incr);
+        _FinalStage incr(Optional<Long> incr);
 
-        _FinalStage incr(Integer incr);
+        _FinalStage incr(Long incr);
 
         /**
          * <p>Key/value pairs to identify a company or user</p>
@@ -175,7 +179,7 @@ public final class UpsertTraitRequestBody {
 
         private Map<String, String> keys = new LinkedHashMap<>();
 
-        private Optional<Integer> incr = Optional.empty();
+        private Optional<Long> incr = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -284,7 +288,7 @@ public final class UpsertTraitRequestBody {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage incr(Integer incr) {
+        public _FinalStage incr(Long incr) {
             this.incr = Optional.ofNullable(incr);
             return this;
         }
@@ -294,7 +298,7 @@ public final class UpsertTraitRequestBody {
          */
         @java.lang.Override
         @JsonSetter(value = "incr", nulls = Nulls.SKIP)
-        public _FinalStage incr(Optional<Integer> incr) {
+        public _FinalStage incr(Optional<Long> incr) {
             this.incr = incr;
             return this;
         }
@@ -302,6 +306,18 @@ public final class UpsertTraitRequestBody {
         @java.lang.Override
         public UpsertTraitRequestBody build() {
             return new UpsertTraitRequestBody(incr, keys, set, trait, updateOnly, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

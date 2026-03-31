@@ -56,7 +56,7 @@ public final class CompanyOverrideResponseData {
 
     private final Optional<Boolean> valueBool;
 
-    private final Optional<Integer> valueNumeric;
+    private final Optional<Long> valueNumeric;
 
     private final Optional<EntityTraitDefinitionResponseData> valueTrait;
 
@@ -83,7 +83,7 @@ public final class CompanyOverrideResponseData {
             Optional<String> ruleIdUsageExceeded,
             OffsetDateTime updatedAt,
             Optional<Boolean> valueBool,
-            Optional<Integer> valueNumeric,
+            Optional<Long> valueNumeric,
             Optional<EntityTraitDefinitionResponseData> valueTrait,
             Optional<String> valueTraitId,
             EntitlementValueType valueType,
@@ -192,7 +192,7 @@ public final class CompanyOverrideResponseData {
     }
 
     @JsonProperty("value_numeric")
-    public Optional<Integer> getValueNumeric() {
+    public Optional<Long> getValueNumeric() {
         return valueNumeric;
     }
 
@@ -312,6 +312,10 @@ public final class CompanyOverrideResponseData {
     public interface _FinalStage {
         CompanyOverrideResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage company(Optional<CompanyDetailResponseData> company);
 
         _FinalStage company(CompanyDetailResponseData company);
@@ -354,9 +358,9 @@ public final class CompanyOverrideResponseData {
 
         _FinalStage valueBool(Boolean valueBool);
 
-        _FinalStage valueNumeric(Optional<Integer> valueNumeric);
+        _FinalStage valueNumeric(Optional<Long> valueNumeric);
 
-        _FinalStage valueNumeric(Integer valueNumeric);
+        _FinalStage valueNumeric(Long valueNumeric);
 
         _FinalStage valueTrait(Optional<EntityTraitDefinitionResponseData> valueTrait);
 
@@ -395,7 +399,7 @@ public final class CompanyOverrideResponseData {
 
         private Optional<EntityTraitDefinitionResponseData> valueTrait = Optional.empty();
 
-        private Optional<Integer> valueNumeric = Optional.empty();
+        private Optional<Long> valueNumeric = Optional.empty();
 
         private Optional<Boolean> valueBool = Optional.empty();
 
@@ -523,14 +527,14 @@ public final class CompanyOverrideResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage valueNumeric(Integer valueNumeric) {
+        public _FinalStage valueNumeric(Long valueNumeric) {
             this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "value_numeric", nulls = Nulls.SKIP)
-        public _FinalStage valueNumeric(Optional<Integer> valueNumeric) {
+        public _FinalStage valueNumeric(Optional<Long> valueNumeric) {
             this.valueNumeric = valueNumeric;
             return this;
         }
@@ -700,6 +704,18 @@ public final class CompanyOverrideResponseData {
                     valueTraitId,
                     valueType,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }
