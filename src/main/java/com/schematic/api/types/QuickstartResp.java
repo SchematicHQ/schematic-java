@@ -69,6 +69,10 @@ public final class QuickstartResp {
 
     public interface _FinalStage {
         QuickstartResp build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -96,6 +100,18 @@ public final class QuickstartResp {
         @java.lang.Override
         public QuickstartResp build() {
             return new QuickstartResp(ok, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

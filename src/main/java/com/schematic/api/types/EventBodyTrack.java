@@ -134,6 +134,10 @@ public final class EventBodyTrack {
     public interface _FinalStage {
         EventBodyTrack build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Key-value pairs to identify company associated with track event</p>
          */
@@ -285,6 +289,18 @@ public final class EventBodyTrack {
         @java.lang.Override
         public EventBodyTrack build() {
             return new EventBodyTrack(company, event, quantity, traits, user, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

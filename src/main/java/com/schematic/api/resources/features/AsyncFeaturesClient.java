@@ -54,6 +54,10 @@ public class AsyncFeaturesClient {
         return this.rawClient.listFeatures().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListFeaturesResponse> listFeatures(RequestOptions requestOptions) {
+        return this.rawClient.listFeatures(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListFeaturesResponse> listFeatures(ListFeaturesRequest request) {
         return this.rawClient.listFeatures(request).thenApply(response -> response.body());
     }
@@ -84,6 +88,10 @@ public class AsyncFeaturesClient {
         return this.rawClient.updateFeature(featureId).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<UpdateFeatureResponse> updateFeature(String featureId, RequestOptions requestOptions) {
+        return this.rawClient.updateFeature(featureId, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<UpdateFeatureResponse> updateFeature(String featureId, UpdateFeatureRequestBody request) {
         return this.rawClient.updateFeature(featureId, request).thenApply(response -> response.body());
     }
@@ -105,6 +113,10 @@ public class AsyncFeaturesClient {
         return this.rawClient.countFeatures().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountFeaturesResponse> countFeatures(RequestOptions requestOptions) {
+        return this.rawClient.countFeatures(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountFeaturesResponse> countFeatures(CountFeaturesRequest request) {
         return this.rawClient.countFeatures(request).thenApply(response -> response.body());
     }
@@ -116,6 +128,10 @@ public class AsyncFeaturesClient {
 
     public CompletableFuture<ListFlagsResponse> listFlags() {
         return this.rawClient.listFlags().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListFlagsResponse> listFlags(RequestOptions requestOptions) {
+        return this.rawClient.listFlags(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListFlagsResponse> listFlags(ListFlagsRequest request) {
@@ -174,6 +190,10 @@ public class AsyncFeaturesClient {
         return this.rawClient.checkFlag(key).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CheckFlagResponse> checkFlag(String key, RequestOptions requestOptions) {
+        return this.rawClient.checkFlag(key, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CheckFlagResponse> checkFlag(String key, CheckFlagRequestBody request) {
         return this.rawClient.checkFlag(key, request).thenApply(response -> response.body());
     }
@@ -185,6 +205,10 @@ public class AsyncFeaturesClient {
 
     public CompletableFuture<CheckFlagsResponse> checkFlags() {
         return this.rawClient.checkFlags().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CheckFlagsResponse> checkFlags(RequestOptions requestOptions) {
+        return this.rawClient.checkFlags(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CheckFlagsResponse> checkFlags(CheckFlagRequestBody request) {
@@ -207,6 +231,10 @@ public class AsyncFeaturesClient {
 
     public CompletableFuture<CountFlagsResponse> countFlags() {
         return this.rawClient.countFlags().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountFlagsResponse> countFlags(RequestOptions requestOptions) {
+        return this.rawClient.countFlags(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountFlagsResponse> countFlags(CountFlagsRequest request) {

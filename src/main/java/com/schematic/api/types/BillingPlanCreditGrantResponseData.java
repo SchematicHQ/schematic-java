@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingPlanCreditGrantResponseData.Builder.class)
 public final class BillingPlanCreditGrantResponseData {
-    private final Optional<Integer> autoTopupAmount;
+    private final Optional<Long> autoTopupAmount;
 
     private final Optional<String> autoTopupAmountType;
 
@@ -32,13 +32,15 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit;
 
-    private final Optional<Integer> autoTopupExpiryUnitCount;
+    private final Optional<Long> autoTopupExpiryUnitCount;
 
-    private final Optional<Integer> autoTopupThresholdPercent;
+    private final Optional<Long> autoTopupThresholdPercent;
 
     private final OffsetDateTime createdAt;
 
-    private final int creditAmount;
+    private final Optional<BillingCreditResponseData> credit;
+
+    private final long creditAmount;
 
     private final String creditId;
 
@@ -52,7 +54,7 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
-    private final Optional<Integer> expiryUnitCount;
+    private final Optional<Long> expiryUnitCount;
 
     private final String id;
 
@@ -62,9 +64,11 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final String planName;
 
-    private final BillingPlanCreditGrantResetCadence resetCadence;
+    private final Optional<String> planVersionId;
 
-    private final BillingPlanCreditGrantResetStart resetStart;
+    private final Optional<BillingPlanCreditGrantResetCadence> resetCadence;
+
+    private final Optional<BillingPlanCreditGrantResetStart> resetStart;
 
     private final Optional<BillingPlanCreditGrantResetType> resetType;
 
@@ -73,28 +77,30 @@ public final class BillingPlanCreditGrantResponseData {
     private final Map<String, Object> additionalProperties;
 
     private BillingPlanCreditGrantResponseData(
-            Optional<Integer> autoTopupAmount,
+            Optional<Long> autoTopupAmount,
             Optional<String> autoTopupAmountType,
             boolean autoTopupEnabled,
             Optional<BillingCreditExpiryType> autoTopupExpiryType,
             Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit,
-            Optional<Integer> autoTopupExpiryUnitCount,
-            Optional<Integer> autoTopupThresholdPercent,
+            Optional<Long> autoTopupExpiryUnitCount,
+            Optional<Long> autoTopupThresholdPercent,
             OffsetDateTime createdAt,
-            int creditAmount,
+            Optional<BillingCreditResponseData> credit,
+            long creditAmount,
             String creditId,
             String creditName,
             Optional<String> creditPluralName,
             Optional<String> creditSingularName,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
-            Optional<Integer> expiryUnitCount,
+            Optional<Long> expiryUnitCount,
             String id,
             Optional<PreviewObjectResponseData> plan,
             String planId,
             String planName,
-            BillingPlanCreditGrantResetCadence resetCadence,
-            BillingPlanCreditGrantResetStart resetStart,
+            Optional<String> planVersionId,
+            Optional<BillingPlanCreditGrantResetCadence> resetCadence,
+            Optional<BillingPlanCreditGrantResetStart> resetStart,
             Optional<BillingPlanCreditGrantResetType> resetType,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -106,6 +112,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.autoTopupExpiryUnitCount = autoTopupExpiryUnitCount;
         this.autoTopupThresholdPercent = autoTopupThresholdPercent;
         this.createdAt = createdAt;
+        this.credit = credit;
         this.creditAmount = creditAmount;
         this.creditId = creditId;
         this.creditName = creditName;
@@ -118,6 +125,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.plan = plan;
         this.planId = planId;
         this.planName = planName;
+        this.planVersionId = planVersionId;
         this.resetCadence = resetCadence;
         this.resetStart = resetStart;
         this.resetType = resetType;
@@ -126,7 +134,7 @@ public final class BillingPlanCreditGrantResponseData {
     }
 
     @JsonProperty("auto_topup_amount")
-    public Optional<Integer> getAutoTopupAmount() {
+    public Optional<Long> getAutoTopupAmount() {
         return autoTopupAmount;
     }
 
@@ -151,12 +159,12 @@ public final class BillingPlanCreditGrantResponseData {
     }
 
     @JsonProperty("auto_topup_expiry_unit_count")
-    public Optional<Integer> getAutoTopupExpiryUnitCount() {
+    public Optional<Long> getAutoTopupExpiryUnitCount() {
         return autoTopupExpiryUnitCount;
     }
 
     @JsonProperty("auto_topup_threshold_percent")
-    public Optional<Integer> getAutoTopupThresholdPercent() {
+    public Optional<Long> getAutoTopupThresholdPercent() {
         return autoTopupThresholdPercent;
     }
 
@@ -165,8 +173,13 @@ public final class BillingPlanCreditGrantResponseData {
         return createdAt;
     }
 
+    @JsonProperty("credit")
+    public Optional<BillingCreditResponseData> getCredit() {
+        return credit;
+    }
+
     @JsonProperty("credit_amount")
-    public int getCreditAmount() {
+    public long getCreditAmount() {
         return creditAmount;
     }
 
@@ -175,16 +188,25 @@ public final class BillingPlanCreditGrantResponseData {
         return creditId;
     }
 
+    /**
+     * @return Use credit.name from the nested credit object instead
+     */
     @JsonProperty("credit_name")
     public String getCreditName() {
         return creditName;
     }
 
+    /**
+     * @return Use plural_name from the nested credit object instead
+     */
     @JsonProperty("credit_plural_name")
     public Optional<String> getCreditPluralName() {
         return creditPluralName;
     }
 
+    /**
+     * @return Use singular_name from the nested credit object instead
+     */
     @JsonProperty("credit_singular_name")
     public Optional<String> getCreditSingularName() {
         return creditSingularName;
@@ -201,7 +223,7 @@ public final class BillingPlanCreditGrantResponseData {
     }
 
     @JsonProperty("expiry_unit_count")
-    public Optional<Integer> getExpiryUnitCount() {
+    public Optional<Long> getExpiryUnitCount() {
         return expiryUnitCount;
     }
 
@@ -228,13 +250,18 @@ public final class BillingPlanCreditGrantResponseData {
         return planName;
     }
 
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
+    }
+
     @JsonProperty("reset_cadence")
-    public BillingPlanCreditGrantResetCadence getResetCadence() {
+    public Optional<BillingPlanCreditGrantResetCadence> getResetCadence() {
         return resetCadence;
     }
 
     @JsonProperty("reset_start")
-    public BillingPlanCreditGrantResetStart getResetStart() {
+    public Optional<BillingPlanCreditGrantResetStart> getResetStart() {
         return resetStart;
     }
 
@@ -269,6 +296,7 @@ public final class BillingPlanCreditGrantResponseData {
                 && autoTopupExpiryUnitCount.equals(other.autoTopupExpiryUnitCount)
                 && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
                 && createdAt.equals(other.createdAt)
+                && credit.equals(other.credit)
                 && creditAmount == other.creditAmount
                 && creditId.equals(other.creditId)
                 && creditName.equals(other.creditName)
@@ -281,6 +309,7 @@ public final class BillingPlanCreditGrantResponseData {
                 && plan.equals(other.plan)
                 && planId.equals(other.planId)
                 && planName.equals(other.planName)
+                && planVersionId.equals(other.planVersionId)
                 && resetCadence.equals(other.resetCadence)
                 && resetStart.equals(other.resetStart)
                 && resetType.equals(other.resetType)
@@ -298,6 +327,7 @@ public final class BillingPlanCreditGrantResponseData {
                 this.autoTopupExpiryUnitCount,
                 this.autoTopupThresholdPercent,
                 this.createdAt,
+                this.credit,
                 this.creditAmount,
                 this.creditId,
                 this.creditName,
@@ -310,6 +340,7 @@ public final class BillingPlanCreditGrantResponseData {
                 this.plan,
                 this.planId,
                 this.planName,
+                this.planVersionId,
                 this.resetCadence,
                 this.resetStart,
                 this.resetType,
@@ -336,7 +367,7 @@ public final class BillingPlanCreditGrantResponseData {
     }
 
     public interface CreditAmountStage {
-        CreditIdStage creditAmount(int creditAmount);
+        CreditIdStage creditAmount(long creditAmount);
     }
 
     public interface CreditIdStage {
@@ -344,6 +375,9 @@ public final class BillingPlanCreditGrantResponseData {
     }
 
     public interface CreditNameStage {
+        /**
+         * <p>Use credit.name from the nested credit object instead</p>
+         */
         IdStage creditName(@NotNull String creditName);
     }
 
@@ -359,15 +393,7 @@ public final class BillingPlanCreditGrantResponseData {
         /**
          * <p>Use plan.name from the nested plan object instead</p>
          */
-        ResetCadenceStage planName(@NotNull String planName);
-    }
-
-    public interface ResetCadenceStage {
-        ResetStartStage resetCadence(@NotNull BillingPlanCreditGrantResetCadence resetCadence);
-    }
-
-    public interface ResetStartStage {
-        UpdatedAtStage resetStart(@NotNull BillingPlanCreditGrantResetStart resetStart);
+        UpdatedAtStage planName(@NotNull String planName);
     }
 
     public interface UpdatedAtStage {
@@ -377,9 +403,13 @@ public final class BillingPlanCreditGrantResponseData {
     public interface _FinalStage {
         BillingPlanCreditGrantResponseData build();
 
-        _FinalStage autoTopupAmount(Optional<Integer> autoTopupAmount);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage autoTopupAmount(Integer autoTopupAmount);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage autoTopupAmount(Optional<Long> autoTopupAmount);
+
+        _FinalStage autoTopupAmount(Long autoTopupAmount);
 
         _FinalStage autoTopupAmountType(Optional<String> autoTopupAmountType);
 
@@ -393,18 +423,28 @@ public final class BillingPlanCreditGrantResponseData {
 
         _FinalStage autoTopupExpiryUnit(BillingCreditExpiryUnit autoTopupExpiryUnit);
 
-        _FinalStage autoTopupExpiryUnitCount(Optional<Integer> autoTopupExpiryUnitCount);
+        _FinalStage autoTopupExpiryUnitCount(Optional<Long> autoTopupExpiryUnitCount);
 
-        _FinalStage autoTopupExpiryUnitCount(Integer autoTopupExpiryUnitCount);
+        _FinalStage autoTopupExpiryUnitCount(Long autoTopupExpiryUnitCount);
 
-        _FinalStage autoTopupThresholdPercent(Optional<Integer> autoTopupThresholdPercent);
+        _FinalStage autoTopupThresholdPercent(Optional<Long> autoTopupThresholdPercent);
 
-        _FinalStage autoTopupThresholdPercent(Integer autoTopupThresholdPercent);
+        _FinalStage autoTopupThresholdPercent(Long autoTopupThresholdPercent);
 
+        _FinalStage credit(Optional<BillingCreditResponseData> credit);
+
+        _FinalStage credit(BillingCreditResponseData credit);
+
+        /**
+         * <p>Use plural_name from the nested credit object instead</p>
+         */
         _FinalStage creditPluralName(Optional<String> creditPluralName);
 
         _FinalStage creditPluralName(String creditPluralName);
 
+        /**
+         * <p>Use singular_name from the nested credit object instead</p>
+         */
         _FinalStage creditSingularName(Optional<String> creditSingularName);
 
         _FinalStage creditSingularName(String creditSingularName);
@@ -417,13 +457,25 @@ public final class BillingPlanCreditGrantResponseData {
 
         _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
-        _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
+        _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount);
 
-        _FinalStage expiryUnitCount(Integer expiryUnitCount);
+        _FinalStage expiryUnitCount(Long expiryUnitCount);
 
         _FinalStage plan(Optional<PreviewObjectResponseData> plan);
 
         _FinalStage plan(PreviewObjectResponseData plan);
+
+        _FinalStage planVersionId(Optional<String> planVersionId);
+
+        _FinalStage planVersionId(String planVersionId);
+
+        _FinalStage resetCadence(Optional<BillingPlanCreditGrantResetCadence> resetCadence);
+
+        _FinalStage resetCadence(BillingPlanCreditGrantResetCadence resetCadence);
+
+        _FinalStage resetStart(Optional<BillingPlanCreditGrantResetStart> resetStart);
+
+        _FinalStage resetStart(BillingPlanCreditGrantResetStart resetStart);
 
         _FinalStage resetType(Optional<BillingPlanCreditGrantResetType> resetType);
 
@@ -440,15 +492,13 @@ public final class BillingPlanCreditGrantResponseData {
                     IdStage,
                     PlanIdStage,
                     PlanNameStage,
-                    ResetCadenceStage,
-                    ResetStartStage,
                     UpdatedAtStage,
                     _FinalStage {
         private boolean autoTopupEnabled;
 
         private OffsetDateTime createdAt;
 
-        private int creditAmount;
+        private long creditAmount;
 
         private String creditId;
 
@@ -460,17 +510,19 @@ public final class BillingPlanCreditGrantResponseData {
 
         private String planName;
 
-        private BillingPlanCreditGrantResetCadence resetCadence;
-
-        private BillingPlanCreditGrantResetStart resetStart;
-
         private OffsetDateTime updatedAt;
 
         private Optional<BillingPlanCreditGrantResetType> resetType = Optional.empty();
 
+        private Optional<BillingPlanCreditGrantResetStart> resetStart = Optional.empty();
+
+        private Optional<BillingPlanCreditGrantResetCadence> resetCadence = Optional.empty();
+
+        private Optional<String> planVersionId = Optional.empty();
+
         private Optional<PreviewObjectResponseData> plan = Optional.empty();
 
-        private Optional<Integer> expiryUnitCount = Optional.empty();
+        private Optional<Long> expiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
@@ -480,9 +532,11 @@ public final class BillingPlanCreditGrantResponseData {
 
         private Optional<String> creditPluralName = Optional.empty();
 
-        private Optional<Integer> autoTopupThresholdPercent = Optional.empty();
+        private Optional<BillingCreditResponseData> credit = Optional.empty();
 
-        private Optional<Integer> autoTopupExpiryUnitCount = Optional.empty();
+        private Optional<Long> autoTopupThresholdPercent = Optional.empty();
+
+        private Optional<Long> autoTopupExpiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit = Optional.empty();
 
@@ -490,7 +544,7 @@ public final class BillingPlanCreditGrantResponseData {
 
         private Optional<String> autoTopupAmountType = Optional.empty();
 
-        private Optional<Integer> autoTopupAmount = Optional.empty();
+        private Optional<Long> autoTopupAmount = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -507,6 +561,7 @@ public final class BillingPlanCreditGrantResponseData {
             autoTopupExpiryUnitCount(other.getAutoTopupExpiryUnitCount());
             autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
             createdAt(other.getCreatedAt());
+            credit(other.getCredit());
             creditAmount(other.getCreditAmount());
             creditId(other.getCreditId());
             creditName(other.getCreditName());
@@ -519,6 +574,7 @@ public final class BillingPlanCreditGrantResponseData {
             plan(other.getPlan());
             planId(other.getPlanId());
             planName(other.getPlanName());
+            planVersionId(other.getPlanVersionId());
             resetCadence(other.getResetCadence());
             resetStart(other.getResetStart());
             resetType(other.getResetType());
@@ -542,7 +598,7 @@ public final class BillingPlanCreditGrantResponseData {
 
         @java.lang.Override
         @JsonSetter("credit_amount")
-        public CreditIdStage creditAmount(int creditAmount) {
+        public CreditIdStage creditAmount(long creditAmount) {
             this.creditAmount = creditAmount;
             return this;
         }
@@ -554,6 +610,11 @@ public final class BillingPlanCreditGrantResponseData {
             return this;
         }
 
+        /**
+         * <p>Use credit.name from the nested credit object instead</p>
+         * <p>Use credit.name from the nested credit object instead</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("credit_name")
         public IdStage creditName(@NotNull String creditName) {
@@ -582,22 +643,8 @@ public final class BillingPlanCreditGrantResponseData {
          */
         @java.lang.Override
         @JsonSetter("plan_name")
-        public ResetCadenceStage planName(@NotNull String planName) {
+        public UpdatedAtStage planName(@NotNull String planName) {
             this.planName = Objects.requireNonNull(planName, "planName must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("reset_cadence")
-        public ResetStartStage resetCadence(@NotNull BillingPlanCreditGrantResetCadence resetCadence) {
-            this.resetCadence = Objects.requireNonNull(resetCadence, "resetCadence must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("reset_start")
-        public UpdatedAtStage resetStart(@NotNull BillingPlanCreditGrantResetStart resetStart) {
-            this.resetStart = Objects.requireNonNull(resetStart, "resetStart must not be null");
             return this;
         }
 
@@ -622,6 +669,45 @@ public final class BillingPlanCreditGrantResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage resetStart(BillingPlanCreditGrantResetStart resetStart) {
+            this.resetStart = Optional.ofNullable(resetStart);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "reset_start", nulls = Nulls.SKIP)
+        public _FinalStage resetStart(Optional<BillingPlanCreditGrantResetStart> resetStart) {
+            this.resetStart = resetStart;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage resetCadence(BillingPlanCreditGrantResetCadence resetCadence) {
+            this.resetCadence = Optional.ofNullable(resetCadence);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "reset_cadence", nulls = Nulls.SKIP)
+        public _FinalStage resetCadence(Optional<BillingPlanCreditGrantResetCadence> resetCadence) {
+            this.resetCadence = resetCadence;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public _FinalStage planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage plan(PreviewObjectResponseData plan) {
             this.plan = Optional.ofNullable(plan);
             return this;
@@ -635,14 +721,14 @@ public final class BillingPlanCreditGrantResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnitCount(Integer expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Long expiryUnitCount) {
             this.expiryUnitCount = Optional.ofNullable(expiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount) {
             this.expiryUnitCount = expiryUnitCount;
             return this;
         }
@@ -673,12 +759,19 @@ public final class BillingPlanCreditGrantResponseData {
             return this;
         }
 
+        /**
+         * <p>Use singular_name from the nested credit object instead</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage creditSingularName(String creditSingularName) {
             this.creditSingularName = Optional.ofNullable(creditSingularName);
             return this;
         }
 
+        /**
+         * <p>Use singular_name from the nested credit object instead</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "credit_singular_name", nulls = Nulls.SKIP)
         public _FinalStage creditSingularName(Optional<String> creditSingularName) {
@@ -686,12 +779,19 @@ public final class BillingPlanCreditGrantResponseData {
             return this;
         }
 
+        /**
+         * <p>Use plural_name from the nested credit object instead</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage creditPluralName(String creditPluralName) {
             this.creditPluralName = Optional.ofNullable(creditPluralName);
             return this;
         }
 
+        /**
+         * <p>Use plural_name from the nested credit object instead</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "credit_plural_name", nulls = Nulls.SKIP)
         public _FinalStage creditPluralName(Optional<String> creditPluralName) {
@@ -700,27 +800,40 @@ public final class BillingPlanCreditGrantResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage autoTopupThresholdPercent(Integer autoTopupThresholdPercent) {
+        public _FinalStage credit(BillingCreditResponseData credit) {
+            this.credit = Optional.ofNullable(credit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit", nulls = Nulls.SKIP)
+        public _FinalStage credit(Optional<BillingCreditResponseData> credit) {
+            this.credit = credit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage autoTopupThresholdPercent(Long autoTopupThresholdPercent) {
             this.autoTopupThresholdPercent = Optional.ofNullable(autoTopupThresholdPercent);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "auto_topup_threshold_percent", nulls = Nulls.SKIP)
-        public _FinalStage autoTopupThresholdPercent(Optional<Integer> autoTopupThresholdPercent) {
+        public _FinalStage autoTopupThresholdPercent(Optional<Long> autoTopupThresholdPercent) {
             this.autoTopupThresholdPercent = autoTopupThresholdPercent;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage autoTopupExpiryUnitCount(Integer autoTopupExpiryUnitCount) {
+        public _FinalStage autoTopupExpiryUnitCount(Long autoTopupExpiryUnitCount) {
             this.autoTopupExpiryUnitCount = Optional.ofNullable(autoTopupExpiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "auto_topup_expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage autoTopupExpiryUnitCount(Optional<Integer> autoTopupExpiryUnitCount) {
+        public _FinalStage autoTopupExpiryUnitCount(Optional<Long> autoTopupExpiryUnitCount) {
             this.autoTopupExpiryUnitCount = autoTopupExpiryUnitCount;
             return this;
         }
@@ -765,14 +878,14 @@ public final class BillingPlanCreditGrantResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage autoTopupAmount(Integer autoTopupAmount) {
+        public _FinalStage autoTopupAmount(Long autoTopupAmount) {
             this.autoTopupAmount = Optional.ofNullable(autoTopupAmount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "auto_topup_amount", nulls = Nulls.SKIP)
-        public _FinalStage autoTopupAmount(Optional<Integer> autoTopupAmount) {
+        public _FinalStage autoTopupAmount(Optional<Long> autoTopupAmount) {
             this.autoTopupAmount = autoTopupAmount;
             return this;
         }
@@ -788,6 +901,7 @@ public final class BillingPlanCreditGrantResponseData {
                     autoTopupExpiryUnitCount,
                     autoTopupThresholdPercent,
                     createdAt,
+                    credit,
                     creditAmount,
                     creditId,
                     creditName,
@@ -800,11 +914,24 @@ public final class BillingPlanCreditGrantResponseData {
                     plan,
                     planId,
                     planName,
+                    planVersionId,
                     resetCadence,
                     resetStart,
                     resetType,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -42,7 +42,7 @@ public final class PlanVersionResponseData {
 
     private final OffsetDateTime updatedAt;
 
-    private final int version;
+    private final long version;
 
     private final Map<String, Object> additionalProperties;
 
@@ -57,7 +57,7 @@ public final class PlanVersionResponseData {
             PlanType planType,
             PlanVersionStatus status,
             OffsetDateTime updatedAt,
-            int version,
+            long version,
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.description = description;
@@ -124,7 +124,7 @@ public final class PlanVersionResponseData {
     }
 
     @JsonProperty("version")
-    public int getVersion() {
+    public long getVersion() {
         return version;
     }
 
@@ -217,11 +217,15 @@ public final class PlanVersionResponseData {
     }
 
     public interface VersionStage {
-        _FinalStage version(int version);
+        _FinalStage version(long version);
     }
 
     public interface _FinalStage {
         PlanVersionResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage originalPlanId(Optional<String> originalPlanId);
 
@@ -259,7 +263,7 @@ public final class PlanVersionResponseData {
 
         private OffsetDateTime updatedAt;
 
-        private int version;
+        private long version;
 
         private Optional<String> originalPlanId = Optional.empty();
 
@@ -349,7 +353,7 @@ public final class PlanVersionResponseData {
 
         @java.lang.Override
         @JsonSetter("version")
-        public _FinalStage version(int version) {
+        public _FinalStage version(long version) {
             this.version = version;
             return this;
         }
@@ -382,6 +386,18 @@ public final class PlanVersionResponseData {
                     updatedAt,
                     version,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

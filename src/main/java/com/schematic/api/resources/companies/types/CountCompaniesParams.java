@@ -28,15 +28,17 @@ public final class CountCompaniesParams {
 
     private final Optional<List<String>> ids;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
     private final Optional<Boolean> monetizedSubscriptions;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Optional<String> planId;
 
     private final Optional<List<String>> planIds;
+
+    private final Optional<String> planVersionId;
 
     private final Optional<String> q;
 
@@ -47,6 +49,8 @@ public final class CountCompaniesParams {
     private final Optional<List<SubscriptionStatus>> subscriptionStatuses;
 
     private final Optional<List<SubscriptionType>> subscriptionTypes;
+
+    private final Optional<String> withEntitlementFor;
 
     private final Optional<Boolean> withSubscription;
 
@@ -61,16 +65,18 @@ public final class CountCompaniesParams {
     private CountCompaniesParams(
             Optional<List<String>> creditTypeIds,
             Optional<List<String>> ids,
-            Optional<Integer> limit,
+            Optional<Long> limit,
             Optional<Boolean> monetizedSubscriptions,
-            Optional<Integer> offset,
+            Optional<Long> offset,
             Optional<String> planId,
             Optional<List<String>> planIds,
+            Optional<String> planVersionId,
             Optional<String> q,
             Optional<String> sortOrderColumn,
             Optional<SortDirection> sortOrderDirection,
             Optional<List<SubscriptionStatus>> subscriptionStatuses,
             Optional<List<SubscriptionType>> subscriptionTypes,
+            Optional<String> withEntitlementFor,
             Optional<Boolean> withSubscription,
             Optional<String> withoutFeatureOverrideFor,
             Optional<Boolean> withoutPlan,
@@ -83,11 +89,13 @@ public final class CountCompaniesParams {
         this.offset = offset;
         this.planId = planId;
         this.planIds = planIds;
+        this.planVersionId = planVersionId;
         this.q = q;
         this.sortOrderColumn = sortOrderColumn;
         this.sortOrderDirection = sortOrderDirection;
         this.subscriptionStatuses = subscriptionStatuses;
         this.subscriptionTypes = subscriptionTypes;
+        this.withEntitlementFor = withEntitlementFor;
         this.withSubscription = withSubscription;
         this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
         this.withoutPlan = withoutPlan;
@@ -115,7 +123,7 @@ public final class CountCompaniesParams {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -131,7 +139,7 @@ public final class CountCompaniesParams {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -152,6 +160,14 @@ public final class CountCompaniesParams {
     }
 
     /**
+     * @return Filter companies by plan version ID (starts with plvr_)
+     */
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
+    }
+
+    /**
      * @return Search for companies by name, keys or string traits
      */
     @JsonProperty("q")
@@ -167,6 +183,9 @@ public final class CountCompaniesParams {
         return sortOrderColumn;
     }
 
+    /**
+     * @return Direction to sort by (asc or desc)
+     */
     @JsonProperty("sort_order_direction")
     public Optional<SortDirection> getSortOrderDirection() {
         return sortOrderDirection;
@@ -186,6 +205,14 @@ public final class CountCompaniesParams {
     @JsonProperty("subscription_types")
     public Optional<List<SubscriptionType>> getSubscriptionTypes() {
         return subscriptionTypes;
+    }
+
+    /**
+     * @return Filter companies that have an entitlement (plan entitlement or company override) for the specified feature ID
+     */
+    @JsonProperty("with_entitlement_for")
+    public Optional<String> getWithEntitlementFor() {
+        return withEntitlementFor;
     }
 
     /**
@@ -239,11 +266,13 @@ public final class CountCompaniesParams {
                 && offset.equals(other.offset)
                 && planId.equals(other.planId)
                 && planIds.equals(other.planIds)
+                && planVersionId.equals(other.planVersionId)
                 && q.equals(other.q)
                 && sortOrderColumn.equals(other.sortOrderColumn)
                 && sortOrderDirection.equals(other.sortOrderDirection)
                 && subscriptionStatuses.equals(other.subscriptionStatuses)
                 && subscriptionTypes.equals(other.subscriptionTypes)
+                && withEntitlementFor.equals(other.withEntitlementFor)
                 && withSubscription.equals(other.withSubscription)
                 && withoutFeatureOverrideFor.equals(other.withoutFeatureOverrideFor)
                 && withoutPlan.equals(other.withoutPlan)
@@ -260,11 +289,13 @@ public final class CountCompaniesParams {
                 this.offset,
                 this.planId,
                 this.planIds,
+                this.planVersionId,
                 this.q,
                 this.sortOrderColumn,
                 this.sortOrderDirection,
                 this.subscriptionStatuses,
                 this.subscriptionTypes,
+                this.withEntitlementFor,
                 this.withSubscription,
                 this.withoutFeatureOverrideFor,
                 this.withoutPlan,
@@ -286,15 +317,17 @@ public final class CountCompaniesParams {
 
         private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
         private Optional<Boolean> monetizedSubscriptions = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         private Optional<String> planId = Optional.empty();
 
         private Optional<List<String>> planIds = Optional.empty();
+
+        private Optional<String> planVersionId = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -305,6 +338,8 @@ public final class CountCompaniesParams {
         private Optional<List<SubscriptionStatus>> subscriptionStatuses = Optional.empty();
 
         private Optional<List<SubscriptionType>> subscriptionTypes = Optional.empty();
+
+        private Optional<String> withEntitlementFor = Optional.empty();
 
         private Optional<Boolean> withSubscription = Optional.empty();
 
@@ -327,11 +362,13 @@ public final class CountCompaniesParams {
             offset(other.getOffset());
             planId(other.getPlanId());
             planIds(other.getPlanIds());
+            planVersionId(other.getPlanVersionId());
             q(other.getQ());
             sortOrderColumn(other.getSortOrderColumn());
             sortOrderDirection(other.getSortOrderDirection());
             subscriptionStatuses(other.getSubscriptionStatuses());
             subscriptionTypes(other.getSubscriptionTypes());
+            withEntitlementFor(other.getWithEntitlementFor());
             withSubscription(other.getWithSubscription());
             withoutFeatureOverrideFor(other.getWithoutFeatureOverrideFor());
             withoutPlan(other.getWithoutPlan());
@@ -371,12 +408,12 @@ public final class CountCompaniesParams {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -399,12 +436,12 @@ public final class CountCompaniesParams {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -438,6 +475,20 @@ public final class CountCompaniesParams {
         }
 
         /**
+         * <p>Filter companies by plan version ID (starts with plvr_)</p>
+         */
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
+        /**
          * <p>Search for companies by name, keys or string traits</p>
          */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
@@ -465,6 +516,9 @@ public final class CountCompaniesParams {
             return this;
         }
 
+        /**
+         * <p>Direction to sort by (asc or desc)</p>
+         */
         @JsonSetter(value = "sort_order_direction", nulls = Nulls.SKIP)
         public Builder sortOrderDirection(Optional<SortDirection> sortOrderDirection) {
             this.sortOrderDirection = sortOrderDirection;
@@ -501,6 +555,20 @@ public final class CountCompaniesParams {
 
         public Builder subscriptionTypes(List<SubscriptionType> subscriptionTypes) {
             this.subscriptionTypes = Optional.ofNullable(subscriptionTypes);
+            return this;
+        }
+
+        /**
+         * <p>Filter companies that have an entitlement (plan entitlement or company override) for the specified feature ID</p>
+         */
+        @JsonSetter(value = "with_entitlement_for", nulls = Nulls.SKIP)
+        public Builder withEntitlementFor(Optional<String> withEntitlementFor) {
+            this.withEntitlementFor = withEntitlementFor;
+            return this;
+        }
+
+        public Builder withEntitlementFor(String withEntitlementFor) {
+            this.withEntitlementFor = Optional.ofNullable(withEntitlementFor);
             return this;
         }
 
@@ -569,16 +637,28 @@ public final class CountCompaniesParams {
                     offset,
                     planId,
                     planIds,
+                    planVersionId,
                     q,
                     sortOrderColumn,
                     sortOrderDirection,
                     subscriptionStatuses,
                     subscriptionTypes,
+                    withEntitlementFor,
                     withSubscription,
                     withoutFeatureOverrideFor,
                     withoutPlan,
                     withoutSubscription,
                     additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

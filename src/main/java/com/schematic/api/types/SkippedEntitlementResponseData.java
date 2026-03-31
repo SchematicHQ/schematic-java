@@ -114,6 +114,10 @@ public final class SkippedEntitlementResponseData {
     public interface _FinalStage {
         SkippedEntitlementResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage errors(List<SkippedEntitlementErrorResponseData> errors);
 
         _FinalStage addErrors(SkippedEntitlementErrorResponseData errors);
@@ -194,6 +198,18 @@ public final class SkippedEntitlementResponseData {
         public SkippedEntitlementResponseData build() {
             return new SkippedEntitlementResponseData(
                     entitlementId, errors, featureId, featureName, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

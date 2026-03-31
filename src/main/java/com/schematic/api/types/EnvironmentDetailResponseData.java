@@ -143,6 +143,10 @@ public final class EnvironmentDetailResponseData {
     public interface _FinalStage {
         EnvironmentDetailResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage apiKeys(List<ApiKeyResponseData> apiKeys);
 
         _FinalStage addApiKeys(ApiKeyResponseData apiKeys);
@@ -244,6 +248,18 @@ public final class EnvironmentDetailResponseData {
         public EnvironmentDetailResponseData build() {
             return new EnvironmentDetailResponseData(
                     apiKeys, createdAt, environmentType, id, name, updatedAt, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

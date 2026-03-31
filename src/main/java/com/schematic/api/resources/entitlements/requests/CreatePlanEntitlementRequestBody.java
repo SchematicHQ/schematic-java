@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreatePlanEntitlementRequestBody {
     private final Optional<String> billingProductId;
 
-    private final Optional<Integer> billingThreshold;
+    private final Optional<Long> billingThreshold;
 
     private final Optional<Double> creditConsumptionRate;
 
@@ -46,7 +46,7 @@ public final class CreatePlanEntitlementRequestBody {
 
     private final Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers;
 
-    private final Optional<Integer> monthlyUnitPrice;
+    private final Optional<Long> monthlyUnitPrice;
 
     private final Optional<String> monthlyUnitPriceDecimal;
 
@@ -54,11 +54,13 @@ public final class CreatePlanEntitlementRequestBody {
 
     private final String planId;
 
+    private final Optional<String> planVersionId;
+
     private final Optional<EntitlementPriceBehavior> priceBehavior;
 
     private final Optional<List<CreatePriceTierRequestBody>> priceTiers;
 
-    private final Optional<Integer> softLimit;
+    private final Optional<Long> softLimit;
 
     private final Optional<BillingTiersMode> tierMode;
 
@@ -66,7 +68,7 @@ public final class CreatePlanEntitlementRequestBody {
 
     private final Optional<String> valueCreditId;
 
-    private final Optional<Integer> valueNumeric;
+    private final Optional<Long> valueNumeric;
 
     private final Optional<String> valueTraitId;
 
@@ -76,7 +78,7 @@ public final class CreatePlanEntitlementRequestBody {
 
     private final Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers;
 
-    private final Optional<Integer> yearlyUnitPrice;
+    private final Optional<Long> yearlyUnitPrice;
 
     private final Optional<String> yearlyUnitPriceDecimal;
 
@@ -84,7 +86,7 @@ public final class CreatePlanEntitlementRequestBody {
 
     private CreatePlanEntitlementRequestBody(
             Optional<String> billingProductId,
-            Optional<Integer> billingThreshold,
+            Optional<Long> billingThreshold,
             Optional<Double> creditConsumptionRate,
             Optional<String> currency,
             String featureId,
@@ -92,22 +94,23 @@ public final class CreatePlanEntitlementRequestBody {
             Optional<CreatePlanEntitlementRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<String> monthlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers,
-            Optional<Integer> monthlyUnitPrice,
+            Optional<Long> monthlyUnitPrice,
             Optional<String> monthlyUnitPriceDecimal,
             Optional<String> overageBillingProductId,
             String planId,
+            Optional<String> planVersionId,
             Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<List<CreatePriceTierRequestBody>> priceTiers,
-            Optional<Integer> softLimit,
+            Optional<Long> softLimit,
             Optional<BillingTiersMode> tierMode,
             Optional<Boolean> valueBool,
             Optional<String> valueCreditId,
-            Optional<Integer> valueNumeric,
+            Optional<Long> valueNumeric,
             Optional<String> valueTraitId,
             EntitlementValueType valueType,
             Optional<String> yearlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers,
-            Optional<Integer> yearlyUnitPrice,
+            Optional<Long> yearlyUnitPrice,
             Optional<String> yearlyUnitPriceDecimal,
             Map<String, Object> additionalProperties) {
         this.billingProductId = billingProductId;
@@ -123,6 +126,7 @@ public final class CreatePlanEntitlementRequestBody {
         this.monthlyUnitPriceDecimal = monthlyUnitPriceDecimal;
         this.overageBillingProductId = overageBillingProductId;
         this.planId = planId;
+        this.planVersionId = planVersionId;
         this.priceBehavior = priceBehavior;
         this.priceTiers = priceTiers;
         this.softLimit = softLimit;
@@ -145,7 +149,7 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     @JsonProperty("billing_threshold")
-    public Optional<Integer> getBillingThreshold() {
+    public Optional<Long> getBillingThreshold() {
         return billingThreshold;
     }
 
@@ -185,7 +189,7 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     @JsonProperty("monthly_unit_price")
-    public Optional<Integer> getMonthlyUnitPrice() {
+    public Optional<Long> getMonthlyUnitPrice() {
         return monthlyUnitPrice;
     }
 
@@ -204,6 +208,11 @@ public final class CreatePlanEntitlementRequestBody {
         return planId;
     }
 
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
+    }
+
     @JsonProperty("price_behavior")
     public Optional<EntitlementPriceBehavior> getPriceBehavior() {
         return priceBehavior;
@@ -218,7 +227,7 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     @JsonProperty("soft_limit")
-    public Optional<Integer> getSoftLimit() {
+    public Optional<Long> getSoftLimit() {
         return softLimit;
     }
 
@@ -238,7 +247,7 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     @JsonProperty("value_numeric")
-    public Optional<Integer> getValueNumeric() {
+    public Optional<Long> getValueNumeric() {
         return valueNumeric;
     }
 
@@ -263,7 +272,7 @@ public final class CreatePlanEntitlementRequestBody {
     }
 
     @JsonProperty("yearly_unit_price")
-    public Optional<Integer> getYearlyUnitPrice() {
+    public Optional<Long> getYearlyUnitPrice() {
         return yearlyUnitPrice;
     }
 
@@ -297,6 +306,7 @@ public final class CreatePlanEntitlementRequestBody {
                 && monthlyUnitPriceDecimal.equals(other.monthlyUnitPriceDecimal)
                 && overageBillingProductId.equals(other.overageBillingProductId)
                 && planId.equals(other.planId)
+                && planVersionId.equals(other.planVersionId)
                 && priceBehavior.equals(other.priceBehavior)
                 && priceTiers.equals(other.priceTiers)
                 && softLimit.equals(other.softLimit)
@@ -328,6 +338,7 @@ public final class CreatePlanEntitlementRequestBody {
                 this.monthlyUnitPriceDecimal,
                 this.overageBillingProductId,
                 this.planId,
+                this.planVersionId,
                 this.priceBehavior,
                 this.priceTiers,
                 this.softLimit,
@@ -369,13 +380,17 @@ public final class CreatePlanEntitlementRequestBody {
     public interface _FinalStage {
         CreatePlanEntitlementRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage billingProductId(Optional<String> billingProductId);
 
         _FinalStage billingProductId(String billingProductId);
 
-        _FinalStage billingThreshold(Optional<Integer> billingThreshold);
+        _FinalStage billingThreshold(Optional<Long> billingThreshold);
 
-        _FinalStage billingThreshold(Integer billingThreshold);
+        _FinalStage billingThreshold(Long billingThreshold);
 
         _FinalStage creditConsumptionRate(Optional<Double> creditConsumptionRate);
 
@@ -403,9 +418,9 @@ public final class CreatePlanEntitlementRequestBody {
 
         _FinalStage monthlyPriceTiers(List<CreatePriceTierRequestBody> monthlyPriceTiers);
 
-        _FinalStage monthlyUnitPrice(Optional<Integer> monthlyUnitPrice);
+        _FinalStage monthlyUnitPrice(Optional<Long> monthlyUnitPrice);
 
-        _FinalStage monthlyUnitPrice(Integer monthlyUnitPrice);
+        _FinalStage monthlyUnitPrice(Long monthlyUnitPrice);
 
         _FinalStage monthlyUnitPriceDecimal(Optional<String> monthlyUnitPriceDecimal);
 
@@ -414,6 +429,10 @@ public final class CreatePlanEntitlementRequestBody {
         _FinalStage overageBillingProductId(Optional<String> overageBillingProductId);
 
         _FinalStage overageBillingProductId(String overageBillingProductId);
+
+        _FinalStage planVersionId(Optional<String> planVersionId);
+
+        _FinalStage planVersionId(String planVersionId);
 
         _FinalStage priceBehavior(Optional<EntitlementPriceBehavior> priceBehavior);
 
@@ -426,9 +445,9 @@ public final class CreatePlanEntitlementRequestBody {
 
         _FinalStage priceTiers(List<CreatePriceTierRequestBody> priceTiers);
 
-        _FinalStage softLimit(Optional<Integer> softLimit);
+        _FinalStage softLimit(Optional<Long> softLimit);
 
-        _FinalStage softLimit(Integer softLimit);
+        _FinalStage softLimit(Long softLimit);
 
         _FinalStage tierMode(Optional<BillingTiersMode> tierMode);
 
@@ -442,9 +461,9 @@ public final class CreatePlanEntitlementRequestBody {
 
         _FinalStage valueCreditId(String valueCreditId);
 
-        _FinalStage valueNumeric(Optional<Integer> valueNumeric);
+        _FinalStage valueNumeric(Optional<Long> valueNumeric);
 
-        _FinalStage valueNumeric(Integer valueNumeric);
+        _FinalStage valueNumeric(Long valueNumeric);
 
         _FinalStage valueTraitId(Optional<String> valueTraitId);
 
@@ -458,9 +477,9 @@ public final class CreatePlanEntitlementRequestBody {
 
         _FinalStage yearlyPriceTiers(List<CreatePriceTierRequestBody> yearlyPriceTiers);
 
-        _FinalStage yearlyUnitPrice(Optional<Integer> yearlyUnitPrice);
+        _FinalStage yearlyUnitPrice(Optional<Long> yearlyUnitPrice);
 
-        _FinalStage yearlyUnitPrice(Integer yearlyUnitPrice);
+        _FinalStage yearlyUnitPrice(Long yearlyUnitPrice);
 
         _FinalStage yearlyUnitPriceDecimal(Optional<String> yearlyUnitPriceDecimal);
 
@@ -477,7 +496,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         private Optional<String> yearlyUnitPriceDecimal = Optional.empty();
 
-        private Optional<Integer> yearlyUnitPrice = Optional.empty();
+        private Optional<Long> yearlyUnitPrice = Optional.empty();
 
         private Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers = Optional.empty();
 
@@ -485,7 +504,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         private Optional<String> valueTraitId = Optional.empty();
 
-        private Optional<Integer> valueNumeric = Optional.empty();
+        private Optional<Long> valueNumeric = Optional.empty();
 
         private Optional<String> valueCreditId = Optional.empty();
 
@@ -493,17 +512,19 @@ public final class CreatePlanEntitlementRequestBody {
 
         private Optional<BillingTiersMode> tierMode = Optional.empty();
 
-        private Optional<Integer> softLimit = Optional.empty();
+        private Optional<Long> softLimit = Optional.empty();
 
         private Optional<List<CreatePriceTierRequestBody>> priceTiers = Optional.empty();
 
         private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
+        private Optional<String> planVersionId = Optional.empty();
+
         private Optional<String> overageBillingProductId = Optional.empty();
 
         private Optional<String> monthlyUnitPriceDecimal = Optional.empty();
 
-        private Optional<Integer> monthlyUnitPrice = Optional.empty();
+        private Optional<Long> monthlyUnitPrice = Optional.empty();
 
         private Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers = Optional.empty();
 
@@ -518,7 +539,7 @@ public final class CreatePlanEntitlementRequestBody {
 
         private Optional<Double> creditConsumptionRate = Optional.empty();
 
-        private Optional<Integer> billingThreshold = Optional.empty();
+        private Optional<Long> billingThreshold = Optional.empty();
 
         private Optional<String> billingProductId = Optional.empty();
 
@@ -542,6 +563,7 @@ public final class CreatePlanEntitlementRequestBody {
             monthlyUnitPriceDecimal(other.getMonthlyUnitPriceDecimal());
             overageBillingProductId(other.getOverageBillingProductId());
             planId(other.getPlanId());
+            planVersionId(other.getPlanVersionId());
             priceBehavior(other.getPriceBehavior());
             priceTiers(other.getPriceTiers());
             softLimit(other.getSoftLimit());
@@ -593,14 +615,14 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage yearlyUnitPrice(Integer yearlyUnitPrice) {
+        public _FinalStage yearlyUnitPrice(Long yearlyUnitPrice) {
             this.yearlyUnitPrice = Optional.ofNullable(yearlyUnitPrice);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "yearly_unit_price", nulls = Nulls.SKIP)
-        public _FinalStage yearlyUnitPrice(Optional<Integer> yearlyUnitPrice) {
+        public _FinalStage yearlyUnitPrice(Optional<Long> yearlyUnitPrice) {
             this.yearlyUnitPrice = yearlyUnitPrice;
             return this;
         }
@@ -645,14 +667,14 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage valueNumeric(Integer valueNumeric) {
+        public _FinalStage valueNumeric(Long valueNumeric) {
             this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "value_numeric", nulls = Nulls.SKIP)
-        public _FinalStage valueNumeric(Optional<Integer> valueNumeric) {
+        public _FinalStage valueNumeric(Optional<Long> valueNumeric) {
             this.valueNumeric = valueNumeric;
             return this;
         }
@@ -697,14 +719,14 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage softLimit(Integer softLimit) {
+        public _FinalStage softLimit(Long softLimit) {
             this.softLimit = Optional.ofNullable(softLimit);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
-        public _FinalStage softLimit(Optional<Integer> softLimit) {
+        public _FinalStage softLimit(Optional<Long> softLimit) {
             this.softLimit = softLimit;
             return this;
         }
@@ -743,6 +765,19 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public _FinalStage planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage overageBillingProductId(String overageBillingProductId) {
             this.overageBillingProductId = Optional.ofNullable(overageBillingProductId);
             return this;
@@ -769,14 +804,14 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage monthlyUnitPrice(Integer monthlyUnitPrice) {
+        public _FinalStage monthlyUnitPrice(Long monthlyUnitPrice) {
             this.monthlyUnitPrice = Optional.ofNullable(monthlyUnitPrice);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "monthly_unit_price", nulls = Nulls.SKIP)
-        public _FinalStage monthlyUnitPrice(Optional<Integer> monthlyUnitPrice) {
+        public _FinalStage monthlyUnitPrice(Optional<Long> monthlyUnitPrice) {
             this.monthlyUnitPrice = monthlyUnitPrice;
             return this;
         }
@@ -862,14 +897,14 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage billingThreshold(Integer billingThreshold) {
+        public _FinalStage billingThreshold(Long billingThreshold) {
             this.billingThreshold = Optional.ofNullable(billingThreshold);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "billing_threshold", nulls = Nulls.SKIP)
-        public _FinalStage billingThreshold(Optional<Integer> billingThreshold) {
+        public _FinalStage billingThreshold(Optional<Long> billingThreshold) {
             this.billingThreshold = billingThreshold;
             return this;
         }
@@ -903,6 +938,7 @@ public final class CreatePlanEntitlementRequestBody {
                     monthlyUnitPriceDecimal,
                     overageBillingProductId,
                     planId,
+                    planVersionId,
                     priceBehavior,
                     priceTiers,
                     softLimit,
@@ -917,6 +953,18 @@ public final class CreatePlanEntitlementRequestBody {
                     yearlyUnitPrice,
                     yearlyUnitPriceDecimal,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

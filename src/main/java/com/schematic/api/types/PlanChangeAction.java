@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class PlanChangeAction {
+    public static final PlanChangeAction PLAN_VERSION_MIGRATION =
+            new PlanChangeAction(Value.PLAN_VERSION_MIGRATION, "plan_version_migration");
+
     public static final PlanChangeAction CHECKOUT = new PlanChangeAction(Value.CHECKOUT, "checkout");
 
     public static final PlanChangeAction MIGRATION = new PlanChangeAction(Value.MIGRATION, "migration");
@@ -62,6 +65,8 @@ public final class PlanChangeAction {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case PLAN_VERSION_MIGRATION:
+                return visitor.visitPlanVersionMigration();
             case CHECKOUT:
                 return visitor.visitCheckout();
             case MIGRATION:
@@ -91,6 +96,8 @@ public final class PlanChangeAction {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static PlanChangeAction valueOf(String value) {
         switch (value) {
+            case "plan_version_migration":
+                return PLAN_VERSION_MIGRATION;
             case "checkout":
                 return CHECKOUT;
             case "migration":
@@ -133,6 +140,8 @@ public final class PlanChangeAction {
 
         PLAN_TRAIT_CHANGE,
 
+        PLAN_VERSION_MIGRATION,
+
         QUICKSTART,
 
         SUBSCRIPTION_CHANGE,
@@ -156,6 +165,8 @@ public final class PlanChangeAction {
         T visitPlanDeleted();
 
         T visitPlanTraitChange();
+
+        T visitPlanVersionMigration();
 
         T visitQuickstart();
 

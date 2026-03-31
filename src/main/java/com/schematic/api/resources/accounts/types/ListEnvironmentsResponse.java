@@ -92,6 +92,10 @@ public final class ListEnvironmentsResponse {
     public interface _FinalStage {
         ListEnvironmentsResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<EnvironmentResponseData> data);
 
         _FinalStage addData(EnvironmentResponseData data);
@@ -156,6 +160,18 @@ public final class ListEnvironmentsResponse {
         @java.lang.Override
         public ListEnvironmentsResponse build() {
             return new ListEnvironmentsResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

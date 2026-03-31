@@ -153,6 +153,10 @@ public final class CompanyResponseData {
     public interface _FinalStage {
         CompanyResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage lastSeenAt(Optional<OffsetDateTime> lastSeenAt);
 
         _FinalStage lastSeenAt(OffsetDateTime lastSeenAt);
@@ -261,6 +265,18 @@ public final class CompanyResponseData {
         public CompanyResponseData build() {
             return new CompanyResponseData(
                     createdAt, environmentId, id, lastSeenAt, logoUrl, name, updatedAt, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

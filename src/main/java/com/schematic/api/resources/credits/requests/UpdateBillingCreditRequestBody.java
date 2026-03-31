@@ -15,7 +15,9 @@ import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingCreditBurnStrategy;
 import com.schematic.api.types.BillingCreditExpiryUnit;
 import com.schematic.api.types.BillingCreditRolloverPolicy;
+import com.schematic.api.types.CreditCurrencyPriceRequestBody;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,9 +28,11 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdateBillingCreditRequestBody {
     private final Optional<BillingCreditBurnStrategy> burnStrategy;
 
+    private final Optional<List<CreditCurrencyPriceRequestBody>> currencyPrices;
+
     private final Optional<BillingCreditExpiryUnit> defaultExpiryUnit;
 
-    private final Optional<Integer> defaultExpiryUnitCount;
+    private final Optional<Long> defaultExpiryUnitCount;
 
     private final Optional<BillingCreditRolloverPolicy> defaultRolloverPolicy;
 
@@ -38,7 +42,7 @@ public final class UpdateBillingCreditRequestBody {
 
     private final String name;
 
-    private final Optional<Integer> perUnitPrice;
+    private final Optional<Long> perUnitPrice;
 
     private final Optional<String> perUnitPriceDecimal;
 
@@ -50,18 +54,20 @@ public final class UpdateBillingCreditRequestBody {
 
     private UpdateBillingCreditRequestBody(
             Optional<BillingCreditBurnStrategy> burnStrategy,
+            Optional<List<CreditCurrencyPriceRequestBody>> currencyPrices,
             Optional<BillingCreditExpiryUnit> defaultExpiryUnit,
-            Optional<Integer> defaultExpiryUnitCount,
+            Optional<Long> defaultExpiryUnitCount,
             Optional<BillingCreditRolloverPolicy> defaultRolloverPolicy,
             String description,
             Optional<String> icon,
             String name,
-            Optional<Integer> perUnitPrice,
+            Optional<Long> perUnitPrice,
             Optional<String> perUnitPriceDecimal,
             Optional<String> pluralName,
             Optional<String> singularName,
             Map<String, Object> additionalProperties) {
         this.burnStrategy = burnStrategy;
+        this.currencyPrices = currencyPrices;
         this.defaultExpiryUnit = defaultExpiryUnit;
         this.defaultExpiryUnitCount = defaultExpiryUnitCount;
         this.defaultRolloverPolicy = defaultRolloverPolicy;
@@ -80,13 +86,18 @@ public final class UpdateBillingCreditRequestBody {
         return burnStrategy;
     }
 
+    @JsonProperty("currency_prices")
+    public Optional<List<CreditCurrencyPriceRequestBody>> getCurrencyPrices() {
+        return currencyPrices;
+    }
+
     @JsonProperty("default_expiry_unit")
     public Optional<BillingCreditExpiryUnit> getDefaultExpiryUnit() {
         return defaultExpiryUnit;
     }
 
     @JsonProperty("default_expiry_unit_count")
-    public Optional<Integer> getDefaultExpiryUnitCount() {
+    public Optional<Long> getDefaultExpiryUnitCount() {
         return defaultExpiryUnitCount;
     }
 
@@ -111,7 +122,7 @@ public final class UpdateBillingCreditRequestBody {
     }
 
     @JsonProperty("per_unit_price")
-    public Optional<Integer> getPerUnitPrice() {
+    public Optional<Long> getPerUnitPrice() {
         return perUnitPrice;
     }
 
@@ -143,6 +154,7 @@ public final class UpdateBillingCreditRequestBody {
 
     private boolean equalTo(UpdateBillingCreditRequestBody other) {
         return burnStrategy.equals(other.burnStrategy)
+                && currencyPrices.equals(other.currencyPrices)
                 && defaultExpiryUnit.equals(other.defaultExpiryUnit)
                 && defaultExpiryUnitCount.equals(other.defaultExpiryUnitCount)
                 && defaultRolloverPolicy.equals(other.defaultRolloverPolicy)
@@ -159,6 +171,7 @@ public final class UpdateBillingCreditRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.burnStrategy,
+                this.currencyPrices,
                 this.defaultExpiryUnit,
                 this.defaultExpiryUnitCount,
                 this.defaultRolloverPolicy,
@@ -193,17 +206,25 @@ public final class UpdateBillingCreditRequestBody {
     public interface _FinalStage {
         UpdateBillingCreditRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage burnStrategy(Optional<BillingCreditBurnStrategy> burnStrategy);
 
         _FinalStage burnStrategy(BillingCreditBurnStrategy burnStrategy);
+
+        _FinalStage currencyPrices(Optional<List<CreditCurrencyPriceRequestBody>> currencyPrices);
+
+        _FinalStage currencyPrices(List<CreditCurrencyPriceRequestBody> currencyPrices);
 
         _FinalStage defaultExpiryUnit(Optional<BillingCreditExpiryUnit> defaultExpiryUnit);
 
         _FinalStage defaultExpiryUnit(BillingCreditExpiryUnit defaultExpiryUnit);
 
-        _FinalStage defaultExpiryUnitCount(Optional<Integer> defaultExpiryUnitCount);
+        _FinalStage defaultExpiryUnitCount(Optional<Long> defaultExpiryUnitCount);
 
-        _FinalStage defaultExpiryUnitCount(Integer defaultExpiryUnitCount);
+        _FinalStage defaultExpiryUnitCount(Long defaultExpiryUnitCount);
 
         _FinalStage defaultRolloverPolicy(Optional<BillingCreditRolloverPolicy> defaultRolloverPolicy);
 
@@ -213,9 +234,9 @@ public final class UpdateBillingCreditRequestBody {
 
         _FinalStage icon(String icon);
 
-        _FinalStage perUnitPrice(Optional<Integer> perUnitPrice);
+        _FinalStage perUnitPrice(Optional<Long> perUnitPrice);
 
-        _FinalStage perUnitPrice(Integer perUnitPrice);
+        _FinalStage perUnitPrice(Long perUnitPrice);
 
         _FinalStage perUnitPriceDecimal(Optional<String> perUnitPriceDecimal);
 
@@ -242,15 +263,17 @@ public final class UpdateBillingCreditRequestBody {
 
         private Optional<String> perUnitPriceDecimal = Optional.empty();
 
-        private Optional<Integer> perUnitPrice = Optional.empty();
+        private Optional<Long> perUnitPrice = Optional.empty();
 
         private Optional<String> icon = Optional.empty();
 
         private Optional<BillingCreditRolloverPolicy> defaultRolloverPolicy = Optional.empty();
 
-        private Optional<Integer> defaultExpiryUnitCount = Optional.empty();
+        private Optional<Long> defaultExpiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> defaultExpiryUnit = Optional.empty();
+
+        private Optional<List<CreditCurrencyPriceRequestBody>> currencyPrices = Optional.empty();
 
         private Optional<BillingCreditBurnStrategy> burnStrategy = Optional.empty();
 
@@ -262,6 +285,7 @@ public final class UpdateBillingCreditRequestBody {
         @java.lang.Override
         public Builder from(UpdateBillingCreditRequestBody other) {
             burnStrategy(other.getBurnStrategy());
+            currencyPrices(other.getCurrencyPrices());
             defaultExpiryUnit(other.getDefaultExpiryUnit());
             defaultExpiryUnitCount(other.getDefaultExpiryUnitCount());
             defaultRolloverPolicy(other.getDefaultRolloverPolicy());
@@ -329,14 +353,14 @@ public final class UpdateBillingCreditRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage perUnitPrice(Integer perUnitPrice) {
+        public _FinalStage perUnitPrice(Long perUnitPrice) {
             this.perUnitPrice = Optional.ofNullable(perUnitPrice);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "per_unit_price", nulls = Nulls.SKIP)
-        public _FinalStage perUnitPrice(Optional<Integer> perUnitPrice) {
+        public _FinalStage perUnitPrice(Optional<Long> perUnitPrice) {
             this.perUnitPrice = perUnitPrice;
             return this;
         }
@@ -368,14 +392,14 @@ public final class UpdateBillingCreditRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage defaultExpiryUnitCount(Integer defaultExpiryUnitCount) {
+        public _FinalStage defaultExpiryUnitCount(Long defaultExpiryUnitCount) {
             this.defaultExpiryUnitCount = Optional.ofNullable(defaultExpiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "default_expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage defaultExpiryUnitCount(Optional<Integer> defaultExpiryUnitCount) {
+        public _FinalStage defaultExpiryUnitCount(Optional<Long> defaultExpiryUnitCount) {
             this.defaultExpiryUnitCount = defaultExpiryUnitCount;
             return this;
         }
@@ -390,6 +414,19 @@ public final class UpdateBillingCreditRequestBody {
         @JsonSetter(value = "default_expiry_unit", nulls = Nulls.SKIP)
         public _FinalStage defaultExpiryUnit(Optional<BillingCreditExpiryUnit> defaultExpiryUnit) {
             this.defaultExpiryUnit = defaultExpiryUnit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage currencyPrices(List<CreditCurrencyPriceRequestBody> currencyPrices) {
+            this.currencyPrices = Optional.ofNullable(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(Optional<List<CreditCurrencyPriceRequestBody>> currencyPrices) {
+            this.currencyPrices = currencyPrices;
             return this;
         }
 
@@ -410,6 +447,7 @@ public final class UpdateBillingCreditRequestBody {
         public UpdateBillingCreditRequestBody build() {
             return new UpdateBillingCreditRequestBody(
                     burnStrategy,
+                    currencyPrices,
                     defaultExpiryUnit,
                     defaultExpiryUnitCount,
                     defaultRolloverPolicy,
@@ -421,6 +459,18 @@ public final class UpdateBillingCreditRequestBody {
                     pluralName,
                     singularName,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

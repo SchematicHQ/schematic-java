@@ -20,21 +20,21 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreatePriceTierRequestBody.Builder.class)
 public final class CreatePriceTierRequestBody {
-    private final Optional<Integer> flatAmount;
+    private final Optional<Long> flatAmount;
 
-    private final Optional<Integer> perUnitPrice;
+    private final Optional<Long> perUnitPrice;
 
     private final Optional<String> perUnitPriceDecimal;
 
-    private final Optional<Integer> upTo;
+    private final Optional<Long> upTo;
 
     private final Map<String, Object> additionalProperties;
 
     private CreatePriceTierRequestBody(
-            Optional<Integer> flatAmount,
-            Optional<Integer> perUnitPrice,
+            Optional<Long> flatAmount,
+            Optional<Long> perUnitPrice,
             Optional<String> perUnitPriceDecimal,
-            Optional<Integer> upTo,
+            Optional<Long> upTo,
             Map<String, Object> additionalProperties) {
         this.flatAmount = flatAmount;
         this.perUnitPrice = perUnitPrice;
@@ -44,12 +44,12 @@ public final class CreatePriceTierRequestBody {
     }
 
     @JsonProperty("flat_amount")
-    public Optional<Integer> getFlatAmount() {
+    public Optional<Long> getFlatAmount() {
         return flatAmount;
     }
 
     @JsonProperty("per_unit_price")
-    public Optional<Integer> getPerUnitPrice() {
+    public Optional<Long> getPerUnitPrice() {
         return perUnitPrice;
     }
 
@@ -59,7 +59,7 @@ public final class CreatePriceTierRequestBody {
     }
 
     @JsonProperty("up_to")
-    public Optional<Integer> getUpTo() {
+    public Optional<Long> getUpTo() {
         return upTo;
     }
 
@@ -97,13 +97,13 @@ public final class CreatePriceTierRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<Integer> flatAmount = Optional.empty();
+        private Optional<Long> flatAmount = Optional.empty();
 
-        private Optional<Integer> perUnitPrice = Optional.empty();
+        private Optional<Long> perUnitPrice = Optional.empty();
 
         private Optional<String> perUnitPriceDecimal = Optional.empty();
 
-        private Optional<Integer> upTo = Optional.empty();
+        private Optional<Long> upTo = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -119,23 +119,23 @@ public final class CreatePriceTierRequestBody {
         }
 
         @JsonSetter(value = "flat_amount", nulls = Nulls.SKIP)
-        public Builder flatAmount(Optional<Integer> flatAmount) {
+        public Builder flatAmount(Optional<Long> flatAmount) {
             this.flatAmount = flatAmount;
             return this;
         }
 
-        public Builder flatAmount(Integer flatAmount) {
+        public Builder flatAmount(Long flatAmount) {
             this.flatAmount = Optional.ofNullable(flatAmount);
             return this;
         }
 
         @JsonSetter(value = "per_unit_price", nulls = Nulls.SKIP)
-        public Builder perUnitPrice(Optional<Integer> perUnitPrice) {
+        public Builder perUnitPrice(Optional<Long> perUnitPrice) {
             this.perUnitPrice = perUnitPrice;
             return this;
         }
 
-        public Builder perUnitPrice(Integer perUnitPrice) {
+        public Builder perUnitPrice(Long perUnitPrice) {
             this.perUnitPrice = Optional.ofNullable(perUnitPrice);
             return this;
         }
@@ -152,12 +152,12 @@ public final class CreatePriceTierRequestBody {
         }
 
         @JsonSetter(value = "up_to", nulls = Nulls.SKIP)
-        public Builder upTo(Optional<Integer> upTo) {
+        public Builder upTo(Optional<Long> upTo) {
             this.upTo = upTo;
             return this;
         }
 
-        public Builder upTo(Integer upTo) {
+        public Builder upTo(Long upTo) {
             this.upTo = Optional.ofNullable(upTo);
             return this;
         }
@@ -165,6 +165,16 @@ public final class CreatePriceTierRequestBody {
         public CreatePriceTierRequestBody build() {
             return new CreatePriceTierRequestBody(
                     flatAmount, perUnitPrice, perUnitPriceDecimal, upTo, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

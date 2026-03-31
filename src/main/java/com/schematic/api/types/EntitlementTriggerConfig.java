@@ -70,6 +70,10 @@ public final class EntitlementTriggerConfig {
 
     public interface _FinalStage {
         EntitlementTriggerConfig build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -97,6 +101,18 @@ public final class EntitlementTriggerConfig {
         @java.lang.Override
         public EntitlementTriggerConfig build() {
             return new EntitlementTriggerConfig(featureId, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

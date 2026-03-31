@@ -90,6 +90,10 @@ public final class ListPlanChangesResponse {
     public interface _FinalStage {
         ListPlanChangesResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<PlanChangeResponseData> data);
 
         _FinalStage addData(PlanChangeResponseData data);
@@ -154,6 +158,18 @@ public final class ListPlanChangesResponse {
         @java.lang.Override
         public ListPlanChangesResponse build() {
             return new ListPlanChangesResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

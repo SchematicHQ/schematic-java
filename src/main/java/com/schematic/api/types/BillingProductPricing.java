@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingProductPricing.Builder.class)
 public final class BillingProductPricing {
-    private final Optional<Integer> billingThreshold;
+    private final Optional<Long> billingThreshold;
 
     private final String currency;
 
@@ -29,9 +29,9 @@ public final class BillingProductPricing {
 
     private final Optional<String> meterId;
 
-    private final Optional<Integer> packageSize;
+    private final Optional<Long> packageSize;
 
-    private final int price;
+    private final long price;
 
     private final Optional<String> priceDecimal;
 
@@ -39,7 +39,7 @@ public final class BillingProductPricing {
 
     private final String productExternalId;
 
-    private final int quantity;
+    private final long quantity;
 
     private final Optional<String> subscriptionItemExternalId;
 
@@ -48,16 +48,16 @@ public final class BillingProductPricing {
     private final Map<String, Object> additionalProperties;
 
     private BillingProductPricing(
-            Optional<Integer> billingThreshold,
+            Optional<Long> billingThreshold,
             String currency,
             String interval,
             Optional<String> meterId,
-            Optional<Integer> packageSize,
-            int price,
+            Optional<Long> packageSize,
+            long price,
             Optional<String> priceDecimal,
             String priceExternalId,
             String productExternalId,
-            int quantity,
+            long quantity,
             Optional<String> subscriptionItemExternalId,
             BillingPriceUsageType usageType,
             Map<String, Object> additionalProperties) {
@@ -77,7 +77,7 @@ public final class BillingProductPricing {
     }
 
     @JsonProperty("billing_threshold")
-    public Optional<Integer> getBillingThreshold() {
+    public Optional<Long> getBillingThreshold() {
         return billingThreshold;
     }
 
@@ -97,12 +97,12 @@ public final class BillingProductPricing {
     }
 
     @JsonProperty("package_size")
-    public Optional<Integer> getPackageSize() {
+    public Optional<Long> getPackageSize() {
         return packageSize;
     }
 
     @JsonProperty("price")
-    public int getPrice() {
+    public long getPrice() {
         return price;
     }
 
@@ -122,7 +122,7 @@ public final class BillingProductPricing {
     }
 
     @JsonProperty("quantity")
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
@@ -199,7 +199,7 @@ public final class BillingProductPricing {
     }
 
     public interface PriceStage {
-        PriceExternalIdStage price(int price);
+        PriceExternalIdStage price(long price);
     }
 
     public interface PriceExternalIdStage {
@@ -211,7 +211,7 @@ public final class BillingProductPricing {
     }
 
     public interface QuantityStage {
-        UsageTypeStage quantity(int quantity);
+        UsageTypeStage quantity(long quantity);
     }
 
     public interface UsageTypeStage {
@@ -221,17 +221,21 @@ public final class BillingProductPricing {
     public interface _FinalStage {
         BillingProductPricing build();
 
-        _FinalStage billingThreshold(Optional<Integer> billingThreshold);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage billingThreshold(Integer billingThreshold);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage billingThreshold(Optional<Long> billingThreshold);
+
+        _FinalStage billingThreshold(Long billingThreshold);
 
         _FinalStage meterId(Optional<String> meterId);
 
         _FinalStage meterId(String meterId);
 
-        _FinalStage packageSize(Optional<Integer> packageSize);
+        _FinalStage packageSize(Optional<Long> packageSize);
 
-        _FinalStage packageSize(Integer packageSize);
+        _FinalStage packageSize(Long packageSize);
 
         _FinalStage priceDecimal(Optional<String> priceDecimal);
 
@@ -256,13 +260,13 @@ public final class BillingProductPricing {
 
         private String interval;
 
-        private int price;
+        private long price;
 
         private String priceExternalId;
 
         private String productExternalId;
 
-        private int quantity;
+        private long quantity;
 
         private BillingPriceUsageType usageType;
 
@@ -270,11 +274,11 @@ public final class BillingProductPricing {
 
         private Optional<String> priceDecimal = Optional.empty();
 
-        private Optional<Integer> packageSize = Optional.empty();
+        private Optional<Long> packageSize = Optional.empty();
 
         private Optional<String> meterId = Optional.empty();
 
-        private Optional<Integer> billingThreshold = Optional.empty();
+        private Optional<Long> billingThreshold = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -314,7 +318,7 @@ public final class BillingProductPricing {
 
         @java.lang.Override
         @JsonSetter("price")
-        public PriceExternalIdStage price(int price) {
+        public PriceExternalIdStage price(long price) {
             this.price = price;
             return this;
         }
@@ -335,7 +339,7 @@ public final class BillingProductPricing {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public UsageTypeStage quantity(int quantity) {
+        public UsageTypeStage quantity(long quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -374,14 +378,14 @@ public final class BillingProductPricing {
         }
 
         @java.lang.Override
-        public _FinalStage packageSize(Integer packageSize) {
+        public _FinalStage packageSize(Long packageSize) {
             this.packageSize = Optional.ofNullable(packageSize);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "package_size", nulls = Nulls.SKIP)
-        public _FinalStage packageSize(Optional<Integer> packageSize) {
+        public _FinalStage packageSize(Optional<Long> packageSize) {
             this.packageSize = packageSize;
             return this;
         }
@@ -400,14 +404,14 @@ public final class BillingProductPricing {
         }
 
         @java.lang.Override
-        public _FinalStage billingThreshold(Integer billingThreshold) {
+        public _FinalStage billingThreshold(Long billingThreshold) {
             this.billingThreshold = Optional.ofNullable(billingThreshold);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "billing_threshold", nulls = Nulls.SKIP)
-        public _FinalStage billingThreshold(Optional<Integer> billingThreshold) {
+        public _FinalStage billingThreshold(Optional<Long> billingThreshold) {
             this.billingThreshold = billingThreshold;
             return this;
         }
@@ -428,6 +432,18 @@ public final class BillingProductPricing {
                     subscriptionItemExternalId,
                     usageType,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

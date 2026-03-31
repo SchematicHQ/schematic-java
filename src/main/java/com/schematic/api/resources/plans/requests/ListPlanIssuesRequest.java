@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,16 +23,25 @@ import org.jetbrains.annotations.NotNull;
 public final class ListPlanIssuesRequest {
     private final String planId;
 
+    private final Optional<String> planVersionId;
+
     private final Map<String, Object> additionalProperties;
 
-    private ListPlanIssuesRequest(String planId, Map<String, Object> additionalProperties) {
+    private ListPlanIssuesRequest(
+            String planId, Optional<String> planVersionId, Map<String, Object> additionalProperties) {
         this.planId = planId;
+        this.planVersionId = planVersionId;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("plan_id")
     public String getPlanId() {
         return planId;
+    }
+
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
     }
 
     @java.lang.Override
@@ -45,12 +56,12 @@ public final class ListPlanIssuesRequest {
     }
 
     private boolean equalTo(ListPlanIssuesRequest other) {
-        return planId.equals(other.planId);
+        return planId.equals(other.planId) && planVersionId.equals(other.planVersionId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.planId);
+        return Objects.hash(this.planId, this.planVersionId);
     }
 
     @java.lang.Override
@@ -70,11 +81,21 @@ public final class ListPlanIssuesRequest {
 
     public interface _FinalStage {
         ListPlanIssuesRequest build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage planVersionId(Optional<String> planVersionId);
+
+        _FinalStage planVersionId(String planVersionId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements PlanIdStage, _FinalStage {
         private String planId;
+
+        private Optional<String> planVersionId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -84,6 +105,7 @@ public final class ListPlanIssuesRequest {
         @java.lang.Override
         public Builder from(ListPlanIssuesRequest other) {
             planId(other.getPlanId());
+            planVersionId(other.getPlanVersionId());
             return this;
         }
 
@@ -95,8 +117,33 @@ public final class ListPlanIssuesRequest {
         }
 
         @java.lang.Override
+        public _FinalStage planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public _FinalStage planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        @java.lang.Override
         public ListPlanIssuesRequest build() {
-            return new ListPlanIssuesRequest(planId, additionalProperties);
+            return new ListPlanIssuesRequest(planId, planVersionId, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

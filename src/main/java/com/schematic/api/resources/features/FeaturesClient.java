@@ -53,6 +53,10 @@ public class FeaturesClient {
         return this.rawClient.listFeatures().body();
     }
 
+    public ListFeaturesResponse listFeatures(RequestOptions requestOptions) {
+        return this.rawClient.listFeatures(requestOptions).body();
+    }
+
     public ListFeaturesResponse listFeatures(ListFeaturesRequest request) {
         return this.rawClient.listFeatures(request).body();
     }
@@ -81,6 +85,10 @@ public class FeaturesClient {
         return this.rawClient.updateFeature(featureId).body();
     }
 
+    public UpdateFeatureResponse updateFeature(String featureId, RequestOptions requestOptions) {
+        return this.rawClient.updateFeature(featureId, requestOptions).body();
+    }
+
     public UpdateFeatureResponse updateFeature(String featureId, UpdateFeatureRequestBody request) {
         return this.rawClient.updateFeature(featureId, request).body();
     }
@@ -102,6 +110,10 @@ public class FeaturesClient {
         return this.rawClient.countFeatures().body();
     }
 
+    public CountFeaturesResponse countFeatures(RequestOptions requestOptions) {
+        return this.rawClient.countFeatures(requestOptions).body();
+    }
+
     public CountFeaturesResponse countFeatures(CountFeaturesRequest request) {
         return this.rawClient.countFeatures(request).body();
     }
@@ -112,6 +124,10 @@ public class FeaturesClient {
 
     public ListFlagsResponse listFlags() {
         return this.rawClient.listFlags().body();
+    }
+
+    public ListFlagsResponse listFlags(RequestOptions requestOptions) {
+        return this.rawClient.listFlags(requestOptions).body();
     }
 
     public ListFlagsResponse listFlags(ListFlagsRequest request) {
@@ -167,6 +183,10 @@ public class FeaturesClient {
         return this.rawClient.checkFlag(key).body();
     }
 
+    public CheckFlagResponse checkFlag(String key, RequestOptions requestOptions) {
+        return this.rawClient.checkFlag(key, requestOptions).body();
+    }
+
     public CheckFlagResponse checkFlag(String key, CheckFlagRequestBody request) {
         return this.rawClient.checkFlag(key, request).body();
     }
@@ -177,6 +197,10 @@ public class FeaturesClient {
 
     public CheckFlagsResponse checkFlags() {
         return this.rawClient.checkFlags().body();
+    }
+
+    public CheckFlagsResponse checkFlags(RequestOptions requestOptions) {
+        return this.rawClient.checkFlags(requestOptions).body();
     }
 
     public CheckFlagsResponse checkFlags(CheckFlagRequestBody request) {
@@ -197,6 +221,10 @@ public class FeaturesClient {
 
     public CountFlagsResponse countFlags() {
         return this.rawClient.countFlags().body();
+    }
+
+    public CountFlagsResponse countFlags(RequestOptions requestOptions) {
+        return this.rawClient.countFlags(requestOptions).body();
     }
 
     public CountFlagsResponse countFlags(CountFlagsRequest request) {

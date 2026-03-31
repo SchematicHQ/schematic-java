@@ -92,6 +92,10 @@ public final class ListEntityKeyDefinitionsResponse {
     public interface _FinalStage {
         ListEntityKeyDefinitionsResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<EntityKeyDefinitionResponseData> data);
 
         _FinalStage addData(EntityKeyDefinitionResponseData data);
@@ -156,6 +160,18 @@ public final class ListEntityKeyDefinitionsResponse {
         @java.lang.Override
         public ListEntityKeyDefinitionsResponse build() {
             return new ListEntityKeyDefinitionsResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

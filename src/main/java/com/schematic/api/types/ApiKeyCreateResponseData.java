@@ -36,6 +36,8 @@ public final class ApiKeyCreateResponseData {
 
     private final String name;
 
+    private final boolean readonly;
+
     private final List<ApiKeyScope> scopes;
 
     private final String secret;
@@ -51,6 +53,7 @@ public final class ApiKeyCreateResponseData {
             String id,
             Optional<OffsetDateTime> lastUsedAt,
             String name,
+            boolean readonly,
             List<ApiKeyScope> scopes,
             String secret,
             OffsetDateTime updatedAt,
@@ -61,6 +64,7 @@ public final class ApiKeyCreateResponseData {
         this.id = id;
         this.lastUsedAt = lastUsedAt;
         this.name = name;
+        this.readonly = readonly;
         this.scopes = scopes;
         this.secret = secret;
         this.updatedAt = updatedAt;
@@ -97,6 +101,11 @@ public final class ApiKeyCreateResponseData {
         return name;
     }
 
+    @JsonProperty("readonly")
+    public boolean getReadonly() {
+        return readonly;
+    }
+
     @JsonProperty("scopes")
     public List<ApiKeyScope> getScopes() {
         return scopes;
@@ -130,6 +139,7 @@ public final class ApiKeyCreateResponseData {
                 && id.equals(other.id)
                 && lastUsedAt.equals(other.lastUsedAt)
                 && name.equals(other.name)
+                && readonly == other.readonly
                 && scopes.equals(other.scopes)
                 && secret.equals(other.secret)
                 && updatedAt.equals(other.updatedAt);
@@ -144,6 +154,7 @@ public final class ApiKeyCreateResponseData {
                 this.id,
                 this.lastUsedAt,
                 this.name,
+                this.readonly,
                 this.scopes,
                 this.secret,
                 this.updatedAt);
@@ -169,7 +180,11 @@ public final class ApiKeyCreateResponseData {
     }
 
     public interface NameStage {
-        SecretStage name(@NotNull String name);
+        ReadonlyStage name(@NotNull String name);
+    }
+
+    public interface ReadonlyStage {
+        SecretStage readonly(boolean readonly);
     }
 
     public interface SecretStage {
@@ -182,6 +197,10 @@ public final class ApiKeyCreateResponseData {
 
     public interface _FinalStage {
         ApiKeyCreateResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage description(Optional<String> description);
 
@@ -204,12 +223,14 @@ public final class ApiKeyCreateResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CreatedAtStage, IdStage, NameStage, SecretStage, UpdatedAtStage, _FinalStage {
+            implements CreatedAtStage, IdStage, NameStage, ReadonlyStage, SecretStage, UpdatedAtStage, _FinalStage {
         private OffsetDateTime createdAt;
 
         private String id;
 
         private String name;
+
+        private boolean readonly;
 
         private String secret;
 
@@ -236,6 +257,7 @@ public final class ApiKeyCreateResponseData {
             id(other.getId());
             lastUsedAt(other.getLastUsedAt());
             name(other.getName());
+            readonly(other.getReadonly());
             scopes(other.getScopes());
             secret(other.getSecret());
             updatedAt(other.getUpdatedAt());
@@ -258,8 +280,15 @@ public final class ApiKeyCreateResponseData {
 
         @java.lang.Override
         @JsonSetter("name")
-        public SecretStage name(@NotNull String name) {
+        public ReadonlyStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("readonly")
+        public SecretStage readonly(boolean readonly) {
+            this.readonly = readonly;
             return this;
         }
 
@@ -349,10 +378,23 @@ public final class ApiKeyCreateResponseData {
                     id,
                     lastUsedAt,
                     name,
+                    readonly,
                     scopes,
                     secret,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

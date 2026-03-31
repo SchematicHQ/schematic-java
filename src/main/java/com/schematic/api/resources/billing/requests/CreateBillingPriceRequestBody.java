@@ -40,9 +40,9 @@ public final class CreateBillingPriceRequestBody {
 
     private final Optional<String> meterId;
 
-    private final Optional<Integer> packageSize;
+    private final Optional<Long> packageSize;
 
-    private final int price;
+    private final long price;
 
     private final Optional<String> priceDecimal;
 
@@ -67,8 +67,8 @@ public final class CreateBillingPriceRequestBody {
             String interval,
             boolean isActive,
             Optional<String> meterId,
-            Optional<Integer> packageSize,
-            int price,
+            Optional<Long> packageSize,
+            long price,
             Optional<String> priceDecimal,
             String priceExternalId,
             List<CreateBillingPriceTierRequestBody> priceTiers,
@@ -126,12 +126,12 @@ public final class CreateBillingPriceRequestBody {
     }
 
     @JsonProperty("package_size")
-    public Optional<Integer> getPackageSize() {
+    public Optional<Long> getPackageSize() {
         return packageSize;
     }
 
     @JsonProperty("price")
-    public int getPrice() {
+    public long getPrice() {
         return price;
     }
 
@@ -251,7 +251,7 @@ public final class CreateBillingPriceRequestBody {
     }
 
     public interface PriceStage {
-        PriceExternalIdStage price(int price);
+        PriceExternalIdStage price(long price);
     }
 
     public interface PriceExternalIdStage {
@@ -269,13 +269,17 @@ public final class CreateBillingPriceRequestBody {
     public interface _FinalStage {
         CreateBillingPriceRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage meterId(Optional<String> meterId);
 
         _FinalStage meterId(String meterId);
 
-        _FinalStage packageSize(Optional<Integer> packageSize);
+        _FinalStage packageSize(Optional<Long> packageSize);
 
-        _FinalStage packageSize(Integer packageSize);
+        _FinalStage packageSize(Long packageSize);
 
         _FinalStage priceDecimal(Optional<String> priceDecimal);
 
@@ -318,7 +322,7 @@ public final class CreateBillingPriceRequestBody {
 
         private boolean isActive;
 
-        private int price;
+        private long price;
 
         private String priceExternalId;
 
@@ -334,7 +338,7 @@ public final class CreateBillingPriceRequestBody {
 
         private Optional<String> priceDecimal = Optional.empty();
 
-        private Optional<Integer> packageSize = Optional.empty();
+        private Optional<Long> packageSize = Optional.empty();
 
         private Optional<String> meterId = Optional.empty();
 
@@ -400,7 +404,7 @@ public final class CreateBillingPriceRequestBody {
 
         @java.lang.Override
         @JsonSetter("price")
-        public PriceExternalIdStage price(int price) {
+        public PriceExternalIdStage price(long price) {
             this.price = price;
             return this;
         }
@@ -490,14 +494,14 @@ public final class CreateBillingPriceRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage packageSize(Integer packageSize) {
+        public _FinalStage packageSize(Long packageSize) {
             this.packageSize = Optional.ofNullable(packageSize);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "package_size", nulls = Nulls.SKIP)
-        public _FinalStage packageSize(Optional<Integer> packageSize) {
+        public _FinalStage packageSize(Optional<Long> packageSize) {
             this.packageSize = packageSize;
             return this;
         }
@@ -534,6 +538,18 @@ public final class CreateBillingPriceRequestBody {
                     tiersMode,
                     usageType,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -36,8 +36,6 @@ public final class ConditionGroupView {
 
     private final String id;
 
-    private final Optional<String> planVersionId;
-
     private final String ruleId;
 
     private final OffsetDateTime updatedAt;
@@ -51,7 +49,6 @@ public final class ConditionGroupView {
             String environmentId,
             Optional<String> flagId,
             String id,
-            Optional<String> planVersionId,
             String ruleId,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -61,7 +58,6 @@ public final class ConditionGroupView {
         this.environmentId = environmentId;
         this.flagId = flagId;
         this.id = id;
-        this.planVersionId = planVersionId;
         this.ruleId = ruleId;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -97,11 +93,6 @@ public final class ConditionGroupView {
         return id;
     }
 
-    @JsonProperty("plan_version_id")
-    public Optional<String> getPlanVersionId() {
-        return planVersionId;
-    }
-
     @JsonProperty("rule_id")
     public String getRuleId() {
         return ruleId;
@@ -130,7 +121,6 @@ public final class ConditionGroupView {
                 && environmentId.equals(other.environmentId)
                 && flagId.equals(other.flagId)
                 && id.equals(other.id)
-                && planVersionId.equals(other.planVersionId)
                 && ruleId.equals(other.ruleId)
                 && updatedAt.equals(other.updatedAt);
     }
@@ -144,7 +134,6 @@ public final class ConditionGroupView {
                 this.environmentId,
                 this.flagId,
                 this.id,
-                this.planVersionId,
                 this.ruleId,
                 this.updatedAt);
     }
@@ -187,6 +176,10 @@ public final class ConditionGroupView {
     public interface _FinalStage {
         ConditionGroupView build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage conditions(List<ConditionView> conditions);
 
         _FinalStage addConditions(ConditionView conditions);
@@ -196,10 +189,6 @@ public final class ConditionGroupView {
         _FinalStage flagId(Optional<String> flagId);
 
         _FinalStage flagId(String flagId);
-
-        _FinalStage planVersionId(Optional<String> planVersionId);
-
-        _FinalStage planVersionId(String planVersionId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -223,8 +212,6 @@ public final class ConditionGroupView {
 
         private OffsetDateTime updatedAt;
 
-        private Optional<String> planVersionId = Optional.empty();
-
         private Optional<String> flagId = Optional.empty();
 
         private List<ConditionView> conditions = new ArrayList<>();
@@ -242,7 +229,6 @@ public final class ConditionGroupView {
             environmentId(other.getEnvironmentId());
             flagId(other.getFlagId());
             id(other.getId());
-            planVersionId(other.getPlanVersionId());
             ruleId(other.getRuleId());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -287,19 +273,6 @@ public final class ConditionGroupView {
         @JsonSetter("updated_at")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage planVersionId(String planVersionId) {
-            this.planVersionId = Optional.ofNullable(planVersionId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
-        public _FinalStage planVersionId(Optional<String> planVersionId) {
-            this.planVersionId = planVersionId;
             return this;
         }
 
@@ -349,10 +322,21 @@ public final class ConditionGroupView {
                     environmentId,
                     flagId,
                     id,
-                    planVersionId,
                     ruleId,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -6,15 +6,20 @@ package com.schematic.api.resources.plans;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.plans.requests.CountPlansRequest;
+import com.schematic.api.resources.plans.requests.DeletePlanVersionRequest;
+import com.schematic.api.resources.plans.requests.GetPlanRequest;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
 import com.schematic.api.resources.plans.requests.ListPlansRequest;
+import com.schematic.api.resources.plans.requests.PublishPlanVersionRequestBody;
 import com.schematic.api.resources.plans.requests.UpdateCompanyPlansRequestBody;
 import com.schematic.api.resources.plans.types.CountPlansResponse;
 import com.schematic.api.resources.plans.types.CreatePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanResponse;
+import com.schematic.api.resources.plans.types.DeletePlanVersionResponse;
 import com.schematic.api.resources.plans.types.GetPlanResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
 import com.schematic.api.resources.plans.types.ListPlansResponse;
+import com.schematic.api.resources.plans.types.PublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
 import com.schematic.api.resources.plans.types.UpdatePlanResponse;
 import com.schematic.api.resources.plans.types.UpsertBillingProductPlanResponse;
@@ -56,6 +61,10 @@ public class AsyncPlansClient {
         return this.rawClient.listPlans().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListPlansResponse> listPlans(RequestOptions requestOptions) {
+        return this.rawClient.listPlans(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListPlansResponse> listPlans(ListPlansRequest request) {
         return this.rawClient.listPlans(request).thenApply(response -> response.body());
     }
@@ -79,6 +88,15 @@ public class AsyncPlansClient {
 
     public CompletableFuture<GetPlanResponse> getPlan(String planId, RequestOptions requestOptions) {
         return this.rawClient.getPlan(planId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetPlanResponse> getPlan(String planId, GetPlanRequest request) {
+        return this.rawClient.getPlan(planId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetPlanResponse> getPlan(
+            String planId, GetPlanRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getPlan(planId, request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<UpdatePlanResponse> updatePlan(String planId, UpdatePlanRequestBody request) {
@@ -114,6 +132,10 @@ public class AsyncPlansClient {
         return this.rawClient.countPlans().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountPlansResponse> countPlans(RequestOptions requestOptions) {
+        return this.rawClient.countPlans(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountPlansResponse> countPlans(CountPlansRequest request) {
         return this.rawClient.countPlans(request).thenApply(response -> response.body());
     }
@@ -129,5 +151,36 @@ public class AsyncPlansClient {
     public CompletableFuture<ListPlanIssuesResponse> listPlanIssues(
             ListPlanIssuesRequest request, RequestOptions requestOptions) {
         return this.rawClient.listPlanIssues(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(String planId) {
+        return this.rawClient.deletePlanVersion(planId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(
+            String planId, RequestOptions requestOptions) {
+        return this.rawClient.deletePlanVersion(planId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(
+            String planId, DeletePlanVersionRequest request) {
+        return this.rawClient.deletePlanVersion(planId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(
+            String planId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
+        return this.rawClient.deletePlanVersion(planId, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<PublishPlanVersionResponse> publishPlanVersion(
+            String planId, PublishPlanVersionRequestBody request) {
+        return this.rawClient.publishPlanVersion(planId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<PublishPlanVersionResponse> publishPlanVersion(
+            String planId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .publishPlanVersion(planId, request, requestOptions)
+                .thenApply(response -> response.body());
     }
 }

@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PreviewSubscriptionUpcomingInvoiceLineItems.Builder.class)
 public final class PreviewSubscriptionUpcomingInvoiceLineItems {
-    private final int amount;
+    private final long amount;
 
     private final String description;
 
@@ -27,16 +27,16 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
 
     private final boolean proration;
 
-    private final int quantity;
+    private final long quantity;
 
     private final Map<String, Object> additionalProperties;
 
     private PreviewSubscriptionUpcomingInvoiceLineItems(
-            int amount,
+            long amount,
             String description,
             String priceId,
             boolean proration,
-            int quantity,
+            long quantity,
             Map<String, Object> additionalProperties) {
         this.amount = amount;
         this.description = description;
@@ -47,7 +47,7 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
     }
 
     @JsonProperty("amount")
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 
@@ -67,7 +67,7 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
     }
 
     @JsonProperty("quantity")
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
@@ -106,7 +106,7 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
     }
 
     public interface AmountStage {
-        DescriptionStage amount(int amount);
+        DescriptionStage amount(long amount);
 
         Builder from(PreviewSubscriptionUpcomingInvoiceLineItems other);
     }
@@ -124,17 +124,21 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
     }
 
     public interface QuantityStage {
-        _FinalStage quantity(int quantity);
+        _FinalStage quantity(long quantity);
     }
 
     public interface _FinalStage {
         PreviewSubscriptionUpcomingInvoiceLineItems build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements AmountStage, DescriptionStage, PriceIdStage, ProrationStage, QuantityStage, _FinalStage {
-        private int amount;
+        private long amount;
 
         private String description;
 
@@ -142,7 +146,7 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
 
         private boolean proration;
 
-        private int quantity;
+        private long quantity;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -161,7 +165,7 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
 
         @java.lang.Override
         @JsonSetter("amount")
-        public DescriptionStage amount(int amount) {
+        public DescriptionStage amount(long amount) {
             this.amount = amount;
             return this;
         }
@@ -189,7 +193,7 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public _FinalStage quantity(int quantity) {
+        public _FinalStage quantity(long quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -198,6 +202,18 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
         public PreviewSubscriptionUpcomingInvoiceLineItems build() {
             return new PreviewSubscriptionUpcomingInvoiceLineItems(
                     amount, description, priceId, proration, quantity, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

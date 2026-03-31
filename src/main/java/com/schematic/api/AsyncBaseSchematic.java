@@ -12,6 +12,7 @@ import com.schematic.api.resources.billing.AsyncBillingClient;
 import com.schematic.api.resources.checkout.AsyncCheckoutClient;
 import com.schematic.api.resources.companies.AsyncCompaniesClient;
 import com.schematic.api.resources.components.AsyncComponentsClient;
+import com.schematic.api.resources.componentspublic.AsyncComponentspublicClient;
 import com.schematic.api.resources.credits.AsyncCreditsClient;
 import com.schematic.api.resources.dataexports.AsyncDataexportsClient;
 import com.schematic.api.resources.entitlements.AsyncEntitlementsClient;
@@ -19,7 +20,9 @@ import com.schematic.api.resources.events.AsyncEventsClient;
 import com.schematic.api.resources.features.AsyncFeaturesClient;
 import com.schematic.api.resources.planbundle.AsyncPlanbundleClient;
 import com.schematic.api.resources.plangroups.AsyncPlangroupsClient;
+import com.schematic.api.resources.planmigrations.AsyncPlanmigrationsClient;
 import com.schematic.api.resources.plans.AsyncPlansClient;
+import com.schematic.api.resources.scheduledcheckout.AsyncScheduledcheckoutClient;
 import com.schematic.api.resources.webhooks.AsyncWebhooksClient;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -55,6 +58,12 @@ public class AsyncBaseSchematic {
 
     protected final Supplier<AsyncPlangroupsClient> plangroupsClient;
 
+    protected final Supplier<AsyncPlanmigrationsClient> planmigrationsClient;
+
+    protected final Supplier<AsyncComponentspublicClient> componentspublicClient;
+
+    protected final Supplier<AsyncScheduledcheckoutClient> scheduledcheckoutClient;
+
     protected final Supplier<AsyncAccesstokensClient> accesstokensClient;
 
     protected final Supplier<AsyncWebhooksClient> webhooksClient;
@@ -75,6 +84,9 @@ public class AsyncBaseSchematic {
         this.featuresClient = Suppliers.memoize(() -> new AsyncFeaturesClient(clientOptions));
         this.planbundleClient = Suppliers.memoize(() -> new AsyncPlanbundleClient(clientOptions));
         this.plangroupsClient = Suppliers.memoize(() -> new AsyncPlangroupsClient(clientOptions));
+        this.planmigrationsClient = Suppliers.memoize(() -> new AsyncPlanmigrationsClient(clientOptions));
+        this.componentspublicClient = Suppliers.memoize(() -> new AsyncComponentspublicClient(clientOptions));
+        this.scheduledcheckoutClient = Suppliers.memoize(() -> new AsyncScheduledcheckoutClient(clientOptions));
         this.accesstokensClient = Suppliers.memoize(() -> new AsyncAccesstokensClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
     }
@@ -158,6 +170,18 @@ public class AsyncBaseSchematic {
 
     public AsyncPlangroupsClient plangroups() {
         return this.plangroupsClient.get();
+    }
+
+    public AsyncPlanmigrationsClient planmigrations() {
+        return this.planmigrationsClient.get();
+    }
+
+    public AsyncComponentspublicClient componentspublic() {
+        return this.componentspublicClient.get();
+    }
+
+    public AsyncScheduledcheckoutClient scheduledcheckout() {
+        return this.scheduledcheckoutClient.get();
     }
 
     public AsyncAccesstokensClient accesstokens() {

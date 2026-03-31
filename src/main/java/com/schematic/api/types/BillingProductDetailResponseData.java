@@ -50,7 +50,7 @@ public final class BillingProductDetailResponseData {
 
     private final double quantity;
 
-    private final int subscriptionCount;
+    private final long subscriptionCount;
 
     private final OffsetDateTime updatedAt;
 
@@ -70,7 +70,7 @@ public final class BillingProductDetailResponseData {
             String productId,
             BillingProviderType providerType,
             double quantity,
-            int subscriptionCount,
+            long subscriptionCount,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
@@ -160,7 +160,7 @@ public final class BillingProductDetailResponseData {
     }
 
     @JsonProperty("subscription_count")
-    public int getSubscriptionCount() {
+    public long getSubscriptionCount() {
         return subscriptionCount;
     }
 
@@ -270,7 +270,7 @@ public final class BillingProductDetailResponseData {
     }
 
     public interface SubscriptionCountStage {
-        UpdatedAtStage subscriptionCount(int subscriptionCount);
+        UpdatedAtStage subscriptionCount(long subscriptionCount);
     }
 
     public interface UpdatedAtStage {
@@ -279,6 +279,10 @@ public final class BillingProductDetailResponseData {
 
     public interface _FinalStage {
         BillingProductDetailResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         /**
          * <p>Deprecated; currencies are associated with prices, not products</p>
@@ -333,7 +337,7 @@ public final class BillingProductDetailResponseData {
 
         private double quantity;
 
-        private int subscriptionCount;
+        private long subscriptionCount;
 
         private OffsetDateTime updatedAt;
 
@@ -440,7 +444,7 @@ public final class BillingProductDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("subscription_count")
-        public UpdatedAtStage subscriptionCount(int subscriptionCount) {
+        public UpdatedAtStage subscriptionCount(long subscriptionCount) {
             this.subscriptionCount = subscriptionCount;
             return this;
         }
@@ -528,6 +532,18 @@ public final class BillingProductDetailResponseData {
                     subscriptionCount,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

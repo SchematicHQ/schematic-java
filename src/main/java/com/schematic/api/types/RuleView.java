@@ -40,9 +40,7 @@ public final class RuleView {
 
     private final String name;
 
-    private final Optional<String> planVersionId;
-
-    private final int priority;
+    private final long priority;
 
     private final String ruleType;
 
@@ -61,8 +59,7 @@ public final class RuleView {
             Optional<String> flagId,
             String id,
             String name,
-            Optional<String> planVersionId,
-            int priority,
+            long priority,
             String ruleType,
             OffsetDateTime updatedAt,
             boolean value,
@@ -75,7 +72,6 @@ public final class RuleView {
         this.flagId = flagId;
         this.id = id;
         this.name = name;
-        this.planVersionId = planVersionId;
         this.priority = priority;
         this.ruleType = ruleType;
         this.updatedAt = updatedAt;
@@ -123,13 +119,8 @@ public final class RuleView {
         return name;
     }
 
-    @JsonProperty("plan_version_id")
-    public Optional<String> getPlanVersionId() {
-        return planVersionId;
-    }
-
     @JsonProperty("priority")
-    public int getPriority() {
+    public long getPriority() {
         return priority;
     }
 
@@ -168,7 +159,6 @@ public final class RuleView {
                 && flagId.equals(other.flagId)
                 && id.equals(other.id)
                 && name.equals(other.name)
-                && planVersionId.equals(other.planVersionId)
                 && priority == other.priority
                 && ruleType.equals(other.ruleType)
                 && updatedAt.equals(other.updatedAt)
@@ -186,7 +176,6 @@ public final class RuleView {
                 this.flagId,
                 this.id,
                 this.name,
-                this.planVersionId,
                 this.priority,
                 this.ruleType,
                 this.updatedAt,
@@ -225,7 +214,7 @@ public final class RuleView {
     }
 
     public interface PriorityStage {
-        RuleTypeStage priority(int priority);
+        RuleTypeStage priority(long priority);
     }
 
     public interface RuleTypeStage {
@@ -243,6 +232,10 @@ public final class RuleView {
     public interface _FinalStage {
         RuleView build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage conditionGroups(List<ConditionGroupView> conditionGroups);
 
         _FinalStage addConditionGroups(ConditionGroupView conditionGroups);
@@ -258,10 +251,6 @@ public final class RuleView {
         _FinalStage flagId(Optional<String> flagId);
 
         _FinalStage flagId(String flagId);
-
-        _FinalStage planVersionId(Optional<String> planVersionId);
-
-        _FinalStage planVersionId(String planVersionId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -286,15 +275,13 @@ public final class RuleView {
 
         private String name;
 
-        private int priority;
+        private long priority;
 
         private String ruleType;
 
         private OffsetDateTime updatedAt;
 
         private boolean value;
-
-        private Optional<String> planVersionId = Optional.empty();
 
         private Optional<String> flagId = Optional.empty();
 
@@ -317,7 +304,6 @@ public final class RuleView {
             flagId(other.getFlagId());
             id(other.getId());
             name(other.getName());
-            planVersionId(other.getPlanVersionId());
             priority(other.getPriority());
             ruleType(other.getRuleType());
             updatedAt(other.getUpdatedAt());
@@ -362,7 +348,7 @@ public final class RuleView {
 
         @java.lang.Override
         @JsonSetter("priority")
-        public RuleTypeStage priority(int priority) {
+        public RuleTypeStage priority(long priority) {
             this.priority = priority;
             return this;
         }
@@ -385,19 +371,6 @@ public final class RuleView {
         @JsonSetter("value")
         public _FinalStage value(boolean value) {
             this.value = value;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage planVersionId(String planVersionId) {
-            this.planVersionId = Optional.ofNullable(planVersionId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
-        public _FinalStage planVersionId(Optional<String> planVersionId) {
-            this.planVersionId = planVersionId;
             return this;
         }
 
@@ -473,12 +446,23 @@ public final class RuleView {
                     flagId,
                     id,
                     name,
-                    planVersionId,
                     priority,
                     ruleType,
                     updatedAt,
                     value,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

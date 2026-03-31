@@ -6,6 +6,7 @@ package com.schematic.api.resources.plangroups;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.plangroups.requests.CreatePlanGroupRequestBody;
+import com.schematic.api.resources.plangroups.requests.GetPlanGroupRequest;
 import com.schematic.api.resources.plangroups.requests.UpdatePlanGroupRequestBody;
 import com.schematic.api.resources.plangroups.types.CreatePlanGroupResponse;
 import com.schematic.api.resources.plangroups.types.GetPlanGroupResponse;
@@ -34,6 +35,14 @@ public class PlangroupsClient {
 
     public GetPlanGroupResponse getPlanGroup(RequestOptions requestOptions) {
         return this.rawClient.getPlanGroup(requestOptions).body();
+    }
+
+    public GetPlanGroupResponse getPlanGroup(GetPlanGroupRequest request) {
+        return this.rawClient.getPlanGroup(request).body();
+    }
+
+    public GetPlanGroupResponse getPlanGroup(GetPlanGroupRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getPlanGroup(request, requestOptions).body();
     }
 
     public CreatePlanGroupResponse createPlanGroup(CreatePlanGroupRequestBody request) {

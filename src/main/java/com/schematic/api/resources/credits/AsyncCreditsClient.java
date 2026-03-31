@@ -10,6 +10,7 @@ import com.schematic.api.resources.credits.requests.CountBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCreditBundlesRequest;
+import com.schematic.api.resources.credits.requests.CountCreditEventLedgerRequest;
 import com.schematic.api.resources.credits.requests.CountCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
@@ -20,6 +21,7 @@ import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
+import com.schematic.api.resources.credits.requests.ListCreditEventLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
@@ -29,6 +31,7 @@ import com.schematic.api.resources.credits.types.CountBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCreditBundlesResponse;
+import com.schematic.api.resources.credits.types.CountCreditEventLedgerResponse;
 import com.schematic.api.resources.credits.types.CountCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.CreateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantResponse;
@@ -43,6 +46,7 @@ import com.schematic.api.resources.credits.types.ListBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.ListBillingPlanCreditGrantsResponse;
 import com.schematic.api.resources.credits.types.ListCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.ListCreditBundlesResponse;
+import com.schematic.api.resources.credits.types.ListCreditEventLedgerResponse;
 import com.schematic.api.resources.credits.types.ListGrantsForCreditResponse;
 import com.schematic.api.resources.credits.types.SoftDeleteBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingCreditResponse;
@@ -72,6 +76,10 @@ public class AsyncCreditsClient {
 
     public CompletableFuture<ListBillingCreditsResponse> listBillingCredits() {
         return this.rawClient.listBillingCredits().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListBillingCreditsResponse> listBillingCredits(RequestOptions requestOptions) {
+        return this.rawClient.listBillingCredits(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListBillingCreditsResponse> listBillingCredits(ListBillingCreditsRequest request) {
@@ -126,6 +134,10 @@ public class AsyncCreditsClient {
         return this.rawClient.listCreditBundles().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListCreditBundlesResponse> listCreditBundles(RequestOptions requestOptions) {
+        return this.rawClient.listCreditBundles(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListCreditBundlesResponse> listCreditBundles(ListCreditBundlesRequest request) {
         return this.rawClient.listCreditBundles(request).thenApply(response -> response.body());
     }
@@ -177,6 +189,10 @@ public class AsyncCreditsClient {
         return this.rawClient.countCreditBundles().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountCreditBundlesResponse> countCreditBundles(RequestOptions requestOptions) {
+        return this.rawClient.countCreditBundles(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountCreditBundlesResponse> countCreditBundles(CountCreditBundlesRequest request) {
         return this.rawClient.countCreditBundles(request).thenApply(response -> response.body());
     }
@@ -190,6 +206,10 @@ public class AsyncCreditsClient {
         return this.rawClient.countBillingCredits().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountBillingCreditsResponse> countBillingCredits(RequestOptions requestOptions) {
+        return this.rawClient.countBillingCredits(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountBillingCreditsResponse> countBillingCredits(CountBillingCreditsRequest request) {
         return this.rawClient.countBillingCredits(request).thenApply(response -> response.body());
     }
@@ -201,6 +221,10 @@ public class AsyncCreditsClient {
 
     public CompletableFuture<ZeroOutGrantResponse> zeroOutGrant(String grantId) {
         return this.rawClient.zeroOutGrant(grantId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ZeroOutGrantResponse> zeroOutGrant(String grantId, RequestOptions requestOptions) {
+        return this.rawClient.zeroOutGrant(grantId, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ZeroOutGrantResponse> zeroOutGrant(String grantId, ZeroOutGrantRequestBody request) {
@@ -228,6 +252,10 @@ public class AsyncCreditsClient {
         return this.rawClient.countCompanyGrants().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountCompanyGrantsResponse> countCompanyGrants(RequestOptions requestOptions) {
+        return this.rawClient.countCompanyGrants(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountCompanyGrantsResponse> countCompanyGrants(CountCompanyGrantsRequest request) {
         return this.rawClient.countCompanyGrants(request).thenApply(response -> response.body());
     }
@@ -239,6 +267,10 @@ public class AsyncCreditsClient {
 
     public CompletableFuture<ListCompanyGrantsResponse> listCompanyGrants() {
         return this.rawClient.listCompanyGrants().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCompanyGrantsResponse> listCompanyGrants(RequestOptions requestOptions) {
+        return this.rawClient.listCompanyGrants(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListCompanyGrantsResponse> listCompanyGrants(ListCompanyGrantsRequest request) {
@@ -255,6 +287,11 @@ public class AsyncCreditsClient {
     }
 
     public CompletableFuture<CountBillingCreditsGrantsResponse> countBillingCreditsGrants(
+            RequestOptions requestOptions) {
+        return this.rawClient.countBillingCreditsGrants(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountBillingCreditsGrantsResponse> countBillingCreditsGrants(
             CountBillingCreditsGrantsRequest request) {
         return this.rawClient.countBillingCreditsGrants(request).thenApply(response -> response.body());
     }
@@ -266,6 +303,10 @@ public class AsyncCreditsClient {
 
     public CompletableFuture<ListGrantsForCreditResponse> listGrantsForCredit() {
         return this.rawClient.listGrantsForCredit().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListGrantsForCreditResponse> listGrantsForCredit(RequestOptions requestOptions) {
+        return this.rawClient.listGrantsForCredit(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListGrantsForCreditResponse> listGrantsForCredit(ListGrantsForCreditRequest request) {
@@ -298,6 +339,11 @@ public class AsyncCreditsClient {
 
     public CompletableFuture<ListBillingPlanCreditGrantsResponse> listBillingPlanCreditGrants() {
         return this.rawClient.listBillingPlanCreditGrants().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListBillingPlanCreditGrantsResponse> listBillingPlanCreditGrants(
+            RequestOptions requestOptions) {
+        return this.rawClient.listBillingPlanCreditGrants(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListBillingPlanCreditGrantsResponse> listBillingPlanCreditGrants(
@@ -341,6 +387,13 @@ public class AsyncCreditsClient {
     }
 
     public CompletableFuture<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
+            String planGrantId, RequestOptions requestOptions) {
+        return this.rawClient
+                .deleteBillingPlanCreditGrant(planGrantId, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
             String planGrantId, DeleteBillingPlanCreditGrantRequest request) {
         return this.rawClient.deleteBillingPlanCreditGrant(planGrantId, request).thenApply(response -> response.body());
     }
@@ -357,6 +410,11 @@ public class AsyncCreditsClient {
     }
 
     public CompletableFuture<CountBillingPlanCreditGrantsResponse> countBillingPlanCreditGrants(
+            RequestOptions requestOptions) {
+        return this.rawClient.countBillingPlanCreditGrants(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountBillingPlanCreditGrantsResponse> countBillingPlanCreditGrants(
             CountBillingPlanCreditGrantsRequest request) {
         return this.rawClient.countBillingPlanCreditGrants(request).thenApply(response -> response.body());
     }
@@ -366,5 +424,25 @@ public class AsyncCreditsClient {
         return this.rawClient
                 .countBillingPlanCreditGrants(request, requestOptions)
                 .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCreditEventLedgerResponse> listCreditEventLedger(
+            ListCreditEventLedgerRequest request) {
+        return this.rawClient.listCreditEventLedger(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCreditEventLedgerResponse> listCreditEventLedger(
+            ListCreditEventLedgerRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listCreditEventLedger(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountCreditEventLedgerResponse> countCreditEventLedger(
+            CountCreditEventLedgerRequest request) {
+        return this.rawClient.countCreditEventLedger(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountCreditEventLedgerResponse> countCreditEventLedger(
+            CountCreditEventLedgerRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countCreditEventLedger(request, requestOptions).thenApply(response -> response.body());
     }
 }

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FeatureEntitlement.Builder.class)
 public final class FeatureEntitlement {
-    private final Optional<Integer> allocation;
+    private final Optional<Long> allocation;
 
     private final Optional<String> creditId;
 
@@ -44,16 +44,16 @@ public final class FeatureEntitlement {
 
     private final Optional<FeatureEntitlementMonthReset> monthReset;
 
-    private final Optional<Integer> softLimit;
+    private final Optional<Long> softLimit;
 
-    private final Optional<Integer> usage;
+    private final Optional<Long> usage;
 
     private final EntitlementValueType valueType;
 
     private final Map<String, Object> additionalProperties;
 
     private FeatureEntitlement(
-            Optional<Integer> allocation,
+            Optional<Long> allocation,
             Optional<String> creditId,
             Optional<Double> creditRemaining,
             Optional<Double> creditTotal,
@@ -64,8 +64,8 @@ public final class FeatureEntitlement {
             Optional<FeatureEntitlementMetricPeriod> metricPeriod,
             Optional<OffsetDateTime> metricResetAt,
             Optional<FeatureEntitlementMonthReset> monthReset,
-            Optional<Integer> softLimit,
-            Optional<Integer> usage,
+            Optional<Long> softLimit,
+            Optional<Long> usage,
             EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
         this.allocation = allocation;
@@ -89,7 +89,7 @@ public final class FeatureEntitlement {
      * @return If the company has a numeric entitlement for this feature, the allocated amount
      */
     @JsonProperty("allocation")
-    public Optional<Integer> getAllocation() {
+    public Optional<Long> getAllocation() {
         return allocation;
     }
 
@@ -177,7 +177,7 @@ public final class FeatureEntitlement {
      * @return For usage-based pricing, the soft limit for overage charges or the next tier boundary
      */
     @JsonProperty("soft_limit")
-    public Optional<Integer> getSoftLimit() {
+    public Optional<Long> getSoftLimit() {
         return softLimit;
     }
 
@@ -185,10 +185,13 @@ public final class FeatureEntitlement {
      * @return If the company has a numeric entitlement for this feature, the current usage amount
      */
     @JsonProperty("usage")
-    public Optional<Integer> getUsage() {
+    public Optional<Long> getUsage() {
         return usage;
     }
 
+    /**
+     * @return The type of the entitlement value
+     */
     @JsonProperty("value_type")
     public EntitlementValueType getValueType() {
         return valueType;
@@ -267,18 +270,25 @@ public final class FeatureEntitlement {
     }
 
     public interface ValueTypeStage {
+        /**
+         * <p>The type of the entitlement value</p>
+         */
         _FinalStage valueType(@NotNull EntitlementValueType valueType);
     }
 
     public interface _FinalStage {
         FeatureEntitlement build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>If the company has a numeric entitlement for this feature, the allocated amount</p>
          */
-        _FinalStage allocation(Optional<Integer> allocation);
+        _FinalStage allocation(Optional<Long> allocation);
 
-        _FinalStage allocation(Integer allocation);
+        _FinalStage allocation(Long allocation);
 
         /**
          * <p>If the company has a credit-based entitlement for this feature, the ID of the credit</p>
@@ -339,16 +349,16 @@ public final class FeatureEntitlement {
         /**
          * <p>For usage-based pricing, the soft limit for overage charges or the next tier boundary</p>
          */
-        _FinalStage softLimit(Optional<Integer> softLimit);
+        _FinalStage softLimit(Optional<Long> softLimit);
 
-        _FinalStage softLimit(Integer softLimit);
+        _FinalStage softLimit(Long softLimit);
 
         /**
          * <p>If the company has a numeric entitlement for this feature, the current usage amount</p>
          */
-        _FinalStage usage(Optional<Integer> usage);
+        _FinalStage usage(Optional<Long> usage);
 
-        _FinalStage usage(Integer usage);
+        _FinalStage usage(Long usage);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -359,9 +369,9 @@ public final class FeatureEntitlement {
 
         private EntitlementValueType valueType;
 
-        private Optional<Integer> usage = Optional.empty();
+        private Optional<Long> usage = Optional.empty();
 
-        private Optional<Integer> softLimit = Optional.empty();
+        private Optional<Long> softLimit = Optional.empty();
 
         private Optional<FeatureEntitlementMonthReset> monthReset = Optional.empty();
 
@@ -379,7 +389,7 @@ public final class FeatureEntitlement {
 
         private Optional<String> creditId = Optional.empty();
 
-        private Optional<Integer> allocation = Optional.empty();
+        private Optional<Long> allocation = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -429,6 +439,11 @@ public final class FeatureEntitlement {
             return this;
         }
 
+        /**
+         * <p>The type of the entitlement value</p>
+         * <p>The type of the entitlement value</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("value_type")
         public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
@@ -441,7 +456,7 @@ public final class FeatureEntitlement {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage usage(Integer usage) {
+        public _FinalStage usage(Long usage) {
             this.usage = Optional.ofNullable(usage);
             return this;
         }
@@ -451,7 +466,7 @@ public final class FeatureEntitlement {
          */
         @java.lang.Override
         @JsonSetter(value = "usage", nulls = Nulls.SKIP)
-        public _FinalStage usage(Optional<Integer> usage) {
+        public _FinalStage usage(Optional<Long> usage) {
             this.usage = usage;
             return this;
         }
@@ -461,7 +476,7 @@ public final class FeatureEntitlement {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage softLimit(Integer softLimit) {
+        public _FinalStage softLimit(Long softLimit) {
             this.softLimit = Optional.ofNullable(softLimit);
             return this;
         }
@@ -471,7 +486,7 @@ public final class FeatureEntitlement {
          */
         @java.lang.Override
         @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
-        public _FinalStage softLimit(Optional<Integer> softLimit) {
+        public _FinalStage softLimit(Optional<Long> softLimit) {
             this.softLimit = softLimit;
             return this;
         }
@@ -641,7 +656,7 @@ public final class FeatureEntitlement {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage allocation(Integer allocation) {
+        public _FinalStage allocation(Long allocation) {
             this.allocation = Optional.ofNullable(allocation);
             return this;
         }
@@ -651,7 +666,7 @@ public final class FeatureEntitlement {
          */
         @java.lang.Override
         @JsonSetter(value = "allocation", nulls = Nulls.SKIP)
-        public _FinalStage allocation(Optional<Integer> allocation) {
+        public _FinalStage allocation(Optional<Long> allocation) {
             this.allocation = allocation;
             return this;
         }
@@ -674,6 +689,18 @@ public final class FeatureEntitlement {
                     usage,
                     valueType,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -5,7 +5,6 @@ package com.schematic.api.resources.companies;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
-import com.schematic.api.resources.companies.requests.CountCompaniesForAdvancedFilterRequest;
 import com.schematic.api.resources.companies.requests.CountCompaniesRequest;
 import com.schematic.api.resources.companies.requests.CountEntityKeyDefinitionsRequest;
 import com.schematic.api.resources.companies.requests.CountEntityTraitDefinitionsRequest;
@@ -17,7 +16,6 @@ import com.schematic.api.resources.companies.requests.DeleteCompanyRequest;
 import com.schematic.api.resources.companies.requests.GetActiveCompanySubscriptionRequest;
 import com.schematic.api.resources.companies.requests.GetEntityTraitValuesRequest;
 import com.schematic.api.resources.companies.requests.GetOrCreateCompanyMembershipRequestBody;
-import com.schematic.api.resources.companies.requests.ListCompaniesForAdvancedFilterRequest;
 import com.schematic.api.resources.companies.requests.ListCompaniesRequest;
 import com.schematic.api.resources.companies.requests.ListCompanyMembershipsRequest;
 import com.schematic.api.resources.companies.requests.ListEntityKeyDefinitionsRequest;
@@ -30,7 +28,6 @@ import com.schematic.api.resources.companies.requests.LookupUserRequest;
 import com.schematic.api.resources.companies.requests.UpdateEntityTraitDefinitionRequestBody;
 import com.schematic.api.resources.companies.requests.UpdatePlanTraitBulkRequestBody;
 import com.schematic.api.resources.companies.requests.UpdatePlanTraitRequestBody;
-import com.schematic.api.resources.companies.types.CountCompaniesForAdvancedFilterResponse;
 import com.schematic.api.resources.companies.types.CountCompaniesResponse;
 import com.schematic.api.resources.companies.types.CountEntityKeyDefinitionsResponse;
 import com.schematic.api.resources.companies.types.CountEntityTraitDefinitionsResponse;
@@ -54,7 +51,6 @@ import com.schematic.api.resources.companies.types.GetOrCreateEntityTraitDefinit
 import com.schematic.api.resources.companies.types.GetPlanChangeResponse;
 import com.schematic.api.resources.companies.types.GetPlanTraitResponse;
 import com.schematic.api.resources.companies.types.GetUserResponse;
-import com.schematic.api.resources.companies.types.ListCompaniesForAdvancedFilterResponse;
 import com.schematic.api.resources.companies.types.ListCompaniesResponse;
 import com.schematic.api.resources.companies.types.ListCompanyMembershipsResponse;
 import com.schematic.api.resources.companies.types.ListEntityKeyDefinitionsResponse;
@@ -98,6 +94,10 @@ public class AsyncCompaniesClient {
         return this.rawClient.listCompanies().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListCompaniesResponse> listCompanies(RequestOptions requestOptions) {
+        return this.rawClient.listCompanies(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListCompaniesResponse> listCompanies(ListCompaniesRequest request) {
         return this.rawClient.listCompanies(request).thenApply(response -> response.body());
     }
@@ -128,6 +128,10 @@ public class AsyncCompaniesClient {
         return this.rawClient.deleteCompany(companyId).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<DeleteCompanyResponse> deleteCompany(String companyId, RequestOptions requestOptions) {
+        return this.rawClient.deleteCompany(companyId, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<DeleteCompanyResponse> deleteCompany(String companyId, DeleteCompanyRequest request) {
         return this.rawClient.deleteCompany(companyId, request).thenApply(response -> response.body());
     }
@@ -141,6 +145,10 @@ public class AsyncCompaniesClient {
         return this.rawClient.countCompanies().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountCompaniesResponse> countCompanies(RequestOptions requestOptions) {
+        return this.rawClient.countCompanies(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountCompaniesResponse> countCompanies(CountCompaniesRequest request) {
         return this.rawClient.countCompanies(request).thenApply(response -> response.body());
     }
@@ -148,22 +156,6 @@ public class AsyncCompaniesClient {
     public CompletableFuture<CountCompaniesResponse> countCompanies(
             CountCompaniesRequest request, RequestOptions requestOptions) {
         return this.rawClient.countCompanies(request, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<CountCompaniesForAdvancedFilterResponse> countCompaniesForAdvancedFilter() {
-        return this.rawClient.countCompaniesForAdvancedFilter().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<CountCompaniesForAdvancedFilterResponse> countCompaniesForAdvancedFilter(
-            CountCompaniesForAdvancedFilterRequest request) {
-        return this.rawClient.countCompaniesForAdvancedFilter(request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<CountCompaniesForAdvancedFilterResponse> countCompaniesForAdvancedFilter(
-            CountCompaniesForAdvancedFilterRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .countCompaniesForAdvancedFilter(request, requestOptions)
-                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<CreateCompanyResponse> createCompany(UpsertCompanyRequestBody request) {
@@ -184,26 +176,28 @@ public class AsyncCompaniesClient {
         return this.rawClient.deleteCompanyByKeys(request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<ListCompaniesForAdvancedFilterResponse> listCompaniesForAdvancedFilter() {
-        return this.rawClient.listCompaniesForAdvancedFilter().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<ListCompaniesForAdvancedFilterResponse> listCompaniesForAdvancedFilter(
-            ListCompaniesForAdvancedFilterRequest request) {
-        return this.rawClient.listCompaniesForAdvancedFilter(request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<ListCompaniesForAdvancedFilterResponse> listCompaniesForAdvancedFilter(
-            ListCompaniesForAdvancedFilterRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .listCompaniesForAdvancedFilter(request, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
+    /**
+     * Company lookup is determined to resolve a company from its keys, similar to how many of our other apis work.
+     * The following approaches will all work to resolve a company and any of them are appropriate:
+     * <ol>
+     * <li><code>/companies/lookup?keys={&quot;foo&quot;: &quot;bar&quot;, &quot;fizz&quot;: &quot;buzz&quot;}</code></li>
+     * <li><code>/companies/lookup?keys[foo]=bar&amp;keys[fizz]=buzz</code></li>
+     * <li><code>/companies/lookup?foo=bar&amp;fizz=buzz</code></li>
+     * </ol>
+     */
     public CompletableFuture<LookupCompanyResponse> lookupCompany(LookupCompanyRequest request) {
         return this.rawClient.lookupCompany(request).thenApply(response -> response.body());
     }
 
+    /**
+     * Company lookup is determined to resolve a company from its keys, similar to how many of our other apis work.
+     * The following approaches will all work to resolve a company and any of them are appropriate:
+     * <ol>
+     * <li><code>/companies/lookup?keys={&quot;foo&quot;: &quot;bar&quot;, &quot;fizz&quot;: &quot;buzz&quot;}</code></li>
+     * <li><code>/companies/lookup?keys[foo]=bar&amp;keys[fizz]=buzz</code></li>
+     * <li><code>/companies/lookup?foo=bar&amp;fizz=buzz</code></li>
+     * </ol>
+     */
     public CompletableFuture<LookupCompanyResponse> lookupCompany(
             LookupCompanyRequest request, RequestOptions requestOptions) {
         return this.rawClient.lookupCompany(request, requestOptions).thenApply(response -> response.body());
@@ -211,6 +205,10 @@ public class AsyncCompaniesClient {
 
     public CompletableFuture<ListCompanyMembershipsResponse> listCompanyMemberships() {
         return this.rawClient.listCompanyMemberships().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCompanyMembershipsResponse> listCompanyMemberships(RequestOptions requestOptions) {
+        return this.rawClient.listCompanyMemberships(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListCompanyMembershipsResponse> listCompanyMemberships(
@@ -251,6 +249,11 @@ public class AsyncCompaniesClient {
     }
 
     public CompletableFuture<GetActiveCompanySubscriptionResponse> getActiveCompanySubscription(
+            RequestOptions requestOptions) {
+        return this.rawClient.getActiveCompanySubscription(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetActiveCompanySubscriptionResponse> getActiveCompanySubscription(
             GetActiveCompanySubscriptionRequest request) {
         return this.rawClient.getActiveCompanySubscription(request).thenApply(response -> response.body());
     }
@@ -275,6 +278,10 @@ public class AsyncCompaniesClient {
         return this.rawClient.listEntityKeyDefinitions().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListEntityKeyDefinitionsResponse> listEntityKeyDefinitions(RequestOptions requestOptions) {
+        return this.rawClient.listEntityKeyDefinitions(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListEntityKeyDefinitionsResponse> listEntityKeyDefinitions(
             ListEntityKeyDefinitionsRequest request) {
         return this.rawClient.listEntityKeyDefinitions(request).thenApply(response -> response.body());
@@ -290,6 +297,11 @@ public class AsyncCompaniesClient {
     }
 
     public CompletableFuture<CountEntityKeyDefinitionsResponse> countEntityKeyDefinitions(
+            RequestOptions requestOptions) {
+        return this.rawClient.countEntityKeyDefinitions(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountEntityKeyDefinitionsResponse> countEntityKeyDefinitions(
             CountEntityKeyDefinitionsRequest request) {
         return this.rawClient.countEntityKeyDefinitions(request).thenApply(response -> response.body());
     }
@@ -301,6 +313,11 @@ public class AsyncCompaniesClient {
 
     public CompletableFuture<ListEntityTraitDefinitionsResponse> listEntityTraitDefinitions() {
         return this.rawClient.listEntityTraitDefinitions().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListEntityTraitDefinitionsResponse> listEntityTraitDefinitions(
+            RequestOptions requestOptions) {
+        return this.rawClient.listEntityTraitDefinitions(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListEntityTraitDefinitionsResponse> listEntityTraitDefinitions(
@@ -360,6 +377,11 @@ public class AsyncCompaniesClient {
     }
 
     public CompletableFuture<CountEntityTraitDefinitionsResponse> countEntityTraitDefinitions(
+            RequestOptions requestOptions) {
+        return this.rawClient.countEntityTraitDefinitions(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountEntityTraitDefinitionsResponse> countEntityTraitDefinitions(
             CountEntityTraitDefinitionsRequest request) {
         return this.rawClient.countEntityTraitDefinitions(request).thenApply(response -> response.body());
     }
@@ -384,6 +406,10 @@ public class AsyncCompaniesClient {
         return this.rawClient.listPlanChanges().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListPlanChangesResponse> listPlanChanges(RequestOptions requestOptions) {
+        return this.rawClient.listPlanChanges(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListPlanChangesResponse> listPlanChanges(ListPlanChangesRequest request) {
         return this.rawClient.listPlanChanges(request).thenApply(response -> response.body());
     }
@@ -403,6 +429,10 @@ public class AsyncCompaniesClient {
 
     public CompletableFuture<ListPlanTraitsResponse> listPlanTraits() {
         return this.rawClient.listPlanTraits().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListPlanTraitsResponse> listPlanTraits(RequestOptions requestOptions) {
+        return this.rawClient.listPlanTraits(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListPlanTraitsResponse> listPlanTraits(ListPlanTraitsRequest request) {
@@ -466,6 +496,10 @@ public class AsyncCompaniesClient {
         return this.rawClient.countPlanTraits().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountPlanTraitsResponse> countPlanTraits(RequestOptions requestOptions) {
+        return this.rawClient.countPlanTraits(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountPlanTraitsResponse> countPlanTraits(CountPlanTraitsRequest request) {
         return this.rawClient.countPlanTraits(request).thenApply(response -> response.body());
     }
@@ -486,6 +520,10 @@ public class AsyncCompaniesClient {
 
     public CompletableFuture<ListUsersResponse> listUsers() {
         return this.rawClient.listUsers().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListUsersResponse> listUsers(RequestOptions requestOptions) {
+        return this.rawClient.listUsers(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListUsersResponse> listUsers(ListUsersRequest request) {
@@ -523,6 +561,10 @@ public class AsyncCompaniesClient {
 
     public CompletableFuture<CountUsersResponse> countUsers() {
         return this.rawClient.countUsers().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountUsersResponse> countUsers(RequestOptions requestOptions) {
+        return this.rawClient.countUsers(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountUsersResponse> countUsers(CountUsersRequest request) {

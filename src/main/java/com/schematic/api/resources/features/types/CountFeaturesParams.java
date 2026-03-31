@@ -28,9 +28,11 @@ public final class CountFeaturesParams {
 
     private final Optional<List<String>> ids;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
+
+    private final Optional<String> planVersionId;
 
     private final Optional<String> q;
 
@@ -44,8 +46,9 @@ public final class CountFeaturesParams {
             Optional<Boolean> booleanRequireEvent,
             Optional<List<FeatureType>> featureType,
             Optional<List<String>> ids,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
+            Optional<String> planVersionId,
             Optional<String> q,
             Optional<String> withoutCompanyOverrideFor,
             Optional<String> withoutPlanEntitlementFor,
@@ -55,6 +58,7 @@ public final class CountFeaturesParams {
         this.ids = ids;
         this.limit = limit;
         this.offset = offset;
+        this.planVersionId = planVersionId;
         this.q = q;
         this.withoutCompanyOverrideFor = withoutCompanyOverrideFor;
         this.withoutPlanEntitlementFor = withoutPlanEntitlementFor;
@@ -86,7 +90,7 @@ public final class CountFeaturesParams {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -94,8 +98,16 @@ public final class CountFeaturesParams {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
+    }
+
+    /**
+     * @return Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
+     */
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
     }
 
     /**
@@ -139,6 +151,7 @@ public final class CountFeaturesParams {
                 && ids.equals(other.ids)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
+                && planVersionId.equals(other.planVersionId)
                 && q.equals(other.q)
                 && withoutCompanyOverrideFor.equals(other.withoutCompanyOverrideFor)
                 && withoutPlanEntitlementFor.equals(other.withoutPlanEntitlementFor);
@@ -152,6 +165,7 @@ public final class CountFeaturesParams {
                 this.ids,
                 this.limit,
                 this.offset,
+                this.planVersionId,
                 this.q,
                 this.withoutCompanyOverrideFor,
                 this.withoutPlanEntitlementFor);
@@ -174,9 +188,11 @@ public final class CountFeaturesParams {
 
         private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
+
+        private Optional<String> planVersionId = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -195,6 +211,7 @@ public final class CountFeaturesParams {
             ids(other.getIds());
             limit(other.getLimit());
             offset(other.getOffset());
+            planVersionId(other.getPlanVersionId());
             q(other.getQ());
             withoutCompanyOverrideFor(other.getWithoutCompanyOverrideFor());
             withoutPlanEntitlementFor(other.getWithoutPlanEntitlementFor());
@@ -244,12 +261,12 @@ public final class CountFeaturesParams {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -258,13 +275,27 @@ public final class CountFeaturesParams {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
+            return this;
+        }
+
+        /**
+         * <p>Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used</p>
+         */
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
             return this;
         }
 
@@ -317,10 +348,21 @@ public final class CountFeaturesParams {
                     ids,
                     limit,
                     offset,
+                    planVersionId,
                     q,
                     withoutCompanyOverrideFor,
                     withoutPlanEntitlementFor,
                     additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

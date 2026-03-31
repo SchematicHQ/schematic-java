@@ -40,6 +40,10 @@ public class AsyncComponentsClient {
         return this.rawClient.listComponents().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListComponentsResponse> listComponents(RequestOptions requestOptions) {
+        return this.rawClient.listComponents(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListComponentsResponse> listComponents(ListComponentsRequest request) {
         return this.rawClient.listComponents(request).thenApply(response -> response.body());
     }
@@ -71,6 +75,11 @@ public class AsyncComponentsClient {
     }
 
     public CompletableFuture<UpdateComponentResponse> updateComponent(
+            String componentId, RequestOptions requestOptions) {
+        return this.rawClient.updateComponent(componentId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpdateComponentResponse> updateComponent(
             String componentId, UpdateComponentRequestBody request) {
         return this.rawClient.updateComponent(componentId, request).thenApply(response -> response.body());
     }
@@ -95,6 +104,10 @@ public class AsyncComponentsClient {
         return this.rawClient.countComponents().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountComponentsResponse> countComponents(RequestOptions requestOptions) {
+        return this.rawClient.countComponents(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountComponentsResponse> countComponents(CountComponentsRequest request) {
         return this.rawClient.countComponents(request).thenApply(response -> response.body());
     }
@@ -106,6 +119,10 @@ public class AsyncComponentsClient {
 
     public CompletableFuture<PreviewComponentDataResponse> previewComponentData() {
         return this.rawClient.previewComponentData().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<PreviewComponentDataResponse> previewComponentData(RequestOptions requestOptions) {
+        return this.rawClient.previewComponentData(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<PreviewComponentDataResponse> previewComponentData(PreviewComponentDataRequest request) {

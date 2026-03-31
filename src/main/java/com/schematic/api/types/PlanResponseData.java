@@ -178,6 +178,10 @@ public final class PlanResponseData {
     public interface _FinalStage {
         PlanResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage audienceType(Optional<String> audienceType);
 
         _FinalStage audienceType(String audienceType);
@@ -293,6 +297,18 @@ public final class PlanResponseData {
         public PlanResponseData build() {
             return new PlanResponseData(
                     audienceType, createdAt, description, icon, id, name, planType, updatedAt, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

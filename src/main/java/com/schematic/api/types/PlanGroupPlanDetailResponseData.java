@@ -24,13 +24,15 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanGroupPlanDetailResponseData.Builder.class)
 public final class PlanGroupPlanDetailResponseData {
+    private final Optional<PlanVersionResponseData> activeVersion;
+
     private final Optional<String> audienceType;
 
     private final Optional<BillingProductDetailResponseData> billingProduct;
 
     private final ChargeType chargeType;
 
-    private final int companyCount;
+    private final long companyCount;
 
     private final List<String> compatiblePlanIds;
 
@@ -38,9 +40,13 @@ public final class PlanGroupPlanDetailResponseData {
 
     private final OffsetDateTime createdAt;
 
+    private final List<PlanCurrencyPricesResponseData> currencyPrices;
+
     private final Optional<CustomPlanViewConfigResponseData> customPlanConfig;
 
     private final String description;
+
+    private final Optional<PlanVersionResponseData> draftVersion;
 
     private final List<PlanEntitlementResponseData> entitlements;
 
@@ -68,7 +74,7 @@ public final class PlanGroupPlanDetailResponseData {
 
     private final PlanType planType;
 
-    private final Optional<Integer> trialDays;
+    private final Optional<Long> trialDays;
 
     private final OffsetDateTime updatedAt;
 
@@ -79,15 +85,18 @@ public final class PlanGroupPlanDetailResponseData {
     private final Map<String, Object> additionalProperties;
 
     private PlanGroupPlanDetailResponseData(
+            Optional<PlanVersionResponseData> activeVersion,
             Optional<String> audienceType,
             Optional<BillingProductDetailResponseData> billingProduct,
             ChargeType chargeType,
-            int companyCount,
+            long companyCount,
             List<String> compatiblePlanIds,
             PlanControlledByType controlledBy,
             OffsetDateTime createdAt,
+            List<PlanCurrencyPricesResponseData> currencyPrices,
             Optional<CustomPlanViewConfigResponseData> customPlanConfig,
             String description,
+            Optional<PlanVersionResponseData> draftVersion,
             List<PlanEntitlementResponseData> entitlements,
             List<FeatureDetailResponseData> features,
             String icon,
@@ -101,11 +110,12 @@ public final class PlanGroupPlanDetailResponseData {
             String name,
             Optional<BillingPriceResponseData> oneTimePrice,
             PlanType planType,
-            Optional<Integer> trialDays,
+            Optional<Long> trialDays,
             OffsetDateTime updatedAt,
             List<PlanVersionResponseData> versions,
             Optional<BillingPriceResponseData> yearlyPrice,
             Map<String, Object> additionalProperties) {
+        this.activeVersion = activeVersion;
         this.audienceType = audienceType;
         this.billingProduct = billingProduct;
         this.chargeType = chargeType;
@@ -113,8 +123,10 @@ public final class PlanGroupPlanDetailResponseData {
         this.compatiblePlanIds = compatiblePlanIds;
         this.controlledBy = controlledBy;
         this.createdAt = createdAt;
+        this.currencyPrices = currencyPrices;
         this.customPlanConfig = customPlanConfig;
         this.description = description;
+        this.draftVersion = draftVersion;
         this.entitlements = entitlements;
         this.features = features;
         this.icon = icon;
@@ -135,6 +147,11 @@ public final class PlanGroupPlanDetailResponseData {
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("active_version")
+    public Optional<PlanVersionResponseData> getActiveVersion() {
+        return activeVersion;
+    }
+
     @JsonProperty("audience_type")
     public Optional<String> getAudienceType() {
         return audienceType;
@@ -151,7 +168,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     @JsonProperty("company_count")
-    public int getCompanyCount() {
+    public long getCompanyCount() {
         return companyCount;
     }
 
@@ -170,6 +187,11 @@ public final class PlanGroupPlanDetailResponseData {
         return createdAt;
     }
 
+    @JsonProperty("currency_prices")
+    public List<PlanCurrencyPricesResponseData> getCurrencyPrices() {
+        return currencyPrices;
+    }
+
     @JsonProperty("custom_plan_config")
     public Optional<CustomPlanViewConfigResponseData> getCustomPlanConfig() {
         return customPlanConfig;
@@ -178,6 +200,11 @@ public final class PlanGroupPlanDetailResponseData {
     @JsonProperty("description")
     public String getDescription() {
         return description;
+    }
+
+    @JsonProperty("draft_version")
+    public Optional<PlanVersionResponseData> getDraftVersion() {
+        return draftVersion;
     }
 
     @JsonProperty("entitlements")
@@ -246,7 +273,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     @JsonProperty("trial_days")
-    public Optional<Integer> getTrialDays() {
+    public Optional<Long> getTrialDays() {
         return trialDays;
     }
 
@@ -277,15 +304,18 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     private boolean equalTo(PlanGroupPlanDetailResponseData other) {
-        return audienceType.equals(other.audienceType)
+        return activeVersion.equals(other.activeVersion)
+                && audienceType.equals(other.audienceType)
                 && billingProduct.equals(other.billingProduct)
                 && chargeType.equals(other.chargeType)
                 && companyCount == other.companyCount
                 && compatiblePlanIds.equals(other.compatiblePlanIds)
                 && controlledBy.equals(other.controlledBy)
                 && createdAt.equals(other.createdAt)
+                && currencyPrices.equals(other.currencyPrices)
                 && customPlanConfig.equals(other.customPlanConfig)
                 && description.equals(other.description)
+                && draftVersion.equals(other.draftVersion)
                 && entitlements.equals(other.entitlements)
                 && features.equals(other.features)
                 && icon.equals(other.icon)
@@ -308,6 +338,7 @@ public final class PlanGroupPlanDetailResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.activeVersion,
                 this.audienceType,
                 this.billingProduct,
                 this.chargeType,
@@ -315,8 +346,10 @@ public final class PlanGroupPlanDetailResponseData {
                 this.compatiblePlanIds,
                 this.controlledBy,
                 this.createdAt,
+                this.currencyPrices,
                 this.customPlanConfig,
                 this.description,
+                this.draftVersion,
                 this.entitlements,
                 this.features,
                 this.icon,
@@ -352,7 +385,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     public interface CompanyCountStage {
-        ControlledByStage companyCount(int companyCount);
+        ControlledByStage companyCount(long companyCount);
     }
 
     public interface ControlledByStage {
@@ -406,6 +439,14 @@ public final class PlanGroupPlanDetailResponseData {
     public interface _FinalStage {
         PlanGroupPlanDetailResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage activeVersion(Optional<PlanVersionResponseData> activeVersion);
+
+        _FinalStage activeVersion(PlanVersionResponseData activeVersion);
+
         _FinalStage audienceType(Optional<String> audienceType);
 
         _FinalStage audienceType(String audienceType);
@@ -420,9 +461,19 @@ public final class PlanGroupPlanDetailResponseData {
 
         _FinalStage addAllCompatiblePlanIds(List<String> compatiblePlanIds);
 
+        _FinalStage currencyPrices(List<PlanCurrencyPricesResponseData> currencyPrices);
+
+        _FinalStage addCurrencyPrices(PlanCurrencyPricesResponseData currencyPrices);
+
+        _FinalStage addAllCurrencyPrices(List<PlanCurrencyPricesResponseData> currencyPrices);
+
         _FinalStage customPlanConfig(Optional<CustomPlanViewConfigResponseData> customPlanConfig);
 
         _FinalStage customPlanConfig(CustomPlanViewConfigResponseData customPlanConfig);
+
+        _FinalStage draftVersion(Optional<PlanVersionResponseData> draftVersion);
+
+        _FinalStage draftVersion(PlanVersionResponseData draftVersion);
 
         _FinalStage entitlements(List<PlanEntitlementResponseData> entitlements);
 
@@ -448,9 +499,9 @@ public final class PlanGroupPlanDetailResponseData {
 
         _FinalStage oneTimePrice(BillingPriceResponseData oneTimePrice);
 
-        _FinalStage trialDays(Optional<Integer> trialDays);
+        _FinalStage trialDays(Optional<Long> trialDays);
 
-        _FinalStage trialDays(Integer trialDays);
+        _FinalStage trialDays(Long trialDays);
 
         _FinalStage versions(List<PlanVersionResponseData> versions);
 
@@ -482,7 +533,7 @@ public final class PlanGroupPlanDetailResponseData {
                     _FinalStage {
         private ChargeType chargeType;
 
-        private int companyCount;
+        private long companyCount;
 
         private PlanControlledByType controlledBy;
 
@@ -512,7 +563,7 @@ public final class PlanGroupPlanDetailResponseData {
 
         private List<PlanVersionResponseData> versions = new ArrayList<>();
 
-        private Optional<Integer> trialDays = Optional.empty();
+        private Optional<Long> trialDays = Optional.empty();
 
         private Optional<BillingPriceResponseData> oneTimePrice = Optional.empty();
 
@@ -524,13 +575,19 @@ public final class PlanGroupPlanDetailResponseData {
 
         private List<PlanEntitlementResponseData> entitlements = new ArrayList<>();
 
+        private Optional<PlanVersionResponseData> draftVersion = Optional.empty();
+
         private Optional<CustomPlanViewConfigResponseData> customPlanConfig = Optional.empty();
+
+        private List<PlanCurrencyPricesResponseData> currencyPrices = new ArrayList<>();
 
         private List<String> compatiblePlanIds = new ArrayList<>();
 
         private Optional<BillingProductDetailResponseData> billingProduct = Optional.empty();
 
         private Optional<String> audienceType = Optional.empty();
+
+        private Optional<PlanVersionResponseData> activeVersion = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -539,6 +596,7 @@ public final class PlanGroupPlanDetailResponseData {
 
         @java.lang.Override
         public Builder from(PlanGroupPlanDetailResponseData other) {
+            activeVersion(other.getActiveVersion());
             audienceType(other.getAudienceType());
             billingProduct(other.getBillingProduct());
             chargeType(other.getChargeType());
@@ -546,8 +604,10 @@ public final class PlanGroupPlanDetailResponseData {
             compatiblePlanIds(other.getCompatiblePlanIds());
             controlledBy(other.getControlledBy());
             createdAt(other.getCreatedAt());
+            currencyPrices(other.getCurrencyPrices());
             customPlanConfig(other.getCustomPlanConfig());
             description(other.getDescription());
+            draftVersion(other.getDraftVersion());
             entitlements(other.getEntitlements());
             features(other.getFeatures());
             icon(other.getIcon());
@@ -577,7 +637,7 @@ public final class PlanGroupPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("company_count")
-        public ControlledByStage companyCount(int companyCount) {
+        public ControlledByStage companyCount(long companyCount) {
             this.companyCount = companyCount;
             return this;
         }
@@ -704,14 +764,14 @@ public final class PlanGroupPlanDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage trialDays(Integer trialDays) {
+        public _FinalStage trialDays(Long trialDays) {
             this.trialDays = Optional.ofNullable(trialDays);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
-        public _FinalStage trialDays(Optional<Integer> trialDays) {
+        public _FinalStage trialDays(Optional<Long> trialDays) {
             this.trialDays = trialDays;
             return this;
         }
@@ -805,6 +865,19 @@ public final class PlanGroupPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage draftVersion(PlanVersionResponseData draftVersion) {
+            this.draftVersion = Optional.ofNullable(draftVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "draft_version", nulls = Nulls.SKIP)
+        public _FinalStage draftVersion(Optional<PlanVersionResponseData> draftVersion) {
+            this.draftVersion = draftVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage customPlanConfig(CustomPlanViewConfigResponseData customPlanConfig) {
             this.customPlanConfig = Optional.ofNullable(customPlanConfig);
             return this;
@@ -814,6 +887,30 @@ public final class PlanGroupPlanDetailResponseData {
         @JsonSetter(value = "custom_plan_config", nulls = Nulls.SKIP)
         public _FinalStage customPlanConfig(Optional<CustomPlanViewConfigResponseData> customPlanConfig) {
             this.customPlanConfig = customPlanConfig;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCurrencyPrices(List<PlanCurrencyPricesResponseData> currencyPrices) {
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCurrencyPrices(PlanCurrencyPricesResponseData currencyPrices) {
+            this.currencyPrices.add(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(List<PlanCurrencyPricesResponseData> currencyPrices) {
+            this.currencyPrices.clear();
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
             return this;
         }
 
@@ -868,8 +965,22 @@ public final class PlanGroupPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage activeVersion(PlanVersionResponseData activeVersion) {
+            this.activeVersion = Optional.ofNullable(activeVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "active_version", nulls = Nulls.SKIP)
+        public _FinalStage activeVersion(Optional<PlanVersionResponseData> activeVersion) {
+            this.activeVersion = activeVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public PlanGroupPlanDetailResponseData build() {
             return new PlanGroupPlanDetailResponseData(
+                    activeVersion,
                     audienceType,
                     billingProduct,
                     chargeType,
@@ -877,8 +988,10 @@ public final class PlanGroupPlanDetailResponseData {
                     compatiblePlanIds,
                     controlledBy,
                     createdAt,
+                    currencyPrices,
                     customPlanConfig,
                     description,
+                    draftVersion,
                     entitlements,
                     features,
                     icon,
@@ -897,6 +1010,18 @@ public final class PlanGroupPlanDetailResponseData {
                     versions,
                     yearlyPrice,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -98,6 +98,10 @@ public final class CreateComponentRequestBody {
     public interface _FinalStage {
         CreateComponentRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage ast(Optional<Map<String, Double>> ast);
 
         _FinalStage ast(Map<String, Double> ast);
@@ -154,6 +158,18 @@ public final class CreateComponentRequestBody {
         @java.lang.Override
         public CreateComponentRequestBody build() {
             return new CreateComponentRequestBody(ast, entityType, name, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

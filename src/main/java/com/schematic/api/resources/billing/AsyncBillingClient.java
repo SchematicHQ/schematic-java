@@ -66,6 +66,10 @@ public class AsyncBillingClient {
         return this.rawClient.listCoupons().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListCouponsResponse> listCoupons(RequestOptions requestOptions) {
+        return this.rawClient.listCoupons(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListCouponsResponse> listCoupons(ListCouponsRequest request) {
         return this.rawClient.listCoupons(request).thenApply(response -> response.body());
     }
@@ -99,6 +103,11 @@ public class AsyncBillingClient {
     }
 
     public CompletableFuture<ListCustomersWithSubscriptionsResponse> listCustomersWithSubscriptions(
+            RequestOptions requestOptions) {
+        return this.rawClient.listCustomersWithSubscriptions(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCustomersWithSubscriptionsResponse> listCustomersWithSubscriptions(
             ListCustomersWithSubscriptionsRequest request) {
         return this.rawClient.listCustomersWithSubscriptions(request).thenApply(response -> response.body());
     }
@@ -112,6 +121,10 @@ public class AsyncBillingClient {
 
     public CompletableFuture<CountCustomersResponse> countCustomers() {
         return this.rawClient.countCustomers().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountCustomersResponse> countCustomers(RequestOptions requestOptions) {
+        return this.rawClient.countCustomers(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountCustomersResponse> countCustomers(CountCustomersRequest request) {
@@ -143,6 +156,10 @@ public class AsyncBillingClient {
 
     public CompletableFuture<ListMetersResponse> listMeters() {
         return this.rawClient.listMeters().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListMetersResponse> listMeters(RequestOptions requestOptions) {
+        return this.rawClient.listMeters(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListMetersResponse> listMeters(ListMetersRequest request) {
@@ -184,6 +201,10 @@ public class AsyncBillingClient {
         return this.rawClient.listBillingPrices().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListBillingPricesResponse> listBillingPrices(RequestOptions requestOptions) {
+        return this.rawClient.listBillingPrices(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListBillingPricesResponse> listBillingPrices(ListBillingPricesRequest request) {
         return this.rawClient.listBillingPrices(request).thenApply(response -> response.body());
     }
@@ -213,6 +234,10 @@ public class AsyncBillingClient {
 
     public CompletableFuture<ListBillingProductPricesResponse> listBillingProductPrices() {
         return this.rawClient.listBillingProductPrices().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListBillingProductPricesResponse> listBillingProductPrices(RequestOptions requestOptions) {
+        return this.rawClient.listBillingProductPrices(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListBillingProductPricesResponse> listBillingProductPrices(
@@ -248,6 +273,10 @@ public class AsyncBillingClient {
         return this.rawClient.listBillingProducts().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListBillingProductsResponse> listBillingProducts(RequestOptions requestOptions) {
+        return this.rawClient.listBillingProducts(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListBillingProductsResponse> listBillingProducts(ListBillingProductsRequest request) {
         return this.rawClient.listBillingProducts(request).thenApply(response -> response.body());
     }
@@ -259,6 +288,10 @@ public class AsyncBillingClient {
 
     public CompletableFuture<CountBillingProductsResponse> countBillingProducts() {
         return this.rawClient.countBillingProducts().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountBillingProductsResponse> countBillingProducts(RequestOptions requestOptions) {
+        return this.rawClient.countBillingProducts(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountBillingProductsResponse> countBillingProducts(CountBillingProductsRequest request) {

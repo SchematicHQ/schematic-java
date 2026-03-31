@@ -98,8 +98,8 @@ client.accounts().listApiKeys(
         .builder()
         .requireEnvironment(true)
         .environmentId("environment_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -132,7 +132,7 @@ client.accounts().listApiKeys(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -140,7 +140,7 @@ client.accounts().listApiKeys(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -202,6 +202,14 @@ client.accounts().createApiKey(
 <dd>
 
 **name:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**readonly:** `Optional<Boolean>` 
     
 </dd>
 </dl>
@@ -372,8 +380,8 @@ client.accounts().countApiKeys(
         .builder()
         .requireEnvironment(true)
         .environmentId("environment_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -406,7 +414,7 @@ client.accounts().countApiKeys(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -414,209 +422,7 @@ client.accounts().countApiKeys(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.accounts.listApiRequests() -> ListApiRequestsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.accounts().listApiRequests(
-    ListApiRequestsRequest
-        .builder()
-        .q("q")
-        .requestType("request_type")
-        .environmentId("environment_id")
-        .limit(1)
-        .offset(1)
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**q:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestType:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**environmentId:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**limit:** `Optional<Integer>` — Page limit (default 100)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**offset:** `Optional<Integer>` — Page offset (default 0)
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.accounts.getApiRequest(apiRequestId) -> GetApiRequestResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.accounts().getApiRequest("api_request_id");
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**apiRequestId:** `String` — api_request_id
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.accounts.countApiRequests() -> CountApiRequestsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.accounts().countApiRequests(
-    CountApiRequestsRequest
-        .builder()
-        .q("q")
-        .requestType("request_type")
-        .environmentId("environment_id")
-        .limit(1)
-        .offset(1)
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**q:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestType:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**environmentId:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**limit:** `Optional<Integer>` — Page limit (default 100)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -645,10 +451,12 @@ client.accounts().listAuditLogs(
     ListAuditLogsRequest
         .builder()
         .actorType(ActorType.API_KEY)
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
         .environmentId("environment_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -673,6 +481,14 @@ client.accounts().listAuditLogs(
 <dl>
 <dd>
 
+**endTime:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **environmentId:** `Optional<String>` 
     
 </dd>
@@ -689,7 +505,7 @@ client.accounts().listAuditLogs(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**startTime:** `Optional<OffsetDateTime>` 
     
 </dd>
 </dl>
@@ -697,7 +513,15 @@ client.accounts().listAuditLogs(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -766,10 +590,12 @@ client.accounts().countAuditLogs(
     CountAuditLogsRequest
         .builder()
         .actorType(ActorType.API_KEY)
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
         .environmentId("environment_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -794,6 +620,14 @@ client.accounts().countAuditLogs(
 <dl>
 <dd>
 
+**endTime:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **environmentId:** `Optional<String>` 
     
 </dd>
@@ -810,7 +644,7 @@ client.accounts().countAuditLogs(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**startTime:** `Optional<OffsetDateTime>` 
     
 </dd>
 </dl>
@@ -818,7 +652,15 @@ client.accounts().countAuditLogs(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -846,8 +688,8 @@ client.accounts().countAuditLogs(
 client.accounts().listEnvironments(
     ListEnvironmentsRequest
         .builder()
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -872,7 +714,7 @@ client.accounts().listEnvironments(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -880,7 +722,7 @@ client.accounts().listEnvironments(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -1112,6 +954,31 @@ client.accounts().quickstart();
 </dl>
 </details>
 
+<details><summary><code>client.accounts.getWhoAmI() -> GetWhoAmIResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.accounts().getWhoAmI();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## billing
 <details><summary><code>client.billing.listCoupons() -> ListCouponsResponse</code></summary>
 <dl>
@@ -1131,8 +998,8 @@ client.billing().listCoupons(
         .builder()
         .isActive(true)
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -1165,7 +1032,7 @@ client.billing().listCoupons(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -1173,7 +1040,7 @@ client.billing().listCoupons(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -1201,14 +1068,14 @@ client.billing().listCoupons(
 client.billing().upsertBillingCoupon(
     CreateCouponRequestBody
         .builder()
-        .amountOff(1)
+        .amountOff(1000000L)
         .duration("duration")
-        .durationInMonths(1)
+        .durationInMonths(1000000L)
         .externalId("external_id")
-        .maxRedemptions(1)
+        .maxRedemptions(1000000L)
         .name("name")
         .percentOff(1.1)
-        .timesRedeemed(1)
+        .timesRedeemed(1000000L)
         .build()
 );
 ```
@@ -1225,7 +1092,7 @@ client.billing().upsertBillingCoupon(
 <dl>
 <dd>
 
-**amountOff:** `Integer` 
+**amountOff:** `Long` 
     
 </dd>
 </dl>
@@ -1249,7 +1116,7 @@ client.billing().upsertBillingCoupon(
 <dl>
 <dd>
 
-**durationInMonths:** `Integer` 
+**durationInMonths:** `Long` 
     
 </dd>
 </dl>
@@ -1265,7 +1132,7 @@ client.billing().upsertBillingCoupon(
 <dl>
 <dd>
 
-**maxRedemptions:** `Integer` 
+**maxRedemptions:** `Long` 
     
 </dd>
 </dl>
@@ -1289,7 +1156,7 @@ client.billing().upsertBillingCoupon(
 <dl>
 <dd>
 
-**timesRedeemed:** `Integer` 
+**timesRedeemed:** `Long` 
     
 </dd>
 </dl>
@@ -1319,12 +1186,12 @@ client.billing().upsertBillingCustomer(
         .builder()
         .email("email")
         .externalId("external_id")
+        .name("name")
         .meta(
             new HashMap<String, String>() {{
                 put("key", "value");
             }}
         )
-        .name("name")
         .build()
 );
 ```
@@ -1420,8 +1287,8 @@ client.billing().listCustomersWithSubscriptions(
         .name("name")
         .providerType(BillingProviderType.SCHEMATIC)
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -1470,7 +1337,7 @@ client.billing().listCustomersWithSubscriptions(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -1478,7 +1345,7 @@ client.billing().listCustomersWithSubscriptions(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -1509,8 +1376,8 @@ client.billing().countCustomers(
         .name("name")
         .providerType(BillingProviderType.SCHEMATIC)
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -1559,7 +1426,7 @@ client.billing().countCustomers(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -1567,7 +1434,7 @@ client.billing().countCustomers(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -1598,8 +1465,8 @@ client.billing().listInvoices(
         .customerExternalId("customer_external_id")
         .subscriptionExternalId("subscription_external_id")
         .companyId("company_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -1640,7 +1507,7 @@ client.billing().listInvoices(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -1648,7 +1515,7 @@ client.billing().listInvoices(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -1676,13 +1543,13 @@ client.billing().listInvoices(
 client.billing().upsertInvoice(
     CreateInvoiceRequestBody
         .builder()
-        .amountDue(1)
-        .amountPaid(1)
-        .amountRemaining(1)
+        .amountDue(1000000L)
+        .amountPaid(1000000L)
+        .amountRemaining(1000000L)
         .collectionMethod("collection_method")
         .currency("currency")
         .customerExternalId("customer_external_id")
-        .subtotal(1)
+        .subtotal(1000000L)
         .build()
 );
 ```
@@ -1699,7 +1566,7 @@ client.billing().upsertInvoice(
 <dl>
 <dd>
 
-**amountDue:** `Integer` 
+**amountDue:** `Long` 
     
 </dd>
 </dl>
@@ -1707,7 +1574,7 @@ client.billing().upsertInvoice(
 <dl>
 <dd>
 
-**amountPaid:** `Integer` 
+**amountPaid:** `Long` 
     
 </dd>
 </dl>
@@ -1715,7 +1582,7 @@ client.billing().upsertInvoice(
 <dl>
 <dd>
 
-**amountRemaining:** `Integer` 
+**amountRemaining:** `Long` 
     
 </dd>
 </dl>
@@ -1771,6 +1638,14 @@ client.billing().upsertInvoice(
 <dl>
 <dd>
 
+**status:** `Optional<InvoiceStatus>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **subscriptionExternalId:** `Optional<String>` 
     
 </dd>
@@ -1779,7 +1654,7 @@ client.billing().upsertInvoice(
 <dl>
 <dd>
 
-**subtotal:** `Integer` 
+**subtotal:** `Long` 
     
 </dd>
 </dl>
@@ -1816,8 +1691,8 @@ client.billing().listMeters(
     ListMetersRequest
         .builder()
         .displayName("display_name")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -1842,7 +1717,7 @@ client.billing().listMeters(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -1850,7 +1725,7 @@ client.billing().listMeters(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -1952,8 +1827,8 @@ client.billing().listPaymentMethods(
         .builder()
         .customerExternalId("customer_external_id")
         .companyId("company_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -1986,7 +1861,7 @@ client.billing().listPaymentMethods(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -1994,7 +1869,7 @@ client.billing().listPaymentMethods(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -2089,7 +1964,7 @@ client.billing().upsertPaymentMethod(
 <dl>
 <dd>
 
-**cardExpMonth:** `Optional<Integer>` 
+**cardExpMonth:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -2097,7 +1972,7 @@ client.billing().upsertPaymentMethod(
 <dl>
 <dd>
 
-**cardExpYear:** `Optional<Integer>` 
+**cardExpYear:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -2157,19 +2032,20 @@ client.billing().upsertPaymentMethod(
 client.billing().listBillingPrices(
     ListBillingPricesRequest
         .builder()
+        .currency("currency")
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
         .interval("interval")
         .isActive(true)
-        .price(1)
+        .price(1000000L)
         .productId("product_id")
         .providerType(BillingProviderType.SCHEMATIC)
         .q("q")
         .tiersMode(BillingTiersMode.GRADUATED)
         .usageType(BillingPriceUsageType.LICENSED)
         .withMeter(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -2182,6 +2058,14 @@ client.billing().listBillingPrices(
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**currency:** `Optional<String>` — Filter for prices in a specific currency (e.g. usd, eur)
+    
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -2226,7 +2110,7 @@ client.billing().listBillingPrices(
 <dl>
 <dd>
 
-**price:** `Optional<Integer>` 
+**price:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -2290,7 +2174,7 @@ client.billing().listBillingPrices(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -2298,7 +2182,7 @@ client.billing().listBillingPrices(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -2331,8 +2215,10 @@ client.billing().upsertBillingPrice(
         .externalAccountId("external_account_id")
         .interval("interval")
         .isActive(true)
-        .price(1)
+        .price(1000000L)
         .priceExternalId("price_external_id")
+        .productExternalId("product_external_id")
+        .usageType(BillingPriceUsageType.LICENSED)
         .priceTiers(
             Arrays.asList(
                 CreateBillingPriceTierRequestBody
@@ -2341,8 +2227,6 @@ client.billing().upsertBillingPrice(
                     .build()
             )
         )
-        .productExternalId("product_external_id")
-        .usageType(BillingPriceUsageType.LICENSED)
         .build()
 );
 ```
@@ -2407,7 +2291,7 @@ client.billing().upsertBillingPrice(
 <dl>
 <dd>
 
-**packageSize:** `Optional<Integer>` 
+**packageSize:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -2415,7 +2299,7 @@ client.billing().upsertBillingPrice(
 <dl>
 <dd>
 
-**price:** `Integer` 
+**price:** `Long` 
     
 </dd>
 </dl>
@@ -2539,19 +2423,20 @@ client.billing().deleteBillingProduct("billing_id");
 client.billing().listBillingProductPrices(
     ListBillingProductPricesRequest
         .builder()
+        .currency("currency")
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
         .interval("interval")
         .isActive(true)
-        .price(1)
+        .price(1000000L)
         .productId("product_id")
         .providerType(BillingProviderType.SCHEMATIC)
         .q("q")
         .tiersMode(BillingTiersMode.GRADUATED)
         .usageType(BillingPriceUsageType.LICENSED)
         .withMeter(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -2564,6 +2449,14 @@ client.billing().listBillingProductPrices(
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**currency:** `Optional<String>` — Filter for prices in a specific currency (e.g. usd, eur)
+    
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -2608,7 +2501,7 @@ client.billing().listBillingProductPrices(
 <dl>
 <dd>
 
-**price:** `Optional<Integer>` 
+**price:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -2672,7 +2565,7 @@ client.billing().listBillingProductPrices(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -2680,7 +2573,7 @@ client.billing().listBillingProductPrices(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -2749,7 +2642,6 @@ client.billing().upsertBillingProduct(
     CreateBillingProductRequestBody
         .builder()
         .externalId("external_id")
-        .name("name")
         .price(1.1)
         .build()
 );
@@ -2783,7 +2675,7 @@ client.billing().upsertBillingProduct(
 <dl>
 <dd>
 
-**name:** `String` 
+**name:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -2836,8 +2728,8 @@ client.billing().listBillingProducts(
         .withPricesOnly(true)
         .withZeroPrice(true)
         .withoutLinkedToPlan(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -2934,7 +2826,7 @@ client.billing().listBillingProducts(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -2942,7 +2834,7 @@ client.billing().listBillingProducts(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -2979,8 +2871,8 @@ client.billing().countBillingProducts(
         .withPricesOnly(true)
         .withZeroPrice(true)
         .withoutLinkedToPlan(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -3077,7 +2969,7 @@ client.billing().countBillingProducts(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -3085,7 +2977,7 @@ client.billing().countBillingProducts(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -3116,6 +3008,9 @@ client.billing().upsertBillingSubscription(
         .cancelAtPeriodEnd(true)
         .currency("currency")
         .customerExternalId("customer_external_id")
+        .expiredAt(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .subscriptionExternalId("subscription_external_id")
+        .totalPrice(1000000L)
         .discounts(
             Arrays.asList(
                 BillingSubscriptionDiscount
@@ -3127,23 +3022,20 @@ client.billing().upsertBillingSubscription(
                     .build()
             )
         )
-        .expiredAt(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
         .productExternalIds(
             Arrays.asList(
                 BillingProductPricing
                     .builder()
                     .currency("currency")
                     .interval("interval")
-                    .price(1)
+                    .price(1000000L)
                     .priceExternalId("price_external_id")
                     .productExternalId("product_external_id")
-                    .quantity(1)
+                    .quantity(1000000L)
                     .usageType(BillingPriceUsageType.LICENSED)
                     .build()
             )
         )
-        .subscriptionExternalId("subscription_external_id")
-        .totalPrice(1)
         .build()
 );
 ```
@@ -3168,7 +3060,7 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
-**cancelAt:** `Optional<Integer>` 
+**cancelAt:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3248,7 +3140,7 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
-**periodEnd:** `Optional<Integer>` 
+**periodEnd:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3256,7 +3148,7 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
-**periodStart:** `Optional<Integer>` 
+**periodStart:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3288,7 +3180,7 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
-**totalPrice:** `Integer` 
+**totalPrice:** `Long` 
     
 </dd>
 </dl>
@@ -3296,7 +3188,7 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
-**trialEnd:** `Optional<Integer>` 
+**trialEnd:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3334,8 +3226,8 @@ client.credits().listBillingCredits(
     ListBillingCreditsRequest
         .builder()
         .name("name")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -3368,7 +3260,7 @@ client.credits().listBillingCredits(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -3376,7 +3268,7 @@ client.credits().listBillingCredits(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -3439,6 +3331,14 @@ client.credits().createBillingCredit(
 <dl>
 <dd>
 
+**currencyPrices:** `Optional<List<CreditCurrencyPriceRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **defaultExpiryUnit:** `Optional<BillingCreditExpiryUnit>` 
     
 </dd>
@@ -3447,7 +3347,7 @@ client.credits().createBillingCredit(
 <dl>
 <dd>
 
-**defaultExpiryUnitCount:** `Optional<Integer>` 
+**defaultExpiryUnitCount:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3487,7 +3387,7 @@ client.credits().createBillingCredit(
 <dl>
 <dd>
 
-**perUnitPrice:** `Optional<Integer>` 
+**perUnitPrice:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3614,6 +3514,14 @@ client.credits().updateBillingCredit(
 <dl>
 <dd>
 
+**currencyPrices:** `Optional<List<CreditCurrencyPriceRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **defaultExpiryUnit:** `Optional<BillingCreditExpiryUnit>` 
     
 </dd>
@@ -3622,7 +3530,7 @@ client.credits().updateBillingCredit(
 <dl>
 <dd>
 
-**defaultExpiryUnitCount:** `Optional<Integer>` 
+**defaultExpiryUnitCount:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3662,7 +3570,7 @@ client.credits().updateBillingCredit(
 <dl>
 <dd>
 
-**perUnitPrice:** `Optional<Integer>` 
+**perUnitPrice:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3757,8 +3665,8 @@ client.credits().listCreditBundles(
         .creditId("credit_id")
         .status(BillingCreditBundleStatus.ACTIVE)
         .bundleType("fixed")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -3807,7 +3715,7 @@ client.credits().listCreditBundles(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -3815,7 +3723,7 @@ client.credits().listCreditBundles(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -3846,7 +3754,7 @@ client.credits().createCreditBundle(
         .bundleName("bundle_name")
         .creditId("credit_id")
         .currency("currency")
-        .pricePerUnit(1)
+        .pricePerUnit(1000000L)
         .build()
 );
 ```
@@ -3895,6 +3803,14 @@ client.credits().createCreditBundle(
 <dl>
 <dd>
 
+**currencyPrices:** `Optional<List<CreditBundleCurrencyPriceRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **expiryType:** `Optional<BillingCreditExpiryType>` 
     
 </dd>
@@ -3911,7 +3827,7 @@ client.credits().createCreditBundle(
 <dl>
 <dd>
 
-**expiryUnitCount:** `Optional<Integer>` 
+**expiryUnitCount:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3919,7 +3835,7 @@ client.credits().createCreditBundle(
 <dl>
 <dd>
 
-**pricePerUnit:** `Integer` 
+**pricePerUnit:** `Long` 
     
 </dd>
 </dl>
@@ -3935,7 +3851,7 @@ client.credits().createCreditBundle(
 <dl>
 <dd>
 
-**quantity:** `Optional<Integer>` 
+**quantity:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -4013,7 +3929,7 @@ client.credits().updateCreditBundleDetails(
     UpdateCreditBundleDetailsRequestBody
         .builder()
         .bundleName("bundle_name")
-        .pricePerUnit(1)
+        .pricePerUnit(1000000L)
         .build()
 );
 ```
@@ -4046,6 +3962,14 @@ client.credits().updateCreditBundleDetails(
 <dl>
 <dd>
 
+**currencyPrices:** `Optional<List<CreditBundleCurrencyPriceRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **expiryType:** `Optional<BillingCreditExpiryType>` 
     
 </dd>
@@ -4062,7 +3986,7 @@ client.credits().updateCreditBundleDetails(
 <dl>
 <dd>
 
-**expiryUnitCount:** `Optional<Integer>` 
+**expiryUnitCount:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -4070,7 +3994,7 @@ client.credits().updateCreditBundleDetails(
 <dl>
 <dd>
 
-**pricePerUnit:** `Integer` 
+**pricePerUnit:** `Long` 
     
 </dd>
 </dl>
@@ -4086,7 +4010,7 @@ client.credits().updateCreditBundleDetails(
 <dl>
 <dd>
 
-**quantity:** `Optional<Integer>` 
+**quantity:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -4165,8 +4089,8 @@ client.credits().countCreditBundles(
         .creditId("credit_id")
         .status(BillingCreditBundleStatus.ACTIVE)
         .bundleType("fixed")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -4215,7 +4139,7 @@ client.credits().countCreditBundles(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -4223,7 +4147,7 @@ client.credits().countCreditBundles(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -4252,8 +4176,8 @@ client.credits().countBillingCredits(
     CountBillingCreditsRequest
         .builder()
         .name("name")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -4286,7 +4210,7 @@ client.credits().countBillingCredits(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -4294,7 +4218,7 @@ client.credits().countBillingCredits(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -4377,7 +4301,7 @@ client.credits().grantBillingCreditsToCompany(
         .builder()
         .companyId("company_id")
         .creditId("credit_id")
-        .quantity(1)
+        .quantity(1000000L)
         .reason(BillingCreditGrantReason.BILLING_CREDIT_AUTO_TOPUP)
         .build()
 );
@@ -4395,7 +4319,7 @@ client.credits().grantBillingCreditsToCompany(
 <dl>
 <dd>
 
-**billingPeriodsCount:** `Optional<Integer>` 
+**billingPeriodsCount:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -4412,6 +4336,14 @@ client.credits().grantBillingCreditsToCompany(
 <dd>
 
 **creditId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**currency:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -4443,7 +4375,7 @@ client.credits().grantBillingCreditsToCompany(
 <dl>
 <dd>
 
-**expiryUnitCount:** `Optional<Integer>` 
+**expiryUnitCount:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -4451,7 +4383,7 @@ client.credits().grantBillingCreditsToCompany(
 <dl>
 <dd>
 
-**quantity:** `Integer` 
+**quantity:** `Long` 
     
 </dd>
 </dl>
@@ -4506,8 +4438,8 @@ client.credits().countCompanyGrants(
         .companyId("company_id")
         .order(CreditGrantSortOrder.CREATED_AT)
         .dir(SortDirection.ASC)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -4548,7 +4480,7 @@ client.credits().countCompanyGrants(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -4556,7 +4488,7 @@ client.credits().countCompanyGrants(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -4587,8 +4519,8 @@ client.credits().listCompanyGrants(
         .companyId("company_id")
         .order(CreditGrantSortOrder.CREATED_AT)
         .dir(SortDirection.ASC)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -4629,7 +4561,7 @@ client.credits().listCompanyGrants(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -4637,7 +4569,7 @@ client.credits().listCompanyGrants(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -4666,8 +4598,8 @@ client.credits().countBillingCreditsGrants(
     CountBillingCreditsGrantsRequest
         .builder()
         .creditId("credit_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -4700,7 +4632,7 @@ client.credits().countBillingCreditsGrants(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -4708,7 +4640,7 @@ client.credits().countBillingCreditsGrants(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -4737,8 +4669,8 @@ client.credits().listGrantsForCredit(
     ListGrantsForCreditRequest
         .builder()
         .creditId("credit_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -4771,7 +4703,7 @@ client.credits().listGrantsForCredit(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -4779,7 +4711,7 @@ client.credits().listGrantsForCredit(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -4813,8 +4745,8 @@ client.credits().getEnrichedCreditLedger(
         .featureId("feature_id")
         .startTime("start_time")
         .endTime("end_time")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -4879,7 +4811,7 @@ client.credits().getEnrichedCreditLedger(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -4887,7 +4819,7 @@ client.credits().getEnrichedCreditLedger(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -4921,8 +4853,8 @@ client.credits().countCreditLedger(
         .featureId("feature_id")
         .startTime("start_time")
         .endTime("end_time")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -4987,7 +4919,7 @@ client.credits().countCreditLedger(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -4995,7 +4927,7 @@ client.credits().countCreditLedger(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -5025,8 +4957,9 @@ client.credits().listBillingPlanCreditGrants(
         .builder()
         .creditId("credit_id")
         .planId("plan_id")
-        .limit(1)
-        .offset(1)
+        .planVersionId("plan_version_id")
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -5051,6 +4984,14 @@ client.credits().listBillingPlanCreditGrants(
 <dl>
 <dd>
 
+**ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **planId:** `Optional<String>` 
     
 </dd>
@@ -5067,7 +5008,7 @@ client.credits().listBillingPlanCreditGrants(
 <dl>
 <dd>
 
-**ids:** `Optional<String>` 
+**planVersionId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -5075,7 +5016,7 @@ client.credits().listBillingPlanCreditGrants(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -5083,7 +5024,7 @@ client.credits().listBillingPlanCreditGrants(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -5111,7 +5052,7 @@ client.credits().listBillingPlanCreditGrants(
 client.credits().createBillingPlanCreditGrant(
     CreateBillingPlanCreditGrantRequestBody
         .builder()
-        .creditAmount(1)
+        .creditAmount(1000000L)
         .creditId("credit_id")
         .planId("plan_id")
         .resetCadence(BillingPlanCreditGrantResetCadence.DAILY)
@@ -5271,8 +5212,9 @@ client.credits().countBillingPlanCreditGrants(
         .builder()
         .creditId("credit_id")
         .planId("plan_id")
-        .limit(1)
-        .offset(1)
+        .planVersionId("plan_version_id")
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -5297,6 +5239,14 @@ client.credits().countBillingPlanCreditGrants(
 <dl>
 <dd>
 
+**ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **planId:** `Optional<String>` 
     
 </dd>
@@ -5313,7 +5263,7 @@ client.credits().countBillingPlanCreditGrants(
 <dl>
 <dd>
 
-**ids:** `Optional<String>` 
+**planVersionId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -5321,7 +5271,7 @@ client.credits().countBillingPlanCreditGrants(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -5329,7 +5279,223 @@ client.credits().countBillingPlanCreditGrants(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.listCreditEventLedger() -> ListCreditEventLedgerResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().listCreditEventLedger(
+    ListCreditEventLedgerRequest
+        .builder()
+        .companyId("company_id")
+        .billingCreditId("billing_credit_id")
+        .endTime("end_time")
+        .eventType(CreditEventType.GRANT)
+        .featureId("feature_id")
+        .startTime("start_time")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingCreditId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**eventType:** `Optional<CreditEventType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.countCreditEventLedger() -> CountCreditEventLedgerResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().countCreditEventLedger(
+    CountCreditEventLedgerRequest
+        .builder()
+        .companyId("company_id")
+        .billingCreditId("billing_credit_id")
+        .endTime("end_time")
+        .eventType(CreditEventType.GRANT)
+        .featureId("feature_id")
+        .startTime("start_time")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingCreditId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**eventType:** `Optional<CreditEventType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -5358,6 +5524,10 @@ client.credits().countBillingPlanCreditGrants(
 client.checkout().internal(
     ChangeSubscriptionInternalRequestBody
         .builder()
+        .companyId("company_id")
+        .newPlanId("new_plan_id")
+        .newPriceId("new_price_id")
+        .skipTrial(true)
         .addOnIds(
             Arrays.asList(
                 UpdateAddOnRequestBody
@@ -5367,28 +5537,24 @@ client.checkout().internal(
                     .build()
             )
         )
-        .companyId("company_id")
         .creditBundles(
             Arrays.asList(
                 UpdateCreditBundleRequestBody
                     .builder()
                     .bundleId("bundle_id")
-                    .quantity(1)
+                    .quantity(1000000L)
                     .build()
             )
         )
-        .newPlanId("new_plan_id")
-        .newPriceId("new_price_id")
         .payInAdvance(
             Arrays.asList(
                 UpdatePayInAdvanceRequestBody
                     .builder()
                     .priceId("price_id")
-                    .quantity(1)
+                    .quantity(1000000L)
                     .build()
             )
         )
-        .skipTrial(true)
         .build()
 );
 ```
@@ -5486,6 +5652,10 @@ client.checkout().getCheckoutData(
 client.checkout().previewCheckoutInternal(
     ChangeSubscriptionInternalRequestBody
         .builder()
+        .companyId("company_id")
+        .newPlanId("new_plan_id")
+        .newPriceId("new_price_id")
+        .skipTrial(true)
         .addOnIds(
             Arrays.asList(
                 UpdateAddOnRequestBody
@@ -5495,28 +5665,24 @@ client.checkout().previewCheckoutInternal(
                     .build()
             )
         )
-        .companyId("company_id")
         .creditBundles(
             Arrays.asList(
                 UpdateCreditBundleRequestBody
                     .builder()
                     .bundleId("bundle_id")
-                    .quantity(1)
+                    .quantity(1000000L)
                     .build()
             )
         )
-        .newPlanId("new_plan_id")
-        .newPriceId("new_price_id")
         .payInAdvance(
             Arrays.asList(
                 UpdatePayInAdvanceRequestBody
                     .builder()
                     .priceId("price_id")
-                    .quantity(1)
+                    .quantity(1000000L)
                     .build()
             )
         )
-        .skipTrial(true)
         .build()
 );
 ```
@@ -5561,6 +5727,7 @@ client.checkout().previewCheckoutInternal(
 client.checkout().managePlan(
     ManagePlanRequest
         .builder()
+        .companyId("company_id")
         .addOnSelections(
             Arrays.asList(
                 PlanSelection
@@ -5569,13 +5736,12 @@ client.checkout().managePlan(
                     .build()
             )
         )
-        .companyId("company_id")
         .creditBundles(
             Arrays.asList(
                 UpdateCreditBundleRequestBody
                     .builder()
                     .bundleId("bundle_id")
-                    .quantity(1)
+                    .quantity(1000000L)
                     .build()
             )
         )
@@ -5584,7 +5750,7 @@ client.checkout().managePlan(
                 UpdatePayInAdvanceRequestBody
                     .builder()
                     .priceId("price_id")
-                    .quantity(1)
+                    .quantity(1000000L)
                     .build()
             )
         )
@@ -5632,6 +5798,7 @@ client.checkout().managePlan(
 client.checkout().previewManagePlan(
     ManagePlanRequest
         .builder()
+        .companyId("company_id")
         .addOnSelections(
             Arrays.asList(
                 PlanSelection
@@ -5640,13 +5807,12 @@ client.checkout().previewManagePlan(
                     .build()
             )
         )
-        .companyId("company_id")
         .creditBundles(
             Arrays.asList(
                 UpdateCreditBundleRequestBody
                     .builder()
                     .bundleId("bundle_id")
-                    .quantity(1)
+                    .quantity(1000000L)
                     .build()
             )
         )
@@ -5655,7 +5821,7 @@ client.checkout().previewManagePlan(
                 UpdatePayInAdvanceRequestBody
                     .builder()
                     .priceId("price_id")
-                    .quantity(1)
+                    .quantity(1000000L)
                     .build()
             )
         )
@@ -5820,15 +5986,17 @@ client.companies().listCompanies(
         .builder()
         .monetizedSubscriptions(true)
         .planId("plan_id")
+        .planVersionId("plan_version_id")
         .q("q")
         .sortOrderColumn("sort_order_column")
         .sortOrderDirection(SortDirection.ASC)
+        .withEntitlementFor("with_entitlement_for")
         .withoutFeatureOverrideFor("without_feature_override_for")
         .withoutPlan(true)
         .withoutSubscription(true)
         .withSubscription(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -5885,6 +6053,14 @@ client.companies().listCompanies(
 <dl>
 <dd>
 
+**planVersionId:** `Optional<String>` — Filter companies by plan version ID (starts with plvr_)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **q:** `Optional<String>` — Search for companies by name, keys or string traits
     
 </dd>
@@ -5925,6 +6101,14 @@ client.companies().listCompanies(
 <dl>
 <dd>
 
+**withEntitlementFor:** `Optional<String>` — Filter companies that have an entitlement (plan entitlement or company override) for the specified feature ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **withoutFeatureOverrideFor:** `Optional<String>` — Filter out companies that already have a company override for the specified feature ID
     
 </dd>
@@ -5957,7 +6141,7 @@ client.companies().listCompanies(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -5965,7 +6149,7 @@ client.companies().listCompanies(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -6147,15 +6331,17 @@ client.companies().countCompanies(
         .builder()
         .monetizedSubscriptions(true)
         .planId("plan_id")
+        .planVersionId("plan_version_id")
         .q("q")
         .sortOrderColumn("sort_order_column")
         .sortOrderDirection(SortDirection.ASC)
+        .withEntitlementFor("with_entitlement_for")
         .withoutFeatureOverrideFor("without_feature_override_for")
         .withoutPlan(true)
         .withoutSubscription(true)
         .withSubscription(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -6212,6 +6398,14 @@ client.companies().countCompanies(
 <dl>
 <dd>
 
+**planVersionId:** `Optional<String>` — Filter companies by plan version ID (starts with plvr_)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **q:** `Optional<String>` — Search for companies by name, keys or string traits
     
 </dd>
@@ -6252,6 +6446,14 @@ client.companies().countCompanies(
 <dl>
 <dd>
 
+**withEntitlementFor:** `Optional<String>` — Filter companies that have an entitlement (plan entitlement or company override) for the specified feature ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **withoutFeatureOverrideFor:** `Optional<String>` — Filter out companies that already have a company override for the specified feature ID
     
 </dd>
@@ -6284,7 +6486,7 @@ client.companies().countCompanies(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -6292,171 +6494,7 @@ client.companies().countCompanies(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.companies.countCompaniesForAdvancedFilter() -> CountCompaniesForAdvancedFilterResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.companies().countCompaniesForAdvancedFilter(
-    CountCompaniesForAdvancedFilterRequest
-        .builder()
-        .monetizedSubscriptions(true)
-        .q("q")
-        .withoutPlan(true)
-        .withoutSubscription(true)
-        .sortOrderColumn("sort_order_column")
-        .sortOrderDirection(SortDirection.ASC)
-        .limit(1)
-        .offset(1)
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**ids:** `Optional<String>` — Filter companies by multiple company IDs (starts with comp_)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**planIds:** `Optional<String>` — Filter companies by one or more plan IDs (each ID starts with plan_)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**featureIds:** `Optional<String>` — Filter companies by one or more feature IDs (each ID starts with feat_)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**creditTypeIds:** `Optional<String>` — Filter companies by one or more credit type IDs (each ID starts with bcrd_)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**subscriptionStatuses:** `Optional<SubscriptionStatus>` — Filter companies by one or more subscription statuses (active, canceled, expired, incomplete, incomplete_expired, past_due, paused, trialing, unpaid)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**subscriptionTypes:** `Optional<SubscriptionType>` — Filter companies by one or more subscription types (paid, free, trial)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**monetizedSubscriptions:** `Optional<Boolean>` — Filter companies that have monetized subscriptions
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**q:** `Optional<String>` — Search for companies by name, keys or string traits
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**withoutPlan:** `Optional<Boolean>` — Filter out companies that have a plan
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**withoutSubscription:** `Optional<Boolean>` — Filter out companies that have a subscription
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sortOrderColumn:** `Optional<String>` — Column to sort by (e.g. name, created_at, last_seen_at)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sortOrderDirection:** `Optional<SortDirection>` — Direction to sort by (asc or desc)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**displayProperties:** `Optional<String>` — Select the display columns to return (e.g. plan, subscription, users, last_seen_at)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**limit:** `Optional<Integer>` — Page limit (default 100)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -6566,173 +6604,27 @@ client.companies().deleteCompanyByKeys(
 </dl>
 </details>
 
-<details><summary><code>client.companies.listCompaniesForAdvancedFilter() -> ListCompaniesForAdvancedFilterResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.companies().listCompaniesForAdvancedFilter(
-    ListCompaniesForAdvancedFilterRequest
-        .builder()
-        .monetizedSubscriptions(true)
-        .q("q")
-        .withoutPlan(true)
-        .withoutSubscription(true)
-        .sortOrderColumn("sort_order_column")
-        .sortOrderDirection(SortDirection.ASC)
-        .limit(1)
-        .offset(1)
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**ids:** `Optional<String>` — Filter companies by multiple company IDs (starts with comp_)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**planIds:** `Optional<String>` — Filter companies by one or more plan IDs (each ID starts with plan_)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**featureIds:** `Optional<String>` — Filter companies by one or more feature IDs (each ID starts with feat_)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**creditTypeIds:** `Optional<String>` — Filter companies by one or more credit type IDs (each ID starts with bcrd_)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**subscriptionStatuses:** `Optional<SubscriptionStatus>` — Filter companies by one or more subscription statuses (active, canceled, expired, incomplete, incomplete_expired, past_due, paused, trialing, unpaid)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**subscriptionTypes:** `Optional<SubscriptionType>` — Filter companies by one or more subscription types (paid, free, trial)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**monetizedSubscriptions:** `Optional<Boolean>` — Filter companies that have monetized subscriptions
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**q:** `Optional<String>` — Search for companies by name, keys or string traits
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**withoutPlan:** `Optional<Boolean>` — Filter out companies that have a plan
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**withoutSubscription:** `Optional<Boolean>` — Filter out companies that have a subscription
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sortOrderColumn:** `Optional<String>` — Column to sort by (e.g. name, created_at, last_seen_at)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sortOrderDirection:** `Optional<SortDirection>` — Direction to sort by (asc or desc)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**displayProperties:** `Optional<String>` — Select the display columns to return (e.g. plan, subscription, users, last_seen_at)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**limit:** `Optional<Integer>` — Page limit (default 100)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**offset:** `Optional<Integer>` — Page offset (default 0)
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.companies.lookupCompany() -> LookupCompanyResponse</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Company lookup is determined to resolve a company from its keys, similar to how many of our other apis work. 
+The following approaches will all work to resolve a company and any of them are appropriate:
+1. `/companies/lookup?keys={"foo": "bar", "fizz": "buzz"}`
+2. `/companies/lookup?keys[foo]=bar&keys[fizz]=buzz`
+2. `/companies/lookup?foo=bar&fizz=buzz`
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -6797,8 +6689,8 @@ client.companies().listCompanyMemberships(
         .builder()
         .companyId("company_id")
         .userId("user_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -6831,7 +6723,7 @@ client.companies().listCompanyMemberships(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -6839,7 +6731,7 @@ client.companies().listCompanyMemberships(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -6962,8 +6854,8 @@ client.companies().getActiveCompanySubscription(
     GetActiveCompanySubscriptionRequest
         .builder()
         .companyId("company_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -6996,7 +6888,7 @@ client.companies().getActiveCompanySubscription(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -7004,7 +6896,7 @@ client.companies().getActiveCompanySubscription(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -7032,12 +6924,12 @@ client.companies().getActiveCompanySubscription(
 client.companies().upsertCompanyTrait(
     UpsertTraitRequestBody
         .builder()
+        .trait("trait")
         .keys(
             new HashMap<String, String>() {{
                 put("key", "value");
             }}
         )
-        .trait("trait")
         .build()
 );
 ```
@@ -7084,8 +6976,8 @@ client.companies().listEntityKeyDefinitions(
         .builder()
         .entityType(EntityType.COMPANY)
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -7126,7 +7018,7 @@ client.companies().listEntityKeyDefinitions(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -7134,7 +7026,7 @@ client.companies().listEntityKeyDefinitions(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -7164,8 +7056,8 @@ client.companies().countEntityKeyDefinitions(
         .builder()
         .entityType(EntityType.COMPANY)
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -7206,7 +7098,7 @@ client.companies().countEntityKeyDefinitions(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -7214,7 +7106,7 @@ client.companies().countEntityKeyDefinitions(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -7245,8 +7137,8 @@ client.companies().listEntityTraitDefinitions(
         .entityType(EntityType.COMPANY)
         .q("q")
         .traitType(TraitType.BOOLEAN)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -7303,7 +7195,7 @@ client.companies().listEntityTraitDefinitions(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -7311,7 +7203,7 @@ client.companies().listEntityTraitDefinitions(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -7340,10 +7232,10 @@ client.companies().getOrCreateEntityTraitDefinition(
     CreateEntityTraitDefinitionRequestBody
         .builder()
         .entityType(EntityType.COMPANY)
+        .traitType(TraitType.BOOLEAN)
         .hierarchy(
             Arrays.asList("hierarchy")
         )
-        .traitType(TraitType.BOOLEAN)
         .build()
 );
 ```
@@ -7517,8 +7409,8 @@ client.companies().countEntityTraitDefinitions(
         .entityType(EntityType.COMPANY)
         .q("q")
         .traitType(TraitType.BOOLEAN)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -7575,7 +7467,7 @@ client.companies().countEntityTraitDefinitions(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -7583,7 +7475,7 @@ client.companies().countEntityTraitDefinitions(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -7613,8 +7505,8 @@ client.companies().getEntityTraitValues(
         .builder()
         .definitionId("definition_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -7647,7 +7539,7 @@ client.companies().getEntityTraitValues(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -7655,7 +7547,7 @@ client.companies().getEntityTraitValues(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -7686,8 +7578,8 @@ client.companies().listPlanChanges(
         .action("action")
         .basePlanAction("base_plan_action")
         .companyId("company_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -7744,7 +7636,7 @@ client.companies().listPlanChanges(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -7752,7 +7644,7 @@ client.companies().listPlanChanges(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -7822,8 +7714,8 @@ client.companies().listPlanTraits(
         .builder()
         .planId("plan_id")
         .traitId("trait_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -7872,7 +7764,7 @@ client.companies().listPlanTraits(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -7880,7 +7772,7 @@ client.companies().listPlanTraits(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -8187,8 +8079,8 @@ client.companies().countPlanTraits(
         .builder()
         .planId("plan_id")
         .traitId("trait_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -8237,7 +8129,7 @@ client.companies().countPlanTraits(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -8245,7 +8137,7 @@ client.companies().countPlanTraits(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -8273,12 +8165,12 @@ client.companies().countPlanTraits(
 client.companies().upsertUserTrait(
     UpsertTraitRequestBody
         .builder()
+        .trait("trait")
         .keys(
             new HashMap<String, String>() {{
                 put("key", "value");
             }}
         )
-        .trait("trait")
         .build()
 );
 ```
@@ -8326,8 +8218,8 @@ client.companies().listUsers(
         .companyId("company_id")
         .planId("plan_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -8376,7 +8268,7 @@ client.companies().listUsers(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -8384,7 +8276,7 @@ client.companies().listUsers(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -8544,8 +8436,8 @@ client.companies().countUsers(
         .companyId("company_id")
         .planId("plan_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -8594,7 +8486,7 @@ client.companies().countUsers(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -8602,7 +8494,7 @@ client.companies().countUsers(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -8782,8 +8674,8 @@ client.entitlements().listCompanyOverrides(
         .featureId("feature_id")
         .withoutExpired(true)
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -8856,7 +8748,7 @@ client.entitlements().listCompanyOverrides(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -8864,7 +8756,7 @@ client.entitlements().listCompanyOverrides(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -8983,7 +8875,7 @@ client.entitlements().createCompanyOverride(
 <dl>
 <dd>
 
-**valueNumeric:** `Optional<Integer>` 
+**valueNumeric:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -9149,7 +9041,7 @@ client.entitlements().updateCompanyOverride(
 <dl>
 <dd>
 
-**valueNumeric:** `Optional<Integer>` 
+**valueNumeric:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -9237,8 +9129,8 @@ client.entitlements().countCompanyOverrides(
         .featureId("feature_id")
         .withoutExpired(true)
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -9311,7 +9203,7 @@ client.entitlements().countCompanyOverrides(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -9319,7 +9211,7 @@ client.entitlements().countCompanyOverrides(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -9349,8 +9241,8 @@ client.entitlements().listFeatureCompanies(
         .builder()
         .featureId("feature_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -9383,7 +9275,7 @@ client.entitlements().listFeatureCompanies(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -9391,7 +9283,7 @@ client.entitlements().listFeatureCompanies(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -9421,8 +9313,8 @@ client.entitlements().countFeatureCompanies(
         .builder()
         .featureId("feature_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -9455,7 +9347,7 @@ client.entitlements().countFeatureCompanies(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -9463,7 +9355,7 @@ client.entitlements().countFeatureCompanies(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -9495,8 +9387,8 @@ client.entitlements().listFeatureUsage(
         .includeUsageAggregation(true)
         .q("q")
         .withoutNegativeEntitlements(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -9561,7 +9453,7 @@ client.entitlements().listFeatureUsage(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -9569,7 +9461,7 @@ client.entitlements().listFeatureUsage(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -9682,8 +9574,8 @@ client.entitlements().countFeatureUsage(
         .includeUsageAggregation(true)
         .q("q")
         .withoutNegativeEntitlements(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -9748,7 +9640,7 @@ client.entitlements().countFeatureUsage(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -9756,7 +9648,7 @@ client.entitlements().countFeatureUsage(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -9786,8 +9678,8 @@ client.entitlements().listFeatureUsers(
         .builder()
         .featureId("feature_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -9820,7 +9712,7 @@ client.entitlements().listFeatureUsers(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -9828,7 +9720,7 @@ client.entitlements().listFeatureUsers(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -9858,8 +9750,8 @@ client.entitlements().countFeatureUsers(
         .builder()
         .featureId("feature_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -9892,7 +9784,7 @@ client.entitlements().countFeatureUsers(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -9900,7 +9792,7 @@ client.entitlements().countFeatureUsers(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -9933,8 +9825,8 @@ client.entitlements().listPlanEntitlements(
         .planVersionId("plan_version_id")
         .q("q")
         .withMeteredProducts(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -10023,7 +9915,7 @@ client.entitlements().listPlanEntitlements(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -10031,7 +9923,7 @@ client.entitlements().listPlanEntitlements(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -10086,7 +9978,7 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
-**billingThreshold:** `Optional<Integer>` 
+**billingThreshold:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10150,7 +10042,7 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
-**monthlyUnitPrice:** `Optional<Integer>` 
+**monthlyUnitPrice:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10182,6 +10074,14 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
+**planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **priceBehavior:** `Optional<EntitlementPriceBehavior>` 
     
 </dd>
@@ -10198,7 +10098,7 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
-**softLimit:** `Optional<Integer>` 
+**softLimit:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10230,7 +10130,7 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
-**valueNumeric:** `Optional<Integer>` 
+**valueNumeric:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10270,7 +10170,7 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
-**yearlyUnitPrice:** `Optional<Integer>` 
+**yearlyUnitPrice:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10380,7 +10280,7 @@ client.entitlements().updatePlanEntitlement(
 <dl>
 <dd>
 
-**billingThreshold:** `Optional<Integer>` 
+**billingThreshold:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10436,7 +10336,7 @@ client.entitlements().updatePlanEntitlement(
 <dl>
 <dd>
 
-**monthlyUnitPrice:** `Optional<Integer>` 
+**monthlyUnitPrice:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10476,7 +10376,7 @@ client.entitlements().updatePlanEntitlement(
 <dl>
 <dd>
 
-**softLimit:** `Optional<Integer>` 
+**softLimit:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10508,7 +10408,7 @@ client.entitlements().updatePlanEntitlement(
 <dl>
 <dd>
 
-**valueNumeric:** `Optional<Integer>` 
+**valueNumeric:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10548,7 +10448,7 @@ client.entitlements().updatePlanEntitlement(
 <dl>
 <dd>
 
-**yearlyUnitPrice:** `Optional<Integer>` 
+**yearlyUnitPrice:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10629,8 +10529,8 @@ client.entitlements().countPlanEntitlements(
         .planVersionId("plan_version_id")
         .q("q")
         .withMeteredProducts(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -10719,7 +10619,7 @@ client.entitlements().countPlanEntitlements(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -10727,7 +10627,7 @@ client.entitlements().countPlanEntitlements(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -10928,12 +10828,13 @@ client.plans().listPlans(
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
         .hasProductId(true)
+        .includeDraftVersions(true)
         .planType(PlanType.PLAN)
         .q("q")
         .withoutEntitlementFor("without_entitlement_for")
         .withoutPaidProductId(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -10998,6 +10899,14 @@ client.plans().listPlans(
 <dl>
 <dd>
 
+**includeDraftVersions:** `Optional<Boolean>` — Include billing settings from draft versions for plans which have draft version
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **planType:** `Optional<PlanType>` — Filter by plan type
     
 </dd>
@@ -11030,7 +10939,7 @@ client.plans().listPlans(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -11038,7 +10947,7 @@ client.plans().listPlans(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -11110,7 +11019,13 @@ client.plans().createPlan(
 <dd>
 
 ```java
-client.plans().getPlan("plan_id");
+client.plans().getPlan(
+    "plan_id",
+    GetPlanRequest
+        .builder()
+        .planVersionId("plan_version_id")
+        .build()
+);
 ```
 </dd>
 </dl>
@@ -11126,6 +11041,14 @@ client.plans().getPlan("plan_id");
 <dd>
 
 **planId:** `String` — plan_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` — Fetch billing settings for a specific plan version
     
 </dd>
 </dl>
@@ -11307,12 +11230,13 @@ client.plans().countPlans(
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
         .hasProductId(true)
+        .includeDraftVersions(true)
         .planType(PlanType.PLAN)
         .q("q")
         .withoutEntitlementFor("without_entitlement_for")
         .withoutPaidProductId(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -11377,6 +11301,14 @@ client.plans().countPlans(
 <dl>
 <dd>
 
+**includeDraftVersions:** `Optional<Boolean>` — Include billing settings from draft versions for plans which have draft version
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **planType:** `Optional<PlanType>` — Filter by plan type
     
 </dd>
@@ -11409,7 +11341,7 @@ client.plans().countPlans(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -11417,7 +11349,7 @@ client.plans().countPlans(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -11446,6 +11378,7 @@ client.plans().listPlanIssues(
     ListPlanIssuesRequest
         .builder()
         .planId("plan_id")
+        .planVersionId("plan_version_id")
         .build()
 );
 ```
@@ -11463,6 +11396,133 @@ client.plans().listPlanIssues(
 <dd>
 
 **planId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.plans.deletePlanVersion(planId) -> DeletePlanVersionResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.plans().deletePlanVersion(
+    "plan_id",
+    DeletePlanVersionRequest
+        .builder()
+        .promoteArchivedVersion(true)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planId:** `String` — plan_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**promoteArchivedVersion:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.plans.publishPlanVersion(planId, request) -> PublishPlanVersionResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.plans().publishPlanVersion(
+    "plan_id",
+    PublishPlanVersionRequestBody
+        .builder()
+        .migrationStrategy(PlanVersionMigrationStrategy.IMMEDIATE)
+        .excludedCompanyIds(
+            Arrays.asList("excluded_company_ids")
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planId:** `String` — plan_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**excludedCompanyIds:** `List<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**migrationStrategy:** `PlanVersionMigrationStrategy` 
     
 </dd>
 </dl>
@@ -11492,8 +11552,8 @@ client.components().listComponents(
     ListComponentsRequest
         .builder()
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -11518,7 +11578,7 @@ client.components().listComponents(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -11526,7 +11586,7 @@ client.components().listComponents(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -11774,8 +11834,8 @@ client.components().countComponents(
     CountComponentsRequest
         .builder()
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -11800,7 +11860,7 @@ client.components().countComponents(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -11808,7 +11868,7 @@ client.components().countComponents(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -12048,8 +12108,8 @@ client.events().getEventSummaries(
     GetEventSummariesRequest
         .builder()
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -12082,7 +12142,7 @@ client.events().getEventSummaries(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -12090,7 +12150,7 @@ client.events().getEventSummaries(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -12122,8 +12182,8 @@ client.events().listEvents(
         .eventSubtype("event_subtype")
         .flagId("flag_id")
         .userId("user_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -12180,7 +12240,7 @@ client.events().listEvents(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -12188,7 +12248,7 @@ client.events().listEvents(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -12329,10 +12389,11 @@ client.features().listFeatures(
         .builder()
         .q("q")
         .withoutCompanyOverrideFor("without_company_override_for")
+        .planVersionId("plan_version_id")
         .withoutPlanEntitlementFor("without_plan_entitlement_for")
         .booleanRequireEvent(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -12373,6 +12434,14 @@ client.features().listFeatures(
 <dl>
 <dd>
 
+**planVersionId:** `Optional<String>` — Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **withoutPlanEntitlementFor:** `Optional<String>` — Filter out features that already have a plan entitlement for the specified plan ID
     
 </dd>
@@ -12397,7 +12466,7 @@ client.features().listFeatures(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -12405,7 +12474,7 @@ client.features().listFeatures(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -12775,10 +12844,11 @@ client.features().countFeatures(
         .builder()
         .q("q")
         .withoutCompanyOverrideFor("without_company_override_for")
+        .planVersionId("plan_version_id")
         .withoutPlanEntitlementFor("without_plan_entitlement_for")
         .booleanRequireEvent(true)
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -12819,6 +12889,14 @@ client.features().countFeatures(
 <dl>
 <dd>
 
+**planVersionId:** `Optional<String>` — Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **withoutPlanEntitlementFor:** `Optional<String>` — Filter out features that already have a plan entitlement for the specified plan ID
     
 </dd>
@@ -12843,7 +12921,7 @@ client.features().countFeatures(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -12851,7 +12929,7 @@ client.features().countFeatures(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -12881,8 +12959,8 @@ client.features().listFlags(
         .builder()
         .featureId("feature_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -12923,7 +13001,7 @@ client.features().listFlags(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -12931,7 +13009,7 @@ client.features().listFlags(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -13151,6 +13229,9 @@ client.features().updateFlagRules(
             Arrays.asList(
                 CreateOrUpdateRuleRequestBody
                     .builder()
+                    .name("name")
+                    .priority(1000000L)
+                    .value(true)
                     .conditionGroups(
                         Arrays.asList(
                             CreateOrUpdateConditionGroupRequestBody
@@ -13182,9 +13263,6 @@ client.features().updateFlagRules(
                                 .build()
                         )
                     )
-                    .name("name")
-                    .priority(1)
-                    .value(true)
                     .build()
             )
         )
@@ -13390,8 +13468,8 @@ client.features().countFlags(
         .builder()
         .featureId("feature_id")
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -13432,7 +13510,7 @@ client.features().countFlags(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -13440,7 +13518,7 @@ client.features().countFlags(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -13618,6 +13696,14 @@ client.planbundle().updatePlanBundle(
 <dl>
 <dd>
 
+**planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **traits:** `Optional<List<UpdatePlanTraitTraitRequestBody>>` 
     
 </dd>
@@ -13644,8 +13730,28 @@ client.planbundle().updatePlanBundle(
 <dd>
 
 ```java
-client.plangroups().getPlanGroup();
+client.plangroups().getPlanGroup(
+    GetPlanGroupRequest
+        .builder()
+        .includeCompanyCounts(true)
+        .build()
+);
 ```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**includeCompanyCounts:** `Optional<Boolean>` 
+    
 </dd>
 </dl>
 </dd>
@@ -13672,13 +13778,23 @@ client.plangroups().getPlanGroup();
 client.plangroups().createPlanGroup(
     CreatePlanGroupRequestBody
         .builder()
-        .addOnIds(
-            Arrays.asList("add_on_ids")
-        )
         .checkoutCollectAddress(true)
         .checkoutCollectEmail(true)
         .checkoutCollectPhone(true)
         .enableTaxCollection(true)
+        .preventDowngradesWhenOverLimit(true)
+        .preventSelfServiceDowngrade(true)
+        .prorationBehavior(ProrationBehavior.CREATE_PRORATIONS)
+        .showAsMonthlyPrices(true)
+        .showCredits(true)
+        .showFeatureDescription(true)
+        .showHardLimit(true)
+        .showPeriodToggle(true)
+        .showZeroPriceAsFree(true)
+        .syncCustomerBillingDetails(true)
+        .addOnIds(
+            Arrays.asList("add_on_ids")
+        )
         .orderedAddOns(
             Arrays.asList(
                 OrderedPlansInGroup
@@ -13703,15 +13819,6 @@ client.plangroups().createPlanGroup(
                     .build()
             )
         )
-        .preventDowngradesWhenOverLimit(true)
-        .preventSelfServiceDowngrade(true)
-        .prorationBehavior(ProrationBehavior.CREATE_PRORATIONS)
-        .showAsMonthlyPrices(true)
-        .showCredits(true)
-        .showFeatureDescription(true)
-        .showPeriodToggle(true)
-        .showZeroPriceAsFree(true)
-        .syncCustomerBillingDetails(true)
         .build()
 );
 ```
@@ -13920,6 +14027,14 @@ client.plangroups().createPlanGroup(
 <dl>
 <dd>
 
+**showHardLimit:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **showPeriodToggle:** `Boolean` 
     
 </dd>
@@ -13944,7 +14059,7 @@ client.plangroups().createPlanGroup(
 <dl>
 <dd>
 
-**trialDays:** `Optional<Integer>` 
+**trialDays:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -13997,13 +14112,23 @@ client.plangroups().updatePlanGroup(
     "plan_group_id",
     UpdatePlanGroupRequestBody
         .builder()
-        .addOnIds(
-            Arrays.asList("add_on_ids")
-        )
         .checkoutCollectAddress(true)
         .checkoutCollectEmail(true)
         .checkoutCollectPhone(true)
         .enableTaxCollection(true)
+        .preventDowngradesWhenOverLimit(true)
+        .preventSelfServiceDowngrade(true)
+        .prorationBehavior(ProrationBehavior.CREATE_PRORATIONS)
+        .showAsMonthlyPrices(true)
+        .showCredits(true)
+        .showFeatureDescription(true)
+        .showHardLimit(true)
+        .showPeriodToggle(true)
+        .showZeroPriceAsFree(true)
+        .syncCustomerBillingDetails(true)
+        .addOnIds(
+            Arrays.asList("add_on_ids")
+        )
         .orderedAddOns(
             Arrays.asList(
                 OrderedPlansInGroup
@@ -14028,15 +14153,6 @@ client.plangroups().updatePlanGroup(
                     .build()
             )
         )
-        .preventDowngradesWhenOverLimit(true)
-        .preventSelfServiceDowngrade(true)
-        .prorationBehavior(ProrationBehavior.CREATE_PRORATIONS)
-        .showAsMonthlyPrices(true)
-        .showCredits(true)
-        .showFeatureDescription(true)
-        .showPeriodToggle(true)
-        .showZeroPriceAsFree(true)
-        .syncCustomerBillingDetails(true)
         .build()
 );
 ```
@@ -14253,6 +14369,14 @@ client.plangroups().updatePlanGroup(
 <dl>
 <dd>
 
+**showHardLimit:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **showPeriodToggle:** `Boolean` 
     
 </dd>
@@ -14277,7 +14401,7 @@ client.plangroups().updatePlanGroup(
 <dl>
 <dd>
 
-**trialDays:** `Optional<Integer>` 
+**trialDays:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -14313,6 +14437,625 @@ client.plangroups().updatePlanGroup(
 </dl>
 </details>
 
+## planmigrations
+<details><summary><code>client.planmigrations.listCompanyMigrations() -> ListCompanyMigrationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().listCompanyMigrations(
+    ListCompanyMigrationsRequest
+        .builder()
+        .migrationId("migration_id")
+        .q("q")
+        .status(PlanVersionCompanyMigrationStatus.COMPLETED)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**migrationId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `Optional<PlanVersionCompanyMigrationStatus>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.planmigrations.countCompanyMigrations() -> CountCompanyMigrationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().countCompanyMigrations(
+    CountCompanyMigrationsRequest
+        .builder()
+        .migrationId("migration_id")
+        .q("q")
+        .status(PlanVersionCompanyMigrationStatus.COMPLETED)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**migrationId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `Optional<PlanVersionCompanyMigrationStatus>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.planmigrations.listMigrations() -> ListMigrationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().listMigrations(
+    ListMigrationsRequest
+        .builder()
+        .planVersionId("plan_version_id")
+        .status(PlanVersionMigrationStatus.COMPLETED)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `Optional<PlanVersionMigrationStatus>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.planmigrations.getMigration(planVersionMigrationId) -> GetMigrationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().getMigration("plan_version_migration_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planVersionMigrationId:** `String` — plan_version_migration_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.planmigrations.countMigrations() -> CountMigrationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().countMigrations(
+    CountMigrationsRequest
+        .builder()
+        .planVersionId("plan_version_id")
+        .status(PlanVersionMigrationStatus.COMPLETED)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `Optional<PlanVersionMigrationStatus>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## componentspublic
+<details><summary><code>client.componentspublic.getPublicPlans() -> GetPublicPlansResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.componentspublic().getPublicPlans();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## scheduledcheckout
+<details><summary><code>client.scheduledcheckout.listScheduledCheckouts() -> ListScheduledCheckoutsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.scheduledcheckout().listScheduledCheckouts(
+    ListScheduledCheckoutsRequest
+        .builder()
+        .companyId("company_id")
+        .status(ScheduledCheckoutStatus.CANCELLED)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `Optional<ScheduledCheckoutStatus>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.scheduledcheckout.createScheduledCheckout(request) -> CreateScheduledCheckoutResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.scheduledcheckout().createScheduledCheckout(
+    CreateScheduledCheckoutRequest
+        .builder()
+        .companyId("company_id")
+        .executeAfter(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .fromPlanId("from_plan_id")
+        .toPlanId("to_plan_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**executeAfter:** `OffsetDateTime` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**fromPlanId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**toPlanId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.scheduledcheckout.getScheduledCheckout(scheduledCheckoutId) -> GetScheduledCheckoutResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.scheduledcheckout().getScheduledCheckout("scheduled_checkout_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**scheduledCheckoutId:** `String` — scheduled_checkout_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.scheduledcheckout.updateScheduledCheckout(scheduledCheckoutId, request) -> UpdateScheduledCheckoutResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.scheduledcheckout().updateScheduledCheckout(
+    "scheduled_checkout_id",
+    UpdateScheduledCheckoutRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**scheduledCheckoutId:** `String` — scheduled_checkout_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**executeAfter:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `Optional<ScheduledCheckoutStatus>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## accesstokens
 <details><summary><code>client.accesstokens.issueTemporaryAccessToken(request) -> IssueTemporaryAccessTokenResponse</code></summary>
 <dl>
@@ -14330,12 +15073,12 @@ client.plangroups().updatePlanGroup(
 client.accesstokens().issueTemporaryAccessToken(
     IssueTemporaryAccessTokenRequestBody
         .builder()
+        .resourceType("company")
         .lookup(
             new HashMap<String, String>() {{
                 put("key", "value");
             }}
         )
-        .resourceType("company")
         .build()
 );
 ```
@@ -14391,8 +15134,8 @@ client.webhooks().listWebhookEvents(
         .builder()
         .q("q")
         .webhookId("webhook_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -14433,7 +15176,7 @@ client.webhooks().listWebhookEvents(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -14441,7 +15184,7 @@ client.webhooks().listWebhookEvents(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -14511,8 +15254,8 @@ client.webhooks().countWebhookEvents(
         .builder()
         .q("q")
         .webhookId("webhook_id")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -14553,7 +15296,7 @@ client.webhooks().countWebhookEvents(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -14561,7 +15304,7 @@ client.webhooks().countWebhookEvents(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -14590,8 +15333,8 @@ client.webhooks().listWebhooks(
     ListWebhooksRequest
         .builder()
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -14616,7 +15359,7 @@ client.webhooks().listWebhooks(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -14624,7 +15367,7 @@ client.webhooks().listWebhooks(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -14653,10 +15396,10 @@ client.webhooks().createWebhook(
     CreateWebhookRequestBody
         .builder()
         .name("name")
+        .url("url")
         .requestTypes(
             Arrays.asList(WebhookRequestType.SUBSCRIPTION_TRIAL_ENDED)
         )
-        .url("url")
         .build()
 );
 ```
@@ -14907,8 +15650,8 @@ client.webhooks().countWebhooks(
     CountWebhooksRequest
         .builder()
         .q("q")
-        .limit(1)
-        .offset(1)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -14933,7 +15676,7 @@ client.webhooks().countWebhooks(
 <dl>
 <dd>
 
-**limit:** `Optional<Integer>` — Page limit (default 100)
+**limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
 </dl>
@@ -14941,7 +15684,7 @@ client.webhooks().countWebhooks(
 <dl>
 <dd>
 
-**offset:** `Optional<Integer>` — Page offset (default 0)
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -14952,3 +15695,4 @@ client.webhooks().countWebhooks(
 </dd>
 </dl>
 </details>
+

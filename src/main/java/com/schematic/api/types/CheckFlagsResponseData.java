@@ -17,22 +17,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CheckFlagsResponseData.Builder.class)
 public final class CheckFlagsResponseData {
     private final List<CheckFlagResponseData> flags;
 
+    private final Optional<DatastreamCompanyPlan> plan;
+
     private final Map<String, Object> additionalProperties;
 
-    private CheckFlagsResponseData(List<CheckFlagResponseData> flags, Map<String, Object> additionalProperties) {
+    private CheckFlagsResponseData(
+            List<CheckFlagResponseData> flags,
+            Optional<DatastreamCompanyPlan> plan,
+            Map<String, Object> additionalProperties) {
         this.flags = flags;
+        this.plan = plan;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("flags")
     public List<CheckFlagResponseData> getFlags() {
         return flags;
+    }
+
+    @JsonProperty("plan")
+    public Optional<DatastreamCompanyPlan> getPlan() {
+        return plan;
     }
 
     @java.lang.Override
@@ -47,12 +59,12 @@ public final class CheckFlagsResponseData {
     }
 
     private boolean equalTo(CheckFlagsResponseData other) {
-        return flags.equals(other.flags);
+        return flags.equals(other.flags) && plan.equals(other.plan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.flags);
+        return Objects.hash(this.flags, this.plan);
     }
 
     @java.lang.Override
@@ -68,6 +80,8 @@ public final class CheckFlagsResponseData {
     public static final class Builder {
         private List<CheckFlagResponseData> flags = new ArrayList<>();
 
+        private Optional<DatastreamCompanyPlan> plan = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -75,6 +89,7 @@ public final class CheckFlagsResponseData {
 
         public Builder from(CheckFlagsResponseData other) {
             flags(other.getFlags());
+            plan(other.getPlan());
             return this;
         }
 
@@ -99,8 +114,29 @@ public final class CheckFlagsResponseData {
             return this;
         }
 
+        @JsonSetter(value = "plan", nulls = Nulls.SKIP)
+        public Builder plan(Optional<DatastreamCompanyPlan> plan) {
+            this.plan = plan;
+            return this;
+        }
+
+        public Builder plan(DatastreamCompanyPlan plan) {
+            this.plan = Optional.ofNullable(plan);
+            return this;
+        }
+
         public CheckFlagsResponseData build() {
-            return new CheckFlagsResponseData(flags, additionalProperties);
+            return new CheckFlagsResponseData(flags, plan, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

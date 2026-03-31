@@ -26,7 +26,7 @@ public final class CreateBillingProductRequestBody {
 
     private final Optional<Boolean> isActive;
 
-    private final String name;
+    private final Optional<String> name;
 
     private final double price;
 
@@ -37,7 +37,7 @@ public final class CreateBillingProductRequestBody {
     private CreateBillingProductRequestBody(
             String externalId,
             Optional<Boolean> isActive,
-            String name,
+            Optional<String> name,
             double price,
             Optional<BillingProviderType> providerType,
             Map<String, Object> additionalProperties) {
@@ -60,7 +60,7 @@ public final class CreateBillingProductRequestBody {
     }
 
     @JsonProperty("name")
-    public String getName() {
+    public Optional<String> getName() {
         return name;
     }
 
@@ -108,13 +108,9 @@ public final class CreateBillingProductRequestBody {
     }
 
     public interface ExternalIdStage {
-        NameStage externalId(@NotNull String externalId);
+        PriceStage externalId(@NotNull String externalId);
 
         Builder from(CreateBillingProductRequestBody other);
-    }
-
-    public interface NameStage {
-        PriceStage name(@NotNull String name);
     }
 
     public interface PriceStage {
@@ -124,9 +120,17 @@ public final class CreateBillingProductRequestBody {
     public interface _FinalStage {
         CreateBillingProductRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage isActive(Optional<Boolean> isActive);
 
         _FinalStage isActive(Boolean isActive);
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
 
         _FinalStage providerType(Optional<BillingProviderType> providerType);
 
@@ -134,14 +138,14 @@ public final class CreateBillingProductRequestBody {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ExternalIdStage, NameStage, PriceStage, _FinalStage {
+    public static final class Builder implements ExternalIdStage, PriceStage, _FinalStage {
         private String externalId;
-
-        private String name;
 
         private double price;
 
         private Optional<BillingProviderType> providerType = Optional.empty();
+
+        private Optional<String> name = Optional.empty();
 
         private Optional<Boolean> isActive = Optional.empty();
 
@@ -162,15 +166,8 @@ public final class CreateBillingProductRequestBody {
 
         @java.lang.Override
         @JsonSetter("external_id")
-        public NameStage externalId(@NotNull String externalId) {
+        public PriceStage externalId(@NotNull String externalId) {
             this.externalId = Objects.requireNonNull(externalId, "externalId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("name")
-        public PriceStage name(@NotNull String name) {
-            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -195,6 +192,19 @@ public final class CreateBillingProductRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage isActive(Boolean isActive) {
             this.isActive = Optional.ofNullable(isActive);
             return this;
@@ -211,6 +221,18 @@ public final class CreateBillingProductRequestBody {
         public CreateBillingProductRequestBody build() {
             return new CreateBillingProductRequestBody(
                     externalId, isActive, name, price, providerType, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

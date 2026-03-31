@@ -90,6 +90,10 @@ public final class CreateBillingPlanCreditGrantResponse {
     public interface _FinalStage {
         CreateBillingPlanCreditGrantResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Input parameters</p>
          */
@@ -163,6 +167,18 @@ public final class CreateBillingPlanCreditGrantResponse {
         @java.lang.Override
         public CreateBillingPlanCreditGrantResponse build() {
             return new CreateBillingPlanCreditGrantResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

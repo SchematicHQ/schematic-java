@@ -22,16 +22,25 @@ import java.util.Optional;
 public final class ListPlanIssuesParams {
     private final Optional<String> planId;
 
+    private final Optional<String> planVersionId;
+
     private final Map<String, Object> additionalProperties;
 
-    private ListPlanIssuesParams(Optional<String> planId, Map<String, Object> additionalProperties) {
+    private ListPlanIssuesParams(
+            Optional<String> planId, Optional<String> planVersionId, Map<String, Object> additionalProperties) {
         this.planId = planId;
+        this.planVersionId = planVersionId;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("plan_id")
     public Optional<String> getPlanId() {
         return planId;
+    }
+
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
     }
 
     @java.lang.Override
@@ -46,12 +55,12 @@ public final class ListPlanIssuesParams {
     }
 
     private boolean equalTo(ListPlanIssuesParams other) {
-        return planId.equals(other.planId);
+        return planId.equals(other.planId) && planVersionId.equals(other.planVersionId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.planId);
+        return Objects.hash(this.planId, this.planVersionId);
     }
 
     @java.lang.Override
@@ -67,6 +76,8 @@ public final class ListPlanIssuesParams {
     public static final class Builder {
         private Optional<String> planId = Optional.empty();
 
+        private Optional<String> planVersionId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -74,6 +85,7 @@ public final class ListPlanIssuesParams {
 
         public Builder from(ListPlanIssuesParams other) {
             planId(other.getPlanId());
+            planVersionId(other.getPlanVersionId());
             return this;
         }
 
@@ -88,8 +100,29 @@ public final class ListPlanIssuesParams {
             return this;
         }
 
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
         public ListPlanIssuesParams build() {
-            return new ListPlanIssuesParams(planId, additionalProperties);
+            return new ListPlanIssuesParams(planId, planVersionId, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

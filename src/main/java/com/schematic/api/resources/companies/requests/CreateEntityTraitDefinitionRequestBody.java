@@ -114,6 +114,10 @@ public final class CreateEntityTraitDefinitionRequestBody {
     public interface _FinalStage {
         CreateEntityTraitDefinitionRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage displayName(Optional<String> displayName);
 
         _FinalStage displayName(String displayName);
@@ -204,6 +208,18 @@ public final class CreateEntityTraitDefinitionRequestBody {
         public CreateEntityTraitDefinitionRequestBody build() {
             return new CreateEntityTraitDefinitionRequestBody(
                     displayName, entityType, hierarchy, traitType, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

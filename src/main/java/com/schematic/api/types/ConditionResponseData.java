@@ -50,11 +50,9 @@ public final class ConditionResponseData {
 
     private final Optional<String> metricPeriodMonthReset;
 
-    private final Optional<Integer> metricValue;
+    private final Optional<Long> metricValue;
 
     private final String operator;
-
-    private final Optional<String> planVersionId;
 
     private final List<String> resourceUnspecifiedIds;
 
@@ -70,7 +68,7 @@ public final class ConditionResponseData {
 
     private final Optional<OffsetDateTime> traitValueDate;
 
-    private final int traitValueInt;
+    private final long traitValueInt;
 
     private final OffsetDateTime updatedAt;
 
@@ -90,9 +88,8 @@ public final class ConditionResponseData {
             String id,
             Optional<String> metricPeriod,
             Optional<String> metricPeriodMonthReset,
-            Optional<Integer> metricValue,
+            Optional<Long> metricValue,
             String operator,
-            Optional<String> planVersionId,
             List<String> resourceUnspecifiedIds,
             String ruleId,
             Optional<EntityType> traitEntityType,
@@ -100,7 +97,7 @@ public final class ConditionResponseData {
             String traitValue,
             boolean traitValueBool,
             Optional<OffsetDateTime> traitValueDate,
-            int traitValueInt,
+            long traitValueInt,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
@@ -118,7 +115,6 @@ public final class ConditionResponseData {
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.metricValue = metricValue;
         this.operator = operator;
-        this.planVersionId = planVersionId;
         this.resourceUnspecifiedIds = resourceUnspecifiedIds;
         this.ruleId = ruleId;
         this.traitEntityType = traitEntityType;
@@ -197,18 +193,13 @@ public final class ConditionResponseData {
     }
 
     @JsonProperty("metric_value")
-    public Optional<Integer> getMetricValue() {
+    public Optional<Long> getMetricValue() {
         return metricValue;
     }
 
     @JsonProperty("operator")
     public String getOperator() {
         return operator;
-    }
-
-    @JsonProperty("plan_version_id")
-    public Optional<String> getPlanVersionId() {
-        return planVersionId;
     }
 
     @JsonProperty("resource_unspecified_ids")
@@ -247,7 +238,7 @@ public final class ConditionResponseData {
     }
 
     @JsonProperty("trait_value_int")
-    public int getTraitValueInt() {
+    public long getTraitValueInt() {
         return traitValueInt;
     }
 
@@ -283,7 +274,6 @@ public final class ConditionResponseData {
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && metricValue.equals(other.metricValue)
                 && operator.equals(other.operator)
-                && planVersionId.equals(other.planVersionId)
                 && resourceUnspecifiedIds.equals(other.resourceUnspecifiedIds)
                 && ruleId.equals(other.ruleId)
                 && traitEntityType.equals(other.traitEntityType)
@@ -313,7 +303,6 @@ public final class ConditionResponseData {
                 this.metricPeriodMonthReset,
                 this.metricValue,
                 this.operator,
-                this.planVersionId,
                 this.resourceUnspecifiedIds,
                 this.ruleId,
                 this.traitEntityType,
@@ -373,7 +362,7 @@ public final class ConditionResponseData {
     }
 
     public interface TraitValueIntStage {
-        UpdatedAtStage traitValueInt(int traitValueInt);
+        UpdatedAtStage traitValueInt(long traitValueInt);
     }
 
     public interface UpdatedAtStage {
@@ -382,6 +371,10 @@ public final class ConditionResponseData {
 
     public interface _FinalStage {
         ConditionResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage comparisonTraitId(Optional<String> comparisonTraitId);
 
@@ -415,13 +408,9 @@ public final class ConditionResponseData {
 
         _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset);
 
-        _FinalStage metricValue(Optional<Integer> metricValue);
+        _FinalStage metricValue(Optional<Long> metricValue);
 
-        _FinalStage metricValue(Integer metricValue);
-
-        _FinalStage planVersionId(Optional<String> planVersionId);
-
-        _FinalStage planVersionId(String planVersionId);
+        _FinalStage metricValue(Long metricValue);
 
         _FinalStage resourceUnspecifiedIds(List<String> resourceUnspecifiedIds);
 
@@ -474,7 +463,7 @@ public final class ConditionResponseData {
 
         private boolean traitValueBool;
 
-        private int traitValueInt;
+        private long traitValueInt;
 
         private OffsetDateTime updatedAt;
 
@@ -486,9 +475,7 @@ public final class ConditionResponseData {
 
         private List<String> resourceUnspecifiedIds = new ArrayList<>();
 
-        private Optional<String> planVersionId = Optional.empty();
-
-        private Optional<Integer> metricValue = Optional.empty();
+        private Optional<Long> metricValue = Optional.empty();
 
         private Optional<String> metricPeriodMonthReset = Optional.empty();
 
@@ -528,7 +515,6 @@ public final class ConditionResponseData {
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             metricValue(other.getMetricValue());
             operator(other.getOperator());
-            planVersionId(other.getPlanVersionId());
             resourceUnspecifiedIds(other.getResourceUnspecifiedIds());
             ruleId(other.getRuleId());
             traitEntityType(other.getTraitEntityType());
@@ -606,7 +592,7 @@ public final class ConditionResponseData {
 
         @java.lang.Override
         @JsonSetter("trait_value_int")
-        public UpdatedAtStage traitValueInt(int traitValueInt) {
+        public UpdatedAtStage traitValueInt(long traitValueInt) {
             this.traitValueInt = traitValueInt;
             return this;
         }
@@ -682,27 +668,14 @@ public final class ConditionResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage planVersionId(String planVersionId) {
-            this.planVersionId = Optional.ofNullable(planVersionId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
-        public _FinalStage planVersionId(Optional<String> planVersionId) {
-            this.planVersionId = planVersionId;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage metricValue(Integer metricValue) {
+        public _FinalStage metricValue(Long metricValue) {
             this.metricValue = Optional.ofNullable(metricValue);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_value", nulls = Nulls.SKIP)
-        public _FinalStage metricValue(Optional<Integer> metricValue) {
+        public _FinalStage metricValue(Optional<Long> metricValue) {
             this.metricValue = metricValue;
             return this;
         }
@@ -829,7 +802,6 @@ public final class ConditionResponseData {
                     metricPeriodMonthReset,
                     metricValue,
                     operator,
-                    planVersionId,
                     resourceUnspecifiedIds,
                     ruleId,
                     traitEntityType,
@@ -840,6 +812,18 @@ public final class ConditionResponseData {
                     traitValueInt,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -23,7 +23,7 @@ import java.util.Optional;
 public final class UsageBasedEntitlementRequestBody {
     private final Optional<String> billingProductId;
 
-    private final Optional<Integer> billingThreshold;
+    private final Optional<Long> billingThreshold;
 
     private final Optional<String> currency;
 
@@ -31,7 +31,7 @@ public final class UsageBasedEntitlementRequestBody {
 
     private final Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers;
 
-    private final Optional<Integer> monthlyUnitPrice;
+    private final Optional<Long> monthlyUnitPrice;
 
     private final Optional<String> monthlyUnitPriceDecimal;
 
@@ -41,7 +41,7 @@ public final class UsageBasedEntitlementRequestBody {
 
     private final Optional<List<CreatePriceTierRequestBody>> priceTiers;
 
-    private final Optional<Integer> softLimit;
+    private final Optional<Long> softLimit;
 
     private final Optional<BillingTiersMode> tierMode;
 
@@ -49,7 +49,7 @@ public final class UsageBasedEntitlementRequestBody {
 
     private final Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers;
 
-    private final Optional<Integer> yearlyUnitPrice;
+    private final Optional<Long> yearlyUnitPrice;
 
     private final Optional<String> yearlyUnitPriceDecimal;
 
@@ -57,20 +57,20 @@ public final class UsageBasedEntitlementRequestBody {
 
     private UsageBasedEntitlementRequestBody(
             Optional<String> billingProductId,
-            Optional<Integer> billingThreshold,
+            Optional<Long> billingThreshold,
             Optional<String> currency,
             Optional<String> monthlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers,
-            Optional<Integer> monthlyUnitPrice,
+            Optional<Long> monthlyUnitPrice,
             Optional<String> monthlyUnitPriceDecimal,
             Optional<String> overageBillingProductId,
             Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<List<CreatePriceTierRequestBody>> priceTiers,
-            Optional<Integer> softLimit,
+            Optional<Long> softLimit,
             Optional<BillingTiersMode> tierMode,
             Optional<String> yearlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers,
-            Optional<Integer> yearlyUnitPrice,
+            Optional<Long> yearlyUnitPrice,
             Optional<String> yearlyUnitPriceDecimal,
             Map<String, Object> additionalProperties) {
         this.billingProductId = billingProductId;
@@ -98,7 +98,7 @@ public final class UsageBasedEntitlementRequestBody {
     }
 
     @JsonProperty("billing_threshold")
-    public Optional<Integer> getBillingThreshold() {
+    public Optional<Long> getBillingThreshold() {
         return billingThreshold;
     }
 
@@ -118,7 +118,7 @@ public final class UsageBasedEntitlementRequestBody {
     }
 
     @JsonProperty("monthly_unit_price")
-    public Optional<Integer> getMonthlyUnitPrice() {
+    public Optional<Long> getMonthlyUnitPrice() {
         return monthlyUnitPrice;
     }
 
@@ -146,7 +146,7 @@ public final class UsageBasedEntitlementRequestBody {
     }
 
     @JsonProperty("soft_limit")
-    public Optional<Integer> getSoftLimit() {
+    public Optional<Long> getSoftLimit() {
         return softLimit;
     }
 
@@ -166,7 +166,7 @@ public final class UsageBasedEntitlementRequestBody {
     }
 
     @JsonProperty("yearly_unit_price")
-    public Optional<Integer> getYearlyUnitPrice() {
+    public Optional<Long> getYearlyUnitPrice() {
         return yearlyUnitPrice;
     }
 
@@ -239,7 +239,7 @@ public final class UsageBasedEntitlementRequestBody {
     public static final class Builder {
         private Optional<String> billingProductId = Optional.empty();
 
-        private Optional<Integer> billingThreshold = Optional.empty();
+        private Optional<Long> billingThreshold = Optional.empty();
 
         private Optional<String> currency = Optional.empty();
 
@@ -247,7 +247,7 @@ public final class UsageBasedEntitlementRequestBody {
 
         private Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers = Optional.empty();
 
-        private Optional<Integer> monthlyUnitPrice = Optional.empty();
+        private Optional<Long> monthlyUnitPrice = Optional.empty();
 
         private Optional<String> monthlyUnitPriceDecimal = Optional.empty();
 
@@ -257,7 +257,7 @@ public final class UsageBasedEntitlementRequestBody {
 
         private Optional<List<CreatePriceTierRequestBody>> priceTiers = Optional.empty();
 
-        private Optional<Integer> softLimit = Optional.empty();
+        private Optional<Long> softLimit = Optional.empty();
 
         private Optional<BillingTiersMode> tierMode = Optional.empty();
 
@@ -265,7 +265,7 @@ public final class UsageBasedEntitlementRequestBody {
 
         private Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers = Optional.empty();
 
-        private Optional<Integer> yearlyUnitPrice = Optional.empty();
+        private Optional<Long> yearlyUnitPrice = Optional.empty();
 
         private Optional<String> yearlyUnitPriceDecimal = Optional.empty();
 
@@ -306,12 +306,12 @@ public final class UsageBasedEntitlementRequestBody {
         }
 
         @JsonSetter(value = "billing_threshold", nulls = Nulls.SKIP)
-        public Builder billingThreshold(Optional<Integer> billingThreshold) {
+        public Builder billingThreshold(Optional<Long> billingThreshold) {
             this.billingThreshold = billingThreshold;
             return this;
         }
 
-        public Builder billingThreshold(Integer billingThreshold) {
+        public Builder billingThreshold(Long billingThreshold) {
             this.billingThreshold = Optional.ofNullable(billingThreshold);
             return this;
         }
@@ -350,12 +350,12 @@ public final class UsageBasedEntitlementRequestBody {
         }
 
         @JsonSetter(value = "monthly_unit_price", nulls = Nulls.SKIP)
-        public Builder monthlyUnitPrice(Optional<Integer> monthlyUnitPrice) {
+        public Builder monthlyUnitPrice(Optional<Long> monthlyUnitPrice) {
             this.monthlyUnitPrice = monthlyUnitPrice;
             return this;
         }
 
-        public Builder monthlyUnitPrice(Integer monthlyUnitPrice) {
+        public Builder monthlyUnitPrice(Long monthlyUnitPrice) {
             this.monthlyUnitPrice = Optional.ofNullable(monthlyUnitPrice);
             return this;
         }
@@ -408,12 +408,12 @@ public final class UsageBasedEntitlementRequestBody {
         }
 
         @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
-        public Builder softLimit(Optional<Integer> softLimit) {
+        public Builder softLimit(Optional<Long> softLimit) {
             this.softLimit = softLimit;
             return this;
         }
 
-        public Builder softLimit(Integer softLimit) {
+        public Builder softLimit(Long softLimit) {
             this.softLimit = Optional.ofNullable(softLimit);
             return this;
         }
@@ -452,12 +452,12 @@ public final class UsageBasedEntitlementRequestBody {
         }
 
         @JsonSetter(value = "yearly_unit_price", nulls = Nulls.SKIP)
-        public Builder yearlyUnitPrice(Optional<Integer> yearlyUnitPrice) {
+        public Builder yearlyUnitPrice(Optional<Long> yearlyUnitPrice) {
             this.yearlyUnitPrice = yearlyUnitPrice;
             return this;
         }
 
-        public Builder yearlyUnitPrice(Integer yearlyUnitPrice) {
+        public Builder yearlyUnitPrice(Long yearlyUnitPrice) {
             this.yearlyUnitPrice = Optional.ofNullable(yearlyUnitPrice);
             return this;
         }
@@ -492,6 +492,16 @@ public final class UsageBasedEntitlementRequestBody {
                     yearlyUnitPrice,
                     yearlyUnitPriceDecimal,
                     additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

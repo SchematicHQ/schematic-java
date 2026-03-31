@@ -113,6 +113,10 @@ public final class CreatePlanRequestBody {
     public interface _FinalStage {
         CreatePlanRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage icon(Optional<String> icon);
 
         _FinalStage icon(String icon);
@@ -179,6 +183,18 @@ public final class CreatePlanRequestBody {
         @java.lang.Override
         public CreatePlanRequestBody build() {
             return new CreatePlanRequestBody(description, icon, name, planType, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

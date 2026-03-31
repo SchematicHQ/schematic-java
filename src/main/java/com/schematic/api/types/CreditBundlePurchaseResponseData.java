@@ -22,16 +22,16 @@ import java.util.Optional;
 public final class CreditBundlePurchaseResponseData {
     private final Optional<BillingCreditBundleResponseData> bundle;
 
-    private final int quantity;
+    private final long quantity;
 
-    private final int total;
+    private final long total;
 
     private final Map<String, Object> additionalProperties;
 
     private CreditBundlePurchaseResponseData(
             Optional<BillingCreditBundleResponseData> bundle,
-            int quantity,
-            int total,
+            long quantity,
+            long total,
             Map<String, Object> additionalProperties) {
         this.bundle = bundle;
         this.quantity = quantity;
@@ -45,12 +45,12 @@ public final class CreditBundlePurchaseResponseData {
     }
 
     @JsonProperty("quantity")
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
     @JsonProperty("total")
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
 
@@ -84,17 +84,21 @@ public final class CreditBundlePurchaseResponseData {
     }
 
     public interface QuantityStage {
-        TotalStage quantity(int quantity);
+        TotalStage quantity(long quantity);
 
         Builder from(CreditBundlePurchaseResponseData other);
     }
 
     public interface TotalStage {
-        _FinalStage total(int total);
+        _FinalStage total(long total);
     }
 
     public interface _FinalStage {
         CreditBundlePurchaseResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage bundle(Optional<BillingCreditBundleResponseData> bundle);
 
@@ -103,9 +107,9 @@ public final class CreditBundlePurchaseResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements QuantityStage, TotalStage, _FinalStage {
-        private int quantity;
+        private long quantity;
 
-        private int total;
+        private long total;
 
         private Optional<BillingCreditBundleResponseData> bundle = Optional.empty();
 
@@ -124,14 +128,14 @@ public final class CreditBundlePurchaseResponseData {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public TotalStage quantity(int quantity) {
+        public TotalStage quantity(long quantity) {
             this.quantity = quantity;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("total")
-        public _FinalStage total(int total) {
+        public _FinalStage total(long total) {
             this.total = total;
             return this;
         }
@@ -152,6 +156,18 @@ public final class CreditBundlePurchaseResponseData {
         @java.lang.Override
         public CreditBundlePurchaseResponseData build() {
             return new CreditBundlePurchaseResponseData(bundle, quantity, total, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

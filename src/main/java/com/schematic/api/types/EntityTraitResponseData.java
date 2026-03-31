@@ -143,6 +143,10 @@ public final class EntityTraitResponseData {
 
     public interface _FinalStage {
         EntityTraitResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -228,6 +232,18 @@ public final class EntityTraitResponseData {
         public EntityTraitResponseData build() {
             return new EntityTraitResponseData(
                     createdAt, definitionId, environmentId, id, updatedAt, value, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

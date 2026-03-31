@@ -91,6 +91,13 @@ public class CheckoutClient {
     }
 
     public UpdateCustomerSubscriptionTrialEndResponse updateCustomerSubscriptionTrialEnd(
+            String subscriptionId, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateCustomerSubscriptionTrialEnd(subscriptionId, requestOptions)
+                .body();
+    }
+
+    public UpdateCustomerSubscriptionTrialEndResponse updateCustomerSubscriptionTrialEnd(
             String subscriptionId, UpdateTrialEndRequestBody request) {
         return this.rawClient
                 .updateCustomerSubscriptionTrialEnd(subscriptionId, request)

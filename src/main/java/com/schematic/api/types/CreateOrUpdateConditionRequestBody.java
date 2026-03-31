@@ -39,7 +39,7 @@ public final class CreateOrUpdateConditionRequestBody {
 
     private final Optional<CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset;
 
-    private final Optional<Integer> metricValue;
+    private final Optional<Long> metricValue;
 
     private final CreateOrUpdateConditionRequestBodyOperator operator;
 
@@ -60,7 +60,7 @@ public final class CreateOrUpdateConditionRequestBody {
             Optional<String> id,
             Optional<CreateOrUpdateConditionRequestBodyMetricPeriod> metricPeriod,
             Optional<CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
-            Optional<Integer> metricValue,
+            Optional<Long> metricValue,
             CreateOrUpdateConditionRequestBodyOperator operator,
             List<String> resourceIds,
             Optional<String> traitId,
@@ -144,7 +144,7 @@ public final class CreateOrUpdateConditionRequestBody {
      * @return Value to compare the track event metric against
      */
     @JsonProperty("metric_value")
-    public Optional<Integer> getMetricValue() {
+    public Optional<Long> getMetricValue() {
         return metricValue;
     }
 
@@ -245,6 +245,10 @@ public final class CreateOrUpdateConditionRequestBody {
     public interface _FinalStage {
         CreateOrUpdateConditionRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Optionally provide a trait ID to compare a metric or trait value against instead of a value</p>
          */
@@ -296,9 +300,9 @@ public final class CreateOrUpdateConditionRequestBody {
         /**
          * <p>Value to compare the track event metric against</p>
          */
-        _FinalStage metricValue(Optional<Integer> metricValue);
+        _FinalStage metricValue(Optional<Long> metricValue);
 
-        _FinalStage metricValue(Integer metricValue);
+        _FinalStage metricValue(Long metricValue);
 
         /**
          * <p>List of resource IDs (companies, users, or plans) targeted by this condition</p>
@@ -336,7 +340,7 @@ public final class CreateOrUpdateConditionRequestBody {
 
         private List<String> resourceIds = new ArrayList<>();
 
-        private Optional<Integer> metricValue = Optional.empty();
+        private Optional<Long> metricValue = Optional.empty();
 
         private Optional<CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset =
                 Optional.empty();
@@ -470,7 +474,7 @@ public final class CreateOrUpdateConditionRequestBody {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage metricValue(Integer metricValue) {
+        public _FinalStage metricValue(Long metricValue) {
             this.metricValue = Optional.ofNullable(metricValue);
             return this;
         }
@@ -480,7 +484,7 @@ public final class CreateOrUpdateConditionRequestBody {
          */
         @java.lang.Override
         @JsonSetter(value = "metric_value", nulls = Nulls.SKIP)
-        public _FinalStage metricValue(Optional<Integer> metricValue) {
+        public _FinalStage metricValue(Optional<Long> metricValue) {
             this.metricValue = metricValue;
             return this;
         }
@@ -637,6 +641,18 @@ public final class CreateOrUpdateConditionRequestBody {
                     traitId,
                     traitValue,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

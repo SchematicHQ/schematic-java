@@ -42,7 +42,7 @@ public final class CompanyPlanWithBillingSubView {
 
     private final Optional<String> planPeriod;
 
-    private final Optional<Integer> planPrice;
+    private final Optional<Long> planPrice;
 
     private final Optional<String> planVersionId;
 
@@ -58,7 +58,7 @@ public final class CompanyPlanWithBillingSubView {
             List<PlanCreditGrantView> includedCreditGrants,
             String name,
             Optional<String> planPeriod,
-            Optional<Integer> planPrice,
+            Optional<Long> planPrice,
             Optional<String> planVersionId,
             Map<String, Object> additionalProperties) {
         this.addedOn = addedOn;
@@ -121,7 +121,7 @@ public final class CompanyPlanWithBillingSubView {
     }
 
     @JsonProperty("plan_price")
-    public Optional<Integer> getPlanPrice() {
+    public Optional<Long> getPlanPrice() {
         return planPrice;
     }
 
@@ -193,6 +193,10 @@ public final class CompanyPlanWithBillingSubView {
     public interface _FinalStage {
         CompanyPlanWithBillingSubView build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage addedOn(Optional<OffsetDateTime> addedOn);
 
         _FinalStage addedOn(OffsetDateTime addedOn);
@@ -223,9 +227,9 @@ public final class CompanyPlanWithBillingSubView {
 
         _FinalStage planPeriod(String planPeriod);
 
-        _FinalStage planPrice(Optional<Integer> planPrice);
+        _FinalStage planPrice(Optional<Long> planPrice);
 
-        _FinalStage planPrice(Integer planPrice);
+        _FinalStage planPrice(Long planPrice);
 
         _FinalStage planVersionId(Optional<String> planVersionId);
 
@@ -240,7 +244,7 @@ public final class CompanyPlanWithBillingSubView {
 
         private Optional<String> planVersionId = Optional.empty();
 
-        private Optional<Integer> planPrice = Optional.empty();
+        private Optional<Long> planPrice = Optional.empty();
 
         private Optional<String> planPeriod = Optional.empty();
 
@@ -305,14 +309,14 @@ public final class CompanyPlanWithBillingSubView {
         }
 
         @java.lang.Override
-        public _FinalStage planPrice(Integer planPrice) {
+        public _FinalStage planPrice(Long planPrice) {
             this.planPrice = Optional.ofNullable(planPrice);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "plan_price", nulls = Nulls.SKIP)
-        public _FinalStage planPrice(Optional<Integer> planPrice) {
+        public _FinalStage planPrice(Optional<Long> planPrice) {
             this.planPrice = planPrice;
             return this;
         }
@@ -434,6 +438,18 @@ public final class CompanyPlanWithBillingSubView {
                     planPrice,
                     planVersionId,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

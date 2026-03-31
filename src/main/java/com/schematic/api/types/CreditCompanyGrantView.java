@@ -39,6 +39,8 @@ public final class CreditCompanyGrantView {
 
     private final String creditName;
 
+    private final Optional<String> currency;
+
     private final Optional<OffsetDateTime> exhaustedAt;
 
     private final Optional<OffsetDateTime> expiresAt;
@@ -47,7 +49,7 @@ public final class CreditCompanyGrantView {
 
     private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
-    private final Optional<Integer> expiryUnitCount;
+    private final Optional<Long> expiryUnitCount;
 
     private final BillingCreditGrantReason grantReason;
 
@@ -61,7 +63,7 @@ public final class CreditCompanyGrantView {
 
     private final Optional<BillingProductPriceResponseData> price;
 
-    private final int quantity;
+    private final long quantity;
 
     private final double quantityRemaining;
 
@@ -96,18 +98,19 @@ public final class CreditCompanyGrantView {
             String creditDescription,
             Optional<String> creditIcon,
             String creditName,
+            Optional<String> currency,
             Optional<OffsetDateTime> exhaustedAt,
             Optional<OffsetDateTime> expiresAt,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
-            Optional<Integer> expiryUnitCount,
+            Optional<Long> expiryUnitCount,
             BillingCreditGrantReason grantReason,
             String id,
             Optional<String> planId,
             Optional<String> planName,
             Optional<String> pluralName,
             Optional<BillingProductPriceResponseData> price,
-            int quantity,
+            long quantity,
             double quantityRemaining,
             double quantityUsed,
             boolean renewalEnabled,
@@ -128,6 +131,7 @@ public final class CreditCompanyGrantView {
         this.creditDescription = creditDescription;
         this.creditIcon = creditIcon;
         this.creditName = creditName;
+        this.currency = currency;
         this.exhaustedAt = exhaustedAt;
         this.expiresAt = expiresAt;
         this.expiryType = expiryType;
@@ -194,6 +198,11 @@ public final class CreditCompanyGrantView {
         return creditName;
     }
 
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
+    }
+
     @JsonProperty("exhausted_at")
     public Optional<OffsetDateTime> getExhaustedAt() {
         return exhaustedAt;
@@ -215,7 +224,7 @@ public final class CreditCompanyGrantView {
     }
 
     @JsonProperty("expiry_unit_count")
-    public Optional<Integer> getExpiryUnitCount() {
+    public Optional<Long> getExpiryUnitCount() {
         return expiryUnitCount;
     }
 
@@ -250,7 +259,7 @@ public final class CreditCompanyGrantView {
     }
 
     @JsonProperty("quantity")
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
@@ -329,6 +338,7 @@ public final class CreditCompanyGrantView {
                 && creditDescription.equals(other.creditDescription)
                 && creditIcon.equals(other.creditIcon)
                 && creditName.equals(other.creditName)
+                && currency.equals(other.currency)
                 && exhaustedAt.equals(other.exhaustedAt)
                 && expiresAt.equals(other.expiresAt)
                 && expiryType.equals(other.expiryType)
@@ -365,6 +375,7 @@ public final class CreditCompanyGrantView {
                 this.creditDescription,
                 this.creditIcon,
                 this.creditName,
+                this.currency,
                 this.exhaustedAt,
                 this.expiresAt,
                 this.expiryType,
@@ -434,7 +445,7 @@ public final class CreditCompanyGrantView {
     }
 
     public interface QuantityStage {
-        QuantityRemainingStage quantity(int quantity);
+        QuantityRemainingStage quantity(long quantity);
     }
 
     public interface QuantityRemainingStage {
@@ -460,6 +471,10 @@ public final class CreditCompanyGrantView {
     public interface _FinalStage {
         CreditCompanyGrantView build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage billingCreditBundleId(Optional<String> billingCreditBundleId);
 
         _FinalStage billingCreditBundleId(String billingCreditBundleId);
@@ -467,6 +482,10 @@ public final class CreditCompanyGrantView {
         _FinalStage creditIcon(Optional<String> creditIcon);
 
         _FinalStage creditIcon(String creditIcon);
+
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
 
         _FinalStage exhaustedAt(Optional<OffsetDateTime> exhaustedAt);
 
@@ -484,9 +503,9 @@ public final class CreditCompanyGrantView {
 
         _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
-        _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
+        _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount);
 
-        _FinalStage expiryUnitCount(Integer expiryUnitCount);
+        _FinalStage expiryUnitCount(Long expiryUnitCount);
 
         _FinalStage planId(Optional<String> planId);
 
@@ -562,7 +581,7 @@ public final class CreditCompanyGrantView {
 
         private String id;
 
-        private int quantity;
+        private long quantity;
 
         private double quantityRemaining;
 
@@ -594,7 +613,7 @@ public final class CreditCompanyGrantView {
 
         private Optional<String> planId = Optional.empty();
 
-        private Optional<Integer> expiryUnitCount = Optional.empty();
+        private Optional<Long> expiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
@@ -603,6 +622,8 @@ public final class CreditCompanyGrantView {
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
         private Optional<OffsetDateTime> exhaustedAt = Optional.empty();
+
+        private Optional<String> currency = Optional.empty();
 
         private Optional<String> creditIcon = Optional.empty();
 
@@ -623,6 +644,7 @@ public final class CreditCompanyGrantView {
             creditDescription(other.getCreditDescription());
             creditIcon(other.getCreditIcon());
             creditName(other.getCreditName());
+            currency(other.getCurrency());
             exhaustedAt(other.getExhaustedAt());
             expiresAt(other.getExpiresAt());
             expiryType(other.getExpiryType());
@@ -707,7 +729,7 @@ public final class CreditCompanyGrantView {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public QuantityRemainingStage quantity(int quantity) {
+        public QuantityRemainingStage quantity(long quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -878,14 +900,14 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnitCount(Integer expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Long expiryUnitCount) {
             this.expiryUnitCount = Optional.ofNullable(expiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount) {
             this.expiryUnitCount = expiryUnitCount;
             return this;
         }
@@ -943,6 +965,19 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage creditIcon(String creditIcon) {
             this.creditIcon = Optional.ofNullable(creditIcon);
             return this;
@@ -979,6 +1014,7 @@ public final class CreditCompanyGrantView {
                     creditDescription,
                     creditIcon,
                     creditName,
+                    currency,
                     exhaustedAt,
                     expiresAt,
                     expiryType,
@@ -1003,6 +1039,18 @@ public final class CreditCompanyGrantView {
                     zeroedOutDate,
                     zeroedOutReason,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

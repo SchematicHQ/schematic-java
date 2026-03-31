@@ -24,11 +24,11 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PreviewSubscriptionFinanceResponseData.Builder.class)
 public final class PreviewSubscriptionFinanceResponseData {
-    private final int amountOff;
+    private final long amountOff;
 
-    private final int dueNow;
+    private final long dueNow;
 
-    private final int newCharges;
+    private final long newCharges;
 
     private final double percentOff;
 
@@ -36,15 +36,15 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private final boolean promoCodeApplied;
 
-    private final int proration;
+    private final long proration;
 
-    private final Optional<Integer> taxAmount;
+    private final Optional<Long> taxAmount;
 
     private final Optional<String> taxDisplayName;
 
     private final boolean taxRequireBillingDetails;
 
-    private final int totalPerBillingPeriod;
+    private final long totalPerBillingPeriod;
 
     private final Optional<OffsetDateTime> trialEnd;
 
@@ -53,17 +53,17 @@ public final class PreviewSubscriptionFinanceResponseData {
     private final Map<String, Object> additionalProperties;
 
     private PreviewSubscriptionFinanceResponseData(
-            int amountOff,
-            int dueNow,
-            int newCharges,
+            long amountOff,
+            long dueNow,
+            long newCharges,
             double percentOff,
             OffsetDateTime periodStart,
             boolean promoCodeApplied,
-            int proration,
-            Optional<Integer> taxAmount,
+            long proration,
+            Optional<Long> taxAmount,
             Optional<String> taxDisplayName,
             boolean taxRequireBillingDetails,
-            int totalPerBillingPeriod,
+            long totalPerBillingPeriod,
             Optional<OffsetDateTime> trialEnd,
             List<PreviewSubscriptionUpcomingInvoiceLineItems> upcomingInvoiceLineItems,
             Map<String, Object> additionalProperties) {
@@ -84,17 +84,17 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     @JsonProperty("amount_off")
-    public int getAmountOff() {
+    public long getAmountOff() {
         return amountOff;
     }
 
     @JsonProperty("due_now")
-    public int getDueNow() {
+    public long getDueNow() {
         return dueNow;
     }
 
     @JsonProperty("new_charges")
-    public int getNewCharges() {
+    public long getNewCharges() {
         return newCharges;
     }
 
@@ -114,12 +114,12 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     @JsonProperty("proration")
-    public int getProration() {
+    public long getProration() {
         return proration;
     }
 
     @JsonProperty("tax_amount")
-    public Optional<Integer> getTaxAmount() {
+    public Optional<Long> getTaxAmount() {
         return taxAmount;
     }
 
@@ -134,7 +134,7 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     @JsonProperty("total_per_billing_period")
-    public int getTotalPerBillingPeriod() {
+    public long getTotalPerBillingPeriod() {
         return totalPerBillingPeriod;
     }
 
@@ -204,17 +204,17 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     public interface AmountOffStage {
-        DueNowStage amountOff(int amountOff);
+        DueNowStage amountOff(long amountOff);
 
         Builder from(PreviewSubscriptionFinanceResponseData other);
     }
 
     public interface DueNowStage {
-        NewChargesStage dueNow(int dueNow);
+        NewChargesStage dueNow(long dueNow);
     }
 
     public interface NewChargesStage {
-        PercentOffStage newCharges(int newCharges);
+        PercentOffStage newCharges(long newCharges);
     }
 
     public interface PercentOffStage {
@@ -230,7 +230,7 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     public interface ProrationStage {
-        TaxRequireBillingDetailsStage proration(int proration);
+        TaxRequireBillingDetailsStage proration(long proration);
     }
 
     public interface TaxRequireBillingDetailsStage {
@@ -238,15 +238,19 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     public interface TotalPerBillingPeriodStage {
-        _FinalStage totalPerBillingPeriod(int totalPerBillingPeriod);
+        _FinalStage totalPerBillingPeriod(long totalPerBillingPeriod);
     }
 
     public interface _FinalStage {
         PreviewSubscriptionFinanceResponseData build();
 
-        _FinalStage taxAmount(Optional<Integer> taxAmount);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage taxAmount(Integer taxAmount);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage taxAmount(Optional<Long> taxAmount);
+
+        _FinalStage taxAmount(Long taxAmount);
 
         _FinalStage taxDisplayName(Optional<String> taxDisplayName);
 
@@ -277,11 +281,11 @@ public final class PreviewSubscriptionFinanceResponseData {
                     TaxRequireBillingDetailsStage,
                     TotalPerBillingPeriodStage,
                     _FinalStage {
-        private int amountOff;
+        private long amountOff;
 
-        private int dueNow;
+        private long dueNow;
 
-        private int newCharges;
+        private long newCharges;
 
         private double percentOff;
 
@@ -289,11 +293,11 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         private boolean promoCodeApplied;
 
-        private int proration;
+        private long proration;
 
         private boolean taxRequireBillingDetails;
 
-        private int totalPerBillingPeriod;
+        private long totalPerBillingPeriod;
 
         private List<PreviewSubscriptionUpcomingInvoiceLineItems> upcomingInvoiceLineItems = new ArrayList<>();
 
@@ -301,7 +305,7 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         private Optional<String> taxDisplayName = Optional.empty();
 
-        private Optional<Integer> taxAmount = Optional.empty();
+        private Optional<Long> taxAmount = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -328,21 +332,21 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         @java.lang.Override
         @JsonSetter("amount_off")
-        public DueNowStage amountOff(int amountOff) {
+        public DueNowStage amountOff(long amountOff) {
             this.amountOff = amountOff;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("due_now")
-        public NewChargesStage dueNow(int dueNow) {
+        public NewChargesStage dueNow(long dueNow) {
             this.dueNow = dueNow;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("new_charges")
-        public PercentOffStage newCharges(int newCharges) {
+        public PercentOffStage newCharges(long newCharges) {
             this.newCharges = newCharges;
             return this;
         }
@@ -370,7 +374,7 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         @java.lang.Override
         @JsonSetter("proration")
-        public TaxRequireBillingDetailsStage proration(int proration) {
+        public TaxRequireBillingDetailsStage proration(long proration) {
             this.proration = proration;
             return this;
         }
@@ -384,7 +388,7 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         @java.lang.Override
         @JsonSetter("total_per_billing_period")
-        public _FinalStage totalPerBillingPeriod(int totalPerBillingPeriod) {
+        public _FinalStage totalPerBillingPeriod(long totalPerBillingPeriod) {
             this.totalPerBillingPeriod = totalPerBillingPeriod;
             return this;
         }
@@ -443,14 +447,14 @@ public final class PreviewSubscriptionFinanceResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage taxAmount(Integer taxAmount) {
+        public _FinalStage taxAmount(Long taxAmount) {
             this.taxAmount = Optional.ofNullable(taxAmount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "tax_amount", nulls = Nulls.SKIP)
-        public _FinalStage taxAmount(Optional<Integer> taxAmount) {
+        public _FinalStage taxAmount(Optional<Long> taxAmount) {
             this.taxAmount = taxAmount;
             return this;
         }
@@ -472,6 +476,18 @@ public final class PreviewSubscriptionFinanceResponseData {
                     trialEnd,
                     upcomingInvoiceLineItems,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

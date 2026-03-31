@@ -92,6 +92,10 @@ public final class ListWebhookEventsResponse {
     public interface _FinalStage {
         ListWebhookEventsResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<WebhookEventDetailResponseData> data);
 
         _FinalStage addData(WebhookEventDetailResponseData data);
@@ -156,6 +160,18 @@ public final class ListWebhookEventsResponse {
         @java.lang.Override
         public ListWebhookEventsResponse build() {
             return new ListWebhookEventsResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

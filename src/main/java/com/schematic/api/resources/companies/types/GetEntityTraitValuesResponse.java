@@ -90,6 +90,10 @@ public final class GetEntityTraitValuesResponse {
     public interface _FinalStage {
         GetEntityTraitValuesResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<EntityTraitValue> data);
 
         _FinalStage addData(EntityTraitValue data);
@@ -154,6 +158,18 @@ public final class GetEntityTraitValuesResponse {
         @java.lang.Override
         public GetEntityTraitValuesResponse build() {
             return new GetEntityTraitValuesResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -56,11 +56,9 @@ public final class ConditionView {
 
     private final Optional<String> metricPeriodMonthReset;
 
-    private final Optional<Integer> metricValue;
+    private final Optional<Long> metricValue;
 
     private final String operator;
-
-    private final Optional<String> planVersionId;
 
     private final List<GenericPreviewObject> planVersions;
 
@@ -82,7 +80,7 @@ public final class ConditionView {
 
     private final Optional<OffsetDateTime> traitValueDate;
 
-    private final int traitValueInt;
+    private final long traitValueInt;
 
     private final OffsetDateTime updatedAt;
 
@@ -107,9 +105,8 @@ public final class ConditionView {
             String id,
             Optional<String> metricPeriod,
             Optional<String> metricPeriodMonthReset,
-            Optional<Integer> metricValue,
+            Optional<Long> metricValue,
             String operator,
-            Optional<String> planVersionId,
             List<GenericPreviewObject> planVersions,
             List<GenericPreviewObject> plans,
             List<String> resourceUnspecifiedIds,
@@ -120,7 +117,7 @@ public final class ConditionView {
             String traitValue,
             boolean traitValueBool,
             Optional<OffsetDateTime> traitValueDate,
-            int traitValueInt,
+            long traitValueInt,
             OffsetDateTime updatedAt,
             List<GenericPreviewObject> users,
             Map<String, Object> additionalProperties) {
@@ -142,7 +139,6 @@ public final class ConditionView {
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.metricValue = metricValue;
         this.operator = operator;
-        this.planVersionId = planVersionId;
         this.planVersions = planVersions;
         this.plans = plans;
         this.resourceUnspecifiedIds = resourceUnspecifiedIds;
@@ -240,18 +236,13 @@ public final class ConditionView {
     }
 
     @JsonProperty("metric_value")
-    public Optional<Integer> getMetricValue() {
+    public Optional<Long> getMetricValue() {
         return metricValue;
     }
 
     @JsonProperty("operator")
     public String getOperator() {
         return operator;
-    }
-
-    @JsonProperty("plan_version_id")
-    public Optional<String> getPlanVersionId() {
-        return planVersionId;
     }
 
     @JsonProperty("plan_versions")
@@ -305,7 +296,7 @@ public final class ConditionView {
     }
 
     @JsonProperty("trait_value_int")
-    public int getTraitValueInt() {
+    public long getTraitValueInt() {
         return traitValueInt;
     }
 
@@ -349,7 +340,6 @@ public final class ConditionView {
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && metricValue.equals(other.metricValue)
                 && operator.equals(other.operator)
-                && planVersionId.equals(other.planVersionId)
                 && planVersions.equals(other.planVersions)
                 && plans.equals(other.plans)
                 && resourceUnspecifiedIds.equals(other.resourceUnspecifiedIds)
@@ -386,7 +376,6 @@ public final class ConditionView {
                 this.metricPeriodMonthReset,
                 this.metricValue,
                 this.operator,
-                this.planVersionId,
                 this.planVersions,
                 this.plans,
                 this.resourceUnspecifiedIds,
@@ -450,7 +439,7 @@ public final class ConditionView {
     }
 
     public interface TraitValueIntStage {
-        UpdatedAtStage traitValueInt(int traitValueInt);
+        UpdatedAtStage traitValueInt(long traitValueInt);
     }
 
     public interface UpdatedAtStage {
@@ -459,6 +448,10 @@ public final class ConditionView {
 
     public interface _FinalStage {
         ConditionView build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage billingProducts(List<GenericPreviewObject> billingProducts);
 
@@ -508,13 +501,9 @@ public final class ConditionView {
 
         _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset);
 
-        _FinalStage metricValue(Optional<Integer> metricValue);
+        _FinalStage metricValue(Optional<Long> metricValue);
 
-        _FinalStage metricValue(Integer metricValue);
-
-        _FinalStage planVersionId(Optional<String> planVersionId);
-
-        _FinalStage planVersionId(String planVersionId);
+        _FinalStage metricValue(Long metricValue);
 
         _FinalStage planVersions(List<GenericPreviewObject> planVersions);
 
@@ -589,7 +578,7 @@ public final class ConditionView {
 
         private boolean traitValueBool;
 
-        private int traitValueInt;
+        private long traitValueInt;
 
         private OffsetDateTime updatedAt;
 
@@ -609,9 +598,7 @@ public final class ConditionView {
 
         private List<GenericPreviewObject> planVersions = new ArrayList<>();
 
-        private Optional<String> planVersionId = Optional.empty();
-
-        private Optional<Integer> metricValue = Optional.empty();
+        private Optional<Long> metricValue = Optional.empty();
 
         private Optional<String> metricPeriodMonthReset = Optional.empty();
 
@@ -660,7 +647,6 @@ public final class ConditionView {
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             metricValue(other.getMetricValue());
             operator(other.getOperator());
-            planVersionId(other.getPlanVersionId());
             planVersions(other.getPlanVersions());
             plans(other.getPlans());
             resourceUnspecifiedIds(other.getResourceUnspecifiedIds());
@@ -742,7 +728,7 @@ public final class ConditionView {
 
         @java.lang.Override
         @JsonSetter("trait_value_int")
-        public UpdatedAtStage traitValueInt(int traitValueInt) {
+        public UpdatedAtStage traitValueInt(long traitValueInt) {
             this.traitValueInt = traitValueInt;
             return this;
         }
@@ -903,27 +889,14 @@ public final class ConditionView {
         }
 
         @java.lang.Override
-        public _FinalStage planVersionId(String planVersionId) {
-            this.planVersionId = Optional.ofNullable(planVersionId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
-        public _FinalStage planVersionId(Optional<String> planVersionId) {
-            this.planVersionId = planVersionId;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage metricValue(Integer metricValue) {
+        public _FinalStage metricValue(Long metricValue) {
             this.metricValue = Optional.ofNullable(metricValue);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_value", nulls = Nulls.SKIP)
-        public _FinalStage metricValue(Optional<Integer> metricValue) {
+        public _FinalStage metricValue(Optional<Long> metricValue) {
             this.metricValue = metricValue;
             return this;
         }
@@ -1114,7 +1087,6 @@ public final class ConditionView {
                     metricPeriodMonthReset,
                     metricValue,
                     operator,
-                    planVersionId,
                     planVersions,
                     plans,
                     resourceUnspecifiedIds,
@@ -1129,6 +1101,18 @@ public final class ConditionView {
                     updatedAt,
                     users,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

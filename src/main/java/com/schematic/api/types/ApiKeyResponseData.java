@@ -36,6 +36,8 @@ public final class ApiKeyResponseData {
 
     private final String name;
 
+    private final boolean readonly;
+
     private final List<ApiKeyScope> scopes;
 
     private final OffsetDateTime updatedAt;
@@ -49,6 +51,7 @@ public final class ApiKeyResponseData {
             String id,
             Optional<OffsetDateTime> lastUsedAt,
             String name,
+            boolean readonly,
             List<ApiKeyScope> scopes,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -58,6 +61,7 @@ public final class ApiKeyResponseData {
         this.id = id;
         this.lastUsedAt = lastUsedAt;
         this.name = name;
+        this.readonly = readonly;
         this.scopes = scopes;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -93,6 +97,11 @@ public final class ApiKeyResponseData {
         return name;
     }
 
+    @JsonProperty("readonly")
+    public boolean getReadonly() {
+        return readonly;
+    }
+
     @JsonProperty("scopes")
     public List<ApiKeyScope> getScopes() {
         return scopes;
@@ -121,6 +130,7 @@ public final class ApiKeyResponseData {
                 && id.equals(other.id)
                 && lastUsedAt.equals(other.lastUsedAt)
                 && name.equals(other.name)
+                && readonly == other.readonly
                 && scopes.equals(other.scopes)
                 && updatedAt.equals(other.updatedAt);
     }
@@ -134,6 +144,7 @@ public final class ApiKeyResponseData {
                 this.id,
                 this.lastUsedAt,
                 this.name,
+                this.readonly,
                 this.scopes,
                 this.updatedAt);
     }
@@ -158,7 +169,11 @@ public final class ApiKeyResponseData {
     }
 
     public interface NameStage {
-        UpdatedAtStage name(@NotNull String name);
+        ReadonlyStage name(@NotNull String name);
+    }
+
+    public interface ReadonlyStage {
+        UpdatedAtStage readonly(boolean readonly);
     }
 
     public interface UpdatedAtStage {
@@ -167,6 +182,10 @@ public final class ApiKeyResponseData {
 
     public interface _FinalStage {
         ApiKeyResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage description(Optional<String> description);
 
@@ -188,12 +207,15 @@ public final class ApiKeyResponseData {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CreatedAtStage, IdStage, NameStage, UpdatedAtStage, _FinalStage {
+    public static final class Builder
+            implements CreatedAtStage, IdStage, NameStage, ReadonlyStage, UpdatedAtStage, _FinalStage {
         private OffsetDateTime createdAt;
 
         private String id;
 
         private String name;
+
+        private boolean readonly;
 
         private OffsetDateTime updatedAt;
 
@@ -218,6 +240,7 @@ public final class ApiKeyResponseData {
             id(other.getId());
             lastUsedAt(other.getLastUsedAt());
             name(other.getName());
+            readonly(other.getReadonly());
             scopes(other.getScopes());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -239,8 +262,15 @@ public final class ApiKeyResponseData {
 
         @java.lang.Override
         @JsonSetter("name")
-        public UpdatedAtStage name(@NotNull String name) {
+        public ReadonlyStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("readonly")
+        public UpdatedAtStage readonly(boolean readonly) {
+            this.readonly = readonly;
             return this;
         }
 
@@ -323,9 +353,22 @@ public final class ApiKeyResponseData {
                     id,
                     lastUsedAt,
                     name,
+                    readonly,
                     scopes,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

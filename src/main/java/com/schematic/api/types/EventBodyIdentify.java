@@ -201,5 +201,15 @@ public final class EventBodyIdentify {
         public EventBodyIdentify build() {
             return new EventBodyIdentify(company, keys, name, traits, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

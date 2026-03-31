@@ -125,6 +125,10 @@ public final class CreateWebhookRequestBody {
     public interface _FinalStage {
         CreateWebhookRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage creditTriggerConfigs(Optional<List<CreditTriggerConfig>> creditTriggerConfigs);
 
         _FinalStage creditTriggerConfigs(List<CreditTriggerConfig> creditTriggerConfigs);
@@ -236,6 +240,18 @@ public final class CreateWebhookRequestBody {
         public CreateWebhookRequestBody build() {
             return new CreateWebhookRequestBody(
                     creditTriggerConfigs, entitlementTriggerConfigs, name, requestTypes, url, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

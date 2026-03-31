@@ -33,9 +33,9 @@ public final class CreatePaymentMethodRequestBody {
 
     private final Optional<String> cardBrand;
 
-    private final Optional<Integer> cardExpMonth;
+    private final Optional<Long> cardExpMonth;
 
-    private final Optional<Integer> cardExpYear;
+    private final Optional<Long> cardExpYear;
 
     private final Optional<String> cardLast4;
 
@@ -54,8 +54,8 @@ public final class CreatePaymentMethodRequestBody {
             Optional<String> billingEmail,
             Optional<String> billingName,
             Optional<String> cardBrand,
-            Optional<Integer> cardExpMonth,
-            Optional<Integer> cardExpYear,
+            Optional<Long> cardExpMonth,
+            Optional<Long> cardExpYear,
             Optional<String> cardLast4,
             String customerExternalId,
             String externalId,
@@ -107,12 +107,12 @@ public final class CreatePaymentMethodRequestBody {
     }
 
     @JsonProperty("card_exp_month")
-    public Optional<Integer> getCardExpMonth() {
+    public Optional<Long> getCardExpMonth() {
         return cardExpMonth;
     }
 
     @JsonProperty("card_exp_year")
-    public Optional<Integer> getCardExpYear() {
+    public Optional<Long> getCardExpYear() {
         return cardExpYear;
     }
 
@@ -205,6 +205,10 @@ public final class CreatePaymentMethodRequestBody {
     public interface _FinalStage {
         CreatePaymentMethodRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage accountLast4(Optional<String> accountLast4);
 
         _FinalStage accountLast4(String accountLast4);
@@ -229,13 +233,13 @@ public final class CreatePaymentMethodRequestBody {
 
         _FinalStage cardBrand(String cardBrand);
 
-        _FinalStage cardExpMonth(Optional<Integer> cardExpMonth);
+        _FinalStage cardExpMonth(Optional<Long> cardExpMonth);
 
-        _FinalStage cardExpMonth(Integer cardExpMonth);
+        _FinalStage cardExpMonth(Long cardExpMonth);
 
-        _FinalStage cardExpYear(Optional<Integer> cardExpYear);
+        _FinalStage cardExpYear(Optional<Long> cardExpYear);
 
-        _FinalStage cardExpYear(Integer cardExpYear);
+        _FinalStage cardExpYear(Long cardExpYear);
 
         _FinalStage cardLast4(Optional<String> cardLast4);
 
@@ -253,9 +257,9 @@ public final class CreatePaymentMethodRequestBody {
 
         private Optional<String> cardLast4 = Optional.empty();
 
-        private Optional<Integer> cardExpYear = Optional.empty();
+        private Optional<Long> cardExpYear = Optional.empty();
 
-        private Optional<Integer> cardExpMonth = Optional.empty();
+        private Optional<Long> cardExpMonth = Optional.empty();
 
         private Optional<String> cardBrand = Optional.empty();
 
@@ -326,27 +330,27 @@ public final class CreatePaymentMethodRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage cardExpYear(Integer cardExpYear) {
+        public _FinalStage cardExpYear(Long cardExpYear) {
             this.cardExpYear = Optional.ofNullable(cardExpYear);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "card_exp_year", nulls = Nulls.SKIP)
-        public _FinalStage cardExpYear(Optional<Integer> cardExpYear) {
+        public _FinalStage cardExpYear(Optional<Long> cardExpYear) {
             this.cardExpYear = cardExpYear;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage cardExpMonth(Integer cardExpMonth) {
+        public _FinalStage cardExpMonth(Long cardExpMonth) {
             this.cardExpMonth = Optional.ofNullable(cardExpMonth);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "card_exp_month", nulls = Nulls.SKIP)
-        public _FinalStage cardExpMonth(Optional<Integer> cardExpMonth) {
+        public _FinalStage cardExpMonth(Optional<Long> cardExpMonth) {
             this.cardExpMonth = cardExpMonth;
             return this;
         }
@@ -445,6 +449,18 @@ public final class CreatePaymentMethodRequestBody {
                     externalId,
                     paymentMethodType,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

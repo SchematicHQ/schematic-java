@@ -10,6 +10,7 @@ import com.schematic.api.resources.credits.requests.CountBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCreditBundlesRequest;
+import com.schematic.api.resources.credits.requests.CountCreditEventLedgerRequest;
 import com.schematic.api.resources.credits.requests.CountCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
@@ -20,6 +21,7 @@ import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
+import com.schematic.api.resources.credits.requests.ListCreditEventLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
@@ -29,6 +31,7 @@ import com.schematic.api.resources.credits.types.CountBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCreditBundlesResponse;
+import com.schematic.api.resources.credits.types.CountCreditEventLedgerResponse;
 import com.schematic.api.resources.credits.types.CountCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.CreateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantResponse;
@@ -43,6 +46,7 @@ import com.schematic.api.resources.credits.types.ListBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.ListBillingPlanCreditGrantsResponse;
 import com.schematic.api.resources.credits.types.ListCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.ListCreditBundlesResponse;
+import com.schematic.api.resources.credits.types.ListCreditEventLedgerResponse;
 import com.schematic.api.resources.credits.types.ListGrantsForCreditResponse;
 import com.schematic.api.resources.credits.types.SoftDeleteBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingCreditResponse;
@@ -71,6 +75,10 @@ public class CreditsClient {
 
     public ListBillingCreditsResponse listBillingCredits() {
         return this.rawClient.listBillingCredits().body();
+    }
+
+    public ListBillingCreditsResponse listBillingCredits(RequestOptions requestOptions) {
+        return this.rawClient.listBillingCredits(requestOptions).body();
     }
 
     public ListBillingCreditsResponse listBillingCredits(ListBillingCreditsRequest request) {
@@ -120,6 +128,10 @@ public class CreditsClient {
 
     public ListCreditBundlesResponse listCreditBundles() {
         return this.rawClient.listCreditBundles().body();
+    }
+
+    public ListCreditBundlesResponse listCreditBundles(RequestOptions requestOptions) {
+        return this.rawClient.listCreditBundles(requestOptions).body();
     }
 
     public ListCreditBundlesResponse listCreditBundles(ListCreditBundlesRequest request) {
@@ -172,6 +184,10 @@ public class CreditsClient {
         return this.rawClient.countCreditBundles().body();
     }
 
+    public CountCreditBundlesResponse countCreditBundles(RequestOptions requestOptions) {
+        return this.rawClient.countCreditBundles(requestOptions).body();
+    }
+
     public CountCreditBundlesResponse countCreditBundles(CountCreditBundlesRequest request) {
         return this.rawClient.countCreditBundles(request).body();
     }
@@ -185,6 +201,10 @@ public class CreditsClient {
         return this.rawClient.countBillingCredits().body();
     }
 
+    public CountBillingCreditsResponse countBillingCredits(RequestOptions requestOptions) {
+        return this.rawClient.countBillingCredits(requestOptions).body();
+    }
+
     public CountBillingCreditsResponse countBillingCredits(CountBillingCreditsRequest request) {
         return this.rawClient.countBillingCredits(request).body();
     }
@@ -196,6 +216,10 @@ public class CreditsClient {
 
     public ZeroOutGrantResponse zeroOutGrant(String grantId) {
         return this.rawClient.zeroOutGrant(grantId).body();
+    }
+
+    public ZeroOutGrantResponse zeroOutGrant(String grantId, RequestOptions requestOptions) {
+        return this.rawClient.zeroOutGrant(grantId, requestOptions).body();
     }
 
     public ZeroOutGrantResponse zeroOutGrant(String grantId, ZeroOutGrantRequestBody request) {
@@ -222,6 +246,10 @@ public class CreditsClient {
         return this.rawClient.countCompanyGrants().body();
     }
 
+    public CountCompanyGrantsResponse countCompanyGrants(RequestOptions requestOptions) {
+        return this.rawClient.countCompanyGrants(requestOptions).body();
+    }
+
     public CountCompanyGrantsResponse countCompanyGrants(CountCompanyGrantsRequest request) {
         return this.rawClient.countCompanyGrants(request).body();
     }
@@ -233,6 +261,10 @@ public class CreditsClient {
 
     public ListCompanyGrantsResponse listCompanyGrants() {
         return this.rawClient.listCompanyGrants().body();
+    }
+
+    public ListCompanyGrantsResponse listCompanyGrants(RequestOptions requestOptions) {
+        return this.rawClient.listCompanyGrants(requestOptions).body();
     }
 
     public ListCompanyGrantsResponse listCompanyGrants(ListCompanyGrantsRequest request) {
@@ -248,6 +280,10 @@ public class CreditsClient {
         return this.rawClient.countBillingCreditsGrants().body();
     }
 
+    public CountBillingCreditsGrantsResponse countBillingCreditsGrants(RequestOptions requestOptions) {
+        return this.rawClient.countBillingCreditsGrants(requestOptions).body();
+    }
+
     public CountBillingCreditsGrantsResponse countBillingCreditsGrants(CountBillingCreditsGrantsRequest request) {
         return this.rawClient.countBillingCreditsGrants(request).body();
     }
@@ -259,6 +295,10 @@ public class CreditsClient {
 
     public ListGrantsForCreditResponse listGrantsForCredit() {
         return this.rawClient.listGrantsForCredit().body();
+    }
+
+    public ListGrantsForCreditResponse listGrantsForCredit(RequestOptions requestOptions) {
+        return this.rawClient.listGrantsForCredit(requestOptions).body();
     }
 
     public ListGrantsForCreditResponse listGrantsForCredit(ListGrantsForCreditRequest request) {
@@ -290,6 +330,10 @@ public class CreditsClient {
 
     public ListBillingPlanCreditGrantsResponse listBillingPlanCreditGrants() {
         return this.rawClient.listBillingPlanCreditGrants().body();
+    }
+
+    public ListBillingPlanCreditGrantsResponse listBillingPlanCreditGrants(RequestOptions requestOptions) {
+        return this.rawClient.listBillingPlanCreditGrants(requestOptions).body();
     }
 
     public ListBillingPlanCreditGrantsResponse listBillingPlanCreditGrants(ListBillingPlanCreditGrantsRequest request) {
@@ -332,6 +376,13 @@ public class CreditsClient {
     }
 
     public DeleteBillingPlanCreditGrantResponse deleteBillingPlanCreditGrant(
+            String planGrantId, RequestOptions requestOptions) {
+        return this.rawClient
+                .deleteBillingPlanCreditGrant(planGrantId, requestOptions)
+                .body();
+    }
+
+    public DeleteBillingPlanCreditGrantResponse deleteBillingPlanCreditGrant(
             String planGrantId, DeleteBillingPlanCreditGrantRequest request) {
         return this.rawClient.deleteBillingPlanCreditGrant(planGrantId, request).body();
     }
@@ -347,6 +398,10 @@ public class CreditsClient {
         return this.rawClient.countBillingPlanCreditGrants().body();
     }
 
+    public CountBillingPlanCreditGrantsResponse countBillingPlanCreditGrants(RequestOptions requestOptions) {
+        return this.rawClient.countBillingPlanCreditGrants(requestOptions).body();
+    }
+
     public CountBillingPlanCreditGrantsResponse countBillingPlanCreditGrants(
             CountBillingPlanCreditGrantsRequest request) {
         return this.rawClient.countBillingPlanCreditGrants(request).body();
@@ -357,5 +412,23 @@ public class CreditsClient {
         return this.rawClient
                 .countBillingPlanCreditGrants(request, requestOptions)
                 .body();
+    }
+
+    public ListCreditEventLedgerResponse listCreditEventLedger(ListCreditEventLedgerRequest request) {
+        return this.rawClient.listCreditEventLedger(request).body();
+    }
+
+    public ListCreditEventLedgerResponse listCreditEventLedger(
+            ListCreditEventLedgerRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listCreditEventLedger(request, requestOptions).body();
+    }
+
+    public CountCreditEventLedgerResponse countCreditEventLedger(CountCreditEventLedgerRequest request) {
+        return this.rawClient.countCreditEventLedger(request).body();
+    }
+
+    public CountCreditEventLedgerResponse countCreditEventLedger(
+            CountCreditEventLedgerRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countCreditEventLedger(request, requestOptions).body();
     }
 }

@@ -89,6 +89,10 @@ public final class PreviewManagePlanResponse {
     public interface _FinalStage {
         PreviewManagePlanResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Input parameters</p>
          */
@@ -162,6 +166,18 @@ public final class PreviewManagePlanResponse {
         @java.lang.Override
         public PreviewManagePlanResponse build() {
             return new PreviewManagePlanResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

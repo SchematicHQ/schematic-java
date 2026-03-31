@@ -25,7 +25,7 @@ public final class CreditGrantExpiryRequestBody {
 
     private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
-    private final Optional<Integer> expiryUnitCount;
+    private final Optional<Long> expiryUnitCount;
 
     private final BillingPlanCreditGrantResetCadence resetCadence;
 
@@ -38,7 +38,7 @@ public final class CreditGrantExpiryRequestBody {
     private CreditGrantExpiryRequestBody(
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
-            Optional<Integer> expiryUnitCount,
+            Optional<Long> expiryUnitCount,
             BillingPlanCreditGrantResetCadence resetCadence,
             BillingPlanCreditGrantResetStart resetStart,
             Optional<BillingPlanCreditGrantResetType> resetType,
@@ -63,7 +63,7 @@ public final class CreditGrantExpiryRequestBody {
     }
 
     @JsonProperty("expiry_unit_count")
-    public Optional<Integer> getExpiryUnitCount() {
+    public Optional<Long> getExpiryUnitCount() {
         return expiryUnitCount;
     }
 
@@ -135,6 +135,10 @@ public final class CreditGrantExpiryRequestBody {
     public interface _FinalStage {
         CreditGrantExpiryRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
 
         _FinalStage expiryType(BillingCreditExpiryType expiryType);
@@ -143,9 +147,9 @@ public final class CreditGrantExpiryRequestBody {
 
         _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
-        _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
+        _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount);
 
-        _FinalStage expiryUnitCount(Integer expiryUnitCount);
+        _FinalStage expiryUnitCount(Long expiryUnitCount);
 
         _FinalStage resetType(Optional<BillingPlanCreditGrantResetType> resetType);
 
@@ -160,7 +164,7 @@ public final class CreditGrantExpiryRequestBody {
 
         private Optional<BillingPlanCreditGrantResetType> resetType = Optional.empty();
 
-        private Optional<Integer> expiryUnitCount = Optional.empty();
+        private Optional<Long> expiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
@@ -210,14 +214,14 @@ public final class CreditGrantExpiryRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnitCount(Integer expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Long expiryUnitCount) {
             this.expiryUnitCount = Optional.ofNullable(expiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount) {
             this.expiryUnitCount = expiryUnitCount;
             return this;
         }
@@ -252,6 +256,18 @@ public final class CreditGrantExpiryRequestBody {
         public CreditGrantExpiryRequestBody build() {
             return new CreditGrantExpiryRequestBody(
                     expiryType, expiryUnit, expiryUnitCount, resetCadence, resetStart, resetType, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

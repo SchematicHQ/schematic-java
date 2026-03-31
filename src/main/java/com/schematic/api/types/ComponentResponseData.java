@@ -156,6 +156,10 @@ public final class ComponentResponseData {
     public interface _FinalStage {
         ComponentResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage ast(Optional<Map<String, Double>> ast);
 
         _FinalStage ast(Map<String, Double> ast);
@@ -253,6 +257,18 @@ public final class ComponentResponseData {
         @java.lang.Override
         public ComponentResponseData build() {
             return new ComponentResponseData(ast, createdAt, id, name, state, type, updatedAt, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

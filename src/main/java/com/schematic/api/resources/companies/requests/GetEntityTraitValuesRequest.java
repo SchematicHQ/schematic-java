@@ -25,17 +25,17 @@ public final class GetEntityTraitValuesRequest {
 
     private final Optional<String> q;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Map<String, Object> additionalProperties;
 
     private GetEntityTraitValuesRequest(
             String definitionId,
             Optional<String> q,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Map<String, Object> additionalProperties) {
         this.definitionId = definitionId;
         this.q = q;
@@ -58,7 +58,7 @@ public final class GetEntityTraitValuesRequest {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -66,7 +66,7 @@ public final class GetEntityTraitValuesRequest {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -111,6 +111,10 @@ public final class GetEntityTraitValuesRequest {
     public interface _FinalStage {
         GetEntityTraitValuesRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage q(Optional<String> q);
 
         _FinalStage q(String q);
@@ -118,25 +122,25 @@ public final class GetEntityTraitValuesRequest {
         /**
          * <p>Page limit (default 100)</p>
          */
-        _FinalStage limit(Optional<Integer> limit);
+        _FinalStage limit(Optional<Long> limit);
 
-        _FinalStage limit(Integer limit);
+        _FinalStage limit(Long limit);
 
         /**
          * <p>Page offset (default 0)</p>
          */
-        _FinalStage offset(Optional<Integer> offset);
+        _FinalStage offset(Optional<Long> offset);
 
-        _FinalStage offset(Integer offset);
+        _FinalStage offset(Long offset);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements DefinitionIdStage, _FinalStage {
         private String definitionId;
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
@@ -166,7 +170,7 @@ public final class GetEntityTraitValuesRequest {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage offset(Integer offset) {
+        public _FinalStage offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -176,7 +180,7 @@ public final class GetEntityTraitValuesRequest {
          */
         @java.lang.Override
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public _FinalStage offset(Optional<Integer> offset) {
+        public _FinalStage offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
@@ -186,7 +190,7 @@ public final class GetEntityTraitValuesRequest {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage limit(Integer limit) {
+        public _FinalStage limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -196,7 +200,7 @@ public final class GetEntityTraitValuesRequest {
          */
         @java.lang.Override
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public _FinalStage limit(Optional<Integer> limit) {
+        public _FinalStage limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
@@ -217,6 +221,18 @@ public final class GetEntityTraitValuesRequest {
         @java.lang.Override
         public GetEntityTraitValuesRequest build() {
             return new GetEntityTraitValuesRequest(definitionId, q, limit, offset, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

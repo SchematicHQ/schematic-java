@@ -22,11 +22,11 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InvoiceResponseData.Builder.class)
 public final class InvoiceResponseData {
-    private final int amountDue;
+    private final long amountDue;
 
-    private final int amountPaid;
+    private final long amountPaid;
 
-    private final int amountRemaining;
+    private final long amountRemaining;
 
     private final String collectionMethod;
 
@@ -50,9 +50,11 @@ public final class InvoiceResponseData {
 
     private final BillingProviderType providerType;
 
+    private final Optional<InvoiceStatus> status;
+
     private final Optional<String> subscriptionExternalId;
 
-    private final int subtotal;
+    private final long subtotal;
 
     private final OffsetDateTime updatedAt;
 
@@ -61,9 +63,9 @@ public final class InvoiceResponseData {
     private final Map<String, Object> additionalProperties;
 
     private InvoiceResponseData(
-            int amountDue,
-            int amountPaid,
-            int amountRemaining,
+            long amountDue,
+            long amountPaid,
+            long amountRemaining,
             String collectionMethod,
             Optional<String> companyId,
             OffsetDateTime createdAt,
@@ -75,8 +77,9 @@ public final class InvoiceResponseData {
             String id,
             Optional<String> paymentMethodExternalId,
             BillingProviderType providerType,
+            Optional<InvoiceStatus> status,
             Optional<String> subscriptionExternalId,
-            int subtotal,
+            long subtotal,
             OffsetDateTime updatedAt,
             Optional<String> url,
             Map<String, Object> additionalProperties) {
@@ -94,6 +97,7 @@ public final class InvoiceResponseData {
         this.id = id;
         this.paymentMethodExternalId = paymentMethodExternalId;
         this.providerType = providerType;
+        this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.subtotal = subtotal;
         this.updatedAt = updatedAt;
@@ -102,17 +106,17 @@ public final class InvoiceResponseData {
     }
 
     @JsonProperty("amount_due")
-    public int getAmountDue() {
+    public long getAmountDue() {
         return amountDue;
     }
 
     @JsonProperty("amount_paid")
-    public int getAmountPaid() {
+    public long getAmountPaid() {
         return amountPaid;
     }
 
     @JsonProperty("amount_remaining")
-    public int getAmountRemaining() {
+    public long getAmountRemaining() {
         return amountRemaining;
     }
 
@@ -171,13 +175,18 @@ public final class InvoiceResponseData {
         return providerType;
     }
 
+    @JsonProperty("status")
+    public Optional<InvoiceStatus> getStatus() {
+        return status;
+    }
+
     @JsonProperty("subscription_external_id")
     public Optional<String> getSubscriptionExternalId() {
         return subscriptionExternalId;
     }
 
     @JsonProperty("subtotal")
-    public int getSubtotal() {
+    public long getSubtotal() {
         return subtotal;
     }
 
@@ -217,6 +226,7 @@ public final class InvoiceResponseData {
                 && id.equals(other.id)
                 && paymentMethodExternalId.equals(other.paymentMethodExternalId)
                 && providerType.equals(other.providerType)
+                && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && subtotal == other.subtotal
                 && updatedAt.equals(other.updatedAt)
@@ -240,6 +250,7 @@ public final class InvoiceResponseData {
                 this.id,
                 this.paymentMethodExternalId,
                 this.providerType,
+                this.status,
                 this.subscriptionExternalId,
                 this.subtotal,
                 this.updatedAt,
@@ -256,17 +267,17 @@ public final class InvoiceResponseData {
     }
 
     public interface AmountDueStage {
-        AmountPaidStage amountDue(int amountDue);
+        AmountPaidStage amountDue(long amountDue);
 
         Builder from(InvoiceResponseData other);
     }
 
     public interface AmountPaidStage {
-        AmountRemainingStage amountPaid(int amountPaid);
+        AmountRemainingStage amountPaid(long amountPaid);
     }
 
     public interface AmountRemainingStage {
-        CollectionMethodStage amountRemaining(int amountRemaining);
+        CollectionMethodStage amountRemaining(long amountRemaining);
     }
 
     public interface CollectionMethodStage {
@@ -298,7 +309,7 @@ public final class InvoiceResponseData {
     }
 
     public interface SubtotalStage {
-        UpdatedAtStage subtotal(int subtotal);
+        UpdatedAtStage subtotal(long subtotal);
     }
 
     public interface UpdatedAtStage {
@@ -307,6 +318,10 @@ public final class InvoiceResponseData {
 
     public interface _FinalStage {
         InvoiceResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage companyId(Optional<String> companyId);
 
@@ -323,6 +338,10 @@ public final class InvoiceResponseData {
         _FinalStage paymentMethodExternalId(Optional<String> paymentMethodExternalId);
 
         _FinalStage paymentMethodExternalId(String paymentMethodExternalId);
+
+        _FinalStage status(Optional<InvoiceStatus> status);
+
+        _FinalStage status(InvoiceStatus status);
 
         _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId);
 
@@ -348,11 +367,11 @@ public final class InvoiceResponseData {
                     SubtotalStage,
                     UpdatedAtStage,
                     _FinalStage {
-        private int amountDue;
+        private long amountDue;
 
-        private int amountPaid;
+        private long amountPaid;
 
-        private int amountRemaining;
+        private long amountRemaining;
 
         private String collectionMethod;
 
@@ -368,13 +387,15 @@ public final class InvoiceResponseData {
 
         private BillingProviderType providerType;
 
-        private int subtotal;
+        private long subtotal;
 
         private OffsetDateTime updatedAt;
 
         private Optional<String> url = Optional.empty();
 
         private Optional<String> subscriptionExternalId = Optional.empty();
+
+        private Optional<InvoiceStatus> status = Optional.empty();
 
         private Optional<String> paymentMethodExternalId = Optional.empty();
 
@@ -405,6 +426,7 @@ public final class InvoiceResponseData {
             id(other.getId());
             paymentMethodExternalId(other.getPaymentMethodExternalId());
             providerType(other.getProviderType());
+            status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             subtotal(other.getSubtotal());
             updatedAt(other.getUpdatedAt());
@@ -414,21 +436,21 @@ public final class InvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("amount_due")
-        public AmountPaidStage amountDue(int amountDue) {
+        public AmountPaidStage amountDue(long amountDue) {
             this.amountDue = amountDue;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("amount_paid")
-        public AmountRemainingStage amountPaid(int amountPaid) {
+        public AmountRemainingStage amountPaid(long amountPaid) {
             this.amountPaid = amountPaid;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("amount_remaining")
-        public CollectionMethodStage amountRemaining(int amountRemaining) {
+        public CollectionMethodStage amountRemaining(long amountRemaining) {
             this.amountRemaining = amountRemaining;
             return this;
         }
@@ -484,7 +506,7 @@ public final class InvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("subtotal")
-        public UpdatedAtStage subtotal(int subtotal) {
+        public UpdatedAtStage subtotal(long subtotal) {
             this.subtotal = subtotal;
             return this;
         }
@@ -519,6 +541,19 @@ public final class InvoiceResponseData {
         @JsonSetter(value = "subscription_external_id", nulls = Nulls.SKIP)
         public _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId) {
             this.subscriptionExternalId = subscriptionExternalId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage status(InvoiceStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<InvoiceStatus> status) {
+            this.status = status;
             return this;
         }
 
@@ -591,11 +626,24 @@ public final class InvoiceResponseData {
                     id,
                     paymentMethodExternalId,
                     providerType,
+                    status,
                     subscriptionExternalId,
                     subtotal,
                     updatedAt,
                     url,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

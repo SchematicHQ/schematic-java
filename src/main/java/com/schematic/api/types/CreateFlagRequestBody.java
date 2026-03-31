@@ -158,6 +158,10 @@ public final class CreateFlagRequestBody {
     public interface _FinalStage {
         CreateFlagRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage featureId(Optional<String> featureId);
 
         _FinalStage featureId(String featureId);
@@ -266,6 +270,18 @@ public final class CreateFlagRequestBody {
         public CreateFlagRequestBody build() {
             return new CreateFlagRequestBody(
                     defaultValue, description, featureId, flagType, key, maintainerId, name, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }
