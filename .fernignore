@@ -3,6 +3,8 @@ CLAUDE.md
 LICENSE
 README.md
 .github/CODEOWNERS
+WASM_VERSION
+scripts/
 src/main/java/com/schematic/api/BaseSchematic.java
 src/main/java/com/schematic/api/EventBuffer.java
 src/main/java/com/schematic/api/Schematic.java

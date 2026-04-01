@@ -22,3 +22,6 @@ generated/
 
 bin
 build
+
+# WASM binary (downloaded at build time via scripts/download-wasm.sh)
+src/main/resources/wasm/
