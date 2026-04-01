@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'application'
 }
 
 repositories {
@@ -13,7 +14,9 @@ dependencies {
     implementation rootProject
 }
 
+application {
+    mainClass = 'sample.App'
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
