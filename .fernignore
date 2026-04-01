@@ -11,6 +11,7 @@ src/main/java/com/schematic/api/cache/CachedItem.java
 src/main/java/com/schematic/api/cache/LocalCache.java
 src/main/java/com/schematic/api/core/NoOpHttpClient.java
 src/main/java/com/schematic/api/logger/ConsoleLogger.java
+src/main/java/com/schematic/api/datastream/
 src/main/java/com/schematic/api/logger/SchematicLogger.java
 src/main/java/com/schematic/webhook/
 src/test/java/com/schematic/api/TestCache.java
@@ -19,4 +20,5 @@ src/test/java/com/schematic/api/TestLogger.java
 src/test/java/com/schematic/api/TestOfflineMode.java
 src/test/java/com/schematic/api/TestReadme.java
 src/test/java/com/schematic/api/TestSchematic.java
+src/test/java/com/schematic/api/datastream/
 src/test/java/com/schematic/webhook/
