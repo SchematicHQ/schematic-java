@@ -32,8 +32,7 @@ class DataStreamWebSocketClientTest {
 
     @Test
     void convertApiUrlToWebSocketUrl_apiSubdomainWithStaging() {
-        String result =
-                DataStreamWebSocketClient.convertApiUrlToWebSocketUrl("https://api.staging.schematichq.com");
+        String result = DataStreamWebSocketClient.convertApiUrlToWebSocketUrl("https://api.staging.schematichq.com");
         assertEquals("wss://datastream.staging.schematichq.com/datastream", result);
     }
 

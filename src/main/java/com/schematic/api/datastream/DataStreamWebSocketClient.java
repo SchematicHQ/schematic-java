@@ -401,8 +401,7 @@ public class DataStreamWebSocketClient implements Closeable {
             URL parsed = new URL(apiUrl);
             String protocol = parsed.getProtocol();
             if (!"http".equals(protocol) && !"https".equals(protocol)) {
-                throw new IllegalArgumentException(
-                        "Unsupported scheme: " + protocol + " (must be http or https)");
+                throw new IllegalArgumentException("Unsupported scheme: " + protocol + " (must be http or https)");
             }
             String scheme = "https".equals(protocol) ? "wss" : "ws";
             String host = parsed.getHost();

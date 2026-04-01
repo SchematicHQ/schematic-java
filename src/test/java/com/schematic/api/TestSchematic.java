@@ -14,6 +14,7 @@ import com.schematic.api.resources.features.types.CheckFlagResponse;
 import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.CheckFlagResponseData;
 import com.schematic.api.types.EventBodyIdentifyCompany;
+import com.schematic.api.types.RulesengineCheckFlagResult;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ class SchematicTest {
                 .apiKey("test_api_key")
                 .logger(logger)
                 .eventBufferInterval(DEFAULT_BUFFER_PERIOD)
-                .cacheProviders(Collections.singletonList(new LocalCache<Boolean>()))
+                .cacheProviders(Collections.singletonList(new LocalCache<RulesengineCheckFlagResult>()))
                 .build();
     }
 
@@ -55,7 +56,7 @@ class SchematicTest {
         boolean result = spySchematic.checkFlag("test_flag", null, null);
 
         assertFalse(result);
-        verify(logger).error(contains("Error checking flag"));
+        verify(logger).error(contains("Error checking flag via API"));
     }
 
     @Test
@@ -78,16 +79,24 @@ class SchematicTest {
         boolean result = spySchematic.checkFlag("test_flag", null, null);
 
         assertTrue(result);
-        for (CacheProvider<Boolean> provider : spySchematic.getFlagCheckCacheProviders()) {
-            assertEquals(true, provider.get("test_flag"));
+        for (CacheProvider<RulesengineCheckFlagResult> provider : spySchematic.getFlagCheckCacheProviders()) {
+            RulesengineCheckFlagResult cached = provider.get("test_flag");
+            assertNotNull(cached);
+            assertTrue(cached.getValue());
+            assertEquals("test_reason", cached.getReason());
         }
     }
 
     @Test
     void checkFlag_ReturnsCachedValue() {
         String flagKey = "test_flag";
-        for (CacheProvider<Boolean> provider : schematic.getFlagCheckCacheProviders()) {
-            provider.set(flagKey, true);
+        RulesengineCheckFlagResult cachedResult = RulesengineCheckFlagResult.builder()
+                .flagKey(flagKey)
+                .reason("test_reason")
+                .value(true)
+                .build();
+        for (CacheProvider<RulesengineCheckFlagResult> provider : schematic.getFlagCheckCacheProviders()) {
+            provider.set(flagKey, cachedResult);
         }
 
         boolean result = schematic.checkFlag(flagKey, null, null);
@@ -102,8 +111,13 @@ class SchematicTest {
         Map<String, String> company = Collections.singletonMap("name", "test_company");
         Map<String, String> user = Collections.singletonMap("id", "unique_id");
 
-        for (CacheProvider<Boolean> provider : schematic.getFlagCheckCacheProviders()) {
-            provider.set(expectedCacheKey, true);
+        RulesengineCheckFlagResult cachedResult = RulesengineCheckFlagResult.builder()
+                .flagKey(flagKey)
+                .reason("test_reason")
+                .value(true)
+                .build();
+        for (CacheProvider<RulesengineCheckFlagResult> provider : schematic.getFlagCheckCacheProviders()) {
+            provider.set(expectedCacheKey, cachedResult);
         }
 
         boolean result = schematic.checkFlag(flagKey, company, user);
@@ -126,7 +140,7 @@ class SchematicTest {
         boolean result = spySchematic.checkFlag("error_flag", null, null);
 
         assertTrue(result);
-        verify(logger).error(contains("Error checking flag"));
+        verify(logger).error(contains("Error checking flag via API"));
     }
 
     @Test
