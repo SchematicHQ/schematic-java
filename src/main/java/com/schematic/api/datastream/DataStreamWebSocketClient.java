@@ -42,8 +42,8 @@ public class DataStreamWebSocketClient implements Closeable {
     }
 
     // Default constants
-    private static final long DEFAULT_PONG_WAIT_MS = 60_000;
-    private static final long DEFAULT_PING_PERIOD_MS = 54_000;
+    private static final long DEFAULT_PONG_WAIT_MS = 30_000;
+    private static final long DEFAULT_PING_PERIOD_MS = 27_000;
     private static final int DEFAULT_MAX_RECONNECT_ATTEMPTS = 10;
     private static final long DEFAULT_MIN_RECONNECT_DELAY_MS = 1_000;
     private static final long DEFAULT_MAX_RECONNECT_DELAY_MS = 30_000;

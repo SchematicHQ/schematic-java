@@ -215,6 +215,20 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     /**
+     * Sets a default value for a specific flag, used when the API is unavailable or in offline mode.
+     */
+    public void setFlagDefault(String flagKey, boolean value) {
+        flagDefaults.put(flagKey, value);
+    }
+
+    /**
+     * Sets default values for multiple flags at once.
+     */
+    public void setFlagDefaults(Map<String, Boolean> defaults) {
+        flagDefaults.putAll(defaults);
+    }
+
+    /**
      * Returns the DataStream client, or null if datastream is not configured.
      */
     public DataStreamClient getDataStreamClient() {
