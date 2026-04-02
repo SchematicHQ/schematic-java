@@ -13,6 +13,8 @@ src/main/java/com/schematic/api/Schematic.java
 src/main/java/com/schematic/api/cache/CacheProvider.java
 src/main/java/com/schematic/api/cache/CachedItem.java
 src/main/java/com/schematic/api/cache/LocalCache.java
+src/main/java/com/schematic/api/cache/RedisCacheConfig.java
+src/main/java/com/schematic/api/cache/RedisCacheProvider.java
 src/main/java/com/schematic/api/core/NoOpHttpClient.java
 src/main/java/com/schematic/api/logger/ConsoleLogger.java
 src/main/java/com/schematic/api/datastream/

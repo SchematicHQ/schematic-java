@@ -94,9 +94,17 @@ public class DataStreamClient implements Closeable {
         this.logger = logger;
         this.objectMapper = ObjectMappers.JSON_MAPPER;
         this.rulesEngine = rulesEngine;
-        this.flagCache = options.getFlagCacheProvider();
-        this.companyCache = options.getCompanyCacheProvider();
-        this.userCache = options.getUserCacheProvider();
+
+        // Build cache providers via factory: custom > Redis > local
+        redis.clients.jedis.JedisPooled redisClient =
+                DataStreamCacheFactory.buildRedisClient(options.getRedisCacheConfig());
+        String keyPrefix = options.getRedisCacheConfig() != null
+                ? options.getRedisCacheConfig().getKeyPrefix()
+                : "schematic:";
+        this.flagCache = DataStreamCacheFactory.buildFlagCache(options, redisClient, keyPrefix);
+        this.companyCache = DataStreamCacheFactory.buildCompanyCache(options, redisClient, keyPrefix);
+        this.userCache = DataStreamCacheFactory.buildUserCache(options, redisClient, keyPrefix);
+
         this.httpClient = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(5, TimeUnit.SECONDS)
@@ -661,7 +669,7 @@ public class DataStreamClient implements Closeable {
         } else if (messageType == MessageType.DELETE) {
             String flagKey = data.has("key") ? data.get("key").asText() : null;
             if (flagKey != null) {
-                flagCache.set(FLAG_PREFIX + flagKey, null);
+                flagCache.delete(FLAG_PREFIX + flagKey);
             }
         }
     }
@@ -703,10 +711,10 @@ public class DataStreamClient implements Closeable {
                 RulesengineCompany existing = companyCache.get(COMPANY_PREFIX + entityId);
                 if (existing != null) {
                     for (Map.Entry<String, String> entry : existing.getKeys().entrySet()) {
-                        companyCache.set(companyCacheKey(entry.getKey(), entry.getValue()), null);
+                        companyCache.delete(companyCacheKey(entry.getKey(), entry.getValue()));
                     }
                 }
-                companyCache.set(COMPANY_PREFIX + entityId, null);
+                companyCache.delete(COMPANY_PREFIX + entityId);
             }
         }
     }
@@ -747,10 +755,10 @@ public class DataStreamClient implements Closeable {
                 RulesengineUser existing = userCache.get(USER_PREFIX + entityId);
                 if (existing != null) {
                     for (Map.Entry<String, String> entry : existing.getKeys().entrySet()) {
-                        userCache.set(userCacheKey(entry.getKey(), entry.getValue()), null);
+                        userCache.delete(userCacheKey(entry.getKey(), entry.getValue()));
                     }
                 }
-                userCache.set(USER_PREFIX + entityId, null);
+                userCache.delete(USER_PREFIX + entityId);
             }
         }
     }

@@ -7,6 +7,7 @@ import com.schematic.api.cache.LocalCache;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
@@ -272,6 +273,51 @@ class LocalCacheTest {
         assertEquals("test-name", retrieved.name);
         assertEquals(99, retrieved.count);
         assertEquals(Arrays.asList("tag1", "tag2"), retrieved.tags);
+    }
+
+    @Test
+    void testDeleteMissing_removesUnlistedKeys() {
+        LocalCache<String> cacheProvider = new LocalCache<>(10, Duration.ofMinutes(5));
+
+        cacheProvider.set("key1", "val1");
+        cacheProvider.set("key2", "val2");
+        cacheProvider.set("key3", "val3");
+
+        cacheProvider.deleteMissing(Arrays.asList("key1"));
+
+        assertEquals("val1", cacheProvider.get("key1"));
+        assertNull(cacheProvider.get("key2"));
+        assertNull(cacheProvider.get("key3"));
+    }
+
+    @Test
+    void testDeleteMissing_withEmptyList() {
+        LocalCache<String> cacheProvider = new LocalCache<>(10, Duration.ofMinutes(5));
+
+        cacheProvider.set("key1", "val1");
+        cacheProvider.set("key2", "val2");
+
+        cacheProvider.deleteMissing(Collections.emptyList());
+
+        assertNull(cacheProvider.get("key1"));
+        assertNull(cacheProvider.get("key2"));
+    }
+
+    @Test
+    void testDeleteMissing_withNullList() {
+        LocalCache<String> cacheProvider = new LocalCache<>(10, Duration.ofMinutes(5));
+
+        cacheProvider.set("key1", "val1");
+
+        assertDoesNotThrow(() -> cacheProvider.deleteMissing(null));
+        assertNull(cacheProvider.get("key1"));
+    }
+
+    @Test
+    void testDeleteMissing_zeroCapacity() {
+        LocalCache<String> cacheProvider = new LocalCache<>(0, Duration.ofMinutes(5));
+
+        assertDoesNotThrow(() -> cacheProvider.deleteMissing(Arrays.asList("key1")));
     }
 
     /** Simple value object for testing complex types in the cache. */

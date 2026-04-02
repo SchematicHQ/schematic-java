@@ -1,7 +1,7 @@
 package com.schematic.api.datastream;
 
 import com.schematic.api.cache.CacheProvider;
-import com.schematic.api.cache.LocalCache;
+import com.schematic.api.cache.RedisCacheConfig;
 import com.schematic.api.types.RulesengineCompany;
 import com.schematic.api.types.RulesengineFlag;
 import com.schematic.api.types.RulesengineUser;
@@ -23,6 +23,7 @@ public class DatastreamOptions {
     private final boolean replicatorMode;
     private final String replicatorHealthUrl;
     private final Duration replicatorHealthCheckInterval;
+    private final RedisCacheConfig redisCacheConfig;
     private final CacheProvider<RulesengineFlag> flagCacheProvider;
     private final CacheProvider<RulesengineCompany> companyCacheProvider;
     private final CacheProvider<RulesengineUser> userCacheProvider;
@@ -35,13 +36,10 @@ public class DatastreamOptions {
         this.replicatorHealthCheckInterval = builder.replicatorHealthCheckInterval != null
                 ? builder.replicatorHealthCheckInterval
                 : DEFAULT_REPLICATOR_HEALTH_CHECK_INTERVAL;
-        this.flagCacheProvider =
-                builder.flagCacheProvider != null ? builder.flagCacheProvider : new LocalCache<>(1_000, this.cacheTTL);
-        this.companyCacheProvider = builder.companyCacheProvider != null
-                ? builder.companyCacheProvider
-                : new LocalCache<>(1_000, this.cacheTTL);
-        this.userCacheProvider =
-                builder.userCacheProvider != null ? builder.userCacheProvider : new LocalCache<>(1_000, this.cacheTTL);
+        this.redisCacheConfig = builder.redisCacheConfig;
+        this.flagCacheProvider = builder.flagCacheProvider;
+        this.companyCacheProvider = builder.companyCacheProvider;
+        this.userCacheProvider = builder.userCacheProvider;
     }
 
     public static Builder builder() {
@@ -64,6 +62,10 @@ public class DatastreamOptions {
         return replicatorHealthCheckInterval;
     }
 
+    public RedisCacheConfig getRedisCacheConfig() {
+        return redisCacheConfig;
+    }
+
     public CacheProvider<RulesengineFlag> getFlagCacheProvider() {
         return flagCacheProvider;
     }
@@ -84,6 +86,7 @@ public class DatastreamOptions {
         private CacheProvider<RulesengineFlag> flagCacheProvider;
         private CacheProvider<RulesengineCompany> companyCacheProvider;
         private CacheProvider<RulesengineUser> userCacheProvider;
+        private RedisCacheConfig redisCacheConfig;
 
         public Builder cacheTTL(Duration cacheTTL) {
             this.cacheTTL = cacheTTL;
@@ -117,6 +120,15 @@ public class DatastreamOptions {
 
         public Builder userCacheProvider(CacheProvider<RulesengineUser> userCacheProvider) {
             this.userCacheProvider = userCacheProvider;
+            return this;
+        }
+
+        /**
+         * Configures Redis-backed caching. The SDK creates and manages the Redis connection
+         * internally. Required for replicator mode.
+         */
+        public Builder redisCache(RedisCacheConfig config) {
+            this.redisCacheConfig = config;
             return this;
         }
 
