@@ -11,6 +11,7 @@ import com.schematic.api.datastream.DataStreamMessages.DataStreamResp;
 import com.schematic.api.datastream.DataStreamMessages.EntityType;
 import com.schematic.api.datastream.DataStreamMessages.MessageType;
 import com.schematic.api.logger.SchematicLogger;
+import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import com.schematic.api.types.RulesengineCompany;
 import com.schematic.api.types.RulesengineFlag;

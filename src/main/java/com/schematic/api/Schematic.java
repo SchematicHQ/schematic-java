@@ -17,6 +17,7 @@ import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.CheckFlagResponseData;
 import com.schematic.api.types.CreateEventRequestBody;
 import com.schematic.api.types.EventBody;
+import com.schematic.api.types.EventBodyFlagCheck;
 import com.schematic.api.types.EventBodyIdentify;
 import com.schematic.api.types.EventBodyIdentifyCompany;
 import com.schematic.api.types.EventBodyTrack;
@@ -269,7 +270,35 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         // Try datastream first if available
         if (dataStreamClient != null && dataStreamClient.isConnected()) {
             try {
-                return dataStreamClient.checkFlag(flagKey, company, user);
+                RulesengineCheckFlagResult result = dataStreamClient.checkFlag(flagKey, company, user);
+
+                // Enqueue flag_check event for analytics
+                try {
+                    EventBodyFlagCheck flagCheckBody = EventBodyFlagCheck.builder()
+                            .flagKey(flagKey)
+                            .reason(result.getReason())
+                            .value(result.getValue())
+                            .companyId(result.getCompanyId().orElse(null))
+                            .userId(result.getUserId().orElse(null))
+                            .flagId(result.getFlagId().orElse(null))
+                            .ruleId(result.getRuleId().orElse(null))
+                            .reqCompany(company)
+                            .reqUser(user)
+                            .error(result.getErr().orElse(null))
+                            .build();
+
+                    CreateEventRequestBody event = CreateEventRequestBody.builder()
+                            .eventType(EventType.FLAG_CHECK)
+                            .body(EventBody.of(flagCheckBody))
+                            .sentAt(OffsetDateTime.now())
+                            .build();
+
+                    eventBuffer.push(event);
+                } catch (Exception e) {
+                    logger.error("Failed to enqueue flag_check event: " + e.getMessage());
+                }
+
+                return result;
             } catch (Exception e) {
                 logger.debug(
                         "Datastream flag check failed for " + flagKey + ", falling back to API: " + e.getMessage());
