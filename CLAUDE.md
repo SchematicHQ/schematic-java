@@ -48,7 +48,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This repository contains the official Schematic Java SDK, supporting Java 8+. Schematic is a feature flag and product analytics service.
+This repository contains the official Schematic Java SDK, supporting Java 11+. Schematic is a feature flag and product analytics service.
 
 ### Key Components
 

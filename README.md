@@ -1,6 +1,6 @@
 # Schematic Java Library
 
-The official Schematic Java library, supporting Java 8+.
+The official Schematic Java library, supporting Java 11+.
 
 ## Installation and Setup
 
