@@ -199,7 +199,6 @@ public class DataStreamClient implements Closeable {
     /**
      * Fetches a company via the datastream WebSocket, waiting for the response with a timeout.
      * Deduplicates concurrent requests for the same entity.
-     * Uses futures with timeout to wait for the response, deduplicating concurrent requests.
      */
     private RulesengineCompany getCompany(Map<String, String> keys) {
         // Check cache first

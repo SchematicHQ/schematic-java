@@ -18,12 +18,19 @@ public class LocalCache<T> implements CacheProvider<T>, AutoCloseable {
     public static final Duration DEFAULT_CACHE_TTL = Duration.ofMillis(5000); // 5000 milliseconds
     private static final Duration CLEANUP_INTERVAL = Duration.ofSeconds(30);
 
+    // Shared scheduler for background cleanup across all LocalCache instances
+    private static final ScheduledExecutorService SHARED_CLEANUP_SCHEDULER =
+            Executors.newSingleThreadScheduledExecutor(r -> {
+                Thread t = new Thread(r, "schematic-cache-cleanup");
+                t.setDaemon(true);
+                return t;
+            });
+
     private final ConcurrentHashMap<String, CachedItem<T>> cache;
     private final LinkedList<String> lruList;
     private final ReentrantLock lock;
     private final int maxItems;
     private final Duration ttl;
-    private final ScheduledExecutorService cleanupScheduler;
 
     public LocalCache() {
         this(DEFAULT_CACHE_CAPACITY, DEFAULT_CACHE_TTL);
@@ -36,13 +43,8 @@ public class LocalCache<T> implements CacheProvider<T>, AutoCloseable {
         this.maxItems = maxItems;
         this.ttl = ttl;
 
-        // Start background cleanup thread for expired items
-        this.cleanupScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread t = new Thread(r, "schematic-cache-cleanup");
-            t.setDaemon(true);
-            return t;
-        });
-        this.cleanupScheduler.scheduleAtFixedRate(
+        // Schedule background cleanup on the shared thread
+        SHARED_CLEANUP_SCHEDULER.scheduleAtFixedRate(
                 this::removeExpiredItems,
                 CLEANUP_INTERVAL.getSeconds(),
                 CLEANUP_INTERVAL.getSeconds(),
@@ -146,7 +148,13 @@ public class LocalCache<T> implements CacheProvider<T>, AutoCloseable {
 
     @Override
     public void close() {
-        cleanupScheduler.shutdownNow();
+        cache.clear();
+        lock.lock();
+        try {
+            lruList.clear();
+        } finally {
+            lock.unlock();
+        }
     }
 
     private void removeExpiredItems() {
