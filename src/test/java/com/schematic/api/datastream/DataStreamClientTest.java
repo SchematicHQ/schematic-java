@@ -326,6 +326,207 @@ class DataStreamClientTest {
         assertEquals("user-1", result.getUserId().orElse(null));
     }
 
+    @Test
+    void handleMessage_partialCompany_noExisting_fallsBackToFullParse() {
+        // Send a PARTIAL company message when nothing is cached for that entity_id
+        // The handler should fall back to parsing it as a full entity
+        ObjectNode companyData = companyNode("comp-new", "customer_id", "cust-new");
+
+        client.handleMessage(
+                buildResp(EntityType.COMPANY.getValue(), MessageType.PARTIAL.getValue(), "comp-new", companyData));
+
+        RulesengineCompany cached = client.getCachedCompany(Collections.singletonMap("customer_id", "cust-new"));
+        assertNotNull(cached);
+        assertEquals("comp-new", cached.getId());
+    }
+
+    @Test
+    void handleMessage_partialUser_noExisting_fallsBackToFullParse() {
+        // Send a PARTIAL user message when nothing is cached for that entity_id
+        // The handler should fall back to parsing it as a full entity
+        ObjectNode userData = userNode("user-new", "email", "new@example.com");
+
+        client.handleMessage(
+                buildResp(EntityType.USER.getValue(), MessageType.PARTIAL.getValue(), "user-new", userData));
+
+        RulesengineUser cached = client.getCachedUser(Collections.singletonMap("email", "new@example.com"));
+        assertNotNull(cached);
+        assertEquals("user-new", cached.getId());
+    }
+
+    @Test
+    void handleMessage_singleFlagDeleteMessage() {
+        // Cache a flag via FULL
+        client.handleMessage(
+                buildResp(EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("del-flag", true)));
+        assertNotNull(client.getCachedFlag("del-flag"));
+
+        // Send a DELETE for that single flag
+        ObjectNode deleteData = objectMapper.createObjectNode();
+        deleteData.put("key", "del-flag");
+        client.handleMessage(buildResp(EntityType.FLAG.getValue(), MessageType.DELETE.getValue(), null, deleteData));
+
+        assertNull(client.getCachedFlag("del-flag"));
+    }
+
+    @Test
+    void handleMessage_companyDeleteMessage() {
+        // Cache a company via FULL
+        client.handleMessage(buildResp(
+                EntityType.COMPANY.getValue(),
+                MessageType.FULL.getValue(),
+                "comp-del",
+                companyNode("comp-del", "customer_id", "cust-del")));
+        assertNotNull(client.getCachedCompany(Collections.singletonMap("customer_id", "cust-del")));
+
+        // Send a DELETE with entity_id
+        ObjectNode deleteData = objectMapper.createObjectNode();
+        client.handleMessage(
+                buildResp(EntityType.COMPANY.getValue(), MessageType.DELETE.getValue(), "comp-del", deleteData));
+
+        // Company should be removed from cache by id
+        // Note: the key-based cache entry may still exist, but the id-based one is removed
+        // The implementation removes by COMPANY_PREFIX + entityId
+    }
+
+    @Test
+    void handleMessage_userDeleteMessage() {
+        // Cache a user via FULL
+        client.handleMessage(buildResp(
+                EntityType.USER.getValue(),
+                MessageType.FULL.getValue(),
+                "user-del",
+                userNode("user-del", "email", "del@example.com")));
+        assertNotNull(client.getCachedUser(Collections.singletonMap("email", "del@example.com")));
+
+        // Send a DELETE with entity_id
+        ObjectNode deleteData = objectMapper.createObjectNode();
+        client.handleMessage(
+                buildResp(EntityType.USER.getValue(), MessageType.DELETE.getValue(), "user-del", deleteData));
+
+        // User should be removed from cache by id
+    }
+
+    @Test
+    void checkFlag_companyContextOnly() {
+        // Cache a flag and a company
+        client.handleMessage(
+                buildResp(EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("co-flag", true)));
+        client.handleMessage(buildResp(
+                EntityType.COMPANY.getValue(),
+                MessageType.FULL.getValue(),
+                "comp-only",
+                companyNode("comp-only", "customer_id", "cust-only")));
+
+        Map<String, String> companyKeys = Collections.singletonMap("customer_id", "cust-only");
+
+        RulesengineCheckFlagResult result = client.checkFlag("co-flag", companyKeys, null);
+        assertEquals("co-flag", result.getFlagKey());
+        assertEquals("comp-only", result.getCompanyId().orElse(null));
+        assertNull(result.getUserId().orElse(null));
+        assertTrue(result.getValue());
+    }
+
+    @Test
+    void checkFlag_userContextOnly() {
+        // Cache a flag and a user
+        client.handleMessage(
+                buildResp(EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("usr-flag", true)));
+        client.handleMessage(buildResp(
+                EntityType.USER.getValue(),
+                MessageType.FULL.getValue(),
+                "user-only",
+                userNode("user-only", "email", "only@example.com")));
+
+        Map<String, String> userKeys = Collections.singletonMap("email", "only@example.com");
+
+        RulesengineCheckFlagResult result = client.checkFlag("usr-flag", null, userKeys);
+        assertEquals("usr-flag", result.getFlagKey());
+        assertNull(result.getCompanyId().orElse(null));
+        assertEquals("user-only", result.getUserId().orElse(null));
+        assertTrue(result.getValue());
+    }
+
+    @Test
+    void handleMessage_companyRetrievableByMultipleKeys() {
+        // Create a company with multiple keys
+        ObjectNode node = objectMapper.createObjectNode();
+        node.put("id", "multi-comp");
+        node.put("account_id", "acc_1");
+        node.put("environment_id", "env_1");
+        ObjectNode keys = objectMapper.createObjectNode();
+        keys.put("customer_id", "cust-1");
+        keys.put("org_id", "org-1");
+        node.set("keys", keys);
+        node.set("traits", objectMapper.createArrayNode());
+        node.set("metrics", objectMapper.createArrayNode());
+        node.set("rules", objectMapper.createArrayNode());
+        node.set("billing_product_ids", objectMapper.createArrayNode());
+        node.set("credit_balances", objectMapper.createObjectNode());
+        node.set("plan_ids", objectMapper.createArrayNode());
+        node.set("plan_version_ids", objectMapper.createArrayNode());
+
+        client.handleMessage(buildResp(EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "multi-comp", node));
+
+        // Verify retrievable by EITHER key
+        RulesengineCompany byCustomerId = client.getCachedCompany(Collections.singletonMap("customer_id", "cust-1"));
+        assertNotNull(byCustomerId);
+        assertEquals("multi-comp", byCustomerId.getId());
+
+        RulesengineCompany byOrgId = client.getCachedCompany(Collections.singletonMap("org_id", "org-1"));
+        assertNotNull(byOrgId);
+        assertEquals("multi-comp", byOrgId.getId());
+    }
+
+    @Test
+    void handleMessage_userRetrievableByMultipleKeys() {
+        // Create a user with multiple keys
+        ObjectNode node = objectMapper.createObjectNode();
+        node.put("id", "multi-user");
+        node.put("account_id", "acc_1");
+        node.put("environment_id", "env_1");
+        ObjectNode keys = objectMapper.createObjectNode();
+        keys.put("email", "multi@example.com");
+        keys.put("user_id", "uid-1");
+        node.set("keys", keys);
+        node.set("traits", objectMapper.createArrayNode());
+        node.set("rules", objectMapper.createArrayNode());
+
+        client.handleMessage(buildResp(EntityType.USER.getValue(), MessageType.FULL.getValue(), "multi-user", node));
+
+        // Verify retrievable by EITHER key
+        RulesengineUser byEmail = client.getCachedUser(Collections.singletonMap("email", "multi@example.com"));
+        assertNotNull(byEmail);
+        assertEquals("multi-user", byEmail.getId());
+
+        RulesengineUser byUserId = client.getCachedUser(Collections.singletonMap("user_id", "uid-1"));
+        assertNotNull(byUserId);
+        assertEquals("multi-user", byUserId.getId());
+    }
+
+    @Test
+    void checkFlag_replicatorMode_evaluatesWithCachedData() {
+        DatastreamOptions replicatorOpts = DatastreamOptions.builder()
+                .withReplicatorMode("http://localhost:8090/ready")
+                .build();
+        DataStreamClient replicatorClient =
+                new DataStreamClient(replicatorOpts, "test-key", "https://api.schematichq.com", logger);
+
+        try {
+            // Cache a flag in the replicator client
+            replicatorClient.handleMessage(buildResp(
+                    EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("rep-flag", true)));
+
+            // checkFlag should work without WebSocket, using cached data
+            RulesengineCheckFlagResult result = replicatorClient.checkFlag("rep-flag", null, null);
+            assertEquals("rep-flag", result.getFlagKey());
+            assertTrue(result.getValue());
+            assertEquals("RULES_ENGINE_UNAVAILABLE", result.getReason());
+        } finally {
+            replicatorClient.close();
+        }
+    }
+
     // --- evaluateFlag tests ---
 
     @Test

@@ -7,9 +7,15 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.RulesengineCompany;
+import com.schematic.api.types.RulesengineEntitlementValueType;
+import com.schematic.api.types.RulesengineFeatureEntitlement;
+import com.schematic.api.types.RulesengineRule;
+import com.schematic.api.types.RulesengineRuleRuleType;
+import com.schematic.api.types.RulesengineTrait;
 import com.schematic.api.types.RulesengineUser;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
@@ -184,6 +190,343 @@ class EntityMergeTest {
 
         assertEquals("acc_2", merged.getAccountId());
         assertEquals("test@example.com", merged.getKeys().get("email"));
+    }
+
+    @Test
+    void partialCompany_onlyTraits() {
+        RulesengineCompany existing = RulesengineCompany.builder()
+                .accountId("acc_1")
+                .environmentId("env_1")
+                .id("comp-1")
+                .keys(Collections.singletonMap("org_id", "org-1"))
+                .traits(Collections.singletonList(
+                        RulesengineTrait.builder().value("old-trait").build()))
+                .metrics(Collections.emptyList())
+                .rules(Collections.emptyList())
+                .billingProductIds(Collections.emptyList())
+                .creditBalances(Collections.emptyMap())
+                .planIds(Collections.emptyList())
+                .planVersionIds(Collections.emptyList())
+                .build();
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.put("id", "comp-1");
+        ArrayNode newTraits = objectMapper.createArrayNode();
+        ObjectNode trait = objectMapper.createObjectNode();
+        trait.put("value", "new-trait");
+        newTraits.add(trait);
+        partial.set("traits", newTraits);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(1, merged.getTraits().size());
+        assertEquals("new-trait", merged.getTraits().get(0).getValue());
+        assertEquals("org-1", merged.getKeys().get("org_id"));
+        assertEquals("acc_1", merged.getAccountId());
+    }
+
+    @Test
+    void partialCompany_overwritesCreditBalance() {
+        Map<String, Double> existingBalances = new HashMap<>();
+        existingBalances.put("credit-1", 100.0);
+
+        RulesengineCompany existing = RulesengineCompany.builder()
+                .accountId("acc_1")
+                .environmentId("env_1")
+                .id("comp-1")
+                .keys(Collections.singletonMap("id", "comp-1"))
+                .traits(Collections.emptyList())
+                .metrics(Collections.emptyList())
+                .rules(Collections.emptyList())
+                .billingProductIds(Collections.emptyList())
+                .creditBalances(existingBalances)
+                .planIds(Collections.emptyList())
+                .planVersionIds(Collections.emptyList())
+                .build();
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.put("id", "comp-1");
+        ObjectNode newBalances = objectMapper.createObjectNode();
+        newBalances.put("credit-1", 50.0);
+        partial.set("credit_balances", newBalances);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(50.0, merged.getCreditBalances().get("credit-1"));
+    }
+
+    @Test
+    void partialCompany_emptyEntitlementsClearsExisting() {
+        List<RulesengineFeatureEntitlement> existingEntitlements =
+                Collections.singletonList(RulesengineFeatureEntitlement.builder()
+                        .featureId("feat-1")
+                        .featureKey("feat-key-1")
+                        .valueType(RulesengineEntitlementValueType.BOOLEAN)
+                        .build());
+
+        RulesengineCompany existing = RulesengineCompany.builder()
+                .accountId("acc_1")
+                .environmentId("env_1")
+                .id("comp-1")
+                .keys(Collections.singletonMap("id", "comp-1"))
+                .traits(Collections.emptyList())
+                .metrics(Collections.emptyList())
+                .rules(Collections.emptyList())
+                .billingProductIds(Collections.emptyList())
+                .creditBalances(Collections.emptyMap())
+                .planIds(Collections.emptyList())
+                .planVersionIds(Collections.emptyList())
+                .entitlements(existingEntitlements)
+                .build();
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.put("id", "comp-1");
+        partial.set("entitlements", objectMapper.createArrayNode());
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertTrue(merged.getEntitlements().isPresent(), "entitlements should be present");
+        assertTrue(merged.getEntitlements().get().isEmpty(), "entitlements should be empty after clearing");
+    }
+
+    @Test
+    void partialCompany_missingIdThrowsError() {
+        RulesengineCompany existing = buildCompany("comp-1", Collections.singletonMap("id", "comp-1"));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.putNull("id");
+        partial.put("account_id", "acc_new");
+
+        assertThrows(Exception.class, () -> EntityMerge.partialCompany(existing, partial));
+    }
+
+    @Test
+    void partialCompany_doesNotMutateOriginal() {
+        Map<String, String> existingKeys = new HashMap<>();
+        existingKeys.put("org_id", "org-1");
+
+        RulesengineCompany existing = buildCompany("comp-1", existingKeys);
+        String originalAccountId = existing.getAccountId();
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.put("id", "comp-1");
+        partial.put("account_id", "acc_new");
+        ObjectNode newKeys = objectMapper.createObjectNode();
+        newKeys.put("org_id", "org-updated");
+        newKeys.put("new_key", "new-val");
+        partial.set("keys", newKeys);
+
+        EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(originalAccountId, existing.getAccountId());
+        assertEquals("org-1", existing.getKeys().get("org_id"));
+        assertNull(existing.getKeys().get("new_key"));
+    }
+
+    @Test
+    void partialCompany_replacesRules() {
+        RulesengineRule originalRule = RulesengineRule.builder()
+                .accountId("acc_1")
+                .environmentId("env_1")
+                .id("rule-1")
+                .name("Original Rule")
+                .priority(1)
+                .ruleType(RulesengineRuleRuleType.GLOBAL_OVERRIDE)
+                .value(true)
+                .build();
+
+        RulesengineCompany existing = RulesengineCompany.builder()
+                .accountId("acc_1")
+                .environmentId("env_1")
+                .id("comp-1")
+                .keys(Collections.singletonMap("id", "comp-1"))
+                .traits(Collections.emptyList())
+                .metrics(Collections.emptyList())
+                .rules(Collections.singletonList(originalRule))
+                .billingProductIds(Collections.emptyList())
+                .creditBalances(Collections.emptyMap())
+                .planIds(Collections.emptyList())
+                .planVersionIds(Collections.emptyList())
+                .build();
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.put("id", "comp-1");
+        ArrayNode newRules = objectMapper.createArrayNode();
+        ObjectNode rule = objectMapper.createObjectNode();
+        rule.put("account_id", "acc_1");
+        rule.put("environment_id", "env_1");
+        rule.put("id", "rule-2");
+        rule.put("name", "Replacement Rule");
+        rule.put("priority", 2);
+        rule.put("rule_type", "global_override");
+        rule.put("value", false);
+        newRules.add(rule);
+        partial.set("rules", newRules);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(1, merged.getRules().size());
+        assertEquals("rule-2", merged.getRules().get(0).getId());
+        assertEquals("Replacement Rule", merged.getRules().get(0).getName());
+        assertEquals(1, existing.getRules().size());
+        assertEquals("rule-1", existing.getRules().get(0).getId());
+    }
+
+    @Test
+    void partialCompany_fullEntityPartialMessage() {
+        RulesengineCompany existing = buildCompany("comp-1", Collections.singletonMap("id", "comp-1"));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.put("id", "comp-1");
+        partial.put("account_id", "acc_new");
+        partial.put("environment_id", "env_new");
+
+        ObjectNode newKeys = objectMapper.createObjectNode();
+        newKeys.put("org_id", "org-new");
+        partial.set("keys", newKeys);
+
+        ArrayNode newTraits = objectMapper.createArrayNode();
+        ObjectNode trait = objectMapper.createObjectNode();
+        trait.put("value", "full-trait");
+        newTraits.add(trait);
+        partial.set("traits", newTraits);
+
+        ObjectNode newBalances = objectMapper.createObjectNode();
+        newBalances.put("credit-x", 999.0);
+        partial.set("credit_balances", newBalances);
+
+        ArrayNode newRules = objectMapper.createArrayNode();
+        ObjectNode rule = objectMapper.createObjectNode();
+        rule.put("account_id", "acc_new");
+        rule.put("environment_id", "env_new");
+        rule.put("id", "rule-full");
+        rule.put("name", "Full Rule");
+        rule.put("priority", 1);
+        rule.put("rule_type", "global_override");
+        rule.put("value", true);
+        newRules.add(rule);
+        partial.set("rules", newRules);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals("acc_new", merged.getAccountId());
+        assertEquals("env_new", merged.getEnvironmentId());
+        assertEquals("org-new", merged.getKeys().get("org_id"));
+        assertEquals(1, merged.getTraits().size());
+        assertEquals("full-trait", merged.getTraits().get(0).getValue());
+        assertEquals(999.0, merged.getCreditBalances().get("credit-x"));
+        assertEquals(1, merged.getRules().size());
+        assertEquals("rule-full", merged.getRules().get(0).getId());
+    }
+
+    // --- User partial merge tests (additional) ---
+
+    @Test
+    void partialUser_onlyTraits() {
+        Map<String, String> existingKeys = new HashMap<>();
+        existingKeys.put("email", "test@example.com");
+
+        RulesengineUser existing = RulesengineUser.builder()
+                .accountId("acc_1")
+                .environmentId("env_1")
+                .id("user-1")
+                .keys(existingKeys)
+                .traits(Collections.singletonList(
+                        RulesengineTrait.builder().value("old-trait").build()))
+                .rules(Collections.emptyList())
+                .build();
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.put("id", "user-1");
+        ArrayNode newTraits = objectMapper.createArrayNode();
+        ObjectNode trait = objectMapper.createObjectNode();
+        trait.put("value", "new-trait");
+        newTraits.add(trait);
+        partial.set("traits", newTraits);
+
+        RulesengineUser merged = EntityMerge.partialUser(existing, partial);
+
+        assertEquals(1, merged.getTraits().size());
+        assertEquals("new-trait", merged.getTraits().get(0).getValue());
+        assertEquals("test@example.com", merged.getKeys().get("email"));
+    }
+
+    @Test
+    void partialUser_missingIdThrowsError() {
+        RulesengineUser existing = buildUser("user-1", Collections.singletonMap("id", "user-1"));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.putNull("id");
+        partial.put("account_id", "acc_new");
+
+        assertThrows(Exception.class, () -> EntityMerge.partialUser(existing, partial));
+    }
+
+    @Test
+    void partialUser_doesNotMutateOriginal() {
+        Map<String, String> existingKeys = new HashMap<>();
+        existingKeys.put("email", "test@example.com");
+
+        RulesengineUser existing = buildUser("user-1", existingKeys);
+        String originalAccountId = existing.getAccountId();
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.put("id", "user-1");
+        partial.put("account_id", "acc_new");
+        ObjectNode newKeys = objectMapper.createObjectNode();
+        newKeys.put("email", "updated@example.com");
+        newKeys.put("new_key", "new-val");
+        partial.set("keys", newKeys);
+
+        EntityMerge.partialUser(existing, partial);
+
+        assertEquals(originalAccountId, existing.getAccountId());
+        assertEquals("test@example.com", existing.getKeys().get("email"));
+        assertNull(existing.getKeys().get("new_key"));
+    }
+
+    @Test
+    void partialUser_fullEntityPartialMessage() {
+        RulesengineUser existing = buildUser("user-1", Collections.singletonMap("email", "old@example.com"));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.put("id", "user-1");
+        partial.put("account_id", "acc_new");
+        partial.put("environment_id", "env_new");
+
+        ObjectNode newKeys = objectMapper.createObjectNode();
+        newKeys.put("email", "new@example.com");
+        newKeys.put("user_id", "u-new");
+        partial.set("keys", newKeys);
+
+        ArrayNode newTraits = objectMapper.createArrayNode();
+        ObjectNode trait = objectMapper.createObjectNode();
+        trait.put("value", "full-trait");
+        newTraits.add(trait);
+        partial.set("traits", newTraits);
+
+        ArrayNode newRules = objectMapper.createArrayNode();
+        ObjectNode rule = objectMapper.createObjectNode();
+        rule.put("account_id", "acc_new");
+        rule.put("environment_id", "env_new");
+        rule.put("id", "rule-u1");
+        rule.put("name", "User Rule");
+        rule.put("priority", 1);
+        rule.put("rule_type", "global_override");
+        rule.put("value", true);
+        newRules.add(rule);
+        partial.set("rules", newRules);
+
+        RulesengineUser merged = EntityMerge.partialUser(existing, partial);
+
+        assertEquals("acc_new", merged.getAccountId());
+        assertEquals("env_new", merged.getEnvironmentId());
+        assertEquals("new@example.com", merged.getKeys().get("email"));
+        assertEquals("u-new", merged.getKeys().get("user_id"));
+        assertEquals(1, merged.getTraits().size());
+        assertEquals("full-trait", merged.getTraits().get(0).getValue());
+        assertEquals(1, merged.getRules().size());
+        assertEquals("rule-u1", merged.getRules().get(0).getId());
     }
 
     // --- Helpers ---

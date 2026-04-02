@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -149,6 +150,153 @@ class LocalCacheTest {
         for (int i = 1; i <= 10; i++) {
             cacheProvider.set(String.valueOf(i + 10), -1);
             assertNull(cacheProvider.get(String.valueOf(i)));
+        }
+    }
+
+    @Test
+    void testDeleteNotPresent() {
+        LocalCache<String> cacheProvider = new LocalCache<>(10, Duration.ofMinutes(5));
+
+        // Setting a key then overwriting with null effectively removes it
+        // Getting a non-existent key after "delete" should return null without error
+        assertNull(cacheProvider.get("never_existed"));
+
+        cacheProvider.set("existing_key", "value");
+        assertEquals("value", cacheProvider.get("existing_key"));
+
+        // Overwrite with null to simulate deletion
+        cacheProvider.set("existing_key", null);
+        assertNull(cacheProvider.get("existing_key"));
+
+        // Verify no side effects on other operations
+        cacheProvider.set("another_key", "another_value");
+        assertEquals("another_value", cacheProvider.get("another_key"));
+    }
+
+    @Test
+    void testZeroMaxItems() {
+        LocalCache<String> cacheProvider = new LocalCache<>(0, Duration.ofMinutes(5));
+
+        cacheProvider.set("key1", "value1");
+        assertNull(cacheProvider.get("key1"));
+
+        cacheProvider.set("key2", "value2");
+        assertNull(cacheProvider.get("key2"));
+
+        // Multiple sets should all be no-ops
+        for (int i = 0; i < 100; i++) {
+            cacheProvider.set("key_" + i, "val_" + i);
+        }
+        for (int i = 0; i < 100; i++) {
+            assertNull(cacheProvider.get("key_" + i));
+        }
+    }
+
+    @Test
+    void testCustomTTLOverrideShorterThanDefault() throws InterruptedException {
+        Duration defaultTtl = Duration.ofSeconds(5);
+        Duration shortTtl = Duration.ofMillis(50);
+        LocalCache<String> cacheProvider = new LocalCache<>(100, defaultTtl);
+
+        // Set one item with default TTL
+        cacheProvider.set("default_ttl_key", "default_value");
+
+        // Set another item with a very short TTL override
+        cacheProvider.set("short_ttl_key", "short_value", shortTtl);
+
+        // Both should be present initially
+        assertEquals("default_value", cacheProvider.get("default_ttl_key"));
+        assertEquals("short_value", cacheProvider.get("short_ttl_key"));
+
+        // Wait for the short TTL to expire
+        Thread.sleep(100);
+
+        // Short TTL item should be expired, default TTL item should still exist
+        assertNull(cacheProvider.get("short_ttl_key"));
+        assertEquals("default_value", cacheProvider.get("default_ttl_key"));
+    }
+
+    @Test
+    void testLRUEvictionOrder() {
+        LocalCache<String> cacheProvider = new LocalCache<>(5, Duration.ofHours(1));
+
+        // Fill cache to capacity
+        cacheProvider.set("a", "val_a");
+        cacheProvider.set("b", "val_b");
+        cacheProvider.set("c", "val_c");
+        cacheProvider.set("d", "val_d");
+        cacheProvider.set("e", "val_e");
+
+        // Access items in a specific order: a, c, e (making b and d least recently used)
+        assertEquals("val_a", cacheProvider.get("a"));
+        assertEquals("val_c", cacheProvider.get("c"));
+        assertEquals("val_e", cacheProvider.get("e"));
+
+        // Add a new item - should evict "b" (least recently used)
+        cacheProvider.set("f", "val_f");
+        assertNull(cacheProvider.get("b"));
+
+        // All other items should still be present
+        assertEquals("val_a", cacheProvider.get("a"));
+        assertEquals("val_c", cacheProvider.get("c"));
+        assertEquals("val_d", cacheProvider.get("d"));
+        assertEquals("val_e", cacheProvider.get("e"));
+        assertEquals("val_f", cacheProvider.get("f"));
+
+        // Add another item - should evict "a" (now the least recently used after
+        // the get() calls above moved other items to the front of the LRU list)
+        cacheProvider.set("g", "val_g");
+        assertNull(cacheProvider.get("a"));
+    }
+
+    @Test
+    void testCacheWithDifferentValueTypes() {
+        // Test with String values
+        LocalCache<String> stringCache = new LocalCache<>(10, Duration.ofMinutes(5));
+        stringCache.set("str_key", "hello world");
+        assertEquals("hello world", stringCache.get("str_key"));
+
+        // Test with Integer values
+        LocalCache<Integer> intCache = new LocalCache<>(10, Duration.ofMinutes(5));
+        intCache.set("int_key", 42);
+        assertEquals(42, intCache.get("int_key"));
+        intCache.set("int_negative", -100);
+        assertEquals(-100, intCache.get("int_negative"));
+
+        // Test with a complex object
+        LocalCache<TestComplexObject> objectCache = new LocalCache<>(10, Duration.ofMinutes(5));
+        TestComplexObject obj = new TestComplexObject("test-name", 99, Arrays.asList("tag1", "tag2"));
+        objectCache.set("obj_key", obj);
+        TestComplexObject retrieved = objectCache.get("obj_key");
+        assertNotNull(retrieved);
+        assertEquals("test-name", retrieved.name);
+        assertEquals(99, retrieved.count);
+        assertEquals(Arrays.asList("tag1", "tag2"), retrieved.tags);
+    }
+
+    /** Simple value object for testing complex types in the cache. */
+    private static class TestComplexObject {
+        final String name;
+        final int count;
+        final List<String> tags;
+
+        TestComplexObject(String name, int count, List<String> tags) {
+            this.name = name;
+            this.count = count;
+            this.tags = tags;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof TestComplexObject)) return false;
+            TestComplexObject that = (TestComplexObject) o;
+            return count == that.count && Objects.equals(name, that.name) && Objects.equals(tags, that.tags);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, count, tags);
         }
     }
 }
