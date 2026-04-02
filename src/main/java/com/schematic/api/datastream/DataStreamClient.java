@@ -14,6 +14,7 @@ import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import com.schematic.api.types.RulesengineCompany;
+import com.schematic.api.types.RulesengineCompanyMetric;
 import com.schematic.api.types.RulesengineFlag;
 import com.schematic.api.types.RulesengineUser;
 import java.io.Closeable;
@@ -409,6 +410,48 @@ public class DataStreamClient implements Closeable {
     }
 
     /**
+     * Updates cached company metrics locally when a track event is received.
+     * Increments metric values matching the event name by the event quantity.
+     */
+    public void updateCompanyMetrics(EventBodyTrack event) {
+        if (event == null) {
+            return;
+        }
+
+        Map<String, String> keys = event.getCompany().orElse(null);
+        if (keys == null || keys.isEmpty()) {
+            return;
+        }
+
+        RulesengineCompany company = getCachedCompany(keys);
+        if (company == null) {
+            return;
+        }
+
+        String eventName = event.getEvent();
+        int quantity = event.getQuantity().orElse(1);
+
+        List<RulesengineCompanyMetric> updatedMetrics = new ArrayList<>();
+        for (RulesengineCompanyMetric metric : company.getMetrics()) {
+            if (eventName.equals(metric.getEventSubtype())) {
+                updatedMetrics.add(RulesengineCompanyMetric.builder()
+                        .from(metric)
+                        .value(metric.getValue() + quantity)
+                        .build());
+            } else {
+                updatedMetrics.add(metric);
+            }
+        }
+
+        RulesengineCompany updated = RulesengineCompany.builder()
+                .from(company)
+                .metrics(updatedMetrics)
+                .build();
+
+        cacheCompanyObject(updated);
+    }
+
+    /**
      * Retrieves a cached flag definition by key.
      */
     public RulesengineFlag getCachedFlag(String flagKey) {
@@ -603,9 +646,15 @@ public class DataStreamClient implements Closeable {
 
         if (messageType == MessageType.FULL) {
             if (data.isArray()) {
+                List<String> cacheKeys = new ArrayList<>();
                 for (JsonNode flagData : data) {
                     cacheFlag(flagData);
+                    String key = flagData.has("key") ? flagData.get("key").asText() : null;
+                    if (key != null) {
+                        cacheKeys.add(FLAG_PREFIX + key);
+                    }
                 }
+                flagCache.deleteMissing(cacheKeys);
             } else {
                 cacheFlag(data);
             }

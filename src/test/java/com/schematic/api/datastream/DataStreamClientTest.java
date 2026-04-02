@@ -11,6 +11,7 @@ import com.schematic.api.datastream.DataStreamMessages.DataStreamResp;
 import com.schematic.api.datastream.DataStreamMessages.EntityType;
 import com.schematic.api.datastream.DataStreamMessages.MessageType;
 import com.schematic.api.logger.SchematicLogger;
+import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import com.schematic.api.types.RulesengineCompany;
 import com.schematic.api.types.RulesengineFlag;
@@ -581,6 +582,96 @@ class DataStreamClientTest {
     void start_throwsAfterClose() {
         client.close();
         assertThrows(IllegalStateException.class, () -> client.start());
+    }
+
+    // --- deleteMissing tests ---
+
+    @Test
+    void handleMessage_fullFlags_removesStaleFlags() {
+        // Cache three flags individually
+        client.handleMessage(
+                buildResp(EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("flag-a", true)));
+        client.handleMessage(
+                buildResp(EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("flag-b", true)));
+        client.handleMessage(
+                buildResp(EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("flag-c", true)));
+
+        assertNotNull(client.getCachedFlag("flag-a"));
+        assertNotNull(client.getCachedFlag("flag-b"));
+        assertNotNull(client.getCachedFlag("flag-c"));
+
+        // Send a bulk FLAGS message with only flag-a and flag-b
+        ArrayNode bulkFlags = objectMapper.createArrayNode();
+        bulkFlags.add(flagNode("flag-a", true));
+        bulkFlags.add(flagNode("flag-b", false));
+
+        client.handleMessage(buildResp(EntityType.FLAGS.getValue(), MessageType.FULL.getValue(), null, bulkFlags));
+
+        // flag-a and flag-b should remain, flag-c should be removed
+        assertNotNull(client.getCachedFlag("flag-a"));
+        assertNotNull(client.getCachedFlag("flag-b"));
+        assertNull(client.getCachedFlag("flag-c"));
+    }
+
+    // --- updateCompanyMetrics tests ---
+
+    @Test
+    void updateCompanyMetrics_incrementsMatchingMetric() {
+        // Cache a company with a metric
+        ObjectNode companyData = companyNode("comp-metrics", "customer_id", "cust-1");
+        ArrayNode metrics = objectMapper.createArrayNode();
+        ObjectNode metric = objectMapper.createObjectNode();
+        metric.put("account_id", "acc_1");
+        metric.put("company_id", "comp-metrics");
+        metric.put("environment_id", "env_1");
+        metric.put("event_subtype", "api_calls");
+        metric.put("period", "current_month");
+        metric.put("month_reset", "first");
+        metric.put("value", 10);
+        metric.put("created_at", "2026-01-01T00:00:00Z");
+        metrics.add(metric);
+        companyData.set("metrics", metrics);
+
+        client.handleMessage(
+                buildResp(EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "comp-metrics", companyData));
+
+        // Build a track event matching the metric
+        EventBodyTrack trackEvent = EventBodyTrack.builder()
+                .event("api_calls")
+                .company(Collections.singletonMap("customer_id", "cust-1"))
+                .quantity(5)
+                .build();
+
+        client.updateCompanyMetrics(trackEvent);
+
+        // Verify the metric was incremented
+        RulesengineCompany updated = client.getCachedCompany(Collections.singletonMap("customer_id", "cust-1"));
+        assertNotNull(updated);
+        assertEquals(15, updated.getMetrics().get(0).getValue());
+    }
+
+    @Test
+    void updateCompanyMetrics_nullEvent_noOp() {
+        assertDoesNotThrow(() -> client.updateCompanyMetrics(null));
+    }
+
+    @Test
+    void updateCompanyMetrics_companyNotInCache_noOp() {
+        EventBodyTrack trackEvent = EventBodyTrack.builder()
+                .event("api_calls")
+                .company(Collections.singletonMap("customer_id", "nonexistent"))
+                .quantity(1)
+                .build();
+
+        assertDoesNotThrow(() -> client.updateCompanyMetrics(trackEvent));
+    }
+
+    @Test
+    void updateCompanyMetrics_noCompanyKeys_noOp() {
+        EventBodyTrack trackEvent =
+                EventBodyTrack.builder().event("api_calls").quantity(1).build();
+
+        assertDoesNotThrow(() -> client.updateCompanyMetrics(trackEvent));
     }
 
     // --- Helper methods: build JSON matching the generated type's @JsonProperty format ---

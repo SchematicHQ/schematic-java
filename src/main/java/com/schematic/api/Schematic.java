@@ -412,6 +412,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .build();
 
             eventBuffer.push(event);
+
+            // Update cached company metrics if datastream is active
+            if (company != null && !company.isEmpty() && dataStreamClient != null && dataStreamClient.isConnected()) {
+                try {
+                    dataStreamClient.updateCompanyMetrics(body);
+                } catch (Exception e2) {
+                    logger.error("Failed to update company metrics: " + e2.getMessage());
+                }
+            }
         } catch (Exception e) {
             logger.error("Error sending track event: " + e.getMessage());
         }
