@@ -9,6 +9,8 @@
  * - SCHEMATIC_API_URL: Schematic API base URL (default: https://api.schematichq.com)
  * - SERVER_PORT: Port to listen on (default: 8080)
  * - CACHE_TTL_MS: Cache TTL in milliseconds (default: 5000)
+ * - REDIS_URL: Redis server endpoint in host:port format (default: localhost:6379)
+ * - REDIS_PASSWORD: Redis password (optional)
  * - REPLICATOR_HEALTH_URL: Replicator health check URL (default: http://localhost:8090/ready)
  * - USE_REPLICATOR: Set to "true" to enable replicator mode (default: false)
  *
@@ -30,6 +32,7 @@
  * Replicator mode example:
  *   export SCHEMATIC_API_KEY="your-key"
  *   export USE_REPLICATOR=true
+ *   export REDIS_URL="localhost:6379"
  *   export REPLICATOR_HEALTH_URL="http://localhost:8090/ready"
  *   ./gradlew :sample-app:run
  */
@@ -37,8 +40,9 @@ package sample;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.schematic.api.Schematic;
-import com.schematic.api.types.RulesengineCheckFlagResult;
+import com.schematic.api.cache.RedisCacheConfig;
 import com.schematic.api.datastream.DatastreamOptions;
+import com.schematic.api.types.RulesengineCheckFlagResult;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
@@ -60,6 +64,7 @@ public final class App {
     private static int serverPort;
     private static boolean useReplicator;
     private static String replicatorHealthUrl;
+    private static String redisUrl;
 
     public static void main(String[] args) throws Exception {
         String apiKey = System.getenv("SCHEMATIC_API_KEY");
@@ -71,12 +76,21 @@ public final class App {
         schematicApiUrl = envOrDefault("SCHEMATIC_API_URL", "https://api.schematichq.com");
         serverPort = Integer.parseInt(envOrDefault("SERVER_PORT", "8080"));
         cacheTtlMs = Integer.parseInt(envOrDefault("CACHE_TTL_MS", "5000"));
+        redisUrl = envOrDefault("REDIS_URL", "localhost:6379");
         useReplicator = "true".equalsIgnoreCase(envOrDefault("USE_REPLICATOR", "false"));
         replicatorHealthUrl = envOrDefault("REPLICATOR_HEALTH_URL", "http://localhost:8090/ready");
 
-        // Configure DataStream options
-        DatastreamOptions.Builder datastreamBuilder =
-                DatastreamOptions.builder().cacheTTL(Duration.ofMillis(cacheTtlMs));
+        // Configure Redis cache
+        RedisCacheConfig.Builder redisBuilder = RedisCacheConfig.builder().endpoint(redisUrl);
+        String redisPassword = System.getenv("REDIS_PASSWORD");
+        if (redisPassword != null && !redisPassword.isEmpty()) {
+            redisBuilder.password(redisPassword);
+        }
+
+        // Configure DataStream options with Redis
+        DatastreamOptions.Builder datastreamBuilder = DatastreamOptions.builder()
+                .cacheTTL(Duration.ofMillis(cacheTtlMs))
+                .redisCache(redisBuilder.build());
 
         if (useReplicator) {
             datastreamBuilder.withReplicatorMode(replicatorHealthUrl);
@@ -101,6 +115,7 @@ public final class App {
 
         System.out.println("Datastream Test Server started on port " + serverPort);
         System.out.println("Mode: " + (useReplicator ? "replicator" : "direct datastream"));
+        System.out.println("Redis: " + redisUrl);
         System.out.println("Endpoints:");
         System.out.println("  GET  /                  - Welcome message");
         System.out.println("  GET  /config            - Show configuration");
@@ -127,6 +142,7 @@ public final class App {
         config.put("schematicApiUrl", schematicApiUrl);
         config.put("cacheTtlMs", cacheTtlMs);
         config.put("hasApiKey", true);
+        config.put("redisUrl", redisUrl);
         config.put("replicatorMode", schematic.isReplicatorMode());
         if (useReplicator) {
             config.put("replicatorHealthUrl", replicatorHealthUrl);
