@@ -159,6 +159,135 @@ user.put("user_id", "your-user-id");
 boolean flagValue = schematic.checkFlag("some-flag-key", company, user);
 ```
 
+## DataStream
+
+DataStream enables local flag evaluation by maintaining a WebSocket connection to Schematic and caching flag rules, company, and user data locally. This reduces latency and network calls for flag checks.
+
+### Key Features
+- **Real-Time Updates**: Automatically updates cached data when changes occur on the backend.
+- **Configurable Caching**: Supports both in-memory (local) caching and Redis-based caching.
+- **Efficient Flag Checks**: Flag evaluation happens locally using a WASM rules engine.
+
+### Setup
+
+```java
+import com.schematic.api.Schematic;
+import com.schematic.api.datastream.DatastreamOptions;
+
+Schematic schematic = Schematic.builder()
+    .apiKey("YOUR_API_KEY")
+    .datastreamOptions(DatastreamOptions.builder()
+        .build())
+    .build();
+
+// Flag checks are now evaluated locally
+boolean flagValue = schematic.checkFlag("some-flag-key", company, user);
+
+// When done, close the client to release resources
+schematic.close();
+```
+
+### Configuration Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `cacheTTL` | `Duration` | 24 hours | Cache TTL for flag/company/user data |
+| `redisCache` | `RedisCacheConfig` | — | Redis connection config (uses in-memory cache if not provided) |
+
+### Configuring Redis Cache
+
+DataStream supports Redis for caching, which is required for [Replicator Mode](#replicator-mode). Pass a `RedisCacheConfig` and the SDK will create and manage the Redis connection internally:
+
+```java
+import com.schematic.api.Schematic;
+import com.schematic.api.cache.RedisCacheConfig;
+import com.schematic.api.datastream.DatastreamOptions;
+import java.time.Duration;
+
+Schematic schematic = Schematic.builder()
+    .apiKey("YOUR_API_KEY")
+    .datastreamOptions(DatastreamOptions.builder()
+        .redisCache(RedisCacheConfig.builder()
+            .endpoint("localhost:6379")
+            .keyPrefix("schematic:")
+            .build())
+        .cacheTTL(Duration.ofMinutes(5))
+        .build())
+    .build();
+```
+
+#### Redis Configuration Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `endpoint` | `String` | `localhost:6379` | Redis server address in `host:port` format |
+| `endpoints` | `List<String>` | `["localhost:6379"]` | Multiple endpoints (for future cluster support) |
+| `username` | `String` | — | Redis 6.0+ ACL username |
+| `password` | `String` | — | Redis password |
+| `database` | `int` | `0` | Redis database index |
+| `ssl` | `boolean` | `false` | Enable SSL/TLS |
+| `keyPrefix` | `String` | `schematic:` | Prefix for all Redis cache keys |
+| `connectTimeout` | `Duration` | 5 seconds | Connection timeout |
+| `readTimeout` | `Duration` | 3 seconds | Read timeout |
+| `maxPoolSize` | `int` | 8 | Maximum connection pool size |
+
+## Replicator Mode
+
+Replicator mode is designed for environments where a separate process (the [schematic-datastream-replicator](https://github.com/SchematicHQ/schematic-datastream-replicator)) manages the WebSocket connection and populates a shared Redis cache. The SDK reads from that cache and evaluates flags locally without establishing its own WebSocket connection.
+
+### Requirements
+
+Replicator mode **requires Redis** as a shared cache so the SDK can read data written by the external replicator process. An in-memory cache will not work since the replicator and SDK run in separate processes.
+
+### Setup
+
+```java
+import com.schematic.api.Schematic;
+import com.schematic.api.cache.RedisCacheConfig;
+import com.schematic.api.datastream.DatastreamOptions;
+
+Schematic schematic = Schematic.builder()
+    .apiKey("YOUR_API_KEY")
+    .datastreamOptions(DatastreamOptions.builder()
+        .redisCache(RedisCacheConfig.builder()
+            .endpoint("localhost:6379")
+            .build())
+        .withReplicatorMode("http://localhost:8090/ready")
+        .build())
+    .build();
+```
+
+### Configuration Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `withReplicatorMode` | `String` | — | Enables replicator mode with the given health check URL |
+| `redisCache` | `RedisCacheConfig` | — | **Required.** Redis connection config for the shared cache |
+| `replicatorHealthCheckInterval` | `Duration` | 30 seconds | Health check polling interval |
+| `cacheTTL` | `Duration` | 24 hours | Cache TTL (should match the replicator's TTL) |
+
+### Cache TTL Configuration
+
+**Important:** When using Replicator Mode, you should set the SDK's cache TTL to match the replicator's cache TTL. The replicator defaults to an unlimited cache TTL. If the SDK uses a shorter TTL (the default is 24 hours), locally updated cache entries (e.g. after track events) will be written back with the shorter TTL and eventually evicted from the shared Redis cache, even though the replicator originally set them with no expiration.
+
+To match the replicator's default unlimited TTL:
+
+```java
+DatastreamOptions.builder()
+    .redisCache(RedisCacheConfig.builder()
+        .endpoint("localhost:6379")
+        .build())
+    .withReplicatorMode("http://localhost:8090/ready")
+    .cacheTTL(Duration.ZERO) // Unlimited, matching the replicator default
+    .build()
+```
+
+When running in Replicator Mode, the client will:
+- Skip establishing WebSocket connections
+- Periodically check if the replicator service is ready
+- Use cached data populated by the external replicator service
+- Fall back to direct API calls if the replicator is not available
+
 ## Webhook Verification
 
 Schematic can send webhooks to notify your application of events. To ensure the security of these webhooks, Schematic signs each request using HMAC-SHA256. The Java SDK provides utility functions to verify these signatures.
