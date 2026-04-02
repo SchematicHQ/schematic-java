@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.types.CreateEventRequestBody;
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
 import okhttp3.MediaType;
@@ -16,14 +17,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Sends event batches directly to the Schematic event capture service,
- * matching the Go SDK's behavior of posting to https://c.schematichq.com/batch.
+ * Sends event batches directly to the Schematic event capture service
+ * by posting to https://c.schematichq.com/batch.
  *
  * <p>Each event payload is built from the Fern-generated {@link CreateEventRequestBody} model
  * with {@code api_key} injected, so any fields added to the generated model are automatically
  * included in the capture service payload.
  */
-public class HttpEventSender {
+public class HttpEventSender implements Closeable {
     private static final String DEFAULT_EVENT_CAPTURE_BASE_URL = "https://c.schematichq.com";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -83,5 +84,11 @@ public class HttpEventSender {
                 throw new IOException("HTTP " + response.code() + ": " + responseBody);
             }
         }
+    }
+
+    @Override
+    public void close() {
+        httpClient.dispatcher().executorService().shutdownNow();
+        httpClient.connectionPool().evictAll();
     }
 }

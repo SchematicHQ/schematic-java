@@ -39,6 +39,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     private final String apiKey;
     private final Thread shutdownHook;
     private final boolean offline;
+    private final HttpEventSender eventSender;
     private final DataStreamClient dataStreamClient;
     private final DatastreamOptions datastreamOptions;
 
@@ -56,7 +57,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 : Collections.singletonList(new LocalCache<RulesengineCheckFlagResult>());
         this.datastreamOptions = builder.datastreamOptions;
 
-        HttpEventSender eventSender = new HttpEventSender(null, this.apiKey, builder.eventCaptureBaseUrl, this.logger);
+        this.eventSender = new HttpEventSender(null, this.apiKey, builder.eventCaptureBaseUrl, this.logger);
         this.eventBuffer = new EventBuffer(
                 eventSender,
                 this.logger,
@@ -92,6 +93,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                             this.dataStreamClient.close();
                         }
                         this.eventBuffer.close();
+                        this.eventSender.close();
                     } catch (Exception e) {
                         logger.error("Error during Schematic shutdown: " + e.getMessage());
                     }
@@ -400,6 +402,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 dataStreamClient.close();
             }
             eventBuffer.close();
+            eventSender.close();
         } catch (Exception e) {
             logger.error("Error closing Schematic client: " + e.getMessage());
         }
