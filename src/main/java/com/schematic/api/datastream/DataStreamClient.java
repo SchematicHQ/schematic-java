@@ -17,11 +17,16 @@ import com.schematic.api.types.RulesengineFlag;
 import com.schematic.api.types.RulesengineUser;
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,7 +37,7 @@ import okhttp3.Response;
  * caches entities (flags, companies, users), and provides flag checking.
  *
  * <p>Entities are cached as typed objects ({@link RulesengineFlag}, {@link RulesengineCompany},
- * {@link RulesengineUser}) matching the approach used by the Python and Go SDKs.
+ * {@link RulesengineUser}).
  */
 public class DataStreamClient implements Closeable {
 
@@ -42,6 +47,9 @@ public class DataStreamClient implements Closeable {
     static final String COMPANY_KEY_PREFIX = "company_key:";
     static final String USER_PREFIX = "user:";
     static final String USER_KEY_PREFIX = "user_key:";
+
+    // Timeout for waiting on entity responses from WebSocket
+    private static final long RESOURCE_TIMEOUT_MS = 2_000;
 
     private final DatastreamOptions options;
     private final String apiKey;
@@ -54,6 +62,12 @@ public class DataStreamClient implements Closeable {
     private final CacheProvider<RulesengineFlag> flagCache;
     private final CacheProvider<RulesengineCompany> companyCache;
     private final CacheProvider<RulesengineUser> userCache;
+
+    // Pending entity requests: cache key -> list of futures waiting for that entity.
+    private final ConcurrentHashMap<String, List<CompletableFuture<RulesengineCompany>>> pendingCompanyRequests =
+            new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, List<CompletableFuture<RulesengineUser>>> pendingUserRequests =
+            new ConcurrentHashMap<>();
 
     // WebSocket client (direct mode only)
     private volatile DataStreamWebSocketClient wsClient;
@@ -157,19 +171,194 @@ public class DataStreamClient implements Closeable {
             return evaluateFlag(flag, cachedCompany, cachedUser);
         }
 
-        // Step 5: Direct mode - fetch missing entities via datastream
+        // Step 5: Direct mode - fetch missing entities via datastream and wait for response
         if (!isConnected()) {
             throw new DataStreamException("Datastream not connected and required entities not in cache");
         }
 
         if (needsCompany && cachedCompany == null) {
-            requestEntity(EntityType.COMPANY, company);
+            cachedCompany = getCompany(company);
         }
         if (needsUser && cachedUser == null) {
-            requestEntity(EntityType.USER, user);
+            cachedUser = getUser(user);
         }
 
         return evaluateFlag(flag, cachedCompany, cachedUser);
+    }
+
+    /**
+     * Fetches a company via the datastream WebSocket, waiting for the response with a timeout.
+     * Deduplicates concurrent requests for the same entity.
+     * Uses futures with timeout to wait for the response, deduplicating concurrent requests.
+     */
+    private RulesengineCompany getCompany(Map<String, String> keys) {
+        // Check cache first
+        RulesengineCompany cached = getCachedCompany(keys);
+        if (cached != null) {
+            return cached;
+        }
+
+        CompletableFuture<RulesengineCompany> future = new CompletableFuture<>();
+        boolean shouldSendRequest = registerPendingCompanyRequest(keys, future);
+
+        if (shouldSendRequest) {
+            requestEntity(EntityType.COMPANY, keys);
+        }
+
+        try {
+            return future.get(RESOURCE_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException e) {
+            log("warn", "Timeout waiting for company data");
+        } catch (Exception e) {
+            log("warn", "Error waiting for company data: " + e.getMessage());
+        } finally {
+            cleanupPendingCompanyRequests(keys, future);
+        }
+
+        return null;
+    }
+
+    /**
+     * Fetches a user via the datastream WebSocket, waiting for the response with a timeout.
+     * Deduplicates concurrent requests for the same entity.
+     */
+    private RulesengineUser getUser(Map<String, String> keys) {
+        // Check cache first
+        RulesengineUser cached = getCachedUser(keys);
+        if (cached != null) {
+            return cached;
+        }
+
+        CompletableFuture<RulesengineUser> future = new CompletableFuture<>();
+        boolean shouldSendRequest = registerPendingUserRequest(keys, future);
+
+        if (shouldSendRequest) {
+            requestEntity(EntityType.USER, keys);
+        }
+
+        try {
+            return future.get(RESOURCE_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException e) {
+            log("warn", "Timeout waiting for user data");
+        } catch (Exception e) {
+            log("warn", "Error waiting for user data: " + e.getMessage());
+        } finally {
+            cleanupPendingUserRequests(keys, future);
+        }
+
+        return null;
+    }
+
+    /**
+     * Registers a future for a pending company request. Returns true if this is the
+     * first request for this entity (meaning the caller should send the WebSocket message).
+     */
+    private boolean registerPendingCompanyRequest(
+            Map<String, String> keys, CompletableFuture<RulesengineCompany> future) {
+        boolean shouldSend = true;
+        for (Map.Entry<String, String> entry : keys.entrySet()) {
+            String cacheKey = companyCacheKey(entry.getKey(), entry.getValue());
+            synchronized (pendingCompanyRequests) {
+                List<CompletableFuture<RulesengineCompany>> existing = pendingCompanyRequests.get(cacheKey);
+                if (existing != null) {
+                    // Another thread already requested this entity
+                    existing.add(future);
+                    shouldSend = false;
+                } else {
+                    List<CompletableFuture<RulesengineCompany>> futures = new ArrayList<>();
+                    futures.add(future);
+                    pendingCompanyRequests.put(cacheKey, futures);
+                }
+            }
+        }
+        return shouldSend;
+    }
+
+    /**
+     * Registers a future for a pending user request. Returns true if this is the
+     * first request for this entity (meaning the caller should send the WebSocket message).
+     */
+    private boolean registerPendingUserRequest(Map<String, String> keys, CompletableFuture<RulesengineUser> future) {
+        boolean shouldSend = true;
+        for (Map.Entry<String, String> entry : keys.entrySet()) {
+            String cacheKey = userCacheKey(entry.getKey(), entry.getValue());
+            synchronized (pendingUserRequests) {
+                List<CompletableFuture<RulesengineUser>> existing = pendingUserRequests.get(cacheKey);
+                if (existing != null) {
+                    existing.add(future);
+                    shouldSend = false;
+                } else {
+                    List<CompletableFuture<RulesengineUser>> futures = new ArrayList<>();
+                    futures.add(future);
+                    pendingUserRequests.put(cacheKey, futures);
+                }
+            }
+        }
+        return shouldSend;
+    }
+
+    /**
+     * Notifies all pending futures waiting for a company with the given keys.
+     */
+    private void notifyPendingCompanyRequests(Map<String, String> keys, RulesengineCompany company) {
+        synchronized (pendingCompanyRequests) {
+            for (Map.Entry<String, String> entry : keys.entrySet()) {
+                String cacheKey = companyCacheKey(entry.getKey(), entry.getValue());
+                List<CompletableFuture<RulesengineCompany>> futures = pendingCompanyRequests.remove(cacheKey);
+                if (futures != null) {
+                    for (CompletableFuture<RulesengineCompany> future : futures) {
+                        future.complete(company);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Notifies all pending futures waiting for a user with the given keys.
+     */
+    private void notifyPendingUserRequests(Map<String, String> keys, RulesengineUser user) {
+        synchronized (pendingUserRequests) {
+            for (Map.Entry<String, String> entry : keys.entrySet()) {
+                String cacheKey = userCacheKey(entry.getKey(), entry.getValue());
+                List<CompletableFuture<RulesengineUser>> futures = pendingUserRequests.remove(cacheKey);
+                if (futures != null) {
+                    for (CompletableFuture<RulesengineUser> future : futures) {
+                        future.complete(user);
+                    }
+                }
+            }
+        }
+    }
+
+    private void cleanupPendingCompanyRequests(Map<String, String> keys, CompletableFuture<RulesengineCompany> future) {
+        synchronized (pendingCompanyRequests) {
+            for (Map.Entry<String, String> entry : keys.entrySet()) {
+                String cacheKey = companyCacheKey(entry.getKey(), entry.getValue());
+                List<CompletableFuture<RulesengineCompany>> futures = pendingCompanyRequests.get(cacheKey);
+                if (futures != null) {
+                    futures.remove(future);
+                    if (futures.isEmpty()) {
+                        pendingCompanyRequests.remove(cacheKey);
+                    }
+                }
+            }
+        }
+    }
+
+    private void cleanupPendingUserRequests(Map<String, String> keys, CompletableFuture<RulesengineUser> future) {
+        synchronized (pendingUserRequests) {
+            for (Map.Entry<String, String> entry : keys.entrySet()) {
+                String cacheKey = userCacheKey(entry.getKey(), entry.getValue());
+                List<CompletableFuture<RulesengineUser>> futures = pendingUserRequests.get(cacheKey);
+                if (futures != null) {
+                    futures.remove(future);
+                    if (futures.isEmpty()) {
+                        pendingUserRequests.remove(cacheKey);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -232,10 +421,9 @@ public class DataStreamClient implements Closeable {
         if (keys == null || keys.isEmpty()) {
             return null;
         }
-        // Look up by first key pair, matching the Node/Python SDK approach
+        // Look up by first key pair
         Map.Entry<String, String> first = keys.entrySet().iterator().next();
-        String cacheKey = COMPANY_KEY_PREFIX + first.getKey() + ":" + first.getValue();
-        return companyCache.get(cacheKey);
+        return companyCache.get(companyCacheKey(first.getKey(), first.getValue()));
     }
 
     /**
@@ -246,8 +434,7 @@ public class DataStreamClient implements Closeable {
             return null;
         }
         Map.Entry<String, String> first = keys.entrySet().iterator().next();
-        String cacheKey = USER_KEY_PREFIX + first.getKey() + ":" + first.getValue();
-        return userCache.get(cacheKey);
+        return userCache.get(userCacheKey(first.getKey(), first.getValue()));
     }
 
     /**
@@ -462,6 +649,13 @@ public class DataStreamClient implements Closeable {
         } else if (messageType == MessageType.DELETE) {
             String entityId = message.getEntityId();
             if (entityId != null) {
+                // Clean up key-based cache entries before removing by ID
+                RulesengineCompany existing = companyCache.get(COMPANY_PREFIX + entityId);
+                if (existing != null) {
+                    for (Map.Entry<String, String> entry : existing.getKeys().entrySet()) {
+                        companyCache.set(companyCacheKey(entry.getKey(), entry.getValue()), null);
+                    }
+                }
                 companyCache.set(COMPANY_PREFIX + entityId, null);
             }
         }
@@ -499,6 +693,13 @@ public class DataStreamClient implements Closeable {
         } else if (messageType == MessageType.DELETE) {
             String entityId = message.getEntityId();
             if (entityId != null) {
+                // Clean up key-based cache entries before removing by ID
+                RulesengineUser existing = userCache.get(USER_PREFIX + entityId);
+                if (existing != null) {
+                    for (Map.Entry<String, String> entry : existing.getKeys().entrySet()) {
+                        userCache.set(userCacheKey(entry.getKey(), entry.getValue()), null);
+                    }
+                }
                 userCache.set(USER_PREFIX + entityId, null);
             }
         }
@@ -537,9 +738,11 @@ public class DataStreamClient implements Closeable {
     private void cacheCompanyObject(RulesengineCompany company) {
         companyCache.set(COMPANY_PREFIX + company.getId(), company);
         for (Map.Entry<String, String> entry : company.getKeys().entrySet()) {
-            String cacheKey = COMPANY_KEY_PREFIX + entry.getKey() + ":" + entry.getValue();
+            String cacheKey = companyCacheKey(entry.getKey(), entry.getValue());
             companyCache.set(cacheKey, company);
         }
+        // Notify any pending requests waiting for this company
+        notifyPendingCompanyRequests(company.getKeys(), company);
     }
 
     private void cacheUser(JsonNode data) {
@@ -554,9 +757,19 @@ public class DataStreamClient implements Closeable {
     private void cacheUserObject(RulesengineUser user) {
         userCache.set(USER_PREFIX + user.getId(), user);
         for (Map.Entry<String, String> entry : user.getKeys().entrySet()) {
-            String cacheKey = USER_KEY_PREFIX + entry.getKey() + ":" + entry.getValue();
+            String cacheKey = userCacheKey(entry.getKey(), entry.getValue());
             userCache.set(cacheKey, user);
         }
+        // Notify any pending requests waiting for this user
+        notifyPendingUserRequests(user.getKeys(), user);
+    }
+
+    private static String companyCacheKey(String key, String value) {
+        return COMPANY_KEY_PREFIX + key + ":" + value;
+    }
+
+    private static String userCacheKey(String key, String value) {
+        return USER_KEY_PREFIX + key + ":" + value;
     }
 
     private void log(String level, String message) {
