@@ -119,7 +119,10 @@ public class EventBuffer implements AutoCloseable {
 
         } catch (Exception e) {
             if (retryCount < MAX_RETRY_ATTEMPTS) {
-                long delayMillis = RETRY_INITIAL_DELAY.toMillis() * (1L << retryCount);
+                long baseDelay = RETRY_INITIAL_DELAY.toMillis() * (1L << retryCount);
+                // Add ±25% jitter
+                double jitter = (Math.random() - 0.5) * 0.5 * baseDelay;
+                long delayMillis = Math.max(0, baseDelay + (long) jitter);
                 logger.warn(
                         "Failed to send event batch, attempting retry %d of %d in %d ms",
                         retryCount + 1, MAX_RETRY_ATTEMPTS, delayMillis);
