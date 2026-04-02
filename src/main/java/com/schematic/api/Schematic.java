@@ -56,8 +56,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 : Collections.singletonList(new LocalCache<RulesengineCheckFlagResult>());
         this.datastreamOptions = builder.datastreamOptions;
 
+        HttpEventSender eventSender = new HttpEventSender(null, this.apiKey, builder.eventCaptureBaseUrl, this.logger);
         this.eventBuffer = new EventBuffer(
-                super.events(),
+                eventSender,
                 this.logger,
                 builder.eventBufferMaxSize,
                 builder.eventBufferInterval != null ? builder.eventBufferInterval : Duration.ofMillis(5000));
@@ -115,6 +116,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         private String basePath;
         private Map<String, String> headers;
         private DatastreamOptions datastreamOptions;
+        private String eventCaptureBaseUrl;
 
         public Builder apiKey(String apiKey) {
             this.apiKey = apiKey;
@@ -163,6 +165,11 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
         public Builder datastreamOptions(DatastreamOptions datastreamOptions) {
             this.datastreamOptions = datastreamOptions;
+            return this;
+        }
+
+        public Builder eventCaptureBaseUrl(String eventCaptureBaseUrl) {
+            this.eventCaptureBaseUrl = eventCaptureBaseUrl;
             return this;
         }
 

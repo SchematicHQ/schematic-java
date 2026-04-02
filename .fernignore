@@ -8,6 +8,7 @@ WASM_VERSION
 scripts/
 src/main/java/com/schematic/api/BaseSchematic.java
 src/main/java/com/schematic/api/EventBuffer.java
+src/main/java/com/schematic/api/HttpEventSender.java
 src/main/java/com/schematic/api/Schematic.java
 src/main/java/com/schematic/api/cache/CacheProvider.java
 src/main/java/com/schematic/api/cache/CachedItem.java
