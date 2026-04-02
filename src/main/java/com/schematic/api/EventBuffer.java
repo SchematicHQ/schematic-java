@@ -18,7 +18,7 @@ public class EventBuffer implements AutoCloseable {
     private static final int DEFAULT_MAX_BATCH_SIZE = 100;
     private static final int DEFAULT_MAX_QUEUE_SIZE = 10_000;
     private static final int MAX_RETRY_ATTEMPTS = 3;
-    private static final Duration RETRY_INITIAL_DELAY = Duration.ofMillis(100);
+    private static final Duration RETRY_INITIAL_DELAY = Duration.ofMillis(1000);
 
     private final ConcurrentLinkedQueue<CreateEventRequestBody> events;
     private final int maxBatchSize;

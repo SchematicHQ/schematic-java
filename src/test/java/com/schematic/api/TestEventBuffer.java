@@ -123,8 +123,8 @@ class EventBufferTest {
 
         try {
             // Wait for all retries to complete
-            // Initial delay + 2nd retry + 3rd retry = 100ms + 200ms + 400ms = 700ms
-            Thread.sleep(800);
+            // Initial delay + 2nd retry + 3rd retry = 1000ms + 2000ms + 4000ms = 7000ms
+            Thread.sleep(8000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Restore the interrupt flag
             fail("Test was interrupted while waiting for retries");

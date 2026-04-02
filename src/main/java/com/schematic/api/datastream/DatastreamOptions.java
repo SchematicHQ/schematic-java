@@ -36,12 +36,12 @@ public class DatastreamOptions {
                 ? builder.replicatorHealthCheckInterval
                 : DEFAULT_REPLICATOR_HEALTH_CHECK_INTERVAL;
         this.flagCacheProvider =
-                builder.flagCacheProvider != null ? builder.flagCacheProvider : new LocalCache<>(10_000, this.cacheTTL);
+                builder.flagCacheProvider != null ? builder.flagCacheProvider : new LocalCache<>(1_000, this.cacheTTL);
         this.companyCacheProvider = builder.companyCacheProvider != null
                 ? builder.companyCacheProvider
-                : new LocalCache<>(10_000, this.cacheTTL);
+                : new LocalCache<>(1_000, this.cacheTTL);
         this.userCacheProvider =
-                builder.userCacheProvider != null ? builder.userCacheProvider : new LocalCache<>(10_000, this.cacheTTL);
+                builder.userCacheProvider != null ? builder.userCacheProvider : new LocalCache<>(1_000, this.cacheTTL);
     }
 
     public static Builder builder() {
