@@ -117,7 +117,7 @@ public final class DataStreamMessages {
         }
     }
 
-    /** Wrapper for request messages (matches Go's DataStreamBaseReq). */
+    /** Wrapper for request messages. */
     public static class DataStreamBaseReq {
         @JsonProperty("data")
         private final DataStreamReq data;

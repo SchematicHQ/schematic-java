@@ -32,7 +32,7 @@ import java.util.Map;
  * flag rules locally using cached flag definitions, company data, and user data.
  * Uses the Chicory pure-Java WASM runtime (no native dependencies).
  *
- * <p>Data flow matches the Python/Node SDKs:
+ * <p>Data flow:
  * <ul>
  *   <li>Input: typed objects serialized to snake_case JSON via Jackson @JsonProperty annotations</li>
  *   <li>Output: camelCase JSON from WASM, converted to snake_case, deserialized into generated types</li>
@@ -136,7 +136,7 @@ public class WasmRulesEngine implements RulesEngine {
         String resultJson = callWasm(inputJson);
 
         // WASM returns camelCase JSON; generated types expect snake_case.
-        // Convert keys before deserializing, matching the Python SDK's approach.
+        // Convert keys before deserializing.
         JsonNode camelNode = mapper.readTree(resultJson);
         JsonNode snakeNode = camelToSnakeKeys(camelNode);
 
@@ -161,6 +161,11 @@ public class WasmRulesEngine implements RulesEngine {
         }
     }
 
+    /**
+     * Calls into the WASM runtime. This method is synchronized because the WASM instance
+     * uses shared linear memory — concurrent calls would corrupt each other's data.
+     * Under high concurrency, flag evaluations are serialized through this lock.
+     */
     private synchronized String callWasm(String inputJson) {
         byte[] data = inputJson.getBytes(StandardCharsets.UTF_8);
         int length = data.length;
@@ -193,7 +198,6 @@ public class WasmRulesEngine implements RulesEngine {
 
     /**
      * Recursively converts JSON object keys from camelCase to snake_case.
-     * Matches the Python SDK's _deep_camel_to_snake() function.
      */
     static JsonNode camelToSnakeKeys(JsonNode node) {
         if (node.isObject()) {

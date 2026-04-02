@@ -27,8 +27,7 @@ import okhttp3.WebSocketListener;
  * WebSocket client for the Schematic DataStream protocol.
  *
  * <p>Provides automatic reconnection with exponential backoff, ping/pong keep-alive,
- * and a message worker pool for processing incoming messages. Mirrors the Go
- * {@code schematic-datastream-ws} package.
+ * and a message worker pool for processing incoming messages.
  */
 public class DataStreamWebSocketClient implements Closeable {
 
@@ -42,7 +41,7 @@ public class DataStreamWebSocketClient implements Closeable {
         void handle() throws Exception;
     }
 
-    // Default constants (matching Go SDK)
+    // Default constants
     private static final long DEFAULT_PONG_WAIT_MS = 40_000;
     private static final long DEFAULT_PING_PERIOD_MS = 30_000;
     private static final long WRITE_WAIT_MS = 10_000;

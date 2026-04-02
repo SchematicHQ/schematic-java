@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Merge helpers for partial datastream updates.
  *
- * <p>Matches the Python SDK's merge.py:
+ * <p>Merge strategy:
  * <ul>
  *   <li>Company: additive merge for {@code keys} and {@code credit_balances},
  *       upsert for {@code metrics}, replace for all other fields</li>
@@ -164,8 +164,7 @@ final class EntityMerge {
     }
 
     /**
-     * Matches metrics by (event_subtype, period, month_reset) key,
-     * matching the Python SDK's _metric_key() function.
+     * Matches metrics by the composite key (event_subtype, period, month_reset).
      */
     private static boolean metricsMatch(JsonNode a, JsonNode b) {
         return textEquals(a, b, "event_subtype") && textEquals(a, b, "period") && textEquals(a, b, "month_reset");
