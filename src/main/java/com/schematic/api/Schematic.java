@@ -215,6 +215,13 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     /**
+     * Sets a default value for a specific flag at runtime.
+     */
+    public void setFlagDefault(String flagKey, boolean value) {
+        flagDefaults.put(flagKey, value);
+    }
+
+    /**
      * Returns the DataStream client, or null if datastream is not configured.
      */
     public DataStreamClient getDataStreamClient() {
@@ -465,6 +472,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     private Map<String, JsonNode> objectMapToJsonNode(Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
         Map<String, JsonNode> result = new HashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             result.put(entry.getKey(), ObjectMappers.JSON_MAPPER.valueToTree(entry.getValue()));

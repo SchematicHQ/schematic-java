@@ -123,14 +123,15 @@ public class EventBuffer implements AutoCloseable {
                 // Add ±25% jitter
                 double jitter = (Math.random() - 0.5) * 0.5 * baseDelay;
                 long delayMillis = Math.max(0, baseDelay + (long) jitter);
-                logger.warn(
-                        "Failed to send event batch, attempting retry %d of %d in %d ms",
-                        retryCount + 1, MAX_RETRY_ATTEMPTS, delayMillis);
+                logger.warn(String.format(
+                        "Failed to send event batch (%s: %s), attempting retry %d of %d in %d ms",
+                        e.getClass().getSimpleName(), e.getMessage(), retryCount + 1, MAX_RETRY_ATTEMPTS, delayMillis));
 
                 scheduler.schedule(() -> sendBatchWithRetry(batch, retryCount + 1), delayMillis, TimeUnit.MILLISECONDS);
             } else {
                 failedEvents.addAndGet(batch.size());
-                logger.error("Failed to flush events: " + e.getMessage());
+                logger.error("Failed to flush events after " + MAX_RETRY_ATTEMPTS + " retries: "
+                        + e.getClass().getName() + ": " + e.getMessage());
             }
         }
     }

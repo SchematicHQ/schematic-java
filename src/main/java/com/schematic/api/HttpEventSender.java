@@ -1,7 +1,6 @@
 package com.schematic.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.schematic.api.core.ObjectMappers;
@@ -51,12 +50,19 @@ public class HttpEventSender implements Closeable {
             return;
         }
 
+        // Build batch matching the capture service format (same as Go SDK's EventPayload)
         ArrayNode eventsArray = ObjectMappers.JSON_MAPPER.createArrayNode();
         for (CreateEventRequestBody event : events) {
-            // Serialize the Fern model to a JSON tree, preserving all current and future fields
-            JsonNode eventNode = ObjectMappers.JSON_MAPPER.valueToTree(event);
-            if (eventNode.isObject()) {
-                ((ObjectNode) eventNode).put("api_key", apiKey);
+            ObjectNode eventNode = ObjectMappers.JSON_MAPPER.createObjectNode();
+            eventNode.put("api_key", apiKey);
+            eventNode.put("type", event.getEventType().toString());
+            if (event.getBody().isPresent()) {
+                eventNode.set(
+                        "body",
+                        ObjectMappers.JSON_MAPPER.valueToTree(event.getBody().get()));
+            }
+            if (event.getSentAt().isPresent()) {
+                eventNode.put("sent_at", event.getSentAt().get().toString());
             }
             eventsArray.add(eventNode);
         }
@@ -71,17 +77,30 @@ public class HttpEventSender implements Closeable {
             throw new IOException("Failed to serialize event batch", e);
         }
 
+        String url = baseUrl + "/batch";
+
         Request request = new Request.Builder()
-                .url(baseUrl + "/batch")
+                .url(url)
                 .post(RequestBody.create(json, JSON))
                 .addHeader("X-Schematic-Api-Key", apiKey)
                 .addHeader("Content-Type", "application/json")
                 .build();
 
+        if (logger != null) {
+            logger.debug("Sending event batch (" + events.size() + " events) to " + url);
+            logger.debug("Event batch payload: " + json);
+        }
+
         try (Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 String responseBody = response.body() != null ? response.body().string() : "";
+                if (logger != null) {
+                    logger.error("Event batch failed: HTTP " + response.code() + " from " + url + ": " + responseBody);
+                }
                 throw new IOException("HTTP " + response.code() + ": " + responseBody);
+            }
+            if (logger != null) {
+                logger.debug("Event batch sent successfully to " + url);
             }
         }
     }

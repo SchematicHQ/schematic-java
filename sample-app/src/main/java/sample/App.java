@@ -1,254 +1,308 @@
 /*
- * Schematic Java Client - Datastream Test Server
+ * Schematic Java SDK - E2E Test App
  *
- * This example demonstrates how to use the Schematic Java client to check feature flags
- * with DataStream support, including replicator mode.
- *
- * Environment Variables:
- * - SCHEMATIC_API_KEY: Your Schematic API key (required)
- * - SCHEMATIC_API_URL: Schematic API base URL (default: https://api.schematichq.com)
- * - SERVER_PORT: Port to listen on (default: 8080)
- * - CACHE_TTL_MS: Cache TTL in milliseconds (default: 5000)
- * - REDIS_URL: Redis server endpoint in host:port format (default: localhost:6379)
- * - REDIS_PASSWORD: Redis password (optional)
- * - REPLICATOR_HEALTH_URL: Replicator health check URL (default: http://localhost:8090/ready)
- * - USE_REPLICATOR: Set to "true" to enable replicator mode (default: false)
+ * HTTP server implementing the shared E2E test app contract.
+ * The SDK client is initialized lazily via POST /configure.
  *
  * Usage:
- * 1. Set environment variables (only SCHEMATIC_API_KEY is required)
- * 2. Run: ./gradlew :sample-app:run
- * 3. Test endpoints:
- *    - GET / - Welcome message
- *    - GET /config - Show current configuration
- *    - GET /health - Health check with datastream status
- *    - GET /datastream-status - DataStream/replicator connection status
- *    - POST /checkflag - Check a feature flag
- *
- * Example checkflag request:
- *   curl -X POST http://localhost:8080/checkflag \
- *     -H "Content-Type: application/json" \
- *     -d '{"flag-key":"my-flag","company":{"id":"comp-123"},"user":{"id":"user-456"}}'
- *
- * Replicator mode example:
- *   export SCHEMATIC_API_KEY="your-key"
- *   export USE_REPLICATOR=true
- *   export REDIS_URL="localhost:6379"
- *   export REPLICATOR_HEALTH_URL="http://localhost:8090/ready"
  *   ./gradlew :sample-app:run
+ *
+ * Endpoints:
+ *   GET  /health          - Returns {"status":"waiting"} or {"status":"configured"}
+ *   POST /configure       - Initialize SDK client with config
+ *   POST /check-flag      - Check a feature flag
+ *   POST /identify        - Submit identify event
+ *   POST /track           - Submit track event
+ *   POST /set-flag-default - Set a flag default value
  */
 package sample;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.schematic.api.Schematic;
+import com.schematic.api.cache.LocalCache;
 import com.schematic.api.cache.RedisCacheConfig;
 import com.schematic.api.datastream.DatastreamOptions;
+import com.schematic.api.types.CheckFlagRequestBody;
+import com.schematic.api.types.EventBodyIdentify;
+import com.schematic.api.types.EventBodyIdentifyCompany;
+import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.InetSocketAddress;
 import java.time.Duration;
-import java.time.Instant;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class App {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final int CACHE_TTL_MS = 2000;
 
-    private static Schematic schematic;
-    private static String schematicApiUrl;
-    private static int cacheTtlMs;
-    private static int serverPort;
-    private static boolean useReplicator;
-    private static String replicatorHealthUrl;
-    private static String redisUrl;
+    private static volatile Schematic client;
+    private static volatile Map<String, Object> currentConfig;
 
     public static void main(String[] args) throws Exception {
-        String apiKey = System.getenv("SCHEMATIC_API_KEY");
-        if (apiKey == null || apiKey.isEmpty()) {
-            System.err.println("ERROR: SCHEMATIC_API_KEY environment variable is not set");
-            System.exit(1);
-        }
+        int port = Integer.parseInt(System.getenv().getOrDefault("PORT", "8080"));
 
-        schematicApiUrl = envOrDefault("SCHEMATIC_API_URL", "https://api.schematichq.com");
-        serverPort = Integer.parseInt(envOrDefault("SERVER_PORT", "8080"));
-        cacheTtlMs = Integer.parseInt(envOrDefault("CACHE_TTL_MS", "5000"));
-        redisUrl = envOrDefault("REDIS_URL", "localhost:6379");
-        useReplicator = "true".equalsIgnoreCase(envOrDefault("USE_REPLICATOR", "false"));
-        replicatorHealthUrl = envOrDefault("REPLICATOR_HEALTH_URL", "http://localhost:8090/ready");
-
-        // Configure Redis cache
-        RedisCacheConfig.Builder redisBuilder = RedisCacheConfig.builder().endpoint(redisUrl);
-        String redisPassword = System.getenv("REDIS_PASSWORD");
-        if (redisPassword != null && !redisPassword.isEmpty()) {
-            redisBuilder.password(redisPassword);
-        }
-
-        // Configure DataStream options with Redis
-        DatastreamOptions.Builder datastreamBuilder = DatastreamOptions.builder()
-                .cacheTTL(Duration.ofMillis(cacheTtlMs))
-                .redisCache(redisBuilder.build());
-
-        if (useReplicator) {
-            datastreamBuilder.withReplicatorMode(replicatorHealthUrl);
-        }
-
-        DatastreamOptions datastreamOptions = datastreamBuilder.build();
-
-        schematic = Schematic.builder()
-                .apiKey(apiKey)
-                .basePath(schematicApiUrl)
-                .datastreamOptions(datastreamOptions)
-                .build();
-
-        HttpServer server = HttpServer.create(new InetSocketAddress(serverPort), 0);
-        server.createContext("/", App::handleRoot);
-        server.createContext("/config", App::handleConfig);
+        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/health", App::handleHealth);
-        server.createContext("/datastream-status", App::handleDatastreamStatus);
-        server.createContext("/checkflag", App::handleCheckFlag);
+        server.createContext("/configure", App::handleConfigure);
+        server.createContext("/check-flag", App::handleCheckFlag);
+        server.createContext("/identify", App::handleIdentify);
+        server.createContext("/track", App::handleTrack);
+        server.createContext("/set-flag-default", App::handleSetFlagDefault);
         server.setExecutor(null);
         server.start();
 
-        System.out.println("Datastream Test Server started on port " + serverPort);
-        System.out.println("Mode: " + (useReplicator ? "replicator" : "direct datastream"));
-        System.out.println("Redis: " + redisUrl);
-        System.out.println("Endpoints:");
-        System.out.println("  GET  /                  - Welcome message");
-        System.out.println("  GET  /config            - Show configuration");
-        System.out.println("  GET  /health            - Health check");
-        System.out.println("  GET  /datastream-status - DataStream connection status");
-        System.out.println("  POST /checkflag         - Check a feature flag");
-    }
-
-    private static void handleRoot(HttpExchange exchange) throws IOException {
-        if (!"GET".equals(exchange.getRequestMethod())) {
-            sendMethodNotAllowed(exchange);
-            return;
-        }
-        sendText(exchange, 200, "Welcome to the Schematic Datastream Test Server!");
-    }
-
-    private static void handleConfig(HttpExchange exchange) throws IOException {
-        if (!"GET".equals(exchange.getRequestMethod())) {
-            sendMethodNotAllowed(exchange);
-            return;
-        }
-
-        Map<String, Object> config = new LinkedHashMap<>();
-        config.put("schematicApiUrl", schematicApiUrl);
-        config.put("cacheTtlMs", cacheTtlMs);
-        config.put("hasApiKey", true);
-        config.put("redisUrl", redisUrl);
-        config.put("replicatorMode", schematic.isReplicatorMode());
-        if (useReplicator) {
-            config.put("replicatorHealthUrl", replicatorHealthUrl);
-        }
-
-        Map<String, Object> endpoints = new LinkedHashMap<>();
-        endpoints.put("health", "/health");
-        endpoints.put("config", "/config");
-        endpoints.put("datastreamStatus", "/datastream-status");
-        endpoints.put("checkFlag", "/checkflag (POST)");
-
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("configuration", config);
-        response.put("endpoints", endpoints);
-        response.put("timestamp", Instant.now().toString());
-
-        sendJson(exchange, 200, response);
+        System.out.println("E2E test app listening on port " + port);
     }
 
     private static void handleHealth(HttpExchange exchange) throws IOException {
         if (!"GET".equals(exchange.getRequestMethod())) {
-            sendMethodNotAllowed(exchange);
+            sendJson(exchange, 405, Map.of("error", "Method Not Allowed"));
             return;
         }
 
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("status", "healthy");
-        response.put("replicatorMode", schematic.isReplicatorMode());
-        response.put("datastreamConnected", schematic.isDatastreamConnected());
-
-        Map<String, Object> config = new LinkedHashMap<>();
-        config.put("schematicApiUrl", schematicApiUrl);
-        config.put("cacheTtlMs", cacheTtlMs);
-        response.put("configuration", config);
-        response.put("timestamp", Instant.now().toString());
-
+        if (client == null) {
+            response.put("status", "waiting");
+        } else {
+            response.put("status", "configured");
+            response.put("config", currentConfig);
+            response.put("cacheTtlMs", CACHE_TTL_MS);
+        }
         sendJson(exchange, 200, response);
     }
 
-    private static void handleDatastreamStatus(HttpExchange exchange) throws IOException {
-        if (!"GET".equals(exchange.getRequestMethod())) {
-            sendMethodNotAllowed(exchange);
+    @SuppressWarnings("unchecked")
+    private static void handleConfigure(HttpExchange exchange) throws IOException {
+        if (!"POST".equals(exchange.getRequestMethod())) {
+            sendJson(exchange, 405, Map.of("error", "Method Not Allowed"));
             return;
         }
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("replicatorMode", schematic.isReplicatorMode());
-        response.put("datastreamConnected", schematic.isDatastreamConnected());
+        try {
+            Map<String, Object> config = MAPPER.readValue(exchange.getRequestBody(), Map.class);
+            logRequest("/configure", config);
+            currentConfig = config;
 
-        Map<String, Object> config = new LinkedHashMap<>();
-        config.put("schematicApiUrl", schematicApiUrl);
-        if (useReplicator) {
-            config.put("replicatorHealthUrl", replicatorHealthUrl);
+            String apiKey = (String) config.get("apiKey");
+            String baseUrl = (String) config.get("baseUrl");
+            String eventCaptureBaseUrl = (String) config.get("eventCaptureBaseUrl");
+            boolean offline = Boolean.TRUE.equals(config.get("offline"));
+            boolean noCache = Boolean.TRUE.equals(config.get("noCache"));
+            boolean useDataStream = Boolean.TRUE.equals(config.get("useDataStream"));
+            String redisUrl = (String) config.get("redisUrl");
+            String replicatorUrl = (String) config.get("replicatorUrl");
+
+            // Parse flag defaults
+            Map<String, Boolean> flagDefaults = new HashMap<>();
+            Object flagDefaultsRaw = config.get("flagDefaults");
+            if (flagDefaultsRaw instanceof Map) {
+                for (Map.Entry<String, Object> entry : ((Map<String, Object>) flagDefaultsRaw).entrySet()) {
+                    flagDefaults.put(entry.getKey(), Boolean.TRUE.equals(entry.getValue()));
+                }
+            }
+
+            // Close existing client if reconfiguring
+            if (client != null) {
+                try {
+                    client.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+
+            Schematic.Builder builder = Schematic.builder().apiKey(apiKey);
+
+            if (baseUrl != null) {
+                builder.basePath(baseUrl);
+            }
+            if (eventCaptureBaseUrl != null) {
+                builder.eventCaptureBaseUrl(eventCaptureBaseUrl);
+            }
+            if (offline) {
+                builder.offline(true);
+            }
+            if (!flagDefaults.isEmpty()) {
+                builder.flagDefaults(flagDefaults);
+            }
+
+            // Cache configuration
+            if (noCache) {
+                builder.cacheProviders(Collections.emptyList());
+            } else if (redisUrl != null && !useDataStream) {
+                // Redis for flag check cache only (no datastream)
+                // Note: flag check cache uses RedisCacheConfig through DatastreamOptions
+                // For non-datastream Redis, we use LocalCache with short TTL
+                builder.cacheProviders(
+                        Collections.singletonList(new LocalCache<>(1000, Duration.ofMillis(CACHE_TTL_MS))));
+            } else {
+                builder.cacheProviders(
+                        Collections.singletonList(new LocalCache<>(1000, Duration.ofMillis(CACHE_TTL_MS))));
+            }
+
+            // DataStream configuration
+            if (useDataStream) {
+                DatastreamOptions.Builder dsBuilder =
+                        DatastreamOptions.builder().cacheTTL(Duration.ofMillis(CACHE_TTL_MS));
+
+                if (redisUrl != null) {
+                    dsBuilder.redisCache(
+                            RedisCacheConfig.builder().endpoint(redisUrl).build());
+                }
+
+                if (replicatorUrl != null) {
+                    dsBuilder.withReplicatorMode(replicatorUrl);
+                }
+
+                builder.datastreamOptions(dsBuilder.build());
+            }
+
+            client = builder.build();
+
+            sendJson(exchange, 200, Map.of("success", true));
+        } catch (Exception e) {
+            sendJson(exchange, 500, errorDetail(e));
         }
-        response.put("configuration", config);
-        response.put("timestamp", Instant.now().toString());
-
-        sendJson(exchange, 200, response);
     }
 
     @SuppressWarnings("unchecked")
     private static void handleCheckFlag(HttpExchange exchange) throws IOException {
         if (!"POST".equals(exchange.getRequestMethod())) {
-            sendMethodNotAllowed(exchange);
+            sendJson(exchange, 405, Map.of("error", "Method Not Allowed"));
+            return;
+        }
+        if (client == null) {
+            sendJson(exchange, 503, Map.of("error", "Not configured"));
             return;
         }
 
         try {
-            InputStream body = exchange.getRequestBody();
-            Map<String, Object> requestBody = MAPPER.readValue(body, Map.class);
+            Map<String, Object> body = MAPPER.readValue(exchange.getRequestBody(), Map.class);
+            logRequest("/check-flag", body);
+            String flagKey = (String) body.get("flagKey");
+            Map<String, String> company = toStringMap(body.get("company"));
+            Map<String, String> user = toStringMap(body.get("user"));
 
-            String flagKey = (String) requestBody.get("flag-key");
-            if (flagKey == null || flagKey.isEmpty()) {
-                Map<String, Object> error = new LinkedHashMap<>();
-                error.put("error", "flag-key is required");
-                sendJson(exchange, 400, error);
-                return;
+            boolean value = client.checkFlag(flagKey, company, user);
+
+            sendJson(exchange, 200, Map.of("value", value));
+        } catch (Exception e) {
+            Map<String, Object> resp = new LinkedHashMap<>();
+            resp.put("value", false);
+            resp.putAll(errorDetail(e));
+            sendJson(exchange, 200, resp);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void handleIdentify(HttpExchange exchange) throws IOException {
+        if (!"POST".equals(exchange.getRequestMethod())) {
+            sendJson(exchange, 405, Map.of("error", "Method Not Allowed"));
+            return;
+        }
+        if (client == null) {
+            sendJson(exchange, 503, Map.of("error", "Not configured"));
+            return;
+        }
+
+        try {
+            Map<String, Object> body = MAPPER.readValue(exchange.getRequestBody(), Map.class);
+            logRequest("/identify", body);
+            Map<String, String> keys = toStringMap(body.get("keys"));
+            Map<String, String> companyKeys = toStringMap(body.get("company"));
+
+            // Build company if provided
+            EventBodyIdentifyCompany company = null;
+            if (companyKeys != null && !companyKeys.isEmpty()) {
+                company = EventBodyIdentifyCompany.builder().keys(companyKeys).build();
             }
 
-            Map<String, String> company = toStringMap(requestBody.get("company"));
-            Map<String, String> user = toStringMap(requestBody.get("user"));
+            // User keys default to the top-level keys
+            Map<String, String> userKeys = keys;
+            Map<String, String> userFromBody = toStringMap(body.get("user"));
+            if (userFromBody != null && !userFromBody.isEmpty()) {
+                userKeys = userFromBody;
+            }
 
-            long startTime = System.nanoTime();
-            RulesengineCheckFlagResult result = schematic.checkFlagWithEntitlement(flagKey, company, user);
-            double durationMs = (System.nanoTime() - startTime) / 1_000_000.0;
+            client.identify(userKeys != null ? userKeys : Collections.emptyMap(), company, null, null);
 
-            Map<String, Object> response = new LinkedHashMap<>();
-            response.put("flagKey", result.getFlagKey());
-            response.put("value", result.getValue());
-            response.put("reason", result.getReason());
-            result.getFlagId().ifPresent(v -> response.put("flagId", v));
-            result.getCompanyId().ifPresent(v -> response.put("companyId", v));
-            result.getUserId().ifPresent(v -> response.put("userId", v));
-            result.getRuleId().ifPresent(v -> response.put("ruleId", v));
-            result.getErr().ifPresent(v -> response.put("error", v));
-            response.put("replicatorMode", schematic.isReplicatorMode());
-            response.put("datastreamConnected", schematic.isDatastreamConnected());
-            response.put("durationMs", durationMs);
-            response.put("timestamp", Instant.now().toString());
-
-            sendJson(exchange, 200, response);
+            sendJson(exchange, 200, Map.of("success", true));
         } catch (Exception e) {
-            Map<String, Object> error = new LinkedHashMap<>();
-            error.put("error", "Flag Check Failed");
-            error.put("detail", e.getMessage());
-            sendJson(exchange, 500, error);
+            Map<String, Object> resp = new LinkedHashMap<>();
+            resp.put("success", false);
+            resp.putAll(errorDetail(e));
+            sendJson(exchange, 200, resp);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void handleTrack(HttpExchange exchange) throws IOException {
+        if (!"POST".equals(exchange.getRequestMethod())) {
+            sendJson(exchange, 405, Map.of("error", "Method Not Allowed"));
+            return;
+        }
+        if (client == null) {
+            sendJson(exchange, 503, Map.of("error", "Not configured"));
+            return;
+        }
+
+        try {
+            Map<String, Object> body = MAPPER.readValue(exchange.getRequestBody(), Map.class);
+            logRequest("/track", body);
+            String event = (String) body.get("event");
+            Map<String, String> company = toStringMap(body.get("company"));
+            Map<String, String> user = toStringMap(body.get("user"));
+            Integer quantity = body.containsKey("quantity") ? ((Number) body.get("quantity")).intValue() : null;
+
+            if (quantity != null) {
+                client.track(event, company, user, null, quantity);
+            } else {
+                client.track(event, company, user, null);
+            }
+
+            sendJson(exchange, 200, Map.of("success", true));
+        } catch (Exception e) {
+            Map<String, Object> resp = new LinkedHashMap<>();
+            resp.put("success", false);
+            resp.putAll(errorDetail(e));
+            sendJson(exchange, 200, resp);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void handleSetFlagDefault(HttpExchange exchange) throws IOException {
+        if (!"POST".equals(exchange.getRequestMethod())) {
+            sendJson(exchange, 405, Map.of("error", "Method Not Allowed"));
+            return;
+        }
+        if (client == null) {
+            sendJson(exchange, 503, Map.of("error", "Not configured"));
+            return;
+        }
+
+        try {
+            Map<String, Object> body = MAPPER.readValue(exchange.getRequestBody(), Map.class);
+            logRequest("/set-flag-default", body);
+            String flagKey = (String) body.get("flagKey");
+            boolean value = Boolean.TRUE.equals(body.get("value"));
+
+            client.setFlagDefault(flagKey, value);
+
+            sendJson(exchange, 200, Map.of("success", true));
+        } catch (Exception e) {
+            Map<String, Object> resp = new LinkedHashMap<>();
+            resp.put("success", false);
+            resp.putAll(errorDetail(e));
+            sendJson(exchange, 200, resp);
         }
     }
 
@@ -265,30 +319,36 @@ public final class App {
         return result;
     }
 
-    private static void sendText(HttpExchange exchange, int status, String text) throws IOException {
-        byte[] bytes = text.getBytes("UTF-8");
-        exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=utf-8");
-        exchange.sendResponseHeaders(status, bytes.length);
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(bytes);
+    private static void logRequest(String endpoint, Map<String, Object> body) {
+        try {
+            System.out.println("[" + endpoint + "] " + MAPPER.writeValueAsString(body));
+        } catch (Exception e) {
+            System.out.println("[" + endpoint + "] (failed to serialize body)");
         }
     }
 
+    private static Map<String, Object> errorDetail(Exception e) {
+        Map<String, Object> detail = new LinkedHashMap<>();
+        detail.put("type", e.getClass().getName());
+        detail.put("message", e.getMessage());
+        if (e.getCause() != null) {
+            detail.put("cause", e.getCause().getClass().getName() + ": " + e.getCause().getMessage());
+        }
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        detail.put("stackTrace", sw.toString());
+        // Also print to stderr for test runner visibility
+        System.err.println("[ERROR] " + e.getClass().getName() + ": " + e.getMessage());
+        e.printStackTrace(System.err);
+        return detail;
+    }
+
     private static void sendJson(HttpExchange exchange, int status, Object obj) throws IOException {
-        byte[] bytes = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsBytes(obj);
+        byte[] bytes = MAPPER.writeValueAsBytes(obj);
         exchange.getResponseHeaders().set("Content-Type", "application/json");
         exchange.sendResponseHeaders(status, bytes.length);
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(bytes);
         }
-    }
-
-    private static void sendMethodNotAllowed(HttpExchange exchange) throws IOException {
-        sendText(exchange, 405, "Method Not Allowed");
-    }
-
-    private static String envOrDefault(String key, String defaultValue) {
-        String value = System.getenv(key);
-        return (value != null && !value.isEmpty()) ? value : defaultValue;
     }
 }
