@@ -67,7 +67,22 @@ final class DataStreamCacheFactory {
         }
 
         String endpoint = config.getEndpoints().get(0);
-        String[] parts = endpoint.split(":");
+
+        // Strip redis:// or rediss:// URI scheme if present
+        String hostPort = endpoint;
+        if (hostPort.startsWith("redis://")) {
+            hostPort = hostPort.substring("redis://".length());
+        } else if (hostPort.startsWith("rediss://")) {
+            hostPort = hostPort.substring("rediss://".length());
+        }
+
+        // Strip trailing path/slash (e.g. "localhost:6379/0" -> "localhost:6379")
+        int slashIdx = hostPort.indexOf('/');
+        if (slashIdx >= 0) {
+            hostPort = hostPort.substring(0, slashIdx);
+        }
+
+        String[] parts = hostPort.split(":");
         String host = parts[0];
         int port = parts.length > 1 ? Integer.parseInt(parts[1]) : 6379;
 
