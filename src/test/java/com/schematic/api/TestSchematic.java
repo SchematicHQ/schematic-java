@@ -11,13 +11,17 @@ import com.schematic.api.cache.LocalCache;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.FeaturesClient;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
+import com.schematic.api.resources.features.types.CheckFlagsResponse;
 import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.CheckFlagResponseData;
+import com.schematic.api.types.CheckFlagsResponseData;
 import com.schematic.api.types.EventBodyIdentifyCompany;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -398,5 +402,265 @@ class SchematicTest {
         assertFalse(resultB);
         // Both calls should hit API since they have different cache keys
         verify(featuresClient, times(2)).checkFlag(eq("ctx_flag"), any(CheckFlagRequestBody.class));
+    }
+
+    // =========================================================================
+    // checkFlags batch tests — mirrors schematic-ruby/test/custom.test.rb:953
+    // =========================================================================
+
+    @Test
+    void checkFlags_OfflineModeReturnsDefaults() {
+        Map<String, Boolean> defaults = new HashMap<>();
+        defaults.put("flag-a", true);
+        defaults.put("flag-b", false);
+        Schematic offlineSchematic = Schematic.builder()
+                .apiKey("test_api_key")
+                .offline(true)
+                .flagDefaults(defaults)
+                .logger(logger)
+                .build();
+
+        List<RulesengineCheckFlagResult> results =
+                offlineSchematic.checkFlags(Arrays.asList("flag-a", "flag-b", "flag-c"), null, null);
+
+        assertEquals(3, results.size());
+        assertEquals("flag-a", results.get(0).getFlagKey());
+        assertTrue(results.get(0).getValue());
+        assertEquals("flag-b", results.get(1).getFlagKey());
+        assertFalse(results.get(1).getValue());
+        // unknown flag defaults to false
+        assertEquals("flag-c", results.get(2).getFlagKey());
+        assertFalse(results.get(2).getValue());
+        for (RulesengineCheckFlagResult r : results) {
+            assertEquals("Offline mode - using default value", r.getReason());
+        }
+    }
+
+    @Test
+    void checkFlags_OfflineModeNoKeysReturnsAllConfiguredDefaults() {
+        Map<String, Boolean> defaults = new HashMap<>();
+        defaults.put("default-a", true);
+        defaults.put("default-b", false);
+        Schematic offlineSchematic = Schematic.builder()
+                .apiKey("test_api_key")
+                .offline(true)
+                .flagDefaults(defaults)
+                .logger(logger)
+                .build();
+
+        List<RulesengineCheckFlagResult> results = offlineSchematic.checkFlags(null, null, null);
+
+        assertEquals(2, results.size());
+        Map<String, Boolean> flagMap = new HashMap<>();
+        for (RulesengineCheckFlagResult r : results) {
+            flagMap.put(r.getFlagKey(), r.getValue());
+        }
+        assertTrue(flagMap.get("default-a"));
+        assertFalse(flagMap.get("default-b"));
+    }
+
+    @Test
+    void checkFlags_OfflineModeNoKeysNoDefaultsReturnsEmpty() {
+        Schematic offlineSchematic = Schematic.builder()
+                .apiKey("test_api_key")
+                .offline(true)
+                .logger(logger)
+                .build();
+
+        List<RulesengineCheckFlagResult> results = offlineSchematic.checkFlags(null, null, null);
+
+        assertTrue(results.isEmpty());
+    }
+
+    @Test
+    void checkFlags_ReturnsValuesFromBulkApi() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(Schematic.builder()
+                .apiKey("test_api_key")
+                .cacheProviders(Collections.emptyList())
+                .flagDefaults(Collections.singletonMap("flag-c", true))
+                .logger(logger)
+                .build());
+        when(spySchematic.features()).thenReturn(featuresClient);
+
+        CheckFlagsResponse response = CheckFlagsResponse.builder()
+                .data(CheckFlagsResponseData.builder()
+                        .flags(Arrays.asList(
+                                CheckFlagResponseData.builder()
+                                        .flag("flag-a")
+                                        .reason("match")
+                                        .value(true)
+                                        .build(),
+                                CheckFlagResponseData.builder()
+                                        .flag("flag-b")
+                                        .reason("no match")
+                                        .value(false)
+                                        .build()))
+                        .build())
+                .build();
+        when(featuresClient.checkFlags(any(CheckFlagRequestBody.class))).thenReturn(response);
+
+        List<RulesengineCheckFlagResult> results = spySchematic.checkFlags(
+                Arrays.asList("flag-a", "flag-b", "flag-c"), Collections.singletonMap("org_id", "abc"), null);
+
+        assertEquals(3, results.size());
+        assertEquals("flag-a", results.get(0).getFlagKey());
+        assertTrue(results.get(0).getValue());
+        assertEquals("flag-b", results.get(1).getFlagKey());
+        assertFalse(results.get(1).getValue());
+        // flag-c not returned by API → falls back to default (true)
+        assertEquals("flag-c", results.get(2).getFlagKey());
+        assertTrue(results.get(2).getValue());
+        assertEquals("Flag not found - using default value", results.get(2).getReason());
+    }
+
+    @Test
+    void checkFlags_AllCachedReturnsWithoutBulkApiCall() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+
+        Map<String, String> company = Collections.singletonMap("org_id", "abc");
+
+        // Pre-populate cache for both flags via individual checks
+        CheckFlagResponse responseX = CheckFlagResponse.builder()
+                .data(CheckFlagResponseData.builder()
+                        .flag("flag-x")
+                        .reason("match")
+                        .value(true)
+                        .build())
+                .build();
+        CheckFlagResponse responseY = CheckFlagResponse.builder()
+                .data(CheckFlagResponseData.builder()
+                        .flag("flag-y")
+                        .reason("no match")
+                        .value(false)
+                        .build())
+                .build();
+        when(featuresClient.checkFlag(eq("flag-x"), any(CheckFlagRequestBody.class)))
+                .thenReturn(responseX);
+        when(featuresClient.checkFlag(eq("flag-y"), any(CheckFlagRequestBody.class)))
+                .thenReturn(responseY);
+
+        spySchematic.checkFlag("flag-x", company, null);
+        spySchematic.checkFlag("flag-y", company, null);
+
+        // Batch check — both should come from cache, no bulk API call should fire
+        List<RulesengineCheckFlagResult> results =
+                spySchematic.checkFlags(Arrays.asList("flag-x", "flag-y"), company, null);
+
+        assertEquals(2, results.size());
+        assertTrue(results.get(0).getValue());
+        assertFalse(results.get(1).getValue());
+        verify(featuresClient, never()).checkFlags(any(CheckFlagRequestBody.class));
+    }
+
+    @Test
+    void checkFlags_FetchesFreshValuesForAllKeysOnAnyCacheMiss() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+
+        Map<String, String> company = Collections.singletonMap("org_id", "abc");
+
+        // Pre-populate cache for one flag via individual check (stale value: true)
+        CheckFlagResponse cachedResponse = CheckFlagResponse.builder()
+                .data(CheckFlagResponseData.builder()
+                        .flag("cached-flag")
+                        .reason("old cached reason")
+                        .value(true)
+                        .build())
+                .build();
+        when(featuresClient.checkFlag(eq("cached-flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(cachedResponse);
+        spySchematic.checkFlag("cached-flag", company, null);
+
+        // Bulk API returns updated value (false) for cached-flag, plus uncached-flag
+        CheckFlagsResponse bulkResponse = CheckFlagsResponse.builder()
+                .data(CheckFlagsResponseData.builder()
+                        .flags(Arrays.asList(
+                                CheckFlagResponseData.builder()
+                                        .flag("cached-flag")
+                                        .reason("updated reason")
+                                        .value(false)
+                                        .build(),
+                                CheckFlagResponseData.builder()
+                                        .flag("uncached-flag")
+                                        .reason("new match")
+                                        .value(true)
+                                        .build()))
+                        .build())
+                .build();
+        when(featuresClient.checkFlags(any(CheckFlagRequestBody.class))).thenReturn(bulkResponse);
+
+        List<RulesengineCheckFlagResult> results =
+                spySchematic.checkFlags(Arrays.asList("cached-flag", "uncached-flag"), company, null);
+
+        assertEquals(2, results.size());
+        // cached-flag should use fresh API value (false), not stale cached value (true)
+        assertFalse(results.get(0).getValue(), "should use fresh API value, not stale cache");
+        assertEquals("updated reason", results.get(0).getReason());
+        assertTrue(results.get(1).getValue());
+    }
+
+    @Test
+    void checkFlags_ReturnsDefaultsOnApiError() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(Schematic.builder()
+                .apiKey("test_api_key")
+                .cacheProviders(Collections.emptyList())
+                .flagDefaults(Collections.singletonMap("err-flag", true))
+                .logger(logger)
+                .build());
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlags(any(CheckFlagRequestBody.class)))
+                .thenThrow(new RuntimeException("Internal Server Error"));
+
+        List<RulesengineCheckFlagResult> results =
+                spySchematic.checkFlags(Arrays.asList("err-flag", "other-flag"), null, null);
+
+        assertEquals(2, results.size());
+        // err-flag has a configured default of true
+        assertTrue(results.get(0).getValue());
+        // other-flag has no default → false
+        assertFalse(results.get(1).getValue());
+        verify(logger).error(contains("Error checking flags via API"));
+    }
+
+    @Test
+    void checkFlags_NoKeysCallsBulkApi() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(Schematic.builder()
+                .apiKey("test_api_key")
+                .cacheProviders(Collections.emptyList())
+                .logger(logger)
+                .build());
+        when(spySchematic.features()).thenReturn(featuresClient);
+
+        CheckFlagsResponse response = CheckFlagsResponse.builder()
+                .data(CheckFlagsResponseData.builder()
+                        .flags(Arrays.asList(
+                                CheckFlagResponseData.builder()
+                                        .flag("auto-a")
+                                        .reason("match")
+                                        .value(true)
+                                        .build(),
+                                CheckFlagResponseData.builder()
+                                        .flag("auto-b")
+                                        .reason("no match")
+                                        .value(false)
+                                        .build()))
+                        .build())
+                .build();
+        when(featuresClient.checkFlags(any(CheckFlagRequestBody.class))).thenReturn(response);
+
+        List<RulesengineCheckFlagResult> results =
+                spySchematic.checkFlags(null, Collections.singletonMap("org_id", "abc"), null);
+
+        assertEquals(2, results.size());
+        assertEquals("auto-a", results.get(0).getFlagKey());
+        assertTrue(results.get(0).getValue());
+        assertEquals("auto-b", results.get(1).getFlagKey());
+        assertFalse(results.get(1).getValue());
     }
 }

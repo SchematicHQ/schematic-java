@@ -13,6 +13,7 @@ import com.schematic.api.datastream.WasmRulesEngine;
 import com.schematic.api.logger.ConsoleLogger;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
+import com.schematic.api.resources.features.types.CheckFlagsResponse;
 import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.CheckFlagResponseData;
 import com.schematic.api.types.CreateEventRequestBody;
@@ -25,6 +26,7 @@ import com.schematic.api.types.EventType;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -267,53 +269,228 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     public RulesengineCheckFlagResult checkFlagWithEntitlement(
             String flagKey, Map<String, String> company, Map<String, String> user) {
         if (offline) {
-            return RulesengineCheckFlagResult.builder()
-                    .flagKey(flagKey)
-                    .reason("flag default")
-                    .value(getFlagDefault(flagKey))
-                    .build();
+            return defaultFlagResult(flagKey, "flag default", null);
         }
 
-        // Try datastream first if available
-        if (dataStreamClient != null && dataStreamClient.isConnected()) {
-            try {
-                RulesengineCheckFlagResult result = dataStreamClient.checkFlag(flagKey, company, user);
+        RulesengineCheckFlagResult dsResult = tryDatastreamCheckFlag(flagKey, company, user);
+        if (dsResult != null) {
+            return dsResult;
+        }
 
-                // Enqueue flag_check event for analytics
-                try {
-                    EventBodyFlagCheck flagCheckBody = EventBodyFlagCheck.builder()
-                            .flagKey(flagKey)
-                            .reason(result.getReason())
-                            .value(result.getValue())
-                            .companyId(result.getCompanyId().orElse(null))
-                            .userId(result.getUserId().orElse(null))
-                            .flagId(result.getFlagId().orElse(null))
-                            .ruleId(result.getRuleId().orElse(null))
-                            .reqCompany(company)
-                            .reqUser(user)
-                            .error(result.getErr().orElse(null))
-                            .build();
+        return checkFlagViaApi(flagKey, company, user);
+    }
 
-                    CreateEventRequestBody event = CreateEventRequestBody.builder()
-                            .eventType(EventType.FLAG_CHECK)
-                            .body(EventBody.of(flagCheckBody))
-                            .sentAt(OffsetDateTime.now())
-                            .build();
+    private RulesengineCheckFlagResult defaultFlagResult(String flagKey, String reason, String err) {
+        return RulesengineCheckFlagResult.builder()
+                .flagKey(flagKey)
+                .reason(reason)
+                .value(getFlagDefault(flagKey))
+                .err(err)
+                .build();
+    }
 
-                    eventBuffer.push(event);
-                } catch (Exception e) {
-                    logger.error("Failed to enqueue flag_check event: " + e.getMessage());
+    /**
+     * Attempts to evaluate a flag via the datastream client. Returns the result on
+     * success (and emits a {@code flag_check} event), or {@code null} if datastream is
+     * not configured/connected or evaluation failed.
+     */
+    private RulesengineCheckFlagResult tryDatastreamCheckFlag(
+            String flagKey, Map<String, String> company, Map<String, String> user) {
+        if (dataStreamClient == null || !dataStreamClient.isConnected()) {
+            return null;
+        }
+        try {
+            RulesengineCheckFlagResult result = dataStreamClient.checkFlag(flagKey, company, user);
+            enqueueFlagCheckEvent(flagKey, result, company, user);
+            return result;
+        } catch (Exception e) {
+            logger.debug("Datastream flag check failed for " + flagKey + ", falling back to API: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private RulesengineCheckFlagResult getCachedFlag(
+            String flagKey, Map<String, String> company, Map<String, String> user) {
+        String cacheKey = buildCacheKey(flagKey, company, user);
+        for (CacheProvider<RulesengineCheckFlagResult> provider : flagCheckCacheProviders) {
+            RulesengineCheckFlagResult cached = provider.get(cacheKey);
+            if (cached != null) {
+                return cached;
+            }
+        }
+        return null;
+    }
+
+    private void cacheFlag(
+            String flagKey, RulesengineCheckFlagResult result, Map<String, String> company, Map<String, String> user) {
+        String cacheKey = buildCacheKey(flagKey, company, user);
+        for (CacheProvider<RulesengineCheckFlagResult> provider : flagCheckCacheProviders) {
+            provider.set(cacheKey, result);
+        }
+    }
+
+    private void enqueueFlagCheckEvent(
+            String flagKey, RulesengineCheckFlagResult result, Map<String, String> company, Map<String, String> user) {
+        try {
+            EventBodyFlagCheck flagCheckBody = EventBodyFlagCheck.builder()
+                    .flagKey(flagKey)
+                    .reason(result.getReason())
+                    .value(result.getValue())
+                    .companyId(result.getCompanyId().orElse(null))
+                    .userId(result.getUserId().orElse(null))
+                    .flagId(result.getFlagId().orElse(null))
+                    .ruleId(result.getRuleId().orElse(null))
+                    .reqCompany(company)
+                    .reqUser(user)
+                    .error(result.getErr().orElse(null))
+                    .build();
+
+            CreateEventRequestBody event = CreateEventRequestBody.builder()
+                    .eventType(EventType.FLAG_CHECK)
+                    .body(EventBody.of(flagCheckBody))
+                    .sentAt(OffsetDateTime.now())
+                    .build();
+
+            eventBuffer.push(event);
+        } catch (Exception e) {
+            logger.error("Failed to enqueue flag_check event: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Checks multiple feature flags, returning the full evaluation results in the
+     * same order as the requested keys.
+     *
+     * <p>Evaluation order:
+     * <ol>
+     *   <li>Offline mode → return flag defaults for the requested keys</li>
+     *   <li>DataStream / replicator (if configured and connected) → evaluate each key
+     *       locally; falls back to the API if any key fails</li>
+     *   <li>Otherwise → look up each requested key in the result cache; if any are
+     *       missing, issue a single bulk {@code features.checkFlags} API call to fetch
+     *       fresh values, refresh the cache, and merge the results</li>
+     * </ol>
+     *
+     * <p>If {@code flagKeys} is null or empty, the bulk API is called once to discover
+     * all flags available for the given context.
+     */
+    public List<RulesengineCheckFlagResult> checkFlags(
+            List<String> flagKeys, Map<String, String> company, Map<String, String> user) {
+        // 1. Offline → return flag defaults for the requested keys. If no keys were
+        // provided, fall back to every key in the configured flag defaults map.
+        if (offline) {
+            Iterable<String> keysToReturn = (flagKeys == null || flagKeys.isEmpty()) ? flagDefaults.keySet() : flagKeys;
+            List<RulesengineCheckFlagResult> results = new ArrayList<>();
+            for (String key : keysToReturn) {
+                if (key == null) continue;
+                results.add(defaultFlagResult(key, "Offline mode - using default value", null));
+            }
+            return results;
+        }
+
+        // 2. DataStream/replicator path: evaluate each key; on any failure fall back to API.
+        if (dataStreamClient != null && dataStreamClient.isConnected() && flagKeys != null && !flagKeys.isEmpty()) {
+            List<RulesengineCheckFlagResult> dsResults = new ArrayList<>(flagKeys.size());
+            boolean dsOk = true;
+            for (String key : flagKeys) {
+                if (key == null) continue;
+                RulesengineCheckFlagResult result = tryDatastreamCheckFlag(key, company, user);
+                if (result == null) {
+                    dsOk = false;
+                    break;
                 }
-
-                return result;
-            } catch (Exception e) {
-                logger.debug(
-                        "Datastream flag check failed for " + flagKey + ", falling back to API: " + e.getMessage());
+                dsResults.add(result);
+            }
+            if (dsOk) {
+                return dsResults;
             }
         }
 
-        // Fall back to API
-        return checkFlagViaApi(flagKey, company, user);
+        // 3. Cache + bulk API path.
+        try {
+            CheckFlagRequestBody request =
+                    CheckFlagRequestBody.builder().company(company).user(user).build();
+
+            // No keys → discover all flags for the context via the bulk API.
+            if (flagKeys == null || flagKeys.isEmpty()) {
+                CheckFlagsResponse response = features().checkFlags(request);
+                List<CheckFlagResponseData> flags = response.getData().getFlags();
+                List<RulesengineCheckFlagResult> all = new ArrayList<>(flags.size());
+                for (CheckFlagResponseData f : flags) {
+                    all.add(toRulesengineResult(f));
+                }
+                return all;
+            }
+
+            // Look up each key in the cache; track which are missing.
+            Map<String, RulesengineCheckFlagResult> cachedResults = new HashMap<>();
+            boolean anyMissing = false;
+            for (String key : flagKeys) {
+                if (key == null) continue;
+                RulesengineCheckFlagResult hit = getCachedFlag(key, company, user);
+                if (hit != null) {
+                    cachedResults.put(key, hit);
+                } else {
+                    anyMissing = true;
+                }
+            }
+
+            // All cached → return without an API call.
+            if (!anyMissing) {
+                List<RulesengineCheckFlagResult> results = new ArrayList<>(flagKeys.size());
+                for (String key : flagKeys) {
+                    if (key == null) continue;
+                    results.add(cachedResults.get(key));
+                }
+                return results;
+            }
+
+            // Cache miss → one bulk API call; refresh cache for everything returned.
+            Map<String, RulesengineCheckFlagResult> apiResults = new HashMap<>();
+            CheckFlagsResponse response = features().checkFlags(request);
+            for (CheckFlagResponseData f : response.getData().getFlags()) {
+                RulesengineCheckFlagResult result = toRulesengineResult(f);
+                apiResults.put(f.getFlag(), result);
+                cacheFlag(f.getFlag(), result, company, user);
+            }
+
+            // Build results in requested key order. Prefer fresh API values, fall back
+            // to the configured flag default for any keys missing from the response.
+            List<RulesengineCheckFlagResult> results = new ArrayList<>(flagKeys.size());
+            for (String key : flagKeys) {
+                if (key == null) continue;
+                RulesengineCheckFlagResult fresh = apiResults.get(key);
+                if (fresh != null) {
+                    results.add(fresh);
+                } else {
+                    results.add(defaultFlagResult(key, "Flag not found - using default value", null));
+                }
+            }
+            return results;
+        } catch (Exception e) {
+            logger.error("Error checking flags via API: " + e.getMessage());
+            List<RulesengineCheckFlagResult> fallback = new ArrayList<>();
+            if (flagKeys != null) {
+                for (String key : flagKeys) {
+                    if (key == null) continue;
+                    fallback.add(defaultFlagResult(
+                            key, "Error occurred - using default value: " + e.getMessage(), e.getMessage()));
+                }
+            }
+            return fallback;
+        }
+    }
+
+    private RulesengineCheckFlagResult toRulesengineResult(CheckFlagResponseData data) {
+        return RulesengineCheckFlagResult.builder()
+                .flagKey(data.getFlag())
+                .reason(data.getReason())
+                .value(data.getValue())
+                .flagId(data.getFlagId().orElse(null))
+                .companyId(data.getCompanyId().orElse(null))
+                .userId(data.getUserId().orElse(null))
+                .ruleId(data.getRuleId().orElse(null))
+                .build();
     }
 
     /**
@@ -322,47 +499,21 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     private RulesengineCheckFlagResult checkFlagViaApi(
             String flagKey, Map<String, String> company, Map<String, String> user) {
         try {
-            String cacheKey = buildCacheKey(flagKey, company, user);
-
-            // Check flag check result cache
-            for (CacheProvider<RulesengineCheckFlagResult> provider : flagCheckCacheProviders) {
-                RulesengineCheckFlagResult cached = provider.get(cacheKey);
-                if (cached != null) {
-                    return cached;
-                }
+            RulesengineCheckFlagResult cached = getCachedFlag(flagKey, company, user);
+            if (cached != null) {
+                return cached;
             }
 
-            // Make API call
             CheckFlagRequestBody request =
                     CheckFlagRequestBody.builder().company(company).user(user).build();
-
             CheckFlagResponse response = features().checkFlag(flagKey, request);
-            CheckFlagResponseData data = response.getData();
+            RulesengineCheckFlagResult result = toRulesengineResult(response.getData());
 
-            RulesengineCheckFlagResult result = RulesengineCheckFlagResult.builder()
-                    .flagKey(flagKey)
-                    .reason(data.getReason())
-                    .value(data.getValue())
-                    .flagId(data.getFlagId().orElse(null))
-                    .companyId(data.getCompanyId().orElse(null))
-                    .userId(data.getUserId().orElse(null))
-                    .ruleId(data.getRuleId().orElse(null))
-                    .build();
-
-            // Update flag check result cache
-            for (CacheProvider<RulesengineCheckFlagResult> provider : flagCheckCacheProviders) {
-                provider.set(cacheKey, result);
-            }
-
+            cacheFlag(flagKey, result, company, user);
             return result;
         } catch (Exception e) {
             logger.error("Error checking flag via API: " + e.getMessage());
-            return RulesengineCheckFlagResult.builder()
-                    .flagKey(flagKey)
-                    .reason("flag default")
-                    .value(getFlagDefault(flagKey))
-                    .err(e.getMessage())
-                    .build();
+            return defaultFlagResult(flagKey, "flag default", e.getMessage());
         }
     }
 
