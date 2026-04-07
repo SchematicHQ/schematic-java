@@ -87,6 +87,10 @@ public final class CreateCompanyOverrideResponse {
     public interface _FinalStage {
         CreateCompanyOverrideResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Input parameters</p>
          */
@@ -160,6 +164,18 @@ public final class CreateCompanyOverrideResponse {
         @java.lang.Override
         public CreateCompanyOverrideResponse build() {
             return new CreateCompanyOverrideResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

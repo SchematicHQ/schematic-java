@@ -65,6 +65,10 @@ public class BillingClient {
         return this.rawClient.listCoupons().body();
     }
 
+    public ListCouponsResponse listCoupons(RequestOptions requestOptions) {
+        return this.rawClient.listCoupons(requestOptions).body();
+    }
+
     public ListCouponsResponse listCoupons(ListCouponsRequest request) {
         return this.rawClient.listCoupons(request).body();
     }
@@ -95,6 +99,10 @@ public class BillingClient {
         return this.rawClient.listCustomersWithSubscriptions().body();
     }
 
+    public ListCustomersWithSubscriptionsResponse listCustomersWithSubscriptions(RequestOptions requestOptions) {
+        return this.rawClient.listCustomersWithSubscriptions(requestOptions).body();
+    }
+
     public ListCustomersWithSubscriptionsResponse listCustomersWithSubscriptions(
             ListCustomersWithSubscriptionsRequest request) {
         return this.rawClient.listCustomersWithSubscriptions(request).body();
@@ -109,6 +117,10 @@ public class BillingClient {
 
     public CountCustomersResponse countCustomers() {
         return this.rawClient.countCustomers().body();
+    }
+
+    public CountCustomersResponse countCustomers(RequestOptions requestOptions) {
+        return this.rawClient.countCustomers(requestOptions).body();
     }
 
     public CountCustomersResponse countCustomers(CountCustomersRequest request) {
@@ -137,6 +149,10 @@ public class BillingClient {
 
     public ListMetersResponse listMeters() {
         return this.rawClient.listMeters().body();
+    }
+
+    public ListMetersResponse listMeters(RequestOptions requestOptions) {
+        return this.rawClient.listMeters(requestOptions).body();
     }
 
     public ListMetersResponse listMeters(ListMetersRequest request) {
@@ -178,6 +194,10 @@ public class BillingClient {
         return this.rawClient.listBillingPrices().body();
     }
 
+    public ListBillingPricesResponse listBillingPrices(RequestOptions requestOptions) {
+        return this.rawClient.listBillingPrices(requestOptions).body();
+    }
+
     public ListBillingPricesResponse listBillingPrices(ListBillingPricesRequest request) {
         return this.rawClient.listBillingPrices(request).body();
     }
@@ -206,6 +226,10 @@ public class BillingClient {
 
     public ListBillingProductPricesResponse listBillingProductPrices() {
         return this.rawClient.listBillingProductPrices().body();
+    }
+
+    public ListBillingProductPricesResponse listBillingProductPrices(RequestOptions requestOptions) {
+        return this.rawClient.listBillingProductPrices(requestOptions).body();
     }
 
     public ListBillingProductPricesResponse listBillingProductPrices(ListBillingProductPricesRequest request) {
@@ -238,6 +262,10 @@ public class BillingClient {
         return this.rawClient.listBillingProducts().body();
     }
 
+    public ListBillingProductsResponse listBillingProducts(RequestOptions requestOptions) {
+        return this.rawClient.listBillingProducts(requestOptions).body();
+    }
+
     public ListBillingProductsResponse listBillingProducts(ListBillingProductsRequest request) {
         return this.rawClient.listBillingProducts(request).body();
     }
@@ -249,6 +277,10 @@ public class BillingClient {
 
     public CountBillingProductsResponse countBillingProducts() {
         return this.rawClient.countBillingProducts().body();
+    }
+
+    public CountBillingProductsResponse countBillingProducts(RequestOptions requestOptions) {
+        return this.rawClient.countBillingProducts(requestOptions).body();
     }
 
     public CountBillingProductsResponse countBillingProducts(CountBillingProductsRequest request) {

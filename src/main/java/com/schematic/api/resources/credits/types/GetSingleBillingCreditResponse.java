@@ -87,6 +87,10 @@ public final class GetSingleBillingCreditResponse {
     public interface _FinalStage {
         GetSingleBillingCreditResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Input parameters</p>
          */
@@ -160,6 +164,18 @@ public final class GetSingleBillingCreditResponse {
         @java.lang.Override
         public GetSingleBillingCreditResponse build() {
             return new GetSingleBillingCreditResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

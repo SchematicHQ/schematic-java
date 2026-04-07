@@ -77,13 +77,15 @@ public final class CreatePlanGroupRequestBody {
 
     private final boolean showFeatureDescription;
 
+    private final boolean showHardLimit;
+
     private final boolean showPeriodToggle;
 
     private final boolean showZeroPriceAsFree;
 
     private final boolean syncCustomerBillingDetails;
 
-    private final Optional<Integer> trialDays;
+    private final Optional<Long> trialDays;
 
     private final Optional<String> trialExpiryPlanId;
 
@@ -118,10 +120,11 @@ public final class CreatePlanGroupRequestBody {
             boolean showAsMonthlyPrices,
             boolean showCredits,
             boolean showFeatureDescription,
+            boolean showHardLimit,
             boolean showPeriodToggle,
             boolean showZeroPriceAsFree,
             boolean syncCustomerBillingDetails,
-            Optional<Integer> trialDays,
+            Optional<Long> trialDays,
             Optional<String> trialExpiryPlanId,
             Optional<String> trialExpiryPlanPriceId,
             Optional<Boolean> trialPaymentMethodRequired,
@@ -150,6 +153,7 @@ public final class CreatePlanGroupRequestBody {
         this.showAsMonthlyPrices = showAsMonthlyPrices;
         this.showCredits = showCredits;
         this.showFeatureDescription = showFeatureDescription;
+        this.showHardLimit = showHardLimit;
         this.showPeriodToggle = showPeriodToggle;
         this.showZeroPriceAsFree = showZeroPriceAsFree;
         this.syncCustomerBillingDetails = syncCustomerBillingDetails;
@@ -283,6 +287,11 @@ public final class CreatePlanGroupRequestBody {
         return showFeatureDescription;
     }
 
+    @JsonProperty("show_hard_limit")
+    public boolean getShowHardLimit() {
+        return showHardLimit;
+    }
+
     @JsonProperty("show_period_toggle")
     public boolean getShowPeriodToggle() {
         return showPeriodToggle;
@@ -299,7 +308,7 @@ public final class CreatePlanGroupRequestBody {
     }
 
     @JsonProperty("trial_days")
-    public Optional<Integer> getTrialDays() {
+    public Optional<Long> getTrialDays() {
         return trialDays;
     }
 
@@ -354,6 +363,7 @@ public final class CreatePlanGroupRequestBody {
                 && showAsMonthlyPrices == other.showAsMonthlyPrices
                 && showCredits == other.showCredits
                 && showFeatureDescription == other.showFeatureDescription
+                && showHardLimit == other.showHardLimit
                 && showPeriodToggle == other.showPeriodToggle
                 && showZeroPriceAsFree == other.showZeroPriceAsFree
                 && syncCustomerBillingDetails == other.syncCustomerBillingDetails
@@ -390,6 +400,7 @@ public final class CreatePlanGroupRequestBody {
                 this.showAsMonthlyPrices,
                 this.showCredits,
                 this.showFeatureDescription,
+                this.showHardLimit,
                 this.showPeriodToggle,
                 this.showZeroPriceAsFree,
                 this.syncCustomerBillingDetails,
@@ -447,7 +458,11 @@ public final class CreatePlanGroupRequestBody {
     }
 
     public interface ShowFeatureDescriptionStage {
-        ShowPeriodToggleStage showFeatureDescription(boolean showFeatureDescription);
+        ShowHardLimitStage showFeatureDescription(boolean showFeatureDescription);
+    }
+
+    public interface ShowHardLimitStage {
+        ShowPeriodToggleStage showHardLimit(boolean showHardLimit);
     }
 
     public interface ShowPeriodToggleStage {
@@ -464,6 +479,10 @@ public final class CreatePlanGroupRequestBody {
 
     public interface _FinalStage {
         CreatePlanGroupRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage addOnCompatibilities(Optional<List<CompatiblePlans>> addOnCompatibilities);
 
@@ -532,9 +551,9 @@ public final class CreatePlanGroupRequestBody {
 
         _FinalStage scheduledDowngradePreventWhenOverLimit(Boolean scheduledDowngradePreventWhenOverLimit);
 
-        _FinalStage trialDays(Optional<Integer> trialDays);
+        _FinalStage trialDays(Optional<Long> trialDays);
 
-        _FinalStage trialDays(Integer trialDays);
+        _FinalStage trialDays(Long trialDays);
 
         _FinalStage trialExpiryPlanId(Optional<String> trialExpiryPlanId);
 
@@ -561,6 +580,7 @@ public final class CreatePlanGroupRequestBody {
                     ShowAsMonthlyPricesStage,
                     ShowCreditsStage,
                     ShowFeatureDescriptionStage,
+                    ShowHardLimitStage,
                     ShowPeriodToggleStage,
                     ShowZeroPriceAsFreeStage,
                     SyncCustomerBillingDetailsStage,
@@ -585,6 +605,8 @@ public final class CreatePlanGroupRequestBody {
 
         private boolean showFeatureDescription;
 
+        private boolean showHardLimit;
+
         private boolean showPeriodToggle;
 
         private boolean showZeroPriceAsFree;
@@ -597,7 +619,7 @@ public final class CreatePlanGroupRequestBody {
 
         private Optional<String> trialExpiryPlanId = Optional.empty();
 
-        private Optional<Integer> trialDays = Optional.empty();
+        private Optional<Long> trialDays = Optional.empty();
 
         private Optional<Boolean> scheduledDowngradePreventWhenOverLimit = Optional.empty();
 
@@ -658,6 +680,7 @@ public final class CreatePlanGroupRequestBody {
             showAsMonthlyPrices(other.getShowAsMonthlyPrices());
             showCredits(other.getShowCredits());
             showFeatureDescription(other.getShowFeatureDescription());
+            showHardLimit(other.getShowHardLimit());
             showPeriodToggle(other.getShowPeriodToggle());
             showZeroPriceAsFree(other.getShowZeroPriceAsFree());
             syncCustomerBillingDetails(other.getSyncCustomerBillingDetails());
@@ -733,8 +756,15 @@ public final class CreatePlanGroupRequestBody {
 
         @java.lang.Override
         @JsonSetter("show_feature_description")
-        public ShowPeriodToggleStage showFeatureDescription(boolean showFeatureDescription) {
+        public ShowHardLimitStage showFeatureDescription(boolean showFeatureDescription) {
             this.showFeatureDescription = showFeatureDescription;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_hard_limit")
+        public ShowPeriodToggleStage showHardLimit(boolean showHardLimit) {
+            this.showHardLimit = showHardLimit;
             return this;
         }
 
@@ -799,14 +829,14 @@ public final class CreatePlanGroupRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage trialDays(Integer trialDays) {
+        public _FinalStage trialDays(Long trialDays) {
             this.trialDays = Optional.ofNullable(trialDays);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
-        public _FinalStage trialDays(Optional<Integer> trialDays) {
+        public _FinalStage trialDays(Optional<Long> trialDays) {
             this.trialDays = trialDays;
             return this;
         }
@@ -1078,6 +1108,7 @@ public final class CreatePlanGroupRequestBody {
                     showAsMonthlyPrices,
                     showCredits,
                     showFeatureDescription,
+                    showHardLimit,
                     showPeriodToggle,
                     showZeroPriceAsFree,
                     syncCustomerBillingDetails,
@@ -1086,6 +1117,18 @@ public final class CreatePlanGroupRequestBody {
                     trialExpiryPlanPriceId,
                     trialPaymentMethodRequired,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

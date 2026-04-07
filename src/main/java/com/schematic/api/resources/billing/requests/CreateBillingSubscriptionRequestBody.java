@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateBillingSubscriptionRequestBody {
     private final Optional<String> applicationId;
 
-    private final Optional<Integer> cancelAt;
+    private final Optional<Long> cancelAt;
 
     private final boolean cancelAtPeriodEnd;
 
@@ -50,9 +50,9 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private final Optional<Map<String, JsonNode>> metadata;
 
-    private final Optional<Integer> periodEnd;
+    private final Optional<Long> periodEnd;
 
-    private final Optional<Integer> periodStart;
+    private final Optional<Long> periodStart;
 
     private final List<BillingProductPricing> productExternalIds;
 
@@ -60,9 +60,9 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private final String subscriptionExternalId;
 
-    private final int totalPrice;
+    private final long totalPrice;
 
-    private final Optional<Integer> trialEnd;
+    private final Optional<Long> trialEnd;
 
     private final Optional<BillingSubscriptionTrialEndSetting> trialEndSetting;
 
@@ -70,7 +70,7 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private CreateBillingSubscriptionRequestBody(
             Optional<String> applicationId,
-            Optional<Integer> cancelAt,
+            Optional<Long> cancelAt,
             boolean cancelAtPeriodEnd,
             String currency,
             String customerExternalId,
@@ -80,13 +80,13 @@ public final class CreateBillingSubscriptionRequestBody {
             OffsetDateTime expiredAt,
             Optional<String> interval,
             Optional<Map<String, JsonNode>> metadata,
-            Optional<Integer> periodEnd,
-            Optional<Integer> periodStart,
+            Optional<Long> periodEnd,
+            Optional<Long> periodStart,
             List<BillingProductPricing> productExternalIds,
             Optional<String> status,
             String subscriptionExternalId,
-            int totalPrice,
-            Optional<Integer> trialEnd,
+            long totalPrice,
+            Optional<Long> trialEnd,
             Optional<BillingSubscriptionTrialEndSetting> trialEndSetting,
             Map<String, Object> additionalProperties) {
         this.applicationId = applicationId;
@@ -117,7 +117,7 @@ public final class CreateBillingSubscriptionRequestBody {
     }
 
     @JsonProperty("cancel_at")
-    public Optional<Integer> getCancelAt() {
+    public Optional<Long> getCancelAt() {
         return cancelAt;
     }
 
@@ -167,12 +167,12 @@ public final class CreateBillingSubscriptionRequestBody {
     }
 
     @JsonProperty("period_end")
-    public Optional<Integer> getPeriodEnd() {
+    public Optional<Long> getPeriodEnd() {
         return periodEnd;
     }
 
     @JsonProperty("period_start")
-    public Optional<Integer> getPeriodStart() {
+    public Optional<Long> getPeriodStart() {
         return periodStart;
     }
 
@@ -192,12 +192,12 @@ public final class CreateBillingSubscriptionRequestBody {
     }
 
     @JsonProperty("total_price")
-    public int getTotalPrice() {
+    public long getTotalPrice() {
         return totalPrice;
     }
 
     @JsonProperty("trial_end")
-    public Optional<Integer> getTrialEnd() {
+    public Optional<Long> getTrialEnd() {
         return trialEnd;
     }
 
@@ -296,19 +296,23 @@ public final class CreateBillingSubscriptionRequestBody {
     }
 
     public interface TotalPriceStage {
-        _FinalStage totalPrice(int totalPrice);
+        _FinalStage totalPrice(long totalPrice);
     }
 
     public interface _FinalStage {
         CreateBillingSubscriptionRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage applicationId(Optional<String> applicationId);
 
         _FinalStage applicationId(String applicationId);
 
-        _FinalStage cancelAt(Optional<Integer> cancelAt);
+        _FinalStage cancelAt(Optional<Long> cancelAt);
 
-        _FinalStage cancelAt(Integer cancelAt);
+        _FinalStage cancelAt(Long cancelAt);
 
         _FinalStage defaultPaymentMethodExternalId(Optional<String> defaultPaymentMethodExternalId);
 
@@ -332,13 +336,13 @@ public final class CreateBillingSubscriptionRequestBody {
 
         _FinalStage metadata(Map<String, JsonNode> metadata);
 
-        _FinalStage periodEnd(Optional<Integer> periodEnd);
+        _FinalStage periodEnd(Optional<Long> periodEnd);
 
-        _FinalStage periodEnd(Integer periodEnd);
+        _FinalStage periodEnd(Long periodEnd);
 
-        _FinalStage periodStart(Optional<Integer> periodStart);
+        _FinalStage periodStart(Optional<Long> periodStart);
 
-        _FinalStage periodStart(Integer periodStart);
+        _FinalStage periodStart(Long periodStart);
 
         _FinalStage productExternalIds(List<BillingProductPricing> productExternalIds);
 
@@ -350,9 +354,9 @@ public final class CreateBillingSubscriptionRequestBody {
 
         _FinalStage status(String status);
 
-        _FinalStage trialEnd(Optional<Integer> trialEnd);
+        _FinalStage trialEnd(Optional<Long> trialEnd);
 
-        _FinalStage trialEnd(Integer trialEnd);
+        _FinalStage trialEnd(Long trialEnd);
 
         _FinalStage trialEndSetting(Optional<BillingSubscriptionTrialEndSetting> trialEndSetting);
 
@@ -378,19 +382,19 @@ public final class CreateBillingSubscriptionRequestBody {
 
         private String subscriptionExternalId;
 
-        private int totalPrice;
+        private long totalPrice;
 
         private Optional<BillingSubscriptionTrialEndSetting> trialEndSetting = Optional.empty();
 
-        private Optional<Integer> trialEnd = Optional.empty();
+        private Optional<Long> trialEnd = Optional.empty();
 
         private Optional<String> status = Optional.empty();
 
         private List<BillingProductPricing> productExternalIds = new ArrayList<>();
 
-        private Optional<Integer> periodStart = Optional.empty();
+        private Optional<Long> periodStart = Optional.empty();
 
-        private Optional<Integer> periodEnd = Optional.empty();
+        private Optional<Long> periodEnd = Optional.empty();
 
         private Optional<Map<String, JsonNode>> metadata = Optional.empty();
 
@@ -402,7 +406,7 @@ public final class CreateBillingSubscriptionRequestBody {
 
         private Optional<String> defaultPaymentMethodExternalId = Optional.empty();
 
-        private Optional<Integer> cancelAt = Optional.empty();
+        private Optional<Long> cancelAt = Optional.empty();
 
         private Optional<String> applicationId = Optional.empty();
 
@@ -473,7 +477,7 @@ public final class CreateBillingSubscriptionRequestBody {
 
         @java.lang.Override
         @JsonSetter("total_price")
-        public _FinalStage totalPrice(int totalPrice) {
+        public _FinalStage totalPrice(long totalPrice) {
             this.totalPrice = totalPrice;
             return this;
         }
@@ -492,14 +496,14 @@ public final class CreateBillingSubscriptionRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage trialEnd(Integer trialEnd) {
+        public _FinalStage trialEnd(Long trialEnd) {
             this.trialEnd = Optional.ofNullable(trialEnd);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "trial_end", nulls = Nulls.SKIP)
-        public _FinalStage trialEnd(Optional<Integer> trialEnd) {
+        public _FinalStage trialEnd(Optional<Long> trialEnd) {
             this.trialEnd = trialEnd;
             return this;
         }
@@ -542,27 +546,27 @@ public final class CreateBillingSubscriptionRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage periodStart(Integer periodStart) {
+        public _FinalStage periodStart(Long periodStart) {
             this.periodStart = Optional.ofNullable(periodStart);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "period_start", nulls = Nulls.SKIP)
-        public _FinalStage periodStart(Optional<Integer> periodStart) {
+        public _FinalStage periodStart(Optional<Long> periodStart) {
             this.periodStart = periodStart;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage periodEnd(Integer periodEnd) {
+        public _FinalStage periodEnd(Long periodEnd) {
             this.periodEnd = Optional.ofNullable(periodEnd);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "period_end", nulls = Nulls.SKIP)
-        public _FinalStage periodEnd(Optional<Integer> periodEnd) {
+        public _FinalStage periodEnd(Optional<Long> periodEnd) {
             this.periodEnd = periodEnd;
             return this;
         }
@@ -644,14 +648,14 @@ public final class CreateBillingSubscriptionRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage cancelAt(Integer cancelAt) {
+        public _FinalStage cancelAt(Long cancelAt) {
             this.cancelAt = Optional.ofNullable(cancelAt);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "cancel_at", nulls = Nulls.SKIP)
-        public _FinalStage cancelAt(Optional<Integer> cancelAt) {
+        public _FinalStage cancelAt(Optional<Long> cancelAt) {
             this.cancelAt = cancelAt;
             return this;
         }
@@ -692,6 +696,18 @@ public final class CreateBillingSubscriptionRequestBody {
                     trialEnd,
                     trialEndSetting,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

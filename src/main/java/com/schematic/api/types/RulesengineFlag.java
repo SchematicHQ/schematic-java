@@ -142,6 +142,10 @@ public final class RulesengineFlag {
     public interface _FinalStage {
         RulesengineFlag build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage rules(List<RulesengineRule> rules);
 
         _FinalStage addRules(RulesengineRule rules);
@@ -242,6 +246,18 @@ public final class RulesengineFlag {
         @java.lang.Override
         public RulesengineFlag build() {
             return new RulesengineFlag(accountId, defaultValue, environmentId, id, key, rules, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -92,6 +92,10 @@ public final class ListBillingCreditsResponse {
     public interface _FinalStage {
         ListBillingCreditsResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<BillingCreditResponseData> data);
 
         _FinalStage addData(BillingCreditResponseData data);
@@ -156,6 +160,18 @@ public final class ListBillingCreditsResponse {
         @java.lang.Override
         public ListBillingCreditsResponse build() {
             return new ListBillingCreditsResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

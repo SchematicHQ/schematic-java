@@ -46,6 +46,10 @@ public class EventsClient {
         return this.rawClient.getEventSummaries().body();
     }
 
+    public GetEventSummariesResponse getEventSummaries(RequestOptions requestOptions) {
+        return this.rawClient.getEventSummaries(requestOptions).body();
+    }
+
     public GetEventSummariesResponse getEventSummaries(GetEventSummariesRequest request) {
         return this.rawClient.getEventSummaries(request).body();
     }
@@ -57,6 +61,10 @@ public class EventsClient {
 
     public ListEventsResponse listEvents() {
         return this.rawClient.listEvents().body();
+    }
+
+    public ListEventsResponse listEvents(RequestOptions requestOptions) {
+        return this.rawClient.listEvents(requestOptions).body();
     }
 
     public ListEventsResponse listEvents(ListEventsRequest request) {

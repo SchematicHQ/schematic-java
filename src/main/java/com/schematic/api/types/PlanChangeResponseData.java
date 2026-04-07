@@ -34,11 +34,13 @@ public final class PlanChangeResponseData {
 
     private final Optional<ApiKeyResponseData> apiKey;
 
-    private final Optional<ApiKeyRequestListResponseData> apiKeyRequest;
+    private final Optional<AuditLogListResponseData> auditLog;
 
     private final Optional<PlanSnapshotView> basePlan;
 
     private final Optional<PlanChangeBasePlanAction> basePlanAction;
+
+    private final Optional<PlanVersionSnapshotView> basePlanVersion;
 
     private final Optional<CompanyResponseData> company;
 
@@ -51,6 +53,8 @@ public final class PlanChangeResponseData {
     private final String id;
 
     private final Optional<PlanSnapshotView> previousBasePlan;
+
+    private final Optional<PlanVersionSnapshotView> previousBasePlanVersion;
 
     private final Optional<String> requestId;
 
@@ -72,15 +76,17 @@ public final class PlanChangeResponseData {
             List<PlanSnapshotView> addOnsAdded,
             List<PlanSnapshotView> addOnsRemoved,
             Optional<ApiKeyResponseData> apiKey,
-            Optional<ApiKeyRequestListResponseData> apiKeyRequest,
+            Optional<AuditLogListResponseData> auditLog,
             Optional<PlanSnapshotView> basePlan,
             Optional<PlanChangeBasePlanAction> basePlanAction,
+            Optional<PlanVersionSnapshotView> basePlanVersion,
             Optional<CompanyResponseData> company,
             String companyId,
             OffsetDateTime createdAt,
             String environmentId,
             String id,
             Optional<PlanSnapshotView> previousBasePlan,
+            Optional<PlanVersionSnapshotView> previousBasePlanVersion,
             Optional<String> requestId,
             Optional<PlanChangeSubscriptionAction> subscriptionChangeAction,
             List<SubscriptionTraitUpdate> traitsUpdated,
@@ -93,15 +99,17 @@ public final class PlanChangeResponseData {
         this.addOnsAdded = addOnsAdded;
         this.addOnsRemoved = addOnsRemoved;
         this.apiKey = apiKey;
-        this.apiKeyRequest = apiKeyRequest;
+        this.auditLog = auditLog;
         this.basePlan = basePlan;
         this.basePlanAction = basePlanAction;
+        this.basePlanVersion = basePlanVersion;
         this.company = company;
         this.companyId = companyId;
         this.createdAt = createdAt;
         this.environmentId = environmentId;
         this.id = id;
         this.previousBasePlan = previousBasePlan;
+        this.previousBasePlanVersion = previousBasePlanVersion;
         this.requestId = requestId;
         this.subscriptionChangeAction = subscriptionChangeAction;
         this.traitsUpdated = traitsUpdated;
@@ -136,9 +144,9 @@ public final class PlanChangeResponseData {
         return apiKey;
     }
 
-    @JsonProperty("api_key_request")
-    public Optional<ApiKeyRequestListResponseData> getApiKeyRequest() {
-        return apiKeyRequest;
+    @JsonProperty("audit_log")
+    public Optional<AuditLogListResponseData> getAuditLog() {
+        return auditLog;
     }
 
     @JsonProperty("base_plan")
@@ -146,9 +154,20 @@ public final class PlanChangeResponseData {
         return basePlan;
     }
 
+    /**
+     * @return Any special behavior that affected the assignment of the base plan during this change.
+     */
     @JsonProperty("base_plan_action")
     public Optional<PlanChangeBasePlanAction> getBasePlanAction() {
         return basePlanAction;
+    }
+
+    /**
+     * @return The plan version that was assigned during this change.
+     */
+    @JsonProperty("base_plan_version")
+    public Optional<PlanVersionSnapshotView> getBasePlanVersion() {
+        return basePlanVersion;
     }
 
     @JsonProperty("company")
@@ -181,11 +200,22 @@ public final class PlanChangeResponseData {
         return previousBasePlan;
     }
 
+    /**
+     * @return The plan version of the previous base plan before this change.
+     */
+    @JsonProperty("previous_base_plan_version")
+    public Optional<PlanVersionSnapshotView> getPreviousBasePlanVersion() {
+        return previousBasePlanVersion;
+    }
+
     @JsonProperty("request_id")
     public Optional<String> getRequestId() {
         return requestId;
     }
 
+    /**
+     * @return If a subscription was changed as a part of this plan change, indicates the type of change that was made.
+     */
     @JsonProperty("subscription_change_action")
     public Optional<PlanChangeSubscriptionAction> getSubscriptionChangeAction() {
         return subscriptionChangeAction;
@@ -231,15 +261,17 @@ public final class PlanChangeResponseData {
                 && addOnsAdded.equals(other.addOnsAdded)
                 && addOnsRemoved.equals(other.addOnsRemoved)
                 && apiKey.equals(other.apiKey)
-                && apiKeyRequest.equals(other.apiKeyRequest)
+                && auditLog.equals(other.auditLog)
                 && basePlan.equals(other.basePlan)
                 && basePlanAction.equals(other.basePlanAction)
+                && basePlanVersion.equals(other.basePlanVersion)
                 && company.equals(other.company)
                 && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
                 && previousBasePlan.equals(other.previousBasePlan)
+                && previousBasePlanVersion.equals(other.previousBasePlanVersion)
                 && requestId.equals(other.requestId)
                 && subscriptionChangeAction.equals(other.subscriptionChangeAction)
                 && traitsUpdated.equals(other.traitsUpdated)
@@ -256,15 +288,17 @@ public final class PlanChangeResponseData {
                 this.addOnsAdded,
                 this.addOnsRemoved,
                 this.apiKey,
-                this.apiKeyRequest,
+                this.auditLog,
                 this.basePlan,
                 this.basePlanAction,
+                this.basePlanVersion,
                 this.company,
                 this.companyId,
                 this.createdAt,
                 this.environmentId,
                 this.id,
                 this.previousBasePlan,
+                this.previousBasePlanVersion,
                 this.requestId,
                 this.subscriptionChangeAction,
                 this.traitsUpdated,
@@ -315,6 +349,10 @@ public final class PlanChangeResponseData {
     public interface _FinalStage {
         PlanChangeResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage addOnsAdded(List<PlanSnapshotView> addOnsAdded);
 
         _FinalStage addAddOnsAdded(PlanSnapshotView addOnsAdded);
@@ -331,17 +369,27 @@ public final class PlanChangeResponseData {
 
         _FinalStage apiKey(ApiKeyResponseData apiKey);
 
-        _FinalStage apiKeyRequest(Optional<ApiKeyRequestListResponseData> apiKeyRequest);
+        _FinalStage auditLog(Optional<AuditLogListResponseData> auditLog);
 
-        _FinalStage apiKeyRequest(ApiKeyRequestListResponseData apiKeyRequest);
+        _FinalStage auditLog(AuditLogListResponseData auditLog);
 
         _FinalStage basePlan(Optional<PlanSnapshotView> basePlan);
 
         _FinalStage basePlan(PlanSnapshotView basePlan);
 
+        /**
+         * <p>Any special behavior that affected the assignment of the base plan during this change.</p>
+         */
         _FinalStage basePlanAction(Optional<PlanChangeBasePlanAction> basePlanAction);
 
         _FinalStage basePlanAction(PlanChangeBasePlanAction basePlanAction);
+
+        /**
+         * <p>The plan version that was assigned during this change.</p>
+         */
+        _FinalStage basePlanVersion(Optional<PlanVersionSnapshotView> basePlanVersion);
+
+        _FinalStage basePlanVersion(PlanVersionSnapshotView basePlanVersion);
 
         _FinalStage company(Optional<CompanyResponseData> company);
 
@@ -351,10 +399,20 @@ public final class PlanChangeResponseData {
 
         _FinalStage previousBasePlan(PlanSnapshotView previousBasePlan);
 
+        /**
+         * <p>The plan version of the previous base plan before this change.</p>
+         */
+        _FinalStage previousBasePlanVersion(Optional<PlanVersionSnapshotView> previousBasePlanVersion);
+
+        _FinalStage previousBasePlanVersion(PlanVersionSnapshotView previousBasePlanVersion);
+
         _FinalStage requestId(Optional<String> requestId);
 
         _FinalStage requestId(String requestId);
 
+        /**
+         * <p>If a subscription was changed as a part of this plan change, indicates the type of change that was made.</p>
+         */
         _FinalStage subscriptionChangeAction(Optional<PlanChangeSubscriptionAction> subscriptionChangeAction);
 
         _FinalStage subscriptionChangeAction(PlanChangeSubscriptionAction subscriptionChangeAction);
@@ -411,15 +469,19 @@ public final class PlanChangeResponseData {
 
         private Optional<String> requestId = Optional.empty();
 
+        private Optional<PlanVersionSnapshotView> previousBasePlanVersion = Optional.empty();
+
         private Optional<PlanSnapshotView> previousBasePlan = Optional.empty();
 
         private Optional<CompanyResponseData> company = Optional.empty();
+
+        private Optional<PlanVersionSnapshotView> basePlanVersion = Optional.empty();
 
         private Optional<PlanChangeBasePlanAction> basePlanAction = Optional.empty();
 
         private Optional<PlanSnapshotView> basePlan = Optional.empty();
 
-        private Optional<ApiKeyRequestListResponseData> apiKeyRequest = Optional.empty();
+        private Optional<AuditLogListResponseData> auditLog = Optional.empty();
 
         private Optional<ApiKeyResponseData> apiKey = Optional.empty();
 
@@ -439,15 +501,17 @@ public final class PlanChangeResponseData {
             addOnsAdded(other.getAddOnsAdded());
             addOnsRemoved(other.getAddOnsRemoved());
             apiKey(other.getApiKey());
-            apiKeyRequest(other.getApiKeyRequest());
+            auditLog(other.getAuditLog());
             basePlan(other.getBasePlan());
             basePlanAction(other.getBasePlanAction());
+            basePlanVersion(other.getBasePlanVersion());
             company(other.getCompany());
             companyId(other.getCompanyId());
             createdAt(other.getCreatedAt());
             environmentId(other.getEnvironmentId());
             id(other.getId());
             previousBasePlan(other.getPreviousBasePlan());
+            previousBasePlanVersion(other.getPreviousBasePlanVersion());
             requestId(other.getRequestId());
             subscriptionChangeAction(other.getSubscriptionChangeAction());
             traitsUpdated(other.getTraitsUpdated());
@@ -567,12 +631,19 @@ public final class PlanChangeResponseData {
             return this;
         }
 
+        /**
+         * <p>If a subscription was changed as a part of this plan change, indicates the type of change that was made.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage subscriptionChangeAction(PlanChangeSubscriptionAction subscriptionChangeAction) {
             this.subscriptionChangeAction = Optional.ofNullable(subscriptionChangeAction);
             return this;
         }
 
+        /**
+         * <p>If a subscription was changed as a part of this plan change, indicates the type of change that was made.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "subscription_change_action", nulls = Nulls.SKIP)
         public _FinalStage subscriptionChangeAction(Optional<PlanChangeSubscriptionAction> subscriptionChangeAction) {
@@ -590,6 +661,26 @@ public final class PlanChangeResponseData {
         @JsonSetter(value = "request_id", nulls = Nulls.SKIP)
         public _FinalStage requestId(Optional<String> requestId) {
             this.requestId = requestId;
+            return this;
+        }
+
+        /**
+         * <p>The plan version of the previous base plan before this change.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage previousBasePlanVersion(PlanVersionSnapshotView previousBasePlanVersion) {
+            this.previousBasePlanVersion = Optional.ofNullable(previousBasePlanVersion);
+            return this;
+        }
+
+        /**
+         * <p>The plan version of the previous base plan before this change.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "previous_base_plan_version", nulls = Nulls.SKIP)
+        public _FinalStage previousBasePlanVersion(Optional<PlanVersionSnapshotView> previousBasePlanVersion) {
+            this.previousBasePlanVersion = previousBasePlanVersion;
             return this;
         }
 
@@ -619,12 +710,39 @@ public final class PlanChangeResponseData {
             return this;
         }
 
+        /**
+         * <p>The plan version that was assigned during this change.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage basePlanVersion(PlanVersionSnapshotView basePlanVersion) {
+            this.basePlanVersion = Optional.ofNullable(basePlanVersion);
+            return this;
+        }
+
+        /**
+         * <p>The plan version that was assigned during this change.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "base_plan_version", nulls = Nulls.SKIP)
+        public _FinalStage basePlanVersion(Optional<PlanVersionSnapshotView> basePlanVersion) {
+            this.basePlanVersion = basePlanVersion;
+            return this;
+        }
+
+        /**
+         * <p>Any special behavior that affected the assignment of the base plan during this change.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage basePlanAction(PlanChangeBasePlanAction basePlanAction) {
             this.basePlanAction = Optional.ofNullable(basePlanAction);
             return this;
         }
 
+        /**
+         * <p>Any special behavior that affected the assignment of the base plan during this change.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "base_plan_action", nulls = Nulls.SKIP)
         public _FinalStage basePlanAction(Optional<PlanChangeBasePlanAction> basePlanAction) {
@@ -646,15 +764,15 @@ public final class PlanChangeResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage apiKeyRequest(ApiKeyRequestListResponseData apiKeyRequest) {
-            this.apiKeyRequest = Optional.ofNullable(apiKeyRequest);
+        public _FinalStage auditLog(AuditLogListResponseData auditLog) {
+            this.auditLog = Optional.ofNullable(auditLog);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "api_key_request", nulls = Nulls.SKIP)
-        public _FinalStage apiKeyRequest(Optional<ApiKeyRequestListResponseData> apiKeyRequest) {
-            this.apiKeyRequest = apiKeyRequest;
+        @JsonSetter(value = "audit_log", nulls = Nulls.SKIP)
+        public _FinalStage auditLog(Optional<AuditLogListResponseData> auditLog) {
+            this.auditLog = auditLog;
             return this;
         }
 
@@ -727,15 +845,17 @@ public final class PlanChangeResponseData {
                     addOnsAdded,
                     addOnsRemoved,
                     apiKey,
-                    apiKeyRequest,
+                    auditLog,
                     basePlan,
                     basePlanAction,
+                    basePlanVersion,
                     company,
                     companyId,
                     createdAt,
                     environmentId,
                     id,
                     previousBasePlan,
+                    previousBasePlanVersion,
                     requestId,
                     subscriptionChangeAction,
                     traitsUpdated,
@@ -743,6 +863,18 @@ public final class PlanChangeResponseData {
                     userId,
                     userName,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

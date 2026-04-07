@@ -135,6 +135,10 @@ public final class RulesengineUser {
     public interface _FinalStage {
         RulesengineUser build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage keys(Map<String, String> keys);
 
         _FinalStage putAllKeys(Map<String, String> keys);
@@ -280,6 +284,18 @@ public final class RulesengineUser {
         @java.lang.Override
         public RulesengineUser build() {
             return new RulesengineUser(accountId, environmentId, id, keys, rules, traits, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

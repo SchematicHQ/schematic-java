@@ -31,13 +31,15 @@ public final class ListFeaturesRequest {
 
     private final Optional<String> withoutCompanyOverrideFor;
 
+    private final Optional<String> planVersionId;
+
     private final Optional<String> withoutPlanEntitlementFor;
 
     private final Optional<Boolean> booleanRequireEvent;
 
-    private final Optional<Integer> limit;
+    private final Optional<Long> limit;
 
-    private final Optional<Integer> offset;
+    private final Optional<Long> offset;
 
     private final Map<String, Object> additionalProperties;
 
@@ -46,15 +48,17 @@ public final class ListFeaturesRequest {
             Optional<List<FeatureType>> featureType,
             Optional<String> q,
             Optional<String> withoutCompanyOverrideFor,
+            Optional<String> planVersionId,
             Optional<String> withoutPlanEntitlementFor,
             Optional<Boolean> booleanRequireEvent,
-            Optional<Integer> limit,
-            Optional<Integer> offset,
+            Optional<Long> limit,
+            Optional<Long> offset,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
         this.featureType = featureType;
         this.q = q;
         this.withoutCompanyOverrideFor = withoutCompanyOverrideFor;
+        this.planVersionId = planVersionId;
         this.withoutPlanEntitlementFor = withoutPlanEntitlementFor;
         this.booleanRequireEvent = booleanRequireEvent;
         this.limit = limit;
@@ -92,6 +96,14 @@ public final class ListFeaturesRequest {
     }
 
     /**
+     * @return Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
+     */
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
+    }
+
+    /**
      * @return Filter out features that already have a plan entitlement for the specified plan ID
      */
     @JsonProperty("without_plan_entitlement_for")
@@ -111,7 +123,7 @@ public final class ListFeaturesRequest {
      * @return Page limit (default 100)
      */
     @JsonProperty("limit")
-    public Optional<Integer> getLimit() {
+    public Optional<Long> getLimit() {
         return limit;
     }
 
@@ -119,7 +131,7 @@ public final class ListFeaturesRequest {
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
-    public Optional<Integer> getOffset() {
+    public Optional<Long> getOffset() {
         return offset;
     }
 
@@ -139,6 +151,7 @@ public final class ListFeaturesRequest {
                 && featureType.equals(other.featureType)
                 && q.equals(other.q)
                 && withoutCompanyOverrideFor.equals(other.withoutCompanyOverrideFor)
+                && planVersionId.equals(other.planVersionId)
                 && withoutPlanEntitlementFor.equals(other.withoutPlanEntitlementFor)
                 && booleanRequireEvent.equals(other.booleanRequireEvent)
                 && limit.equals(other.limit)
@@ -152,6 +165,7 @@ public final class ListFeaturesRequest {
                 this.featureType,
                 this.q,
                 this.withoutCompanyOverrideFor,
+                this.planVersionId,
                 this.withoutPlanEntitlementFor,
                 this.booleanRequireEvent,
                 this.limit,
@@ -177,13 +191,15 @@ public final class ListFeaturesRequest {
 
         private Optional<String> withoutCompanyOverrideFor = Optional.empty();
 
+        private Optional<String> planVersionId = Optional.empty();
+
         private Optional<String> withoutPlanEntitlementFor = Optional.empty();
 
         private Optional<Boolean> booleanRequireEvent = Optional.empty();
 
-        private Optional<Integer> limit = Optional.empty();
+        private Optional<Long> limit = Optional.empty();
 
-        private Optional<Integer> offset = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -195,6 +211,7 @@ public final class ListFeaturesRequest {
             featureType(other.getFeatureType());
             q(other.getQ());
             withoutCompanyOverrideFor(other.getWithoutCompanyOverrideFor());
+            planVersionId(other.getPlanVersionId());
             withoutPlanEntitlementFor(other.getWithoutPlanEntitlementFor());
             booleanRequireEvent(other.getBooleanRequireEvent());
             limit(other.getLimit());
@@ -266,6 +283,20 @@ public final class ListFeaturesRequest {
         }
 
         /**
+         * <p>Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used</p>
+         */
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
+        /**
          * <p>Filter out features that already have a plan entitlement for the specified plan ID</p>
          */
         @JsonSetter(value = "without_plan_entitlement_for", nulls = Nulls.SKIP)
@@ -297,12 +328,12 @@ public final class ListFeaturesRequest {
          * <p>Page limit (default 100)</p>
          */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Integer> limit) {
+        public Builder limit(Optional<Long> limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder limit(Integer limit) {
+        public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
             return this;
         }
@@ -311,12 +342,12 @@ public final class ListFeaturesRequest {
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Integer> offset) {
+        public Builder offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Integer offset) {
+        public Builder offset(Long offset) {
             this.offset = Optional.ofNullable(offset);
             return this;
         }
@@ -327,11 +358,22 @@ public final class ListFeaturesRequest {
                     featureType,
                     q,
                     withoutCompanyOverrideFor,
+                    planVersionId,
                     withoutPlanEntitlementFor,
                     booleanRequireEvent,
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

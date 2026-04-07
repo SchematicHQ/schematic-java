@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class FeatureCompanyUserResponseData {
     private final boolean access;
 
-    private final Optional<Integer> allocation;
+    private final Optional<Long> allocation;
 
     private final EntitlementValueType allocationType;
 
@@ -44,7 +44,7 @@ public final class FeatureCompanyUserResponseData {
 
     private final Optional<PlanResponseData> plan;
 
-    private final Optional<Integer> usage;
+    private final Optional<Long> usage;
 
     private final Optional<UserResponseData> user;
 
@@ -52,7 +52,7 @@ public final class FeatureCompanyUserResponseData {
 
     private FeatureCompanyUserResponseData(
             boolean access,
-            Optional<Integer> allocation,
+            Optional<Long> allocation,
             EntitlementValueType allocationType,
             Optional<CompanyDetailResponseData> company,
             String entitlementId,
@@ -62,7 +62,7 @@ public final class FeatureCompanyUserResponseData {
             Optional<String> monthReset,
             Optional<String> period,
             Optional<PlanResponseData> plan,
-            Optional<Integer> usage,
+            Optional<Long> usage,
             Optional<UserResponseData> user,
             Map<String, Object> additionalProperties) {
         this.access = access;
@@ -93,10 +93,13 @@ public final class FeatureCompanyUserResponseData {
      * @return The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted.
      */
     @JsonProperty("allocation")
-    public Optional<Integer> getAllocation() {
+    public Optional<Long> getAllocation() {
         return allocation;
     }
 
+    /**
+     * @return The type of allocation that is being used.
+     */
     @JsonProperty("allocation_type")
     public EntitlementValueType getAllocationType() {
         return allocationType;
@@ -155,7 +158,7 @@ public final class FeatureCompanyUserResponseData {
      * @return The amount of usage that has been consumed; a null value indicates that usage is not being measured.
      */
     @JsonProperty("usage")
-    public Optional<Integer> getUsage() {
+    public Optional<Long> getUsage() {
         return usage;
     }
 
@@ -228,6 +231,9 @@ public final class FeatureCompanyUserResponseData {
     }
 
     public interface AllocationTypeStage {
+        /**
+         * <p>The type of allocation that is being used.</p>
+         */
         EntitlementIdStage allocationType(@NotNull EntitlementValueType allocationType);
     }
 
@@ -242,12 +248,16 @@ public final class FeatureCompanyUserResponseData {
     public interface _FinalStage {
         FeatureCompanyUserResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted.</p>
          */
-        _FinalStage allocation(Optional<Integer> allocation);
+        _FinalStage allocation(Optional<Long> allocation);
 
-        _FinalStage allocation(Integer allocation);
+        _FinalStage allocation(Long allocation);
 
         _FinalStage company(Optional<CompanyDetailResponseData> company);
 
@@ -285,9 +295,9 @@ public final class FeatureCompanyUserResponseData {
         /**
          * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured.</p>
          */
-        _FinalStage usage(Optional<Integer> usage);
+        _FinalStage usage(Optional<Long> usage);
 
-        _FinalStage usage(Integer usage);
+        _FinalStage usage(Long usage);
 
         _FinalStage user(Optional<UserResponseData> user);
 
@@ -307,7 +317,7 @@ public final class FeatureCompanyUserResponseData {
 
         private Optional<UserResponseData> user = Optional.empty();
 
-        private Optional<Integer> usage = Optional.empty();
+        private Optional<Long> usage = Optional.empty();
 
         private Optional<PlanResponseData> plan = Optional.empty();
 
@@ -321,7 +331,7 @@ public final class FeatureCompanyUserResponseData {
 
         private Optional<CompanyDetailResponseData> company = Optional.empty();
 
-        private Optional<Integer> allocation = Optional.empty();
+        private Optional<Long> allocation = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -358,6 +368,11 @@ public final class FeatureCompanyUserResponseData {
             return this;
         }
 
+        /**
+         * <p>The type of allocation that is being used.</p>
+         * <p>The type of allocation that is being used.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("allocation_type")
         public EntitlementIdStage allocationType(@NotNull EntitlementValueType allocationType) {
@@ -397,7 +412,7 @@ public final class FeatureCompanyUserResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage usage(Integer usage) {
+        public _FinalStage usage(Long usage) {
             this.usage = Optional.ofNullable(usage);
             return this;
         }
@@ -407,7 +422,7 @@ public final class FeatureCompanyUserResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "usage", nulls = Nulls.SKIP)
-        public _FinalStage usage(Optional<Integer> usage) {
+        public _FinalStage usage(Optional<Long> usage) {
             this.usage = usage;
             return this;
         }
@@ -516,7 +531,7 @@ public final class FeatureCompanyUserResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage allocation(Integer allocation) {
+        public _FinalStage allocation(Long allocation) {
             this.allocation = Optional.ofNullable(allocation);
             return this;
         }
@@ -526,7 +541,7 @@ public final class FeatureCompanyUserResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "allocation", nulls = Nulls.SKIP)
-        public _FinalStage allocation(Optional<Integer> allocation) {
+        public _FinalStage allocation(Optional<Long> allocation) {
             this.allocation = allocation;
             return this;
         }
@@ -548,6 +563,18 @@ public final class FeatureCompanyUserResponseData {
                     usage,
                     user,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -24,13 +24,15 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PreviewSubscriptionChangeResponseData.Builder.class)
 public final class PreviewSubscriptionChangeResponseData {
-    private final int amountOff;
+    private final long amountOff;
 
-    private final int dueNow;
+    private final long dueNow;
 
     private final Optional<PreviewSubscriptionFinanceResponseData> finance;
 
-    private final int newCharges;
+    private final boolean isScheduledDowngrade;
+
+    private final long newCharges;
 
     private final boolean paymentMethodRequired;
 
@@ -40,7 +42,9 @@ public final class PreviewSubscriptionChangeResponseData {
 
     private final boolean promoCodeApplied;
 
-    private final int proration;
+    private final long proration;
+
+    private final Optional<OffsetDateTime> scheduledChangeTime;
 
     private final Optional<OffsetDateTime> trialEnd;
 
@@ -49,39 +53,43 @@ public final class PreviewSubscriptionChangeResponseData {
     private final Map<String, Object> additionalProperties;
 
     private PreviewSubscriptionChangeResponseData(
-            int amountOff,
-            int dueNow,
+            long amountOff,
+            long dueNow,
             Optional<PreviewSubscriptionFinanceResponseData> finance,
-            int newCharges,
+            boolean isScheduledDowngrade,
+            long newCharges,
             boolean paymentMethodRequired,
             double percentOff,
             OffsetDateTime periodStart,
             boolean promoCodeApplied,
-            int proration,
+            long proration,
+            Optional<OffsetDateTime> scheduledChangeTime,
             Optional<OffsetDateTime> trialEnd,
             List<FeatureUsageResponseData> usageViolations,
             Map<String, Object> additionalProperties) {
         this.amountOff = amountOff;
         this.dueNow = dueNow;
         this.finance = finance;
+        this.isScheduledDowngrade = isScheduledDowngrade;
         this.newCharges = newCharges;
         this.paymentMethodRequired = paymentMethodRequired;
         this.percentOff = percentOff;
         this.periodStart = periodStart;
         this.promoCodeApplied = promoCodeApplied;
         this.proration = proration;
+        this.scheduledChangeTime = scheduledChangeTime;
         this.trialEnd = trialEnd;
         this.usageViolations = usageViolations;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("amount_off")
-    public int getAmountOff() {
+    public long getAmountOff() {
         return amountOff;
     }
 
     @JsonProperty("due_now")
-    public int getDueNow() {
+    public long getDueNow() {
         return dueNow;
     }
 
@@ -90,8 +98,13 @@ public final class PreviewSubscriptionChangeResponseData {
         return finance;
     }
 
+    @JsonProperty("is_scheduled_downgrade")
+    public boolean getIsScheduledDowngrade() {
+        return isScheduledDowngrade;
+    }
+
     @JsonProperty("new_charges")
-    public int getNewCharges() {
+    public long getNewCharges() {
         return newCharges;
     }
 
@@ -116,8 +129,13 @@ public final class PreviewSubscriptionChangeResponseData {
     }
 
     @JsonProperty("proration")
-    public int getProration() {
+    public long getProration() {
         return proration;
+    }
+
+    @JsonProperty("scheduled_change_time")
+    public Optional<OffsetDateTime> getScheduledChangeTime() {
+        return scheduledChangeTime;
     }
 
     @JsonProperty("trial_end")
@@ -146,12 +164,14 @@ public final class PreviewSubscriptionChangeResponseData {
         return amountOff == other.amountOff
                 && dueNow == other.dueNow
                 && finance.equals(other.finance)
+                && isScheduledDowngrade == other.isScheduledDowngrade
                 && newCharges == other.newCharges
                 && paymentMethodRequired == other.paymentMethodRequired
                 && percentOff == other.percentOff
                 && periodStart.equals(other.periodStart)
                 && promoCodeApplied == other.promoCodeApplied
                 && proration == other.proration
+                && scheduledChangeTime.equals(other.scheduledChangeTime)
                 && trialEnd.equals(other.trialEnd)
                 && usageViolations.equals(other.usageViolations);
     }
@@ -162,12 +182,14 @@ public final class PreviewSubscriptionChangeResponseData {
                 this.amountOff,
                 this.dueNow,
                 this.finance,
+                this.isScheduledDowngrade,
                 this.newCharges,
                 this.paymentMethodRequired,
                 this.percentOff,
                 this.periodStart,
                 this.promoCodeApplied,
                 this.proration,
+                this.scheduledChangeTime,
                 this.trialEnd,
                 this.usageViolations);
     }
@@ -182,17 +204,21 @@ public final class PreviewSubscriptionChangeResponseData {
     }
 
     public interface AmountOffStage {
-        DueNowStage amountOff(int amountOff);
+        DueNowStage amountOff(long amountOff);
 
         Builder from(PreviewSubscriptionChangeResponseData other);
     }
 
     public interface DueNowStage {
-        NewChargesStage dueNow(int dueNow);
+        IsScheduledDowngradeStage dueNow(long dueNow);
+    }
+
+    public interface IsScheduledDowngradeStage {
+        NewChargesStage isScheduledDowngrade(boolean isScheduledDowngrade);
     }
 
     public interface NewChargesStage {
-        PaymentMethodRequiredStage newCharges(int newCharges);
+        PaymentMethodRequiredStage newCharges(long newCharges);
     }
 
     public interface PaymentMethodRequiredStage {
@@ -212,15 +238,23 @@ public final class PreviewSubscriptionChangeResponseData {
     }
 
     public interface ProrationStage {
-        _FinalStage proration(int proration);
+        _FinalStage proration(long proration);
     }
 
     public interface _FinalStage {
         PreviewSubscriptionChangeResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage finance(Optional<PreviewSubscriptionFinanceResponseData> finance);
 
         _FinalStage finance(PreviewSubscriptionFinanceResponseData finance);
+
+        _FinalStage scheduledChangeTime(Optional<OffsetDateTime> scheduledChangeTime);
+
+        _FinalStage scheduledChangeTime(OffsetDateTime scheduledChangeTime);
 
         _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd);
 
@@ -237,6 +271,7 @@ public final class PreviewSubscriptionChangeResponseData {
     public static final class Builder
             implements AmountOffStage,
                     DueNowStage,
+                    IsScheduledDowngradeStage,
                     NewChargesStage,
                     PaymentMethodRequiredStage,
                     PercentOffStage,
@@ -244,11 +279,13 @@ public final class PreviewSubscriptionChangeResponseData {
                     PromoCodeAppliedStage,
                     ProrationStage,
                     _FinalStage {
-        private int amountOff;
+        private long amountOff;
 
-        private int dueNow;
+        private long dueNow;
 
-        private int newCharges;
+        private boolean isScheduledDowngrade;
+
+        private long newCharges;
 
         private boolean paymentMethodRequired;
 
@@ -258,11 +295,13 @@ public final class PreviewSubscriptionChangeResponseData {
 
         private boolean promoCodeApplied;
 
-        private int proration;
+        private long proration;
 
         private List<FeatureUsageResponseData> usageViolations = new ArrayList<>();
 
         private Optional<OffsetDateTime> trialEnd = Optional.empty();
+
+        private Optional<OffsetDateTime> scheduledChangeTime = Optional.empty();
 
         private Optional<PreviewSubscriptionFinanceResponseData> finance = Optional.empty();
 
@@ -276,12 +315,14 @@ public final class PreviewSubscriptionChangeResponseData {
             amountOff(other.getAmountOff());
             dueNow(other.getDueNow());
             finance(other.getFinance());
+            isScheduledDowngrade(other.getIsScheduledDowngrade());
             newCharges(other.getNewCharges());
             paymentMethodRequired(other.getPaymentMethodRequired());
             percentOff(other.getPercentOff());
             periodStart(other.getPeriodStart());
             promoCodeApplied(other.getPromoCodeApplied());
             proration(other.getProration());
+            scheduledChangeTime(other.getScheduledChangeTime());
             trialEnd(other.getTrialEnd());
             usageViolations(other.getUsageViolations());
             return this;
@@ -289,21 +330,28 @@ public final class PreviewSubscriptionChangeResponseData {
 
         @java.lang.Override
         @JsonSetter("amount_off")
-        public DueNowStage amountOff(int amountOff) {
+        public DueNowStage amountOff(long amountOff) {
             this.amountOff = amountOff;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("due_now")
-        public NewChargesStage dueNow(int dueNow) {
+        public IsScheduledDowngradeStage dueNow(long dueNow) {
             this.dueNow = dueNow;
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("is_scheduled_downgrade")
+        public NewChargesStage isScheduledDowngrade(boolean isScheduledDowngrade) {
+            this.isScheduledDowngrade = isScheduledDowngrade;
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("new_charges")
-        public PaymentMethodRequiredStage newCharges(int newCharges) {
+        public PaymentMethodRequiredStage newCharges(long newCharges) {
             this.newCharges = newCharges;
             return this;
         }
@@ -338,7 +386,7 @@ public final class PreviewSubscriptionChangeResponseData {
 
         @java.lang.Override
         @JsonSetter("proration")
-        public _FinalStage proration(int proration) {
+        public _FinalStage proration(long proration) {
             this.proration = proration;
             return this;
         }
@@ -381,6 +429,19 @@ public final class PreviewSubscriptionChangeResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage scheduledChangeTime(OffsetDateTime scheduledChangeTime) {
+            this.scheduledChangeTime = Optional.ofNullable(scheduledChangeTime);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_change_time", nulls = Nulls.SKIP)
+        public _FinalStage scheduledChangeTime(Optional<OffsetDateTime> scheduledChangeTime) {
+            this.scheduledChangeTime = scheduledChangeTime;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage finance(PreviewSubscriptionFinanceResponseData finance) {
             this.finance = Optional.ofNullable(finance);
             return this;
@@ -399,15 +460,29 @@ public final class PreviewSubscriptionChangeResponseData {
                     amountOff,
                     dueNow,
                     finance,
+                    isScheduledDowngrade,
                     newCharges,
                     paymentMethodRequired,
                     percentOff,
                     periodStart,
                     promoCodeApplied,
                     proration,
+                    scheduledChangeTime,
                     trialEnd,
                     usageViolations,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -94,6 +94,10 @@ public final class CompanyLedgerResponseData {
     public interface _FinalStage {
         CompanyLedgerResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage logoUrl(Optional<String> logoUrl);
 
         _FinalStage logoUrl(String logoUrl);
@@ -150,6 +154,18 @@ public final class CompanyLedgerResponseData {
         @java.lang.Override
         public CompanyLedgerResponseData build() {
             return new CompanyLedgerResponseData(id, logoUrl, name, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

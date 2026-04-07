@@ -47,6 +47,10 @@ public class AsyncEventsClient {
         return this.rawClient.getEventSummaries().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<GetEventSummariesResponse> getEventSummaries(RequestOptions requestOptions) {
+        return this.rawClient.getEventSummaries(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<GetEventSummariesResponse> getEventSummaries(GetEventSummariesRequest request) {
         return this.rawClient.getEventSummaries(request).thenApply(response -> response.body());
     }
@@ -58,6 +62,10 @@ public class AsyncEventsClient {
 
     public CompletableFuture<ListEventsResponse> listEvents() {
         return this.rawClient.listEvents().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListEventsResponse> listEvents(RequestOptions requestOptions) {
+        return this.rawClient.listEvents(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListEventsResponse> listEvents(ListEventsRequest request) {

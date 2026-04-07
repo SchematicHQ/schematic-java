@@ -30,6 +30,8 @@ public final class ManagePlanRequest {
 
     private final Optional<String> basePlanPriceId;
 
+    private final Optional<String> basePlanVersionId;
+
     private final Optional<Boolean> cancelImmediately;
 
     private final String companyId;
@@ -54,6 +56,7 @@ public final class ManagePlanRequest {
             List<PlanSelection> addOnSelections,
             Optional<String> basePlanId,
             Optional<String> basePlanPriceId,
+            Optional<String> basePlanVersionId,
             Optional<Boolean> cancelImmediately,
             String companyId,
             Optional<String> couponExternalId,
@@ -67,6 +70,7 @@ public final class ManagePlanRequest {
         this.addOnSelections = addOnSelections;
         this.basePlanId = basePlanId;
         this.basePlanPriceId = basePlanPriceId;
+        this.basePlanVersionId = basePlanVersionId;
         this.cancelImmediately = cancelImmediately;
         this.companyId = companyId;
         this.couponExternalId = couponExternalId;
@@ -92,6 +96,11 @@ public final class ManagePlanRequest {
     @JsonProperty("base_plan_price_id")
     public Optional<String> getBasePlanPriceId() {
         return basePlanPriceId;
+    }
+
+    @JsonProperty("base_plan_version_id")
+    public Optional<String> getBasePlanVersionId() {
+        return basePlanVersionId;
     }
 
     /**
@@ -160,6 +169,7 @@ public final class ManagePlanRequest {
         return addOnSelections.equals(other.addOnSelections)
                 && basePlanId.equals(other.basePlanId)
                 && basePlanPriceId.equals(other.basePlanPriceId)
+                && basePlanVersionId.equals(other.basePlanVersionId)
                 && cancelImmediately.equals(other.cancelImmediately)
                 && companyId.equals(other.companyId)
                 && couponExternalId.equals(other.couponExternalId)
@@ -177,6 +187,7 @@ public final class ManagePlanRequest {
                 this.addOnSelections,
                 this.basePlanId,
                 this.basePlanPriceId,
+                this.basePlanVersionId,
                 this.cancelImmediately,
                 this.companyId,
                 this.couponExternalId,
@@ -206,6 +217,10 @@ public final class ManagePlanRequest {
     public interface _FinalStage {
         ManagePlanRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage addOnSelections(List<PlanSelection> addOnSelections);
 
         _FinalStage addAddOnSelections(PlanSelection addOnSelections);
@@ -219,6 +234,10 @@ public final class ManagePlanRequest {
         _FinalStage basePlanPriceId(Optional<String> basePlanPriceId);
 
         _FinalStage basePlanPriceId(String basePlanPriceId);
+
+        _FinalStage basePlanVersionId(Optional<String> basePlanVersionId);
+
+        _FinalStage basePlanVersionId(String basePlanVersionId);
 
         /**
          * <p>If false, subscription cancels at period end. Only applies when removing all plans. Defaults to true.</p>
@@ -283,6 +302,8 @@ public final class ManagePlanRequest {
 
         private Optional<Boolean> cancelImmediately = Optional.empty();
 
+        private Optional<String> basePlanVersionId = Optional.empty();
+
         private Optional<String> basePlanPriceId = Optional.empty();
 
         private Optional<String> basePlanId = Optional.empty();
@@ -299,6 +320,7 @@ public final class ManagePlanRequest {
             addOnSelections(other.getAddOnSelections());
             basePlanId(other.getBasePlanId());
             basePlanPriceId(other.getBasePlanPriceId());
+            basePlanVersionId(other.getBasePlanVersionId());
             cancelImmediately(other.getCancelImmediately());
             companyId(other.getCompanyId());
             couponExternalId(other.getCouponExternalId());
@@ -460,6 +482,19 @@ public final class ManagePlanRequest {
         }
 
         @java.lang.Override
+        public _FinalStage basePlanVersionId(String basePlanVersionId) {
+            this.basePlanVersionId = Optional.ofNullable(basePlanVersionId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "base_plan_version_id", nulls = Nulls.SKIP)
+        public _FinalStage basePlanVersionId(Optional<String> basePlanVersionId) {
+            this.basePlanVersionId = basePlanVersionId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage basePlanPriceId(String basePlanPriceId) {
             this.basePlanPriceId = Optional.ofNullable(basePlanPriceId);
             return this;
@@ -515,6 +550,7 @@ public final class ManagePlanRequest {
                     addOnSelections,
                     basePlanId,
                     basePlanPriceId,
+                    basePlanVersionId,
                     cancelImmediately,
                     companyId,
                     couponExternalId,
@@ -525,6 +561,18 @@ public final class ManagePlanRequest {
                     prorate,
                     trialEnd,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

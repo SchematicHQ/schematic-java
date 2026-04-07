@@ -46,6 +46,9 @@ public final class CreateEventRequestBody {
         return body;
     }
 
+    /**
+     * @return Either 'identify' or 'track'
+     */
     @JsonProperty("event_type")
     public EventType getEventType() {
         return eventType;
@@ -89,6 +92,9 @@ public final class CreateEventRequestBody {
     }
 
     public interface EventTypeStage {
+        /**
+         * <p>Either 'identify' or 'track'</p>
+         */
         _FinalStage eventType(@NotNull EventType eventType);
 
         Builder from(CreateEventRequestBody other);
@@ -96,6 +102,10 @@ public final class CreateEventRequestBody {
 
     public interface _FinalStage {
         CreateEventRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage body(Optional<EventBody> body);
 
@@ -130,6 +140,11 @@ public final class CreateEventRequestBody {
             return this;
         }
 
+        /**
+         * <p>Either 'identify' or 'track'</p>
+         * <p>Either 'identify' or 'track'</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("event_type")
         public _FinalStage eventType(@NotNull EventType eventType) {
@@ -173,6 +188,18 @@ public final class CreateEventRequestBody {
         @java.lang.Override
         public CreateEventRequestBody build() {
             return new CreateEventRequestBody(body, eventType, sentAt, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

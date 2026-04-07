@@ -101,6 +101,10 @@ public final class UpdatePlanTraitBulkRequestBody {
     public interface _FinalStage {
         UpdatePlanTraitBulkRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage traits(List<UpdatePlanTraitTraitRequestBody> traits);
 
         _FinalStage addTraits(UpdatePlanTraitTraitRequestBody traits);
@@ -170,6 +174,18 @@ public final class UpdatePlanTraitBulkRequestBody {
         @java.lang.Override
         public UpdatePlanTraitBulkRequestBody build() {
             return new UpdatePlanTraitBulkRequestBody(applyToExistingCompanies, planId, traits, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

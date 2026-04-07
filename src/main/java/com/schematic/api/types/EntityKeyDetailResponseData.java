@@ -208,6 +208,10 @@ public final class EntityKeyDetailResponseData {
     public interface _FinalStage {
         EntityKeyDetailResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage definition(Optional<EntityKeyDefinitionResponseData> definition);
 
         _FinalStage definition(EntityKeyDefinitionResponseData definition);
@@ -355,6 +359,18 @@ public final class EntityKeyDetailResponseData {
                     updatedAt,
                     value,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

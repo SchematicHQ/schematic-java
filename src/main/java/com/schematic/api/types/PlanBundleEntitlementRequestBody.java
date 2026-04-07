@@ -93,6 +93,10 @@ public final class PlanBundleEntitlementRequestBody {
     public interface _FinalStage {
         PlanBundleEntitlementRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage entitlementId(Optional<String> entitlementId);
 
         _FinalStage entitlementId(String entitlementId);
@@ -159,6 +163,18 @@ public final class PlanBundleEntitlementRequestBody {
         @java.lang.Override
         public PlanBundleEntitlementRequestBody build() {
             return new PlanBundleEntitlementRequestBody(action, entitlementId, req, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

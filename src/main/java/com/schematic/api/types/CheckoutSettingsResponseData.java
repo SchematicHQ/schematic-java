@@ -99,6 +99,10 @@ public final class CheckoutSettingsResponseData {
 
     public interface _FinalStage {
         CheckoutSettingsResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -147,6 +151,18 @@ public final class CheckoutSettingsResponseData {
         @java.lang.Override
         public CheckoutSettingsResponseData build() {
             return new CheckoutSettingsResponseData(collectAddress, collectEmail, collectPhone, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

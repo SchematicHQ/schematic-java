@@ -21,27 +21,27 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBillingPriceTierRequestBody.Builder.class)
 public final class CreateBillingPriceTierRequestBody {
-    private final Optional<Integer> flatAmount;
+    private final Optional<Long> flatAmount;
 
     private final Optional<String> perUnitDecimal;
 
-    private final Optional<Integer> perUnitPrice;
+    private final Optional<Long> perUnitPrice;
 
     private final String priceExternalId;
 
     private final Optional<BillingProviderType> providerType;
 
-    private final Optional<Integer> upTo;
+    private final Optional<Long> upTo;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateBillingPriceTierRequestBody(
-            Optional<Integer> flatAmount,
+            Optional<Long> flatAmount,
             Optional<String> perUnitDecimal,
-            Optional<Integer> perUnitPrice,
+            Optional<Long> perUnitPrice,
             String priceExternalId,
             Optional<BillingProviderType> providerType,
-            Optional<Integer> upTo,
+            Optional<Long> upTo,
             Map<String, Object> additionalProperties) {
         this.flatAmount = flatAmount;
         this.perUnitDecimal = perUnitDecimal;
@@ -53,7 +53,7 @@ public final class CreateBillingPriceTierRequestBody {
     }
 
     @JsonProperty("flat_amount")
-    public Optional<Integer> getFlatAmount() {
+    public Optional<Long> getFlatAmount() {
         return flatAmount;
     }
 
@@ -63,7 +63,7 @@ public final class CreateBillingPriceTierRequestBody {
     }
 
     @JsonProperty("per_unit_price")
-    public Optional<Integer> getPerUnitPrice() {
+    public Optional<Long> getPerUnitPrice() {
         return perUnitPrice;
     }
 
@@ -78,7 +78,7 @@ public final class CreateBillingPriceTierRequestBody {
     }
 
     @JsonProperty("up_to")
-    public Optional<Integer> getUpTo() {
+    public Optional<Long> getUpTo() {
         return upTo;
     }
 
@@ -131,40 +131,44 @@ public final class CreateBillingPriceTierRequestBody {
     public interface _FinalStage {
         CreateBillingPriceTierRequestBody build();
 
-        _FinalStage flatAmount(Optional<Integer> flatAmount);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage flatAmount(Integer flatAmount);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage flatAmount(Optional<Long> flatAmount);
+
+        _FinalStage flatAmount(Long flatAmount);
 
         _FinalStage perUnitDecimal(Optional<String> perUnitDecimal);
 
         _FinalStage perUnitDecimal(String perUnitDecimal);
 
-        _FinalStage perUnitPrice(Optional<Integer> perUnitPrice);
+        _FinalStage perUnitPrice(Optional<Long> perUnitPrice);
 
-        _FinalStage perUnitPrice(Integer perUnitPrice);
+        _FinalStage perUnitPrice(Long perUnitPrice);
 
         _FinalStage providerType(Optional<BillingProviderType> providerType);
 
         _FinalStage providerType(BillingProviderType providerType);
 
-        _FinalStage upTo(Optional<Integer> upTo);
+        _FinalStage upTo(Optional<Long> upTo);
 
-        _FinalStage upTo(Integer upTo);
+        _FinalStage upTo(Long upTo);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements PriceExternalIdStage, _FinalStage {
         private String priceExternalId;
 
-        private Optional<Integer> upTo = Optional.empty();
+        private Optional<Long> upTo = Optional.empty();
 
         private Optional<BillingProviderType> providerType = Optional.empty();
 
-        private Optional<Integer> perUnitPrice = Optional.empty();
+        private Optional<Long> perUnitPrice = Optional.empty();
 
         private Optional<String> perUnitDecimal = Optional.empty();
 
-        private Optional<Integer> flatAmount = Optional.empty();
+        private Optional<Long> flatAmount = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -190,14 +194,14 @@ public final class CreateBillingPriceTierRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage upTo(Integer upTo) {
+        public _FinalStage upTo(Long upTo) {
             this.upTo = Optional.ofNullable(upTo);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "up_to", nulls = Nulls.SKIP)
-        public _FinalStage upTo(Optional<Integer> upTo) {
+        public _FinalStage upTo(Optional<Long> upTo) {
             this.upTo = upTo;
             return this;
         }
@@ -216,14 +220,14 @@ public final class CreateBillingPriceTierRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage perUnitPrice(Integer perUnitPrice) {
+        public _FinalStage perUnitPrice(Long perUnitPrice) {
             this.perUnitPrice = Optional.ofNullable(perUnitPrice);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "per_unit_price", nulls = Nulls.SKIP)
-        public _FinalStage perUnitPrice(Optional<Integer> perUnitPrice) {
+        public _FinalStage perUnitPrice(Optional<Long> perUnitPrice) {
             this.perUnitPrice = perUnitPrice;
             return this;
         }
@@ -242,14 +246,14 @@ public final class CreateBillingPriceTierRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage flatAmount(Integer flatAmount) {
+        public _FinalStage flatAmount(Long flatAmount) {
             this.flatAmount = Optional.ofNullable(flatAmount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "flat_amount", nulls = Nulls.SKIP)
-        public _FinalStage flatAmount(Optional<Integer> flatAmount) {
+        public _FinalStage flatAmount(Optional<Long> flatAmount) {
             this.flatAmount = flatAmount;
             return this;
         }
@@ -264,6 +268,18 @@ public final class CreateBillingPriceTierRequestBody {
                     providerType,
                     upTo,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

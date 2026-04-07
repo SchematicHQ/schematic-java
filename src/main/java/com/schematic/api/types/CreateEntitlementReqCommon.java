@@ -33,7 +33,7 @@ public final class CreateEntitlementReqCommon {
 
     private final Optional<String> valueCreditId;
 
-    private final Optional<Integer> valueNumeric;
+    private final Optional<Long> valueNumeric;
 
     private final Optional<String> valueTraitId;
 
@@ -48,7 +48,7 @@ public final class CreateEntitlementReqCommon {
             Optional<CreateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Boolean> valueBool,
             Optional<String> valueCreditId,
-            Optional<Integer> valueNumeric,
+            Optional<Long> valueNumeric,
             Optional<String> valueTraitId,
             EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
@@ -95,7 +95,7 @@ public final class CreateEntitlementReqCommon {
     }
 
     @JsonProperty("value_numeric")
-    public Optional<Integer> getValueNumeric() {
+    public Optional<Long> getValueNumeric() {
         return valueNumeric;
     }
 
@@ -168,6 +168,10 @@ public final class CreateEntitlementReqCommon {
     public interface _FinalStage {
         CreateEntitlementReqCommon build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage creditConsumptionRate(Optional<Double> creditConsumptionRate);
 
         _FinalStage creditConsumptionRate(Double creditConsumptionRate);
@@ -189,9 +193,9 @@ public final class CreateEntitlementReqCommon {
 
         _FinalStage valueCreditId(String valueCreditId);
 
-        _FinalStage valueNumeric(Optional<Integer> valueNumeric);
+        _FinalStage valueNumeric(Optional<Long> valueNumeric);
 
-        _FinalStage valueNumeric(Integer valueNumeric);
+        _FinalStage valueNumeric(Long valueNumeric);
 
         _FinalStage valueTraitId(Optional<String> valueTraitId);
 
@@ -206,7 +210,7 @@ public final class CreateEntitlementReqCommon {
 
         private Optional<String> valueTraitId = Optional.empty();
 
-        private Optional<Integer> valueNumeric = Optional.empty();
+        private Optional<Long> valueNumeric = Optional.empty();
 
         private Optional<String> valueCreditId = Optional.empty();
 
@@ -265,14 +269,14 @@ public final class CreateEntitlementReqCommon {
         }
 
         @java.lang.Override
-        public _FinalStage valueNumeric(Integer valueNumeric) {
+        public _FinalStage valueNumeric(Long valueNumeric) {
             this.valueNumeric = Optional.ofNullable(valueNumeric);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "value_numeric", nulls = Nulls.SKIP)
-        public _FinalStage valueNumeric(Optional<Integer> valueNumeric) {
+        public _FinalStage valueNumeric(Optional<Long> valueNumeric) {
             this.valueNumeric = valueNumeric;
             return this;
         }
@@ -357,6 +361,18 @@ public final class CreateEntitlementReqCommon {
                     valueTraitId,
                     valueType,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

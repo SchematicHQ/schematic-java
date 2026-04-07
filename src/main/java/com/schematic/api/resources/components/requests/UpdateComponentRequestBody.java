@@ -167,5 +167,15 @@ public final class UpdateComponentRequestBody {
         public UpdateComponentRequestBody build() {
             return new UpdateComponentRequestBody(ast, entityType, name, state, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

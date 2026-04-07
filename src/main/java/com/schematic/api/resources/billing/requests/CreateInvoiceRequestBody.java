@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.InvoiceStatus;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +23,11 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateInvoiceRequestBody.Builder.class)
 public final class CreateInvoiceRequestBody {
-    private final int amountDue;
+    private final long amountDue;
 
-    private final int amountPaid;
+    private final long amountPaid;
 
-    private final int amountRemaining;
+    private final long amountRemaining;
 
     private final String collectionMethod;
 
@@ -40,26 +41,29 @@ public final class CreateInvoiceRequestBody {
 
     private final Optional<String> paymentMethodExternalId;
 
+    private final Optional<InvoiceStatus> status;
+
     private final Optional<String> subscriptionExternalId;
 
-    private final int subtotal;
+    private final long subtotal;
 
     private final Optional<String> url;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateInvoiceRequestBody(
-            int amountDue,
-            int amountPaid,
-            int amountRemaining,
+            long amountDue,
+            long amountPaid,
+            long amountRemaining,
             String collectionMethod,
             String currency,
             String customerExternalId,
             Optional<OffsetDateTime> dueDate,
             Optional<String> externalId,
             Optional<String> paymentMethodExternalId,
+            Optional<InvoiceStatus> status,
             Optional<String> subscriptionExternalId,
-            int subtotal,
+            long subtotal,
             Optional<String> url,
             Map<String, Object> additionalProperties) {
         this.amountDue = amountDue;
@@ -71,6 +75,7 @@ public final class CreateInvoiceRequestBody {
         this.dueDate = dueDate;
         this.externalId = externalId;
         this.paymentMethodExternalId = paymentMethodExternalId;
+        this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.subtotal = subtotal;
         this.url = url;
@@ -78,17 +83,17 @@ public final class CreateInvoiceRequestBody {
     }
 
     @JsonProperty("amount_due")
-    public int getAmountDue() {
+    public long getAmountDue() {
         return amountDue;
     }
 
     @JsonProperty("amount_paid")
-    public int getAmountPaid() {
+    public long getAmountPaid() {
         return amountPaid;
     }
 
     @JsonProperty("amount_remaining")
-    public int getAmountRemaining() {
+    public long getAmountRemaining() {
         return amountRemaining;
     }
 
@@ -122,13 +127,18 @@ public final class CreateInvoiceRequestBody {
         return paymentMethodExternalId;
     }
 
+    @JsonProperty("status")
+    public Optional<InvoiceStatus> getStatus() {
+        return status;
+    }
+
     @JsonProperty("subscription_external_id")
     public Optional<String> getSubscriptionExternalId() {
         return subscriptionExternalId;
     }
 
     @JsonProperty("subtotal")
-    public int getSubtotal() {
+    public long getSubtotal() {
         return subtotal;
     }
 
@@ -158,6 +168,7 @@ public final class CreateInvoiceRequestBody {
                 && dueDate.equals(other.dueDate)
                 && externalId.equals(other.externalId)
                 && paymentMethodExternalId.equals(other.paymentMethodExternalId)
+                && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && subtotal == other.subtotal
                 && url.equals(other.url);
@@ -175,6 +186,7 @@ public final class CreateInvoiceRequestBody {
                 this.dueDate,
                 this.externalId,
                 this.paymentMethodExternalId,
+                this.status,
                 this.subscriptionExternalId,
                 this.subtotal,
                 this.url);
@@ -190,17 +202,17 @@ public final class CreateInvoiceRequestBody {
     }
 
     public interface AmountDueStage {
-        AmountPaidStage amountDue(int amountDue);
+        AmountPaidStage amountDue(long amountDue);
 
         Builder from(CreateInvoiceRequestBody other);
     }
 
     public interface AmountPaidStage {
-        AmountRemainingStage amountPaid(int amountPaid);
+        AmountRemainingStage amountPaid(long amountPaid);
     }
 
     public interface AmountRemainingStage {
-        CollectionMethodStage amountRemaining(int amountRemaining);
+        CollectionMethodStage amountRemaining(long amountRemaining);
     }
 
     public interface CollectionMethodStage {
@@ -216,11 +228,15 @@ public final class CreateInvoiceRequestBody {
     }
 
     public interface SubtotalStage {
-        _FinalStage subtotal(int subtotal);
+        _FinalStage subtotal(long subtotal);
     }
 
     public interface _FinalStage {
         CreateInvoiceRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage dueDate(Optional<OffsetDateTime> dueDate);
 
@@ -233,6 +249,10 @@ public final class CreateInvoiceRequestBody {
         _FinalStage paymentMethodExternalId(Optional<String> paymentMethodExternalId);
 
         _FinalStage paymentMethodExternalId(String paymentMethodExternalId);
+
+        _FinalStage status(Optional<InvoiceStatus> status);
+
+        _FinalStage status(InvoiceStatus status);
 
         _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId);
 
@@ -253,11 +273,11 @@ public final class CreateInvoiceRequestBody {
                     CustomerExternalIdStage,
                     SubtotalStage,
                     _FinalStage {
-        private int amountDue;
+        private long amountDue;
 
-        private int amountPaid;
+        private long amountPaid;
 
-        private int amountRemaining;
+        private long amountRemaining;
 
         private String collectionMethod;
 
@@ -265,11 +285,13 @@ public final class CreateInvoiceRequestBody {
 
         private String customerExternalId;
 
-        private int subtotal;
+        private long subtotal;
 
         private Optional<String> url = Optional.empty();
 
         private Optional<String> subscriptionExternalId = Optional.empty();
+
+        private Optional<InvoiceStatus> status = Optional.empty();
 
         private Optional<String> paymentMethodExternalId = Optional.empty();
 
@@ -293,6 +315,7 @@ public final class CreateInvoiceRequestBody {
             dueDate(other.getDueDate());
             externalId(other.getExternalId());
             paymentMethodExternalId(other.getPaymentMethodExternalId());
+            status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             subtotal(other.getSubtotal());
             url(other.getUrl());
@@ -301,21 +324,21 @@ public final class CreateInvoiceRequestBody {
 
         @java.lang.Override
         @JsonSetter("amount_due")
-        public AmountPaidStage amountDue(int amountDue) {
+        public AmountPaidStage amountDue(long amountDue) {
             this.amountDue = amountDue;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("amount_paid")
-        public AmountRemainingStage amountPaid(int amountPaid) {
+        public AmountRemainingStage amountPaid(long amountPaid) {
             this.amountPaid = amountPaid;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("amount_remaining")
-        public CollectionMethodStage amountRemaining(int amountRemaining) {
+        public CollectionMethodStage amountRemaining(long amountRemaining) {
             this.amountRemaining = amountRemaining;
             return this;
         }
@@ -343,7 +366,7 @@ public final class CreateInvoiceRequestBody {
 
         @java.lang.Override
         @JsonSetter("subtotal")
-        public _FinalStage subtotal(int subtotal) {
+        public _FinalStage subtotal(long subtotal) {
             this.subtotal = subtotal;
             return this;
         }
@@ -371,6 +394,19 @@ public final class CreateInvoiceRequestBody {
         @JsonSetter(value = "subscription_external_id", nulls = Nulls.SKIP)
         public _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId) {
             this.subscriptionExternalId = subscriptionExternalId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage status(InvoiceStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<InvoiceStatus> status) {
+            this.status = status;
             return this;
         }
 
@@ -425,10 +461,23 @@ public final class CreateInvoiceRequestBody {
                     dueDate,
                     externalId,
                     paymentMethodExternalId,
+                    status,
                     subscriptionExternalId,
                     subtotal,
                     url,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

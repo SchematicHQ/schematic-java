@@ -90,6 +90,10 @@ public final class CountFeatureUsageResponse {
 
     public interface _FinalStage {
         CountFeatureUsageResponse build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -132,6 +136,18 @@ public final class CountFeatureUsageResponse {
         @java.lang.Override
         public CountFeatureUsageResponse build() {
             return new CountFeatureUsageResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

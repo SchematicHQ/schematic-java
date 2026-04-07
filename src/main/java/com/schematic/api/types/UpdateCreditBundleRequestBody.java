@@ -21,11 +21,11 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdateCreditBundleRequestBody {
     private final String bundleId;
 
-    private final int quantity;
+    private final long quantity;
 
     private final Map<String, Object> additionalProperties;
 
-    private UpdateCreditBundleRequestBody(String bundleId, int quantity, Map<String, Object> additionalProperties) {
+    private UpdateCreditBundleRequestBody(String bundleId, long quantity, Map<String, Object> additionalProperties) {
         this.bundleId = bundleId;
         this.quantity = quantity;
         this.additionalProperties = additionalProperties;
@@ -37,7 +37,7 @@ public final class UpdateCreditBundleRequestBody {
     }
 
     @JsonProperty("quantity")
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
@@ -77,18 +77,22 @@ public final class UpdateCreditBundleRequestBody {
     }
 
     public interface QuantityStage {
-        _FinalStage quantity(int quantity);
+        _FinalStage quantity(long quantity);
     }
 
     public interface _FinalStage {
         UpdateCreditBundleRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements BundleIdStage, QuantityStage, _FinalStage {
         private String bundleId;
 
-        private int quantity;
+        private long quantity;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -111,7 +115,7 @@ public final class UpdateCreditBundleRequestBody {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public _FinalStage quantity(int quantity) {
+        public _FinalStage quantity(long quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -119,6 +123,18 @@ public final class UpdateCreditBundleRequestBody {
         @java.lang.Override
         public UpdateCreditBundleRequestBody build() {
             return new UpdateCreditBundleRequestBody(bundleId, quantity, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

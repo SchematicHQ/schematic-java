@@ -124,6 +124,10 @@ public final class RawEventResponseData {
     public interface _FinalStage {
         RawEventResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage eventId(Optional<String> eventId);
 
         _FinalStage eventId(String eventId);
@@ -210,6 +214,18 @@ public final class RawEventResponseData {
         @java.lang.Override
         public RawEventResponseData build() {
             return new RawEventResponseData(capturedAt, eventId, remoteAddr, remoteIp, userAgent, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

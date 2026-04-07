@@ -90,6 +90,10 @@ public final class ListFlagsResponse {
     public interface _FinalStage {
         ListFlagsResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<FlagDetailResponseData> data);
 
         _FinalStage addData(FlagDetailResponseData data);
@@ -154,6 +158,18 @@ public final class ListFlagsResponse {
         @java.lang.Override
         public ListFlagsResponse build() {
             return new ListFlagsResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -314,5 +314,15 @@ public final class UpsertUserSubRequestBody {
             return new UpsertUserSubRequestBody(
                     companyId, companyIds, id, keys, lastSeenAt, name, traits, updateOnly, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

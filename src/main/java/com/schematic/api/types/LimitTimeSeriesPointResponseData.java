@@ -28,7 +28,7 @@ public final class LimitTimeSeriesPointResponseData {
 
     private final EntitlementType limitSource;
 
-    private final Optional<Integer> limitValue;
+    private final Optional<Long> limitValue;
 
     private final Optional<String> planId;
 
@@ -40,7 +40,7 @@ public final class LimitTimeSeriesPointResponseData {
             OffsetDateTime effectiveAt,
             boolean isSoftLimit,
             EntitlementType limitSource,
-            Optional<Integer> limitValue,
+            Optional<Long> limitValue,
             Optional<String> planId,
             Optional<EntitlementPriceBehavior> priceBehavior,
             Map<String, Object> additionalProperties) {
@@ -69,7 +69,7 @@ public final class LimitTimeSeriesPointResponseData {
     }
 
     @JsonProperty("limit_value")
-    public Optional<Integer> getLimitValue() {
+    public Optional<Long> getLimitValue() {
         return limitValue;
     }
 
@@ -135,9 +135,13 @@ public final class LimitTimeSeriesPointResponseData {
     public interface _FinalStage {
         LimitTimeSeriesPointResponseData build();
 
-        _FinalStage limitValue(Optional<Integer> limitValue);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage limitValue(Integer limitValue);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage limitValue(Optional<Long> limitValue);
+
+        _FinalStage limitValue(Long limitValue);
 
         _FinalStage planId(Optional<String> planId);
 
@@ -160,7 +164,7 @@ public final class LimitTimeSeriesPointResponseData {
 
         private Optional<String> planId = Optional.empty();
 
-        private Optional<Integer> limitValue = Optional.empty();
+        private Optional<Long> limitValue = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -226,14 +230,14 @@ public final class LimitTimeSeriesPointResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage limitValue(Integer limitValue) {
+        public _FinalStage limitValue(Long limitValue) {
             this.limitValue = Optional.ofNullable(limitValue);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "limit_value", nulls = Nulls.SKIP)
-        public _FinalStage limitValue(Optional<Integer> limitValue) {
+        public _FinalStage limitValue(Optional<Long> limitValue) {
             this.limitValue = limitValue;
             return this;
         }
@@ -242,6 +246,18 @@ public final class LimitTimeSeriesPointResponseData {
         public LimitTimeSeriesPointResponseData build() {
             return new LimitTimeSeriesPointResponseData(
                     effectiveAt, isSoftLimit, limitSource, limitValue, planId, priceBehavior, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

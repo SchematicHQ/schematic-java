@@ -166,5 +166,15 @@ public final class CreditsAutoTopupHardFailure {
             return new CreditsAutoTopupHardFailure(
                     company, credit, errorMessage, stripeErrorCode, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

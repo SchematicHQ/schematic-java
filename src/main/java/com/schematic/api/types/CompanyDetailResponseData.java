@@ -63,11 +63,13 @@ public final class CompanyDetailResponseData {
 
     private final List<Rule> rules;
 
+    private final Optional<ScheduledDowngradeResponseData> scheduledDowngrade;
+
     private final Optional<Map<String, JsonNode>> traits;
 
     private final OffsetDateTime updatedAt;
 
-    private final int userCount;
+    private final long userCount;
 
     private final Map<String, Object> additionalProperties;
 
@@ -91,9 +93,10 @@ public final class CompanyDetailResponseData {
             Optional<CompanyPlanWithBillingSubView> plan,
             List<GenericPreviewObject> plans,
             List<Rule> rules,
+            Optional<ScheduledDowngradeResponseData> scheduledDowngrade,
             Optional<Map<String, JsonNode>> traits,
             OffsetDateTime updatedAt,
-            int userCount,
+            long userCount,
             Map<String, Object> additionalProperties) {
         this.addOns = addOns;
         this.billingCreditBalances = billingCreditBalances;
@@ -114,6 +117,7 @@ public final class CompanyDetailResponseData {
         this.plan = plan;
         this.plans = plans;
         this.rules = rules;
+        this.scheduledDowngrade = scheduledDowngrade;
         this.traits = traits;
         this.updatedAt = updatedAt;
         this.userCount = userCount;
@@ -215,6 +219,11 @@ public final class CompanyDetailResponseData {
         return rules;
     }
 
+    @JsonProperty("scheduled_downgrade")
+    public Optional<ScheduledDowngradeResponseData> getScheduledDowngrade() {
+        return scheduledDowngrade;
+    }
+
     /**
      * @return A map of trait names to trait values
      */
@@ -229,7 +238,7 @@ public final class CompanyDetailResponseData {
     }
 
     @JsonProperty("user_count")
-    public int getUserCount() {
+    public long getUserCount() {
         return userCount;
     }
 
@@ -264,6 +273,7 @@ public final class CompanyDetailResponseData {
                 && plan.equals(other.plan)
                 && plans.equals(other.plans)
                 && rules.equals(other.rules)
+                && scheduledDowngrade.equals(other.scheduledDowngrade)
                 && traits.equals(other.traits)
                 && updatedAt.equals(other.updatedAt)
                 && userCount == other.userCount;
@@ -291,6 +301,7 @@ public final class CompanyDetailResponseData {
                 this.plan,
                 this.plans,
                 this.rules,
+                this.scheduledDowngrade,
                 this.traits,
                 this.updatedAt,
                 this.userCount);
@@ -328,11 +339,15 @@ public final class CompanyDetailResponseData {
     }
 
     public interface UserCountStage {
-        _FinalStage userCount(int userCount);
+        _FinalStage userCount(long userCount);
     }
 
     public interface _FinalStage {
         CompanyDetailResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage addOns(List<CompanyPlanWithBillingSubView> addOns);
 
@@ -412,6 +427,10 @@ public final class CompanyDetailResponseData {
 
         _FinalStage addAllRules(List<Rule> rules);
 
+        _FinalStage scheduledDowngrade(Optional<ScheduledDowngradeResponseData> scheduledDowngrade);
+
+        _FinalStage scheduledDowngrade(ScheduledDowngradeResponseData scheduledDowngrade);
+
         /**
          * <p>A map of trait names to trait values</p>
          */
@@ -439,9 +458,11 @@ public final class CompanyDetailResponseData {
 
         private OffsetDateTime updatedAt;
 
-        private int userCount;
+        private long userCount;
 
         private Optional<Map<String, JsonNode>> traits = Optional.empty();
+
+        private Optional<ScheduledDowngradeResponseData> scheduledDowngrade = Optional.empty();
 
         private List<Rule> rules = new ArrayList<>();
 
@@ -499,6 +520,7 @@ public final class CompanyDetailResponseData {
             plan(other.getPlan());
             plans(other.getPlans());
             rules(other.getRules());
+            scheduledDowngrade(other.getScheduledDowngrade());
             traits(other.getTraits());
             updatedAt(other.getUpdatedAt());
             userCount(other.getUserCount());
@@ -542,7 +564,7 @@ public final class CompanyDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("user_count")
-        public _FinalStage userCount(int userCount) {
+        public _FinalStage userCount(long userCount) {
             this.userCount = userCount;
             return this;
         }
@@ -564,6 +586,19 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
         public _FinalStage traits(Optional<Map<String, JsonNode>> traits) {
             this.traits = traits;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage scheduledDowngrade(ScheduledDowngradeResponseData scheduledDowngrade) {
+            this.scheduledDowngrade = Optional.ofNullable(scheduledDowngrade);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_downgrade", nulls = Nulls.SKIP)
+        public _FinalStage scheduledDowngrade(Optional<ScheduledDowngradeResponseData> scheduledDowngrade) {
+            this.scheduledDowngrade = scheduledDowngrade;
             return this;
         }
 
@@ -883,10 +918,23 @@ public final class CompanyDetailResponseData {
                     plan,
                     plans,
                     rules,
+                    scheduledDowngrade,
                     traits,
                     updatedAt,
                     userCount,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

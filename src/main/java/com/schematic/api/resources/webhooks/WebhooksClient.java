@@ -42,6 +42,10 @@ public class WebhooksClient {
         return this.rawClient.listWebhookEvents().body();
     }
 
+    public ListWebhookEventsResponse listWebhookEvents(RequestOptions requestOptions) {
+        return this.rawClient.listWebhookEvents(requestOptions).body();
+    }
+
     public ListWebhookEventsResponse listWebhookEvents(ListWebhookEventsRequest request) {
         return this.rawClient.listWebhookEvents(request).body();
     }
@@ -63,6 +67,10 @@ public class WebhooksClient {
         return this.rawClient.countWebhookEvents().body();
     }
 
+    public CountWebhookEventsResponse countWebhookEvents(RequestOptions requestOptions) {
+        return this.rawClient.countWebhookEvents(requestOptions).body();
+    }
+
     public CountWebhookEventsResponse countWebhookEvents(CountWebhookEventsRequest request) {
         return this.rawClient.countWebhookEvents(request).body();
     }
@@ -74,6 +82,10 @@ public class WebhooksClient {
 
     public ListWebhooksResponse listWebhooks() {
         return this.rawClient.listWebhooks().body();
+    }
+
+    public ListWebhooksResponse listWebhooks(RequestOptions requestOptions) {
+        return this.rawClient.listWebhooks(requestOptions).body();
     }
 
     public ListWebhooksResponse listWebhooks(ListWebhooksRequest request) {
@@ -104,6 +116,10 @@ public class WebhooksClient {
         return this.rawClient.updateWebhook(webhookId).body();
     }
 
+    public UpdateWebhookResponse updateWebhook(String webhookId, RequestOptions requestOptions) {
+        return this.rawClient.updateWebhook(webhookId, requestOptions).body();
+    }
+
     public UpdateWebhookResponse updateWebhook(String webhookId, UpdateWebhookRequestBody request) {
         return this.rawClient.updateWebhook(webhookId, request).body();
     }
@@ -123,6 +139,10 @@ public class WebhooksClient {
 
     public CountWebhooksResponse countWebhooks() {
         return this.rawClient.countWebhooks().body();
+    }
+
+    public CountWebhooksResponse countWebhooks(RequestOptions requestOptions) {
+        return this.rawClient.countWebhooks(requestOptions).body();
     }
 
     public CountWebhooksResponse countWebhooks(CountWebhooksRequest request) {

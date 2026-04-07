@@ -83,6 +83,10 @@ public final class IssueTemporaryAccessTokenRequestBody {
     public interface _FinalStage {
         IssueTemporaryAccessTokenRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage lookup(Map<String, String> lookup);
 
         _FinalStage putAllLookup(Map<String, String> lookup);
@@ -142,6 +146,18 @@ public final class IssueTemporaryAccessTokenRequestBody {
         @java.lang.Override
         public IssueTemporaryAccessTokenRequestBody build() {
             return new IssueTemporaryAccessTokenRequestBody(lookup, resourceType, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

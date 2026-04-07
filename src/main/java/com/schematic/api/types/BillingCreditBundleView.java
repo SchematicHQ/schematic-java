@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,8 +23,6 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingCreditBundleView.Builder.class)
 public final class BillingCreditBundleView {
-    private final Optional<String> billingInvoiceId;
-
     private final String bundleType;
 
     private final OffsetDateTime createdAt;
@@ -36,11 +35,13 @@ public final class BillingCreditBundleView {
 
     private final String creditName;
 
+    private final Optional<List<CreditBundleCurrencyPrice>> currencyPrices;
+
     private final BillingCreditExpiryType expiryType;
 
     private final BillingCreditExpiryUnit expiryUnit;
 
-    private final Optional<Integer> expiryUnitCount;
+    private final Optional<Long> expiryUnitCount;
 
     private final boolean hasGrants;
 
@@ -52,7 +53,7 @@ public final class BillingCreditBundleView {
 
     private final Optional<BillingProductPriceResponseData> price;
 
-    private final Optional<Integer> quantity;
+    private final Optional<Long> quantity;
 
     private final Optional<String> singularName;
 
@@ -65,34 +66,34 @@ public final class BillingCreditBundleView {
     private final Map<String, Object> additionalProperties;
 
     private BillingCreditBundleView(
-            Optional<String> billingInvoiceId,
             String bundleType,
             OffsetDateTime createdAt,
             Optional<String> creditDescription,
             Optional<String> creditIcon,
             String creditId,
             String creditName,
+            Optional<List<CreditBundleCurrencyPrice>> currencyPrices,
             BillingCreditExpiryType expiryType,
             BillingCreditExpiryUnit expiryUnit,
-            Optional<Integer> expiryUnitCount,
+            Optional<Long> expiryUnitCount,
             boolean hasGrants,
             String id,
             String name,
             Optional<String> pluralName,
             Optional<BillingProductPriceResponseData> price,
-            Optional<Integer> quantity,
+            Optional<Long> quantity,
             Optional<String> singularName,
             BillingCreditBundleStatus status,
             Optional<BillingProductPriceResponseData> unitPrice,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
-        this.billingInvoiceId = billingInvoiceId;
         this.bundleType = bundleType;
         this.createdAt = createdAt;
         this.creditDescription = creditDescription;
         this.creditIcon = creditIcon;
         this.creditId = creditId;
         this.creditName = creditName;
+        this.currencyPrices = currencyPrices;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
         this.expiryUnitCount = expiryUnitCount;
@@ -107,11 +108,6 @@ public final class BillingCreditBundleView {
         this.unitPrice = unitPrice;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("billing_invoice_id")
-    public Optional<String> getBillingInvoiceId() {
-        return billingInvoiceId;
     }
 
     @JsonProperty("bundle_type")
@@ -144,6 +140,11 @@ public final class BillingCreditBundleView {
         return creditName;
     }
 
+    @JsonProperty("currency_prices")
+    public Optional<List<CreditBundleCurrencyPrice>> getCurrencyPrices() {
+        return currencyPrices;
+    }
+
     @JsonProperty("expiry_type")
     public BillingCreditExpiryType getExpiryType() {
         return expiryType;
@@ -155,7 +156,7 @@ public final class BillingCreditBundleView {
     }
 
     @JsonProperty("expiry_unit_count")
-    public Optional<Integer> getExpiryUnitCount() {
+    public Optional<Long> getExpiryUnitCount() {
         return expiryUnitCount;
     }
 
@@ -185,7 +186,7 @@ public final class BillingCreditBundleView {
     }
 
     @JsonProperty("quantity")
-    public Optional<Integer> getQuantity() {
+    public Optional<Long> getQuantity() {
         return quantity;
     }
 
@@ -221,13 +222,13 @@ public final class BillingCreditBundleView {
     }
 
     private boolean equalTo(BillingCreditBundleView other) {
-        return billingInvoiceId.equals(other.billingInvoiceId)
-                && bundleType.equals(other.bundleType)
+        return bundleType.equals(other.bundleType)
                 && createdAt.equals(other.createdAt)
                 && creditDescription.equals(other.creditDescription)
                 && creditIcon.equals(other.creditIcon)
                 && creditId.equals(other.creditId)
                 && creditName.equals(other.creditName)
+                && currencyPrices.equals(other.currencyPrices)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
                 && expiryUnitCount.equals(other.expiryUnitCount)
@@ -246,13 +247,13 @@ public final class BillingCreditBundleView {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.billingInvoiceId,
                 this.bundleType,
                 this.createdAt,
                 this.creditDescription,
                 this.creditIcon,
                 this.creditId,
                 this.creditName,
+                this.currencyPrices,
                 this.expiryType,
                 this.expiryUnit,
                 this.expiryUnitCount,
@@ -326,9 +327,9 @@ public final class BillingCreditBundleView {
     public interface _FinalStage {
         BillingCreditBundleView build();
 
-        _FinalStage billingInvoiceId(Optional<String> billingInvoiceId);
+        _FinalStage additionalProperty(String key, Object value);
 
-        _FinalStage billingInvoiceId(String billingInvoiceId);
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage creditDescription(Optional<String> creditDescription);
 
@@ -338,9 +339,13 @@ public final class BillingCreditBundleView {
 
         _FinalStage creditIcon(String creditIcon);
 
-        _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
+        _FinalStage currencyPrices(Optional<List<CreditBundleCurrencyPrice>> currencyPrices);
 
-        _FinalStage expiryUnitCount(Integer expiryUnitCount);
+        _FinalStage currencyPrices(List<CreditBundleCurrencyPrice> currencyPrices);
+
+        _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount);
+
+        _FinalStage expiryUnitCount(Long expiryUnitCount);
 
         _FinalStage pluralName(Optional<String> pluralName);
 
@@ -350,9 +355,9 @@ public final class BillingCreditBundleView {
 
         _FinalStage price(BillingProductPriceResponseData price);
 
-        _FinalStage quantity(Optional<Integer> quantity);
+        _FinalStage quantity(Optional<Long> quantity);
 
-        _FinalStage quantity(Integer quantity);
+        _FinalStage quantity(Long quantity);
 
         _FinalStage singularName(Optional<String> singularName);
 
@@ -403,19 +408,19 @@ public final class BillingCreditBundleView {
 
         private Optional<String> singularName = Optional.empty();
 
-        private Optional<Integer> quantity = Optional.empty();
+        private Optional<Long> quantity = Optional.empty();
 
         private Optional<BillingProductPriceResponseData> price = Optional.empty();
 
         private Optional<String> pluralName = Optional.empty();
 
-        private Optional<Integer> expiryUnitCount = Optional.empty();
+        private Optional<Long> expiryUnitCount = Optional.empty();
+
+        private Optional<List<CreditBundleCurrencyPrice>> currencyPrices = Optional.empty();
 
         private Optional<String> creditIcon = Optional.empty();
 
         private Optional<String> creditDescription = Optional.empty();
-
-        private Optional<String> billingInvoiceId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -424,13 +429,13 @@ public final class BillingCreditBundleView {
 
         @java.lang.Override
         public Builder from(BillingCreditBundleView other) {
-            billingInvoiceId(other.getBillingInvoiceId());
             bundleType(other.getBundleType());
             createdAt(other.getCreatedAt());
             creditDescription(other.getCreditDescription());
             creditIcon(other.getCreditIcon());
             creditId(other.getCreditId());
             creditName(other.getCreditName());
+            currencyPrices(other.getCurrencyPrices());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
             expiryUnitCount(other.getExpiryUnitCount());
@@ -551,14 +556,14 @@ public final class BillingCreditBundleView {
         }
 
         @java.lang.Override
-        public _FinalStage quantity(Integer quantity) {
+        public _FinalStage quantity(Long quantity) {
             this.quantity = Optional.ofNullable(quantity);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "quantity", nulls = Nulls.SKIP)
-        public _FinalStage quantity(Optional<Integer> quantity) {
+        public _FinalStage quantity(Optional<Long> quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -590,15 +595,28 @@ public final class BillingCreditBundleView {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnitCount(Integer expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Long expiryUnitCount) {
             this.expiryUnitCount = Optional.ofNullable(expiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount) {
             this.expiryUnitCount = expiryUnitCount;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage currencyPrices(List<CreditBundleCurrencyPrice> currencyPrices) {
+            this.currencyPrices = Optional.ofNullable(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(Optional<List<CreditBundleCurrencyPrice>> currencyPrices) {
+            this.currencyPrices = currencyPrices;
             return this;
         }
 
@@ -629,28 +647,15 @@ public final class BillingCreditBundleView {
         }
 
         @java.lang.Override
-        public _FinalStage billingInvoiceId(String billingInvoiceId) {
-            this.billingInvoiceId = Optional.ofNullable(billingInvoiceId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "billing_invoice_id", nulls = Nulls.SKIP)
-        public _FinalStage billingInvoiceId(Optional<String> billingInvoiceId) {
-            this.billingInvoiceId = billingInvoiceId;
-            return this;
-        }
-
-        @java.lang.Override
         public BillingCreditBundleView build() {
             return new BillingCreditBundleView(
-                    billingInvoiceId,
                     bundleType,
                     createdAt,
                     creditDescription,
                     creditIcon,
                     creditId,
                     creditName,
+                    currencyPrices,
                     expiryType,
                     expiryUnit,
                     expiryUnitCount,
@@ -665,6 +670,18 @@ public final class BillingCreditBundleView {
                     unitPrice,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

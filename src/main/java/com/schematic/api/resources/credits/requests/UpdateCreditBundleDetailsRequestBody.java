@@ -15,7 +15,9 @@ import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingCreditBundleStatus;
 import com.schematic.api.types.BillingCreditExpiryType;
 import com.schematic.api.types.BillingCreditExpiryUnit;
+import com.schematic.api.types.CreditBundleCurrencyPriceRequestBody;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,17 +28,19 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdateCreditBundleDetailsRequestBody {
     private final String bundleName;
 
+    private final Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices;
+
     private final Optional<BillingCreditExpiryType> expiryType;
 
     private final Optional<BillingCreditExpiryUnit> expiryUnit;
 
-    private final Optional<Integer> expiryUnitCount;
+    private final Optional<Long> expiryUnitCount;
 
-    private final int pricePerUnit;
+    private final long pricePerUnit;
 
     private final Optional<String> pricePerUnitDecimal;
 
-    private final Optional<Integer> quantity;
+    private final Optional<Long> quantity;
 
     private final Optional<BillingCreditBundleStatus> status;
 
@@ -44,15 +48,17 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
     private UpdateCreditBundleDetailsRequestBody(
             String bundleName,
+            Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
-            Optional<Integer> expiryUnitCount,
-            int pricePerUnit,
+            Optional<Long> expiryUnitCount,
+            long pricePerUnit,
             Optional<String> pricePerUnitDecimal,
-            Optional<Integer> quantity,
+            Optional<Long> quantity,
             Optional<BillingCreditBundleStatus> status,
             Map<String, Object> additionalProperties) {
         this.bundleName = bundleName;
+        this.currencyPrices = currencyPrices;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
         this.expiryUnitCount = expiryUnitCount;
@@ -68,6 +74,11 @@ public final class UpdateCreditBundleDetailsRequestBody {
         return bundleName;
     }
 
+    @JsonProperty("currency_prices")
+    public Optional<List<CreditBundleCurrencyPriceRequestBody>> getCurrencyPrices() {
+        return currencyPrices;
+    }
+
     @JsonProperty("expiry_type")
     public Optional<BillingCreditExpiryType> getExpiryType() {
         return expiryType;
@@ -79,12 +90,12 @@ public final class UpdateCreditBundleDetailsRequestBody {
     }
 
     @JsonProperty("expiry_unit_count")
-    public Optional<Integer> getExpiryUnitCount() {
+    public Optional<Long> getExpiryUnitCount() {
         return expiryUnitCount;
     }
 
     @JsonProperty("price_per_unit")
-    public int getPricePerUnit() {
+    public long getPricePerUnit() {
         return pricePerUnit;
     }
 
@@ -94,7 +105,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
     }
 
     @JsonProperty("quantity")
-    public Optional<Integer> getQuantity() {
+    public Optional<Long> getQuantity() {
         return quantity;
     }
 
@@ -117,6 +128,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
     private boolean equalTo(UpdateCreditBundleDetailsRequestBody other) {
         return bundleName.equals(other.bundleName)
+                && currencyPrices.equals(other.currencyPrices)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
                 && expiryUnitCount.equals(other.expiryUnitCount)
@@ -130,6 +142,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.bundleName,
+                this.currencyPrices,
                 this.expiryType,
                 this.expiryUnit,
                 this.expiryUnitCount,
@@ -155,11 +168,19 @@ public final class UpdateCreditBundleDetailsRequestBody {
     }
 
     public interface PricePerUnitStage {
-        _FinalStage pricePerUnit(int pricePerUnit);
+        _FinalStage pricePerUnit(long pricePerUnit);
     }
 
     public interface _FinalStage {
         UpdateCreditBundleDetailsRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage currencyPrices(Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices);
+
+        _FinalStage currencyPrices(List<CreditBundleCurrencyPriceRequestBody> currencyPrices);
 
         _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
 
@@ -169,17 +190,17 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
         _FinalStage expiryUnit(BillingCreditExpiryUnit expiryUnit);
 
-        _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
+        _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount);
 
-        _FinalStage expiryUnitCount(Integer expiryUnitCount);
+        _FinalStage expiryUnitCount(Long expiryUnitCount);
 
         _FinalStage pricePerUnitDecimal(Optional<String> pricePerUnitDecimal);
 
         _FinalStage pricePerUnitDecimal(String pricePerUnitDecimal);
 
-        _FinalStage quantity(Optional<Integer> quantity);
+        _FinalStage quantity(Optional<Long> quantity);
 
-        _FinalStage quantity(Integer quantity);
+        _FinalStage quantity(Long quantity);
 
         _FinalStage status(Optional<BillingCreditBundleStatus> status);
 
@@ -190,19 +211,21 @@ public final class UpdateCreditBundleDetailsRequestBody {
     public static final class Builder implements BundleNameStage, PricePerUnitStage, _FinalStage {
         private String bundleName;
 
-        private int pricePerUnit;
+        private long pricePerUnit;
 
         private Optional<BillingCreditBundleStatus> status = Optional.empty();
 
-        private Optional<Integer> quantity = Optional.empty();
+        private Optional<Long> quantity = Optional.empty();
 
         private Optional<String> pricePerUnitDecimal = Optional.empty();
 
-        private Optional<Integer> expiryUnitCount = Optional.empty();
+        private Optional<Long> expiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
 
         private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
+
+        private Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -212,6 +235,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
         @java.lang.Override
         public Builder from(UpdateCreditBundleDetailsRequestBody other) {
             bundleName(other.getBundleName());
+            currencyPrices(other.getCurrencyPrices());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
             expiryUnitCount(other.getExpiryUnitCount());
@@ -231,7 +255,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
         @java.lang.Override
         @JsonSetter("price_per_unit")
-        public _FinalStage pricePerUnit(int pricePerUnit) {
+        public _FinalStage pricePerUnit(long pricePerUnit) {
             this.pricePerUnit = pricePerUnit;
             return this;
         }
@@ -250,14 +274,14 @@ public final class UpdateCreditBundleDetailsRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage quantity(Integer quantity) {
+        public _FinalStage quantity(Long quantity) {
             this.quantity = Optional.ofNullable(quantity);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "quantity", nulls = Nulls.SKIP)
-        public _FinalStage quantity(Optional<Integer> quantity) {
+        public _FinalStage quantity(Optional<Long> quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -276,14 +300,14 @@ public final class UpdateCreditBundleDetailsRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnitCount(Integer expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Long expiryUnitCount) {
             this.expiryUnitCount = Optional.ofNullable(expiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount) {
             this.expiryUnitCount = expiryUnitCount;
             return this;
         }
@@ -315,9 +339,23 @@ public final class UpdateCreditBundleDetailsRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage currencyPrices(List<CreditBundleCurrencyPriceRequestBody> currencyPrices) {
+            this.currencyPrices = Optional.ofNullable(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices) {
+            this.currencyPrices = currencyPrices;
+            return this;
+        }
+
+        @java.lang.Override
         public UpdateCreditBundleDetailsRequestBody build() {
             return new UpdateCreditBundleDetailsRequestBody(
                     bundleName,
+                    currencyPrices,
                     expiryType,
                     expiryUnit,
                     expiryUnitCount,
@@ -326,6 +364,18 @@ public final class UpdateCreditBundleDetailsRequestBody {
                     quantity,
                     status,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

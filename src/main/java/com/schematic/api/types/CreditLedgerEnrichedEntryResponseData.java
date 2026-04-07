@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreditLedgerEnrichedEntryResponseData.Builder.class)
 public final class CreditLedgerEnrichedEntryResponseData {
-    private final int billingCreditAutoTopupGrantCount;
+    private final long billingCreditAutoTopupGrantCount;
 
     private final String billingCreditId;
 
@@ -32,7 +32,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
     private final Optional<BillingCreditLedgerResponseData> credit;
 
-    private final int expiredGrantCount;
+    private final long expiredGrantCount;
 
     private final Optional<FeatureLedgerResponseData> feature;
 
@@ -40,19 +40,19 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
     private final OffsetDateTime firstTransactionAt;
 
-    private final int freeGrantCount;
+    private final long freeGrantCount;
 
-    private final int grantCount;
+    private final long grantCount;
 
     private final OffsetDateTime lastTransactionAt;
 
-    private final int manuallyZeroedCount;
+    private final long manuallyZeroedCount;
 
     private final double netChange;
 
-    private final int planGrantCount;
+    private final long planGrantCount;
 
-    private final int purchasedGrantCount;
+    private final long purchasedGrantCount;
 
     private final OffsetDateTime timeBucket;
 
@@ -60,37 +60,37 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
     private final double totalGranted;
 
-    private final int transactionCount;
+    private final long transactionCount;
 
-    private final int usageCount;
+    private final long usageCount;
 
-    private final int zeroedOutCount;
+    private final long zeroedOutCount;
 
     private final Map<String, Object> additionalProperties;
 
     private CreditLedgerEnrichedEntryResponseData(
-            int billingCreditAutoTopupGrantCount,
+            long billingCreditAutoTopupGrantCount,
             String billingCreditId,
             Optional<CompanyLedgerResponseData> company,
             String companyId,
             Optional<BillingCreditLedgerResponseData> credit,
-            int expiredGrantCount,
+            long expiredGrantCount,
             Optional<FeatureLedgerResponseData> feature,
             Optional<String> featureId,
             OffsetDateTime firstTransactionAt,
-            int freeGrantCount,
-            int grantCount,
+            long freeGrantCount,
+            long grantCount,
             OffsetDateTime lastTransactionAt,
-            int manuallyZeroedCount,
+            long manuallyZeroedCount,
             double netChange,
-            int planGrantCount,
-            int purchasedGrantCount,
+            long planGrantCount,
+            long purchasedGrantCount,
             OffsetDateTime timeBucket,
             double totalConsumed,
             double totalGranted,
-            int transactionCount,
-            int usageCount,
-            int zeroedOutCount,
+            long transactionCount,
+            long usageCount,
+            long zeroedOutCount,
             Map<String, Object> additionalProperties) {
         this.billingCreditAutoTopupGrantCount = billingCreditAutoTopupGrantCount;
         this.billingCreditId = billingCreditId;
@@ -118,7 +118,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     @JsonProperty("billing_credit_auto_topup_grant_count")
-    public int getBillingCreditAutoTopupGrantCount() {
+    public long getBillingCreditAutoTopupGrantCount() {
         return billingCreditAutoTopupGrantCount;
     }
 
@@ -143,7 +143,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     @JsonProperty("expired_grant_count")
-    public int getExpiredGrantCount() {
+    public long getExpiredGrantCount() {
         return expiredGrantCount;
     }
 
@@ -163,12 +163,12 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     @JsonProperty("free_grant_count")
-    public int getFreeGrantCount() {
+    public long getFreeGrantCount() {
         return freeGrantCount;
     }
 
     @JsonProperty("grant_count")
-    public int getGrantCount() {
+    public long getGrantCount() {
         return grantCount;
     }
 
@@ -178,7 +178,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     @JsonProperty("manually_zeroed_count")
-    public int getManuallyZeroedCount() {
+    public long getManuallyZeroedCount() {
         return manuallyZeroedCount;
     }
 
@@ -188,12 +188,12 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     @JsonProperty("plan_grant_count")
-    public int getPlanGrantCount() {
+    public long getPlanGrantCount() {
         return planGrantCount;
     }
 
     @JsonProperty("purchased_grant_count")
-    public int getPurchasedGrantCount() {
+    public long getPurchasedGrantCount() {
         return purchasedGrantCount;
     }
 
@@ -213,17 +213,17 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     @JsonProperty("transaction_count")
-    public int getTransactionCount() {
+    public long getTransactionCount() {
         return transactionCount;
     }
 
     @JsonProperty("usage_count")
-    public int getUsageCount() {
+    public long getUsageCount() {
         return usageCount;
     }
 
     @JsonProperty("zeroed_out_count")
-    public int getZeroedOutCount() {
+    public long getZeroedOutCount() {
         return zeroedOutCount;
     }
 
@@ -301,7 +301,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     public interface BillingCreditAutoTopupGrantCountStage {
-        BillingCreditIdStage billingCreditAutoTopupGrantCount(int billingCreditAutoTopupGrantCount);
+        BillingCreditIdStage billingCreditAutoTopupGrantCount(long billingCreditAutoTopupGrantCount);
 
         Builder from(CreditLedgerEnrichedEntryResponseData other);
     }
@@ -315,7 +315,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     public interface ExpiredGrantCountStage {
-        FirstTransactionAtStage expiredGrantCount(int expiredGrantCount);
+        FirstTransactionAtStage expiredGrantCount(long expiredGrantCount);
     }
 
     public interface FirstTransactionAtStage {
@@ -323,11 +323,11 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     public interface FreeGrantCountStage {
-        GrantCountStage freeGrantCount(int freeGrantCount);
+        GrantCountStage freeGrantCount(long freeGrantCount);
     }
 
     public interface GrantCountStage {
-        LastTransactionAtStage grantCount(int grantCount);
+        LastTransactionAtStage grantCount(long grantCount);
     }
 
     public interface LastTransactionAtStage {
@@ -335,7 +335,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     public interface ManuallyZeroedCountStage {
-        NetChangeStage manuallyZeroedCount(int manuallyZeroedCount);
+        NetChangeStage manuallyZeroedCount(long manuallyZeroedCount);
     }
 
     public interface NetChangeStage {
@@ -343,11 +343,11 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     public interface PlanGrantCountStage {
-        PurchasedGrantCountStage planGrantCount(int planGrantCount);
+        PurchasedGrantCountStage planGrantCount(long planGrantCount);
     }
 
     public interface PurchasedGrantCountStage {
-        TimeBucketStage purchasedGrantCount(int purchasedGrantCount);
+        TimeBucketStage purchasedGrantCount(long purchasedGrantCount);
     }
 
     public interface TimeBucketStage {
@@ -363,19 +363,23 @@ public final class CreditLedgerEnrichedEntryResponseData {
     }
 
     public interface TransactionCountStage {
-        UsageCountStage transactionCount(int transactionCount);
+        UsageCountStage transactionCount(long transactionCount);
     }
 
     public interface UsageCountStage {
-        ZeroedOutCountStage usageCount(int usageCount);
+        ZeroedOutCountStage usageCount(long usageCount);
     }
 
     public interface ZeroedOutCountStage {
-        _FinalStage zeroedOutCount(int zeroedOutCount);
+        _FinalStage zeroedOutCount(long zeroedOutCount);
     }
 
     public interface _FinalStage {
         CreditLedgerEnrichedEntryResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage company(Optional<CompanyLedgerResponseData> company);
 
@@ -415,29 +419,29 @@ public final class CreditLedgerEnrichedEntryResponseData {
                     UsageCountStage,
                     ZeroedOutCountStage,
                     _FinalStage {
-        private int billingCreditAutoTopupGrantCount;
+        private long billingCreditAutoTopupGrantCount;
 
         private String billingCreditId;
 
         private String companyId;
 
-        private int expiredGrantCount;
+        private long expiredGrantCount;
 
         private OffsetDateTime firstTransactionAt;
 
-        private int freeGrantCount;
+        private long freeGrantCount;
 
-        private int grantCount;
+        private long grantCount;
 
         private OffsetDateTime lastTransactionAt;
 
-        private int manuallyZeroedCount;
+        private long manuallyZeroedCount;
 
         private double netChange;
 
-        private int planGrantCount;
+        private long planGrantCount;
 
-        private int purchasedGrantCount;
+        private long purchasedGrantCount;
 
         private OffsetDateTime timeBucket;
 
@@ -445,11 +449,11 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
         private double totalGranted;
 
-        private int transactionCount;
+        private long transactionCount;
 
-        private int usageCount;
+        private long usageCount;
 
-        private int zeroedOutCount;
+        private long zeroedOutCount;
 
         private Optional<String> featureId = Optional.empty();
 
@@ -493,7 +497,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
         @java.lang.Override
         @JsonSetter("billing_credit_auto_topup_grant_count")
-        public BillingCreditIdStage billingCreditAutoTopupGrantCount(int billingCreditAutoTopupGrantCount) {
+        public BillingCreditIdStage billingCreditAutoTopupGrantCount(long billingCreditAutoTopupGrantCount) {
             this.billingCreditAutoTopupGrantCount = billingCreditAutoTopupGrantCount;
             return this;
         }
@@ -514,7 +518,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
         @java.lang.Override
         @JsonSetter("expired_grant_count")
-        public FirstTransactionAtStage expiredGrantCount(int expiredGrantCount) {
+        public FirstTransactionAtStage expiredGrantCount(long expiredGrantCount) {
             this.expiredGrantCount = expiredGrantCount;
             return this;
         }
@@ -528,14 +532,14 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
         @java.lang.Override
         @JsonSetter("free_grant_count")
-        public GrantCountStage freeGrantCount(int freeGrantCount) {
+        public GrantCountStage freeGrantCount(long freeGrantCount) {
             this.freeGrantCount = freeGrantCount;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("grant_count")
-        public LastTransactionAtStage grantCount(int grantCount) {
+        public LastTransactionAtStage grantCount(long grantCount) {
             this.grantCount = grantCount;
             return this;
         }
@@ -549,7 +553,7 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
         @java.lang.Override
         @JsonSetter("manually_zeroed_count")
-        public NetChangeStage manuallyZeroedCount(int manuallyZeroedCount) {
+        public NetChangeStage manuallyZeroedCount(long manuallyZeroedCount) {
             this.manuallyZeroedCount = manuallyZeroedCount;
             return this;
         }
@@ -563,14 +567,14 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
         @java.lang.Override
         @JsonSetter("plan_grant_count")
-        public PurchasedGrantCountStage planGrantCount(int planGrantCount) {
+        public PurchasedGrantCountStage planGrantCount(long planGrantCount) {
             this.planGrantCount = planGrantCount;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("purchased_grant_count")
-        public TimeBucketStage purchasedGrantCount(int purchasedGrantCount) {
+        public TimeBucketStage purchasedGrantCount(long purchasedGrantCount) {
             this.purchasedGrantCount = purchasedGrantCount;
             return this;
         }
@@ -598,21 +602,21 @@ public final class CreditLedgerEnrichedEntryResponseData {
 
         @java.lang.Override
         @JsonSetter("transaction_count")
-        public UsageCountStage transactionCount(int transactionCount) {
+        public UsageCountStage transactionCount(long transactionCount) {
             this.transactionCount = transactionCount;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("usage_count")
-        public ZeroedOutCountStage usageCount(int usageCount) {
+        public ZeroedOutCountStage usageCount(long usageCount) {
             this.usageCount = usageCount;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("zeroed_out_count")
-        public _FinalStage zeroedOutCount(int zeroedOutCount) {
+        public _FinalStage zeroedOutCount(long zeroedOutCount) {
             this.zeroedOutCount = zeroedOutCount;
             return this;
         }
@@ -695,6 +699,18 @@ public final class CreditLedgerEnrichedEntryResponseData {
                     usageCount,
                     zeroedOutCount,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

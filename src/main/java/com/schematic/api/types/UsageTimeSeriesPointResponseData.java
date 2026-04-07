@@ -28,7 +28,7 @@ public final class UsageTimeSeriesPointResponseData {
 
     private final OffsetDateTime timestamp;
 
-    private final int usage;
+    private final long usage;
 
     private final Map<String, Object> additionalProperties;
 
@@ -36,7 +36,7 @@ public final class UsageTimeSeriesPointResponseData {
             Optional<OffsetDateTime> periodEnd,
             Optional<OffsetDateTime> periodStart,
             OffsetDateTime timestamp,
-            int usage,
+            long usage,
             Map<String, Object> additionalProperties) {
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
@@ -61,7 +61,7 @@ public final class UsageTimeSeriesPointResponseData {
     }
 
     @JsonProperty("usage")
-    public int getUsage() {
+    public long getUsage() {
         return usage;
     }
 
@@ -104,11 +104,15 @@ public final class UsageTimeSeriesPointResponseData {
     }
 
     public interface UsageStage {
-        _FinalStage usage(int usage);
+        _FinalStage usage(long usage);
     }
 
     public interface _FinalStage {
         UsageTimeSeriesPointResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage periodEnd(Optional<OffsetDateTime> periodEnd);
 
@@ -123,7 +127,7 @@ public final class UsageTimeSeriesPointResponseData {
     public static final class Builder implements TimestampStage, UsageStage, _FinalStage {
         private OffsetDateTime timestamp;
 
-        private int usage;
+        private long usage;
 
         private Optional<OffsetDateTime> periodStart = Optional.empty();
 
@@ -152,7 +156,7 @@ public final class UsageTimeSeriesPointResponseData {
 
         @java.lang.Override
         @JsonSetter("usage")
-        public _FinalStage usage(int usage) {
+        public _FinalStage usage(long usage) {
             this.usage = usage;
             return this;
         }
@@ -186,6 +190,18 @@ public final class UsageTimeSeriesPointResponseData {
         @java.lang.Override
         public UsageTimeSeriesPointResponseData build() {
             return new UsageTimeSeriesPointResponseData(periodEnd, periodStart, timestamp, usage, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

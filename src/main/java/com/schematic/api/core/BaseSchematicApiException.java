@@ -65,9 +65,9 @@ public class BaseSchematicApiException extends BaseSchematicException {
         return this.headers;
     }
 
-    @java.lang.Override
+    @Override
     public String toString() {
         return "BaseSchematicApiException{" + "message: " + getMessage() + ", statusCode: " + statusCode + ", body: "
-                + body + "}";
+                + ObjectMappers.stringify(body) + "}";
     }
 }

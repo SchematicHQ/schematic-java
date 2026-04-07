@@ -66,6 +66,10 @@ public class AsyncEntitlementsClient {
         return this.rawClient.listCompanyOverrides().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListCompanyOverridesResponse> listCompanyOverrides(RequestOptions requestOptions) {
+        return this.rawClient.listCompanyOverrides(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListCompanyOverridesResponse> listCompanyOverrides(ListCompanyOverridesRequest request) {
         return this.rawClient.listCompanyOverrides(request).thenApply(response -> response.body());
     }
@@ -123,6 +127,10 @@ public class AsyncEntitlementsClient {
         return this.rawClient.countCompanyOverrides().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountCompanyOverridesResponse> countCompanyOverrides(RequestOptions requestOptions) {
+        return this.rawClient.countCompanyOverrides(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountCompanyOverridesResponse> countCompanyOverrides(
             CountCompanyOverridesRequest request) {
         return this.rawClient.countCompanyOverrides(request).thenApply(response -> response.body());
@@ -156,6 +164,10 @@ public class AsyncEntitlementsClient {
         return this.rawClient.listFeatureUsage().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListFeatureUsageResponse> listFeatureUsage(RequestOptions requestOptions) {
+        return this.rawClient.listFeatureUsage(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListFeatureUsageResponse> listFeatureUsage(ListFeatureUsageRequest request) {
         return this.rawClient.listFeatureUsage(request).thenApply(response -> response.body());
     }
@@ -177,6 +189,10 @@ public class AsyncEntitlementsClient {
 
     public CompletableFuture<CountFeatureUsageResponse> countFeatureUsage() {
         return this.rawClient.countFeatureUsage().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountFeatureUsageResponse> countFeatureUsage(RequestOptions requestOptions) {
+        return this.rawClient.countFeatureUsage(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountFeatureUsageResponse> countFeatureUsage(CountFeatureUsageRequest request) {
@@ -208,6 +224,10 @@ public class AsyncEntitlementsClient {
 
     public CompletableFuture<ListPlanEntitlementsResponse> listPlanEntitlements() {
         return this.rawClient.listPlanEntitlements().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListPlanEntitlementsResponse> listPlanEntitlements(RequestOptions requestOptions) {
+        return this.rawClient.listPlanEntitlements(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListPlanEntitlementsResponse> listPlanEntitlements(ListPlanEntitlementsRequest request) {
@@ -265,6 +285,10 @@ public class AsyncEntitlementsClient {
 
     public CompletableFuture<CountPlanEntitlementsResponse> countPlanEntitlements() {
         return this.rawClient.countPlanEntitlements().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountPlanEntitlementsResponse> countPlanEntitlements(RequestOptions requestOptions) {
+        return this.rawClient.countPlanEntitlements(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountPlanEntitlementsResponse> countPlanEntitlements(

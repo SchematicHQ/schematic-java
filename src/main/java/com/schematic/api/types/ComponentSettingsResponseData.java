@@ -24,6 +24,8 @@ public final class ComponentSettingsResponseData {
 
     private final boolean showFeatureDescription;
 
+    private final boolean showHardLimit;
+
     private final boolean showPeriodToggle;
 
     private final boolean showZeroPriceAsFree;
@@ -34,12 +36,14 @@ public final class ComponentSettingsResponseData {
             boolean showAsMonthlyPrices,
             boolean showCredits,
             boolean showFeatureDescription,
+            boolean showHardLimit,
             boolean showPeriodToggle,
             boolean showZeroPriceAsFree,
             Map<String, Object> additionalProperties) {
         this.showAsMonthlyPrices = showAsMonthlyPrices;
         this.showCredits = showCredits;
         this.showFeatureDescription = showFeatureDescription;
+        this.showHardLimit = showHardLimit;
         this.showPeriodToggle = showPeriodToggle;
         this.showZeroPriceAsFree = showZeroPriceAsFree;
         this.additionalProperties = additionalProperties;
@@ -58,6 +62,11 @@ public final class ComponentSettingsResponseData {
     @JsonProperty("show_feature_description")
     public boolean getShowFeatureDescription() {
         return showFeatureDescription;
+    }
+
+    @JsonProperty("show_hard_limit")
+    public boolean getShowHardLimit() {
+        return showHardLimit;
     }
 
     @JsonProperty("show_period_toggle")
@@ -85,6 +94,7 @@ public final class ComponentSettingsResponseData {
         return showAsMonthlyPrices == other.showAsMonthlyPrices
                 && showCredits == other.showCredits
                 && showFeatureDescription == other.showFeatureDescription
+                && showHardLimit == other.showHardLimit
                 && showPeriodToggle == other.showPeriodToggle
                 && showZeroPriceAsFree == other.showZeroPriceAsFree;
     }
@@ -95,6 +105,7 @@ public final class ComponentSettingsResponseData {
                 this.showAsMonthlyPrices,
                 this.showCredits,
                 this.showFeatureDescription,
+                this.showHardLimit,
                 this.showPeriodToggle,
                 this.showZeroPriceAsFree);
     }
@@ -119,7 +130,11 @@ public final class ComponentSettingsResponseData {
     }
 
     public interface ShowFeatureDescriptionStage {
-        ShowPeriodToggleStage showFeatureDescription(boolean showFeatureDescription);
+        ShowHardLimitStage showFeatureDescription(boolean showFeatureDescription);
+    }
+
+    public interface ShowHardLimitStage {
+        ShowPeriodToggleStage showHardLimit(boolean showHardLimit);
     }
 
     public interface ShowPeriodToggleStage {
@@ -132,6 +147,10 @@ public final class ComponentSettingsResponseData {
 
     public interface _FinalStage {
         ComponentSettingsResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -139,6 +158,7 @@ public final class ComponentSettingsResponseData {
             implements ShowAsMonthlyPricesStage,
                     ShowCreditsStage,
                     ShowFeatureDescriptionStage,
+                    ShowHardLimitStage,
                     ShowPeriodToggleStage,
                     ShowZeroPriceAsFreeStage,
                     _FinalStage {
@@ -147,6 +167,8 @@ public final class ComponentSettingsResponseData {
         private boolean showCredits;
 
         private boolean showFeatureDescription;
+
+        private boolean showHardLimit;
 
         private boolean showPeriodToggle;
 
@@ -162,6 +184,7 @@ public final class ComponentSettingsResponseData {
             showAsMonthlyPrices(other.getShowAsMonthlyPrices());
             showCredits(other.getShowCredits());
             showFeatureDescription(other.getShowFeatureDescription());
+            showHardLimit(other.getShowHardLimit());
             showPeriodToggle(other.getShowPeriodToggle());
             showZeroPriceAsFree(other.getShowZeroPriceAsFree());
             return this;
@@ -183,8 +206,15 @@ public final class ComponentSettingsResponseData {
 
         @java.lang.Override
         @JsonSetter("show_feature_description")
-        public ShowPeriodToggleStage showFeatureDescription(boolean showFeatureDescription) {
+        public ShowHardLimitStage showFeatureDescription(boolean showFeatureDescription) {
             this.showFeatureDescription = showFeatureDescription;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_hard_limit")
+        public ShowPeriodToggleStage showHardLimit(boolean showHardLimit) {
+            this.showHardLimit = showHardLimit;
             return this;
         }
 
@@ -208,9 +238,22 @@ public final class ComponentSettingsResponseData {
                     showAsMonthlyPrices,
                     showCredits,
                     showFeatureDescription,
+                    showHardLimit,
                     showPeriodToggle,
                     showZeroPriceAsFree,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

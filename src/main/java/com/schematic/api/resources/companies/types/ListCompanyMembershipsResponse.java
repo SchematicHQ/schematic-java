@@ -92,6 +92,10 @@ public final class ListCompanyMembershipsResponse {
     public interface _FinalStage {
         ListCompanyMembershipsResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<CompanyMembershipDetailResponseData> data);
 
         _FinalStage addData(CompanyMembershipDetailResponseData data);
@@ -156,6 +160,18 @@ public final class ListCompanyMembershipsResponse {
         @java.lang.Override
         public ListCompanyMembershipsResponse build() {
             return new ListCompanyMembershipsResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

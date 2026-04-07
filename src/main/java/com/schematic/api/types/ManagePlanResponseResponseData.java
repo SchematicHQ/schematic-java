@@ -81,6 +81,10 @@ public final class ManagePlanResponseResponseData {
     public interface _FinalStage {
         ManagePlanResponseResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage company(Optional<CompanyDetailResponseData> company);
 
         _FinalStage company(CompanyDetailResponseData company);
@@ -127,6 +131,18 @@ public final class ManagePlanResponseResponseData {
         @java.lang.Override
         public ManagePlanResponseResponseData build() {
             return new ManagePlanResponseResponseData(company, success, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -21,33 +21,33 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CouponRequestBody.Builder.class)
 public final class CouponRequestBody {
-    private final int amountOff;
+    private final long amountOff;
 
     private final Optional<String> currency;
 
     private final String duration;
 
-    private final int durationInMonths;
+    private final long durationInMonths;
 
-    private final int maxRedemptions;
+    private final long maxRedemptions;
 
     private final String name;
 
     private final double percentOff;
 
-    private final int timesRedeemed;
+    private final long timesRedeemed;
 
     private final Map<String, Object> additionalProperties;
 
     private CouponRequestBody(
-            int amountOff,
+            long amountOff,
             Optional<String> currency,
             String duration,
-            int durationInMonths,
-            int maxRedemptions,
+            long durationInMonths,
+            long maxRedemptions,
             String name,
             double percentOff,
-            int timesRedeemed,
+            long timesRedeemed,
             Map<String, Object> additionalProperties) {
         this.amountOff = amountOff;
         this.currency = currency;
@@ -61,7 +61,7 @@ public final class CouponRequestBody {
     }
 
     @JsonProperty("amount_off")
-    public int getAmountOff() {
+    public long getAmountOff() {
         return amountOff;
     }
 
@@ -76,12 +76,12 @@ public final class CouponRequestBody {
     }
 
     @JsonProperty("duration_in_months")
-    public int getDurationInMonths() {
+    public long getDurationInMonths() {
         return durationInMonths;
     }
 
     @JsonProperty("max_redemptions")
-    public int getMaxRedemptions() {
+    public long getMaxRedemptions() {
         return maxRedemptions;
     }
 
@@ -96,7 +96,7 @@ public final class CouponRequestBody {
     }
 
     @JsonProperty("times_redeemed")
-    public int getTimesRedeemed() {
+    public long getTimesRedeemed() {
         return timesRedeemed;
     }
 
@@ -145,7 +145,7 @@ public final class CouponRequestBody {
     }
 
     public interface AmountOffStage {
-        DurationStage amountOff(int amountOff);
+        DurationStage amountOff(long amountOff);
 
         Builder from(CouponRequestBody other);
     }
@@ -155,11 +155,11 @@ public final class CouponRequestBody {
     }
 
     public interface DurationInMonthsStage {
-        MaxRedemptionsStage durationInMonths(int durationInMonths);
+        MaxRedemptionsStage durationInMonths(long durationInMonths);
     }
 
     public interface MaxRedemptionsStage {
-        NameStage maxRedemptions(int maxRedemptions);
+        NameStage maxRedemptions(long maxRedemptions);
     }
 
     public interface NameStage {
@@ -171,11 +171,15 @@ public final class CouponRequestBody {
     }
 
     public interface TimesRedeemedStage {
-        _FinalStage timesRedeemed(int timesRedeemed);
+        _FinalStage timesRedeemed(long timesRedeemed);
     }
 
     public interface _FinalStage {
         CouponRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage currency(Optional<String> currency);
 
@@ -192,19 +196,19 @@ public final class CouponRequestBody {
                     PercentOffStage,
                     TimesRedeemedStage,
                     _FinalStage {
-        private int amountOff;
+        private long amountOff;
 
         private String duration;
 
-        private int durationInMonths;
+        private long durationInMonths;
 
-        private int maxRedemptions;
+        private long maxRedemptions;
 
         private String name;
 
         private double percentOff;
 
-        private int timesRedeemed;
+        private long timesRedeemed;
 
         private Optional<String> currency = Optional.empty();
 
@@ -228,7 +232,7 @@ public final class CouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("amount_off")
-        public DurationStage amountOff(int amountOff) {
+        public DurationStage amountOff(long amountOff) {
             this.amountOff = amountOff;
             return this;
         }
@@ -242,14 +246,14 @@ public final class CouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("duration_in_months")
-        public MaxRedemptionsStage durationInMonths(int durationInMonths) {
+        public MaxRedemptionsStage durationInMonths(long durationInMonths) {
             this.durationInMonths = durationInMonths;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("max_redemptions")
-        public NameStage maxRedemptions(int maxRedemptions) {
+        public NameStage maxRedemptions(long maxRedemptions) {
             this.maxRedemptions = maxRedemptions;
             return this;
         }
@@ -270,7 +274,7 @@ public final class CouponRequestBody {
 
         @java.lang.Override
         @JsonSetter("times_redeemed")
-        public _FinalStage timesRedeemed(int timesRedeemed) {
+        public _FinalStage timesRedeemed(long timesRedeemed) {
             this.timesRedeemed = timesRedeemed;
             return this;
         }
@@ -300,6 +304,18 @@ public final class CouponRequestBody {
                     percentOff,
                     timesRedeemed,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

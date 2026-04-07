@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public final class FeatureUsageResponseData {
     private final boolean access;
 
-    private final Optional<Integer> allocation;
+    private final Optional<Long> allocation;
 
     private final EntitlementValueType allocationType;
 
@@ -49,7 +49,7 @@ public final class FeatureUsageResponseData {
 
     private final Optional<Double> creditUsed;
 
-    private final Optional<Integer> effectiveLimit;
+    private final Optional<Long> effectiveLimit;
 
     private final Optional<Double> effectivePrice;
 
@@ -73,7 +73,7 @@ public final class FeatureUsageResponseData {
 
     private final Optional<BillingPriceView> monthlyUsageBasedPrice;
 
-    private final Optional<Integer> overuse;
+    private final Optional<Long> overuse;
 
     private final Optional<Double> percentUsed;
 
@@ -85,9 +85,9 @@ public final class FeatureUsageResponseData {
 
     private final Optional<EntitlementPriceBehavior> priceBehavior;
 
-    private final Optional<Integer> softLimit;
+    private final Optional<Long> softLimit;
 
-    private final Optional<Integer> usage;
+    private final Optional<Long> usage;
 
     private final Optional<BillingPriceView> yearlyUsageBasedPrice;
 
@@ -95,7 +95,7 @@ public final class FeatureUsageResponseData {
 
     private FeatureUsageResponseData(
             boolean access,
-            Optional<Integer> allocation,
+            Optional<Long> allocation,
             EntitlementValueType allocationType,
             Optional<CompanyOverrideResponseData> companyOverride,
             Optional<Double> creditConsumptionRate,
@@ -107,7 +107,7 @@ public final class FeatureUsageResponseData {
             Optional<String> creditTypeIcon,
             Optional<CreditUsageAggregation> creditUsageAggregation,
             Optional<Double> creditUsed,
-            Optional<Integer> effectiveLimit,
+            Optional<Long> effectiveLimit,
             Optional<Double> effectivePrice,
             Optional<OffsetDateTime> entitlementExpirationDate,
             String entitlementId,
@@ -119,14 +119,14 @@ public final class FeatureUsageResponseData {
             Optional<OffsetDateTime> metricResetAt,
             Optional<String> monthReset,
             Optional<BillingPriceView> monthlyUsageBasedPrice,
-            Optional<Integer> overuse,
+            Optional<Long> overuse,
             Optional<Double> percentUsed,
             Optional<String> period,
             Optional<PlanResponseData> plan,
             Optional<PlanEntitlementResponseData> planEntitlement,
             Optional<EntitlementPriceBehavior> priceBehavior,
-            Optional<Integer> softLimit,
-            Optional<Integer> usage,
+            Optional<Long> softLimit,
+            Optional<Long> usage,
             Optional<BillingPriceView> yearlyUsageBasedPrice,
             Map<String, Object> additionalProperties) {
         this.access = access;
@@ -178,10 +178,13 @@ public final class FeatureUsageResponseData {
      * @return The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted or that this is a credit-based entitlement (use credit_remaining instead).
      */
     @JsonProperty("allocation")
-    public Optional<Integer> getAllocation() {
+    public Optional<Long> getAllocation() {
         return allocation;
     }
 
+    /**
+     * @return The type of allocation that is being used.
+     */
     @JsonProperty("allocation_type")
     public EntitlementValueType getAllocationType() {
         return allocationType;
@@ -210,6 +213,9 @@ public final class FeatureUsageResponseData {
         return creditGrantDetails;
     }
 
+    /**
+     * @return Reason for the credit grant
+     */
     @JsonProperty("credit_grant_reason")
     public Optional<BillingCreditGrantReason> getCreditGrantReason() {
         return creditGrantReason;
@@ -236,6 +242,9 @@ public final class FeatureUsageResponseData {
         return creditTypeIcon;
     }
 
+    /**
+     * @return Aggregated credit usage by time period (day, week, month, billing period)
+     */
     @JsonProperty("credit_usage_aggregation")
     public Optional<CreditUsageAggregation> getCreditUsageAggregation() {
         return creditUsageAggregation;
@@ -250,7 +259,7 @@ public final class FeatureUsageResponseData {
      * @return Effective limit for usage calculations. For overage pricing, this is the soft limit where overage charges begin. For tiered pricing, this is the first tier boundary. For other pricing models, this is the base allocation. Used to calculate usage percentages and determine access thresholds.
      */
     @JsonProperty("effective_limit")
-    public Optional<Integer> getEffectiveLimit() {
+    public Optional<Long> getEffectiveLimit() {
         return effectiveLimit;
     }
 
@@ -331,7 +340,7 @@ public final class FeatureUsageResponseData {
      * @return Amount of usage exceeding soft limit (overage pricing only)
      */
     @JsonProperty("overuse")
-    public Optional<Integer> getOveruse() {
+    public Optional<Long> getOveruse() {
         return overuse;
     }
 
@@ -370,7 +379,7 @@ public final class FeatureUsageResponseData {
      * @return The soft limit for the feature usage. Available only for overage price behavior
      */
     @JsonProperty("soft_limit")
-    public Optional<Integer> getSoftLimit() {
+    public Optional<Long> getSoftLimit() {
         return softLimit;
     }
 
@@ -378,7 +387,7 @@ public final class FeatureUsageResponseData {
      * @return The amount of usage that has been consumed; a null value indicates that usage is not being measured or that this is a credit-based entitlement (use credit_used instead).
      */
     @JsonProperty("usage")
-    public Optional<Integer> getUsage() {
+    public Optional<Long> getUsage() {
         return usage;
     }
 
@@ -493,6 +502,9 @@ public final class FeatureUsageResponseData {
     }
 
     public interface AllocationTypeStage {
+        /**
+         * <p>The type of allocation that is being used.</p>
+         */
         EntitlementIdStage allocationType(@NotNull EntitlementValueType allocationType);
     }
 
@@ -507,12 +519,16 @@ public final class FeatureUsageResponseData {
     public interface _FinalStage {
         FeatureUsageResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>The maximum amount of usage that is permitted; a null value indicates that unlimited usage is permitted or that this is a credit-based entitlement (use credit_remaining instead).</p>
          */
-        _FinalStage allocation(Optional<Integer> allocation);
+        _FinalStage allocation(Optional<Long> allocation);
 
-        _FinalStage allocation(Integer allocation);
+        _FinalStage allocation(Long allocation);
 
         _FinalStage companyOverride(Optional<CompanyOverrideResponseData> companyOverride);
 
@@ -533,6 +549,9 @@ public final class FeatureUsageResponseData {
 
         _FinalStage creditGrantDetails(List<CreditGrantDetail> creditGrantDetails);
 
+        /**
+         * <p>Reason for the credit grant</p>
+         */
         _FinalStage creditGrantReason(Optional<BillingCreditGrantReason> creditGrantReason);
 
         _FinalStage creditGrantReason(BillingCreditGrantReason creditGrantReason);
@@ -555,6 +574,9 @@ public final class FeatureUsageResponseData {
 
         _FinalStage creditTypeIcon(String creditTypeIcon);
 
+        /**
+         * <p>Aggregated credit usage by time period (day, week, month, billing period)</p>
+         */
         _FinalStage creditUsageAggregation(Optional<CreditUsageAggregation> creditUsageAggregation);
 
         _FinalStage creditUsageAggregation(CreditUsageAggregation creditUsageAggregation);
@@ -566,9 +588,9 @@ public final class FeatureUsageResponseData {
         /**
          * <p>Effective limit for usage calculations. For overage pricing, this is the soft limit where overage charges begin. For tiered pricing, this is the first tier boundary. For other pricing models, this is the base allocation. Used to calculate usage percentages and determine access thresholds.</p>
          */
-        _FinalStage effectiveLimit(Optional<Integer> effectiveLimit);
+        _FinalStage effectiveLimit(Optional<Long> effectiveLimit);
 
-        _FinalStage effectiveLimit(Integer effectiveLimit);
+        _FinalStage effectiveLimit(Long effectiveLimit);
 
         /**
          * <p>Per-unit price for current usage scenario</p>
@@ -627,9 +649,9 @@ public final class FeatureUsageResponseData {
         /**
          * <p>Amount of usage exceeding soft limit (overage pricing only)</p>
          */
-        _FinalStage overuse(Optional<Integer> overuse);
+        _FinalStage overuse(Optional<Long> overuse);
 
-        _FinalStage overuse(Integer overuse);
+        _FinalStage overuse(Long overuse);
 
         /**
          * <p>Percentage of allocation consumed (0-100+)</p>
@@ -660,16 +682,16 @@ public final class FeatureUsageResponseData {
         /**
          * <p>The soft limit for the feature usage. Available only for overage price behavior</p>
          */
-        _FinalStage softLimit(Optional<Integer> softLimit);
+        _FinalStage softLimit(Optional<Long> softLimit);
 
-        _FinalStage softLimit(Integer softLimit);
+        _FinalStage softLimit(Long softLimit);
 
         /**
          * <p>The amount of usage that has been consumed; a null value indicates that usage is not being measured or that this is a credit-based entitlement (use credit_used instead).</p>
          */
-        _FinalStage usage(Optional<Integer> usage);
+        _FinalStage usage(Optional<Long> usage);
 
-        _FinalStage usage(Integer usage);
+        _FinalStage usage(Long usage);
 
         _FinalStage yearlyUsageBasedPrice(Optional<BillingPriceView> yearlyUsageBasedPrice);
 
@@ -689,9 +711,9 @@ public final class FeatureUsageResponseData {
 
         private Optional<BillingPriceView> yearlyUsageBasedPrice = Optional.empty();
 
-        private Optional<Integer> usage = Optional.empty();
+        private Optional<Long> usage = Optional.empty();
 
-        private Optional<Integer> softLimit = Optional.empty();
+        private Optional<Long> softLimit = Optional.empty();
 
         private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
@@ -703,7 +725,7 @@ public final class FeatureUsageResponseData {
 
         private Optional<Double> percentUsed = Optional.empty();
 
-        private Optional<Integer> overuse = Optional.empty();
+        private Optional<Long> overuse = Optional.empty();
 
         private Optional<BillingPriceView> monthlyUsageBasedPrice = Optional.empty();
 
@@ -723,7 +745,7 @@ public final class FeatureUsageResponseData {
 
         private Optional<Double> effectivePrice = Optional.empty();
 
-        private Optional<Integer> effectiveLimit = Optional.empty();
+        private Optional<Long> effectiveLimit = Optional.empty();
 
         private Optional<Double> creditUsed = Optional.empty();
 
@@ -745,7 +767,7 @@ public final class FeatureUsageResponseData {
 
         private Optional<CompanyOverrideResponseData> companyOverride = Optional.empty();
 
-        private Optional<Integer> allocation = Optional.empty();
+        private Optional<Long> allocation = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -803,6 +825,11 @@ public final class FeatureUsageResponseData {
             return this;
         }
 
+        /**
+         * <p>The type of allocation that is being used.</p>
+         * <p>The type of allocation that is being used.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("allocation_type")
         public EntitlementIdStage allocationType(@NotNull EntitlementValueType allocationType) {
@@ -842,7 +869,7 @@ public final class FeatureUsageResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage usage(Integer usage) {
+        public _FinalStage usage(Long usage) {
             this.usage = Optional.ofNullable(usage);
             return this;
         }
@@ -852,7 +879,7 @@ public final class FeatureUsageResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "usage", nulls = Nulls.SKIP)
-        public _FinalStage usage(Optional<Integer> usage) {
+        public _FinalStage usage(Optional<Long> usage) {
             this.usage = usage;
             return this;
         }
@@ -862,7 +889,7 @@ public final class FeatureUsageResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage softLimit(Integer softLimit) {
+        public _FinalStage softLimit(Long softLimit) {
             this.softLimit = Optional.ofNullable(softLimit);
             return this;
         }
@@ -872,7 +899,7 @@ public final class FeatureUsageResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
-        public _FinalStage softLimit(Optional<Integer> softLimit) {
+        public _FinalStage softLimit(Optional<Long> softLimit) {
             this.softLimit = softLimit;
             return this;
         }
@@ -961,7 +988,7 @@ public final class FeatureUsageResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage overuse(Integer overuse) {
+        public _FinalStage overuse(Long overuse) {
             this.overuse = Optional.ofNullable(overuse);
             return this;
         }
@@ -971,7 +998,7 @@ public final class FeatureUsageResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "overuse", nulls = Nulls.SKIP)
-        public _FinalStage overuse(Optional<Integer> overuse) {
+        public _FinalStage overuse(Optional<Long> overuse) {
             this.overuse = overuse;
             return this;
         }
@@ -1140,7 +1167,7 @@ public final class FeatureUsageResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage effectiveLimit(Integer effectiveLimit) {
+        public _FinalStage effectiveLimit(Long effectiveLimit) {
             this.effectiveLimit = Optional.ofNullable(effectiveLimit);
             return this;
         }
@@ -1150,7 +1177,7 @@ public final class FeatureUsageResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "effective_limit", nulls = Nulls.SKIP)
-        public _FinalStage effectiveLimit(Optional<Integer> effectiveLimit) {
+        public _FinalStage effectiveLimit(Optional<Long> effectiveLimit) {
             this.effectiveLimit = effectiveLimit;
             return this;
         }
@@ -1168,12 +1195,19 @@ public final class FeatureUsageResponseData {
             return this;
         }
 
+        /**
+         * <p>Aggregated credit usage by time period (day, week, month, billing period)</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage creditUsageAggregation(CreditUsageAggregation creditUsageAggregation) {
             this.creditUsageAggregation = Optional.ofNullable(creditUsageAggregation);
             return this;
         }
 
+        /**
+         * <p>Aggregated credit usage by time period (day, week, month, billing period)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "credit_usage_aggregation", nulls = Nulls.SKIP)
         public _FinalStage creditUsageAggregation(Optional<CreditUsageAggregation> creditUsageAggregation) {
@@ -1234,12 +1268,19 @@ public final class FeatureUsageResponseData {
             return this;
         }
 
+        /**
+         * <p>Reason for the credit grant</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage creditGrantReason(BillingCreditGrantReason creditGrantReason) {
             this.creditGrantReason = Optional.ofNullable(creditGrantReason);
             return this;
         }
 
+        /**
+         * <p>Reason for the credit grant</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "credit_grant_reason", nulls = Nulls.SKIP)
         public _FinalStage creditGrantReason(Optional<BillingCreditGrantReason> creditGrantReason) {
@@ -1311,7 +1352,7 @@ public final class FeatureUsageResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage allocation(Integer allocation) {
+        public _FinalStage allocation(Long allocation) {
             this.allocation = Optional.ofNullable(allocation);
             return this;
         }
@@ -1321,7 +1362,7 @@ public final class FeatureUsageResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "allocation", nulls = Nulls.SKIP)
-        public _FinalStage allocation(Optional<Integer> allocation) {
+        public _FinalStage allocation(Optional<Long> allocation) {
             this.allocation = allocation;
             return this;
         }
@@ -1364,6 +1405,18 @@ public final class FeatureUsageResponseData {
                     usage,
                     yearlyUsageBasedPrice,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

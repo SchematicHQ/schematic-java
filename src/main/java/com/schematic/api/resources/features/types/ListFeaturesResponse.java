@@ -90,6 +90,10 @@ public final class ListFeaturesResponse {
     public interface _FinalStage {
         ListFeaturesResponse build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<FeatureDetailResponseData> data);
 
         _FinalStage addData(FeatureDetailResponseData data);
@@ -154,6 +158,18 @@ public final class ListFeaturesResponse {
         @java.lang.Override
         public ListFeaturesResponse build() {
             return new ListFeaturesResponse(data, params, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

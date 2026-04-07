@@ -85,6 +85,10 @@ public final class PlanGroupPlanEntitlementsOrder {
     public interface _FinalStage {
         PlanGroupPlanEntitlementsOrder build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage entitlements(Optional<List<PlanEntitlementsOrder>> entitlements);
 
         _FinalStage entitlements(List<PlanEntitlementsOrder> entitlements);
@@ -131,6 +135,18 @@ public final class PlanGroupPlanEntitlementsOrder {
         @java.lang.Override
         public PlanGroupPlanEntitlementsOrder build() {
             return new PlanGroupPlanEntitlementsOrder(entitlements, planId, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

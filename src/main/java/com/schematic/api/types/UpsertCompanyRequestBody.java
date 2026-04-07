@@ -31,6 +31,8 @@ public final class UpsertCompanyRequestBody {
 
     private final Optional<String> name;
 
+    private final Optional<Boolean> preventKeyRemap;
+
     private final Optional<Map<String, JsonNode>> traits;
 
     private final Optional<Boolean> updateOnly;
@@ -42,6 +44,7 @@ public final class UpsertCompanyRequestBody {
             Map<String, String> keys,
             Optional<OffsetDateTime> lastSeenAt,
             Optional<String> name,
+            Optional<Boolean> preventKeyRemap,
             Optional<Map<String, JsonNode>> traits,
             Optional<Boolean> updateOnly,
             Map<String, Object> additionalProperties) {
@@ -49,6 +52,7 @@ public final class UpsertCompanyRequestBody {
         this.keys = keys;
         this.lastSeenAt = lastSeenAt;
         this.name = name;
+        this.preventKeyRemap = preventKeyRemap;
         this.traits = traits;
         this.updateOnly = updateOnly;
         this.additionalProperties = additionalProperties;
@@ -80,6 +84,11 @@ public final class UpsertCompanyRequestBody {
         return name;
     }
 
+    @JsonProperty("prevent_key_remap")
+    public Optional<Boolean> getPreventKeyRemap() {
+        return preventKeyRemap;
+    }
+
     /**
      * @return A map of trait names to trait values
      */
@@ -109,13 +118,15 @@ public final class UpsertCompanyRequestBody {
                 && keys.equals(other.keys)
                 && lastSeenAt.equals(other.lastSeenAt)
                 && name.equals(other.name)
+                && preventKeyRemap.equals(other.preventKeyRemap)
                 && traits.equals(other.traits)
                 && updateOnly.equals(other.updateOnly);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.keys, this.lastSeenAt, this.name, this.traits, this.updateOnly);
+        return Objects.hash(
+                this.id, this.keys, this.lastSeenAt, this.name, this.preventKeyRemap, this.traits, this.updateOnly);
     }
 
     @java.lang.Override
@@ -137,6 +148,8 @@ public final class UpsertCompanyRequestBody {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<Boolean> preventKeyRemap = Optional.empty();
+
         private Optional<Map<String, JsonNode>> traits = Optional.empty();
 
         private Optional<Boolean> updateOnly = Optional.empty();
@@ -151,6 +164,7 @@ public final class UpsertCompanyRequestBody {
             keys(other.getKeys());
             lastSeenAt(other.getLastSeenAt());
             name(other.getName());
+            preventKeyRemap(other.getPreventKeyRemap());
             traits(other.getTraits());
             updateOnly(other.getUpdateOnly());
             return this;
@@ -216,6 +230,17 @@ public final class UpsertCompanyRequestBody {
             return this;
         }
 
+        @JsonSetter(value = "prevent_key_remap", nulls = Nulls.SKIP)
+        public Builder preventKeyRemap(Optional<Boolean> preventKeyRemap) {
+            this.preventKeyRemap = preventKeyRemap;
+            return this;
+        }
+
+        public Builder preventKeyRemap(Boolean preventKeyRemap) {
+            this.preventKeyRemap = Optional.ofNullable(preventKeyRemap);
+            return this;
+        }
+
         /**
          * <p>A map of trait names to trait values</p>
          */
@@ -242,7 +267,18 @@ public final class UpsertCompanyRequestBody {
         }
 
         public UpsertCompanyRequestBody build() {
-            return new UpsertCompanyRequestBody(id, keys, lastSeenAt, name, traits, updateOnly, additionalProperties);
+            return new UpsertCompanyRequestBody(
+                    id, keys, lastSeenAt, name, preventKeyRemap, traits, updateOnly, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

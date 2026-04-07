@@ -155,6 +155,10 @@ public final class BillingSubscriptionDiscount {
     public interface _FinalStage {
         BillingSubscriptionDiscount build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage customerFacingCode(Optional<String> customerFacingCode);
 
         _FinalStage customerFacingCode(String customerFacingCode);
@@ -280,6 +284,18 @@ public final class BillingSubscriptionDiscount {
                     promoCodeExternalId,
                     startedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

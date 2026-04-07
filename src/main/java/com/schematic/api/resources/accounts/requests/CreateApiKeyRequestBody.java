@@ -27,16 +27,20 @@ public final class CreateApiKeyRequestBody {
 
     private final String name;
 
+    private final Optional<Boolean> readonly;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateApiKeyRequestBody(
             Optional<String> description,
             Optional<String> environmentId,
             String name,
+            Optional<Boolean> readonly,
             Map<String, Object> additionalProperties) {
         this.description = description;
         this.environmentId = environmentId;
         this.name = name;
+        this.readonly = readonly;
         this.additionalProperties = additionalProperties;
     }
 
@@ -55,6 +59,11 @@ public final class CreateApiKeyRequestBody {
         return name;
     }
 
+    @JsonProperty("readonly")
+    public Optional<Boolean> getReadonly() {
+        return readonly;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -69,12 +78,13 @@ public final class CreateApiKeyRequestBody {
     private boolean equalTo(CreateApiKeyRequestBody other) {
         return description.equals(other.description)
                 && environmentId.equals(other.environmentId)
-                && name.equals(other.name);
+                && name.equals(other.name)
+                && readonly.equals(other.readonly);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.description, this.environmentId, this.name);
+        return Objects.hash(this.description, this.environmentId, this.name, this.readonly);
     }
 
     @java.lang.Override
@@ -95,6 +105,10 @@ public final class CreateApiKeyRequestBody {
     public interface _FinalStage {
         CreateApiKeyRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
@@ -102,11 +116,17 @@ public final class CreateApiKeyRequestBody {
         _FinalStage environmentId(Optional<String> environmentId);
 
         _FinalStage environmentId(String environmentId);
+
+        _FinalStage readonly(Optional<Boolean> readonly);
+
+        _FinalStage readonly(Boolean readonly);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements NameStage, _FinalStage {
         private String name;
+
+        private Optional<Boolean> readonly = Optional.empty();
 
         private Optional<String> environmentId = Optional.empty();
 
@@ -122,6 +142,7 @@ public final class CreateApiKeyRequestBody {
             description(other.getDescription());
             environmentId(other.getEnvironmentId());
             name(other.getName());
+            readonly(other.getReadonly());
             return this;
         }
 
@@ -129,6 +150,19 @@ public final class CreateApiKeyRequestBody {
         @JsonSetter("name")
         public _FinalStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage readonly(Boolean readonly) {
+            this.readonly = Optional.ofNullable(readonly);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "readonly", nulls = Nulls.SKIP)
+        public _FinalStage readonly(Optional<Boolean> readonly) {
+            this.readonly = readonly;
             return this;
         }
 
@@ -160,7 +194,19 @@ public final class CreateApiKeyRequestBody {
 
         @java.lang.Override
         public CreateApiKeyRequestBody build() {
-            return new CreateApiKeyRequestBody(description, environmentId, name, additionalProperties);
+            return new CreateApiKeyRequestBody(description, environmentId, name, readonly, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

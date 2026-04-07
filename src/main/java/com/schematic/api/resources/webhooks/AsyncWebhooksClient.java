@@ -43,6 +43,10 @@ public class AsyncWebhooksClient {
         return this.rawClient.listWebhookEvents().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListWebhookEventsResponse> listWebhookEvents(RequestOptions requestOptions) {
+        return this.rawClient.listWebhookEvents(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListWebhookEventsResponse> listWebhookEvents(ListWebhookEventsRequest request) {
         return this.rawClient.listWebhookEvents(request).thenApply(response -> response.body());
     }
@@ -65,6 +69,10 @@ public class AsyncWebhooksClient {
         return this.rawClient.countWebhookEvents().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CountWebhookEventsResponse> countWebhookEvents(RequestOptions requestOptions) {
+        return this.rawClient.countWebhookEvents(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountWebhookEventsResponse> countWebhookEvents(CountWebhookEventsRequest request) {
         return this.rawClient.countWebhookEvents(request).thenApply(response -> response.body());
     }
@@ -76,6 +84,10 @@ public class AsyncWebhooksClient {
 
     public CompletableFuture<ListWebhooksResponse> listWebhooks() {
         return this.rawClient.listWebhooks().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListWebhooksResponse> listWebhooks(RequestOptions requestOptions) {
+        return this.rawClient.listWebhooks(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListWebhooksResponse> listWebhooks(ListWebhooksRequest request) {
@@ -108,6 +120,10 @@ public class AsyncWebhooksClient {
         return this.rawClient.updateWebhook(webhookId).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<UpdateWebhookResponse> updateWebhook(String webhookId, RequestOptions requestOptions) {
+        return this.rawClient.updateWebhook(webhookId, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<UpdateWebhookResponse> updateWebhook(String webhookId, UpdateWebhookRequestBody request) {
         return this.rawClient.updateWebhook(webhookId, request).thenApply(response -> response.body());
     }
@@ -127,6 +143,10 @@ public class AsyncWebhooksClient {
 
     public CompletableFuture<CountWebhooksResponse> countWebhooks() {
         return this.rawClient.countWebhooks().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountWebhooksResponse> countWebhooks(RequestOptions requestOptions) {
+        return this.rawClient.countWebhooks(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountWebhooksResponse> countWebhooks(CountWebhooksRequest request) {

@@ -71,6 +71,9 @@ public final class WebhookRequestType {
 
     public static final WebhookRequestType PLAN_UPDATED = new WebhookRequestType(Value.PLAN_UPDATED, "plan.updated");
 
+    public static final WebhookRequestType COMPANY_SCHEDULED_DOWNGRADE =
+            new WebhookRequestType(Value.COMPANY_SCHEDULED_DOWNGRADE, "company.scheduled_downgrade");
+
     public static final WebhookRequestType CREDIT_LIMIT_WARNING =
             new WebhookRequestType(Value.CREDIT_LIMIT_WARNING, "credit.limit.warning");
 
@@ -79,6 +82,9 @@ public final class WebhookRequestType {
 
     public static final WebhookRequestType ENTITLEMENT_SOFT_LIMIT_WARNING =
             new WebhookRequestType(Value.ENTITLEMENT_SOFT_LIMIT_WARNING, "entitlement.soft_limit.warning");
+
+    public static final WebhookRequestType PLAN_VERSION_DELETED =
+            new WebhookRequestType(Value.PLAN_VERSION_DELETED, "plan_version.deleted");
 
     public static final WebhookRequestType COMPANY_PLAN_CHANGED =
             new WebhookRequestType(Value.COMPANY_PLAN_CHANGED, "company.plan_changed");
@@ -187,12 +193,16 @@ public final class WebhookRequestType {
                 return visitor.visitEntitlementLimitWarning();
             case PLAN_UPDATED:
                 return visitor.visitPlanUpdated();
+            case COMPANY_SCHEDULED_DOWNGRADE:
+                return visitor.visitCompanyScheduledDowngrade();
             case CREDIT_LIMIT_WARNING:
                 return visitor.visitCreditLimitWarning();
             case FEATURE_CREATED:
                 return visitor.visitFeatureCreated();
             case ENTITLEMENT_SOFT_LIMIT_WARNING:
                 return visitor.visitEntitlementSoftLimitWarning();
+            case PLAN_VERSION_DELETED:
+                return visitor.visitPlanVersionDeleted();
             case COMPANY_PLAN_CHANGED:
                 return visitor.visitCompanyPlanChanged();
             case COMPANY_UPDATED:
@@ -270,12 +280,16 @@ public final class WebhookRequestType {
                 return ENTITLEMENT_LIMIT_WARNING;
             case "plan.updated":
                 return PLAN_UPDATED;
+            case "company.scheduled_downgrade":
+                return COMPANY_SCHEDULED_DOWNGRADE;
             case "credit.limit.warning":
                 return CREDIT_LIMIT_WARNING;
             case "feature.created":
                 return FEATURE_CREATED;
             case "entitlement.soft_limit.warning":
                 return ENTITLEMENT_SOFT_LIMIT_WARNING;
+            case "plan_version.deleted":
+                return PLAN_VERSION_DELETED;
             case "company.plan_changed":
                 return COMPANY_PLAN_CHANGED;
             case "company.updated":
@@ -317,6 +331,8 @@ public final class WebhookRequestType {
         COMPANY_OVERRIDE_UPDATED,
 
         COMPANY_PLAN_CHANGED,
+
+        COMPANY_SCHEDULED_DOWNGRADE,
 
         COMPANY_UPDATED,
 
@@ -362,6 +378,8 @@ public final class WebhookRequestType {
 
         PLAN_UPDATED,
 
+        PLAN_VERSION_DELETED,
+
         RULE_DELETED,
 
         TEST_SEND,
@@ -395,6 +413,8 @@ public final class WebhookRequestType {
         T visitCompanyOverrideUpdated();
 
         T visitCompanyPlanChanged();
+
+        T visitCompanyScheduledDowngrade();
 
         T visitCompanyUpdated();
 
@@ -439,6 +459,8 @@ public final class WebhookRequestType {
         T visitPlanEntitlementUpdated();
 
         T visitPlanUpdated();
+
+        T visitPlanVersionDeleted();
 
         T visitRuleDeleted();
 

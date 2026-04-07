@@ -65,6 +65,10 @@ public class EntitlementsClient {
         return this.rawClient.listCompanyOverrides().body();
     }
 
+    public ListCompanyOverridesResponse listCompanyOverrides(RequestOptions requestOptions) {
+        return this.rawClient.listCompanyOverrides(requestOptions).body();
+    }
+
     public ListCompanyOverridesResponse listCompanyOverrides(ListCompanyOverridesRequest request) {
         return this.rawClient.listCompanyOverrides(request).body();
     }
@@ -120,6 +124,10 @@ public class EntitlementsClient {
         return this.rawClient.countCompanyOverrides().body();
     }
 
+    public CountCompanyOverridesResponse countCompanyOverrides(RequestOptions requestOptions) {
+        return this.rawClient.countCompanyOverrides(requestOptions).body();
+    }
+
     public CountCompanyOverridesResponse countCompanyOverrides(CountCompanyOverridesRequest request) {
         return this.rawClient.countCompanyOverrides(request).body();
     }
@@ -151,6 +159,10 @@ public class EntitlementsClient {
         return this.rawClient.listFeatureUsage().body();
     }
 
+    public ListFeatureUsageResponse listFeatureUsage(RequestOptions requestOptions) {
+        return this.rawClient.listFeatureUsage(requestOptions).body();
+    }
+
     public ListFeatureUsageResponse listFeatureUsage(ListFeatureUsageRequest request) {
         return this.rawClient.listFeatureUsage(request).body();
     }
@@ -170,6 +182,10 @@ public class EntitlementsClient {
 
     public CountFeatureUsageResponse countFeatureUsage() {
         return this.rawClient.countFeatureUsage().body();
+    }
+
+    public CountFeatureUsageResponse countFeatureUsage(RequestOptions requestOptions) {
+        return this.rawClient.countFeatureUsage(requestOptions).body();
     }
 
     public CountFeatureUsageResponse countFeatureUsage(CountFeatureUsageRequest request) {
@@ -200,6 +216,10 @@ public class EntitlementsClient {
 
     public ListPlanEntitlementsResponse listPlanEntitlements() {
         return this.rawClient.listPlanEntitlements().body();
+    }
+
+    public ListPlanEntitlementsResponse listPlanEntitlements(RequestOptions requestOptions) {
+        return this.rawClient.listPlanEntitlements(requestOptions).body();
     }
 
     public ListPlanEntitlementsResponse listPlanEntitlements(ListPlanEntitlementsRequest request) {
@@ -255,6 +275,10 @@ public class EntitlementsClient {
 
     public CountPlanEntitlementsResponse countPlanEntitlements() {
         return this.rawClient.countPlanEntitlements().body();
+    }
+
+    public CountPlanEntitlementsResponse countPlanEntitlements(RequestOptions requestOptions) {
+        return this.rawClient.countPlanEntitlements(requestOptions).body();
     }
 
     public CountPlanEntitlementsResponse countPlanEntitlements(CountPlanEntitlementsRequest request) {

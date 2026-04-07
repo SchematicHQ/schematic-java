@@ -31,7 +31,7 @@ public final class CreateOrUpdateRuleRequestBody {
 
     private final String name;
 
-    private final int priority;
+    private final long priority;
 
     private final Optional<CreateOrUpdateRuleRequestBodyRuleType> ruleType;
 
@@ -44,7 +44,7 @@ public final class CreateOrUpdateRuleRequestBody {
             List<CreateOrUpdateConditionRequestBody> conditions,
             Optional<String> id,
             String name,
-            int priority,
+            long priority,
             Optional<CreateOrUpdateRuleRequestBodyRuleType> ruleType,
             boolean value,
             Map<String, Object> additionalProperties) {
@@ -79,7 +79,7 @@ public final class CreateOrUpdateRuleRequestBody {
     }
 
     @JsonProperty("priority")
-    public int getPriority() {
+    public long getPriority() {
         return priority;
     }
 
@@ -136,7 +136,7 @@ public final class CreateOrUpdateRuleRequestBody {
     }
 
     public interface PriorityStage {
-        ValueStage priority(int priority);
+        ValueStage priority(long priority);
     }
 
     public interface ValueStage {
@@ -145,6 +145,10 @@ public final class CreateOrUpdateRuleRequestBody {
 
     public interface _FinalStage {
         CreateOrUpdateRuleRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage conditionGroups(List<CreateOrUpdateConditionGroupRequestBody> conditionGroups);
 
@@ -171,7 +175,7 @@ public final class CreateOrUpdateRuleRequestBody {
     public static final class Builder implements NameStage, PriorityStage, ValueStage, _FinalStage {
         private String name;
 
-        private int priority;
+        private long priority;
 
         private boolean value;
 
@@ -209,7 +213,7 @@ public final class CreateOrUpdateRuleRequestBody {
 
         @java.lang.Override
         @JsonSetter("priority")
-        public ValueStage priority(int priority) {
+        public ValueStage priority(long priority) {
             this.priority = priority;
             return this;
         }
@@ -299,6 +303,18 @@ public final class CreateOrUpdateRuleRequestBody {
         public CreateOrUpdateRuleRequestBody build() {
             return new CreateOrUpdateRuleRequestBody(
                     conditionGroups, conditions, id, name, priority, ruleType, value, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

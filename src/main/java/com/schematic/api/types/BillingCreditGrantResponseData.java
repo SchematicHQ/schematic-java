@@ -35,6 +35,8 @@ public final class BillingCreditGrantResponseData {
 
     private final String creditName;
 
+    private final Optional<String> currency;
+
     private final Optional<OffsetDateTime> expiresAt;
 
     private final BillingCreditGrantReason grantReason;
@@ -47,7 +49,7 @@ public final class BillingCreditGrantResponseData {
 
     private final Optional<BillingPriceResponseData> price;
 
-    private final int quantity;
+    private final long quantity;
 
     private final double quantityRemaining;
 
@@ -78,13 +80,14 @@ public final class BillingCreditGrantResponseData {
             Optional<String> creditIcon,
             String creditId,
             String creditName,
+            Optional<String> currency,
             Optional<OffsetDateTime> expiresAt,
             BillingCreditGrantReason grantReason,
             String id,
             Optional<String> planId,
             Optional<String> planName,
             Optional<BillingPriceResponseData> price,
-            int quantity,
+            long quantity,
             double quantityRemaining,
             double quantityUsed,
             boolean renewalEnabled,
@@ -102,6 +105,7 @@ public final class BillingCreditGrantResponseData {
         this.creditIcon = creditIcon;
         this.creditId = creditId;
         this.creditName = creditName;
+        this.currency = currency;
         this.expiresAt = expiresAt;
         this.grantReason = grantReason;
         this.id = id;
@@ -152,6 +156,11 @@ public final class BillingCreditGrantResponseData {
         return creditName;
     }
 
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
+    }
+
     @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
         return expiresAt;
@@ -183,7 +192,7 @@ public final class BillingCreditGrantResponseData {
     }
 
     @JsonProperty("quantity")
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
@@ -255,6 +264,7 @@ public final class BillingCreditGrantResponseData {
                 && creditIcon.equals(other.creditIcon)
                 && creditId.equals(other.creditId)
                 && creditName.equals(other.creditName)
+                && currency.equals(other.currency)
                 && expiresAt.equals(other.expiresAt)
                 && grantReason.equals(other.grantReason)
                 && id.equals(other.id)
@@ -283,6 +293,7 @@ public final class BillingCreditGrantResponseData {
                 this.creditIcon,
                 this.creditId,
                 this.creditName,
+                this.currency,
                 this.expiresAt,
                 this.grantReason,
                 this.id,
@@ -342,7 +353,7 @@ public final class BillingCreditGrantResponseData {
     }
 
     public interface QuantityStage {
-        QuantityRemainingStage quantity(int quantity);
+        QuantityRemainingStage quantity(long quantity);
     }
 
     public interface QuantityRemainingStage {
@@ -368,9 +379,17 @@ public final class BillingCreditGrantResponseData {
     public interface _FinalStage {
         BillingCreditGrantResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage creditIcon(Optional<String> creditIcon);
 
         _FinalStage creditIcon(String creditIcon);
+
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
 
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
@@ -439,7 +458,7 @@ public final class BillingCreditGrantResponseData {
 
         private String id;
 
-        private int quantity;
+        private long quantity;
 
         private double quantityRemaining;
 
@@ -469,6 +488,8 @@ public final class BillingCreditGrantResponseData {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
+        private Optional<String> currency = Optional.empty();
+
         private Optional<String> creditIcon = Optional.empty();
 
         @JsonAnySetter
@@ -484,6 +505,7 @@ public final class BillingCreditGrantResponseData {
             creditIcon(other.getCreditIcon());
             creditId(other.getCreditId());
             creditName(other.getCreditName());
+            currency(other.getCurrency());
             expiresAt(other.getExpiresAt());
             grantReason(other.getGrantReason());
             id(other.getId());
@@ -555,7 +577,7 @@ public final class BillingCreditGrantResponseData {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public QuantityRemainingStage quantity(int quantity) {
+        public QuantityRemainingStage quantity(long quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -713,6 +735,19 @@ public final class BillingCreditGrantResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage creditIcon(String creditIcon) {
             this.creditIcon = Optional.ofNullable(creditIcon);
             return this;
@@ -734,6 +769,7 @@ public final class BillingCreditGrantResponseData {
                     creditIcon,
                     creditId,
                     creditName,
+                    currency,
                     expiresAt,
                     grantReason,
                     id,
@@ -752,6 +788,18 @@ public final class BillingCreditGrantResponseData {
                     zeroedOutDate,
                     zeroedOutReason,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

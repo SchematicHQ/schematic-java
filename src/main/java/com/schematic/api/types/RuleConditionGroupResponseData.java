@@ -142,6 +142,10 @@ public final class RuleConditionGroupResponseData {
     public interface _FinalStage {
         RuleConditionGroupResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage flagId(Optional<String> flagId);
 
         _FinalStage flagId(String flagId);
@@ -230,6 +234,18 @@ public final class RuleConditionGroupResponseData {
         public RuleConditionGroupResponseData build() {
             return new RuleConditionGroupResponseData(
                     createdAt, environmentId, flagId, id, ruleId, updatedAt, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

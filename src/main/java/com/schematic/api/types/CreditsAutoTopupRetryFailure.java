@@ -22,7 +22,7 @@ import java.util.Optional;
 public final class CreditsAutoTopupRetryFailure {
     private final Optional<CreditsAutoTopupCompanySummary> company;
 
-    private final int consecutiveFailures;
+    private final long consecutiveFailures;
 
     private final Optional<CreditsAutoTopupCreditSummary> credit;
 
@@ -34,7 +34,7 @@ public final class CreditsAutoTopupRetryFailure {
 
     private CreditsAutoTopupRetryFailure(
             Optional<CreditsAutoTopupCompanySummary> company,
-            int consecutiveFailures,
+            long consecutiveFailures,
             Optional<CreditsAutoTopupCreditSummary> credit,
             Optional<String> lastErrorMessage,
             Optional<String> stripeErrorCode,
@@ -53,7 +53,7 @@ public final class CreditsAutoTopupRetryFailure {
     }
 
     @JsonProperty("consecutive_failures")
-    public int getConsecutiveFailures() {
+    public long getConsecutiveFailures() {
         return consecutiveFailures;
     }
 
@@ -107,13 +107,17 @@ public final class CreditsAutoTopupRetryFailure {
     }
 
     public interface ConsecutiveFailuresStage {
-        _FinalStage consecutiveFailures(int consecutiveFailures);
+        _FinalStage consecutiveFailures(long consecutiveFailures);
 
         Builder from(CreditsAutoTopupRetryFailure other);
     }
 
     public interface _FinalStage {
         CreditsAutoTopupRetryFailure build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage company(Optional<CreditsAutoTopupCompanySummary> company);
 
@@ -134,7 +138,7 @@ public final class CreditsAutoTopupRetryFailure {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ConsecutiveFailuresStage, _FinalStage {
-        private int consecutiveFailures;
+        private long consecutiveFailures;
 
         private Optional<String> stripeErrorCode = Optional.empty();
 
@@ -161,7 +165,7 @@ public final class CreditsAutoTopupRetryFailure {
 
         @java.lang.Override
         @JsonSetter("consecutive_failures")
-        public _FinalStage consecutiveFailures(int consecutiveFailures) {
+        public _FinalStage consecutiveFailures(long consecutiveFailures) {
             this.consecutiveFailures = consecutiveFailures;
             return this;
         }
@@ -222,6 +226,18 @@ public final class CreditsAutoTopupRetryFailure {
         public CreditsAutoTopupRetryFailure build() {
             return new CreditsAutoTopupRetryFailure(
                     company, consecutiveFailures, credit, lastErrorMessage, stripeErrorCode, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

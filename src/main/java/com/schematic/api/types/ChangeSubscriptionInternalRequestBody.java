@@ -190,6 +190,10 @@ public final class ChangeSubscriptionInternalRequestBody {
     public interface _FinalStage {
         ChangeSubscriptionInternalRequestBody build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage addOnIds(List<UpdateAddOnRequestBody> addOnIds);
 
         _FinalStage addAddOnIds(UpdateAddOnRequestBody addOnIds);
@@ -417,6 +421,18 @@ public final class ChangeSubscriptionInternalRequestBody {
                     promoCode,
                     skipTrial,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

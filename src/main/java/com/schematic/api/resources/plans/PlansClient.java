@@ -6,15 +6,20 @@ package com.schematic.api.resources.plans;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.plans.requests.CountPlansRequest;
+import com.schematic.api.resources.plans.requests.DeletePlanVersionRequest;
+import com.schematic.api.resources.plans.requests.GetPlanRequest;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
 import com.schematic.api.resources.plans.requests.ListPlansRequest;
+import com.schematic.api.resources.plans.requests.PublishPlanVersionRequestBody;
 import com.schematic.api.resources.plans.requests.UpdateCompanyPlansRequestBody;
 import com.schematic.api.resources.plans.types.CountPlansResponse;
 import com.schematic.api.resources.plans.types.CreatePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanResponse;
+import com.schematic.api.resources.plans.types.DeletePlanVersionResponse;
 import com.schematic.api.resources.plans.types.GetPlanResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
 import com.schematic.api.resources.plans.types.ListPlansResponse;
+import com.schematic.api.resources.plans.types.PublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
 import com.schematic.api.resources.plans.types.UpdatePlanResponse;
 import com.schematic.api.resources.plans.types.UpsertBillingProductPlanResponse;
@@ -54,6 +59,10 @@ public class PlansClient {
         return this.rawClient.listPlans().body();
     }
 
+    public ListPlansResponse listPlans(RequestOptions requestOptions) {
+        return this.rawClient.listPlans(requestOptions).body();
+    }
+
     public ListPlansResponse listPlans(ListPlansRequest request) {
         return this.rawClient.listPlans(request).body();
     }
@@ -76,6 +85,14 @@ public class PlansClient {
 
     public GetPlanResponse getPlan(String planId, RequestOptions requestOptions) {
         return this.rawClient.getPlan(planId, requestOptions).body();
+    }
+
+    public GetPlanResponse getPlan(String planId, GetPlanRequest request) {
+        return this.rawClient.getPlan(planId, request).body();
+    }
+
+    public GetPlanResponse getPlan(String planId, GetPlanRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getPlan(planId, request, requestOptions).body();
     }
 
     public UpdatePlanResponse updatePlan(String planId, UpdatePlanRequestBody request) {
@@ -110,6 +127,10 @@ public class PlansClient {
         return this.rawClient.countPlans().body();
     }
 
+    public CountPlansResponse countPlans(RequestOptions requestOptions) {
+        return this.rawClient.countPlans(requestOptions).body();
+    }
+
     public CountPlansResponse countPlans(CountPlansRequest request) {
         return this.rawClient.countPlans(request).body();
     }
@@ -124,5 +145,33 @@ public class PlansClient {
 
     public ListPlanIssuesResponse listPlanIssues(ListPlanIssuesRequest request, RequestOptions requestOptions) {
         return this.rawClient.listPlanIssues(request, requestOptions).body();
+    }
+
+    public DeletePlanVersionResponse deletePlanVersion(String planId) {
+        return this.rawClient.deletePlanVersion(planId).body();
+    }
+
+    public DeletePlanVersionResponse deletePlanVersion(String planId, RequestOptions requestOptions) {
+        return this.rawClient.deletePlanVersion(planId, requestOptions).body();
+    }
+
+    public DeletePlanVersionResponse deletePlanVersion(String planId, DeletePlanVersionRequest request) {
+        return this.rawClient.deletePlanVersion(planId, request).body();
+    }
+
+    public DeletePlanVersionResponse deletePlanVersion(
+            String planId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
+        return this.rawClient.deletePlanVersion(planId, request, requestOptions).body();
+    }
+
+    public PublishPlanVersionResponse publishPlanVersion(String planId, PublishPlanVersionRequestBody request) {
+        return this.rawClient.publishPlanVersion(planId, request).body();
+    }
+
+    public PublishPlanVersionResponse publishPlanVersion(
+            String planId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .publishPlanVersion(planId, request, requestOptions)
+                .body();
     }
 }

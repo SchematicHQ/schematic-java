@@ -28,7 +28,7 @@ public final class UpdateRuleRequestBody {
 
     private final String name;
 
-    private final int priority;
+    private final long priority;
 
     private final boolean value;
 
@@ -38,7 +38,7 @@ public final class UpdateRuleRequestBody {
             List<CreateOrUpdateConditionGroupRequestBody> conditionGroups,
             List<CreateOrUpdateConditionRequestBody> conditions,
             String name,
-            int priority,
+            long priority,
             boolean value,
             Map<String, Object> additionalProperties) {
         this.conditionGroups = conditionGroups;
@@ -65,7 +65,7 @@ public final class UpdateRuleRequestBody {
     }
 
     @JsonProperty("priority")
-    public int getPriority() {
+    public long getPriority() {
         return priority;
     }
 
@@ -114,7 +114,7 @@ public final class UpdateRuleRequestBody {
     }
 
     public interface PriorityStage {
-        ValueStage priority(int priority);
+        ValueStage priority(long priority);
     }
 
     public interface ValueStage {
@@ -123,6 +123,10 @@ public final class UpdateRuleRequestBody {
 
     public interface _FinalStage {
         UpdateRuleRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         _FinalStage conditionGroups(List<CreateOrUpdateConditionGroupRequestBody> conditionGroups);
 
@@ -141,7 +145,7 @@ public final class UpdateRuleRequestBody {
     public static final class Builder implements NameStage, PriorityStage, ValueStage, _FinalStage {
         private String name;
 
-        private int priority;
+        private long priority;
 
         private boolean value;
 
@@ -173,7 +177,7 @@ public final class UpdateRuleRequestBody {
 
         @java.lang.Override
         @JsonSetter("priority")
-        public ValueStage priority(int priority) {
+        public ValueStage priority(long priority) {
             this.priority = priority;
             return this;
         }
@@ -236,6 +240,18 @@ public final class UpdateRuleRequestBody {
         @java.lang.Override
         public UpdateRuleRequestBody build() {
             return new UpdateRuleRequestBody(conditionGroups, conditions, name, priority, value, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

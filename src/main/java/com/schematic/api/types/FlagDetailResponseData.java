@@ -239,6 +239,10 @@ public final class FlagDetailResponseData {
     public interface _FinalStage {
         FlagDetailResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage feature(Optional<FeatureResponseData> feature);
 
         _FinalStage feature(FeatureResponseData feature);
@@ -471,6 +475,18 @@ public final class FlagDetailResponseData {
                     rules,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -34,7 +34,7 @@ public final class AuditLogListResponseData {
 
     private final String method;
 
-    private final Optional<Integer> resourceId;
+    private final Optional<Long> resourceId;
 
     private final Optional<String> resourceIdString;
 
@@ -42,7 +42,7 @@ public final class AuditLogListResponseData {
 
     private final Optional<String> resourceType;
 
-    private final Optional<Integer> respCode;
+    private final Optional<Long> respCode;
 
     private final Optional<String> secondaryResource;
 
@@ -61,11 +61,11 @@ public final class AuditLogListResponseData {
             Optional<String> environmentId,
             String id,
             String method,
-            Optional<Integer> resourceId,
+            Optional<Long> resourceId,
             Optional<String> resourceIdString,
             Optional<String> resourceName,
             Optional<String> resourceType,
-            Optional<Integer> respCode,
+            Optional<Long> respCode,
             Optional<String> secondaryResource,
             OffsetDateTime startedAt,
             String url,
@@ -120,7 +120,7 @@ public final class AuditLogListResponseData {
     }
 
     @JsonProperty("resource_id")
-    public Optional<Integer> getResourceId() {
+    public Optional<Long> getResourceId() {
         return resourceId;
     }
 
@@ -140,7 +140,7 @@ public final class AuditLogListResponseData {
     }
 
     @JsonProperty("resp_code")
-    public Optional<Integer> getRespCode() {
+    public Optional<Long> getRespCode() {
         return respCode;
     }
 
@@ -247,6 +247,10 @@ public final class AuditLogListResponseData {
     public interface _FinalStage {
         AuditLogListResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage apiKeyId(Optional<String> apiKeyId);
 
         _FinalStage apiKeyId(String apiKeyId);
@@ -259,9 +263,9 @@ public final class AuditLogListResponseData {
 
         _FinalStage environmentId(String environmentId);
 
-        _FinalStage resourceId(Optional<Integer> resourceId);
+        _FinalStage resourceId(Optional<Long> resourceId);
 
-        _FinalStage resourceId(Integer resourceId);
+        _FinalStage resourceId(Long resourceId);
 
         _FinalStage resourceIdString(Optional<String> resourceIdString);
 
@@ -275,9 +279,9 @@ public final class AuditLogListResponseData {
 
         _FinalStage resourceType(String resourceType);
 
-        _FinalStage respCode(Optional<Integer> respCode);
+        _FinalStage respCode(Optional<Long> respCode);
 
-        _FinalStage respCode(Integer respCode);
+        _FinalStage respCode(Long respCode);
 
         _FinalStage secondaryResource(Optional<String> secondaryResource);
 
@@ -305,7 +309,7 @@ public final class AuditLogListResponseData {
 
         private Optional<String> secondaryResource = Optional.empty();
 
-        private Optional<Integer> respCode = Optional.empty();
+        private Optional<Long> respCode = Optional.empty();
 
         private Optional<String> resourceType = Optional.empty();
 
@@ -313,7 +317,7 @@ public final class AuditLogListResponseData {
 
         private Optional<String> resourceIdString = Optional.empty();
 
-        private Optional<Integer> resourceId = Optional.empty();
+        private Optional<Long> resourceId = Optional.empty();
 
         private Optional<String> environmentId = Optional.empty();
 
@@ -408,14 +412,14 @@ public final class AuditLogListResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage respCode(Integer respCode) {
+        public _FinalStage respCode(Long respCode) {
             this.respCode = Optional.ofNullable(respCode);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "resp_code", nulls = Nulls.SKIP)
-        public _FinalStage respCode(Optional<Integer> respCode) {
+        public _FinalStage respCode(Optional<Long> respCode) {
             this.respCode = respCode;
             return this;
         }
@@ -460,14 +464,14 @@ public final class AuditLogListResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage resourceId(Integer resourceId) {
+        public _FinalStage resourceId(Long resourceId) {
             this.resourceId = Optional.ofNullable(resourceId);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "resource_id", nulls = Nulls.SKIP)
-        public _FinalStage resourceId(Optional<Integer> resourceId) {
+        public _FinalStage resourceId(Optional<Long> resourceId) {
             this.resourceId = resourceId;
             return this;
         }
@@ -530,6 +534,18 @@ public final class AuditLogListResponseData {
                     url,
                     userName,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

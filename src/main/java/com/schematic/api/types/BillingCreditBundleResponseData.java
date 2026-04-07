@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,11 +38,13 @@ public final class BillingCreditBundleResponseData {
 
     private final String creditName;
 
+    private final List<CreditBundleCurrencyPriceResponseData> currencyPrices;
+
     private final BillingCreditExpiryType expiryType;
 
     private final BillingCreditExpiryUnit expiryUnit;
 
-    private final Optional<Integer> expiryUnitCount;
+    private final Optional<Long> expiryUnitCount;
 
     private final boolean hasGrants;
 
@@ -52,7 +56,7 @@ public final class BillingCreditBundleResponseData {
 
     private final Optional<BillingPriceResponseData> price;
 
-    private final Optional<Integer> quantity;
+    private final Optional<Long> quantity;
 
     private final Optional<String> singularName;
 
@@ -72,15 +76,16 @@ public final class BillingCreditBundleResponseData {
             Optional<String> creditIcon,
             String creditId,
             String creditName,
+            List<CreditBundleCurrencyPriceResponseData> currencyPrices,
             BillingCreditExpiryType expiryType,
             BillingCreditExpiryUnit expiryUnit,
-            Optional<Integer> expiryUnitCount,
+            Optional<Long> expiryUnitCount,
             boolean hasGrants,
             String id,
             String name,
             Optional<String> pluralName,
             Optional<BillingPriceResponseData> price,
-            Optional<Integer> quantity,
+            Optional<Long> quantity,
             Optional<String> singularName,
             BillingCreditBundleStatus status,
             Optional<BillingPriceResponseData> unitPrice,
@@ -93,6 +98,7 @@ public final class BillingCreditBundleResponseData {
         this.creditIcon = creditIcon;
         this.creditId = creditId;
         this.creditName = creditName;
+        this.currencyPrices = currencyPrices;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
         this.expiryUnitCount = expiryUnitCount;
@@ -144,6 +150,11 @@ public final class BillingCreditBundleResponseData {
         return creditName;
     }
 
+    @JsonProperty("currency_prices")
+    public List<CreditBundleCurrencyPriceResponseData> getCurrencyPrices() {
+        return currencyPrices;
+    }
+
     @JsonProperty("expiry_type")
     public BillingCreditExpiryType getExpiryType() {
         return expiryType;
@@ -155,7 +166,7 @@ public final class BillingCreditBundleResponseData {
     }
 
     @JsonProperty("expiry_unit_count")
-    public Optional<Integer> getExpiryUnitCount() {
+    public Optional<Long> getExpiryUnitCount() {
         return expiryUnitCount;
     }
 
@@ -185,7 +196,7 @@ public final class BillingCreditBundleResponseData {
     }
 
     @JsonProperty("quantity")
-    public Optional<Integer> getQuantity() {
+    public Optional<Long> getQuantity() {
         return quantity;
     }
 
@@ -228,6 +239,7 @@ public final class BillingCreditBundleResponseData {
                 && creditIcon.equals(other.creditIcon)
                 && creditId.equals(other.creditId)
                 && creditName.equals(other.creditName)
+                && currencyPrices.equals(other.currencyPrices)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
                 && expiryUnitCount.equals(other.expiryUnitCount)
@@ -253,6 +265,7 @@ public final class BillingCreditBundleResponseData {
                 this.creditIcon,
                 this.creditId,
                 this.creditName,
+                this.currencyPrices,
                 this.expiryType,
                 this.expiryUnit,
                 this.expiryUnitCount,
@@ -326,6 +339,10 @@ public final class BillingCreditBundleResponseData {
     public interface _FinalStage {
         BillingCreditBundleResponseData build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage billingInvoiceId(Optional<String> billingInvoiceId);
 
         _FinalStage billingInvoiceId(String billingInvoiceId);
@@ -338,9 +355,15 @@ public final class BillingCreditBundleResponseData {
 
         _FinalStage creditIcon(String creditIcon);
 
-        _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount);
+        _FinalStage currencyPrices(List<CreditBundleCurrencyPriceResponseData> currencyPrices);
 
-        _FinalStage expiryUnitCount(Integer expiryUnitCount);
+        _FinalStage addCurrencyPrices(CreditBundleCurrencyPriceResponseData currencyPrices);
+
+        _FinalStage addAllCurrencyPrices(List<CreditBundleCurrencyPriceResponseData> currencyPrices);
+
+        _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount);
+
+        _FinalStage expiryUnitCount(Long expiryUnitCount);
 
         _FinalStage pluralName(Optional<String> pluralName);
 
@@ -350,9 +373,9 @@ public final class BillingCreditBundleResponseData {
 
         _FinalStage price(BillingPriceResponseData price);
 
-        _FinalStage quantity(Optional<Integer> quantity);
+        _FinalStage quantity(Optional<Long> quantity);
 
-        _FinalStage quantity(Integer quantity);
+        _FinalStage quantity(Long quantity);
 
         _FinalStage singularName(Optional<String> singularName);
 
@@ -403,13 +426,15 @@ public final class BillingCreditBundleResponseData {
 
         private Optional<String> singularName = Optional.empty();
 
-        private Optional<Integer> quantity = Optional.empty();
+        private Optional<Long> quantity = Optional.empty();
 
         private Optional<BillingPriceResponseData> price = Optional.empty();
 
         private Optional<String> pluralName = Optional.empty();
 
-        private Optional<Integer> expiryUnitCount = Optional.empty();
+        private Optional<Long> expiryUnitCount = Optional.empty();
+
+        private List<CreditBundleCurrencyPriceResponseData> currencyPrices = new ArrayList<>();
 
         private Optional<String> creditIcon = Optional.empty();
 
@@ -431,6 +456,7 @@ public final class BillingCreditBundleResponseData {
             creditIcon(other.getCreditIcon());
             creditId(other.getCreditId());
             creditName(other.getCreditName());
+            currencyPrices(other.getCurrencyPrices());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
             expiryUnitCount(other.getExpiryUnitCount());
@@ -551,14 +577,14 @@ public final class BillingCreditBundleResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage quantity(Integer quantity) {
+        public _FinalStage quantity(Long quantity) {
             this.quantity = Optional.ofNullable(quantity);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "quantity", nulls = Nulls.SKIP)
-        public _FinalStage quantity(Optional<Integer> quantity) {
+        public _FinalStage quantity(Optional<Long> quantity) {
             this.quantity = quantity;
             return this;
         }
@@ -590,15 +616,39 @@ public final class BillingCreditBundleResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage expiryUnitCount(Integer expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Long expiryUnitCount) {
             this.expiryUnitCount = Optional.ofNullable(expiryUnitCount);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiry_unit_count", nulls = Nulls.SKIP)
-        public _FinalStage expiryUnitCount(Optional<Integer> expiryUnitCount) {
+        public _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount) {
             this.expiryUnitCount = expiryUnitCount;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCurrencyPrices(List<CreditBundleCurrencyPriceResponseData> currencyPrices) {
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCurrencyPrices(CreditBundleCurrencyPriceResponseData currencyPrices) {
+            this.currencyPrices.add(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(List<CreditBundleCurrencyPriceResponseData> currencyPrices) {
+            this.currencyPrices.clear();
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
             return this;
         }
 
@@ -651,6 +701,7 @@ public final class BillingCreditBundleResponseData {
                     creditIcon,
                     creditId,
                     creditName,
+                    currencyPrices,
                     expiryType,
                     expiryUnit,
                     expiryUnitCount,
@@ -665,6 +716,18 @@ public final class BillingCreditBundleResponseData {
                     unitPrice,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }
