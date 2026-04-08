@@ -4,6 +4,7 @@ CLAUDE.md
 LICENSE
 README.md
 .github/CODEOWNERS
+.github/workflows/ci.yml
 WASM_VERSION
 scripts/
 src/main/java/com/schematic/api/BaseSchematic.java
