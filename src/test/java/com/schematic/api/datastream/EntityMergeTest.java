@@ -290,14 +290,20 @@ class EntityMergeTest {
     }
 
     @Test
-    void partialCompany_missingIdThrowsError() {
+    void partialCompany_toleratesMissingId() {
+        // Wire shape from the API: data is wrapped under the field name,
+        // no id at the top level. Cache lookup happens at the handler level
+        // using entityId from the envelope, not from the data payload.
         RulesengineCompany existing = buildCompany("comp-1", Collections.singletonMap("id", "comp-1"));
 
         ObjectNode partial = objectMapper.createObjectNode();
-        partial.putNull("id");
         partial.put("account_id", "acc_new");
 
-        assertThrows(Exception.class, () -> EntityMerge.partialCompany(existing, partial));
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        // Existing id is preserved; account_id is updated.
+        assertEquals("comp-1", merged.getId());
+        assertEquals("acc_new", merged.getAccountId());
     }
 
     @Test
@@ -452,14 +458,20 @@ class EntityMergeTest {
     }
 
     @Test
-    void partialUser_missingIdThrowsError() {
+    void partialUser_toleratesMissingId() {
+        // Wire shape from the API: data is wrapped under the field name,
+        // no id at the top level. Cache lookup happens at the handler level
+        // using entityId from the envelope, not from the data payload.
         RulesengineUser existing = buildUser("user-1", Collections.singletonMap("id", "user-1"));
 
         ObjectNode partial = objectMapper.createObjectNode();
-        partial.putNull("id");
         partial.put("account_id", "acc_new");
 
-        assertThrows(Exception.class, () -> EntityMerge.partialUser(existing, partial));
+        RulesengineUser merged = EntityMerge.partialUser(existing, partial);
+
+        // Existing id is preserved; account_id is updated.
+        assertEquals("user-1", merged.getId());
+        assertEquals("acc_new", merged.getAccountId());
     }
 
     @Test
