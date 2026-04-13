@@ -472,9 +472,13 @@ public class DataStreamClient implements Closeable {
         if (keys == null || keys.isEmpty()) {
             return null;
         }
-        // Look up by first key pair
-        Map.Entry<String, String> first = keys.entrySet().iterator().next();
-        return companyCache.get(companyCacheKey(first.getKey(), first.getValue()));
+        for (Map.Entry<String, String> entry : keys.entrySet()) {
+            RulesengineCompany company = companyCache.get(companyCacheKey(entry.getKey(), entry.getValue()));
+            if (company != null) {
+                return company;
+            }
+        }
+        return null;
     }
 
     /**
@@ -484,8 +488,13 @@ public class DataStreamClient implements Closeable {
         if (keys == null || keys.isEmpty()) {
             return null;
         }
-        Map.Entry<String, String> first = keys.entrySet().iterator().next();
-        return userCache.get(userCacheKey(first.getKey(), first.getValue()));
+        for (Map.Entry<String, String> entry : keys.entrySet()) {
+            RulesengineUser user = userCache.get(userCacheKey(entry.getKey(), entry.getValue()));
+            if (user != null) {
+                return user;
+            }
+        }
+        return null;
     }
 
     /**
