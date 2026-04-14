@@ -84,7 +84,15 @@ public class WasmRulesEngine implements RulesEngine {
 
             WasmModule module = Parser.parse(wasmStream);
 
-            WasiOptions wasiOptions = WasiOptions.builder().build();
+            // Auto-flush the WASM stderr/stdout so that eprintln! from the rules
+            // engine surfaces immediately (without this, errors are buffered and
+            // can appear to be silent).
+            java.io.PrintStream wasmStderr = new java.io.PrintStream(System.err, true);
+            java.io.PrintStream wasmStdout = new java.io.PrintStream(System.out, true);
+            WasiOptions wasiOptions = WasiOptions.builder()
+                    .withStdout(wasmStdout)
+                    .withStderr(wasmStderr)
+                    .build();
             WasiPreview1 wasi = WasiPreview1.builder().withOptions(wasiOptions).build();
             HostFunction[] hostFunctions = WasiPreview1_ModuleFactory.toHostFunctions(wasi);
 
@@ -147,16 +155,20 @@ public class WasmRulesEngine implements RulesEngine {
             throw new IllegalStateException("WASM rules engine not initialized");
         }
 
-        // Build envelope using the SDK's ObjectMapper — @JsonProperty annotations
-        // produce snake_case JSON which the WASM engine accepts
+        // Build envelope using the SDK's ObjectMapper. @JsonProperty annotations
+        // produce snake_case JSON; the WASM rules engine accepts snake_case via
+        // #[serde(alias = "...")] on its Rust types.
         ObjectMapper mapper = ObjectMappers.JSON_MAPPER;
         ObjectNode envelope = mapper.createObjectNode();
-        envelope.set("flag", mapper.valueToTree(flag));
+        // `null` entity context for the flag subtree (flag rules can reference
+        // either user or company traits, so we can't assume one); "company"
+        // and "user" for their respective subtrees.
+        envelope.set("flag", sanitize(mapper.valueToTree(flag), null));
         if (company != null) {
-            envelope.set("company", mapper.valueToTree(company));
+            envelope.set("company", sanitize(mapper.valueToTree(company), "company"));
         }
         if (user != null) {
-            envelope.set("user", mapper.valueToTree(user));
+            envelope.set("user", sanitize(mapper.valueToTree(user), "user"));
         }
 
         String inputJson = mapper.writeValueAsString(envelope);
@@ -226,6 +238,50 @@ public class WasmRulesEngine implements RulesEngine {
                 result.add(camelToSnakeKeys(element));
             }
             return result;
+        }
+        return node;
+    }
+
+    /**
+     * Recursively walks the tree and fixes any `trait_definition.entity_type`
+     * that's missing or empty. The WASM rules engine's `EntityType` enum only
+     * accepts "user" or "company" — empty strings cause the entire parse to
+     * fail with error code -1.
+     *
+     * <p>When {@code defaultEntityType} is non-null (i.e. the subtree is rooted
+     * at a company or user object), we inject it so the condition still
+     * evaluates correctly. When it's null (flag subtree), we can't determine
+     * the entity type, so we drop the `trait_definition` (the condition field
+     * is optional and the rule still evaluates).
+     *
+     * <p>Workaround for replicator data that writes `entity_type: ""`. Once
+     * the replicator writes correct values, this is a no-op.
+     */
+    static JsonNode sanitize(JsonNode node, String defaultEntityType) {
+        if (node.isObject()) {
+            ObjectNode obj = (ObjectNode) node;
+            JsonNode td = obj.get("trait_definition");
+            if (td != null && td.isObject()) {
+                ObjectNode tdObj = (ObjectNode) td;
+                JsonNode et = tdObj.get("entity_type");
+                boolean missing = et == null || !et.isTextual() || et.asText().isEmpty();
+                if (missing) {
+                    if (defaultEntityType != null) {
+                        tdObj.put("entity_type", defaultEntityType);
+                    } else {
+                        obj.remove("trait_definition");
+                    }
+                }
+            }
+            Iterator<Map.Entry<String, JsonNode>> fields = obj.fields();
+            while (fields.hasNext()) {
+                Map.Entry<String, JsonNode> field = fields.next();
+                sanitize(field.getValue(), defaultEntityType);
+            }
+        } else if (node.isArray()) {
+            for (JsonNode element : node) {
+                sanitize(element, defaultEntityType);
+            }
         }
         return node;
     }

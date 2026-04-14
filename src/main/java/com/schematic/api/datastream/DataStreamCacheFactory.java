@@ -61,6 +61,19 @@ final class DataStreamCacheFactory {
         return new LocalCache<>(DEFAULT_CACHE_SIZE, options.getCacheTTL());
     }
 
+    /**
+     * Key-based lookup caches store the entity's ID (as a JSON string) at
+     * `{resource}:{version}:{key}:{value}`, matching the replicator's two-step
+     * lookup pattern.
+     */
+    static CacheProvider<String> buildKeyLookupCache(
+            DatastreamOptions options, JedisPooled redisClient, String keyPrefix) {
+        if (redisClient != null) {
+            return new RedisCacheProvider<>(redisClient, options.getCacheTTL(), keyPrefix, String.class);
+        }
+        return new LocalCache<>(DEFAULT_CACHE_SIZE, options.getCacheTTL());
+    }
+
     static JedisPooled buildRedisClient(RedisCacheConfig config) {
         if (config == null) {
             return null;

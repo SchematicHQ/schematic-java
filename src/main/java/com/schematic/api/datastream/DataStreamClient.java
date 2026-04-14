@@ -43,12 +43,12 @@ import okhttp3.Response;
  */
 public class DataStreamClient implements Closeable {
 
-    // Cache key prefixes
+    // Cache key prefixes. Must match the replicator and other SDKs: both
+    // ID-based and (key, value)-based lookups share the same resource prefix
+    // (`company:` / `user:`) and are disambiguated by the trailing segments.
     static final String FLAG_PREFIX = "flags:";
     static final String COMPANY_PREFIX = "company:";
-    static final String COMPANY_KEY_PREFIX = "company_key:";
     static final String USER_PREFIX = "user:";
-    static final String USER_KEY_PREFIX = "user_key:";
 
     // Timeout for waiting on entity responses from WebSocket
     private static final long RESOURCE_TIMEOUT_MS = 2_000;
@@ -64,6 +64,10 @@ public class DataStreamClient implements Closeable {
     private final CacheProvider<RulesengineFlag> flagCache;
     private final CacheProvider<RulesengineCompany> companyCache;
     private final CacheProvider<RulesengineUser> userCache;
+    // Key-based lookup caches: map `{resource}:{version}:{key}:{value}` -> entity ID.
+    // The entity object itself lives in the corresponding ID cache above.
+    private final CacheProvider<String> companyKeyCache;
+    private final CacheProvider<String> userKeyCache;
 
     // Pending entity requests: cache key -> list of futures waiting for that entity.
     private final ConcurrentHashMap<String, List<CompletableFuture<RulesengineCompany>>> pendingCompanyRequests =
@@ -105,6 +109,8 @@ public class DataStreamClient implements Closeable {
         this.flagCache = DataStreamCacheFactory.buildFlagCache(options, redisClient, keyPrefix);
         this.companyCache = DataStreamCacheFactory.buildCompanyCache(options, redisClient, keyPrefix);
         this.userCache = DataStreamCacheFactory.buildUserCache(options, redisClient, keyPrefix);
+        this.companyKeyCache = DataStreamCacheFactory.buildKeyLookupCache(options, redisClient, keyPrefix);
+        this.userKeyCache = DataStreamCacheFactory.buildKeyLookupCache(options, redisClient, keyPrefix);
 
         this.httpClient = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
@@ -474,7 +480,11 @@ public class DataStreamClient implements Closeable {
             return null;
         }
         for (Map.Entry<String, String> entry : keys.entrySet()) {
-            RulesengineCompany company = companyCache.get(companyCacheKey(entry.getKey(), entry.getValue()));
+            String id = companyKeyCache.get(companyCacheKey(entry.getKey(), entry.getValue()));
+            if (id == null) {
+                continue;
+            }
+            RulesengineCompany company = companyCache.get(companyIdCacheKey(id));
             if (company != null) {
                 return company;
             }
@@ -490,7 +500,11 @@ public class DataStreamClient implements Closeable {
             return null;
         }
         for (Map.Entry<String, String> entry : keys.entrySet()) {
-            RulesengineUser user = userCache.get(userCacheKey(entry.getKey(), entry.getValue()));
+            String id = userKeyCache.get(userCacheKey(entry.getKey(), entry.getValue()));
+            if (id == null) {
+                continue;
+            }
+            RulesengineUser user = userCache.get(userIdCacheKey(id));
             if (user != null) {
                 return user;
             }
@@ -730,7 +744,7 @@ public class DataStreamClient implements Closeable {
                 RulesengineCompany existing = companyCache.get(companyIdCacheKey(entityId));
                 if (existing != null) {
                     for (Map.Entry<String, String> entry : existing.getKeys().entrySet()) {
-                        companyCache.delete(companyCacheKey(entry.getKey(), entry.getValue()));
+                        companyKeyCache.delete(companyCacheKey(entry.getKey(), entry.getValue()));
                     }
                 }
                 companyCache.delete(companyIdCacheKey(entityId));
@@ -774,7 +788,7 @@ public class DataStreamClient implements Closeable {
                 RulesengineUser existing = userCache.get(userIdCacheKey(entityId));
                 if (existing != null) {
                     for (Map.Entry<String, String> entry : existing.getKeys().entrySet()) {
-                        userCache.delete(userCacheKey(entry.getKey(), entry.getValue()));
+                        userKeyCache.delete(userCacheKey(entry.getKey(), entry.getValue()));
                     }
                 }
                 userCache.delete(userIdCacheKey(entityId));
@@ -815,8 +829,7 @@ public class DataStreamClient implements Closeable {
     private void cacheCompanyObject(RulesengineCompany company) {
         companyCache.set(companyIdCacheKey(company.getId()), company);
         for (Map.Entry<String, String> entry : company.getKeys().entrySet()) {
-            String cacheKey = companyCacheKey(entry.getKey(), entry.getValue());
-            companyCache.set(cacheKey, company);
+            companyKeyCache.set(companyCacheKey(entry.getKey(), entry.getValue()), company.getId());
         }
         // Notify any pending requests waiting for this company
         notifyPendingCompanyRequests(company.getKeys(), company);
@@ -834,8 +847,7 @@ public class DataStreamClient implements Closeable {
     private void cacheUserObject(RulesengineUser user) {
         userCache.set(userIdCacheKey(user.getId()), user);
         for (Map.Entry<String, String> entry : user.getKeys().entrySet()) {
-            String cacheKey = userCacheKey(entry.getKey(), entry.getValue());
-            userCache.set(cacheKey, user);
+            userKeyCache.set(userCacheKey(entry.getKey(), entry.getValue()), user.getId());
         }
         // Notify any pending requests waiting for this user
         notifyPendingUserRequests(user.getKeys(), user);
@@ -868,7 +880,7 @@ public class DataStreamClient implements Closeable {
     }
 
     private String flagCacheKey(String flagKey) {
-        return FLAG_PREFIX + versionKey() + ":" + flagKey;
+        return FLAG_PREFIX + versionKey() + ":" + flagKey.toLowerCase();
     }
 
     private String companyIdCacheKey(String id) {
@@ -880,11 +892,11 @@ public class DataStreamClient implements Closeable {
     }
 
     private String companyCacheKey(String key, String value) {
-        return COMPANY_KEY_PREFIX + versionKey() + ":" + key + ":" + value;
+        return COMPANY_PREFIX + versionKey() + ":" + key.toLowerCase() + ":" + value.toLowerCase();
     }
 
     private String userCacheKey(String key, String value) {
-        return USER_KEY_PREFIX + versionKey() + ":" + key + ":" + value;
+        return USER_PREFIX + versionKey() + ":" + key.toLowerCase() + ":" + value.toLowerCase();
     }
 
     private void log(String level, String message) {
