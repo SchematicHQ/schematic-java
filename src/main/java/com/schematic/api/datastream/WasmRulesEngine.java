@@ -114,6 +114,22 @@ public class WasmRulesEngine implements RulesEngine {
     }
 
     @Override
+    public String getVersionKey() {
+        if (!initialized) {
+            return null;
+        }
+        try {
+            ExportFunction versionKeyFn = instance.export("get_version_key_wasm");
+            long[] result = versionKeyFn.apply();
+            int ptr = (int) result[0];
+            return memory.readCString(ptr);
+        } catch (Exception e) {
+            log("warn", "Failed to get WASM version key: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
     public RulesengineCheckFlagResult checkFlag(RulesengineFlag flag, RulesengineCompany company, RulesengineUser user)
             throws Exception {
         if (!initialized) {
@@ -141,24 +157,6 @@ public class WasmRulesEngine implements RulesEngine {
         JsonNode snakeNode = camelToSnakeKeys(camelNode);
 
         return mapper.treeToValue(snakeNode, RulesengineCheckFlagResult.class);
-    }
-
-    /**
-     * Returns the rules engine version key, used for cache invalidation.
-     */
-    public String getVersionKey() {
-        if (!initialized) {
-            return null;
-        }
-        try {
-            ExportFunction versionKeyFn = instance.export("get_version_key_wasm");
-            long[] result = versionKeyFn.apply();
-            int ptr = (int) result[0];
-            return memory.readCString(ptr);
-        } catch (Exception e) {
-            log("warn", "Failed to get WASM version key: " + e.getMessage());
-            return null;
-        }
     }
 
     /**

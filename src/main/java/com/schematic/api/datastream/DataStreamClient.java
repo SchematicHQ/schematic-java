@@ -76,6 +76,7 @@ public class DataStreamClient implements Closeable {
 
     // Replicator mode state
     private final AtomicBoolean replicatorReady = new AtomicBoolean(false);
+    private volatile String replicatorCacheVersion;
     private volatile ScheduledExecutorService healthCheckScheduler;
     private volatile ScheduledFuture<?> healthCheckTask;
     private final OkHttpClient httpClient;
@@ -149,7 +150,7 @@ public class DataStreamClient implements Closeable {
      */
     public RulesengineCheckFlagResult checkFlag(String flagKey, Map<String, String> company, Map<String, String> user) {
         // Step 1: Get flag from cache
-        RulesengineFlag flag = flagCache.get(FLAG_PREFIX + flagKey);
+        RulesengineFlag flag = flagCache.get(flagCacheKey(flagKey));
         if (flag == null) {
             throw new DataStreamException("Flag not found in cache: " + flagKey);
         }
@@ -462,7 +463,7 @@ public class DataStreamClient implements Closeable {
      * Retrieves a cached flag definition by key.
      */
     public RulesengineFlag getCachedFlag(String flagKey) {
-        return flagCache.get(FLAG_PREFIX + flagKey);
+        return flagCache.get(flagCacheKey(flagKey));
     }
 
     /**
@@ -593,14 +594,24 @@ public class DataStreamClient implements Closeable {
                     boolean ready = body.has("ready") && body.get("ready").asBoolean(false);
                     boolean wasReady = replicatorReady.getAndSet(ready);
 
+                    String newCacheVersion = null;
+                    if (body.has("cache_version")) {
+                        newCacheVersion = body.get("cache_version").asText();
+                    } else if (body.has("cacheVersion")) {
+                        newCacheVersion = body.get("cacheVersion").asText();
+                    }
+                    if (newCacheVersion != null && !newCacheVersion.equals(replicatorCacheVersion)) {
+                        String oldVersion = replicatorCacheVersion;
+                        replicatorCacheVersion = newCacheVersion;
+                        log(
+                                "info",
+                                "Replicator cache version changed from "
+                                        + (oldVersion == null ? "(null)" : oldVersion) + " to "
+                                        + newCacheVersion);
+                    }
+
                     if (ready && !wasReady) {
                         log("info", "Replicator is now ready");
-                        if (body.has("cache_version")) {
-                            log(
-                                    "info",
-                                    "Replicator cache version: "
-                                            + body.get("cache_version").asText());
-                        }
                     } else if (!ready && wasReady) {
                         log("warn", "Replicator is no longer ready");
                     }
@@ -667,7 +678,7 @@ public class DataStreamClient implements Closeable {
                     cacheFlag(flagData);
                     String key = flagData.has("key") ? flagData.get("key").asText() : null;
                     if (key != null) {
-                        cacheKeys.add(FLAG_PREFIX + key);
+                        cacheKeys.add(flagCacheKey(key));
                     }
                 }
                 flagCache.deleteMissing(cacheKeys);
@@ -677,7 +688,7 @@ public class DataStreamClient implements Closeable {
         } else if (messageType == MessageType.DELETE) {
             String flagKey = data.has("key") ? data.get("key").asText() : null;
             if (flagKey != null) {
-                flagCache.delete(FLAG_PREFIX + flagKey);
+                flagCache.delete(flagCacheKey(flagKey));
             }
         }
     }
@@ -699,7 +710,7 @@ public class DataStreamClient implements Closeable {
         } else if (messageType == MessageType.PARTIAL) {
             String entityId = message.getEntityId();
             if (entityId != null) {
-                RulesengineCompany existing = companyCache.get(COMPANY_PREFIX + entityId);
+                RulesengineCompany existing = companyCache.get(companyIdCacheKey(entityId));
                 if (existing != null) {
                     try {
                         RulesengineCompany merged = EntityMerge.partialCompany(existing, data);
@@ -716,13 +727,13 @@ public class DataStreamClient implements Closeable {
             String entityId = message.getEntityId();
             if (entityId != null) {
                 // Clean up key-based cache entries before removing by ID
-                RulesengineCompany existing = companyCache.get(COMPANY_PREFIX + entityId);
+                RulesengineCompany existing = companyCache.get(companyIdCacheKey(entityId));
                 if (existing != null) {
                     for (Map.Entry<String, String> entry : existing.getKeys().entrySet()) {
                         companyCache.delete(companyCacheKey(entry.getKey(), entry.getValue()));
                     }
                 }
-                companyCache.delete(COMPANY_PREFIX + entityId);
+                companyCache.delete(companyIdCacheKey(entityId));
             }
         }
     }
@@ -744,7 +755,7 @@ public class DataStreamClient implements Closeable {
         } else if (messageType == MessageType.PARTIAL) {
             String entityId = message.getEntityId();
             if (entityId != null) {
-                RulesengineUser existing = userCache.get(USER_PREFIX + entityId);
+                RulesengineUser existing = userCache.get(userIdCacheKey(entityId));
                 if (existing != null) {
                     try {
                         RulesengineUser merged = EntityMerge.partialUser(existing, data);
@@ -760,13 +771,13 @@ public class DataStreamClient implements Closeable {
             String entityId = message.getEntityId();
             if (entityId != null) {
                 // Clean up key-based cache entries before removing by ID
-                RulesengineUser existing = userCache.get(USER_PREFIX + entityId);
+                RulesengineUser existing = userCache.get(userIdCacheKey(entityId));
                 if (existing != null) {
                     for (Map.Entry<String, String> entry : existing.getKeys().entrySet()) {
                         userCache.delete(userCacheKey(entry.getKey(), entry.getValue()));
                     }
                 }
-                userCache.delete(USER_PREFIX + entityId);
+                userCache.delete(userIdCacheKey(entityId));
             }
         }
     }
@@ -786,7 +797,7 @@ public class DataStreamClient implements Closeable {
         try {
             RulesengineFlag flag = objectMapper.treeToValue(data, RulesengineFlag.class);
             log("debug", "Caching flag: " + flag.getKey());
-            flagCache.set(FLAG_PREFIX + flag.getKey(), flag);
+            flagCache.set(flagCacheKey(flag.getKey()), flag);
         } catch (Exception e) {
             log("warn", "Failed to parse flag from datastream: " + e.getMessage());
         }
@@ -802,7 +813,7 @@ public class DataStreamClient implements Closeable {
     }
 
     private void cacheCompanyObject(RulesengineCompany company) {
-        companyCache.set(COMPANY_PREFIX + company.getId(), company);
+        companyCache.set(companyIdCacheKey(company.getId()), company);
         for (Map.Entry<String, String> entry : company.getKeys().entrySet()) {
             String cacheKey = companyCacheKey(entry.getKey(), entry.getValue());
             companyCache.set(cacheKey, company);
@@ -821,7 +832,7 @@ public class DataStreamClient implements Closeable {
     }
 
     private void cacheUserObject(RulesengineUser user) {
-        userCache.set(USER_PREFIX + user.getId(), user);
+        userCache.set(userIdCacheKey(user.getId()), user);
         for (Map.Entry<String, String> entry : user.getKeys().entrySet()) {
             String cacheKey = userCacheKey(entry.getKey(), entry.getValue());
             userCache.set(cacheKey, user);
@@ -830,12 +841,49 @@ public class DataStreamClient implements Closeable {
         notifyPendingUserRequests(user.getKeys(), user);
     }
 
-    private static String companyCacheKey(String key, String value) {
-        return COMPANY_KEY_PREFIX + key + ":" + value;
+    /**
+     * Returns the version key used to namespace cache entries. Prefers the
+     * replicator cache version (when in replicator mode and available),
+     * otherwise falls back to the rules engine version key, or "1" if neither
+     * is available.
+     */
+    private String versionKey() {
+        if (options.isReplicatorMode() && replicatorCacheVersion != null) {
+            return replicatorCacheVersion;
+        }
+        if (rulesEngine != null) {
+            try {
+                if (rulesEngine.isInitialized()) {
+                    String v = rulesEngine.getVersionKey();
+                    if (v != null) {
+                        return v;
+                    }
+                }
+            } catch (Exception e) {
+                log("warn", "Failed to get rules engine version key: " + e.getMessage());
+            }
+        }
+        return "1";
     }
 
-    private static String userCacheKey(String key, String value) {
-        return USER_KEY_PREFIX + key + ":" + value;
+    private String flagCacheKey(String flagKey) {
+        return FLAG_PREFIX + versionKey() + ":" + flagKey;
+    }
+
+    private String companyIdCacheKey(String id) {
+        return COMPANY_PREFIX + versionKey() + ":" + id;
+    }
+
+    private String userIdCacheKey(String id) {
+        return USER_PREFIX + versionKey() + ":" + id;
+    }
+
+    private String companyCacheKey(String key, String value) {
+        return COMPANY_KEY_PREFIX + versionKey() + ":" + key + ":" + value;
+    }
+
+    private String userCacheKey(String key, String value) {
+        return USER_KEY_PREFIX + versionKey() + ":" + key + ":" + value;
     }
 
     private void log(String level, String message) {
