@@ -88,7 +88,6 @@ public class HttpEventSender implements Closeable {
 
         if (logger != null) {
             logger.debug("Sending event batch (" + events.size() + " events) to " + url);
-            logger.debug("Event batch payload: " + json);
         }
 
         try (Response response = httpClient.newCall(request).execute()) {
