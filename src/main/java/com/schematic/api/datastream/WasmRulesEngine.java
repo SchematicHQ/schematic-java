@@ -46,6 +46,7 @@ public class WasmRulesEngine implements RulesEngine {
     private final String wasmResourcePath;
 
     private volatile boolean initialized;
+    private volatile String cachedVersionKey;
     private Instance instance;
     private Memory memory;
     private ExportFunction allocFn;
@@ -118,14 +119,24 @@ public class WasmRulesEngine implements RulesEngine {
         if (!initialized) {
             return null;
         }
-        try {
-            ExportFunction versionKeyFn = instance.export("get_version_key_wasm");
-            long[] result = versionKeyFn.apply();
-            int ptr = (int) result[0];
-            return memory.readCString(ptr);
-        } catch (Exception e) {
-            log("warn", "Failed to get WASM version key: " + e.getMessage());
-            return null;
+        String cached = cachedVersionKey;
+        if (cached != null) {
+            return cached;
+        }
+        synchronized (this) {
+            if (cachedVersionKey != null) {
+                return cachedVersionKey;
+            }
+            try {
+                ExportFunction versionKeyFn = instance.export("get_version_key_wasm");
+                long[] result = versionKeyFn.apply();
+                int ptr = (int) result[0];
+                cachedVersionKey = memory.readCString(ptr);
+                return cachedVersionKey;
+            } catch (Exception e) {
+                log("warn", "Failed to get WASM version key: " + e.getMessage());
+                return null;
+            }
         }
     }
 

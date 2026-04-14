@@ -848,8 +848,9 @@ public class DataStreamClient implements Closeable {
      * is available.
      */
     private String versionKey() {
-        if (options.isReplicatorMode() && replicatorCacheVersion != null) {
-            return replicatorCacheVersion;
+        String replicatorVersion = replicatorCacheVersion;
+        if (options.isReplicatorMode() && replicatorVersion != null) {
+            return replicatorVersion;
         }
         if (rulesEngine != null) {
             try {
