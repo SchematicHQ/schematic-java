@@ -168,13 +168,24 @@ public class DataStreamClient implements Closeable {
         RulesengineCompany cachedCompany = null;
         RulesengineUser cachedUser = null;
 
-        if (needsCompany) {
-            cachedCompany = getCachedCompany(company);
-            log("debug", "Company " + (cachedCompany != null ? "found in cache" : "not found in cache"));
-        }
-        if (needsUser) {
-            cachedUser = getCachedUser(user);
-            log("debug", "User " + (cachedUser != null ? "found in cache" : "not found in cache"));
+        try {
+            if (needsCompany) {
+                cachedCompany = getCachedCompany(company);
+                log("debug", "Company " + (cachedCompany != null ? "found in cache" : "not found in cache"));
+            }
+            if (needsUser) {
+                cachedUser = getCachedUser(user);
+                log("debug", "User " + (cachedUser != null ? "found in cache" : "not found in cache"));
+            }
+        } catch (DataStreamException.KeyConflict e) {
+            log("warn", "Key conflict for flag " + flagKey + ": " + e.getMessage());
+            return RulesengineCheckFlagResult.builder()
+                    .flagKey(flagKey)
+                    .reason("key conflict")
+                    .value(flag.getDefaultValue())
+                    .flagId(flag.getId())
+                    .err(e.getMessage())
+                    .build();
         }
 
         // Step 3: Replicator mode - evaluate with whatever we have
@@ -479,17 +490,23 @@ public class DataStreamClient implements Closeable {
         if (keys == null || keys.isEmpty()) {
             return null;
         }
+        String matchedId = null;
         for (Map.Entry<String, String> entry : keys.entrySet()) {
             String id = companyKeyCache.get(companyCacheKey(entry.getKey(), entry.getValue()));
             if (id == null) {
                 continue;
             }
-            RulesengineCompany company = companyCache.get(companyIdCacheKey(id));
-            if (company != null) {
-                return company;
+            if (matchedId == null) {
+                matchedId = id;
+            } else if (!matchedId.equals(id)) {
+                throw new DataStreamException.KeyConflict(
+                        "Company keys match multiple entities: " + matchedId + " and " + id);
             }
         }
-        return null;
+        if (matchedId == null) {
+            return null;
+        }
+        return companyCache.get(companyIdCacheKey(matchedId));
     }
 
     /**
@@ -499,17 +516,23 @@ public class DataStreamClient implements Closeable {
         if (keys == null || keys.isEmpty()) {
             return null;
         }
+        String matchedId = null;
         for (Map.Entry<String, String> entry : keys.entrySet()) {
             String id = userKeyCache.get(userCacheKey(entry.getKey(), entry.getValue()));
             if (id == null) {
                 continue;
             }
-            RulesengineUser user = userCache.get(userIdCacheKey(id));
-            if (user != null) {
-                return user;
+            if (matchedId == null) {
+                matchedId = id;
+            } else if (!matchedId.equals(id)) {
+                throw new DataStreamException.KeyConflict(
+                        "User keys match multiple entities: " + matchedId + " and " + id);
             }
         }
-        return null;
+        if (matchedId == null) {
+            return null;
+        }
+        return userCache.get(userIdCacheKey(matchedId));
     }
 
     /**

@@ -505,6 +505,126 @@ class DataStreamClientTest {
         assertEquals("multi-user", byUserId.getId());
     }
 
+    // --- Key conflict tests ---
+
+    @Test
+    void getCachedCompany_throwsKeyConflictWhenKeysMatchDifferentCompanies() {
+        client.handleMessage(buildResp(
+                EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "comp-a", companyNode("comp-a", "customer_id", "cust-1")));
+        client.handleMessage(buildResp(
+                EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "comp-b", companyNode("comp-b", "org_id", "org-2")));
+
+        Map<String, String> conflicting = new HashMap<>();
+        conflicting.put("customer_id", "cust-1");
+        conflicting.put("org_id", "org-2");
+
+        assertThrows(DataStreamException.KeyConflict.class, () -> client.getCachedCompany(conflicting));
+    }
+
+    @Test
+    void getCachedCompany_returnsEntityWhenKeysMatchSameCompany() {
+        ObjectNode node = companyNode("comp-1", "customer_id", "cust-1");
+        ((ObjectNode) node.get("keys")).put("org_id", "org-1");
+        client.handleMessage(
+                buildResp(EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "comp-1", node));
+
+        Map<String, String> allKeys = new HashMap<>();
+        allKeys.put("customer_id", "cust-1");
+        allKeys.put("org_id", "org-1");
+
+        RulesengineCompany result = client.getCachedCompany(allKeys);
+        assertNotNull(result);
+        assertEquals("comp-1", result.getId());
+    }
+
+    @Test
+    void getCachedUser_throwsKeyConflictWhenKeysMatchDifferentUsers() {
+        client.handleMessage(buildResp(
+                EntityType.USER.getValue(), MessageType.FULL.getValue(), "user-a", userNode("user-a", "email", "a@ex.com")));
+        client.handleMessage(buildResp(
+                EntityType.USER.getValue(), MessageType.FULL.getValue(), "user-b", userNode("user-b", "user_id", "uid-b")));
+
+        Map<String, String> conflicting = new HashMap<>();
+        conflicting.put("email", "a@ex.com");
+        conflicting.put("user_id", "uid-b");
+
+        assertThrows(DataStreamException.KeyConflict.class, () -> client.getCachedUser(conflicting));
+    }
+
+    @Test
+    void getCachedUser_returnsEntityWhenKeysMatchSameUser() {
+        ObjectNode node = userNode("user-1", "email", "u@ex.com");
+        ((ObjectNode) node.get("keys")).put("user_id", "uid-1");
+        client.handleMessage(
+                buildResp(EntityType.USER.getValue(), MessageType.FULL.getValue(), "user-1", node));
+
+        Map<String, String> allKeys = new HashMap<>();
+        allKeys.put("email", "u@ex.com");
+        allKeys.put("user_id", "uid-1");
+
+        RulesengineUser result = client.getCachedUser(allKeys);
+        assertNotNull(result);
+        assertEquals("user-1", result.getId());
+    }
+
+    @Test
+    void checkFlag_returnsKeyConflictResultOnCompanyConflict() {
+        // Replicator mode so checkFlag doesn't try to fetch from a (nonexistent) WebSocket.
+        DatastreamOptions opts = DatastreamOptions.builder()
+                .withReplicatorMode("http://localhost:8090/ready")
+                .build();
+        DataStreamClient replicatorClient =
+                new DataStreamClient(opts, "test-key", "https://api.schematichq.com", logger);
+        try {
+            replicatorClient.handleMessage(buildResp(
+                    EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("conflict-flag", true)));
+            replicatorClient.handleMessage(buildResp(
+                    EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "c-a", companyNode("c-a", "customer_id", "cust-1")));
+            replicatorClient.handleMessage(buildResp(
+                    EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "c-b", companyNode("c-b", "org_id", "org-2")));
+
+            Map<String, String> conflicting = new HashMap<>();
+            conflicting.put("customer_id", "cust-1");
+            conflicting.put("org_id", "org-2");
+
+            RulesengineCheckFlagResult result = replicatorClient.checkFlag("conflict-flag", conflicting, null);
+            assertEquals("conflict-flag", result.getFlagKey());
+            assertEquals("key conflict", result.getReason());
+            // Default value from the flag (true) should be returned
+            assertTrue(result.getValue());
+        } finally {
+            replicatorClient.close();
+        }
+    }
+
+    @Test
+    void checkFlag_returnsKeyConflictResultOnUserConflict() {
+        DatastreamOptions opts = DatastreamOptions.builder()
+                .withReplicatorMode("http://localhost:8090/ready")
+                .build();
+        DataStreamClient replicatorClient =
+                new DataStreamClient(opts, "test-key", "https://api.schematichq.com", logger);
+        try {
+            replicatorClient.handleMessage(buildResp(
+                    EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("user-conflict-flag", false)));
+            replicatorClient.handleMessage(buildResp(
+                    EntityType.USER.getValue(), MessageType.FULL.getValue(), "u-a", userNode("u-a", "email", "a@ex.com")));
+            replicatorClient.handleMessage(buildResp(
+                    EntityType.USER.getValue(), MessageType.FULL.getValue(), "u-b", userNode("u-b", "user_id", "uid-b")));
+
+            Map<String, String> conflicting = new HashMap<>();
+            conflicting.put("email", "a@ex.com");
+            conflicting.put("user_id", "uid-b");
+
+            RulesengineCheckFlagResult result = replicatorClient.checkFlag("user-conflict-flag", null, conflicting);
+            assertEquals("user-conflict-flag", result.getFlagKey());
+            assertEquals("key conflict", result.getReason());
+            assertFalse(result.getValue());
+        } finally {
+            replicatorClient.close();
+        }
+    }
+
     @Test
     void checkFlag_replicatorMode_evaluatesWithCachedData() {
         DatastreamOptions replicatorOpts = DatastreamOptions.builder()
