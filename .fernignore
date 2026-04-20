@@ -6,7 +6,9 @@ README.md
 .github/CODEOWNERS
 .github/workflows/ci.yml
 WASM_VERSION
+.gitignore
 scripts/
+sample-app/
 src/main/java/com/schematic/api/BaseSchematic.java
 src/main/java/com/schematic/api/EventBuffer.java
 src/main/java/com/schematic/api/HttpEventSender.java
