@@ -510,9 +510,15 @@ class DataStreamClientTest {
     @Test
     void getCachedCompany_throwsKeyConflictWhenKeysMatchDifferentCompanies() {
         client.handleMessage(buildResp(
-                EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "comp-a", companyNode("comp-a", "customer_id", "cust-1")));
+                EntityType.COMPANY.getValue(),
+                MessageType.FULL.getValue(),
+                "comp-a",
+                companyNode("comp-a", "customer_id", "cust-1")));
         client.handleMessage(buildResp(
-                EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "comp-b", companyNode("comp-b", "org_id", "org-2")));
+                EntityType.COMPANY.getValue(),
+                MessageType.FULL.getValue(),
+                "comp-b",
+                companyNode("comp-b", "org_id", "org-2")));
 
         Map<String, String> conflicting = new HashMap<>();
         conflicting.put("customer_id", "cust-1");
@@ -525,8 +531,7 @@ class DataStreamClientTest {
     void getCachedCompany_returnsEntityWhenKeysMatchSameCompany() {
         ObjectNode node = companyNode("comp-1", "customer_id", "cust-1");
         ((ObjectNode) node.get("keys")).put("org_id", "org-1");
-        client.handleMessage(
-                buildResp(EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "comp-1", node));
+        client.handleMessage(buildResp(EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "comp-1", node));
 
         Map<String, String> allKeys = new HashMap<>();
         allKeys.put("customer_id", "cust-1");
@@ -540,9 +545,15 @@ class DataStreamClientTest {
     @Test
     void getCachedUser_throwsKeyConflictWhenKeysMatchDifferentUsers() {
         client.handleMessage(buildResp(
-                EntityType.USER.getValue(), MessageType.FULL.getValue(), "user-a", userNode("user-a", "email", "a@ex.com")));
+                EntityType.USER.getValue(),
+                MessageType.FULL.getValue(),
+                "user-a",
+                userNode("user-a", "email", "a@ex.com")));
         client.handleMessage(buildResp(
-                EntityType.USER.getValue(), MessageType.FULL.getValue(), "user-b", userNode("user-b", "user_id", "uid-b")));
+                EntityType.USER.getValue(),
+                MessageType.FULL.getValue(),
+                "user-b",
+                userNode("user-b", "user_id", "uid-b")));
 
         Map<String, String> conflicting = new HashMap<>();
         conflicting.put("email", "a@ex.com");
@@ -555,8 +566,7 @@ class DataStreamClientTest {
     void getCachedUser_returnsEntityWhenKeysMatchSameUser() {
         ObjectNode node = userNode("user-1", "email", "u@ex.com");
         ((ObjectNode) node.get("keys")).put("user_id", "uid-1");
-        client.handleMessage(
-                buildResp(EntityType.USER.getValue(), MessageType.FULL.getValue(), "user-1", node));
+        client.handleMessage(buildResp(EntityType.USER.getValue(), MessageType.FULL.getValue(), "user-1", node));
 
         Map<String, String> allKeys = new HashMap<>();
         allKeys.put("email", "u@ex.com");
@@ -579,9 +589,15 @@ class DataStreamClientTest {
             replicatorClient.handleMessage(buildResp(
                     EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("conflict-flag", true)));
             replicatorClient.handleMessage(buildResp(
-                    EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "c-a", companyNode("c-a", "customer_id", "cust-1")));
+                    EntityType.COMPANY.getValue(),
+                    MessageType.FULL.getValue(),
+                    "c-a",
+                    companyNode("c-a", "customer_id", "cust-1")));
             replicatorClient.handleMessage(buildResp(
-                    EntityType.COMPANY.getValue(), MessageType.FULL.getValue(), "c-b", companyNode("c-b", "org_id", "org-2")));
+                    EntityType.COMPANY.getValue(),
+                    MessageType.FULL.getValue(),
+                    "c-b",
+                    companyNode("c-b", "org_id", "org-2")));
 
             Map<String, String> conflicting = new HashMap<>();
             conflicting.put("customer_id", "cust-1");
@@ -606,11 +622,20 @@ class DataStreamClientTest {
                 new DataStreamClient(opts, "test-key", "https://api.schematichq.com", logger);
         try {
             replicatorClient.handleMessage(buildResp(
-                    EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("user-conflict-flag", false)));
+                    EntityType.FLAG.getValue(),
+                    MessageType.FULL.getValue(),
+                    null,
+                    flagNode("user-conflict-flag", false)));
             replicatorClient.handleMessage(buildResp(
-                    EntityType.USER.getValue(), MessageType.FULL.getValue(), "u-a", userNode("u-a", "email", "a@ex.com")));
+                    EntityType.USER.getValue(),
+                    MessageType.FULL.getValue(),
+                    "u-a",
+                    userNode("u-a", "email", "a@ex.com")));
             replicatorClient.handleMessage(buildResp(
-                    EntityType.USER.getValue(), MessageType.FULL.getValue(), "u-b", userNode("u-b", "user_id", "uid-b")));
+                    EntityType.USER.getValue(),
+                    MessageType.FULL.getValue(),
+                    "u-b",
+                    userNode("u-b", "user_id", "uid-b")));
 
             Map<String, String> conflicting = new HashMap<>();
             conflicting.put("email", "a@ex.com");

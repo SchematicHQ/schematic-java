@@ -1,6 +1,12 @@
 # Schematic Java Library
 
-The official Schematic Java library, supporting Java 11+.
+The official Schematic Java library.
+
+**Java version requirements:**
+- Core SDK (flag checks, events, webhooks): **Java 8+**
+- Datastream / local flag evaluation: **Java 11+** (required by the WASM runtime)
+
+Enabling datastream on a JVM older than 11 will throw a `DataStreamException` with a clear message at `Schematic` build time, rather than a cryptic `UnsupportedClassVersionError` at runtime.
 
 ## Installation and Setup
 

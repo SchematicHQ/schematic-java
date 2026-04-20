@@ -8,6 +8,7 @@ import com.schematic.api.core.Environment;
 import com.schematic.api.core.NoOpHttpClient;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.datastream.DataStreamClient;
+import com.schematic.api.datastream.DataStreamException;
 import com.schematic.api.datastream.DatastreamOptions;
 import com.schematic.api.datastream.WasmRulesEngine;
 import com.schematic.api.logger.ConsoleLogger;
@@ -69,6 +70,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
         // Initialize DataStream client if options are provided
         if (this.datastreamOptions != null && !this.offline) {
+            requireJava11ForDatastream();
             String basePath = builder.basePath != null ? builder.basePath : "https://api.schematichq.com";
 
             // Initialize WASM rules engine for local flag evaluation
@@ -104,6 +106,25 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 "SchematicShutdownHook");
 
         Runtime.getRuntime().addShutdownHook(this.shutdownHook);
+    }
+
+    // Datastream depends on the WASM runtime (Chicory), which requires Java 11+.
+    // The check lives here so it fires before any datastream class is resolved —
+    // otherwise Java 8 users hit a cryptic UnsupportedClassVersionError on Chicory.
+    private static void requireJava11ForDatastream() {
+        String version = System.getProperty("java.specification.version", "");
+        int major;
+        try {
+            major = version.startsWith("1.") ? Integer.parseInt(version.substring(2)) : Integer.parseInt(version);
+        } catch (NumberFormatException e) {
+            return;
+        }
+        if (major < 11) {
+            throw new DataStreamException(
+                    "Schematic datastream requires Java 11 or later (detected Java "
+                            + version
+                            + "). Core SDK features (flag checks, events, webhooks) are compatible with Java 8+, but datastream and local flag evaluation require Java 11+.");
+        }
     }
 
     public static Builder builder() {
