@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public final class FeatureView {
     private final String accountId;
 
+    private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
+
     private final OffsetDateTime createdAt;
 
     private final String description;
@@ -64,6 +66,7 @@ public final class FeatureView {
 
     private FeatureView(
             String accountId,
+            Optional<BillingLinkedResourceResponseData> billingLinkedResource,
             OffsetDateTime createdAt,
             String description,
             Optional<String> eventSubtype,
@@ -83,6 +86,7 @@ public final class FeatureView {
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
+        this.billingLinkedResource = billingLinkedResource;
         this.createdAt = createdAt;
         this.description = description;
         this.eventSubtype = eventSubtype;
@@ -106,6 +110,11 @@ public final class FeatureView {
     @JsonProperty("account_id")
     public String getAccountId() {
         return accountId;
+    }
+
+    @JsonProperty("billing_linked_resource")
+    public Optional<BillingLinkedResourceResponseData> getBillingLinkedResource() {
+        return billingLinkedResource;
     }
 
     @JsonProperty("created_at")
@@ -206,6 +215,7 @@ public final class FeatureView {
 
     private boolean equalTo(FeatureView other) {
         return accountId.equals(other.accountId)
+                && billingLinkedResource.equals(other.billingLinkedResource)
                 && createdAt.equals(other.createdAt)
                 && description.equals(other.description)
                 && eventSubtype.equals(other.eventSubtype)
@@ -229,6 +239,7 @@ public final class FeatureView {
     public int hashCode() {
         return Objects.hash(
                 this.accountId,
+                this.billingLinkedResource,
                 this.createdAt,
                 this.description,
                 this.eventSubtype,
@@ -297,6 +308,10 @@ public final class FeatureView {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource);
+
+        _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
 
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
@@ -390,6 +405,8 @@ public final class FeatureView {
 
         private Optional<String> eventSubtype = Optional.empty();
 
+        private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -398,6 +415,7 @@ public final class FeatureView {
         @java.lang.Override
         public Builder from(FeatureView other) {
             accountId(other.getAccountId());
+            billingLinkedResource(other.getBillingLinkedResource());
             createdAt(other.getCreatedAt());
             description(other.getDescription());
             eventSubtype(other.getEventSubtype());
@@ -627,9 +645,23 @@ public final class FeatureView {
         }
 
         @java.lang.Override
+        public _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource) {
+            this.billingLinkedResource = Optional.ofNullable(billingLinkedResource);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_linked_resource", nulls = Nulls.SKIP)
+        public _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource) {
+            this.billingLinkedResource = billingLinkedResource;
+            return this;
+        }
+
+        @java.lang.Override
         public FeatureView build() {
             return new FeatureView(
                     accountId,
+                    billingLinkedResource,
                     createdAt,
                     description,
                     eventSubtype,

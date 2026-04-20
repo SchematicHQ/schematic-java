@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingProductPricing;
+import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.BillingSubscriptionDiscount;
 import com.schematic.api.types.BillingSubscriptionTrialEndSetting;
 import java.time.OffsetDateTime;
@@ -56,6 +57,8 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private final List<BillingProductPricing> productExternalIds;
 
+    private final Optional<BillingProviderType> providerType;
+
     private final Optional<String> status;
 
     private final String subscriptionExternalId;
@@ -83,6 +86,7 @@ public final class CreateBillingSubscriptionRequestBody {
             Optional<Long> periodEnd,
             Optional<Long> periodStart,
             List<BillingProductPricing> productExternalIds,
+            Optional<BillingProviderType> providerType,
             Optional<String> status,
             String subscriptionExternalId,
             long totalPrice,
@@ -103,6 +107,7 @@ public final class CreateBillingSubscriptionRequestBody {
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
         this.productExternalIds = productExternalIds;
+        this.providerType = providerType;
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.totalPrice = totalPrice;
@@ -181,6 +186,11 @@ public final class CreateBillingSubscriptionRequestBody {
         return productExternalIds;
     }
 
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("status")
     public Optional<String> getStatus() {
         return status;
@@ -233,6 +243,7 @@ public final class CreateBillingSubscriptionRequestBody {
                 && periodEnd.equals(other.periodEnd)
                 && periodStart.equals(other.periodStart)
                 && productExternalIds.equals(other.productExternalIds)
+                && providerType.equals(other.providerType)
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && totalPrice == other.totalPrice
@@ -257,6 +268,7 @@ public final class CreateBillingSubscriptionRequestBody {
                 this.periodEnd,
                 this.periodStart,
                 this.productExternalIds,
+                this.providerType,
                 this.status,
                 this.subscriptionExternalId,
                 this.totalPrice,
@@ -350,6 +362,10 @@ public final class CreateBillingSubscriptionRequestBody {
 
         _FinalStage addAllProductExternalIds(List<BillingProductPricing> productExternalIds);
 
+        _FinalStage providerType(Optional<BillingProviderType> providerType);
+
+        _FinalStage providerType(BillingProviderType providerType);
+
         _FinalStage status(Optional<String> status);
 
         _FinalStage status(String status);
@@ -389,6 +405,8 @@ public final class CreateBillingSubscriptionRequestBody {
         private Optional<Long> trialEnd = Optional.empty();
 
         private Optional<String> status = Optional.empty();
+
+        private Optional<BillingProviderType> providerType = Optional.empty();
 
         private List<BillingProductPricing> productExternalIds = new ArrayList<>();
 
@@ -431,6 +449,7 @@ public final class CreateBillingSubscriptionRequestBody {
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
             productExternalIds(other.getProductExternalIds());
+            providerType(other.getProviderType());
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             totalPrice(other.getTotalPrice());
@@ -518,6 +537,19 @@ public final class CreateBillingSubscriptionRequestBody {
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
         public _FinalStage status(Optional<String> status) {
             this.status = status;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public _FinalStage providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
             return this;
         }
 
@@ -690,6 +722,7 @@ public final class CreateBillingSubscriptionRequestBody {
                     periodEnd,
                     periodStart,
                     productExternalIds,
+                    providerType,
                     status,
                     subscriptionExternalId,
                     totalPrice,

@@ -41,6 +41,8 @@ public final class CountPlansRequest {
 
     private final Optional<String> q;
 
+    private final Optional<String> scopedToCompanyId;
+
     private final Optional<String> withoutEntitlementFor;
 
     private final Optional<Boolean> withoutPaidProductId;
@@ -61,6 +63,7 @@ public final class CountPlansRequest {
             Optional<Boolean> includeDraftVersions,
             Optional<PlanType> planType,
             Optional<String> q,
+            Optional<String> scopedToCompanyId,
             Optional<String> withoutEntitlementFor,
             Optional<Boolean> withoutPaidProductId,
             Optional<Long> limit,
@@ -75,6 +78,7 @@ public final class CountPlansRequest {
         this.includeDraftVersions = includeDraftVersions;
         this.planType = planType;
         this.q = q;
+        this.scopedToCompanyId = scopedToCompanyId;
         this.withoutEntitlementFor = withoutEntitlementFor;
         this.withoutPaidProductId = withoutPaidProductId;
         this.limit = limit;
@@ -146,6 +150,14 @@ public final class CountPlansRequest {
     }
 
     /**
+     * @return Filter plans scoped to a specific company (custom plans)
+     */
+    @JsonProperty("scoped_to_company_id")
+    public Optional<String> getScopedToCompanyId() {
+        return scopedToCompanyId;
+    }
+
+    /**
      * @return Filter out plans that already have a plan entitlement for the specified feature ID
      */
     @JsonProperty("without_entitlement_for")
@@ -198,6 +210,7 @@ public final class CountPlansRequest {
                 && includeDraftVersions.equals(other.includeDraftVersions)
                 && planType.equals(other.planType)
                 && q.equals(other.q)
+                && scopedToCompanyId.equals(other.scopedToCompanyId)
                 && withoutEntitlementFor.equals(other.withoutEntitlementFor)
                 && withoutPaidProductId.equals(other.withoutPaidProductId)
                 && limit.equals(other.limit)
@@ -216,6 +229,7 @@ public final class CountPlansRequest {
                 this.includeDraftVersions,
                 this.planType,
                 this.q,
+                this.scopedToCompanyId,
                 this.withoutEntitlementFor,
                 this.withoutPaidProductId,
                 this.limit,
@@ -251,6 +265,8 @@ public final class CountPlansRequest {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<String> scopedToCompanyId = Optional.empty();
+
         private Optional<String> withoutEntitlementFor = Optional.empty();
 
         private Optional<Boolean> withoutPaidProductId = Optional.empty();
@@ -274,6 +290,7 @@ public final class CountPlansRequest {
             includeDraftVersions(other.getIncludeDraftVersions());
             planType(other.getPlanType());
             q(other.getQ());
+            scopedToCompanyId(other.getScopedToCompanyId());
             withoutEntitlementFor(other.getWithoutEntitlementFor());
             withoutPaidProductId(other.getWithoutPaidProductId());
             limit(other.getLimit());
@@ -404,6 +421,20 @@ public final class CountPlansRequest {
         }
 
         /**
+         * <p>Filter plans scoped to a specific company (custom plans)</p>
+         */
+        @JsonSetter(value = "scoped_to_company_id", nulls = Nulls.SKIP)
+        public Builder scopedToCompanyId(Optional<String> scopedToCompanyId) {
+            this.scopedToCompanyId = scopedToCompanyId;
+            return this;
+        }
+
+        public Builder scopedToCompanyId(String scopedToCompanyId) {
+            this.scopedToCompanyId = Optional.ofNullable(scopedToCompanyId);
+            return this;
+        }
+
+        /**
          * <p>Filter out plans that already have a plan entitlement for the specified feature ID</p>
          */
         @JsonSetter(value = "without_entitlement_for", nulls = Nulls.SKIP)
@@ -470,6 +501,7 @@ public final class CountPlansRequest {
                     includeDraftVersions,
                     planType,
                     q,
+                    scopedToCompanyId,
                     withoutEntitlementFor,
                     withoutPaidProductId,
                     limit,

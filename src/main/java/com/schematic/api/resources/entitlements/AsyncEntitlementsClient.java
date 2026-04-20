@@ -10,6 +10,7 @@ import com.schematic.api.resources.entitlements.requests.CountFeatureCompaniesRe
 import com.schematic.api.resources.entitlements.requests.CountFeatureUsageRequest;
 import com.schematic.api.resources.entitlements.requests.CountFeatureUsersRequest;
 import com.schematic.api.resources.entitlements.requests.CountPlanEntitlementsRequest;
+import com.schematic.api.resources.entitlements.requests.CreateBillingLinkedPlanEntitlementRequestBody;
 import com.schematic.api.resources.entitlements.requests.CreateCompanyOverrideRequestBody;
 import com.schematic.api.resources.entitlements.requests.CreatePlanEntitlementRequestBody;
 import com.schematic.api.resources.entitlements.requests.DuplicatePlanEntitlementsRequestBody;
@@ -43,6 +44,7 @@ import com.schematic.api.resources.entitlements.types.ListFeatureUsersResponse;
 import com.schematic.api.resources.entitlements.types.ListPlanEntitlementsResponse;
 import com.schematic.api.resources.entitlements.types.UpdateCompanyOverrideResponse;
 import com.schematic.api.resources.entitlements.types.UpdatePlanEntitlementResponse;
+import com.schematic.api.resources.entitlements.types.UpsertPlanEntitlementForBillingProductResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncEntitlementsClient {
@@ -280,6 +282,18 @@ public class AsyncEntitlementsClient {
             String planEntitlementId, RequestOptions requestOptions) {
         return this.rawClient
                 .deletePlanEntitlement(planEntitlementId, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpsertPlanEntitlementForBillingProductResponse> upsertPlanEntitlementForBillingProduct(
+            CreateBillingLinkedPlanEntitlementRequestBody request) {
+        return this.rawClient.upsertPlanEntitlementForBillingProduct(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpsertPlanEntitlementForBillingProductResponse> upsertPlanEntitlementForBillingProduct(
+            CreateBillingLinkedPlanEntitlementRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .upsertPlanEntitlementForBillingProduct(request, requestOptions)
                 .thenApply(response -> response.body());
     }
 

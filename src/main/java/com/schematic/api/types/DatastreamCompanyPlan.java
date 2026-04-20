@@ -28,13 +28,20 @@ public final class DatastreamCompanyPlan {
 
     private final Optional<OffsetDateTime> trialEndDate;
 
+    private final Optional<TrialStatus> trialStatus;
+
     private final Map<String, Object> additionalProperties;
 
     private DatastreamCompanyPlan(
-            String id, String name, Optional<OffsetDateTime> trialEndDate, Map<String, Object> additionalProperties) {
+            String id,
+            String name,
+            Optional<OffsetDateTime> trialEndDate,
+            Optional<TrialStatus> trialStatus,
+            Map<String, Object> additionalProperties) {
         this.id = id;
         this.name = name;
         this.trialEndDate = trialEndDate;
+        this.trialStatus = trialStatus;
         this.additionalProperties = additionalProperties;
     }
 
@@ -53,6 +60,11 @@ public final class DatastreamCompanyPlan {
         return trialEndDate;
     }
 
+    @JsonProperty("trial_status")
+    public Optional<TrialStatus> getTrialStatus() {
+        return trialStatus;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -65,12 +77,15 @@ public final class DatastreamCompanyPlan {
     }
 
     private boolean equalTo(DatastreamCompanyPlan other) {
-        return id.equals(other.id) && name.equals(other.name) && trialEndDate.equals(other.trialEndDate);
+        return id.equals(other.id)
+                && name.equals(other.name)
+                && trialEndDate.equals(other.trialEndDate)
+                && trialStatus.equals(other.trialStatus);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name, this.trialEndDate);
+        return Objects.hash(this.id, this.name, this.trialEndDate, this.trialStatus);
     }
 
     @java.lang.Override
@@ -102,6 +117,10 @@ public final class DatastreamCompanyPlan {
         _FinalStage trialEndDate(Optional<OffsetDateTime> trialEndDate);
 
         _FinalStage trialEndDate(OffsetDateTime trialEndDate);
+
+        _FinalStage trialStatus(Optional<TrialStatus> trialStatus);
+
+        _FinalStage trialStatus(TrialStatus trialStatus);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -109,6 +128,8 @@ public final class DatastreamCompanyPlan {
         private String id;
 
         private String name;
+
+        private Optional<TrialStatus> trialStatus = Optional.empty();
 
         private Optional<OffsetDateTime> trialEndDate = Optional.empty();
 
@@ -122,6 +143,7 @@ public final class DatastreamCompanyPlan {
             id(other.getId());
             name(other.getName());
             trialEndDate(other.getTrialEndDate());
+            trialStatus(other.getTrialStatus());
             return this;
         }
 
@@ -140,6 +162,19 @@ public final class DatastreamCompanyPlan {
         }
 
         @java.lang.Override
+        public _FinalStage trialStatus(TrialStatus trialStatus) {
+            this.trialStatus = Optional.ofNullable(trialStatus);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_status", nulls = Nulls.SKIP)
+        public _FinalStage trialStatus(Optional<TrialStatus> trialStatus) {
+            this.trialStatus = trialStatus;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage trialEndDate(OffsetDateTime trialEndDate) {
             this.trialEndDate = Optional.ofNullable(trialEndDate);
             return this;
@@ -154,7 +189,7 @@ public final class DatastreamCompanyPlan {
 
         @java.lang.Override
         public DatastreamCompanyPlan build() {
-            return new DatastreamCompanyPlan(id, name, trialEndDate, additionalProperties);
+            return new DatastreamCompanyPlan(id, name, trialEndDate, trialStatus, additionalProperties);
         }
 
         @java.lang.Override

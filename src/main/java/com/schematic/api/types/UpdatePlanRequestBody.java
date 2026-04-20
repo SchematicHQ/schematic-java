@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdatePlanRequestBody {
     private final Optional<String> description;
 
-    private final Optional<String> icon;
+    private final Optional<PlanIcon> icon;
 
     private final String name;
 
@@ -31,7 +31,7 @@ public final class UpdatePlanRequestBody {
 
     private UpdatePlanRequestBody(
             Optional<String> description,
-            Optional<String> icon,
+            Optional<PlanIcon> icon,
             String name,
             Map<String, Object> additionalProperties) {
         this.description = description;
@@ -46,7 +46,7 @@ public final class UpdatePlanRequestBody {
     }
 
     @JsonProperty("icon")
-    public Optional<String> getIcon() {
+    public Optional<PlanIcon> getIcon() {
         return icon;
     }
 
@@ -101,16 +101,16 @@ public final class UpdatePlanRequestBody {
 
         _FinalStage description(String description);
 
-        _FinalStage icon(Optional<String> icon);
+        _FinalStage icon(Optional<PlanIcon> icon);
 
-        _FinalStage icon(String icon);
+        _FinalStage icon(PlanIcon icon);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements NameStage, _FinalStage {
         private String name;
 
-        private Optional<String> icon = Optional.empty();
+        private Optional<PlanIcon> icon = Optional.empty();
 
         private Optional<String> description = Optional.empty();
 
@@ -135,14 +135,14 @@ public final class UpdatePlanRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage icon(String icon) {
+        public _FinalStage icon(PlanIcon icon) {
             this.icon = Optional.ofNullable(icon);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "icon", nulls = Nulls.SKIP)
-        public _FinalStage icon(Optional<String> icon) {
+        public _FinalStage icon(Optional<PlanIcon> icon) {
             this.icon = icon;
             return this;
         }

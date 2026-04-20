@@ -18,6 +18,7 @@ import com.schematic.api.resources.dataexports.AsyncDataexportsClient;
 import com.schematic.api.resources.entitlements.AsyncEntitlementsClient;
 import com.schematic.api.resources.events.AsyncEventsClient;
 import com.schematic.api.resources.features.AsyncFeaturesClient;
+import com.schematic.api.resources.integrationsapi.AsyncIntegrationsapiClient;
 import com.schematic.api.resources.planbundle.AsyncPlanbundleClient;
 import com.schematic.api.resources.plangroups.AsyncPlangroupsClient;
 import com.schematic.api.resources.planmigrations.AsyncPlanmigrationsClient;
@@ -54,6 +55,8 @@ public class AsyncBaseSchematic {
 
     protected final Supplier<AsyncFeaturesClient> featuresClient;
 
+    protected final Supplier<AsyncIntegrationsapiClient> integrationsapiClient;
+
     protected final Supplier<AsyncPlanbundleClient> planbundleClient;
 
     protected final Supplier<AsyncPlangroupsClient> plangroupsClient;
@@ -82,6 +85,7 @@ public class AsyncBaseSchematic {
         this.dataexportsClient = Suppliers.memoize(() -> new AsyncDataexportsClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new AsyncEventsClient(clientOptions));
         this.featuresClient = Suppliers.memoize(() -> new AsyncFeaturesClient(clientOptions));
+        this.integrationsapiClient = Suppliers.memoize(() -> new AsyncIntegrationsapiClient(clientOptions));
         this.planbundleClient = Suppliers.memoize(() -> new AsyncPlanbundleClient(clientOptions));
         this.plangroupsClient = Suppliers.memoize(() -> new AsyncPlangroupsClient(clientOptions));
         this.planmigrationsClient = Suppliers.memoize(() -> new AsyncPlanmigrationsClient(clientOptions));
@@ -162,6 +166,10 @@ public class AsyncBaseSchematic {
 
     public AsyncFeaturesClient features() {
         return this.featuresClient.get();
+    }
+
+    public AsyncIntegrationsapiClient integrationsapi() {
+        return this.integrationsapiClient.get();
     }
 
     public AsyncPlanbundleClient planbundle() {

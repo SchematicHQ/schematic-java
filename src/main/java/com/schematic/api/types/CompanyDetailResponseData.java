@@ -35,6 +35,8 @@ public final class CompanyDetailResponseData {
 
     private final OffsetDateTime createdAt;
 
+    private final List<CustomPlanBillingResponseData> customPlanBillings;
+
     private final Optional<PaymentMethodResponseData> defaultPaymentMethod;
 
     private final List<FeatureEntitlement> entitlements;
@@ -79,6 +81,7 @@ public final class CompanyDetailResponseData {
             Optional<BillingSubscriptionView> billingSubscription,
             List<BillingSubscriptionView> billingSubscriptions,
             OffsetDateTime createdAt,
+            List<CustomPlanBillingResponseData> customPlanBillings,
             Optional<PaymentMethodResponseData> defaultPaymentMethod,
             List<FeatureEntitlement> entitlements,
             List<EntityTraitDetailResponseData> entityTraits,
@@ -103,6 +106,7 @@ public final class CompanyDetailResponseData {
         this.billingSubscription = billingSubscription;
         this.billingSubscriptions = billingSubscriptions;
         this.createdAt = createdAt;
+        this.customPlanBillings = customPlanBillings;
         this.defaultPaymentMethod = defaultPaymentMethod;
         this.entitlements = entitlements;
         this.entityTraits = entityTraits;
@@ -147,6 +151,11 @@ public final class CompanyDetailResponseData {
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("custom_plan_billings")
+    public List<CustomPlanBillingResponseData> getCustomPlanBillings() {
+        return customPlanBillings;
     }
 
     @JsonProperty("default_payment_method")
@@ -259,6 +268,7 @@ public final class CompanyDetailResponseData {
                 && billingSubscription.equals(other.billingSubscription)
                 && billingSubscriptions.equals(other.billingSubscriptions)
                 && createdAt.equals(other.createdAt)
+                && customPlanBillings.equals(other.customPlanBillings)
                 && defaultPaymentMethod.equals(other.defaultPaymentMethod)
                 && entitlements.equals(other.entitlements)
                 && entityTraits.equals(other.entityTraits)
@@ -287,6 +297,7 @@ public final class CompanyDetailResponseData {
                 this.billingSubscription,
                 this.billingSubscriptions,
                 this.createdAt,
+                this.customPlanBillings,
                 this.defaultPaymentMethod,
                 this.entitlements,
                 this.entityTraits,
@@ -368,6 +379,12 @@ public final class CompanyDetailResponseData {
         _FinalStage addBillingSubscriptions(BillingSubscriptionView billingSubscriptions);
 
         _FinalStage addAllBillingSubscriptions(List<BillingSubscriptionView> billingSubscriptions);
+
+        _FinalStage customPlanBillings(List<CustomPlanBillingResponseData> customPlanBillings);
+
+        _FinalStage addCustomPlanBillings(CustomPlanBillingResponseData customPlanBillings);
+
+        _FinalStage addAllCustomPlanBillings(List<CustomPlanBillingResponseData> customPlanBillings);
 
         _FinalStage defaultPaymentMethod(Optional<PaymentMethodResponseData> defaultPaymentMethod);
 
@@ -486,6 +503,8 @@ public final class CompanyDetailResponseData {
 
         private Optional<PaymentMethodResponseData> defaultPaymentMethod = Optional.empty();
 
+        private List<CustomPlanBillingResponseData> customPlanBillings = new ArrayList<>();
+
         private List<BillingSubscriptionView> billingSubscriptions = new ArrayList<>();
 
         private Optional<BillingSubscriptionView> billingSubscription = Optional.empty();
@@ -506,6 +525,7 @@ public final class CompanyDetailResponseData {
             billingSubscription(other.getBillingSubscription());
             billingSubscriptions(other.getBillingSubscriptions());
             createdAt(other.getCreatedAt());
+            customPlanBillings(other.getCustomPlanBillings());
             defaultPaymentMethod(other.getDefaultPaymentMethod());
             entitlements(other.getEntitlements());
             entityTraits(other.getEntityTraits());
@@ -823,6 +843,30 @@ public final class CompanyDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCustomPlanBillings(List<CustomPlanBillingResponseData> customPlanBillings) {
+            if (customPlanBillings != null) {
+                this.customPlanBillings.addAll(customPlanBillings);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCustomPlanBillings(CustomPlanBillingResponseData customPlanBillings) {
+            this.customPlanBillings.add(customPlanBillings);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_plan_billings", nulls = Nulls.SKIP)
+        public _FinalStage customPlanBillings(List<CustomPlanBillingResponseData> customPlanBillings) {
+            this.customPlanBillings.clear();
+            if (customPlanBillings != null) {
+                this.customPlanBillings.addAll(customPlanBillings);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllBillingSubscriptions(List<BillingSubscriptionView> billingSubscriptions) {
             if (billingSubscriptions != null) {
                 this.billingSubscriptions.addAll(billingSubscriptions);
@@ -904,6 +948,7 @@ public final class CompanyDetailResponseData {
                     billingSubscription,
                     billingSubscriptions,
                     createdAt,
+                    customPlanBillings,
                     defaultPaymentMethod,
                     entitlements,
                     entityTraits,

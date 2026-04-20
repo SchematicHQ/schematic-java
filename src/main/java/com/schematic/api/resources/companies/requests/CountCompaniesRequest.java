@@ -35,6 +35,8 @@ public final class CountCompaniesRequest {
 
     private final Optional<List<SubscriptionType>> subscriptionTypes;
 
+    private final Optional<Boolean> hasScheduledDowngrade;
+
     private final Optional<Boolean> monetizedSubscriptions;
 
     private final Optional<String> planId;
@@ -69,6 +71,7 @@ public final class CountCompaniesRequest {
             Optional<List<String>> planIds,
             Optional<List<SubscriptionStatus>> subscriptionStatuses,
             Optional<List<SubscriptionType>> subscriptionTypes,
+            Optional<Boolean> hasScheduledDowngrade,
             Optional<Boolean> monetizedSubscriptions,
             Optional<String> planId,
             Optional<String> planVersionId,
@@ -88,6 +91,7 @@ public final class CountCompaniesRequest {
         this.planIds = planIds;
         this.subscriptionStatuses = subscriptionStatuses;
         this.subscriptionTypes = subscriptionTypes;
+        this.hasScheduledDowngrade = hasScheduledDowngrade;
         this.monetizedSubscriptions = monetizedSubscriptions;
         this.planId = planId;
         this.planVersionId = planVersionId;
@@ -142,6 +146,14 @@ public final class CountCompaniesRequest {
     @JsonProperty("subscription_types")
     public Optional<List<SubscriptionType>> getSubscriptionTypes() {
         return subscriptionTypes;
+    }
+
+    /**
+     * @return Filter companies that have a pending scheduled downgrade
+     */
+    @JsonProperty("has_scheduled_downgrade")
+    public Optional<Boolean> getHasScheduledDowngrade() {
+        return hasScheduledDowngrade;
     }
 
     /**
@@ -265,6 +277,7 @@ public final class CountCompaniesRequest {
                 && planIds.equals(other.planIds)
                 && subscriptionStatuses.equals(other.subscriptionStatuses)
                 && subscriptionTypes.equals(other.subscriptionTypes)
+                && hasScheduledDowngrade.equals(other.hasScheduledDowngrade)
                 && monetizedSubscriptions.equals(other.monetizedSubscriptions)
                 && planId.equals(other.planId)
                 && planVersionId.equals(other.planVersionId)
@@ -288,6 +301,7 @@ public final class CountCompaniesRequest {
                 this.planIds,
                 this.subscriptionStatuses,
                 this.subscriptionTypes,
+                this.hasScheduledDowngrade,
                 this.monetizedSubscriptions,
                 this.planId,
                 this.planVersionId,
@@ -323,6 +337,8 @@ public final class CountCompaniesRequest {
         private Optional<List<SubscriptionStatus>> subscriptionStatuses = Optional.empty();
 
         private Optional<List<SubscriptionType>> subscriptionTypes = Optional.empty();
+
+        private Optional<Boolean> hasScheduledDowngrade = Optional.empty();
 
         private Optional<Boolean> monetizedSubscriptions = Optional.empty();
 
@@ -361,6 +377,7 @@ public final class CountCompaniesRequest {
             planIds(other.getPlanIds());
             subscriptionStatuses(other.getSubscriptionStatuses());
             subscriptionTypes(other.getSubscriptionTypes());
+            hasScheduledDowngrade(other.getHasScheduledDowngrade());
             monetizedSubscriptions(other.getMonetizedSubscriptions());
             planId(other.getPlanId());
             planVersionId(other.getPlanVersionId());
@@ -469,6 +486,20 @@ public final class CountCompaniesRequest {
 
         public Builder subscriptionTypes(SubscriptionType subscriptionTypes) {
             this.subscriptionTypes = Optional.of(Collections.singletonList(subscriptionTypes));
+            return this;
+        }
+
+        /**
+         * <p>Filter companies that have a pending scheduled downgrade</p>
+         */
+        @JsonSetter(value = "has_scheduled_downgrade", nulls = Nulls.SKIP)
+        public Builder hasScheduledDowngrade(Optional<Boolean> hasScheduledDowngrade) {
+            this.hasScheduledDowngrade = hasScheduledDowngrade;
+            return this;
+        }
+
+        public Builder hasScheduledDowngrade(Boolean hasScheduledDowngrade) {
+            this.hasScheduledDowngrade = Optional.ofNullable(hasScheduledDowngrade);
             return this;
         }
 
@@ -661,6 +692,7 @@ public final class CountCompaniesRequest {
                     planIds,
                     subscriptionStatuses,
                     subscriptionTypes,
+                    hasScheduledDowngrade,
                     monetizedSubscriptions,
                     planId,
                     planVersionId,

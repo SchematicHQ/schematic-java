@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class RulesEngineSchemaVersion {
-    public static final RulesEngineSchemaVersion V_5_F_633_CC_3 =
-            new RulesEngineSchemaVersion(Value.V_5_F_633_CC_3, "v5f633cc3");
+    public static final RulesEngineSchemaVersion V_313_FA_646 =
+            new RulesEngineSchemaVersion(Value.V_313_FA_646, "v313fa646");
 
     public static final RulesEngineSchemaVersion PLACEHOLDER_FOR_FERN_COMPATIBILITY = new RulesEngineSchemaVersion(
             Value.PLACEHOLDER_FOR_FERN_COMPATIBILITY, "placeholder-for-fern-compatibility");
@@ -46,8 +46,8 @@ public final class RulesEngineSchemaVersion {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case V_5_F_633_CC_3:
-                return visitor.visitV5F633Cc3();
+            case V_313_FA_646:
+                return visitor.visitV313Fa646();
             case PLACEHOLDER_FOR_FERN_COMPATIBILITY:
                 return visitor.visitPlaceholderForFernCompatibility();
             case UNKNOWN:
@@ -59,8 +59,8 @@ public final class RulesEngineSchemaVersion {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static RulesEngineSchemaVersion valueOf(String value) {
         switch (value) {
-            case "v5f633cc3":
-                return V_5_F_633_CC_3;
+            case "v313fa646":
+                return V_313_FA_646;
             case "placeholder-for-fern-compatibility":
                 return PLACEHOLDER_FOR_FERN_COMPATIBILITY;
             default:
@@ -69,7 +69,7 @@ public final class RulesEngineSchemaVersion {
     }
 
     public enum Value {
-        V_5_F_633_CC_3,
+        V_313_FA_646,
 
         PLACEHOLDER_FOR_FERN_COMPATIBILITY,
 
@@ -77,7 +77,7 @@ public final class RulesEngineSchemaVersion {
     }
 
     public interface Visitor<T> {
-        T visitV5F633Cc3();
+        T visitV313Fa646();
 
         T visitPlaceholderForFernCompatibility();
 

@@ -80,6 +80,120 @@ client.deletePlanAudiencesPlanAudienceId("plan_audience_id");
 </details>
 
 ## accounts
+<details><summary><code>client.accounts.listAccountMembers() -> ListAccountMembersResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.accounts().listAccountMembers(
+    ListAccountMembersRequest
+        .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .q("q")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` — Search filter
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.accounts.getAccountMember(accountMemberId) -> GetAccountMemberResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.accounts().getAccountMember("account_member_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**accountMemberId:** `String` — account_member_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.accounts.listApiKeys() -> ListApiKeysResponse</code></summary>
 <dl>
 <dd>
@@ -688,6 +802,9 @@ client.accounts().countAuditLogs(
 client.accounts().listEnvironments(
     ListEnvironmentsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -1284,8 +1401,11 @@ client.billing().upsertBillingCustomer(
 client.billing().listCustomersWithSubscriptions(
     ListCustomersWithSubscriptionsRequest
         .builder()
+        .companyIds(
+            Arrays.asList("company_ids")
+        )
         .name("name")
-        .providerType(BillingProviderType.SCHEMATIC)
+        .providerType(BillingProviderType.ORB)
         .q("q")
         .limit(1000000L)
         .offset(1000000L)
@@ -1373,8 +1493,11 @@ client.billing().listCustomersWithSubscriptions(
 client.billing().countCustomers(
     CountCustomersRequest
         .builder()
+        .companyIds(
+            Arrays.asList("company_ids")
+        )
         .name("name")
-        .providerType(BillingProviderType.SCHEMATIC)
+        .providerType(BillingProviderType.ORB)
         .q("q")
         .limit(1000000L)
         .offset(1000000L)
@@ -1801,6 +1924,14 @@ client.billing().upsertBillingMeter(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**providerType:** `Optional<BillingProviderType>` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -2032,6 +2163,12 @@ client.billing().upsertPaymentMethod(
 client.billing().listBillingPrices(
     ListBillingPricesRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .productIds(
+            Arrays.asList("product_ids")
+        )
         .currency("currency")
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
@@ -2039,7 +2176,7 @@ client.billing().listBillingPrices(
         .isActive(true)
         .price(1000000L)
         .productId("product_id")
-        .providerType(BillingProviderType.SCHEMATIC)
+        .providerType(BillingProviderType.ORB)
         .q("q")
         .tiersMode(BillingTiersMode.GRADUATED)
         .usageType(BillingPriceUsageType.LICENSED)
@@ -2423,6 +2560,12 @@ client.billing().deleteBillingProduct("billing_id");
 client.billing().listBillingProductPrices(
     ListBillingProductPricesRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .productIds(
+            Arrays.asList("product_ids")
+        )
         .currency("currency")
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
@@ -2430,7 +2573,7 @@ client.billing().listBillingProductPrices(
         .isActive(true)
         .price(1000000L)
         .productId("product_id")
-        .providerType(BillingProviderType.SCHEMATIC)
+        .providerType(BillingProviderType.ORB)
         .q("q")
         .tiersMode(BillingTiersMode.GRADUATED)
         .usageType(BillingPriceUsageType.LICENSED)
@@ -2719,10 +2862,13 @@ client.billing().upsertBillingProduct(
 client.billing().listBillingProducts(
     ListBillingProductsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .isActive(true)
         .name("name")
         .priceUsageType(BillingPriceUsageType.LICENSED)
-        .providerType(BillingProviderType.SCHEMATIC)
+        .providerType(BillingProviderType.ORB)
         .q("q")
         .withOneTimeCharges(true)
         .withPricesOnly(true)
@@ -2862,10 +3008,13 @@ client.billing().listBillingProducts(
 client.billing().countBillingProducts(
     CountBillingProductsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .isActive(true)
         .name("name")
         .priceUsageType(BillingPriceUsageType.LICENSED)
-        .providerType(BillingProviderType.SCHEMATIC)
+        .providerType(BillingProviderType.ORB)
         .q("q")
         .withOneTimeCharges(true)
         .withPricesOnly(true)
@@ -3164,6 +3313,14 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
+**providerType:** `Optional<BillingProviderType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **status:** `Optional<String>` 
     
 </dd>
@@ -3225,6 +3382,9 @@ client.billing().upsertBillingSubscription(
 client.credits().listBillingCredits(
     ListBillingCreditsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .name("name")
         .limit(1000000L)
         .offset(1000000L)
@@ -3662,6 +3822,9 @@ client.credits().softDeleteBillingCredit("credit_id");
 client.credits().listCreditBundles(
     ListCreditBundlesRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .creditId("credit_id")
         .status(BillingCreditBundleStatus.ACTIVE)
         .bundleType("fixed")
@@ -4086,6 +4249,9 @@ client.credits().deleteCreditBundle("bundle_id");
 client.credits().countCreditBundles(
     CountCreditBundlesRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .creditId("credit_id")
         .status(BillingCreditBundleStatus.ACTIVE)
         .bundleType("fixed")
@@ -4175,6 +4341,9 @@ client.credits().countCreditBundles(
 client.credits().countBillingCredits(
     CountBillingCreditsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .name("name")
         .limit(1000000L)
         .offset(1000000L)
@@ -4302,7 +4471,7 @@ client.credits().grantBillingCreditsToCompany(
         .companyId("company_id")
         .creditId("credit_id")
         .quantity(1000000L)
-        .reason(BillingCreditGrantReason.BILLING_CREDIT_AUTO_TOPUP)
+        .reason(BillingCreditGrantReason.ADJUSTMENT)
         .build()
 );
 ```
@@ -4597,6 +4766,9 @@ client.credits().listCompanyGrants(
 client.credits().countBillingCreditsGrants(
     CountBillingCreditsGrantsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .creditId("credit_id")
         .limit(1000000L)
         .offset(1000000L)
@@ -4668,6 +4840,9 @@ client.credits().countBillingCreditsGrants(
 client.credits().listGrantsForCredit(
     ListGrantsForCreditRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .creditId("credit_id")
         .limit(1000000L)
         .offset(1000000L)
@@ -4955,6 +5130,12 @@ client.credits().countCreditLedger(
 client.credits().listBillingPlanCreditGrants(
     ListBillingPlanCreditGrantsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .planIds(
+            Arrays.asList("plan_ids")
+        )
         .creditId("credit_id")
         .planId("plan_id")
         .planVersionId("plan_version_id")
@@ -5074,6 +5255,46 @@ client.credits().createBillingPlanCreditGrant(
 <dd>
 
 **request:** `CreateBillingPlanCreditGrantRequestBody` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.getSingleBillingPlanCreditGrant(planGrantId) -> GetSingleBillingPlanCreditGrantResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().getSingleBillingPlanCreditGrant("plan_grant_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planGrantId:** `String` — plan_grant_id
     
 </dd>
 </dl>
@@ -5210,6 +5431,12 @@ client.credits().deleteBillingPlanCreditGrant(
 client.credits().countBillingPlanCreditGrants(
     CountBillingPlanCreditGrantsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .planIds(
+            Arrays.asList("plan_ids")
+        )
         .creditId("credit_id")
         .planId("plan_id")
         .planVersionId("plan_version_id")
@@ -5984,6 +6211,22 @@ client.checkout().updateCustomerSubscriptionTrialEnd(
 client.companies().listCompanies(
     ListCompaniesRequest
         .builder()
+        .creditTypeIds(
+            Arrays.asList("credit_type_ids")
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
+        .planIds(
+            Arrays.asList("plan_ids")
+        )
+        .subscriptionStatuses(
+            Arrays.asList(SubscriptionStatus.ACTIVE)
+        )
+        .subscriptionTypes(
+            Arrays.asList(SubscriptionType.FREE)
+        )
+        .hasScheduledDowngrade(true)
         .monetizedSubscriptions(true)
         .planId("plan_id")
         .planVersionId("plan_version_id")
@@ -6014,6 +6257,14 @@ client.companies().listCompanies(
 <dd>
 
 **creditTypeIds:** `Optional<String>` — Filter companies by one or more credit type IDs (each ID starts with bcrd_)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**hasScheduledDowngrade:** `Optional<Boolean>` — Filter companies that have a pending scheduled downgrade
     
 </dd>
 </dl>
@@ -6329,6 +6580,22 @@ client.companies().deleteCompany(
 client.companies().countCompanies(
     CountCompaniesRequest
         .builder()
+        .creditTypeIds(
+            Arrays.asList("credit_type_ids")
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
+        .planIds(
+            Arrays.asList("plan_ids")
+        )
+        .subscriptionStatuses(
+            Arrays.asList(SubscriptionStatus.ACTIVE)
+        )
+        .subscriptionTypes(
+            Arrays.asList(SubscriptionType.FREE)
+        )
+        .hasScheduledDowngrade(true)
         .monetizedSubscriptions(true)
         .planId("plan_id")
         .planVersionId("plan_version_id")
@@ -6359,6 +6626,14 @@ client.companies().countCompanies(
 <dd>
 
 **creditTypeIds:** `Optional<String>` — Filter companies by one or more credit type IDs (each ID starts with bcrd_)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**hasScheduledDowngrade:** `Optional<Boolean>` — Filter companies that have a pending scheduled downgrade
     
 </dd>
 </dl>
@@ -6853,6 +7128,9 @@ client.companies().deleteCompanyMembership("company_membership_id");
 client.companies().getActiveCompanySubscription(
     GetActiveCompanySubscriptionRequest
         .builder()
+        .companyIds(
+            Arrays.asList("company_ids")
+        )
         .companyId("company_id")
         .limit(1000000L)
         .offset(1000000L)
@@ -6974,6 +7252,9 @@ client.companies().upsertCompanyTrait(
 client.companies().listEntityKeyDefinitions(
     ListEntityKeyDefinitionsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .entityType(EntityType.COMPANY)
         .q("q")
         .limit(1000000L)
@@ -7054,6 +7335,9 @@ client.companies().listEntityKeyDefinitions(
 client.companies().countEntityKeyDefinitions(
     CountEntityKeyDefinitionsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .entityType(EntityType.COMPANY)
         .q("q")
         .limit(1000000L)
@@ -7134,6 +7418,12 @@ client.companies().countEntityKeyDefinitions(
 client.companies().listEntityTraitDefinitions(
     ListEntityTraitDefinitionsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .traitTypes(
+            Arrays.asList(TraitType.BOOLEAN)
+        )
         .entityType(EntityType.COMPANY)
         .q("q")
         .traitType(TraitType.BOOLEAN)
@@ -7406,6 +7696,12 @@ client.companies().updateEntityTraitDefinition(
 client.companies().countEntityTraitDefinitions(
     CountEntityTraitDefinitionsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .traitTypes(
+            Arrays.asList(TraitType.BOOLEAN)
+        )
         .entityType(EntityType.COMPANY)
         .q("q")
         .traitType(TraitType.BOOLEAN)
@@ -7575,8 +7871,14 @@ client.companies().getEntityTraitValues(
 client.companies().listPlanChanges(
     ListPlanChangesRequest
         .builder()
-        .action("action")
-        .basePlanAction("base_plan_action")
+        .companyIds(
+            Arrays.asList("company_ids")
+        )
+        .planIds(
+            Arrays.asList("plan_ids")
+        )
+        .action(PlanChangeAction.CHECKOUT)
+        .basePlanAction(PlanChangeBasePlanAction.FALLBACK)
         .companyId("company_id")
         .limit(1000000L)
         .offset(1000000L)
@@ -7596,7 +7898,7 @@ client.companies().listPlanChanges(
 <dl>
 <dd>
 
-**action:** `Optional<String>` 
+**action:** `Optional<PlanChangeAction>` 
     
 </dd>
 </dl>
@@ -7604,7 +7906,7 @@ client.companies().listPlanChanges(
 <dl>
 <dd>
 
-**basePlanAction:** `Optional<String>` 
+**basePlanAction:** `Optional<PlanChangeBasePlanAction>` 
     
 </dd>
 </dl>
@@ -7712,6 +8014,12 @@ client.companies().getPlanChange("plan_change_id");
 client.companies().listPlanTraits(
     ListPlanTraitsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .traitIds(
+            Arrays.asList("trait_ids")
+        )
         .planId("plan_id")
         .traitId("trait_id")
         .limit(1000000L)
@@ -8077,6 +8385,12 @@ client.companies().updatePlanTraitsBulk(
 client.companies().countPlanTraits(
     CountPlanTraitsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .traitIds(
+            Arrays.asList("trait_ids")
+        )
         .planId("plan_id")
         .traitId("trait_id")
         .limit(1000000L)
@@ -8215,6 +8529,9 @@ client.companies().upsertUserTrait(
 client.companies().listUsers(
     ListUsersRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .companyId("company_id")
         .planId("plan_id")
         .q("q")
@@ -8433,6 +8750,9 @@ client.companies().deleteUser("user_id");
 client.companies().countUsers(
     CountUsersRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .companyId("company_id")
         .planId("plan_id")
         .q("q")
@@ -8670,6 +8990,15 @@ client.companies().lookupUser(
 client.entitlements().listCompanyOverrides(
     ListCompanyOverridesRequest
         .builder()
+        .companyIds(
+            Arrays.asList("company_ids")
+        )
+        .featureIds(
+            Arrays.asList("feature_ids")
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
         .companyId("company_id")
         .featureId("feature_id")
         .withoutExpired(true)
@@ -9125,6 +9454,15 @@ client.entitlements().deleteCompanyOverride("company_override_id");
 client.entitlements().countCompanyOverrides(
     CountCompanyOverridesRequest
         .builder()
+        .companyIds(
+            Arrays.asList("company_ids")
+        )
+        .featureIds(
+            Arrays.asList("feature_ids")
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
         .companyId("company_id")
         .featureId("feature_id")
         .withoutExpired(true)
@@ -9383,6 +9721,9 @@ client.entitlements().countFeatureCompanies(
 client.entitlements().listFeatureUsage(
     ListFeatureUsageRequest
         .builder()
+        .featureIds(
+            Arrays.asList("feature_ids")
+        )
         .companyId("company_id")
         .includeUsageAggregation(true)
         .q("q")
@@ -9570,6 +9911,9 @@ client.entitlements().getFeatureUsageTimeSeries(
 client.entitlements().countFeatureUsage(
     CountFeatureUsageRequest
         .builder()
+        .featureIds(
+            Arrays.asList("feature_ids")
+        )
         .companyId("company_id")
         .includeUsageAggregation(true)
         .q("q")
@@ -9820,6 +10164,18 @@ client.entitlements().countFeatureUsers(
 client.entitlements().listPlanEntitlements(
     ListPlanEntitlementsRequest
         .builder()
+        .featureIds(
+            Arrays.asList("feature_ids")
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
+        .planIds(
+            Arrays.asList("plan_ids")
+        )
+        .planVersionIds(
+            Arrays.asList("plan_version_ids")
+        )
         .featureId("feature_id")
         .planId("plan_id")
         .planVersionId("plan_version_id")
@@ -9995,6 +10351,14 @@ client.entitlements().createPlanEntitlement(
 <dd>
 
 **currency:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**currencyPrices:** `Optional<List<CurrencyPriceRequestBody>>` 
     
 </dd>
 </dl>
@@ -10304,6 +10668,14 @@ client.entitlements().updatePlanEntitlement(
 <dl>
 <dd>
 
+**currencyPrices:** `Optional<List<CurrencyPriceRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **metricPeriod:** `Optional<UpdatePlanEntitlementRequestBodyMetricPeriod>` 
     
 </dd>
@@ -10508,6 +10880,287 @@ client.entitlements().deletePlanEntitlement("plan_entitlement_id");
 </dl>
 </details>
 
+<details><summary><code>client.entitlements.upsertPlanEntitlementForBillingProduct(request) -> UpsertPlanEntitlementForBillingProductResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.entitlements().upsertPlanEntitlementForBillingProduct(
+    CreateBillingLinkedPlanEntitlementRequestBody
+        .builder()
+        .billingProvider(BillingProviderType.ORB)
+        .externalResourceId("external_resource_id")
+        .featureId("feature_id")
+        .planId("plan_id")
+        .valueType(EntitlementValueType.BOOLEAN)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProductId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**billingProvider:** `BillingProviderType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**billingThreshold:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditConsumptionRate:** `Optional<Double>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**currency:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**currencyPrices:** `Optional<List<CurrencyPriceRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**externalResourceId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metricPeriod:** `Optional<CreateBillingLinkedPlanEntitlementRequestBodyMetricPeriod>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metricPeriodMonthReset:** `Optional<CreateBillingLinkedPlanEntitlementRequestBodyMetricPeriodMonthReset>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**monthlyMeteredPriceId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**monthlyPriceTiers:** `Optional<List<CreatePriceTierRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**monthlyUnitPrice:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**monthlyUnitPriceDecimal:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**overageBillingProductId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**priceBehavior:** `Optional<EntitlementPriceBehavior>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**priceTiers:** `Optional<List<CreatePriceTierRequestBody>>` — Use MonthlyPriceTiers or YearlyPriceTiers instead
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**softLimit:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tierMode:** `Optional<BillingTiersMode>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**valueBool:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**valueCreditId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**valueNumeric:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**valueTraitId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**valueType:** `EntitlementValueType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**yearlyMeteredPriceId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**yearlyPriceTiers:** `Optional<List<CreatePriceTierRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**yearlyUnitPrice:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**yearlyUnitPriceDecimal:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.entitlements.countPlanEntitlements() -> CountPlanEntitlementsResponse</code></summary>
 <dl>
 <dd>
@@ -10524,6 +11177,18 @@ client.entitlements().deletePlanEntitlement("plan_entitlement_id");
 client.entitlements().countPlanEntitlements(
     CountPlanEntitlementsRequest
         .builder()
+        .featureIds(
+            Arrays.asList("feature_ids")
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
+        .planIds(
+            Arrays.asList("plan_ids")
+        )
+        .planVersionIds(
+            Arrays.asList("plan_version_ids")
+        )
         .featureId("feature_id")
         .planId("plan_id")
         .planVersionId("plan_version_id")
@@ -10807,6 +11472,85 @@ client.plans().updateCompanyPlans(
 </dl>
 </details>
 
+<details><summary><code>client.plans.createCustomPlan(request) -> CreateCustomPlanResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.plans().createCustomPlan(
+    CreateCustomPlanRequestBody
+        .builder()
+        .companyId("company_id")
+        .description("description")
+        .name("name")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**copiedFromPlanId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**icon:** `Optional<PlanIcon>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.plans.listPlans() -> ListPlansResponse</code></summary>
 <dl>
 <dd>
@@ -10823,6 +11567,9 @@ client.plans().updateCompanyPlans(
 client.plans().listPlans(
     ListPlansRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .companyId("company_id")
         .forFallbackPlan(true)
         .forInitialPlan(true)
@@ -10831,6 +11578,7 @@ client.plans().listPlans(
         .includeDraftVersions(true)
         .planType(PlanType.PLAN)
         .q("q")
+        .scopedToCompanyId("scoped_to_company_id")
         .withoutEntitlementFor("without_entitlement_for")
         .withoutPaidProductId(true)
         .limit(1000000L)
@@ -10916,6 +11664,14 @@ client.plans().listPlans(
 <dd>
 
 **q:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**scopedToCompanyId:** `Optional<String>` — Filter plans scoped to a specific company (custom plans)
     
 </dd>
 </dl>
@@ -11209,6 +11965,239 @@ client.plans().upsertBillingProductPlan(
 </dl>
 </details>
 
+<details><summary><code>client.plans.upsertPlanForBillingProduct(request) -> UpsertPlanForBillingProductResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.plans().upsertPlanForBillingProduct(
+    CreateBillingLinkedPlanRequestBody
+        .builder()
+        .billingProvider(BillingProviderType.ORB)
+        .description("description")
+        .externalResourceId("external_resource_id")
+        .name("name")
+        .planType(PlanType.PLAN)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProvider:** `BillingProviderType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**externalResourceId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**icon:** `Optional<PlanIcon>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planType:** `PlanType` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.plans.listBillingProductMatchCompanies() -> ListBillingProductMatchCompaniesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.plans().listBillingProductMatchCompanies(
+    ListBillingProductMatchCompaniesRequest
+        .builder()
+        .planId("plan_id")
+        .q("q")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planId:** `String` — The plan ID to find billing product match companies for
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` — Search for companies by name, keys or string traits
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.plans.countBillingProductMatchCompanies() -> CountBillingProductMatchCompaniesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.plans().countBillingProductMatchCompanies(
+    CountBillingProductMatchCompaniesRequest
+        .builder()
+        .planId("plan_id")
+        .q("q")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planId:** `String` — The plan ID to find billing product match companies for
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` — Search for companies by name, keys or string traits
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.plans.countPlans() -> CountPlansResponse</code></summary>
 <dl>
 <dd>
@@ -11225,6 +12214,9 @@ client.plans().upsertBillingProductPlan(
 client.plans().countPlans(
     CountPlansRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .companyId("company_id")
         .forFallbackPlan(true)
         .forInitialPlan(true)
@@ -11233,6 +12225,7 @@ client.plans().countPlans(
         .includeDraftVersions(true)
         .planType(PlanType.PLAN)
         .q("q")
+        .scopedToCompanyId("scoped_to_company_id")
         .withoutEntitlementFor("without_entitlement_for")
         .withoutPaidProductId(true)
         .limit(1000000L)
@@ -11318,6 +12311,14 @@ client.plans().countPlans(
 <dd>
 
 **q:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**scopedToCompanyId:** `Optional<String>` — Filter plans scoped to a specific company (custom plans)
     
 </dd>
 </dl>
@@ -11490,6 +12491,15 @@ client.plans().publishPlanVersion(
         .excludedCompanyIds(
             Arrays.asList("excluded_company_ids")
         )
+        .payInAdvance(
+            Arrays.asList(
+                UpdatePayInAdvanceRequestBody
+                    .builder()
+                    .priceId("price_id")
+                    .quantity(1000000L)
+                    .build()
+            )
+        )
         .build()
 );
 ```
@@ -11514,6 +12524,30 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
+**activationStrategy:** `Optional<CustomPlanActivationStrategy>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customerEmail:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**daysUntilDue:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **excludedCompanyIds:** `List<String>` 
     
 </dd>
@@ -11523,6 +12557,14 @@ client.plans().publishPlanVersion(
 <dd>
 
 **migrationStrategy:** `PlanVersionMigrationStrategy` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**payInAdvance:** `List<UpdatePayInAdvanceRequestBody>` 
     
 </dd>
 </dl>
@@ -12107,6 +13149,9 @@ client.events().createEventBatch(
 client.events().getEventSummaries(
     GetEventSummariesRequest
         .builder()
+        .eventSubtypes(
+            Arrays.asList("event_subtypes")
+        )
         .q("q")
         .limit(1000000L)
         .offset(1000000L)
@@ -12178,6 +13223,9 @@ client.events().getEventSummaries(
 client.events().listEvents(
     ListEventsRequest
         .builder()
+        .eventTypes(
+            Arrays.asList(EventType.FLAG_CHECK)
+        )
         .companyId("company_id")
         .eventSubtype("event_subtype")
         .flagId("flag_id")
@@ -12387,11 +13435,17 @@ client.events().getSegmentIntegrationStatus();
 client.features().listFeatures(
     ListFeaturesRequest
         .builder()
+        .featureType(
+            Arrays.asList(FeatureType.BOOLEAN)
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
+        .booleanRequireEvent(true)
+        .planVersionId("plan_version_id")
         .q("q")
         .withoutCompanyOverrideFor("without_company_override_for")
-        .planVersionId("plan_version_id")
         .withoutPlanEntitlementFor("without_plan_entitlement_for")
-        .booleanRequireEvent(true)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -12410,7 +13464,31 @@ client.features().listFeatures(
 <dl>
 <dd>
 
+**booleanRequireEvent:** `Optional<Boolean>` — Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureType:** `Optional<FeatureType>` — Filter by one or more feature types (boolean, event, trait)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` — Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
     
 </dd>
 </dl>
@@ -12434,31 +13512,7 @@ client.features().listFeatures(
 <dl>
 <dd>
 
-**planVersionId:** `Optional<String>` — Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **withoutPlanEntitlementFor:** `Optional<String>` — Filter out features that already have a plan entitlement for the specified plan ID
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**featureType:** `Optional<FeatureType>` — Filter by one or more feature types (boolean, event, trait)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**booleanRequireEvent:** `Optional<Boolean>` — Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
     
 </dd>
 </dl>
@@ -12826,6 +13880,151 @@ client.features().deleteFeature("feature_id");
 </dl>
 </details>
 
+<details><summary><code>client.features.upsertFeatureForBillingProduct(request) -> UpsertFeatureForBillingProductResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.features().upsertFeatureForBillingProduct(
+    CreateBillingLinkedFeatureRequestBody
+        .builder()
+        .billingProvider(BillingProviderType.ORB)
+        .description("description")
+        .externalResourceId("external_resource_id")
+        .featureType(FeatureType.BOOLEAN)
+        .name("name")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProvider:** `BillingProviderType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**eventSubtype:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**externalResourceId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureType:** `FeatureType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**flag:** `Optional<CreateOrUpdateFlagRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**icon:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**lifecyclePhase:** `Optional<FeatureLifecyclePhase>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**maintainerId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pluralName:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**singularName:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**traitId:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.features.countFeatures() -> CountFeaturesResponse</code></summary>
 <dl>
 <dd>
@@ -12842,11 +14041,17 @@ client.features().deleteFeature("feature_id");
 client.features().countFeatures(
     CountFeaturesRequest
         .builder()
+        .featureType(
+            Arrays.asList(FeatureType.BOOLEAN)
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
+        .booleanRequireEvent(true)
+        .planVersionId("plan_version_id")
         .q("q")
         .withoutCompanyOverrideFor("without_company_override_for")
-        .planVersionId("plan_version_id")
         .withoutPlanEntitlementFor("without_plan_entitlement_for")
-        .booleanRequireEvent(true)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -12865,7 +14070,31 @@ client.features().countFeatures(
 <dl>
 <dd>
 
+**booleanRequireEvent:** `Optional<Boolean>` — Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureType:** `Optional<FeatureType>` — Filter by one or more feature types (boolean, event, trait)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` — Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
     
 </dd>
 </dl>
@@ -12889,31 +14118,7 @@ client.features().countFeatures(
 <dl>
 <dd>
 
-**planVersionId:** `Optional<String>` — Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **withoutPlanEntitlementFor:** `Optional<String>` — Filter out features that already have a plan entitlement for the specified plan ID
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**featureType:** `Optional<FeatureType>` — Filter by one or more feature types (boolean, event, trait)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**booleanRequireEvent:** `Optional<Boolean>` — Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
     
 </dd>
 </dl>
@@ -12957,6 +14162,9 @@ client.features().countFeatures(
 client.features().listFlags(
     ListFlagsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .featureId("feature_id")
         .q("q")
         .limit(1000000L)
@@ -13466,6 +14674,9 @@ client.features().checkFlagsBulk(
 client.features().countFlags(
     CountFlagsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .featureId("feature_id")
         .q("q")
         .limit(1000000L)
@@ -13519,6 +14730,47 @@ client.features().countFlags(
 <dd>
 
 **offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## integrationsapi
+<details><summary><code>client.integrationsapi.getIntegrationWebhookUrl(type) -> GetIntegrationWebhookUrlResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().getIntegrationWebhookUrl("type");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**type:** `String` — type
     
 </dd>
 </dl>
@@ -15132,6 +16384,9 @@ client.accesstokens().issueTemporaryAccessToken(
 client.webhooks().listWebhookEvents(
     ListWebhookEventsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .q("q")
         .webhookId("webhook_id")
         .limit(1000000L)
@@ -15252,6 +16507,9 @@ client.webhooks().getWebhookEvent("webhook_event_id");
 client.webhooks().countWebhookEvents(
     CountWebhookEventsRequest
         .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
         .q("q")
         .webhookId("webhook_id")
         .limit(1000000L)

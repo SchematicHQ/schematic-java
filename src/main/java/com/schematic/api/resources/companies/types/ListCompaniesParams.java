@@ -26,6 +26,8 @@ import java.util.Optional;
 public final class ListCompaniesParams {
     private final Optional<List<String>> creditTypeIds;
 
+    private final Optional<Boolean> hasScheduledDowngrade;
+
     private final Optional<List<String>> ids;
 
     private final Optional<Long> limit;
@@ -64,6 +66,7 @@ public final class ListCompaniesParams {
 
     private ListCompaniesParams(
             Optional<List<String>> creditTypeIds,
+            Optional<Boolean> hasScheduledDowngrade,
             Optional<List<String>> ids,
             Optional<Long> limit,
             Optional<Boolean> monetizedSubscriptions,
@@ -83,6 +86,7 @@ public final class ListCompaniesParams {
             Optional<Boolean> withoutSubscription,
             Map<String, Object> additionalProperties) {
         this.creditTypeIds = creditTypeIds;
+        this.hasScheduledDowngrade = hasScheduledDowngrade;
         this.ids = ids;
         this.limit = limit;
         this.monetizedSubscriptions = monetizedSubscriptions;
@@ -109,6 +113,14 @@ public final class ListCompaniesParams {
     @JsonProperty("credit_type_ids")
     public Optional<List<String>> getCreditTypeIds() {
         return creditTypeIds;
+    }
+
+    /**
+     * @return Filter companies that have a pending scheduled downgrade
+     */
+    @JsonProperty("has_scheduled_downgrade")
+    public Optional<Boolean> getHasScheduledDowngrade() {
+        return hasScheduledDowngrade;
     }
 
     /**
@@ -260,6 +272,7 @@ public final class ListCompaniesParams {
 
     private boolean equalTo(ListCompaniesParams other) {
         return creditTypeIds.equals(other.creditTypeIds)
+                && hasScheduledDowngrade.equals(other.hasScheduledDowngrade)
                 && ids.equals(other.ids)
                 && limit.equals(other.limit)
                 && monetizedSubscriptions.equals(other.monetizedSubscriptions)
@@ -283,6 +296,7 @@ public final class ListCompaniesParams {
     public int hashCode() {
         return Objects.hash(
                 this.creditTypeIds,
+                this.hasScheduledDowngrade,
                 this.ids,
                 this.limit,
                 this.monetizedSubscriptions,
@@ -314,6 +328,8 @@ public final class ListCompaniesParams {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<List<String>> creditTypeIds = Optional.empty();
+
+        private Optional<Boolean> hasScheduledDowngrade = Optional.empty();
 
         private Optional<List<String>> ids = Optional.empty();
 
@@ -356,6 +372,7 @@ public final class ListCompaniesParams {
 
         public Builder from(ListCompaniesParams other) {
             creditTypeIds(other.getCreditTypeIds());
+            hasScheduledDowngrade(other.getHasScheduledDowngrade());
             ids(other.getIds());
             limit(other.getLimit());
             monetizedSubscriptions(other.getMonetizedSubscriptions());
@@ -387,6 +404,20 @@ public final class ListCompaniesParams {
 
         public Builder creditTypeIds(List<String> creditTypeIds) {
             this.creditTypeIds = Optional.ofNullable(creditTypeIds);
+            return this;
+        }
+
+        /**
+         * <p>Filter companies that have a pending scheduled downgrade</p>
+         */
+        @JsonSetter(value = "has_scheduled_downgrade", nulls = Nulls.SKIP)
+        public Builder hasScheduledDowngrade(Optional<Boolean> hasScheduledDowngrade) {
+            this.hasScheduledDowngrade = hasScheduledDowngrade;
+            return this;
+        }
+
+        public Builder hasScheduledDowngrade(Boolean hasScheduledDowngrade) {
+            this.hasScheduledDowngrade = Optional.ofNullable(hasScheduledDowngrade);
             return this;
         }
 
@@ -631,6 +662,7 @@ public final class ListCompaniesParams {
         public ListCompaniesParams build() {
             return new ListCompaniesParams(
                     creditTypeIds,
+                    hasScheduledDowngrade,
                     ids,
                     limit,
                     monetizedSubscriptions,

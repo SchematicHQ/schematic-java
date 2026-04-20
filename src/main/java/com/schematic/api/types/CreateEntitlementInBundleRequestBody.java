@@ -30,6 +30,8 @@ public final class CreateEntitlementInBundleRequestBody {
 
     private final Optional<String> currency;
 
+    private final Optional<List<CurrencyPriceRequestBody>> currencyPrices;
+
     private final String featureId;
 
     private final Optional<CreateEntitlementInBundleRequestBodyMetricPeriod> metricPeriod;
@@ -83,6 +85,7 @@ public final class CreateEntitlementInBundleRequestBody {
             Optional<Long> billingThreshold,
             Optional<Double> creditConsumptionRate,
             Optional<String> currency,
+            Optional<List<CurrencyPriceRequestBody>> currencyPrices,
             String featureId,
             Optional<CreateEntitlementInBundleRequestBodyMetricPeriod> metricPeriod,
             Optional<CreateEntitlementInBundleRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
@@ -111,6 +114,7 @@ public final class CreateEntitlementInBundleRequestBody {
         this.billingThreshold = billingThreshold;
         this.creditConsumptionRate = creditConsumptionRate;
         this.currency = currency;
+        this.currencyPrices = currencyPrices;
         this.featureId = featureId;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
@@ -155,6 +159,11 @@ public final class CreateEntitlementInBundleRequestBody {
     @JsonProperty("currency")
     public Optional<String> getCurrency() {
         return currency;
+    }
+
+    @JsonProperty("currency_prices")
+    public Optional<List<CurrencyPriceRequestBody>> getCurrencyPrices() {
+        return currencyPrices;
     }
 
     @JsonProperty("feature_id")
@@ -292,6 +301,7 @@ public final class CreateEntitlementInBundleRequestBody {
                 && billingThreshold.equals(other.billingThreshold)
                 && creditConsumptionRate.equals(other.creditConsumptionRate)
                 && currency.equals(other.currency)
+                && currencyPrices.equals(other.currencyPrices)
                 && featureId.equals(other.featureId)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
@@ -324,6 +334,7 @@ public final class CreateEntitlementInBundleRequestBody {
                 this.billingThreshold,
                 this.creditConsumptionRate,
                 this.currency,
+                this.currencyPrices,
                 this.featureId,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
@@ -394,6 +405,10 @@ public final class CreateEntitlementInBundleRequestBody {
         _FinalStage currency(Optional<String> currency);
 
         _FinalStage currency(String currency);
+
+        _FinalStage currencyPrices(Optional<List<CurrencyPriceRequestBody>> currencyPrices);
+
+        _FinalStage currencyPrices(List<CurrencyPriceRequestBody> currencyPrices);
 
         _FinalStage metricPeriod(Optional<CreateEntitlementInBundleRequestBodyMetricPeriod> metricPeriod);
 
@@ -530,6 +545,8 @@ public final class CreateEntitlementInBundleRequestBody {
 
         private Optional<CreateEntitlementInBundleRequestBodyMetricPeriod> metricPeriod = Optional.empty();
 
+        private Optional<List<CurrencyPriceRequestBody>> currencyPrices = Optional.empty();
+
         private Optional<String> currency = Optional.empty();
 
         private Optional<Double> creditConsumptionRate = Optional.empty();
@@ -549,6 +566,7 @@ public final class CreateEntitlementInBundleRequestBody {
             billingThreshold(other.getBillingThreshold());
             creditConsumptionRate(other.getCreditConsumptionRate());
             currency(other.getCurrency());
+            currencyPrices(other.getCurrencyPrices());
             featureId(other.getFeatureId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
@@ -866,6 +884,19 @@ public final class CreateEntitlementInBundleRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage currencyPrices(List<CurrencyPriceRequestBody> currencyPrices) {
+            this.currencyPrices = Optional.ofNullable(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(Optional<List<CurrencyPriceRequestBody>> currencyPrices) {
+            this.currencyPrices = currencyPrices;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage currency(String currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
@@ -924,6 +955,7 @@ public final class CreateEntitlementInBundleRequestBody {
                     billingThreshold,
                     creditConsumptionRate,
                     currency,
+                    currencyPrices,
                     featureId,
                     metricPeriod,
                     metricPeriodMonthReset,

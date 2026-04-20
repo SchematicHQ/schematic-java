@@ -12,30 +12,64 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CustomPlanActivationStrategy;
 import com.schematic.api.types.PlanVersionMigrationStrategy;
+import com.schematic.api.types.UpdatePayInAdvanceRequestBody;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PublishPlanVersionRequestBody.Builder.class)
 public final class PublishPlanVersionRequestBody {
+    private final Optional<CustomPlanActivationStrategy> activationStrategy;
+
+    private final Optional<String> customerEmail;
+
+    private final Optional<Long> daysUntilDue;
+
     private final List<String> excludedCompanyIds;
 
     private final PlanVersionMigrationStrategy migrationStrategy;
 
+    private final List<UpdatePayInAdvanceRequestBody> payInAdvance;
+
     private final Map<String, Object> additionalProperties;
 
     private PublishPlanVersionRequestBody(
+            Optional<CustomPlanActivationStrategy> activationStrategy,
+            Optional<String> customerEmail,
+            Optional<Long> daysUntilDue,
             List<String> excludedCompanyIds,
             PlanVersionMigrationStrategy migrationStrategy,
+            List<UpdatePayInAdvanceRequestBody> payInAdvance,
             Map<String, Object> additionalProperties) {
+        this.activationStrategy = activationStrategy;
+        this.customerEmail = customerEmail;
+        this.daysUntilDue = daysUntilDue;
         this.excludedCompanyIds = excludedCompanyIds;
         this.migrationStrategy = migrationStrategy;
+        this.payInAdvance = payInAdvance;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("activation_strategy")
+    public Optional<CustomPlanActivationStrategy> getActivationStrategy() {
+        return activationStrategy;
+    }
+
+    @JsonProperty("customer_email")
+    public Optional<String> getCustomerEmail() {
+        return customerEmail;
+    }
+
+    @JsonProperty("days_until_due")
+    public Optional<Long> getDaysUntilDue() {
+        return daysUntilDue;
     }
 
     @JsonProperty("excluded_company_ids")
@@ -46,6 +80,11 @@ public final class PublishPlanVersionRequestBody {
     @JsonProperty("migration_strategy")
     public PlanVersionMigrationStrategy getMigrationStrategy() {
         return migrationStrategy;
+    }
+
+    @JsonProperty("pay_in_advance")
+    public List<UpdatePayInAdvanceRequestBody> getPayInAdvance() {
+        return payInAdvance;
     }
 
     @java.lang.Override
@@ -60,12 +99,23 @@ public final class PublishPlanVersionRequestBody {
     }
 
     private boolean equalTo(PublishPlanVersionRequestBody other) {
-        return excludedCompanyIds.equals(other.excludedCompanyIds) && migrationStrategy.equals(other.migrationStrategy);
+        return activationStrategy.equals(other.activationStrategy)
+                && customerEmail.equals(other.customerEmail)
+                && daysUntilDue.equals(other.daysUntilDue)
+                && excludedCompanyIds.equals(other.excludedCompanyIds)
+                && migrationStrategy.equals(other.migrationStrategy)
+                && payInAdvance.equals(other.payInAdvance);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.excludedCompanyIds, this.migrationStrategy);
+        return Objects.hash(
+                this.activationStrategy,
+                this.customerEmail,
+                this.daysUntilDue,
+                this.excludedCompanyIds,
+                this.migrationStrategy,
+                this.payInAdvance);
     }
 
     @java.lang.Override
@@ -90,18 +140,44 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage activationStrategy(Optional<CustomPlanActivationStrategy> activationStrategy);
+
+        _FinalStage activationStrategy(CustomPlanActivationStrategy activationStrategy);
+
+        _FinalStage customerEmail(Optional<String> customerEmail);
+
+        _FinalStage customerEmail(String customerEmail);
+
+        _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
+
+        _FinalStage daysUntilDue(Long daysUntilDue);
+
         _FinalStage excludedCompanyIds(List<String> excludedCompanyIds);
 
         _FinalStage addExcludedCompanyIds(String excludedCompanyIds);
 
         _FinalStage addAllExcludedCompanyIds(List<String> excludedCompanyIds);
+
+        _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
+
+        _FinalStage addPayInAdvance(UpdatePayInAdvanceRequestBody payInAdvance);
+
+        _FinalStage addAllPayInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MigrationStrategyStage, _FinalStage {
         private PlanVersionMigrationStrategy migrationStrategy;
 
+        private List<UpdatePayInAdvanceRequestBody> payInAdvance = new ArrayList<>();
+
         private List<String> excludedCompanyIds = new ArrayList<>();
+
+        private Optional<Long> daysUntilDue = Optional.empty();
+
+        private Optional<String> customerEmail = Optional.empty();
+
+        private Optional<CustomPlanActivationStrategy> activationStrategy = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -110,8 +186,12 @@ public final class PublishPlanVersionRequestBody {
 
         @java.lang.Override
         public Builder from(PublishPlanVersionRequestBody other) {
+            activationStrategy(other.getActivationStrategy());
+            customerEmail(other.getCustomerEmail());
+            daysUntilDue(other.getDaysUntilDue());
             excludedCompanyIds(other.getExcludedCompanyIds());
             migrationStrategy(other.getMigrationStrategy());
+            payInAdvance(other.getPayInAdvance());
             return this;
         }
 
@@ -119,6 +199,30 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter("migration_strategy")
         public _FinalStage migrationStrategy(@NotNull PlanVersionMigrationStrategy migrationStrategy) {
             this.migrationStrategy = Objects.requireNonNull(migrationStrategy, "migrationStrategy must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllPayInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance) {
+            if (payInAdvance != null) {
+                this.payInAdvance.addAll(payInAdvance);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addPayInAdvance(UpdatePayInAdvanceRequestBody payInAdvance) {
+            this.payInAdvance.add(payInAdvance);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pay_in_advance", nulls = Nulls.SKIP)
+        public _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance) {
+            this.payInAdvance.clear();
+            if (payInAdvance != null) {
+                this.payInAdvance.addAll(payInAdvance);
+            }
             return this;
         }
 
@@ -147,8 +251,54 @@ public final class PublishPlanVersionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage daysUntilDue(Long daysUntilDue) {
+            this.daysUntilDue = Optional.ofNullable(daysUntilDue);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "days_until_due", nulls = Nulls.SKIP)
+        public _FinalStage daysUntilDue(Optional<Long> daysUntilDue) {
+            this.daysUntilDue = daysUntilDue;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage customerEmail(String customerEmail) {
+            this.customerEmail = Optional.ofNullable(customerEmail);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "customer_email", nulls = Nulls.SKIP)
+        public _FinalStage customerEmail(Optional<String> customerEmail) {
+            this.customerEmail = customerEmail;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage activationStrategy(CustomPlanActivationStrategy activationStrategy) {
+            this.activationStrategy = Optional.ofNullable(activationStrategy);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "activation_strategy", nulls = Nulls.SKIP)
+        public _FinalStage activationStrategy(Optional<CustomPlanActivationStrategy> activationStrategy) {
+            this.activationStrategy = activationStrategy;
+            return this;
+        }
+
+        @java.lang.Override
         public PublishPlanVersionRequestBody build() {
-            return new PublishPlanVersionRequestBody(excludedCompanyIds, migrationStrategy, additionalProperties);
+            return new PublishPlanVersionRequestBody(
+                    activationStrategy,
+                    customerEmail,
+                    daysUntilDue,
+                    excludedCompanyIds,
+                    migrationStrategy,
+                    payInAdvance,
+                    additionalProperties);
         }
 
         @java.lang.Override

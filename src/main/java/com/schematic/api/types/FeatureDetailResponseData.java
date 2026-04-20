@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FeatureDetailResponseData.Builder.class)
 public final class FeatureDetailResponseData {
+    private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
+
     private final OffsetDateTime createdAt;
 
     private final String description;
@@ -61,6 +63,7 @@ public final class FeatureDetailResponseData {
     private final Map<String, Object> additionalProperties;
 
     private FeatureDetailResponseData(
+            Optional<BillingLinkedResourceResponseData> billingLinkedResource,
             OffsetDateTime createdAt,
             String description,
             Optional<String> eventSubtype,
@@ -79,6 +82,7 @@ public final class FeatureDetailResponseData {
             Optional<String> traitId,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
+        this.billingLinkedResource = billingLinkedResource;
         this.createdAt = createdAt;
         this.description = description;
         this.eventSubtype = eventSubtype;
@@ -97,6 +101,11 @@ public final class FeatureDetailResponseData {
         this.traitId = traitId;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_linked_resource")
+    public Optional<BillingLinkedResourceResponseData> getBillingLinkedResource() {
+        return billingLinkedResource;
     }
 
     @JsonProperty("created_at")
@@ -196,7 +205,8 @@ public final class FeatureDetailResponseData {
     }
 
     private boolean equalTo(FeatureDetailResponseData other) {
-        return createdAt.equals(other.createdAt)
+        return billingLinkedResource.equals(other.billingLinkedResource)
+                && createdAt.equals(other.createdAt)
                 && description.equals(other.description)
                 && eventSubtype.equals(other.eventSubtype)
                 && eventSummary.equals(other.eventSummary)
@@ -218,6 +228,7 @@ public final class FeatureDetailResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingLinkedResource,
                 this.createdAt,
                 this.description,
                 this.eventSubtype,
@@ -282,6 +293,10 @@ public final class FeatureDetailResponseData {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource);
+
+        _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
 
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
@@ -372,6 +387,8 @@ public final class FeatureDetailResponseData {
 
         private Optional<String> eventSubtype = Optional.empty();
 
+        private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -379,6 +396,7 @@ public final class FeatureDetailResponseData {
 
         @java.lang.Override
         public Builder from(FeatureDetailResponseData other) {
+            billingLinkedResource(other.getBillingLinkedResource());
             createdAt(other.getCreatedAt());
             description(other.getDescription());
             eventSubtype(other.getEventSubtype());
@@ -601,8 +619,22 @@ public final class FeatureDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource) {
+            this.billingLinkedResource = Optional.ofNullable(billingLinkedResource);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_linked_resource", nulls = Nulls.SKIP)
+        public _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource) {
+            this.billingLinkedResource = billingLinkedResource;
+            return this;
+        }
+
+        @java.lang.Override
         public FeatureDetailResponseData build() {
             return new FeatureDetailResponseData(
+                    billingLinkedResource,
                     createdAt,
                     description,
                     eventSubtype,

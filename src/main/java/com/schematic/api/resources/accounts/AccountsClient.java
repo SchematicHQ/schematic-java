@@ -9,6 +9,7 @@ import com.schematic.api.resources.accounts.requests.CountApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.CountAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.CreateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.CreateEnvironmentRequestBody;
+import com.schematic.api.resources.accounts.requests.ListAccountMembersRequest;
 import com.schematic.api.resources.accounts.requests.ListApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.ListAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.ListEnvironmentsRequest;
@@ -20,10 +21,12 @@ import com.schematic.api.resources.accounts.types.CreateApiKeyResponse;
 import com.schematic.api.resources.accounts.types.CreateEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.DeleteApiKeyResponse;
 import com.schematic.api.resources.accounts.types.DeleteEnvironmentResponse;
+import com.schematic.api.resources.accounts.types.GetAccountMemberResponse;
 import com.schematic.api.resources.accounts.types.GetApiKeyResponse;
 import com.schematic.api.resources.accounts.types.GetAuditLogResponse;
 import com.schematic.api.resources.accounts.types.GetEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.GetWhoAmIResponse;
+import com.schematic.api.resources.accounts.types.ListAccountMembersResponse;
 import com.schematic.api.resources.accounts.types.ListApiKeysResponse;
 import com.schematic.api.resources.accounts.types.ListAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.ListEnvironmentsResponse;
@@ -46,6 +49,31 @@ public class AccountsClient {
      */
     public RawAccountsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    public ListAccountMembersResponse listAccountMembers() {
+        return this.rawClient.listAccountMembers().body();
+    }
+
+    public ListAccountMembersResponse listAccountMembers(RequestOptions requestOptions) {
+        return this.rawClient.listAccountMembers(requestOptions).body();
+    }
+
+    public ListAccountMembersResponse listAccountMembers(ListAccountMembersRequest request) {
+        return this.rawClient.listAccountMembers(request).body();
+    }
+
+    public ListAccountMembersResponse listAccountMembers(
+            ListAccountMembersRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listAccountMembers(request, requestOptions).body();
+    }
+
+    public GetAccountMemberResponse getAccountMember(String accountMemberId) {
+        return this.rawClient.getAccountMember(accountMemberId).body();
+    }
+
+    public GetAccountMemberResponse getAccountMember(String accountMemberId, RequestOptions requestOptions) {
+        return this.rawClient.getAccountMember(accountMemberId, requestOptions).body();
     }
 
     public ListApiKeysResponse listApiKeys(ListApiKeysRequest request) {

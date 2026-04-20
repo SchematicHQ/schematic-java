@@ -24,11 +24,15 @@ import org.jetbrains.annotations.NotNull;
 public final class PlanResponseData {
     private final Optional<String> audienceType;
 
+    private final Optional<String> companyId;
+
+    private final Optional<String> copiedFromPlanId;
+
     private final OffsetDateTime createdAt;
 
     private final String description;
 
-    private final String icon;
+    private final PlanIcon icon;
 
     private final String id;
 
@@ -42,15 +46,19 @@ public final class PlanResponseData {
 
     private PlanResponseData(
             Optional<String> audienceType,
+            Optional<String> companyId,
+            Optional<String> copiedFromPlanId,
             OffsetDateTime createdAt,
             String description,
-            String icon,
+            PlanIcon icon,
             String id,
             String name,
             PlanType planType,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.audienceType = audienceType;
+        this.companyId = companyId;
+        this.copiedFromPlanId = copiedFromPlanId;
         this.createdAt = createdAt;
         this.description = description;
         this.icon = icon;
@@ -66,6 +74,16 @@ public final class PlanResponseData {
         return audienceType;
     }
 
+    @JsonProperty("company_id")
+    public Optional<String> getCompanyId() {
+        return companyId;
+    }
+
+    @JsonProperty("copied_from_plan_id")
+    public Optional<String> getCopiedFromPlanId() {
+        return copiedFromPlanId;
+    }
+
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
@@ -77,7 +95,7 @@ public final class PlanResponseData {
     }
 
     @JsonProperty("icon")
-    public String getIcon() {
+    public PlanIcon getIcon() {
         return icon;
     }
 
@@ -114,6 +132,8 @@ public final class PlanResponseData {
 
     private boolean equalTo(PlanResponseData other) {
         return audienceType.equals(other.audienceType)
+                && companyId.equals(other.companyId)
+                && copiedFromPlanId.equals(other.copiedFromPlanId)
                 && createdAt.equals(other.createdAt)
                 && description.equals(other.description)
                 && icon.equals(other.icon)
@@ -127,6 +147,8 @@ public final class PlanResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.audienceType,
+                this.companyId,
+                this.copiedFromPlanId,
                 this.createdAt,
                 this.description,
                 this.icon,
@@ -156,7 +178,7 @@ public final class PlanResponseData {
     }
 
     public interface IconStage {
-        IdStage icon(@NotNull String icon);
+        IdStage icon(@NotNull PlanIcon icon);
     }
 
     public interface IdStage {
@@ -185,6 +207,14 @@ public final class PlanResponseData {
         _FinalStage audienceType(Optional<String> audienceType);
 
         _FinalStage audienceType(String audienceType);
+
+        _FinalStage companyId(Optional<String> companyId);
+
+        _FinalStage companyId(String companyId);
+
+        _FinalStage copiedFromPlanId(Optional<String> copiedFromPlanId);
+
+        _FinalStage copiedFromPlanId(String copiedFromPlanId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -201,7 +231,7 @@ public final class PlanResponseData {
 
         private String description;
 
-        private String icon;
+        private PlanIcon icon;
 
         private String id;
 
@@ -210,6 +240,10 @@ public final class PlanResponseData {
         private PlanType planType;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<String> copiedFromPlanId = Optional.empty();
+
+        private Optional<String> companyId = Optional.empty();
 
         private Optional<String> audienceType = Optional.empty();
 
@@ -221,6 +255,8 @@ public final class PlanResponseData {
         @java.lang.Override
         public Builder from(PlanResponseData other) {
             audienceType(other.getAudienceType());
+            companyId(other.getCompanyId());
+            copiedFromPlanId(other.getCopiedFromPlanId());
             createdAt(other.getCreatedAt());
             description(other.getDescription());
             icon(other.getIcon());
@@ -247,7 +283,7 @@ public final class PlanResponseData {
 
         @java.lang.Override
         @JsonSetter("icon")
-        public IdStage icon(@NotNull String icon) {
+        public IdStage icon(@NotNull PlanIcon icon) {
             this.icon = Objects.requireNonNull(icon, "icon must not be null");
             return this;
         }
@@ -281,6 +317,32 @@ public final class PlanResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage copiedFromPlanId(String copiedFromPlanId) {
+            this.copiedFromPlanId = Optional.ofNullable(copiedFromPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "copied_from_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage copiedFromPlanId(Optional<String> copiedFromPlanId) {
+            this.copiedFromPlanId = copiedFromPlanId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage companyId(String companyId) {
+            this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
+        public _FinalStage companyId(Optional<String> companyId) {
+            this.companyId = companyId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage audienceType(String audienceType) {
             this.audienceType = Optional.ofNullable(audienceType);
             return this;
@@ -296,7 +358,17 @@ public final class PlanResponseData {
         @java.lang.Override
         public PlanResponseData build() {
             return new PlanResponseData(
-                    audienceType, createdAt, description, icon, id, name, planType, updatedAt, additionalProperties);
+                    audienceType,
+                    companyId,
+                    copiedFromPlanId,
+                    createdAt,
+                    description,
+                    icon,
+                    id,
+                    name,
+                    planType,
+                    updatedAt,
+                    additionalProperties);
         }
 
         @java.lang.Override

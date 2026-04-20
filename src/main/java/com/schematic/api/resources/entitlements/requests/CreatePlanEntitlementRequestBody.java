@@ -16,6 +16,7 @@ import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementReque
 import com.schematic.api.resources.entitlements.types.CreatePlanEntitlementRequestBodyMetricPeriodMonthReset;
 import com.schematic.api.types.BillingTiersMode;
 import com.schematic.api.types.CreatePriceTierRequestBody;
+import com.schematic.api.types.CurrencyPriceRequestBody;
 import com.schematic.api.types.EntitlementPriceBehavior;
 import com.schematic.api.types.EntitlementValueType;
 import java.util.HashMap;
@@ -35,6 +36,8 @@ public final class CreatePlanEntitlementRequestBody {
     private final Optional<Double> creditConsumptionRate;
 
     private final Optional<String> currency;
+
+    private final Optional<List<CurrencyPriceRequestBody>> currencyPrices;
 
     private final String featureId;
 
@@ -89,6 +92,7 @@ public final class CreatePlanEntitlementRequestBody {
             Optional<Long> billingThreshold,
             Optional<Double> creditConsumptionRate,
             Optional<String> currency,
+            Optional<List<CurrencyPriceRequestBody>> currencyPrices,
             String featureId,
             Optional<CreatePlanEntitlementRequestBodyMetricPeriod> metricPeriod,
             Optional<CreatePlanEntitlementRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
@@ -117,6 +121,7 @@ public final class CreatePlanEntitlementRequestBody {
         this.billingThreshold = billingThreshold;
         this.creditConsumptionRate = creditConsumptionRate;
         this.currency = currency;
+        this.currencyPrices = currencyPrices;
         this.featureId = featureId;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
@@ -161,6 +166,11 @@ public final class CreatePlanEntitlementRequestBody {
     @JsonProperty("currency")
     public Optional<String> getCurrency() {
         return currency;
+    }
+
+    @JsonProperty("currency_prices")
+    public Optional<List<CurrencyPriceRequestBody>> getCurrencyPrices() {
+        return currencyPrices;
     }
 
     @JsonProperty("feature_id")
@@ -297,6 +307,7 @@ public final class CreatePlanEntitlementRequestBody {
                 && billingThreshold.equals(other.billingThreshold)
                 && creditConsumptionRate.equals(other.creditConsumptionRate)
                 && currency.equals(other.currency)
+                && currencyPrices.equals(other.currencyPrices)
                 && featureId.equals(other.featureId)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
@@ -329,6 +340,7 @@ public final class CreatePlanEntitlementRequestBody {
                 this.billingThreshold,
                 this.creditConsumptionRate,
                 this.currency,
+                this.currencyPrices,
                 this.featureId,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
@@ -399,6 +411,10 @@ public final class CreatePlanEntitlementRequestBody {
         _FinalStage currency(Optional<String> currency);
 
         _FinalStage currency(String currency);
+
+        _FinalStage currencyPrices(Optional<List<CurrencyPriceRequestBody>> currencyPrices);
+
+        _FinalStage currencyPrices(List<CurrencyPriceRequestBody> currencyPrices);
 
         _FinalStage metricPeriod(Optional<CreatePlanEntitlementRequestBodyMetricPeriod> metricPeriod);
 
@@ -535,6 +551,8 @@ public final class CreatePlanEntitlementRequestBody {
 
         private Optional<CreatePlanEntitlementRequestBodyMetricPeriod> metricPeriod = Optional.empty();
 
+        private Optional<List<CurrencyPriceRequestBody>> currencyPrices = Optional.empty();
+
         private Optional<String> currency = Optional.empty();
 
         private Optional<Double> creditConsumptionRate = Optional.empty();
@@ -554,6 +572,7 @@ public final class CreatePlanEntitlementRequestBody {
             billingThreshold(other.getBillingThreshold());
             creditConsumptionRate(other.getCreditConsumptionRate());
             currency(other.getCurrency());
+            currencyPrices(other.getCurrencyPrices());
             featureId(other.getFeatureId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
@@ -871,6 +890,19 @@ public final class CreatePlanEntitlementRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage currencyPrices(List<CurrencyPriceRequestBody> currencyPrices) {
+            this.currencyPrices = Optional.ofNullable(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(Optional<List<CurrencyPriceRequestBody>> currencyPrices) {
+            this.currencyPrices = currencyPrices;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage currency(String currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
@@ -929,6 +961,7 @@ public final class CreatePlanEntitlementRequestBody {
                     billingThreshold,
                     creditConsumptionRate,
                     currency,
+                    currencyPrices,
                     featureId,
                     metricPeriod,
                     metricPeriodMonthReset,

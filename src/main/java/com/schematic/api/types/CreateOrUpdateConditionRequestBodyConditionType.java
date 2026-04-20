@@ -16,6 +16,9 @@ public final class CreateOrUpdateConditionRequestBodyConditionType {
     public static final CreateOrUpdateConditionRequestBodyConditionType PLAN =
             new CreateOrUpdateConditionRequestBodyConditionType(Value.PLAN, "plan");
 
+    public static final CreateOrUpdateConditionRequestBodyConditionType PLAN_VERSION =
+            new CreateOrUpdateConditionRequestBodyConditionType(Value.PLAN_VERSION, "plan_version");
+
     public static final CreateOrUpdateConditionRequestBodyConditionType TRAIT =
             new CreateOrUpdateConditionRequestBodyConditionType(Value.TRAIT, "trait");
 
@@ -67,6 +70,8 @@ public final class CreateOrUpdateConditionRequestBodyConditionType {
                 return visitor.visitBasePlan();
             case PLAN:
                 return visitor.visitPlan();
+            case PLAN_VERSION:
+                return visitor.visitPlanVersion();
             case TRAIT:
                 return visitor.visitTrait();
             case BILLING_PRODUCT:
@@ -90,6 +95,8 @@ public final class CreateOrUpdateConditionRequestBodyConditionType {
                 return BASE_PLAN;
             case "plan":
                 return PLAN;
+            case "plan_version":
+                return PLAN_VERSION;
             case "trait":
                 return TRAIT;
             case "billing_product":
@@ -114,6 +121,8 @@ public final class CreateOrUpdateConditionRequestBodyConditionType {
 
         PLAN,
 
+        PLAN_VERSION,
+
         BILLING_PRODUCT,
 
         BASE_PLAN,
@@ -131,6 +140,8 @@ public final class CreateOrUpdateConditionRequestBodyConditionType {
         T visitUser();
 
         T visitPlan();
+
+        T visitPlanVersion();
 
         T visitBillingProduct();
 

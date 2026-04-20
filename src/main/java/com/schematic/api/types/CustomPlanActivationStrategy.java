@@ -6,16 +6,18 @@ package com.schematic.api.types;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public final class PlanControlledByType {
-    public static final PlanControlledByType SCHEMATIC = new PlanControlledByType(Value.SCHEMATIC, "schematic");
+public final class CustomPlanActivationStrategy {
+    public static final CustomPlanActivationStrategy ON_PAYMENT =
+            new CustomPlanActivationStrategy(Value.ON_PAYMENT, "on_payment");
 
-    public static final PlanControlledByType STRIPE = new PlanControlledByType(Value.STRIPE, "stripe");
+    public static final CustomPlanActivationStrategy ON_PUBLISH =
+            new CustomPlanActivationStrategy(Value.ON_PUBLISH, "on_publish");
 
     private final Value value;
 
     private final String string;
 
-    PlanControlledByType(Value value, String string) {
+    CustomPlanActivationStrategy(Value value, String string) {
         this.value = value;
         this.string = string;
     }
@@ -33,7 +35,8 @@ public final class PlanControlledByType {
     @java.lang.Override
     public boolean equals(Object other) {
         return (this == other)
-                || (other instanceof PlanControlledByType && this.string.equals(((PlanControlledByType) other).string));
+                || (other instanceof CustomPlanActivationStrategy
+                        && this.string.equals(((CustomPlanActivationStrategy) other).string));
     }
 
     @java.lang.Override
@@ -43,10 +46,10 @@ public final class PlanControlledByType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case SCHEMATIC:
-                return visitor.visitSchematic();
-            case STRIPE:
-                return visitor.visitStripe();
+            case ON_PAYMENT:
+                return visitor.visitOnPayment();
+            case ON_PUBLISH:
+                return visitor.visitOnPublish();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -54,29 +57,29 @@ public final class PlanControlledByType {
     }
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public static PlanControlledByType valueOf(String value) {
+    public static CustomPlanActivationStrategy valueOf(String value) {
         switch (value) {
-            case "schematic":
-                return SCHEMATIC;
-            case "stripe":
-                return STRIPE;
+            case "on_payment":
+                return ON_PAYMENT;
+            case "on_publish":
+                return ON_PUBLISH;
             default:
-                return new PlanControlledByType(Value.UNKNOWN, value);
+                return new CustomPlanActivationStrategy(Value.UNKNOWN, value);
         }
     }
 
     public enum Value {
-        SCHEMATIC,
+        ON_PAYMENT,
 
-        STRIPE,
+        ON_PUBLISH,
 
         UNKNOWN
     }
 
     public interface Visitor<T> {
-        T visitSchematic();
+        T visitOnPayment();
 
-        T visitStripe();
+        T visitOnPublish();
 
         T visitUnknown(String unknownType);
     }

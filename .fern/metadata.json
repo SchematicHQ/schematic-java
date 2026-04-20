@@ -1,5 +1,5 @@
 {
-  "cliVersion": "4.43.1",
+  "cliVersion": "4.76.1",
   "generatorName": "fernapi/fern-java-sdk",
   "generatorVersion": "3.44.6",
   "generatorConfig": {
@@ -11,6 +11,6 @@
       "testImplementation org.mockito:mockito-junit-jupiter:5.3.1"
     ]
   },
-  "originGitCommit": "2717563b79232180e36aa245da14c045650ea31b",
-  "sdkVersion": "1.3.1"
+  "originGitCommit": "3984203f8f49616dfdae68590f4b291c18ca1151",
+  "sdkVersion": "1.4.0"
 }

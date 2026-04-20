@@ -123,6 +123,13 @@ public class AsyncRawCompaniesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("companies");
+        if (request.getHasScheduledDowngrade().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "has_scheduled_downgrade",
+                    request.getHasScheduledDowngrade().get(),
+                    false);
+        }
         if (request.getMonetizedSubscriptions().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -587,6 +594,13 @@ public class AsyncRawCompaniesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("companies/count");
+        if (request.getHasScheduledDowngrade().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "has_scheduled_downgrade",
+                    request.getHasScheduledDowngrade().get(),
+                    false);
+        }
         if (request.getMonetizedSubscriptions().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,

@@ -28,6 +28,8 @@ public final class CompanyPlanDetailResponseData {
 
     private final Optional<String> audienceType;
 
+    private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
+
     private final Optional<BillingProductDetailResponseData> billingProduct;
 
     private final ChargeType chargeType;
@@ -36,9 +38,15 @@ public final class CompanyPlanDetailResponseData {
 
     private final long companyCount;
 
+    private final Optional<String> companyId;
+
+    private final Optional<String> companyName;
+
     private final List<String> compatiblePlanIds;
 
-    private final PlanControlledByType controlledBy;
+    private final String controlledBy;
+
+    private final Optional<String> copiedFromPlanId;
 
     private final OffsetDateTime createdAt;
 
@@ -58,7 +66,7 @@ public final class CompanyPlanDetailResponseData {
 
     private final List<FeatureDetailResponseData> features;
 
-    private final String icon;
+    private final PlanIcon icon;
 
     private final String id;
 
@@ -99,12 +107,16 @@ public final class CompanyPlanDetailResponseData {
     private CompanyPlanDetailResponseData(
             Optional<PlanVersionResponseData> activeVersion,
             Optional<String> audienceType,
+            Optional<BillingLinkedResourceResponseData> billingLinkedResource,
             Optional<BillingProductDetailResponseData> billingProduct,
             ChargeType chargeType,
             boolean companyCanTrial,
             long companyCount,
+            Optional<String> companyId,
+            Optional<String> companyName,
             List<String> compatiblePlanIds,
-            PlanControlledByType controlledBy,
+            String controlledBy,
+            Optional<String> copiedFromPlanId,
             OffsetDateTime createdAt,
             List<PlanCurrencyPricesResponseData> currencyPrices,
             boolean current,
@@ -114,7 +126,7 @@ public final class CompanyPlanDetailResponseData {
             Optional<PlanVersionResponseData> draftVersion,
             List<PlanEntitlementResponseData> entitlements,
             List<FeatureDetailResponseData> features,
-            String icon,
+            PlanIcon icon,
             String id,
             List<PlanCreditGrantView> includedCreditGrants,
             Optional<CompanyPlanInvalidReason> invalidReason,
@@ -135,12 +147,16 @@ public final class CompanyPlanDetailResponseData {
             Map<String, Object> additionalProperties) {
         this.activeVersion = activeVersion;
         this.audienceType = audienceType;
+        this.billingLinkedResource = billingLinkedResource;
         this.billingProduct = billingProduct;
         this.chargeType = chargeType;
         this.companyCanTrial = companyCanTrial;
         this.companyCount = companyCount;
+        this.companyId = companyId;
+        this.companyName = companyName;
         this.compatiblePlanIds = compatiblePlanIds;
         this.controlledBy = controlledBy;
+        this.copiedFromPlanId = copiedFromPlanId;
         this.createdAt = createdAt;
         this.currencyPrices = currencyPrices;
         this.current = current;
@@ -181,6 +197,11 @@ public final class CompanyPlanDetailResponseData {
         return audienceType;
     }
 
+    @JsonProperty("billing_linked_resource")
+    public Optional<BillingLinkedResourceResponseData> getBillingLinkedResource() {
+        return billingLinkedResource;
+    }
+
     @JsonProperty("billing_product")
     public Optional<BillingProductDetailResponseData> getBillingProduct() {
         return billingProduct;
@@ -201,14 +222,29 @@ public final class CompanyPlanDetailResponseData {
         return companyCount;
     }
 
+    @JsonProperty("company_id")
+    public Optional<String> getCompanyId() {
+        return companyId;
+    }
+
+    @JsonProperty("company_name")
+    public Optional<String> getCompanyName() {
+        return companyName;
+    }
+
     @JsonProperty("compatible_plan_ids")
     public List<String> getCompatiblePlanIds() {
         return compatiblePlanIds;
     }
 
     @JsonProperty("controlled_by")
-    public PlanControlledByType getControlledBy() {
+    public String getControlledBy() {
         return controlledBy;
+    }
+
+    @JsonProperty("copied_from_plan_id")
+    public Optional<String> getCopiedFromPlanId() {
+        return copiedFromPlanId;
     }
 
     @JsonProperty("created_at")
@@ -257,7 +293,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     @JsonProperty("icon")
-    public String getIcon() {
+    public PlanIcon getIcon() {
         return icon;
     }
 
@@ -360,12 +396,16 @@ public final class CompanyPlanDetailResponseData {
     private boolean equalTo(CompanyPlanDetailResponseData other) {
         return activeVersion.equals(other.activeVersion)
                 && audienceType.equals(other.audienceType)
+                && billingLinkedResource.equals(other.billingLinkedResource)
                 && billingProduct.equals(other.billingProduct)
                 && chargeType.equals(other.chargeType)
                 && companyCanTrial == other.companyCanTrial
                 && companyCount == other.companyCount
+                && companyId.equals(other.companyId)
+                && companyName.equals(other.companyName)
                 && compatiblePlanIds.equals(other.compatiblePlanIds)
                 && controlledBy.equals(other.controlledBy)
+                && copiedFromPlanId.equals(other.copiedFromPlanId)
                 && createdAt.equals(other.createdAt)
                 && currencyPrices.equals(other.currencyPrices)
                 && current == other.current
@@ -400,12 +440,16 @@ public final class CompanyPlanDetailResponseData {
         return Objects.hash(
                 this.activeVersion,
                 this.audienceType,
+                this.billingLinkedResource,
                 this.billingProduct,
                 this.chargeType,
                 this.companyCanTrial,
                 this.companyCount,
+                this.companyId,
+                this.companyName,
                 this.compatiblePlanIds,
                 this.controlledBy,
+                this.copiedFromPlanId,
                 this.createdAt,
                 this.currencyPrices,
                 this.current,
@@ -459,7 +503,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface ControlledByStage {
-        CreatedAtStage controlledBy(@NotNull PlanControlledByType controlledBy);
+        CreatedAtStage controlledBy(@NotNull String controlledBy);
     }
 
     public interface CreatedAtStage {
@@ -479,7 +523,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     public interface IconStage {
-        IdStage icon(@NotNull String icon);
+        IdStage icon(@NotNull PlanIcon icon);
     }
 
     public interface IdStage {
@@ -533,15 +577,31 @@ public final class CompanyPlanDetailResponseData {
 
         _FinalStage audienceType(String audienceType);
 
+        _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource);
+
+        _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
+
         _FinalStage billingProduct(Optional<BillingProductDetailResponseData> billingProduct);
 
         _FinalStage billingProduct(BillingProductDetailResponseData billingProduct);
+
+        _FinalStage companyId(Optional<String> companyId);
+
+        _FinalStage companyId(String companyId);
+
+        _FinalStage companyName(Optional<String> companyName);
+
+        _FinalStage companyName(String companyName);
 
         _FinalStage compatiblePlanIds(List<String> compatiblePlanIds);
 
         _FinalStage addCompatiblePlanIds(String compatiblePlanIds);
 
         _FinalStage addAllCompatiblePlanIds(List<String> compatiblePlanIds);
+
+        _FinalStage copiedFromPlanId(Optional<String> copiedFromPlanId);
+
+        _FinalStage copiedFromPlanId(String copiedFromPlanId);
 
         _FinalStage currencyPrices(List<PlanCurrencyPricesResponseData> currencyPrices);
 
@@ -635,7 +695,7 @@ public final class CompanyPlanDetailResponseData {
 
         private long companyCount;
 
-        private PlanControlledByType controlledBy;
+        private String controlledBy;
 
         private OffsetDateTime createdAt;
 
@@ -645,7 +705,7 @@ public final class CompanyPlanDetailResponseData {
 
         private String description;
 
-        private String icon;
+        private PlanIcon icon;
 
         private String id;
 
@@ -691,9 +751,17 @@ public final class CompanyPlanDetailResponseData {
 
         private List<PlanCurrencyPricesResponseData> currencyPrices = new ArrayList<>();
 
+        private Optional<String> copiedFromPlanId = Optional.empty();
+
         private List<String> compatiblePlanIds = new ArrayList<>();
 
+        private Optional<String> companyName = Optional.empty();
+
+        private Optional<String> companyId = Optional.empty();
+
         private Optional<BillingProductDetailResponseData> billingProduct = Optional.empty();
+
+        private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
 
         private Optional<String> audienceType = Optional.empty();
 
@@ -708,12 +776,16 @@ public final class CompanyPlanDetailResponseData {
         public Builder from(CompanyPlanDetailResponseData other) {
             activeVersion(other.getActiveVersion());
             audienceType(other.getAudienceType());
+            billingLinkedResource(other.getBillingLinkedResource());
             billingProduct(other.getBillingProduct());
             chargeType(other.getChargeType());
             companyCanTrial(other.getCompanyCanTrial());
             companyCount(other.getCompanyCount());
+            companyId(other.getCompanyId());
+            companyName(other.getCompanyName());
             compatiblePlanIds(other.getCompatiblePlanIds());
             controlledBy(other.getControlledBy());
+            copiedFromPlanId(other.getCopiedFromPlanId());
             createdAt(other.getCreatedAt());
             currencyPrices(other.getCurrencyPrices());
             current(other.getCurrent());
@@ -767,7 +839,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("controlled_by")
-        public CreatedAtStage controlledBy(@NotNull PlanControlledByType controlledBy) {
+        public CreatedAtStage controlledBy(@NotNull String controlledBy) {
             this.controlledBy = Objects.requireNonNull(controlledBy, "controlledBy must not be null");
             return this;
         }
@@ -802,7 +874,7 @@ public final class CompanyPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("icon")
-        public IdStage icon(@NotNull String icon) {
+        public IdStage icon(@NotNull PlanIcon icon) {
             this.icon = Objects.requireNonNull(icon, "icon must not be null");
             return this;
         }
@@ -1106,6 +1178,19 @@ public final class CompanyPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage copiedFromPlanId(String copiedFromPlanId) {
+            this.copiedFromPlanId = Optional.ofNullable(copiedFromPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "copied_from_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage copiedFromPlanId(Optional<String> copiedFromPlanId) {
+            this.copiedFromPlanId = copiedFromPlanId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllCompatiblePlanIds(List<String> compatiblePlanIds) {
             if (compatiblePlanIds != null) {
                 this.compatiblePlanIds.addAll(compatiblePlanIds);
@@ -1130,6 +1215,32 @@ public final class CompanyPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage companyName(String companyName) {
+            this.companyName = Optional.ofNullable(companyName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_name", nulls = Nulls.SKIP)
+        public _FinalStage companyName(Optional<String> companyName) {
+            this.companyName = companyName;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage companyId(String companyId) {
+            this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
+        public _FinalStage companyId(Optional<String> companyId) {
+            this.companyId = companyId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingProduct(BillingProductDetailResponseData billingProduct) {
             this.billingProduct = Optional.ofNullable(billingProduct);
             return this;
@@ -1139,6 +1250,19 @@ public final class CompanyPlanDetailResponseData {
         @JsonSetter(value = "billing_product", nulls = Nulls.SKIP)
         public _FinalStage billingProduct(Optional<BillingProductDetailResponseData> billingProduct) {
             this.billingProduct = billingProduct;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource) {
+            this.billingLinkedResource = Optional.ofNullable(billingLinkedResource);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_linked_resource", nulls = Nulls.SKIP)
+        public _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource) {
+            this.billingLinkedResource = billingLinkedResource;
             return this;
         }
 
@@ -1173,12 +1297,16 @@ public final class CompanyPlanDetailResponseData {
             return new CompanyPlanDetailResponseData(
                     activeVersion,
                     audienceType,
+                    billingLinkedResource,
                     billingProduct,
                     chargeType,
                     companyCanTrial,
                     companyCount,
+                    companyId,
+                    companyName,
                     compatiblePlanIds,
                     controlledBy,
+                    copiedFromPlanId,
                     createdAt,
                     currencyPrices,
                     current,
