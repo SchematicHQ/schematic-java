@@ -295,6 +295,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
         RulesengineCheckFlagResult dsResult = tryDatastreamCheckFlag(flagKey, company, user);
         if (dsResult != null) {
+            enqueueFlagCheckEvent(flagKey, dsResult, company, user);
             return dsResult;
         }
 
@@ -312,8 +313,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     /**
      * Attempts to evaluate a flag via the datastream client. Returns the result on
-     * success (and emits a {@code flag_check} event), or {@code null} if datastream is
-     * not configured/connected or evaluation failed.
+     * success, or {@code null} if datastream is not configured/connected or evaluation
+     * failed. Callers are responsible for emitting a {@code flag_check} event when
+     * appropriate — single-flag checks do, bulk checks do not.
      */
     private RulesengineCheckFlagResult tryDatastreamCheckFlag(
             String flagKey, Map<String, String> company, Map<String, String> user) {
@@ -321,9 +323,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             return null;
         }
         try {
-            RulesengineCheckFlagResult result = dataStreamClient.checkFlag(flagKey, company, user);
-            enqueueFlagCheckEvent(flagKey, result, company, user);
-            return result;
+            return dataStreamClient.checkFlag(flagKey, company, user);
         } catch (Exception e) {
             logger.debug("Datastream flag check failed for " + flagKey + ", falling back to API: " + e.getMessage());
             return null;
