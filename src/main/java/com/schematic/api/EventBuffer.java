@@ -1,8 +1,6 @@
 package com.schematic.api;
 
 import com.schematic.api.logger.SchematicLogger;
-import com.schematic.api.resources.events.EventsClient;
-import com.schematic.api.resources.events.requests.CreateEventBatchRequestBody;
 import com.schematic.api.types.CreateEventRequestBody;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -11,7 +9,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Buffers and batches events before sending them to the Schematic API.
+ * Buffers and batches events before sending them to the Schematic event capture service.
  * Provides thread-safe event handling with automatic retry capabilities
  * and resource management.
  */
@@ -20,12 +18,12 @@ public class EventBuffer implements AutoCloseable {
     private static final int DEFAULT_MAX_BATCH_SIZE = 100;
     private static final int DEFAULT_MAX_QUEUE_SIZE = 10_000;
     private static final int MAX_RETRY_ATTEMPTS = 3;
-    private static final Duration RETRY_INITIAL_DELAY = Duration.ofMillis(100);
+    private static final Duration RETRY_INITIAL_DELAY = Duration.ofMillis(1000);
 
     private final ConcurrentLinkedQueue<CreateEventRequestBody> events;
     private final int maxBatchSize;
     private final Duration flushInterval;
-    private final EventsClient eventsClient;
+    private final HttpEventSender eventSender;
     private final SchematicLogger logger;
     private final ScheduledExecutorService scheduler;
     private final AtomicInteger droppedEvents;
@@ -36,16 +34,16 @@ public class EventBuffer implements AutoCloseable {
     /**
      * Creates a new EventBuffer instance.
      *
-     * @param eventsClient The client used to send events to the API
+     * @param eventSender The HTTP sender used to send events to the capture service
      * @param logger Logger instance for error reporting and monitoring
      * @param maxBatchSize Maximum number of events to include in a single batch
      * @param flushInterval How often to automatically flush the buffer
      */
-    public EventBuffer(EventsClient eventsClient, SchematicLogger logger, int maxBatchSize, Duration flushInterval) {
+    public EventBuffer(HttpEventSender eventSender, SchematicLogger logger, int maxBatchSize, Duration flushInterval) {
         this.events = new ConcurrentLinkedQueue<>();
         this.maxBatchSize = maxBatchSize > 0 ? maxBatchSize : DEFAULT_MAX_BATCH_SIZE;
         this.flushInterval = flushInterval != null ? flushInterval : DEFAULT_FLUSH_INTERVAL;
-        this.eventsClient = eventsClient;
+        this.eventSender = eventSender;
         this.logger = logger;
         this.droppedEvents = new AtomicInteger(0);
         this.processedEvents = new AtomicInteger(0);
@@ -94,7 +92,7 @@ public class EventBuffer implements AutoCloseable {
     }
 
     /**
-     * Manually flushes the event buffer, sending all queued events to the API.
+     * Manually flushes the event buffer, sending all queued events to the capture service.
      */
     public void flush() {
         if (events.isEmpty()) {
@@ -116,23 +114,24 @@ public class EventBuffer implements AutoCloseable {
 
     private void sendBatchWithRetry(List<CreateEventRequestBody> batch, int retryCount) {
         try {
-            CreateEventBatchRequestBody requestBody =
-                    CreateEventBatchRequestBody.builder().events(batch).build();
-
-            eventsClient.createEventBatch(requestBody);
+            eventSender.sendBatch(batch);
             processedEvents.addAndGet(batch.size());
 
         } catch (Exception e) {
             if (retryCount < MAX_RETRY_ATTEMPTS) {
-                long delayMillis = RETRY_INITIAL_DELAY.toMillis() * (1L << retryCount);
-                logger.warn(
-                        "Failed to send event batch, attempting retry %d of %d in %d ms",
-                        retryCount + 1, MAX_RETRY_ATTEMPTS, delayMillis);
+                long baseDelay = RETRY_INITIAL_DELAY.toMillis() * (1L << retryCount);
+                // Add ±25% jitter
+                double jitter = (Math.random() - 0.5) * 0.5 * baseDelay;
+                long delayMillis = Math.max(0, baseDelay + (long) jitter);
+                logger.warn(String.format(
+                        "Failed to send event batch (%s: %s), attempting retry %d of %d in %d ms",
+                        e.getClass().getSimpleName(), e.getMessage(), retryCount + 1, MAX_RETRY_ATTEMPTS, delayMillis));
 
                 scheduler.schedule(() -> sendBatchWithRetry(batch, retryCount + 1), delayMillis, TimeUnit.MILLISECONDS);
             } else {
                 failedEvents.addAndGet(batch.size());
-                logger.error("Failed to flush events: " + e.getMessage());
+                logger.error("Failed to flush events after " + MAX_RETRY_ATTEMPTS + " retries: "
+                        + e.getClass().getName() + ": " + e.getMessage());
             }
         }
     }

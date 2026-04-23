@@ -2,13 +2,15 @@ package com.schematic.api;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.*;
 
 import com.schematic.api.logger.SchematicLogger;
-import com.schematic.api.resources.events.EventsClient;
-import com.schematic.api.resources.events.requests.CreateEventBatchRequestBody;
 import com.schematic.api.types.CreateEventRequestBody;
+import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class EventBufferTest {
     @Mock
-    private EventsClient eventsClient;
+    private HttpEventSender eventSender;
 
     @Mock
     private SchematicLogger logger;
@@ -31,7 +33,7 @@ class EventBufferTest {
 
     @BeforeEach
     void setUp() {
-        eventBuffer = new EventBuffer(eventsClient, logger, 5, Duration.ofMillis(100));
+        eventBuffer = new EventBuffer(eventSender, logger, 5, Duration.ofMillis(100));
     }
 
     @AfterEach
@@ -40,19 +42,19 @@ class EventBufferTest {
     }
 
     @Test
-    void pushEvent_ShouldAddToBuffer() {
+    void pushEvent_ShouldAddToBuffer() throws IOException {
         CreateEventRequestBody event = mock(CreateEventRequestBody.class);
         eventBuffer.push(event);
 
         // Force a flush to verify the event was buffered
         eventBuffer.flush();
-        ArgumentCaptor<CreateEventBatchRequestBody> captor = ArgumentCaptor.forClass(CreateEventBatchRequestBody.class);
-        verify(eventsClient).createEventBatch(captor.capture());
-        assertEquals(1, captor.getValue().getEvents().size());
+        ArgumentCaptor<List<CreateEventRequestBody>> captor = ArgumentCaptor.forClass(List.class);
+        verify(eventSender).sendBatch(captor.capture());
+        assertEquals(1, captor.getValue().size());
     }
 
     @Test
-    void pushEvents_ExceedingMaxSize_ShouldTriggerFlush() {
+    void pushEvents_ExceedingMaxSize_ShouldTriggerFlush() throws IOException {
         CreateEventRequestBody event = mock(CreateEventRequestBody.class);
 
         // Push events up to max size
@@ -63,57 +65,57 @@ class EventBufferTest {
         // Push one more to trigger flush
         eventBuffer.push(event);
 
-        verify(eventsClient).createEventBatch(any());
+        verify(eventSender).sendBatch(any());
     }
 
     @Test
-    void flush_ShouldSendEvents() {
+    void flush_ShouldSendEvents() throws IOException {
         CreateEventRequestBody event = mock(CreateEventRequestBody.class);
         eventBuffer.push(event);
         eventBuffer.push(event);
 
         eventBuffer.flush();
 
-        ArgumentCaptor<CreateEventBatchRequestBody> captor = ArgumentCaptor.forClass(CreateEventBatchRequestBody.class);
-        verify(eventsClient).createEventBatch(captor.capture());
-        assertEquals(2, captor.getValue().getEvents().size());
+        ArgumentCaptor<List<CreateEventRequestBody>> captor = ArgumentCaptor.forClass(List.class);
+        verify(eventSender).sendBatch(captor.capture());
+        assertEquals(2, captor.getValue().size());
     }
 
     @Test
-    void periodicFlush_ShouldTrigger() throws InterruptedException {
+    void periodicFlush_ShouldTrigger() throws Exception {
         CreateEventRequestBody event = mock(CreateEventRequestBody.class);
         eventBuffer.push(event);
 
         // Wait for periodic flush
         Thread.sleep(150);
 
-        verify(eventsClient, atLeastOnce()).createEventBatch(any());
+        verify(eventSender, atLeastOnce()).sendBatch(any());
     }
 
     @Test
-    void stop_ShouldFlushRemainingEvents() {
+    void stop_ShouldFlushRemainingEvents() throws IOException {
         CreateEventRequestBody event = mock(CreateEventRequestBody.class);
         eventBuffer.push(event);
 
         eventBuffer.close();
 
-        verify(eventsClient).createEventBatch(any());
+        verify(eventSender).sendBatch(any());
     }
 
     @Test
-    void pushAfterStop_ShouldLogError() {
+    void pushAfterStop_ShouldLogError() throws IOException {
         eventBuffer.close();
         CreateEventRequestBody event = mock(CreateEventRequestBody.class);
 
         eventBuffer.push(event);
 
         verify(logger).error(anyString());
-        verify(eventsClient, never()).createEventBatch(any());
+        verify(eventSender, never()).sendBatch(any());
     }
 
     @Test
-    void flushWithError_ShouldLogError() {
-        doThrow(new RuntimeException("Test error")).when(eventsClient).createEventBatch(any());
+    void flushWithError_ShouldLogError() throws IOException {
+        doThrow(new IOException("Test error")).when(eventSender).sendBatch(any());
         CreateEventRequestBody event = mock(CreateEventRequestBody.class);
         eventBuffer.push(event);
 
@@ -121,8 +123,8 @@ class EventBufferTest {
 
         try {
             // Wait for all retries to complete
-            // Initial delay + 2nd retry + 3rd retry = 100ms + 200ms + 400ms = 700ms
-            Thread.sleep(800);
+            // Initial delay + 2nd retry + 3rd retry = 1000ms + 2000ms + 4000ms = 7000ms
+            Thread.sleep(8000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Restore the interrupt flag
             fail("Test was interrupted while waiting for retries");
@@ -132,7 +134,7 @@ class EventBufferTest {
     }
 
     @Test
-    void concurrentPushes_ShouldHandleCorrectly() throws InterruptedException {
+    void concurrentPushes_ShouldHandleCorrectly() throws Exception {
         int threadCount = 10;
         CountDownLatch startLatch = new CountDownLatch(1);
         CountDownLatch doneLatch = new CountDownLatch(threadCount);
@@ -160,12 +162,10 @@ class EventBufferTest {
         Thread.sleep(200);
 
         // Verify events were processed
-        ArgumentCaptor<CreateEventBatchRequestBody> captor = ArgumentCaptor.forClass(CreateEventBatchRequestBody.class);
-        verify(eventsClient, atLeastOnce()).createEventBatch(captor.capture());
+        ArgumentCaptor<List<CreateEventRequestBody>> captor = ArgumentCaptor.forClass(List.class);
+        verify(eventSender, atLeastOnce()).sendBatch(captor.capture());
 
-        int totalEvents = captor.getAllValues().stream()
-                .mapToInt(batch -> batch.getEvents().size())
-                .sum();
+        int totalEvents = captor.getAllValues().stream().mapToInt(List::size).sum();
         assertEquals(100, totalEvents);
     }
 }

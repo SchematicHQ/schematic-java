@@ -1,16 +1,26 @@
 # Specify files that shouldn't be modified by Fern
 CLAUDE.md
+.claude/
 LICENSE
 README.md
 .github/CODEOWNERS
+.github/workflows/ci.yml
+WASM_VERSION
+.gitignore
+scripts/
+sample-app/
 src/main/java/com/schematic/api/BaseSchematic.java
 src/main/java/com/schematic/api/EventBuffer.java
+src/main/java/com/schematic/api/HttpEventSender.java
 src/main/java/com/schematic/api/Schematic.java
 src/main/java/com/schematic/api/cache/CacheProvider.java
 src/main/java/com/schematic/api/cache/CachedItem.java
 src/main/java/com/schematic/api/cache/LocalCache.java
+src/main/java/com/schematic/api/cache/RedisCacheConfig.java
+src/main/java/com/schematic/api/cache/RedisCacheProvider.java
 src/main/java/com/schematic/api/core/NoOpHttpClient.java
 src/main/java/com/schematic/api/logger/ConsoleLogger.java
+src/main/java/com/schematic/api/datastream/
 src/main/java/com/schematic/api/logger/SchematicLogger.java
 src/main/java/com/schematic/webhook/
 src/test/java/com/schematic/api/TestCache.java
@@ -19,4 +29,5 @@ src/test/java/com/schematic/api/TestLogger.java
 src/test/java/com/schematic/api/TestOfflineMode.java
 src/test/java/com/schematic/api/TestReadme.java
 src/test/java/com/schematic/api/TestSchematic.java
+src/test/java/com/schematic/api/datastream/
 src/test/java/com/schematic/webhook/
