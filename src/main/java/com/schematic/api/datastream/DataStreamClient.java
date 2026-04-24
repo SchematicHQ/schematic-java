@@ -718,7 +718,7 @@ public class DataStreamClient implements Closeable {
                         cacheKeys.add(flagCacheKey(key));
                     }
                 }
-                flagCache.deleteMissing(cacheKeys);
+                flagCache.deleteMissing(cacheKeys, FLAG_PREFIX + "*");
             } else {
                 cacheFlag(data);
             }
