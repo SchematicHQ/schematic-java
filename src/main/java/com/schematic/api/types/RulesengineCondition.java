@@ -27,7 +27,7 @@ public final class RulesengineCondition {
 
     private final Optional<RulesengineTraitDefinition> comparisonTraitDefinition;
 
-    private final RulesengineConditionConditionType conditionType;
+    private final RulesengineConditionType conditionType;
 
     private final Optional<Double> consumptionRate;
 
@@ -39,13 +39,13 @@ public final class RulesengineCondition {
 
     private final String id;
 
-    private final Optional<RulesengineConditionMetricPeriod> metricPeriod;
+    private final Optional<RulesengineMetricPeriod> metricPeriod;
 
-    private final Optional<RulesengineConditionMetricPeriodMonthReset> metricPeriodMonthReset;
+    private final Optional<RulesengineMetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final Optional<Long> metricValue;
 
-    private final RulesengineConditionOperator operator;
+    private final ComparableOperator operator;
 
     private final List<String> resourceIds;
 
@@ -58,16 +58,16 @@ public final class RulesengineCondition {
     private RulesengineCondition(
             String accountId,
             Optional<RulesengineTraitDefinition> comparisonTraitDefinition,
-            RulesengineConditionConditionType conditionType,
+            RulesengineConditionType conditionType,
             Optional<Double> consumptionRate,
             Optional<String> creditId,
             String environmentId,
             Optional<String> eventSubtype,
             String id,
-            Optional<RulesengineConditionMetricPeriod> metricPeriod,
-            Optional<RulesengineConditionMetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<RulesengineMetricPeriod> metricPeriod,
+            Optional<RulesengineMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Long> metricValue,
-            RulesengineConditionOperator operator,
+            ComparableOperator operator,
             List<String> resourceIds,
             Optional<RulesengineTraitDefinition> traitDefinition,
             String traitValue,
@@ -101,7 +101,7 @@ public final class RulesengineCondition {
     }
 
     @JsonProperty("condition_type")
-    public RulesengineConditionConditionType getConditionType() {
+    public RulesengineConditionType getConditionType() {
         return conditionType;
     }
 
@@ -131,12 +131,12 @@ public final class RulesengineCondition {
     }
 
     @JsonProperty("metric_period")
-    public Optional<RulesengineConditionMetricPeriod> getMetricPeriod() {
+    public Optional<RulesengineMetricPeriod> getMetricPeriod() {
         return metricPeriod;
     }
 
     @JsonProperty("metric_period_month_reset")
-    public Optional<RulesengineConditionMetricPeriodMonthReset> getMetricPeriodMonthReset() {
+    public Optional<RulesengineMetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
     }
 
@@ -146,7 +146,7 @@ public final class RulesengineCondition {
     }
 
     @JsonProperty("operator")
-    public RulesengineConditionOperator getOperator() {
+    public ComparableOperator getOperator() {
         return operator;
     }
 
@@ -230,7 +230,7 @@ public final class RulesengineCondition {
     }
 
     public interface ConditionTypeStage {
-        EnvironmentIdStage conditionType(@NotNull RulesengineConditionConditionType conditionType);
+        EnvironmentIdStage conditionType(@NotNull RulesengineConditionType conditionType);
     }
 
     public interface EnvironmentIdStage {
@@ -242,7 +242,7 @@ public final class RulesengineCondition {
     }
 
     public interface OperatorStage {
-        TraitValueStage operator(@NotNull RulesengineConditionOperator operator);
+        TraitValueStage operator(@NotNull ComparableOperator operator);
     }
 
     public interface TraitValueStage {
@@ -272,13 +272,13 @@ public final class RulesengineCondition {
 
         _FinalStage eventSubtype(String eventSubtype);
 
-        _FinalStage metricPeriod(Optional<RulesengineConditionMetricPeriod> metricPeriod);
+        _FinalStage metricPeriod(Optional<RulesengineMetricPeriod> metricPeriod);
 
-        _FinalStage metricPeriod(RulesengineConditionMetricPeriod metricPeriod);
+        _FinalStage metricPeriod(RulesengineMetricPeriod metricPeriod);
 
-        _FinalStage metricPeriodMonthReset(Optional<RulesengineConditionMetricPeriodMonthReset> metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(Optional<RulesengineMetricPeriodMonthReset> metricPeriodMonthReset);
 
-        _FinalStage metricPeriodMonthReset(RulesengineConditionMetricPeriodMonthReset metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(RulesengineMetricPeriodMonthReset metricPeriodMonthReset);
 
         _FinalStage metricValue(Optional<Long> metricValue);
 
@@ -306,13 +306,13 @@ public final class RulesengineCondition {
                     _FinalStage {
         private String accountId;
 
-        private RulesengineConditionConditionType conditionType;
+        private RulesengineConditionType conditionType;
 
         private String environmentId;
 
         private String id;
 
-        private RulesengineConditionOperator operator;
+        private ComparableOperator operator;
 
         private String traitValue;
 
@@ -322,9 +322,9 @@ public final class RulesengineCondition {
 
         private Optional<Long> metricValue = Optional.empty();
 
-        private Optional<RulesengineConditionMetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
+        private Optional<RulesengineMetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
-        private Optional<RulesengineConditionMetricPeriod> metricPeriod = Optional.empty();
+        private Optional<RulesengineMetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<String> eventSubtype = Optional.empty();
 
@@ -368,7 +368,7 @@ public final class RulesengineCondition {
 
         @java.lang.Override
         @JsonSetter("condition_type")
-        public EnvironmentIdStage conditionType(@NotNull RulesengineConditionConditionType conditionType) {
+        public EnvironmentIdStage conditionType(@NotNull RulesengineConditionType conditionType) {
             this.conditionType = Objects.requireNonNull(conditionType, "conditionType must not be null");
             return this;
         }
@@ -389,7 +389,7 @@ public final class RulesengineCondition {
 
         @java.lang.Override
         @JsonSetter("operator")
-        public TraitValueStage operator(@NotNull RulesengineConditionOperator operator) {
+        public TraitValueStage operator(@NotNull ComparableOperator operator) {
             this.operator = Objects.requireNonNull(operator, "operator must not be null");
             return this;
         }
@@ -452,28 +452,27 @@ public final class RulesengineCondition {
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriodMonthReset(RulesengineConditionMetricPeriodMonthReset metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(RulesengineMetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period_month_reset", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriodMonthReset(
-                Optional<RulesengineConditionMetricPeriodMonthReset> metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(Optional<RulesengineMetricPeriodMonthReset> metricPeriodMonthReset) {
             this.metricPeriodMonthReset = metricPeriodMonthReset;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriod(RulesengineConditionMetricPeriod metricPeriod) {
+        public _FinalStage metricPeriod(RulesengineMetricPeriod metricPeriod) {
             this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriod(Optional<RulesengineConditionMetricPeriod> metricPeriod) {
+        public _FinalStage metricPeriod(Optional<RulesengineMetricPeriod> metricPeriod) {
             this.metricPeriod = metricPeriod;
             return this;
         }

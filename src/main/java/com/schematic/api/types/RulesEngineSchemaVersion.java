@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class RulesEngineSchemaVersion {
-    public static final RulesEngineSchemaVersion V_5_F_633_CC_3 =
-            new RulesEngineSchemaVersion(Value.V_5_F_633_CC_3, "v5f633cc3");
-
     public static final RulesEngineSchemaVersion PLACEHOLDER_FOR_FERN_COMPATIBILITY = new RulesEngineSchemaVersion(
             Value.PLACEHOLDER_FOR_FERN_COMPATIBILITY, "placeholder-for-fern-compatibility");
+
+    public static final RulesEngineSchemaVersion VF_05_BF_5_DA =
+            new RulesEngineSchemaVersion(Value.VF_05_BF_5_DA, "vf05bf5da");
 
     private final Value value;
 
@@ -46,10 +46,10 @@ public final class RulesEngineSchemaVersion {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case V_5_F_633_CC_3:
-                return visitor.visitV5F633Cc3();
             case PLACEHOLDER_FOR_FERN_COMPATIBILITY:
                 return visitor.visitPlaceholderForFernCompatibility();
+            case VF_05_BF_5_DA:
+                return visitor.visitVf05Bf5Da();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -59,17 +59,17 @@ public final class RulesEngineSchemaVersion {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static RulesEngineSchemaVersion valueOf(String value) {
         switch (value) {
-            case "v5f633cc3":
-                return V_5_F_633_CC_3;
             case "placeholder-for-fern-compatibility":
                 return PLACEHOLDER_FOR_FERN_COMPATIBILITY;
+            case "vf05bf5da":
+                return VF_05_BF_5_DA;
             default:
                 return new RulesEngineSchemaVersion(Value.UNKNOWN, value);
         }
     }
 
     public enum Value {
-        V_5_F_633_CC_3,
+        VF_05_BF_5_DA,
 
         PLACEHOLDER_FOR_FERN_COMPATIBILITY,
 
@@ -77,7 +77,7 @@ public final class RulesEngineSchemaVersion {
     }
 
     public interface Visitor<T> {
-        T visitV5F633Cc3();
+        T visitVf05Bf5Da();
 
         T visitPlaceholderForFernCompatibility();
 

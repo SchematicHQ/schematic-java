@@ -9,6 +9,7 @@ import com.schematic.api.resources.accounts.requests.CountApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.CountAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.CreateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.CreateEnvironmentRequestBody;
+import com.schematic.api.resources.accounts.requests.ListAccountMembersRequest;
 import com.schematic.api.resources.accounts.requests.ListApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.ListAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.ListEnvironmentsRequest;
@@ -20,10 +21,12 @@ import com.schematic.api.resources.accounts.types.CreateApiKeyResponse;
 import com.schematic.api.resources.accounts.types.CreateEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.DeleteApiKeyResponse;
 import com.schematic.api.resources.accounts.types.DeleteEnvironmentResponse;
+import com.schematic.api.resources.accounts.types.GetAccountMemberResponse;
 import com.schematic.api.resources.accounts.types.GetApiKeyResponse;
 import com.schematic.api.resources.accounts.types.GetAuditLogResponse;
 import com.schematic.api.resources.accounts.types.GetEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.GetWhoAmIResponse;
+import com.schematic.api.resources.accounts.types.ListAccountMembersResponse;
 import com.schematic.api.resources.accounts.types.ListApiKeysResponse;
 import com.schematic.api.resources.accounts.types.ListAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.ListEnvironmentsResponse;
@@ -47,6 +50,32 @@ public class AsyncAccountsClient {
      */
     public AsyncRawAccountsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    public CompletableFuture<ListAccountMembersResponse> listAccountMembers() {
+        return this.rawClient.listAccountMembers().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListAccountMembersResponse> listAccountMembers(RequestOptions requestOptions) {
+        return this.rawClient.listAccountMembers(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListAccountMembersResponse> listAccountMembers(ListAccountMembersRequest request) {
+        return this.rawClient.listAccountMembers(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListAccountMembersResponse> listAccountMembers(
+            ListAccountMembersRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listAccountMembers(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetAccountMemberResponse> getAccountMember(String accountMemberId) {
+        return this.rawClient.getAccountMember(accountMemberId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetAccountMemberResponse> getAccountMember(
+            String accountMemberId, RequestOptions requestOptions) {
+        return this.rawClient.getAccountMember(accountMemberId, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListApiKeysResponse> listApiKeys(ListApiKeysRequest request) {

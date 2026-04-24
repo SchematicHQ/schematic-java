@@ -34,7 +34,7 @@ public final class RulesengineCheckFlagResult {
 
     private final Optional<String> featureUsageEvent;
 
-    private final Optional<RulesengineCheckFlagResultFeatureUsagePeriod> featureUsagePeriod;
+    private final Optional<RulesengineMetricPeriod> featureUsagePeriod;
 
     private final Optional<OffsetDateTime> featureUsageResetAt;
 
@@ -46,7 +46,7 @@ public final class RulesengineCheckFlagResult {
 
     private final Optional<String> ruleId;
 
-    private final Optional<RulesengineCheckFlagResultRuleType> ruleType;
+    private final Optional<RulesengineRuleType> ruleType;
 
     private final Optional<String> userId;
 
@@ -61,13 +61,13 @@ public final class RulesengineCheckFlagResult {
             Optional<Long> featureAllocation,
             Optional<Long> featureUsage,
             Optional<String> featureUsageEvent,
-            Optional<RulesengineCheckFlagResultFeatureUsagePeriod> featureUsagePeriod,
+            Optional<RulesengineMetricPeriod> featureUsagePeriod,
             Optional<OffsetDateTime> featureUsageResetAt,
             Optional<String> flagId,
             String flagKey,
             String reason,
             Optional<String> ruleId,
-            Optional<RulesengineCheckFlagResultRuleType> ruleType,
+            Optional<RulesengineRuleType> ruleType,
             Optional<String> userId,
             boolean value,
             Map<String, Object> additionalProperties) {
@@ -120,7 +120,7 @@ public final class RulesengineCheckFlagResult {
     }
 
     @JsonProperty("feature_usage_period")
-    public Optional<RulesengineCheckFlagResultFeatureUsagePeriod> getFeatureUsagePeriod() {
+    public Optional<RulesengineMetricPeriod> getFeatureUsagePeriod() {
         return featureUsagePeriod;
     }
 
@@ -150,7 +150,7 @@ public final class RulesengineCheckFlagResult {
     }
 
     @JsonProperty("rule_type")
-    public Optional<RulesengineCheckFlagResultRuleType> getRuleType() {
+    public Optional<RulesengineRuleType> getRuleType() {
         return ruleType;
     }
 
@@ -267,9 +267,9 @@ public final class RulesengineCheckFlagResult {
 
         _FinalStage featureUsageEvent(String featureUsageEvent);
 
-        _FinalStage featureUsagePeriod(Optional<RulesengineCheckFlagResultFeatureUsagePeriod> featureUsagePeriod);
+        _FinalStage featureUsagePeriod(Optional<RulesengineMetricPeriod> featureUsagePeriod);
 
-        _FinalStage featureUsagePeriod(RulesengineCheckFlagResultFeatureUsagePeriod featureUsagePeriod);
+        _FinalStage featureUsagePeriod(RulesengineMetricPeriod featureUsagePeriod);
 
         _FinalStage featureUsageResetAt(Optional<OffsetDateTime> featureUsageResetAt);
 
@@ -283,9 +283,9 @@ public final class RulesengineCheckFlagResult {
 
         _FinalStage ruleId(String ruleId);
 
-        _FinalStage ruleType(Optional<RulesengineCheckFlagResultRuleType> ruleType);
+        _FinalStage ruleType(Optional<RulesengineRuleType> ruleType);
 
-        _FinalStage ruleType(RulesengineCheckFlagResultRuleType ruleType);
+        _FinalStage ruleType(RulesengineRuleType ruleType);
 
         _FinalStage userId(Optional<String> userId);
 
@@ -302,7 +302,7 @@ public final class RulesengineCheckFlagResult {
 
         private Optional<String> userId = Optional.empty();
 
-        private Optional<RulesengineCheckFlagResultRuleType> ruleType = Optional.empty();
+        private Optional<RulesengineRuleType> ruleType = Optional.empty();
 
         private Optional<String> ruleId = Optional.empty();
 
@@ -310,7 +310,7 @@ public final class RulesengineCheckFlagResult {
 
         private Optional<OffsetDateTime> featureUsageResetAt = Optional.empty();
 
-        private Optional<RulesengineCheckFlagResultFeatureUsagePeriod> featureUsagePeriod = Optional.empty();
+        private Optional<RulesengineMetricPeriod> featureUsagePeriod = Optional.empty();
 
         private Optional<String> featureUsageEvent = Optional.empty();
 
@@ -384,14 +384,14 @@ public final class RulesengineCheckFlagResult {
         }
 
         @java.lang.Override
-        public _FinalStage ruleType(RulesengineCheckFlagResultRuleType ruleType) {
+        public _FinalStage ruleType(RulesengineRuleType ruleType) {
             this.ruleType = Optional.ofNullable(ruleType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "rule_type", nulls = Nulls.SKIP)
-        public _FinalStage ruleType(Optional<RulesengineCheckFlagResultRuleType> ruleType) {
+        public _FinalStage ruleType(Optional<RulesengineRuleType> ruleType) {
             this.ruleType = ruleType;
             return this;
         }
@@ -436,15 +436,14 @@ public final class RulesengineCheckFlagResult {
         }
 
         @java.lang.Override
-        public _FinalStage featureUsagePeriod(RulesengineCheckFlagResultFeatureUsagePeriod featureUsagePeriod) {
+        public _FinalStage featureUsagePeriod(RulesengineMetricPeriod featureUsagePeriod) {
             this.featureUsagePeriod = Optional.ofNullable(featureUsagePeriod);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "feature_usage_period", nulls = Nulls.SKIP)
-        public _FinalStage featureUsagePeriod(
-                Optional<RulesengineCheckFlagResultFeatureUsagePeriod> featureUsagePeriod) {
+        public _FinalStage featureUsagePeriod(Optional<RulesengineMetricPeriod> featureUsagePeriod) {
             this.featureUsagePeriod = featureUsagePeriod;
             return this;
         }

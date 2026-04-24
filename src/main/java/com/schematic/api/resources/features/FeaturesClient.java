@@ -8,6 +8,7 @@ import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.features.requests.CheckFlagsBulkRequestBody;
 import com.schematic.api.resources.features.requests.CountFeaturesRequest;
 import com.schematic.api.resources.features.requests.CountFlagsRequest;
+import com.schematic.api.resources.features.requests.CreateBillingLinkedFeatureRequestBody;
 import com.schematic.api.resources.features.requests.CreateFeatureRequestBody;
 import com.schematic.api.resources.features.requests.ListFeaturesRequest;
 import com.schematic.api.resources.features.requests.ListFlagsRequest;
@@ -29,6 +30,7 @@ import com.schematic.api.resources.features.types.ListFlagsResponse;
 import com.schematic.api.resources.features.types.UpdateFeatureResponse;
 import com.schematic.api.resources.features.types.UpdateFlagResponse;
 import com.schematic.api.resources.features.types.UpdateFlagRulesResponse;
+import com.schematic.api.resources.features.types.UpsertFeatureForBillingProductResponse;
 import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.CreateFlagRequestBody;
 
@@ -104,6 +106,18 @@ public class FeaturesClient {
 
     public DeleteFeatureResponse deleteFeature(String featureId, RequestOptions requestOptions) {
         return this.rawClient.deleteFeature(featureId, requestOptions).body();
+    }
+
+    public UpsertFeatureForBillingProductResponse upsertFeatureForBillingProduct(
+            CreateBillingLinkedFeatureRequestBody request) {
+        return this.rawClient.upsertFeatureForBillingProduct(request).body();
+    }
+
+    public UpsertFeatureForBillingProductResponse upsertFeatureForBillingProduct(
+            CreateBillingLinkedFeatureRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .upsertFeatureForBillingProduct(request, requestOptions)
+                .body();
     }
 
     public CountFeaturesResponse countFeatures() {

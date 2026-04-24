@@ -28,7 +28,7 @@ public final class PlanVersionResponseData {
 
     private final String environmentId;
 
-    private final String icon;
+    private final PlanIcon icon;
 
     private final String id;
 
@@ -50,7 +50,7 @@ public final class PlanVersionResponseData {
             OffsetDateTime createdAt,
             String description,
             String environmentId,
-            String icon,
+            PlanIcon icon,
             String id,
             String name,
             Optional<String> originalPlanId,
@@ -89,7 +89,7 @@ public final class PlanVersionResponseData {
     }
 
     @JsonProperty("icon")
-    public String getIcon() {
+    public PlanIcon getIcon() {
         return icon;
     }
 
@@ -193,7 +193,7 @@ public final class PlanVersionResponseData {
     }
 
     public interface IconStage {
-        IdStage icon(@NotNull String icon);
+        IdStage icon(@NotNull PlanIcon icon);
     }
 
     public interface IdStage {
@@ -251,7 +251,7 @@ public final class PlanVersionResponseData {
 
         private String environmentId;
 
-        private String icon;
+        private PlanIcon icon;
 
         private String id;
 
@@ -311,7 +311,7 @@ public final class PlanVersionResponseData {
 
         @java.lang.Override
         @JsonSetter("icon")
-        public IdStage icon(@NotNull String icon) {
+        public IdStage icon(@NotNull PlanIcon icon) {
             this.icon = Objects.requireNonNull(icon, "icon must not be null");
             return this;
         }

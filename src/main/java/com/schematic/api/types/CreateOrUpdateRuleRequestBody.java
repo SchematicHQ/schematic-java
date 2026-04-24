@@ -33,7 +33,7 @@ public final class CreateOrUpdateRuleRequestBody {
 
     private final long priority;
 
-    private final Optional<CreateOrUpdateRuleRequestBodyRuleType> ruleType;
+    private final Optional<RuleType> ruleType;
 
     private final boolean value;
 
@@ -45,7 +45,7 @@ public final class CreateOrUpdateRuleRequestBody {
             Optional<String> id,
             String name,
             long priority,
-            Optional<CreateOrUpdateRuleRequestBodyRuleType> ruleType,
+            Optional<RuleType> ruleType,
             boolean value,
             Map<String, Object> additionalProperties) {
         this.conditionGroups = conditionGroups;
@@ -84,7 +84,7 @@ public final class CreateOrUpdateRuleRequestBody {
     }
 
     @JsonProperty("rule_type")
-    public Optional<CreateOrUpdateRuleRequestBodyRuleType> getRuleType() {
+    public Optional<RuleType> getRuleType() {
         return ruleType;
     }
 
@@ -166,9 +166,9 @@ public final class CreateOrUpdateRuleRequestBody {
 
         _FinalStage id(String id);
 
-        _FinalStage ruleType(Optional<CreateOrUpdateRuleRequestBodyRuleType> ruleType);
+        _FinalStage ruleType(Optional<RuleType> ruleType);
 
-        _FinalStage ruleType(CreateOrUpdateRuleRequestBodyRuleType ruleType);
+        _FinalStage ruleType(RuleType ruleType);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -179,7 +179,7 @@ public final class CreateOrUpdateRuleRequestBody {
 
         private boolean value;
 
-        private Optional<CreateOrUpdateRuleRequestBodyRuleType> ruleType = Optional.empty();
+        private Optional<RuleType> ruleType = Optional.empty();
 
         private Optional<String> id = Optional.empty();
 
@@ -226,14 +226,14 @@ public final class CreateOrUpdateRuleRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage ruleType(CreateOrUpdateRuleRequestBodyRuleType ruleType) {
+        public _FinalStage ruleType(RuleType ruleType) {
             this.ruleType = Optional.ofNullable(ruleType);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "rule_type", nulls = Nulls.SKIP)
-        public _FinalStage ruleType(Optional<CreateOrUpdateRuleRequestBodyRuleType> ruleType) {
+        public _FinalStage ruleType(Optional<RuleType> ruleType) {
             this.ruleType = ruleType;
             return this;
         }

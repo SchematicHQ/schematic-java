@@ -36,9 +36,9 @@ public final class CompanyEventPeriodMetricsResponseData {
 
     private final String eventSubtype;
 
-    private final String monthReset;
+    private final MetricPeriodMonthReset monthReset;
 
-    private final String period;
+    private final MetricPeriod period;
 
     private final Optional<OffsetDateTime> validUntil;
 
@@ -54,8 +54,8 @@ public final class CompanyEventPeriodMetricsResponseData {
             OffsetDateTime createdAt,
             String environmentId,
             String eventSubtype,
-            String monthReset,
-            String period,
+            MetricPeriodMonthReset monthReset,
+            MetricPeriod period,
             Optional<OffsetDateTime> validUntil,
             long value,
             Map<String, Object> additionalProperties) {
@@ -109,12 +109,12 @@ public final class CompanyEventPeriodMetricsResponseData {
     }
 
     @JsonProperty("month_reset")
-    public String getMonthReset() {
+    public MetricPeriodMonthReset getMonthReset() {
         return monthReset;
     }
 
     @JsonProperty("period")
-    public String getPeriod() {
+    public MetricPeriod getPeriod() {
         return period;
     }
 
@@ -210,11 +210,11 @@ public final class CompanyEventPeriodMetricsResponseData {
     }
 
     public interface MonthResetStage {
-        PeriodStage monthReset(@NotNull String monthReset);
+        PeriodStage monthReset(@NotNull MetricPeriodMonthReset monthReset);
     }
 
     public interface PeriodStage {
-        ValueStage period(@NotNull String period);
+        ValueStage period(@NotNull MetricPeriod period);
     }
 
     public interface ValueStage {
@@ -260,9 +260,9 @@ public final class CompanyEventPeriodMetricsResponseData {
 
         private String eventSubtype;
 
-        private String monthReset;
+        private MetricPeriodMonthReset monthReset;
 
-        private String period;
+        private MetricPeriod period;
 
         private long value;
 
@@ -340,14 +340,14 @@ public final class CompanyEventPeriodMetricsResponseData {
 
         @java.lang.Override
         @JsonSetter("month_reset")
-        public PeriodStage monthReset(@NotNull String monthReset) {
+        public PeriodStage monthReset(@NotNull MetricPeriodMonthReset monthReset) {
             this.monthReset = Objects.requireNonNull(monthReset, "monthReset must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("period")
-        public ValueStage period(@NotNull String period) {
+        public ValueStage period(@NotNull MetricPeriod period) {
             this.period = Objects.requireNonNull(period, "period must not be null");
             return this;
         }

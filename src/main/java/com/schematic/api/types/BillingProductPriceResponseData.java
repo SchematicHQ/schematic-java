@@ -36,6 +36,8 @@ public final class BillingProductPriceResponseData {
 
     private final Optional<String> meterId;
 
+    private final Optional<String> nickname;
+
     private final long packageSize;
 
     private final long price;
@@ -64,6 +66,7 @@ public final class BillingProductPriceResponseData {
             BillingProductPriceInterval interval,
             boolean isActive,
             Optional<String> meterId,
+            Optional<String> nickname,
             long packageSize,
             long price,
             Optional<String> priceDecimal,
@@ -81,6 +84,7 @@ public final class BillingProductPriceResponseData {
         this.interval = interval;
         this.isActive = isActive;
         this.meterId = meterId;
+        this.nickname = nickname;
         this.packageSize = packageSize;
         this.price = price;
         this.priceDecimal = priceDecimal;
@@ -126,6 +130,11 @@ public final class BillingProductPriceResponseData {
     @JsonProperty("meter_id")
     public Optional<String> getMeterId() {
         return meterId;
+    }
+
+    @JsonProperty("nickname")
+    public Optional<String> getNickname() {
+        return nickname;
     }
 
     @JsonProperty("package_size")
@@ -192,6 +201,7 @@ public final class BillingProductPriceResponseData {
                 && interval.equals(other.interval)
                 && isActive == other.isActive
                 && meterId.equals(other.meterId)
+                && nickname.equals(other.nickname)
                 && packageSize == other.packageSize
                 && price == other.price
                 && priceDecimal.equals(other.priceDecimal)
@@ -213,6 +223,7 @@ public final class BillingProductPriceResponseData {
                 this.interval,
                 this.isActive,
                 this.meterId,
+                this.nickname,
                 this.packageSize,
                 this.price,
                 this.priceDecimal,
@@ -298,6 +309,10 @@ public final class BillingProductPriceResponseData {
 
         _FinalStage meterId(String meterId);
 
+        _FinalStage nickname(Optional<String> nickname);
+
+        _FinalStage nickname(String nickname);
+
         _FinalStage priceDecimal(Optional<String> priceDecimal);
 
         _FinalStage priceDecimal(String priceDecimal);
@@ -353,6 +368,8 @@ public final class BillingProductPriceResponseData {
 
         private Optional<String> priceDecimal = Optional.empty();
 
+        private Optional<String> nickname = Optional.empty();
+
         private Optional<String> meterId = Optional.empty();
 
         @JsonAnySetter
@@ -369,6 +386,7 @@ public final class BillingProductPriceResponseData {
             interval(other.getInterval());
             isActive(other.getIsActive());
             meterId(other.getMeterId());
+            nickname(other.getNickname());
             packageSize(other.getPackageSize());
             price(other.getPrice());
             priceDecimal(other.getPriceDecimal());
@@ -499,6 +517,19 @@ public final class BillingProductPriceResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage nickname(String nickname) {
+            this.nickname = Optional.ofNullable(nickname);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "nickname", nulls = Nulls.SKIP)
+        public _FinalStage nickname(Optional<String> nickname) {
+            this.nickname = nickname;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage meterId(String meterId) {
             this.meterId = Optional.ofNullable(meterId);
             return this;
@@ -521,6 +552,7 @@ public final class BillingProductPriceResponseData {
                     interval,
                     isActive,
                     meterId,
+                    nickname,
                     packageSize,
                     price,
                     priceDecimal,

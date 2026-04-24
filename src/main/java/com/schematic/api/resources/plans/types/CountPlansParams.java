@@ -24,6 +24,8 @@ import java.util.Optional;
 public final class CountPlansParams {
     private final Optional<String> companyId;
 
+    private final Optional<Boolean> excludeCompanyScoped;
+
     private final Optional<Boolean> forFallbackPlan;
 
     private final Optional<Boolean> forInitialPlan;
@@ -44,6 +46,8 @@ public final class CountPlansParams {
 
     private final Optional<String> q;
 
+    private final Optional<String> scopedToCompanyId;
+
     private final Optional<String> withoutEntitlementFor;
 
     private final Optional<Boolean> withoutPaidProductId;
@@ -52,6 +56,7 @@ public final class CountPlansParams {
 
     private CountPlansParams(
             Optional<String> companyId,
+            Optional<Boolean> excludeCompanyScoped,
             Optional<Boolean> forFallbackPlan,
             Optional<Boolean> forInitialPlan,
             Optional<Boolean> forTrialExpiryPlan,
@@ -62,10 +67,12 @@ public final class CountPlansParams {
             Optional<Long> offset,
             Optional<PlanType> planType,
             Optional<String> q,
+            Optional<String> scopedToCompanyId,
             Optional<String> withoutEntitlementFor,
             Optional<Boolean> withoutPaidProductId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
+        this.excludeCompanyScoped = excludeCompanyScoped;
         this.forFallbackPlan = forFallbackPlan;
         this.forInitialPlan = forInitialPlan;
         this.forTrialExpiryPlan = forTrialExpiryPlan;
@@ -76,6 +83,7 @@ public final class CountPlansParams {
         this.offset = offset;
         this.planType = planType;
         this.q = q;
+        this.scopedToCompanyId = scopedToCompanyId;
         this.withoutEntitlementFor = withoutEntitlementFor;
         this.withoutPaidProductId = withoutPaidProductId;
         this.additionalProperties = additionalProperties;
@@ -84,6 +92,14 @@ public final class CountPlansParams {
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
+    }
+
+    /**
+     * @return Exclude plans that are scoped to a company (custom plans assigned to a company)
+     */
+    @JsonProperty("exclude_company_scoped")
+    public Optional<Boolean> getExcludeCompanyScoped() {
+        return excludeCompanyScoped;
     }
 
     /**
@@ -161,6 +177,14 @@ public final class CountPlansParams {
     }
 
     /**
+     * @return Filter plans scoped to a specific company (custom plans)
+     */
+    @JsonProperty("scoped_to_company_id")
+    public Optional<String> getScopedToCompanyId() {
+        return scopedToCompanyId;
+    }
+
+    /**
      * @return Filter out plans that already have a plan entitlement for the specified feature ID
      */
     @JsonProperty("without_entitlement_for")
@@ -189,6 +213,7 @@ public final class CountPlansParams {
 
     private boolean equalTo(CountPlansParams other) {
         return companyId.equals(other.companyId)
+                && excludeCompanyScoped.equals(other.excludeCompanyScoped)
                 && forFallbackPlan.equals(other.forFallbackPlan)
                 && forInitialPlan.equals(other.forInitialPlan)
                 && forTrialExpiryPlan.equals(other.forTrialExpiryPlan)
@@ -199,6 +224,7 @@ public final class CountPlansParams {
                 && offset.equals(other.offset)
                 && planType.equals(other.planType)
                 && q.equals(other.q)
+                && scopedToCompanyId.equals(other.scopedToCompanyId)
                 && withoutEntitlementFor.equals(other.withoutEntitlementFor)
                 && withoutPaidProductId.equals(other.withoutPaidProductId);
     }
@@ -207,6 +233,7 @@ public final class CountPlansParams {
     public int hashCode() {
         return Objects.hash(
                 this.companyId,
+                this.excludeCompanyScoped,
                 this.forFallbackPlan,
                 this.forInitialPlan,
                 this.forTrialExpiryPlan,
@@ -217,6 +244,7 @@ public final class CountPlansParams {
                 this.offset,
                 this.planType,
                 this.q,
+                this.scopedToCompanyId,
                 this.withoutEntitlementFor,
                 this.withoutPaidProductId);
     }
@@ -233,6 +261,8 @@ public final class CountPlansParams {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<String> companyId = Optional.empty();
+
+        private Optional<Boolean> excludeCompanyScoped = Optional.empty();
 
         private Optional<Boolean> forFallbackPlan = Optional.empty();
 
@@ -254,6 +284,8 @@ public final class CountPlansParams {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<String> scopedToCompanyId = Optional.empty();
+
         private Optional<String> withoutEntitlementFor = Optional.empty();
 
         private Optional<Boolean> withoutPaidProductId = Optional.empty();
@@ -265,6 +297,7 @@ public final class CountPlansParams {
 
         public Builder from(CountPlansParams other) {
             companyId(other.getCompanyId());
+            excludeCompanyScoped(other.getExcludeCompanyScoped());
             forFallbackPlan(other.getForFallbackPlan());
             forInitialPlan(other.getForInitialPlan());
             forTrialExpiryPlan(other.getForTrialExpiryPlan());
@@ -275,6 +308,7 @@ public final class CountPlansParams {
             offset(other.getOffset());
             planType(other.getPlanType());
             q(other.getQ());
+            scopedToCompanyId(other.getScopedToCompanyId());
             withoutEntitlementFor(other.getWithoutEntitlementFor());
             withoutPaidProductId(other.getWithoutPaidProductId());
             return this;
@@ -288,6 +322,20 @@ public final class CountPlansParams {
 
         public Builder companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        /**
+         * <p>Exclude plans that are scoped to a company (custom plans assigned to a company)</p>
+         */
+        @JsonSetter(value = "exclude_company_scoped", nulls = Nulls.SKIP)
+        public Builder excludeCompanyScoped(Optional<Boolean> excludeCompanyScoped) {
+            this.excludeCompanyScoped = excludeCompanyScoped;
+            return this;
+        }
+
+        public Builder excludeCompanyScoped(Boolean excludeCompanyScoped) {
+            this.excludeCompanyScoped = Optional.ofNullable(excludeCompanyScoped);
             return this;
         }
 
@@ -426,6 +474,20 @@ public final class CountPlansParams {
         }
 
         /**
+         * <p>Filter plans scoped to a specific company (custom plans)</p>
+         */
+        @JsonSetter(value = "scoped_to_company_id", nulls = Nulls.SKIP)
+        public Builder scopedToCompanyId(Optional<String> scopedToCompanyId) {
+            this.scopedToCompanyId = scopedToCompanyId;
+            return this;
+        }
+
+        public Builder scopedToCompanyId(String scopedToCompanyId) {
+            this.scopedToCompanyId = Optional.ofNullable(scopedToCompanyId);
+            return this;
+        }
+
+        /**
          * <p>Filter out plans that already have a plan entitlement for the specified feature ID</p>
          */
         @JsonSetter(value = "without_entitlement_for", nulls = Nulls.SKIP)
@@ -456,6 +518,7 @@ public final class CountPlansParams {
         public CountPlansParams build() {
             return new CountPlansParams(
                     companyId,
+                    excludeCompanyScoped,
                     forFallbackPlan,
                     forInitialPlan,
                     forTrialExpiryPlan,
@@ -466,6 +529,7 @@ public final class CountPlansParams {
                     offset,
                     planType,
                     q,
+                    scopedToCompanyId,
                     withoutEntitlementFor,
                     withoutPaidProductId,
                     additionalProperties);

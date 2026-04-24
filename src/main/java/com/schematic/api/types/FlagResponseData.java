@@ -36,7 +36,7 @@ public final class FlagResponseData {
 
     private final String key;
 
-    private final Optional<String> maintainerId;
+    private final Optional<String> maintainerAccountMemberId;
 
     private final String name;
 
@@ -52,7 +52,7 @@ public final class FlagResponseData {
             String flagType,
             String id,
             String key,
-            Optional<String> maintainerId,
+            Optional<String> maintainerAccountMemberId,
             String name,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -63,7 +63,7 @@ public final class FlagResponseData {
         this.flagType = flagType;
         this.id = id;
         this.key = key;
-        this.maintainerId = maintainerId;
+        this.maintainerAccountMemberId = maintainerAccountMemberId;
         this.name = name;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -104,9 +104,9 @@ public final class FlagResponseData {
         return key;
     }
 
-    @JsonProperty("maintainer_id")
-    public Optional<String> getMaintainerId() {
-        return maintainerId;
+    @JsonProperty("maintainer_account_member_id")
+    public Optional<String> getMaintainerAccountMemberId() {
+        return maintainerAccountMemberId;
     }
 
     @JsonProperty("name")
@@ -138,7 +138,7 @@ public final class FlagResponseData {
                 && flagType.equals(other.flagType)
                 && id.equals(other.id)
                 && key.equals(other.key)
-                && maintainerId.equals(other.maintainerId)
+                && maintainerAccountMemberId.equals(other.maintainerAccountMemberId)
                 && name.equals(other.name)
                 && updatedAt.equals(other.updatedAt);
     }
@@ -153,7 +153,7 @@ public final class FlagResponseData {
                 this.flagType,
                 this.id,
                 this.key,
-                this.maintainerId,
+                this.maintainerAccountMemberId,
                 this.name,
                 this.updatedAt);
     }
@@ -212,9 +212,9 @@ public final class FlagResponseData {
 
         _FinalStage featureId(String featureId);
 
-        _FinalStage maintainerId(Optional<String> maintainerId);
+        _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId);
 
-        _FinalStage maintainerId(String maintainerId);
+        _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -244,7 +244,7 @@ public final class FlagResponseData {
 
         private OffsetDateTime updatedAt;
 
-        private Optional<String> maintainerId = Optional.empty();
+        private Optional<String> maintainerAccountMemberId = Optional.empty();
 
         private Optional<String> featureId = Optional.empty();
 
@@ -262,7 +262,7 @@ public final class FlagResponseData {
             flagType(other.getFlagType());
             id(other.getId());
             key(other.getKey());
-            maintainerId(other.getMaintainerId());
+            maintainerAccountMemberId(other.getMaintainerAccountMemberId());
             name(other.getName());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -325,15 +325,15 @@ public final class FlagResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage maintainerId(String maintainerId) {
-            this.maintainerId = Optional.ofNullable(maintainerId);
+        public _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = Optional.ofNullable(maintainerAccountMemberId);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "maintainer_id", nulls = Nulls.SKIP)
-        public _FinalStage maintainerId(Optional<String> maintainerId) {
-            this.maintainerId = maintainerId;
+        @JsonSetter(value = "maintainer_account_member_id", nulls = Nulls.SKIP)
+        public _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = maintainerAccountMemberId;
             return this;
         }
 
@@ -360,7 +360,7 @@ public final class FlagResponseData {
                     flagType,
                     id,
                     key,
-                    maintainerId,
+                    maintainerAccountMemberId,
                     name,
                     updatedAt,
                     additionalProperties);

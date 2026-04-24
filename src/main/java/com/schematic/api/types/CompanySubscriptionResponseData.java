@@ -44,6 +44,8 @@ public final class CompanySubscriptionResponseData {
 
     private final List<BillingProductForSubscriptionResponseData> products;
 
+    private final BillingProviderType providerType;
+
     private final String status;
 
     private final String subscriptionExternalId;
@@ -65,6 +67,7 @@ public final class CompanySubscriptionResponseData {
             Optional<InvoiceResponseData> latestInvoice,
             Optional<PaymentMethodResponseData> paymentMethod,
             List<BillingProductForSubscriptionResponseData> products,
+            BillingProviderType providerType,
             String status,
             String subscriptionExternalId,
             long totalPrice,
@@ -80,6 +83,7 @@ public final class CompanySubscriptionResponseData {
         this.latestInvoice = latestInvoice;
         this.paymentMethod = paymentMethod;
         this.products = products;
+        this.providerType = providerType;
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.totalPrice = totalPrice;
@@ -137,6 +141,11 @@ public final class CompanySubscriptionResponseData {
         return products;
     }
 
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
+    }
+
     @JsonProperty("status")
     public String getStatus() {
         return status;
@@ -179,6 +188,7 @@ public final class CompanySubscriptionResponseData {
                 && latestInvoice.equals(other.latestInvoice)
                 && paymentMethod.equals(other.paymentMethod)
                 && products.equals(other.products)
+                && providerType.equals(other.providerType)
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && totalPrice == other.totalPrice
@@ -198,6 +208,7 @@ public final class CompanySubscriptionResponseData {
                 this.latestInvoice,
                 this.paymentMethod,
                 this.products,
+                this.providerType,
                 this.status,
                 this.subscriptionExternalId,
                 this.totalPrice,
@@ -228,7 +239,11 @@ public final class CompanySubscriptionResponseData {
     }
 
     public interface IntervalStage {
-        StatusStage interval(@NotNull String interval);
+        ProviderTypeStage interval(@NotNull String interval);
+    }
+
+    public interface ProviderTypeStage {
+        StatusStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface StatusStage {
@@ -289,6 +304,7 @@ public final class CompanySubscriptionResponseData {
                     CurrencyStage,
                     CustomerExternalIdStage,
                     IntervalStage,
+                    ProviderTypeStage,
                     StatusStage,
                     SubscriptionExternalIdStage,
                     TotalPriceStage,
@@ -300,6 +316,8 @@ public final class CompanySubscriptionResponseData {
         private String customerExternalId;
 
         private String interval;
+
+        private BillingProviderType providerType;
 
         private String status;
 
@@ -338,6 +356,7 @@ public final class CompanySubscriptionResponseData {
             latestInvoice(other.getLatestInvoice());
             paymentMethod(other.getPaymentMethod());
             products(other.getProducts());
+            providerType(other.getProviderType());
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             totalPrice(other.getTotalPrice());
@@ -368,8 +387,15 @@ public final class CompanySubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public StatusStage interval(@NotNull String interval) {
+        public ProviderTypeStage interval(@NotNull String interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("provider_type")
+        public StatusStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -521,6 +547,7 @@ public final class CompanySubscriptionResponseData {
                     latestInvoice,
                     paymentMethod,
                     products,
+                    providerType,
                     status,
                     subscriptionExternalId,
                     totalPrice,

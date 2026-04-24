@@ -29,6 +29,8 @@ public final class BillingPriceResponseData {
 
     private final BillingProductPriceInterval interval;
 
+    private final Optional<String> nickname;
+
     private final long price;
 
     private final Optional<String> priceDecimal;
@@ -44,6 +46,7 @@ public final class BillingPriceResponseData {
             String externalPriceId,
             String id,
             BillingProductPriceInterval interval,
+            Optional<String> nickname,
             long price,
             Optional<String> priceDecimal,
             BillingProviderType providerType,
@@ -53,6 +56,7 @@ public final class BillingPriceResponseData {
         this.externalPriceId = externalPriceId;
         this.id = id;
         this.interval = interval;
+        this.nickname = nickname;
         this.price = price;
         this.priceDecimal = priceDecimal;
         this.providerType = providerType;
@@ -78,6 +82,11 @@ public final class BillingPriceResponseData {
     @JsonProperty("interval")
     public BillingProductPriceInterval getInterval() {
         return interval;
+    }
+
+    @JsonProperty("nickname")
+    public Optional<String> getNickname() {
+        return nickname;
     }
 
     @JsonProperty("price")
@@ -116,6 +125,7 @@ public final class BillingPriceResponseData {
                 && externalPriceId.equals(other.externalPriceId)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
+                && nickname.equals(other.nickname)
                 && price == other.price
                 && priceDecimal.equals(other.priceDecimal)
                 && providerType.equals(other.providerType)
@@ -129,6 +139,7 @@ public final class BillingPriceResponseData {
                 this.externalPriceId,
                 this.id,
                 this.interval,
+                this.nickname,
                 this.price,
                 this.priceDecimal,
                 this.providerType,
@@ -181,6 +192,10 @@ public final class BillingPriceResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage nickname(Optional<String> nickname);
+
+        _FinalStage nickname(String nickname);
+
         _FinalStage priceDecimal(Optional<String> priceDecimal);
 
         _FinalStage priceDecimal(String priceDecimal);
@@ -212,6 +227,8 @@ public final class BillingPriceResponseData {
 
         private Optional<String> priceDecimal = Optional.empty();
 
+        private Optional<String> nickname = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -223,6 +240,7 @@ public final class BillingPriceResponseData {
             externalPriceId(other.getExternalPriceId());
             id(other.getId());
             interval(other.getInterval());
+            nickname(other.getNickname());
             price(other.getPrice());
             priceDecimal(other.getPriceDecimal());
             providerType(other.getProviderType());
@@ -293,12 +311,26 @@ public final class BillingPriceResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage nickname(String nickname) {
+            this.nickname = Optional.ofNullable(nickname);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "nickname", nulls = Nulls.SKIP)
+        public _FinalStage nickname(Optional<String> nickname) {
+            this.nickname = nickname;
+            return this;
+        }
+
+        @java.lang.Override
         public BillingPriceResponseData build() {
             return new BillingPriceResponseData(
                     currency,
                     externalPriceId,
                     id,
                     interval,
+                    nickname,
                     price,
                     priceDecimal,
                     providerType,

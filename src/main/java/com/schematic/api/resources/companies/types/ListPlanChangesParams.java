@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.PlanChangeAction;
+import com.schematic.api.types.PlanChangeBasePlanAction;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +23,9 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListPlanChangesParams.Builder.class)
 public final class ListPlanChangesParams {
-    private final Optional<String> action;
+    private final Optional<PlanChangeAction> action;
 
-    private final Optional<String> basePlanAction;
+    private final Optional<PlanChangeBasePlanAction> basePlanAction;
 
     private final Optional<String> companyId;
 
@@ -38,8 +40,8 @@ public final class ListPlanChangesParams {
     private final Map<String, Object> additionalProperties;
 
     private ListPlanChangesParams(
-            Optional<String> action,
-            Optional<String> basePlanAction,
+            Optional<PlanChangeAction> action,
+            Optional<PlanChangeBasePlanAction> basePlanAction,
             Optional<String> companyId,
             Optional<List<String>> companyIds,
             Optional<Long> limit,
@@ -57,12 +59,12 @@ public final class ListPlanChangesParams {
     }
 
     @JsonProperty("action")
-    public Optional<String> getAction() {
+    public Optional<PlanChangeAction> getAction() {
         return action;
     }
 
     @JsonProperty("base_plan_action")
-    public Optional<String> getBasePlanAction() {
+    public Optional<PlanChangeBasePlanAction> getBasePlanAction() {
         return basePlanAction;
     }
 
@@ -141,9 +143,9 @@ public final class ListPlanChangesParams {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> action = Optional.empty();
+        private Optional<PlanChangeAction> action = Optional.empty();
 
-        private Optional<String> basePlanAction = Optional.empty();
+        private Optional<PlanChangeBasePlanAction> basePlanAction = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
 
@@ -172,23 +174,23 @@ public final class ListPlanChangesParams {
         }
 
         @JsonSetter(value = "action", nulls = Nulls.SKIP)
-        public Builder action(Optional<String> action) {
+        public Builder action(Optional<PlanChangeAction> action) {
             this.action = action;
             return this;
         }
 
-        public Builder action(String action) {
+        public Builder action(PlanChangeAction action) {
             this.action = Optional.ofNullable(action);
             return this;
         }
 
         @JsonSetter(value = "base_plan_action", nulls = Nulls.SKIP)
-        public Builder basePlanAction(Optional<String> basePlanAction) {
+        public Builder basePlanAction(Optional<PlanChangeBasePlanAction> basePlanAction) {
             this.basePlanAction = basePlanAction;
             return this;
         }
 
-        public Builder basePlanAction(String basePlanAction) {
+        public Builder basePlanAction(PlanChangeBasePlanAction basePlanAction) {
             this.basePlanAction = Optional.ofNullable(basePlanAction);
             return this;
         }

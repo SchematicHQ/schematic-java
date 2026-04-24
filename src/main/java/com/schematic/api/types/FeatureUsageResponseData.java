@@ -61,7 +61,7 @@ public final class FeatureUsageResponseData {
 
     private final EntitlementType entitlementType;
 
-    private final Optional<FeatureDetailResponseData> feature;
+    private final Optional<FeatureInPlanResponseData> feature;
 
     private final Optional<Boolean> hasValidAllocation;
 
@@ -69,7 +69,7 @@ public final class FeatureUsageResponseData {
 
     private final Optional<OffsetDateTime> metricResetAt;
 
-    private final Optional<String> monthReset;
+    private final Optional<MetricPeriodMonthReset> monthReset;
 
     private final Optional<BillingPriceView> monthlyUsageBasedPrice;
 
@@ -77,7 +77,7 @@ public final class FeatureUsageResponseData {
 
     private final Optional<Double> percentUsed;
 
-    private final Optional<String> period;
+    private final Optional<MetricPeriod> period;
 
     private final Optional<PlanResponseData> plan;
 
@@ -113,15 +113,15 @@ public final class FeatureUsageResponseData {
             String entitlementId,
             Optional<String> entitlementSource,
             EntitlementType entitlementType,
-            Optional<FeatureDetailResponseData> feature,
+            Optional<FeatureInPlanResponseData> feature,
             Optional<Boolean> hasValidAllocation,
             Optional<Boolean> isUnlimited,
             Optional<OffsetDateTime> metricResetAt,
-            Optional<String> monthReset,
+            Optional<MetricPeriodMonthReset> monthReset,
             Optional<BillingPriceView> monthlyUsageBasedPrice,
             Optional<Long> overuse,
             Optional<Double> percentUsed,
-            Optional<String> period,
+            Optional<MetricPeriod> period,
             Optional<PlanResponseData> plan,
             Optional<PlanEntitlementResponseData> planEntitlement,
             Optional<EntitlementPriceBehavior> priceBehavior,
@@ -295,7 +295,7 @@ public final class FeatureUsageResponseData {
     }
 
     @JsonProperty("feature")
-    public Optional<FeatureDetailResponseData> getFeature() {
+    public Optional<FeatureInPlanResponseData> getFeature() {
         return feature;
     }
 
@@ -327,7 +327,7 @@ public final class FeatureUsageResponseData {
      * @return If the period is current_month, when the month resets.
      */
     @JsonProperty("month_reset")
-    public Optional<String> getMonthReset() {
+    public Optional<MetricPeriodMonthReset> getMonthReset() {
         return monthReset;
     }
 
@@ -356,7 +356,7 @@ public final class FeatureUsageResponseData {
      * @return The period over which usage is measured.
      */
     @JsonProperty("period")
-    public Optional<String> getPeriod() {
+    public Optional<MetricPeriod> getPeriod() {
         return period;
     }
 
@@ -610,9 +610,9 @@ public final class FeatureUsageResponseData {
 
         _FinalStage entitlementSource(String entitlementSource);
 
-        _FinalStage feature(Optional<FeatureDetailResponseData> feature);
+        _FinalStage feature(Optional<FeatureInPlanResponseData> feature);
 
-        _FinalStage feature(FeatureDetailResponseData feature);
+        _FinalStage feature(FeatureInPlanResponseData feature);
 
         /**
          * <p>Whether a valid allocation exists</p>
@@ -638,9 +638,9 @@ public final class FeatureUsageResponseData {
         /**
          * <p>If the period is current_month, when the month resets.</p>
          */
-        _FinalStage monthReset(Optional<String> monthReset);
+        _FinalStage monthReset(Optional<MetricPeriodMonthReset> monthReset);
 
-        _FinalStage monthReset(String monthReset);
+        _FinalStage monthReset(MetricPeriodMonthReset monthReset);
 
         _FinalStage monthlyUsageBasedPrice(Optional<BillingPriceView> monthlyUsageBasedPrice);
 
@@ -663,9 +663,9 @@ public final class FeatureUsageResponseData {
         /**
          * <p>The period over which usage is measured.</p>
          */
-        _FinalStage period(Optional<String> period);
+        _FinalStage period(Optional<MetricPeriod> period);
 
-        _FinalStage period(String period);
+        _FinalStage period(MetricPeriod period);
 
         _FinalStage plan(Optional<PlanResponseData> plan);
 
@@ -721,7 +721,7 @@ public final class FeatureUsageResponseData {
 
         private Optional<PlanResponseData> plan = Optional.empty();
 
-        private Optional<String> period = Optional.empty();
+        private Optional<MetricPeriod> period = Optional.empty();
 
         private Optional<Double> percentUsed = Optional.empty();
 
@@ -729,7 +729,7 @@ public final class FeatureUsageResponseData {
 
         private Optional<BillingPriceView> monthlyUsageBasedPrice = Optional.empty();
 
-        private Optional<String> monthReset = Optional.empty();
+        private Optional<MetricPeriodMonthReset> monthReset = Optional.empty();
 
         private Optional<OffsetDateTime> metricResetAt = Optional.empty();
 
@@ -737,7 +737,7 @@ public final class FeatureUsageResponseData {
 
         private Optional<Boolean> hasValidAllocation = Optional.empty();
 
-        private Optional<FeatureDetailResponseData> feature = Optional.empty();
+        private Optional<FeatureInPlanResponseData> feature = Optional.empty();
 
         private Optional<String> entitlementSource = Optional.empty();
 
@@ -948,7 +948,7 @@ public final class FeatureUsageResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage period(String period) {
+        public _FinalStage period(MetricPeriod period) {
             this.period = Optional.ofNullable(period);
             return this;
         }
@@ -958,7 +958,7 @@ public final class FeatureUsageResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "period", nulls = Nulls.SKIP)
-        public _FinalStage period(Optional<String> period) {
+        public _FinalStage period(Optional<MetricPeriod> period) {
             this.period = period;
             return this;
         }
@@ -1021,7 +1021,7 @@ public final class FeatureUsageResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage monthReset(String monthReset) {
+        public _FinalStage monthReset(MetricPeriodMonthReset monthReset) {
             this.monthReset = Optional.ofNullable(monthReset);
             return this;
         }
@@ -1031,7 +1031,7 @@ public final class FeatureUsageResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "month_reset", nulls = Nulls.SKIP)
-        public _FinalStage monthReset(Optional<String> monthReset) {
+        public _FinalStage monthReset(Optional<MetricPeriodMonthReset> monthReset) {
             this.monthReset = monthReset;
             return this;
         }
@@ -1097,14 +1097,14 @@ public final class FeatureUsageResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage feature(FeatureDetailResponseData feature) {
+        public _FinalStage feature(FeatureInPlanResponseData feature) {
             this.feature = Optional.ofNullable(feature);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "feature", nulls = Nulls.SKIP)
-        public _FinalStage feature(Optional<FeatureDetailResponseData> feature) {
+        public _FinalStage feature(Optional<FeatureInPlanResponseData> feature) {
             this.feature = feature;
             return this;
         }

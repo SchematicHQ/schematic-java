@@ -38,9 +38,9 @@ public final class FeatureCompanyUserResponseData {
 
     private final Optional<OffsetDateTime> metricResetAt;
 
-    private final Optional<String> monthReset;
+    private final Optional<MetricPeriodMonthReset> monthReset;
 
-    private final Optional<String> period;
+    private final Optional<MetricPeriod> period;
 
     private final Optional<PlanResponseData> plan;
 
@@ -59,8 +59,8 @@ public final class FeatureCompanyUserResponseData {
             EntitlementType entitlementType,
             Optional<FeatureDetailResponseData> feature,
             Optional<OffsetDateTime> metricResetAt,
-            Optional<String> monthReset,
-            Optional<String> period,
+            Optional<MetricPeriodMonthReset> monthReset,
+            Optional<MetricPeriod> period,
             Optional<PlanResponseData> plan,
             Optional<Long> usage,
             Optional<UserResponseData> user,
@@ -137,7 +137,7 @@ public final class FeatureCompanyUserResponseData {
      * @return If the period is current_month, when the month resets.
      */
     @JsonProperty("month_reset")
-    public Optional<String> getMonthReset() {
+    public Optional<MetricPeriodMonthReset> getMonthReset() {
         return monthReset;
     }
 
@@ -145,7 +145,7 @@ public final class FeatureCompanyUserResponseData {
      * @return The period over which usage is measured.
      */
     @JsonProperty("period")
-    public Optional<String> getPeriod() {
+    public Optional<MetricPeriod> getPeriod() {
         return period;
     }
 
@@ -277,16 +277,16 @@ public final class FeatureCompanyUserResponseData {
         /**
          * <p>If the period is current_month, when the month resets.</p>
          */
-        _FinalStage monthReset(Optional<String> monthReset);
+        _FinalStage monthReset(Optional<MetricPeriodMonthReset> monthReset);
 
-        _FinalStage monthReset(String monthReset);
+        _FinalStage monthReset(MetricPeriodMonthReset monthReset);
 
         /**
          * <p>The period over which usage is measured.</p>
          */
-        _FinalStage period(Optional<String> period);
+        _FinalStage period(Optional<MetricPeriod> period);
 
-        _FinalStage period(String period);
+        _FinalStage period(MetricPeriod period);
 
         _FinalStage plan(Optional<PlanResponseData> plan);
 
@@ -321,9 +321,9 @@ public final class FeatureCompanyUserResponseData {
 
         private Optional<PlanResponseData> plan = Optional.empty();
 
-        private Optional<String> period = Optional.empty();
+        private Optional<MetricPeriod> period = Optional.empty();
 
-        private Optional<String> monthReset = Optional.empty();
+        private Optional<MetricPeriodMonthReset> monthReset = Optional.empty();
 
         private Optional<OffsetDateTime> metricResetAt = Optional.empty();
 
@@ -445,7 +445,7 @@ public final class FeatureCompanyUserResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage period(String period) {
+        public _FinalStage period(MetricPeriod period) {
             this.period = Optional.ofNullable(period);
             return this;
         }
@@ -455,7 +455,7 @@ public final class FeatureCompanyUserResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "period", nulls = Nulls.SKIP)
-        public _FinalStage period(Optional<String> period) {
+        public _FinalStage period(Optional<MetricPeriod> period) {
             this.period = period;
             return this;
         }
@@ -465,7 +465,7 @@ public final class FeatureCompanyUserResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage monthReset(String monthReset) {
+        public _FinalStage monthReset(MetricPeriodMonthReset monthReset) {
             this.monthReset = Optional.ofNullable(monthReset);
             return this;
         }
@@ -475,7 +475,7 @@ public final class FeatureCompanyUserResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "month_reset", nulls = Nulls.SKIP)
-        public _FinalStage monthReset(Optional<String> monthReset) {
+        public _FinalStage monthReset(Optional<MetricPeriodMonthReset> monthReset) {
             this.monthReset = monthReset;
             return this;
         }

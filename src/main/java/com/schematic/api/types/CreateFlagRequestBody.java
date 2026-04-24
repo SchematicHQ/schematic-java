@@ -31,7 +31,7 @@ public final class CreateFlagRequestBody {
 
     private final String key;
 
-    private final Optional<String> maintainerId;
+    private final Optional<String> maintainerAccountMemberId;
 
     private final String name;
 
@@ -43,7 +43,7 @@ public final class CreateFlagRequestBody {
             Optional<String> featureId,
             String flagType,
             String key,
-            Optional<String> maintainerId,
+            Optional<String> maintainerAccountMemberId,
             String name,
             Map<String, Object> additionalProperties) {
         this.defaultValue = defaultValue;
@@ -51,7 +51,7 @@ public final class CreateFlagRequestBody {
         this.featureId = featureId;
         this.flagType = flagType;
         this.key = key;
-        this.maintainerId = maintainerId;
+        this.maintainerAccountMemberId = maintainerAccountMemberId;
         this.name = name;
         this.additionalProperties = additionalProperties;
     }
@@ -81,9 +81,9 @@ public final class CreateFlagRequestBody {
         return key;
     }
 
-    @JsonProperty("maintainer_id")
-    public Optional<String> getMaintainerId() {
-        return maintainerId;
+    @JsonProperty("maintainer_account_member_id")
+    public Optional<String> getMaintainerAccountMemberId() {
+        return maintainerAccountMemberId;
     }
 
     @JsonProperty("name")
@@ -108,7 +108,7 @@ public final class CreateFlagRequestBody {
                 && featureId.equals(other.featureId)
                 && flagType.equals(other.flagType)
                 && key.equals(other.key)
-                && maintainerId.equals(other.maintainerId)
+                && maintainerAccountMemberId.equals(other.maintainerAccountMemberId)
                 && name.equals(other.name);
     }
 
@@ -120,7 +120,7 @@ public final class CreateFlagRequestBody {
                 this.featureId,
                 this.flagType,
                 this.key,
-                this.maintainerId,
+                this.maintainerAccountMemberId,
                 this.name);
     }
 
@@ -166,9 +166,9 @@ public final class CreateFlagRequestBody {
 
         _FinalStage featureId(String featureId);
 
-        _FinalStage maintainerId(Optional<String> maintainerId);
+        _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId);
 
-        _FinalStage maintainerId(String maintainerId);
+        _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -184,7 +184,7 @@ public final class CreateFlagRequestBody {
 
         private String name;
 
-        private Optional<String> maintainerId = Optional.empty();
+        private Optional<String> maintainerAccountMemberId = Optional.empty();
 
         private Optional<String> featureId = Optional.empty();
 
@@ -200,7 +200,7 @@ public final class CreateFlagRequestBody {
             featureId(other.getFeatureId());
             flagType(other.getFlagType());
             key(other.getKey());
-            maintainerId(other.getMaintainerId());
+            maintainerAccountMemberId(other.getMaintainerAccountMemberId());
             name(other.getName());
             return this;
         }
@@ -241,15 +241,15 @@ public final class CreateFlagRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage maintainerId(String maintainerId) {
-            this.maintainerId = Optional.ofNullable(maintainerId);
+        public _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = Optional.ofNullable(maintainerAccountMemberId);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "maintainer_id", nulls = Nulls.SKIP)
-        public _FinalStage maintainerId(Optional<String> maintainerId) {
-            this.maintainerId = maintainerId;
+        @JsonSetter(value = "maintainer_account_member_id", nulls = Nulls.SKIP)
+        public _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = maintainerAccountMemberId;
             return this;
         }
 
@@ -269,7 +269,14 @@ public final class CreateFlagRequestBody {
         @java.lang.Override
         public CreateFlagRequestBody build() {
             return new CreateFlagRequestBody(
-                    defaultValue, description, featureId, flagType, key, maintainerId, name, additionalProperties);
+                    defaultValue,
+                    description,
+                    featureId,
+                    flagType,
+                    key,
+                    maintainerAccountMemberId,
+                    name,
+                    additionalProperties);
         }
 
         @java.lang.Override

@@ -32,9 +32,9 @@ public final class RulesengineCompanyMetric {
 
     private final String eventSubtype;
 
-    private final RulesengineCompanyMetricMonthReset monthReset;
+    private final RulesengineMetricPeriodMonthReset monthReset;
 
-    private final RulesengineCompanyMetricPeriod period;
+    private final RulesengineMetricPeriod period;
 
     private final Optional<OffsetDateTime> validUntil;
 
@@ -48,8 +48,8 @@ public final class RulesengineCompanyMetric {
             OffsetDateTime createdAt,
             String environmentId,
             String eventSubtype,
-            RulesengineCompanyMetricMonthReset monthReset,
-            RulesengineCompanyMetricPeriod period,
+            RulesengineMetricPeriodMonthReset monthReset,
+            RulesengineMetricPeriod period,
             Optional<OffsetDateTime> validUntil,
             long value,
             Map<String, Object> additionalProperties) {
@@ -91,12 +91,12 @@ public final class RulesengineCompanyMetric {
     }
 
     @JsonProperty("month_reset")
-    public RulesengineCompanyMetricMonthReset getMonthReset() {
+    public RulesengineMetricPeriodMonthReset getMonthReset() {
         return monthReset;
     }
 
     @JsonProperty("period")
-    public RulesengineCompanyMetricPeriod getPeriod() {
+    public RulesengineMetricPeriod getPeriod() {
         return period;
     }
 
@@ -179,11 +179,11 @@ public final class RulesengineCompanyMetric {
     }
 
     public interface MonthResetStage {
-        PeriodStage monthReset(@NotNull RulesengineCompanyMetricMonthReset monthReset);
+        PeriodStage monthReset(@NotNull RulesengineMetricPeriodMonthReset monthReset);
     }
 
     public interface PeriodStage {
-        ValueStage period(@NotNull RulesengineCompanyMetricPeriod period);
+        ValueStage period(@NotNull RulesengineMetricPeriod period);
     }
 
     public interface ValueStage {
@@ -223,9 +223,9 @@ public final class RulesengineCompanyMetric {
 
         private String eventSubtype;
 
-        private RulesengineCompanyMetricMonthReset monthReset;
+        private RulesengineMetricPeriodMonthReset monthReset;
 
-        private RulesengineCompanyMetricPeriod period;
+        private RulesengineMetricPeriod period;
 
         private long value;
 
@@ -287,14 +287,14 @@ public final class RulesengineCompanyMetric {
 
         @java.lang.Override
         @JsonSetter("month_reset")
-        public PeriodStage monthReset(@NotNull RulesengineCompanyMetricMonthReset monthReset) {
+        public PeriodStage monthReset(@NotNull RulesengineMetricPeriodMonthReset monthReset) {
             this.monthReset = Objects.requireNonNull(monthReset, "monthReset must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("period")
-        public ValueStage period(@NotNull RulesengineCompanyMetricPeriod period) {
+        public ValueStage period(@NotNull RulesengineMetricPeriod period) {
             this.period = Objects.requireNonNull(period, "period must not be null");
             return this;
         }

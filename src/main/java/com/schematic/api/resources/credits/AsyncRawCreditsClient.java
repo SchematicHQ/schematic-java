@@ -53,6 +53,7 @@ import com.schematic.api.resources.credits.types.DeleteCreditBundleResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
 import com.schematic.api.resources.credits.types.GetEnrichedCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
+import com.schematic.api.resources.credits.types.GetSingleBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.GrantBillingCreditsToCompanyResponse;
 import com.schematic.api.resources.credits.types.ListBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.ListBillingPlanCreditGrantsResponse;
@@ -2316,6 +2317,89 @@ public class AsyncRawCreditsClient {
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
                                         response));
                                 return;
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<GetSingleBillingPlanCreditGrantResponse>>
+            getSingleBillingPlanCreditGrant(String planGrantId) {
+        return getSingleBillingPlanCreditGrant(planGrantId, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<GetSingleBillingPlanCreditGrantResponse>>
+            getSingleBillingPlanCreditGrant(String planGrantId, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/credits/plan-grants")
+                .addPathSegment(planGrantId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<BaseSchematicHttpResponse<GetSingleBillingPlanCreditGrantResponse>> future =
+                new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, GetSingleBillingPlanCreditGrantResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
