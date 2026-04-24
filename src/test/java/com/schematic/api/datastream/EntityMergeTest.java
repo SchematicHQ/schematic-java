@@ -10,7 +10,7 @@ import com.schematic.api.types.RulesengineCompany;
 import com.schematic.api.types.RulesengineEntitlementValueType;
 import com.schematic.api.types.RulesengineFeatureEntitlement;
 import com.schematic.api.types.RulesengineRule;
-import com.schematic.api.types.RulesengineRuleRuleType;
+import com.schematic.api.types.RulesengineRuleType;
 import com.schematic.api.types.RulesengineTrait;
 import com.schematic.api.types.RulesengineUser;
 import java.util.Collections;
@@ -337,7 +337,7 @@ class EntityMergeTest {
                 .id("rule-1")
                 .name("Original Rule")
                 .priority(1)
-                .ruleType(RulesengineRuleRuleType.GLOBAL_OVERRIDE)
+                .ruleType(RulesengineRuleType.GLOBAL_OVERRIDE)
                 .value(true)
                 .build();
 
