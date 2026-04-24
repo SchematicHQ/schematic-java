@@ -34,6 +34,8 @@ public final class PlanCreditGrantView {
 
     private final Optional<Long> billingCreditAutoTopupExpiryUnitCount;
 
+    private final Optional<Long> billingCreditAutoTopupThresholdCredits;
+
     private final Optional<Long> billingCreditAutoTopupThresholdPercent;
 
     private final OffsetDateTime createdAt;
@@ -85,6 +87,7 @@ public final class PlanCreditGrantView {
             Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType,
             Optional<BillingCreditExpiryUnit> billingCreditAutoTopupExpiryUnit,
             Optional<Long> billingCreditAutoTopupExpiryUnitCount,
+            Optional<Long> billingCreditAutoTopupThresholdCredits,
             Optional<Long> billingCreditAutoTopupThresholdPercent,
             OffsetDateTime createdAt,
             Optional<BillingCreditView> credit,
@@ -113,6 +116,7 @@ public final class PlanCreditGrantView {
         this.billingCreditAutoTopupExpiryType = billingCreditAutoTopupExpiryType;
         this.billingCreditAutoTopupExpiryUnit = billingCreditAutoTopupExpiryUnit;
         this.billingCreditAutoTopupExpiryUnitCount = billingCreditAutoTopupExpiryUnitCount;
+        this.billingCreditAutoTopupThresholdCredits = billingCreditAutoTopupThresholdCredits;
         this.billingCreditAutoTopupThresholdPercent = billingCreditAutoTopupThresholdPercent;
         this.createdAt = createdAt;
         this.credit = credit;
@@ -165,6 +169,11 @@ public final class PlanCreditGrantView {
     @JsonProperty("billing_credit_auto_topup_expiry_unit_count")
     public Optional<Long> getBillingCreditAutoTopupExpiryUnitCount() {
         return billingCreditAutoTopupExpiryUnitCount;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_threshold_credits")
+    public Optional<Long> getBillingCreditAutoTopupThresholdCredits() {
+        return billingCreditAutoTopupThresholdCredits;
     }
 
     @JsonProperty("billing_credit_auto_topup_threshold_percent")
@@ -305,6 +314,7 @@ public final class PlanCreditGrantView {
                 && billingCreditAutoTopupExpiryType.equals(other.billingCreditAutoTopupExpiryType)
                 && billingCreditAutoTopupExpiryUnit.equals(other.billingCreditAutoTopupExpiryUnit)
                 && billingCreditAutoTopupExpiryUnitCount.equals(other.billingCreditAutoTopupExpiryUnitCount)
+                && billingCreditAutoTopupThresholdCredits.equals(other.billingCreditAutoTopupThresholdCredits)
                 && billingCreditAutoTopupThresholdPercent.equals(other.billingCreditAutoTopupThresholdPercent)
                 && createdAt.equals(other.createdAt)
                 && credit.equals(other.credit)
@@ -337,6 +347,7 @@ public final class PlanCreditGrantView {
                 this.billingCreditAutoTopupExpiryType,
                 this.billingCreditAutoTopupExpiryUnit,
                 this.billingCreditAutoTopupExpiryUnitCount,
+                this.billingCreditAutoTopupThresholdCredits,
                 this.billingCreditAutoTopupThresholdPercent,
                 this.createdAt,
                 this.credit,
@@ -445,6 +456,10 @@ public final class PlanCreditGrantView {
         _FinalStage billingCreditAutoTopupExpiryUnitCount(Optional<Long> billingCreditAutoTopupExpiryUnitCount);
 
         _FinalStage billingCreditAutoTopupExpiryUnitCount(Long billingCreditAutoTopupExpiryUnitCount);
+
+        _FinalStage billingCreditAutoTopupThresholdCredits(Optional<Long> billingCreditAutoTopupThresholdCredits);
+
+        _FinalStage billingCreditAutoTopupThresholdCredits(Long billingCreditAutoTopupThresholdCredits);
 
         _FinalStage billingCreditAutoTopupThresholdPercent(Optional<Long> billingCreditAutoTopupThresholdPercent);
 
@@ -561,6 +576,8 @@ public final class PlanCreditGrantView {
 
         private Optional<Long> billingCreditAutoTopupThresholdPercent = Optional.empty();
 
+        private Optional<Long> billingCreditAutoTopupThresholdCredits = Optional.empty();
+
         private Optional<Long> billingCreditAutoTopupExpiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> billingCreditAutoTopupExpiryUnit = Optional.empty();
@@ -584,6 +601,7 @@ public final class PlanCreditGrantView {
             billingCreditAutoTopupExpiryType(other.getBillingCreditAutoTopupExpiryType());
             billingCreditAutoTopupExpiryUnit(other.getBillingCreditAutoTopupExpiryUnit());
             billingCreditAutoTopupExpiryUnitCount(other.getBillingCreditAutoTopupExpiryUnitCount());
+            billingCreditAutoTopupThresholdCredits(other.getBillingCreditAutoTopupThresholdCredits());
             billingCreditAutoTopupThresholdPercent(other.getBillingCreditAutoTopupThresholdPercent());
             createdAt(other.getCreatedAt());
             credit(other.getCredit());
@@ -867,6 +885,20 @@ public final class PlanCreditGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage billingCreditAutoTopupThresholdCredits(Long billingCreditAutoTopupThresholdCredits) {
+            this.billingCreditAutoTopupThresholdCredits = Optional.ofNullable(billingCreditAutoTopupThresholdCredits);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_auto_topup_threshold_credits", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditAutoTopupThresholdCredits(
+                Optional<Long> billingCreditAutoTopupThresholdCredits) {
+            this.billingCreditAutoTopupThresholdCredits = billingCreditAutoTopupThresholdCredits;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingCreditAutoTopupExpiryUnitCount(Long billingCreditAutoTopupExpiryUnitCount) {
             this.billingCreditAutoTopupExpiryUnitCount = Optional.ofNullable(billingCreditAutoTopupExpiryUnitCount);
             return this;
@@ -942,6 +974,7 @@ public final class PlanCreditGrantView {
                     billingCreditAutoTopupExpiryType,
                     billingCreditAutoTopupExpiryUnit,
                     billingCreditAutoTopupExpiryUnitCount,
+                    billingCreditAutoTopupThresholdCredits,
                     billingCreditAutoTopupThresholdPercent,
                     createdAt,
                     credit,

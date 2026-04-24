@@ -35,7 +35,7 @@ public final class UpdateFeatureRequestBody {
 
     private final Optional<FeatureLifecyclePhase> lifecyclePhase;
 
-    private final Optional<String> maintainerId;
+    private final Optional<String> maintainerAccountMemberId;
 
     private final Optional<String> name;
 
@@ -54,7 +54,7 @@ public final class UpdateFeatureRequestBody {
             Optional<CreateOrUpdateFlagRequestBody> flag,
             Optional<String> icon,
             Optional<FeatureLifecyclePhase> lifecyclePhase,
-            Optional<String> maintainerId,
+            Optional<String> maintainerAccountMemberId,
             Optional<String> name,
             Optional<String> pluralName,
             Optional<String> singularName,
@@ -66,7 +66,7 @@ public final class UpdateFeatureRequestBody {
         this.flag = flag;
         this.icon = icon;
         this.lifecyclePhase = lifecyclePhase;
-        this.maintainerId = maintainerId;
+        this.maintainerAccountMemberId = maintainerAccountMemberId;
         this.name = name;
         this.pluralName = pluralName;
         this.singularName = singularName;
@@ -104,9 +104,9 @@ public final class UpdateFeatureRequestBody {
         return lifecyclePhase;
     }
 
-    @JsonProperty("maintainer_id")
-    public Optional<String> getMaintainerId() {
-        return maintainerId;
+    @JsonProperty("maintainer_account_member_id")
+    public Optional<String> getMaintainerAccountMemberId() {
+        return maintainerAccountMemberId;
     }
 
     @JsonProperty("name")
@@ -147,7 +147,7 @@ public final class UpdateFeatureRequestBody {
                 && flag.equals(other.flag)
                 && icon.equals(other.icon)
                 && lifecyclePhase.equals(other.lifecyclePhase)
-                && maintainerId.equals(other.maintainerId)
+                && maintainerAccountMemberId.equals(other.maintainerAccountMemberId)
                 && name.equals(other.name)
                 && pluralName.equals(other.pluralName)
                 && singularName.equals(other.singularName)
@@ -163,7 +163,7 @@ public final class UpdateFeatureRequestBody {
                 this.flag,
                 this.icon,
                 this.lifecyclePhase,
-                this.maintainerId,
+                this.maintainerAccountMemberId,
                 this.name,
                 this.pluralName,
                 this.singularName,
@@ -193,7 +193,7 @@ public final class UpdateFeatureRequestBody {
 
         private Optional<FeatureLifecyclePhase> lifecyclePhase = Optional.empty();
 
-        private Optional<String> maintainerId = Optional.empty();
+        private Optional<String> maintainerAccountMemberId = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -215,7 +215,7 @@ public final class UpdateFeatureRequestBody {
             flag(other.getFlag());
             icon(other.getIcon());
             lifecyclePhase(other.getLifecyclePhase());
-            maintainerId(other.getMaintainerId());
+            maintainerAccountMemberId(other.getMaintainerAccountMemberId());
             name(other.getName());
             pluralName(other.getPluralName());
             singularName(other.getSingularName());
@@ -289,14 +289,14 @@ public final class UpdateFeatureRequestBody {
             return this;
         }
 
-        @JsonSetter(value = "maintainer_id", nulls = Nulls.SKIP)
-        public Builder maintainerId(Optional<String> maintainerId) {
-            this.maintainerId = maintainerId;
+        @JsonSetter(value = "maintainer_account_member_id", nulls = Nulls.SKIP)
+        public Builder maintainerAccountMemberId(Optional<String> maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = maintainerAccountMemberId;
             return this;
         }
 
-        public Builder maintainerId(String maintainerId) {
-            this.maintainerId = Optional.ofNullable(maintainerId);
+        public Builder maintainerAccountMemberId(String maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = Optional.ofNullable(maintainerAccountMemberId);
             return this;
         }
 
@@ -352,7 +352,7 @@ public final class UpdateFeatureRequestBody {
                     flag,
                     icon,
                     lifecyclePhase,
-                    maintainerId,
+                    maintainerAccountMemberId,
                     name,
                     pluralName,
                     singularName,

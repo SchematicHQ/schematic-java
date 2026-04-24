@@ -11,7 +11,6 @@ import com.schematic.api.resources.companies.requests.CountEntityTraitDefinition
 import com.schematic.api.resources.companies.requests.CountPlanTraitsRequest;
 import com.schematic.api.resources.companies.requests.CountUsersRequest;
 import com.schematic.api.resources.companies.requests.CreateEntityTraitDefinitionRequestBody;
-import com.schematic.api.resources.companies.requests.CreatePlanTraitRequestBody;
 import com.schematic.api.resources.companies.requests.DeleteCompanyRequest;
 import com.schematic.api.resources.companies.requests.GetActiveCompanySubscriptionRequest;
 import com.schematic.api.resources.companies.requests.GetEntityTraitValuesRequest;
@@ -27,19 +26,16 @@ import com.schematic.api.resources.companies.requests.LookupCompanyRequest;
 import com.schematic.api.resources.companies.requests.LookupUserRequest;
 import com.schematic.api.resources.companies.requests.UpdateEntityTraitDefinitionRequestBody;
 import com.schematic.api.resources.companies.requests.UpdatePlanTraitBulkRequestBody;
-import com.schematic.api.resources.companies.requests.UpdatePlanTraitRequestBody;
 import com.schematic.api.resources.companies.types.CountCompaniesResponse;
 import com.schematic.api.resources.companies.types.CountEntityKeyDefinitionsResponse;
 import com.schematic.api.resources.companies.types.CountEntityTraitDefinitionsResponse;
 import com.schematic.api.resources.companies.types.CountPlanTraitsResponse;
 import com.schematic.api.resources.companies.types.CountUsersResponse;
 import com.schematic.api.resources.companies.types.CreateCompanyResponse;
-import com.schematic.api.resources.companies.types.CreatePlanTraitResponse;
 import com.schematic.api.resources.companies.types.CreateUserResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyMembershipResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyResponse;
-import com.schematic.api.resources.companies.types.DeletePlanTraitResponse;
 import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
@@ -61,7 +57,6 @@ import com.schematic.api.resources.companies.types.ListUsersResponse;
 import com.schematic.api.resources.companies.types.LookupCompanyResponse;
 import com.schematic.api.resources.companies.types.LookupUserResponse;
 import com.schematic.api.resources.companies.types.UpdateEntityTraitDefinitionResponse;
-import com.schematic.api.resources.companies.types.UpdatePlanTraitResponse;
 import com.schematic.api.resources.companies.types.UpdatePlanTraitsBulkResponse;
 import com.schematic.api.resources.companies.types.UpsertCompanyResponse;
 import com.schematic.api.resources.companies.types.UpsertCompanyTraitResponse;
@@ -425,39 +420,12 @@ public class CompaniesClient {
         return this.rawClient.listPlanTraits(request, requestOptions).body();
     }
 
-    public CreatePlanTraitResponse createPlanTrait(CreatePlanTraitRequestBody request) {
-        return this.rawClient.createPlanTrait(request).body();
-    }
-
-    public CreatePlanTraitResponse createPlanTrait(CreatePlanTraitRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createPlanTrait(request, requestOptions).body();
-    }
-
     public GetPlanTraitResponse getPlanTrait(String planTraitId) {
         return this.rawClient.getPlanTrait(planTraitId).body();
     }
 
     public GetPlanTraitResponse getPlanTrait(String planTraitId, RequestOptions requestOptions) {
         return this.rawClient.getPlanTrait(planTraitId, requestOptions).body();
-    }
-
-    public UpdatePlanTraitResponse updatePlanTrait(String planTraitId, UpdatePlanTraitRequestBody request) {
-        return this.rawClient.updatePlanTrait(planTraitId, request).body();
-    }
-
-    public UpdatePlanTraitResponse updatePlanTrait(
-            String planTraitId, UpdatePlanTraitRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updatePlanTrait(planTraitId, request, requestOptions)
-                .body();
-    }
-
-    public DeletePlanTraitResponse deletePlanTrait(String planTraitId) {
-        return this.rawClient.deletePlanTrait(planTraitId).body();
-    }
-
-    public DeletePlanTraitResponse deletePlanTrait(String planTraitId, RequestOptions requestOptions) {
-        return this.rawClient.deletePlanTrait(planTraitId, requestOptions).body();
     }
 
     public UpdatePlanTraitsBulkResponse updatePlanTraitsBulk(UpdatePlanTraitBulkRequestBody request) {

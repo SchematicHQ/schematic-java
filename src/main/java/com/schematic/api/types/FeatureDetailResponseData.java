@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FeatureDetailResponseData.Builder.class)
 public final class FeatureDetailResponseData {
+    private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
+
     private final OffsetDateTime createdAt;
 
     private final String description;
@@ -42,7 +44,9 @@ public final class FeatureDetailResponseData {
 
     private final Optional<FeatureLifecyclePhase> lifecyclePhase;
 
-    private final Optional<String> maintainerId;
+    private final Optional<AccountMemberResponseData> maintainer;
+
+    private final Optional<String> maintainerAccountMemberId;
 
     private final String name;
 
@@ -61,6 +65,7 @@ public final class FeatureDetailResponseData {
     private final Map<String, Object> additionalProperties;
 
     private FeatureDetailResponseData(
+            Optional<BillingLinkedResourceResponseData> billingLinkedResource,
             OffsetDateTime createdAt,
             String description,
             Optional<String> eventSubtype,
@@ -70,7 +75,8 @@ public final class FeatureDetailResponseData {
             String icon,
             String id,
             Optional<FeatureLifecyclePhase> lifecyclePhase,
-            Optional<String> maintainerId,
+            Optional<AccountMemberResponseData> maintainer,
+            Optional<String> maintainerAccountMemberId,
             String name,
             List<PreviewObject> plans,
             Optional<String> pluralName,
@@ -79,6 +85,7 @@ public final class FeatureDetailResponseData {
             Optional<String> traitId,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
+        this.billingLinkedResource = billingLinkedResource;
         this.createdAt = createdAt;
         this.description = description;
         this.eventSubtype = eventSubtype;
@@ -88,7 +95,8 @@ public final class FeatureDetailResponseData {
         this.icon = icon;
         this.id = id;
         this.lifecyclePhase = lifecyclePhase;
-        this.maintainerId = maintainerId;
+        this.maintainer = maintainer;
+        this.maintainerAccountMemberId = maintainerAccountMemberId;
         this.name = name;
         this.plans = plans;
         this.pluralName = pluralName;
@@ -97,6 +105,11 @@ public final class FeatureDetailResponseData {
         this.traitId = traitId;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_linked_resource")
+    public Optional<BillingLinkedResourceResponseData> getBillingLinkedResource() {
+        return billingLinkedResource;
     }
 
     @JsonProperty("created_at")
@@ -144,9 +157,14 @@ public final class FeatureDetailResponseData {
         return lifecyclePhase;
     }
 
-    @JsonProperty("maintainer_id")
-    public Optional<String> getMaintainerId() {
-        return maintainerId;
+    @JsonProperty("maintainer")
+    public Optional<AccountMemberResponseData> getMaintainer() {
+        return maintainer;
+    }
+
+    @JsonProperty("maintainer_account_member_id")
+    public Optional<String> getMaintainerAccountMemberId() {
+        return maintainerAccountMemberId;
     }
 
     @JsonProperty("name")
@@ -196,7 +214,8 @@ public final class FeatureDetailResponseData {
     }
 
     private boolean equalTo(FeatureDetailResponseData other) {
-        return createdAt.equals(other.createdAt)
+        return billingLinkedResource.equals(other.billingLinkedResource)
+                && createdAt.equals(other.createdAt)
                 && description.equals(other.description)
                 && eventSubtype.equals(other.eventSubtype)
                 && eventSummary.equals(other.eventSummary)
@@ -205,7 +224,8 @@ public final class FeatureDetailResponseData {
                 && icon.equals(other.icon)
                 && id.equals(other.id)
                 && lifecyclePhase.equals(other.lifecyclePhase)
-                && maintainerId.equals(other.maintainerId)
+                && maintainer.equals(other.maintainer)
+                && maintainerAccountMemberId.equals(other.maintainerAccountMemberId)
                 && name.equals(other.name)
                 && plans.equals(other.plans)
                 && pluralName.equals(other.pluralName)
@@ -218,6 +238,7 @@ public final class FeatureDetailResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingLinkedResource,
                 this.createdAt,
                 this.description,
                 this.eventSubtype,
@@ -227,7 +248,8 @@ public final class FeatureDetailResponseData {
                 this.icon,
                 this.id,
                 this.lifecyclePhase,
-                this.maintainerId,
+                this.maintainer,
+                this.maintainerAccountMemberId,
                 this.name,
                 this.plans,
                 this.pluralName,
@@ -283,6 +305,10 @@ public final class FeatureDetailResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource);
+
+        _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
+
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
         _FinalStage eventSubtype(String eventSubtype);
@@ -301,9 +327,13 @@ public final class FeatureDetailResponseData {
 
         _FinalStage lifecyclePhase(FeatureLifecyclePhase lifecyclePhase);
 
-        _FinalStage maintainerId(Optional<String> maintainerId);
+        _FinalStage maintainer(Optional<AccountMemberResponseData> maintainer);
 
-        _FinalStage maintainerId(String maintainerId);
+        _FinalStage maintainer(AccountMemberResponseData maintainer);
+
+        _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId);
+
+        _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId);
 
         _FinalStage plans(List<PreviewObject> plans);
 
@@ -362,7 +392,9 @@ public final class FeatureDetailResponseData {
 
         private List<PreviewObject> plans = new ArrayList<>();
 
-        private Optional<String> maintainerId = Optional.empty();
+        private Optional<String> maintainerAccountMemberId = Optional.empty();
+
+        private Optional<AccountMemberResponseData> maintainer = Optional.empty();
 
         private Optional<FeatureLifecyclePhase> lifecyclePhase = Optional.empty();
 
@@ -372,6 +404,8 @@ public final class FeatureDetailResponseData {
 
         private Optional<String> eventSubtype = Optional.empty();
 
+        private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -379,6 +413,7 @@ public final class FeatureDetailResponseData {
 
         @java.lang.Override
         public Builder from(FeatureDetailResponseData other) {
+            billingLinkedResource(other.getBillingLinkedResource());
             createdAt(other.getCreatedAt());
             description(other.getDescription());
             eventSubtype(other.getEventSubtype());
@@ -388,7 +423,8 @@ public final class FeatureDetailResponseData {
             icon(other.getIcon());
             id(other.getId());
             lifecyclePhase(other.getLifecyclePhase());
-            maintainerId(other.getMaintainerId());
+            maintainer(other.getMaintainer());
+            maintainerAccountMemberId(other.getMaintainerAccountMemberId());
             name(other.getName());
             plans(other.getPlans());
             pluralName(other.getPluralName());
@@ -525,15 +561,28 @@ public final class FeatureDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage maintainerId(String maintainerId) {
-            this.maintainerId = Optional.ofNullable(maintainerId);
+        public _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = Optional.ofNullable(maintainerAccountMemberId);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "maintainer_id", nulls = Nulls.SKIP)
-        public _FinalStage maintainerId(Optional<String> maintainerId) {
-            this.maintainerId = maintainerId;
+        @JsonSetter(value = "maintainer_account_member_id", nulls = Nulls.SKIP)
+        public _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = maintainerAccountMemberId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage maintainer(AccountMemberResponseData maintainer) {
+            this.maintainer = Optional.ofNullable(maintainer);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "maintainer", nulls = Nulls.SKIP)
+        public _FinalStage maintainer(Optional<AccountMemberResponseData> maintainer) {
+            this.maintainer = maintainer;
             return this;
         }
 
@@ -601,8 +650,22 @@ public final class FeatureDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource) {
+            this.billingLinkedResource = Optional.ofNullable(billingLinkedResource);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_linked_resource", nulls = Nulls.SKIP)
+        public _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource) {
+            this.billingLinkedResource = billingLinkedResource;
+            return this;
+        }
+
+        @java.lang.Override
         public FeatureDetailResponseData build() {
             return new FeatureDetailResponseData(
+                    billingLinkedResource,
                     createdAt,
                     description,
                     eventSubtype,
@@ -612,7 +675,8 @@ public final class FeatureDetailResponseData {
                     icon,
                     id,
                     lifecyclePhase,
-                    maintainerId,
+                    maintainer,
+                    maintainerAccountMemberId,
                     name,
                     plans,
                     pluralName,

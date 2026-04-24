@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateOrUpdateConditionRequestBody {
     private final Optional<String> comparisonTraitId;
 
-    private final CreateOrUpdateConditionRequestBodyConditionType conditionType;
+    private final ConditionType conditionType;
 
     private final Optional<Double> creditCost;
 
@@ -35,13 +35,13 @@ public final class CreateOrUpdateConditionRequestBody {
 
     private final Optional<String> id;
 
-    private final Optional<CreateOrUpdateConditionRequestBodyMetricPeriod> metricPeriod;
+    private final Optional<MetricPeriod> metricPeriod;
 
-    private final Optional<CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset;
+    private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final Optional<Long> metricValue;
 
-    private final CreateOrUpdateConditionRequestBodyOperator operator;
+    private final ComparableOperator operator;
 
     private final List<String> resourceIds;
 
@@ -53,15 +53,15 @@ public final class CreateOrUpdateConditionRequestBody {
 
     private CreateOrUpdateConditionRequestBody(
             Optional<String> comparisonTraitId,
-            CreateOrUpdateConditionRequestBodyConditionType conditionType,
+            ConditionType conditionType,
             Optional<Double> creditCost,
             Optional<String> creditId,
             Optional<String> eventSubtype,
             Optional<String> id,
-            Optional<CreateOrUpdateConditionRequestBodyMetricPeriod> metricPeriod,
-            Optional<CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<MetricPeriod> metricPeriod,
+            Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Long> metricValue,
-            CreateOrUpdateConditionRequestBodyOperator operator,
+            ComparableOperator operator,
             List<String> resourceIds,
             Optional<String> traitId,
             Optional<String> traitValue,
@@ -91,7 +91,7 @@ public final class CreateOrUpdateConditionRequestBody {
     }
 
     @JsonProperty("condition_type")
-    public CreateOrUpdateConditionRequestBodyConditionType getConditionType() {
+    public ConditionType getConditionType() {
         return conditionType;
     }
 
@@ -128,7 +128,7 @@ public final class CreateOrUpdateConditionRequestBody {
      * @return Period of time over which to measure the track event metric
      */
     @JsonProperty("metric_period")
-    public Optional<CreateOrUpdateConditionRequestBodyMetricPeriod> getMetricPeriod() {
+    public Optional<MetricPeriod> getMetricPeriod() {
         return metricPeriod;
     }
 
@@ -136,7 +136,7 @@ public final class CreateOrUpdateConditionRequestBody {
      * @return When metric_period=current_month, specify whether the month restarts based on the calendar month or the billing period
      */
     @JsonProperty("metric_period_month_reset")
-    public Optional<CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset> getMetricPeriodMonthReset() {
+    public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
     }
 
@@ -149,7 +149,7 @@ public final class CreateOrUpdateConditionRequestBody {
     }
 
     @JsonProperty("operator")
-    public CreateOrUpdateConditionRequestBodyOperator getOperator() {
+    public ComparableOperator getOperator() {
         return operator;
     }
 
@@ -233,13 +233,13 @@ public final class CreateOrUpdateConditionRequestBody {
     }
 
     public interface ConditionTypeStage {
-        OperatorStage conditionType(@NotNull CreateOrUpdateConditionRequestBodyConditionType conditionType);
+        OperatorStage conditionType(@NotNull ConditionType conditionType);
 
         Builder from(CreateOrUpdateConditionRequestBody other);
     }
 
     public interface OperatorStage {
-        _FinalStage operator(@NotNull CreateOrUpdateConditionRequestBodyOperator operator);
+        _FinalStage operator(@NotNull ComparableOperator operator);
     }
 
     public interface _FinalStage {
@@ -284,18 +284,16 @@ public final class CreateOrUpdateConditionRequestBody {
         /**
          * <p>Period of time over which to measure the track event metric</p>
          */
-        _FinalStage metricPeriod(Optional<CreateOrUpdateConditionRequestBodyMetricPeriod> metricPeriod);
+        _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod);
 
-        _FinalStage metricPeriod(CreateOrUpdateConditionRequestBodyMetricPeriod metricPeriod);
+        _FinalStage metricPeriod(MetricPeriod metricPeriod);
 
         /**
          * <p>When metric_period=current_month, specify whether the month restarts based on the calendar month or the billing period</p>
          */
-        _FinalStage metricPeriodMonthReset(
-                Optional<CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
-        _FinalStage metricPeriodMonthReset(
-                CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
         /**
          * <p>Value to compare the track event metric against</p>
@@ -330,9 +328,9 @@ public final class CreateOrUpdateConditionRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ConditionTypeStage, OperatorStage, _FinalStage {
-        private CreateOrUpdateConditionRequestBodyConditionType conditionType;
+        private ConditionType conditionType;
 
-        private CreateOrUpdateConditionRequestBodyOperator operator;
+        private ComparableOperator operator;
 
         private Optional<String> traitValue = Optional.empty();
 
@@ -342,10 +340,9 @@ public final class CreateOrUpdateConditionRequestBody {
 
         private Optional<Long> metricValue = Optional.empty();
 
-        private Optional<CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset =
-                Optional.empty();
+        private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
-        private Optional<CreateOrUpdateConditionRequestBodyMetricPeriod> metricPeriod = Optional.empty();
+        private Optional<MetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<String> id = Optional.empty();
 
@@ -382,14 +379,14 @@ public final class CreateOrUpdateConditionRequestBody {
 
         @java.lang.Override
         @JsonSetter("condition_type")
-        public OperatorStage conditionType(@NotNull CreateOrUpdateConditionRequestBodyConditionType conditionType) {
+        public OperatorStage conditionType(@NotNull ConditionType conditionType) {
             this.conditionType = Objects.requireNonNull(conditionType, "conditionType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("operator")
-        public _FinalStage operator(@NotNull CreateOrUpdateConditionRequestBodyOperator operator) {
+        public _FinalStage operator(@NotNull ComparableOperator operator) {
             this.operator = Objects.requireNonNull(operator, "operator must not be null");
             return this;
         }
@@ -494,8 +491,7 @@ public final class CreateOrUpdateConditionRequestBody {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage metricPeriodMonthReset(
-                CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
@@ -505,8 +501,7 @@ public final class CreateOrUpdateConditionRequestBody {
          */
         @java.lang.Override
         @JsonSetter(value = "metric_period_month_reset", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriodMonthReset(
-                Optional<CreateOrUpdateConditionRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset) {
             this.metricPeriodMonthReset = metricPeriodMonthReset;
             return this;
         }
@@ -516,7 +511,7 @@ public final class CreateOrUpdateConditionRequestBody {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage metricPeriod(CreateOrUpdateConditionRequestBodyMetricPeriod metricPeriod) {
+        public _FinalStage metricPeriod(MetricPeriod metricPeriod) {
             this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
@@ -526,7 +521,7 @@ public final class CreateOrUpdateConditionRequestBody {
          */
         @java.lang.Override
         @JsonSetter(value = "metric_period", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriod(Optional<CreateOrUpdateConditionRequestBodyMetricPeriod> metricPeriod) {
+        public _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod) {
             this.metricPeriod = metricPeriod;
             return this;
         }

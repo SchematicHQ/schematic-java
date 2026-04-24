@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class BillingProviderType {
+    public static final BillingProviderType ORB = new BillingProviderType(Value.ORB, "orb");
+
     public static final BillingProviderType SCHEMATIC = new BillingProviderType(Value.SCHEMATIC, "schematic");
 
     public static final BillingProviderType STRIPE = new BillingProviderType(Value.STRIPE, "stripe");
@@ -43,6 +45,8 @@ public final class BillingProviderType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case ORB:
+                return visitor.visitOrb();
             case SCHEMATIC:
                 return visitor.visitSchematic();
             case STRIPE:
@@ -56,6 +60,8 @@ public final class BillingProviderType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static BillingProviderType valueOf(String value) {
         switch (value) {
+            case "orb":
+                return ORB;
             case "schematic":
                 return SCHEMATIC;
             case "stripe":
@@ -66,6 +72,8 @@ public final class BillingProviderType {
     }
 
     public enum Value {
+        ORB,
+
         SCHEMATIC,
 
         STRIPE,
@@ -74,6 +82,8 @@ public final class BillingProviderType {
     }
 
     public interface Visitor<T> {
+        T visitOrb();
+
         T visitSchematic();
 
         T visitStripe();

@@ -42,6 +42,8 @@ public final class BillingPriceView {
 
     private final Optional<String> meterId;
 
+    private final Optional<String> nickname;
+
     private final long packageSize;
 
     private final long price;
@@ -80,6 +82,7 @@ public final class BillingPriceView {
             Optional<String> meterEventName,
             Optional<String> meterEventPayloadKey,
             Optional<String> meterId,
+            Optional<String> nickname,
             long packageSize,
             long price,
             Optional<String> priceDecimal,
@@ -103,6 +106,7 @@ public final class BillingPriceView {
         this.meterEventName = meterEventName;
         this.meterEventPayloadKey = meterEventPayloadKey;
         this.meterId = meterId;
+        this.nickname = nickname;
         this.packageSize = packageSize;
         this.price = price;
         this.priceDecimal = priceDecimal;
@@ -162,6 +166,11 @@ public final class BillingPriceView {
     @JsonProperty("meter_id")
     public Optional<String> getMeterId() {
         return meterId;
+    }
+
+    @JsonProperty("nickname")
+    public Optional<String> getNickname() {
+        return nickname;
     }
 
     @JsonProperty("package_size")
@@ -250,6 +259,7 @@ public final class BillingPriceView {
                 && meterEventName.equals(other.meterEventName)
                 && meterEventPayloadKey.equals(other.meterEventPayloadKey)
                 && meterId.equals(other.meterId)
+                && nickname.equals(other.nickname)
                 && packageSize == other.packageSize
                 && price == other.price
                 && priceDecimal.equals(other.priceDecimal)
@@ -277,6 +287,7 @@ public final class BillingPriceView {
                 this.meterEventName,
                 this.meterEventPayloadKey,
                 this.meterId,
+                this.nickname,
                 this.packageSize,
                 this.price,
                 this.priceDecimal,
@@ -386,6 +397,10 @@ public final class BillingPriceView {
 
         _FinalStage meterId(String meterId);
 
+        _FinalStage nickname(Optional<String> nickname);
+
+        _FinalStage nickname(String nickname);
+
         _FinalStage priceDecimal(Optional<String> priceDecimal);
 
         _FinalStage priceDecimal(String priceDecimal);
@@ -458,6 +473,8 @@ public final class BillingPriceView {
 
         private Optional<String> priceDecimal = Optional.empty();
 
+        private Optional<String> nickname = Optional.empty();
+
         private Optional<String> meterId = Optional.empty();
 
         private Optional<String> meterEventPayloadKey = Optional.empty();
@@ -480,6 +497,7 @@ public final class BillingPriceView {
             meterEventName(other.getMeterEventName());
             meterEventPayloadKey(other.getMeterEventPayloadKey());
             meterId(other.getMeterId());
+            nickname(other.getNickname());
             packageSize(other.getPackageSize());
             price(other.getPrice());
             priceDecimal(other.getPriceDecimal());
@@ -659,6 +677,19 @@ public final class BillingPriceView {
         }
 
         @java.lang.Override
+        public _FinalStage nickname(String nickname) {
+            this.nickname = Optional.ofNullable(nickname);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "nickname", nulls = Nulls.SKIP)
+        public _FinalStage nickname(Optional<String> nickname) {
+            this.nickname = nickname;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage meterId(String meterId) {
             this.meterId = Optional.ofNullable(meterId);
             return this;
@@ -709,6 +740,7 @@ public final class BillingPriceView {
                     meterEventName,
                     meterEventPayloadKey,
                     meterId,
+                    nickname,
                     packageSize,
                     price,
                     priceDecimal,

@@ -23,19 +23,19 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountFeaturesRequest.Builder.class)
 public final class CountFeaturesRequest {
+    private final Optional<List<FeatureType>> featureType;
+
     private final Optional<List<String>> ids;
 
-    private final Optional<List<FeatureType>> featureType;
+    private final Optional<Boolean> booleanRequireEvent;
+
+    private final Optional<String> planVersionId;
 
     private final Optional<String> q;
 
     private final Optional<String> withoutCompanyOverrideFor;
 
-    private final Optional<String> planVersionId;
-
     private final Optional<String> withoutPlanEntitlementFor;
-
-    private final Optional<Boolean> booleanRequireEvent;
 
     private final Optional<Long> limit;
 
@@ -44,31 +44,26 @@ public final class CountFeaturesRequest {
     private final Map<String, Object> additionalProperties;
 
     private CountFeaturesRequest(
-            Optional<List<String>> ids,
             Optional<List<FeatureType>> featureType,
+            Optional<List<String>> ids,
+            Optional<Boolean> booleanRequireEvent,
+            Optional<String> planVersionId,
             Optional<String> q,
             Optional<String> withoutCompanyOverrideFor,
-            Optional<String> planVersionId,
             Optional<String> withoutPlanEntitlementFor,
-            Optional<Boolean> booleanRequireEvent,
             Optional<Long> limit,
             Optional<Long> offset,
             Map<String, Object> additionalProperties) {
-        this.ids = ids;
         this.featureType = featureType;
+        this.ids = ids;
+        this.booleanRequireEvent = booleanRequireEvent;
+        this.planVersionId = planVersionId;
         this.q = q;
         this.withoutCompanyOverrideFor = withoutCompanyOverrideFor;
-        this.planVersionId = planVersionId;
         this.withoutPlanEntitlementFor = withoutPlanEntitlementFor;
-        this.booleanRequireEvent = booleanRequireEvent;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("ids")
-    public Optional<List<String>> getIds() {
-        return ids;
     }
 
     /**
@@ -77,6 +72,27 @@ public final class CountFeaturesRequest {
     @JsonProperty("feature_type")
     public Optional<List<FeatureType>> getFeatureType() {
         return featureType;
+    }
+
+    @JsonProperty("ids")
+    public Optional<List<String>> getIds() {
+        return ids;
+    }
+
+    /**
+     * @return Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
+     */
+    @JsonProperty("boolean_require_event")
+    public Optional<Boolean> getBooleanRequireEvent() {
+        return booleanRequireEvent;
+    }
+
+    /**
+     * @return Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
+     */
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
     }
 
     /**
@@ -96,27 +112,11 @@ public final class CountFeaturesRequest {
     }
 
     /**
-     * @return Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
-     */
-    @JsonProperty("plan_version_id")
-    public Optional<String> getPlanVersionId() {
-        return planVersionId;
-    }
-
-    /**
      * @return Filter out features that already have a plan entitlement for the specified plan ID
      */
     @JsonProperty("without_plan_entitlement_for")
     public Optional<String> getWithoutPlanEntitlementFor() {
         return withoutPlanEntitlementFor;
-    }
-
-    /**
-     * @return Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
-     */
-    @JsonProperty("boolean_require_event")
-    public Optional<Boolean> getBooleanRequireEvent() {
-        return booleanRequireEvent;
     }
 
     /**
@@ -147,13 +147,13 @@ public final class CountFeaturesRequest {
     }
 
     private boolean equalTo(CountFeaturesRequest other) {
-        return ids.equals(other.ids)
-                && featureType.equals(other.featureType)
+        return featureType.equals(other.featureType)
+                && ids.equals(other.ids)
+                && booleanRequireEvent.equals(other.booleanRequireEvent)
+                && planVersionId.equals(other.planVersionId)
                 && q.equals(other.q)
                 && withoutCompanyOverrideFor.equals(other.withoutCompanyOverrideFor)
-                && planVersionId.equals(other.planVersionId)
                 && withoutPlanEntitlementFor.equals(other.withoutPlanEntitlementFor)
-                && booleanRequireEvent.equals(other.booleanRequireEvent)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
     }
@@ -161,13 +161,13 @@ public final class CountFeaturesRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.ids,
                 this.featureType,
+                this.ids,
+                this.booleanRequireEvent,
+                this.planVersionId,
                 this.q,
                 this.withoutCompanyOverrideFor,
-                this.planVersionId,
                 this.withoutPlanEntitlementFor,
-                this.booleanRequireEvent,
                 this.limit,
                 this.offset);
     }
@@ -183,19 +183,19 @@ public final class CountFeaturesRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<List<FeatureType>> featureType = Optional.empty();
+
         private Optional<List<String>> ids = Optional.empty();
 
-        private Optional<List<FeatureType>> featureType = Optional.empty();
+        private Optional<Boolean> booleanRequireEvent = Optional.empty();
+
+        private Optional<String> planVersionId = Optional.empty();
 
         private Optional<String> q = Optional.empty();
 
         private Optional<String> withoutCompanyOverrideFor = Optional.empty();
 
-        private Optional<String> planVersionId = Optional.empty();
-
         private Optional<String> withoutPlanEntitlementFor = Optional.empty();
-
-        private Optional<Boolean> booleanRequireEvent = Optional.empty();
 
         private Optional<Long> limit = Optional.empty();
 
@@ -207,15 +207,34 @@ public final class CountFeaturesRequest {
         private Builder() {}
 
         public Builder from(CountFeaturesRequest other) {
-            ids(other.getIds());
             featureType(other.getFeatureType());
+            ids(other.getIds());
+            booleanRequireEvent(other.getBooleanRequireEvent());
+            planVersionId(other.getPlanVersionId());
             q(other.getQ());
             withoutCompanyOverrideFor(other.getWithoutCompanyOverrideFor());
-            planVersionId(other.getPlanVersionId());
             withoutPlanEntitlementFor(other.getWithoutPlanEntitlementFor());
-            booleanRequireEvent(other.getBooleanRequireEvent());
             limit(other.getLimit());
             offset(other.getOffset());
+            return this;
+        }
+
+        /**
+         * <p>Filter by one or more feature types (boolean, event, trait)</p>
+         */
+        @JsonSetter(value = "feature_type", nulls = Nulls.SKIP)
+        public Builder featureType(Optional<List<FeatureType>> featureType) {
+            this.featureType = featureType;
+            return this;
+        }
+
+        public Builder featureType(List<FeatureType> featureType) {
+            this.featureType = Optional.ofNullable(featureType);
+            return this;
+        }
+
+        public Builder featureType(FeatureType featureType) {
+            this.featureType = Optional.of(Collections.singletonList(featureType));
             return this;
         }
 
@@ -236,21 +255,30 @@ public final class CountFeaturesRequest {
         }
 
         /**
-         * <p>Filter by one or more feature types (boolean, event, trait)</p>
+         * <p>Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.</p>
          */
-        @JsonSetter(value = "feature_type", nulls = Nulls.SKIP)
-        public Builder featureType(Optional<List<FeatureType>> featureType) {
-            this.featureType = featureType;
+        @JsonSetter(value = "boolean_require_event", nulls = Nulls.SKIP)
+        public Builder booleanRequireEvent(Optional<Boolean> booleanRequireEvent) {
+            this.booleanRequireEvent = booleanRequireEvent;
             return this;
         }
 
-        public Builder featureType(List<FeatureType> featureType) {
-            this.featureType = Optional.ofNullable(featureType);
+        public Builder booleanRequireEvent(Boolean booleanRequireEvent) {
+            this.booleanRequireEvent = Optional.ofNullable(booleanRequireEvent);
             return this;
         }
 
-        public Builder featureType(FeatureType featureType) {
-            this.featureType = Optional.of(Collections.singletonList(featureType));
+        /**
+         * <p>Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used</p>
+         */
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
             return this;
         }
 
@@ -283,20 +311,6 @@ public final class CountFeaturesRequest {
         }
 
         /**
-         * <p>Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used</p>
-         */
-        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
-        public Builder planVersionId(Optional<String> planVersionId) {
-            this.planVersionId = planVersionId;
-            return this;
-        }
-
-        public Builder planVersionId(String planVersionId) {
-            this.planVersionId = Optional.ofNullable(planVersionId);
-            return this;
-        }
-
-        /**
          * <p>Filter out features that already have a plan entitlement for the specified plan ID</p>
          */
         @JsonSetter(value = "without_plan_entitlement_for", nulls = Nulls.SKIP)
@@ -307,20 +321,6 @@ public final class CountFeaturesRequest {
 
         public Builder withoutPlanEntitlementFor(String withoutPlanEntitlementFor) {
             this.withoutPlanEntitlementFor = Optional.ofNullable(withoutPlanEntitlementFor);
-            return this;
-        }
-
-        /**
-         * <p>Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.</p>
-         */
-        @JsonSetter(value = "boolean_require_event", nulls = Nulls.SKIP)
-        public Builder booleanRequireEvent(Optional<Boolean> booleanRequireEvent) {
-            this.booleanRequireEvent = booleanRequireEvent;
-            return this;
-        }
-
-        public Builder booleanRequireEvent(Boolean booleanRequireEvent) {
-            this.booleanRequireEvent = Optional.ofNullable(booleanRequireEvent);
             return this;
         }
 
@@ -354,13 +354,13 @@ public final class CountFeaturesRequest {
 
         public CountFeaturesRequest build() {
             return new CountFeaturesRequest(
-                    ids,
                     featureType,
+                    ids,
+                    booleanRequireEvent,
+                    planVersionId,
                     q,
                     withoutCompanyOverrideFor,
-                    planVersionId,
                     withoutPlanEntitlementFor,
-                    booleanRequireEvent,
                     limit,
                     offset,
                     additionalProperties);

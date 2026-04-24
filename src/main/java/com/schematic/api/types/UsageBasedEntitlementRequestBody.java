@@ -27,6 +27,8 @@ public final class UsageBasedEntitlementRequestBody {
 
     private final Optional<String> currency;
 
+    private final Optional<List<CurrencyPriceRequestBody>> currencyPrices;
+
     private final Optional<String> monthlyMeteredPriceId;
 
     private final Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers;
@@ -59,6 +61,7 @@ public final class UsageBasedEntitlementRequestBody {
             Optional<String> billingProductId,
             Optional<Long> billingThreshold,
             Optional<String> currency,
+            Optional<List<CurrencyPriceRequestBody>> currencyPrices,
             Optional<String> monthlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers,
             Optional<Long> monthlyUnitPrice,
@@ -76,6 +79,7 @@ public final class UsageBasedEntitlementRequestBody {
         this.billingProductId = billingProductId;
         this.billingThreshold = billingThreshold;
         this.currency = currency;
+        this.currencyPrices = currencyPrices;
         this.monthlyMeteredPriceId = monthlyMeteredPriceId;
         this.monthlyPriceTiers = monthlyPriceTiers;
         this.monthlyUnitPrice = monthlyUnitPrice;
@@ -105,6 +109,11 @@ public final class UsageBasedEntitlementRequestBody {
     @JsonProperty("currency")
     public Optional<String> getCurrency() {
         return currency;
+    }
+
+    @JsonProperty("currency_prices")
+    public Optional<List<CurrencyPriceRequestBody>> getCurrencyPrices() {
+        return currencyPrices;
     }
 
     @JsonProperty("monthly_metered_price_id")
@@ -190,6 +199,7 @@ public final class UsageBasedEntitlementRequestBody {
         return billingProductId.equals(other.billingProductId)
                 && billingThreshold.equals(other.billingThreshold)
                 && currency.equals(other.currency)
+                && currencyPrices.equals(other.currencyPrices)
                 && monthlyMeteredPriceId.equals(other.monthlyMeteredPriceId)
                 && monthlyPriceTiers.equals(other.monthlyPriceTiers)
                 && monthlyUnitPrice.equals(other.monthlyUnitPrice)
@@ -211,6 +221,7 @@ public final class UsageBasedEntitlementRequestBody {
                 this.billingProductId,
                 this.billingThreshold,
                 this.currency,
+                this.currencyPrices,
                 this.monthlyMeteredPriceId,
                 this.monthlyPriceTiers,
                 this.monthlyUnitPrice,
@@ -242,6 +253,8 @@ public final class UsageBasedEntitlementRequestBody {
         private Optional<Long> billingThreshold = Optional.empty();
 
         private Optional<String> currency = Optional.empty();
+
+        private Optional<List<CurrencyPriceRequestBody>> currencyPrices = Optional.empty();
 
         private Optional<String> monthlyMeteredPriceId = Optional.empty();
 
@@ -278,6 +291,7 @@ public final class UsageBasedEntitlementRequestBody {
             billingProductId(other.getBillingProductId());
             billingThreshold(other.getBillingThreshold());
             currency(other.getCurrency());
+            currencyPrices(other.getCurrencyPrices());
             monthlyMeteredPriceId(other.getMonthlyMeteredPriceId());
             monthlyPriceTiers(other.getMonthlyPriceTiers());
             monthlyUnitPrice(other.getMonthlyUnitPrice());
@@ -324,6 +338,17 @@ public final class UsageBasedEntitlementRequestBody {
 
         public Builder currency(String currency) {
             this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public Builder currencyPrices(Optional<List<CurrencyPriceRequestBody>> currencyPrices) {
+            this.currencyPrices = currencyPrices;
+            return this;
+        }
+
+        public Builder currencyPrices(List<CurrencyPriceRequestBody> currencyPrices) {
+            this.currencyPrices = Optional.ofNullable(currencyPrices);
             return this;
         }
 
@@ -478,6 +503,7 @@ public final class UsageBasedEntitlementRequestBody {
                     billingProductId,
                     billingThreshold,
                     currency,
+                    currencyPrices,
                     monthlyMeteredPriceId,
                     monthlyPriceTiers,
                     monthlyUnitPrice,

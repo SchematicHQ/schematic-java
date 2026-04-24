@@ -5,24 +5,36 @@ package com.schematic.api.resources.plans;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.plans.requests.CountBillingProductMatchCompaniesRequest;
 import com.schematic.api.resources.plans.requests.CountPlansRequest;
+import com.schematic.api.resources.plans.requests.CreateBillingLinkedPlanRequestBody;
+import com.schematic.api.resources.plans.requests.CreateCustomPlanRequestBody;
 import com.schematic.api.resources.plans.requests.DeletePlanVersionRequest;
 import com.schematic.api.resources.plans.requests.GetPlanRequest;
+import com.schematic.api.resources.plans.requests.ListBillingProductMatchCompaniesRequest;
+import com.schematic.api.resources.plans.requests.ListCustomPlanBillingsRequest;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
 import com.schematic.api.resources.plans.requests.ListPlansRequest;
 import com.schematic.api.resources.plans.requests.PublishPlanVersionRequestBody;
+import com.schematic.api.resources.plans.requests.RetryCustomPlanBillingRequestBody;
 import com.schematic.api.resources.plans.requests.UpdateCompanyPlansRequestBody;
+import com.schematic.api.resources.plans.types.CountBillingProductMatchCompaniesResponse;
 import com.schematic.api.resources.plans.types.CountPlansResponse;
+import com.schematic.api.resources.plans.types.CreateCustomPlanResponse;
 import com.schematic.api.resources.plans.types.CreatePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanVersionResponse;
 import com.schematic.api.resources.plans.types.GetPlanResponse;
+import com.schematic.api.resources.plans.types.ListBillingProductMatchCompaniesResponse;
+import com.schematic.api.resources.plans.types.ListCustomPlanBillingsResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
 import com.schematic.api.resources.plans.types.ListPlansResponse;
 import com.schematic.api.resources.plans.types.PublishPlanVersionResponse;
+import com.schematic.api.resources.plans.types.RetryCustomPlanBillingResponse;
 import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
 import com.schematic.api.resources.plans.types.UpdatePlanResponse;
 import com.schematic.api.resources.plans.types.UpsertBillingProductPlanResponse;
+import com.schematic.api.resources.plans.types.UpsertPlanForBillingProductResponse;
 import com.schematic.api.types.CreatePlanRequestBody;
 import com.schematic.api.types.UpdatePlanRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
@@ -55,6 +67,47 @@ public class AsyncPlansClient {
         return this.rawClient
                 .updateCompanyPlans(companyPlanId, request, requestOptions)
                 .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCustomPlanBillingsResponse> listCustomPlanBillings() {
+        return this.rawClient.listCustomPlanBillings().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCustomPlanBillingsResponse> listCustomPlanBillings(RequestOptions requestOptions) {
+        return this.rawClient.listCustomPlanBillings(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCustomPlanBillingsResponse> listCustomPlanBillings(
+            ListCustomPlanBillingsRequest request) {
+        return this.rawClient.listCustomPlanBillings(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCustomPlanBillingsResponse> listCustomPlanBillings(
+            ListCustomPlanBillingsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listCustomPlanBillings(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<RetryCustomPlanBillingResponse> retryCustomPlanBilling(
+            String customPlanBillingId, RetryCustomPlanBillingRequestBody request) {
+        return this.rawClient
+                .retryCustomPlanBilling(customPlanBillingId, request)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<RetryCustomPlanBillingResponse> retryCustomPlanBilling(
+            String customPlanBillingId, RetryCustomPlanBillingRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .retryCustomPlanBilling(customPlanBillingId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CreateCustomPlanResponse> createCustomPlan(CreateCustomPlanRequestBody request) {
+        return this.rawClient.createCustomPlan(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CreateCustomPlanResponse> createCustomPlan(
+            CreateCustomPlanRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.createCustomPlan(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListPlansResponse> listPlans() {
@@ -125,6 +178,42 @@ public class AsyncPlansClient {
             String planId, UpsertBillingProductRequestBody request, RequestOptions requestOptions) {
         return this.rawClient
                 .upsertBillingProductPlan(planId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpsertPlanForBillingProductResponse> upsertPlanForBillingProduct(
+            CreateBillingLinkedPlanRequestBody request) {
+        return this.rawClient.upsertPlanForBillingProduct(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpsertPlanForBillingProductResponse> upsertPlanForBillingProduct(
+            CreateBillingLinkedPlanRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .upsertPlanForBillingProduct(request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListBillingProductMatchCompaniesResponse> listBillingProductMatchCompanies(
+            ListBillingProductMatchCompaniesRequest request) {
+        return this.rawClient.listBillingProductMatchCompanies(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListBillingProductMatchCompaniesResponse> listBillingProductMatchCompanies(
+            ListBillingProductMatchCompaniesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .listBillingProductMatchCompanies(request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountBillingProductMatchCompaniesResponse> countBillingProductMatchCompanies(
+            CountBillingProductMatchCompaniesRequest request) {
+        return this.rawClient.countBillingProductMatchCompanies(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountBillingProductMatchCompaniesResponse> countBillingProductMatchCompanies(
+            CountBillingProductMatchCompaniesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .countBillingProductMatchCompanies(request, requestOptions)
                 .thenApply(response -> response.body());
     }
 

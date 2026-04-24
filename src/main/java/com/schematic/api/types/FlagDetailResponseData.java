@@ -42,7 +42,9 @@ public final class FlagDetailResponseData {
 
     private final Optional<OffsetDateTime> lastCheckedAt;
 
-    private final Optional<String> maintainerId;
+    private final Optional<AccountMemberResponseData> maintainer;
+
+    private final Optional<String> maintainerAccountMemberId;
 
     private final String name;
 
@@ -62,7 +64,8 @@ public final class FlagDetailResponseData {
             String id,
             String key,
             Optional<OffsetDateTime> lastCheckedAt,
-            Optional<String> maintainerId,
+            Optional<AccountMemberResponseData> maintainer,
+            Optional<String> maintainerAccountMemberId,
             String name,
             List<RuleDetailResponseData> rules,
             OffsetDateTime updatedAt,
@@ -76,7 +79,8 @@ public final class FlagDetailResponseData {
         this.id = id;
         this.key = key;
         this.lastCheckedAt = lastCheckedAt;
-        this.maintainerId = maintainerId;
+        this.maintainer = maintainer;
+        this.maintainerAccountMemberId = maintainerAccountMemberId;
         this.name = name;
         this.rules = rules;
         this.updatedAt = updatedAt;
@@ -128,9 +132,14 @@ public final class FlagDetailResponseData {
         return lastCheckedAt;
     }
 
-    @JsonProperty("maintainer_id")
-    public Optional<String> getMaintainerId() {
-        return maintainerId;
+    @JsonProperty("maintainer")
+    public Optional<AccountMemberResponseData> getMaintainer() {
+        return maintainer;
+    }
+
+    @JsonProperty("maintainer_account_member_id")
+    public Optional<String> getMaintainerAccountMemberId() {
+        return maintainerAccountMemberId;
     }
 
     @JsonProperty("name")
@@ -169,7 +178,8 @@ public final class FlagDetailResponseData {
                 && id.equals(other.id)
                 && key.equals(other.key)
                 && lastCheckedAt.equals(other.lastCheckedAt)
-                && maintainerId.equals(other.maintainerId)
+                && maintainer.equals(other.maintainer)
+                && maintainerAccountMemberId.equals(other.maintainerAccountMemberId)
                 && name.equals(other.name)
                 && rules.equals(other.rules)
                 && updatedAt.equals(other.updatedAt);
@@ -187,7 +197,8 @@ public final class FlagDetailResponseData {
                 this.id,
                 this.key,
                 this.lastCheckedAt,
-                this.maintainerId,
+                this.maintainer,
+                this.maintainerAccountMemberId,
                 this.name,
                 this.rules,
                 this.updatedAt);
@@ -255,9 +266,13 @@ public final class FlagDetailResponseData {
 
         _FinalStage lastCheckedAt(OffsetDateTime lastCheckedAt);
 
-        _FinalStage maintainerId(Optional<String> maintainerId);
+        _FinalStage maintainer(Optional<AccountMemberResponseData> maintainer);
 
-        _FinalStage maintainerId(String maintainerId);
+        _FinalStage maintainer(AccountMemberResponseData maintainer);
+
+        _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId);
+
+        _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId);
 
         _FinalStage rules(List<RuleDetailResponseData> rules);
 
@@ -295,7 +310,9 @@ public final class FlagDetailResponseData {
 
         private List<RuleDetailResponseData> rules = new ArrayList<>();
 
-        private Optional<String> maintainerId = Optional.empty();
+        private Optional<String> maintainerAccountMemberId = Optional.empty();
+
+        private Optional<AccountMemberResponseData> maintainer = Optional.empty();
 
         private Optional<OffsetDateTime> lastCheckedAt = Optional.empty();
 
@@ -319,7 +336,8 @@ public final class FlagDetailResponseData {
             id(other.getId());
             key(other.getKey());
             lastCheckedAt(other.getLastCheckedAt());
-            maintainerId(other.getMaintainerId());
+            maintainer(other.getMaintainer());
+            maintainerAccountMemberId(other.getMaintainerAccountMemberId());
             name(other.getName());
             rules(other.getRules());
             updatedAt(other.getUpdatedAt());
@@ -407,15 +425,28 @@ public final class FlagDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage maintainerId(String maintainerId) {
-            this.maintainerId = Optional.ofNullable(maintainerId);
+        public _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = Optional.ofNullable(maintainerAccountMemberId);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "maintainer_id", nulls = Nulls.SKIP)
-        public _FinalStage maintainerId(Optional<String> maintainerId) {
-            this.maintainerId = maintainerId;
+        @JsonSetter(value = "maintainer_account_member_id", nulls = Nulls.SKIP)
+        public _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = maintainerAccountMemberId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage maintainer(AccountMemberResponseData maintainer) {
+            this.maintainer = Optional.ofNullable(maintainer);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "maintainer", nulls = Nulls.SKIP)
+        public _FinalStage maintainer(Optional<AccountMemberResponseData> maintainer) {
+            this.maintainer = maintainer;
             return this;
         }
 
@@ -470,7 +501,8 @@ public final class FlagDetailResponseData {
                     id,
                     key,
                     lastCheckedAt,
-                    maintainerId,
+                    maintainer,
+                    maintainerAccountMemberId,
                     name,
                     rules,
                     updatedAt,

@@ -23,9 +23,9 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdateEntitlementReqCommon {
     private final Optional<Double> creditConsumptionRate;
 
-    private final Optional<UpdateEntitlementReqCommonMetricPeriod> metricPeriod;
+    private final Optional<MetricPeriod> metricPeriod;
 
-    private final Optional<UpdateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset;
+    private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final Optional<Boolean> valueBool;
 
@@ -41,8 +41,8 @@ public final class UpdateEntitlementReqCommon {
 
     private UpdateEntitlementReqCommon(
             Optional<Double> creditConsumptionRate,
-            Optional<UpdateEntitlementReqCommonMetricPeriod> metricPeriod,
-            Optional<UpdateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<MetricPeriod> metricPeriod,
+            Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Boolean> valueBool,
             Optional<String> valueCreditId,
             Optional<Long> valueNumeric,
@@ -66,12 +66,12 @@ public final class UpdateEntitlementReqCommon {
     }
 
     @JsonProperty("metric_period")
-    public Optional<UpdateEntitlementReqCommonMetricPeriod> getMetricPeriod() {
+    public Optional<MetricPeriod> getMetricPeriod() {
         return metricPeriod;
     }
 
     @JsonProperty("metric_period_month_reset")
-    public Optional<UpdateEntitlementReqCommonMetricPeriodMonthReset> getMetricPeriodMonthReset() {
+    public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
     }
 
@@ -161,14 +161,13 @@ public final class UpdateEntitlementReqCommon {
 
         _FinalStage creditConsumptionRate(Double creditConsumptionRate);
 
-        _FinalStage metricPeriod(Optional<UpdateEntitlementReqCommonMetricPeriod> metricPeriod);
+        _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod);
 
-        _FinalStage metricPeriod(UpdateEntitlementReqCommonMetricPeriod metricPeriod);
+        _FinalStage metricPeriod(MetricPeriod metricPeriod);
 
-        _FinalStage metricPeriodMonthReset(
-                Optional<UpdateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
-        _FinalStage metricPeriodMonthReset(UpdateEntitlementReqCommonMetricPeriodMonthReset metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
@@ -199,9 +198,9 @@ public final class UpdateEntitlementReqCommon {
 
         private Optional<Boolean> valueBool = Optional.empty();
 
-        private Optional<UpdateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
+        private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
-        private Optional<UpdateEntitlementReqCommonMetricPeriod> metricPeriod = Optional.empty();
+        private Optional<MetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<Double> creditConsumptionRate = Optional.empty();
 
@@ -283,29 +282,27 @@ public final class UpdateEntitlementReqCommon {
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriodMonthReset(
-                UpdateEntitlementReqCommonMetricPeriodMonthReset metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period_month_reset", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriodMonthReset(
-                Optional<UpdateEntitlementReqCommonMetricPeriodMonthReset> metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset) {
             this.metricPeriodMonthReset = metricPeriodMonthReset;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriod(UpdateEntitlementReqCommonMetricPeriod metricPeriod) {
+        public _FinalStage metricPeriod(MetricPeriod metricPeriod) {
             this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriod(Optional<UpdateEntitlementReqCommonMetricPeriod> metricPeriod) {
+        public _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod) {
             this.metricPeriod = metricPeriod;
             return this;
         }

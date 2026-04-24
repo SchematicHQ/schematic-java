@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import com.schematic.api.resources.entitlements.types.CreateCompanyOverrideRequestBodyMetricPeriod;
-import com.schematic.api.resources.entitlements.types.CreateCompanyOverrideRequestBodyMetricPeriodMonthReset;
 import com.schematic.api.types.EntitlementValueType;
+import com.schematic.api.types.MetricPeriod;
+import com.schematic.api.types.MetricPeriodMonthReset;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,9 +33,9 @@ public final class CreateCompanyOverrideRequestBody {
 
     private final String featureId;
 
-    private final Optional<CreateCompanyOverrideRequestBodyMetricPeriod> metricPeriod;
+    private final Optional<MetricPeriod> metricPeriod;
 
-    private final Optional<CreateCompanyOverrideRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset;
+    private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final Optional<String> note;
 
@@ -56,8 +56,8 @@ public final class CreateCompanyOverrideRequestBody {
             Optional<Double> creditConsumptionRate,
             Optional<OffsetDateTime> expirationDate,
             String featureId,
-            Optional<CreateCompanyOverrideRequestBodyMetricPeriod> metricPeriod,
-            Optional<CreateCompanyOverrideRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<MetricPeriod> metricPeriod,
+            Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<String> note,
             Optional<Boolean> valueBool,
             Optional<String> valueCreditId,
@@ -101,12 +101,12 @@ public final class CreateCompanyOverrideRequestBody {
     }
 
     @JsonProperty("metric_period")
-    public Optional<CreateCompanyOverrideRequestBodyMetricPeriod> getMetricPeriod() {
+    public Optional<MetricPeriod> getMetricPeriod() {
         return metricPeriod;
     }
 
     @JsonProperty("metric_period_month_reset")
-    public Optional<CreateCompanyOverrideRequestBodyMetricPeriodMonthReset> getMetricPeriodMonthReset() {
+    public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
     }
 
@@ -221,15 +221,13 @@ public final class CreateCompanyOverrideRequestBody {
 
         _FinalStage expirationDate(OffsetDateTime expirationDate);
 
-        _FinalStage metricPeriod(Optional<CreateCompanyOverrideRequestBodyMetricPeriod> metricPeriod);
+        _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod);
 
-        _FinalStage metricPeriod(CreateCompanyOverrideRequestBodyMetricPeriod metricPeriod);
+        _FinalStage metricPeriod(MetricPeriod metricPeriod);
 
-        _FinalStage metricPeriodMonthReset(
-                Optional<CreateCompanyOverrideRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
-        _FinalStage metricPeriodMonthReset(
-                CreateCompanyOverrideRequestBodyMetricPeriodMonthReset metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
         _FinalStage note(Optional<String> note);
 
@@ -270,10 +268,9 @@ public final class CreateCompanyOverrideRequestBody {
 
         private Optional<String> note = Optional.empty();
 
-        private Optional<CreateCompanyOverrideRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset =
-                Optional.empty();
+        private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
-        private Optional<CreateCompanyOverrideRequestBodyMetricPeriod> metricPeriod = Optional.empty();
+        private Optional<MetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<OffsetDateTime> expirationDate = Optional.empty();
 
@@ -388,29 +385,27 @@ public final class CreateCompanyOverrideRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriodMonthReset(
-                CreateCompanyOverrideRequestBodyMetricPeriodMonthReset metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period_month_reset", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriodMonthReset(
-                Optional<CreateCompanyOverrideRequestBodyMetricPeriodMonthReset> metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset) {
             this.metricPeriodMonthReset = metricPeriodMonthReset;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriod(CreateCompanyOverrideRequestBodyMetricPeriod metricPeriod) {
+        public _FinalStage metricPeriod(MetricPeriod metricPeriod) {
             this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriod(Optional<CreateCompanyOverrideRequestBodyMetricPeriod> metricPeriod) {
+        public _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod) {
             this.metricPeriod = metricPeriod;
             return this;
         }

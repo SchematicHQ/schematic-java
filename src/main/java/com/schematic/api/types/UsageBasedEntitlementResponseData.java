@@ -29,9 +29,9 @@ public final class UsageBasedEntitlementResponseData {
 
     private final Optional<BillingPriceView> meteredPrice;
 
-    private final Optional<String> metricPeriod;
+    private final Optional<MetricPeriod> metricPeriod;
 
-    private final Optional<String> metricPeriodMonthReset;
+    private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final Optional<BillingPriceView> monthlyUsageBasedPrice;
 
@@ -52,8 +52,8 @@ public final class UsageBasedEntitlementResponseData {
             Optional<Double> consumptionRate,
             String featureId,
             Optional<BillingPriceView> meteredPrice,
-            Optional<String> metricPeriod,
-            Optional<String> metricPeriodMonthReset,
+            Optional<MetricPeriod> metricPeriod,
+            Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<BillingPriceView> monthlyUsageBasedPrice,
             Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<Boolean> valueBool,
@@ -97,12 +97,12 @@ public final class UsageBasedEntitlementResponseData {
     }
 
     @JsonProperty("metric_period")
-    public Optional<String> getMetricPeriod() {
+    public Optional<MetricPeriod> getMetricPeriod() {
         return metricPeriod;
     }
 
     @JsonProperty("metric_period_month_reset")
-    public Optional<String> getMetricPeriodMonthReset() {
+    public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
     }
 
@@ -217,13 +217,13 @@ public final class UsageBasedEntitlementResponseData {
 
         _FinalStage meteredPrice(BillingPriceView meteredPrice);
 
-        _FinalStage metricPeriod(Optional<String> metricPeriod);
+        _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod);
 
-        _FinalStage metricPeriod(String metricPeriod);
+        _FinalStage metricPeriod(MetricPeriod metricPeriod);
 
-        _FinalStage metricPeriodMonthReset(Optional<String> metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
-        _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
         _FinalStage monthlyUsageBasedPrice(Optional<BillingPriceView> monthlyUsageBasedPrice);
 
@@ -262,9 +262,9 @@ public final class UsageBasedEntitlementResponseData {
 
         private Optional<BillingPriceView> monthlyUsageBasedPrice = Optional.empty();
 
-        private Optional<String> metricPeriodMonthReset = Optional.empty();
+        private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
-        private Optional<String> metricPeriod = Optional.empty();
+        private Optional<MetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<BillingPriceView> meteredPrice = Optional.empty();
 
@@ -374,27 +374,27 @@ public final class UsageBasedEntitlementResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period_month_reset", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriodMonthReset(Optional<String> metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset) {
             this.metricPeriodMonthReset = metricPeriodMonthReset;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriod(String metricPeriod) {
+        public _FinalStage metricPeriod(MetricPeriod metricPeriod) {
             this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriod(Optional<String> metricPeriod) {
+        public _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod) {
             this.metricPeriod = metricPeriod;
             return this;
         }

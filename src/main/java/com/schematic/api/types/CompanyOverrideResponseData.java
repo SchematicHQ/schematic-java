@@ -42,9 +42,9 @@ public final class CompanyOverrideResponseData {
 
     private final String id;
 
-    private final Optional<String> metricPeriod;
+    private final Optional<MetricPeriod> metricPeriod;
 
-    private final Optional<String> metricPeriodMonthReset;
+    private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final List<CompanyOverrideNoteResponseData> notes;
 
@@ -76,8 +76,8 @@ public final class CompanyOverrideResponseData {
             Optional<FeatureResponseData> feature,
             String featureId,
             String id,
-            Optional<String> metricPeriod,
-            Optional<String> metricPeriodMonthReset,
+            Optional<MetricPeriod> metricPeriod,
+            Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             List<CompanyOverrideNoteResponseData> notes,
             Optional<String> ruleId,
             Optional<String> ruleIdUsageExceeded,
@@ -157,12 +157,12 @@ public final class CompanyOverrideResponseData {
     }
 
     @JsonProperty("metric_period")
-    public Optional<String> getMetricPeriod() {
+    public Optional<MetricPeriod> getMetricPeriod() {
         return metricPeriod;
     }
 
     @JsonProperty("metric_period_month_reset")
-    public Optional<String> getMetricPeriodMonthReset() {
+    public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
     }
 
@@ -332,13 +332,13 @@ public final class CompanyOverrideResponseData {
 
         _FinalStage feature(FeatureResponseData feature);
 
-        _FinalStage metricPeriod(Optional<String> metricPeriod);
+        _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod);
 
-        _FinalStage metricPeriod(String metricPeriod);
+        _FinalStage metricPeriod(MetricPeriod metricPeriod);
 
-        _FinalStage metricPeriodMonthReset(Optional<String> metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
-        _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
         _FinalStage notes(List<CompanyOverrideNoteResponseData> notes);
 
@@ -409,9 +409,9 @@ public final class CompanyOverrideResponseData {
 
         private List<CompanyOverrideNoteResponseData> notes = new ArrayList<>();
 
-        private Optional<String> metricPeriodMonthReset = Optional.empty();
+        private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
-        private Optional<String> metricPeriod = Optional.empty();
+        private Optional<MetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<FeatureResponseData> feature = Optional.empty();
 
@@ -603,27 +603,27 @@ public final class CompanyOverrideResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period_month_reset", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriodMonthReset(Optional<String> metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset) {
             this.metricPeriodMonthReset = metricPeriodMonthReset;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriod(String metricPeriod) {
+        public _FinalStage metricPeriod(MetricPeriod metricPeriod) {
             this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriod(Optional<String> metricPeriod) {
+        public _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod) {
             this.metricPeriod = metricPeriod;
             return this;
         }

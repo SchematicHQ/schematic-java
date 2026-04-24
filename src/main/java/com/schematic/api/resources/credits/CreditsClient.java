@@ -41,6 +41,7 @@ import com.schematic.api.resources.credits.types.DeleteCreditBundleResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
 import com.schematic.api.resources.credits.types.GetEnrichedCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
+import com.schematic.api.resources.credits.types.GetSingleBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.GrantBillingCreditsToCompanyResponse;
 import com.schematic.api.resources.credits.types.ListBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.ListBillingPlanCreditGrantsResponse;
@@ -356,6 +357,17 @@ public class CreditsClient {
             CreateBillingPlanCreditGrantRequestBody request, RequestOptions requestOptions) {
         return this.rawClient
                 .createBillingPlanCreditGrant(request, requestOptions)
+                .body();
+    }
+
+    public GetSingleBillingPlanCreditGrantResponse getSingleBillingPlanCreditGrant(String planGrantId) {
+        return this.rawClient.getSingleBillingPlanCreditGrant(planGrantId).body();
+    }
+
+    public GetSingleBillingPlanCreditGrantResponse getSingleBillingPlanCreditGrant(
+            String planGrantId, RequestOptions requestOptions) {
+        return this.rawClient
+                .getSingleBillingPlanCreditGrant(planGrantId, requestOptions)
                 .body();
     }
 

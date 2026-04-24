@@ -28,6 +28,8 @@ public final class AuditLogResponseData {
 
     private final Optional<OffsetDateTime> endedAt;
 
+    private final Optional<EnvironmentResponseData> environment;
+
     private final Optional<String> environmentId;
 
     private final String id;
@@ -64,6 +66,7 @@ public final class AuditLogResponseData {
             ActorType actorType,
             Optional<String> apiKeyId,
             Optional<OffsetDateTime> endedAt,
+            Optional<EnvironmentResponseData> environment,
             Optional<String> environmentId,
             String id,
             String method,
@@ -83,6 +86,7 @@ public final class AuditLogResponseData {
         this.actorType = actorType;
         this.apiKeyId = apiKeyId;
         this.endedAt = endedAt;
+        this.environment = environment;
         this.environmentId = environmentId;
         this.id = id;
         this.method = method;
@@ -114,6 +118,11 @@ public final class AuditLogResponseData {
     @JsonProperty("ended_at")
     public Optional<OffsetDateTime> getEndedAt() {
         return endedAt;
+    }
+
+    @JsonProperty("environment")
+    public Optional<EnvironmentResponseData> getEnvironment() {
+        return environment;
     }
 
     @JsonProperty("environment_id")
@@ -206,6 +215,7 @@ public final class AuditLogResponseData {
         return actorType.equals(other.actorType)
                 && apiKeyId.equals(other.apiKeyId)
                 && endedAt.equals(other.endedAt)
+                && environment.equals(other.environment)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
                 && method.equals(other.method)
@@ -229,6 +239,7 @@ public final class AuditLogResponseData {
                 this.actorType,
                 this.apiKeyId,
                 this.endedAt,
+                this.environment,
                 this.environmentId,
                 this.id,
                 this.method,
@@ -291,6 +302,10 @@ public final class AuditLogResponseData {
         _FinalStage endedAt(Optional<OffsetDateTime> endedAt);
 
         _FinalStage endedAt(OffsetDateTime endedAt);
+
+        _FinalStage environment(Optional<EnvironmentResponseData> environment);
+
+        _FinalStage environment(EnvironmentResponseData environment);
 
         _FinalStage environmentId(Optional<String> environmentId);
 
@@ -372,6 +387,8 @@ public final class AuditLogResponseData {
 
         private Optional<String> environmentId = Optional.empty();
 
+        private Optional<EnvironmentResponseData> environment = Optional.empty();
+
         private Optional<OffsetDateTime> endedAt = Optional.empty();
 
         private Optional<String> apiKeyId = Optional.empty();
@@ -386,6 +403,7 @@ public final class AuditLogResponseData {
             actorType(other.getActorType());
             apiKeyId(other.getApiKeyId());
             endedAt(other.getEndedAt());
+            environment(other.getEnvironment());
             environmentId(other.getEnvironmentId());
             id(other.getId());
             method(other.getMethod());
@@ -583,6 +601,19 @@ public final class AuditLogResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage environment(EnvironmentResponseData environment) {
+            this.environment = Optional.ofNullable(environment);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "environment", nulls = Nulls.SKIP)
+        public _FinalStage environment(Optional<EnvironmentResponseData> environment) {
+            this.environment = environment;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage endedAt(OffsetDateTime endedAt) {
             this.endedAt = Optional.ofNullable(endedAt);
             return this;
@@ -614,6 +645,7 @@ public final class AuditLogResponseData {
                     actorType,
                     apiKeyId,
                     endedAt,
+                    environment,
                     environmentId,
                     id,
                     method,

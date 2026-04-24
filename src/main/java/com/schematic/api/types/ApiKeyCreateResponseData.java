@@ -28,6 +28,8 @@ public final class ApiKeyCreateResponseData {
 
     private final Optional<String> description;
 
+    private final Optional<EnvironmentResponseData> environment;
+
     private final Optional<String> environmentId;
 
     private final String id;
@@ -49,6 +51,7 @@ public final class ApiKeyCreateResponseData {
     private ApiKeyCreateResponseData(
             OffsetDateTime createdAt,
             Optional<String> description,
+            Optional<EnvironmentResponseData> environment,
             Optional<String> environmentId,
             String id,
             Optional<OffsetDateTime> lastUsedAt,
@@ -60,6 +63,7 @@ public final class ApiKeyCreateResponseData {
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.description = description;
+        this.environment = environment;
         this.environmentId = environmentId;
         this.id = id;
         this.lastUsedAt = lastUsedAt;
@@ -79,6 +83,11 @@ public final class ApiKeyCreateResponseData {
     @JsonProperty("description")
     public Optional<String> getDescription() {
         return description;
+    }
+
+    @JsonProperty("environment")
+    public Optional<EnvironmentResponseData> getEnvironment() {
+        return environment;
     }
 
     @JsonProperty("environment_id")
@@ -135,6 +144,7 @@ public final class ApiKeyCreateResponseData {
     private boolean equalTo(ApiKeyCreateResponseData other) {
         return createdAt.equals(other.createdAt)
                 && description.equals(other.description)
+                && environment.equals(other.environment)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
                 && lastUsedAt.equals(other.lastUsedAt)
@@ -150,6 +160,7 @@ public final class ApiKeyCreateResponseData {
         return Objects.hash(
                 this.createdAt,
                 this.description,
+                this.environment,
                 this.environmentId,
                 this.id,
                 this.lastUsedAt,
@@ -206,6 +217,10 @@ public final class ApiKeyCreateResponseData {
 
         _FinalStage description(String description);
 
+        _FinalStage environment(Optional<EnvironmentResponseData> environment);
+
+        _FinalStage environment(EnvironmentResponseData environment);
+
         _FinalStage environmentId(Optional<String> environmentId);
 
         _FinalStage environmentId(String environmentId);
@@ -242,6 +257,8 @@ public final class ApiKeyCreateResponseData {
 
         private Optional<String> environmentId = Optional.empty();
 
+        private Optional<EnvironmentResponseData> environment = Optional.empty();
+
         private Optional<String> description = Optional.empty();
 
         @JsonAnySetter
@@ -253,6 +270,7 @@ public final class ApiKeyCreateResponseData {
         public Builder from(ApiKeyCreateResponseData other) {
             createdAt(other.getCreatedAt());
             description(other.getDescription());
+            environment(other.getEnvironment());
             environmentId(other.getEnvironmentId());
             id(other.getId());
             lastUsedAt(other.getLastUsedAt());
@@ -357,6 +375,19 @@ public final class ApiKeyCreateResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage environment(EnvironmentResponseData environment) {
+            this.environment = Optional.ofNullable(environment);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "environment", nulls = Nulls.SKIP)
+        public _FinalStage environment(Optional<EnvironmentResponseData> environment) {
+            this.environment = environment;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage description(String description) {
             this.description = Optional.ofNullable(description);
             return this;
@@ -374,6 +405,7 @@ public final class ApiKeyCreateResponseData {
             return new ApiKeyCreateResponseData(
                     createdAt,
                     description,
+                    environment,
                     environmentId,
                     id,
                     lastUsedAt,

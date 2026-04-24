@@ -34,7 +34,7 @@ public final class RuleResponseData {
 
     private final long priority;
 
-    private final String ruleType;
+    private final RuleType ruleType;
 
     private final OffsetDateTime updatedAt;
 
@@ -49,7 +49,7 @@ public final class RuleResponseData {
             String id,
             String name,
             long priority,
-            String ruleType,
+            RuleType ruleType,
             OffsetDateTime updatedAt,
             boolean value,
             Map<String, Object> additionalProperties) {
@@ -96,7 +96,7 @@ public final class RuleResponseData {
     }
 
     @JsonProperty("rule_type")
-    public String getRuleType() {
+    public RuleType getRuleType() {
         return ruleType;
     }
 
@@ -179,7 +179,7 @@ public final class RuleResponseData {
     }
 
     public interface RuleTypeStage {
-        UpdatedAtStage ruleType(@NotNull String ruleType);
+        UpdatedAtStage ruleType(@NotNull RuleType ruleType);
     }
 
     public interface UpdatedAtStage {
@@ -223,7 +223,7 @@ public final class RuleResponseData {
 
         private long priority;
 
-        private String ruleType;
+        private RuleType ruleType;
 
         private OffsetDateTime updatedAt;
 
@@ -287,7 +287,7 @@ public final class RuleResponseData {
 
         @java.lang.Override
         @JsonSetter("rule_type")
-        public UpdatedAtStage ruleType(@NotNull String ruleType) {
+        public UpdatedAtStage ruleType(@NotNull RuleType ruleType) {
             this.ruleType = Objects.requireNonNull(ruleType, "ruleType must not be null");
             return this;
         }

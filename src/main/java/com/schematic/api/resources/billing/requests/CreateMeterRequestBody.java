@@ -9,11 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -27,6 +30,8 @@ public final class CreateMeterRequestBody {
 
     private final String externalId;
 
+    private final Optional<BillingProviderType> providerType;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateMeterRequestBody(
@@ -34,11 +39,13 @@ public final class CreateMeterRequestBody {
             String eventName,
             String eventPayloadKey,
             String externalId,
+            Optional<BillingProviderType> providerType,
             Map<String, Object> additionalProperties) {
         this.displayName = displayName;
         this.eventName = eventName;
         this.eventPayloadKey = eventPayloadKey;
         this.externalId = externalId;
+        this.providerType = providerType;
         this.additionalProperties = additionalProperties;
     }
 
@@ -62,6 +69,11 @@ public final class CreateMeterRequestBody {
         return externalId;
     }
 
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -77,12 +89,13 @@ public final class CreateMeterRequestBody {
         return displayName.equals(other.displayName)
                 && eventName.equals(other.eventName)
                 && eventPayloadKey.equals(other.eventPayloadKey)
-                && externalId.equals(other.externalId);
+                && externalId.equals(other.externalId)
+                && providerType.equals(other.providerType);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.displayName, this.eventName, this.eventPayloadKey, this.externalId);
+        return Objects.hash(this.displayName, this.eventName, this.eventPayloadKey, this.externalId, this.providerType);
     }
 
     @java.lang.Override
@@ -118,6 +131,10 @@ public final class CreateMeterRequestBody {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage providerType(Optional<BillingProviderType> providerType);
+
+        _FinalStage providerType(BillingProviderType providerType);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -131,6 +148,8 @@ public final class CreateMeterRequestBody {
 
         private String externalId;
 
+        private Optional<BillingProviderType> providerType = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -142,6 +161,7 @@ public final class CreateMeterRequestBody {
             eventName(other.getEventName());
             eventPayloadKey(other.getEventPayloadKey());
             externalId(other.getExternalId());
+            providerType(other.getProviderType());
             return this;
         }
 
@@ -174,9 +194,22 @@ public final class CreateMeterRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public _FinalStage providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
+            return this;
+        }
+
+        @java.lang.Override
         public CreateMeterRequestBody build() {
             return new CreateMeterRequestBody(
-                    displayName, eventName, eventPayloadKey, externalId, additionalProperties);
+                    displayName, eventName, eventPayloadKey, externalId, providerType, additionalProperties);
         }
 
         @java.lang.Override

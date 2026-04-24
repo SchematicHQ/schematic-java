@@ -28,13 +28,21 @@ public final class PlanDetailResponseData {
 
     private final Optional<String> audienceType;
 
+    private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
+
     private final Optional<BillingProductDetailResponseData> billingProduct;
 
     private final ChargeType chargeType;
 
     private final long companyCount;
 
-    private final PlanControlledByType controlledBy;
+    private final Optional<String> companyId;
+
+    private final Optional<String> companyName;
+
+    private final BillingProviderType controlledBy;
+
+    private final Optional<String> copiedFromPlanId;
 
     private final OffsetDateTime createdAt;
 
@@ -44,9 +52,9 @@ public final class PlanDetailResponseData {
 
     private final Optional<PlanVersionResponseData> draftVersion;
 
-    private final List<FeatureDetailResponseData> features;
+    private final List<FeatureInPlanResponseData> features;
 
-    private final String icon;
+    private final PlanIcon icon;
 
     private final String id;
 
@@ -79,16 +87,20 @@ public final class PlanDetailResponseData {
     private PlanDetailResponseData(
             Optional<PlanVersionResponseData> activeVersion,
             Optional<String> audienceType,
+            Optional<BillingLinkedResourceResponseData> billingLinkedResource,
             Optional<BillingProductDetailResponseData> billingProduct,
             ChargeType chargeType,
             long companyCount,
-            PlanControlledByType controlledBy,
+            Optional<String> companyId,
+            Optional<String> companyName,
+            BillingProviderType controlledBy,
+            Optional<String> copiedFromPlanId,
             OffsetDateTime createdAt,
             List<PlanCurrencyPricesResponseData> currencyPrices,
             String description,
             Optional<PlanVersionResponseData> draftVersion,
-            List<FeatureDetailResponseData> features,
-            String icon,
+            List<FeatureInPlanResponseData> features,
+            PlanIcon icon,
             String id,
             Optional<List<BillingPlanCreditGrantResponseData>> includedCreditGrants,
             boolean isDefault,
@@ -105,10 +117,14 @@ public final class PlanDetailResponseData {
             Map<String, Object> additionalProperties) {
         this.activeVersion = activeVersion;
         this.audienceType = audienceType;
+        this.billingLinkedResource = billingLinkedResource;
         this.billingProduct = billingProduct;
         this.chargeType = chargeType;
         this.companyCount = companyCount;
+        this.companyId = companyId;
+        this.companyName = companyName;
         this.controlledBy = controlledBy;
+        this.copiedFromPlanId = copiedFromPlanId;
         this.createdAt = createdAt;
         this.currencyPrices = currencyPrices;
         this.description = description;
@@ -141,6 +157,11 @@ public final class PlanDetailResponseData {
         return audienceType;
     }
 
+    @JsonProperty("billing_linked_resource")
+    public Optional<BillingLinkedResourceResponseData> getBillingLinkedResource() {
+        return billingLinkedResource;
+    }
+
     @JsonProperty("billing_product")
     public Optional<BillingProductDetailResponseData> getBillingProduct() {
         return billingProduct;
@@ -156,9 +177,24 @@ public final class PlanDetailResponseData {
         return companyCount;
     }
 
+    @JsonProperty("company_id")
+    public Optional<String> getCompanyId() {
+        return companyId;
+    }
+
+    @JsonProperty("company_name")
+    public Optional<String> getCompanyName() {
+        return companyName;
+    }
+
     @JsonProperty("controlled_by")
-    public PlanControlledByType getControlledBy() {
+    public BillingProviderType getControlledBy() {
         return controlledBy;
+    }
+
+    @JsonProperty("copied_from_plan_id")
+    public Optional<String> getCopiedFromPlanId() {
+        return copiedFromPlanId;
     }
 
     @JsonProperty("created_at")
@@ -182,12 +218,12 @@ public final class PlanDetailResponseData {
     }
 
     @JsonProperty("features")
-    public List<FeatureDetailResponseData> getFeatures() {
+    public List<FeatureInPlanResponseData> getFeatures() {
         return features;
     }
 
     @JsonProperty("icon")
-    public String getIcon() {
+    public PlanIcon getIcon() {
         return icon;
     }
 
@@ -270,10 +306,14 @@ public final class PlanDetailResponseData {
     private boolean equalTo(PlanDetailResponseData other) {
         return activeVersion.equals(other.activeVersion)
                 && audienceType.equals(other.audienceType)
+                && billingLinkedResource.equals(other.billingLinkedResource)
                 && billingProduct.equals(other.billingProduct)
                 && chargeType.equals(other.chargeType)
                 && companyCount == other.companyCount
+                && companyId.equals(other.companyId)
+                && companyName.equals(other.companyName)
                 && controlledBy.equals(other.controlledBy)
+                && copiedFromPlanId.equals(other.copiedFromPlanId)
                 && createdAt.equals(other.createdAt)
                 && currencyPrices.equals(other.currencyPrices)
                 && description.equals(other.description)
@@ -300,10 +340,14 @@ public final class PlanDetailResponseData {
         return Objects.hash(
                 this.activeVersion,
                 this.audienceType,
+                this.billingLinkedResource,
                 this.billingProduct,
                 this.chargeType,
                 this.companyCount,
+                this.companyId,
+                this.companyName,
                 this.controlledBy,
+                this.copiedFromPlanId,
                 this.createdAt,
                 this.currencyPrices,
                 this.description,
@@ -345,7 +389,7 @@ public final class PlanDetailResponseData {
     }
 
     public interface ControlledByStage {
-        CreatedAtStage controlledBy(@NotNull PlanControlledByType controlledBy);
+        CreatedAtStage controlledBy(@NotNull BillingProviderType controlledBy);
     }
 
     public interface CreatedAtStage {
@@ -357,7 +401,7 @@ public final class PlanDetailResponseData {
     }
 
     public interface IconStage {
-        IdStage icon(@NotNull String icon);
+        IdStage icon(@NotNull PlanIcon icon);
     }
 
     public interface IdStage {
@@ -403,9 +447,25 @@ public final class PlanDetailResponseData {
 
         _FinalStage audienceType(String audienceType);
 
+        _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource);
+
+        _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
+
         _FinalStage billingProduct(Optional<BillingProductDetailResponseData> billingProduct);
 
         _FinalStage billingProduct(BillingProductDetailResponseData billingProduct);
+
+        _FinalStage companyId(Optional<String> companyId);
+
+        _FinalStage companyId(String companyId);
+
+        _FinalStage companyName(Optional<String> companyName);
+
+        _FinalStage companyName(String companyName);
+
+        _FinalStage copiedFromPlanId(Optional<String> copiedFromPlanId);
+
+        _FinalStage copiedFromPlanId(String copiedFromPlanId);
 
         _FinalStage currencyPrices(List<PlanCurrencyPricesResponseData> currencyPrices);
 
@@ -417,11 +477,11 @@ public final class PlanDetailResponseData {
 
         _FinalStage draftVersion(PlanVersionResponseData draftVersion);
 
-        _FinalStage features(List<FeatureDetailResponseData> features);
+        _FinalStage features(List<FeatureInPlanResponseData> features);
 
-        _FinalStage addFeatures(FeatureDetailResponseData features);
+        _FinalStage addFeatures(FeatureInPlanResponseData features);
 
-        _FinalStage addAllFeatures(List<FeatureDetailResponseData> features);
+        _FinalStage addAllFeatures(List<FeatureInPlanResponseData> features);
 
         _FinalStage includedCreditGrants(Optional<List<BillingPlanCreditGrantResponseData>> includedCreditGrants);
 
@@ -470,13 +530,13 @@ public final class PlanDetailResponseData {
 
         private long companyCount;
 
-        private PlanControlledByType controlledBy;
+        private BillingProviderType controlledBy;
 
         private OffsetDateTime createdAt;
 
         private String description;
 
-        private String icon;
+        private PlanIcon icon;
 
         private String id;
 
@@ -504,13 +564,21 @@ public final class PlanDetailResponseData {
 
         private Optional<List<BillingPlanCreditGrantResponseData>> includedCreditGrants = Optional.empty();
 
-        private List<FeatureDetailResponseData> features = new ArrayList<>();
+        private List<FeatureInPlanResponseData> features = new ArrayList<>();
 
         private Optional<PlanVersionResponseData> draftVersion = Optional.empty();
 
         private List<PlanCurrencyPricesResponseData> currencyPrices = new ArrayList<>();
 
+        private Optional<String> copiedFromPlanId = Optional.empty();
+
+        private Optional<String> companyName = Optional.empty();
+
+        private Optional<String> companyId = Optional.empty();
+
         private Optional<BillingProductDetailResponseData> billingProduct = Optional.empty();
+
+        private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
 
         private Optional<String> audienceType = Optional.empty();
 
@@ -525,10 +593,14 @@ public final class PlanDetailResponseData {
         public Builder from(PlanDetailResponseData other) {
             activeVersion(other.getActiveVersion());
             audienceType(other.getAudienceType());
+            billingLinkedResource(other.getBillingLinkedResource());
             billingProduct(other.getBillingProduct());
             chargeType(other.getChargeType());
             companyCount(other.getCompanyCount());
+            companyId(other.getCompanyId());
+            companyName(other.getCompanyName());
             controlledBy(other.getControlledBy());
+            copiedFromPlanId(other.getCopiedFromPlanId());
             createdAt(other.getCreatedAt());
             currencyPrices(other.getCurrencyPrices());
             description(other.getDescription());
@@ -567,7 +639,7 @@ public final class PlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("controlled_by")
-        public CreatedAtStage controlledBy(@NotNull PlanControlledByType controlledBy) {
+        public CreatedAtStage controlledBy(@NotNull BillingProviderType controlledBy) {
             this.controlledBy = Objects.requireNonNull(controlledBy, "controlledBy must not be null");
             return this;
         }
@@ -588,7 +660,7 @@ public final class PlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("icon")
-        public IdStage icon(@NotNull String icon) {
+        public IdStage icon(@NotNull PlanIcon icon) {
             this.icon = Objects.requireNonNull(icon, "icon must not be null");
             return this;
         }
@@ -733,7 +805,7 @@ public final class PlanDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage addAllFeatures(List<FeatureDetailResponseData> features) {
+        public _FinalStage addAllFeatures(List<FeatureInPlanResponseData> features) {
             if (features != null) {
                 this.features.addAll(features);
             }
@@ -741,14 +813,14 @@ public final class PlanDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage addFeatures(FeatureDetailResponseData features) {
+        public _FinalStage addFeatures(FeatureInPlanResponseData features) {
             this.features.add(features);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "features", nulls = Nulls.SKIP)
-        public _FinalStage features(List<FeatureDetailResponseData> features) {
+        public _FinalStage features(List<FeatureInPlanResponseData> features) {
             this.features.clear();
             if (features != null) {
                 this.features.addAll(features);
@@ -794,6 +866,45 @@ public final class PlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage copiedFromPlanId(String copiedFromPlanId) {
+            this.copiedFromPlanId = Optional.ofNullable(copiedFromPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "copied_from_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage copiedFromPlanId(Optional<String> copiedFromPlanId) {
+            this.copiedFromPlanId = copiedFromPlanId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage companyName(String companyName) {
+            this.companyName = Optional.ofNullable(companyName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_name", nulls = Nulls.SKIP)
+        public _FinalStage companyName(Optional<String> companyName) {
+            this.companyName = companyName;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage companyId(String companyId) {
+            this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
+        public _FinalStage companyId(Optional<String> companyId) {
+            this.companyId = companyId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingProduct(BillingProductDetailResponseData billingProduct) {
             this.billingProduct = Optional.ofNullable(billingProduct);
             return this;
@@ -803,6 +914,19 @@ public final class PlanDetailResponseData {
         @JsonSetter(value = "billing_product", nulls = Nulls.SKIP)
         public _FinalStage billingProduct(Optional<BillingProductDetailResponseData> billingProduct) {
             this.billingProduct = billingProduct;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource) {
+            this.billingLinkedResource = Optional.ofNullable(billingLinkedResource);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_linked_resource", nulls = Nulls.SKIP)
+        public _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource) {
+            this.billingLinkedResource = billingLinkedResource;
             return this;
         }
 
@@ -837,10 +961,14 @@ public final class PlanDetailResponseData {
             return new PlanDetailResponseData(
                     activeVersion,
                     audienceType,
+                    billingLinkedResource,
                     billingProduct,
                     chargeType,
                     companyCount,
+                    companyId,
+                    companyName,
                     controlledBy,
+                    copiedFromPlanId,
                     createdAt,
                     currencyPrices,
                     description,

@@ -7,7 +7,7 @@ import com.schematic.api.types.RulesengineCheckFlagResult;
 import com.schematic.api.types.RulesengineCompany;
 import com.schematic.api.types.RulesengineFlag;
 import com.schematic.api.types.RulesengineRule;
-import com.schematic.api.types.RulesengineRuleRuleType;
+import com.schematic.api.types.RulesengineRuleType;
 import com.schematic.api.types.RulesengineTrait;
 import com.schematic.api.types.RulesengineUser;
 import java.util.ArrayList;
@@ -150,7 +150,7 @@ class WasmRulesEngineTest {
                 .id("rule_standard")
                 .name("standard")
                 .priority(1)
-                .ruleType(RulesengineRuleRuleType.STANDARD)
+                .ruleType(RulesengineRuleType.STANDARD)
                 .value(true)
                 .conditions(Collections.emptyList())
                 .conditionGroups(Collections.emptyList())
@@ -382,7 +382,7 @@ class WasmRulesEngineTest {
                 .id(id)
                 .name(ruleType)
                 .priority(priority)
-                .ruleType(RulesengineRuleRuleType.GLOBAL_OVERRIDE)
+                .ruleType(RulesengineRuleType.GLOBAL_OVERRIDE)
                 .value(value)
                 .conditions(Collections.emptyList())
                 .conditionGroups(Collections.emptyList())

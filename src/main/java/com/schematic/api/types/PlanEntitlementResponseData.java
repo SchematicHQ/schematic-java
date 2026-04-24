@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanEntitlementResponseData.Builder.class)
 public final class PlanEntitlementResponseData {
+    private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
+
     private final Optional<Long> billingThreshold;
 
     private final Optional<Double> consumptionRate;
@@ -44,9 +46,9 @@ public final class PlanEntitlementResponseData {
 
     private final Optional<BillingPriceView> meteredYearlyPrice;
 
-    private final Optional<String> metricPeriod;
+    private final Optional<MetricPeriod> metricPeriod;
 
-    private final Optional<String> metricPeriodMonthReset;
+    private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final Optional<PlanResponseData> plan;
 
@@ -79,6 +81,7 @@ public final class PlanEntitlementResponseData {
     private final Map<String, Object> additionalProperties;
 
     private PlanEntitlementResponseData(
+            Optional<BillingLinkedResourceResponseData> billingLinkedResource,
             Optional<Long> billingThreshold,
             Optional<Double> consumptionRate,
             OffsetDateTime createdAt,
@@ -89,8 +92,8 @@ public final class PlanEntitlementResponseData {
             String id,
             Optional<BillingPriceView> meteredMonthlyPrice,
             Optional<BillingPriceView> meteredYearlyPrice,
-            Optional<String> metricPeriod,
-            Optional<String> metricPeriodMonthReset,
+            Optional<MetricPeriod> metricPeriod,
+            Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<PlanResponseData> plan,
             String planId,
             Optional<EntitlementPriceBehavior> priceBehavior,
@@ -106,6 +109,7 @@ public final class PlanEntitlementResponseData {
             Optional<String> valueTraitId,
             EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
+        this.billingLinkedResource = billingLinkedResource;
         this.billingThreshold = billingThreshold;
         this.consumptionRate = consumptionRate;
         this.createdAt = createdAt;
@@ -133,6 +137,11 @@ public final class PlanEntitlementResponseData {
         this.valueTraitId = valueTraitId;
         this.valueType = valueType;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_linked_resource")
+    public Optional<BillingLinkedResourceResponseData> getBillingLinkedResource() {
+        return billingLinkedResource;
     }
 
     @JsonProperty("billing_threshold")
@@ -186,12 +195,12 @@ public final class PlanEntitlementResponseData {
     }
 
     @JsonProperty("metric_period")
-    public Optional<String> getMetricPeriod() {
+    public Optional<MetricPeriod> getMetricPeriod() {
         return metricPeriod;
     }
 
     @JsonProperty("metric_period_month_reset")
-    public Optional<String> getMetricPeriodMonthReset() {
+    public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
     }
 
@@ -277,7 +286,8 @@ public final class PlanEntitlementResponseData {
     }
 
     private boolean equalTo(PlanEntitlementResponseData other) {
-        return billingThreshold.equals(other.billingThreshold)
+        return billingLinkedResource.equals(other.billingLinkedResource)
+                && billingThreshold.equals(other.billingThreshold)
                 && consumptionRate.equals(other.consumptionRate)
                 && createdAt.equals(other.createdAt)
                 && currencyPrices.equals(other.currencyPrices)
@@ -308,6 +318,7 @@ public final class PlanEntitlementResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingLinkedResource,
                 this.billingThreshold,
                 this.consumptionRate,
                 this.createdAt,
@@ -386,6 +397,10 @@ public final class PlanEntitlementResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource);
+
+        _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
+
         _FinalStage billingThreshold(Optional<Long> billingThreshold);
 
         _FinalStage billingThreshold(Long billingThreshold);
@@ -412,13 +427,13 @@ public final class PlanEntitlementResponseData {
 
         _FinalStage meteredYearlyPrice(BillingPriceView meteredYearlyPrice);
 
-        _FinalStage metricPeriod(Optional<String> metricPeriod);
+        _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod);
 
-        _FinalStage metricPeriod(String metricPeriod);
+        _FinalStage metricPeriod(MetricPeriod metricPeriod);
 
-        _FinalStage metricPeriodMonthReset(Optional<String> metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
-        _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
         _FinalStage plan(Optional<PlanResponseData> plan);
 
@@ -508,9 +523,9 @@ public final class PlanEntitlementResponseData {
 
         private Optional<PlanResponseData> plan = Optional.empty();
 
-        private Optional<String> metricPeriodMonthReset = Optional.empty();
+        private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
-        private Optional<String> metricPeriod = Optional.empty();
+        private Optional<MetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<BillingPriceView> meteredYearlyPrice = Optional.empty();
 
@@ -524,6 +539,8 @@ public final class PlanEntitlementResponseData {
 
         private Optional<Long> billingThreshold = Optional.empty();
 
+        private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -531,6 +548,7 @@ public final class PlanEntitlementResponseData {
 
         @java.lang.Override
         public Builder from(PlanEntitlementResponseData other) {
+            billingLinkedResource(other.getBillingLinkedResource());
             billingThreshold(other.getBillingThreshold());
             consumptionRate(other.getConsumptionRate());
             createdAt(other.getCreatedAt());
@@ -747,27 +765,27 @@ public final class PlanEntitlementResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period_month_reset", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriodMonthReset(Optional<String> metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset) {
             this.metricPeriodMonthReset = metricPeriodMonthReset;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriod(String metricPeriod) {
+        public _FinalStage metricPeriod(MetricPeriod metricPeriod) {
             this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriod(Optional<String> metricPeriod) {
+        public _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod) {
             this.metricPeriod = metricPeriod;
             return this;
         }
@@ -862,8 +880,22 @@ public final class PlanEntitlementResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource) {
+            this.billingLinkedResource = Optional.ofNullable(billingLinkedResource);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_linked_resource", nulls = Nulls.SKIP)
+        public _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource) {
+            this.billingLinkedResource = billingLinkedResource;
+            return this;
+        }
+
+        @java.lang.Override
         public PlanEntitlementResponseData build() {
             return new PlanEntitlementResponseData(
+                    billingLinkedResource,
                     billingThreshold,
                     consumptionRate,
                     createdAt,

@@ -4,7 +4,6 @@
 package com.schematic.api;
 
 import com.schematic.api.core.ClientOptions;
-import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.Suppliers;
 import com.schematic.api.resources.accesstokens.AsyncAccesstokensClient;
 import com.schematic.api.resources.accounts.AsyncAccountsClient;
@@ -18,19 +17,17 @@ import com.schematic.api.resources.dataexports.AsyncDataexportsClient;
 import com.schematic.api.resources.entitlements.AsyncEntitlementsClient;
 import com.schematic.api.resources.events.AsyncEventsClient;
 import com.schematic.api.resources.features.AsyncFeaturesClient;
+import com.schematic.api.resources.integrationsapi.AsyncIntegrationsapiClient;
 import com.schematic.api.resources.planbundle.AsyncPlanbundleClient;
 import com.schematic.api.resources.plangroups.AsyncPlangroupsClient;
 import com.schematic.api.resources.planmigrations.AsyncPlanmigrationsClient;
 import com.schematic.api.resources.plans.AsyncPlansClient;
 import com.schematic.api.resources.scheduledcheckout.AsyncScheduledcheckoutClient;
 import com.schematic.api.resources.webhooks.AsyncWebhooksClient;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class AsyncBaseSchematic {
     protected final ClientOptions clientOptions;
-
-    private final AsyncRawBaseSchematic rawClient;
 
     protected final Supplier<AsyncAccountsClient> accountsClient;
 
@@ -54,6 +51,8 @@ public class AsyncBaseSchematic {
 
     protected final Supplier<AsyncFeaturesClient> featuresClient;
 
+    protected final Supplier<AsyncIntegrationsapiClient> integrationsapiClient;
+
     protected final Supplier<AsyncPlanbundleClient> planbundleClient;
 
     protected final Supplier<AsyncPlangroupsClient> plangroupsClient;
@@ -70,7 +69,6 @@ public class AsyncBaseSchematic {
 
     public AsyncBaseSchematic(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
-        this.rawClient = new AsyncRawBaseSchematic(clientOptions);
         this.accountsClient = Suppliers.memoize(() -> new AsyncAccountsClient(clientOptions));
         this.billingClient = Suppliers.memoize(() -> new AsyncBillingClient(clientOptions));
         this.creditsClient = Suppliers.memoize(() -> new AsyncCreditsClient(clientOptions));
@@ -82,6 +80,7 @@ public class AsyncBaseSchematic {
         this.dataexportsClient = Suppliers.memoize(() -> new AsyncDataexportsClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new AsyncEventsClient(clientOptions));
         this.featuresClient = Suppliers.memoize(() -> new AsyncFeaturesClient(clientOptions));
+        this.integrationsapiClient = Suppliers.memoize(() -> new AsyncIntegrationsapiClient(clientOptions));
         this.planbundleClient = Suppliers.memoize(() -> new AsyncPlanbundleClient(clientOptions));
         this.plangroupsClient = Suppliers.memoize(() -> new AsyncPlangroupsClient(clientOptions));
         this.planmigrationsClient = Suppliers.memoize(() -> new AsyncPlanmigrationsClient(clientOptions));
@@ -89,35 +88,6 @@ public class AsyncBaseSchematic {
         this.scheduledcheckoutClient = Suppliers.memoize(() -> new AsyncScheduledcheckoutClient(clientOptions));
         this.accesstokensClient = Suppliers.memoize(() -> new AsyncAccesstokensClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
-    }
-
-    /**
-     * Get responses with HTTP metadata like headers
-     */
-    public AsyncRawBaseSchematic withRawResponse() {
-        return this.rawClient;
-    }
-
-    public CompletableFuture<Void> putPlanAudiencesPlanAudienceId(String planAudienceId) {
-        return this.rawClient.putPlanAudiencesPlanAudienceId(planAudienceId).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Void> putPlanAudiencesPlanAudienceId(
-            String planAudienceId, RequestOptions requestOptions) {
-        return this.rawClient
-                .putPlanAudiencesPlanAudienceId(planAudienceId, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Void> deletePlanAudiencesPlanAudienceId(String planAudienceId) {
-        return this.rawClient.deletePlanAudiencesPlanAudienceId(planAudienceId).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Void> deletePlanAudiencesPlanAudienceId(
-            String planAudienceId, RequestOptions requestOptions) {
-        return this.rawClient
-                .deletePlanAudiencesPlanAudienceId(planAudienceId, requestOptions)
-                .thenApply(response -> response.body());
     }
 
     public AsyncAccountsClient accounts() {
@@ -162,6 +132,10 @@ public class AsyncBaseSchematic {
 
     public AsyncFeaturesClient features() {
         return this.featuresClient.get();
+    }
+
+    public AsyncIntegrationsapiClient integrationsapi() {
+        return this.integrationsapiClient.get();
     }
 
     public AsyncPlanbundleClient planbundle() {

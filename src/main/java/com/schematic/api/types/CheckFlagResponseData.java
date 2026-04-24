@@ -34,7 +34,7 @@ public final class CheckFlagResponseData {
 
     private final Optional<String> featureUsageEvent;
 
-    private final Optional<String> featureUsagePeriod;
+    private final Optional<MetricPeriod> featureUsagePeriod;
 
     private final Optional<OffsetDateTime> featureUsageResetAt;
 
@@ -46,7 +46,7 @@ public final class CheckFlagResponseData {
 
     private final Optional<String> ruleId;
 
-    private final Optional<String> ruleType;
+    private final Optional<RuleType> ruleType;
 
     private final Optional<String> userId;
 
@@ -61,13 +61,13 @@ public final class CheckFlagResponseData {
             Optional<Long> featureAllocation,
             Optional<Long> featureUsage,
             Optional<String> featureUsageEvent,
-            Optional<String> featureUsagePeriod,
+            Optional<MetricPeriod> featureUsagePeriod,
             Optional<OffsetDateTime> featureUsageResetAt,
             String flag,
             Optional<String> flagId,
             String reason,
             Optional<String> ruleId,
-            Optional<String> ruleType,
+            Optional<RuleType> ruleType,
             Optional<String> userId,
             boolean value,
             Map<String, Object> additionalProperties) {
@@ -141,7 +141,7 @@ public final class CheckFlagResponseData {
      * @return Deprecated: Use Entitlement.MetricPeriod instead.
      */
     @JsonProperty("feature_usage_period")
-    public Optional<String> getFeatureUsagePeriod() {
+    public Optional<MetricPeriod> getFeatureUsagePeriod() {
         return featureUsagePeriod;
     }
 
@@ -189,7 +189,7 @@ public final class CheckFlagResponseData {
      * @return If a rule was found, its type
      */
     @JsonProperty("rule_type")
-    public Optional<String> getRuleType() {
+    public Optional<RuleType> getRuleType() {
         return ruleType;
     }
 
@@ -342,9 +342,9 @@ public final class CheckFlagResponseData {
         /**
          * <p>Deprecated: Use Entitlement.MetricPeriod instead.</p>
          */
-        _FinalStage featureUsagePeriod(Optional<String> featureUsagePeriod);
+        _FinalStage featureUsagePeriod(Optional<MetricPeriod> featureUsagePeriod);
 
-        _FinalStage featureUsagePeriod(String featureUsagePeriod);
+        _FinalStage featureUsagePeriod(MetricPeriod featureUsagePeriod);
 
         /**
          * <p>Deprecated: Use Entitlement.MetricResetAt instead.</p>
@@ -370,9 +370,9 @@ public final class CheckFlagResponseData {
         /**
          * <p>If a rule was found, its type</p>
          */
-        _FinalStage ruleType(Optional<String> ruleType);
+        _FinalStage ruleType(Optional<RuleType> ruleType);
 
-        _FinalStage ruleType(String ruleType);
+        _FinalStage ruleType(RuleType ruleType);
 
         /**
          * <p>If user keys were provided and matched a user, its ID</p>
@@ -392,7 +392,7 @@ public final class CheckFlagResponseData {
 
         private Optional<String> userId = Optional.empty();
 
-        private Optional<String> ruleType = Optional.empty();
+        private Optional<RuleType> ruleType = Optional.empty();
 
         private Optional<String> ruleId = Optional.empty();
 
@@ -400,7 +400,7 @@ public final class CheckFlagResponseData {
 
         private Optional<OffsetDateTime> featureUsageResetAt = Optional.empty();
 
-        private Optional<String> featureUsagePeriod = Optional.empty();
+        private Optional<MetricPeriod> featureUsagePeriod = Optional.empty();
 
         private Optional<String> featureUsageEvent = Optional.empty();
 
@@ -500,7 +500,7 @@ public final class CheckFlagResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage ruleType(String ruleType) {
+        public _FinalStage ruleType(RuleType ruleType) {
             this.ruleType = Optional.ofNullable(ruleType);
             return this;
         }
@@ -510,7 +510,7 @@ public final class CheckFlagResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "rule_type", nulls = Nulls.SKIP)
-        public _FinalStage ruleType(Optional<String> ruleType) {
+        public _FinalStage ruleType(Optional<RuleType> ruleType) {
             this.ruleType = ruleType;
             return this;
         }
@@ -580,7 +580,7 @@ public final class CheckFlagResponseData {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage featureUsagePeriod(String featureUsagePeriod) {
+        public _FinalStage featureUsagePeriod(MetricPeriod featureUsagePeriod) {
             this.featureUsagePeriod = Optional.ofNullable(featureUsagePeriod);
             return this;
         }
@@ -590,7 +590,7 @@ public final class CheckFlagResponseData {
          */
         @java.lang.Override
         @JsonSetter(value = "feature_usage_period", nulls = Nulls.SKIP)
-        public _FinalStage featureUsagePeriod(Optional<String> featureUsagePeriod) {
+        public _FinalStage featureUsagePeriod(Optional<MetricPeriod> featureUsagePeriod) {
             this.featureUsagePeriod = featureUsagePeriod;
             return this;
         }

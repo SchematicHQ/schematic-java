@@ -34,6 +34,8 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final Optional<Long> autoTopupExpiryUnitCount;
 
+    private final Optional<Long> autoTopupThresholdCredits;
+
     private final Optional<Long> autoTopupThresholdPercent;
 
     private final OffsetDateTime createdAt;
@@ -83,6 +85,7 @@ public final class BillingPlanCreditGrantResponseData {
             Optional<BillingCreditExpiryType> autoTopupExpiryType,
             Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit,
             Optional<Long> autoTopupExpiryUnitCount,
+            Optional<Long> autoTopupThresholdCredits,
             Optional<Long> autoTopupThresholdPercent,
             OffsetDateTime createdAt,
             Optional<BillingCreditResponseData> credit,
@@ -110,6 +113,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.autoTopupExpiryType = autoTopupExpiryType;
         this.autoTopupExpiryUnit = autoTopupExpiryUnit;
         this.autoTopupExpiryUnitCount = autoTopupExpiryUnitCount;
+        this.autoTopupThresholdCredits = autoTopupThresholdCredits;
         this.autoTopupThresholdPercent = autoTopupThresholdPercent;
         this.createdAt = createdAt;
         this.credit = credit;
@@ -161,6 +165,11 @@ public final class BillingPlanCreditGrantResponseData {
     @JsonProperty("auto_topup_expiry_unit_count")
     public Optional<Long> getAutoTopupExpiryUnitCount() {
         return autoTopupExpiryUnitCount;
+    }
+
+    @JsonProperty("auto_topup_threshold_credits")
+    public Optional<Long> getAutoTopupThresholdCredits() {
+        return autoTopupThresholdCredits;
     }
 
     @JsonProperty("auto_topup_threshold_percent")
@@ -294,6 +303,7 @@ public final class BillingPlanCreditGrantResponseData {
                 && autoTopupExpiryType.equals(other.autoTopupExpiryType)
                 && autoTopupExpiryUnit.equals(other.autoTopupExpiryUnit)
                 && autoTopupExpiryUnitCount.equals(other.autoTopupExpiryUnitCount)
+                && autoTopupThresholdCredits.equals(other.autoTopupThresholdCredits)
                 && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
                 && createdAt.equals(other.createdAt)
                 && credit.equals(other.credit)
@@ -325,6 +335,7 @@ public final class BillingPlanCreditGrantResponseData {
                 this.autoTopupExpiryType,
                 this.autoTopupExpiryUnit,
                 this.autoTopupExpiryUnitCount,
+                this.autoTopupThresholdCredits,
                 this.autoTopupThresholdPercent,
                 this.createdAt,
                 this.credit,
@@ -426,6 +437,10 @@ public final class BillingPlanCreditGrantResponseData {
         _FinalStage autoTopupExpiryUnitCount(Optional<Long> autoTopupExpiryUnitCount);
 
         _FinalStage autoTopupExpiryUnitCount(Long autoTopupExpiryUnitCount);
+
+        _FinalStage autoTopupThresholdCredits(Optional<Long> autoTopupThresholdCredits);
+
+        _FinalStage autoTopupThresholdCredits(Long autoTopupThresholdCredits);
 
         _FinalStage autoTopupThresholdPercent(Optional<Long> autoTopupThresholdPercent);
 
@@ -536,6 +551,8 @@ public final class BillingPlanCreditGrantResponseData {
 
         private Optional<Long> autoTopupThresholdPercent = Optional.empty();
 
+        private Optional<Long> autoTopupThresholdCredits = Optional.empty();
+
         private Optional<Long> autoTopupExpiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit = Optional.empty();
@@ -559,6 +576,7 @@ public final class BillingPlanCreditGrantResponseData {
             autoTopupExpiryType(other.getAutoTopupExpiryType());
             autoTopupExpiryUnit(other.getAutoTopupExpiryUnit());
             autoTopupExpiryUnitCount(other.getAutoTopupExpiryUnitCount());
+            autoTopupThresholdCredits(other.getAutoTopupThresholdCredits());
             autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
             createdAt(other.getCreatedAt());
             credit(other.getCredit());
@@ -826,6 +844,19 @@ public final class BillingPlanCreditGrantResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage autoTopupThresholdCredits(Long autoTopupThresholdCredits) {
+            this.autoTopupThresholdCredits = Optional.ofNullable(autoTopupThresholdCredits);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_threshold_credits", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupThresholdCredits(Optional<Long> autoTopupThresholdCredits) {
+            this.autoTopupThresholdCredits = autoTopupThresholdCredits;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage autoTopupExpiryUnitCount(Long autoTopupExpiryUnitCount) {
             this.autoTopupExpiryUnitCount = Optional.ofNullable(autoTopupExpiryUnitCount);
             return this;
@@ -899,6 +930,7 @@ public final class BillingPlanCreditGrantResponseData {
                     autoTopupExpiryType,
                     autoTopupExpiryUnit,
                     autoTopupExpiryUnitCount,
+                    autoTopupThresholdCredits,
                     autoTopupThresholdPercent,
                     createdAt,
                     credit,

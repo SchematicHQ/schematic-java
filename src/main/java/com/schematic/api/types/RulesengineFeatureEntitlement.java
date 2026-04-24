@@ -38,11 +38,11 @@ public final class RulesengineFeatureEntitlement {
 
     private final String featureKey;
 
-    private final Optional<RulesengineFeatureEntitlementMetricPeriod> metricPeriod;
+    private final Optional<RulesengineMetricPeriod> metricPeriod;
 
     private final Optional<OffsetDateTime> metricResetAt;
 
-    private final Optional<RulesengineFeatureEntitlementMonthReset> monthReset;
+    private final Optional<RulesengineMetricPeriodMonthReset> monthReset;
 
     private final Optional<Long> softLimit;
 
@@ -61,9 +61,9 @@ public final class RulesengineFeatureEntitlement {
             Optional<String> eventName,
             String featureId,
             String featureKey,
-            Optional<RulesengineFeatureEntitlementMetricPeriod> metricPeriod,
+            Optional<RulesengineMetricPeriod> metricPeriod,
             Optional<OffsetDateTime> metricResetAt,
-            Optional<RulesengineFeatureEntitlementMonthReset> monthReset,
+            Optional<RulesengineMetricPeriodMonthReset> monthReset,
             Optional<Long> softLimit,
             Optional<Long> usage,
             RulesengineEntitlementValueType valueType,
@@ -153,7 +153,7 @@ public final class RulesengineFeatureEntitlement {
      * @return For event-based feature entitlements, the period over which usage is tracked
      */
     @JsonProperty("metric_period")
-    public Optional<RulesengineFeatureEntitlementMetricPeriod> getMetricPeriod() {
+    public Optional<RulesengineMetricPeriod> getMetricPeriod() {
         return metricPeriod;
     }
 
@@ -169,7 +169,7 @@ public final class RulesengineFeatureEntitlement {
      * @return For event-based feature entitlements that have a monthly period, whether that monthly reset is based on the calendar month or a billing cycle
      */
     @JsonProperty("month_reset")
-    public Optional<RulesengineFeatureEntitlementMonthReset> getMonthReset() {
+    public Optional<RulesengineMetricPeriodMonthReset> getMonthReset() {
         return monthReset;
     }
 
@@ -328,9 +328,9 @@ public final class RulesengineFeatureEntitlement {
         /**
          * <p>For event-based feature entitlements, the period over which usage is tracked</p>
          */
-        _FinalStage metricPeriod(Optional<RulesengineFeatureEntitlementMetricPeriod> metricPeriod);
+        _FinalStage metricPeriod(Optional<RulesengineMetricPeriod> metricPeriod);
 
-        _FinalStage metricPeriod(RulesengineFeatureEntitlementMetricPeriod metricPeriod);
+        _FinalStage metricPeriod(RulesengineMetricPeriod metricPeriod);
 
         /**
          * <p>For event-based feature entitlements, when the usage period will reset</p>
@@ -342,9 +342,9 @@ public final class RulesengineFeatureEntitlement {
         /**
          * <p>For event-based feature entitlements that have a monthly period, whether that monthly reset is based on the calendar month or a billing cycle</p>
          */
-        _FinalStage monthReset(Optional<RulesengineFeatureEntitlementMonthReset> monthReset);
+        _FinalStage monthReset(Optional<RulesengineMetricPeriodMonthReset> monthReset);
 
-        _FinalStage monthReset(RulesengineFeatureEntitlementMonthReset monthReset);
+        _FinalStage monthReset(RulesengineMetricPeriodMonthReset monthReset);
 
         /**
          * <p>For usage-based pricing, the soft limit for overage charges or the next tier boundary</p>
@@ -373,11 +373,11 @@ public final class RulesengineFeatureEntitlement {
 
         private Optional<Long> softLimit = Optional.empty();
 
-        private Optional<RulesengineFeatureEntitlementMonthReset> monthReset = Optional.empty();
+        private Optional<RulesengineMetricPeriodMonthReset> monthReset = Optional.empty();
 
         private Optional<OffsetDateTime> metricResetAt = Optional.empty();
 
-        private Optional<RulesengineFeatureEntitlementMetricPeriod> metricPeriod = Optional.empty();
+        private Optional<RulesengineMetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<String> eventName = Optional.empty();
 
@@ -496,7 +496,7 @@ public final class RulesengineFeatureEntitlement {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage monthReset(RulesengineFeatureEntitlementMonthReset monthReset) {
+        public _FinalStage monthReset(RulesengineMetricPeriodMonthReset monthReset) {
             this.monthReset = Optional.ofNullable(monthReset);
             return this;
         }
@@ -506,7 +506,7 @@ public final class RulesengineFeatureEntitlement {
          */
         @java.lang.Override
         @JsonSetter(value = "month_reset", nulls = Nulls.SKIP)
-        public _FinalStage monthReset(Optional<RulesengineFeatureEntitlementMonthReset> monthReset) {
+        public _FinalStage monthReset(Optional<RulesengineMetricPeriodMonthReset> monthReset) {
             this.monthReset = monthReset;
             return this;
         }
@@ -536,7 +536,7 @@ public final class RulesengineFeatureEntitlement {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage metricPeriod(RulesengineFeatureEntitlementMetricPeriod metricPeriod) {
+        public _FinalStage metricPeriod(RulesengineMetricPeriod metricPeriod) {
             this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
@@ -546,7 +546,7 @@ public final class RulesengineFeatureEntitlement {
          */
         @java.lang.Override
         @JsonSetter(value = "metric_period", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriod(Optional<RulesengineFeatureEntitlementMetricPeriod> metricPeriod) {
+        public _FinalStage metricPeriod(Optional<RulesengineMetricPeriod> metricPeriod) {
             this.metricPeriod = metricPeriod;
             return this;
         }

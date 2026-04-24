@@ -36,7 +36,7 @@ public final class ConditionView {
 
     private final Optional<String> conditionGroupId;
 
-    private final String conditionType;
+    private final ConditionType conditionType;
 
     private final Optional<Double> consumptionRate;
 
@@ -52,13 +52,13 @@ public final class ConditionView {
 
     private final String id;
 
-    private final Optional<String> metricPeriod;
+    private final Optional<MetricPeriod> metricPeriod;
 
-    private final Optional<String> metricPeriodMonthReset;
+    private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
     private final Optional<Long> metricValue;
 
-    private final String operator;
+    private final ComparableOperator operator;
 
     private final List<GenericPreviewObject> planVersions;
 
@@ -95,7 +95,7 @@ public final class ConditionView {
             Optional<EntityTraitDefinitionResponseData> comparisonTrait,
             Optional<String> comparisonTraitId,
             Optional<String> conditionGroupId,
-            String conditionType,
+            ConditionType conditionType,
             Optional<Double> consumptionRate,
             OffsetDateTime createdAt,
             Optional<String> creditId,
@@ -103,10 +103,10 @@ public final class ConditionView {
             Optional<String> eventSubtype,
             Optional<String> flagId,
             String id,
-            Optional<String> metricPeriod,
-            Optional<String> metricPeriodMonthReset,
+            Optional<MetricPeriod> metricPeriod,
+            Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Long> metricValue,
-            String operator,
+            ComparableOperator operator,
             List<GenericPreviewObject> planVersions,
             List<GenericPreviewObject> plans,
             List<String> resourceUnspecifiedIds,
@@ -186,7 +186,7 @@ public final class ConditionView {
     }
 
     @JsonProperty("condition_type")
-    public String getConditionType() {
+    public ConditionType getConditionType() {
         return conditionType;
     }
 
@@ -226,12 +226,12 @@ public final class ConditionView {
     }
 
     @JsonProperty("metric_period")
-    public Optional<String> getMetricPeriod() {
+    public Optional<MetricPeriod> getMetricPeriod() {
         return metricPeriod;
     }
 
     @JsonProperty("metric_period_month_reset")
-    public Optional<String> getMetricPeriodMonthReset() {
+    public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
     }
 
@@ -241,7 +241,7 @@ public final class ConditionView {
     }
 
     @JsonProperty("operator")
-    public String getOperator() {
+    public ComparableOperator getOperator() {
         return operator;
     }
 
@@ -407,7 +407,7 @@ public final class ConditionView {
     }
 
     public interface ConditionTypeStage {
-        CreatedAtStage conditionType(@NotNull String conditionType);
+        CreatedAtStage conditionType(@NotNull ConditionType conditionType);
     }
 
     public interface CreatedAtStage {
@@ -423,7 +423,7 @@ public final class ConditionView {
     }
 
     public interface OperatorStage {
-        RuleIdStage operator(@NotNull String operator);
+        RuleIdStage operator(@NotNull ComparableOperator operator);
     }
 
     public interface RuleIdStage {
@@ -493,13 +493,13 @@ public final class ConditionView {
 
         _FinalStage flagId(String flagId);
 
-        _FinalStage metricPeriod(Optional<String> metricPeriod);
+        _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod);
 
-        _FinalStage metricPeriod(String metricPeriod);
+        _FinalStage metricPeriod(MetricPeriod metricPeriod);
 
-        _FinalStage metricPeriodMonthReset(Optional<String> metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
-        _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset);
+        _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
         _FinalStage metricValue(Optional<Long> metricValue);
 
@@ -562,7 +562,7 @@ public final class ConditionView {
                     _FinalStage {
         private String accountId;
 
-        private String conditionType;
+        private ConditionType conditionType;
 
         private OffsetDateTime createdAt;
 
@@ -570,7 +570,7 @@ public final class ConditionView {
 
         private String id;
 
-        private String operator;
+        private ComparableOperator operator;
 
         private String ruleId;
 
@@ -600,9 +600,9 @@ public final class ConditionView {
 
         private Optional<Long> metricValue = Optional.empty();
 
-        private Optional<String> metricPeriodMonthReset = Optional.empty();
+        private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
-        private Optional<String> metricPeriod = Optional.empty();
+        private Optional<MetricPeriod> metricPeriod = Optional.empty();
 
         private Optional<String> flagId = Optional.empty();
 
@@ -672,7 +672,7 @@ public final class ConditionView {
 
         @java.lang.Override
         @JsonSetter("condition_type")
-        public CreatedAtStage conditionType(@NotNull String conditionType) {
+        public CreatedAtStage conditionType(@NotNull ConditionType conditionType) {
             this.conditionType = Objects.requireNonNull(conditionType, "conditionType must not be null");
             return this;
         }
@@ -700,7 +700,7 @@ public final class ConditionView {
 
         @java.lang.Override
         @JsonSetter("operator")
-        public RuleIdStage operator(@NotNull String operator) {
+        public RuleIdStage operator(@NotNull ComparableOperator operator) {
             this.operator = Objects.requireNonNull(operator, "operator must not be null");
             return this;
         }
@@ -902,27 +902,27 @@ public final class ConditionView {
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriodMonthReset(String metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period_month_reset", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriodMonthReset(Optional<String> metricPeriodMonthReset) {
+        public _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset) {
             this.metricPeriodMonthReset = metricPeriodMonthReset;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage metricPeriod(String metricPeriod) {
+        public _FinalStage metricPeriod(MetricPeriod metricPeriod) {
             this.metricPeriod = Optional.ofNullable(metricPeriod);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "metric_period", nulls = Nulls.SKIP)
-        public _FinalStage metricPeriod(Optional<String> metricPeriod) {
+        public _FinalStage metricPeriod(Optional<MetricPeriod> metricPeriod) {
             this.metricPeriod = metricPeriod;
             return this;
         }

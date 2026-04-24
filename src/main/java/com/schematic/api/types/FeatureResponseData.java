@@ -36,7 +36,7 @@ public final class FeatureResponseData {
 
     private final Optional<FeatureLifecyclePhase> lifecyclePhase;
 
-    private final Optional<String> maintainerId;
+    private final Optional<String> maintainerAccountMemberId;
 
     private final String name;
 
@@ -58,7 +58,7 @@ public final class FeatureResponseData {
             String icon,
             String id,
             Optional<FeatureLifecyclePhase> lifecyclePhase,
-            Optional<String> maintainerId,
+            Optional<String> maintainerAccountMemberId,
             String name,
             Optional<String> pluralName,
             Optional<String> singularName,
@@ -72,7 +72,7 @@ public final class FeatureResponseData {
         this.icon = icon;
         this.id = id;
         this.lifecyclePhase = lifecyclePhase;
-        this.maintainerId = maintainerId;
+        this.maintainerAccountMemberId = maintainerAccountMemberId;
         this.name = name;
         this.pluralName = pluralName;
         this.singularName = singularName;
@@ -116,9 +116,9 @@ public final class FeatureResponseData {
         return lifecyclePhase;
     }
 
-    @JsonProperty("maintainer_id")
-    public Optional<String> getMaintainerId() {
-        return maintainerId;
+    @JsonProperty("maintainer_account_member_id")
+    public Optional<String> getMaintainerAccountMemberId() {
+        return maintainerAccountMemberId;
     }
 
     @JsonProperty("name")
@@ -165,7 +165,7 @@ public final class FeatureResponseData {
                 && icon.equals(other.icon)
                 && id.equals(other.id)
                 && lifecyclePhase.equals(other.lifecyclePhase)
-                && maintainerId.equals(other.maintainerId)
+                && maintainerAccountMemberId.equals(other.maintainerAccountMemberId)
                 && name.equals(other.name)
                 && pluralName.equals(other.pluralName)
                 && singularName.equals(other.singularName)
@@ -183,7 +183,7 @@ public final class FeatureResponseData {
                 this.icon,
                 this.id,
                 this.lifecyclePhase,
-                this.maintainerId,
+                this.maintainerAccountMemberId,
                 this.name,
                 this.pluralName,
                 this.singularName,
@@ -245,9 +245,9 @@ public final class FeatureResponseData {
 
         _FinalStage lifecyclePhase(FeatureLifecyclePhase lifecyclePhase);
 
-        _FinalStage maintainerId(Optional<String> maintainerId);
+        _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId);
 
-        _FinalStage maintainerId(String maintainerId);
+        _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId);
 
         _FinalStage pluralName(Optional<String> pluralName);
 
@@ -292,7 +292,7 @@ public final class FeatureResponseData {
 
         private Optional<String> pluralName = Optional.empty();
 
-        private Optional<String> maintainerId = Optional.empty();
+        private Optional<String> maintainerAccountMemberId = Optional.empty();
 
         private Optional<FeatureLifecyclePhase> lifecyclePhase = Optional.empty();
 
@@ -312,7 +312,7 @@ public final class FeatureResponseData {
             icon(other.getIcon());
             id(other.getId());
             lifecyclePhase(other.getLifecyclePhase());
-            maintainerId(other.getMaintainerId());
+            maintainerAccountMemberId(other.getMaintainerAccountMemberId());
             name(other.getName());
             pluralName(other.getPluralName());
             singularName(other.getSingularName());
@@ -410,15 +410,15 @@ public final class FeatureResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage maintainerId(String maintainerId) {
-            this.maintainerId = Optional.ofNullable(maintainerId);
+        public _FinalStage maintainerAccountMemberId(String maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = Optional.ofNullable(maintainerAccountMemberId);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "maintainer_id", nulls = Nulls.SKIP)
-        public _FinalStage maintainerId(Optional<String> maintainerId) {
-            this.maintainerId = maintainerId;
+        @JsonSetter(value = "maintainer_account_member_id", nulls = Nulls.SKIP)
+        public _FinalStage maintainerAccountMemberId(Optional<String> maintainerAccountMemberId) {
+            this.maintainerAccountMemberId = maintainerAccountMemberId;
             return this;
         }
 
@@ -458,7 +458,7 @@ public final class FeatureResponseData {
                     icon,
                     id,
                     lifecyclePhase,
-                    maintainerId,
+                    maintainerAccountMemberId,
                     name,
                     pluralName,
                     singularName,

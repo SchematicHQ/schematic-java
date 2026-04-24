@@ -44,8 +44,6 @@ public final class FlagView {
 
     private final Optional<OffsetDateTime> lastCheckedAt;
 
-    private final Optional<String> maintainerId;
-
     private final String name;
 
     private final List<RuleView> rules;
@@ -65,7 +63,6 @@ public final class FlagView {
             String id,
             String key,
             Optional<OffsetDateTime> lastCheckedAt,
-            Optional<String> maintainerId,
             String name,
             List<RuleView> rules,
             OffsetDateTime updatedAt,
@@ -80,7 +77,6 @@ public final class FlagView {
         this.id = id;
         this.key = key;
         this.lastCheckedAt = lastCheckedAt;
-        this.maintainerId = maintainerId;
         this.name = name;
         this.rules = rules;
         this.updatedAt = updatedAt;
@@ -137,11 +133,6 @@ public final class FlagView {
         return lastCheckedAt;
     }
 
-    @JsonProperty("maintainer_id")
-    public Optional<String> getMaintainerId() {
-        return maintainerId;
-    }
-
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -179,7 +170,6 @@ public final class FlagView {
                 && id.equals(other.id)
                 && key.equals(other.key)
                 && lastCheckedAt.equals(other.lastCheckedAt)
-                && maintainerId.equals(other.maintainerId)
                 && name.equals(other.name)
                 && rules.equals(other.rules)
                 && updatedAt.equals(other.updatedAt);
@@ -198,7 +188,6 @@ public final class FlagView {
                 this.id,
                 this.key,
                 this.lastCheckedAt,
-                this.maintainerId,
                 this.name,
                 this.rules,
                 this.updatedAt);
@@ -270,10 +259,6 @@ public final class FlagView {
 
         _FinalStage lastCheckedAt(OffsetDateTime lastCheckedAt);
 
-        _FinalStage maintainerId(Optional<String> maintainerId);
-
-        _FinalStage maintainerId(String maintainerId);
-
         _FinalStage rules(List<RuleView> rules);
 
         _FinalStage addRules(RuleView rules);
@@ -313,8 +298,6 @@ public final class FlagView {
 
         private List<RuleView> rules = new ArrayList<>();
 
-        private Optional<String> maintainerId = Optional.empty();
-
         private Optional<OffsetDateTime> lastCheckedAt = Optional.empty();
 
         private Optional<String> featureId = Optional.empty();
@@ -338,7 +321,6 @@ public final class FlagView {
             id(other.getId());
             key(other.getKey());
             lastCheckedAt(other.getLastCheckedAt());
-            maintainerId(other.getMaintainerId());
             name(other.getName());
             rules(other.getRules());
             updatedAt(other.getUpdatedAt());
@@ -433,19 +415,6 @@ public final class FlagView {
         }
 
         @java.lang.Override
-        public _FinalStage maintainerId(String maintainerId) {
-            this.maintainerId = Optional.ofNullable(maintainerId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "maintainer_id", nulls = Nulls.SKIP)
-        public _FinalStage maintainerId(Optional<String> maintainerId) {
-            this.maintainerId = maintainerId;
-            return this;
-        }
-
-        @java.lang.Override
         public _FinalStage lastCheckedAt(OffsetDateTime lastCheckedAt) {
             this.lastCheckedAt = Optional.ofNullable(lastCheckedAt);
             return this;
@@ -497,7 +466,6 @@ public final class FlagView {
                     id,
                     key,
                     lastCheckedAt,
-                    maintainerId,
                     name,
                     rules,
                     updatedAt,

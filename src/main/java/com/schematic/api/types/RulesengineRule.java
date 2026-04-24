@@ -39,7 +39,7 @@ public final class RulesengineRule {
 
     private final long priority;
 
-    private final RulesengineRuleRuleType ruleType;
+    private final RulesengineRuleType ruleType;
 
     private final boolean value;
 
@@ -54,7 +54,7 @@ public final class RulesengineRule {
             String id,
             String name,
             long priority,
-            RulesengineRuleRuleType ruleType,
+            RulesengineRuleType ruleType,
             boolean value,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
@@ -111,7 +111,7 @@ public final class RulesengineRule {
     }
 
     @JsonProperty("rule_type")
-    public RulesengineRuleRuleType getRuleType() {
+    public RulesengineRuleType getRuleType() {
         return ruleType;
     }
 
@@ -191,7 +191,7 @@ public final class RulesengineRule {
     }
 
     public interface RuleTypeStage {
-        ValueStage ruleType(@NotNull RulesengineRuleRuleType ruleType);
+        ValueStage ruleType(@NotNull RulesengineRuleType ruleType);
     }
 
     public interface ValueStage {
@@ -242,7 +242,7 @@ public final class RulesengineRule {
 
         private long priority;
 
-        private RulesengineRuleRuleType ruleType;
+        private RulesengineRuleType ruleType;
 
         private boolean value;
 
@@ -309,7 +309,7 @@ public final class RulesengineRule {
 
         @java.lang.Override
         @JsonSetter("rule_type")
-        public ValueStage ruleType(@NotNull RulesengineRuleRuleType ruleType) {
+        public ValueStage ruleType(@NotNull RulesengineRuleType ruleType) {
             this.ruleType = Objects.requireNonNull(ruleType, "ruleType must not be null");
             return this;
         }
