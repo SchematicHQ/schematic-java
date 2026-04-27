@@ -7,14 +7,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class PlanChangeSubscriptionAction {
-    public static final PlanChangeSubscriptionAction ADJUSTMENT =
-            new PlanChangeSubscriptionAction(Value.ADJUSTMENT, "adjustment");
-
     public static final PlanChangeSubscriptionAction DOWNGRADE =
             new PlanChangeSubscriptionAction(Value.DOWNGRADE, "downgrade");
 
     public static final PlanChangeSubscriptionAction INVALID =
             new PlanChangeSubscriptionAction(Value.INVALID, "invalid");
+
+    public static final PlanChangeSubscriptionAction ADJUSTMENT =
+            new PlanChangeSubscriptionAction(Value.ADJUSTMENT, "adjustment");
 
     public static final PlanChangeSubscriptionAction UNSUBSCRIBE =
             new PlanChangeSubscriptionAction(Value.UNSUBSCRIBE, "unsubscribe");
@@ -61,12 +61,12 @@ public final class PlanChangeSubscriptionAction {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case ADJUSTMENT:
-                return visitor.visitAdjustment();
             case DOWNGRADE:
                 return visitor.visitDowngrade();
             case INVALID:
                 return visitor.visitInvalid();
+            case ADJUSTMENT:
+                return visitor.visitAdjustment();
             case UNSUBSCRIBE:
                 return visitor.visitUnsubscribe();
             case SUBSCRIBE:
@@ -84,12 +84,12 @@ public final class PlanChangeSubscriptionAction {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static PlanChangeSubscriptionAction valueOf(String value) {
         switch (value) {
-            case "adjustment":
-                return ADJUSTMENT;
             case "downgrade":
                 return DOWNGRADE;
             case "invalid":
                 return INVALID;
+            case "adjustment":
+                return ADJUSTMENT;
             case "unsubscribe":
                 return UNSUBSCRIBE;
             case "subscribe":

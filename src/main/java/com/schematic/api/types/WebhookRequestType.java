@@ -7,8 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class WebhookRequestType {
-    public static final WebhookRequestType AUTO_TOPUP_HARD_FAILURE =
-            new WebhookRequestType(Value.AUTO_TOPUP_HARD_FAILURE, "auto.topup.hard.failure");
+    public static final WebhookRequestType FLAG_UPDATED = new WebhookRequestType(Value.FLAG_UPDATED, "flag.updated");
 
     public static final WebhookRequestType AUTO_TOPUP_RETRY_EXCEEDED =
             new WebhookRequestType(Value.AUTO_TOPUP_RETRY_EXCEEDED, "auto.topup.retry.exceeded");
@@ -16,89 +15,88 @@ public final class WebhookRequestType {
     public static final WebhookRequestType COMPANY_DELETED =
             new WebhookRequestType(Value.COMPANY_DELETED, "company.deleted");
 
-    public static final WebhookRequestType COMPANY_OVERRIDE_UPDATED =
-            new WebhookRequestType(Value.COMPANY_OVERRIDE_UPDATED, "company.override.updated");
-
-    public static final WebhookRequestType FLAG_UPDATED = new WebhookRequestType(Value.FLAG_UPDATED, "flag.updated");
-
-    public static final WebhookRequestType FEATURE_UPDATED =
-            new WebhookRequestType(Value.FEATURE_UPDATED, "feature.updated");
-
     public static final WebhookRequestType FLAG_RULES_UPDATED =
             new WebhookRequestType(Value.FLAG_RULES_UPDATED, "flag_rules.updated");
 
-    public static final WebhookRequestType USER_UPDATED = new WebhookRequestType(Value.USER_UPDATED, "user.updated");
+    public static final WebhookRequestType COMPANY_OVERRIDE_UPDATED =
+            new WebhookRequestType(Value.COMPANY_OVERRIDE_UPDATED, "company.override.updated");
 
     public static final WebhookRequestType PLAN_DELETED = new WebhookRequestType(Value.PLAN_DELETED, "plan.deleted");
+
+    public static final WebhookRequestType PLAN_ENTITLEMENT_CREATED =
+            new WebhookRequestType(Value.PLAN_ENTITLEMENT_CREATED, "plan.entitlement.created");
+
+    public static final WebhookRequestType USER_UPDATED = new WebhookRequestType(Value.USER_UPDATED, "user.updated");
+
+    public static final WebhookRequestType AUTO_TOPUP_HARD_FAILURE =
+            new WebhookRequestType(Value.AUTO_TOPUP_HARD_FAILURE, "auto.topup.hard.failure");
 
     public static final WebhookRequestType COMPANY_OVERRIDE_DELETED =
             new WebhookRequestType(Value.COMPANY_OVERRIDE_DELETED, "company.override.deleted");
 
-    public static final WebhookRequestType PLAN_ENTITLEMENT_UPDATED =
-            new WebhookRequestType(Value.PLAN_ENTITLEMENT_UPDATED, "plan.entitlement.updated");
-
-    public static final WebhookRequestType RULE_DELETED = new WebhookRequestType(Value.RULE_DELETED, "rule.deleted");
-
     public static final WebhookRequestType USER_CREATED = new WebhookRequestType(Value.USER_CREATED, "user.created");
 
-    public static final WebhookRequestType FEATURE_DELETED =
-            new WebhookRequestType(Value.FEATURE_DELETED, "feature.deleted");
+    public static final WebhookRequestType FEATURE_CREATED =
+            new WebhookRequestType(Value.FEATURE_CREATED, "feature.created");
 
-    public static final WebhookRequestType CREDIT_LIMIT_REACHED =
-            new WebhookRequestType(Value.CREDIT_LIMIT_REACHED, "credit.limit.reached");
-
-    public static final WebhookRequestType ENTITLEMENT_SOFT_LIMIT_REACHED =
-            new WebhookRequestType(Value.ENTITLEMENT_SOFT_LIMIT_REACHED, "entitlement.soft_limit.reached");
-
-    public static final WebhookRequestType SUBSCRIPTION_TRIAL_ENDED =
-            new WebhookRequestType(Value.SUBSCRIPTION_TRIAL_ENDED, "subscription.trial.ended");
+    public static final WebhookRequestType RULE_DELETED = new WebhookRequestType(Value.RULE_DELETED, "rule.deleted");
 
     public static final WebhookRequestType ENTITLEMENT_LIMIT_REACHED =
             new WebhookRequestType(Value.ENTITLEMENT_LIMIT_REACHED, "entitlement.limit.reached");
 
-    public static final WebhookRequestType COMPANY_OVERRIDE_CREATED =
-            new WebhookRequestType(Value.COMPANY_OVERRIDE_CREATED, "company.override.created");
-
-    public static final WebhookRequestType FLAG_CREATED = new WebhookRequestType(Value.FLAG_CREATED, "flag.created");
+    public static final WebhookRequestType CREDIT_LIMIT_REACHED =
+            new WebhookRequestType(Value.CREDIT_LIMIT_REACHED, "credit.limit.reached");
 
     public static final WebhookRequestType PLAN_ENTITLEMENT_DELETED =
             new WebhookRequestType(Value.PLAN_ENTITLEMENT_DELETED, "plan.entitlement.deleted");
 
-    public static final WebhookRequestType USER_DELETED = new WebhookRequestType(Value.USER_DELETED, "user.deleted");
+    public static final WebhookRequestType SUBSCRIPTION_TRIAL_ENDED =
+            new WebhookRequestType(Value.SUBSCRIPTION_TRIAL_ENDED, "subscription.trial.ended");
+
+    public static final WebhookRequestType ENTITLEMENT_SOFT_LIMIT_REACHED =
+            new WebhookRequestType(Value.ENTITLEMENT_SOFT_LIMIT_REACHED, "entitlement.soft_limit.reached");
 
     public static final WebhookRequestType ENTITLEMENT_LIMIT_WARNING =
             new WebhookRequestType(Value.ENTITLEMENT_LIMIT_WARNING, "entitlement.limit.warning");
+
+    public static final WebhookRequestType CREDIT_LIMIT_WARNING =
+            new WebhookRequestType(Value.CREDIT_LIMIT_WARNING, "credit.limit.warning");
+
+    public static final WebhookRequestType COMPANY_OVERRIDE_CREATED =
+            new WebhookRequestType(Value.COMPANY_OVERRIDE_CREATED, "company.override.created");
 
     public static final WebhookRequestType PLAN_UPDATED = new WebhookRequestType(Value.PLAN_UPDATED, "plan.updated");
 
     public static final WebhookRequestType COMPANY_SCHEDULED_DOWNGRADE =
             new WebhookRequestType(Value.COMPANY_SCHEDULED_DOWNGRADE, "company.scheduled_downgrade");
 
-    public static final WebhookRequestType CREDIT_LIMIT_WARNING =
-            new WebhookRequestType(Value.CREDIT_LIMIT_WARNING, "credit.limit.warning");
+    public static final WebhookRequestType FEATURE_DELETED =
+            new WebhookRequestType(Value.FEATURE_DELETED, "feature.deleted");
 
-    public static final WebhookRequestType FEATURE_CREATED =
-            new WebhookRequestType(Value.FEATURE_CREATED, "feature.created");
+    public static final WebhookRequestType FLAG_CREATED = new WebhookRequestType(Value.FLAG_CREATED, "flag.created");
+
+    public static final WebhookRequestType USER_DELETED = new WebhookRequestType(Value.USER_DELETED, "user.deleted");
 
     public static final WebhookRequestType ENTITLEMENT_SOFT_LIMIT_WARNING =
             new WebhookRequestType(Value.ENTITLEMENT_SOFT_LIMIT_WARNING, "entitlement.soft_limit.warning");
 
-    public static final WebhookRequestType PLAN_VERSION_DELETED =
-            new WebhookRequestType(Value.PLAN_VERSION_DELETED, "plan_version.deleted");
-
     public static final WebhookRequestType COMPANY_PLAN_CHANGED =
             new WebhookRequestType(Value.COMPANY_PLAN_CHANGED, "company.plan_changed");
-
-    public static final WebhookRequestType COMPANY_UPDATED =
-            new WebhookRequestType(Value.COMPANY_UPDATED, "company.updated");
 
     public static final WebhookRequestType ENTITLEMENT_TIER_LIMIT_REACHED =
             new WebhookRequestType(Value.ENTITLEMENT_TIER_LIMIT_REACHED, "entitlement.tier_limit.reached");
 
+    public static final WebhookRequestType PLAN_VERSION_DELETED =
+            new WebhookRequestType(Value.PLAN_VERSION_DELETED, "plan_version.deleted");
+
     public static final WebhookRequestType COMPANY_OVERRIDE_EXPIRED =
             new WebhookRequestType(Value.COMPANY_OVERRIDE_EXPIRED, "company.override.expired");
 
-    public static final WebhookRequestType FLAG_DELETED = new WebhookRequestType(Value.FLAG_DELETED, "flag.deleted");
+    public static final WebhookRequestType PLAN_ENTITLEMENT_UPDATED =
+            new WebhookRequestType(Value.PLAN_ENTITLEMENT_UPDATED, "plan.entitlement.updated");
+
+    public static final WebhookRequestType COMPANY_UPDATED =
+            new WebhookRequestType(Value.COMPANY_UPDATED, "company.updated");
 
     public static final WebhookRequestType COMPANY_CREATED =
             new WebhookRequestType(Value.COMPANY_CREATED, "company.created");
@@ -106,12 +104,14 @@ public final class WebhookRequestType {
     public static final WebhookRequestType ENTITLEMENT_TIER_LIMIT_WARNING =
             new WebhookRequestType(Value.ENTITLEMENT_TIER_LIMIT_WARNING, "entitlement.tier_limit.warning");
 
-    public static final WebhookRequestType PLAN_ENTITLEMENT_CREATED =
-            new WebhookRequestType(Value.PLAN_ENTITLEMENT_CREATED, "plan.entitlement.created");
+    public static final WebhookRequestType FLAG_DELETED = new WebhookRequestType(Value.FLAG_DELETED, "flag.deleted");
 
     public static final WebhookRequestType PLAN_CREATED = new WebhookRequestType(Value.PLAN_CREATED, "plan.created");
 
     public static final WebhookRequestType TEST_SEND = new WebhookRequestType(Value.TEST_SEND, "test.send");
+
+    public static final WebhookRequestType FEATURE_UPDATED =
+            new WebhookRequestType(Value.FEATURE_UPDATED, "feature.updated");
 
     private final Value value;
 
@@ -145,84 +145,84 @@ public final class WebhookRequestType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case AUTO_TOPUP_HARD_FAILURE:
-                return visitor.visitAutoTopupHardFailure();
+            case FLAG_UPDATED:
+                return visitor.visitFlagUpdated();
             case AUTO_TOPUP_RETRY_EXCEEDED:
                 return visitor.visitAutoTopupRetryExceeded();
             case COMPANY_DELETED:
                 return visitor.visitCompanyDeleted();
-            case COMPANY_OVERRIDE_UPDATED:
-                return visitor.visitCompanyOverrideUpdated();
-            case FLAG_UPDATED:
-                return visitor.visitFlagUpdated();
-            case FEATURE_UPDATED:
-                return visitor.visitFeatureUpdated();
             case FLAG_RULES_UPDATED:
                 return visitor.visitFlagRulesUpdated();
-            case USER_UPDATED:
-                return visitor.visitUserUpdated();
+            case COMPANY_OVERRIDE_UPDATED:
+                return visitor.visitCompanyOverrideUpdated();
             case PLAN_DELETED:
                 return visitor.visitPlanDeleted();
+            case PLAN_ENTITLEMENT_CREATED:
+                return visitor.visitPlanEntitlementCreated();
+            case USER_UPDATED:
+                return visitor.visitUserUpdated();
+            case AUTO_TOPUP_HARD_FAILURE:
+                return visitor.visitAutoTopupHardFailure();
             case COMPANY_OVERRIDE_DELETED:
                 return visitor.visitCompanyOverrideDeleted();
-            case PLAN_ENTITLEMENT_UPDATED:
-                return visitor.visitPlanEntitlementUpdated();
-            case RULE_DELETED:
-                return visitor.visitRuleDeleted();
             case USER_CREATED:
                 return visitor.visitUserCreated();
-            case FEATURE_DELETED:
-                return visitor.visitFeatureDeleted();
-            case CREDIT_LIMIT_REACHED:
-                return visitor.visitCreditLimitReached();
-            case ENTITLEMENT_SOFT_LIMIT_REACHED:
-                return visitor.visitEntitlementSoftLimitReached();
-            case SUBSCRIPTION_TRIAL_ENDED:
-                return visitor.visitSubscriptionTrialEnded();
+            case FEATURE_CREATED:
+                return visitor.visitFeatureCreated();
+            case RULE_DELETED:
+                return visitor.visitRuleDeleted();
             case ENTITLEMENT_LIMIT_REACHED:
                 return visitor.visitEntitlementLimitReached();
-            case COMPANY_OVERRIDE_CREATED:
-                return visitor.visitCompanyOverrideCreated();
-            case FLAG_CREATED:
-                return visitor.visitFlagCreated();
+            case CREDIT_LIMIT_REACHED:
+                return visitor.visitCreditLimitReached();
             case PLAN_ENTITLEMENT_DELETED:
                 return visitor.visitPlanEntitlementDeleted();
-            case USER_DELETED:
-                return visitor.visitUserDeleted();
+            case SUBSCRIPTION_TRIAL_ENDED:
+                return visitor.visitSubscriptionTrialEnded();
+            case ENTITLEMENT_SOFT_LIMIT_REACHED:
+                return visitor.visitEntitlementSoftLimitReached();
             case ENTITLEMENT_LIMIT_WARNING:
                 return visitor.visitEntitlementLimitWarning();
+            case CREDIT_LIMIT_WARNING:
+                return visitor.visitCreditLimitWarning();
+            case COMPANY_OVERRIDE_CREATED:
+                return visitor.visitCompanyOverrideCreated();
             case PLAN_UPDATED:
                 return visitor.visitPlanUpdated();
             case COMPANY_SCHEDULED_DOWNGRADE:
                 return visitor.visitCompanyScheduledDowngrade();
-            case CREDIT_LIMIT_WARNING:
-                return visitor.visitCreditLimitWarning();
-            case FEATURE_CREATED:
-                return visitor.visitFeatureCreated();
+            case FEATURE_DELETED:
+                return visitor.visitFeatureDeleted();
+            case FLAG_CREATED:
+                return visitor.visitFlagCreated();
+            case USER_DELETED:
+                return visitor.visitUserDeleted();
             case ENTITLEMENT_SOFT_LIMIT_WARNING:
                 return visitor.visitEntitlementSoftLimitWarning();
-            case PLAN_VERSION_DELETED:
-                return visitor.visitPlanVersionDeleted();
             case COMPANY_PLAN_CHANGED:
                 return visitor.visitCompanyPlanChanged();
-            case COMPANY_UPDATED:
-                return visitor.visitCompanyUpdated();
             case ENTITLEMENT_TIER_LIMIT_REACHED:
                 return visitor.visitEntitlementTierLimitReached();
+            case PLAN_VERSION_DELETED:
+                return visitor.visitPlanVersionDeleted();
             case COMPANY_OVERRIDE_EXPIRED:
                 return visitor.visitCompanyOverrideExpired();
-            case FLAG_DELETED:
-                return visitor.visitFlagDeleted();
+            case PLAN_ENTITLEMENT_UPDATED:
+                return visitor.visitPlanEntitlementUpdated();
+            case COMPANY_UPDATED:
+                return visitor.visitCompanyUpdated();
             case COMPANY_CREATED:
                 return visitor.visitCompanyCreated();
             case ENTITLEMENT_TIER_LIMIT_WARNING:
                 return visitor.visitEntitlementTierLimitWarning();
-            case PLAN_ENTITLEMENT_CREATED:
-                return visitor.visitPlanEntitlementCreated();
+            case FLAG_DELETED:
+                return visitor.visitFlagDeleted();
             case PLAN_CREATED:
                 return visitor.visitPlanCreated();
             case TEST_SEND:
                 return visitor.visitTestSend();
+            case FEATURE_UPDATED:
+                return visitor.visitFeatureUpdated();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -232,84 +232,84 @@ public final class WebhookRequestType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static WebhookRequestType valueOf(String value) {
         switch (value) {
-            case "auto.topup.hard.failure":
-                return AUTO_TOPUP_HARD_FAILURE;
+            case "flag.updated":
+                return FLAG_UPDATED;
             case "auto.topup.retry.exceeded":
                 return AUTO_TOPUP_RETRY_EXCEEDED;
             case "company.deleted":
                 return COMPANY_DELETED;
-            case "company.override.updated":
-                return COMPANY_OVERRIDE_UPDATED;
-            case "flag.updated":
-                return FLAG_UPDATED;
-            case "feature.updated":
-                return FEATURE_UPDATED;
             case "flag_rules.updated":
                 return FLAG_RULES_UPDATED;
-            case "user.updated":
-                return USER_UPDATED;
+            case "company.override.updated":
+                return COMPANY_OVERRIDE_UPDATED;
             case "plan.deleted":
                 return PLAN_DELETED;
+            case "plan.entitlement.created":
+                return PLAN_ENTITLEMENT_CREATED;
+            case "user.updated":
+                return USER_UPDATED;
+            case "auto.topup.hard.failure":
+                return AUTO_TOPUP_HARD_FAILURE;
             case "company.override.deleted":
                 return COMPANY_OVERRIDE_DELETED;
-            case "plan.entitlement.updated":
-                return PLAN_ENTITLEMENT_UPDATED;
-            case "rule.deleted":
-                return RULE_DELETED;
             case "user.created":
                 return USER_CREATED;
-            case "feature.deleted":
-                return FEATURE_DELETED;
-            case "credit.limit.reached":
-                return CREDIT_LIMIT_REACHED;
-            case "entitlement.soft_limit.reached":
-                return ENTITLEMENT_SOFT_LIMIT_REACHED;
-            case "subscription.trial.ended":
-                return SUBSCRIPTION_TRIAL_ENDED;
+            case "feature.created":
+                return FEATURE_CREATED;
+            case "rule.deleted":
+                return RULE_DELETED;
             case "entitlement.limit.reached":
                 return ENTITLEMENT_LIMIT_REACHED;
-            case "company.override.created":
-                return COMPANY_OVERRIDE_CREATED;
-            case "flag.created":
-                return FLAG_CREATED;
+            case "credit.limit.reached":
+                return CREDIT_LIMIT_REACHED;
             case "plan.entitlement.deleted":
                 return PLAN_ENTITLEMENT_DELETED;
-            case "user.deleted":
-                return USER_DELETED;
+            case "subscription.trial.ended":
+                return SUBSCRIPTION_TRIAL_ENDED;
+            case "entitlement.soft_limit.reached":
+                return ENTITLEMENT_SOFT_LIMIT_REACHED;
             case "entitlement.limit.warning":
                 return ENTITLEMENT_LIMIT_WARNING;
+            case "credit.limit.warning":
+                return CREDIT_LIMIT_WARNING;
+            case "company.override.created":
+                return COMPANY_OVERRIDE_CREATED;
             case "plan.updated":
                 return PLAN_UPDATED;
             case "company.scheduled_downgrade":
                 return COMPANY_SCHEDULED_DOWNGRADE;
-            case "credit.limit.warning":
-                return CREDIT_LIMIT_WARNING;
-            case "feature.created":
-                return FEATURE_CREATED;
+            case "feature.deleted":
+                return FEATURE_DELETED;
+            case "flag.created":
+                return FLAG_CREATED;
+            case "user.deleted":
+                return USER_DELETED;
             case "entitlement.soft_limit.warning":
                 return ENTITLEMENT_SOFT_LIMIT_WARNING;
-            case "plan_version.deleted":
-                return PLAN_VERSION_DELETED;
             case "company.plan_changed":
                 return COMPANY_PLAN_CHANGED;
-            case "company.updated":
-                return COMPANY_UPDATED;
             case "entitlement.tier_limit.reached":
                 return ENTITLEMENT_TIER_LIMIT_REACHED;
+            case "plan_version.deleted":
+                return PLAN_VERSION_DELETED;
             case "company.override.expired":
                 return COMPANY_OVERRIDE_EXPIRED;
-            case "flag.deleted":
-                return FLAG_DELETED;
+            case "plan.entitlement.updated":
+                return PLAN_ENTITLEMENT_UPDATED;
+            case "company.updated":
+                return COMPANY_UPDATED;
             case "company.created":
                 return COMPANY_CREATED;
             case "entitlement.tier_limit.warning":
                 return ENTITLEMENT_TIER_LIMIT_WARNING;
-            case "plan.entitlement.created":
-                return PLAN_ENTITLEMENT_CREATED;
+            case "flag.deleted":
+                return FLAG_DELETED;
             case "plan.created":
                 return PLAN_CREATED;
             case "test.send":
                 return TEST_SEND;
+            case "feature.updated":
+                return FEATURE_UPDATED;
             default:
                 return new WebhookRequestType(Value.UNKNOWN, value);
         }

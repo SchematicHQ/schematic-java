@@ -5,9 +5,9 @@ package com.schematic.api.resources.plans.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -90,12 +90,12 @@ public final class CountPlansRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("ids")
+    @JsonIgnore
     public Optional<List<String>> getIds() {
         return ids;
     }
 
-    @JsonProperty("company_id")
+    @JsonIgnore
     public Optional<String> getCompanyId() {
         return companyId;
     }
@@ -103,7 +103,7 @@ public final class CountPlansRequest {
     /**
      * @return Exclude plans that are scoped to a company (custom plans assigned to a company)
      */
-    @JsonProperty("exclude_company_scoped")
+    @JsonIgnore
     public Optional<Boolean> getExcludeCompanyScoped() {
         return excludeCompanyScoped;
     }
@@ -111,7 +111,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter for plans valid as fallback plans (not linked to billing)
      */
-    @JsonProperty("for_fallback_plan")
+    @JsonIgnore
     public Optional<Boolean> getForFallbackPlan() {
         return forFallbackPlan;
     }
@@ -119,7 +119,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter for plans valid as initial plans (not linked to billing, free, or auto-cancelling trial)
      */
-    @JsonProperty("for_initial_plan")
+    @JsonIgnore
     public Optional<Boolean> getForInitialPlan() {
         return forInitialPlan;
     }
@@ -127,7 +127,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter for plans valid as trial expiry plans (not linked to billing or free)
      */
-    @JsonProperty("for_trial_expiry_plan")
+    @JsonIgnore
     public Optional<Boolean> getForTrialExpiryPlan() {
         return forTrialExpiryPlan;
     }
@@ -135,7 +135,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter out plans that do not have a billing product ID
      */
-    @JsonProperty("has_product_id")
+    @JsonIgnore
     public Optional<Boolean> getHasProductId() {
         return hasProductId;
     }
@@ -143,7 +143,7 @@ public final class CountPlansRequest {
     /**
      * @return Include billing settings from draft versions for plans which have draft version
      */
-    @JsonProperty("include_draft_versions")
+    @JsonIgnore
     public Optional<Boolean> getIncludeDraftVersions() {
         return includeDraftVersions;
     }
@@ -151,12 +151,12 @@ public final class CountPlansRequest {
     /**
      * @return Filter by plan type
      */
-    @JsonProperty("plan_type")
+    @JsonIgnore
     public Optional<PlanType> getPlanType() {
         return planType;
     }
 
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
@@ -164,7 +164,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter plans scoped to a specific company (custom plans)
      */
-    @JsonProperty("scoped_to_company_id")
+    @JsonIgnore
     public Optional<String> getScopedToCompanyId() {
         return scopedToCompanyId;
     }
@@ -172,7 +172,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter out plans that already have a plan entitlement for the specified feature ID
      */
-    @JsonProperty("without_entitlement_for")
+    @JsonIgnore
     public Optional<String> getWithoutEntitlementFor() {
         return withoutEntitlementFor;
     }
@@ -180,7 +180,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter out plans that have a paid billing product ID
      */
-    @JsonProperty("without_paid_product_id")
+    @JsonIgnore
     public Optional<Boolean> getWithoutPaidProductId() {
         return withoutPaidProductId;
     }
@@ -188,7 +188,7 @@ public final class CountPlansRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -196,7 +196,7 @@ public final class CountPlansRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

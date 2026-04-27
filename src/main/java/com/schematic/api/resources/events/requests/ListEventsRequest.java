@@ -5,9 +5,9 @@ package com.schematic.api.resources.events.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -58,27 +58,27 @@ public final class ListEventsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("event_types")
+    @JsonIgnore
     public Optional<List<EventType>> getEventTypes() {
         return eventTypes;
     }
 
-    @JsonProperty("company_id")
+    @JsonIgnore
     public Optional<String> getCompanyId() {
         return companyId;
     }
 
-    @JsonProperty("event_subtype")
+    @JsonIgnore
     public Optional<String> getEventSubtype() {
         return eventSubtype;
     }
 
-    @JsonProperty("flag_id")
+    @JsonIgnore
     public Optional<String> getFlagId() {
         return flagId;
     }
 
-    @JsonProperty("user_id")
+    @JsonIgnore
     public Optional<String> getUserId() {
         return userId;
     }
@@ -86,7 +86,7 @@ public final class ListEventsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -94,7 +94,7 @@ public final class ListEventsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

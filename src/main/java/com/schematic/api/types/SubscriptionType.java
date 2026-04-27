@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class SubscriptionType {
+    public static final SubscriptionType PAID = new SubscriptionType(Value.PAID, "paid");
+
     public static final SubscriptionType TRIAL = new SubscriptionType(Value.TRIAL, "trial");
 
     public static final SubscriptionType FREE = new SubscriptionType(Value.FREE, "free");
 
     public static final SubscriptionType ONE_TIME = new SubscriptionType(Value.ONE_TIME, "one_time");
-
-    public static final SubscriptionType PAID = new SubscriptionType(Value.PAID, "paid");
 
     private final Value value;
 
@@ -47,14 +47,14 @@ public final class SubscriptionType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case PAID:
+                return visitor.visitPaid();
             case TRIAL:
                 return visitor.visitTrial();
             case FREE:
                 return visitor.visitFree();
             case ONE_TIME:
                 return visitor.visitOneTime();
-            case PAID:
-                return visitor.visitPaid();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -64,14 +64,14 @@ public final class SubscriptionType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static SubscriptionType valueOf(String value) {
         switch (value) {
+            case "paid":
+                return PAID;
             case "trial":
                 return TRIAL;
             case "free":
                 return FREE;
             case "one_time":
                 return ONE_TIME;
-            case "paid":
-                return PAID;
             default:
                 return new SubscriptionType(Value.UNKNOWN, value);
         }

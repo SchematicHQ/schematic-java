@@ -15,14 +15,14 @@ public final class FeatureLifecyclePhase {
 
     public static final FeatureLifecyclePhase INACTIVE = new FeatureLifecyclePhase(Value.INACTIVE, "inactive");
 
+    public static final FeatureLifecyclePhase INTERNAL_TESTING =
+            new FeatureLifecyclePhase(Value.INTERNAL_TESTING, "internal_testing");
+
     public static final FeatureLifecyclePhase ADD_ON = new FeatureLifecyclePhase(Value.ADD_ON, "add_on");
 
     public static final FeatureLifecyclePhase DEPRECATED = new FeatureLifecyclePhase(Value.DEPRECATED, "deprecated");
 
     public static final FeatureLifecyclePhase LEGACY = new FeatureLifecyclePhase(Value.LEGACY, "legacy");
-
-    public static final FeatureLifecyclePhase INTERNAL_TESTING =
-            new FeatureLifecyclePhase(Value.INTERNAL_TESTING, "internal_testing");
 
     public static final FeatureLifecyclePhase IN_PLAN = new FeatureLifecyclePhase(Value.IN_PLAN, "in_plan");
 
@@ -67,14 +67,14 @@ public final class FeatureLifecyclePhase {
                 return visitor.visitBeta();
             case INACTIVE:
                 return visitor.visitInactive();
+            case INTERNAL_TESTING:
+                return visitor.visitInternalTesting();
             case ADD_ON:
                 return visitor.visitAddOn();
             case DEPRECATED:
                 return visitor.visitDeprecated();
             case LEGACY:
                 return visitor.visitLegacy();
-            case INTERNAL_TESTING:
-                return visitor.visitInternalTesting();
             case IN_PLAN:
                 return visitor.visitInPlan();
             case UNKNOWN:
@@ -94,14 +94,14 @@ public final class FeatureLifecyclePhase {
                 return BETA;
             case "inactive":
                 return INACTIVE;
+            case "internal_testing":
+                return INTERNAL_TESTING;
             case "add_on":
                 return ADD_ON;
             case "deprecated":
                 return DEPRECATED;
             case "legacy":
                 return LEGACY;
-            case "internal_testing":
-                return INTERNAL_TESTING;
             case "in_plan":
                 return IN_PLAN;
             default:

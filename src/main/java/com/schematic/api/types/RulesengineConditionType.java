@@ -11,19 +11,19 @@ public final class RulesengineConditionType {
 
     public static final RulesengineConditionType METRIC = new RulesengineConditionType(Value.METRIC, "metric");
 
+    public static final RulesengineConditionType TRAIT = new RulesengineConditionType(Value.TRAIT, "trait");
+
     public static final RulesengineConditionType PLAN = new RulesengineConditionType(Value.PLAN, "plan");
 
     public static final RulesengineConditionType PLAN_VERSION =
             new RulesengineConditionType(Value.PLAN_VERSION, "plan_version");
 
-    public static final RulesengineConditionType TRAIT = new RulesengineConditionType(Value.TRAIT, "trait");
+    public static final RulesengineConditionType USER = new RulesengineConditionType(Value.USER, "user");
 
     public static final RulesengineConditionType CREDIT = new RulesengineConditionType(Value.CREDIT, "credit");
 
     public static final RulesengineConditionType BILLING_PRODUCT =
             new RulesengineConditionType(Value.BILLING_PRODUCT, "billing_product");
-
-    public static final RulesengineConditionType USER = new RulesengineConditionType(Value.USER, "user");
 
     public static final RulesengineConditionType COMPANY = new RulesengineConditionType(Value.COMPANY, "company");
 
@@ -64,18 +64,18 @@ public final class RulesengineConditionType {
                 return visitor.visitBasePlan();
             case METRIC:
                 return visitor.visitMetric();
+            case TRAIT:
+                return visitor.visitTrait();
             case PLAN:
                 return visitor.visitPlan();
             case PLAN_VERSION:
                 return visitor.visitPlanVersion();
-            case TRAIT:
-                return visitor.visitTrait();
+            case USER:
+                return visitor.visitUser();
             case CREDIT:
                 return visitor.visitCredit();
             case BILLING_PRODUCT:
                 return visitor.visitBillingProduct();
-            case USER:
-                return visitor.visitUser();
             case COMPANY:
                 return visitor.visitCompany();
             case UNKNOWN:
@@ -91,18 +91,18 @@ public final class RulesengineConditionType {
                 return BASE_PLAN;
             case "metric":
                 return METRIC;
+            case "trait":
+                return TRAIT;
             case "plan":
                 return PLAN;
             case "plan_version":
                 return PLAN_VERSION;
-            case "trait":
-                return TRAIT;
+            case "user":
+                return USER;
             case "credit":
                 return CREDIT;
             case "billing_product":
                 return BILLING_PRODUCT;
-            case "user":
-                return USER;
             case "company":
                 return COMPANY;
             default:

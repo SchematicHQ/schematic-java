@@ -11,9 +11,9 @@ public final class EntitlementValueType {
 
     public static final EntitlementValueType TRAIT = new EntitlementValueType(Value.TRAIT, "trait");
 
-    public static final EntitlementValueType BOOLEAN = new EntitlementValueType(Value.BOOLEAN, "boolean");
-
     public static final EntitlementValueType UNKNOWN = new EntitlementValueType(Value.UNKNOWN, "unknown");
+
+    public static final EntitlementValueType BOOLEAN = new EntitlementValueType(Value.BOOLEAN, "boolean");
 
     public static final EntitlementValueType CREDIT = new EntitlementValueType(Value.CREDIT, "credit");
 
@@ -55,10 +55,10 @@ public final class EntitlementValueType {
                 return visitor.visitNumeric();
             case TRAIT:
                 return visitor.visitTrait();
-            case BOOLEAN:
-                return visitor.visitBoolean();
             case UNKNOWN:
                 return visitor.visitUnknown();
+            case BOOLEAN:
+                return visitor.visitBoolean();
             case CREDIT:
                 return visitor.visitCredit();
             case UNLIMITED:
@@ -76,10 +76,10 @@ public final class EntitlementValueType {
                 return NUMERIC;
             case "trait":
                 return TRAIT;
-            case "boolean":
-                return BOOLEAN;
             case "unknown":
                 return UNKNOWN;
+            case "boolean":
+                return BOOLEAN;
             case "credit":
                 return CREDIT;
             case "unlimited":

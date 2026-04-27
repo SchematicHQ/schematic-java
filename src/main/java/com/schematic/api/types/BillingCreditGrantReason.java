@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class BillingCreditGrantReason {
+    public static final BillingCreditGrantReason PURCHASED = new BillingCreditGrantReason(Value.PURCHASED, "purchased");
+
     public static final BillingCreditGrantReason ADJUSTMENT =
             new BillingCreditGrantReason(Value.ADJUSTMENT, "adjustment");
-
-    public static final BillingCreditGrantReason PURCHASED = new BillingCreditGrantReason(Value.PURCHASED, "purchased");
 
     public static final BillingCreditGrantReason PLAN = new BillingCreditGrantReason(Value.PLAN, "plan");
 
@@ -52,10 +52,10 @@ public final class BillingCreditGrantReason {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case ADJUSTMENT:
-                return visitor.visitAdjustment();
             case PURCHASED:
                 return visitor.visitPurchased();
+            case ADJUSTMENT:
+                return visitor.visitAdjustment();
             case PLAN:
                 return visitor.visitPlan();
             case BILLING_CREDIT_AUTO_TOPUP:
@@ -71,10 +71,10 @@ public final class BillingCreditGrantReason {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static BillingCreditGrantReason valueOf(String value) {
         switch (value) {
-            case "adjustment":
-                return ADJUSTMENT;
             case "purchased":
                 return PURCHASED;
+            case "adjustment":
+                return ADJUSTMENT;
             case "plan":
                 return PLAN;
             case "billing_credit_auto_topup":

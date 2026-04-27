@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class MetricPeriod {
     public static final MetricPeriod CURRENT_DAY = new MetricPeriod(Value.CURRENT_DAY, "current_day");
 
-    public static final MetricPeriod ALL_TIME = new MetricPeriod(Value.ALL_TIME, "all_time");
-
     public static final MetricPeriod CURRENT_WEEK = new MetricPeriod(Value.CURRENT_WEEK, "current_week");
+
+    public static final MetricPeriod ALL_TIME = new MetricPeriod(Value.ALL_TIME, "all_time");
 
     public static final MetricPeriod CURRENT_MONTH = new MetricPeriod(Value.CURRENT_MONTH, "current_month");
 
@@ -48,10 +48,10 @@ public final class MetricPeriod {
         switch (value) {
             case CURRENT_DAY:
                 return visitor.visitCurrentDay();
-            case ALL_TIME:
-                return visitor.visitAllTime();
             case CURRENT_WEEK:
                 return visitor.visitCurrentWeek();
+            case ALL_TIME:
+                return visitor.visitAllTime();
             case CURRENT_MONTH:
                 return visitor.visitCurrentMonth();
             case UNKNOWN:
@@ -65,10 +65,10 @@ public final class MetricPeriod {
         switch (value) {
             case "current_day":
                 return CURRENT_DAY;
-            case "all_time":
-                return ALL_TIME;
             case "current_week":
                 return CURRENT_WEEK;
+            case "all_time":
+                return ALL_TIME;
             case "current_month":
                 return CURRENT_MONTH;
             default:

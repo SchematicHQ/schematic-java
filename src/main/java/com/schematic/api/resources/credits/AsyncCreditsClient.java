@@ -19,6 +19,7 @@ import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrant
 import com.schematic.api.resources.credits.requests.GetEnrichedCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
+import com.schematic.api.resources.credits.requests.ListCompanyCreditBalancesRequest;
 import com.schematic.api.resources.credits.requests.ListCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.ListCreditEventLedgerRequest;
@@ -45,6 +46,7 @@ import com.schematic.api.resources.credits.types.GetSingleBillingPlanCreditGrant
 import com.schematic.api.resources.credits.types.GrantBillingCreditsToCompanyResponse;
 import com.schematic.api.resources.credits.types.ListBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.ListBillingPlanCreditGrantsResponse;
+import com.schematic.api.resources.credits.types.ListCompanyCreditBalancesResponse;
 import com.schematic.api.resources.credits.types.ListCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.ListCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.ListCreditEventLedgerResponse;
@@ -129,6 +131,16 @@ public class AsyncCreditsClient {
     public CompletableFuture<SoftDeleteBillingCreditResponse> softDeleteBillingCredit(
             String creditId, RequestOptions requestOptions) {
         return this.rawClient.softDeleteBillingCredit(creditId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCompanyCreditBalancesResponse> listCompanyCreditBalances(
+            ListCompanyCreditBalancesRequest request) {
+        return this.rawClient.listCompanyCreditBalances(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCompanyCreditBalancesResponse> listCompanyCreditBalances(
+            ListCompanyCreditBalancesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listCompanyCreditBalances(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListCreditBundlesResponse> listCreditBundles() {

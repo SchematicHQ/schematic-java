@@ -5,9 +5,9 @@ package com.schematic.api.resources.accounts.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -57,27 +57,27 @@ public final class ListAuditLogsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("actor_type")
+    @JsonIgnore
     public Optional<ActorType> getActorType() {
         return actorType;
     }
 
-    @JsonProperty("end_time")
+    @JsonIgnore
     public Optional<OffsetDateTime> getEndTime() {
         return endTime;
     }
 
-    @JsonProperty("environment_id")
+    @JsonIgnore
     public Optional<String> getEnvironmentId() {
         return environmentId;
     }
 
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
 
-    @JsonProperty("start_time")
+    @JsonIgnore
     public Optional<OffsetDateTime> getStartTime() {
         return startTime;
     }
@@ -85,7 +85,7 @@ public final class ListAuditLogsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -93,7 +93,7 @@ public final class ListAuditLogsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

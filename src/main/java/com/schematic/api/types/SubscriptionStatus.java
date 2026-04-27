@@ -11,11 +11,13 @@ public final class SubscriptionStatus {
 
     public static final SubscriptionStatus CANCELED = new SubscriptionStatus(Value.CANCELED, "canceled");
 
+    public static final SubscriptionStatus EXPIRED = new SubscriptionStatus(Value.EXPIRED, "expired");
+
     public static final SubscriptionStatus INCOMPLETE = new SubscriptionStatus(Value.INCOMPLETE, "incomplete");
 
     public static final SubscriptionStatus PAUSED = new SubscriptionStatus(Value.PAUSED, "paused");
 
-    public static final SubscriptionStatus EXPIRED = new SubscriptionStatus(Value.EXPIRED, "expired");
+    public static final SubscriptionStatus TRIALING = new SubscriptionStatus(Value.TRIALING, "trialing");
 
     public static final SubscriptionStatus INCOMPLETE_EXPIRED =
             new SubscriptionStatus(Value.INCOMPLETE_EXPIRED, "incomplete_expired");
@@ -23,8 +25,6 @@ public final class SubscriptionStatus {
     public static final SubscriptionStatus ACTIVE = new SubscriptionStatus(Value.ACTIVE, "active");
 
     public static final SubscriptionStatus UNPAID = new SubscriptionStatus(Value.UNPAID, "unpaid");
-
-    public static final SubscriptionStatus TRIALING = new SubscriptionStatus(Value.TRIALING, "trialing");
 
     private final Value value;
 
@@ -62,20 +62,20 @@ public final class SubscriptionStatus {
                 return visitor.visitPastDue();
             case CANCELED:
                 return visitor.visitCanceled();
+            case EXPIRED:
+                return visitor.visitExpired();
             case INCOMPLETE:
                 return visitor.visitIncomplete();
             case PAUSED:
                 return visitor.visitPaused();
-            case EXPIRED:
-                return visitor.visitExpired();
+            case TRIALING:
+                return visitor.visitTrialing();
             case INCOMPLETE_EXPIRED:
                 return visitor.visitIncompleteExpired();
             case ACTIVE:
                 return visitor.visitActive();
             case UNPAID:
                 return visitor.visitUnpaid();
-            case TRIALING:
-                return visitor.visitTrialing();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -89,20 +89,20 @@ public final class SubscriptionStatus {
                 return PAST_DUE;
             case "canceled":
                 return CANCELED;
+            case "expired":
+                return EXPIRED;
             case "incomplete":
                 return INCOMPLETE;
             case "paused":
                 return PAUSED;
-            case "expired":
-                return EXPIRED;
+            case "trialing":
+                return TRIALING;
             case "incomplete_expired":
                 return INCOMPLETE_EXPIRED;
             case "active":
                 return ACTIVE;
             case "unpaid":
                 return UNPAID;
-            case "trialing":
-                return TRIALING;
             default:
                 return new SubscriptionStatus(Value.UNKNOWN, value);
         }

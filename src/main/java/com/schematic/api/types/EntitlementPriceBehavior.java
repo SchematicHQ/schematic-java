@@ -9,16 +9,16 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class EntitlementPriceBehavior {
     public static final EntitlementPriceBehavior TIER = new EntitlementPriceBehavior(Value.TIER, "tier");
 
+    public static final EntitlementPriceBehavior OVERAGE = new EntitlementPriceBehavior(Value.OVERAGE, "overage");
+
     public static final EntitlementPriceBehavior CREDIT_BURNDOWN =
             new EntitlementPriceBehavior(Value.CREDIT_BURNDOWN, "credit_burndown");
 
-    public static final EntitlementPriceBehavior OVERAGE = new EntitlementPriceBehavior(Value.OVERAGE, "overage");
+    public static final EntitlementPriceBehavior PAY_IN_ADVANCE =
+            new EntitlementPriceBehavior(Value.PAY_IN_ADVANCE, "pay_in_advance");
 
     public static final EntitlementPriceBehavior PAY_AS_YOU_GO =
             new EntitlementPriceBehavior(Value.PAY_AS_YOU_GO, "pay_as_you_go");
-
-    public static final EntitlementPriceBehavior PAY_IN_ADVANCE =
-            new EntitlementPriceBehavior(Value.PAY_IN_ADVANCE, "pay_in_advance");
 
     private final Value value;
 
@@ -55,14 +55,14 @@ public final class EntitlementPriceBehavior {
         switch (value) {
             case TIER:
                 return visitor.visitTier();
-            case CREDIT_BURNDOWN:
-                return visitor.visitCreditBurndown();
             case OVERAGE:
                 return visitor.visitOverage();
-            case PAY_AS_YOU_GO:
-                return visitor.visitPayAsYouGo();
+            case CREDIT_BURNDOWN:
+                return visitor.visitCreditBurndown();
             case PAY_IN_ADVANCE:
                 return visitor.visitPayInAdvance();
+            case PAY_AS_YOU_GO:
+                return visitor.visitPayAsYouGo();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -74,14 +74,14 @@ public final class EntitlementPriceBehavior {
         switch (value) {
             case "tier":
                 return TIER;
-            case "credit_burndown":
-                return CREDIT_BURNDOWN;
             case "overage":
                 return OVERAGE;
-            case "pay_as_you_go":
-                return PAY_AS_YOU_GO;
+            case "credit_burndown":
+                return CREDIT_BURNDOWN;
             case "pay_in_advance":
                 return PAY_IN_ADVANCE;
+            case "pay_as_you_go":
+                return PAY_AS_YOU_GO;
             default:
                 return new EntitlementPriceBehavior(Value.UNKNOWN, value);
         }

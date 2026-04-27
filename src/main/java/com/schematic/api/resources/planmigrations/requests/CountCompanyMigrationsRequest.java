@@ -5,9 +5,9 @@ package com.schematic.api.resources.planmigrations.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -48,17 +48,17 @@ public final class CountCompanyMigrationsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("migration_id")
+    @JsonIgnore
     public Optional<String> getMigrationId() {
         return migrationId;
     }
 
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
 
-    @JsonProperty("status")
+    @JsonIgnore
     public Optional<PlanVersionCompanyMigrationStatus> getStatus() {
         return status;
     }
@@ -66,7 +66,7 @@ public final class CountCompanyMigrationsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -74,7 +74,7 @@ public final class CountCompanyMigrationsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

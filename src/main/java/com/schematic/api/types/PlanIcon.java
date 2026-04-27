@@ -11,9 +11,9 @@ public final class PlanIcon {
 
     public static final PlanIcon EMERALD = new PlanIcon(Value.EMERALD, "emerald");
 
-    public static final PlanIcon BLUE_GRAY = new PlanIcon(Value.BLUE_GRAY, "blueGray");
-
     public static final PlanIcon YELLOW = new PlanIcon(Value.YELLOW, "yellow");
+
+    public static final PlanIcon BLUE_GRAY = new PlanIcon(Value.BLUE_GRAY, "blueGray");
 
     public static final PlanIcon LIME = new PlanIcon(Value.LIME, "lime");
 
@@ -29,27 +29,27 @@ public final class PlanIcon {
 
     public static final PlanIcon VIOLET = new PlanIcon(Value.VIOLET, "violet");
 
-    public static final PlanIcon BLUE_GREEN = new PlanIcon(Value.BLUE_GREEN, "blueGreen");
-
     public static final PlanIcon WARM_GRAY = new PlanIcon(Value.WARM_GRAY, "warmGray");
 
-    public static final PlanIcon GREEN = new PlanIcon(Value.GREEN, "green");
+    public static final PlanIcon BLUE_GREEN = new PlanIcon(Value.BLUE_GREEN, "blueGreen");
 
     public static final PlanIcon LIGHT_BLUE = new PlanIcon(Value.LIGHT_BLUE, "lightBlue");
 
-    public static final PlanIcon TEAL = new PlanIcon(Value.TEAL, "teal");
+    public static final PlanIcon GREEN = new PlanIcon(Value.GREEN, "green");
 
     public static final PlanIcon ORANGE = new PlanIcon(Value.ORANGE, "orange");
 
     public static final PlanIcon PINK = new PlanIcon(Value.PINK, "pink");
 
-    public static final PlanIcon RED_ORANGE = new PlanIcon(Value.RED_ORANGE, "redOrange");
-
-    public static final PlanIcon TRUE_GRAY = new PlanIcon(Value.TRUE_GRAY, "trueGray");
+    public static final PlanIcon TEAL = new PlanIcon(Value.TEAL, "teal");
 
     public static final PlanIcon INDIGO = new PlanIcon(Value.INDIGO, "indigo");
 
     public static final PlanIcon SLATE = new PlanIcon(Value.SLATE, "slate");
+
+    public static final PlanIcon RED_ORANGE = new PlanIcon(Value.RED_ORANGE, "redOrange");
+
+    public static final PlanIcon TRUE_GRAY = new PlanIcon(Value.TRUE_GRAY, "trueGray");
 
     public static final PlanIcon AMBER = new PlanIcon(Value.AMBER, "amber");
 
@@ -92,10 +92,10 @@ public final class PlanIcon {
                 return visitor.visitFuchsia();
             case EMERALD:
                 return visitor.visitEmerald();
-            case BLUE_GRAY:
-                return visitor.visitBlueGray();
             case YELLOW:
                 return visitor.visitYellow();
+            case BLUE_GRAY:
+                return visitor.visitBlueGray();
             case LIME:
                 return visitor.visitLime();
             case SKY:
@@ -110,28 +110,28 @@ public final class PlanIcon {
                 return visitor.visitBlue();
             case VIOLET:
                 return visitor.visitViolet();
-            case BLUE_GREEN:
-                return visitor.visitBlueGreen();
             case WARM_GRAY:
                 return visitor.visitWarmGray();
-            case GREEN:
-                return visitor.visitGreen();
+            case BLUE_GREEN:
+                return visitor.visitBlueGreen();
             case LIGHT_BLUE:
                 return visitor.visitLightBlue();
-            case TEAL:
-                return visitor.visitTeal();
+            case GREEN:
+                return visitor.visitGreen();
             case ORANGE:
                 return visitor.visitOrange();
             case PINK:
                 return visitor.visitPink();
-            case RED_ORANGE:
-                return visitor.visitRedOrange();
-            case TRUE_GRAY:
-                return visitor.visitTrueGray();
+            case TEAL:
+                return visitor.visitTeal();
             case INDIGO:
                 return visitor.visitIndigo();
             case SLATE:
                 return visitor.visitSlate();
+            case RED_ORANGE:
+                return visitor.visitRedOrange();
+            case TRUE_GRAY:
+                return visitor.visitTrueGray();
             case AMBER:
                 return visitor.visitAmber();
             case RED:
@@ -151,10 +151,10 @@ public final class PlanIcon {
                 return FUCHSIA;
             case "emerald":
                 return EMERALD;
-            case "blueGray":
-                return BLUE_GRAY;
             case "yellow":
                 return YELLOW;
+            case "blueGray":
+                return BLUE_GRAY;
             case "lime":
                 return LIME;
             case "sky":
@@ -169,28 +169,28 @@ public final class PlanIcon {
                 return BLUE;
             case "violet":
                 return VIOLET;
-            case "blueGreen":
-                return BLUE_GREEN;
             case "warmGray":
                 return WARM_GRAY;
-            case "green":
-                return GREEN;
+            case "blueGreen":
+                return BLUE_GREEN;
             case "lightBlue":
                 return LIGHT_BLUE;
-            case "teal":
-                return TEAL;
+            case "green":
+                return GREEN;
             case "orange":
                 return ORANGE;
             case "pink":
                 return PINK;
-            case "redOrange":
-                return RED_ORANGE;
-            case "trueGray":
-                return TRUE_GRAY;
+            case "teal":
+                return TEAL;
             case "indigo":
                 return INDIGO;
             case "slate":
                 return SLATE;
+            case "redOrange":
+                return RED_ORANGE;
+            case "trueGray":
+                return TRUE_GRAY;
             case "amber":
                 return AMBER;
             case "red":

@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class WebhookEventStatus {
-    public static final WebhookEventStatus FAILURE = new WebhookEventStatus(Value.FAILURE, "failure");
-
     public static final WebhookEventStatus SUCCESS = new WebhookEventStatus(Value.SUCCESS, "success");
+
+    public static final WebhookEventStatus FAILURE = new WebhookEventStatus(Value.FAILURE, "failure");
 
     public static final WebhookEventStatus PENDING = new WebhookEventStatus(Value.PENDING, "pending");
 
@@ -45,10 +45,10 @@ public final class WebhookEventStatus {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case FAILURE:
-                return visitor.visitFailure();
             case SUCCESS:
                 return visitor.visitSuccess();
+            case FAILURE:
+                return visitor.visitFailure();
             case PENDING:
                 return visitor.visitPending();
             case UNKNOWN:
@@ -60,10 +60,10 @@ public final class WebhookEventStatus {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static WebhookEventStatus valueOf(String value) {
         switch (value) {
-            case "failure":
-                return FAILURE;
             case "success":
                 return SUCCESS;
+            case "failure":
+                return FAILURE;
             case "pending":
                 return PENDING;
             default:

@@ -5,9 +5,9 @@ package com.schematic.api.resources.billing.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -54,22 +54,22 @@ public final class ListCustomersWithSubscriptionsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("company_ids")
+    @JsonIgnore
     public Optional<List<String>> getCompanyIds() {
         return companyIds;
     }
 
-    @JsonProperty("name")
+    @JsonIgnore
     public Optional<String> getName() {
         return name;
     }
 
-    @JsonProperty("provider_type")
+    @JsonIgnore
     public Optional<BillingProviderType> getProviderType() {
         return providerType;
     }
 
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
@@ -77,7 +77,7 @@ public final class ListCustomersWithSubscriptionsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -85,7 +85,7 @@ public final class ListCustomersWithSubscriptionsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

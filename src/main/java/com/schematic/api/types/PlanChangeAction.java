@@ -7,19 +7,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class PlanChangeAction {
-    public static final PlanChangeAction PLAN_VERSION_MIGRATION =
-            new PlanChangeAction(Value.PLAN_VERSION_MIGRATION, "plan_version_migration");
-
     public static final PlanChangeAction CHECKOUT = new PlanChangeAction(Value.CHECKOUT, "checkout");
 
     public static final PlanChangeAction MIGRATION = new PlanChangeAction(Value.MIGRATION, "migration");
 
-    public static final PlanChangeAction COMPANY_UPSERT = new PlanChangeAction(Value.COMPANY_UPSERT, "company_upsert");
-
-    public static final PlanChangeAction PLAN_BILLING_PRODUCT_CHANGED =
-            new PlanChangeAction(Value.PLAN_BILLING_PRODUCT_CHANGED, "plan_billing_product_changed");
-
-    public static final PlanChangeAction FALLBACK_PLAN = new PlanChangeAction(Value.FALLBACK_PLAN, "fallback_plan");
+    public static final PlanChangeAction PLAN_VERSION_MIGRATION =
+            new PlanChangeAction(Value.PLAN_VERSION_MIGRATION, "plan_version_migration");
 
     public static final PlanChangeAction SUBSCRIPTION_CHANGE =
             new PlanChangeAction(Value.SUBSCRIPTION_CHANGE, "subscription_change");
@@ -28,10 +21,17 @@ public final class PlanChangeAction {
 
     public static final PlanChangeAction QUICKSTART = new PlanChangeAction(Value.QUICKSTART, "quickstart");
 
-    public static final PlanChangeAction MANAGE_PLAN = new PlanChangeAction(Value.MANAGE_PLAN, "manage_plan");
+    public static final PlanChangeAction COMPANY_UPSERT = new PlanChangeAction(Value.COMPANY_UPSERT, "company_upsert");
+
+    public static final PlanChangeAction PLAN_BILLING_PRODUCT_CHANGED =
+            new PlanChangeAction(Value.PLAN_BILLING_PRODUCT_CHANGED, "plan_billing_product_changed");
+
+    public static final PlanChangeAction FALLBACK_PLAN = new PlanChangeAction(Value.FALLBACK_PLAN, "fallback_plan");
 
     public static final PlanChangeAction PLAN_TRAIT_CHANGE =
             new PlanChangeAction(Value.PLAN_TRAIT_CHANGE, "plan_trait_change");
+
+    public static final PlanChangeAction MANAGE_PLAN = new PlanChangeAction(Value.MANAGE_PLAN, "manage_plan");
 
     private final Value value;
 
@@ -65,28 +65,28 @@ public final class PlanChangeAction {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case PLAN_VERSION_MIGRATION:
-                return visitor.visitPlanVersionMigration();
             case CHECKOUT:
                 return visitor.visitCheckout();
             case MIGRATION:
                 return visitor.visitMigration();
-            case COMPANY_UPSERT:
-                return visitor.visitCompanyUpsert();
-            case PLAN_BILLING_PRODUCT_CHANGED:
-                return visitor.visitPlanBillingProductChanged();
-            case FALLBACK_PLAN:
-                return visitor.visitFallbackPlan();
+            case PLAN_VERSION_MIGRATION:
+                return visitor.visitPlanVersionMigration();
             case SUBSCRIPTION_CHANGE:
                 return visitor.visitSubscriptionChange();
             case PLAN_DELETED:
                 return visitor.visitPlanDeleted();
             case QUICKSTART:
                 return visitor.visitQuickstart();
-            case MANAGE_PLAN:
-                return visitor.visitManagePlan();
+            case COMPANY_UPSERT:
+                return visitor.visitCompanyUpsert();
+            case PLAN_BILLING_PRODUCT_CHANGED:
+                return visitor.visitPlanBillingProductChanged();
+            case FALLBACK_PLAN:
+                return visitor.visitFallbackPlan();
             case PLAN_TRAIT_CHANGE:
                 return visitor.visitPlanTraitChange();
+            case MANAGE_PLAN:
+                return visitor.visitManagePlan();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -96,28 +96,28 @@ public final class PlanChangeAction {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static PlanChangeAction valueOf(String value) {
         switch (value) {
-            case "plan_version_migration":
-                return PLAN_VERSION_MIGRATION;
             case "checkout":
                 return CHECKOUT;
             case "migration":
                 return MIGRATION;
-            case "company_upsert":
-                return COMPANY_UPSERT;
-            case "plan_billing_product_changed":
-                return PLAN_BILLING_PRODUCT_CHANGED;
-            case "fallback_plan":
-                return FALLBACK_PLAN;
+            case "plan_version_migration":
+                return PLAN_VERSION_MIGRATION;
             case "subscription_change":
                 return SUBSCRIPTION_CHANGE;
             case "plan_deleted":
                 return PLAN_DELETED;
             case "quickstart":
                 return QUICKSTART;
-            case "manage_plan":
-                return MANAGE_PLAN;
+            case "company_upsert":
+                return COMPANY_UPSERT;
+            case "plan_billing_product_changed":
+                return PLAN_BILLING_PRODUCT_CHANGED;
+            case "fallback_plan":
+                return FALLBACK_PLAN;
             case "plan_trait_change":
                 return PLAN_TRAIT_CHANGE;
+            case "manage_plan":
+                return MANAGE_PLAN;
             default:
                 return new PlanChangeAction(Value.UNKNOWN, value);
         }

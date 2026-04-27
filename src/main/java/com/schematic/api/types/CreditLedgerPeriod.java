@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class CreditLedgerPeriod {
-    public static final CreditLedgerPeriod RAW = new CreditLedgerPeriod(Value.RAW, "raw");
-
-    public static final CreditLedgerPeriod MONTHLY = new CreditLedgerPeriod(Value.MONTHLY, "monthly");
-
     public static final CreditLedgerPeriod DAILY = new CreditLedgerPeriod(Value.DAILY, "daily");
 
     public static final CreditLedgerPeriod WEEKLY = new CreditLedgerPeriod(Value.WEEKLY, "weekly");
+
+    public static final CreditLedgerPeriod RAW = new CreditLedgerPeriod(Value.RAW, "raw");
+
+    public static final CreditLedgerPeriod MONTHLY = new CreditLedgerPeriod(Value.MONTHLY, "monthly");
 
     private final Value value;
 
@@ -47,14 +47,14 @@ public final class CreditLedgerPeriod {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case RAW:
-                return visitor.visitRaw();
-            case MONTHLY:
-                return visitor.visitMonthly();
             case DAILY:
                 return visitor.visitDaily();
             case WEEKLY:
                 return visitor.visitWeekly();
+            case RAW:
+                return visitor.visitRaw();
+            case MONTHLY:
+                return visitor.visitMonthly();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -64,14 +64,14 @@ public final class CreditLedgerPeriod {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static CreditLedgerPeriod valueOf(String value) {
         switch (value) {
-            case "raw":
-                return RAW;
-            case "monthly":
-                return MONTHLY;
             case "daily":
                 return DAILY;
             case "weekly":
                 return WEEKLY;
+            case "raw":
+                return RAW;
+            case "monthly":
+                return MONTHLY;
             default:
                 return new CreditLedgerPeriod(Value.UNKNOWN, value);
         }

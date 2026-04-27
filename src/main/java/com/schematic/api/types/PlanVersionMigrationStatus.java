@@ -9,13 +9,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class PlanVersionMigrationStatus {
     public static final PlanVersionMigrationStatus FAILED = new PlanVersionMigrationStatus(Value.FAILED, "failed");
 
-    public static final PlanVersionMigrationStatus COMPLETED =
-            new PlanVersionMigrationStatus(Value.COMPLETED, "completed");
-
     public static final PlanVersionMigrationStatus IN_PROGRESS =
             new PlanVersionMigrationStatus(Value.IN_PROGRESS, "in_progress");
 
     public static final PlanVersionMigrationStatus PENDING = new PlanVersionMigrationStatus(Value.PENDING, "pending");
+
+    public static final PlanVersionMigrationStatus COMPLETED =
+            new PlanVersionMigrationStatus(Value.COMPLETED, "completed");
 
     private final Value value;
 
@@ -52,12 +52,12 @@ public final class PlanVersionMigrationStatus {
         switch (value) {
             case FAILED:
                 return visitor.visitFailed();
-            case COMPLETED:
-                return visitor.visitCompleted();
             case IN_PROGRESS:
                 return visitor.visitInProgress();
             case PENDING:
                 return visitor.visitPending();
+            case COMPLETED:
+                return visitor.visitCompleted();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -69,12 +69,12 @@ public final class PlanVersionMigrationStatus {
         switch (value) {
             case "failed":
                 return FAILED;
-            case "completed":
-                return COMPLETED;
             case "in_progress":
                 return IN_PROGRESS;
             case "pending":
                 return PENDING;
+            case "completed":
+                return COMPLETED;
             default:
                 return new PlanVersionMigrationStatus(Value.UNKNOWN, value);
         }
