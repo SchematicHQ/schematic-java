@@ -5,9 +5,9 @@ package com.schematic.api.resources.entitlements.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -76,7 +76,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Filter plan entitlements by multiple feature IDs (starting with feat_)
      */
-    @JsonProperty("feature_ids")
+    @JsonIgnore
     public Optional<List<String>> getFeatureIds() {
         return featureIds;
     }
@@ -84,7 +84,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Filter plan entitlements by multiple plan entitlement IDs (starting with pltl_)
      */
-    @JsonProperty("ids")
+    @JsonIgnore
     public Optional<List<String>> getIds() {
         return ids;
     }
@@ -92,7 +92,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Filter plan entitlements by multiple plan IDs (starting with plan_)
      */
-    @JsonProperty("plan_ids")
+    @JsonIgnore
     public Optional<List<String>> getPlanIds() {
         return planIds;
     }
@@ -100,7 +100,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Filter plan entitlements by multiple plan version IDs (starting with plvr_)
      */
-    @JsonProperty("plan_version_ids")
+    @JsonIgnore
     public Optional<List<String>> getPlanVersionIds() {
         return planVersionIds;
     }
@@ -108,7 +108,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Filter plan entitlements by a single feature ID (starting with feat_)
      */
-    @JsonProperty("feature_id")
+    @JsonIgnore
     public Optional<String> getFeatureId() {
         return featureId;
     }
@@ -116,7 +116,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Filter plan entitlements by a single plan ID (starting with plan_)
      */
-    @JsonProperty("plan_id")
+    @JsonIgnore
     public Optional<String> getPlanId() {
         return planId;
     }
@@ -124,7 +124,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Filter plan entitlements by a single plan version ID (starting with plvr_)
      */
-    @JsonProperty("plan_version_id")
+    @JsonIgnore
     public Optional<String> getPlanVersionId() {
         return planVersionId;
     }
@@ -132,7 +132,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Search for plan entitlements by feature or company name
      */
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
@@ -140,7 +140,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Filter plan entitlements only with metered products
      */
-    @JsonProperty("with_metered_products")
+    @JsonIgnore
     public Optional<Boolean> getWithMeteredProducts() {
         return withMeteredProducts;
     }
@@ -148,7 +148,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -156,7 +156,7 @@ public final class CountPlanEntitlementsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

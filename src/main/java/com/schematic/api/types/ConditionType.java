@@ -11,17 +11,17 @@ public final class ConditionType {
 
     public static final ConditionType METRIC = new ConditionType(Value.METRIC, "metric");
 
+    public static final ConditionType TRAIT = new ConditionType(Value.TRAIT, "trait");
+
     public static final ConditionType PLAN = new ConditionType(Value.PLAN, "plan");
 
     public static final ConditionType PLAN_VERSION = new ConditionType(Value.PLAN_VERSION, "plan_version");
 
-    public static final ConditionType TRAIT = new ConditionType(Value.TRAIT, "trait");
+    public static final ConditionType USER = new ConditionType(Value.USER, "user");
 
     public static final ConditionType CREDIT = new ConditionType(Value.CREDIT, "credit");
 
     public static final ConditionType BILLING_PRODUCT = new ConditionType(Value.BILLING_PRODUCT, "billing_product");
-
-    public static final ConditionType USER = new ConditionType(Value.USER, "user");
 
     public static final ConditionType COMPANY = new ConditionType(Value.COMPANY, "company");
 
@@ -61,18 +61,18 @@ public final class ConditionType {
                 return visitor.visitBasePlan();
             case METRIC:
                 return visitor.visitMetric();
+            case TRAIT:
+                return visitor.visitTrait();
             case PLAN:
                 return visitor.visitPlan();
             case PLAN_VERSION:
                 return visitor.visitPlanVersion();
-            case TRAIT:
-                return visitor.visitTrait();
+            case USER:
+                return visitor.visitUser();
             case CREDIT:
                 return visitor.visitCredit();
             case BILLING_PRODUCT:
                 return visitor.visitBillingProduct();
-            case USER:
-                return visitor.visitUser();
             case COMPANY:
                 return visitor.visitCompany();
             case UNKNOWN:
@@ -88,18 +88,18 @@ public final class ConditionType {
                 return BASE_PLAN;
             case "metric":
                 return METRIC;
+            case "trait":
+                return TRAIT;
             case "plan":
                 return PLAN;
             case "plan_version":
                 return PLAN_VERSION;
-            case "trait":
-                return TRAIT;
+            case "user":
+                return USER;
             case "credit":
                 return CREDIT;
             case "billing_product":
                 return BILLING_PRODUCT;
-            case "user":
-                return USER;
             case "company":
                 return COMPANY;
             default:

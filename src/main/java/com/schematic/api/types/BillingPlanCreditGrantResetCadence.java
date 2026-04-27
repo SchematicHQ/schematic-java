@@ -10,14 +10,14 @@ public final class BillingPlanCreditGrantResetCadence {
     public static final BillingPlanCreditGrantResetCadence YEARLY =
             new BillingPlanCreditGrantResetCadence(Value.YEARLY, "yearly");
 
-    public static final BillingPlanCreditGrantResetCadence MONTHLY =
-            new BillingPlanCreditGrantResetCadence(Value.MONTHLY, "monthly");
-
     public static final BillingPlanCreditGrantResetCadence DAILY =
             new BillingPlanCreditGrantResetCadence(Value.DAILY, "daily");
 
     public static final BillingPlanCreditGrantResetCadence WEEKLY =
             new BillingPlanCreditGrantResetCadence(Value.WEEKLY, "weekly");
+
+    public static final BillingPlanCreditGrantResetCadence MONTHLY =
+            new BillingPlanCreditGrantResetCadence(Value.MONTHLY, "monthly");
 
     private final Value value;
 
@@ -54,12 +54,12 @@ public final class BillingPlanCreditGrantResetCadence {
         switch (value) {
             case YEARLY:
                 return visitor.visitYearly();
-            case MONTHLY:
-                return visitor.visitMonthly();
             case DAILY:
                 return visitor.visitDaily();
             case WEEKLY:
                 return visitor.visitWeekly();
+            case MONTHLY:
+                return visitor.visitMonthly();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -71,12 +71,12 @@ public final class BillingPlanCreditGrantResetCadence {
         switch (value) {
             case "yearly":
                 return YEARLY;
-            case "monthly":
-                return MONTHLY;
             case "daily":
                 return DAILY;
             case "weekly":
                 return WEEKLY;
+            case "monthly":
+                return MONTHLY;
             default:
                 return new BillingPlanCreditGrantResetCadence(Value.UNKNOWN, value);
         }

@@ -5,9 +5,9 @@ package com.schematic.api.resources.features.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -69,12 +69,12 @@ public final class CountFeaturesRequest {
     /**
      * @return Filter by one or more feature types (boolean, event, trait)
      */
-    @JsonProperty("feature_type")
+    @JsonIgnore
     public Optional<List<FeatureType>> getFeatureType() {
         return featureType;
     }
 
-    @JsonProperty("ids")
+    @JsonIgnore
     public Optional<List<String>> getIds() {
         return ids;
     }
@@ -82,7 +82,7 @@ public final class CountFeaturesRequest {
     /**
      * @return Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
      */
-    @JsonProperty("boolean_require_event")
+    @JsonIgnore
     public Optional<Boolean> getBooleanRequireEvent() {
         return booleanRequireEvent;
     }
@@ -90,7 +90,7 @@ public final class CountFeaturesRequest {
     /**
      * @return Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
      */
-    @JsonProperty("plan_version_id")
+    @JsonIgnore
     public Optional<String> getPlanVersionId() {
         return planVersionId;
     }
@@ -98,7 +98,7 @@ public final class CountFeaturesRequest {
     /**
      * @return Search by feature name or ID
      */
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
@@ -106,7 +106,7 @@ public final class CountFeaturesRequest {
     /**
      * @return Filter out features that already have a company override for the specified company ID
      */
-    @JsonProperty("without_company_override_for")
+    @JsonIgnore
     public Optional<String> getWithoutCompanyOverrideFor() {
         return withoutCompanyOverrideFor;
     }
@@ -114,7 +114,7 @@ public final class CountFeaturesRequest {
     /**
      * @return Filter out features that already have a plan entitlement for the specified plan ID
      */
-    @JsonProperty("without_plan_entitlement_for")
+    @JsonIgnore
     public Optional<String> getWithoutPlanEntitlementFor() {
         return withoutPlanEntitlementFor;
     }
@@ -122,7 +122,7 @@ public final class CountFeaturesRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -130,7 +130,7 @@ public final class CountFeaturesRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

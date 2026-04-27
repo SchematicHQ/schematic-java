@@ -13,11 +13,11 @@ public final class RulesengineEntitlementValueType {
     public static final RulesengineEntitlementValueType TRAIT =
             new RulesengineEntitlementValueType(Value.TRAIT, "trait");
 
-    public static final RulesengineEntitlementValueType BOOLEAN =
-            new RulesengineEntitlementValueType(Value.BOOLEAN, "boolean");
-
     public static final RulesengineEntitlementValueType UNKNOWN =
             new RulesengineEntitlementValueType(Value.UNKNOWN, "unknown");
+
+    public static final RulesengineEntitlementValueType BOOLEAN =
+            new RulesengineEntitlementValueType(Value.BOOLEAN, "boolean");
 
     public static final RulesengineEntitlementValueType CREDIT =
             new RulesengineEntitlementValueType(Value.CREDIT, "credit");
@@ -62,10 +62,10 @@ public final class RulesengineEntitlementValueType {
                 return visitor.visitNumeric();
             case TRAIT:
                 return visitor.visitTrait();
-            case BOOLEAN:
-                return visitor.visitBoolean();
             case UNKNOWN:
                 return visitor.visitUnknown();
+            case BOOLEAN:
+                return visitor.visitBoolean();
             case CREDIT:
                 return visitor.visitCredit();
             case UNLIMITED:
@@ -83,10 +83,10 @@ public final class RulesengineEntitlementValueType {
                 return NUMERIC;
             case "trait":
                 return TRAIT;
-            case "boolean":
-                return BOOLEAN;
             case "unknown":
                 return UNKNOWN;
+            case "boolean":
+                return BOOLEAN;
             case "credit":
                 return CREDIT;
             case "unlimited":

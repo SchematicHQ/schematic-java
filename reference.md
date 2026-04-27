@@ -3734,6 +3734,51 @@ client.credits().softDeleteBillingCredit("credit_id");
 </dl>
 </details>
 
+<details><summary><code>client.credits.listCompanyCreditBalances() -> ListCompanyCreditBalancesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().listCompanyCreditBalances(
+    ListCompanyCreditBalancesRequest
+        .builder()
+        .companyId("company_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.credits.listCreditBundles() -> ListCreditBundlesResponse</code></summary>
 <dl>
 <dd>
@@ -14689,6 +14734,329 @@ client.features().countFlags(
 <dd>
 
 **offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## insights
+<details><summary><code>client.insights.getActivity() -> GetActivityResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.insights().getActivity(
+    GetActivityRequest
+        .builder()
+        .limit(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.insights.getEnvironmentFeatureUsageTimeSeries() -> GetEnvironmentFeatureUsageTimeSeriesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.insights().getEnvironmentFeatureUsageTimeSeries(
+    GetEnvironmentFeatureUsageTimeSeriesRequest
+        .builder()
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .featureId("feature_id")
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .granularity(TimeSeriesGranularity.DAILY)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**endTime:** `OffsetDateTime` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**granularity:** `Optional<TimeSeriesGranularity>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `OffsetDateTime` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.insights.getPlanGrowth() -> GetPlanGrowthResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.insights().getPlanGrowth(
+    GetPlanGrowthRequest
+        .builder()
+        .months(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**months:** `Optional<Long>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.insights.getSummary() -> GetSummaryResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.insights().getSummary();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.insights.getTopFeaturesByUsage() -> GetTopFeaturesByUsageResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.insights().getTopFeaturesByUsage(
+    GetTopFeaturesByUsageRequest
+        .builder()
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .limit(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**endTime:** `OffsetDateTime` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `OffsetDateTime` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.insights.getEnvironmentTraitUsageTimeSeries() -> GetEnvironmentTraitUsageTimeSeriesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.insights().getEnvironmentTraitUsageTimeSeries(
+    GetEnvironmentTraitUsageTimeSeriesRequest
+        .builder()
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .featureId("feature_id")
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .granularity(TimeSeriesGranularity.DAILY)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**endTime:** `OffsetDateTime` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**granularity:** `Optional<TimeSeriesGranularity>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `OffsetDateTime` 
     
 </dd>
 </dl>

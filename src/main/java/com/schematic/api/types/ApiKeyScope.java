@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class ApiKeyScope {
+    public static final ApiKeyScope ADMIN = new ApiKeyScope(Value.ADMIN, "admin");
+
     public static final ApiKeyScope CAPTURE = new ApiKeyScope(Value.CAPTURE, "capture");
 
     public static final ApiKeyScope WRITE = new ApiKeyScope(Value.WRITE, "write");
-
-    public static final ApiKeyScope ADMIN = new ApiKeyScope(Value.ADMIN, "admin");
 
     public static final ApiKeyScope READ = new ApiKeyScope(Value.READ, "read");
 
@@ -46,12 +46,12 @@ public final class ApiKeyScope {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case ADMIN:
+                return visitor.visitAdmin();
             case CAPTURE:
                 return visitor.visitCapture();
             case WRITE:
                 return visitor.visitWrite();
-            case ADMIN:
-                return visitor.visitAdmin();
             case READ:
                 return visitor.visitRead();
             case UNKNOWN:
@@ -63,12 +63,12 @@ public final class ApiKeyScope {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static ApiKeyScope valueOf(String value) {
         switch (value) {
+            case "admin":
+                return ADMIN;
             case "capture":
                 return CAPTURE;
             case "write":
                 return WRITE;
-            case "admin":
-                return ADMIN;
             case "read":
                 return READ;
             default:

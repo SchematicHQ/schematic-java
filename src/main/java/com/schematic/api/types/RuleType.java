@@ -7,19 +7,19 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class RuleType {
-    public static final RuleType GLOBAL_OVERRIDE = new RuleType(Value.GLOBAL_OVERRIDE, "global_override");
-
     public static final RuleType COMPANY_OVERRIDE = new RuleType(Value.COMPANY_OVERRIDE, "company_override");
 
     public static final RuleType COMPANY_OVERRIDE_USAGE_EXCEEDED =
             new RuleType(Value.COMPANY_OVERRIDE_USAGE_EXCEEDED, "company_override_usage_exceeded");
 
+    public static final RuleType GLOBAL_OVERRIDE = new RuleType(Value.GLOBAL_OVERRIDE, "global_override");
+
+    public static final RuleType DEFAULT = new RuleType(Value.DEFAULT, "default");
+
     public static final RuleType PLAN_ENTITLEMENT_USAGE_EXCEEDED =
             new RuleType(Value.PLAN_ENTITLEMENT_USAGE_EXCEEDED, "plan_entitlement_usage_exceeded");
 
     public static final RuleType STANDARD = new RuleType(Value.STANDARD, "standard");
-
-    public static final RuleType DEFAULT = new RuleType(Value.DEFAULT, "default");
 
     public static final RuleType PLAN_ENTITLEMENT = new RuleType(Value.PLAN_ENTITLEMENT, "plan_entitlement");
 
@@ -54,18 +54,18 @@ public final class RuleType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case GLOBAL_OVERRIDE:
-                return visitor.visitGlobalOverride();
             case COMPANY_OVERRIDE:
                 return visitor.visitCompanyOverride();
             case COMPANY_OVERRIDE_USAGE_EXCEEDED:
                 return visitor.visitCompanyOverrideUsageExceeded();
+            case GLOBAL_OVERRIDE:
+                return visitor.visitGlobalOverride();
+            case DEFAULT:
+                return visitor.visitDefault();
             case PLAN_ENTITLEMENT_USAGE_EXCEEDED:
                 return visitor.visitPlanEntitlementUsageExceeded();
             case STANDARD:
                 return visitor.visitStandard();
-            case DEFAULT:
-                return visitor.visitDefault();
             case PLAN_ENTITLEMENT:
                 return visitor.visitPlanEntitlement();
             case UNKNOWN:
@@ -77,18 +77,18 @@ public final class RuleType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static RuleType valueOf(String value) {
         switch (value) {
-            case "global_override":
-                return GLOBAL_OVERRIDE;
             case "company_override":
                 return COMPANY_OVERRIDE;
             case "company_override_usage_exceeded":
                 return COMPANY_OVERRIDE_USAGE_EXCEEDED;
+            case "global_override":
+                return GLOBAL_OVERRIDE;
+            case "default":
+                return DEFAULT;
             case "plan_entitlement_usage_exceeded":
                 return PLAN_ENTITLEMENT_USAGE_EXCEEDED;
             case "standard":
                 return STANDARD;
-            case "default":
-                return DEFAULT;
             case "plan_entitlement":
                 return PLAN_ENTITLEMENT;
             default:

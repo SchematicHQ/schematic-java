@@ -9,11 +9,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class TimeSeriesGranularity {
     public static final TimeSeriesGranularity HOURLY = new TimeSeriesGranularity(Value.HOURLY, "hourly");
 
-    public static final TimeSeriesGranularity MONTHLY = new TimeSeriesGranularity(Value.MONTHLY, "monthly");
-
     public static final TimeSeriesGranularity DAILY = new TimeSeriesGranularity(Value.DAILY, "daily");
 
     public static final TimeSeriesGranularity WEEKLY = new TimeSeriesGranularity(Value.WEEKLY, "weekly");
+
+    public static final TimeSeriesGranularity MONTHLY = new TimeSeriesGranularity(Value.MONTHLY, "monthly");
 
     private final Value value;
 
@@ -50,12 +50,12 @@ public final class TimeSeriesGranularity {
         switch (value) {
             case HOURLY:
                 return visitor.visitHourly();
-            case MONTHLY:
-                return visitor.visitMonthly();
             case DAILY:
                 return visitor.visitDaily();
             case WEEKLY:
                 return visitor.visitWeekly();
+            case MONTHLY:
+                return visitor.visitMonthly();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -67,12 +67,12 @@ public final class TimeSeriesGranularity {
         switch (value) {
             case "hourly":
                 return HOURLY;
-            case "monthly":
-                return MONTHLY;
             case "daily":
                 return DAILY;
             case "weekly":
                 return WEEKLY;
+            case "monthly":
+                return MONTHLY;
             default:
                 return new TimeSeriesGranularity(Value.UNKNOWN, value);
         }

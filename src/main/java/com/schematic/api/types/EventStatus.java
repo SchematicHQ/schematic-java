@@ -13,9 +13,9 @@ public final class EventStatus {
 
     public static final EventStatus UNKNOWN = new EventStatus(Value.UNKNOWN, "unknown");
 
-    public static final EventStatus PROCESSED = new EventStatus(Value.PROCESSED, "processed");
-
     public static final EventStatus ENRICHED = new EventStatus(Value.ENRICHED, "enriched");
+
+    public static final EventStatus PROCESSED = new EventStatus(Value.PROCESSED, "processed");
 
     private final Value value;
 
@@ -54,10 +54,10 @@ public final class EventStatus {
                 return visitor.visitPending();
             case UNKNOWN:
                 return visitor.visitUnknown();
-            case PROCESSED:
-                return visitor.visitProcessed();
             case ENRICHED:
                 return visitor.visitEnriched();
+            case PROCESSED:
+                return visitor.visitProcessed();
             case _UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -73,10 +73,10 @@ public final class EventStatus {
                 return PENDING;
             case "unknown":
                 return UNKNOWN;
-            case "processed":
-                return PROCESSED;
             case "enriched":
                 return ENRICHED;
+            case "processed":
+                return PROCESSED;
             default:
                 return new EventStatus(Value._UNKNOWN, value);
         }

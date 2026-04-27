@@ -5,9 +5,9 @@ package com.schematic.api.resources.companies.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -111,7 +111,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies by one or more credit type IDs (each ID starts with bcrd_)
      */
-    @JsonProperty("credit_type_ids")
+    @JsonIgnore
     public Optional<List<String>> getCreditTypeIds() {
         return creditTypeIds;
     }
@@ -119,7 +119,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies by multiple company IDs (starts with comp_)
      */
-    @JsonProperty("ids")
+    @JsonIgnore
     public Optional<List<String>> getIds() {
         return ids;
     }
@@ -127,7 +127,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies by one or more plan IDs (each ID starts with plan_)
      */
-    @JsonProperty("plan_ids")
+    @JsonIgnore
     public Optional<List<String>> getPlanIds() {
         return planIds;
     }
@@ -135,7 +135,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies by one or more subscription statuses
      */
-    @JsonProperty("subscription_statuses")
+    @JsonIgnore
     public Optional<List<SubscriptionStatus>> getSubscriptionStatuses() {
         return subscriptionStatuses;
     }
@@ -143,7 +143,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies by one or more subscription types
      */
-    @JsonProperty("subscription_types")
+    @JsonIgnore
     public Optional<List<SubscriptionType>> getSubscriptionTypes() {
         return subscriptionTypes;
     }
@@ -151,7 +151,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies that have a pending scheduled downgrade
      */
-    @JsonProperty("has_scheduled_downgrade")
+    @JsonIgnore
     public Optional<Boolean> getHasScheduledDowngrade() {
         return hasScheduledDowngrade;
     }
@@ -159,7 +159,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies that have monetized subscriptions
      */
-    @JsonProperty("monetized_subscriptions")
+    @JsonIgnore
     public Optional<Boolean> getMonetizedSubscriptions() {
         return monetizedSubscriptions;
     }
@@ -167,7 +167,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies by plan ID (starts with plan_)
      */
-    @JsonProperty("plan_id")
+    @JsonIgnore
     public Optional<String> getPlanId() {
         return planId;
     }
@@ -175,7 +175,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies by plan version ID (starts with plvr_)
      */
-    @JsonProperty("plan_version_id")
+    @JsonIgnore
     public Optional<String> getPlanVersionId() {
         return planVersionId;
     }
@@ -183,7 +183,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Search for companies by name, keys or string traits
      */
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
@@ -191,7 +191,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Column to sort by (e.g. name, created_at, last_seen_at)
      */
-    @JsonProperty("sort_order_column")
+    @JsonIgnore
     public Optional<String> getSortOrderColumn() {
         return sortOrderColumn;
     }
@@ -199,7 +199,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Direction to sort by (asc or desc)
      */
-    @JsonProperty("sort_order_direction")
+    @JsonIgnore
     public Optional<SortDirection> getSortOrderDirection() {
         return sortOrderDirection;
     }
@@ -207,7 +207,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies that have an entitlement (plan entitlement or company override) for the specified feature ID
      */
-    @JsonProperty("with_entitlement_for")
+    @JsonIgnore
     public Optional<String> getWithEntitlementFor() {
         return withEntitlementFor;
     }
@@ -215,7 +215,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter out companies that already have a company override for the specified feature ID
      */
-    @JsonProperty("without_feature_override_for")
+    @JsonIgnore
     public Optional<String> getWithoutFeatureOverrideFor() {
         return withoutFeatureOverrideFor;
     }
@@ -223,7 +223,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter out companies that have a plan
      */
-    @JsonProperty("without_plan")
+    @JsonIgnore
     public Optional<Boolean> getWithoutPlan() {
         return withoutPlan;
     }
@@ -231,7 +231,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter out companies that have a subscription
      */
-    @JsonProperty("without_subscription")
+    @JsonIgnore
     public Optional<Boolean> getWithoutSubscription() {
         return withoutSubscription;
     }
@@ -239,7 +239,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Filter companies that have a subscription
      */
-    @JsonProperty("with_subscription")
+    @JsonIgnore
     public Optional<Boolean> getWithSubscription() {
         return withSubscription;
     }
@@ -247,7 +247,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -255,7 +255,7 @@ public final class CountCompaniesRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

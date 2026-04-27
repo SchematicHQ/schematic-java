@@ -10,10 +10,10 @@ public final class RulesengineMetricPeriod {
     public static final RulesengineMetricPeriod CURRENT_DAY =
             new RulesengineMetricPeriod(Value.CURRENT_DAY, "current_day");
 
-    public static final RulesengineMetricPeriod ALL_TIME = new RulesengineMetricPeriod(Value.ALL_TIME, "all_time");
-
     public static final RulesengineMetricPeriod CURRENT_WEEK =
             new RulesengineMetricPeriod(Value.CURRENT_WEEK, "current_week");
+
+    public static final RulesengineMetricPeriod ALL_TIME = new RulesengineMetricPeriod(Value.ALL_TIME, "all_time");
 
     public static final RulesengineMetricPeriod CURRENT_MONTH =
             new RulesengineMetricPeriod(Value.CURRENT_MONTH, "current_month");
@@ -53,10 +53,10 @@ public final class RulesengineMetricPeriod {
         switch (value) {
             case CURRENT_DAY:
                 return visitor.visitCurrentDay();
-            case ALL_TIME:
-                return visitor.visitAllTime();
             case CURRENT_WEEK:
                 return visitor.visitCurrentWeek();
+            case ALL_TIME:
+                return visitor.visitAllTime();
             case CURRENT_MONTH:
                 return visitor.visitCurrentMonth();
             case UNKNOWN:
@@ -70,10 +70,10 @@ public final class RulesengineMetricPeriod {
         switch (value) {
             case "current_day":
                 return CURRENT_DAY;
-            case "all_time":
-                return ALL_TIME;
             case "current_week":
                 return CURRENT_WEEK;
+            case "all_time":
+                return ALL_TIME;
             case "current_month":
                 return CURRENT_MONTH;
             default:

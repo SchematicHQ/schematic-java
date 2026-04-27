@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class CreditEventType {
-    public static final CreditEventType USAGE = new CreditEventType(Value.USAGE, "usage");
-
     public static final CreditEventType ZERO_OUT = new CreditEventType(Value.ZERO_OUT, "zero_out");
+
+    public static final CreditEventType USAGE = new CreditEventType(Value.USAGE, "usage");
 
     public static final CreditEventType TRANSFER = new CreditEventType(Value.TRANSFER, "transfer");
 
@@ -47,10 +47,10 @@ public final class CreditEventType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case USAGE:
-                return visitor.visitUsage();
             case ZERO_OUT:
                 return visitor.visitZeroOut();
+            case USAGE:
+                return visitor.visitUsage();
             case TRANSFER:
                 return visitor.visitTransfer();
             case GRANT:
@@ -64,10 +64,10 @@ public final class CreditEventType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static CreditEventType valueOf(String value) {
         switch (value) {
-            case "usage":
-                return USAGE;
             case "zero_out":
                 return ZERO_OUT;
+            case "usage":
+                return USAGE;
             case "transfer":
                 return TRANSFER;
             case "grant":

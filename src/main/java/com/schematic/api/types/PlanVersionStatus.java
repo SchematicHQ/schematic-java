@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class PlanVersionStatus {
     public static final PlanVersionStatus PUBLISHED = new PlanVersionStatus(Value.PUBLISHED, "published");
 
-    public static final PlanVersionStatus ARCHIVED = new PlanVersionStatus(Value.ARCHIVED, "archived");
-
     public static final PlanVersionStatus DRAFT = new PlanVersionStatus(Value.DRAFT, "draft");
+
+    public static final PlanVersionStatus ARCHIVED = new PlanVersionStatus(Value.ARCHIVED, "archived");
 
     private final Value value;
 
@@ -47,10 +47,10 @@ public final class PlanVersionStatus {
         switch (value) {
             case PUBLISHED:
                 return visitor.visitPublished();
-            case ARCHIVED:
-                return visitor.visitArchived();
             case DRAFT:
                 return visitor.visitDraft();
+            case ARCHIVED:
+                return visitor.visitArchived();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -62,10 +62,10 @@ public final class PlanVersionStatus {
         switch (value) {
             case "published":
                 return PUBLISHED;
-            case "archived":
-                return ARCHIVED;
             case "draft":
                 return DRAFT;
+            case "archived":
+                return ARCHIVED;
             default:
                 return new PlanVersionStatus(Value.UNKNOWN, value);
         }

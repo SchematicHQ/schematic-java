@@ -5,9 +5,9 @@ package com.schematic.api.resources.billing.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -79,7 +79,7 @@ public final class CountBillingProductsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("ids")
+    @JsonIgnore
     public Optional<List<String>> getIds() {
         return ids;
     }
@@ -87,27 +87,27 @@ public final class CountBillingProductsRequest {
     /**
      * @return Filter products that are active. Defaults to true if not specified
      */
-    @JsonProperty("is_active")
+    @JsonIgnore
     public Optional<Boolean> getIsActive() {
         return isActive;
     }
 
-    @JsonProperty("name")
+    @JsonIgnore
     public Optional<String> getName() {
         return name;
     }
 
-    @JsonProperty("price_usage_type")
+    @JsonIgnore
     public Optional<BillingPriceUsageType> getPriceUsageType() {
         return priceUsageType;
     }
 
-    @JsonProperty("provider_type")
+    @JsonIgnore
     public Optional<BillingProviderType> getProviderType() {
         return providerType;
     }
 
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
@@ -115,7 +115,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Filter products that are one time charges
      */
-    @JsonProperty("with_one_time_charges")
+    @JsonIgnore
     public Optional<Boolean> getWithOneTimeCharges() {
         return withOneTimeCharges;
     }
@@ -123,7 +123,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Filter products that have prices
      */
-    @JsonProperty("with_prices_only")
+    @JsonIgnore
     public Optional<Boolean> getWithPricesOnly() {
         return withPricesOnly;
     }
@@ -131,7 +131,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Filter products that have zero price for free subscription type
      */
-    @JsonProperty("with_zero_price")
+    @JsonIgnore
     public Optional<Boolean> getWithZeroPrice() {
         return withZeroPrice;
     }
@@ -139,7 +139,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Filter products that are not linked to any plan
      */
-    @JsonProperty("without_linked_to_plan")
+    @JsonIgnore
     public Optional<Boolean> getWithoutLinkedToPlan() {
         return withoutLinkedToPlan;
     }
@@ -147,7 +147,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -155,7 +155,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

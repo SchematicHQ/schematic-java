@@ -7,23 +7,20 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class AccountMemberPermission {
+    public static final AccountMemberPermission WEBHOOKS_EDIT =
+            new AccountMemberPermission(Value.WEBHOOKS_EDIT, "webhooks_edit");
+
     public static final AccountMemberPermission COMPANY_USERS_EDIT =
             new AccountMemberPermission(Value.COMPANY_USERS_EDIT, "company_users_edit");
 
     public static final AccountMemberPermission PLAN_BILLING_EDIT =
             new AccountMemberPermission(Value.PLAN_BILLING_EDIT, "plan_billing_edit");
 
-    public static final AccountMemberPermission WEBHOOKS_EDIT =
-            new AccountMemberPermission(Value.WEBHOOKS_EDIT, "webhooks_edit");
-
-    public static final AccountMemberPermission PLAN_ENTITLEMENTS_EDIT =
-            new AccountMemberPermission(Value.PLAN_ENTITLEMENTS_EDIT, "plan_entitlements_edit");
-
     public static final AccountMemberPermission FEATURES_EDIT =
             new AccountMemberPermission(Value.FEATURES_EDIT, "features_edit");
 
-    public static final AccountMemberPermission WEBHOOKS_REVEAL_SECRET =
-            new AccountMemberPermission(Value.WEBHOOKS_REVEAL_SECRET, "webhooks_reveal_secret");
+    public static final AccountMemberPermission PLAN_ENTITLEMENTS_EDIT =
+            new AccountMemberPermission(Value.PLAN_ENTITLEMENTS_EDIT, "plan_entitlements_edit");
 
     public static final AccountMemberPermission FLAG_RULES_EDIT =
             new AccountMemberPermission(Value.FLAG_RULES_EDIT, "flag_rules_edit");
@@ -31,17 +28,14 @@ public final class AccountMemberPermission {
     public static final AccountMemberPermission PLAN_VERSIONS_EDIT =
             new AccountMemberPermission(Value.PLAN_VERSIONS_EDIT, "plan_versions_edit");
 
+    public static final AccountMemberPermission WEBHOOKS_REVEAL_SECRET =
+            new AccountMemberPermission(Value.WEBHOOKS_REVEAL_SECRET, "webhooks_reveal_secret");
+
     public static final AccountMemberPermission FLAGS_EDIT =
             new AccountMemberPermission(Value.FLAGS_EDIT, "flags_edit");
 
     public static final AccountMemberPermission PLANS_EDIT =
             new AccountMemberPermission(Value.PLANS_EDIT, "plans_edit");
-
-    public static final AccountMemberPermission BILLING_CREDITS_EDIT =
-            new AccountMemberPermission(Value.BILLING_CREDITS_EDIT, "billing_credits_edit");
-
-    public static final AccountMemberPermission DATA_EXPORTS_EDIT =
-            new AccountMemberPermission(Value.DATA_EXPORTS_EDIT, "data_exports_edit");
 
     public static final AccountMemberPermission COMPANIES_EDIT =
             new AccountMemberPermission(Value.COMPANIES_EDIT, "companies_edit");
@@ -51,6 +45,12 @@ public final class AccountMemberPermission {
 
     public static final AccountMemberPermission OVERRIDES_EDIT =
             new AccountMemberPermission(Value.OVERRIDES_EDIT, "overrides_edit");
+
+    public static final AccountMemberPermission BILLING_CREDITS_EDIT =
+            new AccountMemberPermission(Value.BILLING_CREDITS_EDIT, "billing_credits_edit");
+
+    public static final AccountMemberPermission DATA_EXPORTS_EDIT =
+            new AccountMemberPermission(Value.DATA_EXPORTS_EDIT, "data_exports_edit");
 
     private final Value value;
 
@@ -85,36 +85,36 @@ public final class AccountMemberPermission {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case WEBHOOKS_EDIT:
+                return visitor.visitWebhooksEdit();
             case COMPANY_USERS_EDIT:
                 return visitor.visitCompanyUsersEdit();
             case PLAN_BILLING_EDIT:
                 return visitor.visitPlanBillingEdit();
-            case WEBHOOKS_EDIT:
-                return visitor.visitWebhooksEdit();
-            case PLAN_ENTITLEMENTS_EDIT:
-                return visitor.visitPlanEntitlementsEdit();
             case FEATURES_EDIT:
                 return visitor.visitFeaturesEdit();
-            case WEBHOOKS_REVEAL_SECRET:
-                return visitor.visitWebhooksRevealSecret();
+            case PLAN_ENTITLEMENTS_EDIT:
+                return visitor.visitPlanEntitlementsEdit();
             case FLAG_RULES_EDIT:
                 return visitor.visitFlagRulesEdit();
             case PLAN_VERSIONS_EDIT:
                 return visitor.visitPlanVersionsEdit();
+            case WEBHOOKS_REVEAL_SECRET:
+                return visitor.visitWebhooksRevealSecret();
             case FLAGS_EDIT:
                 return visitor.visitFlagsEdit();
             case PLANS_EDIT:
                 return visitor.visitPlansEdit();
-            case BILLING_CREDITS_EDIT:
-                return visitor.visitBillingCreditsEdit();
-            case DATA_EXPORTS_EDIT:
-                return visitor.visitDataExportsEdit();
             case COMPANIES_EDIT:
                 return visitor.visitCompaniesEdit();
             case COMPONENTS_EDIT:
                 return visitor.visitComponentsEdit();
             case OVERRIDES_EDIT:
                 return visitor.visitOverridesEdit();
+            case BILLING_CREDITS_EDIT:
+                return visitor.visitBillingCreditsEdit();
+            case DATA_EXPORTS_EDIT:
+                return visitor.visitDataExportsEdit();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -124,36 +124,36 @@ public final class AccountMemberPermission {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static AccountMemberPermission valueOf(String value) {
         switch (value) {
+            case "webhooks_edit":
+                return WEBHOOKS_EDIT;
             case "company_users_edit":
                 return COMPANY_USERS_EDIT;
             case "plan_billing_edit":
                 return PLAN_BILLING_EDIT;
-            case "webhooks_edit":
-                return WEBHOOKS_EDIT;
-            case "plan_entitlements_edit":
-                return PLAN_ENTITLEMENTS_EDIT;
             case "features_edit":
                 return FEATURES_EDIT;
-            case "webhooks_reveal_secret":
-                return WEBHOOKS_REVEAL_SECRET;
+            case "plan_entitlements_edit":
+                return PLAN_ENTITLEMENTS_EDIT;
             case "flag_rules_edit":
                 return FLAG_RULES_EDIT;
             case "plan_versions_edit":
                 return PLAN_VERSIONS_EDIT;
+            case "webhooks_reveal_secret":
+                return WEBHOOKS_REVEAL_SECRET;
             case "flags_edit":
                 return FLAGS_EDIT;
             case "plans_edit":
                 return PLANS_EDIT;
-            case "billing_credits_edit":
-                return BILLING_CREDITS_EDIT;
-            case "data_exports_edit":
-                return DATA_EXPORTS_EDIT;
             case "companies_edit":
                 return COMPANIES_EDIT;
             case "components_edit":
                 return COMPONENTS_EDIT;
             case "overrides_edit":
                 return OVERRIDES_EDIT;
+            case "billing_credits_edit":
+                return BILLING_CREDITS_EDIT;
+            case "data_exports_edit":
+                return DATA_EXPORTS_EDIT;
             default:
                 return new AccountMemberPermission(Value.UNKNOWN, value);
         }

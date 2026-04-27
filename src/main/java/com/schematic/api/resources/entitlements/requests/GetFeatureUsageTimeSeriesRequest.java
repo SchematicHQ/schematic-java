@@ -5,9 +5,9 @@ package com.schematic.api.resources.entitlements.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -50,27 +50,27 @@ public final class GetFeatureUsageTimeSeriesRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("company_id")
+    @JsonIgnore
     public String getCompanyId() {
         return companyId;
     }
 
-    @JsonProperty("end_time")
+    @JsonIgnore
     public OffsetDateTime getEndTime() {
         return endTime;
     }
 
-    @JsonProperty("feature_id")
+    @JsonIgnore
     public String getFeatureId() {
         return featureId;
     }
 
-    @JsonProperty("granularity")
+    @JsonIgnore
     public Optional<TimeSeriesGranularity> getGranularity() {
         return granularity;
     }
 
-    @JsonProperty("start_time")
+    @JsonIgnore
     public OffsetDateTime getStartTime() {
         return startTime;
     }

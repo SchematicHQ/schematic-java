@@ -5,9 +5,9 @@ package com.schematic.api.resources.companies.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -59,27 +59,27 @@ public final class ListEntityTraitDefinitionsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("ids")
+    @JsonIgnore
     public Optional<List<String>> getIds() {
         return ids;
     }
 
-    @JsonProperty("trait_types")
+    @JsonIgnore
     public Optional<List<TraitType>> getTraitTypes() {
         return traitTypes;
     }
 
-    @JsonProperty("entity_type")
+    @JsonIgnore
     public Optional<EntityType> getEntityType() {
         return entityType;
     }
 
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
 
-    @JsonProperty("trait_type")
+    @JsonIgnore
     public Optional<TraitType> getTraitType() {
         return traitType;
     }
@@ -87,7 +87,7 @@ public final class ListEntityTraitDefinitionsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -95,7 +95,7 @@ public final class ListEntityTraitDefinitionsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

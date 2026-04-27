@@ -7,15 +7,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class InvoiceStatus {
+    public static final InvoiceStatus VOID = new InvoiceStatus(Value.VOID, "void");
+
     public static final InvoiceStatus PAID = new InvoiceStatus(Value.PAID, "paid");
+
+    public static final InvoiceStatus DRAFT = new InvoiceStatus(Value.DRAFT, "draft");
 
     public static final InvoiceStatus UNCOLLECTIBLE = new InvoiceStatus(Value.UNCOLLECTIBLE, "uncollectible");
 
     public static final InvoiceStatus OPEN = new InvoiceStatus(Value.OPEN, "open");
-
-    public static final InvoiceStatus VOID = new InvoiceStatus(Value.VOID, "void");
-
-    public static final InvoiceStatus DRAFT = new InvoiceStatus(Value.DRAFT, "draft");
 
     private final Value value;
 
@@ -49,16 +49,16 @@ public final class InvoiceStatus {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case VOID:
+                return visitor.visitVoid();
             case PAID:
                 return visitor.visitPaid();
+            case DRAFT:
+                return visitor.visitDraft();
             case UNCOLLECTIBLE:
                 return visitor.visitUncollectible();
             case OPEN:
                 return visitor.visitOpen();
-            case VOID:
-                return visitor.visitVoid();
-            case DRAFT:
-                return visitor.visitDraft();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -68,16 +68,16 @@ public final class InvoiceStatus {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static InvoiceStatus valueOf(String value) {
         switch (value) {
+            case "void":
+                return VOID;
             case "paid":
                 return PAID;
+            case "draft":
+                return DRAFT;
             case "uncollectible":
                 return UNCOLLECTIBLE;
             case "open":
                 return OPEN;
-            case "void":
-                return VOID;
-            case "draft":
-                return DRAFT;
             default:
                 return new InvoiceStatus(Value.UNKNOWN, value);
         }

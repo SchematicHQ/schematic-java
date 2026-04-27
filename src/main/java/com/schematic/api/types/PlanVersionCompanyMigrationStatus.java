@@ -13,14 +13,14 @@ public final class PlanVersionCompanyMigrationStatus {
     public static final PlanVersionCompanyMigrationStatus FAILED =
             new PlanVersionCompanyMigrationStatus(Value.FAILED, "failed");
 
-    public static final PlanVersionCompanyMigrationStatus COMPLETED =
-            new PlanVersionCompanyMigrationStatus(Value.COMPLETED, "completed");
-
     public static final PlanVersionCompanyMigrationStatus IN_PROGRESS =
             new PlanVersionCompanyMigrationStatus(Value.IN_PROGRESS, "in_progress");
 
     public static final PlanVersionCompanyMigrationStatus PENDING =
             new PlanVersionCompanyMigrationStatus(Value.PENDING, "pending");
+
+    public static final PlanVersionCompanyMigrationStatus COMPLETED =
+            new PlanVersionCompanyMigrationStatus(Value.COMPLETED, "completed");
 
     private final Value value;
 
@@ -59,12 +59,12 @@ public final class PlanVersionCompanyMigrationStatus {
                 return visitor.visitSkipped();
             case FAILED:
                 return visitor.visitFailed();
-            case COMPLETED:
-                return visitor.visitCompleted();
             case IN_PROGRESS:
                 return visitor.visitInProgress();
             case PENDING:
                 return visitor.visitPending();
+            case COMPLETED:
+                return visitor.visitCompleted();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -78,12 +78,12 @@ public final class PlanVersionCompanyMigrationStatus {
                 return SKIPPED;
             case "failed":
                 return FAILED;
-            case "completed":
-                return COMPLETED;
             case "in_progress":
                 return IN_PROGRESS;
             case "pending":
                 return PENDING;
+            case "completed":
+                return COMPLETED;
             default:
                 return new PlanVersionCompanyMigrationStatus(Value.UNKNOWN, value);
         }

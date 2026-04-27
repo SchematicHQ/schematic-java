@@ -15,10 +15,10 @@ public final class BillingCreditExpiryType {
     public static final BillingCreditExpiryType END_OF_NEXT_BILLING_PERIOD =
             new BillingCreditExpiryType(Value.END_OF_NEXT_BILLING_PERIOD, "end_of_next_billing_period");
 
-    public static final BillingCreditExpiryType NO_EXPIRY = new BillingCreditExpiryType(Value.NO_EXPIRY, "no_expiry");
-
     public static final BillingCreditExpiryType END_OF_TRIAL =
             new BillingCreditExpiryType(Value.END_OF_TRIAL, "end_of_trial");
+
+    public static final BillingCreditExpiryType NO_EXPIRY = new BillingCreditExpiryType(Value.NO_EXPIRY, "no_expiry");
 
     private final Value value;
 
@@ -59,10 +59,10 @@ public final class BillingCreditExpiryType {
                 return visitor.visitDuration();
             case END_OF_NEXT_BILLING_PERIOD:
                 return visitor.visitEndOfNextBillingPeriod();
-            case NO_EXPIRY:
-                return visitor.visitNoExpiry();
             case END_OF_TRIAL:
                 return visitor.visitEndOfTrial();
+            case NO_EXPIRY:
+                return visitor.visitNoExpiry();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -78,10 +78,10 @@ public final class BillingCreditExpiryType {
                 return DURATION;
             case "end_of_next_billing_period":
                 return END_OF_NEXT_BILLING_PERIOD;
-            case "no_expiry":
-                return NO_EXPIRY;
             case "end_of_trial":
                 return END_OF_TRIAL;
+            case "no_expiry":
+                return NO_EXPIRY;
             default:
                 return new BillingCreditExpiryType(Value.UNKNOWN, value);
         }

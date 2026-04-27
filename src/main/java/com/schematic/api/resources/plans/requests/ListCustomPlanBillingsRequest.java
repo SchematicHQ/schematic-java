@@ -5,9 +5,9 @@ package com.schematic.api.resources.plans.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -57,7 +57,7 @@ public final class ListCustomPlanBillingsRequest {
     /**
      * @return Filter by multiple billing statuses
      */
-    @JsonProperty("statuses")
+    @JsonIgnore
     public Optional<List<CustomPlanBillingStatus>> getStatuses() {
         return statuses;
     }
@@ -65,7 +65,7 @@ public final class ListCustomPlanBillingsRequest {
     /**
      * @return Filter by company ID
      */
-    @JsonProperty("company_id")
+    @JsonIgnore
     public Optional<String> getCompanyId() {
         return companyId;
     }
@@ -73,7 +73,7 @@ public final class ListCustomPlanBillingsRequest {
     /**
      * @return Filter by plan ID
      */
-    @JsonProperty("plan_id")
+    @JsonIgnore
     public Optional<String> getPlanId() {
         return planId;
     }
@@ -81,7 +81,7 @@ public final class ListCustomPlanBillingsRequest {
     /**
      * @return Filter by billing status
      */
-    @JsonProperty("status")
+    @JsonIgnore
     public Optional<CustomPlanBillingStatus> getStatus() {
         return status;
     }
@@ -89,7 +89,7 @@ public final class ListCustomPlanBillingsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -97,7 +97,7 @@ public final class ListCustomPlanBillingsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

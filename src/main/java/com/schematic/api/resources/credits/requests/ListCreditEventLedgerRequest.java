@@ -5,9 +5,9 @@ package com.schematic.api.resources.credits.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -61,32 +61,32 @@ public final class ListCreditEventLedgerRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("billing_credit_id")
+    @JsonIgnore
     public Optional<String> getBillingCreditId() {
         return billingCreditId;
     }
 
-    @JsonProperty("company_id")
+    @JsonIgnore
     public String getCompanyId() {
         return companyId;
     }
 
-    @JsonProperty("end_time")
+    @JsonIgnore
     public Optional<String> getEndTime() {
         return endTime;
     }
 
-    @JsonProperty("event_type")
+    @JsonIgnore
     public Optional<CreditEventType> getEventType() {
         return eventType;
     }
 
-    @JsonProperty("feature_id")
+    @JsonIgnore
     public Optional<String> getFeatureId() {
         return featureId;
     }
 
-    @JsonProperty("start_time")
+    @JsonIgnore
     public Optional<String> getStartTime() {
         return startTime;
     }
@@ -94,7 +94,7 @@ public final class ListCreditEventLedgerRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -102,7 +102,7 @@ public final class ListCreditEventLedgerRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

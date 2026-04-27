@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class DataExportStatus {
-    public static final DataExportStatus FAILURE = new DataExportStatus(Value.FAILURE, "failure");
-
     public static final DataExportStatus SUCCESS = new DataExportStatus(Value.SUCCESS, "success");
+
+    public static final DataExportStatus FAILURE = new DataExportStatus(Value.FAILURE, "failure");
 
     public static final DataExportStatus PENDING = new DataExportStatus(Value.PENDING, "pending");
 
@@ -45,10 +45,10 @@ public final class DataExportStatus {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case FAILURE:
-                return visitor.visitFailure();
             case SUCCESS:
                 return visitor.visitSuccess();
+            case FAILURE:
+                return visitor.visitFailure();
             case PENDING:
                 return visitor.visitPending();
             case UNKNOWN:
@@ -60,10 +60,10 @@ public final class DataExportStatus {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static DataExportStatus valueOf(String value) {
         switch (value) {
-            case "failure":
-                return FAILURE;
             case "success":
                 return SUCCESS;
+            case "failure":
+                return FAILURE;
             case "pending":
                 return PENDING;
             default:

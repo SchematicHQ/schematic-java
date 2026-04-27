@@ -9,19 +9,19 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class ComparableOperator {
     public static final ComparableOperator GTE = new ComparableOperator(Value.GTE, "gte");
 
-    public static final ComparableOperator LT = new ComparableOperator(Value.LT, "lt");
-
     public static final ComparableOperator GT = new ComparableOperator(Value.GT, "gt");
 
+    public static final ComparableOperator LT = new ComparableOperator(Value.LT, "lt");
+
     public static final ComparableOperator NOT_EMPTY = new ComparableOperator(Value.NOT_EMPTY, "not_empty");
+
+    public static final ComparableOperator IS_EMPTY = new ComparableOperator(Value.IS_EMPTY, "is_empty");
 
     public static final ComparableOperator EQ = new ComparableOperator(Value.EQ, "eq");
 
     public static final ComparableOperator NE = new ComparableOperator(Value.NE, "ne");
 
     public static final ComparableOperator LTE = new ComparableOperator(Value.LTE, "lte");
-
-    public static final ComparableOperator IS_EMPTY = new ComparableOperator(Value.IS_EMPTY, "is_empty");
 
     private final Value value;
 
@@ -57,20 +57,20 @@ public final class ComparableOperator {
         switch (value) {
             case GTE:
                 return visitor.visitGte();
-            case LT:
-                return visitor.visitLt();
             case GT:
                 return visitor.visitGt();
+            case LT:
+                return visitor.visitLt();
             case NOT_EMPTY:
                 return visitor.visitNotEmpty();
+            case IS_EMPTY:
+                return visitor.visitIsEmpty();
             case EQ:
                 return visitor.visitEq();
             case NE:
                 return visitor.visitNe();
             case LTE:
                 return visitor.visitLte();
-            case IS_EMPTY:
-                return visitor.visitIsEmpty();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -82,20 +82,20 @@ public final class ComparableOperator {
         switch (value) {
             case "gte":
                 return GTE;
-            case "lt":
-                return LT;
             case "gt":
                 return GT;
+            case "lt":
+                return LT;
             case "not_empty":
                 return NOT_EMPTY;
+            case "is_empty":
+                return IS_EMPTY;
             case "eq":
                 return EQ;
             case "ne":
                 return NE;
             case "lte":
                 return LTE;
-            case "is_empty":
-                return IS_EMPTY;
             default:
                 return new ComparableOperator(Value.UNKNOWN, value);
         }

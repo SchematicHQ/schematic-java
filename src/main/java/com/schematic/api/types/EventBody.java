@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.schematic.api.core.ObjectMappers;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 @JsonDeserialize(using = EventBody.Deserializer.class)
@@ -89,17 +90,26 @@ public final class EventBody {
         @java.lang.Override
         public EventBody deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
-            try {
-                return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyTrack.class));
-            } catch (RuntimeException e) {
+            if (value instanceof Map<?, ?> && ((Map<?, ?>) value).containsKey("event")) {
+                try {
+                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyTrack.class));
+                } catch (RuntimeException e) {
+                }
             }
-            try {
-                return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyFlagCheck.class));
-            } catch (RuntimeException e) {
+            if (value instanceof Map<?, ?>
+                    && ((Map<?, ?>) value).containsKey("flag_key")
+                    && ((Map<?, ?>) value).containsKey("reason")
+                    && ((Map<?, ?>) value).containsKey("value")) {
+                try {
+                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyFlagCheck.class));
+                } catch (RuntimeException e) {
+                }
             }
-            try {
-                return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyIdentify.class));
-            } catch (RuntimeException e) {
+            if (value instanceof Map<?, ?> && ((Map<?, ?>) value).containsKey("keys")) {
+                try {
+                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyIdentify.class));
+                } catch (RuntimeException e) {
+                }
             }
             throw new JsonParseException(p, "Failed to deserialize");
         }

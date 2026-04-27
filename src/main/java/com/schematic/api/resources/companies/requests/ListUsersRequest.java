@@ -5,9 +5,9 @@ package com.schematic.api.resources.companies.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -56,7 +56,7 @@ public final class ListUsersRequest {
     /**
      * @return Filter users by multiple user IDs (starts with user_)
      */
-    @JsonProperty("ids")
+    @JsonIgnore
     public Optional<List<String>> getIds() {
         return ids;
     }
@@ -64,7 +64,7 @@ public final class ListUsersRequest {
     /**
      * @return Filter users by company ID (starts with comp_)
      */
-    @JsonProperty("company_id")
+    @JsonIgnore
     public Optional<String> getCompanyId() {
         return companyId;
     }
@@ -72,7 +72,7 @@ public final class ListUsersRequest {
     /**
      * @return Filter users by plan ID (starts with plan_)
      */
-    @JsonProperty("plan_id")
+    @JsonIgnore
     public Optional<String> getPlanId() {
         return planId;
     }
@@ -80,7 +80,7 @@ public final class ListUsersRequest {
     /**
      * @return Search for users by name, keys or string traits
      */
-    @JsonProperty("q")
+    @JsonIgnore
     public Optional<String> getQ() {
         return q;
     }
@@ -88,7 +88,7 @@ public final class ListUsersRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -96,7 +96,7 @@ public final class ListUsersRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonProperty("offset")
+    @JsonIgnore
     public Optional<Long> getOffset() {
         return offset;
     }

@@ -12,11 +12,11 @@ public final class ActorType {
 
     public static final ActorType APP_USER = new ActorType(Value.APP_USER, "app_user");
 
+    public static final ActorType SYSTEM = new ActorType(Value.SYSTEM, "system");
+
     public static final ActorType API_KEY = new ActorType(Value.API_KEY, "api_key");
 
     public static final ActorType STRIPE_APP = new ActorType(Value.STRIPE_APP, "stripe_app");
-
-    public static final ActorType SYSTEM = new ActorType(Value.SYSTEM, "system");
 
     private final Value value;
 
@@ -53,12 +53,12 @@ public final class ActorType {
                 return visitor.visitTemporaryAccessToken();
             case APP_USER:
                 return visitor.visitAppUser();
+            case SYSTEM:
+                return visitor.visitSystem();
             case API_KEY:
                 return visitor.visitApiKey();
             case STRIPE_APP:
                 return visitor.visitStripeApp();
-            case SYSTEM:
-                return visitor.visitSystem();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -72,12 +72,12 @@ public final class ActorType {
                 return TEMPORARY_ACCESS_TOKEN;
             case "app_user":
                 return APP_USER;
+            case "system":
+                return SYSTEM;
             case "api_key":
                 return API_KEY;
             case "stripe_app":
                 return STRIPE_APP;
-            case "system":
-                return SYSTEM;
             default:
                 return new ActorType(Value.UNKNOWN, value);
         }
