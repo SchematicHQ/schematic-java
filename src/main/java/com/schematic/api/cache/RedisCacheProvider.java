@@ -94,38 +94,22 @@ public class RedisCacheProvider<T> implements CacheProvider<T> {
     }
 
     @Override
-    public void deleteMissing(List<String> keysToKeep) {
+    public void deleteMissing(List<String> keysToKeep, String scanPattern) {
         if (keysToKeep == null || keysToKeep.isEmpty()) {
             return;
         }
-
-        // Build set of full keys to keep for O(1) lookup
-        Set<String> keepSet = new HashSet<>();
-        String scanPrefix = null;
-        for (String key : keysToKeep) {
-            String fullKey = getFullKey(key);
-            keepSet.add(fullKey);
-            // Extract prefix from first key for scanning
-            if (scanPrefix == null) {
-                int colonIdx = fullKey.indexOf(':');
-                if (colonIdx >= 0) {
-                    // Use the key prefix + the cache key prefix (e.g. "schematic:flags:")
-                    int secondColon = fullKey.indexOf(':', colonIdx + 1);
-                    if (secondColon >= 0) {
-                        scanPrefix = fullKey.substring(0, secondColon + 1);
-                    } else {
-                        scanPrefix = fullKey.substring(0, colonIdx + 1);
-                    }
-                }
-            }
-        }
-
-        if (scanPrefix == null) {
+        if (scanPattern == null || scanPattern.isEmpty()) {
+            // Without an explicit scan scope we'd have to wildcard the whole keyPrefix,
+            // which would match sibling caches in the same namespace. Refuse to guess.
             return;
         }
 
-        // SCAN for all keys matching the prefix
-        ScanParams scanParams = new ScanParams().match(scanPrefix + "*").count(SCAN_BATCH_SIZE);
+        Set<String> keepSet = new HashSet<>();
+        for (String key : keysToKeep) {
+            keepSet.add(getFullKey(key));
+        }
+
+        ScanParams scanParams = new ScanParams().match(keyPrefix + scanPattern).count(SCAN_BATCH_SIZE);
         String cursor = ScanParams.SCAN_POINTER_START;
         List<String> keysToDelete = new ArrayList<>();
 
