@@ -115,22 +115,21 @@ class EventBufferTest {
 
     @Test
     void flushWithError_ShouldLogError() throws IOException {
-        doThrow(new IOException("Test error")).when(eventSender).sendBatch(any());
-        CreateEventRequestBody event = mock(CreateEventRequestBody.class);
-        eventBuffer.push(event);
-
-        eventBuffer.flush();
-
+        // Use a tiny retry delay so the three async retries finish in milliseconds rather
+        // than the production ~7s, keeping the test fast and deterministic.
+        EventBuffer fastRetryBuffer =
+                new EventBuffer(eventSender, logger, 5, Duration.ofMillis(100), Duration.ofMillis(1));
         try {
-            // Wait for all retries to complete
-            // Initial delay + 2nd retry + 3rd retry = 1000ms + 2000ms + 4000ms = 7000ms
-            Thread.sleep(8000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Restore the interrupt flag
-            fail("Test was interrupted while waiting for retries");
-        }
+            doThrow(new IOException("Test error")).when(eventSender).sendBatch(any());
+            CreateEventRequestBody event = mock(CreateEventRequestBody.class);
+            fastRetryBuffer.push(event);
 
-        verify(logger).error(contains("Failed to flush events"));
+            fastRetryBuffer.flush();
+
+            verify(logger, timeout(2_000)).error(contains("Failed to flush events"));
+        } finally {
+            fastRetryBuffer.close();
+        }
     }
 
     @Test

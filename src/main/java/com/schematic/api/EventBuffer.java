@@ -23,6 +23,7 @@ public class EventBuffer implements AutoCloseable {
     private final ConcurrentLinkedQueue<CreateEventRequestBody> events;
     private final int maxBatchSize;
     private final Duration flushInterval;
+    private final Duration retryInitialDelay;
     private final HttpEventSender eventSender;
     private final SchematicLogger logger;
     private final ScheduledExecutorService scheduler;
@@ -40,9 +41,29 @@ public class EventBuffer implements AutoCloseable {
      * @param flushInterval How often to automatically flush the buffer
      */
     public EventBuffer(HttpEventSender eventSender, SchematicLogger logger, int maxBatchSize, Duration flushInterval) {
+        this(eventSender, logger, maxBatchSize, flushInterval, RETRY_INITIAL_DELAY);
+    }
+
+    /**
+     * Creates a new EventBuffer instance with a custom initial retry delay.
+     *
+     * @param eventSender The HTTP sender used to send events to the capture service
+     * @param logger Logger instance for error reporting and monitoring
+     * @param maxBatchSize Maximum number of events to include in a single batch
+     * @param flushInterval How often to automatically flush the buffer
+     * @param retryInitialDelay Base delay for the first retry attempt; subsequent retries use
+     *     exponential backoff (delay * 2^attempt) with ±25% jitter
+     */
+    public EventBuffer(
+            HttpEventSender eventSender,
+            SchematicLogger logger,
+            int maxBatchSize,
+            Duration flushInterval,
+            Duration retryInitialDelay) {
         this.events = new ConcurrentLinkedQueue<>();
         this.maxBatchSize = maxBatchSize > 0 ? maxBatchSize : DEFAULT_MAX_BATCH_SIZE;
         this.flushInterval = flushInterval != null ? flushInterval : DEFAULT_FLUSH_INTERVAL;
+        this.retryInitialDelay = retryInitialDelay != null ? retryInitialDelay : RETRY_INITIAL_DELAY;
         this.eventSender = eventSender;
         this.logger = logger;
         this.droppedEvents = new AtomicInteger(0);
@@ -119,7 +140,7 @@ public class EventBuffer implements AutoCloseable {
 
         } catch (Exception e) {
             if (retryCount < MAX_RETRY_ATTEMPTS) {
-                long baseDelay = RETRY_INITIAL_DELAY.toMillis() * (1L << retryCount);
+                long baseDelay = retryInitialDelay.toMillis() * (1L << retryCount);
                 // Add ±25% jitter
                 double jitter = (Math.random() - 0.5) * 0.5 * baseDelay;
                 long delayMillis = Math.max(0, baseDelay + (long) jitter);
