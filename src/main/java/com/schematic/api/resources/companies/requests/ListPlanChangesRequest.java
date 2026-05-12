@@ -5,9 +5,9 @@ package com.schematic.api.resources.companies.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -59,27 +59,27 @@ public final class ListPlanChangesRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("company_ids")
     public Optional<List<String>> getCompanyIds() {
         return companyIds;
     }
 
-    @JsonIgnore
+    @JsonProperty("plan_ids")
     public Optional<List<String>> getPlanIds() {
         return planIds;
     }
 
-    @JsonIgnore
+    @JsonProperty("action")
     public Optional<PlanChangeAction> getAction() {
         return action;
     }
 
-    @JsonIgnore
+    @JsonProperty("base_plan_action")
     public Optional<PlanChangeBasePlanAction> getBasePlanAction() {
         return basePlanAction;
     }
 
-    @JsonIgnore
+    @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
     }
@@ -87,7 +87,7 @@ public final class ListPlanChangesRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -95,7 +95,7 @@ public final class ListPlanChangesRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }

@@ -226,6 +226,10 @@ public class RawEventsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "flag_id", request.getFlagId().get(), false);
         }
+        if (request.getIdempotencyKey().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "idempotency_key", request.getIdempotencyKey().get(), false);
+        }
         if (request.getUserId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "user_id", request.getUserId().get(), false);

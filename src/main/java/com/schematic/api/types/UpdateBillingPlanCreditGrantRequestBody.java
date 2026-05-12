@@ -35,6 +35,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
     private final Optional<Long> autoTopupExpiryUnitCount;
 
+    private final Optional<Boolean> autoTopupSelfService;
+
     private final Optional<Long> autoTopupThresholdCredits;
 
     private final Optional<Long> autoTopupThresholdPercent;
@@ -63,6 +65,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             Optional<BillingCreditExpiryType> autoTopupExpiryType,
             Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit,
             Optional<Long> autoTopupExpiryUnitCount,
+            Optional<Boolean> autoTopupSelfService,
             Optional<Long> autoTopupThresholdCredits,
             Optional<Long> autoTopupThresholdPercent,
             Optional<Long> creditAmount,
@@ -80,6 +83,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         this.autoTopupExpiryType = autoTopupExpiryType;
         this.autoTopupExpiryUnit = autoTopupExpiryUnit;
         this.autoTopupExpiryUnitCount = autoTopupExpiryUnitCount;
+        this.autoTopupSelfService = autoTopupSelfService;
         this.autoTopupThresholdCredits = autoTopupThresholdCredits;
         this.autoTopupThresholdPercent = autoTopupThresholdPercent;
         this.creditAmount = creditAmount;
@@ -125,6 +129,11 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
     @JsonProperty("auto_topup_expiry_unit_count")
     public Optional<Long> getAutoTopupExpiryUnitCount() {
         return autoTopupExpiryUnitCount;
+    }
+
+    @JsonProperty("auto_topup_self_service")
+    public Optional<Boolean> getAutoTopupSelfService() {
+        return autoTopupSelfService;
     }
 
     @JsonProperty("auto_topup_threshold_credits")
@@ -192,6 +201,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 && autoTopupExpiryType.equals(other.autoTopupExpiryType)
                 && autoTopupExpiryUnit.equals(other.autoTopupExpiryUnit)
                 && autoTopupExpiryUnitCount.equals(other.autoTopupExpiryUnitCount)
+                && autoTopupSelfService.equals(other.autoTopupSelfService)
                 && autoTopupThresholdCredits.equals(other.autoTopupThresholdCredits)
                 && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
                 && creditAmount.equals(other.creditAmount)
@@ -213,6 +223,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 this.autoTopupExpiryType,
                 this.autoTopupExpiryUnit,
                 this.autoTopupExpiryUnitCount,
+                this.autoTopupSelfService,
                 this.autoTopupThresholdCredits,
                 this.autoTopupThresholdPercent,
                 this.creditAmount,
@@ -278,6 +289,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
         _FinalStage autoTopupExpiryUnitCount(Long autoTopupExpiryUnitCount);
 
+        _FinalStage autoTopupSelfService(Optional<Boolean> autoTopupSelfService);
+
+        _FinalStage autoTopupSelfService(Boolean autoTopupSelfService);
+
         _FinalStage autoTopupThresholdCredits(Optional<Long> autoTopupThresholdCredits);
 
         _FinalStage autoTopupThresholdCredits(Long autoTopupThresholdCredits);
@@ -327,6 +342,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
         private Optional<Long> autoTopupThresholdCredits = Optional.empty();
 
+        private Optional<Boolean> autoTopupSelfService = Optional.empty();
+
         private Optional<Long> autoTopupExpiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit = Optional.empty();
@@ -355,6 +372,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             autoTopupExpiryType(other.getAutoTopupExpiryType());
             autoTopupExpiryUnit(other.getAutoTopupExpiryUnit());
             autoTopupExpiryUnitCount(other.getAutoTopupExpiryUnitCount());
+            autoTopupSelfService(other.getAutoTopupSelfService());
             autoTopupThresholdCredits(other.getAutoTopupThresholdCredits());
             autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
             creditAmount(other.getCreditAmount());
@@ -473,6 +491,19 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage autoTopupSelfService(Boolean autoTopupSelfService) {
+            this.autoTopupSelfService = Optional.ofNullable(autoTopupSelfService);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_self_service", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupSelfService(Optional<Boolean> autoTopupSelfService) {
+            this.autoTopupSelfService = autoTopupSelfService;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage autoTopupExpiryUnitCount(Long autoTopupExpiryUnitCount) {
             this.autoTopupExpiryUnitCount = Optional.ofNullable(autoTopupExpiryUnitCount);
             return this;
@@ -573,6 +604,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                     autoTopupExpiryType,
                     autoTopupExpiryUnit,
                     autoTopupExpiryUnitCount,
+                    autoTopupSelfService,
                     autoTopupThresholdCredits,
                     autoTopupThresholdPercent,
                     creditAmount,

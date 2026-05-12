@@ -30,6 +30,8 @@ public final class ListEventsParams {
 
     private final Optional<String> flagId;
 
+    private final Optional<String> idempotencyKey;
+
     private final Optional<Long> limit;
 
     private final Optional<Long> offset;
@@ -43,6 +45,7 @@ public final class ListEventsParams {
             Optional<String> eventSubtype,
             Optional<List<EventType>> eventTypes,
             Optional<String> flagId,
+            Optional<String> idempotencyKey,
             Optional<Long> limit,
             Optional<Long> offset,
             Optional<String> userId,
@@ -51,6 +54,7 @@ public final class ListEventsParams {
         this.eventSubtype = eventSubtype;
         this.eventTypes = eventTypes;
         this.flagId = flagId;
+        this.idempotencyKey = idempotencyKey;
         this.limit = limit;
         this.offset = offset;
         this.userId = userId;
@@ -75,6 +79,11 @@ public final class ListEventsParams {
     @JsonProperty("flag_id")
     public Optional<String> getFlagId() {
         return flagId;
+    }
+
+    @JsonProperty("idempotency_key")
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
     }
 
     /**
@@ -114,6 +123,7 @@ public final class ListEventsParams {
                 && eventSubtype.equals(other.eventSubtype)
                 && eventTypes.equals(other.eventTypes)
                 && flagId.equals(other.flagId)
+                && idempotencyKey.equals(other.idempotencyKey)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
                 && userId.equals(other.userId);
@@ -122,7 +132,14 @@ public final class ListEventsParams {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.companyId, this.eventSubtype, this.eventTypes, this.flagId, this.limit, this.offset, this.userId);
+                this.companyId,
+                this.eventSubtype,
+                this.eventTypes,
+                this.flagId,
+                this.idempotencyKey,
+                this.limit,
+                this.offset,
+                this.userId);
     }
 
     @java.lang.Override
@@ -144,6 +161,8 @@ public final class ListEventsParams {
 
         private Optional<String> flagId = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         private Optional<Long> limit = Optional.empty();
 
         private Optional<Long> offset = Optional.empty();
@@ -160,6 +179,7 @@ public final class ListEventsParams {
             eventSubtype(other.getEventSubtype());
             eventTypes(other.getEventTypes());
             flagId(other.getFlagId());
+            idempotencyKey(other.getIdempotencyKey());
             limit(other.getLimit());
             offset(other.getOffset());
             userId(other.getUserId());
@@ -210,6 +230,17 @@ public final class ListEventsParams {
             return this;
         }
 
+        @JsonSetter(value = "idempotency_key", nulls = Nulls.SKIP)
+        public Builder idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        public Builder idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
+            return this;
+        }
+
         /**
          * <p>Page limit (default 100)</p>
          */
@@ -251,7 +282,15 @@ public final class ListEventsParams {
 
         public ListEventsParams build() {
             return new ListEventsParams(
-                    companyId, eventSubtype, eventTypes, flagId, limit, offset, userId, additionalProperties);
+                    companyId,
+                    eventSubtype,
+                    eventTypes,
+                    flagId,
+                    idempotencyKey,
+                    limit,
+                    offset,
+                    userId,
+                    additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

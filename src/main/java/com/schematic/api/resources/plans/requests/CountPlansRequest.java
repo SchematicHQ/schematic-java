@@ -5,9 +5,9 @@ package com.schematic.api.resources.plans.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -26,6 +26,8 @@ public final class CountPlansRequest {
     private final Optional<List<String>> ids;
 
     private final Optional<String> companyId;
+
+    private final Optional<Boolean> companyScopedOnly;
 
     private final Optional<Boolean> excludeCompanyScoped;
 
@@ -58,6 +60,7 @@ public final class CountPlansRequest {
     private CountPlansRequest(
             Optional<List<String>> ids,
             Optional<String> companyId,
+            Optional<Boolean> companyScopedOnly,
             Optional<Boolean> excludeCompanyScoped,
             Optional<Boolean> forFallbackPlan,
             Optional<Boolean> forInitialPlan,
@@ -74,6 +77,7 @@ public final class CountPlansRequest {
             Map<String, Object> additionalProperties) {
         this.ids = ids;
         this.companyId = companyId;
+        this.companyScopedOnly = companyScopedOnly;
         this.excludeCompanyScoped = excludeCompanyScoped;
         this.forFallbackPlan = forFallbackPlan;
         this.forInitialPlan = forInitialPlan;
@@ -90,20 +94,28 @@ public final class CountPlansRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
     }
 
-    @JsonIgnore
+    @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
     }
 
     /**
+     * @return Only return plans that are scoped to a company (custom plans assigned to a company)
+     */
+    @JsonProperty("company_scoped_only")
+    public Optional<Boolean> getCompanyScopedOnly() {
+        return companyScopedOnly;
+    }
+
+    /**
      * @return Exclude plans that are scoped to a company (custom plans assigned to a company)
      */
-    @JsonIgnore
+    @JsonProperty("exclude_company_scoped")
     public Optional<Boolean> getExcludeCompanyScoped() {
         return excludeCompanyScoped;
     }
@@ -111,7 +123,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter for plans valid as fallback plans (not linked to billing)
      */
-    @JsonIgnore
+    @JsonProperty("for_fallback_plan")
     public Optional<Boolean> getForFallbackPlan() {
         return forFallbackPlan;
     }
@@ -119,7 +131,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter for plans valid as initial plans (not linked to billing, free, or auto-cancelling trial)
      */
-    @JsonIgnore
+    @JsonProperty("for_initial_plan")
     public Optional<Boolean> getForInitialPlan() {
         return forInitialPlan;
     }
@@ -127,7 +139,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter for plans valid as trial expiry plans (not linked to billing or free)
      */
-    @JsonIgnore
+    @JsonProperty("for_trial_expiry_plan")
     public Optional<Boolean> getForTrialExpiryPlan() {
         return forTrialExpiryPlan;
     }
@@ -135,7 +147,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter out plans that do not have a billing product ID
      */
-    @JsonIgnore
+    @JsonProperty("has_product_id")
     public Optional<Boolean> getHasProductId() {
         return hasProductId;
     }
@@ -143,7 +155,7 @@ public final class CountPlansRequest {
     /**
      * @return Include billing settings from draft versions for plans which have draft version
      */
-    @JsonIgnore
+    @JsonProperty("include_draft_versions")
     public Optional<Boolean> getIncludeDraftVersions() {
         return includeDraftVersions;
     }
@@ -151,12 +163,12 @@ public final class CountPlansRequest {
     /**
      * @return Filter by plan type
      */
-    @JsonIgnore
+    @JsonProperty("plan_type")
     public Optional<PlanType> getPlanType() {
         return planType;
     }
 
-    @JsonIgnore
+    @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
     }
@@ -164,7 +176,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter plans scoped to a specific company (custom plans)
      */
-    @JsonIgnore
+    @JsonProperty("scoped_to_company_id")
     public Optional<String> getScopedToCompanyId() {
         return scopedToCompanyId;
     }
@@ -172,7 +184,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter out plans that already have a plan entitlement for the specified feature ID
      */
-    @JsonIgnore
+    @JsonProperty("without_entitlement_for")
     public Optional<String> getWithoutEntitlementFor() {
         return withoutEntitlementFor;
     }
@@ -180,7 +192,7 @@ public final class CountPlansRequest {
     /**
      * @return Filter out plans that have a paid billing product ID
      */
-    @JsonIgnore
+    @JsonProperty("without_paid_product_id")
     public Optional<Boolean> getWithoutPaidProductId() {
         return withoutPaidProductId;
     }
@@ -188,7 +200,7 @@ public final class CountPlansRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -196,7 +208,7 @@ public final class CountPlansRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }
@@ -215,6 +227,7 @@ public final class CountPlansRequest {
     private boolean equalTo(CountPlansRequest other) {
         return ids.equals(other.ids)
                 && companyId.equals(other.companyId)
+                && companyScopedOnly.equals(other.companyScopedOnly)
                 && excludeCompanyScoped.equals(other.excludeCompanyScoped)
                 && forFallbackPlan.equals(other.forFallbackPlan)
                 && forInitialPlan.equals(other.forInitialPlan)
@@ -235,6 +248,7 @@ public final class CountPlansRequest {
         return Objects.hash(
                 this.ids,
                 this.companyId,
+                this.companyScopedOnly,
                 this.excludeCompanyScoped,
                 this.forFallbackPlan,
                 this.forInitialPlan,
@@ -264,6 +278,8 @@ public final class CountPlansRequest {
         private Optional<List<String>> ids = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
+
+        private Optional<Boolean> companyScopedOnly = Optional.empty();
 
         private Optional<Boolean> excludeCompanyScoped = Optional.empty();
 
@@ -299,6 +315,7 @@ public final class CountPlansRequest {
         public Builder from(CountPlansRequest other) {
             ids(other.getIds());
             companyId(other.getCompanyId());
+            companyScopedOnly(other.getCompanyScopedOnly());
             excludeCompanyScoped(other.getExcludeCompanyScoped());
             forFallbackPlan(other.getForFallbackPlan());
             forInitialPlan(other.getForInitialPlan());
@@ -339,6 +356,20 @@ public final class CountPlansRequest {
 
         public Builder companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        /**
+         * <p>Only return plans that are scoped to a company (custom plans assigned to a company)</p>
+         */
+        @JsonSetter(value = "company_scoped_only", nulls = Nulls.SKIP)
+        public Builder companyScopedOnly(Optional<Boolean> companyScopedOnly) {
+            this.companyScopedOnly = companyScopedOnly;
+            return this;
+        }
+
+        public Builder companyScopedOnly(Boolean companyScopedOnly) {
+            this.companyScopedOnly = Optional.ofNullable(companyScopedOnly);
             return this;
         }
 
@@ -525,6 +556,7 @@ public final class CountPlansRequest {
             return new CountPlansRequest(
                     ids,
                     companyId,
+                    companyScopedOnly,
                     excludeCompanyScoped,
                     forFallbackPlan,
                     forInitialPlan,

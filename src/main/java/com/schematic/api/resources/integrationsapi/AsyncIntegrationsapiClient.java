@@ -5,7 +5,14 @@ package com.schematic.api.resources.integrationsapi;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.integrationsapi.requests.ListIntegrationsRequest;
+import com.schematic.api.resources.integrationsapi.requests.StartDataImportRequestBody;
 import com.schematic.api.resources.integrationsapi.types.GetIntegrationWebhookUrlResponse;
+import com.schematic.api.resources.integrationsapi.types.ListIntegrationsResponse;
+import com.schematic.api.resources.integrationsapi.types.LoadSampleDataSetV2Response;
+import com.schematic.api.resources.integrationsapi.types.RunIntegrationResponse;
+import com.schematic.api.resources.integrationsapi.types.StartDataImportResponse;
+import com.schematic.api.resources.integrationsapi.types.UninstallIntegrationResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncIntegrationsapiClient {
@@ -25,6 +32,32 @@ public class AsyncIntegrationsapiClient {
         return this.rawClient;
     }
 
+    public CompletableFuture<RunIntegrationResponse> runIntegration(String integrationId) {
+        return this.rawClient.runIntegration(integrationId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<RunIntegrationResponse> runIntegration(
+            String integrationId, RequestOptions requestOptions) {
+        return this.rawClient.runIntegration(integrationId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListIntegrationsResponse> listIntegrations() {
+        return this.rawClient.listIntegrations().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListIntegrationsResponse> listIntegrations(RequestOptions requestOptions) {
+        return this.rawClient.listIntegrations(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListIntegrationsResponse> listIntegrations(ListIntegrationsRequest request) {
+        return this.rawClient.listIntegrations(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListIntegrationsResponse> listIntegrations(
+            ListIntegrationsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listIntegrations(request, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<GetIntegrationWebhookUrlResponse> getIntegrationWebhookUrl(String type) {
         return this.rawClient.getIntegrationWebhookUrl(type).thenApply(response -> response.body());
     }
@@ -32,5 +65,33 @@ public class AsyncIntegrationsapiClient {
     public CompletableFuture<GetIntegrationWebhookUrlResponse> getIntegrationWebhookUrl(
             String type, RequestOptions requestOptions) {
         return this.rawClient.getIntegrationWebhookUrl(type, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<StartDataImportResponse> startDataImport(StartDataImportRequestBody request) {
+        return this.rawClient.startDataImport(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<StartDataImportResponse> startDataImport(
+            StartDataImportRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.startDataImport(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<LoadSampleDataSetV2Response> loadSampleDataSetV2() {
+        return this.rawClient.loadSampleDataSetV2().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<LoadSampleDataSetV2Response> loadSampleDataSetV2(RequestOptions requestOptions) {
+        return this.rawClient.loadSampleDataSetV2(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UninstallIntegrationResponse> uninstallIntegration(String integrationId) {
+        return this.rawClient.uninstallIntegration(integrationId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UninstallIntegrationResponse> uninstallIntegration(
+            String integrationId, RequestOptions requestOptions) {
+        return this.rawClient
+                .uninstallIntegration(integrationId, requestOptions)
+                .thenApply(response -> response.body());
     }
 }

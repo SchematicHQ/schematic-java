@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.FeatureType;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,8 @@ public final class ListFeaturesParams {
 
     private final Optional<Long> limit;
 
+    private final Optional<BillingProviderType> managedBy;
+
     private final Optional<Long> offset;
 
     private final Optional<String> planVersionId;
@@ -47,6 +50,7 @@ public final class ListFeaturesParams {
             Optional<List<FeatureType>> featureType,
             Optional<List<String>> ids,
             Optional<Long> limit,
+            Optional<BillingProviderType> managedBy,
             Optional<Long> offset,
             Optional<String> planVersionId,
             Optional<String> q,
@@ -57,6 +61,7 @@ public final class ListFeaturesParams {
         this.featureType = featureType;
         this.ids = ids;
         this.limit = limit;
+        this.managedBy = managedBy;
         this.offset = offset;
         this.planVersionId = planVersionId;
         this.q = q;
@@ -92,6 +97,14 @@ public final class ListFeaturesParams {
     @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
+    }
+
+    /**
+     * @return Filter for features managed by a billing provider, or by Schematic (no billing provider)
+     */
+    @JsonProperty("managed_by")
+    public Optional<BillingProviderType> getManagedBy() {
+        return managedBy;
     }
 
     /**
@@ -150,6 +163,7 @@ public final class ListFeaturesParams {
                 && featureType.equals(other.featureType)
                 && ids.equals(other.ids)
                 && limit.equals(other.limit)
+                && managedBy.equals(other.managedBy)
                 && offset.equals(other.offset)
                 && planVersionId.equals(other.planVersionId)
                 && q.equals(other.q)
@@ -164,6 +178,7 @@ public final class ListFeaturesParams {
                 this.featureType,
                 this.ids,
                 this.limit,
+                this.managedBy,
                 this.offset,
                 this.planVersionId,
                 this.q,
@@ -190,6 +205,8 @@ public final class ListFeaturesParams {
 
         private Optional<Long> limit = Optional.empty();
 
+        private Optional<BillingProviderType> managedBy = Optional.empty();
+
         private Optional<Long> offset = Optional.empty();
 
         private Optional<String> planVersionId = Optional.empty();
@@ -210,6 +227,7 @@ public final class ListFeaturesParams {
             featureType(other.getFeatureType());
             ids(other.getIds());
             limit(other.getLimit());
+            managedBy(other.getManagedBy());
             offset(other.getOffset());
             planVersionId(other.getPlanVersionId());
             q(other.getQ());
@@ -268,6 +286,20 @@ public final class ListFeaturesParams {
 
         public Builder limit(Long limit) {
             this.limit = Optional.ofNullable(limit);
+            return this;
+        }
+
+        /**
+         * <p>Filter for features managed by a billing provider, or by Schematic (no billing provider)</p>
+         */
+        @JsonSetter(value = "managed_by", nulls = Nulls.SKIP)
+        public Builder managedBy(Optional<BillingProviderType> managedBy) {
+            this.managedBy = managedBy;
+            return this;
+        }
+
+        public Builder managedBy(BillingProviderType managedBy) {
+            this.managedBy = Optional.ofNullable(managedBy);
             return this;
         }
 
@@ -347,6 +379,7 @@ public final class ListFeaturesParams {
                     featureType,
                     ids,
                     limit,
+                    managedBy,
                     offset,
                     planVersionId,
                     q,

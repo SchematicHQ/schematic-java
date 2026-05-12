@@ -34,6 +34,8 @@ public final class ApiKeyResponseData {
 
     private final String id;
 
+    private final Optional<ApiKeyIntegrationResponseData> integration;
+
     private final Optional<OffsetDateTime> lastUsedAt;
 
     private final String name;
@@ -52,6 +54,7 @@ public final class ApiKeyResponseData {
             Optional<EnvironmentResponseData> environment,
             Optional<String> environmentId,
             String id,
+            Optional<ApiKeyIntegrationResponseData> integration,
             Optional<OffsetDateTime> lastUsedAt,
             String name,
             boolean readonly,
@@ -63,6 +66,7 @@ public final class ApiKeyResponseData {
         this.environment = environment;
         this.environmentId = environmentId;
         this.id = id;
+        this.integration = integration;
         this.lastUsedAt = lastUsedAt;
         this.name = name;
         this.readonly = readonly;
@@ -94,6 +98,11 @@ public final class ApiKeyResponseData {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    @JsonProperty("integration")
+    public Optional<ApiKeyIntegrationResponseData> getIntegration() {
+        return integration;
     }
 
     @JsonProperty("last_used_at")
@@ -138,6 +147,7 @@ public final class ApiKeyResponseData {
                 && environment.equals(other.environment)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
+                && integration.equals(other.integration)
                 && lastUsedAt.equals(other.lastUsedAt)
                 && name.equals(other.name)
                 && readonly == other.readonly
@@ -153,6 +163,7 @@ public final class ApiKeyResponseData {
                 this.environment,
                 this.environmentId,
                 this.id,
+                this.integration,
                 this.lastUsedAt,
                 this.name,
                 this.readonly,
@@ -210,6 +221,10 @@ public final class ApiKeyResponseData {
 
         _FinalStage environmentId(String environmentId);
 
+        _FinalStage integration(Optional<ApiKeyIntegrationResponseData> integration);
+
+        _FinalStage integration(ApiKeyIntegrationResponseData integration);
+
         _FinalStage lastUsedAt(Optional<OffsetDateTime> lastUsedAt);
 
         _FinalStage lastUsedAt(OffsetDateTime lastUsedAt);
@@ -238,6 +253,8 @@ public final class ApiKeyResponseData {
 
         private Optional<OffsetDateTime> lastUsedAt = Optional.empty();
 
+        private Optional<ApiKeyIntegrationResponseData> integration = Optional.empty();
+
         private Optional<String> environmentId = Optional.empty();
 
         private Optional<EnvironmentResponseData> environment = Optional.empty();
@@ -256,6 +273,7 @@ public final class ApiKeyResponseData {
             environment(other.getEnvironment());
             environmentId(other.getEnvironmentId());
             id(other.getId());
+            integration(other.getIntegration());
             lastUsedAt(other.getLastUsedAt());
             name(other.getName());
             readonly(other.getReadonly());
@@ -337,6 +355,19 @@ public final class ApiKeyResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage integration(ApiKeyIntegrationResponseData integration) {
+            this.integration = Optional.ofNullable(integration);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "integration", nulls = Nulls.SKIP)
+        public _FinalStage integration(Optional<ApiKeyIntegrationResponseData> integration) {
+            this.integration = integration;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage environmentId(String environmentId) {
             this.environmentId = Optional.ofNullable(environmentId);
             return this;
@@ -383,6 +414,7 @@ public final class ApiKeyResponseData {
                     environment,
                     environmentId,
                     id,
+                    integration,
                     lastUsedAt,
                     name,
                     readonly,

@@ -24,6 +24,8 @@ import java.util.Optional;
 public final class CountPlansParams {
     private final Optional<String> companyId;
 
+    private final Optional<Boolean> companyScopedOnly;
+
     private final Optional<Boolean> excludeCompanyScoped;
 
     private final Optional<Boolean> forFallbackPlan;
@@ -56,6 +58,7 @@ public final class CountPlansParams {
 
     private CountPlansParams(
             Optional<String> companyId,
+            Optional<Boolean> companyScopedOnly,
             Optional<Boolean> excludeCompanyScoped,
             Optional<Boolean> forFallbackPlan,
             Optional<Boolean> forInitialPlan,
@@ -72,6 +75,7 @@ public final class CountPlansParams {
             Optional<Boolean> withoutPaidProductId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
+        this.companyScopedOnly = companyScopedOnly;
         this.excludeCompanyScoped = excludeCompanyScoped;
         this.forFallbackPlan = forFallbackPlan;
         this.forInitialPlan = forInitialPlan;
@@ -92,6 +96,14 @@ public final class CountPlansParams {
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
+    }
+
+    /**
+     * @return Only return plans that are scoped to a company (custom plans assigned to a company)
+     */
+    @JsonProperty("company_scoped_only")
+    public Optional<Boolean> getCompanyScopedOnly() {
+        return companyScopedOnly;
     }
 
     /**
@@ -213,6 +225,7 @@ public final class CountPlansParams {
 
     private boolean equalTo(CountPlansParams other) {
         return companyId.equals(other.companyId)
+                && companyScopedOnly.equals(other.companyScopedOnly)
                 && excludeCompanyScoped.equals(other.excludeCompanyScoped)
                 && forFallbackPlan.equals(other.forFallbackPlan)
                 && forInitialPlan.equals(other.forInitialPlan)
@@ -233,6 +246,7 @@ public final class CountPlansParams {
     public int hashCode() {
         return Objects.hash(
                 this.companyId,
+                this.companyScopedOnly,
                 this.excludeCompanyScoped,
                 this.forFallbackPlan,
                 this.forInitialPlan,
@@ -261,6 +275,8 @@ public final class CountPlansParams {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<String> companyId = Optional.empty();
+
+        private Optional<Boolean> companyScopedOnly = Optional.empty();
 
         private Optional<Boolean> excludeCompanyScoped = Optional.empty();
 
@@ -297,6 +313,7 @@ public final class CountPlansParams {
 
         public Builder from(CountPlansParams other) {
             companyId(other.getCompanyId());
+            companyScopedOnly(other.getCompanyScopedOnly());
             excludeCompanyScoped(other.getExcludeCompanyScoped());
             forFallbackPlan(other.getForFallbackPlan());
             forInitialPlan(other.getForInitialPlan());
@@ -322,6 +339,20 @@ public final class CountPlansParams {
 
         public Builder companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        /**
+         * <p>Only return plans that are scoped to a company (custom plans assigned to a company)</p>
+         */
+        @JsonSetter(value = "company_scoped_only", nulls = Nulls.SKIP)
+        public Builder companyScopedOnly(Optional<Boolean> companyScopedOnly) {
+            this.companyScopedOnly = companyScopedOnly;
+            return this;
+        }
+
+        public Builder companyScopedOnly(Boolean companyScopedOnly) {
+            this.companyScopedOnly = Optional.ofNullable(companyScopedOnly);
             return this;
         }
 
@@ -518,6 +549,7 @@ public final class CountPlansParams {
         public CountPlansParams build() {
             return new CountPlansParams(
                     companyId,
+                    companyScopedOnly,
                     excludeCompanyScoped,
                     forFallbackPlan,
                     forInitialPlan,

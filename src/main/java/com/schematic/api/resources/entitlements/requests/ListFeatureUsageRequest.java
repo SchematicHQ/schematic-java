@@ -5,9 +5,9 @@ package com.schematic.api.resources.entitlements.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -61,17 +61,17 @@ public final class ListFeatureUsageRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("feature_ids")
     public Optional<List<String>> getFeatureIds() {
         return featureIds;
     }
 
-    @JsonIgnore
+    @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
     }
 
-    @JsonIgnore
+    @JsonProperty("company_keys")
     public Optional<Map<String, String>> getCompanyKeys() {
         return companyKeys;
     }
@@ -79,17 +79,17 @@ public final class ListFeatureUsageRequest {
     /**
      * @return Include time-bucketed usage aggregation (today, this week, this month, billing period) for credit-based entitlements. Defaults to false for performance.
      */
-    @JsonIgnore
+    @JsonProperty("include_usage_aggregation")
     public Optional<Boolean> getIncludeUsageAggregation() {
         return includeUsageAggregation;
     }
 
-    @JsonIgnore
+    @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
     }
 
-    @JsonIgnore
+    @JsonProperty("without_negative_entitlements")
     public Optional<Boolean> getWithoutNegativeEntitlements() {
         return withoutNegativeEntitlements;
     }
@@ -97,7 +97,7 @@ public final class ListFeatureUsageRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -105,7 +105,7 @@ public final class ListFeatureUsageRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }

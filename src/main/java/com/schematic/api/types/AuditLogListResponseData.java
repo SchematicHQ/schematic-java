@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class AuditLogListResponseData {
     private final ActorType actorType;
 
+    private final Optional<ApiKeyResponseData> apiKey;
+
     private final Optional<String> apiKeyId;
 
     private final Optional<OffsetDateTime> endedAt;
@@ -58,6 +60,7 @@ public final class AuditLogListResponseData {
 
     private AuditLogListResponseData(
             ActorType actorType,
+            Optional<ApiKeyResponseData> apiKey,
             Optional<String> apiKeyId,
             Optional<OffsetDateTime> endedAt,
             Optional<EnvironmentResponseData> environment,
@@ -75,6 +78,7 @@ public final class AuditLogListResponseData {
             Optional<String> userName,
             Map<String, Object> additionalProperties) {
         this.actorType = actorType;
+        this.apiKey = apiKey;
         this.apiKeyId = apiKeyId;
         this.endedAt = endedAt;
         this.environment = environment;
@@ -96,6 +100,11 @@ public final class AuditLogListResponseData {
     @JsonProperty("actor_type")
     public ActorType getActorType() {
         return actorType;
+    }
+
+    @JsonProperty("api_key")
+    public Optional<ApiKeyResponseData> getApiKey() {
+        return apiKey;
     }
 
     @JsonProperty("api_key_id")
@@ -186,6 +195,7 @@ public final class AuditLogListResponseData {
 
     private boolean equalTo(AuditLogListResponseData other) {
         return actorType.equals(other.actorType)
+                && apiKey.equals(other.apiKey)
                 && apiKeyId.equals(other.apiKeyId)
                 && endedAt.equals(other.endedAt)
                 && environment.equals(other.environment)
@@ -207,6 +217,7 @@ public final class AuditLogListResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.actorType,
+                this.apiKey,
                 this.apiKeyId,
                 this.endedAt,
                 this.environment,
@@ -261,6 +272,10 @@ public final class AuditLogListResponseData {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage apiKey(Optional<ApiKeyResponseData> apiKey);
+
+        _FinalStage apiKey(ApiKeyResponseData apiKey);
 
         _FinalStage apiKeyId(Optional<String> apiKeyId);
 
@@ -342,6 +357,8 @@ public final class AuditLogListResponseData {
 
         private Optional<String> apiKeyId = Optional.empty();
 
+        private Optional<ApiKeyResponseData> apiKey = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -350,6 +367,7 @@ public final class AuditLogListResponseData {
         @java.lang.Override
         public Builder from(AuditLogListResponseData other) {
             actorType(other.getActorType());
+            apiKey(other.getApiKey());
             apiKeyId(other.getApiKeyId());
             endedAt(other.getEndedAt());
             environment(other.getEnvironment());
@@ -547,9 +565,23 @@ public final class AuditLogListResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage apiKey(ApiKeyResponseData apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "api_key", nulls = Nulls.SKIP)
+        public _FinalStage apiKey(Optional<ApiKeyResponseData> apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        @java.lang.Override
         public AuditLogListResponseData build() {
             return new AuditLogListResponseData(
                     actorType,
+                    apiKey,
                     apiKeyId,
                     endedAt,
                     environment,

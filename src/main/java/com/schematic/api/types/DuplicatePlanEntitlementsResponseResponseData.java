@@ -23,15 +23,19 @@ import java.util.Objects;
 public final class DuplicatePlanEntitlementsResponseResponseData {
     private final List<PlanEntitlementResponseData> data;
 
+    private final List<PlanIssueResponseData> issues;
+
     private final List<SkippedEntitlementResponseData> skipped;
 
     private final Map<String, Object> additionalProperties;
 
     private DuplicatePlanEntitlementsResponseResponseData(
             List<PlanEntitlementResponseData> data,
+            List<PlanIssueResponseData> issues,
             List<SkippedEntitlementResponseData> skipped,
             Map<String, Object> additionalProperties) {
         this.data = data;
+        this.issues = issues;
         this.skipped = skipped;
         this.additionalProperties = additionalProperties;
     }
@@ -39,6 +43,11 @@ public final class DuplicatePlanEntitlementsResponseResponseData {
     @JsonProperty("data")
     public List<PlanEntitlementResponseData> getData() {
         return data;
+    }
+
+    @JsonProperty("issues")
+    public List<PlanIssueResponseData> getIssues() {
+        return issues;
     }
 
     @JsonProperty("skipped")
@@ -59,12 +68,12 @@ public final class DuplicatePlanEntitlementsResponseResponseData {
     }
 
     private boolean equalTo(DuplicatePlanEntitlementsResponseResponseData other) {
-        return data.equals(other.data) && skipped.equals(other.skipped);
+        return data.equals(other.data) && issues.equals(other.issues) && skipped.equals(other.skipped);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.data, this.skipped);
+        return Objects.hash(this.data, this.issues, this.skipped);
     }
 
     @java.lang.Override
@@ -80,6 +89,8 @@ public final class DuplicatePlanEntitlementsResponseResponseData {
     public static final class Builder {
         private List<PlanEntitlementResponseData> data = new ArrayList<>();
 
+        private List<PlanIssueResponseData> issues = new ArrayList<>();
+
         private List<SkippedEntitlementResponseData> skipped = new ArrayList<>();
 
         @JsonAnySetter
@@ -89,6 +100,7 @@ public final class DuplicatePlanEntitlementsResponseResponseData {
 
         public Builder from(DuplicatePlanEntitlementsResponseResponseData other) {
             data(other.getData());
+            issues(other.getIssues());
             skipped(other.getSkipped());
             return this;
         }
@@ -110,6 +122,27 @@ public final class DuplicatePlanEntitlementsResponseResponseData {
         public Builder addAllData(List<PlanEntitlementResponseData> data) {
             if (data != null) {
                 this.data.addAll(data);
+            }
+            return this;
+        }
+
+        @JsonSetter(value = "issues", nulls = Nulls.SKIP)
+        public Builder issues(List<PlanIssueResponseData> issues) {
+            this.issues.clear();
+            if (issues != null) {
+                this.issues.addAll(issues);
+            }
+            return this;
+        }
+
+        public Builder addIssues(PlanIssueResponseData issues) {
+            this.issues.add(issues);
+            return this;
+        }
+
+        public Builder addAllIssues(List<PlanIssueResponseData> issues) {
+            if (issues != null) {
+                this.issues.addAll(issues);
             }
             return this;
         }
@@ -136,7 +169,7 @@ public final class DuplicatePlanEntitlementsResponseResponseData {
         }
 
         public DuplicatePlanEntitlementsResponseResponseData build() {
-            return new DuplicatePlanEntitlementsResponseResponseData(data, skipped, additionalProperties);
+            return new DuplicatePlanEntitlementsResponseResponseData(data, issues, skipped, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

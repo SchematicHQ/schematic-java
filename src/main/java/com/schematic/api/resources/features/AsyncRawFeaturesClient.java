@@ -92,6 +92,10 @@ public class AsyncRawFeaturesClient {
                     request.getBooleanRequireEvent().get(),
                     false);
         }
+        if (request.getManagedBy().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "managed_by", request.getManagedBy().get(), false);
+        }
         if (request.getPlanVersionId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
@@ -685,6 +689,10 @@ public class AsyncRawFeaturesClient {
                     "boolean_require_event",
                     request.getBooleanRequireEvent().get(),
                     false);
+        }
+        if (request.getManagedBy().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "managed_by", request.getManagedBy().get(), false);
         }
         if (request.getPlanVersionId().isPresent()) {
             QueryStringMapper.addQueryParameter(
