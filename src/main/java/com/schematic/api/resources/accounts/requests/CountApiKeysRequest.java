@@ -5,9 +5,9 @@ package com.schematic.api.resources.accounts.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -43,12 +43,12 @@ public final class CountApiKeysRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("environment_id")
     public Optional<String> getEnvironmentId() {
         return environmentId;
     }
 
-    @JsonIgnore
+    @JsonProperty("require_environment")
     public boolean getRequireEnvironment() {
         return requireEnvironment;
     }
@@ -56,7 +56,7 @@ public final class CountApiKeysRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -64,7 +64,7 @@ public final class CountApiKeysRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }

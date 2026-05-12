@@ -5,9 +5,9 @@ package com.schematic.api.resources.billing.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -36,6 +36,8 @@ public final class CountBillingProductsRequest {
 
     private final Optional<String> q;
 
+    private final Optional<Boolean> recurringChargesOnly;
+
     private final Optional<Boolean> withOneTimeCharges;
 
     private final Optional<Boolean> withPricesOnly;
@@ -57,6 +59,7 @@ public final class CountBillingProductsRequest {
             Optional<BillingPriceUsageType> priceUsageType,
             Optional<BillingProviderType> providerType,
             Optional<String> q,
+            Optional<Boolean> recurringChargesOnly,
             Optional<Boolean> withOneTimeCharges,
             Optional<Boolean> withPricesOnly,
             Optional<Boolean> withZeroPrice,
@@ -70,6 +73,7 @@ public final class CountBillingProductsRequest {
         this.priceUsageType = priceUsageType;
         this.providerType = providerType;
         this.q = q;
+        this.recurringChargesOnly = recurringChargesOnly;
         this.withOneTimeCharges = withOneTimeCharges;
         this.withPricesOnly = withPricesOnly;
         this.withZeroPrice = withZeroPrice;
@@ -79,7 +83,7 @@ public final class CountBillingProductsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
     }
@@ -87,35 +91,43 @@ public final class CountBillingProductsRequest {
     /**
      * @return Filter products that are active. Defaults to true if not specified
      */
-    @JsonIgnore
+    @JsonProperty("is_active")
     public Optional<Boolean> getIsActive() {
         return isActive;
     }
 
-    @JsonIgnore
+    @JsonProperty("name")
     public Optional<String> getName() {
         return name;
     }
 
-    @JsonIgnore
+    @JsonProperty("price_usage_type")
     public Optional<BillingPriceUsageType> getPriceUsageType() {
         return priceUsageType;
     }
 
-    @JsonIgnore
+    @JsonProperty("provider_type")
     public Optional<BillingProviderType> getProviderType() {
         return providerType;
     }
 
-    @JsonIgnore
+    @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
     }
 
     /**
+     * @return Filter to products that have at least one recurring price
+     */
+    @JsonProperty("recurring_charges_only")
+    public Optional<Boolean> getRecurringChargesOnly() {
+        return recurringChargesOnly;
+    }
+
+    /**
      * @return Filter products that are one time charges
      */
-    @JsonIgnore
+    @JsonProperty("with_one_time_charges")
     public Optional<Boolean> getWithOneTimeCharges() {
         return withOneTimeCharges;
     }
@@ -123,7 +135,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Filter products that have prices
      */
-    @JsonIgnore
+    @JsonProperty("with_prices_only")
     public Optional<Boolean> getWithPricesOnly() {
         return withPricesOnly;
     }
@@ -131,7 +143,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Filter products that have zero price for free subscription type
      */
-    @JsonIgnore
+    @JsonProperty("with_zero_price")
     public Optional<Boolean> getWithZeroPrice() {
         return withZeroPrice;
     }
@@ -139,7 +151,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Filter products that are not linked to any plan
      */
-    @JsonIgnore
+    @JsonProperty("without_linked_to_plan")
     public Optional<Boolean> getWithoutLinkedToPlan() {
         return withoutLinkedToPlan;
     }
@@ -147,7 +159,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -155,7 +167,7 @@ public final class CountBillingProductsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }
@@ -178,6 +190,7 @@ public final class CountBillingProductsRequest {
                 && priceUsageType.equals(other.priceUsageType)
                 && providerType.equals(other.providerType)
                 && q.equals(other.q)
+                && recurringChargesOnly.equals(other.recurringChargesOnly)
                 && withOneTimeCharges.equals(other.withOneTimeCharges)
                 && withPricesOnly.equals(other.withPricesOnly)
                 && withZeroPrice.equals(other.withZeroPrice)
@@ -195,6 +208,7 @@ public final class CountBillingProductsRequest {
                 this.priceUsageType,
                 this.providerType,
                 this.q,
+                this.recurringChargesOnly,
                 this.withOneTimeCharges,
                 this.withPricesOnly,
                 this.withZeroPrice,
@@ -226,6 +240,8 @@ public final class CountBillingProductsRequest {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<Boolean> recurringChargesOnly = Optional.empty();
+
         private Optional<Boolean> withOneTimeCharges = Optional.empty();
 
         private Optional<Boolean> withPricesOnly = Optional.empty();
@@ -250,6 +266,7 @@ public final class CountBillingProductsRequest {
             priceUsageType(other.getPriceUsageType());
             providerType(other.getProviderType());
             q(other.getQ());
+            recurringChargesOnly(other.getRecurringChargesOnly());
             withOneTimeCharges(other.getWithOneTimeCharges());
             withPricesOnly(other.getWithPricesOnly());
             withZeroPrice(other.getWithZeroPrice());
@@ -330,6 +347,20 @@ public final class CountBillingProductsRequest {
 
         public Builder q(String q) {
             this.q = Optional.ofNullable(q);
+            return this;
+        }
+
+        /**
+         * <p>Filter to products that have at least one recurring price</p>
+         */
+        @JsonSetter(value = "recurring_charges_only", nulls = Nulls.SKIP)
+        public Builder recurringChargesOnly(Optional<Boolean> recurringChargesOnly) {
+            this.recurringChargesOnly = recurringChargesOnly;
+            return this;
+        }
+
+        public Builder recurringChargesOnly(Boolean recurringChargesOnly) {
+            this.recurringChargesOnly = Optional.ofNullable(recurringChargesOnly);
             return this;
         }
 
@@ -425,6 +456,7 @@ public final class CountBillingProductsRequest {
                     priceUsageType,
                     providerType,
                     q,
+                    recurringChargesOnly,
                     withOneTimeCharges,
                     withPricesOnly,
                     withZeroPrice,

@@ -5,13 +5,14 @@ package com.schematic.api.resources.features.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.FeatureType;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +29,8 @@ public final class ListFeaturesRequest {
     private final Optional<List<String>> ids;
 
     private final Optional<Boolean> booleanRequireEvent;
+
+    private final Optional<BillingProviderType> managedBy;
 
     private final Optional<String> planVersionId;
 
@@ -47,6 +50,7 @@ public final class ListFeaturesRequest {
             Optional<List<FeatureType>> featureType,
             Optional<List<String>> ids,
             Optional<Boolean> booleanRequireEvent,
+            Optional<BillingProviderType> managedBy,
             Optional<String> planVersionId,
             Optional<String> q,
             Optional<String> withoutCompanyOverrideFor,
@@ -57,6 +61,7 @@ public final class ListFeaturesRequest {
         this.featureType = featureType;
         this.ids = ids;
         this.booleanRequireEvent = booleanRequireEvent;
+        this.managedBy = managedBy;
         this.planVersionId = planVersionId;
         this.q = q;
         this.withoutCompanyOverrideFor = withoutCompanyOverrideFor;
@@ -69,12 +74,12 @@ public final class ListFeaturesRequest {
     /**
      * @return Filter by one or more feature types (boolean, event, trait)
      */
-    @JsonIgnore
+    @JsonProperty("feature_type")
     public Optional<List<FeatureType>> getFeatureType() {
         return featureType;
     }
 
-    @JsonIgnore
+    @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
     }
@@ -82,15 +87,23 @@ public final class ListFeaturesRequest {
     /**
      * @return Only return boolean features if there is an associated event. Automatically includes boolean in the feature types filter.
      */
-    @JsonIgnore
+    @JsonProperty("boolean_require_event")
     public Optional<Boolean> getBooleanRequireEvent() {
         return booleanRequireEvent;
     }
 
     /**
+     * @return Filter for features managed by a billing provider, or by Schematic (no billing provider)
+     */
+    @JsonProperty("managed_by")
+    public Optional<BillingProviderType> getManagedBy() {
+        return managedBy;
+    }
+
+    /**
      * @return Filter by plan version ID when used with without_plan_entitlement_for; if not provided, the latest published version is used
      */
-    @JsonIgnore
+    @JsonProperty("plan_version_id")
     public Optional<String> getPlanVersionId() {
         return planVersionId;
     }
@@ -98,7 +111,7 @@ public final class ListFeaturesRequest {
     /**
      * @return Search by feature name or ID
      */
-    @JsonIgnore
+    @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
     }
@@ -106,7 +119,7 @@ public final class ListFeaturesRequest {
     /**
      * @return Filter out features that already have a company override for the specified company ID
      */
-    @JsonIgnore
+    @JsonProperty("without_company_override_for")
     public Optional<String> getWithoutCompanyOverrideFor() {
         return withoutCompanyOverrideFor;
     }
@@ -114,7 +127,7 @@ public final class ListFeaturesRequest {
     /**
      * @return Filter out features that already have a plan entitlement for the specified plan ID
      */
-    @JsonIgnore
+    @JsonProperty("without_plan_entitlement_for")
     public Optional<String> getWithoutPlanEntitlementFor() {
         return withoutPlanEntitlementFor;
     }
@@ -122,7 +135,7 @@ public final class ListFeaturesRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -130,7 +143,7 @@ public final class ListFeaturesRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }
@@ -150,6 +163,7 @@ public final class ListFeaturesRequest {
         return featureType.equals(other.featureType)
                 && ids.equals(other.ids)
                 && booleanRequireEvent.equals(other.booleanRequireEvent)
+                && managedBy.equals(other.managedBy)
                 && planVersionId.equals(other.planVersionId)
                 && q.equals(other.q)
                 && withoutCompanyOverrideFor.equals(other.withoutCompanyOverrideFor)
@@ -164,6 +178,7 @@ public final class ListFeaturesRequest {
                 this.featureType,
                 this.ids,
                 this.booleanRequireEvent,
+                this.managedBy,
                 this.planVersionId,
                 this.q,
                 this.withoutCompanyOverrideFor,
@@ -189,6 +204,8 @@ public final class ListFeaturesRequest {
 
         private Optional<Boolean> booleanRequireEvent = Optional.empty();
 
+        private Optional<BillingProviderType> managedBy = Optional.empty();
+
         private Optional<String> planVersionId = Optional.empty();
 
         private Optional<String> q = Optional.empty();
@@ -210,6 +227,7 @@ public final class ListFeaturesRequest {
             featureType(other.getFeatureType());
             ids(other.getIds());
             booleanRequireEvent(other.getBooleanRequireEvent());
+            managedBy(other.getManagedBy());
             planVersionId(other.getPlanVersionId());
             q(other.getQ());
             withoutCompanyOverrideFor(other.getWithoutCompanyOverrideFor());
@@ -265,6 +283,20 @@ public final class ListFeaturesRequest {
 
         public Builder booleanRequireEvent(Boolean booleanRequireEvent) {
             this.booleanRequireEvent = Optional.ofNullable(booleanRequireEvent);
+            return this;
+        }
+
+        /**
+         * <p>Filter for features managed by a billing provider, or by Schematic (no billing provider)</p>
+         */
+        @JsonSetter(value = "managed_by", nulls = Nulls.SKIP)
+        public Builder managedBy(Optional<BillingProviderType> managedBy) {
+            this.managedBy = managedBy;
+            return this;
+        }
+
+        public Builder managedBy(BillingProviderType managedBy) {
+            this.managedBy = Optional.ofNullable(managedBy);
             return this;
         }
 
@@ -357,6 +389,7 @@ public final class ListFeaturesRequest {
                     featureType,
                     ids,
                     booleanRequireEvent,
+                    managedBy,
                     planVersionId,
                     q,
                     withoutCompanyOverrideFor,

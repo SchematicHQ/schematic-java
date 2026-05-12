@@ -34,6 +34,8 @@ public final class PlanCreditGrantView {
 
     private final Optional<Long> billingCreditAutoTopupExpiryUnitCount;
 
+    private final boolean billingCreditAutoTopupSelfService;
+
     private final Optional<Long> billingCreditAutoTopupThresholdCredits;
 
     private final Optional<Long> billingCreditAutoTopupThresholdPercent;
@@ -87,6 +89,7 @@ public final class PlanCreditGrantView {
             Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType,
             Optional<BillingCreditExpiryUnit> billingCreditAutoTopupExpiryUnit,
             Optional<Long> billingCreditAutoTopupExpiryUnitCount,
+            boolean billingCreditAutoTopupSelfService,
             Optional<Long> billingCreditAutoTopupThresholdCredits,
             Optional<Long> billingCreditAutoTopupThresholdPercent,
             OffsetDateTime createdAt,
@@ -116,6 +119,7 @@ public final class PlanCreditGrantView {
         this.billingCreditAutoTopupExpiryType = billingCreditAutoTopupExpiryType;
         this.billingCreditAutoTopupExpiryUnit = billingCreditAutoTopupExpiryUnit;
         this.billingCreditAutoTopupExpiryUnitCount = billingCreditAutoTopupExpiryUnitCount;
+        this.billingCreditAutoTopupSelfService = billingCreditAutoTopupSelfService;
         this.billingCreditAutoTopupThresholdCredits = billingCreditAutoTopupThresholdCredits;
         this.billingCreditAutoTopupThresholdPercent = billingCreditAutoTopupThresholdPercent;
         this.createdAt = createdAt;
@@ -169,6 +173,11 @@ public final class PlanCreditGrantView {
     @JsonProperty("billing_credit_auto_topup_expiry_unit_count")
     public Optional<Long> getBillingCreditAutoTopupExpiryUnitCount() {
         return billingCreditAutoTopupExpiryUnitCount;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_self_service")
+    public boolean getBillingCreditAutoTopupSelfService() {
+        return billingCreditAutoTopupSelfService;
     }
 
     @JsonProperty("billing_credit_auto_topup_threshold_credits")
@@ -314,6 +323,7 @@ public final class PlanCreditGrantView {
                 && billingCreditAutoTopupExpiryType.equals(other.billingCreditAutoTopupExpiryType)
                 && billingCreditAutoTopupExpiryUnit.equals(other.billingCreditAutoTopupExpiryUnit)
                 && billingCreditAutoTopupExpiryUnitCount.equals(other.billingCreditAutoTopupExpiryUnitCount)
+                && billingCreditAutoTopupSelfService == other.billingCreditAutoTopupSelfService
                 && billingCreditAutoTopupThresholdCredits.equals(other.billingCreditAutoTopupThresholdCredits)
                 && billingCreditAutoTopupThresholdPercent.equals(other.billingCreditAutoTopupThresholdPercent)
                 && createdAt.equals(other.createdAt)
@@ -347,6 +357,7 @@ public final class PlanCreditGrantView {
                 this.billingCreditAutoTopupExpiryType,
                 this.billingCreditAutoTopupExpiryUnit,
                 this.billingCreditAutoTopupExpiryUnitCount,
+                this.billingCreditAutoTopupSelfService,
                 this.billingCreditAutoTopupThresholdCredits,
                 this.billingCreditAutoTopupThresholdPercent,
                 this.createdAt,
@@ -381,9 +392,13 @@ public final class PlanCreditGrantView {
     }
 
     public interface BillingCreditAutoTopupEnabledStage {
-        CreatedAtStage billingCreditAutoTopupEnabled(boolean billingCreditAutoTopupEnabled);
+        BillingCreditAutoTopupSelfServiceStage billingCreditAutoTopupEnabled(boolean billingCreditAutoTopupEnabled);
 
         Builder from(PlanCreditGrantView other);
+    }
+
+    public interface BillingCreditAutoTopupSelfServiceStage {
+        CreatedAtStage billingCreditAutoTopupSelfService(boolean billingCreditAutoTopupSelfService);
     }
 
     public interface CreatedAtStage {
@@ -522,6 +537,7 @@ public final class PlanCreditGrantView {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements BillingCreditAutoTopupEnabledStage,
+                    BillingCreditAutoTopupSelfServiceStage,
                     CreatedAtStage,
                     CreditAmountStage,
                     CreditDescriptionStage,
@@ -533,6 +549,8 @@ public final class PlanCreditGrantView {
                     UpdatedAtStage,
                     _FinalStage {
         private boolean billingCreditAutoTopupEnabled;
+
+        private boolean billingCreditAutoTopupSelfService;
 
         private OffsetDateTime createdAt;
 
@@ -601,6 +619,7 @@ public final class PlanCreditGrantView {
             billingCreditAutoTopupExpiryType(other.getBillingCreditAutoTopupExpiryType());
             billingCreditAutoTopupExpiryUnit(other.getBillingCreditAutoTopupExpiryUnit());
             billingCreditAutoTopupExpiryUnitCount(other.getBillingCreditAutoTopupExpiryUnitCount());
+            billingCreditAutoTopupSelfService(other.getBillingCreditAutoTopupSelfService());
             billingCreditAutoTopupThresholdCredits(other.getBillingCreditAutoTopupThresholdCredits());
             billingCreditAutoTopupThresholdPercent(other.getBillingCreditAutoTopupThresholdPercent());
             createdAt(other.getCreatedAt());
@@ -628,8 +647,16 @@ public final class PlanCreditGrantView {
 
         @java.lang.Override
         @JsonSetter("billing_credit_auto_topup_enabled")
-        public CreatedAtStage billingCreditAutoTopupEnabled(boolean billingCreditAutoTopupEnabled) {
+        public BillingCreditAutoTopupSelfServiceStage billingCreditAutoTopupEnabled(
+                boolean billingCreditAutoTopupEnabled) {
             this.billingCreditAutoTopupEnabled = billingCreditAutoTopupEnabled;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_credit_auto_topup_self_service")
+        public CreatedAtStage billingCreditAutoTopupSelfService(boolean billingCreditAutoTopupSelfService) {
+            this.billingCreditAutoTopupSelfService = billingCreditAutoTopupSelfService;
             return this;
         }
 
@@ -974,6 +1001,7 @@ public final class PlanCreditGrantView {
                     billingCreditAutoTopupExpiryType,
                     billingCreditAutoTopupExpiryUnit,
                     billingCreditAutoTopupExpiryUnitCount,
+                    billingCreditAutoTopupSelfService,
                     billingCreditAutoTopupThresholdCredits,
                     billingCreditAutoTopupThresholdPercent,
                     createdAt,

@@ -2798,6 +2798,7 @@ client.billing().listBillingProducts(
         .priceUsageType(BillingPriceUsageType.LICENSED)
         .providerType(BillingProviderType.ORB)
         .q("q")
+        .recurringChargesOnly(true)
         .withOneTimeCharges(true)
         .withPricesOnly(true)
         .withZeroPrice(true)
@@ -2861,6 +2862,14 @@ client.billing().listBillingProducts(
 <dd>
 
 **q:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**recurringChargesOnly:** `Optional<Boolean>` — Filter to products that have at least one recurring price
     
 </dd>
 </dl>
@@ -2944,6 +2953,7 @@ client.billing().countBillingProducts(
         .priceUsageType(BillingPriceUsageType.LICENSED)
         .providerType(BillingProviderType.ORB)
         .q("q")
+        .recurringChargesOnly(true)
         .withOneTimeCharges(true)
         .withPricesOnly(true)
         .withZeroPrice(true)
@@ -3007,6 +3017,14 @@ client.billing().countBillingProducts(
 <dd>
 
 **q:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**recurringChargesOnly:** `Optional<Boolean>` — Filter to products that have at least one recurring price
     
 </dd>
 </dl>
@@ -5109,6 +5127,9 @@ client.credits().listBillingPlanCreditGrants(
         .planIds(
             Arrays.asList("plan_ids")
         )
+        .planVersionIds(
+            Arrays.asList("plan_version_ids")
+        )
         .creditId("credit_id")
         .planId("plan_id")
         .planVersionId("plan_version_id")
@@ -5163,6 +5184,14 @@ client.credits().listBillingPlanCreditGrants(
 <dd>
 
 **planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionIds:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -5410,6 +5439,9 @@ client.credits().countBillingPlanCreditGrants(
         .planIds(
             Arrays.asList("plan_ids")
         )
+        .planVersionIds(
+            Arrays.asList("plan_version_ids")
+        )
         .creditId("credit_id")
         .planId("plan_id")
         .planVersionId("plan_version_id")
@@ -5464,6 +5496,14 @@ client.credits().countBillingPlanCreditGrants(
 <dd>
 
 **planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionIds:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -5737,6 +5777,14 @@ client.checkout().internal(
                     .build()
             )
         )
+        .autoTopupOverrides(
+            Arrays.asList(
+                UpdateAutoTopupOverrideRequestBody
+                    .builder()
+                    .planCreditGrantId("plan_credit_grant_id")
+                    .build()
+            )
+        )
         .creditBundles(
             Arrays.asList(
                 UpdateCreditBundleRequestBody
@@ -5862,6 +5910,14 @@ client.checkout().previewCheckoutInternal(
                     .builder()
                     .addOnId("add_on_id")
                     .priceId("price_id")
+                    .build()
+            )
+        )
+        .autoTopupOverrides(
+            Arrays.asList(
+                UpdateAutoTopupOverrideRequestBody
+                    .builder()
+                    .planCreditGrantId("plan_credit_grant_id")
                     .build()
             )
         )
@@ -11557,6 +11613,7 @@ client.plans().listPlans(
             Arrays.asList("ids")
         )
         .companyId("company_id")
+        .companyScopedOnly(true)
         .excludeCompanyScoped(true)
         .forFallbackPlan(true)
         .forInitialPlan(true)
@@ -11587,6 +11644,14 @@ client.plans().listPlans(
 <dd>
 
 **companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyScopedOnly:** `Optional<Boolean>` — Only return plans that are scoped to a company (custom plans assigned to a company)
     
 </dd>
 </dl>
@@ -12021,6 +12086,14 @@ client.plans().upsertPlanForBillingProduct(
 <dl>
 <dd>
 
+**externalResourceVersion:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **icon:** `Optional<PlanIcon>` 
     
 </dd>
@@ -12213,6 +12286,7 @@ client.plans().countPlans(
             Arrays.asList("ids")
         )
         .companyId("company_id")
+        .companyScopedOnly(true)
         .excludeCompanyScoped(true)
         .forFallbackPlan(true)
         .forInitialPlan(true)
@@ -12243,6 +12317,14 @@ client.plans().countPlans(
 <dd>
 
 **companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyScopedOnly:** `Optional<Boolean>` — Only return plans that are scoped to a company (custom plans assigned to a company)
     
 </dd>
 </dl>
@@ -13233,6 +13315,7 @@ client.events().listEvents(
         .companyId("company_id")
         .eventSubtype("event_subtype")
         .flagId("flag_id")
+        .idempotencyKey("idempotency_key")
         .userId("user_id")
         .limit(1000000L)
         .offset(1000000L)
@@ -13277,6 +13360,14 @@ client.events().listEvents(
 <dd>
 
 **flagId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -13446,6 +13537,7 @@ client.features().listFeatures(
             Arrays.asList("ids")
         )
         .booleanRequireEvent(true)
+        .managedBy(BillingProviderType.ORB)
         .planVersionId("plan_version_id")
         .q("q")
         .withoutCompanyOverrideFor("without_company_override_for")
@@ -13485,6 +13577,14 @@ client.features().listFeatures(
 <dd>
 
 **ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**managedBy:** `Optional<BillingProviderType>` — Filter for features managed by a billing provider, or by Schematic (no billing provider)
     
 </dd>
 </dl>
@@ -14052,6 +14152,7 @@ client.features().countFeatures(
             Arrays.asList("ids")
         )
         .booleanRequireEvent(true)
+        .managedBy(BillingProviderType.ORB)
         .planVersionId("plan_version_id")
         .q("q")
         .withoutCompanyOverrideFor("without_company_override_for")
@@ -14091,6 +14192,14 @@ client.features().countFeatures(
 <dd>
 
 **ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**managedBy:** `Optional<BillingProviderType>` — Filter for features managed by a billing provider, or by Schematic (no billing provider)
     
 </dd>
 </dl>
@@ -15069,6 +15178,147 @@ client.insights().getEnvironmentTraitUsageTimeSeries(
 </details>
 
 ## integrationsapi
+<details><summary><code>client.integrationsapi.runIntegration(integrationId) -> RunIntegrationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().runIntegration("integration_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**integrationId:** `String` — integration_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.listIntegrations() -> ListIntegrationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().listIntegrations(
+    ListIntegrationsRequest
+        .builder()
+        .excludeIds(
+            Arrays.asList("exclude_ids")
+        )
+        .billingOnly(true)
+        .id("id")
+        .state(IntegrationState.ACTIVE)
+        .type(IntegrationType.CLERK)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingOnly:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**excludeIds:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**state:** `Optional<IntegrationState>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**type:** `Optional<IntegrationType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.integrationsapi.getIntegrationWebhookUrl(type) -> GetIntegrationWebhookUrlResponse</code></summary>
 <dl>
 <dd>
@@ -15098,6 +15348,132 @@ client.integrationsapi().getIntegrationWebhookUrl("type");
 <dd>
 
 **type:** `String` — type
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.startDataImport(request) -> StartDataImportResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().startDataImport(
+    StartDataImportRequestBody
+        .builder()
+        .integrationId("integration_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyMatchingCriteria:** `Optional<CompanyMatchingCriteria>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyMatchingField:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**integrationId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.loadSampleDataSetV2() -> LoadSampleDataSetV2Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().loadSampleDataSetV2();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.uninstallIntegration(integrationId) -> UninstallIntegrationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().uninstallIntegration("integration_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**integrationId:** `String` — integration_id
     
 </dd>
 </dl>

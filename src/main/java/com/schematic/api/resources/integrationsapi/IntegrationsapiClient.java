@@ -5,7 +5,14 @@ package com.schematic.api.resources.integrationsapi;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.integrationsapi.requests.ListIntegrationsRequest;
+import com.schematic.api.resources.integrationsapi.requests.StartDataImportRequestBody;
 import com.schematic.api.resources.integrationsapi.types.GetIntegrationWebhookUrlResponse;
+import com.schematic.api.resources.integrationsapi.types.ListIntegrationsResponse;
+import com.schematic.api.resources.integrationsapi.types.LoadSampleDataSetV2Response;
+import com.schematic.api.resources.integrationsapi.types.RunIntegrationResponse;
+import com.schematic.api.resources.integrationsapi.types.StartDataImportResponse;
+import com.schematic.api.resources.integrationsapi.types.UninstallIntegrationResponse;
 
 public class IntegrationsapiClient {
     protected final ClientOptions clientOptions;
@@ -24,11 +31,61 @@ public class IntegrationsapiClient {
         return this.rawClient;
     }
 
+    public RunIntegrationResponse runIntegration(String integrationId) {
+        return this.rawClient.runIntegration(integrationId).body();
+    }
+
+    public RunIntegrationResponse runIntegration(String integrationId, RequestOptions requestOptions) {
+        return this.rawClient.runIntegration(integrationId, requestOptions).body();
+    }
+
+    public ListIntegrationsResponse listIntegrations() {
+        return this.rawClient.listIntegrations().body();
+    }
+
+    public ListIntegrationsResponse listIntegrations(RequestOptions requestOptions) {
+        return this.rawClient.listIntegrations(requestOptions).body();
+    }
+
+    public ListIntegrationsResponse listIntegrations(ListIntegrationsRequest request) {
+        return this.rawClient.listIntegrations(request).body();
+    }
+
+    public ListIntegrationsResponse listIntegrations(ListIntegrationsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listIntegrations(request, requestOptions).body();
+    }
+
     public GetIntegrationWebhookUrlResponse getIntegrationWebhookUrl(String type) {
         return this.rawClient.getIntegrationWebhookUrl(type).body();
     }
 
     public GetIntegrationWebhookUrlResponse getIntegrationWebhookUrl(String type, RequestOptions requestOptions) {
         return this.rawClient.getIntegrationWebhookUrl(type, requestOptions).body();
+    }
+
+    public StartDataImportResponse startDataImport(StartDataImportRequestBody request) {
+        return this.rawClient.startDataImport(request).body();
+    }
+
+    public StartDataImportResponse startDataImport(StartDataImportRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.startDataImport(request, requestOptions).body();
+    }
+
+    public LoadSampleDataSetV2Response loadSampleDataSetV2() {
+        return this.rawClient.loadSampleDataSetV2().body();
+    }
+
+    public LoadSampleDataSetV2Response loadSampleDataSetV2(RequestOptions requestOptions) {
+        return this.rawClient.loadSampleDataSetV2(requestOptions).body();
+    }
+
+    public UninstallIntegrationResponse uninstallIntegration(String integrationId) {
+        return this.rawClient.uninstallIntegration(integrationId).body();
+    }
+
+    public UninstallIntegrationResponse uninstallIntegration(String integrationId, RequestOptions requestOptions) {
+        return this.rawClient
+                .uninstallIntegration(integrationId, requestOptions)
+                .body();
     }
 }

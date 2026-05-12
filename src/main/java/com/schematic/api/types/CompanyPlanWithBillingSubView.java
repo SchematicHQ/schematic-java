@@ -36,7 +36,7 @@ public final class CompanyPlanWithBillingSubView {
 
     private final Optional<String> imageUrl;
 
-    private final List<PlanCreditGrantView> includedCreditGrants;
+    private final List<CompanyPlanCreditGrantView> includedCreditGrants;
 
     private final String name;
 
@@ -55,7 +55,7 @@ public final class CompanyPlanWithBillingSubView {
             Optional<String> description,
             String id,
             Optional<String> imageUrl,
-            List<PlanCreditGrantView> includedCreditGrants,
+            List<CompanyPlanCreditGrantView> includedCreditGrants,
             String name,
             Optional<String> planPeriod,
             Optional<Long> planPrice,
@@ -106,7 +106,7 @@ public final class CompanyPlanWithBillingSubView {
     }
 
     @JsonProperty("included_credit_grants")
-    public List<PlanCreditGrantView> getIncludedCreditGrants() {
+    public List<CompanyPlanCreditGrantView> getIncludedCreditGrants() {
         return includedCreditGrants;
     }
 
@@ -217,11 +217,11 @@ public final class CompanyPlanWithBillingSubView {
 
         _FinalStage imageUrl(String imageUrl);
 
-        _FinalStage includedCreditGrants(List<PlanCreditGrantView> includedCreditGrants);
+        _FinalStage includedCreditGrants(List<CompanyPlanCreditGrantView> includedCreditGrants);
 
-        _FinalStage addIncludedCreditGrants(PlanCreditGrantView includedCreditGrants);
+        _FinalStage addIncludedCreditGrants(CompanyPlanCreditGrantView includedCreditGrants);
 
-        _FinalStage addAllIncludedCreditGrants(List<PlanCreditGrantView> includedCreditGrants);
+        _FinalStage addAllIncludedCreditGrants(List<CompanyPlanCreditGrantView> includedCreditGrants);
 
         _FinalStage planPeriod(Optional<String> planPeriod);
 
@@ -248,7 +248,7 @@ public final class CompanyPlanWithBillingSubView {
 
         private Optional<String> planPeriod = Optional.empty();
 
-        private List<PlanCreditGrantView> includedCreditGrants = new ArrayList<>();
+        private List<CompanyPlanCreditGrantView> includedCreditGrants = new ArrayList<>();
 
         private Optional<String> imageUrl = Optional.empty();
 
@@ -335,7 +335,7 @@ public final class CompanyPlanWithBillingSubView {
         }
 
         @java.lang.Override
-        public _FinalStage addAllIncludedCreditGrants(List<PlanCreditGrantView> includedCreditGrants) {
+        public _FinalStage addAllIncludedCreditGrants(List<CompanyPlanCreditGrantView> includedCreditGrants) {
             if (includedCreditGrants != null) {
                 this.includedCreditGrants.addAll(includedCreditGrants);
             }
@@ -343,14 +343,14 @@ public final class CompanyPlanWithBillingSubView {
         }
 
         @java.lang.Override
-        public _FinalStage addIncludedCreditGrants(PlanCreditGrantView includedCreditGrants) {
+        public _FinalStage addIncludedCreditGrants(CompanyPlanCreditGrantView includedCreditGrants) {
             this.includedCreditGrants.add(includedCreditGrants);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "included_credit_grants", nulls = Nulls.SKIP)
-        public _FinalStage includedCreditGrants(List<PlanCreditGrantView> includedCreditGrants) {
+        public _FinalStage includedCreditGrants(List<CompanyPlanCreditGrantView> includedCreditGrants) {
             this.includedCreditGrants.clear();
             if (includedCreditGrants != null) {
                 this.includedCreditGrants.addAll(includedCreditGrants);

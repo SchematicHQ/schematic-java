@@ -5,9 +5,9 @@ package com.schematic.api.resources.companies.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -53,22 +53,22 @@ public final class CountPlanTraitsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
     }
 
-    @JsonIgnore
+    @JsonProperty("trait_ids")
     public Optional<List<String>> getTraitIds() {
         return traitIds;
     }
 
-    @JsonIgnore
+    @JsonProperty("plan_id")
     public Optional<String> getPlanId() {
         return planId;
     }
 
-    @JsonIgnore
+    @JsonProperty("trait_id")
     public Optional<String> getTraitId() {
         return traitId;
     }
@@ -76,7 +76,7 @@ public final class CountPlanTraitsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -84,7 +84,7 @@ public final class CountPlanTraitsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }

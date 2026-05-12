@@ -5,9 +5,9 @@ package com.schematic.api.resources.companies.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -50,17 +50,17 @@ public final class ListEntityKeyDefinitionsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
     }
 
-    @JsonIgnore
+    @JsonProperty("entity_type")
     public Optional<EntityType> getEntityType() {
         return entityType;
     }
 
-    @JsonIgnore
+    @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
     }
@@ -68,7 +68,7 @@ public final class ListEntityKeyDefinitionsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -76,7 +76,7 @@ public final class ListEntityKeyDefinitionsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }

@@ -27,6 +27,8 @@ public final class DataEventPayload {
 
     private final Optional<Map<String, JsonNode>> body;
 
+    private final Optional<String> idempotencyKey;
+
     private final Optional<OffsetDateTime> sentAt;
 
     private final EventType type;
@@ -36,11 +38,13 @@ public final class DataEventPayload {
     private DataEventPayload(
             String apiKey,
             Optional<Map<String, JsonNode>> body,
+            Optional<String> idempotencyKey,
             Optional<OffsetDateTime> sentAt,
             EventType type,
             Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
         this.body = body;
+        this.idempotencyKey = idempotencyKey;
         this.sentAt = sentAt;
         this.type = type;
         this.additionalProperties = additionalProperties;
@@ -54,6 +58,11 @@ public final class DataEventPayload {
     @JsonProperty("body")
     public Optional<Map<String, JsonNode>> getBody() {
         return body;
+    }
+
+    @JsonProperty("idempotency_key")
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
     }
 
     @JsonProperty("sent_at")
@@ -80,13 +89,14 @@ public final class DataEventPayload {
     private boolean equalTo(DataEventPayload other) {
         return apiKey.equals(other.apiKey)
                 && body.equals(other.body)
+                && idempotencyKey.equals(other.idempotencyKey)
                 && sentAt.equals(other.sentAt)
                 && type.equals(other.type);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKey, this.body, this.sentAt, this.type);
+        return Objects.hash(this.apiKey, this.body, this.idempotencyKey, this.sentAt, this.type);
     }
 
     @java.lang.Override
@@ -119,6 +129,10 @@ public final class DataEventPayload {
 
         _FinalStage body(Map<String, JsonNode> body);
 
+        _FinalStage idempotencyKey(Optional<String> idempotencyKey);
+
+        _FinalStage idempotencyKey(String idempotencyKey);
+
         _FinalStage sentAt(Optional<OffsetDateTime> sentAt);
 
         _FinalStage sentAt(OffsetDateTime sentAt);
@@ -132,6 +146,8 @@ public final class DataEventPayload {
 
         private Optional<OffsetDateTime> sentAt = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         private Optional<Map<String, JsonNode>> body = Optional.empty();
 
         @JsonAnySetter
@@ -143,6 +159,7 @@ public final class DataEventPayload {
         public Builder from(DataEventPayload other) {
             apiKey(other.getApiKey());
             body(other.getBody());
+            idempotencyKey(other.getIdempotencyKey());
             sentAt(other.getSentAt());
             type(other.getType());
             return this;
@@ -176,6 +193,19 @@ public final class DataEventPayload {
         }
 
         @java.lang.Override
+        public _FinalStage idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "idempotency_key", nulls = Nulls.SKIP)
+        public _FinalStage idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage body(Map<String, JsonNode> body) {
             this.body = Optional.ofNullable(body);
             return this;
@@ -190,7 +220,7 @@ public final class DataEventPayload {
 
         @java.lang.Override
         public DataEventPayload build() {
-            return new DataEventPayload(apiKey, body, sentAt, type, additionalProperties);
+            return new DataEventPayload(apiKey, body, idempotencyKey, sentAt, type, additionalProperties);
         }
 
         @java.lang.Override

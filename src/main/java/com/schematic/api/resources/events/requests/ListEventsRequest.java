@@ -5,9 +5,9 @@ package com.schematic.api.resources.events.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -31,6 +31,8 @@ public final class ListEventsRequest {
 
     private final Optional<String> flagId;
 
+    private final Optional<String> idempotencyKey;
+
     private final Optional<String> userId;
 
     private final Optional<Long> limit;
@@ -44,6 +46,7 @@ public final class ListEventsRequest {
             Optional<String> companyId,
             Optional<String> eventSubtype,
             Optional<String> flagId,
+            Optional<String> idempotencyKey,
             Optional<String> userId,
             Optional<Long> limit,
             Optional<Long> offset,
@@ -52,33 +55,39 @@ public final class ListEventsRequest {
         this.companyId = companyId;
         this.eventSubtype = eventSubtype;
         this.flagId = flagId;
+        this.idempotencyKey = idempotencyKey;
         this.userId = userId;
         this.limit = limit;
         this.offset = offset;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("event_types")
     public Optional<List<EventType>> getEventTypes() {
         return eventTypes;
     }
 
-    @JsonIgnore
+    @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
     }
 
-    @JsonIgnore
+    @JsonProperty("event_subtype")
     public Optional<String> getEventSubtype() {
         return eventSubtype;
     }
 
-    @JsonIgnore
+    @JsonProperty("flag_id")
     public Optional<String> getFlagId() {
         return flagId;
     }
 
-    @JsonIgnore
+    @JsonProperty("idempotency_key")
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
+    }
+
+    @JsonProperty("user_id")
     public Optional<String> getUserId() {
         return userId;
     }
@@ -86,7 +95,7 @@ public final class ListEventsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -94,7 +103,7 @@ public final class ListEventsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }
@@ -115,6 +124,7 @@ public final class ListEventsRequest {
                 && companyId.equals(other.companyId)
                 && eventSubtype.equals(other.eventSubtype)
                 && flagId.equals(other.flagId)
+                && idempotencyKey.equals(other.idempotencyKey)
                 && userId.equals(other.userId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
@@ -123,7 +133,14 @@ public final class ListEventsRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.eventTypes, this.companyId, this.eventSubtype, this.flagId, this.userId, this.limit, this.offset);
+                this.eventTypes,
+                this.companyId,
+                this.eventSubtype,
+                this.flagId,
+                this.idempotencyKey,
+                this.userId,
+                this.limit,
+                this.offset);
     }
 
     @java.lang.Override
@@ -145,6 +162,8 @@ public final class ListEventsRequest {
 
         private Optional<String> flagId = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         private Optional<String> userId = Optional.empty();
 
         private Optional<Long> limit = Optional.empty();
@@ -161,6 +180,7 @@ public final class ListEventsRequest {
             companyId(other.getCompanyId());
             eventSubtype(other.getEventSubtype());
             flagId(other.getFlagId());
+            idempotencyKey(other.getIdempotencyKey());
             userId(other.getUserId());
             limit(other.getLimit());
             offset(other.getOffset());
@@ -216,6 +236,17 @@ public final class ListEventsRequest {
             return this;
         }
 
+        @JsonSetter(value = "idempotency_key", nulls = Nulls.SKIP)
+        public Builder idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        public Builder idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
+            return this;
+        }
+
         @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
         public Builder userId(Optional<String> userId) {
             this.userId = userId;
@@ -257,7 +288,15 @@ public final class ListEventsRequest {
 
         public ListEventsRequest build() {
             return new ListEventsRequest(
-                    eventTypes, companyId, eventSubtype, flagId, userId, limit, offset, additionalProperties);
+                    eventTypes,
+                    companyId,
+                    eventSubtype,
+                    flagId,
+                    idempotencyKey,
+                    userId,
+                    limit,
+                    offset,
+                    additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -5,9 +5,9 @@ package com.schematic.api.resources.credits.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -26,6 +26,8 @@ public final class ListBillingPlanCreditGrantsRequest {
 
     private final Optional<List<String>> planIds;
 
+    private final Optional<List<String>> planVersionIds;
+
     private final Optional<String> creditId;
 
     private final Optional<String> planId;
@@ -41,6 +43,7 @@ public final class ListBillingPlanCreditGrantsRequest {
     private ListBillingPlanCreditGrantsRequest(
             Optional<List<String>> ids,
             Optional<List<String>> planIds,
+            Optional<List<String>> planVersionIds,
             Optional<String> creditId,
             Optional<String> planId,
             Optional<String> planVersionId,
@@ -49,6 +52,7 @@ public final class ListBillingPlanCreditGrantsRequest {
             Map<String, Object> additionalProperties) {
         this.ids = ids;
         this.planIds = planIds;
+        this.planVersionIds = planVersionIds;
         this.creditId = creditId;
         this.planId = planId;
         this.planVersionId = planVersionId;
@@ -57,27 +61,32 @@ public final class ListBillingPlanCreditGrantsRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
     }
 
-    @JsonIgnore
+    @JsonProperty("plan_ids")
     public Optional<List<String>> getPlanIds() {
         return planIds;
     }
 
-    @JsonIgnore
+    @JsonProperty("plan_version_ids")
+    public Optional<List<String>> getPlanVersionIds() {
+        return planVersionIds;
+    }
+
+    @JsonProperty("credit_id")
     public Optional<String> getCreditId() {
         return creditId;
     }
 
-    @JsonIgnore
+    @JsonProperty("plan_id")
     public Optional<String> getPlanId() {
         return planId;
     }
 
-    @JsonIgnore
+    @JsonProperty("plan_version_id")
     public Optional<String> getPlanVersionId() {
         return planVersionId;
     }
@@ -85,7 +94,7 @@ public final class ListBillingPlanCreditGrantsRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -93,7 +102,7 @@ public final class ListBillingPlanCreditGrantsRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }
@@ -113,6 +122,7 @@ public final class ListBillingPlanCreditGrantsRequest {
     private boolean equalTo(ListBillingPlanCreditGrantsRequest other) {
         return ids.equals(other.ids)
                 && planIds.equals(other.planIds)
+                && planVersionIds.equals(other.planVersionIds)
                 && creditId.equals(other.creditId)
                 && planId.equals(other.planId)
                 && planVersionId.equals(other.planVersionId)
@@ -123,7 +133,14 @@ public final class ListBillingPlanCreditGrantsRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.ids, this.planIds, this.creditId, this.planId, this.planVersionId, this.limit, this.offset);
+                this.ids,
+                this.planIds,
+                this.planVersionIds,
+                this.creditId,
+                this.planId,
+                this.planVersionId,
+                this.limit,
+                this.offset);
     }
 
     @java.lang.Override
@@ -140,6 +157,8 @@ public final class ListBillingPlanCreditGrantsRequest {
         private Optional<List<String>> ids = Optional.empty();
 
         private Optional<List<String>> planIds = Optional.empty();
+
+        private Optional<List<String>> planVersionIds = Optional.empty();
 
         private Optional<String> creditId = Optional.empty();
 
@@ -159,6 +178,7 @@ public final class ListBillingPlanCreditGrantsRequest {
         public Builder from(ListBillingPlanCreditGrantsRequest other) {
             ids(other.getIds());
             planIds(other.getPlanIds());
+            planVersionIds(other.getPlanVersionIds());
             creditId(other.getCreditId());
             planId(other.getPlanId());
             planVersionId(other.getPlanVersionId());
@@ -196,6 +216,22 @@ public final class ListBillingPlanCreditGrantsRequest {
 
         public Builder planIds(String planIds) {
             this.planIds = Optional.of(Collections.singletonList(planIds));
+            return this;
+        }
+
+        @JsonSetter(value = "plan_version_ids", nulls = Nulls.SKIP)
+        public Builder planVersionIds(Optional<List<String>> planVersionIds) {
+            this.planVersionIds = planVersionIds;
+            return this;
+        }
+
+        public Builder planVersionIds(List<String> planVersionIds) {
+            this.planVersionIds = Optional.ofNullable(planVersionIds);
+            return this;
+        }
+
+        public Builder planVersionIds(String planVersionIds) {
+            this.planVersionIds = Optional.of(Collections.singletonList(planVersionIds));
             return this;
         }
 
@@ -262,7 +298,7 @@ public final class ListBillingPlanCreditGrantsRequest {
 
         public ListBillingPlanCreditGrantsRequest build() {
             return new ListBillingPlanCreditGrantsRequest(
-                    ids, planIds, creditId, planId, planVersionId, limit, offset, additionalProperties);
+                    ids, planIds, planVersionIds, creditId, planId, planVersionId, limit, offset, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

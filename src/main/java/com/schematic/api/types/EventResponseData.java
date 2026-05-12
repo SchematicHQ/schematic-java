@@ -46,6 +46,8 @@ public final class EventResponseData {
 
     private final String id;
 
+    private final Optional<String> idempotencyKey;
+
     private final Optional<OffsetDateTime> loadedAt;
 
     private final Optional<OffsetDateTime> processedAt;
@@ -77,6 +79,7 @@ public final class EventResponseData {
             Optional<String> errorMessage,
             List<String> featureIds,
             String id,
+            Optional<String> idempotencyKey,
             Optional<OffsetDateTime> loadedAt,
             Optional<OffsetDateTime> processedAt,
             long quantity,
@@ -97,6 +100,7 @@ public final class EventResponseData {
         this.errorMessage = errorMessage;
         this.featureIds = featureIds;
         this.id = id;
+        this.idempotencyKey = idempotencyKey;
         this.loadedAt = loadedAt;
         this.processedAt = processedAt;
         this.quantity = quantity;
@@ -157,6 +161,11 @@ public final class EventResponseData {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    @JsonProperty("idempotency_key")
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
     }
 
     @JsonProperty("loaded_at")
@@ -226,6 +235,7 @@ public final class EventResponseData {
                 && errorMessage.equals(other.errorMessage)
                 && featureIds.equals(other.featureIds)
                 && id.equals(other.id)
+                && idempotencyKey.equals(other.idempotencyKey)
                 && loadedAt.equals(other.loadedAt)
                 && processedAt.equals(other.processedAt)
                 && quantity == other.quantity
@@ -250,6 +260,7 @@ public final class EventResponseData {
                 this.errorMessage,
                 this.featureIds,
                 this.id,
+                this.idempotencyKey,
                 this.loadedAt,
                 this.processedAt,
                 this.quantity,
@@ -335,6 +346,10 @@ public final class EventResponseData {
 
         _FinalStage addAllFeatureIds(List<String> featureIds);
 
+        _FinalStage idempotencyKey(Optional<String> idempotencyKey);
+
+        _FinalStage idempotencyKey(String idempotencyKey);
+
         _FinalStage loadedAt(Optional<OffsetDateTime> loadedAt);
 
         _FinalStage loadedAt(OffsetDateTime loadedAt);
@@ -387,6 +402,8 @@ public final class EventResponseData {
 
         private Optional<OffsetDateTime> loadedAt = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         private List<String> featureIds = new ArrayList<>();
 
         private Optional<String> errorMessage = Optional.empty();
@@ -418,6 +435,7 @@ public final class EventResponseData {
             errorMessage(other.getErrorMessage());
             featureIds(other.getFeatureIds());
             id(other.getId());
+            idempotencyKey(other.getIdempotencyKey());
             loadedAt(other.getLoadedAt());
             processedAt(other.getProcessedAt());
             quantity(other.getQuantity());
@@ -551,6 +569,19 @@ public final class EventResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "idempotency_key", nulls = Nulls.SKIP)
+        public _FinalStage idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllFeatureIds(List<String> featureIds) {
             if (featureIds != null) {
                 this.featureIds.addAll(featureIds);
@@ -676,6 +707,7 @@ public final class EventResponseData {
                     errorMessage,
                     featureIds,
                     id,
+                    idempotencyKey,
                     loadedAt,
                     processedAt,
                     quantity,

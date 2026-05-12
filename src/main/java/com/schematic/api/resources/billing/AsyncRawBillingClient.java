@@ -1919,6 +1919,13 @@ public class AsyncRawBillingClient {
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
+        if (request.getRecurringChargesOnly().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "recurring_charges_only",
+                    request.getRecurringChargesOnly().get(),
+                    false);
+        }
         if (request.getWithOneTimeCharges().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -2065,6 +2072,13 @@ public class AsyncRawBillingClient {
         }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
+        }
+        if (request.getRecurringChargesOnly().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "recurring_charges_only",
+                    request.getRecurringChargesOnly().get(),
+                    false);
         }
         if (request.getWithOneTimeCharges().isPresent()) {
             QueryStringMapper.addQueryParameter(

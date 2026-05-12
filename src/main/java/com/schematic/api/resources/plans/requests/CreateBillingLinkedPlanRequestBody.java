@@ -30,6 +30,8 @@ public final class CreateBillingLinkedPlanRequestBody {
 
     private final String externalResourceId;
 
+    private final Optional<String> externalResourceVersion;
+
     private final Optional<PlanIcon> icon;
 
     private final String name;
@@ -42,6 +44,7 @@ public final class CreateBillingLinkedPlanRequestBody {
             BillingProviderType billingProvider,
             String description,
             String externalResourceId,
+            Optional<String> externalResourceVersion,
             Optional<PlanIcon> icon,
             String name,
             PlanType planType,
@@ -49,6 +52,7 @@ public final class CreateBillingLinkedPlanRequestBody {
         this.billingProvider = billingProvider;
         this.description = description;
         this.externalResourceId = externalResourceId;
+        this.externalResourceVersion = externalResourceVersion;
         this.icon = icon;
         this.name = name;
         this.planType = planType;
@@ -68,6 +72,11 @@ public final class CreateBillingLinkedPlanRequestBody {
     @JsonProperty("external_resource_id")
     public String getExternalResourceId() {
         return externalResourceId;
+    }
+
+    @JsonProperty("external_resource_version")
+    public Optional<String> getExternalResourceVersion() {
+        return externalResourceVersion;
     }
 
     @JsonProperty("icon")
@@ -101,6 +110,7 @@ public final class CreateBillingLinkedPlanRequestBody {
         return billingProvider.equals(other.billingProvider)
                 && description.equals(other.description)
                 && externalResourceId.equals(other.externalResourceId)
+                && externalResourceVersion.equals(other.externalResourceVersion)
                 && icon.equals(other.icon)
                 && name.equals(other.name)
                 && planType.equals(other.planType);
@@ -109,7 +119,13 @@ public final class CreateBillingLinkedPlanRequestBody {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.billingProvider, this.description, this.externalResourceId, this.icon, this.name, this.planType);
+                this.billingProvider,
+                this.description,
+                this.externalResourceId,
+                this.externalResourceVersion,
+                this.icon,
+                this.name,
+                this.planType);
     }
 
     @java.lang.Override
@@ -150,6 +166,10 @@ public final class CreateBillingLinkedPlanRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage externalResourceVersion(Optional<String> externalResourceVersion);
+
+        _FinalStage externalResourceVersion(String externalResourceVersion);
+
         _FinalStage icon(Optional<PlanIcon> icon);
 
         _FinalStage icon(PlanIcon icon);
@@ -175,6 +195,8 @@ public final class CreateBillingLinkedPlanRequestBody {
 
         private Optional<PlanIcon> icon = Optional.empty();
 
+        private Optional<String> externalResourceVersion = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -185,6 +207,7 @@ public final class CreateBillingLinkedPlanRequestBody {
             billingProvider(other.getBillingProvider());
             description(other.getDescription());
             externalResourceId(other.getExternalResourceId());
+            externalResourceVersion(other.getExternalResourceVersion());
             icon(other.getIcon());
             name(other.getName());
             planType(other.getPlanType());
@@ -240,9 +263,29 @@ public final class CreateBillingLinkedPlanRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage externalResourceVersion(String externalResourceVersion) {
+            this.externalResourceVersion = Optional.ofNullable(externalResourceVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "external_resource_version", nulls = Nulls.SKIP)
+        public _FinalStage externalResourceVersion(Optional<String> externalResourceVersion) {
+            this.externalResourceVersion = externalResourceVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public CreateBillingLinkedPlanRequestBody build() {
             return new CreateBillingLinkedPlanRequestBody(
-                    billingProvider, description, externalResourceId, icon, name, planType, additionalProperties);
+                    billingProvider,
+                    description,
+                    externalResourceId,
+                    externalResourceVersion,
+                    icon,
+                    name,
+                    planType,
+                    additionalProperties);
         }
 
         @java.lang.Override

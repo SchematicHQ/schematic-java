@@ -28,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 public final class EventDetailResponseData {
     private final Optional<String> apiKey;
 
+    private final Optional<ApiKeyResponseData> apiKeyView;
+
     private final Map<String, JsonNode> body;
 
     private final String bodyPreview;
@@ -49,6 +51,8 @@ public final class EventDetailResponseData {
     private final List<PreviewObject> features;
 
     private final String id;
+
+    private final Optional<String> idempotencyKey;
 
     private final Optional<OffsetDateTime> loadedAt;
 
@@ -74,6 +78,7 @@ public final class EventDetailResponseData {
 
     private EventDetailResponseData(
             Optional<String> apiKey,
+            Optional<ApiKeyResponseData> apiKeyView,
             Map<String, JsonNode> body,
             String bodyPreview,
             OffsetDateTime capturedAt,
@@ -85,6 +90,7 @@ public final class EventDetailResponseData {
             List<String> featureIds,
             List<PreviewObject> features,
             String id,
+            Optional<String> idempotencyKey,
             Optional<OffsetDateTime> loadedAt,
             Optional<OffsetDateTime> processedAt,
             long quantity,
@@ -97,6 +103,7 @@ public final class EventDetailResponseData {
             Optional<String> userId,
             Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
+        this.apiKeyView = apiKeyView;
         this.body = body;
         this.bodyPreview = bodyPreview;
         this.capturedAt = capturedAt;
@@ -108,6 +115,7 @@ public final class EventDetailResponseData {
         this.featureIds = featureIds;
         this.features = features;
         this.id = id;
+        this.idempotencyKey = idempotencyKey;
         this.loadedAt = loadedAt;
         this.processedAt = processedAt;
         this.quantity = quantity;
@@ -124,6 +132,11 @@ public final class EventDetailResponseData {
     @JsonProperty("api_key")
     public Optional<String> getApiKey() {
         return apiKey;
+    }
+
+    @JsonProperty("api_key_view")
+    public Optional<ApiKeyResponseData> getApiKeyView() {
+        return apiKeyView;
     }
 
     @JsonProperty("body")
@@ -179,6 +192,11 @@ public final class EventDetailResponseData {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    @JsonProperty("idempotency_key")
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
     }
 
     @JsonProperty("loaded_at")
@@ -244,6 +262,7 @@ public final class EventDetailResponseData {
 
     private boolean equalTo(EventDetailResponseData other) {
         return apiKey.equals(other.apiKey)
+                && apiKeyView.equals(other.apiKeyView)
                 && body.equals(other.body)
                 && bodyPreview.equals(other.bodyPreview)
                 && capturedAt.equals(other.capturedAt)
@@ -255,6 +274,7 @@ public final class EventDetailResponseData {
                 && featureIds.equals(other.featureIds)
                 && features.equals(other.features)
                 && id.equals(other.id)
+                && idempotencyKey.equals(other.idempotencyKey)
                 && loadedAt.equals(other.loadedAt)
                 && processedAt.equals(other.processedAt)
                 && quantity == other.quantity
@@ -271,6 +291,7 @@ public final class EventDetailResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.apiKey,
+                this.apiKeyView,
                 this.body,
                 this.bodyPreview,
                 this.capturedAt,
@@ -282,6 +303,7 @@ public final class EventDetailResponseData {
                 this.featureIds,
                 this.features,
                 this.id,
+                this.idempotencyKey,
                 this.loadedAt,
                 this.processedAt,
                 this.quantity,
@@ -340,6 +362,10 @@ public final class EventDetailResponseData {
 
         _FinalStage apiKey(String apiKey);
 
+        _FinalStage apiKeyView(Optional<ApiKeyResponseData> apiKeyView);
+
+        _FinalStage apiKeyView(ApiKeyResponseData apiKeyView);
+
         _FinalStage body(Map<String, JsonNode> body);
 
         _FinalStage putAllBody(Map<String, JsonNode> body);
@@ -377,6 +403,10 @@ public final class EventDetailResponseData {
         _FinalStage addFeatures(PreviewObject features);
 
         _FinalStage addAllFeatures(List<PreviewObject> features);
+
+        _FinalStage idempotencyKey(Optional<String> idempotencyKey);
+
+        _FinalStage idempotencyKey(String idempotencyKey);
 
         _FinalStage loadedAt(Optional<OffsetDateTime> loadedAt);
 
@@ -436,6 +466,8 @@ public final class EventDetailResponseData {
 
         private Optional<OffsetDateTime> loadedAt = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         private List<PreviewObject> features = new ArrayList<>();
 
         private List<String> featureIds = new ArrayList<>();
@@ -452,6 +484,8 @@ public final class EventDetailResponseData {
 
         private Map<String, JsonNode> body = new LinkedHashMap<>();
 
+        private Optional<ApiKeyResponseData> apiKeyView = Optional.empty();
+
         private Optional<String> apiKey = Optional.empty();
 
         @JsonAnySetter
@@ -462,6 +496,7 @@ public final class EventDetailResponseData {
         @java.lang.Override
         public Builder from(EventDetailResponseData other) {
             apiKey(other.getApiKey());
+            apiKeyView(other.getApiKeyView());
             body(other.getBody());
             bodyPreview(other.getBodyPreview());
             capturedAt(other.getCapturedAt());
@@ -473,6 +508,7 @@ public final class EventDetailResponseData {
             featureIds(other.getFeatureIds());
             features(other.getFeatures());
             id(other.getId());
+            idempotencyKey(other.getIdempotencyKey());
             loadedAt(other.getLoadedAt());
             processedAt(other.getProcessedAt());
             quantity(other.getQuantity());
@@ -620,6 +656,19 @@ public final class EventDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "idempotency_key", nulls = Nulls.SKIP)
+        public _FinalStage idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllFeatures(List<PreviewObject> features) {
             if (features != null) {
                 this.features.addAll(features);
@@ -757,6 +806,19 @@ public final class EventDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage apiKeyView(ApiKeyResponseData apiKeyView) {
+            this.apiKeyView = Optional.ofNullable(apiKeyView);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "api_key_view", nulls = Nulls.SKIP)
+        public _FinalStage apiKeyView(Optional<ApiKeyResponseData> apiKeyView) {
+            this.apiKeyView = apiKeyView;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage apiKey(String apiKey) {
             this.apiKey = Optional.ofNullable(apiKey);
             return this;
@@ -773,6 +835,7 @@ public final class EventDetailResponseData {
         public EventDetailResponseData build() {
             return new EventDetailResponseData(
                     apiKey,
+                    apiKeyView,
                     body,
                     bodyPreview,
                     capturedAt,
@@ -784,6 +847,7 @@ public final class EventDetailResponseData {
                     featureIds,
                     features,
                     id,
+                    idempotencyKey,
                     loadedAt,
                     processedAt,
                     quantity,

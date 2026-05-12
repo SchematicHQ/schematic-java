@@ -10,8 +10,8 @@ public final class RulesEngineSchemaVersion {
     public static final RulesEngineSchemaVersion PLACEHOLDER_FOR_FERN_COMPATIBILITY = new RulesEngineSchemaVersion(
             Value.PLACEHOLDER_FOR_FERN_COMPATIBILITY, "placeholder-for-fern-compatibility");
 
-    public static final RulesEngineSchemaVersion VF_05_BF_5_DA =
-            new RulesEngineSchemaVersion(Value.VF_05_BF_5_DA, "vf05bf5da");
+    public static final RulesEngineSchemaVersion V_97288_F_60 =
+            new RulesEngineSchemaVersion(Value.V_97288_F_60, "v97288f60");
 
     private final Value value;
 
@@ -48,8 +48,8 @@ public final class RulesEngineSchemaVersion {
         switch (value) {
             case PLACEHOLDER_FOR_FERN_COMPATIBILITY:
                 return visitor.visitPlaceholderForFernCompatibility();
-            case VF_05_BF_5_DA:
-                return visitor.visitVf05Bf5Da();
+            case V_97288_F_60:
+                return visitor.visitV97288F60();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -61,15 +61,15 @@ public final class RulesEngineSchemaVersion {
         switch (value) {
             case "placeholder-for-fern-compatibility":
                 return PLACEHOLDER_FOR_FERN_COMPATIBILITY;
-            case "vf05bf5da":
-                return VF_05_BF_5_DA;
+            case "v97288f60":
+                return V_97288_F_60;
             default:
                 return new RulesEngineSchemaVersion(Value.UNKNOWN, value);
         }
     }
 
     public enum Value {
-        VF_05_BF_5_DA,
+        V_97288_F_60,
 
         PLACEHOLDER_FOR_FERN_COMPATIBILITY,
 
@@ -77,7 +77,7 @@ public final class RulesEngineSchemaVersion {
     }
 
     public interface Visitor<T> {
-        T visitVf05Bf5Da();
+        T visitV97288F60();
 
         T visitPlaceholderForFernCompatibility();
 

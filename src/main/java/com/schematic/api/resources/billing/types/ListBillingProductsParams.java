@@ -39,6 +39,8 @@ public final class ListBillingProductsParams {
 
     private final Optional<String> q;
 
+    private final Optional<Boolean> recurringChargesOnly;
+
     private final Optional<Boolean> withOneTimeCharges;
 
     private final Optional<Boolean> withPricesOnly;
@@ -58,6 +60,7 @@ public final class ListBillingProductsParams {
             Optional<BillingPriceUsageType> priceUsageType,
             Optional<BillingProviderType> providerType,
             Optional<String> q,
+            Optional<Boolean> recurringChargesOnly,
             Optional<Boolean> withOneTimeCharges,
             Optional<Boolean> withPricesOnly,
             Optional<Boolean> withZeroPrice,
@@ -71,6 +74,7 @@ public final class ListBillingProductsParams {
         this.priceUsageType = priceUsageType;
         this.providerType = providerType;
         this.q = q;
+        this.recurringChargesOnly = recurringChargesOnly;
         this.withOneTimeCharges = withOneTimeCharges;
         this.withPricesOnly = withPricesOnly;
         this.withZeroPrice = withZeroPrice;
@@ -128,6 +132,14 @@ public final class ListBillingProductsParams {
     }
 
     /**
+     * @return Filter to products that have at least one recurring price
+     */
+    @JsonProperty("recurring_charges_only")
+    public Optional<Boolean> getRecurringChargesOnly() {
+        return recurringChargesOnly;
+    }
+
+    /**
      * @return Filter products that are one time charges
      */
     @JsonProperty("with_one_time_charges")
@@ -179,6 +191,7 @@ public final class ListBillingProductsParams {
                 && priceUsageType.equals(other.priceUsageType)
                 && providerType.equals(other.providerType)
                 && q.equals(other.q)
+                && recurringChargesOnly.equals(other.recurringChargesOnly)
                 && withOneTimeCharges.equals(other.withOneTimeCharges)
                 && withPricesOnly.equals(other.withPricesOnly)
                 && withZeroPrice.equals(other.withZeroPrice)
@@ -196,6 +209,7 @@ public final class ListBillingProductsParams {
                 this.priceUsageType,
                 this.providerType,
                 this.q,
+                this.recurringChargesOnly,
                 this.withOneTimeCharges,
                 this.withPricesOnly,
                 this.withZeroPrice,
@@ -229,6 +243,8 @@ public final class ListBillingProductsParams {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<Boolean> recurringChargesOnly = Optional.empty();
+
         private Optional<Boolean> withOneTimeCharges = Optional.empty();
 
         private Optional<Boolean> withPricesOnly = Optional.empty();
@@ -251,6 +267,7 @@ public final class ListBillingProductsParams {
             priceUsageType(other.getPriceUsageType());
             providerType(other.getProviderType());
             q(other.getQ());
+            recurringChargesOnly(other.getRecurringChargesOnly());
             withOneTimeCharges(other.getWithOneTimeCharges());
             withPricesOnly(other.getWithPricesOnly());
             withZeroPrice(other.getWithZeroPrice());
@@ -356,6 +373,20 @@ public final class ListBillingProductsParams {
         }
 
         /**
+         * <p>Filter to products that have at least one recurring price</p>
+         */
+        @JsonSetter(value = "recurring_charges_only", nulls = Nulls.SKIP)
+        public Builder recurringChargesOnly(Optional<Boolean> recurringChargesOnly) {
+            this.recurringChargesOnly = recurringChargesOnly;
+            return this;
+        }
+
+        public Builder recurringChargesOnly(Boolean recurringChargesOnly) {
+            this.recurringChargesOnly = Optional.ofNullable(recurringChargesOnly);
+            return this;
+        }
+
+        /**
          * <p>Filter products that are one time charges</p>
          */
         @JsonSetter(value = "with_one_time_charges", nulls = Nulls.SKIP)
@@ -421,6 +452,7 @@ public final class ListBillingProductsParams {
                     priceUsageType,
                     providerType,
                     q,
+                    recurringChargesOnly,
                     withOneTimeCharges,
                     withPricesOnly,
                     withZeroPrice,

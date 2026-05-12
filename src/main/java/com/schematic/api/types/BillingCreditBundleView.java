@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public final class BillingCreditBundleView {
 
     private final String creditName;
 
-    private final Optional<List<CreditBundleCurrencyPrice>> currencyPrices;
+    private final List<CreditBundleCurrencyPrice> currencyPrices;
 
     private final BillingCreditExpiryType expiryType;
 
@@ -72,7 +73,7 @@ public final class BillingCreditBundleView {
             Optional<String> creditIcon,
             String creditId,
             String creditName,
-            Optional<List<CreditBundleCurrencyPrice>> currencyPrices,
+            List<CreditBundleCurrencyPrice> currencyPrices,
             BillingCreditExpiryType expiryType,
             BillingCreditExpiryUnit expiryUnit,
             Optional<Long> expiryUnitCount,
@@ -141,7 +142,7 @@ public final class BillingCreditBundleView {
     }
 
     @JsonProperty("currency_prices")
-    public Optional<List<CreditBundleCurrencyPrice>> getCurrencyPrices() {
+    public List<CreditBundleCurrencyPrice> getCurrencyPrices() {
         return currencyPrices;
     }
 
@@ -339,9 +340,11 @@ public final class BillingCreditBundleView {
 
         _FinalStage creditIcon(String creditIcon);
 
-        _FinalStage currencyPrices(Optional<List<CreditBundleCurrencyPrice>> currencyPrices);
-
         _FinalStage currencyPrices(List<CreditBundleCurrencyPrice> currencyPrices);
+
+        _FinalStage addCurrencyPrices(CreditBundleCurrencyPrice currencyPrices);
+
+        _FinalStage addAllCurrencyPrices(List<CreditBundleCurrencyPrice> currencyPrices);
 
         _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount);
 
@@ -416,7 +419,7 @@ public final class BillingCreditBundleView {
 
         private Optional<Long> expiryUnitCount = Optional.empty();
 
-        private Optional<List<CreditBundleCurrencyPrice>> currencyPrices = Optional.empty();
+        private List<CreditBundleCurrencyPrice> currencyPrices = new ArrayList<>();
 
         private Optional<String> creditIcon = Optional.empty();
 
@@ -608,15 +611,26 @@ public final class BillingCreditBundleView {
         }
 
         @java.lang.Override
-        public _FinalStage currencyPrices(List<CreditBundleCurrencyPrice> currencyPrices) {
-            this.currencyPrices = Optional.ofNullable(currencyPrices);
+        public _FinalStage addAllCurrencyPrices(List<CreditBundleCurrencyPrice> currencyPrices) {
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCurrencyPrices(CreditBundleCurrencyPrice currencyPrices) {
+            this.currencyPrices.add(currencyPrices);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
-        public _FinalStage currencyPrices(Optional<List<CreditBundleCurrencyPrice>> currencyPrices) {
-            this.currencyPrices = currencyPrices;
+        public _FinalStage currencyPrices(List<CreditBundleCurrencyPrice> currencyPrices) {
+            this.currencyPrices.clear();
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
             return this;
         }
 

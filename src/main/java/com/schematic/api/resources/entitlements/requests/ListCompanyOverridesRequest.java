@@ -5,9 +5,9 @@ package com.schematic.api.resources.entitlements.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -68,7 +68,7 @@ public final class ListCompanyOverridesRequest {
     /**
      * @return Filter company overrides by multiple company IDs (starting with comp_)
      */
-    @JsonIgnore
+    @JsonProperty("company_ids")
     public Optional<List<String>> getCompanyIds() {
         return companyIds;
     }
@@ -76,7 +76,7 @@ public final class ListCompanyOverridesRequest {
     /**
      * @return Filter company overrides by multiple feature IDs (starting with feat_)
      */
-    @JsonIgnore
+    @JsonProperty("feature_ids")
     public Optional<List<String>> getFeatureIds() {
         return featureIds;
     }
@@ -84,7 +84,7 @@ public final class ListCompanyOverridesRequest {
     /**
      * @return Filter company overrides by multiple company override IDs (starting with cmov_)
      */
-    @JsonIgnore
+    @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
     }
@@ -92,7 +92,7 @@ public final class ListCompanyOverridesRequest {
     /**
      * @return Filter company overrides by a single company ID (starting with comp_)
      */
-    @JsonIgnore
+    @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
     }
@@ -100,7 +100,7 @@ public final class ListCompanyOverridesRequest {
     /**
      * @return Filter company overrides by a single feature ID (starting with feat_)
      */
-    @JsonIgnore
+    @JsonProperty("feature_id")
     public Optional<String> getFeatureId() {
         return featureId;
     }
@@ -108,7 +108,7 @@ public final class ListCompanyOverridesRequest {
     /**
      * @return Filter company overrides by whether they have not expired
      */
-    @JsonIgnore
+    @JsonProperty("without_expired")
     public Optional<Boolean> getWithoutExpired() {
         return withoutExpired;
     }
@@ -116,7 +116,7 @@ public final class ListCompanyOverridesRequest {
     /**
      * @return Search for company overrides by feature or company name
      */
-    @JsonIgnore
+    @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
     }
@@ -124,7 +124,7 @@ public final class ListCompanyOverridesRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -132,7 +132,7 @@ public final class ListCompanyOverridesRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }

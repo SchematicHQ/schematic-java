@@ -35,6 +35,8 @@ public final class ListBillingPlanCreditGrantsParams {
 
     private final Optional<String> planVersionId;
 
+    private final Optional<List<String>> planVersionIds;
+
     private final Map<String, Object> additionalProperties;
 
     private ListBillingPlanCreditGrantsParams(
@@ -45,6 +47,7 @@ public final class ListBillingPlanCreditGrantsParams {
             Optional<String> planId,
             Optional<List<String>> planIds,
             Optional<String> planVersionId,
+            Optional<List<String>> planVersionIds,
             Map<String, Object> additionalProperties) {
         this.creditId = creditId;
         this.ids = ids;
@@ -53,6 +56,7 @@ public final class ListBillingPlanCreditGrantsParams {
         this.planId = planId;
         this.planIds = planIds;
         this.planVersionId = planVersionId;
+        this.planVersionIds = planVersionIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -97,6 +101,11 @@ public final class ListBillingPlanCreditGrantsParams {
         return planVersionId;
     }
 
+    @JsonProperty("plan_version_ids")
+    public Optional<List<String>> getPlanVersionIds() {
+        return planVersionIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -115,13 +124,21 @@ public final class ListBillingPlanCreditGrantsParams {
                 && offset.equals(other.offset)
                 && planId.equals(other.planId)
                 && planIds.equals(other.planIds)
-                && planVersionId.equals(other.planVersionId);
+                && planVersionId.equals(other.planVersionId)
+                && planVersionIds.equals(other.planVersionIds);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.creditId, this.ids, this.limit, this.offset, this.planId, this.planIds, this.planVersionId);
+                this.creditId,
+                this.ids,
+                this.limit,
+                this.offset,
+                this.planId,
+                this.planIds,
+                this.planVersionId,
+                this.planVersionIds);
     }
 
     @java.lang.Override
@@ -149,6 +166,8 @@ public final class ListBillingPlanCreditGrantsParams {
 
         private Optional<String> planVersionId = Optional.empty();
 
+        private Optional<List<String>> planVersionIds = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -162,6 +181,7 @@ public final class ListBillingPlanCreditGrantsParams {
             planId(other.getPlanId());
             planIds(other.getPlanIds());
             planVersionId(other.getPlanVersionId());
+            planVersionIds(other.getPlanVersionIds());
             return this;
         }
 
@@ -248,9 +268,20 @@ public final class ListBillingPlanCreditGrantsParams {
             return this;
         }
 
+        @JsonSetter(value = "plan_version_ids", nulls = Nulls.SKIP)
+        public Builder planVersionIds(Optional<List<String>> planVersionIds) {
+            this.planVersionIds = planVersionIds;
+            return this;
+        }
+
+        public Builder planVersionIds(List<String> planVersionIds) {
+            this.planVersionIds = Optional.ofNullable(planVersionIds);
+            return this;
+        }
+
         public ListBillingPlanCreditGrantsParams build() {
             return new ListBillingPlanCreditGrantsParams(
-                    creditId, ids, limit, offset, planId, planIds, planVersionId, additionalProperties);
+                    creditId, ids, limit, offset, planId, planIds, planVersionId, planVersionIds, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

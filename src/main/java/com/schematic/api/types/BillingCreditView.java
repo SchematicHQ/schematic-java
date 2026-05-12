@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,6 +31,8 @@ public final class BillingCreditView {
     private final boolean costEditable;
 
     private final OffsetDateTime createdAt;
+
+    private final List<CreditCurrencyPrice> currencyPrices;
 
     private final BillingCreditExpiryUnit defaultExpiryUnit;
 
@@ -67,6 +71,7 @@ public final class BillingCreditView {
             BillingCreditBurnStrategy burnStrategy,
             boolean costEditable,
             OffsetDateTime createdAt,
+            List<CreditCurrencyPrice> currencyPrices,
             BillingCreditExpiryUnit defaultExpiryUnit,
             Optional<Long> defaultExpiryUnitCount,
             BillingCreditRolloverPolicy defaultRolloverPolicy,
@@ -87,6 +92,7 @@ public final class BillingCreditView {
         this.burnStrategy = burnStrategy;
         this.costEditable = costEditable;
         this.createdAt = createdAt;
+        this.currencyPrices = currencyPrices;
         this.defaultExpiryUnit = defaultExpiryUnit;
         this.defaultExpiryUnitCount = defaultExpiryUnitCount;
         this.defaultRolloverPolicy = defaultRolloverPolicy;
@@ -123,6 +129,11 @@ public final class BillingCreditView {
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("currency_prices")
+    public List<CreditCurrencyPrice> getCurrencyPrices() {
+        return currencyPrices;
     }
 
     @JsonProperty("default_expiry_unit")
@@ -216,6 +227,7 @@ public final class BillingCreditView {
                 && burnStrategy.equals(other.burnStrategy)
                 && costEditable == other.costEditable
                 && createdAt.equals(other.createdAt)
+                && currencyPrices.equals(other.currencyPrices)
                 && defaultExpiryUnit.equals(other.defaultExpiryUnit)
                 && defaultExpiryUnitCount.equals(other.defaultExpiryUnitCount)
                 && defaultRolloverPolicy.equals(other.defaultRolloverPolicy)
@@ -240,6 +252,7 @@ public final class BillingCreditView {
                 this.burnStrategy,
                 this.costEditable,
                 this.createdAt,
+                this.currencyPrices,
                 this.defaultExpiryUnit,
                 this.defaultExpiryUnitCount,
                 this.defaultRolloverPolicy,
@@ -318,6 +331,12 @@ public final class BillingCreditView {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage currencyPrices(List<CreditCurrencyPrice> currencyPrices);
+
+        _FinalStage addCurrencyPrices(CreditCurrencyPrice currencyPrices);
+
+        _FinalStage addAllCurrencyPrices(List<CreditCurrencyPrice> currencyPrices);
 
         _FinalStage defaultExpiryUnitCount(Optional<Long> defaultExpiryUnitCount);
 
@@ -404,6 +423,8 @@ public final class BillingCreditView {
 
         private Optional<Long> defaultExpiryUnitCount = Optional.empty();
 
+        private List<CreditCurrencyPrice> currencyPrices = new ArrayList<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -415,6 +436,7 @@ public final class BillingCreditView {
             burnStrategy(other.getBurnStrategy());
             costEditable(other.getCostEditable());
             createdAt(other.getCreatedAt());
+            currencyPrices(other.getCurrencyPrices());
             defaultExpiryUnit(other.getDefaultExpiryUnit());
             defaultExpiryUnitCount(other.getDefaultExpiryUnitCount());
             defaultRolloverPolicy(other.getDefaultRolloverPolicy());
@@ -616,12 +638,37 @@ public final class BillingCreditView {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCurrencyPrices(List<CreditCurrencyPrice> currencyPrices) {
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCurrencyPrices(CreditCurrencyPrice currencyPrices) {
+            this.currencyPrices.add(currencyPrices);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency_prices", nulls = Nulls.SKIP)
+        public _FinalStage currencyPrices(List<CreditCurrencyPrice> currencyPrices) {
+            this.currencyPrices.clear();
+            if (currencyPrices != null) {
+                this.currencyPrices.addAll(currencyPrices);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public BillingCreditView build() {
             return new BillingCreditView(
                     accountId,
                     burnStrategy,
                     costEditable,
                     createdAt,
+                    currencyPrices,
                     defaultExpiryUnit,
                     defaultExpiryUnitCount,
                     defaultRolloverPolicy,

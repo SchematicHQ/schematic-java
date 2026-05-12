@@ -1752,6 +1752,10 @@ public class RawCreditsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_ids", request.getPlanIds().get(), true);
         }
+        if (request.getPlanVersionIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_ids", request.getPlanVersionIds().get(), true);
+        }
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -2136,6 +2140,10 @@ public class RawCreditsClient {
         if (request.getPlanIds().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_ids", request.getPlanIds().get(), true);
+        }
+        if (request.getPlanVersionIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_ids", request.getPlanVersionIds().get(), true);
         }
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {

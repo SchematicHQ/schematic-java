@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 public final class ChangeSubscriptionRequestBody {
     private final List<UpdateAddOnRequestBody> addOnIds;
 
+    private final List<UpdateAutoTopupOverrideRequestBody> autoTopupOverrides;
+
     private final Optional<String> couponExternalId;
 
     private final List<UpdateCreditBundleRequestBody> creditBundles;
@@ -45,6 +47,7 @@ public final class ChangeSubscriptionRequestBody {
 
     private ChangeSubscriptionRequestBody(
             List<UpdateAddOnRequestBody> addOnIds,
+            List<UpdateAutoTopupOverrideRequestBody> autoTopupOverrides,
             Optional<String> couponExternalId,
             List<UpdateCreditBundleRequestBody> creditBundles,
             String newPlanId,
@@ -55,6 +58,7 @@ public final class ChangeSubscriptionRequestBody {
             boolean skipTrial,
             Map<String, Object> additionalProperties) {
         this.addOnIds = addOnIds;
+        this.autoTopupOverrides = autoTopupOverrides;
         this.couponExternalId = couponExternalId;
         this.creditBundles = creditBundles;
         this.newPlanId = newPlanId;
@@ -69,6 +73,11 @@ public final class ChangeSubscriptionRequestBody {
     @JsonProperty("add_on_ids")
     public List<UpdateAddOnRequestBody> getAddOnIds() {
         return addOnIds;
+    }
+
+    @JsonProperty("auto_topup_overrides")
+    public List<UpdateAutoTopupOverrideRequestBody> getAutoTopupOverrides() {
+        return autoTopupOverrides;
     }
 
     @JsonProperty("coupon_external_id")
@@ -124,6 +133,7 @@ public final class ChangeSubscriptionRequestBody {
 
     private boolean equalTo(ChangeSubscriptionRequestBody other) {
         return addOnIds.equals(other.addOnIds)
+                && autoTopupOverrides.equals(other.autoTopupOverrides)
                 && couponExternalId.equals(other.couponExternalId)
                 && creditBundles.equals(other.creditBundles)
                 && newPlanId.equals(other.newPlanId)
@@ -138,6 +148,7 @@ public final class ChangeSubscriptionRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.addOnIds,
+                this.autoTopupOverrides,
                 this.couponExternalId,
                 this.creditBundles,
                 this.newPlanId,
@@ -184,6 +195,12 @@ public final class ChangeSubscriptionRequestBody {
 
         _FinalStage addAllAddOnIds(List<UpdateAddOnRequestBody> addOnIds);
 
+        _FinalStage autoTopupOverrides(List<UpdateAutoTopupOverrideRequestBody> autoTopupOverrides);
+
+        _FinalStage addAutoTopupOverrides(UpdateAutoTopupOverrideRequestBody autoTopupOverrides);
+
+        _FinalStage addAllAutoTopupOverrides(List<UpdateAutoTopupOverrideRequestBody> autoTopupOverrides);
+
         _FinalStage couponExternalId(Optional<String> couponExternalId);
 
         _FinalStage couponExternalId(String couponExternalId);
@@ -227,6 +244,8 @@ public final class ChangeSubscriptionRequestBody {
 
         private Optional<String> couponExternalId = Optional.empty();
 
+        private List<UpdateAutoTopupOverrideRequestBody> autoTopupOverrides = new ArrayList<>();
+
         private List<UpdateAddOnRequestBody> addOnIds = new ArrayList<>();
 
         @JsonAnySetter
@@ -237,6 +256,7 @@ public final class ChangeSubscriptionRequestBody {
         @java.lang.Override
         public Builder from(ChangeSubscriptionRequestBody other) {
             addOnIds(other.getAddOnIds());
+            autoTopupOverrides(other.getAutoTopupOverrides());
             couponExternalId(other.getCouponExternalId());
             creditBundles(other.getCreditBundles());
             newPlanId(other.getNewPlanId());
@@ -357,6 +377,30 @@ public final class ChangeSubscriptionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage addAllAutoTopupOverrides(List<UpdateAutoTopupOverrideRequestBody> autoTopupOverrides) {
+            if (autoTopupOverrides != null) {
+                this.autoTopupOverrides.addAll(autoTopupOverrides);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAutoTopupOverrides(UpdateAutoTopupOverrideRequestBody autoTopupOverrides) {
+            this.autoTopupOverrides.add(autoTopupOverrides);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_overrides", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupOverrides(List<UpdateAutoTopupOverrideRequestBody> autoTopupOverrides) {
+            this.autoTopupOverrides.clear();
+            if (autoTopupOverrides != null) {
+                this.autoTopupOverrides.addAll(autoTopupOverrides);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllAddOnIds(List<UpdateAddOnRequestBody> addOnIds) {
             if (addOnIds != null) {
                 this.addOnIds.addAll(addOnIds);
@@ -384,6 +428,7 @@ public final class ChangeSubscriptionRequestBody {
         public ChangeSubscriptionRequestBody build() {
             return new ChangeSubscriptionRequestBody(
                     addOnIds,
+                    autoTopupOverrides,
                     couponExternalId,
                     creditBundles,
                     newPlanId,

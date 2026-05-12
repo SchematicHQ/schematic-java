@@ -5,9 +5,9 @@ package com.schematic.api.resources.billing.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -96,12 +96,12 @@ public final class ListBillingPricesRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonIgnore
+    @JsonProperty("ids")
     public Optional<List<String>> getIds() {
         return ids;
     }
 
-    @JsonIgnore
+    @JsonProperty("product_ids")
     public Optional<List<String>> getProductIds() {
         return productIds;
     }
@@ -109,7 +109,7 @@ public final class ListBillingPricesRequest {
     /**
      * @return Filter for prices in a specific currency (e.g. usd, eur)
      */
-    @JsonIgnore
+    @JsonProperty("currency")
     public Optional<String> getCurrency() {
         return currency;
     }
@@ -117,7 +117,7 @@ public final class ListBillingPricesRequest {
     /**
      * @return Filter for prices valid for initial plans (free prices only)
      */
-    @JsonIgnore
+    @JsonProperty("for_initial_plan")
     public Optional<Boolean> getForInitialPlan() {
         return forInitialPlan;
     }
@@ -125,12 +125,12 @@ public final class ListBillingPricesRequest {
     /**
      * @return Filter for prices valid for trial expiry plans (free prices only)
      */
-    @JsonIgnore
+    @JsonProperty("for_trial_expiry_plan")
     public Optional<Boolean> getForTrialExpiryPlan() {
         return forTrialExpiryPlan;
     }
 
-    @JsonIgnore
+    @JsonProperty("interval")
     public Optional<String> getInterval() {
         return interval;
     }
@@ -138,37 +138,37 @@ public final class ListBillingPricesRequest {
     /**
      * @return Filter for active prices on active products (defaults to true if not specified)
      */
-    @JsonIgnore
+    @JsonProperty("is_active")
     public Optional<Boolean> getIsActive() {
         return isActive;
     }
 
-    @JsonIgnore
+    @JsonProperty("price")
     public Optional<Long> getPrice() {
         return price;
     }
 
-    @JsonIgnore
+    @JsonProperty("product_id")
     public Optional<String> getProductId() {
         return productId;
     }
 
-    @JsonIgnore
+    @JsonProperty("provider_type")
     public Optional<BillingProviderType> getProviderType() {
         return providerType;
     }
 
-    @JsonIgnore
+    @JsonProperty("q")
     public Optional<String> getQ() {
         return q;
     }
 
-    @JsonIgnore
+    @JsonProperty("tiers_mode")
     public Optional<BillingTiersMode> getTiersMode() {
         return tiersMode;
     }
 
-    @JsonIgnore
+    @JsonProperty("usage_type")
     public Optional<BillingPriceUsageType> getUsageType() {
         return usageType;
     }
@@ -176,7 +176,7 @@ public final class ListBillingPricesRequest {
     /**
      * @return Filter for prices with a meter
      */
-    @JsonIgnore
+    @JsonProperty("with_meter")
     public Optional<Boolean> getWithMeter() {
         return withMeter;
     }
@@ -184,7 +184,7 @@ public final class ListBillingPricesRequest {
     /**
      * @return Page limit (default 100)
      */
-    @JsonIgnore
+    @JsonProperty("limit")
     public Optional<Long> getLimit() {
         return limit;
     }
@@ -192,7 +192,7 @@ public final class ListBillingPricesRequest {
     /**
      * @return Page offset (default 0)
      */
-    @JsonIgnore
+    @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
     }

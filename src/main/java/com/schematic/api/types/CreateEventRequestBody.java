@@ -26,6 +26,8 @@ public final class CreateEventRequestBody {
 
     private final EventType eventType;
 
+    private final Optional<String> idempotencyKey;
+
     private final Optional<OffsetDateTime> sentAt;
 
     private final Map<String, Object> additionalProperties;
@@ -33,10 +35,12 @@ public final class CreateEventRequestBody {
     private CreateEventRequestBody(
             Optional<EventBody> body,
             EventType eventType,
+            Optional<String> idempotencyKey,
             Optional<OffsetDateTime> sentAt,
             Map<String, Object> additionalProperties) {
         this.body = body;
         this.eventType = eventType;
+        this.idempotencyKey = idempotencyKey;
         this.sentAt = sentAt;
         this.additionalProperties = additionalProperties;
     }
@@ -52,6 +56,14 @@ public final class CreateEventRequestBody {
     @JsonProperty("event_type")
     public EventType getEventType() {
         return eventType;
+    }
+
+    /**
+     * @return Optional client-supplied key. Duplicate events with the same key (scoped to the environment) are dropped for 24h.
+     */
+    @JsonProperty("idempotency_key")
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
     }
 
     /**
@@ -74,12 +86,15 @@ public final class CreateEventRequestBody {
     }
 
     private boolean equalTo(CreateEventRequestBody other) {
-        return body.equals(other.body) && eventType.equals(other.eventType) && sentAt.equals(other.sentAt);
+        return body.equals(other.body)
+                && eventType.equals(other.eventType)
+                && idempotencyKey.equals(other.idempotencyKey)
+                && sentAt.equals(other.sentAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.body, this.eventType, this.sentAt);
+        return Objects.hash(this.body, this.eventType, this.idempotencyKey, this.sentAt);
     }
 
     @java.lang.Override
@@ -112,6 +127,13 @@ public final class CreateEventRequestBody {
         _FinalStage body(EventBody body);
 
         /**
+         * <p>Optional client-supplied key. Duplicate events with the same key (scoped to the environment) are dropped for 24h.</p>
+         */
+        _FinalStage idempotencyKey(Optional<String> idempotencyKey);
+
+        _FinalStage idempotencyKey(String idempotencyKey);
+
+        /**
          * <p>Optionally provide a timestamp at which the event was sent to Schematic</p>
          */
         _FinalStage sentAt(Optional<OffsetDateTime> sentAt);
@@ -125,6 +147,8 @@ public final class CreateEventRequestBody {
 
         private Optional<OffsetDateTime> sentAt = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         private Optional<EventBody> body = Optional.empty();
 
         @JsonAnySetter
@@ -136,6 +160,7 @@ public final class CreateEventRequestBody {
         public Builder from(CreateEventRequestBody other) {
             body(other.getBody());
             eventType(other.getEventType());
+            idempotencyKey(other.getIdempotencyKey());
             sentAt(other.getSentAt());
             return this;
         }
@@ -172,6 +197,26 @@ public final class CreateEventRequestBody {
             return this;
         }
 
+        /**
+         * <p>Optional client-supplied key. Duplicate events with the same key (scoped to the environment) are dropped for 24h.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
+            return this;
+        }
+
+        /**
+         * <p>Optional client-supplied key. Duplicate events with the same key (scoped to the environment) are dropped for 24h.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "idempotency_key", nulls = Nulls.SKIP)
+        public _FinalStage idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage body(EventBody body) {
             this.body = Optional.ofNullable(body);
@@ -187,7 +232,7 @@ public final class CreateEventRequestBody {
 
         @java.lang.Override
         public CreateEventRequestBody build() {
-            return new CreateEventRequestBody(body, eventType, sentAt, additionalProperties);
+            return new CreateEventRequestBody(body, eventType, idempotencyKey, sentAt, additionalProperties);
         }
 
         @java.lang.Override

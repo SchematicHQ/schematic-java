@@ -495,6 +495,13 @@ public class AsyncRawPlansClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_id", request.getCompanyId().get(), false);
         }
+        if (request.getCompanyScopedOnly().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "company_scoped_only",
+                    request.getCompanyScopedOnly().get(),
+                    false);
+        }
         if (request.getExcludeCompanyScoped().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -1419,6 +1426,13 @@ public class AsyncRawPlansClient {
         if (request.getCompanyId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_id", request.getCompanyId().get(), false);
+        }
+        if (request.getCompanyScopedOnly().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "company_scoped_only",
+                    request.getCompanyScopedOnly().get(),
+                    false);
         }
         if (request.getExcludeCompanyScoped().isPresent()) {
             QueryStringMapper.addQueryParameter(
