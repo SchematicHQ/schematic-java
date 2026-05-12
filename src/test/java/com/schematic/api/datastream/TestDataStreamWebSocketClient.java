@@ -11,6 +11,7 @@ import com.schematic.api.datastream.DataStreamMessages.MessageType;
 import com.schematic.api.logger.SchematicLogger;
 import java.util.HashMap;
 import java.util.Map;
+import okhttp3.Request;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -243,6 +244,48 @@ class DataStreamWebSocketClientTest {
 
         assertFalse(client.isConnected());
         assertFalse(client.isReady());
+        client.close();
+    }
+
+    // --- Handshake header tests ---
+
+    @Test
+    void buildHandshakeRequest_attachesIdentificationHeaders() {
+        DataStreamWebSocketClient client = DataStreamWebSocketClient.builder()
+                .url("https://api.schematichq.com")
+                .apiKey("test_key")
+                .sdkVersion("1.4.2")
+                .messageHandler(msg -> {})
+                .build();
+
+        Request request = client.buildHandshakeRequest();
+
+        assertEquals("test_key", request.header("X-Schematic-Api-Key"));
+        assertEquals("direct", request.header("X-Schematic-Datastream-Mode"));
+        assertEquals("schematic-java", request.header("X-Schematic-Client"));
+        assertEquals("1.4.2", request.header("X-Schematic-Client-Version"));
+
+        client.close();
+    }
+
+    @Test
+    void buildHandshakeRequest_fallsBackToUnknownVersionWhenMissing() {
+        // The version is supplied by Schematic (resolved from ClientOptions's
+        // X-Fern-SDK-Version header). When no version is provided to the
+        // builder we fall back to "unknown" — matches schematic-go's behavior
+        // for untagged builds.
+        DataStreamWebSocketClient client = DataStreamWebSocketClient.builder()
+                .url("https://api.schematichq.com")
+                .apiKey("test_key")
+                .messageHandler(msg -> {})
+                .build();
+
+        Request request = client.buildHandshakeRequest();
+
+        assertEquals("unknown", request.header("X-Schematic-Client-Version"));
+        assertEquals("direct", request.header("X-Schematic-Datastream-Mode"));
+        assertEquals("schematic-java", request.header("X-Schematic-Client"));
+
         client.close();
     }
 

@@ -84,8 +84,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 rulesEngine = null;
             }
 
-            this.dataStreamClient =
-                    new DataStreamClient(this.datastreamOptions, this.apiKey, basePath, this.logger, rulesEngine);
+            this.dataStreamClient = new DataStreamClient(
+                    this.datastreamOptions, this.apiKey, basePath, this.logger, rulesEngine, resolveSdkVersion());
             this.dataStreamClient.start();
         } else {
             this.dataStreamClient = null;
@@ -106,6 +106,22 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 "SchematicShutdownHook");
 
         Runtime.getRuntime().addShutdownHook(this.shutdownHook);
+    }
+
+    // The SDK version is published by Fern into ClientOptions's X-Fern-SDK-Version
+    // header on every regen — same source of truth as build.gradle's `version`.
+    // Reading from there means no parallel constant for us to hand-maintain.
+    // Resolved once at construction and passed through to the WebSocket client.
+    private String resolveSdkVersion() {
+        try {
+            String version = this.clientOptions.headers(null).get("X-Fern-SDK-Version");
+            if (version != null && !version.isEmpty()) {
+                return version;
+            }
+        } catch (Exception e) {
+            logger.debug("Failed to resolve SDK version: " + e.getMessage());
+        }
+        return null;
     }
 
     // Datastream depends on the WASM runtime (Chicory), which requires Java 11+.

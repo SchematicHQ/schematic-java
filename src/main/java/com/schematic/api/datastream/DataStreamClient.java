@@ -56,6 +56,7 @@ public class DataStreamClient implements Closeable {
     private final DatastreamOptions options;
     private final String apiKey;
     private final String apiUrl;
+    private final String sdkVersion;
     private final SchematicLogger logger;
     private final ObjectMapper objectMapper;
     private final RulesEngine rulesEngine;
@@ -88,14 +89,25 @@ public class DataStreamClient implements Closeable {
     private final AtomicBoolean closed = new AtomicBoolean(false);
 
     public DataStreamClient(DatastreamOptions options, String apiKey, String apiUrl, SchematicLogger logger) {
-        this(options, apiKey, apiUrl, logger, null);
+        this(options, apiKey, apiUrl, logger, null, null);
     }
 
     public DataStreamClient(
             DatastreamOptions options, String apiKey, String apiUrl, SchematicLogger logger, RulesEngine rulesEngine) {
+        this(options, apiKey, apiUrl, logger, rulesEngine, null);
+    }
+
+    public DataStreamClient(
+            DatastreamOptions options,
+            String apiKey,
+            String apiUrl,
+            SchematicLogger logger,
+            RulesEngine rulesEngine,
+            String sdkVersion) {
         this.options = options;
         this.apiKey = apiKey;
         this.apiUrl = apiUrl;
+        this.sdkVersion = sdkVersion;
         this.logger = logger;
         this.objectMapper = ObjectMappers.JSON_MAPPER;
         this.rulesEngine = rulesEngine;
@@ -586,6 +598,7 @@ public class DataStreamClient implements Closeable {
         wsClient = DataStreamWebSocketClient.builder()
                 .url(apiUrl)
                 .apiKey(apiKey)
+                .sdkVersion(sdkVersion)
                 .messageHandler(this::handleMessage)
                 .connectionReadyHandler(this::onConnectionReady)
                 .logger(logger)

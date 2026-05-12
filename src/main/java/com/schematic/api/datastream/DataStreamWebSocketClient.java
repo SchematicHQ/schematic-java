@@ -50,9 +50,18 @@ public class DataStreamWebSocketClient implements Closeable {
     private static final int DEFAULT_MESSAGE_QUEUE_SIZE = 100;
     private static final int DEFAULT_MESSAGE_WORKERS = 1;
 
+    // Headers attached to the WebSocket handshake so the backend can distinguish
+    // direct-SDK connections from the schematic-datastream-replicator and
+    // correlate either to a specific release. Mode is always "direct" here —
+    // replicator mode in this SDK doesn't open a WebSocket at all.
+    static final String CLIENT_NAME = "schematic-java";
+    static final String DATASTREAM_MODE_DIRECT = "direct";
+    static final String UNKNOWN_VERSION = "unknown";
+
     // Configuration
     private final String url;
     private final String apiKey;
+    private final String sdkVersion;
     private final MessageHandler messageHandler;
     private final ConnectionReadyHandler connectionReadyHandler;
     private final SchematicLogger logger;
@@ -93,6 +102,8 @@ public class DataStreamWebSocketClient implements Closeable {
 
         this.url = convertApiUrlToWebSocketUrl(builder.url);
         this.apiKey = builder.apiKey;
+        this.sdkVersion =
+                (builder.sdkVersion != null && !builder.sdkVersion.isEmpty()) ? builder.sdkVersion : UNKNOWN_VERSION;
         this.messageHandler = builder.messageHandler;
         this.connectionReadyHandler = builder.connectionReadyHandler;
         this.logger = builder.logger;
@@ -274,13 +285,24 @@ public class DataStreamWebSocketClient implements Closeable {
     }
 
     private void doConnect() {
-        Request request = new Request.Builder()
-                .url(url)
-                .header("X-Schematic-Api-Key", apiKey)
-                .build();
-
+        Request request = buildHandshakeRequest();
         log("debug", "Connecting to WebSocket: " + url);
         httpClient.newWebSocket(request, new SchematicWebSocketListener());
+    }
+
+    /**
+     * Builds the HTTP request used for the WebSocket handshake. The mode/client
+     * headers let the backend tell direct-SDK connections apart from the
+     * schematic-datastream-replicator process and correlate them to a release.
+     */
+    Request buildHandshakeRequest() {
+        return new Request.Builder()
+                .url(url)
+                .header("X-Schematic-Api-Key", apiKey)
+                .header("X-Schematic-Datastream-Mode", DATASTREAM_MODE_DIRECT)
+                .header("X-Schematic-Client", CLIENT_NAME)
+                .header("X-Schematic-Client-Version", sdkVersion)
+                .build();
     }
 
     private void handleConnected() {
@@ -514,6 +536,7 @@ public class DataStreamWebSocketClient implements Closeable {
     public static class Builder {
         private String url;
         private String apiKey;
+        private String sdkVersion;
         private MessageHandler messageHandler;
         private ConnectionReadyHandler connectionReadyHandler;
         private SchematicLogger logger;
@@ -532,6 +555,11 @@ public class DataStreamWebSocketClient implements Closeable {
 
         public Builder apiKey(String apiKey) {
             this.apiKey = apiKey;
+            return this;
+        }
+
+        public Builder sdkVersion(String sdkVersion) {
+            this.sdkVersion = sdkVersion;
             return this;
         }
 
