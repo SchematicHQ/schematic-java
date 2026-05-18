@@ -5,8 +5,10 @@ package com.schematic.api.resources.planbundle;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.planbundle.requests.CreateCustomPlanBundleRequestBody;
 import com.schematic.api.resources.planbundle.requests.CreatePlanBundleRequestBody;
 import com.schematic.api.resources.planbundle.requests.UpdatePlanBundleRequestBody;
+import com.schematic.api.resources.planbundle.types.CreateCustomPlanBundleResponse;
 import com.schematic.api.resources.planbundle.types.CreatePlanBundleResponse;
 import com.schematic.api.resources.planbundle.types.UpdatePlanBundleResponse;
 import java.util.concurrent.CompletableFuture;
@@ -26,6 +28,16 @@ public class AsyncPlanbundleClient {
      */
     public AsyncRawPlanbundleClient withRawResponse() {
         return this.rawClient;
+    }
+
+    public CompletableFuture<CreateCustomPlanBundleResponse> createCustomPlanBundle(
+            CreateCustomPlanBundleRequestBody request) {
+        return this.rawClient.createCustomPlanBundle(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CreateCustomPlanBundleResponse> createCustomPlanBundle(
+            CreateCustomPlanBundleRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.createCustomPlanBundle(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CreatePlanBundleResponse> createPlanBundle(CreatePlanBundleRequestBody request) {

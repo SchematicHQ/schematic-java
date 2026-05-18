@@ -29,6 +29,8 @@ public final class BillingPriceResponseData {
 
     private final BillingProductPriceInterval interval;
 
+    private final long intervalCount;
+
     private final Optional<String> nickname;
 
     private final long price;
@@ -46,6 +48,7 @@ public final class BillingPriceResponseData {
             String externalPriceId,
             String id,
             BillingProductPriceInterval interval,
+            long intervalCount,
             Optional<String> nickname,
             long price,
             Optional<String> priceDecimal,
@@ -56,6 +59,7 @@ public final class BillingPriceResponseData {
         this.externalPriceId = externalPriceId;
         this.id = id;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.nickname = nickname;
         this.price = price;
         this.priceDecimal = priceDecimal;
@@ -82,6 +86,11 @@ public final class BillingPriceResponseData {
     @JsonProperty("interval")
     public BillingProductPriceInterval getInterval() {
         return interval;
+    }
+
+    @JsonProperty("interval_count")
+    public long getIntervalCount() {
+        return intervalCount;
     }
 
     @JsonProperty("nickname")
@@ -125,6 +134,7 @@ public final class BillingPriceResponseData {
                 && externalPriceId.equals(other.externalPriceId)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
+                && intervalCount == other.intervalCount
                 && nickname.equals(other.nickname)
                 && price == other.price
                 && priceDecimal.equals(other.priceDecimal)
@@ -139,6 +149,7 @@ public final class BillingPriceResponseData {
                 this.externalPriceId,
                 this.id,
                 this.interval,
+                this.intervalCount,
                 this.nickname,
                 this.price,
                 this.priceDecimal,
@@ -170,7 +181,11 @@ public final class BillingPriceResponseData {
     }
 
     public interface IntervalStage {
-        PriceStage interval(@NotNull BillingProductPriceInterval interval);
+        IntervalCountStage interval(@NotNull BillingProductPriceInterval interval);
+    }
+
+    public interface IntervalCountStage {
+        PriceStage intervalCount(long intervalCount);
     }
 
     public interface PriceStage {
@@ -207,6 +222,7 @@ public final class BillingPriceResponseData {
                     ExternalPriceIdStage,
                     IdStage,
                     IntervalStage,
+                    IntervalCountStage,
                     PriceStage,
                     ProviderTypeStage,
                     SchemeStage,
@@ -218,6 +234,8 @@ public final class BillingPriceResponseData {
         private String id;
 
         private BillingProductPriceInterval interval;
+
+        private long intervalCount;
 
         private long price;
 
@@ -240,6 +258,7 @@ public final class BillingPriceResponseData {
             externalPriceId(other.getExternalPriceId());
             id(other.getId());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             nickname(other.getNickname());
             price(other.getPrice());
             priceDecimal(other.getPriceDecimal());
@@ -271,8 +290,15 @@ public final class BillingPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public PriceStage interval(@NotNull BillingProductPriceInterval interval) {
+        public IntervalCountStage interval(@NotNull BillingProductPriceInterval interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("interval_count")
+        public PriceStage intervalCount(long intervalCount) {
+            this.intervalCount = intervalCount;
             return this;
         }
 
@@ -330,6 +356,7 @@ public final class BillingPriceResponseData {
                     externalPriceId,
                     id,
                     interval,
+                    intervalCount,
                     nickname,
                     price,
                     priceDecimal,

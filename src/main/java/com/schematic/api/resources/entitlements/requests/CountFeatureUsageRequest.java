@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,8 @@ public final class CountFeatureUsageRequest {
 
     private final Optional<Boolean> includeUsageAggregation;
 
+    private final Optional<BillingProviderType> managedBy;
+
     private final Optional<String> q;
 
     private final Optional<Boolean> withoutNegativeEntitlements;
@@ -45,6 +48,7 @@ public final class CountFeatureUsageRequest {
             Optional<String> companyId,
             Optional<Map<String, String>> companyKeys,
             Optional<Boolean> includeUsageAggregation,
+            Optional<BillingProviderType> managedBy,
             Optional<String> q,
             Optional<Boolean> withoutNegativeEntitlements,
             Optional<Long> limit,
@@ -54,6 +58,7 @@ public final class CountFeatureUsageRequest {
         this.companyId = companyId;
         this.companyKeys = companyKeys;
         this.includeUsageAggregation = includeUsageAggregation;
+        this.managedBy = managedBy;
         this.q = q;
         this.withoutNegativeEntitlements = withoutNegativeEntitlements;
         this.limit = limit;
@@ -82,6 +87,14 @@ public final class CountFeatureUsageRequest {
     @JsonProperty("include_usage_aggregation")
     public Optional<Boolean> getIncludeUsageAggregation() {
         return includeUsageAggregation;
+    }
+
+    /**
+     * @return Filter for features managed by a billing provider, or by Schematic (no billing provider)
+     */
+    @JsonProperty("managed_by")
+    public Optional<BillingProviderType> getManagedBy() {
+        return managedBy;
     }
 
     @JsonProperty("q")
@@ -126,6 +139,7 @@ public final class CountFeatureUsageRequest {
                 && companyId.equals(other.companyId)
                 && companyKeys.equals(other.companyKeys)
                 && includeUsageAggregation.equals(other.includeUsageAggregation)
+                && managedBy.equals(other.managedBy)
                 && q.equals(other.q)
                 && withoutNegativeEntitlements.equals(other.withoutNegativeEntitlements)
                 && limit.equals(other.limit)
@@ -139,6 +153,7 @@ public final class CountFeatureUsageRequest {
                 this.companyId,
                 this.companyKeys,
                 this.includeUsageAggregation,
+                this.managedBy,
                 this.q,
                 this.withoutNegativeEntitlements,
                 this.limit,
@@ -164,6 +179,8 @@ public final class CountFeatureUsageRequest {
 
         private Optional<Boolean> includeUsageAggregation = Optional.empty();
 
+        private Optional<BillingProviderType> managedBy = Optional.empty();
+
         private Optional<String> q = Optional.empty();
 
         private Optional<Boolean> withoutNegativeEntitlements = Optional.empty();
@@ -182,6 +199,7 @@ public final class CountFeatureUsageRequest {
             companyId(other.getCompanyId());
             companyKeys(other.getCompanyKeys());
             includeUsageAggregation(other.getIncludeUsageAggregation());
+            managedBy(other.getManagedBy());
             q(other.getQ());
             withoutNegativeEntitlements(other.getWithoutNegativeEntitlements());
             limit(other.getLimit());
@@ -241,6 +259,20 @@ public final class CountFeatureUsageRequest {
             return this;
         }
 
+        /**
+         * <p>Filter for features managed by a billing provider, or by Schematic (no billing provider)</p>
+         */
+        @JsonSetter(value = "managed_by", nulls = Nulls.SKIP)
+        public Builder managedBy(Optional<BillingProviderType> managedBy) {
+            this.managedBy = managedBy;
+            return this;
+        }
+
+        public Builder managedBy(BillingProviderType managedBy) {
+            this.managedBy = Optional.ofNullable(managedBy);
+            return this;
+        }
+
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
         public Builder q(Optional<String> q) {
             this.q = q;
@@ -297,6 +329,7 @@ public final class CountFeatureUsageRequest {
                     companyId,
                     companyKeys,
                     includeUsageAggregation,
+                    managedBy,
                     q,
                     withoutNegativeEntitlements,
                     limit,

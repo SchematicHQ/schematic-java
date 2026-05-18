@@ -37,6 +37,8 @@ public final class UsageBasedEntitlementResponseData {
 
     private final Optional<EntitlementPriceBehavior> priceBehavior;
 
+    private final Optional<BillingPriceView> quarterlyUsageBasedPrice;
+
     private final Optional<Boolean> valueBool;
 
     private final Optional<Long> valueNumeric;
@@ -56,6 +58,7 @@ public final class UsageBasedEntitlementResponseData {
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<BillingPriceView> monthlyUsageBasedPrice,
             Optional<EntitlementPriceBehavior> priceBehavior,
+            Optional<BillingPriceView> quarterlyUsageBasedPrice,
             Optional<Boolean> valueBool,
             Optional<Long> valueNumeric,
             EntitlementValueType valueType,
@@ -69,6 +72,7 @@ public final class UsageBasedEntitlementResponseData {
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.monthlyUsageBasedPrice = monthlyUsageBasedPrice;
         this.priceBehavior = priceBehavior;
+        this.quarterlyUsageBasedPrice = quarterlyUsageBasedPrice;
         this.valueBool = valueBool;
         this.valueNumeric = valueNumeric;
         this.valueType = valueType;
@@ -116,6 +120,11 @@ public final class UsageBasedEntitlementResponseData {
         return priceBehavior;
     }
 
+    @JsonProperty("quarterly_usage_based_price")
+    public Optional<BillingPriceView> getQuarterlyUsageBasedPrice() {
+        return quarterlyUsageBasedPrice;
+    }
+
     @JsonProperty("value_bool")
     public Optional<Boolean> getValueBool() {
         return valueBool;
@@ -156,6 +165,7 @@ public final class UsageBasedEntitlementResponseData {
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && monthlyUsageBasedPrice.equals(other.monthlyUsageBasedPrice)
                 && priceBehavior.equals(other.priceBehavior)
+                && quarterlyUsageBasedPrice.equals(other.quarterlyUsageBasedPrice)
                 && valueBool.equals(other.valueBool)
                 && valueNumeric.equals(other.valueNumeric)
                 && valueType.equals(other.valueType)
@@ -173,6 +183,7 @@ public final class UsageBasedEntitlementResponseData {
                 this.metricPeriodMonthReset,
                 this.monthlyUsageBasedPrice,
                 this.priceBehavior,
+                this.quarterlyUsageBasedPrice,
                 this.valueBool,
                 this.valueNumeric,
                 this.valueType,
@@ -233,6 +244,10 @@ public final class UsageBasedEntitlementResponseData {
 
         _FinalStage priceBehavior(EntitlementPriceBehavior priceBehavior);
 
+        _FinalStage quarterlyUsageBasedPrice(Optional<BillingPriceView> quarterlyUsageBasedPrice);
+
+        _FinalStage quarterlyUsageBasedPrice(BillingPriceView quarterlyUsageBasedPrice);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -257,6 +272,8 @@ public final class UsageBasedEntitlementResponseData {
         private Optional<Long> valueNumeric = Optional.empty();
 
         private Optional<Boolean> valueBool = Optional.empty();
+
+        private Optional<BillingPriceView> quarterlyUsageBasedPrice = Optional.empty();
 
         private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
@@ -287,6 +304,7 @@ public final class UsageBasedEntitlementResponseData {
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             monthlyUsageBasedPrice(other.getMonthlyUsageBasedPrice());
             priceBehavior(other.getPriceBehavior());
+            quarterlyUsageBasedPrice(other.getQuarterlyUsageBasedPrice());
             valueBool(other.getValueBool());
             valueNumeric(other.getValueNumeric());
             valueType(other.getValueType());
@@ -344,6 +362,19 @@ public final class UsageBasedEntitlementResponseData {
         @JsonSetter(value = "value_bool", nulls = Nulls.SKIP)
         public _FinalStage valueBool(Optional<Boolean> valueBool) {
             this.valueBool = valueBool;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyUsageBasedPrice(BillingPriceView quarterlyUsageBasedPrice) {
+            this.quarterlyUsageBasedPrice = Optional.ofNullable(quarterlyUsageBasedPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_usage_based_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyUsageBasedPrice(Optional<BillingPriceView> quarterlyUsageBasedPrice) {
+            this.quarterlyUsageBasedPrice = quarterlyUsageBasedPrice;
             return this;
         }
 
@@ -449,6 +480,7 @@ public final class UsageBasedEntitlementResponseData {
                     metricPeriodMonthReset,
                     monthlyUsageBasedPrice,
                     priceBehavior,
+                    quarterlyUsageBasedPrice,
                     valueBool,
                     valueNumeric,
                     valueType,

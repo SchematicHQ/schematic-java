@@ -46,6 +46,8 @@ public class AsyncBaseSchematic {
 
     protected final Supplier<AsyncComponentsClient> componentsClient;
 
+    protected final Supplier<AsyncPlanbundleClient> planbundleClient;
+
     protected final Supplier<AsyncDataexportsClient> dataexportsClient;
 
     protected final Supplier<AsyncEventsClient> eventsClient;
@@ -55,8 +57,6 @@ public class AsyncBaseSchematic {
     protected final Supplier<AsyncInsightsClient> insightsClient;
 
     protected final Supplier<AsyncIntegrationsapiClient> integrationsapiClient;
-
-    protected final Supplier<AsyncPlanbundleClient> planbundleClient;
 
     protected final Supplier<AsyncPlangroupsClient> plangroupsClient;
 
@@ -80,12 +80,12 @@ public class AsyncBaseSchematic {
         this.entitlementsClient = Suppliers.memoize(() -> new AsyncEntitlementsClient(clientOptions));
         this.plansClient = Suppliers.memoize(() -> new AsyncPlansClient(clientOptions));
         this.componentsClient = Suppliers.memoize(() -> new AsyncComponentsClient(clientOptions));
+        this.planbundleClient = Suppliers.memoize(() -> new AsyncPlanbundleClient(clientOptions));
         this.dataexportsClient = Suppliers.memoize(() -> new AsyncDataexportsClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new AsyncEventsClient(clientOptions));
         this.featuresClient = Suppliers.memoize(() -> new AsyncFeaturesClient(clientOptions));
         this.insightsClient = Suppliers.memoize(() -> new AsyncInsightsClient(clientOptions));
         this.integrationsapiClient = Suppliers.memoize(() -> new AsyncIntegrationsapiClient(clientOptions));
-        this.planbundleClient = Suppliers.memoize(() -> new AsyncPlanbundleClient(clientOptions));
         this.plangroupsClient = Suppliers.memoize(() -> new AsyncPlangroupsClient(clientOptions));
         this.planmigrationsClient = Suppliers.memoize(() -> new AsyncPlanmigrationsClient(clientOptions));
         this.componentspublicClient = Suppliers.memoize(() -> new AsyncComponentspublicClient(clientOptions));
@@ -126,6 +126,10 @@ public class AsyncBaseSchematic {
         return this.componentsClient.get();
     }
 
+    public AsyncPlanbundleClient planbundle() {
+        return this.planbundleClient.get();
+    }
+
     public AsyncDataexportsClient dataexports() {
         return this.dataexportsClient.get();
     }
@@ -144,10 +148,6 @@ public class AsyncBaseSchematic {
 
     public AsyncIntegrationsapiClient integrationsapi() {
         return this.integrationsapiClient.get();
-    }
-
-    public AsyncPlanbundleClient planbundle() {
-        return this.planbundleClient.get();
     }
 
     public AsyncPlangroupsClient plangroups() {

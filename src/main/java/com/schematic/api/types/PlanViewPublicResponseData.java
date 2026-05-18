@@ -84,6 +84,8 @@ public final class PlanViewPublicResponseData {
 
     private final PlanType planType;
 
+    private final Optional<BillingPriceResponseData> quarterlyPrice;
+
     private final Optional<Long> trialDays;
 
     private final OffsetDateTime updatedAt;
@@ -125,6 +127,7 @@ public final class PlanViewPublicResponseData {
             String name,
             Optional<BillingPriceResponseData> oneTimePrice,
             PlanType planType,
+            Optional<BillingPriceResponseData> quarterlyPrice,
             Optional<Long> trialDays,
             OffsetDateTime updatedAt,
             List<PlanVersionResponseData> versions,
@@ -160,6 +163,7 @@ public final class PlanViewPublicResponseData {
         this.name = name;
         this.oneTimePrice = oneTimePrice;
         this.planType = planType;
+        this.quarterlyPrice = quarterlyPrice;
         this.trialDays = trialDays;
         this.updatedAt = updatedAt;
         this.versions = versions;
@@ -317,6 +321,11 @@ public final class PlanViewPublicResponseData {
         return planType;
     }
 
+    @JsonProperty("quarterly_price")
+    public Optional<BillingPriceResponseData> getQuarterlyPrice() {
+        return quarterlyPrice;
+    }
+
     @JsonProperty("trial_days")
     public Optional<Long> getTrialDays() {
         return trialDays;
@@ -379,6 +388,7 @@ public final class PlanViewPublicResponseData {
                 && name.equals(other.name)
                 && oneTimePrice.equals(other.oneTimePrice)
                 && planType.equals(other.planType)
+                && quarterlyPrice.equals(other.quarterlyPrice)
                 && trialDays.equals(other.trialDays)
                 && updatedAt.equals(other.updatedAt)
                 && versions.equals(other.versions)
@@ -418,6 +428,7 @@ public final class PlanViewPublicResponseData {
                 this.name,
                 this.oneTimePrice,
                 this.planType,
+                this.quarterlyPrice,
                 this.trialDays,
                 this.updatedAt,
                 this.versions,
@@ -576,6 +587,10 @@ public final class PlanViewPublicResponseData {
 
         _FinalStage oneTimePrice(BillingPriceResponseData oneTimePrice);
 
+        _FinalStage quarterlyPrice(Optional<BillingPriceResponseData> quarterlyPrice);
+
+        _FinalStage quarterlyPrice(BillingPriceResponseData quarterlyPrice);
+
         _FinalStage trialDays(Optional<Long> trialDays);
 
         _FinalStage trialDays(Long trialDays);
@@ -644,6 +659,8 @@ public final class PlanViewPublicResponseData {
         private List<PlanVersionResponseData> versions = new ArrayList<>();
 
         private Optional<Long> trialDays = Optional.empty();
+
+        private Optional<BillingPriceResponseData> quarterlyPrice = Optional.empty();
 
         private Optional<BillingPriceResponseData> oneTimePrice = Optional.empty();
 
@@ -714,6 +731,7 @@ public final class PlanViewPublicResponseData {
             name(other.getName());
             oneTimePrice(other.getOneTimePrice());
             planType(other.getPlanType());
+            quarterlyPrice(other.getQuarterlyPrice());
             trialDays(other.getTrialDays());
             updatedAt(other.getUpdatedAt());
             versions(other.getVersions());
@@ -873,6 +891,19 @@ public final class PlanViewPublicResponseData {
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
         public _FinalStage trialDays(Optional<Long> trialDays) {
             this.trialDays = trialDays;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyPrice(BillingPriceResponseData quarterlyPrice) {
+            this.quarterlyPrice = Optional.ofNullable(quarterlyPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPrice(Optional<BillingPriceResponseData> quarterlyPrice) {
+            this.quarterlyPrice = quarterlyPrice;
             return this;
         }
 
@@ -1172,6 +1203,7 @@ public final class PlanViewPublicResponseData {
                     name,
                     oneTimePrice,
                     planType,
+                    quarterlyPrice,
                     trialDays,
                     updatedAt,
                     versions,

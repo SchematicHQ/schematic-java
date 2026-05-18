@@ -57,6 +57,14 @@ public final class UpdatePlanEntitlementRequestBody {
 
     private final Optional<List<CreatePriceTierRequestBody>> priceTiers;
 
+    private final Optional<String> quarterlyMeteredPriceId;
+
+    private final Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers;
+
+    private final Optional<Long> quarterlyUnitPrice;
+
+    private final Optional<String> quarterlyUnitPriceDecimal;
+
     private final Optional<Long> softLimit;
 
     private final Optional<BillingTiersMode> tierMode;
@@ -96,6 +104,10 @@ public final class UpdatePlanEntitlementRequestBody {
             Optional<String> overageBillingProductId,
             Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<List<CreatePriceTierRequestBody>> priceTiers,
+            Optional<String> quarterlyMeteredPriceId,
+            Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers,
+            Optional<Long> quarterlyUnitPrice,
+            Optional<String> quarterlyUnitPriceDecimal,
             Optional<Long> softLimit,
             Optional<BillingTiersMode> tierMode,
             Optional<Boolean> valueBool,
@@ -122,6 +134,10 @@ public final class UpdatePlanEntitlementRequestBody {
         this.overageBillingProductId = overageBillingProductId;
         this.priceBehavior = priceBehavior;
         this.priceTiers = priceTiers;
+        this.quarterlyMeteredPriceId = quarterlyMeteredPriceId;
+        this.quarterlyPriceTiers = quarterlyPriceTiers;
+        this.quarterlyUnitPrice = quarterlyUnitPrice;
+        this.quarterlyUnitPriceDecimal = quarterlyUnitPriceDecimal;
         this.softLimit = softLimit;
         this.tierMode = tierMode;
         this.valueBool = valueBool;
@@ -209,6 +225,26 @@ public final class UpdatePlanEntitlementRequestBody {
         return priceTiers;
     }
 
+    @JsonProperty("quarterly_metered_price_id")
+    public Optional<String> getQuarterlyMeteredPriceId() {
+        return quarterlyMeteredPriceId;
+    }
+
+    @JsonProperty("quarterly_price_tiers")
+    public Optional<List<CreatePriceTierRequestBody>> getQuarterlyPriceTiers() {
+        return quarterlyPriceTiers;
+    }
+
+    @JsonProperty("quarterly_unit_price")
+    public Optional<Long> getQuarterlyUnitPrice() {
+        return quarterlyUnitPrice;
+    }
+
+    @JsonProperty("quarterly_unit_price_decimal")
+    public Optional<String> getQuarterlyUnitPriceDecimal() {
+        return quarterlyUnitPriceDecimal;
+    }
+
     @JsonProperty("soft_limit")
     public Optional<Long> getSoftLimit() {
         return softLimit;
@@ -290,6 +326,10 @@ public final class UpdatePlanEntitlementRequestBody {
                 && overageBillingProductId.equals(other.overageBillingProductId)
                 && priceBehavior.equals(other.priceBehavior)
                 && priceTiers.equals(other.priceTiers)
+                && quarterlyMeteredPriceId.equals(other.quarterlyMeteredPriceId)
+                && quarterlyPriceTiers.equals(other.quarterlyPriceTiers)
+                && quarterlyUnitPrice.equals(other.quarterlyUnitPrice)
+                && quarterlyUnitPriceDecimal.equals(other.quarterlyUnitPriceDecimal)
                 && softLimit.equals(other.softLimit)
                 && tierMode.equals(other.tierMode)
                 && valueBool.equals(other.valueBool)
@@ -320,6 +360,10 @@ public final class UpdatePlanEntitlementRequestBody {
                 this.overageBillingProductId,
                 this.priceBehavior,
                 this.priceTiers,
+                this.quarterlyMeteredPriceId,
+                this.quarterlyPriceTiers,
+                this.quarterlyUnitPrice,
+                this.quarterlyUnitPriceDecimal,
                 this.softLimit,
                 this.tierMode,
                 this.valueBool,
@@ -414,6 +458,22 @@ public final class UpdatePlanEntitlementRequestBody {
 
         _FinalStage priceTiers(List<CreatePriceTierRequestBody> priceTiers);
 
+        _FinalStage quarterlyMeteredPriceId(Optional<String> quarterlyMeteredPriceId);
+
+        _FinalStage quarterlyMeteredPriceId(String quarterlyMeteredPriceId);
+
+        _FinalStage quarterlyPriceTiers(Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers);
+
+        _FinalStage quarterlyPriceTiers(List<CreatePriceTierRequestBody> quarterlyPriceTiers);
+
+        _FinalStage quarterlyUnitPrice(Optional<Long> quarterlyUnitPrice);
+
+        _FinalStage quarterlyUnitPrice(Long quarterlyUnitPrice);
+
+        _FinalStage quarterlyUnitPriceDecimal(Optional<String> quarterlyUnitPriceDecimal);
+
+        _FinalStage quarterlyUnitPriceDecimal(String quarterlyUnitPriceDecimal);
+
         _FinalStage softLimit(Optional<Long> softLimit);
 
         _FinalStage softLimit(Long softLimit);
@@ -479,6 +539,14 @@ public final class UpdatePlanEntitlementRequestBody {
 
         private Optional<Long> softLimit = Optional.empty();
 
+        private Optional<String> quarterlyUnitPriceDecimal = Optional.empty();
+
+        private Optional<Long> quarterlyUnitPrice = Optional.empty();
+
+        private Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers = Optional.empty();
+
+        private Optional<String> quarterlyMeteredPriceId = Optional.empty();
+
         private Optional<List<CreatePriceTierRequestBody>> priceTiers = Optional.empty();
 
         private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
@@ -528,6 +596,10 @@ public final class UpdatePlanEntitlementRequestBody {
             overageBillingProductId(other.getOverageBillingProductId());
             priceBehavior(other.getPriceBehavior());
             priceTiers(other.getPriceTiers());
+            quarterlyMeteredPriceId(other.getQuarterlyMeteredPriceId());
+            quarterlyPriceTiers(other.getQuarterlyPriceTiers());
+            quarterlyUnitPrice(other.getQuarterlyUnitPrice());
+            quarterlyUnitPriceDecimal(other.getQuarterlyUnitPriceDecimal());
             softLimit(other.getSoftLimit());
             tierMode(other.getTierMode());
             valueBool(other.getValueBool());
@@ -676,6 +748,58 @@ public final class UpdatePlanEntitlementRequestBody {
         @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
         public _FinalStage softLimit(Optional<Long> softLimit) {
             this.softLimit = softLimit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyUnitPriceDecimal(String quarterlyUnitPriceDecimal) {
+            this.quarterlyUnitPriceDecimal = Optional.ofNullable(quarterlyUnitPriceDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_unit_price_decimal", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyUnitPriceDecimal(Optional<String> quarterlyUnitPriceDecimal) {
+            this.quarterlyUnitPriceDecimal = quarterlyUnitPriceDecimal;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyUnitPrice(Long quarterlyUnitPrice) {
+            this.quarterlyUnitPrice = Optional.ofNullable(quarterlyUnitPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_unit_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyUnitPrice(Optional<Long> quarterlyUnitPrice) {
+            this.quarterlyUnitPrice = quarterlyUnitPrice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyPriceTiers(List<CreatePriceTierRequestBody> quarterlyPriceTiers) {
+            this.quarterlyPriceTiers = Optional.ofNullable(quarterlyPriceTiers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price_tiers", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPriceTiers(Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers) {
+            this.quarterlyPriceTiers = quarterlyPriceTiers;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyMeteredPriceId(String quarterlyMeteredPriceId) {
+            this.quarterlyMeteredPriceId = Optional.ofNullable(quarterlyMeteredPriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_metered_price_id", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyMeteredPriceId(Optional<String> quarterlyMeteredPriceId) {
+            this.quarterlyMeteredPriceId = quarterlyMeteredPriceId;
             return this;
         }
 
@@ -885,6 +1009,10 @@ public final class UpdatePlanEntitlementRequestBody {
                     overageBillingProductId,
                     priceBehavior,
                     priceTiers,
+                    quarterlyMeteredPriceId,
+                    quarterlyPriceTiers,
+                    quarterlyUnitPrice,
+                    quarterlyUnitPriceDecimal,
                     softLimit,
                     tierMode,
                     valueBool,

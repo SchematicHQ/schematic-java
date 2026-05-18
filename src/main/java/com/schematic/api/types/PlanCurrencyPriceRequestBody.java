@@ -27,6 +27,8 @@ public final class PlanCurrencyPriceRequestBody {
 
     private final Optional<Long> oneTimePrice;
 
+    private final Optional<Long> quarterlyPrice;
+
     private final Optional<Long> yearlyPrice;
 
     private final Map<String, Object> additionalProperties;
@@ -35,11 +37,13 @@ public final class PlanCurrencyPriceRequestBody {
             String currency,
             Optional<Long> monthlyPrice,
             Optional<Long> oneTimePrice,
+            Optional<Long> quarterlyPrice,
             Optional<Long> yearlyPrice,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.monthlyPrice = monthlyPrice;
         this.oneTimePrice = oneTimePrice;
+        this.quarterlyPrice = quarterlyPrice;
         this.yearlyPrice = yearlyPrice;
         this.additionalProperties = additionalProperties;
     }
@@ -57,6 +61,11 @@ public final class PlanCurrencyPriceRequestBody {
     @JsonProperty("one_time_price")
     public Optional<Long> getOneTimePrice() {
         return oneTimePrice;
+    }
+
+    @JsonProperty("quarterly_price")
+    public Optional<Long> getQuarterlyPrice() {
+        return quarterlyPrice;
     }
 
     @JsonProperty("yearly_price")
@@ -79,12 +88,13 @@ public final class PlanCurrencyPriceRequestBody {
         return currency.equals(other.currency)
                 && monthlyPrice.equals(other.monthlyPrice)
                 && oneTimePrice.equals(other.oneTimePrice)
+                && quarterlyPrice.equals(other.quarterlyPrice)
                 && yearlyPrice.equals(other.yearlyPrice);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.currency, this.monthlyPrice, this.oneTimePrice, this.yearlyPrice);
+        return Objects.hash(this.currency, this.monthlyPrice, this.oneTimePrice, this.quarterlyPrice, this.yearlyPrice);
     }
 
     @java.lang.Override
@@ -117,6 +127,10 @@ public final class PlanCurrencyPriceRequestBody {
 
         _FinalStage oneTimePrice(Long oneTimePrice);
 
+        _FinalStage quarterlyPrice(Optional<Long> quarterlyPrice);
+
+        _FinalStage quarterlyPrice(Long quarterlyPrice);
+
         _FinalStage yearlyPrice(Optional<Long> yearlyPrice);
 
         _FinalStage yearlyPrice(Long yearlyPrice);
@@ -127,6 +141,8 @@ public final class PlanCurrencyPriceRequestBody {
         private String currency;
 
         private Optional<Long> yearlyPrice = Optional.empty();
+
+        private Optional<Long> quarterlyPrice = Optional.empty();
 
         private Optional<Long> oneTimePrice = Optional.empty();
 
@@ -142,6 +158,7 @@ public final class PlanCurrencyPriceRequestBody {
             currency(other.getCurrency());
             monthlyPrice(other.getMonthlyPrice());
             oneTimePrice(other.getOneTimePrice());
+            quarterlyPrice(other.getQuarterlyPrice());
             yearlyPrice(other.getYearlyPrice());
             return this;
         }
@@ -163,6 +180,19 @@ public final class PlanCurrencyPriceRequestBody {
         @JsonSetter(value = "yearly_price", nulls = Nulls.SKIP)
         public _FinalStage yearlyPrice(Optional<Long> yearlyPrice) {
             this.yearlyPrice = yearlyPrice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyPrice(Long quarterlyPrice) {
+            this.quarterlyPrice = Optional.ofNullable(quarterlyPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPrice(Optional<Long> quarterlyPrice) {
+            this.quarterlyPrice = quarterlyPrice;
             return this;
         }
 
@@ -195,7 +225,7 @@ public final class PlanCurrencyPriceRequestBody {
         @java.lang.Override
         public PlanCurrencyPriceRequestBody build() {
             return new PlanCurrencyPriceRequestBody(
-                    currency, monthlyPrice, oneTimePrice, yearlyPrice, additionalProperties);
+                    currency, monthlyPrice, oneTimePrice, quarterlyPrice, yearlyPrice, additionalProperties);
         }
 
         @java.lang.Override

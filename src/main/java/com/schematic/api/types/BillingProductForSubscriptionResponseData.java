@@ -40,6 +40,8 @@ public final class BillingProductForSubscriptionResponseData {
 
     private final String interval;
 
+    private final Optional<Long> intervalCount;
+
     private final Optional<String> meterId;
 
     private final String name;
@@ -79,6 +81,7 @@ public final class BillingProductForSubscriptionResponseData {
             String externalId,
             String id,
             String interval,
+            Optional<Long> intervalCount,
             Optional<String> meterId,
             String name,
             long packageSize,
@@ -102,6 +105,7 @@ public final class BillingProductForSubscriptionResponseData {
         this.externalId = externalId;
         this.id = id;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.meterId = meterId;
         this.name = name;
         this.packageSize = packageSize;
@@ -157,6 +161,11 @@ public final class BillingProductForSubscriptionResponseData {
     @JsonProperty("interval")
     public String getInterval() {
         return interval;
+    }
+
+    @JsonProperty("interval_count")
+    public Optional<Long> getIntervalCount() {
+        return intervalCount;
     }
 
     @JsonProperty("meter_id")
@@ -250,6 +259,7 @@ public final class BillingProductForSubscriptionResponseData {
                 && externalId.equals(other.externalId)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
+                && intervalCount.equals(other.intervalCount)
                 && meterId.equals(other.meterId)
                 && name.equals(other.name)
                 && packageSize == other.packageSize
@@ -277,6 +287,7 @@ public final class BillingProductForSubscriptionResponseData {
                 this.externalId,
                 this.id,
                 this.interval,
+                this.intervalCount,
                 this.meterId,
                 this.name,
                 this.packageSize,
@@ -383,6 +394,10 @@ public final class BillingProductForSubscriptionResponseData {
 
         _FinalStage billingThreshold(Long billingThreshold);
 
+        _FinalStage intervalCount(Optional<Long> intervalCount);
+
+        _FinalStage intervalCount(Long intervalCount);
+
         _FinalStage meterId(Optional<String> meterId);
 
         _FinalStage meterId(String meterId);
@@ -464,6 +479,8 @@ public final class BillingProductForSubscriptionResponseData {
 
         private Optional<String> meterId = Optional.empty();
 
+        private Optional<Long> intervalCount = Optional.empty();
+
         private Optional<Long> billingThreshold = Optional.empty();
 
         @JsonAnySetter
@@ -481,6 +498,7 @@ public final class BillingProductForSubscriptionResponseData {
             externalId(other.getExternalId());
             id(other.getId());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             meterId(other.getMeterId());
             name(other.getName());
             packageSize(other.getPackageSize());
@@ -681,6 +699,19 @@ public final class BillingProductForSubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage intervalCount(Long intervalCount) {
+            this.intervalCount = Optional.ofNullable(intervalCount);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "interval_count", nulls = Nulls.SKIP)
+        public _FinalStage intervalCount(Optional<Long> intervalCount) {
+            this.intervalCount = intervalCount;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingThreshold(Long billingThreshold) {
             this.billingThreshold = Optional.ofNullable(billingThreshold);
             return this;
@@ -704,6 +735,7 @@ public final class BillingProductForSubscriptionResponseData {
                     externalId,
                     id,
                     interval,
+                    intervalCount,
                     meterId,
                     name,
                     packageSize,

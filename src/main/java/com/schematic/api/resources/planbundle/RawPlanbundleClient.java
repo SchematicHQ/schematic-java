@@ -16,8 +16,10 @@ import com.schematic.api.errors.ForbiddenError;
 import com.schematic.api.errors.InternalServerError;
 import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
+import com.schematic.api.resources.planbundle.requests.CreateCustomPlanBundleRequestBody;
 import com.schematic.api.resources.planbundle.requests.CreatePlanBundleRequestBody;
 import com.schematic.api.resources.planbundle.requests.UpdatePlanBundleRequestBody;
+import com.schematic.api.resources.planbundle.types.CreateCustomPlanBundleResponse;
 import com.schematic.api.resources.planbundle.types.CreatePlanBundleResponse;
 import com.schematic.api.resources.planbundle.types.UpdatePlanBundleResponse;
 import com.schematic.api.types.ApiError;
@@ -35,6 +37,76 @@ public class RawPlanbundleClient {
 
     public RawPlanbundleClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+    }
+
+    public BaseSchematicHttpResponse<CreateCustomPlanBundleResponse> createCustomPlanBundle(
+            CreateCustomPlanBundleRequestBody request) {
+        return createCustomPlanBundle(request, null);
+    }
+
+    public BaseSchematicHttpResponse<CreateCustomPlanBundleResponse> createCustomPlanBundle(
+            CreateCustomPlanBundleRequestBody request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("custom-plan-bundles");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CreateCustomPlanBundleResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
     }
 
     public BaseSchematicHttpResponse<CreatePlanBundleResponse> createPlanBundle(CreatePlanBundleRequestBody request) {
