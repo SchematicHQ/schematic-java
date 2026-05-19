@@ -85,6 +85,8 @@ public final class FeatureUsageResponseData {
 
     private final Optional<EntitlementPriceBehavior> priceBehavior;
 
+    private final Optional<BillingPriceView> quarterlyUsageBasedPrice;
+
     private final Optional<Long> softLimit;
 
     private final Optional<Long> usage;
@@ -125,6 +127,7 @@ public final class FeatureUsageResponseData {
             Optional<PlanResponseData> plan,
             Optional<PlanEntitlementResponseData> planEntitlement,
             Optional<EntitlementPriceBehavior> priceBehavior,
+            Optional<BillingPriceView> quarterlyUsageBasedPrice,
             Optional<Long> softLimit,
             Optional<Long> usage,
             Optional<BillingPriceView> yearlyUsageBasedPrice,
@@ -160,6 +163,7 @@ public final class FeatureUsageResponseData {
         this.plan = plan;
         this.planEntitlement = planEntitlement;
         this.priceBehavior = priceBehavior;
+        this.quarterlyUsageBasedPrice = quarterlyUsageBasedPrice;
         this.softLimit = softLimit;
         this.usage = usage;
         this.yearlyUsageBasedPrice = yearlyUsageBasedPrice;
@@ -375,6 +379,11 @@ public final class FeatureUsageResponseData {
         return priceBehavior;
     }
 
+    @JsonProperty("quarterly_usage_based_price")
+    public Optional<BillingPriceView> getQuarterlyUsageBasedPrice() {
+        return quarterlyUsageBasedPrice;
+    }
+
     /**
      * @return The soft limit for the feature usage. Available only for overage price behavior
      */
@@ -439,6 +448,7 @@ public final class FeatureUsageResponseData {
                 && plan.equals(other.plan)
                 && planEntitlement.equals(other.planEntitlement)
                 && priceBehavior.equals(other.priceBehavior)
+                && quarterlyUsageBasedPrice.equals(other.quarterlyUsageBasedPrice)
                 && softLimit.equals(other.softLimit)
                 && usage.equals(other.usage)
                 && yearlyUsageBasedPrice.equals(other.yearlyUsageBasedPrice);
@@ -478,6 +488,7 @@ public final class FeatureUsageResponseData {
                 this.plan,
                 this.planEntitlement,
                 this.priceBehavior,
+                this.quarterlyUsageBasedPrice,
                 this.softLimit,
                 this.usage,
                 this.yearlyUsageBasedPrice);
@@ -679,6 +690,10 @@ public final class FeatureUsageResponseData {
 
         _FinalStage priceBehavior(EntitlementPriceBehavior priceBehavior);
 
+        _FinalStage quarterlyUsageBasedPrice(Optional<BillingPriceView> quarterlyUsageBasedPrice);
+
+        _FinalStage quarterlyUsageBasedPrice(BillingPriceView quarterlyUsageBasedPrice);
+
         /**
          * <p>The soft limit for the feature usage. Available only for overage price behavior</p>
          */
@@ -714,6 +729,8 @@ public final class FeatureUsageResponseData {
         private Optional<Long> usage = Optional.empty();
 
         private Optional<Long> softLimit = Optional.empty();
+
+        private Optional<BillingPriceView> quarterlyUsageBasedPrice = Optional.empty();
 
         private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
@@ -807,6 +824,7 @@ public final class FeatureUsageResponseData {
             plan(other.getPlan());
             planEntitlement(other.getPlanEntitlement());
             priceBehavior(other.getPriceBehavior());
+            quarterlyUsageBasedPrice(other.getQuarterlyUsageBasedPrice());
             softLimit(other.getSoftLimit());
             usage(other.getUsage());
             yearlyUsageBasedPrice(other.getYearlyUsageBasedPrice());
@@ -901,6 +919,19 @@ public final class FeatureUsageResponseData {
         @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
         public _FinalStage softLimit(Optional<Long> softLimit) {
             this.softLimit = softLimit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyUsageBasedPrice(BillingPriceView quarterlyUsageBasedPrice) {
+            this.quarterlyUsageBasedPrice = Optional.ofNullable(quarterlyUsageBasedPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_usage_based_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyUsageBasedPrice(Optional<BillingPriceView> quarterlyUsageBasedPrice) {
+            this.quarterlyUsageBasedPrice = quarterlyUsageBasedPrice;
             return this;
         }
 
@@ -1401,6 +1432,7 @@ public final class FeatureUsageResponseData {
                     plan,
                     planEntitlement,
                     priceBehavior,
+                    quarterlyUsageBasedPrice,
                     softLimit,
                     usage,
                     yearlyUsageBasedPrice,

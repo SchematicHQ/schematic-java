@@ -25,6 +25,8 @@ public final class EntitlementCurrencyPricesResponseData {
 
     private final Optional<BillingPriceView> monthlyPrice;
 
+    private final Optional<BillingPriceView> quarterlyPrice;
+
     private final Optional<BillingPriceView> yearlyPrice;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class EntitlementCurrencyPricesResponseData {
     private EntitlementCurrencyPricesResponseData(
             String currency,
             Optional<BillingPriceView> monthlyPrice,
+            Optional<BillingPriceView> quarterlyPrice,
             Optional<BillingPriceView> yearlyPrice,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.monthlyPrice = monthlyPrice;
+        this.quarterlyPrice = quarterlyPrice;
         this.yearlyPrice = yearlyPrice;
         this.additionalProperties = additionalProperties;
     }
@@ -48,6 +52,11 @@ public final class EntitlementCurrencyPricesResponseData {
     @JsonProperty("monthly_price")
     public Optional<BillingPriceView> getMonthlyPrice() {
         return monthlyPrice;
+    }
+
+    @JsonProperty("quarterly_price")
+    public Optional<BillingPriceView> getQuarterlyPrice() {
+        return quarterlyPrice;
     }
 
     @JsonProperty("yearly_price")
@@ -70,12 +79,13 @@ public final class EntitlementCurrencyPricesResponseData {
     private boolean equalTo(EntitlementCurrencyPricesResponseData other) {
         return currency.equals(other.currency)
                 && monthlyPrice.equals(other.monthlyPrice)
+                && quarterlyPrice.equals(other.quarterlyPrice)
                 && yearlyPrice.equals(other.yearlyPrice);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.currency, this.monthlyPrice, this.yearlyPrice);
+        return Objects.hash(this.currency, this.monthlyPrice, this.quarterlyPrice, this.yearlyPrice);
     }
 
     @java.lang.Override
@@ -104,6 +114,10 @@ public final class EntitlementCurrencyPricesResponseData {
 
         _FinalStage monthlyPrice(BillingPriceView monthlyPrice);
 
+        _FinalStage quarterlyPrice(Optional<BillingPriceView> quarterlyPrice);
+
+        _FinalStage quarterlyPrice(BillingPriceView quarterlyPrice);
+
         _FinalStage yearlyPrice(Optional<BillingPriceView> yearlyPrice);
 
         _FinalStage yearlyPrice(BillingPriceView yearlyPrice);
@@ -114,6 +128,8 @@ public final class EntitlementCurrencyPricesResponseData {
         private String currency;
 
         private Optional<BillingPriceView> yearlyPrice = Optional.empty();
+
+        private Optional<BillingPriceView> quarterlyPrice = Optional.empty();
 
         private Optional<BillingPriceView> monthlyPrice = Optional.empty();
 
@@ -126,6 +142,7 @@ public final class EntitlementCurrencyPricesResponseData {
         public Builder from(EntitlementCurrencyPricesResponseData other) {
             currency(other.getCurrency());
             monthlyPrice(other.getMonthlyPrice());
+            quarterlyPrice(other.getQuarterlyPrice());
             yearlyPrice(other.getYearlyPrice());
             return this;
         }
@@ -151,6 +168,19 @@ public final class EntitlementCurrencyPricesResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage quarterlyPrice(BillingPriceView quarterlyPrice) {
+            this.quarterlyPrice = Optional.ofNullable(quarterlyPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPrice(Optional<BillingPriceView> quarterlyPrice) {
+            this.quarterlyPrice = quarterlyPrice;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage monthlyPrice(BillingPriceView monthlyPrice) {
             this.monthlyPrice = Optional.ofNullable(monthlyPrice);
             return this;
@@ -165,7 +195,8 @@ public final class EntitlementCurrencyPricesResponseData {
 
         @java.lang.Override
         public EntitlementCurrencyPricesResponseData build() {
-            return new EntitlementCurrencyPricesResponseData(currency, monthlyPrice, yearlyPrice, additionalProperties);
+            return new EntitlementCurrencyPricesResponseData(
+                    currency, monthlyPrice, quarterlyPrice, yearlyPrice, additionalProperties);
         }
 
         @java.lang.Override

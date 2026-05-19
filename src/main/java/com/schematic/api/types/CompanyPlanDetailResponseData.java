@@ -90,6 +90,8 @@ public final class CompanyPlanDetailResponseData {
 
     private final PlanType planType;
 
+    private final Optional<BillingPriceResponseData> quarterlyPrice;
+
     private final Optional<Long> trialDays;
 
     private final OffsetDateTime updatedAt;
@@ -138,6 +140,7 @@ public final class CompanyPlanDetailResponseData {
             String name,
             Optional<BillingPriceResponseData> oneTimePrice,
             PlanType planType,
+            Optional<BillingPriceResponseData> quarterlyPrice,
             Optional<Long> trialDays,
             OffsetDateTime updatedAt,
             List<FeatureUsageResponseData> usageViolations,
@@ -178,6 +181,7 @@ public final class CompanyPlanDetailResponseData {
         this.name = name;
         this.oneTimePrice = oneTimePrice;
         this.planType = planType;
+        this.quarterlyPrice = quarterlyPrice;
         this.trialDays = trialDays;
         this.updatedAt = updatedAt;
         this.usageViolations = usageViolations;
@@ -352,6 +356,11 @@ public final class CompanyPlanDetailResponseData {
         return planType;
     }
 
+    @JsonProperty("quarterly_price")
+    public Optional<BillingPriceResponseData> getQuarterlyPrice() {
+        return quarterlyPrice;
+    }
+
     @JsonProperty("trial_days")
     public Optional<Long> getTrialDays() {
         return trialDays;
@@ -427,6 +436,7 @@ public final class CompanyPlanDetailResponseData {
                 && name.equals(other.name)
                 && oneTimePrice.equals(other.oneTimePrice)
                 && planType.equals(other.planType)
+                && quarterlyPrice.equals(other.quarterlyPrice)
                 && trialDays.equals(other.trialDays)
                 && updatedAt.equals(other.updatedAt)
                 && usageViolations.equals(other.usageViolations)
@@ -471,6 +481,7 @@ public final class CompanyPlanDetailResponseData {
                 this.name,
                 this.oneTimePrice,
                 this.planType,
+                this.quarterlyPrice,
                 this.trialDays,
                 this.updatedAt,
                 this.usageViolations,
@@ -647,6 +658,10 @@ public final class CompanyPlanDetailResponseData {
 
         _FinalStage oneTimePrice(BillingPriceResponseData oneTimePrice);
 
+        _FinalStage quarterlyPrice(Optional<BillingPriceResponseData> quarterlyPrice);
+
+        _FinalStage quarterlyPrice(BillingPriceResponseData quarterlyPrice);
+
         _FinalStage trialDays(Optional<Long> trialDays);
 
         _FinalStage trialDays(Long trialDays);
@@ -733,6 +748,8 @@ public final class CompanyPlanDetailResponseData {
 
         private Optional<Long> trialDays = Optional.empty();
 
+        private Optional<BillingPriceResponseData> quarterlyPrice = Optional.empty();
+
         private Optional<BillingPriceResponseData> oneTimePrice = Optional.empty();
 
         private Optional<BillingPriceResponseData> monthlyPrice = Optional.empty();
@@ -807,6 +824,7 @@ public final class CompanyPlanDetailResponseData {
             name(other.getName());
             oneTimePrice(other.getOneTimePrice());
             planType(other.getPlanType());
+            quarterlyPrice(other.getQuarterlyPrice());
             trialDays(other.getTrialDays());
             updatedAt(other.getUpdatedAt());
             usageViolations(other.getUsageViolations());
@@ -1013,6 +1031,19 @@ public final class CompanyPlanDetailResponseData {
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
         public _FinalStage trialDays(Optional<Long> trialDays) {
             this.trialDays = trialDays;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyPrice(BillingPriceResponseData quarterlyPrice) {
+            this.quarterlyPrice = Optional.ofNullable(quarterlyPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPrice(Optional<BillingPriceResponseData> quarterlyPrice) {
+            this.quarterlyPrice = quarterlyPrice;
             return this;
         }
 
@@ -1328,6 +1359,7 @@ public final class CompanyPlanDetailResponseData {
                     name,
                     oneTimePrice,
                     planType,
+                    quarterlyPrice,
                     trialDays,
                     updatedAt,
                     usageViolations,

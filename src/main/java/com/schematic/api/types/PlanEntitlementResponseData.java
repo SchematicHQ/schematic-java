@@ -44,6 +44,8 @@ public final class PlanEntitlementResponseData {
 
     private final Optional<BillingPriceView> meteredMonthlyPrice;
 
+    private final Optional<BillingPriceView> meteredQuarterlyPrice;
+
     private final Optional<BillingPriceView> meteredYearlyPrice;
 
     private final Optional<MetricPeriod> metricPeriod;
@@ -91,6 +93,7 @@ public final class PlanEntitlementResponseData {
             String featureId,
             String id,
             Optional<BillingPriceView> meteredMonthlyPrice,
+            Optional<BillingPriceView> meteredQuarterlyPrice,
             Optional<BillingPriceView> meteredYearlyPrice,
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
@@ -119,6 +122,7 @@ public final class PlanEntitlementResponseData {
         this.featureId = featureId;
         this.id = id;
         this.meteredMonthlyPrice = meteredMonthlyPrice;
+        this.meteredQuarterlyPrice = meteredQuarterlyPrice;
         this.meteredYearlyPrice = meteredYearlyPrice;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
@@ -187,6 +191,11 @@ public final class PlanEntitlementResponseData {
     @JsonProperty("metered_monthly_price")
     public Optional<BillingPriceView> getMeteredMonthlyPrice() {
         return meteredMonthlyPrice;
+    }
+
+    @JsonProperty("metered_quarterly_price")
+    public Optional<BillingPriceView> getMeteredQuarterlyPrice() {
+        return meteredQuarterlyPrice;
     }
 
     @JsonProperty("metered_yearly_price")
@@ -296,6 +305,7 @@ public final class PlanEntitlementResponseData {
                 && featureId.equals(other.featureId)
                 && id.equals(other.id)
                 && meteredMonthlyPrice.equals(other.meteredMonthlyPrice)
+                && meteredQuarterlyPrice.equals(other.meteredQuarterlyPrice)
                 && meteredYearlyPrice.equals(other.meteredYearlyPrice)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
@@ -328,6 +338,7 @@ public final class PlanEntitlementResponseData {
                 this.featureId,
                 this.id,
                 this.meteredMonthlyPrice,
+                this.meteredQuarterlyPrice,
                 this.meteredYearlyPrice,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
@@ -422,6 +433,10 @@ public final class PlanEntitlementResponseData {
         _FinalStage meteredMonthlyPrice(Optional<BillingPriceView> meteredMonthlyPrice);
 
         _FinalStage meteredMonthlyPrice(BillingPriceView meteredMonthlyPrice);
+
+        _FinalStage meteredQuarterlyPrice(Optional<BillingPriceView> meteredQuarterlyPrice);
+
+        _FinalStage meteredQuarterlyPrice(BillingPriceView meteredQuarterlyPrice);
 
         _FinalStage meteredYearlyPrice(Optional<BillingPriceView> meteredYearlyPrice);
 
@@ -529,6 +544,8 @@ public final class PlanEntitlementResponseData {
 
         private Optional<BillingPriceView> meteredYearlyPrice = Optional.empty();
 
+        private Optional<BillingPriceView> meteredQuarterlyPrice = Optional.empty();
+
         private Optional<BillingPriceView> meteredMonthlyPrice = Optional.empty();
 
         private Optional<FeatureResponseData> feature = Optional.empty();
@@ -558,6 +575,7 @@ public final class PlanEntitlementResponseData {
             featureId(other.getFeatureId());
             id(other.getId());
             meteredMonthlyPrice(other.getMeteredMonthlyPrice());
+            meteredQuarterlyPrice(other.getMeteredQuarterlyPrice());
             meteredYearlyPrice(other.getMeteredYearlyPrice());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
@@ -804,6 +822,19 @@ public final class PlanEntitlementResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage meteredQuarterlyPrice(BillingPriceView meteredQuarterlyPrice) {
+            this.meteredQuarterlyPrice = Optional.ofNullable(meteredQuarterlyPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metered_quarterly_price", nulls = Nulls.SKIP)
+        public _FinalStage meteredQuarterlyPrice(Optional<BillingPriceView> meteredQuarterlyPrice) {
+            this.meteredQuarterlyPrice = meteredQuarterlyPrice;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage meteredMonthlyPrice(BillingPriceView meteredMonthlyPrice) {
             this.meteredMonthlyPrice = Optional.ofNullable(meteredMonthlyPrice);
             return this;
@@ -905,6 +936,7 @@ public final class PlanEntitlementResponseData {
                     featureId,
                     id,
                     meteredMonthlyPrice,
+                    meteredQuarterlyPrice,
                     meteredYearlyPrice,
                     metricPeriod,
                     metricPeriodMonthReset,

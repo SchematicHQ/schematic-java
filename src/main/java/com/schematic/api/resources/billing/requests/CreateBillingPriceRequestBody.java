@@ -36,6 +36,8 @@ public final class CreateBillingPriceRequestBody {
 
     private final String interval;
 
+    private final Optional<Long> intervalCount;
+
     private final boolean isActive;
 
     private final Optional<String> meterId;
@@ -67,6 +69,7 @@ public final class CreateBillingPriceRequestBody {
             String currency,
             String externalAccountId,
             String interval,
+            Optional<Long> intervalCount,
             boolean isActive,
             Optional<String> meterId,
             Optional<String> nickname,
@@ -84,6 +87,7 @@ public final class CreateBillingPriceRequestBody {
         this.currency = currency;
         this.externalAccountId = externalAccountId;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.isActive = isActive;
         this.meterId = meterId;
         this.nickname = nickname;
@@ -117,6 +121,11 @@ public final class CreateBillingPriceRequestBody {
     @JsonProperty("interval")
     public String getInterval() {
         return interval;
+    }
+
+    @JsonProperty("interval_count")
+    public Optional<Long> getIntervalCount() {
+        return intervalCount;
     }
 
     @JsonProperty("is_active")
@@ -195,6 +204,7 @@ public final class CreateBillingPriceRequestBody {
                 && currency.equals(other.currency)
                 && externalAccountId.equals(other.externalAccountId)
                 && interval.equals(other.interval)
+                && intervalCount.equals(other.intervalCount)
                 && isActive == other.isActive
                 && meterId.equals(other.meterId)
                 && nickname.equals(other.nickname)
@@ -216,6 +226,7 @@ public final class CreateBillingPriceRequestBody {
                 this.currency,
                 this.externalAccountId,
                 this.interval,
+                this.intervalCount,
                 this.isActive,
                 this.meterId,
                 this.nickname,
@@ -283,6 +294,10 @@ public final class CreateBillingPriceRequestBody {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage intervalCount(Optional<Long> intervalCount);
+
+        _FinalStage intervalCount(Long intervalCount);
 
         _FinalStage meterId(Optional<String> meterId);
 
@@ -359,6 +374,8 @@ public final class CreateBillingPriceRequestBody {
 
         private Optional<String> meterId = Optional.empty();
 
+        private Optional<Long> intervalCount = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -370,6 +387,7 @@ public final class CreateBillingPriceRequestBody {
             currency(other.getCurrency());
             externalAccountId(other.getExternalAccountId());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             isActive(other.getIsActive());
             meterId(other.getMeterId());
             nickname(other.getNickname());
@@ -551,12 +569,26 @@ public final class CreateBillingPriceRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage intervalCount(Long intervalCount) {
+            this.intervalCount = Optional.ofNullable(intervalCount);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "interval_count", nulls = Nulls.SKIP)
+        public _FinalStage intervalCount(Optional<Long> intervalCount) {
+            this.intervalCount = intervalCount;
+            return this;
+        }
+
+        @java.lang.Override
         public CreateBillingPriceRequestBody build() {
             return new CreateBillingPriceRequestBody(
                     billingScheme,
                     currency,
                     externalAccountId,
                     interval,
+                    intervalCount,
                     isActive,
                     meterId,
                     nickname,

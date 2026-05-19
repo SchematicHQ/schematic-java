@@ -34,6 +34,8 @@ public final class BillingPriceView {
 
     private final BillingProductPriceInterval interval;
 
+    private final long intervalCount;
+
     private final boolean isActive;
 
     private final Optional<String> meterEventName;
@@ -78,6 +80,7 @@ public final class BillingPriceView {
             String currency,
             String id,
             BillingProductPriceInterval interval,
+            long intervalCount,
             boolean isActive,
             Optional<String> meterEventName,
             Optional<String> meterEventPayloadKey,
@@ -102,6 +105,7 @@ public final class BillingPriceView {
         this.currency = currency;
         this.id = id;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.isActive = isActive;
         this.meterEventName = meterEventName;
         this.meterEventPayloadKey = meterEventPayloadKey;
@@ -146,6 +150,11 @@ public final class BillingPriceView {
     @JsonProperty("interval")
     public BillingProductPriceInterval getInterval() {
         return interval;
+    }
+
+    @JsonProperty("interval_count")
+    public long getIntervalCount() {
+        return intervalCount;
     }
 
     @JsonProperty("is_active")
@@ -255,6 +264,7 @@ public final class BillingPriceView {
                 && currency.equals(other.currency)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
+                && intervalCount == other.intervalCount
                 && isActive == other.isActive
                 && meterEventName.equals(other.meterEventName)
                 && meterEventPayloadKey.equals(other.meterEventPayloadKey)
@@ -283,6 +293,7 @@ public final class BillingPriceView {
                 this.currency,
                 this.id,
                 this.interval,
+                this.intervalCount,
                 this.isActive,
                 this.meterEventName,
                 this.meterEventPayloadKey,
@@ -331,7 +342,11 @@ public final class BillingPriceView {
     }
 
     public interface IntervalStage {
-        IsActiveStage interval(@NotNull BillingProductPriceInterval interval);
+        IntervalCountStage interval(@NotNull BillingProductPriceInterval interval);
+    }
+
+    public interface IntervalCountStage {
+        IsActiveStage intervalCount(long intervalCount);
     }
 
     public interface IsActiveStage {
@@ -423,6 +438,7 @@ public final class BillingPriceView {
                     CurrencyStage,
                     IdStage,
                     IntervalStage,
+                    IntervalCountStage,
                     IsActiveStage,
                     PackageSizeStage,
                     PriceStage,
@@ -444,6 +460,8 @@ public final class BillingPriceView {
         private String id;
 
         private BillingProductPriceInterval interval;
+
+        private long intervalCount;
 
         private boolean isActive;
 
@@ -493,6 +511,7 @@ public final class BillingPriceView {
             currency(other.getCurrency());
             id(other.getId());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             isActive(other.getIsActive());
             meterEventName(other.getMeterEventName());
             meterEventPayloadKey(other.getMeterEventPayloadKey());
@@ -544,8 +563,15 @@ public final class BillingPriceView {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public IsActiveStage interval(@NotNull BillingProductPriceInterval interval) {
+        public IntervalCountStage interval(@NotNull BillingProductPriceInterval interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("interval_count")
+        public IsActiveStage intervalCount(long intervalCount) {
+            this.intervalCount = intervalCount;
             return this;
         }
 
@@ -736,6 +762,7 @@ public final class BillingPriceView {
                     currency,
                     id,
                     interval,
+                    intervalCount,
                     isActive,
                     meterEventName,
                     meterEventPayloadKey,

@@ -27,6 +27,8 @@ public final class PlanCurrencyPricesResponseData {
 
     private final Optional<BillingPriceResponseData> oneTimePrice;
 
+    private final Optional<BillingPriceResponseData> quarterlyPrice;
+
     private final Optional<BillingPriceResponseData> yearlyPrice;
 
     private final Map<String, Object> additionalProperties;
@@ -35,11 +37,13 @@ public final class PlanCurrencyPricesResponseData {
             String currency,
             Optional<BillingPriceResponseData> monthlyPrice,
             Optional<BillingPriceResponseData> oneTimePrice,
+            Optional<BillingPriceResponseData> quarterlyPrice,
             Optional<BillingPriceResponseData> yearlyPrice,
             Map<String, Object> additionalProperties) {
         this.currency = currency;
         this.monthlyPrice = monthlyPrice;
         this.oneTimePrice = oneTimePrice;
+        this.quarterlyPrice = quarterlyPrice;
         this.yearlyPrice = yearlyPrice;
         this.additionalProperties = additionalProperties;
     }
@@ -57,6 +61,11 @@ public final class PlanCurrencyPricesResponseData {
     @JsonProperty("one_time_price")
     public Optional<BillingPriceResponseData> getOneTimePrice() {
         return oneTimePrice;
+    }
+
+    @JsonProperty("quarterly_price")
+    public Optional<BillingPriceResponseData> getQuarterlyPrice() {
+        return quarterlyPrice;
     }
 
     @JsonProperty("yearly_price")
@@ -79,12 +88,13 @@ public final class PlanCurrencyPricesResponseData {
         return currency.equals(other.currency)
                 && monthlyPrice.equals(other.monthlyPrice)
                 && oneTimePrice.equals(other.oneTimePrice)
+                && quarterlyPrice.equals(other.quarterlyPrice)
                 && yearlyPrice.equals(other.yearlyPrice);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.currency, this.monthlyPrice, this.oneTimePrice, this.yearlyPrice);
+        return Objects.hash(this.currency, this.monthlyPrice, this.oneTimePrice, this.quarterlyPrice, this.yearlyPrice);
     }
 
     @java.lang.Override
@@ -117,6 +127,10 @@ public final class PlanCurrencyPricesResponseData {
 
         _FinalStage oneTimePrice(BillingPriceResponseData oneTimePrice);
 
+        _FinalStage quarterlyPrice(Optional<BillingPriceResponseData> quarterlyPrice);
+
+        _FinalStage quarterlyPrice(BillingPriceResponseData quarterlyPrice);
+
         _FinalStage yearlyPrice(Optional<BillingPriceResponseData> yearlyPrice);
 
         _FinalStage yearlyPrice(BillingPriceResponseData yearlyPrice);
@@ -127,6 +141,8 @@ public final class PlanCurrencyPricesResponseData {
         private String currency;
 
         private Optional<BillingPriceResponseData> yearlyPrice = Optional.empty();
+
+        private Optional<BillingPriceResponseData> quarterlyPrice = Optional.empty();
 
         private Optional<BillingPriceResponseData> oneTimePrice = Optional.empty();
 
@@ -142,6 +158,7 @@ public final class PlanCurrencyPricesResponseData {
             currency(other.getCurrency());
             monthlyPrice(other.getMonthlyPrice());
             oneTimePrice(other.getOneTimePrice());
+            quarterlyPrice(other.getQuarterlyPrice());
             yearlyPrice(other.getYearlyPrice());
             return this;
         }
@@ -163,6 +180,19 @@ public final class PlanCurrencyPricesResponseData {
         @JsonSetter(value = "yearly_price", nulls = Nulls.SKIP)
         public _FinalStage yearlyPrice(Optional<BillingPriceResponseData> yearlyPrice) {
             this.yearlyPrice = yearlyPrice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyPrice(BillingPriceResponseData quarterlyPrice) {
+            this.quarterlyPrice = Optional.ofNullable(quarterlyPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPrice(Optional<BillingPriceResponseData> quarterlyPrice) {
+            this.quarterlyPrice = quarterlyPrice;
             return this;
         }
 
@@ -195,7 +225,7 @@ public final class PlanCurrencyPricesResponseData {
         @java.lang.Override
         public PlanCurrencyPricesResponseData build() {
             return new PlanCurrencyPricesResponseData(
-                    currency, monthlyPrice, oneTimePrice, yearlyPrice, additionalProperties);
+                    currency, monthlyPrice, oneTimePrice, quarterlyPrice, yearlyPrice, additionalProperties);
         }
 
         @java.lang.Override

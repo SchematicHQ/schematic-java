@@ -40,6 +40,10 @@ public final class UpsertBillingProductRequestBody {
 
     private final Optional<String> oneTimePriceId;
 
+    private final Optional<Long> quarterlyPrice;
+
+    private final Optional<String> quarterlyPriceId;
+
     private final Optional<Long> trialDays;
 
     private final Optional<Long> yearlyPrice;
@@ -58,6 +62,8 @@ public final class UpsertBillingProductRequestBody {
             Optional<String> monthlyPriceId,
             Optional<Long> oneTimePrice,
             Optional<String> oneTimePriceId,
+            Optional<Long> quarterlyPrice,
+            Optional<String> quarterlyPriceId,
             Optional<Long> trialDays,
             Optional<Long> yearlyPrice,
             Optional<String> yearlyPriceId,
@@ -71,6 +77,8 @@ public final class UpsertBillingProductRequestBody {
         this.monthlyPriceId = monthlyPriceId;
         this.oneTimePrice = oneTimePrice;
         this.oneTimePriceId = oneTimePriceId;
+        this.quarterlyPrice = quarterlyPrice;
+        this.quarterlyPriceId = quarterlyPriceId;
         this.trialDays = trialDays;
         this.yearlyPrice = yearlyPrice;
         this.yearlyPriceId = yearlyPriceId;
@@ -122,6 +130,16 @@ public final class UpsertBillingProductRequestBody {
         return oneTimePriceId;
     }
 
+    @JsonProperty("quarterly_price")
+    public Optional<Long> getQuarterlyPrice() {
+        return quarterlyPrice;
+    }
+
+    @JsonProperty("quarterly_price_id")
+    public Optional<String> getQuarterlyPriceId() {
+        return quarterlyPriceId;
+    }
+
     @JsonProperty("trial_days")
     public Optional<Long> getTrialDays() {
         return trialDays;
@@ -158,6 +176,8 @@ public final class UpsertBillingProductRequestBody {
                 && monthlyPriceId.equals(other.monthlyPriceId)
                 && oneTimePrice.equals(other.oneTimePrice)
                 && oneTimePriceId.equals(other.oneTimePriceId)
+                && quarterlyPrice.equals(other.quarterlyPrice)
+                && quarterlyPriceId.equals(other.quarterlyPriceId)
                 && trialDays.equals(other.trialDays)
                 && yearlyPrice.equals(other.yearlyPrice)
                 && yearlyPriceId.equals(other.yearlyPriceId);
@@ -175,6 +195,8 @@ public final class UpsertBillingProductRequestBody {
                 this.monthlyPriceId,
                 this.oneTimePrice,
                 this.oneTimePriceId,
+                this.quarterlyPrice,
+                this.quarterlyPriceId,
                 this.trialDays,
                 this.yearlyPrice,
                 this.yearlyPriceId);
@@ -234,6 +256,14 @@ public final class UpsertBillingProductRequestBody {
 
         _FinalStage oneTimePriceId(String oneTimePriceId);
 
+        _FinalStage quarterlyPrice(Optional<Long> quarterlyPrice);
+
+        _FinalStage quarterlyPrice(Long quarterlyPrice);
+
+        _FinalStage quarterlyPriceId(Optional<String> quarterlyPriceId);
+
+        _FinalStage quarterlyPriceId(String quarterlyPriceId);
+
         _FinalStage trialDays(Optional<Long> trialDays);
 
         _FinalStage trialDays(Long trialDays);
@@ -258,6 +288,10 @@ public final class UpsertBillingProductRequestBody {
         private Optional<Long> yearlyPrice = Optional.empty();
 
         private Optional<Long> trialDays = Optional.empty();
+
+        private Optional<String> quarterlyPriceId = Optional.empty();
+
+        private Optional<Long> quarterlyPrice = Optional.empty();
 
         private Optional<String> oneTimePriceId = Optional.empty();
 
@@ -289,6 +323,8 @@ public final class UpsertBillingProductRequestBody {
             monthlyPriceId(other.getMonthlyPriceId());
             oneTimePrice(other.getOneTimePrice());
             oneTimePriceId(other.getOneTimePriceId());
+            quarterlyPrice(other.getQuarterlyPrice());
+            quarterlyPriceId(other.getQuarterlyPriceId());
             trialDays(other.getTrialDays());
             yearlyPrice(other.getYearlyPrice());
             yearlyPriceId(other.getYearlyPriceId());
@@ -345,6 +381,32 @@ public final class UpsertBillingProductRequestBody {
         @JsonSetter(value = "trial_days", nulls = Nulls.SKIP)
         public _FinalStage trialDays(Optional<Long> trialDays) {
             this.trialDays = trialDays;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyPriceId(String quarterlyPriceId) {
+            this.quarterlyPriceId = Optional.ofNullable(quarterlyPriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price_id", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPriceId(Optional<String> quarterlyPriceId) {
+            this.quarterlyPriceId = quarterlyPriceId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyPrice(Long quarterlyPrice) {
+            this.quarterlyPrice = Optional.ofNullable(quarterlyPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPrice(Optional<Long> quarterlyPrice) {
+            this.quarterlyPrice = quarterlyPrice;
             return this;
         }
 
@@ -451,6 +513,8 @@ public final class UpsertBillingProductRequestBody {
                     monthlyPriceId,
                     oneTimePrice,
                     oneTimePriceId,
+                    quarterlyPrice,
+                    quarterlyPriceId,
                     trialDays,
                     yearlyPrice,
                     yearlyPriceId,

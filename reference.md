@@ -2332,6 +2332,14 @@ client.billing().upsertBillingPrice(
 <dl>
 <dd>
 
+**intervalCount:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **isActive:** `Boolean` 
     
 </dd>
@@ -9589,6 +9597,7 @@ client.entitlements().listFeatureUsage(
         )
         .companyId("company_id")
         .includeUsageAggregation(true)
+        .managedBy(BillingProviderType.ORB)
         .q("q")
         .withoutNegativeEntitlements(true)
         .limit(1000000L)
@@ -9634,6 +9643,14 @@ client.entitlements().listFeatureUsage(
 <dd>
 
 **includeUsageAggregation:** `Optional<Boolean>` — Include time-bucketed usage aggregation (today, this week, this month, billing period) for credit-based entitlements. Defaults to false for performance.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**managedBy:** `Optional<BillingProviderType>` — Filter for features managed by a billing provider, or by Schematic (no billing provider)
     
 </dd>
 </dl>
@@ -9779,6 +9796,7 @@ client.entitlements().countFeatureUsage(
         )
         .companyId("company_id")
         .includeUsageAggregation(true)
+        .managedBy(BillingProviderType.ORB)
         .q("q")
         .withoutNegativeEntitlements(true)
         .limit(1000000L)
@@ -9824,6 +9842,14 @@ client.entitlements().countFeatureUsage(
 <dd>
 
 **includeUsageAggregation:** `Optional<Boolean>` — Include time-bucketed usage aggregation (today, this week, this month, billing period) for credit-based entitlements. Defaults to false for performance.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**managedBy:** `Optional<BillingProviderType>` — Filter for features managed by a billing provider, or by Schematic (no billing provider)
     
 </dd>
 </dl>
@@ -10325,6 +10351,38 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
+**quarterlyMeteredPriceId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyPriceTiers:** `Optional<List<CreatePriceTierRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyUnitPrice:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyUnitPriceDecimal:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **softLimit:** `Optional<Long>` 
     
 </dd>
@@ -10604,6 +10662,38 @@ client.entitlements().updatePlanEntitlement(
 <dd>
 
 **priceTiers:** `Optional<List<CreatePriceTierRequestBody>>` — Use MonthlyPriceTiers or YearlyPriceTiers instead
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyMeteredPriceId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyPriceTiers:** `Optional<List<CreatePriceTierRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyUnitPrice:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyUnitPriceDecimal:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -10925,6 +11015,38 @@ client.entitlements().upsertPlanEntitlementForBillingProduct(
 <dd>
 
 **priceTiers:** `Optional<List<CreatePriceTierRequestBody>>` — Use MonthlyPriceTiers or YearlyPriceTiers instead
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyMeteredPriceId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyPriceTiers:** `Optional<List<CreatePriceTierRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyUnitPrice:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quarterlyUnitPriceDecimal:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -13051,6 +13173,260 @@ client.components().previewComponentData(
 <dd>
 
 **componentId:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## planbundle
+<details><summary><code>client.planbundle.createCustomPlanBundle(request) -> CreateCustomPlanBundleResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planbundle().createCustomPlanBundle(
+    CreateCustomPlanBundleRequestBody
+        .builder()
+        .entitlements(
+            Arrays.asList(
+                PlanBundleEntitlementRequestBody
+                    .builder()
+                    .action(PlanBundleAction.CREATE)
+                    .build()
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProduct:** `Optional<UpsertBillingProductRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**entitlements:** `List<PlanBundleEntitlementRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**plan:** `Optional<CreateCustomPlanBundlePlanRequestBody>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.planbundle.createPlanBundle(request) -> CreatePlanBundleResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planbundle().createPlanBundle(
+    CreatePlanBundleRequestBody
+        .builder()
+        .entitlements(
+            Arrays.asList(
+                PlanBundleEntitlementRequestBody
+                    .builder()
+                    .action(PlanBundleAction.CREATE)
+                    .build()
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProduct:** `Optional<UpsertBillingProductRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditGrants:** `Optional<List<PlanBundleCreditGrantRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**entitlements:** `List<PlanBundleEntitlementRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**plan:** `Optional<CreatePlanRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**traits:** `Optional<List<UpdatePlanTraitTraitRequestBody>>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.planbundle.updatePlanBundle(planBundleId, request) -> UpdatePlanBundleResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planbundle().updatePlanBundle(
+    "plan_bundle_id",
+    UpdatePlanBundleRequestBody
+        .builder()
+        .entitlements(
+            Arrays.asList(
+                PlanBundleEntitlementRequestBody
+                    .builder()
+                    .action(PlanBundleAction.CREATE)
+                    .build()
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planBundleId:** `String` — plan_bundle_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**billingProduct:** `Optional<UpsertBillingProductRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditGrants:** `Optional<List<PlanBundleCreditGrantRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**entitlements:** `List<PlanBundleEntitlementRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**plan:** `Optional<UpdatePlanRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**traits:** `Optional<List<UpdatePlanTraitTraitRequestBody>>` 
     
 </dd>
 </dl>
@@ -15474,192 +15850,6 @@ client.integrationsapi().uninstallIntegration("integration_id");
 <dd>
 
 **integrationId:** `String` — integration_id
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## planbundle
-<details><summary><code>client.planbundle.createPlanBundle(request) -> CreatePlanBundleResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.planbundle().createPlanBundle(
-    CreatePlanBundleRequestBody
-        .builder()
-        .entitlements(
-            Arrays.asList(
-                PlanBundleEntitlementRequestBody
-                    .builder()
-                    .action(PlanBundleAction.CREATE)
-                    .build()
-            )
-        )
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**billingProduct:** `Optional<UpsertBillingProductRequestBody>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**creditGrants:** `Optional<List<PlanBundleCreditGrantRequestBody>>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**entitlements:** `List<PlanBundleEntitlementRequestBody>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**plan:** `Optional<CreatePlanRequestBody>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**traits:** `Optional<List<UpdatePlanTraitTraitRequestBody>>` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.planbundle.updatePlanBundle(planBundleId, request) -> UpdatePlanBundleResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.planbundle().updatePlanBundle(
-    "plan_bundle_id",
-    UpdatePlanBundleRequestBody
-        .builder()
-        .entitlements(
-            Arrays.asList(
-                PlanBundleEntitlementRequestBody
-                    .builder()
-                    .action(PlanBundleAction.CREATE)
-                    .build()
-            )
-        )
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**planBundleId:** `String` — plan_bundle_id
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**billingProduct:** `Optional<UpsertBillingProductRequestBody>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**creditGrants:** `Optional<List<PlanBundleCreditGrantRequestBody>>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**entitlements:** `List<PlanBundleEntitlementRequestBody>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**plan:** `Optional<UpdatePlanRequestBody>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**planVersionId:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**traits:** `Optional<List<UpdatePlanTraitTraitRequestBody>>` 
     
 </dd>
 </dl>

@@ -924,6 +924,10 @@ public class AsyncRawEntitlementsClient {
                     request.getIncludeUsageAggregation().get(),
                     false);
         }
+        if (request.getManagedBy().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "managed_by", request.getManagedBy().get(), false);
+        }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -1144,6 +1148,10 @@ public class AsyncRawEntitlementsClient {
                     "include_usage_aggregation",
                     request.getIncludeUsageAggregation().get(),
                     false);
+        }
+        if (request.getManagedBy().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "managed_by", request.getManagedBy().get(), false);
         }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);

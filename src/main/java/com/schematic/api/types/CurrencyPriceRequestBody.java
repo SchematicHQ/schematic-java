@@ -30,6 +30,12 @@ public final class CurrencyPriceRequestBody {
 
     private final Optional<String> monthlyUnitPriceDecimal;
 
+    private final Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers;
+
+    private final Optional<Long> quarterlyUnitPrice;
+
+    private final Optional<String> quarterlyUnitPriceDecimal;
+
     private final Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers;
 
     private final Optional<Long> yearlyUnitPrice;
@@ -43,6 +49,9 @@ public final class CurrencyPriceRequestBody {
             Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers,
             Optional<Long> monthlyUnitPrice,
             Optional<String> monthlyUnitPriceDecimal,
+            Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers,
+            Optional<Long> quarterlyUnitPrice,
+            Optional<String> quarterlyUnitPriceDecimal,
             Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers,
             Optional<Long> yearlyUnitPrice,
             Optional<String> yearlyUnitPriceDecimal,
@@ -51,6 +60,9 @@ public final class CurrencyPriceRequestBody {
         this.monthlyPriceTiers = monthlyPriceTiers;
         this.monthlyUnitPrice = monthlyUnitPrice;
         this.monthlyUnitPriceDecimal = monthlyUnitPriceDecimal;
+        this.quarterlyPriceTiers = quarterlyPriceTiers;
+        this.quarterlyUnitPrice = quarterlyUnitPrice;
+        this.quarterlyUnitPriceDecimal = quarterlyUnitPriceDecimal;
         this.yearlyPriceTiers = yearlyPriceTiers;
         this.yearlyUnitPrice = yearlyUnitPrice;
         this.yearlyUnitPriceDecimal = yearlyUnitPriceDecimal;
@@ -75,6 +87,21 @@ public final class CurrencyPriceRequestBody {
     @JsonProperty("monthly_unit_price_decimal")
     public Optional<String> getMonthlyUnitPriceDecimal() {
         return monthlyUnitPriceDecimal;
+    }
+
+    @JsonProperty("quarterly_price_tiers")
+    public Optional<List<CreatePriceTierRequestBody>> getQuarterlyPriceTiers() {
+        return quarterlyPriceTiers;
+    }
+
+    @JsonProperty("quarterly_unit_price")
+    public Optional<Long> getQuarterlyUnitPrice() {
+        return quarterlyUnitPrice;
+    }
+
+    @JsonProperty("quarterly_unit_price_decimal")
+    public Optional<String> getQuarterlyUnitPriceDecimal() {
+        return quarterlyUnitPriceDecimal;
     }
 
     @JsonProperty("yearly_price_tiers")
@@ -108,6 +135,9 @@ public final class CurrencyPriceRequestBody {
                 && monthlyPriceTiers.equals(other.monthlyPriceTiers)
                 && monthlyUnitPrice.equals(other.monthlyUnitPrice)
                 && monthlyUnitPriceDecimal.equals(other.monthlyUnitPriceDecimal)
+                && quarterlyPriceTiers.equals(other.quarterlyPriceTiers)
+                && quarterlyUnitPrice.equals(other.quarterlyUnitPrice)
+                && quarterlyUnitPriceDecimal.equals(other.quarterlyUnitPriceDecimal)
                 && yearlyPriceTiers.equals(other.yearlyPriceTiers)
                 && yearlyUnitPrice.equals(other.yearlyUnitPrice)
                 && yearlyUnitPriceDecimal.equals(other.yearlyUnitPriceDecimal);
@@ -120,6 +150,9 @@ public final class CurrencyPriceRequestBody {
                 this.monthlyPriceTiers,
                 this.monthlyUnitPrice,
                 this.monthlyUnitPriceDecimal,
+                this.quarterlyPriceTiers,
+                this.quarterlyUnitPrice,
+                this.quarterlyUnitPriceDecimal,
                 this.yearlyPriceTiers,
                 this.yearlyUnitPrice,
                 this.yearlyUnitPriceDecimal);
@@ -159,6 +192,18 @@ public final class CurrencyPriceRequestBody {
 
         _FinalStage monthlyUnitPriceDecimal(String monthlyUnitPriceDecimal);
 
+        _FinalStage quarterlyPriceTiers(Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers);
+
+        _FinalStage quarterlyPriceTiers(List<CreatePriceTierRequestBody> quarterlyPriceTiers);
+
+        _FinalStage quarterlyUnitPrice(Optional<Long> quarterlyUnitPrice);
+
+        _FinalStage quarterlyUnitPrice(Long quarterlyUnitPrice);
+
+        _FinalStage quarterlyUnitPriceDecimal(Optional<String> quarterlyUnitPriceDecimal);
+
+        _FinalStage quarterlyUnitPriceDecimal(String quarterlyUnitPriceDecimal);
+
         _FinalStage yearlyPriceTiers(Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers);
 
         _FinalStage yearlyPriceTiers(List<CreatePriceTierRequestBody> yearlyPriceTiers);
@@ -182,6 +227,12 @@ public final class CurrencyPriceRequestBody {
 
         private Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers = Optional.empty();
 
+        private Optional<String> quarterlyUnitPriceDecimal = Optional.empty();
+
+        private Optional<Long> quarterlyUnitPrice = Optional.empty();
+
+        private Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers = Optional.empty();
+
         private Optional<String> monthlyUnitPriceDecimal = Optional.empty();
 
         private Optional<Long> monthlyUnitPrice = Optional.empty();
@@ -199,6 +250,9 @@ public final class CurrencyPriceRequestBody {
             monthlyPriceTiers(other.getMonthlyPriceTiers());
             monthlyUnitPrice(other.getMonthlyUnitPrice());
             monthlyUnitPriceDecimal(other.getMonthlyUnitPriceDecimal());
+            quarterlyPriceTiers(other.getQuarterlyPriceTiers());
+            quarterlyUnitPrice(other.getQuarterlyUnitPrice());
+            quarterlyUnitPriceDecimal(other.getQuarterlyUnitPriceDecimal());
             yearlyPriceTiers(other.getYearlyPriceTiers());
             yearlyUnitPrice(other.getYearlyUnitPrice());
             yearlyUnitPriceDecimal(other.getYearlyUnitPriceDecimal());
@@ -252,6 +306,45 @@ public final class CurrencyPriceRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage quarterlyUnitPriceDecimal(String quarterlyUnitPriceDecimal) {
+            this.quarterlyUnitPriceDecimal = Optional.ofNullable(quarterlyUnitPriceDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_unit_price_decimal", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyUnitPriceDecimal(Optional<String> quarterlyUnitPriceDecimal) {
+            this.quarterlyUnitPriceDecimal = quarterlyUnitPriceDecimal;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyUnitPrice(Long quarterlyUnitPrice) {
+            this.quarterlyUnitPrice = Optional.ofNullable(quarterlyUnitPrice);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_unit_price", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyUnitPrice(Optional<Long> quarterlyUnitPrice) {
+            this.quarterlyUnitPrice = quarterlyUnitPrice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quarterlyPriceTiers(List<CreatePriceTierRequestBody> quarterlyPriceTiers) {
+            this.quarterlyPriceTiers = Optional.ofNullable(quarterlyPriceTiers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price_tiers", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPriceTiers(Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers) {
+            this.quarterlyPriceTiers = quarterlyPriceTiers;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage monthlyUnitPriceDecimal(String monthlyUnitPriceDecimal) {
             this.monthlyUnitPriceDecimal = Optional.ofNullable(monthlyUnitPriceDecimal);
             return this;
@@ -297,6 +390,9 @@ public final class CurrencyPriceRequestBody {
                     monthlyPriceTiers,
                     monthlyUnitPrice,
                     monthlyUnitPriceDecimal,
+                    quarterlyPriceTiers,
+                    quarterlyUnitPrice,
+                    quarterlyUnitPriceDecimal,
                     yearlyPriceTiers,
                     yearlyUnitPrice,
                     yearlyUnitPriceDecimal,

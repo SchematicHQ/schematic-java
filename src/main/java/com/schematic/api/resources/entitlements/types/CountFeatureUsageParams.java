@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,8 @@ public final class CountFeatureUsageParams {
 
     private final Optional<Long> limit;
 
+    private final Optional<BillingProviderType> managedBy;
+
     private final Optional<Long> offset;
 
     private final Optional<String> q;
@@ -45,6 +48,7 @@ public final class CountFeatureUsageParams {
             Optional<List<String>> featureIds,
             Optional<Boolean> includeUsageAggregation,
             Optional<Long> limit,
+            Optional<BillingProviderType> managedBy,
             Optional<Long> offset,
             Optional<String> q,
             Optional<Boolean> withoutNegativeEntitlements,
@@ -54,6 +58,7 @@ public final class CountFeatureUsageParams {
         this.featureIds = featureIds;
         this.includeUsageAggregation = includeUsageAggregation;
         this.limit = limit;
+        this.managedBy = managedBy;
         this.offset = offset;
         this.q = q;
         this.withoutNegativeEntitlements = withoutNegativeEntitlements;
@@ -92,6 +97,14 @@ public final class CountFeatureUsageParams {
     }
 
     /**
+     * @return Filter for features managed by a billing provider, or by Schematic (no billing provider)
+     */
+    @JsonProperty("managed_by")
+    public Optional<BillingProviderType> getManagedBy() {
+        return managedBy;
+    }
+
+    /**
      * @return Page offset (default 0)
      */
     @JsonProperty("offset")
@@ -126,6 +139,7 @@ public final class CountFeatureUsageParams {
                 && featureIds.equals(other.featureIds)
                 && includeUsageAggregation.equals(other.includeUsageAggregation)
                 && limit.equals(other.limit)
+                && managedBy.equals(other.managedBy)
                 && offset.equals(other.offset)
                 && q.equals(other.q)
                 && withoutNegativeEntitlements.equals(other.withoutNegativeEntitlements);
@@ -139,6 +153,7 @@ public final class CountFeatureUsageParams {
                 this.featureIds,
                 this.includeUsageAggregation,
                 this.limit,
+                this.managedBy,
                 this.offset,
                 this.q,
                 this.withoutNegativeEntitlements);
@@ -165,6 +180,8 @@ public final class CountFeatureUsageParams {
 
         private Optional<Long> limit = Optional.empty();
 
+        private Optional<BillingProviderType> managedBy = Optional.empty();
+
         private Optional<Long> offset = Optional.empty();
 
         private Optional<String> q = Optional.empty();
@@ -182,6 +199,7 @@ public final class CountFeatureUsageParams {
             featureIds(other.getFeatureIds());
             includeUsageAggregation(other.getIncludeUsageAggregation());
             limit(other.getLimit());
+            managedBy(other.getManagedBy());
             offset(other.getOffset());
             q(other.getQ());
             withoutNegativeEntitlements(other.getWithoutNegativeEntitlements());
@@ -250,6 +268,20 @@ public final class CountFeatureUsageParams {
         }
 
         /**
+         * <p>Filter for features managed by a billing provider, or by Schematic (no billing provider)</p>
+         */
+        @JsonSetter(value = "managed_by", nulls = Nulls.SKIP)
+        public Builder managedBy(Optional<BillingProviderType> managedBy) {
+            this.managedBy = managedBy;
+            return this;
+        }
+
+        public Builder managedBy(BillingProviderType managedBy) {
+            this.managedBy = Optional.ofNullable(managedBy);
+            return this;
+        }
+
+        /**
          * <p>Page offset (default 0)</p>
          */
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
@@ -292,6 +324,7 @@ public final class CountFeatureUsageParams {
                     featureIds,
                     includeUsageAggregation,
                     limit,
+                    managedBy,
                     offset,
                     q,
                     withoutNegativeEntitlements,

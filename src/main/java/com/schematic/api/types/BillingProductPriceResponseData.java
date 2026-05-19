@@ -32,6 +32,8 @@ public final class BillingProductPriceResponseData {
 
     private final BillingProductPriceInterval interval;
 
+    private final long intervalCount;
+
     private final boolean isActive;
 
     private final Optional<String> meterId;
@@ -64,6 +66,7 @@ public final class BillingProductPriceResponseData {
             String currency,
             String id,
             BillingProductPriceInterval interval,
+            long intervalCount,
             boolean isActive,
             Optional<String> meterId,
             Optional<String> nickname,
@@ -82,6 +85,7 @@ public final class BillingProductPriceResponseData {
         this.currency = currency;
         this.id = id;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.isActive = isActive;
         this.meterId = meterId;
         this.nickname = nickname;
@@ -120,6 +124,11 @@ public final class BillingProductPriceResponseData {
     @JsonProperty("interval")
     public BillingProductPriceInterval getInterval() {
         return interval;
+    }
+
+    @JsonProperty("interval_count")
+    public long getIntervalCount() {
+        return intervalCount;
     }
 
     @JsonProperty("is_active")
@@ -199,6 +208,7 @@ public final class BillingProductPriceResponseData {
                 && currency.equals(other.currency)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
+                && intervalCount == other.intervalCount
                 && isActive == other.isActive
                 && meterId.equals(other.meterId)
                 && nickname.equals(other.nickname)
@@ -221,6 +231,7 @@ public final class BillingProductPriceResponseData {
                 this.currency,
                 this.id,
                 this.interval,
+                this.intervalCount,
                 this.isActive,
                 this.meterId,
                 this.nickname,
@@ -263,7 +274,11 @@ public final class BillingProductPriceResponseData {
     }
 
     public interface IntervalStage {
-        IsActiveStage interval(@NotNull BillingProductPriceInterval interval);
+        IntervalCountStage interval(@NotNull BillingProductPriceInterval interval);
+    }
+
+    public interface IntervalCountStage {
+        IsActiveStage intervalCount(long intervalCount);
     }
 
     public interface IsActiveStage {
@@ -329,6 +344,7 @@ public final class BillingProductPriceResponseData {
                     CurrencyStage,
                     IdStage,
                     IntervalStage,
+                    IntervalCountStage,
                     IsActiveStage,
                     PackageSizeStage,
                     PriceStage,
@@ -347,6 +363,8 @@ public final class BillingProductPriceResponseData {
         private String id;
 
         private BillingProductPriceInterval interval;
+
+        private long intervalCount;
 
         private boolean isActive;
 
@@ -384,6 +402,7 @@ public final class BillingProductPriceResponseData {
             currency(other.getCurrency());
             id(other.getId());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             isActive(other.getIsActive());
             meterId(other.getMeterId());
             nickname(other.getNickname());
@@ -429,8 +448,15 @@ public final class BillingProductPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public IsActiveStage interval(@NotNull BillingProductPriceInterval interval) {
+        public IntervalCountStage interval(@NotNull BillingProductPriceInterval interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("interval_count")
+        public IsActiveStage intervalCount(long intervalCount) {
+            this.intervalCount = intervalCount;
             return this;
         }
 
@@ -550,6 +576,7 @@ public final class BillingProductPriceResponseData {
                     currency,
                     id,
                     interval,
+                    intervalCount,
                     isActive,
                     meterId,
                     nickname,
