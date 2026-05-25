@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class UpsertBillingProductRequestBody {
     private final Optional<String> billingProductId;
 
+    private final Optional<BillingStrategy> billingStrategy;
+
     private final ChargeType chargeType;
 
     private final Optional<String> currency;
@@ -54,6 +56,7 @@ public final class UpsertBillingProductRequestBody {
 
     private UpsertBillingProductRequestBody(
             Optional<String> billingProductId,
+            Optional<BillingStrategy> billingStrategy,
             ChargeType chargeType,
             Optional<String> currency,
             Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices,
@@ -69,6 +72,7 @@ public final class UpsertBillingProductRequestBody {
             Optional<String> yearlyPriceId,
             Map<String, Object> additionalProperties) {
         this.billingProductId = billingProductId;
+        this.billingStrategy = billingStrategy;
         this.chargeType = chargeType;
         this.currency = currency;
         this.currencyPrices = currencyPrices;
@@ -88,6 +92,11 @@ public final class UpsertBillingProductRequestBody {
     @JsonProperty("billing_product_id")
     public Optional<String> getBillingProductId() {
         return billingProductId;
+    }
+
+    @JsonProperty("billing_strategy")
+    public Optional<BillingStrategy> getBillingStrategy() {
+        return billingStrategy;
     }
 
     @JsonProperty("charge_type")
@@ -168,6 +177,7 @@ public final class UpsertBillingProductRequestBody {
 
     private boolean equalTo(UpsertBillingProductRequestBody other) {
         return billingProductId.equals(other.billingProductId)
+                && billingStrategy.equals(other.billingStrategy)
                 && chargeType.equals(other.chargeType)
                 && currency.equals(other.currency)
                 && currencyPrices.equals(other.currencyPrices)
@@ -187,6 +197,7 @@ public final class UpsertBillingProductRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.billingProductId,
+                this.billingStrategy,
                 this.chargeType,
                 this.currency,
                 this.currencyPrices,
@@ -231,6 +242,10 @@ public final class UpsertBillingProductRequestBody {
         _FinalStage billingProductId(Optional<String> billingProductId);
 
         _FinalStage billingProductId(String billingProductId);
+
+        _FinalStage billingStrategy(Optional<BillingStrategy> billingStrategy);
+
+        _FinalStage billingStrategy(BillingStrategy billingStrategy);
 
         _FinalStage currency(Optional<String> currency);
 
@@ -305,6 +320,8 @@ public final class UpsertBillingProductRequestBody {
 
         private Optional<String> currency = Optional.empty();
 
+        private Optional<BillingStrategy> billingStrategy = Optional.empty();
+
         private Optional<String> billingProductId = Optional.empty();
 
         @JsonAnySetter
@@ -315,6 +332,7 @@ public final class UpsertBillingProductRequestBody {
         @java.lang.Override
         public Builder from(UpsertBillingProductRequestBody other) {
             billingProductId(other.getBillingProductId());
+            billingStrategy(other.getBillingStrategy());
             chargeType(other.getChargeType());
             currency(other.getCurrency());
             currencyPrices(other.getCurrencyPrices());
@@ -489,6 +507,19 @@ public final class UpsertBillingProductRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage billingStrategy(BillingStrategy billingStrategy) {
+            this.billingStrategy = Optional.ofNullable(billingStrategy);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_strategy", nulls = Nulls.SKIP)
+        public _FinalStage billingStrategy(Optional<BillingStrategy> billingStrategy) {
+            this.billingStrategy = billingStrategy;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingProductId(String billingProductId) {
             this.billingProductId = Optional.ofNullable(billingProductId);
             return this;
@@ -505,6 +536,7 @@ public final class UpsertBillingProductRequestBody {
         public UpsertBillingProductRequestBody build() {
             return new UpsertBillingProductRequestBody(
                     billingProductId,
+                    billingStrategy,
                     chargeType,
                     currency,
                     currencyPrices,

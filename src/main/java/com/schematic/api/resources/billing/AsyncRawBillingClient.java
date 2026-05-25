@@ -38,6 +38,7 @@ import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
+import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
@@ -1145,6 +1146,94 @@ public class AsyncRawBillingClient {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBodyString, UpsertPaymentMethodResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<DeletePaymentMethodByExternalIdResponse>>
+            deletePaymentMethodByExternalId(String billingId) {
+        return deletePaymentMethodByExternalId(billingId, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<DeletePaymentMethodByExternalIdResponse>>
+            deletePaymentMethodByExternalId(String billingId, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/payment-methods")
+                .addPathSegment(billingId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<BaseSchematicHttpResponse<DeletePaymentMethodByExternalIdResponse>> future =
+                new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, DeletePaymentMethodByExternalIdResponse.class),
                                 response));
                         return;
                     }

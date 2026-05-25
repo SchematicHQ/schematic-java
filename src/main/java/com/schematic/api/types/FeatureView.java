@@ -60,6 +60,8 @@ public final class FeatureView {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<String> usageLimitTraitId;
+
     private final Map<String, Object> additionalProperties;
 
     private FeatureView(
@@ -81,6 +83,7 @@ public final class FeatureView {
             Optional<EntityTraitDefinitionResponseData> trait,
             Optional<String> traitId,
             OffsetDateTime updatedAt,
+            Optional<String> usageLimitTraitId,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.billingLinkedResource = billingLinkedResource;
@@ -100,6 +103,7 @@ public final class FeatureView {
         this.trait = trait;
         this.traitId = traitId;
         this.updatedAt = updatedAt;
+        this.usageLimitTraitId = usageLimitTraitId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -193,6 +197,11 @@ public final class FeatureView {
         return updatedAt;
     }
 
+    @JsonProperty("usage_limit_trait_id")
+    public Optional<String> getUsageLimitTraitId() {
+        return usageLimitTraitId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -222,7 +231,8 @@ public final class FeatureView {
                 && singularName.equals(other.singularName)
                 && trait.equals(other.trait)
                 && traitId.equals(other.traitId)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && usageLimitTraitId.equals(other.usageLimitTraitId);
     }
 
     @java.lang.Override
@@ -245,7 +255,8 @@ public final class FeatureView {
                 this.singularName,
                 this.trait,
                 this.traitId,
-                this.updatedAt);
+                this.updatedAt,
+                this.usageLimitTraitId);
     }
 
     @java.lang.Override
@@ -341,6 +352,10 @@ public final class FeatureView {
         _FinalStage traitId(Optional<String> traitId);
 
         _FinalStage traitId(String traitId);
+
+        _FinalStage usageLimitTraitId(Optional<String> usageLimitTraitId);
+
+        _FinalStage usageLimitTraitId(String usageLimitTraitId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -369,6 +384,8 @@ public final class FeatureView {
         private String name;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<String> usageLimitTraitId = Optional.empty();
 
         private Optional<String> traitId = Optional.empty();
 
@@ -415,6 +432,7 @@ public final class FeatureView {
             trait(other.getTrait());
             traitId(other.getTraitId());
             updatedAt(other.getUpdatedAt());
+            usageLimitTraitId(other.getUsageLimitTraitId());
             return this;
         }
 
@@ -471,6 +489,19 @@ public final class FeatureView {
         @JsonSetter("updated_at")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage usageLimitTraitId(String usageLimitTraitId) {
+            this.usageLimitTraitId = Optional.ofNullable(usageLimitTraitId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "usage_limit_trait_id", nulls = Nulls.SKIP)
+        public _FinalStage usageLimitTraitId(Optional<String> usageLimitTraitId) {
+            this.usageLimitTraitId = usageLimitTraitId;
             return this;
         }
 
@@ -647,6 +678,7 @@ public final class FeatureView {
                     trait,
                     traitId,
                     updatedAt,
+                    usageLimitTraitId,
                     additionalProperties);
         }
 

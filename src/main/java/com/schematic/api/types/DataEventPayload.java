@@ -25,11 +25,15 @@ import org.jetbrains.annotations.NotNull;
 public final class DataEventPayload {
     private final String apiKey;
 
+    private final Optional<Boolean> backfill;
+
     private final Optional<Map<String, JsonNode>> body;
 
     private final Optional<String> idempotencyKey;
 
     private final Optional<OffsetDateTime> sentAt;
+
+    private final Optional<Boolean> trustedClientClock;
 
     private final EventType type;
 
@@ -37,15 +41,19 @@ public final class DataEventPayload {
 
     private DataEventPayload(
             String apiKey,
+            Optional<Boolean> backfill,
             Optional<Map<String, JsonNode>> body,
             Optional<String> idempotencyKey,
             Optional<OffsetDateTime> sentAt,
+            Optional<Boolean> trustedClientClock,
             EventType type,
             Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
+        this.backfill = backfill;
         this.body = body;
         this.idempotencyKey = idempotencyKey;
         this.sentAt = sentAt;
+        this.trustedClientClock = trustedClientClock;
         this.type = type;
         this.additionalProperties = additionalProperties;
     }
@@ -53,6 +61,11 @@ public final class DataEventPayload {
     @JsonProperty("api_key")
     public String getApiKey() {
         return apiKey;
+    }
+
+    @JsonProperty("backfill")
+    public Optional<Boolean> getBackfill() {
+        return backfill;
     }
 
     @JsonProperty("body")
@@ -68,6 +81,11 @@ public final class DataEventPayload {
     @JsonProperty("sent_at")
     public Optional<OffsetDateTime> getSentAt() {
         return sentAt;
+    }
+
+    @JsonProperty("trusted_client_clock")
+    public Optional<Boolean> getTrustedClientClock() {
+        return trustedClientClock;
     }
 
     @JsonProperty("type")
@@ -88,15 +106,24 @@ public final class DataEventPayload {
 
     private boolean equalTo(DataEventPayload other) {
         return apiKey.equals(other.apiKey)
+                && backfill.equals(other.backfill)
                 && body.equals(other.body)
                 && idempotencyKey.equals(other.idempotencyKey)
                 && sentAt.equals(other.sentAt)
+                && trustedClientClock.equals(other.trustedClientClock)
                 && type.equals(other.type);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKey, this.body, this.idempotencyKey, this.sentAt, this.type);
+        return Objects.hash(
+                this.apiKey,
+                this.backfill,
+                this.body,
+                this.idempotencyKey,
+                this.sentAt,
+                this.trustedClientClock,
+                this.type);
     }
 
     @java.lang.Override
@@ -125,6 +152,10 @@ public final class DataEventPayload {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage backfill(Optional<Boolean> backfill);
+
+        _FinalStage backfill(Boolean backfill);
+
         _FinalStage body(Optional<Map<String, JsonNode>> body);
 
         _FinalStage body(Map<String, JsonNode> body);
@@ -136,6 +167,10 @@ public final class DataEventPayload {
         _FinalStage sentAt(Optional<OffsetDateTime> sentAt);
 
         _FinalStage sentAt(OffsetDateTime sentAt);
+
+        _FinalStage trustedClientClock(Optional<Boolean> trustedClientClock);
+
+        _FinalStage trustedClientClock(Boolean trustedClientClock);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -144,11 +179,15 @@ public final class DataEventPayload {
 
         private EventType type;
 
+        private Optional<Boolean> trustedClientClock = Optional.empty();
+
         private Optional<OffsetDateTime> sentAt = Optional.empty();
 
         private Optional<String> idempotencyKey = Optional.empty();
 
         private Optional<Map<String, JsonNode>> body = Optional.empty();
+
+        private Optional<Boolean> backfill = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -158,9 +197,11 @@ public final class DataEventPayload {
         @java.lang.Override
         public Builder from(DataEventPayload other) {
             apiKey(other.getApiKey());
+            backfill(other.getBackfill());
             body(other.getBody());
             idempotencyKey(other.getIdempotencyKey());
             sentAt(other.getSentAt());
+            trustedClientClock(other.getTrustedClientClock());
             type(other.getType());
             return this;
         }
@@ -176,6 +217,19 @@ public final class DataEventPayload {
         @JsonSetter("type")
         public _FinalStage type(@NotNull EventType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage trustedClientClock(Boolean trustedClientClock) {
+            this.trustedClientClock = Optional.ofNullable(trustedClientClock);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trusted_client_clock", nulls = Nulls.SKIP)
+        public _FinalStage trustedClientClock(Optional<Boolean> trustedClientClock) {
+            this.trustedClientClock = trustedClientClock;
             return this;
         }
 
@@ -219,8 +273,22 @@ public final class DataEventPayload {
         }
 
         @java.lang.Override
+        public _FinalStage backfill(Boolean backfill) {
+            this.backfill = Optional.ofNullable(backfill);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "backfill", nulls = Nulls.SKIP)
+        public _FinalStage backfill(Optional<Boolean> backfill) {
+            this.backfill = backfill;
+            return this;
+        }
+
+        @java.lang.Override
         public DataEventPayload build() {
-            return new DataEventPayload(apiKey, body, idempotencyKey, sentAt, type, additionalProperties);
+            return new DataEventPayload(
+                    apiKey, backfill, body, idempotencyKey, sentAt, trustedClientClock, type, additionalProperties);
         }
 
         @java.lang.Override

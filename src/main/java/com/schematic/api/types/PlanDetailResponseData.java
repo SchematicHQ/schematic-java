@@ -32,6 +32,8 @@ public final class PlanDetailResponseData {
 
     private final Optional<BillingProductDetailResponseData> billingProduct;
 
+    private final BillingStrategy billingStrategy;
+
     private final ChargeType chargeType;
 
     private final long companyCount;
@@ -91,6 +93,7 @@ public final class PlanDetailResponseData {
             Optional<String> audienceType,
             Optional<BillingLinkedResourceResponseData> billingLinkedResource,
             Optional<BillingProductDetailResponseData> billingProduct,
+            BillingStrategy billingStrategy,
             ChargeType chargeType,
             long companyCount,
             Optional<String> companyId,
@@ -122,6 +125,7 @@ public final class PlanDetailResponseData {
         this.audienceType = audienceType;
         this.billingLinkedResource = billingLinkedResource;
         this.billingProduct = billingProduct;
+        this.billingStrategy = billingStrategy;
         this.chargeType = chargeType;
         this.companyCount = companyCount;
         this.companyId = companyId;
@@ -169,6 +173,11 @@ public final class PlanDetailResponseData {
     @JsonProperty("billing_product")
     public Optional<BillingProductDetailResponseData> getBillingProduct() {
         return billingProduct;
+    }
+
+    @JsonProperty("billing_strategy")
+    public BillingStrategy getBillingStrategy() {
+        return billingStrategy;
     }
 
     @JsonProperty("charge_type")
@@ -246,6 +255,9 @@ public final class PlanDetailResponseData {
         return isDefault;
     }
 
+    /**
+     * @return Deprecated: Use BillingStrategy instead
+     */
     @JsonProperty("is_free")
     public boolean getIsFree() {
         return isFree;
@@ -317,6 +329,7 @@ public final class PlanDetailResponseData {
                 && audienceType.equals(other.audienceType)
                 && billingLinkedResource.equals(other.billingLinkedResource)
                 && billingProduct.equals(other.billingProduct)
+                && billingStrategy.equals(other.billingStrategy)
                 && chargeType.equals(other.chargeType)
                 && companyCount == other.companyCount
                 && companyId.equals(other.companyId)
@@ -352,6 +365,7 @@ public final class PlanDetailResponseData {
                 this.audienceType,
                 this.billingLinkedResource,
                 this.billingProduct,
+                this.billingStrategy,
                 this.chargeType,
                 this.companyCount,
                 this.companyId,
@@ -385,14 +399,18 @@ public final class PlanDetailResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static ChargeTypeStage builder() {
+    public static BillingStrategyStage builder() {
         return new Builder();
+    }
+
+    public interface BillingStrategyStage {
+        ChargeTypeStage billingStrategy(@NotNull BillingStrategy billingStrategy);
+
+        Builder from(PlanDetailResponseData other);
     }
 
     public interface ChargeTypeStage {
         CompanyCountStage chargeType(@NotNull ChargeType chargeType);
-
-        Builder from(PlanDetailResponseData other);
     }
 
     public interface CompanyCountStage {
@@ -424,6 +442,9 @@ public final class PlanDetailResponseData {
     }
 
     public interface IsFreeStage {
+        /**
+         * <p>Deprecated: Use BillingStrategy instead</p>
+         */
         IsTrialableStage isFree(boolean isFree);
     }
 
@@ -527,7 +548,8 @@ public final class PlanDetailResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements ChargeTypeStage,
+            implements BillingStrategyStage,
+                    ChargeTypeStage,
                     CompanyCountStage,
                     ControlledByStage,
                     CreatedAtStage,
@@ -541,6 +563,8 @@ public final class PlanDetailResponseData {
                     PlanTypeStage,
                     UpdatedAtStage,
                     _FinalStage {
+        private BillingStrategy billingStrategy;
+
         private ChargeType chargeType;
 
         private long companyCount;
@@ -612,6 +636,7 @@ public final class PlanDetailResponseData {
             audienceType(other.getAudienceType());
             billingLinkedResource(other.getBillingLinkedResource());
             billingProduct(other.getBillingProduct());
+            billingStrategy(other.getBillingStrategy());
             chargeType(other.getChargeType());
             companyCount(other.getCompanyCount());
             companyId(other.getCompanyId());
@@ -638,6 +663,13 @@ public final class PlanDetailResponseData {
             updatedAt(other.getUpdatedAt());
             versions(other.getVersions());
             yearlyPrice(other.getYearlyPrice());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_strategy")
+        public ChargeTypeStage billingStrategy(@NotNull BillingStrategy billingStrategy) {
+            this.billingStrategy = Objects.requireNonNull(billingStrategy, "billingStrategy must not be null");
             return this;
         }
 
@@ -697,6 +729,11 @@ public final class PlanDetailResponseData {
             return this;
         }
 
+        /**
+         * <p>Deprecated: Use BillingStrategy instead</p>
+         * <p>Deprecated: Use BillingStrategy instead</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("is_free")
         public IsTrialableStage isFree(boolean isFree) {
@@ -994,6 +1031,7 @@ public final class PlanDetailResponseData {
                     audienceType,
                     billingLinkedResource,
                     billingProduct,
+                    billingStrategy,
                     chargeType,
                     companyCount,
                     companyId,

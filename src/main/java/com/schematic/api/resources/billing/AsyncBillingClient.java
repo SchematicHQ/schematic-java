@@ -26,6 +26,7 @@ import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
+import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
@@ -195,6 +196,18 @@ public class AsyncBillingClient {
     public CompletableFuture<UpsertPaymentMethodResponse> upsertPaymentMethod(
             CreatePaymentMethodRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.upsertPaymentMethod(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeletePaymentMethodByExternalIdResponse> deletePaymentMethodByExternalId(
+            String billingId) {
+        return this.rawClient.deletePaymentMethodByExternalId(billingId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeletePaymentMethodByExternalIdResponse> deletePaymentMethodByExternalId(
+            String billingId, RequestOptions requestOptions) {
+        return this.rawClient
+                .deletePaymentMethodByExternalId(billingId, requestOptions)
+                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListBillingPricesResponse> listBillingPrices() {

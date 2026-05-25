@@ -2067,6 +2067,46 @@ client.billing().upsertPaymentMethod(
 </dl>
 </details>
 
+<details><summary><code>client.billing.deletePaymentMethodByExternalId(billingId) -> DeletePaymentMethodByExternalIdResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().deletePaymentMethodByExternalId("billing_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingId:** `String` — billing_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.billing.listBillingPrices() -> ListBillingPricesResponse</code></summary>
 <dl>
 <dd>
@@ -4886,6 +4926,192 @@ client.credits().listGrantsForCredit(
 <dd>
 
 **offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.acquireCreditLease(request) -> AcquireCreditLeaseResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().acquireCreditLease(
+    AcquireCreditLeaseRequestBody
+        .builder()
+        .companyId("company_id")
+        .creditTypeId("credit_type_id")
+        .requestedAmount(1.1)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditTypeId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expiresAt:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestedAmount:** `Double` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.extendCreditLease(leaseId, request) -> ExtendCreditLeaseResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().extendCreditLease(
+    "lease_id",
+    ExtendCreditLeaseRequestBody
+        .builder()
+        .additionalAmount(1.1)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**leaseId:** `String` — lease_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**additionalAmount:** `Double` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expiresAt:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.releaseCreditLease(leaseId, request) -> ReleaseCreditLeaseResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().releaseCreditLease(
+    "lease_id",
+    new HashMap<String, JsonNode>() {{
+        put("key", ObjectMappers.JSON_MAPPER.valueToTree("value"));
+    }}
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**leaseId:** `String` — lease_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Map<String, Object>` 
     
 </dd>
 </dl>
