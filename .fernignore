@@ -32,3 +32,6 @@ src/test/java/com/schematic/api/TestSchematic.java
 src/test/java/com/schematic/api/cache/RedisCacheProviderTest.java
 src/test/java/com/schematic/api/datastream/
 src/test/java/com/schematic/webhook/
+.fern/replay.lock
+.fern/replay.yml
+.gitattributes

@@ -3,8 +3,10 @@
  */
 package com.schematic.api.resources.credits;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.credits.requests.AcquireCreditLeaseRequestBody;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrantsRequest;
@@ -16,6 +18,7 @@ import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBo
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
 import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
+import com.schematic.api.resources.credits.requests.ExtendCreditLeaseRequestBody;
 import com.schematic.api.resources.credits.requests.GetEnrichedCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
@@ -27,6 +30,7 @@ import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
 import com.schematic.api.resources.credits.requests.ZeroOutGrantRequestBody;
+import com.schematic.api.resources.credits.types.AcquireCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.CountBillingCreditsGrantsResponse;
 import com.schematic.api.resources.credits.types.CountBillingCreditsResponse;
 import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsResponse;
@@ -39,6 +43,7 @@ import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantRes
 import com.schematic.api.resources.credits.types.CreateCreditBundleResponse;
 import com.schematic.api.resources.credits.types.DeleteBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.DeleteCreditBundleResponse;
+import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
 import com.schematic.api.resources.credits.types.GetEnrichedCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
@@ -51,6 +56,7 @@ import com.schematic.api.resources.credits.types.ListCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.ListCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.ListCreditEventLedgerResponse;
 import com.schematic.api.resources.credits.types.ListGrantsForCreditResponse;
+import com.schematic.api.resources.credits.types.ReleaseCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.SoftDeleteBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantResponse;
@@ -58,6 +64,7 @@ import com.schematic.api.resources.credits.types.UpdateCreditBundleDetailsRespon
 import com.schematic.api.resources.credits.types.ZeroOutGrantResponse;
 import com.schematic.api.types.CreateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.types.UpdateBillingPlanCreditGrantRequestBody;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncCreditsClient {
@@ -329,6 +336,39 @@ public class AsyncCreditsClient {
     public CompletableFuture<ListGrantsForCreditResponse> listGrantsForCredit(
             ListGrantsForCreditRequest request, RequestOptions requestOptions) {
         return this.rawClient.listGrantsForCredit(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<AcquireCreditLeaseResponse> acquireCreditLease(AcquireCreditLeaseRequestBody request) {
+        return this.rawClient.acquireCreditLease(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<AcquireCreditLeaseResponse> acquireCreditLease(
+            AcquireCreditLeaseRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.acquireCreditLease(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ExtendCreditLeaseResponse> extendCreditLease(
+            String leaseId, ExtendCreditLeaseRequestBody request) {
+        return this.rawClient.extendCreditLease(leaseId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ExtendCreditLeaseResponse> extendCreditLease(
+            String leaseId, ExtendCreditLeaseRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .extendCreditLease(leaseId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ReleaseCreditLeaseResponse> releaseCreditLease(
+            String leaseId, Map<String, JsonNode> request) {
+        return this.rawClient.releaseCreditLease(leaseId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ReleaseCreditLeaseResponse> releaseCreditLease(
+            String leaseId, Map<String, JsonNode> request, RequestOptions requestOptions) {
+        return this.rawClient
+                .releaseCreditLease(leaseId, request, requestOptions)
+                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<GetEnrichedCreditLedgerResponse> getEnrichedCreditLedger(

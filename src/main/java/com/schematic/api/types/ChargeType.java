@@ -13,6 +13,8 @@ public final class ChargeType {
 
     public static final ChargeType ONE_TIME = new ChargeType(Value.ONE_TIME, "one_time");
 
+    public static final ChargeType NONE = new ChargeType(Value.NONE, "none");
+
     private final Value value;
 
     private final String string;
@@ -50,6 +52,8 @@ public final class ChargeType {
                 return visitor.visitFree();
             case ONE_TIME:
                 return visitor.visitOneTime();
+            case NONE:
+                return visitor.visitNone();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -65,6 +69,8 @@ public final class ChargeType {
                 return FREE;
             case "one_time":
                 return ONE_TIME;
+            case "none":
+                return NONE;
             default:
                 return new ChargeType(Value.UNKNOWN, value);
         }
@@ -72,6 +78,8 @@ public final class ChargeType {
 
     public enum Value {
         FREE,
+
+        NONE,
 
         ONE_TIME,
 
@@ -82,6 +90,8 @@ public final class ChargeType {
 
     public interface Visitor<T> {
         T visitFree();
+
+        T visitNone();
 
         T visitOneTime();
 

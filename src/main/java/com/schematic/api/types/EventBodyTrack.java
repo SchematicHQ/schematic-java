@@ -26,6 +26,8 @@ public final class EventBodyTrack {
 
     private final String event;
 
+    private final Optional<String> leaseId;
+
     private final Optional<Integer> quantity;
 
     private final Optional<Map<String, JsonNode>> traits;
@@ -37,12 +39,14 @@ public final class EventBodyTrack {
     private EventBodyTrack(
             Optional<Map<String, String>> company,
             String event,
+            Optional<String> leaseId,
             Optional<Integer> quantity,
             Optional<Map<String, JsonNode>> traits,
             Optional<Map<String, String>> user,
             Map<String, Object> additionalProperties) {
         this.company = company;
         this.event = event;
+        this.leaseId = leaseId;
         this.quantity = quantity;
         this.traits = traits;
         this.user = user;
@@ -63,6 +67,14 @@ public final class EventBodyTrack {
     @JsonProperty("event")
     public String getEvent() {
         return event;
+    }
+
+    /**
+     * @return Credit lease ID this track event is redeeming against
+     */
+    @JsonProperty("lease_id")
+    public Optional<String> getLeaseId() {
+        return leaseId;
     }
 
     /**
@@ -103,6 +115,7 @@ public final class EventBodyTrack {
     private boolean equalTo(EventBodyTrack other) {
         return company.equals(other.company)
                 && event.equals(other.event)
+                && leaseId.equals(other.leaseId)
                 && quantity.equals(other.quantity)
                 && traits.equals(other.traits)
                 && user.equals(other.user);
@@ -110,7 +123,7 @@ public final class EventBodyTrack {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.company, this.event, this.quantity, this.traits, this.user);
+        return Objects.hash(this.company, this.event, this.leaseId, this.quantity, this.traits, this.user);
     }
 
     @java.lang.Override
@@ -146,6 +159,13 @@ public final class EventBodyTrack {
         _FinalStage company(Map<String, String> company);
 
         /**
+         * <p>Credit lease ID this track event is redeeming against</p>
+         */
+        _FinalStage leaseId(Optional<String> leaseId);
+
+        _FinalStage leaseId(String leaseId);
+
+        /**
          * <p>Optionally specify the quantity of the event</p>
          */
         _FinalStage quantity(Optional<Integer> quantity);
@@ -177,6 +197,8 @@ public final class EventBodyTrack {
 
         private Optional<Integer> quantity = Optional.empty();
 
+        private Optional<String> leaseId = Optional.empty();
+
         private Optional<Map<String, String>> company = Optional.empty();
 
         @JsonAnySetter
@@ -188,6 +210,7 @@ public final class EventBodyTrack {
         public Builder from(EventBodyTrack other) {
             company(other.getCompany());
             event(other.getEvent());
+            leaseId(other.getLeaseId());
             quantity(other.getQuantity());
             traits(other.getTraits());
             user(other.getUser());
@@ -267,6 +290,26 @@ public final class EventBodyTrack {
         }
 
         /**
+         * <p>Credit lease ID this track event is redeeming against</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage leaseId(String leaseId) {
+            this.leaseId = Optional.ofNullable(leaseId);
+            return this;
+        }
+
+        /**
+         * <p>Credit lease ID this track event is redeeming against</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "lease_id", nulls = Nulls.SKIP)
+        public _FinalStage leaseId(Optional<String> leaseId) {
+            this.leaseId = leaseId;
+            return this;
+        }
+
+        /**
          * <p>Key-value pairs to identify company associated with track event</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -288,7 +331,7 @@ public final class EventBodyTrack {
 
         @java.lang.Override
         public EventBodyTrack build() {
-            return new EventBodyTrack(company, event, quantity, traits, user, additionalProperties);
+            return new EventBodyTrack(company, event, leaseId, quantity, traits, user, additionalProperties);
         }
 
         @java.lang.Override

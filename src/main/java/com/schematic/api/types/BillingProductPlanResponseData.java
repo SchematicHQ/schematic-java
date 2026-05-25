@@ -25,6 +25,8 @@ public final class BillingProductPlanResponseData {
 
     private final String billingProductId;
 
+    private final BillingStrategy billingStrategy;
+
     private final ChargeType chargeType;
 
     private final BillingProviderType controlledBy;
@@ -48,6 +50,7 @@ public final class BillingProductPlanResponseData {
     private BillingProductPlanResponseData(
             String accountId,
             String billingProductId,
+            BillingStrategy billingStrategy,
             ChargeType chargeType,
             BillingProviderType controlledBy,
             String environmentId,
@@ -60,6 +63,7 @@ public final class BillingProductPlanResponseData {
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.billingProductId = billingProductId;
+        this.billingStrategy = billingStrategy;
         this.chargeType = chargeType;
         this.controlledBy = controlledBy;
         this.environmentId = environmentId;
@@ -80,6 +84,11 @@ public final class BillingProductPlanResponseData {
     @JsonProperty("billing_product_id")
     public String getBillingProductId() {
         return billingProductId;
+    }
+
+    @JsonProperty("billing_strategy")
+    public BillingStrategy getBillingStrategy() {
+        return billingStrategy;
     }
 
     @JsonProperty("charge_type")
@@ -141,6 +150,7 @@ public final class BillingProductPlanResponseData {
     private boolean equalTo(BillingProductPlanResponseData other) {
         return accountId.equals(other.accountId)
                 && billingProductId.equals(other.billingProductId)
+                && billingStrategy.equals(other.billingStrategy)
                 && chargeType.equals(other.chargeType)
                 && controlledBy.equals(other.controlledBy)
                 && environmentId.equals(other.environmentId)
@@ -157,6 +167,7 @@ public final class BillingProductPlanResponseData {
         return Objects.hash(
                 this.accountId,
                 this.billingProductId,
+                this.billingStrategy,
                 this.chargeType,
                 this.controlledBy,
                 this.environmentId,
@@ -184,7 +195,11 @@ public final class BillingProductPlanResponseData {
     }
 
     public interface BillingProductIdStage {
-        ChargeTypeStage billingProductId(@NotNull String billingProductId);
+        BillingStrategyStage billingProductId(@NotNull String billingProductId);
+    }
+
+    public interface BillingStrategyStage {
+        ChargeTypeStage billingStrategy(@NotNull BillingStrategy billingStrategy);
     }
 
     public interface ChargeTypeStage {
@@ -235,6 +250,7 @@ public final class BillingProductPlanResponseData {
     public static final class Builder
             implements AccountIdStage,
                     BillingProductIdStage,
+                    BillingStrategyStage,
                     ChargeTypeStage,
                     ControlledByStage,
                     EnvironmentIdStage,
@@ -244,6 +260,8 @@ public final class BillingProductPlanResponseData {
         private String accountId;
 
         private String billingProductId;
+
+        private BillingStrategy billingStrategy;
 
         private ChargeType chargeType;
 
@@ -272,6 +290,7 @@ public final class BillingProductPlanResponseData {
         public Builder from(BillingProductPlanResponseData other) {
             accountId(other.getAccountId());
             billingProductId(other.getBillingProductId());
+            billingStrategy(other.getBillingStrategy());
             chargeType(other.getChargeType());
             controlledBy(other.getControlledBy());
             environmentId(other.getEnvironmentId());
@@ -293,8 +312,15 @@ public final class BillingProductPlanResponseData {
 
         @java.lang.Override
         @JsonSetter("billing_product_id")
-        public ChargeTypeStage billingProductId(@NotNull String billingProductId) {
+        public BillingStrategyStage billingProductId(@NotNull String billingProductId) {
             this.billingProductId = Objects.requireNonNull(billingProductId, "billingProductId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_strategy")
+        public ChargeTypeStage billingStrategy(@NotNull BillingStrategy billingStrategy) {
+            this.billingStrategy = Objects.requireNonNull(billingStrategy, "billingStrategy must not be null");
             return this;
         }
 
@@ -390,6 +416,7 @@ public final class BillingProductPlanResponseData {
             return new BillingProductPlanResponseData(
                     accountId,
                     billingProductId,
+                    billingStrategy,
                     chargeType,
                     controlledBy,
                     environmentId,

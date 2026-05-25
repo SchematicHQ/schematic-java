@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateEventRequestBody.Builder.class)
 public final class CreateEventRequestBody {
+    private final Optional<Boolean> backfill;
+
     private final Optional<EventBody> body;
 
     private final EventType eventType;
@@ -30,19 +32,33 @@ public final class CreateEventRequestBody {
 
     private final Optional<OffsetDateTime> sentAt;
 
+    private final Optional<Boolean> trustedClientClock;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateEventRequestBody(
+            Optional<Boolean> backfill,
             Optional<EventBody> body,
             EventType eventType,
             Optional<String> idempotencyKey,
             Optional<OffsetDateTime> sentAt,
+            Optional<Boolean> trustedClientClock,
             Map<String, Object> additionalProperties) {
+        this.backfill = backfill;
         this.body = body;
         this.eventType = eventType;
         this.idempotencyKey = idempotencyKey;
         this.sentAt = sentAt;
+        this.trustedClientClock = trustedClientClock;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Requires a secret API key, and trusted_client_clock. Import historical data without affecting billing.
+     */
+    @JsonProperty("backfill")
+    public Optional<Boolean> getBackfill() {
+        return backfill;
     }
 
     @JsonProperty("body")
@@ -74,6 +90,14 @@ public final class CreateEventRequestBody {
         return sentAt;
     }
 
+    /**
+     * @return Requires a secret API key and sent_at. Use sent_at as the effective timestamp.
+     */
+    @JsonProperty("trusted_client_clock")
+    public Optional<Boolean> getTrustedClientClock() {
+        return trustedClientClock;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -86,15 +110,18 @@ public final class CreateEventRequestBody {
     }
 
     private boolean equalTo(CreateEventRequestBody other) {
-        return body.equals(other.body)
+        return backfill.equals(other.backfill)
+                && body.equals(other.body)
                 && eventType.equals(other.eventType)
                 && idempotencyKey.equals(other.idempotencyKey)
-                && sentAt.equals(other.sentAt);
+                && sentAt.equals(other.sentAt)
+                && trustedClientClock.equals(other.trustedClientClock);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.body, this.eventType, this.idempotencyKey, this.sentAt);
+        return Objects.hash(
+                this.backfill, this.body, this.eventType, this.idempotencyKey, this.sentAt, this.trustedClientClock);
     }
 
     @java.lang.Override
@@ -122,6 +149,13 @@ public final class CreateEventRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Requires a secret API key, and trusted_client_clock. Import historical data without affecting billing.</p>
+         */
+        _FinalStage backfill(Optional<Boolean> backfill);
+
+        _FinalStage backfill(Boolean backfill);
+
         _FinalStage body(Optional<EventBody> body);
 
         _FinalStage body(EventBody body);
@@ -139,17 +173,28 @@ public final class CreateEventRequestBody {
         _FinalStage sentAt(Optional<OffsetDateTime> sentAt);
 
         _FinalStage sentAt(OffsetDateTime sentAt);
+
+        /**
+         * <p>Requires a secret API key and sent_at. Use sent_at as the effective timestamp.</p>
+         */
+        _FinalStage trustedClientClock(Optional<Boolean> trustedClientClock);
+
+        _FinalStage trustedClientClock(Boolean trustedClientClock);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements EventTypeStage, _FinalStage {
         private EventType eventType;
 
+        private Optional<Boolean> trustedClientClock = Optional.empty();
+
         private Optional<OffsetDateTime> sentAt = Optional.empty();
 
         private Optional<String> idempotencyKey = Optional.empty();
 
         private Optional<EventBody> body = Optional.empty();
+
+        private Optional<Boolean> backfill = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -158,10 +203,12 @@ public final class CreateEventRequestBody {
 
         @java.lang.Override
         public Builder from(CreateEventRequestBody other) {
+            backfill(other.getBackfill());
             body(other.getBody());
             eventType(other.getEventType());
             idempotencyKey(other.getIdempotencyKey());
             sentAt(other.getSentAt());
+            trustedClientClock(other.getTrustedClientClock());
             return this;
         }
 
@@ -174,6 +221,26 @@ public final class CreateEventRequestBody {
         @JsonSetter("event_type")
         public _FinalStage eventType(@NotNull EventType eventType) {
             this.eventType = Objects.requireNonNull(eventType, "eventType must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Requires a secret API key and sent_at. Use sent_at as the effective timestamp.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage trustedClientClock(Boolean trustedClientClock) {
+            this.trustedClientClock = Optional.ofNullable(trustedClientClock);
+            return this;
+        }
+
+        /**
+         * <p>Requires a secret API key and sent_at. Use sent_at as the effective timestamp.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "trusted_client_clock", nulls = Nulls.SKIP)
+        public _FinalStage trustedClientClock(Optional<Boolean> trustedClientClock) {
+            this.trustedClientClock = trustedClientClock;
             return this;
         }
 
@@ -230,9 +297,30 @@ public final class CreateEventRequestBody {
             return this;
         }
 
+        /**
+         * <p>Requires a secret API key, and trusted_client_clock. Import historical data without affecting billing.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage backfill(Boolean backfill) {
+            this.backfill = Optional.ofNullable(backfill);
+            return this;
+        }
+
+        /**
+         * <p>Requires a secret API key, and trusted_client_clock. Import historical data without affecting billing.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "backfill", nulls = Nulls.SKIP)
+        public _FinalStage backfill(Optional<Boolean> backfill) {
+            this.backfill = backfill;
+            return this;
+        }
+
         @java.lang.Override
         public CreateEventRequestBody build() {
-            return new CreateEventRequestBody(body, eventType, idempotencyKey, sentAt, additionalProperties);
+            return new CreateEventRequestBody(
+                    backfill, body, eventType, idempotencyKey, sentAt, trustedClientClock, additionalProperties);
         }
 
         @java.lang.Override
