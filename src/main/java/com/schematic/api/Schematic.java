@@ -556,6 +556,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     public void identify(
             Map<String, String> keys, EventBodyIdentifyCompany company, String name, Map<String, Object> traits) {
+        identify(keys, company, name, traits, null);
+    }
+
+    public void identify(
+            Map<String, String> keys,
+            EventBodyIdentifyCompany company,
+            String name,
+            Map<String, Object> traits,
+            IdentifyOptions options) {
         if (offline) return;
 
         try {
@@ -566,13 +575,17 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .traits(objectMapToJsonNode(traits))
                     .build();
 
-            CreateEventRequestBody event = CreateEventRequestBody.builder()
+            CreateEventRequestBody._FinalStage event = CreateEventRequestBody.builder()
                     .eventType(EventType.IDENTIFY)
                     .body(EventBody.of(body))
-                    .sentAt(OffsetDateTime.now())
-                    .build();
+                    .sentAt(OffsetDateTime.now());
 
-            eventBuffer.push(event);
+            // Null passes through to Optional.empty() and is omitted from the wire.
+            if (options != null) {
+                event.idempotencyKey(options.getIdempotencyKey());
+            }
+
+            eventBuffer.push(event.build());
         } catch (Exception e) {
             logger.error("Error sending identify event: " + e.getMessage());
         }
@@ -580,7 +593,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     public void track(
             String eventName, Map<String, String> company, Map<String, String> user, Map<String, Object> traits) {
-        track(eventName, company, user, traits, 1);
+        track(eventName, company, user, traits, 1, null);
     }
 
     public void track(
@@ -589,6 +602,25 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             Map<String, String> user,
             Map<String, Object> traits,
             Integer quantity) {
+        track(eventName, company, user, traits, quantity, null);
+    }
+
+    public void track(
+            String eventName,
+            Map<String, String> company,
+            Map<String, String> user,
+            Map<String, Object> traits,
+            TrackOptions options) {
+        track(eventName, company, user, traits, 1, options);
+    }
+
+    public void track(
+            String eventName,
+            Map<String, String> company,
+            Map<String, String> user,
+            Map<String, Object> traits,
+            Integer quantity,
+            TrackOptions options) {
         if (offline) return;
 
         try {
@@ -600,13 +632,25 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .quantity(quantity)
                     .build();
 
-            CreateEventRequestBody event = CreateEventRequestBody.builder()
+            // Java has always stamped sent_at with the local clock; an explicit
+            // sentAt option overrides it (required when trustedClientClock is set).
+            CreateEventRequestBody._FinalStage event = CreateEventRequestBody.builder()
                     .eventType(EventType.TRACK)
                     .body(EventBody.of(body))
-                    .sentAt(OffsetDateTime.now())
-                    .build();
+                    .sentAt(
+                            options != null && options.getSentAt() != null
+                                    ? options.getSentAt()
+                                    : OffsetDateTime.now());
 
-            eventBuffer.push(event);
+            // Nulls pass through to Optional.empty() and are omitted from the wire.
+            // sentAt is handled above since null there would drop the now() default.
+            if (options != null) {
+                event.idempotencyKey(options.getIdempotencyKey())
+                        .trustedClientClock(options.getTrustedClientClock())
+                        .backfill(options.getBackfill());
+            }
+
+            eventBuffer.push(event.build());
 
             // Update cached company metrics if datastream is active
             if (company != null && !company.isEmpty() && dataStreamClient != null && dataStreamClient.isConnected()) {

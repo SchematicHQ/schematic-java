@@ -20,8 +20,9 @@ import okhttp3.Response;
  * by posting to https://c.schematichq.com/batch.
  *
  * <p>Each event payload is built from the Fern-generated {@link CreateEventRequestBody} model
- * with {@code api_key} injected, so any fields added to the generated model are automatically
- * included in the capture service payload.
+ * with {@code api_key} injected. Optional metadata fields ({@code idempotency_key},
+ * {@code sent_at}, {@code trusted_client_clock}, {@code backfill}) are forwarded only when set,
+ * matching the {@code exclude_none} wire format used by the other SDKs.
  */
 public class HttpEventSender implements Closeable {
     private static final String DEFAULT_EVENT_CAPTURE_BASE_URL = "https://c.schematichq.com";
@@ -50,29 +51,9 @@ public class HttpEventSender implements Closeable {
             return;
         }
 
-        // Build batch matching the capture service format (same as Go SDK's EventPayload)
-        ArrayNode eventsArray = ObjectMappers.JSON_MAPPER.createArrayNode();
-        for (CreateEventRequestBody event : events) {
-            ObjectNode eventNode = ObjectMappers.JSON_MAPPER.createObjectNode();
-            eventNode.put("api_key", apiKey);
-            eventNode.put("type", event.getEventType().toString());
-            if (event.getBody().isPresent()) {
-                eventNode.set(
-                        "body",
-                        ObjectMappers.JSON_MAPPER.valueToTree(event.getBody().get()));
-            }
-            if (event.getSentAt().isPresent()) {
-                eventNode.put("sent_at", event.getSentAt().get().toString());
-            }
-            eventsArray.add(eventNode);
-        }
-
-        ObjectNode batchPayload = ObjectMappers.JSON_MAPPER.createObjectNode();
-        batchPayload.set("events", eventsArray);
-
         String json;
         try {
-            json = ObjectMappers.JSON_MAPPER.writeValueAsString(batchPayload);
+            json = serializeBatch(events);
         } catch (JsonProcessingException e) {
             throw new IOException("Failed to serialize event batch", e);
         }
@@ -102,6 +83,45 @@ public class HttpEventSender implements Closeable {
                 logger.debug("Event batch sent successfully to " + url);
             }
         }
+    }
+
+    /**
+     * Serializes a batch of events into the capture service's wire format (same shape as the
+     * Go/Ruby/C#/Python SDKs): a {@code type} field, an embedded {@code api_key}, and the optional
+     * metadata fields forwarded only when present so we never send explicit nulls.
+     *
+     * <p>Package-private for unit testing of the wire mapping.
+     */
+    String serializeBatch(List<CreateEventRequestBody> events) throws JsonProcessingException {
+        ArrayNode eventsArray = ObjectMappers.JSON_MAPPER.createArrayNode();
+        for (CreateEventRequestBody event : events) {
+            ObjectNode eventNode = ObjectMappers.JSON_MAPPER.createObjectNode();
+            eventNode.put("api_key", apiKey);
+            eventNode.put("type", event.getEventType().toString());
+            if (event.getBody().isPresent()) {
+                eventNode.set(
+                        "body",
+                        ObjectMappers.JSON_MAPPER.valueToTree(event.getBody().get()));
+            }
+            if (event.getSentAt().isPresent()) {
+                eventNode.put("sent_at", event.getSentAt().get().toString());
+            }
+            if (event.getIdempotencyKey().isPresent()) {
+                eventNode.put("idempotency_key", event.getIdempotencyKey().get());
+            }
+            if (event.getTrustedClientClock().isPresent()) {
+                eventNode.put(
+                        "trusted_client_clock", event.getTrustedClientClock().get());
+            }
+            if (event.getBackfill().isPresent()) {
+                eventNode.put("backfill", event.getBackfill().get());
+            }
+            eventsArray.add(eventNode);
+        }
+
+        ObjectNode batchPayload = ObjectMappers.JSON_MAPPER.createObjectNode();
+        batchPayload.set("events", eventsArray);
+        return ObjectMappers.JSON_MAPPER.writeValueAsString(batchPayload);
     }
 
     @Override
