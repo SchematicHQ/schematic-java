@@ -8,13 +8,19 @@ package com.schematic.api.logger;
  * {@code info} and {@code debug}.
  */
 public enum LogLevel {
-    DEBUG,
-    INFO,
-    WARN,
-    ERROR;
+    DEBUG(0),
+    INFO(1),
+    WARN(2),
+    ERROR(3);
+
+    private final int severity;
+
+    LogLevel(int severity) {
+        this.severity = severity;
+    }
 
     /** Whether a message logged at {@code messageLevel} should be emitted by a logger at this level. */
     boolean allows(LogLevel messageLevel) {
-        return messageLevel.ordinal() >= this.ordinal();
+        return messageLevel.severity >= this.severity;
     }
 }

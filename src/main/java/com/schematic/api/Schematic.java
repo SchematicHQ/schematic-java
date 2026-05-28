@@ -589,17 +589,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .traits(objectMapToJsonNode(traits))
                     .build();
 
-            CreateEventRequestBody._FinalStage event = CreateEventRequestBody.builder()
-                    .eventType(EventType.IDENTIFY)
-                    .body(EventBody.of(body))
-                    .sentAt(OffsetDateTime.now());
-
-            // Null passes through to Optional.empty() and is omitted from the wire.
-            if (options != null) {
-                event.idempotencyKey(options.getIdempotencyKey());
-            }
-
-            eventBuffer.push(event.build());
+            eventBuffer.push(buildIdentifyEvent(EventBody.of(body), options));
         } catch (Exception e) {
             logger.error("Error sending identify event: " + e.getMessage());
         }
@@ -646,25 +636,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .quantity(quantity)
                     .build();
 
-            // Java has always stamped sent_at with the local clock; an explicit
-            // sentAt option overrides it (required when trustedClientClock is set).
-            CreateEventRequestBody._FinalStage event = CreateEventRequestBody.builder()
-                    .eventType(EventType.TRACK)
-                    .body(EventBody.of(body))
-                    .sentAt(
-                            options != null && options.getSentAt() != null
-                                    ? options.getSentAt()
-                                    : OffsetDateTime.now());
-
-            // Nulls pass through to Optional.empty() and are omitted from the wire.
-            // sentAt is handled above since null there would drop the now() default.
-            if (options != null) {
-                event.idempotencyKey(options.getIdempotencyKey())
-                        .trustedClientClock(options.getTrustedClientClock())
-                        .backfill(options.getBackfill());
-            }
-
-            eventBuffer.push(event.build());
+            eventBuffer.push(buildTrackEvent(EventBody.of(body), options));
 
             // Update cached company metrics if datastream is active
             if (company != null && !company.isEmpty() && dataStreamClient != null && dataStreamClient.isConnected()) {
@@ -677,6 +649,41 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         } catch (Exception e) {
             logger.error("Error sending track event: " + e.getMessage());
         }
+    }
+
+    /**
+     * Builds the identify event pushed to the buffer. Package-private for unit-testing the
+     * option-to-event mapping. {@code sent_at} is stamped with the local clock; a null option
+     * field passes through to {@code Optional.empty()} and is omitted from the wire.
+     */
+    static CreateEventRequestBody buildIdentifyEvent(EventBody body, IdentifyOptions options) {
+        CreateEventRequestBody._FinalStage event = CreateEventRequestBody.builder()
+                .eventType(EventType.IDENTIFY)
+                .body(body)
+                .sentAt(OffsetDateTime.now());
+        if (options != null) {
+            event.idempotencyKey(options.getIdempotencyKey());
+        }
+        return event.build();
+    }
+
+    /**
+     * Builds the track event pushed to the buffer. Package-private for unit-testing the
+     * option-to-event mapping. An explicit {@code sentAt} option overrides the local-clock default
+     * (required when {@code trustedClientClock} is set); other null option fields pass through to
+     * {@code Optional.empty()} and are omitted from the wire.
+     */
+    static CreateEventRequestBody buildTrackEvent(EventBody body, TrackOptions options) {
+        CreateEventRequestBody._FinalStage event = CreateEventRequestBody.builder()
+                .eventType(EventType.TRACK)
+                .body(body)
+                .sentAt(options != null && options.getSentAt() != null ? options.getSentAt() : OffsetDateTime.now());
+        if (options != null) {
+            event.idempotencyKey(options.getIdempotencyKey())
+                    .trustedClientClock(options.getTrustedClientClock())
+                    .backfill(options.getBackfill());
+        }
+        return event.build();
     }
 
     @Override

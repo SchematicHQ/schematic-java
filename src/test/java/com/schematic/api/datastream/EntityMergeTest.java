@@ -837,6 +837,34 @@ class EntityMergeTest {
         assertEquals(0L, merged.getEntitlements().get().get(0).getUsage().get());
     }
 
+    @Test
+    void partialCompany_syncsUsageForCreditAttachedEntitlement() {
+        // Per spec, a credit-attached entitlement (credit_id set) still has usage synced to the
+        // matching metric value. For credit features this is the raw event count, not credits used
+        // — that divergence is expected; credit consumption comes from credit_used / REST.
+        RulesengineCompany existing = companyWithEntitlementsAndMetrics(
+                Collections.singletonMap("credit-1", 100.0),
+                List.of(entitlement(
+                        "feat-1",
+                        "f1",
+                        "credit-1",
+                        100.0,
+                        "credits_used",
+                        RulesengineMetricPeriod.ALL_TIME,
+                        RulesengineMetricPeriodMonthReset.FIRST_OF_MONTH,
+                        10L)),
+                metric("credits_used", "all_time", "first_of_month", 10));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        ArrayNode metrics = objectMapper.createArrayNode();
+        metrics.add(metric("credits_used", "all_time", "first_of_month", 42));
+        partial.set("metrics", metrics);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(42L, merged.getEntitlements().get().get(0).getUsage().get());
+    }
+
     // --- Helpers ---
 
     private RulesengineCompany buildCompany(String id, Map<String, String> keys) {
