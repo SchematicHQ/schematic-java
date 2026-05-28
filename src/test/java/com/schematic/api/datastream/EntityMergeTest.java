@@ -9,6 +9,8 @@ import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.RulesengineCompany;
 import com.schematic.api.types.RulesengineEntitlementValueType;
 import com.schematic.api.types.RulesengineFeatureEntitlement;
+import com.schematic.api.types.RulesengineMetricPeriod;
+import com.schematic.api.types.RulesengineMetricPeriodMonthReset;
 import com.schematic.api.types.RulesengineRule;
 import com.schematic.api.types.RulesengineRuleType;
 import com.schematic.api.types.RulesengineTrait;
@@ -541,6 +543,300 @@ class EntityMergeTest {
         assertEquals("rule-u1", merged.getRules().get(0).getId());
     }
 
+    // --- Entitlement credit_remaining sync tests ---
+    // Credit-balance partials don't include refreshed entitlements, so the SDK syncs
+    // credit_remaining locally to mirror the server's partial-message handling.
+
+    @Test
+    void partialCompany_syncsCreditRemainingForMatchingCreditId() {
+        RulesengineCompany existing = companyWithEntitlements(
+                Collections.singletonMap("credit-1", 100.0),
+                List.of(
+                        entitlement("feat-1", "f1", "credit-1", 100.0, null, null, null, null),
+                        // no credit_id — must stay untouched
+                        entitlement("feat-2", "f2", null, null, null, null, null, null)));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.set("credit_balances", balances("credit-1", 25.0));
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(25.0, merged.getCreditBalances().get("credit-1"));
+        assertTrue(merged.getEntitlements().isPresent());
+        assertEquals(
+                25.0, merged.getEntitlements().get().get(0).getCreditRemaining().get());
+        assertFalse(merged.getEntitlements().get().get(1).getCreditRemaining().isPresent());
+    }
+
+    @Test
+    void partialCompany_syncsCreditRemainingAcrossMultipleCreditIds() {
+        Map<String, Double> existingBalances = new HashMap<>();
+        existingBalances.put("credit-1", 100.0);
+        existingBalances.put("credit-2", 50.0);
+
+        RulesengineCompany existing = companyWithEntitlements(
+                existingBalances,
+                List.of(
+                        entitlement("feat-1", "f1", "credit-1", 100.0, null, null, null, null),
+                        entitlement("feat-2", "f2", "credit-2", 50.0, null, null, null, null)));
+
+        ObjectNode newBalances = objectMapper.createObjectNode();
+        newBalances.put("credit-1", 75.0);
+        newBalances.put("credit-2", 10.0);
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.set("credit_balances", newBalances);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(
+                75.0, merged.getEntitlements().get().get(0).getCreditRemaining().get());
+        assertEquals(
+                10.0, merged.getEntitlements().get().get(1).getCreditRemaining().get());
+    }
+
+    @Test
+    void partialCompany_leavesUnmatchedEntitlementCreditIdUntouched() {
+        Map<String, Double> existingBalances = new HashMap<>();
+        existingBalances.put("credit-1", 100.0);
+        existingBalances.put("credit-other", 999.0);
+
+        RulesengineCompany existing = companyWithEntitlements(
+                existingBalances, List.of(entitlement("feat-1", "f1", "credit-other", 999.0, null, null, null, null)));
+
+        // Partial only updates credit-1; entitlement points at credit-other.
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.set("credit_balances", balances("credit-1", 25.0));
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(
+                999.0,
+                merged.getEntitlements().get().get(0).getCreditRemaining().get());
+    }
+
+    @Test
+    void partialCompany_singleCreditFansOutToMultipleEntitlements() {
+        // One credit type can fund multiple features; a balance update must sync
+        // credit_remaining on every entitlement pointing at that credit.
+        RulesengineCompany existing = companyWithEntitlements(
+                Collections.singletonMap("credit-shared", 500.0),
+                List.of(
+                        entitlement("feat-a", "feature-a", "credit-shared", 500.0, null, null, null, null),
+                        entitlement("feat-b", "feature-b", "credit-shared", 500.0, null, null, null, null),
+                        entitlement("feat-c", "feature-c", "credit-shared", 500.0, null, null, null, null),
+                        entitlement("feat-d", "feature-d", null, null, null, null, null, null)));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.set("credit_balances", balances("credit-shared", 120.0));
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(
+                120.0,
+                merged.getEntitlements().get().get(0).getCreditRemaining().get());
+        assertEquals(
+                120.0,
+                merged.getEntitlements().get().get(1).getCreditRemaining().get());
+        assertEquals(
+                120.0,
+                merged.getEntitlements().get().get(2).getCreditRemaining().get());
+        assertFalse(merged.getEntitlements().get().get(3).getCreditRemaining().isPresent());
+    }
+
+    @Test
+    void partialCompany_skipsSyncWhenPartialSendsEntitlements() {
+        // If the partial carries entitlements, trust those wholesale.
+        RulesengineCompany existing = companyWithEntitlements(
+                Collections.singletonMap("credit-1", 100.0),
+                List.of(entitlement("feat-1", "f1", "credit-1", 100.0, null, null, null, null)));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.set("credit_balances", balances("credit-1", 25.0));
+        ArrayNode partialEnts = objectMapper.createArrayNode();
+        ObjectNode ent = objectMapper.createObjectNode();
+        ent.put("feature_id", "feat-1");
+        ent.put("feature_key", "f1");
+        ent.put("value_type", "boolean");
+        ent.put("credit_id", "credit-1");
+        ent.put("credit_remaining", 17.0);
+        partialEnts.add(ent);
+        partial.set("entitlements", partialEnts);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(
+                17.0, merged.getEntitlements().get().get(0).getCreditRemaining().get());
+    }
+
+    @Test
+    void partialCompany_creditSyncNoOpWhenNoEntitlements() {
+        RulesengineCompany existing = buildCompany("comp-1", Collections.singletonMap("id", "comp-1"));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.set("credit_balances", balances("credit-1", 25.0));
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(25.0, merged.getCreditBalances().get("credit-1"));
+        assertFalse(merged.getEntitlements().isPresent());
+    }
+
+    // --- Entitlement usage sync tests ---
+    // A metrics partial doesn't carry refreshed entitlements, so usage is re-derived
+    // from the matching metric (event_subtype + period + month_reset).
+
+    @Test
+    void partialCompany_syncsUsageForEventBasedEntitlement() {
+        RulesengineCompany existing = companyWithEntitlementsAndMetrics(
+                Collections.emptyMap(),
+                List.of(entitlement(
+                        "feat-1",
+                        "f1",
+                        null,
+                        null,
+                        "credits_used",
+                        RulesengineMetricPeriod.CURRENT_MONTH,
+                        RulesengineMetricPeriodMonthReset.FIRST_OF_MONTH,
+                        10L)),
+                metric("credits_used", "current_month", "first_of_month", 10));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        ArrayNode metrics = objectMapper.createArrayNode();
+        metrics.add(metric("credits_used", "current_month", "first_of_month", 42));
+        partial.set("metrics", metrics);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(42L, merged.getEntitlements().get().get(0).getUsage().get());
+    }
+
+    @Test
+    void partialCompany_usageMatchRequiresPeriodAndMonthReset() {
+        // Matching uses the full triple; a metric with a different period must not match.
+        RulesengineCompany existing = companyWithEntitlementsAndMetrics(
+                Collections.emptyMap(),
+                List.of(entitlement(
+                        "feat-1",
+                        "f1",
+                        null,
+                        null,
+                        "api_calls",
+                        RulesengineMetricPeriod.CURRENT_MONTH, // differs from metric's period
+                        RulesengineMetricPeriodMonthReset.FIRST_OF_MONTH,
+                        5L)),
+                metric("api_calls", "all_time", "first_of_month", 100));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        ArrayNode metrics = objectMapper.createArrayNode();
+        metrics.add(metric("api_calls", "all_time", "first_of_month", 999));
+        partial.set("metrics", metrics);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(5L, merged.getEntitlements().get().get(0).getUsage().get());
+    }
+
+    @Test
+    void partialCompany_usageMatchDefaultsToAllTimeFirstOfMonth() {
+        // When period/month_reset are absent, the lookup defaults to all_time/first_of_month.
+        RulesengineCompany existing = companyWithEntitlementsAndMetrics(
+                Collections.emptyMap(),
+                List.of(entitlement("feat-1", "f1", null, null, "api_calls", null, null, null)),
+                metric("api_calls", "all_time", "first_of_month", 0));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        ArrayNode metrics = objectMapper.createArrayNode();
+        metrics.add(metric("api_calls", "all_time", "first_of_month", 7));
+        partial.set("metrics", metrics);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(7L, merged.getEntitlements().get().get(0).getUsage().get());
+    }
+
+    @Test
+    void partialCompany_usageUnchangedWhenNoMatchingMetricInPartial() {
+        // Partial updates a different event; event-a stays in merged metrics at 50, so usage stays 50.
+        RulesengineCompany existing = companyWithEntitlementsAndMetrics(
+                Collections.emptyMap(),
+                List.of(entitlement(
+                        "feat-1",
+                        "f1",
+                        null,
+                        null,
+                        "event-a",
+                        RulesengineMetricPeriod.ALL_TIME,
+                        RulesengineMetricPeriodMonthReset.FIRST_OF_MONTH,
+                        50L)),
+                metric("event-a", "all_time", "first_of_month", 50));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        ArrayNode metrics = objectMapper.createArrayNode();
+        metrics.add(metric("event-b", "all_time", "first_of_month", 999));
+        partial.set("metrics", metrics);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(50L, merged.getEntitlements().get().get(0).getUsage().get());
+    }
+
+    @Test
+    void partialCompany_syncsUsageAndCreditRemainingInOnePartial() {
+        RulesengineCompany existing = companyWithEntitlementsAndMetrics(
+                Collections.singletonMap("credit-1", 100.0),
+                List.of(entitlement(
+                        "feat-1",
+                        "f1",
+                        "credit-1",
+                        100.0,
+                        "event-a",
+                        RulesengineMetricPeriod.ALL_TIME,
+                        RulesengineMetricPeriodMonthReset.FIRST_OF_MONTH,
+                        5L)),
+                metric("event-a", "all_time", "first_of_month", 5));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        partial.set("credit_balances", balances("credit-1", 25.0));
+        ArrayNode metrics = objectMapper.createArrayNode();
+        metrics.add(metric("event-a", "all_time", "first_of_month", 80));
+        partial.set("metrics", metrics);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(
+                25.0, merged.getEntitlements().get().get(0).getCreditRemaining().get());
+        assertEquals(80L, merged.getEntitlements().get().get(0).getUsage().get());
+    }
+
+    @Test
+    void partialCompany_usageDefaultsToZeroWhenMatchedMetricHasNoValue() {
+        // Mirrors Python/Ruby: a matching metric that carries no value counts as 0,
+        // so a previously non-zero usage is reset rather than left stale.
+        RulesengineCompany existing = companyWithEntitlementsAndMetrics(
+                Collections.emptyMap(),
+                List.of(entitlement(
+                        "feat-1",
+                        "f1",
+                        null,
+                        null,
+                        "credits_used",
+                        RulesengineMetricPeriod.ALL_TIME,
+                        RulesengineMetricPeriodMonthReset.FIRST_OF_MONTH,
+                        10L)),
+                metric("credits_used", "all_time", "first_of_month", 10));
+
+        ObjectNode partial = objectMapper.createObjectNode();
+        ArrayNode metrics = objectMapper.createArrayNode();
+        ObjectNode valueless = metric("credits_used", "all_time", "first_of_month", 0);
+        valueless.remove("value");
+        metrics.add(valueless);
+        partial.set("metrics", metrics);
+
+        RulesengineCompany merged = EntityMerge.partialCompany(existing, partial);
+
+        assertEquals(0L, merged.getEntitlements().get().get(0).getUsage().get());
+    }
+
     // --- Helpers ---
 
     private RulesengineCompany buildCompany(String id, Map<String, String> keys) {
@@ -568,5 +864,86 @@ class EntityMergeTest {
                 .traits(Collections.emptyList())
                 .rules(Collections.emptyList())
                 .build();
+    }
+
+    private RulesengineCompany companyWithEntitlements(
+            Map<String, Double> creditBalances, List<RulesengineFeatureEntitlement> entitlements) {
+        return RulesengineCompany.builder()
+                .accountId("acc_1")
+                .environmentId("env_1")
+                .id("comp-1")
+                .keys(Collections.singletonMap("id", "comp-1"))
+                .traits(Collections.emptyList())
+                .metrics(Collections.emptyList())
+                .rules(Collections.emptyList())
+                .billingProductIds(Collections.emptyList())
+                .creditBalances(creditBalances)
+                .planIds(Collections.emptyList())
+                .planVersionIds(Collections.emptyList())
+                .entitlements(entitlements)
+                .build();
+    }
+
+    private RulesengineCompany companyWithEntitlementsAndMetrics(
+            Map<String, Double> creditBalances, List<RulesengineFeatureEntitlement> entitlements, ObjectNode metric) {
+        RulesengineCompany company = companyWithEntitlements(creditBalances, entitlements);
+        ObjectNode tree = (ObjectNode) objectMapper.valueToTree(company);
+        ArrayNode metrics = objectMapper.createArrayNode();
+        metrics.add(metric);
+        tree.set("metrics", metrics);
+        return objectMapper.convertValue(tree, RulesengineCompany.class);
+    }
+
+    private RulesengineFeatureEntitlement entitlement(
+            String featureId,
+            String featureKey,
+            String creditId,
+            Double creditRemaining,
+            String eventName,
+            RulesengineMetricPeriod metricPeriod,
+            RulesengineMetricPeriodMonthReset monthReset,
+            Long usage) {
+        RulesengineFeatureEntitlement._FinalStage builder = RulesengineFeatureEntitlement.builder()
+                .featureId(featureId)
+                .featureKey(featureKey)
+                .valueType(RulesengineEntitlementValueType.BOOLEAN);
+        if (creditId != null) {
+            builder.creditId(creditId);
+        }
+        if (creditRemaining != null) {
+            builder.creditRemaining(creditRemaining);
+        }
+        if (eventName != null) {
+            builder.eventName(eventName);
+        }
+        if (metricPeriod != null) {
+            builder.metricPeriod(metricPeriod);
+        }
+        if (monthReset != null) {
+            builder.monthReset(monthReset);
+        }
+        if (usage != null) {
+            builder.usage(usage);
+        }
+        return builder.build();
+    }
+
+    private ObjectNode metric(String eventSubtype, String period, String monthReset, int value) {
+        ObjectNode m = objectMapper.createObjectNode();
+        m.put("account_id", "acc_1");
+        m.put("company_id", "comp-1");
+        m.put("environment_id", "env_1");
+        m.put("created_at", "2026-01-01T00:00:00Z");
+        m.put("event_subtype", eventSubtype);
+        m.put("period", period);
+        m.put("month_reset", monthReset);
+        m.put("value", value);
+        return m;
+    }
+
+    private ObjectNode balances(String creditId, double amount) {
+        ObjectNode node = objectMapper.createObjectNode();
+        node.put(creditId, amount);
+        return node;
     }
 }
