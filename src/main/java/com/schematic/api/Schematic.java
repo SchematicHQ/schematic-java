@@ -12,6 +12,7 @@ import com.schematic.api.datastream.DataStreamException;
 import com.schematic.api.datastream.DatastreamOptions;
 import com.schematic.api.datastream.WasmRulesEngine;
 import com.schematic.api.logger.ConsoleLogger;
+import com.schematic.api.logger.LogLevel;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
 import com.schematic.api.resources.features.types.CheckFlagsResponse;
@@ -53,7 +54,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         this.apiKey = builder.apiKey;
         this.eventBufferInterval =
                 builder.eventBufferInterval != null ? builder.eventBufferInterval : Duration.ofMillis(5000);
-        this.logger = builder.logger != null ? builder.logger : new ConsoleLogger();
+        // A consumer-provided logger is used as-is (its own level governs); logLevel only
+        // configures the default ConsoleLogger, which otherwise defaults to WARN.
+        this.logger = builder.logger != null ? builder.logger : new ConsoleLogger(builder.logLevel);
         this.flagDefaults = builder.flagDefaults != null ? builder.flagDefaults : new HashMap<>();
         this.offline = builder.offline;
         this.flagCheckCacheProviders = builder.cacheProviders != null
@@ -150,6 +153,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     public static class Builder {
         private String apiKey;
         private SchematicLogger logger;
+        private LogLevel logLevel;
         private Map<String, Boolean> flagDefaults;
         private List<CacheProvider<RulesengineCheckFlagResult>> cacheProviders;
         private boolean offline;
@@ -167,6 +171,16 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
         public Builder logger(SchematicLogger logger) {
             this.logger = logger;
+            return this;
+        }
+
+        /**
+         * Sets the level for the default {@link ConsoleLogger} (defaults to {@link LogLevel#WARN}).
+         * Ignored when a custom {@link #logger(SchematicLogger)} is provided — that logger's own level
+         * configuration is the source of truth.
+         */
+        public Builder logLevel(LogLevel logLevel) {
+            this.logLevel = logLevel;
             return this;
         }
 
