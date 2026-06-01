@@ -68,6 +68,8 @@ public final class PlanEntitlementResponseData {
 
     private final Optional<BillingProductResponseData> usageBasedProduct;
 
+    private final Optional<Long> usageQuantity;
+
     private final Optional<Boolean> valueBool;
 
     private final Optional<BillingCreditResponseData> valueCredit;
@@ -105,6 +107,7 @@ public final class PlanEntitlementResponseData {
             Optional<Long> softLimit,
             OffsetDateTime updatedAt,
             Optional<BillingProductResponseData> usageBasedProduct,
+            Optional<Long> usageQuantity,
             Optional<Boolean> valueBool,
             Optional<BillingCreditResponseData> valueCredit,
             Optional<Long> valueNumeric,
@@ -134,6 +137,7 @@ public final class PlanEntitlementResponseData {
         this.softLimit = softLimit;
         this.updatedAt = updatedAt;
         this.usageBasedProduct = usageBasedProduct;
+        this.usageQuantity = usageQuantity;
         this.valueBool = valueBool;
         this.valueCredit = valueCredit;
         this.valueNumeric = valueNumeric;
@@ -253,6 +257,14 @@ public final class PlanEntitlementResponseData {
         return usageBasedProduct;
     }
 
+    /**
+     * @return The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.
+     */
+    @JsonProperty("usage_quantity")
+    public Optional<Long> getUsageQuantity() {
+        return usageQuantity;
+    }
+
     @JsonProperty("value_bool")
     public Optional<Boolean> getValueBool() {
         return valueBool;
@@ -317,6 +329,7 @@ public final class PlanEntitlementResponseData {
                 && softLimit.equals(other.softLimit)
                 && updatedAt.equals(other.updatedAt)
                 && usageBasedProduct.equals(other.usageBasedProduct)
+                && usageQuantity.equals(other.usageQuantity)
                 && valueBool.equals(other.valueBool)
                 && valueCredit.equals(other.valueCredit)
                 && valueNumeric.equals(other.valueNumeric)
@@ -350,6 +363,7 @@ public final class PlanEntitlementResponseData {
                 this.softLimit,
                 this.updatedAt,
                 this.usageBasedProduct,
+                this.usageQuantity,
                 this.valueBool,
                 this.valueCredit,
                 this.valueNumeric,
@@ -470,6 +484,13 @@ public final class PlanEntitlementResponseData {
 
         _FinalStage usageBasedProduct(BillingProductResponseData usageBasedProduct);
 
+        /**
+         * <p>The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.</p>
+         */
+        _FinalStage usageQuantity(Optional<Long> usageQuantity);
+
+        _FinalStage usageQuantity(Long usageQuantity);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -527,6 +548,8 @@ public final class PlanEntitlementResponseData {
         private Optional<BillingCreditResponseData> valueCredit = Optional.empty();
 
         private Optional<Boolean> valueBool = Optional.empty();
+
+        private Optional<Long> usageQuantity = Optional.empty();
 
         private Optional<BillingProductResponseData> usageBasedProduct = Optional.empty();
 
@@ -587,6 +610,7 @@ public final class PlanEntitlementResponseData {
             softLimit(other.getSoftLimit());
             updatedAt(other.getUpdatedAt());
             usageBasedProduct(other.getUsageBasedProduct());
+            usageQuantity(other.getUsageQuantity());
             valueBool(other.getValueBool());
             valueCredit(other.getValueCredit());
             valueNumeric(other.getValueNumeric());
@@ -714,6 +738,26 @@ public final class PlanEntitlementResponseData {
         @JsonSetter(value = "value_bool", nulls = Nulls.SKIP)
         public _FinalStage valueBool(Optional<Boolean> valueBool) {
             this.valueBool = valueBool;
+            return this;
+        }
+
+        /**
+         * <p>The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage usageQuantity(Long usageQuantity) {
+            this.usageQuantity = Optional.ofNullable(usageQuantity);
+            return this;
+        }
+
+        /**
+         * <p>The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "usage_quantity", nulls = Nulls.SKIP)
+        public _FinalStage usageQuantity(Optional<Long> usageQuantity) {
+            this.usageQuantity = usageQuantity;
             return this;
         }
 
@@ -948,6 +992,7 @@ public final class PlanEntitlementResponseData {
                     softLimit,
                     updatedAt,
                     usageBasedProduct,
+                    usageQuantity,
                     valueBool,
                     valueCredit,
                     valueNumeric,

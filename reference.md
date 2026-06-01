@@ -6483,6 +6483,9 @@ client.companies().listCompanies(
         .planIds(
             Arrays.asList("plan_ids")
         )
+        .planVersionIds(
+            Arrays.asList("plan_version_ids")
+        )
         .subscriptionStatuses(
             Arrays.asList(SubscriptionStatus.ACTIVE)
         )
@@ -6568,6 +6571,14 @@ client.companies().listCompanies(
 <dd>
 
 **planVersionId:** `Optional<String>` — Filter companies by plan version ID (starts with plvr_)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionIds:** `Optional<String>` — Filter companies by one or more plan version IDs (each ID starts with plvr_). Takes precedence over plan_version_id when set.
     
 </dd>
 </dl>
@@ -6852,6 +6863,9 @@ client.companies().countCompanies(
         .planIds(
             Arrays.asList("plan_ids")
         )
+        .planVersionIds(
+            Arrays.asList("plan_version_ids")
+        )
         .subscriptionStatuses(
             Arrays.asList(SubscriptionStatus.ACTIVE)
         )
@@ -6937,6 +6951,14 @@ client.companies().countCompanies(
 <dd>
 
 **planVersionId:** `Optional<String>` — Filter companies by plan version ID (starts with plvr_)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionIds:** `Optional<String>` — Filter companies by one or more plan version IDs (each ID starts with plvr_). Takes precedence over plan_version_id when set.
     
 </dd>
 </dl>
@@ -10625,6 +10647,14 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
+**usageQuantity:** `Optional<Long>` — The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **valueBool:** `Optional<Boolean>` 
     
 </dd>
@@ -10936,6 +10966,14 @@ client.entitlements().updatePlanEntitlement(
 <dd>
 
 **tierMode:** `Optional<BillingTiersMode>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**usageQuantity:** `Optional<Long>` — The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.
     
 </dd>
 </dl>
@@ -11289,6 +11327,14 @@ client.entitlements().upsertPlanEntitlementForBillingProduct(
 <dd>
 
 **tierMode:** `Optional<BillingTiersMode>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**usageQuantity:** `Optional<Long>` — The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.
     
 </dd>
 </dl>
@@ -11775,6 +11821,59 @@ client.plans().listCustomPlanBillings(
 </dl>
 </details>
 
+<details><summary><code>client.plans.markCustomPlanBillingPaid(customPlanBillingId, request) -> MarkCustomPlanBillingPaidResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.plans().markCustomPlanBillingPaid(
+    "custom_plan_billing_id",
+    new HashMap<String, JsonNode>() {{
+        put("key", ObjectMappers.JSON_MAPPER.valueToTree("value"));
+    }}
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**customPlanBillingId:** `String` — custom_plan_billing_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Map<String, Object>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.plans.retryCustomPlanBilling(customPlanBillingId, request) -> RetryCustomPlanBillingResponse</code></summary>
 <dl>
 <dd>
@@ -11971,6 +12070,7 @@ client.plans().listPlans(
         .planType(PlanType.PLAN)
         .q("q")
         .scopedToCompanyId("scoped_to_company_id")
+        .withEntitlements(true)
         .withoutEntitlementFor("without_entitlement_for")
         .withoutPaidProductId(true)
         .limit(1000000L)
@@ -12080,6 +12180,14 @@ client.plans().listPlans(
 <dd>
 
 **scopedToCompanyId:** `Optional<String>` — Filter plans scoped to a specific company (custom plans)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**withEntitlements:** `Optional<Boolean>` — Include each plan's entitlements in the response
     
 </dd>
 </dl>
@@ -12644,6 +12752,7 @@ client.plans().countPlans(
         .planType(PlanType.PLAN)
         .q("q")
         .scopedToCompanyId("scoped_to_company_id")
+        .withEntitlements(true)
         .withoutEntitlementFor("without_entitlement_for")
         .withoutPaidProductId(true)
         .limit(1000000L)
@@ -12753,6 +12862,14 @@ client.plans().countPlans(
 <dd>
 
 **scopedToCompanyId:** `Optional<String>` — Filter plans scoped to a specific company (custom plans)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**withEntitlements:** `Optional<Boolean>` — Include each plan's entitlements in the response
     
 </dd>
 </dl>
@@ -16890,6 +17007,46 @@ client.planmigrations().listCompanyMigrations(
 </dl>
 </details>
 
+<details><summary><code>client.planmigrations.retryCompanyMigration(planVersionCompanyMigrationId) -> RetryCompanyMigrationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().retryCompanyMigration("plan_version_company_migration_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planVersionCompanyMigrationId:** `String` — plan_version_company_migration_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.planmigrations.countCompanyMigrations() -> CountCompanyMigrationsResponse</code></summary>
 <dl>
 <dd>
@@ -17043,6 +17200,111 @@ client.planmigrations().listMigrations(
 </dl>
 </details>
 
+<details><summary><code>client.planmigrations.createMigration(request) -> CreateMigrationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().createMigration(
+    CreateMigrationInput
+        .builder()
+        .planId("plan_id")
+        .planVersionIdTo("plan_version_id_to")
+        .strategy(PlanVersionMigrationStrategy.IMMEDIATE)
+        .targetPlanType(PlanType.PLAN)
+        .companyIds(
+            Arrays.asList("company_ids")
+        )
+        .excludedCompanyIds(
+            Arrays.asList("excluded_company_ids")
+        )
+        .planVersionIdsFrom(
+            Arrays.asList("plan_version_ids_from")
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyIds:** `List<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**excludedCompanyIds:** `List<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionIdTo:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionIdsFrom:** `List<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**strategy:** `PlanVersionMigrationStrategy` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**targetPlanType:** `PlanType` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.planmigrations.getMigration(planVersionMigrationId) -> GetMigrationResponse</code></summary>
 <dl>
 <dd>
@@ -17072,6 +17334,62 @@ client.planmigrations().getMigration("plan_version_migration_id");
 <dd>
 
 **planVersionMigrationId:** `String` — plan_version_migration_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.planmigrations.retryMigration(planVersionMigrationId, request) -> RetryMigrationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().retryMigration(
+    "plan_version_migration_id",
+    RetryMigrationRequestBody
+        .builder()
+        .errorCodes(
+            Arrays.asList(MigrationErrorCode.AMBIGUOUS_SUBSCRIPTION_ITEM)
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planVersionMigrationId:** `String` — plan_version_migration_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**errorCodes:** `List<MigrationErrorCode>` 
     
 </dd>
 </dl>

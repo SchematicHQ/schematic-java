@@ -32,8 +32,6 @@ public final class StripeIntegrationConfig {
 
     private final Optional<String> onboardUrl;
 
-    private final int version;
-
     private final Map<String, Object> additionalProperties;
 
     private StripeIntegrationConfig(
@@ -43,7 +41,6 @@ public final class StripeIntegrationConfig {
             boolean isSandbox,
             boolean liveMode,
             Optional<String> onboardUrl,
-            int version,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.accountName = accountName;
@@ -51,7 +48,6 @@ public final class StripeIntegrationConfig {
         this.isSandbox = isSandbox;
         this.liveMode = liveMode;
         this.onboardUrl = onboardUrl;
-        this.version = version;
         this.additionalProperties = additionalProperties;
     }
 
@@ -103,14 +99,6 @@ public final class StripeIntegrationConfig {
         return onboardUrl;
     }
 
-    /**
-     * @return Stripe integration config version (1 = legacy API key install, 2 = Connect/App install)
-     */
-    @JsonProperty("version")
-    public int getVersion() {
-        return version;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -128,8 +116,7 @@ public final class StripeIntegrationConfig {
                 && companyUpdateOnly.equals(other.companyUpdateOnly)
                 && isSandbox == other.isSandbox
                 && liveMode == other.liveMode
-                && onboardUrl.equals(other.onboardUrl)
-                && version == other.version;
+                && onboardUrl.equals(other.onboardUrl);
     }
 
     @java.lang.Override
@@ -140,8 +127,7 @@ public final class StripeIntegrationConfig {
                 this.companyUpdateOnly,
                 this.isSandbox,
                 this.liveMode,
-                this.onboardUrl,
-                this.version);
+                this.onboardUrl);
     }
 
     @java.lang.Override
@@ -166,14 +152,7 @@ public final class StripeIntegrationConfig {
         /**
          * <p>Whether the integration is connected to a live Stripe account</p>
          */
-        VersionStage liveMode(boolean liveMode);
-    }
-
-    public interface VersionStage {
-        /**
-         * <p>Stripe integration config version (1 = legacy API key install, 2 = Connect/App install)</p>
-         */
-        _FinalStage version(int version);
+        _FinalStage liveMode(boolean liveMode);
     }
 
     public interface _FinalStage {
@@ -213,12 +192,10 @@ public final class StripeIntegrationConfig {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IsSandboxStage, LiveModeStage, VersionStage, _FinalStage {
+    public static final class Builder implements IsSandboxStage, LiveModeStage, _FinalStage {
         private boolean isSandbox;
 
         private boolean liveMode;
-
-        private int version;
 
         private Optional<String> onboardUrl = Optional.empty();
 
@@ -241,7 +218,6 @@ public final class StripeIntegrationConfig {
             isSandbox(other.getIsSandbox());
             liveMode(other.getLiveMode());
             onboardUrl(other.getOnboardUrl());
-            version(other.getVersion());
             return this;
         }
 
@@ -264,20 +240,8 @@ public final class StripeIntegrationConfig {
          */
         @java.lang.Override
         @JsonSetter("live_mode")
-        public VersionStage liveMode(boolean liveMode) {
+        public _FinalStage liveMode(boolean liveMode) {
             this.liveMode = liveMode;
-            return this;
-        }
-
-        /**
-         * <p>Stripe integration config version (1 = legacy API key install, 2 = Connect/App install)</p>
-         * <p>Stripe integration config version (1 = legacy API key install, 2 = Connect/App install)</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("version")
-        public _FinalStage version(int version) {
-            this.version = version;
             return this;
         }
 
@@ -364,14 +328,7 @@ public final class StripeIntegrationConfig {
         @java.lang.Override
         public StripeIntegrationConfig build() {
             return new StripeIntegrationConfig(
-                    accountId,
-                    accountName,
-                    companyUpdateOnly,
-                    isSandbox,
-                    liveMode,
-                    onboardUrl,
-                    version,
-                    additionalProperties);
+                    accountId, accountName, companyUpdateOnly, isSandbox, liveMode, onboardUrl, additionalProperties);
         }
 
         @java.lang.Override

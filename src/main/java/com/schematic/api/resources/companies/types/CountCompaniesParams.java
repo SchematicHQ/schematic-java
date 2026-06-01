@@ -42,6 +42,8 @@ public final class CountCompaniesParams {
 
     private final Optional<String> planVersionId;
 
+    private final Optional<List<String>> planVersionIds;
+
     private final Optional<String> q;
 
     private final Optional<String> sortOrderColumn;
@@ -74,6 +76,7 @@ public final class CountCompaniesParams {
             Optional<String> planId,
             Optional<List<String>> planIds,
             Optional<String> planVersionId,
+            Optional<List<String>> planVersionIds,
             Optional<String> q,
             Optional<String> sortOrderColumn,
             Optional<SortDirection> sortOrderDirection,
@@ -94,6 +97,7 @@ public final class CountCompaniesParams {
         this.planId = planId;
         this.planIds = planIds;
         this.planVersionId = planVersionId;
+        this.planVersionIds = planVersionIds;
         this.q = q;
         this.sortOrderColumn = sortOrderColumn;
         this.sortOrderDirection = sortOrderDirection;
@@ -177,6 +181,14 @@ public final class CountCompaniesParams {
     @JsonProperty("plan_version_id")
     public Optional<String> getPlanVersionId() {
         return planVersionId;
+    }
+
+    /**
+     * @return Filter companies by one or more plan version IDs (each ID starts with plvr_). Takes precedence over plan_version_id when set.
+     */
+    @JsonProperty("plan_version_ids")
+    public Optional<List<String>> getPlanVersionIds() {
+        return planVersionIds;
     }
 
     /**
@@ -280,6 +292,7 @@ public final class CountCompaniesParams {
                 && planId.equals(other.planId)
                 && planIds.equals(other.planIds)
                 && planVersionId.equals(other.planVersionId)
+                && planVersionIds.equals(other.planVersionIds)
                 && q.equals(other.q)
                 && sortOrderColumn.equals(other.sortOrderColumn)
                 && sortOrderDirection.equals(other.sortOrderDirection)
@@ -304,6 +317,7 @@ public final class CountCompaniesParams {
                 this.planId,
                 this.planIds,
                 this.planVersionId,
+                this.planVersionIds,
                 this.q,
                 this.sortOrderColumn,
                 this.sortOrderDirection,
@@ -345,6 +359,8 @@ public final class CountCompaniesParams {
 
         private Optional<String> planVersionId = Optional.empty();
 
+        private Optional<List<String>> planVersionIds = Optional.empty();
+
         private Optional<String> q = Optional.empty();
 
         private Optional<String> sortOrderColumn = Optional.empty();
@@ -380,6 +396,7 @@ public final class CountCompaniesParams {
             planId(other.getPlanId());
             planIds(other.getPlanIds());
             planVersionId(other.getPlanVersionId());
+            planVersionIds(other.getPlanVersionIds());
             q(other.getQ());
             sortOrderColumn(other.getSortOrderColumn());
             sortOrderDirection(other.getSortOrderDirection());
@@ -516,6 +533,20 @@ public final class CountCompaniesParams {
 
         public Builder planVersionId(String planVersionId) {
             this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
+        /**
+         * <p>Filter companies by one or more plan version IDs (each ID starts with plvr_). Takes precedence over plan_version_id when set.</p>
+         */
+        @JsonSetter(value = "plan_version_ids", nulls = Nulls.SKIP)
+        public Builder planVersionIds(Optional<List<String>> planVersionIds) {
+            this.planVersionIds = planVersionIds;
+            return this;
+        }
+
+        public Builder planVersionIds(List<String> planVersionIds) {
+            this.planVersionIds = Optional.ofNullable(planVersionIds);
             return this;
         }
 
@@ -670,6 +701,7 @@ public final class CountCompaniesParams {
                     planId,
                     planIds,
                     planVersionId,
+                    planVersionIds,
                     q,
                     sortOrderColumn,
                     sortOrderDirection,

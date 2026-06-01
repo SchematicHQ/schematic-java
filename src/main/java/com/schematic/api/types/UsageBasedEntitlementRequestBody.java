@@ -55,6 +55,8 @@ public final class UsageBasedEntitlementRequestBody {
 
     private final Optional<BillingTiersMode> tierMode;
 
+    private final Optional<Long> usageQuantity;
+
     private final Optional<String> yearlyMeteredPriceId;
 
     private final Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers;
@@ -83,6 +85,7 @@ public final class UsageBasedEntitlementRequestBody {
             Optional<String> quarterlyUnitPriceDecimal,
             Optional<Long> softLimit,
             Optional<BillingTiersMode> tierMode,
+            Optional<Long> usageQuantity,
             Optional<String> yearlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers,
             Optional<Long> yearlyUnitPrice,
@@ -105,6 +108,7 @@ public final class UsageBasedEntitlementRequestBody {
         this.quarterlyUnitPriceDecimal = quarterlyUnitPriceDecimal;
         this.softLimit = softLimit;
         this.tierMode = tierMode;
+        this.usageQuantity = usageQuantity;
         this.yearlyMeteredPriceId = yearlyMeteredPriceId;
         this.yearlyPriceTiers = yearlyPriceTiers;
         this.yearlyUnitPrice = yearlyUnitPrice;
@@ -200,6 +204,14 @@ public final class UsageBasedEntitlementRequestBody {
         return tierMode;
     }
 
+    /**
+     * @return The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.
+     */
+    @JsonProperty("usage_quantity")
+    public Optional<Long> getUsageQuantity() {
+        return usageQuantity;
+    }
+
     @JsonProperty("yearly_metered_price_id")
     public Optional<String> getYearlyMeteredPriceId() {
         return yearlyMeteredPriceId;
@@ -249,6 +261,7 @@ public final class UsageBasedEntitlementRequestBody {
                 && quarterlyUnitPriceDecimal.equals(other.quarterlyUnitPriceDecimal)
                 && softLimit.equals(other.softLimit)
                 && tierMode.equals(other.tierMode)
+                && usageQuantity.equals(other.usageQuantity)
                 && yearlyMeteredPriceId.equals(other.yearlyMeteredPriceId)
                 && yearlyPriceTiers.equals(other.yearlyPriceTiers)
                 && yearlyUnitPrice.equals(other.yearlyUnitPrice)
@@ -275,6 +288,7 @@ public final class UsageBasedEntitlementRequestBody {
                 this.quarterlyUnitPriceDecimal,
                 this.softLimit,
                 this.tierMode,
+                this.usageQuantity,
                 this.yearlyMeteredPriceId,
                 this.yearlyPriceTiers,
                 this.yearlyUnitPrice,
@@ -326,6 +340,8 @@ public final class UsageBasedEntitlementRequestBody {
 
         private Optional<BillingTiersMode> tierMode = Optional.empty();
 
+        private Optional<Long> usageQuantity = Optional.empty();
+
         private Optional<String> yearlyMeteredPriceId = Optional.empty();
 
         private Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers = Optional.empty();
@@ -357,6 +373,7 @@ public final class UsageBasedEntitlementRequestBody {
             quarterlyUnitPriceDecimal(other.getQuarterlyUnitPriceDecimal());
             softLimit(other.getSoftLimit());
             tierMode(other.getTierMode());
+            usageQuantity(other.getUsageQuantity());
             yearlyMeteredPriceId(other.getYearlyMeteredPriceId());
             yearlyPriceTiers(other.getYearlyPriceTiers());
             yearlyUnitPrice(other.getYearlyUnitPrice());
@@ -554,6 +571,20 @@ public final class UsageBasedEntitlementRequestBody {
             return this;
         }
 
+        /**
+         * <p>The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.</p>
+         */
+        @JsonSetter(value = "usage_quantity", nulls = Nulls.SKIP)
+        public Builder usageQuantity(Optional<Long> usageQuantity) {
+            this.usageQuantity = usageQuantity;
+            return this;
+        }
+
+        public Builder usageQuantity(Long usageQuantity) {
+            this.usageQuantity = Optional.ofNullable(usageQuantity);
+            return this;
+        }
+
         @JsonSetter(value = "yearly_metered_price_id", nulls = Nulls.SKIP)
         public Builder yearlyMeteredPriceId(Optional<String> yearlyMeteredPriceId) {
             this.yearlyMeteredPriceId = yearlyMeteredPriceId;
@@ -617,6 +648,7 @@ public final class UsageBasedEntitlementRequestBody {
                     quarterlyUnitPriceDecimal,
                     softLimit,
                     tierMode,
+                    usageQuantity,
                     yearlyMeteredPriceId,
                     yearlyPriceTiers,
                     yearlyUnitPrice,

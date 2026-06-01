@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.plans;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.plans.requests.CountBillingProductMatchCompaniesRequest;
@@ -29,6 +30,7 @@ import com.schematic.api.resources.plans.types.ListBillingProductMatchCompaniesR
 import com.schematic.api.resources.plans.types.ListCustomPlanBillingsResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
 import com.schematic.api.resources.plans.types.ListPlansResponse;
+import com.schematic.api.resources.plans.types.MarkCustomPlanBillingPaidResponse;
 import com.schematic.api.resources.plans.types.PublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.RetryCustomPlanBillingResponse;
 import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
@@ -38,6 +40,7 @@ import com.schematic.api.resources.plans.types.UpsertPlanForBillingProductRespon
 import com.schematic.api.types.CreatePlanRequestBody;
 import com.schematic.api.types.UpdatePlanRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
+import java.util.Map;
 
 public class PlansClient {
     protected final ClientOptions clientOptions;
@@ -82,6 +85,20 @@ public class PlansClient {
     public ListCustomPlanBillingsResponse listCustomPlanBillings(
             ListCustomPlanBillingsRequest request, RequestOptions requestOptions) {
         return this.rawClient.listCustomPlanBillings(request, requestOptions).body();
+    }
+
+    public MarkCustomPlanBillingPaidResponse markCustomPlanBillingPaid(
+            String customPlanBillingId, Map<String, JsonNode> request) {
+        return this.rawClient
+                .markCustomPlanBillingPaid(customPlanBillingId, request)
+                .body();
+    }
+
+    public MarkCustomPlanBillingPaidResponse markCustomPlanBillingPaid(
+            String customPlanBillingId, Map<String, JsonNode> request, RequestOptions requestOptions) {
+        return this.rawClient
+                .markCustomPlanBillingPaid(customPlanBillingId, request, requestOptions)
+                .body();
     }
 
     public RetryCustomPlanBillingResponse retryCustomPlanBilling(

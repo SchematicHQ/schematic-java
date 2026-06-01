@@ -49,6 +49,8 @@ public final class CheckoutSubscription {
 
     private final String interval;
 
+    private final Optional<String> invoiceId;
+
     private final Optional<String> invoiceUrl;
 
     private final Optional<Map<String, JsonNode>> metadata;
@@ -85,6 +87,7 @@ public final class CheckoutSubscription {
             Optional<OffsetDateTime> expiredAt,
             String id,
             String interval,
+            Optional<String> invoiceId,
             Optional<String> invoiceUrl,
             Optional<Map<String, JsonNode>> metadata,
             long periodEnd,
@@ -109,6 +112,7 @@ public final class CheckoutSubscription {
         this.expiredAt = expiredAt;
         this.id = id;
         this.interval = interval;
+        this.invoiceId = invoiceId;
         this.invoiceUrl = invoiceUrl;
         this.metadata = metadata;
         this.periodEnd = periodEnd;
@@ -187,6 +191,11 @@ public final class CheckoutSubscription {
         return interval;
     }
 
+    @JsonProperty("invoice_id")
+    public Optional<String> getInvoiceId() {
+        return invoiceId;
+    }
+
     @JsonProperty("invoice_url")
     public Optional<String> getInvoiceUrl() {
         return invoiceUrl;
@@ -262,6 +271,7 @@ public final class CheckoutSubscription {
                 && expiredAt.equals(other.expiredAt)
                 && id.equals(other.id)
                 && interval.equals(other.interval)
+                && invoiceId.equals(other.invoiceId)
                 && invoiceUrl.equals(other.invoiceUrl)
                 && metadata.equals(other.metadata)
                 && periodEnd == other.periodEnd
@@ -290,6 +300,7 @@ public final class CheckoutSubscription {
                 this.expiredAt,
                 this.id,
                 this.interval,
+                this.invoiceId,
                 this.invoiceUrl,
                 this.metadata,
                 this.periodEnd,
@@ -396,6 +407,10 @@ public final class CheckoutSubscription {
 
         _FinalStage expiredAt(OffsetDateTime expiredAt);
 
+        _FinalStage invoiceId(Optional<String> invoiceId);
+
+        _FinalStage invoiceId(String invoiceId);
+
         _FinalStage invoiceUrl(Optional<String> invoiceUrl);
 
         _FinalStage invoiceUrl(String invoiceUrl);
@@ -460,6 +475,8 @@ public final class CheckoutSubscription {
 
         private Optional<String> invoiceUrl = Optional.empty();
 
+        private Optional<String> invoiceId = Optional.empty();
+
         private Optional<OffsetDateTime> expiredAt = Optional.empty();
 
         private Optional<String> defaultPaymentMethodId = Optional.empty();
@@ -494,6 +511,7 @@ public final class CheckoutSubscription {
             expiredAt(other.getExpiredAt());
             id(other.getId());
             interval(other.getInterval());
+            invoiceId(other.getInvoiceId());
             invoiceUrl(other.getInvoiceUrl());
             metadata(other.getMetadata());
             periodEnd(other.getPeriodEnd());
@@ -645,6 +663,19 @@ public final class CheckoutSubscription {
         }
 
         @java.lang.Override
+        public _FinalStage invoiceId(String invoiceId) {
+            this.invoiceId = Optional.ofNullable(invoiceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "invoice_id", nulls = Nulls.SKIP)
+        public _FinalStage invoiceId(Optional<String> invoiceId) {
+            this.invoiceId = invoiceId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage expiredAt(OffsetDateTime expiredAt) {
             this.expiredAt = Optional.ofNullable(expiredAt);
             return this;
@@ -751,6 +782,7 @@ public final class CheckoutSubscription {
                     expiredAt,
                     id,
                     interval,
+                    invoiceId,
                     invoiceUrl,
                     metadata,
                     periodEnd,

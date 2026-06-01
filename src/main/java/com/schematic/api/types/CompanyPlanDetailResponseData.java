@@ -28,6 +28,8 @@ public final class CompanyPlanDetailResponseData {
 
     private final Optional<String> audienceType;
 
+    private final List<PlanPriceCadence> availablePeriods;
+
     private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
 
     private final Optional<BillingProductDetailResponseData> billingProduct;
@@ -64,7 +66,7 @@ public final class CompanyPlanDetailResponseData {
 
     private final Optional<PlanVersionResponseData> draftVersion;
 
-    private final List<PlanEntitlementResponseData> entitlements;
+    private final Optional<List<PlanEntitlementResponseData>> entitlements;
 
     private final List<FeatureInPlanResponseData> features;
 
@@ -111,6 +113,7 @@ public final class CompanyPlanDetailResponseData {
     private CompanyPlanDetailResponseData(
             Optional<PlanVersionResponseData> activeVersion,
             Optional<String> audienceType,
+            List<PlanPriceCadence> availablePeriods,
             Optional<BillingLinkedResourceResponseData> billingLinkedResource,
             Optional<BillingProductDetailResponseData> billingProduct,
             BillingStrategy billingStrategy,
@@ -129,7 +132,7 @@ public final class CompanyPlanDetailResponseData {
             Optional<CustomPlanConfig> customPlanConfig,
             String description,
             Optional<PlanVersionResponseData> draftVersion,
-            List<PlanEntitlementResponseData> entitlements,
+            Optional<List<PlanEntitlementResponseData>> entitlements,
             List<FeatureInPlanResponseData> features,
             PlanIcon icon,
             String id,
@@ -153,6 +156,7 @@ public final class CompanyPlanDetailResponseData {
             Map<String, Object> additionalProperties) {
         this.activeVersion = activeVersion;
         this.audienceType = audienceType;
+        this.availablePeriods = availablePeriods;
         this.billingLinkedResource = billingLinkedResource;
         this.billingProduct = billingProduct;
         this.billingStrategy = billingStrategy;
@@ -203,6 +207,11 @@ public final class CompanyPlanDetailResponseData {
     @JsonProperty("audience_type")
     public Optional<String> getAudienceType() {
         return audienceType;
+    }
+
+    @JsonProperty("available_periods")
+    public List<PlanPriceCadence> getAvailablePeriods() {
+        return availablePeriods;
     }
 
     @JsonProperty("billing_linked_resource")
@@ -296,7 +305,7 @@ public final class CompanyPlanDetailResponseData {
     }
 
     @JsonProperty("entitlements")
-    public List<PlanEntitlementResponseData> getEntitlements() {
+    public Optional<List<PlanEntitlementResponseData>> getEntitlements() {
         return entitlements;
     }
 
@@ -417,6 +426,7 @@ public final class CompanyPlanDetailResponseData {
     private boolean equalTo(CompanyPlanDetailResponseData other) {
         return activeVersion.equals(other.activeVersion)
                 && audienceType.equals(other.audienceType)
+                && availablePeriods.equals(other.availablePeriods)
                 && billingLinkedResource.equals(other.billingLinkedResource)
                 && billingProduct.equals(other.billingProduct)
                 && billingStrategy.equals(other.billingStrategy)
@@ -463,6 +473,7 @@ public final class CompanyPlanDetailResponseData {
         return Objects.hash(
                 this.activeVersion,
                 this.audienceType,
+                this.availablePeriods,
                 this.billingLinkedResource,
                 this.billingProduct,
                 this.billingStrategy,
@@ -609,6 +620,12 @@ public final class CompanyPlanDetailResponseData {
 
         _FinalStage audienceType(String audienceType);
 
+        _FinalStage availablePeriods(List<PlanPriceCadence> availablePeriods);
+
+        _FinalStage addAvailablePeriods(PlanPriceCadence availablePeriods);
+
+        _FinalStage addAllAvailablePeriods(List<PlanPriceCadence> availablePeriods);
+
         _FinalStage billingLinkedResource(Optional<BillingLinkedResourceResponseData> billingLinkedResource);
 
         _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
@@ -649,11 +666,9 @@ public final class CompanyPlanDetailResponseData {
 
         _FinalStage draftVersion(PlanVersionResponseData draftVersion);
 
+        _FinalStage entitlements(Optional<List<PlanEntitlementResponseData>> entitlements);
+
         _FinalStage entitlements(List<PlanEntitlementResponseData> entitlements);
-
-        _FinalStage addEntitlements(PlanEntitlementResponseData entitlements);
-
-        _FinalStage addAllEntitlements(List<PlanEntitlementResponseData> entitlements);
 
         _FinalStage features(List<FeatureInPlanResponseData> features);
 
@@ -784,7 +799,7 @@ public final class CompanyPlanDetailResponseData {
 
         private List<FeatureInPlanResponseData> features = new ArrayList<>();
 
-        private List<PlanEntitlementResponseData> entitlements = new ArrayList<>();
+        private Optional<List<PlanEntitlementResponseData>> entitlements = Optional.empty();
 
         private Optional<PlanVersionResponseData> draftVersion = Optional.empty();
 
@@ -804,6 +819,8 @@ public final class CompanyPlanDetailResponseData {
 
         private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
 
+        private List<PlanPriceCadence> availablePeriods = new ArrayList<>();
+
         private Optional<String> audienceType = Optional.empty();
 
         private Optional<PlanVersionResponseData> activeVersion = Optional.empty();
@@ -817,6 +834,7 @@ public final class CompanyPlanDetailResponseData {
         public Builder from(CompanyPlanDetailResponseData other) {
             activeVersion(other.getActiveVersion());
             audienceType(other.getAudienceType());
+            availablePeriods(other.getAvailablePeriods());
             billingLinkedResource(other.getBillingLinkedResource());
             billingProduct(other.getBillingProduct());
             billingStrategy(other.getBillingStrategy());
@@ -1172,26 +1190,15 @@ public final class CompanyPlanDetailResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage addAllEntitlements(List<PlanEntitlementResponseData> entitlements) {
-            if (entitlements != null) {
-                this.entitlements.addAll(entitlements);
-            }
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage addEntitlements(PlanEntitlementResponseData entitlements) {
-            this.entitlements.add(entitlements);
+        public _FinalStage entitlements(List<PlanEntitlementResponseData> entitlements) {
+            this.entitlements = Optional.ofNullable(entitlements);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "entitlements", nulls = Nulls.SKIP)
-        public _FinalStage entitlements(List<PlanEntitlementResponseData> entitlements) {
-            this.entitlements.clear();
-            if (entitlements != null) {
-                this.entitlements.addAll(entitlements);
-            }
+        public _FinalStage entitlements(Optional<List<PlanEntitlementResponseData>> entitlements) {
+            this.entitlements = entitlements;
             return this;
         }
 
@@ -1335,6 +1342,30 @@ public final class CompanyPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllAvailablePeriods(List<PlanPriceCadence> availablePeriods) {
+            if (availablePeriods != null) {
+                this.availablePeriods.addAll(availablePeriods);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAvailablePeriods(PlanPriceCadence availablePeriods) {
+            this.availablePeriods.add(availablePeriods);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "available_periods", nulls = Nulls.SKIP)
+        public _FinalStage availablePeriods(List<PlanPriceCadence> availablePeriods) {
+            this.availablePeriods.clear();
+            if (availablePeriods != null) {
+                this.availablePeriods.addAll(availablePeriods);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage audienceType(String audienceType) {
             this.audienceType = Optional.ofNullable(audienceType);
             return this;
@@ -1365,6 +1396,7 @@ public final class CompanyPlanDetailResponseData {
             return new CompanyPlanDetailResponseData(
                     activeVersion,
                     audienceType,
+                    availablePeriods,
                     billingLinkedResource,
                     billingProduct,
                     billingStrategy,

@@ -31,6 +31,8 @@ public final class CountCompaniesRequest {
 
     private final Optional<List<String>> planIds;
 
+    private final Optional<List<String>> planVersionIds;
+
     private final Optional<List<SubscriptionStatus>> subscriptionStatuses;
 
     private final Optional<List<SubscriptionType>> subscriptionTypes;
@@ -69,6 +71,7 @@ public final class CountCompaniesRequest {
             Optional<List<String>> creditTypeIds,
             Optional<List<String>> ids,
             Optional<List<String>> planIds,
+            Optional<List<String>> planVersionIds,
             Optional<List<SubscriptionStatus>> subscriptionStatuses,
             Optional<List<SubscriptionType>> subscriptionTypes,
             Optional<Boolean> hasScheduledDowngrade,
@@ -89,6 +92,7 @@ public final class CountCompaniesRequest {
         this.creditTypeIds = creditTypeIds;
         this.ids = ids;
         this.planIds = planIds;
+        this.planVersionIds = planVersionIds;
         this.subscriptionStatuses = subscriptionStatuses;
         this.subscriptionTypes = subscriptionTypes;
         this.hasScheduledDowngrade = hasScheduledDowngrade;
@@ -130,6 +134,14 @@ public final class CountCompaniesRequest {
     @JsonProperty("plan_ids")
     public Optional<List<String>> getPlanIds() {
         return planIds;
+    }
+
+    /**
+     * @return Filter companies by one or more plan version IDs (each ID starts with plvr_). Takes precedence over plan_version_id when set.
+     */
+    @JsonProperty("plan_version_ids")
+    public Optional<List<String>> getPlanVersionIds() {
+        return planVersionIds;
     }
 
     /**
@@ -275,6 +287,7 @@ public final class CountCompaniesRequest {
         return creditTypeIds.equals(other.creditTypeIds)
                 && ids.equals(other.ids)
                 && planIds.equals(other.planIds)
+                && planVersionIds.equals(other.planVersionIds)
                 && subscriptionStatuses.equals(other.subscriptionStatuses)
                 && subscriptionTypes.equals(other.subscriptionTypes)
                 && hasScheduledDowngrade.equals(other.hasScheduledDowngrade)
@@ -299,6 +312,7 @@ public final class CountCompaniesRequest {
                 this.creditTypeIds,
                 this.ids,
                 this.planIds,
+                this.planVersionIds,
                 this.subscriptionStatuses,
                 this.subscriptionTypes,
                 this.hasScheduledDowngrade,
@@ -333,6 +347,8 @@ public final class CountCompaniesRequest {
         private Optional<List<String>> ids = Optional.empty();
 
         private Optional<List<String>> planIds = Optional.empty();
+
+        private Optional<List<String>> planVersionIds = Optional.empty();
 
         private Optional<List<SubscriptionStatus>> subscriptionStatuses = Optional.empty();
 
@@ -375,6 +391,7 @@ public final class CountCompaniesRequest {
             creditTypeIds(other.getCreditTypeIds());
             ids(other.getIds());
             planIds(other.getPlanIds());
+            planVersionIds(other.getPlanVersionIds());
             subscriptionStatuses(other.getSubscriptionStatuses());
             subscriptionTypes(other.getSubscriptionTypes());
             hasScheduledDowngrade(other.getHasScheduledDowngrade());
@@ -448,6 +465,25 @@ public final class CountCompaniesRequest {
 
         public Builder planIds(String planIds) {
             this.planIds = Optional.of(Collections.singletonList(planIds));
+            return this;
+        }
+
+        /**
+         * <p>Filter companies by one or more plan version IDs (each ID starts with plvr_). Takes precedence over plan_version_id when set.</p>
+         */
+        @JsonSetter(value = "plan_version_ids", nulls = Nulls.SKIP)
+        public Builder planVersionIds(Optional<List<String>> planVersionIds) {
+            this.planVersionIds = planVersionIds;
+            return this;
+        }
+
+        public Builder planVersionIds(List<String> planVersionIds) {
+            this.planVersionIds = Optional.ofNullable(planVersionIds);
+            return this;
+        }
+
+        public Builder planVersionIds(String planVersionIds) {
+            this.planVersionIds = Optional.of(Collections.singletonList(planVersionIds));
             return this;
         }
 
@@ -690,6 +726,7 @@ public final class CountCompaniesRequest {
                     creditTypeIds,
                     ids,
                     planIds,
+                    planVersionIds,
                     subscriptionStatuses,
                     subscriptionTypes,
                     hasScheduledDowngrade,

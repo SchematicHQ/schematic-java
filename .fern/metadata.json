@@ -1,7 +1,7 @@
 {
   "cliVersion": "5.6.0",
   "generatorName": "fernapi/fern-java-sdk",
-  "generatorVersion": "4.8.10",
+  "generatorVersion": "4.8.11",
   "generatorConfig": {
     "client-class-name": "BaseSchematic",
     "generate-unknown-as-json-node": true,
@@ -14,10 +14,10 @@
       "implementation redis.clients:jedis:5.2.0"
     ]
   },
-  "originGitCommit": "470e0f433ab9bb0e88784674fa2e1efce62ebd9b",
+  "originGitCommit": "a3057c10aa6a1daa708dc714c89ce943f67a722a",
   "originGitCommitIsDirty": false,
   "invokedBy": "ci",
-  "requestedVersion": "1.4.0",
+  "requestedVersion": "1.4.1",
   "ciProvider": "github",
-  "sdkVersion": "1.4.0"
+  "sdkVersion": "1.4.1"
 }

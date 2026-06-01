@@ -11,6 +11,8 @@ public final class IntegrationType {
 
     public static final IntegrationType UNKNOWN = new IntegrationType(Value.UNKNOWN, "unknown");
 
+    public static final IntegrationType WORKOS = new IntegrationType(Value.WORKOS, "workos");
+
     public static final IntegrationType CLERK = new IntegrationType(Value.CLERK, "clerk");
 
     public static final IntegrationType STRIPE = new IntegrationType(Value.STRIPE, "stripe");
@@ -51,6 +53,8 @@ public final class IntegrationType {
                 return visitor.visitOrb();
             case UNKNOWN:
                 return visitor.visitUnknown();
+            case WORKOS:
+                return visitor.visitWorkos();
             case CLERK:
                 return visitor.visitClerk();
             case STRIPE:
@@ -68,6 +72,8 @@ public final class IntegrationType {
                 return ORB;
             case "unknown":
                 return UNKNOWN;
+            case "workos":
+                return WORKOS;
             case "clerk":
                 return CLERK;
             case "stripe":
@@ -86,6 +92,8 @@ public final class IntegrationType {
 
         UNKNOWN,
 
+        WORKOS,
+
         _UNKNOWN
     }
 
@@ -97,6 +105,8 @@ public final class IntegrationType {
         T visitStripe();
 
         T visitUnknown();
+
+        T visitWorkos();
 
         T visitUnknown(String unknownType);
     }

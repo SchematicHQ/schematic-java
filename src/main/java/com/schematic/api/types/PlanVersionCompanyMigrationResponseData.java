@@ -32,6 +32,8 @@ public final class PlanVersionCompanyMigrationResponseData {
 
     private final Optional<String> error;
 
+    private final Optional<MigrationErrorCode> errorCode;
+
     private final String id;
 
     private final String migrationId;
@@ -52,6 +54,7 @@ public final class PlanVersionCompanyMigrationResponseData {
             Optional<OffsetDateTime> completedAt,
             OffsetDateTime createdAt,
             Optional<String> error,
+            Optional<MigrationErrorCode> errorCode,
             String id,
             String migrationId,
             Optional<String> planVersionIdFrom,
@@ -64,6 +67,7 @@ public final class PlanVersionCompanyMigrationResponseData {
         this.completedAt = completedAt;
         this.createdAt = createdAt;
         this.error = error;
+        this.errorCode = errorCode;
         this.id = id;
         this.migrationId = migrationId;
         this.planVersionIdFrom = planVersionIdFrom;
@@ -96,6 +100,11 @@ public final class PlanVersionCompanyMigrationResponseData {
     @JsonProperty("error")
     public Optional<String> getError() {
         return error;
+    }
+
+    @JsonProperty("error_code")
+    public Optional<MigrationErrorCode> getErrorCode() {
+        return errorCode;
     }
 
     @JsonProperty("id")
@@ -146,6 +155,7 @@ public final class PlanVersionCompanyMigrationResponseData {
                 && completedAt.equals(other.completedAt)
                 && createdAt.equals(other.createdAt)
                 && error.equals(other.error)
+                && errorCode.equals(other.errorCode)
                 && id.equals(other.id)
                 && migrationId.equals(other.migrationId)
                 && planVersionIdFrom.equals(other.planVersionIdFrom)
@@ -162,6 +172,7 @@ public final class PlanVersionCompanyMigrationResponseData {
                 this.completedAt,
                 this.createdAt,
                 this.error,
+                this.errorCode,
                 this.id,
                 this.migrationId,
                 this.planVersionIdFrom,
@@ -224,6 +235,10 @@ public final class PlanVersionCompanyMigrationResponseData {
 
         _FinalStage error(String error);
 
+        _FinalStage errorCode(Optional<MigrationErrorCode> errorCode);
+
+        _FinalStage errorCode(MigrationErrorCode errorCode);
+
         _FinalStage planVersionIdFrom(Optional<String> planVersionIdFrom);
 
         _FinalStage planVersionIdFrom(String planVersionIdFrom);
@@ -261,6 +276,8 @@ public final class PlanVersionCompanyMigrationResponseData {
 
         private Optional<String> planVersionIdFrom = Optional.empty();
 
+        private Optional<MigrationErrorCode> errorCode = Optional.empty();
+
         private Optional<String> error = Optional.empty();
 
         private Optional<OffsetDateTime> completedAt = Optional.empty();
@@ -277,6 +294,7 @@ public final class PlanVersionCompanyMigrationResponseData {
             completedAt(other.getCompletedAt());
             createdAt(other.getCreatedAt());
             error(other.getError());
+            errorCode(other.getErrorCode());
             id(other.getId());
             migrationId(other.getMigrationId());
             planVersionIdFrom(other.getPlanVersionIdFrom());
@@ -362,6 +380,19 @@ public final class PlanVersionCompanyMigrationResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage errorCode(MigrationErrorCode errorCode) {
+            this.errorCode = Optional.ofNullable(errorCode);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "error_code", nulls = Nulls.SKIP)
+        public _FinalStage errorCode(Optional<MigrationErrorCode> errorCode) {
+            this.errorCode = errorCode;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage error(String error) {
             this.error = Optional.ofNullable(error);
             return this;
@@ -395,6 +426,7 @@ public final class PlanVersionCompanyMigrationResponseData {
                     completedAt,
                     createdAt,
                     error,
+                    errorCode,
                     id,
                     migrationId,
                     planVersionIdFrom,
