@@ -12,6 +12,7 @@ import com.schematic.api.datastream.DataStreamException;
 import com.schematic.api.datastream.DatastreamOptions;
 import com.schematic.api.datastream.WasmRulesEngine;
 import com.schematic.api.logger.ConsoleLogger;
+import com.schematic.api.logger.LogLevel;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
 import com.schematic.api.resources.features.types.CheckFlagsResponse;
@@ -53,7 +54,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         this.apiKey = builder.apiKey;
         this.eventBufferInterval =
                 builder.eventBufferInterval != null ? builder.eventBufferInterval : Duration.ofMillis(5000);
-        this.logger = builder.logger != null ? builder.logger : new ConsoleLogger();
+        // A consumer-provided logger is used as-is (its own level governs); logLevel only
+        // configures the default ConsoleLogger, which otherwise defaults to WARN.
+        this.logger = builder.logger != null ? builder.logger : new ConsoleLogger(builder.logLevel);
         this.flagDefaults = builder.flagDefaults != null ? builder.flagDefaults : new HashMap<>();
         this.offline = builder.offline;
         this.flagCheckCacheProviders = builder.cacheProviders != null
@@ -150,6 +153,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     public static class Builder {
         private String apiKey;
         private SchematicLogger logger;
+        private LogLevel logLevel;
         private Map<String, Boolean> flagDefaults;
         private List<CacheProvider<RulesengineCheckFlagResult>> cacheProviders;
         private boolean offline;
@@ -167,6 +171,16 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
         public Builder logger(SchematicLogger logger) {
             this.logger = logger;
+            return this;
+        }
+
+        /**
+         * Sets the level for the default {@link ConsoleLogger} (defaults to {@link LogLevel#WARN}).
+         * Ignored when a custom {@link #logger(SchematicLogger)} is provided — that logger's own level
+         * configuration is the source of truth.
+         */
+        public Builder logLevel(LogLevel logLevel) {
+            this.logLevel = logLevel;
             return this;
         }
 
@@ -556,6 +570,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     public void identify(
             Map<String, String> keys, EventBodyIdentifyCompany company, String name, Map<String, Object> traits) {
+        identify(keys, company, name, traits, null);
+    }
+
+    public void identify(
+            Map<String, String> keys,
+            EventBodyIdentifyCompany company,
+            String name,
+            Map<String, Object> traits,
+            IdentifyOptions options) {
         if (offline) return;
 
         try {
@@ -566,13 +589,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .traits(objectMapToJsonNode(traits))
                     .build();
 
-            CreateEventRequestBody event = CreateEventRequestBody.builder()
-                    .eventType(EventType.IDENTIFY)
-                    .body(EventBody.of(body))
-                    .sentAt(OffsetDateTime.now())
-                    .build();
-
-            eventBuffer.push(event);
+            eventBuffer.push(buildIdentifyEvent(EventBody.of(body), options));
         } catch (Exception e) {
             logger.error("Error sending identify event: " + e.getMessage());
         }
@@ -580,7 +597,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     public void track(
             String eventName, Map<String, String> company, Map<String, String> user, Map<String, Object> traits) {
-        track(eventName, company, user, traits, 1);
+        track(eventName, company, user, traits, 1, null);
     }
 
     public void track(
@@ -589,6 +606,25 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             Map<String, String> user,
             Map<String, Object> traits,
             Integer quantity) {
+        track(eventName, company, user, traits, quantity, null);
+    }
+
+    public void track(
+            String eventName,
+            Map<String, String> company,
+            Map<String, String> user,
+            Map<String, Object> traits,
+            TrackOptions options) {
+        track(eventName, company, user, traits, 1, options);
+    }
+
+    public void track(
+            String eventName,
+            Map<String, String> company,
+            Map<String, String> user,
+            Map<String, Object> traits,
+            Integer quantity,
+            TrackOptions options) {
         if (offline) return;
 
         try {
@@ -600,13 +636,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .quantity(quantity)
                     .build();
 
-            CreateEventRequestBody event = CreateEventRequestBody.builder()
-                    .eventType(EventType.TRACK)
-                    .body(EventBody.of(body))
-                    .sentAt(OffsetDateTime.now())
-                    .build();
-
-            eventBuffer.push(event);
+            eventBuffer.push(buildTrackEvent(EventBody.of(body), options));
 
             // Update cached company metrics if datastream is active
             if (company != null && !company.isEmpty() && dataStreamClient != null && dataStreamClient.isConnected()) {
@@ -619,6 +649,41 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         } catch (Exception e) {
             logger.error("Error sending track event: " + e.getMessage());
         }
+    }
+
+    /**
+     * Builds the identify event pushed to the buffer. Package-private for unit-testing the
+     * option-to-event mapping. {@code sent_at} is stamped with the local clock; a null option
+     * field passes through to {@code Optional.empty()} and is omitted from the wire.
+     */
+    static CreateEventRequestBody buildIdentifyEvent(EventBody body, IdentifyOptions options) {
+        CreateEventRequestBody._FinalStage event = CreateEventRequestBody.builder()
+                .eventType(EventType.IDENTIFY)
+                .body(body)
+                .sentAt(OffsetDateTime.now());
+        if (options != null) {
+            event.idempotencyKey(options.getIdempotencyKey());
+        }
+        return event.build();
+    }
+
+    /**
+     * Builds the track event pushed to the buffer. Package-private for unit-testing the
+     * option-to-event mapping. An explicit {@code sentAt} option overrides the local-clock default
+     * (required when {@code trustedClientClock} is set); other null option fields pass through to
+     * {@code Optional.empty()} and are omitted from the wire.
+     */
+    static CreateEventRequestBody buildTrackEvent(EventBody body, TrackOptions options) {
+        CreateEventRequestBody._FinalStage event = CreateEventRequestBody.builder()
+                .eventType(EventType.TRACK)
+                .body(body)
+                .sentAt(options != null && options.getSentAt() != null ? options.getSentAt() : OffsetDateTime.now());
+        if (options != null) {
+            event.idempotencyKey(options.getIdempotencyKey())
+                    .trustedClientClock(options.getTrustedClientClock())
+                    .backfill(options.getBackfill());
+        }
+        return event.build();
     }
 
     @Override

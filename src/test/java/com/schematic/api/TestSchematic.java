@@ -15,9 +15,15 @@ import com.schematic.api.resources.features.types.CheckFlagsResponse;
 import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.CheckFlagResponseData;
 import com.schematic.api.types.CheckFlagsResponseData;
+import com.schematic.api.types.CreateEventRequestBody;
+import com.schematic.api.types.EventBody;
+import com.schematic.api.types.EventBodyIdentify;
 import com.schematic.api.types.EventBodyIdentifyCompany;
+import com.schematic.api.types.EventBodyTrack;
+import com.schematic.api.types.EventType;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -170,6 +176,82 @@ class SchematicTest {
         Thread.sleep(100);
 
         verify(logger, never()).error(any());
+    }
+
+    // --- Track/identify option mapping (buildTrackEvent / buildIdentifyEvent) ---
+
+    @Test
+    void buildTrackEvent_appliesAllOptions() {
+        OffsetDateTime sentAt = OffsetDateTime.parse("2026-01-01T00:00:00Z");
+        EventBody body = EventBody.of(EventBodyTrack.builder().event("e").build());
+
+        CreateEventRequestBody event = Schematic.buildTrackEvent(
+                body,
+                TrackOptions.builder()
+                        .idempotencyKey("idem-1")
+                        .sentAt(sentAt)
+                        .trustedClientClock(true)
+                        .backfill(false)
+                        .build());
+
+        assertEquals(EventType.TRACK, event.getEventType());
+        assertEquals("idem-1", event.getIdempotencyKey().get());
+        assertEquals(sentAt, event.getSentAt().get());
+        assertTrue(event.getTrustedClientClock().get());
+        assertFalse(event.getBackfill().get());
+    }
+
+    @Test
+    void buildTrackEvent_nullOptionsLeavesMetadataUnsetAndStampsSentAt() {
+        EventBody body = EventBody.of(EventBodyTrack.builder().event("e").build());
+
+        CreateEventRequestBody event = Schematic.buildTrackEvent(body, null);
+
+        assertFalse(event.getIdempotencyKey().isPresent());
+        assertFalse(event.getTrustedClientClock().isPresent());
+        assertFalse(event.getBackfill().isPresent());
+        assertTrue(event.getSentAt().isPresent(), "sent_at should default to now()");
+    }
+
+    @Test
+    void buildTrackEvent_defaultsSentAtToNowWhenOptionOmitsIt() {
+        EventBody body = EventBody.of(EventBodyTrack.builder().event("e").build());
+        OffsetDateTime before = OffsetDateTime.now().minusSeconds(1);
+
+        CreateEventRequestBody event = Schematic.buildTrackEvent(
+                body, TrackOptions.builder().idempotencyKey("idem-1").build());
+
+        OffsetDateTime after = OffsetDateTime.now().plusSeconds(1);
+        assertTrue(event.getSentAt().isPresent());
+        OffsetDateTime sentAt = event.getSentAt().get();
+        assertTrue(sentAt.isAfter(before) && sentAt.isBefore(after));
+        assertEquals("idem-1", event.getIdempotencyKey().get());
+    }
+
+    @Test
+    void buildIdentifyEvent_appliesIdempotencyKey() {
+        EventBody body = EventBody.of(EventBodyIdentify.builder()
+                .keys(Collections.singletonMap("user_id", "u1"))
+                .build());
+
+        CreateEventRequestBody event = Schematic.buildIdentifyEvent(
+                body, IdentifyOptions.builder().idempotencyKey("idem-2").build());
+
+        assertEquals(EventType.IDENTIFY, event.getEventType());
+        assertEquals("idem-2", event.getIdempotencyKey().get());
+        assertTrue(event.getSentAt().isPresent());
+    }
+
+    @Test
+    void buildIdentifyEvent_nullOptionsLeavesIdempotencyUnset() {
+        EventBody body = EventBody.of(EventBodyIdentify.builder()
+                .keys(Collections.singletonMap("user_id", "u1"))
+                .build());
+
+        CreateEventRequestBody event = Schematic.buildIdentifyEvent(body, null);
+
+        assertFalse(event.getIdempotencyKey().isPresent());
+        assertTrue(event.getSentAt().isPresent());
     }
 
     @Test

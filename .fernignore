@@ -12,7 +12,9 @@ sample-app/
 src/main/java/com/schematic/api/BaseSchematic.java
 src/main/java/com/schematic/api/EventBuffer.java
 src/main/java/com/schematic/api/HttpEventSender.java
+src/main/java/com/schematic/api/IdentifyOptions.java
 src/main/java/com/schematic/api/Schematic.java
+src/main/java/com/schematic/api/TrackOptions.java
 src/main/java/com/schematic/api/cache/CacheProvider.java
 src/main/java/com/schematic/api/cache/CachedItem.java
 src/main/java/com/schematic/api/cache/LocalCache.java
@@ -20,9 +22,11 @@ src/main/java/com/schematic/api/cache/RedisCacheConfig.java
 src/main/java/com/schematic/api/cache/RedisCacheProvider.java
 src/main/java/com/schematic/api/core/NoOpHttpClient.java
 src/main/java/com/schematic/api/logger/ConsoleLogger.java
+src/main/java/com/schematic/api/logger/LogLevel.java
 src/main/java/com/schematic/api/datastream/
 src/main/java/com/schematic/api/logger/SchematicLogger.java
 src/main/java/com/schematic/webhook/
+src/test/java/com/schematic/api/HttpEventSenderTest.java
 src/test/java/com/schematic/api/TestCache.java
 src/test/java/com/schematic/api/TestEventBuffer.java
 src/test/java/com/schematic/api/TestLogger.java
