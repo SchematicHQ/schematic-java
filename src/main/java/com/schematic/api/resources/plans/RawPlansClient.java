@@ -4,6 +4,7 @@
 package com.schematic.api.resources.plans;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.BaseSchematicHttpResponse;
@@ -41,6 +42,7 @@ import com.schematic.api.resources.plans.types.ListBillingProductMatchCompaniesR
 import com.schematic.api.resources.plans.types.ListCustomPlanBillingsResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
 import com.schematic.api.resources.plans.types.ListPlansResponse;
+import com.schematic.api.resources.plans.types.MarkCustomPlanBillingPaidResponse;
 import com.schematic.api.resources.plans.types.PublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.RetryCustomPlanBillingResponse;
 import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
@@ -52,6 +54,7 @@ import com.schematic.api.types.CreatePlanRequestBody;
 import com.schematic.api.types.UpdatePlanRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
 import java.io.IOException;
+import java.util.Map;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -202,6 +205,79 @@ public class RawPlansClient {
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListCustomPlanBillingsResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<MarkCustomPlanBillingPaidResponse> markCustomPlanBillingPaid(
+            String customPlanBillingId, Map<String, JsonNode> request) {
+        return markCustomPlanBillingPaid(customPlanBillingId, request, null);
+    }
+
+    public BaseSchematicHttpResponse<MarkCustomPlanBillingPaidResponse> markCustomPlanBillingPaid(
+            String customPlanBillingId, Map<String, JsonNode> request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("custom-plan-billings")
+                .addPathSegment(customPlanBillingId)
+                .addPathSegments("mark-paid");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("PUT", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, MarkCustomPlanBillingPaidResponse.class),
                         response);
             }
             try {
@@ -448,6 +524,10 @@ public class RawPlansClient {
                     "scoped_to_company_id",
                     request.getScopedToCompanyId().get(),
                     false);
+        }
+        if (request.getWithEntitlements().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "with_entitlements", request.getWithEntitlements().get(), false);
         }
         if (request.getWithoutEntitlementFor().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1159,6 +1239,10 @@ public class RawPlansClient {
                     "scoped_to_company_id",
                     request.getScopedToCompanyId().get(),
                     false);
+        }
+        if (request.getWithEntitlements().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "with_entitlements", request.getWithEntitlements().get(), false);
         }
         if (request.getWithoutEntitlementFor().isPresent()) {
             QueryStringMapper.addQueryParameter(

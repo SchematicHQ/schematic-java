@@ -7,13 +7,18 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.planmigrations.requests.CountCompanyMigrationsRequest;
 import com.schematic.api.resources.planmigrations.requests.CountMigrationsRequest;
+import com.schematic.api.resources.planmigrations.requests.CreateMigrationInput;
 import com.schematic.api.resources.planmigrations.requests.ListCompanyMigrationsRequest;
 import com.schematic.api.resources.planmigrations.requests.ListMigrationsRequest;
+import com.schematic.api.resources.planmigrations.requests.RetryMigrationRequestBody;
 import com.schematic.api.resources.planmigrations.types.CountCompanyMigrationsResponse;
 import com.schematic.api.resources.planmigrations.types.CountMigrationsResponse;
+import com.schematic.api.resources.planmigrations.types.CreateMigrationResponse;
 import com.schematic.api.resources.planmigrations.types.GetMigrationResponse;
 import com.schematic.api.resources.planmigrations.types.ListCompanyMigrationsResponse;
 import com.schematic.api.resources.planmigrations.types.ListMigrationsResponse;
+import com.schematic.api.resources.planmigrations.types.RetryCompanyMigrationResponse;
+import com.schematic.api.resources.planmigrations.types.RetryMigrationResponse;
 
 public class PlanmigrationsClient {
     protected final ClientOptions clientOptions;
@@ -49,6 +54,19 @@ public class PlanmigrationsClient {
         return this.rawClient.listCompanyMigrations(request, requestOptions).body();
     }
 
+    public RetryCompanyMigrationResponse retryCompanyMigration(String planVersionCompanyMigrationId) {
+        return this.rawClient
+                .retryCompanyMigration(planVersionCompanyMigrationId)
+                .body();
+    }
+
+    public RetryCompanyMigrationResponse retryCompanyMigration(
+            String planVersionCompanyMigrationId, RequestOptions requestOptions) {
+        return this.rawClient
+                .retryCompanyMigration(planVersionCompanyMigrationId, requestOptions)
+                .body();
+    }
+
     public CountCompanyMigrationsResponse countCompanyMigrations() {
         return this.rawClient.countCompanyMigrations().body();
     }
@@ -82,6 +100,14 @@ public class PlanmigrationsClient {
         return this.rawClient.listMigrations(request, requestOptions).body();
     }
 
+    public CreateMigrationResponse createMigration(CreateMigrationInput request) {
+        return this.rawClient.createMigration(request).body();
+    }
+
+    public CreateMigrationResponse createMigration(CreateMigrationInput request, RequestOptions requestOptions) {
+        return this.rawClient.createMigration(request, requestOptions).body();
+    }
+
     public GetMigrationResponse getMigration(String planVersionMigrationId) {
         return this.rawClient.getMigration(planVersionMigrationId).body();
     }
@@ -89,6 +115,17 @@ public class PlanmigrationsClient {
     public GetMigrationResponse getMigration(String planVersionMigrationId, RequestOptions requestOptions) {
         return this.rawClient
                 .getMigration(planVersionMigrationId, requestOptions)
+                .body();
+    }
+
+    public RetryMigrationResponse retryMigration(String planVersionMigrationId, RetryMigrationRequestBody request) {
+        return this.rawClient.retryMigration(planVersionMigrationId, request).body();
+    }
+
+    public RetryMigrationResponse retryMigration(
+            String planVersionMigrationId, RetryMigrationRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .retryMigration(planVersionMigrationId, request, requestOptions)
                 .body();
     }
 

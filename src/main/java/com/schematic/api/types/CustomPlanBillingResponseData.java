@@ -30,6 +30,8 @@ public final class CustomPlanBillingResponseData {
 
     private final long daysUntilDue;
 
+    private final Optional<String> externalInvoiceId;
+
     private final String id;
 
     private final Optional<OffsetDateTime> paidAt;
@@ -51,6 +53,7 @@ public final class CustomPlanBillingResponseData {
             String companyId,
             OffsetDateTime createdAt,
             long daysUntilDue,
+            Optional<String> externalInvoiceId,
             String id,
             Optional<OffsetDateTime> paidAt,
             String planId,
@@ -63,6 +66,7 @@ public final class CustomPlanBillingResponseData {
         this.companyId = companyId;
         this.createdAt = createdAt;
         this.daysUntilDue = daysUntilDue;
+        this.externalInvoiceId = externalInvoiceId;
         this.id = id;
         this.paidAt = paidAt;
         this.planId = planId;
@@ -91,6 +95,11 @@ public final class CustomPlanBillingResponseData {
     @JsonProperty("days_until_due")
     public long getDaysUntilDue() {
         return daysUntilDue;
+    }
+
+    @JsonProperty("external_invoice_id")
+    public Optional<String> getExternalInvoiceId() {
+        return externalInvoiceId;
     }
 
     @JsonProperty("id")
@@ -144,6 +153,7 @@ public final class CustomPlanBillingResponseData {
                 && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
                 && daysUntilDue == other.daysUntilDue
+                && externalInvoiceId.equals(other.externalInvoiceId)
                 && id.equals(other.id)
                 && paidAt.equals(other.paidAt)
                 && planId.equals(other.planId)
@@ -160,6 +170,7 @@ public final class CustomPlanBillingResponseData {
                 this.companyId,
                 this.createdAt,
                 this.daysUntilDue,
+                this.externalInvoiceId,
                 this.id,
                 this.paidAt,
                 this.planId,
@@ -219,6 +230,10 @@ public final class CustomPlanBillingResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage externalInvoiceId(Optional<String> externalInvoiceId);
+
+        _FinalStage externalInvoiceId(String externalInvoiceId);
+
         _FinalStage paidAt(Optional<OffsetDateTime> paidAt);
 
         _FinalStage paidAt(OffsetDateTime paidAt);
@@ -265,6 +280,8 @@ public final class CustomPlanBillingResponseData {
 
         private Optional<OffsetDateTime> paidAt = Optional.empty();
 
+        private Optional<String> externalInvoiceId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -276,6 +293,7 @@ public final class CustomPlanBillingResponseData {
             companyId(other.getCompanyId());
             createdAt(other.getCreatedAt());
             daysUntilDue(other.getDaysUntilDue());
+            externalInvoiceId(other.getExternalInvoiceId());
             id(other.getId());
             paidAt(other.getPaidAt());
             planId(other.getPlanId());
@@ -382,12 +400,26 @@ public final class CustomPlanBillingResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage externalInvoiceId(String externalInvoiceId) {
+            this.externalInvoiceId = Optional.ofNullable(externalInvoiceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "external_invoice_id", nulls = Nulls.SKIP)
+        public _FinalStage externalInvoiceId(Optional<String> externalInvoiceId) {
+            this.externalInvoiceId = externalInvoiceId;
+            return this;
+        }
+
+        @java.lang.Override
         public CustomPlanBillingResponseData build() {
             return new CustomPlanBillingResponseData(
                     activationStrategy,
                     companyId,
                     createdAt,
                     daysUntilDue,
+                    externalInvoiceId,
                     id,
                     paidAt,
                     planId,

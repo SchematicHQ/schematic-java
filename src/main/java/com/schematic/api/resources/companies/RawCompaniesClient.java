@@ -196,6 +196,10 @@ public class RawCompaniesClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_ids", request.getPlanIds().get(), true);
         }
+        if (request.getPlanVersionIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_ids", request.getPlanVersionIds().get(), true);
+        }
         if (request.getSubscriptionStatuses().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -568,6 +572,10 @@ public class RawCompaniesClient {
         if (request.getPlanIds().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_ids", request.getPlanIds().get(), true);
+        }
+        if (request.getPlanVersionIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_ids", request.getPlanVersionIds().get(), true);
         }
         if (request.getSubscriptionStatuses().isPresent()) {
             QueryStringMapper.addQueryParameter(

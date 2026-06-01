@@ -38,6 +38,10 @@ public final class IntegrationConfig {
         return new IntegrationConfig(new StripeValue(value));
     }
 
+    public static IntegrationConfig workos(WorkOsIntegrationConfig value) {
+        return new IntegrationConfig(new WorkosValue(value));
+    }
+
     public boolean isClerk() {
         return value instanceof ClerkValue;
     }
@@ -48,6 +52,10 @@ public final class IntegrationConfig {
 
     public boolean isStripe() {
         return value instanceof StripeValue;
+    }
+
+    public boolean isWorkos() {
+        return value instanceof WorkosValue;
     }
 
     public boolean _isUnknown() {
@@ -71,6 +79,13 @@ public final class IntegrationConfig {
     public Optional<StripeIntegrationConfig> getStripe() {
         if (isStripe()) {
             return Optional.of(((StripeValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<WorkOsIntegrationConfig> getWorkos() {
+        if (isWorkos()) {
+            return Optional.of(((WorkosValue) value).value);
         }
         return Optional.empty();
     }
@@ -110,6 +125,8 @@ public final class IntegrationConfig {
 
         T visitStripe(StripeIntegrationConfig stripe);
 
+        T visitWorkos(WorkOsIntegrationConfig workos);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -117,7 +134,8 @@ public final class IntegrationConfig {
     @JsonSubTypes({
         @JsonSubTypes.Type(ClerkValue.class),
         @JsonSubTypes.Type(OrbValue.class),
-        @JsonSubTypes.Type(StripeValue.class)
+        @JsonSubTypes.Type(StripeValue.class),
+        @JsonSubTypes.Type(WorkosValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -230,6 +248,46 @@ public final class IntegrationConfig {
         }
 
         private boolean equalTo(StripeValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "IntegrationConfig{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("workos")
+    @JsonIgnoreProperties("type")
+    private static final class WorkosValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private WorkOsIntegrationConfig value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private WorkosValue() {}
+
+        private WorkosValue(WorkOsIntegrationConfig value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitWorkos(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof WorkosValue && equalTo((WorkosValue) other);
+        }
+
+        private boolean equalTo(WorkosValue other) {
             return value.equals(other.value);
         }
 

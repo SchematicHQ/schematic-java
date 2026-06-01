@@ -54,6 +54,8 @@ public final class PlanDetailResponseData {
 
     private final Optional<PlanVersionResponseData> draftVersion;
 
+    private final Optional<List<PlanEntitlementResponseData>> entitlements;
+
     private final List<FeatureInPlanResponseData> features;
 
     private final PlanIcon icon;
@@ -104,6 +106,7 @@ public final class PlanDetailResponseData {
             List<PlanCurrencyPricesResponseData> currencyPrices,
             String description,
             Optional<PlanVersionResponseData> draftVersion,
+            Optional<List<PlanEntitlementResponseData>> entitlements,
             List<FeatureInPlanResponseData> features,
             PlanIcon icon,
             String id,
@@ -136,6 +139,7 @@ public final class PlanDetailResponseData {
         this.currencyPrices = currencyPrices;
         this.description = description;
         this.draftVersion = draftVersion;
+        this.entitlements = entitlements;
         this.features = features;
         this.icon = icon;
         this.id = id;
@@ -228,6 +232,11 @@ public final class PlanDetailResponseData {
     @JsonProperty("draft_version")
     public Optional<PlanVersionResponseData> getDraftVersion() {
         return draftVersion;
+    }
+
+    @JsonProperty("entitlements")
+    public Optional<List<PlanEntitlementResponseData>> getEntitlements() {
+        return entitlements;
     }
 
     @JsonProperty("features")
@@ -340,6 +349,7 @@ public final class PlanDetailResponseData {
                 && currencyPrices.equals(other.currencyPrices)
                 && description.equals(other.description)
                 && draftVersion.equals(other.draftVersion)
+                && entitlements.equals(other.entitlements)
                 && features.equals(other.features)
                 && icon.equals(other.icon)
                 && id.equals(other.id)
@@ -376,6 +386,7 @@ public final class PlanDetailResponseData {
                 this.currencyPrices,
                 this.description,
                 this.draftVersion,
+                this.entitlements,
                 this.features,
                 this.icon,
                 this.id,
@@ -509,6 +520,10 @@ public final class PlanDetailResponseData {
 
         _FinalStage draftVersion(PlanVersionResponseData draftVersion);
 
+        _FinalStage entitlements(Optional<List<PlanEntitlementResponseData>> entitlements);
+
+        _FinalStage entitlements(List<PlanEntitlementResponseData> entitlements);
+
         _FinalStage features(List<FeatureInPlanResponseData> features);
 
         _FinalStage addFeatures(FeatureInPlanResponseData features);
@@ -607,6 +622,8 @@ public final class PlanDetailResponseData {
 
         private List<FeatureInPlanResponseData> features = new ArrayList<>();
 
+        private Optional<List<PlanEntitlementResponseData>> entitlements = Optional.empty();
+
         private Optional<PlanVersionResponseData> draftVersion = Optional.empty();
 
         private List<PlanCurrencyPricesResponseData> currencyPrices = new ArrayList<>();
@@ -647,6 +664,7 @@ public final class PlanDetailResponseData {
             currencyPrices(other.getCurrencyPrices());
             description(other.getDescription());
             draftVersion(other.getDraftVersion());
+            entitlements(other.getEntitlements());
             features(other.getFeatures());
             icon(other.getIcon());
             id(other.getId());
@@ -897,6 +915,19 @@ public final class PlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage entitlements(List<PlanEntitlementResponseData> entitlements) {
+            this.entitlements = Optional.ofNullable(entitlements);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "entitlements", nulls = Nulls.SKIP)
+        public _FinalStage entitlements(Optional<List<PlanEntitlementResponseData>> entitlements) {
+            this.entitlements = entitlements;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage draftVersion(PlanVersionResponseData draftVersion) {
             this.draftVersion = Optional.ofNullable(draftVersion);
             return this;
@@ -1042,6 +1073,7 @@ public final class PlanDetailResponseData {
                     currencyPrices,
                     description,
                     draftVersion,
+                    entitlements,
                     features,
                     icon,
                     id,

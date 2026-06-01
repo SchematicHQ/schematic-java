@@ -69,6 +69,8 @@ public final class UpdatePlanEntitlementRequestBody {
 
     private final Optional<BillingTiersMode> tierMode;
 
+    private final Optional<Long> usageQuantity;
+
     private final Optional<Boolean> valueBool;
 
     private final Optional<String> valueCreditId;
@@ -110,6 +112,7 @@ public final class UpdatePlanEntitlementRequestBody {
             Optional<String> quarterlyUnitPriceDecimal,
             Optional<Long> softLimit,
             Optional<BillingTiersMode> tierMode,
+            Optional<Long> usageQuantity,
             Optional<Boolean> valueBool,
             Optional<String> valueCreditId,
             Optional<Long> valueNumeric,
@@ -140,6 +143,7 @@ public final class UpdatePlanEntitlementRequestBody {
         this.quarterlyUnitPriceDecimal = quarterlyUnitPriceDecimal;
         this.softLimit = softLimit;
         this.tierMode = tierMode;
+        this.usageQuantity = usageQuantity;
         this.valueBool = valueBool;
         this.valueCreditId = valueCreditId;
         this.valueNumeric = valueNumeric;
@@ -255,6 +259,14 @@ public final class UpdatePlanEntitlementRequestBody {
         return tierMode;
     }
 
+    /**
+     * @return The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.
+     */
+    @JsonProperty("usage_quantity")
+    public Optional<Long> getUsageQuantity() {
+        return usageQuantity;
+    }
+
     @JsonProperty("value_bool")
     public Optional<Boolean> getValueBool() {
         return valueBool;
@@ -332,6 +344,7 @@ public final class UpdatePlanEntitlementRequestBody {
                 && quarterlyUnitPriceDecimal.equals(other.quarterlyUnitPriceDecimal)
                 && softLimit.equals(other.softLimit)
                 && tierMode.equals(other.tierMode)
+                && usageQuantity.equals(other.usageQuantity)
                 && valueBool.equals(other.valueBool)
                 && valueCreditId.equals(other.valueCreditId)
                 && valueNumeric.equals(other.valueNumeric)
@@ -366,6 +379,7 @@ public final class UpdatePlanEntitlementRequestBody {
                 this.quarterlyUnitPriceDecimal,
                 this.softLimit,
                 this.tierMode,
+                this.usageQuantity,
                 this.valueBool,
                 this.valueCreditId,
                 this.valueNumeric,
@@ -482,6 +496,13 @@ public final class UpdatePlanEntitlementRequestBody {
 
         _FinalStage tierMode(BillingTiersMode tierMode);
 
+        /**
+         * <p>The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.</p>
+         */
+        _FinalStage usageQuantity(Optional<Long> usageQuantity);
+
+        _FinalStage usageQuantity(Long usageQuantity);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -534,6 +555,8 @@ public final class UpdatePlanEntitlementRequestBody {
         private Optional<String> valueCreditId = Optional.empty();
 
         private Optional<Boolean> valueBool = Optional.empty();
+
+        private Optional<Long> usageQuantity = Optional.empty();
 
         private Optional<BillingTiersMode> tierMode = Optional.empty();
 
@@ -602,6 +625,7 @@ public final class UpdatePlanEntitlementRequestBody {
             quarterlyUnitPriceDecimal(other.getQuarterlyUnitPriceDecimal());
             softLimit(other.getSoftLimit());
             tierMode(other.getTierMode());
+            usageQuantity(other.getUsageQuantity());
             valueBool(other.getValueBool());
             valueCreditId(other.getValueCreditId());
             valueNumeric(other.getValueNumeric());
@@ -722,6 +746,26 @@ public final class UpdatePlanEntitlementRequestBody {
         @JsonSetter(value = "value_bool", nulls = Nulls.SKIP)
         public _FinalStage valueBool(Optional<Boolean> valueBool) {
             this.valueBool = valueBool;
+            return this;
+        }
+
+        /**
+         * <p>The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage usageQuantity(Long usageQuantity) {
+            this.usageQuantity = Optional.ofNullable(usageQuantity);
+            return this;
+        }
+
+        /**
+         * <p>The committed unit quantity for this entitlement. For custom plans this is the quantity the company is contractually committed to; for standard plans it is the quantity pre-filled when subscribing. Only applies to pay-in-advance entitlements. Note: this is not yet enforced/auto-provisioned as a true default — it is currently stored for downstream billing use.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "usage_quantity", nulls = Nulls.SKIP)
+        public _FinalStage usageQuantity(Optional<Long> usageQuantity) {
+            this.usageQuantity = usageQuantity;
             return this;
         }
 
@@ -1015,6 +1059,7 @@ public final class UpdatePlanEntitlementRequestBody {
                     quarterlyUnitPriceDecimal,
                     softLimit,
                     tierMode,
+                    usageQuantity,
                     valueBool,
                     valueCreditId,
                     valueNumeric,

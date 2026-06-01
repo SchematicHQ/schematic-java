@@ -7,13 +7,18 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.planmigrations.requests.CountCompanyMigrationsRequest;
 import com.schematic.api.resources.planmigrations.requests.CountMigrationsRequest;
+import com.schematic.api.resources.planmigrations.requests.CreateMigrationInput;
 import com.schematic.api.resources.planmigrations.requests.ListCompanyMigrationsRequest;
 import com.schematic.api.resources.planmigrations.requests.ListMigrationsRequest;
+import com.schematic.api.resources.planmigrations.requests.RetryMigrationRequestBody;
 import com.schematic.api.resources.planmigrations.types.CountCompanyMigrationsResponse;
 import com.schematic.api.resources.planmigrations.types.CountMigrationsResponse;
+import com.schematic.api.resources.planmigrations.types.CreateMigrationResponse;
 import com.schematic.api.resources.planmigrations.types.GetMigrationResponse;
 import com.schematic.api.resources.planmigrations.types.ListCompanyMigrationsResponse;
 import com.schematic.api.resources.planmigrations.types.ListMigrationsResponse;
+import com.schematic.api.resources.planmigrations.types.RetryCompanyMigrationResponse;
+import com.schematic.api.resources.planmigrations.types.RetryMigrationResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncPlanmigrationsClient {
@@ -51,6 +56,20 @@ public class AsyncPlanmigrationsClient {
         return this.rawClient.listCompanyMigrations(request, requestOptions).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<RetryCompanyMigrationResponse> retryCompanyMigration(
+            String planVersionCompanyMigrationId) {
+        return this.rawClient
+                .retryCompanyMigration(planVersionCompanyMigrationId)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<RetryCompanyMigrationResponse> retryCompanyMigration(
+            String planVersionCompanyMigrationId, RequestOptions requestOptions) {
+        return this.rawClient
+                .retryCompanyMigration(planVersionCompanyMigrationId, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CountCompanyMigrationsResponse> countCompanyMigrations() {
         return this.rawClient.countCompanyMigrations().thenApply(response -> response.body());
     }
@@ -86,6 +105,15 @@ public class AsyncPlanmigrationsClient {
         return this.rawClient.listMigrations(request, requestOptions).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CreateMigrationResponse> createMigration(CreateMigrationInput request) {
+        return this.rawClient.createMigration(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CreateMigrationResponse> createMigration(
+            CreateMigrationInput request, RequestOptions requestOptions) {
+        return this.rawClient.createMigration(request, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<GetMigrationResponse> getMigration(String planVersionMigrationId) {
         return this.rawClient.getMigration(planVersionMigrationId).thenApply(response -> response.body());
     }
@@ -94,6 +122,18 @@ public class AsyncPlanmigrationsClient {
             String planVersionMigrationId, RequestOptions requestOptions) {
         return this.rawClient
                 .getMigration(planVersionMigrationId, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<RetryMigrationResponse> retryMigration(
+            String planVersionMigrationId, RetryMigrationRequestBody request) {
+        return this.rawClient.retryMigration(planVersionMigrationId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<RetryMigrationResponse> retryMigration(
+            String planVersionMigrationId, RetryMigrationRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .retryMigration(planVersionMigrationId, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 

@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,6 +42,8 @@ public final class PlanVersionMigrationResponseData {
 
     private final String planVersionIdTo;
 
+    private final List<String> planVersionIdsFrom;
+
     private final long skippedCompanies;
 
     private final Optional<OffsetDateTime> startedAt;
@@ -64,6 +68,7 @@ public final class PlanVersionMigrationResponseData {
             String planId,
             Optional<String> planVersionIdFrom,
             String planVersionIdTo,
+            List<String> planVersionIdsFrom,
             long skippedCompanies,
             Optional<OffsetDateTime> startedAt,
             PlanVersionMigrationStatus status,
@@ -80,6 +85,7 @@ public final class PlanVersionMigrationResponseData {
         this.planId = planId;
         this.planVersionIdFrom = planVersionIdFrom;
         this.planVersionIdTo = planVersionIdTo;
+        this.planVersionIdsFrom = planVersionIdsFrom;
         this.skippedCompanies = skippedCompanies;
         this.startedAt = startedAt;
         this.status = status;
@@ -134,6 +140,11 @@ public final class PlanVersionMigrationResponseData {
         return planVersionIdTo;
     }
 
+    @JsonProperty("plan_version_ids_from")
+    public List<String> getPlanVersionIdsFrom() {
+        return planVersionIdsFrom;
+    }
+
     @JsonProperty("skipped_companies")
     public long getSkippedCompanies() {
         return skippedCompanies;
@@ -185,6 +196,7 @@ public final class PlanVersionMigrationResponseData {
                 && planId.equals(other.planId)
                 && planVersionIdFrom.equals(other.planVersionIdFrom)
                 && planVersionIdTo.equals(other.planVersionIdTo)
+                && planVersionIdsFrom.equals(other.planVersionIdsFrom)
                 && skippedCompanies == other.skippedCompanies
                 && startedAt.equals(other.startedAt)
                 && status.equals(other.status)
@@ -205,6 +217,7 @@ public final class PlanVersionMigrationResponseData {
                 this.planId,
                 this.planVersionIdFrom,
                 this.planVersionIdTo,
+                this.planVersionIdsFrom,
                 this.skippedCompanies,
                 this.startedAt,
                 this.status,
@@ -287,6 +300,12 @@ public final class PlanVersionMigrationResponseData {
 
         _FinalStage planVersionIdFrom(String planVersionIdFrom);
 
+        _FinalStage planVersionIdsFrom(List<String> planVersionIdsFrom);
+
+        _FinalStage addPlanVersionIdsFrom(String planVersionIdsFrom);
+
+        _FinalStage addAllPlanVersionIdsFrom(List<String> planVersionIdsFrom);
+
         _FinalStage startedAt(Optional<OffsetDateTime> startedAt);
 
         _FinalStage startedAt(OffsetDateTime startedAt);
@@ -330,6 +349,8 @@ public final class PlanVersionMigrationResponseData {
 
         private Optional<OffsetDateTime> startedAt = Optional.empty();
 
+        private List<String> planVersionIdsFrom = new ArrayList<>();
+
         private Optional<String> planVersionIdFrom = Optional.empty();
 
         private Optional<String> error = Optional.empty();
@@ -352,6 +373,7 @@ public final class PlanVersionMigrationResponseData {
             planId(other.getPlanId());
             planVersionIdFrom(other.getPlanVersionIdFrom());
             planVersionIdTo(other.getPlanVersionIdTo());
+            planVersionIdsFrom(other.getPlanVersionIdsFrom());
             skippedCompanies(other.getSkippedCompanies());
             startedAt(other.getStartedAt());
             status(other.getStatus());
@@ -452,6 +474,30 @@ public final class PlanVersionMigrationResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllPlanVersionIdsFrom(List<String> planVersionIdsFrom) {
+            if (planVersionIdsFrom != null) {
+                this.planVersionIdsFrom.addAll(planVersionIdsFrom);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addPlanVersionIdsFrom(String planVersionIdsFrom) {
+            this.planVersionIdsFrom.add(planVersionIdsFrom);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "plan_version_ids_from", nulls = Nulls.SKIP)
+        public _FinalStage planVersionIdsFrom(List<String> planVersionIdsFrom) {
+            this.planVersionIdsFrom.clear();
+            if (planVersionIdsFrom != null) {
+                this.planVersionIdsFrom.addAll(planVersionIdsFrom);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage planVersionIdFrom(String planVersionIdFrom) {
             this.planVersionIdFrom = Optional.ofNullable(planVersionIdFrom);
             return this;
@@ -502,6 +548,7 @@ public final class PlanVersionMigrationResponseData {
                     planId,
                     planVersionIdFrom,
                     planVersionIdTo,
+                    planVersionIdsFrom,
                     skippedCompanies,
                     startedAt,
                     status,
