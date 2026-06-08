@@ -7,12 +7,16 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.integrationsapi.requests.ListIntegrationsRequest;
 import com.schematic.api.resources.integrationsapi.requests.StartDataImportRequestBody;
+import com.schematic.api.resources.integrationsapi.types.AssumeStripeInstalledResponse;
 import com.schematic.api.resources.integrationsapi.types.GetIntegrationWebhookUrlResponse;
+import com.schematic.api.resources.integrationsapi.types.InstallIntegrationResponse;
+import com.schematic.api.resources.integrationsapi.types.InstallStripeResponse;
 import com.schematic.api.resources.integrationsapi.types.ListIntegrationsResponse;
-import com.schematic.api.resources.integrationsapi.types.LoadSampleDataSetV2Response;
+import com.schematic.api.resources.integrationsapi.types.LoadSampleDataSetResponse;
 import com.schematic.api.resources.integrationsapi.types.RunIntegrationResponse;
 import com.schematic.api.resources.integrationsapi.types.StartDataImportResponse;
 import com.schematic.api.resources.integrationsapi.types.UninstallIntegrationResponse;
+import com.schematic.api.types.InstallIntegrationRequestBody;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncIntegrationsapiClient {
@@ -67,6 +71,15 @@ public class AsyncIntegrationsapiClient {
         return this.rawClient.getIntegrationWebhookUrl(type, requestOptions).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<InstallIntegrationResponse> installIntegration(InstallIntegrationRequestBody request) {
+        return this.rawClient.installIntegration(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InstallIntegrationResponse> installIntegration(
+            InstallIntegrationRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.installIntegration(request, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<StartDataImportResponse> startDataImport(StartDataImportRequestBody request) {
         return this.rawClient.startDataImport(request).thenApply(response -> response.body());
     }
@@ -76,12 +89,31 @@ public class AsyncIntegrationsapiClient {
         return this.rawClient.startDataImport(request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<LoadSampleDataSetV2Response> loadSampleDataSetV2() {
-        return this.rawClient.loadSampleDataSetV2().thenApply(response -> response.body());
+    public CompletableFuture<LoadSampleDataSetResponse> loadSampleDataSet() {
+        return this.rawClient.loadSampleDataSet().thenApply(response -> response.body());
     }
 
-    public CompletableFuture<LoadSampleDataSetV2Response> loadSampleDataSetV2(RequestOptions requestOptions) {
-        return this.rawClient.loadSampleDataSetV2(requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<LoadSampleDataSetResponse> loadSampleDataSet(RequestOptions requestOptions) {
+        return this.rawClient.loadSampleDataSet(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<AssumeStripeInstalledResponse> assumeStripeInstalled(
+            InstallIntegrationRequestBody request) {
+        return this.rawClient.assumeStripeInstalled(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<AssumeStripeInstalledResponse> assumeStripeInstalled(
+            InstallIntegrationRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.assumeStripeInstalled(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InstallStripeResponse> installStripe(InstallIntegrationRequestBody request) {
+        return this.rawClient.installStripe(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InstallStripeResponse> installStripe(
+            InstallIntegrationRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.installStripe(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<UninstallIntegrationResponse> uninstallIntegration(String integrationId) {

@@ -73,7 +73,13 @@ public final class CreditCompanyGrantView {
 
     private final Optional<BillingPlanCreditGrantResetCadence> renewalPeriod;
 
+    private final Optional<Double> reserved;
+
+    private final Optional<Double> settled;
+
     private final Optional<String> singularName;
+
+    private final Optional<String> sourceGrantId;
 
     private final String sourceLabel;
 
@@ -115,7 +121,10 @@ public final class CreditCompanyGrantView {
             double quantityUsed,
             boolean renewalEnabled,
             Optional<BillingPlanCreditGrantResetCadence> renewalPeriod,
+            Optional<Double> reserved,
+            Optional<Double> settled,
             Optional<String> singularName,
+            Optional<String> sourceGrantId,
             String sourceLabel,
             Optional<List<CreditTransferView>> transfers,
             OffsetDateTime updatedAt,
@@ -148,7 +157,10 @@ public final class CreditCompanyGrantView {
         this.quantityUsed = quantityUsed;
         this.renewalEnabled = renewalEnabled;
         this.renewalPeriod = renewalPeriod;
+        this.reserved = reserved;
+        this.settled = settled;
         this.singularName = singularName;
+        this.sourceGrantId = sourceGrantId;
         this.sourceLabel = sourceLabel;
         this.transfers = transfers;
         this.updatedAt = updatedAt;
@@ -283,9 +295,24 @@ public final class CreditCompanyGrantView {
         return renewalPeriod;
     }
 
+    @JsonProperty("reserved")
+    public Optional<Double> getReserved() {
+        return reserved;
+    }
+
+    @JsonProperty("settled")
+    public Optional<Double> getSettled() {
+        return settled;
+    }
+
     @JsonProperty("singular_name")
     public Optional<String> getSingularName() {
         return singularName;
+    }
+
+    @JsonProperty("source_grant_id")
+    public Optional<String> getSourceGrantId() {
+        return sourceGrantId;
     }
 
     @JsonProperty("source_label")
@@ -355,7 +382,10 @@ public final class CreditCompanyGrantView {
                 && quantityUsed == other.quantityUsed
                 && renewalEnabled == other.renewalEnabled
                 && renewalPeriod.equals(other.renewalPeriod)
+                && reserved.equals(other.reserved)
+                && settled.equals(other.settled)
                 && singularName.equals(other.singularName)
+                && sourceGrantId.equals(other.sourceGrantId)
                 && sourceLabel.equals(other.sourceLabel)
                 && transfers.equals(other.transfers)
                 && updatedAt.equals(other.updatedAt)
@@ -392,7 +422,10 @@ public final class CreditCompanyGrantView {
                 this.quantityUsed,
                 this.renewalEnabled,
                 this.renewalPeriod,
+                this.reserved,
+                this.settled,
                 this.singularName,
+                this.sourceGrantId,
                 this.sourceLabel,
                 this.transfers,
                 this.updatedAt,
@@ -527,9 +560,21 @@ public final class CreditCompanyGrantView {
 
         _FinalStage renewalPeriod(BillingPlanCreditGrantResetCadence renewalPeriod);
 
+        _FinalStage reserved(Optional<Double> reserved);
+
+        _FinalStage reserved(Double reserved);
+
+        _FinalStage settled(Optional<Double> settled);
+
+        _FinalStage settled(Double settled);
+
         _FinalStage singularName(Optional<String> singularName);
 
         _FinalStage singularName(String singularName);
+
+        _FinalStage sourceGrantId(Optional<String> sourceGrantId);
+
+        _FinalStage sourceGrantId(String sourceGrantId);
 
         _FinalStage transfers(Optional<List<CreditTransferView>> transfers);
 
@@ -601,7 +646,13 @@ public final class CreditCompanyGrantView {
 
         private Optional<List<CreditTransferView>> transfers = Optional.empty();
 
+        private Optional<String> sourceGrantId = Optional.empty();
+
         private Optional<String> singularName = Optional.empty();
+
+        private Optional<Double> settled = Optional.empty();
+
+        private Optional<Double> reserved = Optional.empty();
 
         private Optional<BillingPlanCreditGrantResetCadence> renewalPeriod = Optional.empty();
 
@@ -661,7 +712,10 @@ public final class CreditCompanyGrantView {
             quantityUsed(other.getQuantityUsed());
             renewalEnabled(other.getRenewalEnabled());
             renewalPeriod(other.getRenewalPeriod());
+            reserved(other.getReserved());
+            settled(other.getSettled());
             singularName(other.getSingularName());
+            sourceGrantId(other.getSourceGrantId());
             sourceLabel(other.getSourceLabel());
             transfers(other.getTransfers());
             updatedAt(other.getUpdatedAt());
@@ -822,6 +876,19 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage sourceGrantId(String sourceGrantId) {
+            this.sourceGrantId = Optional.ofNullable(sourceGrantId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "source_grant_id", nulls = Nulls.SKIP)
+        public _FinalStage sourceGrantId(Optional<String> sourceGrantId) {
+            this.sourceGrantId = sourceGrantId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage singularName(String singularName) {
             this.singularName = Optional.ofNullable(singularName);
             return this;
@@ -831,6 +898,32 @@ public final class CreditCompanyGrantView {
         @JsonSetter(value = "singular_name", nulls = Nulls.SKIP)
         public _FinalStage singularName(Optional<String> singularName) {
             this.singularName = singularName;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage settled(Double settled) {
+            this.settled = Optional.ofNullable(settled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "settled", nulls = Nulls.SKIP)
+        public _FinalStage settled(Optional<Double> settled) {
+            this.settled = settled;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage reserved(Double reserved) {
+            this.reserved = Optional.ofNullable(reserved);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "reserved", nulls = Nulls.SKIP)
+        public _FinalStage reserved(Optional<Double> reserved) {
+            this.reserved = reserved;
             return this;
         }
 
@@ -1031,7 +1124,10 @@ public final class CreditCompanyGrantView {
                     quantityUsed,
                     renewalEnabled,
                     renewalPeriod,
+                    reserved,
+                    settled,
                     singularName,
+                    sourceGrantId,
                     sourceLabel,
                     transfers,
                     updatedAt,

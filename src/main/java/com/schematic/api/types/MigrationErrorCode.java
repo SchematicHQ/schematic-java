@@ -28,6 +28,9 @@ public final class MigrationErrorCode {
     public static final MigrationErrorCode NO_PRICE_FOR_INTERVAL =
             new MigrationErrorCode(Value.NO_PRICE_FOR_INTERVAL, "no_price_for_interval");
 
+    public static final MigrationErrorCode OPERATION_ITEM_NOT_FOUND =
+            new MigrationErrorCode(Value.OPERATION_ITEM_NOT_FOUND, "operation_item_not_found");
+
     public static final MigrationErrorCode PERMANENT_CONFIG =
             new MigrationErrorCode(Value.PERMANENT_CONFIG, "permanent_config");
 
@@ -85,6 +88,8 @@ public final class MigrationErrorCode {
                 return visitor.visitMultipleSubscriptions();
             case NO_PRICE_FOR_INTERVAL:
                 return visitor.visitNoPriceForInterval();
+            case OPERATION_ITEM_NOT_FOUND:
+                return visitor.visitOperationItemNotFound();
             case PERMANENT_CONFIG:
                 return visitor.visitPermanentConfig();
             case UNKNOWN:
@@ -116,6 +121,8 @@ public final class MigrationErrorCode {
                 return MULTIPLE_SUBSCRIPTIONS;
             case "no_price_for_interval":
                 return NO_PRICE_FOR_INTERVAL;
+            case "operation_item_not_found":
+                return OPERATION_ITEM_NOT_FOUND;
             case "permanent_config":
                 return PERMANENT_CONFIG;
             case "unknown":
@@ -137,6 +144,8 @@ public final class MigrationErrorCode {
         NO_PRICE_FOR_INTERVAL,
 
         NOT_ON_ORIGIN_VERSION,
+
+        OPERATION_ITEM_NOT_FOUND,
 
         PERMANENT_CONFIG,
 
@@ -163,6 +172,8 @@ public final class MigrationErrorCode {
         T visitNoPriceForInterval();
 
         T visitNotOnOriginVersion();
+
+        T visitOperationItemNotFound();
 
         T visitPermanentConfig();
 

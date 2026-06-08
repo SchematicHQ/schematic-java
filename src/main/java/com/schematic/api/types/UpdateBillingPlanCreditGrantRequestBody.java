@@ -55,6 +55,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
     private final Optional<BillingPlanCreditGrantResetType> resetType;
 
+    private final Optional<Long> rolloverPercentage;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateBillingPlanCreditGrantRequestBody(
@@ -75,6 +77,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             BillingPlanCreditGrantResetCadence resetCadence,
             BillingPlanCreditGrantResetStart resetStart,
             Optional<BillingPlanCreditGrantResetType> resetType,
+            Optional<Long> rolloverPercentage,
             Map<String, Object> additionalProperties) {
         this.applyToExisting = applyToExisting;
         this.autoTopupAmount = autoTopupAmount;
@@ -93,6 +96,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         this.resetCadence = resetCadence;
         this.resetStart = resetStart;
         this.resetType = resetType;
+        this.rolloverPercentage = rolloverPercentage;
         this.additionalProperties = additionalProperties;
     }
 
@@ -181,6 +185,14 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         return resetType;
     }
 
+    /**
+     * @return Percentage of unused credits that carry over when this grant resets. Only applies when reset_type is plan_period. Rolled-over credits expire at the next reset and are not rolled again.
+     */
+    @JsonProperty("rollover_percentage")
+    public Optional<Long> getRolloverPercentage() {
+        return rolloverPercentage;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -210,7 +222,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 && expiryUnitCount.equals(other.expiryUnitCount)
                 && resetCadence.equals(other.resetCadence)
                 && resetStart.equals(other.resetStart)
-                && resetType.equals(other.resetType);
+                && resetType.equals(other.resetType)
+                && rolloverPercentage.equals(other.rolloverPercentage);
     }
 
     @java.lang.Override
@@ -232,7 +245,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 this.expiryUnitCount,
                 this.resetCadence,
                 this.resetStart,
-                this.resetType);
+                this.resetType,
+                this.rolloverPercentage);
     }
 
     @java.lang.Override
@@ -320,6 +334,13 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         _FinalStage resetType(Optional<BillingPlanCreditGrantResetType> resetType);
 
         _FinalStage resetType(BillingPlanCreditGrantResetType resetType);
+
+        /**
+         * <p>Percentage of unused credits that carry over when this grant resets. Only applies when reset_type is plan_period. Rolled-over credits expire at the next reset and are not rolled again.</p>
+         */
+        _FinalStage rolloverPercentage(Optional<Long> rolloverPercentage);
+
+        _FinalStage rolloverPercentage(Long rolloverPercentage);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -327,6 +348,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         private BillingPlanCreditGrantResetCadence resetCadence;
 
         private BillingPlanCreditGrantResetStart resetStart;
+
+        private Optional<Long> rolloverPercentage = Optional.empty();
 
         private Optional<BillingPlanCreditGrantResetType> resetType = Optional.empty();
 
@@ -382,6 +405,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             resetCadence(other.getResetCadence());
             resetStart(other.getResetStart());
             resetType(other.getResetType());
+            rolloverPercentage(other.getRolloverPercentage());
             return this;
         }
 
@@ -396,6 +420,26 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         @JsonSetter("reset_start")
         public _FinalStage resetStart(@NotNull BillingPlanCreditGrantResetStart resetStart) {
             this.resetStart = Objects.requireNonNull(resetStart, "resetStart must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Percentage of unused credits that carry over when this grant resets. Only applies when reset_type is plan_period. Rolled-over credits expire at the next reset and are not rolled again.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage rolloverPercentage(Long rolloverPercentage) {
+            this.rolloverPercentage = Optional.ofNullable(rolloverPercentage);
+            return this;
+        }
+
+        /**
+         * <p>Percentage of unused credits that carry over when this grant resets. Only applies when reset_type is plan_period. Rolled-over credits expire at the next reset and are not rolled again.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "rollover_percentage", nulls = Nulls.SKIP)
+        public _FinalStage rolloverPercentage(Optional<Long> rolloverPercentage) {
+            this.rolloverPercentage = rolloverPercentage;
             return this;
         }
 
@@ -614,6 +658,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                     resetCadence,
                     resetStart,
                     resetType,
+                    rolloverPercentage,
                     additionalProperties);
         }
 

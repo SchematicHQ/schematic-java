@@ -11,6 +11,8 @@ public final class BillingProviderType {
 
     public static final BillingProviderType SCHEMATIC = new BillingProviderType(Value.SCHEMATIC, "schematic");
 
+    public static final BillingProviderType METRONOME = new BillingProviderType(Value.METRONOME, "metronome");
+
     public static final BillingProviderType STRIPE = new BillingProviderType(Value.STRIPE, "stripe");
 
     private final Value value;
@@ -49,6 +51,8 @@ public final class BillingProviderType {
                 return visitor.visitOrb();
             case SCHEMATIC:
                 return visitor.visitSchematic();
+            case METRONOME:
+                return visitor.visitMetronome();
             case STRIPE:
                 return visitor.visitStripe();
             case UNKNOWN:
@@ -64,6 +68,8 @@ public final class BillingProviderType {
                 return ORB;
             case "schematic":
                 return SCHEMATIC;
+            case "metronome":
+                return METRONOME;
             case "stripe":
                 return STRIPE;
             default:
@@ -72,6 +78,8 @@ public final class BillingProviderType {
     }
 
     public enum Value {
+        METRONOME,
+
         ORB,
 
         SCHEMATIC,
@@ -82,6 +90,8 @@ public final class BillingProviderType {
     }
 
     public interface Visitor<T> {
+        T visitMetronome();
+
         T visitOrb();
 
         T visitSchematic();

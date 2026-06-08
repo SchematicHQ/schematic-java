@@ -114,6 +114,80 @@ client.accounts().getAccountMember("account_member_id");
 </dl>
 </details>
 
+<details><summary><code>client.accounts.countAccountMembers() -> CountAccountMembersResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.accounts().countAccountMembers(
+    CountAccountMembersRequest
+        .builder()
+        .ids(
+            Arrays.asList("ids")
+        )
+        .q("q")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` — Search filter
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.accounts.listApiKeys() -> ListApiKeysResponse</code></summary>
 <dl>
 <dd>
@@ -1325,7 +1399,7 @@ client.billing().listCustomersWithSubscriptions(
             Arrays.asList("company_ids")
         )
         .name("name")
-        .providerType(BillingProviderType.ORB)
+        .providerType(BillingProviderType.METRONOME)
         .q("q")
         .limit(1000000L)
         .offset(1000000L)
@@ -1417,7 +1491,7 @@ client.billing().countCustomers(
             Arrays.asList("company_ids")
         )
         .name("name")
-        .providerType(BillingProviderType.ORB)
+        .providerType(BillingProviderType.METRONOME)
         .q("q")
         .limit(1000000L)
         .offset(1000000L)
@@ -2136,7 +2210,7 @@ client.billing().listBillingPrices(
         .isActive(true)
         .price(1000000L)
         .productId("product_id")
-        .providerType(BillingProviderType.ORB)
+        .providerType(BillingProviderType.METRONOME)
         .q("q")
         .tiersMode(BillingTiersMode.GRADUATED)
         .usageType(BillingPriceUsageType.LICENSED)
@@ -2549,7 +2623,7 @@ client.billing().listBillingProductPrices(
         .isActive(true)
         .price(1000000L)
         .productId("product_id")
-        .providerType(BillingProviderType.ORB)
+        .providerType(BillingProviderType.METRONOME)
         .q("q")
         .tiersMode(BillingTiersMode.GRADUATED)
         .usageType(BillingPriceUsageType.LICENSED)
@@ -2844,7 +2918,7 @@ client.billing().listBillingProducts(
         .isActive(true)
         .name("name")
         .priceUsageType(BillingPriceUsageType.LICENSED)
-        .providerType(BillingProviderType.ORB)
+        .providerType(BillingProviderType.METRONOME)
         .q("q")
         .recurringChargesOnly(true)
         .withOneTimeCharges(true)
@@ -2999,7 +3073,7 @@ client.billing().countBillingProducts(
         .isActive(true)
         .name("name")
         .priceUsageType(BillingPriceUsageType.LICENSED)
-        .providerType(BillingProviderType.ORB)
+        .providerType(BillingProviderType.METRONOME)
         .q("q")
         .recurringChargesOnly(true)
         .withOneTimeCharges(true)
@@ -6028,6 +6102,15 @@ client.checkout().internal(
                     .build()
             )
         )
+        .customFieldValues(
+            Arrays.asList(
+                CheckoutFieldValue
+                    .builder()
+                    .id("id")
+                    .value("value")
+                    .build()
+            )
+        )
         .payInAdvance(
             Arrays.asList(
                 UpdatePayInAdvanceRequestBody
@@ -6164,6 +6247,15 @@ client.checkout().previewCheckoutInternal(
                     .build()
             )
         )
+        .customFieldValues(
+            Arrays.asList(
+                CheckoutFieldValue
+                    .builder()
+                    .id("id")
+                    .value("value")
+                    .build()
+            )
+        )
         .payInAdvance(
             Arrays.asList(
                 UpdatePayInAdvanceRequestBody
@@ -6235,6 +6327,15 @@ client.checkout().managePlan(
                     .build()
             )
         )
+        .customFieldValues(
+            Arrays.asList(
+                CheckoutFieldValue
+                    .builder()
+                    .id("id")
+                    .value("value")
+                    .build()
+            )
+        )
         .payInAdvanceEntitlements(
             Arrays.asList(
                 UpdatePayInAdvanceRequestBody
@@ -6303,6 +6404,15 @@ client.checkout().previewManagePlan(
                     .builder()
                     .bundleId("bundle_id")
                     .quantity(1000000L)
+                    .build()
+            )
+        )
+        .customFieldValues(
+            Arrays.asList(
+                CheckoutFieldValue
+                    .builder()
+                    .id("id")
+                    .value("value")
                     .build()
             )
         )
@@ -9845,7 +9955,7 @@ client.entitlements().listFeatureUsage(
         )
         .companyId("company_id")
         .includeUsageAggregation(true)
-        .managedBy(BillingProviderType.ORB)
+        .managedBy(BillingProviderType.METRONOME)
         .q("q")
         .withoutNegativeEntitlements(true)
         .limit(1000000L)
@@ -10044,7 +10154,7 @@ client.entitlements().countFeatureUsage(
         )
         .companyId("company_id")
         .includeUsageAggregation(true)
-        .managedBy(BillingProviderType.ORB)
+        .managedBy(BillingProviderType.METRONOME)
         .q("q")
         .withoutNegativeEntitlements(true)
         .limit(1000000L)
@@ -11113,7 +11223,7 @@ client.entitlements().deletePlanEntitlement("plan_entitlement_id");
 client.entitlements().upsertPlanEntitlementForBillingProduct(
     CreateBillingLinkedPlanEntitlementRequestBody
         .builder()
-        .billingProvider(BillingProviderType.ORB)
+        .billingProvider(BillingProviderType.METRONOME)
         .externalResourceId("external_resource_id")
         .featureId("feature_id")
         .planId("plan_id")
@@ -12497,7 +12607,7 @@ client.plans().upsertBillingProductPlan(
 client.plans().upsertPlanForBillingProduct(
     CreateBillingLinkedPlanRequestBody
         .builder()
-        .billingProvider(BillingProviderType.ORB)
+        .billingProvider(BillingProviderType.METRONOME)
         .description("description")
         .externalResourceId("external_resource_id")
         .name("name")
@@ -14256,7 +14366,7 @@ client.features().listFeatures(
             Arrays.asList("ids")
         )
         .booleanRequireEvent(true)
-        .managedBy(BillingProviderType.ORB)
+        .managedBy(BillingProviderType.METRONOME)
         .planVersionId("plan_version_id")
         .q("q")
         .withoutCompanyOverrideFor("without_company_override_for")
@@ -14719,7 +14829,7 @@ client.features().deleteFeature("feature_id");
 client.features().upsertFeatureForBillingProduct(
     CreateBillingLinkedFeatureRequestBody
         .builder()
-        .billingProvider(BillingProviderType.ORB)
+        .billingProvider(BillingProviderType.METRONOME)
         .description("description")
         .externalResourceId("external_resource_id")
         .featureType(FeatureType.BOOLEAN)
@@ -14871,7 +14981,7 @@ client.features().countFeatures(
             Arrays.asList("ids")
         )
         .booleanRequireEvent(true)
-        .managedBy(BillingProviderType.ORB)
+        .managedBy(BillingProviderType.METRONOME)
         .planVersionId("plan_version_id")
         .q("q")
         .withoutCompanyOverrideFor("without_company_override_for")
@@ -16078,6 +16188,51 @@ client.integrationsapi().getIntegrationWebhookUrl("type");
 </dl>
 </details>
 
+<details><summary><code>client.integrationsapi.installIntegration(request) -> InstallIntegrationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().installIntegration(
+    InstallIntegrationRequestBody
+        .builder()
+        .type(IntegrationType.CLERK)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `InstallIntegrationRequestBody` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.integrationsapi.startDataImport(request) -> StartDataImportResponse</code></summary>
 <dl>
 <dd>
@@ -16139,7 +16294,7 @@ client.integrationsapi().startDataImport(
 </dl>
 </details>
 
-<details><summary><code>client.integrationsapi.loadSampleDataSetV2() -> LoadSampleDataSetV2Response</code></summary>
+<details><summary><code>client.integrationsapi.loadSampleDataSet() -> LoadSampleDataSetResponse</code></summary>
 <dl>
 <dd>
 
@@ -16152,8 +16307,98 @@ client.integrationsapi().startDataImport(
 <dd>
 
 ```java
-client.integrationsapi().loadSampleDataSetV2();
+client.integrationsapi().loadSampleDataSet();
 ```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.assumeStripeInstalled(request) -> AssumeStripeInstalledResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().assumeStripeInstalled(
+    InstallIntegrationRequestBody
+        .builder()
+        .type(IntegrationType.CLERK)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `InstallIntegrationRequestBody` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.installStripe(request) -> InstallStripeResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().installStripe(
+    InstallIntegrationRequestBody
+        .builder()
+        .type(IntegrationType.CLERK)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `InstallIntegrationRequestBody` 
+    
 </dd>
 </dl>
 </dd>
@@ -16356,6 +16601,14 @@ client.plangroups().createPlanGroup(
 <dd>
 
 **checkoutCollectPhone:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customCheckoutFields:** `Optional<List<CheckoutFieldInput>>` 
     
 </dd>
 </dl>
@@ -16698,6 +16951,14 @@ client.plangroups().updatePlanGroup(
 <dd>
 
 **checkoutCollectPhone:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customCheckoutFields:** `Optional<List<CheckoutFieldInput>>` 
     
 </dd>
 </dl>

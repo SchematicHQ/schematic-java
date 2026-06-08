@@ -5,6 +5,7 @@ package com.schematic.api.resources.accounts;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.accounts.requests.CountAccountMembersRequest;
 import com.schematic.api.resources.accounts.requests.CountApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.CountAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.CreateApiKeyRequestBody;
@@ -15,6 +16,7 @@ import com.schematic.api.resources.accounts.requests.ListAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.ListEnvironmentsRequest;
 import com.schematic.api.resources.accounts.requests.UpdateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.UpdateEnvironmentRequestBody;
+import com.schematic.api.resources.accounts.types.CountAccountMembersResponse;
 import com.schematic.api.resources.accounts.types.CountApiKeysResponse;
 import com.schematic.api.resources.accounts.types.CountAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.CreateApiKeyResponse;
@@ -76,6 +78,23 @@ public class AsyncAccountsClient {
     public CompletableFuture<GetAccountMemberResponse> getAccountMember(
             String accountMemberId, RequestOptions requestOptions) {
         return this.rawClient.getAccountMember(accountMemberId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountAccountMembersResponse> countAccountMembers() {
+        return this.rawClient.countAccountMembers().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountAccountMembersResponse> countAccountMembers(RequestOptions requestOptions) {
+        return this.rawClient.countAccountMembers(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountAccountMembersResponse> countAccountMembers(CountAccountMembersRequest request) {
+        return this.rawClient.countAccountMembers(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountAccountMembersResponse> countAccountMembers(
+            CountAccountMembersRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countAccountMembers(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListApiKeysResponse> listApiKeys(ListApiKeysRequest request) {

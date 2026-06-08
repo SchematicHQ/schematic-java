@@ -54,6 +54,8 @@ public final class EventDetailResponseData {
 
     private final Optional<String> idempotencyKey;
 
+    private final Optional<String> leaseId;
+
     private final Optional<OffsetDateTime> loadedAt;
 
     private final Optional<OffsetDateTime> processedAt;
@@ -91,6 +93,7 @@ public final class EventDetailResponseData {
             List<PreviewObject> features,
             String id,
             Optional<String> idempotencyKey,
+            Optional<String> leaseId,
             Optional<OffsetDateTime> loadedAt,
             Optional<OffsetDateTime> processedAt,
             long quantity,
@@ -116,6 +119,7 @@ public final class EventDetailResponseData {
         this.features = features;
         this.id = id;
         this.idempotencyKey = idempotencyKey;
+        this.leaseId = leaseId;
         this.loadedAt = loadedAt;
         this.processedAt = processedAt;
         this.quantity = quantity;
@@ -199,6 +203,11 @@ public final class EventDetailResponseData {
         return idempotencyKey;
     }
 
+    @JsonProperty("lease_id")
+    public Optional<String> getLeaseId() {
+        return leaseId;
+    }
+
     @JsonProperty("loaded_at")
     public Optional<OffsetDateTime> getLoadedAt() {
         return loadedAt;
@@ -275,6 +284,7 @@ public final class EventDetailResponseData {
                 && features.equals(other.features)
                 && id.equals(other.id)
                 && idempotencyKey.equals(other.idempotencyKey)
+                && leaseId.equals(other.leaseId)
                 && loadedAt.equals(other.loadedAt)
                 && processedAt.equals(other.processedAt)
                 && quantity == other.quantity
@@ -304,6 +314,7 @@ public final class EventDetailResponseData {
                 this.features,
                 this.id,
                 this.idempotencyKey,
+                this.leaseId,
                 this.loadedAt,
                 this.processedAt,
                 this.quantity,
@@ -408,6 +419,10 @@ public final class EventDetailResponseData {
 
         _FinalStage idempotencyKey(String idempotencyKey);
 
+        _FinalStage leaseId(Optional<String> leaseId);
+
+        _FinalStage leaseId(String leaseId);
+
         _FinalStage loadedAt(Optional<OffsetDateTime> loadedAt);
 
         _FinalStage loadedAt(OffsetDateTime loadedAt);
@@ -466,6 +481,8 @@ public final class EventDetailResponseData {
 
         private Optional<OffsetDateTime> loadedAt = Optional.empty();
 
+        private Optional<String> leaseId = Optional.empty();
+
         private Optional<String> idempotencyKey = Optional.empty();
 
         private List<PreviewObject> features = new ArrayList<>();
@@ -509,6 +526,7 @@ public final class EventDetailResponseData {
             features(other.getFeatures());
             id(other.getId());
             idempotencyKey(other.getIdempotencyKey());
+            leaseId(other.getLeaseId());
             loadedAt(other.getLoadedAt());
             processedAt(other.getProcessedAt());
             quantity(other.getQuantity());
@@ -652,6 +670,19 @@ public final class EventDetailResponseData {
         @JsonSetter(value = "loaded_at", nulls = Nulls.SKIP)
         public _FinalStage loadedAt(Optional<OffsetDateTime> loadedAt) {
             this.loadedAt = loadedAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage leaseId(String leaseId) {
+            this.leaseId = Optional.ofNullable(leaseId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "lease_id", nulls = Nulls.SKIP)
+        public _FinalStage leaseId(Optional<String> leaseId) {
+            this.leaseId = leaseId;
             return this;
         }
 
@@ -848,6 +879,7 @@ public final class EventDetailResponseData {
                     features,
                     id,
                     idempotencyKey,
+                    leaseId,
                     loadedAt,
                     processedAt,
                     quantity,

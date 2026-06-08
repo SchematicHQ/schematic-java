@@ -13,6 +13,8 @@ public final class IntegrationType {
 
     public static final IntegrationType WORKOS = new IntegrationType(Value.WORKOS, "workos");
 
+    public static final IntegrationType METRONOME = new IntegrationType(Value.METRONOME, "metronome");
+
     public static final IntegrationType CLERK = new IntegrationType(Value.CLERK, "clerk");
 
     public static final IntegrationType STRIPE = new IntegrationType(Value.STRIPE, "stripe");
@@ -55,6 +57,8 @@ public final class IntegrationType {
                 return visitor.visitUnknown();
             case WORKOS:
                 return visitor.visitWorkos();
+            case METRONOME:
+                return visitor.visitMetronome();
             case CLERK:
                 return visitor.visitClerk();
             case STRIPE:
@@ -74,6 +78,8 @@ public final class IntegrationType {
                 return UNKNOWN;
             case "workos":
                 return WORKOS;
+            case "metronome":
+                return METRONOME;
             case "clerk":
                 return CLERK;
             case "stripe":
@@ -85,6 +91,8 @@ public final class IntegrationType {
 
     public enum Value {
         CLERK,
+
+        METRONOME,
 
         ORB,
 
@@ -99,6 +107,8 @@ public final class IntegrationType {
 
     public interface Visitor<T> {
         T visitClerk();
+
+        T visitMetronome();
 
         T visitOrb();
 

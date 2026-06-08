@@ -25,6 +25,10 @@ public final class CompanyCreditBalanceResponseData {
 
     private final double remaining;
 
+    private final double reserved;
+
+    private final double settled;
+
     private final BillingProviderType source;
 
     private final Optional<Double> total;
@@ -34,11 +38,15 @@ public final class CompanyCreditBalanceResponseData {
     private CompanyCreditBalanceResponseData(
             String creditId,
             double remaining,
+            double reserved,
+            double settled,
             BillingProviderType source,
             Optional<Double> total,
             Map<String, Object> additionalProperties) {
         this.creditId = creditId;
         this.remaining = remaining;
+        this.reserved = reserved;
+        this.settled = settled;
         this.source = source;
         this.total = total;
         this.additionalProperties = additionalProperties;
@@ -52,6 +60,16 @@ public final class CompanyCreditBalanceResponseData {
     @JsonProperty("remaining")
     public double getRemaining() {
         return remaining;
+    }
+
+    @JsonProperty("reserved")
+    public double getReserved() {
+        return reserved;
+    }
+
+    @JsonProperty("settled")
+    public double getSettled() {
+        return settled;
     }
 
     @JsonProperty("source")
@@ -78,13 +96,15 @@ public final class CompanyCreditBalanceResponseData {
     private boolean equalTo(CompanyCreditBalanceResponseData other) {
         return creditId.equals(other.creditId)
                 && remaining == other.remaining
+                && reserved == other.reserved
+                && settled == other.settled
                 && source.equals(other.source)
                 && total.equals(other.total);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.creditId, this.remaining, this.source, this.total);
+        return Objects.hash(this.creditId, this.remaining, this.reserved, this.settled, this.source, this.total);
     }
 
     @java.lang.Override
@@ -103,7 +123,15 @@ public final class CompanyCreditBalanceResponseData {
     }
 
     public interface RemainingStage {
-        SourceStage remaining(double remaining);
+        ReservedStage remaining(double remaining);
+    }
+
+    public interface ReservedStage {
+        SettledStage reserved(double reserved);
+    }
+
+    public interface SettledStage {
+        SourceStage settled(double settled);
     }
 
     public interface SourceStage {
@@ -123,10 +151,15 @@ public final class CompanyCreditBalanceResponseData {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CreditIdStage, RemainingStage, SourceStage, _FinalStage {
+    public static final class Builder
+            implements CreditIdStage, RemainingStage, ReservedStage, SettledStage, SourceStage, _FinalStage {
         private String creditId;
 
         private double remaining;
+
+        private double reserved;
+
+        private double settled;
 
         private BillingProviderType source;
 
@@ -141,6 +174,8 @@ public final class CompanyCreditBalanceResponseData {
         public Builder from(CompanyCreditBalanceResponseData other) {
             creditId(other.getCreditId());
             remaining(other.getRemaining());
+            reserved(other.getReserved());
+            settled(other.getSettled());
             source(other.getSource());
             total(other.getTotal());
             return this;
@@ -155,8 +190,22 @@ public final class CompanyCreditBalanceResponseData {
 
         @java.lang.Override
         @JsonSetter("remaining")
-        public SourceStage remaining(double remaining) {
+        public ReservedStage remaining(double remaining) {
             this.remaining = remaining;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("reserved")
+        public SettledStage reserved(double reserved) {
+            this.reserved = reserved;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("settled")
+        public SourceStage settled(double settled) {
+            this.settled = settled;
             return this;
         }
 
@@ -182,7 +231,8 @@ public final class CompanyCreditBalanceResponseData {
 
         @java.lang.Override
         public CompanyCreditBalanceResponseData build() {
-            return new CompanyCreditBalanceResponseData(creditId, remaining, source, total, additionalProperties);
+            return new CompanyCreditBalanceResponseData(
+                    creditId, remaining, reserved, settled, source, total, additionalProperties);
         }
 
         @java.lang.Override
