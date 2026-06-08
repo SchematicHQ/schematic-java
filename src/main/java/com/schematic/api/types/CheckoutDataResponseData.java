@@ -32,6 +32,8 @@ public final class CheckoutDataResponseData {
 
     private final Optional<CompanyDetailResponseData> company;
 
+    private final List<CheckoutFieldWithValue> customCheckoutFields;
+
     private final Optional<FeatureUsageDetailResponseData> featureUsage;
 
     private final List<CreditBundlePurchaseResponseData> selectedCreditBundles;
@@ -50,6 +52,7 @@ public final class CheckoutDataResponseData {
             List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements,
             List<BillingCreditBundleResponseData> availableCreditBundles,
             Optional<CompanyDetailResponseData> company,
+            List<CheckoutFieldWithValue> customCheckoutFields,
             Optional<FeatureUsageDetailResponseData> featureUsage,
             List<CreditBundlePurchaseResponseData> selectedCreditBundles,
             Optional<PlanDetailResponseData> selectedPlan,
@@ -61,6 +64,7 @@ public final class CheckoutDataResponseData {
         this.activeUsageBasedEntitlements = activeUsageBasedEntitlements;
         this.availableCreditBundles = availableCreditBundles;
         this.company = company;
+        this.customCheckoutFields = customCheckoutFields;
         this.featureUsage = featureUsage;
         this.selectedCreditBundles = selectedCreditBundles;
         this.selectedPlan = selectedPlan;
@@ -92,6 +96,11 @@ public final class CheckoutDataResponseData {
     @JsonProperty("company")
     public Optional<CompanyDetailResponseData> getCompany() {
         return company;
+    }
+
+    @JsonProperty("custom_checkout_fields")
+    public List<CheckoutFieldWithValue> getCustomCheckoutFields() {
+        return customCheckoutFields;
     }
 
     @JsonProperty("feature_usage")
@@ -136,6 +145,7 @@ public final class CheckoutDataResponseData {
                 && activeUsageBasedEntitlements.equals(other.activeUsageBasedEntitlements)
                 && availableCreditBundles.equals(other.availableCreditBundles)
                 && company.equals(other.company)
+                && customCheckoutFields.equals(other.customCheckoutFields)
                 && featureUsage.equals(other.featureUsage)
                 && selectedCreditBundles.equals(other.selectedCreditBundles)
                 && selectedPlan.equals(other.selectedPlan)
@@ -151,6 +161,7 @@ public final class CheckoutDataResponseData {
                 this.activeUsageBasedEntitlements,
                 this.availableCreditBundles,
                 this.company,
+                this.customCheckoutFields,
                 this.featureUsage,
                 this.selectedCreditBundles,
                 this.selectedPlan,
@@ -179,6 +190,8 @@ public final class CheckoutDataResponseData {
 
         private Optional<CompanyDetailResponseData> company = Optional.empty();
 
+        private List<CheckoutFieldWithValue> customCheckoutFields = new ArrayList<>();
+
         private Optional<FeatureUsageDetailResponseData> featureUsage = Optional.empty();
 
         private List<CreditBundlePurchaseResponseData> selectedCreditBundles = new ArrayList<>();
@@ -200,6 +213,7 @@ public final class CheckoutDataResponseData {
             activeUsageBasedEntitlements(other.getActiveUsageBasedEntitlements());
             availableCreditBundles(other.getAvailableCreditBundles());
             company(other.getCompany());
+            customCheckoutFields(other.getCustomCheckoutFields());
             featureUsage(other.getFeatureUsage());
             selectedCreditBundles(other.getSelectedCreditBundles());
             selectedPlan(other.getSelectedPlan());
@@ -295,6 +309,27 @@ public final class CheckoutDataResponseData {
             return this;
         }
 
+        @JsonSetter(value = "custom_checkout_fields", nulls = Nulls.SKIP)
+        public Builder customCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
+            this.customCheckoutFields.clear();
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
+            return this;
+        }
+
+        public Builder addCustomCheckoutFields(CheckoutFieldWithValue customCheckoutFields) {
+            this.customCheckoutFields.add(customCheckoutFields);
+            return this;
+        }
+
+        public Builder addAllCustomCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
+            return this;
+        }
+
         @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
         public Builder featureUsage(Optional<FeatureUsageDetailResponseData> featureUsage) {
             this.featureUsage = featureUsage;
@@ -380,6 +415,7 @@ public final class CheckoutDataResponseData {
                     activeUsageBasedEntitlements,
                     availableCreditBundles,
                     company,
+                    customCheckoutFields,
                     featureUsage,
                     selectedCreditBundles,
                     selectedPlan,

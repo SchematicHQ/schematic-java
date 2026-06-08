@@ -48,6 +48,8 @@ public final class BillingCreditView {
 
     private final String id;
 
+    private final BillingCreditLedgerAuthority ledgerAuthority;
+
     private final String name;
 
     private final Optional<String> pluralName;
@@ -79,6 +81,7 @@ public final class BillingCreditView {
             String environmentId,
             Optional<String> icon,
             String id,
+            BillingCreditLedgerAuthority ledgerAuthority,
             String name,
             Optional<String> pluralName,
             Optional<BillingPriceView> price,
@@ -100,6 +103,7 @@ public final class BillingCreditView {
         this.environmentId = environmentId;
         this.icon = icon;
         this.id = id;
+        this.ledgerAuthority = ledgerAuthority;
         this.name = name;
         this.pluralName = pluralName;
         this.price = price;
@@ -171,6 +175,11 @@ public final class BillingCreditView {
         return id;
     }
 
+    @JsonProperty("ledger_authority")
+    public BillingCreditLedgerAuthority getLedgerAuthority() {
+        return ledgerAuthority;
+    }
+
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -235,6 +244,7 @@ public final class BillingCreditView {
                 && environmentId.equals(other.environmentId)
                 && icon.equals(other.icon)
                 && id.equals(other.id)
+                && ledgerAuthority.equals(other.ledgerAuthority)
                 && name.equals(other.name)
                 && pluralName.equals(other.pluralName)
                 && price.equals(other.price)
@@ -260,6 +270,7 @@ public final class BillingCreditView {
                 this.environmentId,
                 this.icon,
                 this.id,
+                this.ledgerAuthority,
                 this.name,
                 this.pluralName,
                 this.price,
@@ -314,7 +325,11 @@ public final class BillingCreditView {
     }
 
     public interface IdStage {
-        NameStage id(@NotNull String id);
+        LedgerAuthorityStage id(@NotNull String id);
+    }
+
+    public interface LedgerAuthorityStage {
+        NameStage ledgerAuthority(@NotNull BillingCreditLedgerAuthority ledgerAuthority);
     }
 
     public interface NameStage {
@@ -382,6 +397,7 @@ public final class BillingCreditView {
                     DescriptionStage,
                     EnvironmentIdStage,
                     IdStage,
+                    LedgerAuthorityStage,
                     NameStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -402,6 +418,8 @@ public final class BillingCreditView {
         private String environmentId;
 
         private String id;
+
+        private BillingCreditLedgerAuthority ledgerAuthority;
 
         private String name;
 
@@ -444,6 +462,7 @@ public final class BillingCreditView {
             environmentId(other.getEnvironmentId());
             icon(other.getIcon());
             id(other.getId());
+            ledgerAuthority(other.getLedgerAuthority());
             name(other.getName());
             pluralName(other.getPluralName());
             price(other.getPrice());
@@ -514,8 +533,15 @@ public final class BillingCreditView {
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(@NotNull String id) {
+        public LedgerAuthorityStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("ledger_authority")
+        public NameStage ledgerAuthority(@NotNull BillingCreditLedgerAuthority ledgerAuthority) {
+            this.ledgerAuthority = Objects.requireNonNull(ledgerAuthority, "ledgerAuthority must not be null");
             return this;
         }
 
@@ -676,6 +702,7 @@ public final class BillingCreditView {
                     environmentId,
                     icon,
                     id,
+                    ledgerAuthority,
                     name,
                     pluralName,
                     price,

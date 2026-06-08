@@ -29,6 +29,8 @@ public final class PlanGroupDetailResponseData {
 
     private final ComponentSettingsResponseData componentSettings;
 
+    private final List<CheckoutFieldResponseData> customCheckoutFields;
+
     private final Optional<CustomPlanViewConfigResponseData> customPlanConfig;
 
     private final Optional<String> customPlanId;
@@ -103,6 +105,7 @@ public final class PlanGroupDetailResponseData {
             List<PlanGroupPlanDetailResponseData> addOns,
             CheckoutSettingsResponseData checkoutSettings,
             ComponentSettingsResponseData componentSettings,
+            List<CheckoutFieldResponseData> customCheckoutFields,
             Optional<CustomPlanViewConfigResponseData> customPlanConfig,
             Optional<String> customPlanId,
             Optional<PlanGroupPlanDetailResponseData> defaultPlan,
@@ -141,6 +144,7 @@ public final class PlanGroupDetailResponseData {
         this.addOns = addOns;
         this.checkoutSettings = checkoutSettings;
         this.componentSettings = componentSettings;
+        this.customCheckoutFields = customCheckoutFields;
         this.customPlanConfig = customPlanConfig;
         this.customPlanId = customPlanId;
         this.defaultPlan = defaultPlan;
@@ -191,6 +195,11 @@ public final class PlanGroupDetailResponseData {
     @JsonProperty("component_settings")
     public ComponentSettingsResponseData getComponentSettings() {
         return componentSettings;
+    }
+
+    @JsonProperty("custom_checkout_fields")
+    public List<CheckoutFieldResponseData> getCustomCheckoutFields() {
+        return customCheckoutFields;
     }
 
     @JsonProperty("custom_plan_config")
@@ -378,6 +387,7 @@ public final class PlanGroupDetailResponseData {
         return addOns.equals(other.addOns)
                 && checkoutSettings.equals(other.checkoutSettings)
                 && componentSettings.equals(other.componentSettings)
+                && customCheckoutFields.equals(other.customCheckoutFields)
                 && customPlanConfig.equals(other.customPlanConfig)
                 && customPlanId.equals(other.customPlanId)
                 && defaultPlan.equals(other.defaultPlan)
@@ -420,6 +430,7 @@ public final class PlanGroupDetailResponseData {
                 this.addOns,
                 this.checkoutSettings,
                 this.componentSettings,
+                this.customCheckoutFields,
                 this.customPlanConfig,
                 this.customPlanId,
                 this.defaultPlan,
@@ -527,6 +538,12 @@ public final class PlanGroupDetailResponseData {
         _FinalStage addAddOns(PlanGroupPlanDetailResponseData addOns);
 
         _FinalStage addAllAddOns(List<PlanGroupPlanDetailResponseData> addOns);
+
+        _FinalStage customCheckoutFields(List<CheckoutFieldResponseData> customCheckoutFields);
+
+        _FinalStage addCustomCheckoutFields(CheckoutFieldResponseData customCheckoutFields);
+
+        _FinalStage addAllCustomCheckoutFields(List<CheckoutFieldResponseData> customCheckoutFields);
 
         _FinalStage customPlanConfig(Optional<CustomPlanViewConfigResponseData> customPlanConfig);
 
@@ -720,6 +737,8 @@ public final class PlanGroupDetailResponseData {
 
         private Optional<CustomPlanViewConfigResponseData> customPlanConfig = Optional.empty();
 
+        private List<CheckoutFieldResponseData> customCheckoutFields = new ArrayList<>();
+
         private List<PlanGroupPlanDetailResponseData> addOns = new ArrayList<>();
 
         @JsonAnySetter
@@ -732,6 +751,7 @@ public final class PlanGroupDetailResponseData {
             addOns(other.getAddOns());
             checkoutSettings(other.getCheckoutSettings());
             componentSettings(other.getComponentSettings());
+            customCheckoutFields(other.getCustomCheckoutFields());
             customPlanConfig(other.getCustomPlanConfig());
             customPlanId(other.getCustomPlanId());
             defaultPlan(other.getDefaultPlan());
@@ -1212,6 +1232,30 @@ public final class PlanGroupDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCustomCheckoutFields(List<CheckoutFieldResponseData> customCheckoutFields) {
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCustomCheckoutFields(CheckoutFieldResponseData customCheckoutFields) {
+            this.customCheckoutFields.add(customCheckoutFields);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_checkout_fields", nulls = Nulls.SKIP)
+        public _FinalStage customCheckoutFields(List<CheckoutFieldResponseData> customCheckoutFields) {
+            this.customCheckoutFields.clear();
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllAddOns(List<PlanGroupPlanDetailResponseData> addOns) {
             if (addOns != null) {
                 this.addOns.addAll(addOns);
@@ -1241,6 +1285,7 @@ public final class PlanGroupDetailResponseData {
                     addOns,
                     checkoutSettings,
                     componentSettings,
+                    customCheckoutFields,
                     customPlanConfig,
                     customPlanId,
                     defaultPlan,

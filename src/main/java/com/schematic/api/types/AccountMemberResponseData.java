@@ -28,9 +28,13 @@ public final class AccountMemberResponseData {
 
     private final Optional<String> email;
 
+    private final Optional<String> firstName;
+
     private final String id;
 
     private final Optional<String> imageUrl;
+
+    private final Optional<String> lastName;
 
     private final Optional<String> name;
 
@@ -45,8 +49,10 @@ public final class AccountMemberResponseData {
     private AccountMemberResponseData(
             OffsetDateTime createdAt,
             Optional<String> email,
+            Optional<String> firstName,
             String id,
             Optional<String> imageUrl,
+            Optional<String> lastName,
             Optional<String> name,
             Map<String, List<AccountMemberPermission>> permissions,
             Optional<AccountMemberRole> role,
@@ -54,8 +60,10 @@ public final class AccountMemberResponseData {
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.email = email;
+        this.firstName = firstName;
         this.id = id;
         this.imageUrl = imageUrl;
+        this.lastName = lastName;
         this.name = name;
         this.permissions = permissions;
         this.role = role;
@@ -73,6 +81,11 @@ public final class AccountMemberResponseData {
         return email;
     }
 
+    @JsonProperty("first_name")
+    public Optional<String> getFirstName() {
+        return firstName;
+    }
+
     @JsonProperty("id")
     public String getId() {
         return id;
@@ -81,6 +94,11 @@ public final class AccountMemberResponseData {
     @JsonProperty("image_url")
     public Optional<String> getImageUrl() {
         return imageUrl;
+    }
+
+    @JsonProperty("last_name")
+    public Optional<String> getLastName() {
+        return lastName;
     }
 
     @JsonProperty("name")
@@ -117,8 +135,10 @@ public final class AccountMemberResponseData {
     private boolean equalTo(AccountMemberResponseData other) {
         return createdAt.equals(other.createdAt)
                 && email.equals(other.email)
+                && firstName.equals(other.firstName)
                 && id.equals(other.id)
                 && imageUrl.equals(other.imageUrl)
+                && lastName.equals(other.lastName)
                 && name.equals(other.name)
                 && permissions.equals(other.permissions)
                 && role.equals(other.role)
@@ -130,8 +150,10 @@ public final class AccountMemberResponseData {
         return Objects.hash(
                 this.createdAt,
                 this.email,
+                this.firstName,
                 this.id,
                 this.imageUrl,
+                this.lastName,
                 this.name,
                 this.permissions,
                 this.role,
@@ -172,9 +194,17 @@ public final class AccountMemberResponseData {
 
         _FinalStage email(String email);
 
+        _FinalStage firstName(Optional<String> firstName);
+
+        _FinalStage firstName(String firstName);
+
         _FinalStage imageUrl(Optional<String> imageUrl);
 
         _FinalStage imageUrl(String imageUrl);
+
+        _FinalStage lastName(Optional<String> lastName);
+
+        _FinalStage lastName(String lastName);
 
         _FinalStage name(Optional<String> name);
 
@@ -205,7 +235,11 @@ public final class AccountMemberResponseData {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<String> lastName = Optional.empty();
+
         private Optional<String> imageUrl = Optional.empty();
+
+        private Optional<String> firstName = Optional.empty();
 
         private Optional<String> email = Optional.empty();
 
@@ -218,8 +252,10 @@ public final class AccountMemberResponseData {
         public Builder from(AccountMemberResponseData other) {
             createdAt(other.getCreatedAt());
             email(other.getEmail());
+            firstName(other.getFirstName());
             id(other.getId());
             imageUrl(other.getImageUrl());
+            lastName(other.getLastName());
             name(other.getName());
             permissions(other.getPermissions());
             role(other.getRole());
@@ -299,6 +335,19 @@ public final class AccountMemberResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage lastName(String lastName) {
+            this.lastName = Optional.ofNullable(lastName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "last_name", nulls = Nulls.SKIP)
+        public _FinalStage lastName(Optional<String> lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage imageUrl(String imageUrl) {
             this.imageUrl = Optional.ofNullable(imageUrl);
             return this;
@@ -308,6 +357,19 @@ public final class AccountMemberResponseData {
         @JsonSetter(value = "image_url", nulls = Nulls.SKIP)
         public _FinalStage imageUrl(Optional<String> imageUrl) {
             this.imageUrl = imageUrl;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage firstName(String firstName) {
+            this.firstName = Optional.ofNullable(firstName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "first_name", nulls = Nulls.SKIP)
+        public _FinalStage firstName(Optional<String> firstName) {
+            this.firstName = firstName;
             return this;
         }
 
@@ -327,7 +389,17 @@ public final class AccountMemberResponseData {
         @java.lang.Override
         public AccountMemberResponseData build() {
             return new AccountMemberResponseData(
-                    createdAt, email, id, imageUrl, name, permissions, role, updatedAt, additionalProperties);
+                    createdAt,
+                    email,
+                    firstName,
+                    id,
+                    imageUrl,
+                    lastName,
+                    name,
+                    permissions,
+                    role,
+                    updatedAt,
+                    additionalProperties);
         }
 
         @java.lang.Override

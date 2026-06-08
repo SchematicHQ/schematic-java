@@ -82,6 +82,8 @@ public final class CompanyPlanCreditGrantView {
 
     private final BillingPlanCreditGrantResetType resetType;
 
+    private final long rolloverPercentage;
+
     private final Optional<String> singularName;
 
     private final OffsetDateTime updatedAt;
@@ -119,6 +121,7 @@ public final class CompanyPlanCreditGrantView {
             Optional<BillingPlanCreditGrantResetCadence> resetCadence,
             Optional<BillingPlanCreditGrantResetStart> resetStart,
             BillingPlanCreditGrantResetType resetType,
+            long rolloverPercentage,
             Optional<String> singularName,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -152,6 +155,7 @@ public final class CompanyPlanCreditGrantView {
         this.resetCadence = resetCadence;
         this.resetStart = resetStart;
         this.resetType = resetType;
+        this.rolloverPercentage = rolloverPercentage;
         this.singularName = singularName;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -319,6 +323,11 @@ public final class CompanyPlanCreditGrantView {
         return resetType;
     }
 
+    @JsonProperty("rollover_percentage")
+    public long getRolloverPercentage() {
+        return rolloverPercentage;
+    }
+
     /**
      * @return Deprecated field, will be removed in the future. Use Credit.SingularName instead.
      */
@@ -374,6 +383,7 @@ public final class CompanyPlanCreditGrantView {
                 && resetCadence.equals(other.resetCadence)
                 && resetStart.equals(other.resetStart)
                 && resetType.equals(other.resetType)
+                && rolloverPercentage == other.rolloverPercentage
                 && singularName.equals(other.singularName)
                 && updatedAt.equals(other.updatedAt);
     }
@@ -411,6 +421,7 @@ public final class CompanyPlanCreditGrantView {
                 this.resetCadence,
                 this.resetStart,
                 this.resetType,
+                this.rolloverPercentage,
                 this.singularName,
                 this.updatedAt);
     }
@@ -469,7 +480,11 @@ public final class CompanyPlanCreditGrantView {
     }
 
     public interface ResetTypeStage {
-        UpdatedAtStage resetType(@NotNull BillingPlanCreditGrantResetType resetType);
+        RolloverPercentageStage resetType(@NotNull BillingPlanCreditGrantResetType resetType);
+    }
+
+    public interface RolloverPercentageStage {
+        UpdatedAtStage rolloverPercentage(long rolloverPercentage);
     }
 
     public interface UpdatedAtStage {
@@ -591,6 +606,7 @@ public final class CompanyPlanCreditGrantView {
                     IdStage,
                     PlanIdStage,
                     ResetTypeStage,
+                    RolloverPercentageStage,
                     UpdatedAtStage,
                     _FinalStage {
         private boolean billingCreditAutoTopupEnabled;
@@ -612,6 +628,8 @@ public final class CompanyPlanCreditGrantView {
         private String planId;
 
         private BillingPlanCreditGrantResetType resetType;
+
+        private long rolloverPercentage;
 
         private OffsetDateTime updatedAt;
 
@@ -694,6 +712,7 @@ public final class CompanyPlanCreditGrantView {
             resetCadence(other.getResetCadence());
             resetStart(other.getResetStart());
             resetType(other.getResetType());
+            rolloverPercentage(other.getRolloverPercentage());
             singularName(other.getSingularName());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -775,8 +794,15 @@ public final class CompanyPlanCreditGrantView {
 
         @java.lang.Override
         @JsonSetter("reset_type")
-        public UpdatedAtStage resetType(@NotNull BillingPlanCreditGrantResetType resetType) {
+        public RolloverPercentageStage resetType(@NotNull BillingPlanCreditGrantResetType resetType) {
             this.resetType = Objects.requireNonNull(resetType, "resetType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("rollover_percentage")
+        public UpdatedAtStage rolloverPercentage(long rolloverPercentage) {
+            this.rolloverPercentage = rolloverPercentage;
             return this;
         }
 
@@ -1118,6 +1144,7 @@ public final class CompanyPlanCreditGrantView {
                     resetCadence,
                     resetStart,
                     resetType,
+                    rolloverPercentage,
                     singularName,
                     updatedAt,
                     additionalProperties);

@@ -43,6 +43,8 @@ public final class ComponentHydrateResponseData {
 
     private final List<CreditCompanyGrantView> creditGrants;
 
+    private final List<CheckoutFieldWithValue> customCheckoutFields;
+
     private final Optional<PlanDetailResponseData> defaultPlan;
 
     private final ComponentDisplaySettings displaySettings;
@@ -88,6 +90,7 @@ public final class ComponentHydrateResponseData {
             Optional<ComponentResponseData> component,
             List<BillingCreditBundleView> creditBundles,
             List<CreditCompanyGrantView> creditGrants,
+            List<CheckoutFieldWithValue> customCheckoutFields,
             Optional<PlanDetailResponseData> defaultPlan,
             ComponentDisplaySettings displaySettings,
             Optional<FeatureUsageDetailResponseData> featureUsage,
@@ -115,6 +118,7 @@ public final class ComponentHydrateResponseData {
         this.component = component;
         this.creditBundles = creditBundles;
         this.creditGrants = creditGrants;
+        this.customCheckoutFields = customCheckoutFields;
         this.defaultPlan = defaultPlan;
         this.displaySettings = displaySettings;
         this.featureUsage = featureUsage;
@@ -182,6 +186,11 @@ public final class ComponentHydrateResponseData {
     @JsonProperty("credit_grants")
     public List<CreditCompanyGrantView> getCreditGrants() {
         return creditGrants;
+    }
+
+    @JsonProperty("custom_checkout_fields")
+    public List<CheckoutFieldWithValue> getCustomCheckoutFields() {
+        return customCheckoutFields;
     }
 
     @JsonProperty("default_plan")
@@ -286,6 +295,7 @@ public final class ComponentHydrateResponseData {
                 && component.equals(other.component)
                 && creditBundles.equals(other.creditBundles)
                 && creditGrants.equals(other.creditGrants)
+                && customCheckoutFields.equals(other.customCheckoutFields)
                 && defaultPlan.equals(other.defaultPlan)
                 && displaySettings.equals(other.displaySettings)
                 && featureUsage.equals(other.featureUsage)
@@ -317,6 +327,7 @@ public final class ComponentHydrateResponseData {
                 this.component,
                 this.creditBundles,
                 this.creditGrants,
+                this.customCheckoutFields,
                 this.defaultPlan,
                 this.displaySettings,
                 this.featureUsage,
@@ -430,6 +441,12 @@ public final class ComponentHydrateResponseData {
 
         _FinalStage addAllCreditGrants(List<CreditCompanyGrantView> creditGrants);
 
+        _FinalStage customCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields);
+
+        _FinalStage addCustomCheckoutFields(CheckoutFieldWithValue customCheckoutFields);
+
+        _FinalStage addAllCustomCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields);
+
         _FinalStage defaultPlan(Optional<PlanDetailResponseData> defaultPlan);
 
         _FinalStage defaultPlan(PlanDetailResponseData defaultPlan);
@@ -515,6 +532,8 @@ public final class ComponentHydrateResponseData {
 
         private Optional<PlanDetailResponseData> defaultPlan = Optional.empty();
 
+        private List<CheckoutFieldWithValue> customCheckoutFields = new ArrayList<>();
+
         private List<CreditCompanyGrantView> creditGrants = new ArrayList<>();
 
         private List<BillingCreditBundleView> creditBundles = new ArrayList<>();
@@ -550,6 +569,7 @@ public final class ComponentHydrateResponseData {
             component(other.getComponent());
             creditBundles(other.getCreditBundles());
             creditGrants(other.getCreditGrants());
+            customCheckoutFields(other.getCustomCheckoutFields());
             defaultPlan(other.getDefaultPlan());
             displaySettings(other.getDisplaySettings());
             featureUsage(other.getFeatureUsage());
@@ -746,6 +766,30 @@ public final class ComponentHydrateResponseData {
         @JsonSetter(value = "default_plan", nulls = Nulls.SKIP)
         public _FinalStage defaultPlan(Optional<PlanDetailResponseData> defaultPlan) {
             this.defaultPlan = defaultPlan;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCustomCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCustomCheckoutFields(CheckoutFieldWithValue customCheckoutFields) {
+            this.customCheckoutFields.add(customCheckoutFields);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_checkout_fields", nulls = Nulls.SKIP)
+        public _FinalStage customCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
+            this.customCheckoutFields.clear();
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
             return this;
         }
 
@@ -948,6 +992,7 @@ public final class ComponentHydrateResponseData {
                     component,
                     creditBundles,
                     creditGrants,
+                    customCheckoutFields,
                     defaultPlan,
                     displaySettings,
                     featureUsage,

@@ -14,6 +14,8 @@ public final class BillingCreditGrantReason {
 
     public static final BillingCreditGrantReason PLAN = new BillingCreditGrantReason(Value.PLAN, "plan");
 
+    public static final BillingCreditGrantReason ROLLOVER = new BillingCreditGrantReason(Value.ROLLOVER, "rollover");
+
     public static final BillingCreditGrantReason BILLING_CREDIT_AUTO_TOPUP =
             new BillingCreditGrantReason(Value.BILLING_CREDIT_AUTO_TOPUP, "billing_credit_auto_topup");
 
@@ -58,6 +60,8 @@ public final class BillingCreditGrantReason {
                 return visitor.visitAdjustment();
             case PLAN:
                 return visitor.visitPlan();
+            case ROLLOVER:
+                return visitor.visitRollover();
             case BILLING_CREDIT_AUTO_TOPUP:
                 return visitor.visitBillingCreditAutoTopup();
             case FREE:
@@ -77,6 +81,8 @@ public final class BillingCreditGrantReason {
                 return ADJUSTMENT;
             case "plan":
                 return PLAN;
+            case "rollover":
+                return ROLLOVER;
             case "billing_credit_auto_topup":
                 return BILLING_CREDIT_AUTO_TOPUP;
             case "free":
@@ -97,6 +103,8 @@ public final class BillingCreditGrantReason {
 
         PURCHASED,
 
+        ROLLOVER,
+
         UNKNOWN
     }
 
@@ -110,6 +118,8 @@ public final class BillingCreditGrantReason {
         T visitPlan();
 
         T visitPurchased();
+
+        T visitRollover();
 
         T visitUnknown(String unknownType);
     }

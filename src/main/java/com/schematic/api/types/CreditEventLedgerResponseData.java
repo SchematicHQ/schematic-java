@@ -82,6 +82,8 @@ public final class CreditEventLedgerResponseData {
 
     private final Optional<String> usageEventId;
 
+    private final Optional<CreditUsageReason> usageReason;
+
     private final Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason;
 
     private final Map<String, Object> additionalProperties;
@@ -117,6 +119,7 @@ public final class CreditEventLedgerResponseData {
             long sourceId,
             Optional<String> toGrantId,
             Optional<String> usageEventId,
+            Optional<CreditUsageReason> usageReason,
             Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason,
             Map<String, Object> additionalProperties) {
         this.amount = amount;
@@ -149,6 +152,7 @@ public final class CreditEventLedgerResponseData {
         this.sourceId = sourceId;
         this.toGrantId = toGrantId;
         this.usageEventId = usageEventId;
+        this.usageReason = usageReason;
         this.zeroedOutReason = zeroedOutReason;
         this.additionalProperties = additionalProperties;
     }
@@ -303,6 +307,11 @@ public final class CreditEventLedgerResponseData {
         return usageEventId;
     }
 
+    @JsonProperty("usage_reason")
+    public Optional<CreditUsageReason> getUsageReason() {
+        return usageReason;
+    }
+
     @JsonProperty("zeroed_out_reason")
     public Optional<BillingCreditGrantZeroedOutReason> getZeroedOutReason() {
         return zeroedOutReason;
@@ -350,6 +359,7 @@ public final class CreditEventLedgerResponseData {
                 && sourceId == other.sourceId
                 && toGrantId.equals(other.toGrantId)
                 && usageEventId.equals(other.usageEventId)
+                && usageReason.equals(other.usageReason)
                 && zeroedOutReason.equals(other.zeroedOutReason);
     }
 
@@ -386,6 +396,7 @@ public final class CreditEventLedgerResponseData {
                 this.sourceId,
                 this.toGrantId,
                 this.usageEventId,
+                this.usageReason,
                 this.zeroedOutReason);
     }
 
@@ -527,6 +538,10 @@ public final class CreditEventLedgerResponseData {
 
         _FinalStage usageEventId(String usageEventId);
 
+        _FinalStage usageReason(Optional<CreditUsageReason> usageReason);
+
+        _FinalStage usageReason(CreditUsageReason usageReason);
+
         _FinalStage zeroedOutReason(Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason);
 
         _FinalStage zeroedOutReason(BillingCreditGrantZeroedOutReason zeroedOutReason);
@@ -563,6 +578,8 @@ public final class CreditEventLedgerResponseData {
         private long sourceId;
 
         private Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason = Optional.empty();
+
+        private Optional<CreditUsageReason> usageReason = Optional.empty();
 
         private Optional<String> usageEventId = Optional.empty();
 
@@ -643,6 +660,7 @@ public final class CreditEventLedgerResponseData {
             sourceId(other.getSourceId());
             toGrantId(other.getToGrantId());
             usageEventId(other.getUsageEventId());
+            usageReason(other.getUsageReason());
             zeroedOutReason(other.getZeroedOutReason());
             return this;
         }
@@ -720,6 +738,19 @@ public final class CreditEventLedgerResponseData {
         @JsonSetter(value = "zeroed_out_reason", nulls = Nulls.SKIP)
         public _FinalStage zeroedOutReason(Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason) {
             this.zeroedOutReason = zeroedOutReason;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage usageReason(CreditUsageReason usageReason) {
+            this.usageReason = Optional.ofNullable(usageReason);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "usage_reason", nulls = Nulls.SKIP)
+        public _FinalStage usageReason(Optional<CreditUsageReason> usageReason) {
+            this.usageReason = usageReason;
             return this;
         }
 
@@ -1029,6 +1060,7 @@ public final class CreditEventLedgerResponseData {
                     sourceId,
                     toGrantId,
                     usageEventId,
+                    usageReason,
                     zeroedOutReason,
                     additionalProperties);
         }

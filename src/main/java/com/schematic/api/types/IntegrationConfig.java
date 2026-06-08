@@ -30,6 +30,10 @@ public final class IntegrationConfig {
         return new IntegrationConfig(new ClerkValue(value));
     }
 
+    public static IntegrationConfig metronome(MetronomeIntegrationConfig value) {
+        return new IntegrationConfig(new MetronomeValue(value));
+    }
+
     public static IntegrationConfig orb(OrbIntegrationConfig value) {
         return new IntegrationConfig(new OrbValue(value));
     }
@@ -44,6 +48,10 @@ public final class IntegrationConfig {
 
     public boolean isClerk() {
         return value instanceof ClerkValue;
+    }
+
+    public boolean isMetronome() {
+        return value instanceof MetronomeValue;
     }
 
     public boolean isOrb() {
@@ -65,6 +73,13 @@ public final class IntegrationConfig {
     public Optional<ClerkIntegrationConfig> getClerk() {
         if (isClerk()) {
             return Optional.of(((ClerkValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<MetronomeIntegrationConfig> getMetronome() {
+        if (isMetronome()) {
+            return Optional.of(((MetronomeValue) value).value);
         }
         return Optional.empty();
     }
@@ -121,6 +136,8 @@ public final class IntegrationConfig {
     public interface Visitor<T> {
         T visitClerk(ClerkIntegrationConfig clerk);
 
+        T visitMetronome(MetronomeIntegrationConfig metronome);
+
         T visitOrb(OrbIntegrationConfig orb);
 
         T visitStripe(StripeIntegrationConfig stripe);
@@ -133,6 +150,7 @@ public final class IntegrationConfig {
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
     @JsonSubTypes({
         @JsonSubTypes.Type(ClerkValue.class),
+        @JsonSubTypes.Type(MetronomeValue.class),
         @JsonSubTypes.Type(OrbValue.class),
         @JsonSubTypes.Type(StripeValue.class),
         @JsonSubTypes.Type(WorkosValue.class)
@@ -168,6 +186,46 @@ public final class IntegrationConfig {
         }
 
         private boolean equalTo(ClerkValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "IntegrationConfig{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("metronome")
+    @JsonIgnoreProperties("type")
+    private static final class MetronomeValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private MetronomeIntegrationConfig value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private MetronomeValue() {}
+
+        private MetronomeValue(MetronomeIntegrationConfig value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitMetronome(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof MetronomeValue && equalTo((MetronomeValue) other);
+        }
+
+        private boolean equalTo(MetronomeValue other) {
             return value.equals(other.value);
         }
 

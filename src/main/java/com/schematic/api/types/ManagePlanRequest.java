@@ -40,6 +40,8 @@ public final class ManagePlanRequest {
 
     private final List<UpdateCreditBundleRequestBody> creditBundles;
 
+    private final List<CheckoutFieldValue> customFieldValues;
+
     private final List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements;
 
     private final Optional<String> paymentMethodExternalId;
@@ -61,6 +63,7 @@ public final class ManagePlanRequest {
             String companyId,
             Optional<String> couponExternalId,
             List<UpdateCreditBundleRequestBody> creditBundles,
+            List<CheckoutFieldValue> customFieldValues,
             List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements,
             Optional<String> paymentMethodExternalId,
             Optional<String> promoCode,
@@ -75,6 +78,7 @@ public final class ManagePlanRequest {
         this.companyId = companyId;
         this.couponExternalId = couponExternalId;
         this.creditBundles = creditBundles;
+        this.customFieldValues = customFieldValues;
         this.payInAdvanceEntitlements = payInAdvanceEntitlements;
         this.paymentMethodExternalId = paymentMethodExternalId;
         this.promoCode = promoCode;
@@ -126,6 +130,11 @@ public final class ManagePlanRequest {
         return creditBundles;
     }
 
+    @JsonProperty("custom_field_values")
+    public List<CheckoutFieldValue> getCustomFieldValues() {
+        return customFieldValues;
+    }
+
     @JsonProperty("pay_in_advance_entitlements")
     public List<UpdatePayInAdvanceRequestBody> getPayInAdvanceEntitlements() {
         return payInAdvanceEntitlements;
@@ -174,6 +183,7 @@ public final class ManagePlanRequest {
                 && companyId.equals(other.companyId)
                 && couponExternalId.equals(other.couponExternalId)
                 && creditBundles.equals(other.creditBundles)
+                && customFieldValues.equals(other.customFieldValues)
                 && payInAdvanceEntitlements.equals(other.payInAdvanceEntitlements)
                 && paymentMethodExternalId.equals(other.paymentMethodExternalId)
                 && promoCode.equals(other.promoCode)
@@ -192,6 +202,7 @@ public final class ManagePlanRequest {
                 this.companyId,
                 this.couponExternalId,
                 this.creditBundles,
+                this.customFieldValues,
                 this.payInAdvanceEntitlements,
                 this.paymentMethodExternalId,
                 this.promoCode,
@@ -256,6 +267,12 @@ public final class ManagePlanRequest {
 
         _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles);
 
+        _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues);
+
+        _FinalStage addCustomFieldValues(CheckoutFieldValue customFieldValues);
+
+        _FinalStage addAllCustomFieldValues(List<CheckoutFieldValue> customFieldValues);
+
         _FinalStage payInAdvanceEntitlements(List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements);
 
         _FinalStage addPayInAdvanceEntitlements(UpdatePayInAdvanceRequestBody payInAdvanceEntitlements);
@@ -296,6 +313,8 @@ public final class ManagePlanRequest {
 
         private List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements = new ArrayList<>();
 
+        private List<CheckoutFieldValue> customFieldValues = new ArrayList<>();
+
         private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
         private Optional<String> couponExternalId = Optional.empty();
@@ -325,6 +344,7 @@ public final class ManagePlanRequest {
             companyId(other.getCompanyId());
             couponExternalId(other.getCouponExternalId());
             creditBundles(other.getCreditBundles());
+            customFieldValues(other.getCustomFieldValues());
             payInAdvanceEntitlements(other.getPayInAdvanceEntitlements());
             paymentMethodExternalId(other.getPaymentMethodExternalId());
             promoCode(other.getPromoCode());
@@ -420,6 +440,30 @@ public final class ManagePlanRequest {
             this.payInAdvanceEntitlements.clear();
             if (payInAdvanceEntitlements != null) {
                 this.payInAdvanceEntitlements.addAll(payInAdvanceEntitlements);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCustomFieldValues(List<CheckoutFieldValue> customFieldValues) {
+            if (customFieldValues != null) {
+                this.customFieldValues.addAll(customFieldValues);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCustomFieldValues(CheckoutFieldValue customFieldValues) {
+            this.customFieldValues.add(customFieldValues);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_field_values", nulls = Nulls.SKIP)
+        public _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues) {
+            this.customFieldValues.clear();
+            if (customFieldValues != null) {
+                this.customFieldValues.addAll(customFieldValues);
             }
             return this;
         }
@@ -555,6 +599,7 @@ public final class ManagePlanRequest {
                     companyId,
                     couponExternalId,
                     creditBundles,
+                    customFieldValues,
                     payInAdvanceEntitlements,
                     paymentMethodExternalId,
                     promoCode,

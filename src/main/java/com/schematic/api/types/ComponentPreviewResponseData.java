@@ -43,6 +43,8 @@ public final class ComponentPreviewResponseData {
 
     private final List<CreditCompanyGrantView> creditGrants;
 
+    private final List<CheckoutFieldWithValue> customCheckoutFields;
+
     private final Optional<PlanDetailResponseData> defaultPlan;
 
     private final ComponentDisplaySettings displaySettings;
@@ -90,6 +92,7 @@ public final class ComponentPreviewResponseData {
             Optional<ComponentResponseData> component,
             List<BillingCreditBundleView> creditBundles,
             List<CreditCompanyGrantView> creditGrants,
+            List<CheckoutFieldWithValue> customCheckoutFields,
             Optional<PlanDetailResponseData> defaultPlan,
             ComponentDisplaySettings displaySettings,
             Optional<FeatureUsageDetailResponseData> featureUsage,
@@ -118,6 +121,7 @@ public final class ComponentPreviewResponseData {
         this.component = component;
         this.creditBundles = creditBundles;
         this.creditGrants = creditGrants;
+        this.customCheckoutFields = customCheckoutFields;
         this.defaultPlan = defaultPlan;
         this.displaySettings = displaySettings;
         this.featureUsage = featureUsage;
@@ -186,6 +190,11 @@ public final class ComponentPreviewResponseData {
     @JsonProperty("credit_grants")
     public List<CreditCompanyGrantView> getCreditGrants() {
         return creditGrants;
+    }
+
+    @JsonProperty("custom_checkout_fields")
+    public List<CheckoutFieldWithValue> getCustomCheckoutFields() {
+        return customCheckoutFields;
     }
 
     @JsonProperty("default_plan")
@@ -295,6 +304,7 @@ public final class ComponentPreviewResponseData {
                 && component.equals(other.component)
                 && creditBundles.equals(other.creditBundles)
                 && creditGrants.equals(other.creditGrants)
+                && customCheckoutFields.equals(other.customCheckoutFields)
                 && defaultPlan.equals(other.defaultPlan)
                 && displaySettings.equals(other.displaySettings)
                 && featureUsage.equals(other.featureUsage)
@@ -327,6 +337,7 @@ public final class ComponentPreviewResponseData {
                 this.component,
                 this.creditBundles,
                 this.creditGrants,
+                this.customCheckoutFields,
                 this.defaultPlan,
                 this.displaySettings,
                 this.featureUsage,
@@ -441,6 +452,12 @@ public final class ComponentPreviewResponseData {
 
         _FinalStage addAllCreditGrants(List<CreditCompanyGrantView> creditGrants);
 
+        _FinalStage customCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields);
+
+        _FinalStage addCustomCheckoutFields(CheckoutFieldWithValue customCheckoutFields);
+
+        _FinalStage addAllCustomCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields);
+
         _FinalStage defaultPlan(Optional<PlanDetailResponseData> defaultPlan);
 
         _FinalStage defaultPlan(PlanDetailResponseData defaultPlan);
@@ -534,6 +551,8 @@ public final class ComponentPreviewResponseData {
 
         private Optional<PlanDetailResponseData> defaultPlan = Optional.empty();
 
+        private List<CheckoutFieldWithValue> customCheckoutFields = new ArrayList<>();
+
         private List<CreditCompanyGrantView> creditGrants = new ArrayList<>();
 
         private List<BillingCreditBundleView> creditBundles = new ArrayList<>();
@@ -569,6 +588,7 @@ public final class ComponentPreviewResponseData {
             component(other.getComponent());
             creditBundles(other.getCreditBundles());
             creditGrants(other.getCreditGrants());
+            customCheckoutFields(other.getCustomCheckoutFields());
             defaultPlan(other.getDefaultPlan());
             displaySettings(other.getDisplaySettings());
             featureUsage(other.getFeatureUsage());
@@ -794,6 +814,30 @@ public final class ComponentPreviewResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCustomCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCustomCheckoutFields(CheckoutFieldWithValue customCheckoutFields) {
+            this.customCheckoutFields.add(customCheckoutFields);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_checkout_fields", nulls = Nulls.SKIP)
+        public _FinalStage customCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
+            this.customCheckoutFields.clear();
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllCreditGrants(List<CreditCompanyGrantView> creditGrants) {
             if (creditGrants != null) {
                 this.creditGrants.addAll(creditGrants);
@@ -992,6 +1036,7 @@ public final class ComponentPreviewResponseData {
                     component,
                     creditBundles,
                     creditGrants,
+                    customCheckoutFields,
                     defaultPlan,
                     displaySettings,
                     featureUsage,

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CheckoutFieldInput;
 import com.schematic.api.types.CompatiblePlans;
 import com.schematic.api.types.CustomPlanConfig;
 import com.schematic.api.types.OrderedPlansInGroup;
@@ -38,6 +39,8 @@ public final class CreatePlanGroupRequestBody {
     private final boolean checkoutCollectEmail;
 
     private final boolean checkoutCollectPhone;
+
+    private final Optional<List<CheckoutFieldInput>> customCheckoutFields;
 
     private final Optional<CustomPlanConfig> customPlanConfig;
 
@@ -101,6 +104,7 @@ public final class CreatePlanGroupRequestBody {
             boolean checkoutCollectAddress,
             boolean checkoutCollectEmail,
             boolean checkoutCollectPhone,
+            Optional<List<CheckoutFieldInput>> customCheckoutFields,
             Optional<CustomPlanConfig> customPlanConfig,
             Optional<String> customPlanId,
             boolean enableTaxCollection,
@@ -134,6 +138,7 @@ public final class CreatePlanGroupRequestBody {
         this.checkoutCollectAddress = checkoutCollectAddress;
         this.checkoutCollectEmail = checkoutCollectEmail;
         this.checkoutCollectPhone = checkoutCollectPhone;
+        this.customCheckoutFields = customCheckoutFields;
         this.customPlanConfig = customPlanConfig;
         this.customPlanId = customPlanId;
         this.enableTaxCollection = enableTaxCollection;
@@ -190,6 +195,11 @@ public final class CreatePlanGroupRequestBody {
     @JsonProperty("checkout_collect_phone")
     public boolean getCheckoutCollectPhone() {
         return checkoutCollectPhone;
+    }
+
+    @JsonProperty("custom_checkout_fields")
+    public Optional<List<CheckoutFieldInput>> getCustomCheckoutFields() {
+        return customCheckoutFields;
     }
 
     @JsonProperty("custom_plan_config")
@@ -344,6 +354,7 @@ public final class CreatePlanGroupRequestBody {
                 && checkoutCollectAddress == other.checkoutCollectAddress
                 && checkoutCollectEmail == other.checkoutCollectEmail
                 && checkoutCollectPhone == other.checkoutCollectPhone
+                && customCheckoutFields.equals(other.customCheckoutFields)
                 && customPlanConfig.equals(other.customPlanConfig)
                 && customPlanId.equals(other.customPlanId)
                 && enableTaxCollection == other.enableTaxCollection
@@ -381,6 +392,7 @@ public final class CreatePlanGroupRequestBody {
                 this.checkoutCollectAddress,
                 this.checkoutCollectEmail,
                 this.checkoutCollectPhone,
+                this.customCheckoutFields,
                 this.customPlanConfig,
                 this.customPlanId,
                 this.enableTaxCollection,
@@ -496,6 +508,10 @@ public final class CreatePlanGroupRequestBody {
         _FinalStage addAddOnIds(String addOnIds);
 
         _FinalStage addAllAddOnIds(List<String> addOnIds);
+
+        _FinalStage customCheckoutFields(Optional<List<CheckoutFieldInput>> customCheckoutFields);
+
+        _FinalStage customCheckoutFields(List<CheckoutFieldInput> customCheckoutFields);
 
         _FinalStage customPlanConfig(Optional<CustomPlanConfig> customPlanConfig);
 
@@ -645,6 +661,8 @@ public final class CreatePlanGroupRequestBody {
 
         private Optional<CustomPlanConfig> customPlanConfig = Optional.empty();
 
+        private Optional<List<CheckoutFieldInput>> customCheckoutFields = Optional.empty();
+
         private List<String> addOnIds = new ArrayList<>();
 
         private Optional<List<CompatiblePlans>> addOnCompatibilities = Optional.empty();
@@ -661,6 +679,7 @@ public final class CreatePlanGroupRequestBody {
             checkoutCollectAddress(other.getCheckoutCollectAddress());
             checkoutCollectEmail(other.getCheckoutCollectEmail());
             checkoutCollectPhone(other.getCheckoutCollectPhone());
+            customCheckoutFields(other.getCustomCheckoutFields());
             customPlanConfig(other.getCustomPlanConfig());
             customPlanId(other.getCustomPlanId());
             enableTaxCollection(other.getEnableTaxCollection());
@@ -1033,6 +1052,19 @@ public final class CreatePlanGroupRequestBody {
             return this;
         }
 
+        @java.lang.Override
+        public _FinalStage customCheckoutFields(List<CheckoutFieldInput> customCheckoutFields) {
+            this.customCheckoutFields = Optional.ofNullable(customCheckoutFields);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_checkout_fields", nulls = Nulls.SKIP)
+        public _FinalStage customCheckoutFields(Optional<List<CheckoutFieldInput>> customCheckoutFields) {
+            this.customCheckoutFields = customCheckoutFields;
+            return this;
+        }
+
         /**
          * <p>Use OrderedAddOns instead</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -1089,6 +1121,7 @@ public final class CreatePlanGroupRequestBody {
                     checkoutCollectAddress,
                     checkoutCollectEmail,
                     checkoutCollectPhone,
+                    customCheckoutFields,
                     customPlanConfig,
                     customPlanId,
                     enableTaxCollection,

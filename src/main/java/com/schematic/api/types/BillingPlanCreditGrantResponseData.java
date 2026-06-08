@@ -76,6 +76,8 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final Optional<BillingPlanCreditGrantResetType> resetType;
 
+    private final long rolloverPercentage;
+
     private final OffsetDateTime updatedAt;
 
     private final Map<String, Object> additionalProperties;
@@ -108,6 +110,7 @@ public final class BillingPlanCreditGrantResponseData {
             Optional<BillingPlanCreditGrantResetCadence> resetCadence,
             Optional<BillingPlanCreditGrantResetStart> resetStart,
             Optional<BillingPlanCreditGrantResetType> resetType,
+            long rolloverPercentage,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.autoTopupAmount = autoTopupAmount;
@@ -137,6 +140,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.resetCadence = resetCadence;
         this.resetStart = resetStart;
         this.resetType = resetType;
+        this.rolloverPercentage = rolloverPercentage;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -288,6 +292,14 @@ public final class BillingPlanCreditGrantResponseData {
         return resetType;
     }
 
+    /**
+     * @return Percentage of unused credits that carry over when this grant resets. Only meaningful when reset_type is plan_period.
+     */
+    @JsonProperty("rollover_percentage")
+    public long getRolloverPercentage() {
+        return rolloverPercentage;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -333,6 +345,7 @@ public final class BillingPlanCreditGrantResponseData {
                 && resetCadence.equals(other.resetCadence)
                 && resetStart.equals(other.resetStart)
                 && resetType.equals(other.resetType)
+                && rolloverPercentage == other.rolloverPercentage
                 && updatedAt.equals(other.updatedAt);
     }
 
@@ -366,6 +379,7 @@ public final class BillingPlanCreditGrantResponseData {
                 this.resetCadence,
                 this.resetStart,
                 this.resetType,
+                this.rolloverPercentage,
                 this.updatedAt);
     }
 
@@ -419,7 +433,14 @@ public final class BillingPlanCreditGrantResponseData {
         /**
          * <p>Use plan.name from the nested plan object instead</p>
          */
-        UpdatedAtStage planName(@NotNull String planName);
+        RolloverPercentageStage planName(@NotNull String planName);
+    }
+
+    public interface RolloverPercentageStage {
+        /**
+         * <p>Percentage of unused credits that carry over when this grant resets. Only meaningful when reset_type is plan_period.</p>
+         */
+        UpdatedAtStage rolloverPercentage(long rolloverPercentage);
     }
 
     public interface UpdatedAtStage {
@@ -523,6 +544,7 @@ public final class BillingPlanCreditGrantResponseData {
                     IdStage,
                     PlanIdStage,
                     PlanNameStage,
+                    RolloverPercentageStage,
                     UpdatedAtStage,
                     _FinalStage {
         private boolean autoTopupEnabled;
@@ -542,6 +564,8 @@ public final class BillingPlanCreditGrantResponseData {
         private String planId;
 
         private String planName;
+
+        private long rolloverPercentage;
 
         private OffsetDateTime updatedAt;
 
@@ -615,6 +639,7 @@ public final class BillingPlanCreditGrantResponseData {
             resetCadence(other.getResetCadence());
             resetStart(other.getResetStart());
             resetType(other.getResetType());
+            rolloverPercentage(other.getRolloverPercentage());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -687,8 +712,20 @@ public final class BillingPlanCreditGrantResponseData {
          */
         @java.lang.Override
         @JsonSetter("plan_name")
-        public UpdatedAtStage planName(@NotNull String planName) {
+        public RolloverPercentageStage planName(@NotNull String planName) {
             this.planName = Objects.requireNonNull(planName, "planName must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Percentage of unused credits that carry over when this grant resets. Only meaningful when reset_type is plan_period.</p>
+         * <p>Percentage of unused credits that carry over when this grant resets. Only meaningful when reset_type is plan_period.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("rollover_percentage")
+        public UpdatedAtStage rolloverPercentage(long rolloverPercentage) {
+            this.rolloverPercentage = rolloverPercentage;
             return this;
         }
 
@@ -977,6 +1014,7 @@ public final class BillingPlanCreditGrantResponseData {
                     resetCadence,
                     resetStart,
                     resetType,
+                    rolloverPercentage,
                     updatedAt,
                     additionalProperties);
         }

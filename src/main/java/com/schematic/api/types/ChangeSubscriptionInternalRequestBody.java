@@ -33,6 +33,8 @@ public final class ChangeSubscriptionInternalRequestBody {
 
     private final List<UpdateCreditBundleRequestBody> creditBundles;
 
+    private final List<CheckoutFieldValue> customFieldValues;
+
     private final String newPlanId;
 
     private final String newPriceId;
@@ -53,6 +55,7 @@ public final class ChangeSubscriptionInternalRequestBody {
             String companyId,
             Optional<String> couponExternalId,
             List<UpdateCreditBundleRequestBody> creditBundles,
+            List<CheckoutFieldValue> customFieldValues,
             String newPlanId,
             String newPriceId,
             List<UpdatePayInAdvanceRequestBody> payInAdvance,
@@ -65,6 +68,7 @@ public final class ChangeSubscriptionInternalRequestBody {
         this.companyId = companyId;
         this.couponExternalId = couponExternalId;
         this.creditBundles = creditBundles;
+        this.customFieldValues = customFieldValues;
         this.newPlanId = newPlanId;
         this.newPriceId = newPriceId;
         this.payInAdvance = payInAdvance;
@@ -97,6 +101,11 @@ public final class ChangeSubscriptionInternalRequestBody {
     @JsonProperty("credit_bundles")
     public List<UpdateCreditBundleRequestBody> getCreditBundles() {
         return creditBundles;
+    }
+
+    @JsonProperty("custom_field_values")
+    public List<CheckoutFieldValue> getCustomFieldValues() {
+        return customFieldValues;
     }
 
     @JsonProperty("new_plan_id")
@@ -147,6 +156,7 @@ public final class ChangeSubscriptionInternalRequestBody {
                 && companyId.equals(other.companyId)
                 && couponExternalId.equals(other.couponExternalId)
                 && creditBundles.equals(other.creditBundles)
+                && customFieldValues.equals(other.customFieldValues)
                 && newPlanId.equals(other.newPlanId)
                 && newPriceId.equals(other.newPriceId)
                 && payInAdvance.equals(other.payInAdvance)
@@ -163,6 +173,7 @@ public final class ChangeSubscriptionInternalRequestBody {
                 this.companyId,
                 this.couponExternalId,
                 this.creditBundles,
+                this.customFieldValues,
                 this.newPlanId,
                 this.newPriceId,
                 this.payInAdvance,
@@ -227,6 +238,12 @@ public final class ChangeSubscriptionInternalRequestBody {
 
         _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles);
 
+        _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues);
+
+        _FinalStage addCustomFieldValues(CheckoutFieldValue customFieldValues);
+
+        _FinalStage addAllCustomFieldValues(List<CheckoutFieldValue> customFieldValues);
+
         _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
 
         _FinalStage addPayInAdvance(UpdatePayInAdvanceRequestBody payInAdvance);
@@ -259,6 +276,8 @@ public final class ChangeSubscriptionInternalRequestBody {
 
         private List<UpdatePayInAdvanceRequestBody> payInAdvance = new ArrayList<>();
 
+        private List<CheckoutFieldValue> customFieldValues = new ArrayList<>();
+
         private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
         private Optional<String> couponExternalId = Optional.empty();
@@ -279,6 +298,7 @@ public final class ChangeSubscriptionInternalRequestBody {
             companyId(other.getCompanyId());
             couponExternalId(other.getCouponExternalId());
             creditBundles(other.getCreditBundles());
+            customFieldValues(other.getCustomFieldValues());
             newPlanId(other.getNewPlanId());
             newPriceId(other.getNewPriceId());
             payInAdvance(other.getPayInAdvance());
@@ -362,6 +382,30 @@ public final class ChangeSubscriptionInternalRequestBody {
             this.payInAdvance.clear();
             if (payInAdvance != null) {
                 this.payInAdvance.addAll(payInAdvance);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCustomFieldValues(List<CheckoutFieldValue> customFieldValues) {
+            if (customFieldValues != null) {
+                this.customFieldValues.addAll(customFieldValues);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCustomFieldValues(CheckoutFieldValue customFieldValues) {
+            this.customFieldValues.add(customFieldValues);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_field_values", nulls = Nulls.SKIP)
+        public _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues) {
+            this.customFieldValues.clear();
+            if (customFieldValues != null) {
+                this.customFieldValues.addAll(customFieldValues);
             }
             return this;
         }
@@ -459,6 +503,7 @@ public final class ChangeSubscriptionInternalRequestBody {
                     companyId,
                     couponExternalId,
                     creditBundles,
+                    customFieldValues,
                     newPlanId,
                     newPriceId,
                     payInAdvance,
