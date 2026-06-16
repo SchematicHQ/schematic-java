@@ -39,6 +39,8 @@ public final class ChangeSubscriptionInternalRequestBody {
 
     private final String newPriceId;
 
+    private final Optional<Boolean> optInAccepted;
+
     private final List<UpdatePayInAdvanceRequestBody> payInAdvance;
 
     private final Optional<String> paymentMethodId;
@@ -58,6 +60,7 @@ public final class ChangeSubscriptionInternalRequestBody {
             List<CheckoutFieldValue> customFieldValues,
             String newPlanId,
             String newPriceId,
+            Optional<Boolean> optInAccepted,
             List<UpdatePayInAdvanceRequestBody> payInAdvance,
             Optional<String> paymentMethodId,
             Optional<String> promoCode,
@@ -71,6 +74,7 @@ public final class ChangeSubscriptionInternalRequestBody {
         this.customFieldValues = customFieldValues;
         this.newPlanId = newPlanId;
         this.newPriceId = newPriceId;
+        this.optInAccepted = optInAccepted;
         this.payInAdvance = payInAdvance;
         this.paymentMethodId = paymentMethodId;
         this.promoCode = promoCode;
@@ -118,6 +122,11 @@ public final class ChangeSubscriptionInternalRequestBody {
         return newPriceId;
     }
 
+    @JsonProperty("opt_in_accepted")
+    public Optional<Boolean> getOptInAccepted() {
+        return optInAccepted;
+    }
+
     @JsonProperty("pay_in_advance")
     public List<UpdatePayInAdvanceRequestBody> getPayInAdvance() {
         return payInAdvance;
@@ -159,6 +168,7 @@ public final class ChangeSubscriptionInternalRequestBody {
                 && customFieldValues.equals(other.customFieldValues)
                 && newPlanId.equals(other.newPlanId)
                 && newPriceId.equals(other.newPriceId)
+                && optInAccepted.equals(other.optInAccepted)
                 && payInAdvance.equals(other.payInAdvance)
                 && paymentMethodId.equals(other.paymentMethodId)
                 && promoCode.equals(other.promoCode)
@@ -176,6 +186,7 @@ public final class ChangeSubscriptionInternalRequestBody {
                 this.customFieldValues,
                 this.newPlanId,
                 this.newPriceId,
+                this.optInAccepted,
                 this.payInAdvance,
                 this.paymentMethodId,
                 this.promoCode,
@@ -244,6 +255,10 @@ public final class ChangeSubscriptionInternalRequestBody {
 
         _FinalStage addAllCustomFieldValues(List<CheckoutFieldValue> customFieldValues);
 
+        _FinalStage optInAccepted(Optional<Boolean> optInAccepted);
+
+        _FinalStage optInAccepted(Boolean optInAccepted);
+
         _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
 
         _FinalStage addPayInAdvance(UpdatePayInAdvanceRequestBody payInAdvance);
@@ -276,6 +291,8 @@ public final class ChangeSubscriptionInternalRequestBody {
 
         private List<UpdatePayInAdvanceRequestBody> payInAdvance = new ArrayList<>();
 
+        private Optional<Boolean> optInAccepted = Optional.empty();
+
         private List<CheckoutFieldValue> customFieldValues = new ArrayList<>();
 
         private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
@@ -301,6 +318,7 @@ public final class ChangeSubscriptionInternalRequestBody {
             customFieldValues(other.getCustomFieldValues());
             newPlanId(other.getNewPlanId());
             newPriceId(other.getNewPriceId());
+            optInAccepted(other.getOptInAccepted());
             payInAdvance(other.getPayInAdvance());
             paymentMethodId(other.getPaymentMethodId());
             promoCode(other.getPromoCode());
@@ -383,6 +401,19 @@ public final class ChangeSubscriptionInternalRequestBody {
             if (payInAdvance != null) {
                 this.payInAdvance.addAll(payInAdvance);
             }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage optInAccepted(Boolean optInAccepted) {
+            this.optInAccepted = Optional.ofNullable(optInAccepted);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "opt_in_accepted", nulls = Nulls.SKIP)
+        public _FinalStage optInAccepted(Optional<Boolean> optInAccepted) {
+            this.optInAccepted = optInAccepted;
             return this;
         }
 
@@ -506,6 +537,7 @@ public final class ChangeSubscriptionInternalRequestBody {
                     customFieldValues,
                     newPlanId,
                     newPriceId,
+                    optInAccepted,
                     payInAdvance,
                     paymentMethodId,
                     promoCode,

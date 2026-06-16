@@ -13,13 +13,11 @@ import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrants
 import com.schematic.api.resources.credits.requests.CountCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.CountCreditEventLedgerRequest;
-import com.schematic.api.resources.credits.requests.CountCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
 import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
 import com.schematic.api.resources.credits.requests.ExtendCreditLeaseRequestBody;
-import com.schematic.api.resources.credits.requests.GetEnrichedCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCompanyCreditBalancesRequest;
@@ -37,7 +35,6 @@ import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsRes
 import com.schematic.api.resources.credits.types.CountCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.CountCreditEventLedgerResponse;
-import com.schematic.api.resources.credits.types.CountCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.CreateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.CreateCreditBundleResponse;
@@ -45,7 +42,6 @@ import com.schematic.api.resources.credits.types.DeleteBillingPlanCreditGrantRes
 import com.schematic.api.resources.credits.types.DeleteCreditBundleResponse;
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
-import com.schematic.api.resources.credits.types.GetEnrichedCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.GrantBillingCreditsToCompanyResponse;
@@ -369,25 +365,6 @@ public class AsyncCreditsClient {
         return this.rawClient
                 .releaseCreditLease(leaseId, request, requestOptions)
                 .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<GetEnrichedCreditLedgerResponse> getEnrichedCreditLedger(
-            GetEnrichedCreditLedgerRequest request) {
-        return this.rawClient.getEnrichedCreditLedger(request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<GetEnrichedCreditLedgerResponse> getEnrichedCreditLedger(
-            GetEnrichedCreditLedgerRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getEnrichedCreditLedger(request, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<CountCreditLedgerResponse> countCreditLedger(CountCreditLedgerRequest request) {
-        return this.rawClient.countCreditLedger(request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<CountCreditLedgerResponse> countCreditLedger(
-            CountCreditLedgerRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countCreditLedger(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListBillingPlanCreditGrantsResponse> listBillingPlanCreditGrants() {

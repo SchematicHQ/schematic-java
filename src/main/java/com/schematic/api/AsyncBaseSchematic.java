@@ -4,6 +4,7 @@
 package com.schematic.api;
 
 import com.schematic.api.core.ClientOptions;
+import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.Suppliers;
 import com.schematic.api.resources.accesstokens.AsyncAccesstokensClient;
 import com.schematic.api.resources.accounts.AsyncAccountsClient;
@@ -25,10 +26,13 @@ import com.schematic.api.resources.planmigrations.AsyncPlanmigrationsClient;
 import com.schematic.api.resources.plans.AsyncPlansClient;
 import com.schematic.api.resources.scheduledcheckout.AsyncScheduledcheckoutClient;
 import com.schematic.api.resources.webhooks.AsyncWebhooksClient;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class AsyncBaseSchematic {
     protected final ClientOptions clientOptions;
+
+    private final AsyncRawBaseSchematic rawClient;
 
     protected final Supplier<AsyncAccountsClient> accountsClient;
 
@@ -72,6 +76,7 @@ public class AsyncBaseSchematic {
 
     public AsyncBaseSchematic(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new AsyncRawBaseSchematic(clientOptions);
         this.accountsClient = Suppliers.memoize(() -> new AsyncAccountsClient(clientOptions));
         this.billingClient = Suppliers.memoize(() -> new AsyncBillingClient(clientOptions));
         this.creditsClient = Suppliers.memoize(() -> new AsyncCreditsClient(clientOptions));
@@ -92,6 +97,21 @@ public class AsyncBaseSchematic {
         this.scheduledcheckoutClient = Suppliers.memoize(() -> new AsyncScheduledcheckoutClient(clientOptions));
         this.accesstokensClient = Suppliers.memoize(() -> new AsyncAccesstokensClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public AsyncRawBaseSchematic withRawResponse() {
+        return this.rawClient;
+    }
+
+    public CompletableFuture<Void> getCreditLedger() {
+        return this.rawClient.getCreditLedger().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> getCreditLedger(RequestOptions requestOptions) {
+        return this.rawClient.getCreditLedger(requestOptions).thenApply(response -> response.body());
     }
 
     public AsyncAccountsClient accounts() {

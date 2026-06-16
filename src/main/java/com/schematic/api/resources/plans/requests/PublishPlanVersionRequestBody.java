@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CustomPlanActivationStrategy;
 import com.schematic.api.types.PlanVersionMigrationStrategy;
-import com.schematic.api.types.UpdatePayInAdvanceRequestBody;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +35,6 @@ public final class PublishPlanVersionRequestBody {
 
     private final PlanVersionMigrationStrategy migrationStrategy;
 
-    private final List<UpdatePayInAdvanceRequestBody> payInAdvance;
-
     private final Map<String, Object> additionalProperties;
 
     private PublishPlanVersionRequestBody(
@@ -46,14 +43,12 @@ public final class PublishPlanVersionRequestBody {
             Optional<Long> daysUntilDue,
             List<String> excludedCompanyIds,
             PlanVersionMigrationStrategy migrationStrategy,
-            List<UpdatePayInAdvanceRequestBody> payInAdvance,
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.customerEmail = customerEmail;
         this.daysUntilDue = daysUntilDue;
         this.excludedCompanyIds = excludedCompanyIds;
         this.migrationStrategy = migrationStrategy;
-        this.payInAdvance = payInAdvance;
         this.additionalProperties = additionalProperties;
     }
 
@@ -82,11 +77,6 @@ public final class PublishPlanVersionRequestBody {
         return migrationStrategy;
     }
 
-    @JsonProperty("pay_in_advance")
-    public List<UpdatePayInAdvanceRequestBody> getPayInAdvance() {
-        return payInAdvance;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -103,8 +93,7 @@ public final class PublishPlanVersionRequestBody {
                 && customerEmail.equals(other.customerEmail)
                 && daysUntilDue.equals(other.daysUntilDue)
                 && excludedCompanyIds.equals(other.excludedCompanyIds)
-                && migrationStrategy.equals(other.migrationStrategy)
-                && payInAdvance.equals(other.payInAdvance);
+                && migrationStrategy.equals(other.migrationStrategy);
     }
 
     @java.lang.Override
@@ -114,8 +103,7 @@ public final class PublishPlanVersionRequestBody {
                 this.customerEmail,
                 this.daysUntilDue,
                 this.excludedCompanyIds,
-                this.migrationStrategy,
-                this.payInAdvance);
+                this.migrationStrategy);
     }
 
     @java.lang.Override
@@ -157,19 +145,11 @@ public final class PublishPlanVersionRequestBody {
         _FinalStage addExcludedCompanyIds(String excludedCompanyIds);
 
         _FinalStage addAllExcludedCompanyIds(List<String> excludedCompanyIds);
-
-        _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
-
-        _FinalStage addPayInAdvance(UpdatePayInAdvanceRequestBody payInAdvance);
-
-        _FinalStage addAllPayInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MigrationStrategyStage, _FinalStage {
         private PlanVersionMigrationStrategy migrationStrategy;
-
-        private List<UpdatePayInAdvanceRequestBody> payInAdvance = new ArrayList<>();
 
         private List<String> excludedCompanyIds = new ArrayList<>();
 
@@ -191,7 +171,6 @@ public final class PublishPlanVersionRequestBody {
             daysUntilDue(other.getDaysUntilDue());
             excludedCompanyIds(other.getExcludedCompanyIds());
             migrationStrategy(other.getMigrationStrategy());
-            payInAdvance(other.getPayInAdvance());
             return this;
         }
 
@@ -199,30 +178,6 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter("migration_strategy")
         public _FinalStage migrationStrategy(@NotNull PlanVersionMigrationStrategy migrationStrategy) {
             this.migrationStrategy = Objects.requireNonNull(migrationStrategy, "migrationStrategy must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage addAllPayInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance) {
-            if (payInAdvance != null) {
-                this.payInAdvance.addAll(payInAdvance);
-            }
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage addPayInAdvance(UpdatePayInAdvanceRequestBody payInAdvance) {
-            this.payInAdvance.add(payInAdvance);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "pay_in_advance", nulls = Nulls.SKIP)
-        public _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance) {
-            this.payInAdvance.clear();
-            if (payInAdvance != null) {
-                this.payInAdvance.addAll(payInAdvance);
-            }
             return this;
         }
 
@@ -297,7 +252,6 @@ public final class PublishPlanVersionRequestBody {
                     daysUntilDue,
                     excludedCompanyIds,
                     migrationStrategy,
-                    payInAdvance,
                     additionalProperties);
         }
 

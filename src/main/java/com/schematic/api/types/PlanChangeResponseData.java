@@ -52,6 +52,8 @@ public final class PlanChangeResponseData {
 
     private final String id;
 
+    private final boolean isVersionUpgrade;
+
     private final Optional<PlanSnapshotView> previousBasePlan;
 
     private final Optional<PlanVersionSnapshotView> previousBasePlanVersion;
@@ -85,6 +87,7 @@ public final class PlanChangeResponseData {
             OffsetDateTime createdAt,
             String environmentId,
             String id,
+            boolean isVersionUpgrade,
             Optional<PlanSnapshotView> previousBasePlan,
             Optional<PlanVersionSnapshotView> previousBasePlanVersion,
             Optional<String> requestId,
@@ -108,6 +111,7 @@ public final class PlanChangeResponseData {
         this.createdAt = createdAt;
         this.environmentId = environmentId;
         this.id = id;
+        this.isVersionUpgrade = isVersionUpgrade;
         this.previousBasePlan = previousBasePlan;
         this.previousBasePlanVersion = previousBasePlanVersion;
         this.requestId = requestId;
@@ -195,6 +199,14 @@ public final class PlanChangeResponseData {
         return id;
     }
 
+    /**
+     * @return True when this change moved the company to a different version of the same plan (e.g. a plan version migration) rather than to a different plan.
+     */
+    @JsonProperty("is_version_upgrade")
+    public boolean getIsVersionUpgrade() {
+        return isVersionUpgrade;
+    }
+
     @JsonProperty("previous_base_plan")
     public Optional<PlanSnapshotView> getPreviousBasePlan() {
         return previousBasePlan;
@@ -270,6 +282,7 @@ public final class PlanChangeResponseData {
                 && createdAt.equals(other.createdAt)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
+                && isVersionUpgrade == other.isVersionUpgrade
                 && previousBasePlan.equals(other.previousBasePlan)
                 && previousBasePlanVersion.equals(other.previousBasePlanVersion)
                 && requestId.equals(other.requestId)
@@ -297,6 +310,7 @@ public final class PlanChangeResponseData {
                 this.createdAt,
                 this.environmentId,
                 this.id,
+                this.isVersionUpgrade,
                 this.previousBasePlan,
                 this.previousBasePlanVersion,
                 this.requestId,
@@ -339,7 +353,14 @@ public final class PlanChangeResponseData {
     }
 
     public interface IdStage {
-        UpdatedAtStage id(@NotNull String id);
+        IsVersionUpgradeStage id(@NotNull String id);
+    }
+
+    public interface IsVersionUpgradeStage {
+        /**
+         * <p>True when this change moved the company to a different version of the same plan (e.g. a plan version migration) rather than to a different plan.</p>
+         */
+        UpdatedAtStage isVersionUpgrade(boolean isVersionUpgrade);
     }
 
     public interface UpdatedAtStage {
@@ -443,6 +464,7 @@ public final class PlanChangeResponseData {
                     CreatedAtStage,
                     EnvironmentIdStage,
                     IdStage,
+                    IsVersionUpgradeStage,
                     UpdatedAtStage,
                     _FinalStage {
         private PlanChangeAction action;
@@ -456,6 +478,8 @@ public final class PlanChangeResponseData {
         private String environmentId;
 
         private String id;
+
+        private boolean isVersionUpgrade;
 
         private OffsetDateTime updatedAt;
 
@@ -510,6 +534,7 @@ public final class PlanChangeResponseData {
             createdAt(other.getCreatedAt());
             environmentId(other.getEnvironmentId());
             id(other.getId());
+            isVersionUpgrade(other.getIsVersionUpgrade());
             previousBasePlan(other.getPreviousBasePlan());
             previousBasePlanVersion(other.getPreviousBasePlanVersion());
             requestId(other.getRequestId());
@@ -558,8 +583,20 @@ public final class PlanChangeResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public UpdatedAtStage id(@NotNull String id) {
+        public IsVersionUpgradeStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        /**
+         * <p>True when this change moved the company to a different version of the same plan (e.g. a plan version migration) rather than to a different plan.</p>
+         * <p>True when this change moved the company to a different version of the same plan (e.g. a plan version migration) rather than to a different plan.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("is_version_upgrade")
+        public UpdatedAtStage isVersionUpgrade(boolean isVersionUpgrade) {
+            this.isVersionUpgrade = isVersionUpgrade;
             return this;
         }
 
@@ -854,6 +891,7 @@ public final class PlanChangeResponseData {
                     createdAt,
                     environmentId,
                     id,
+                    isVersionUpgrade,
                     previousBasePlan,
                     previousBasePlanVersion,
                     requestId,
