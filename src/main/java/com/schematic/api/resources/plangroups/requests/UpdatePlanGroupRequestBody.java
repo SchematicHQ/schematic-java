@@ -54,6 +54,12 @@ public final class UpdatePlanGroupRequestBody {
 
     private final Optional<String> initialPlanPriceId;
 
+    private final boolean optInEnabled;
+
+    private final Optional<String> optInText;
+
+    private final Optional<String> optInTitle;
+
     private final List<OrderedPlansInGroup> orderedAddOns;
 
     private final List<PlanGroupBundleOrder> orderedBundleList;
@@ -111,6 +117,9 @@ public final class UpdatePlanGroupRequestBody {
             Optional<String> fallbackPlanId,
             Optional<String> initialPlanId,
             Optional<String> initialPlanPriceId,
+            boolean optInEnabled,
+            Optional<String> optInText,
+            Optional<String> optInTitle,
             List<OrderedPlansInGroup> orderedAddOns,
             List<PlanGroupBundleOrder> orderedBundleList,
             List<OrderedPlansInGroup> orderedPlans,
@@ -145,6 +154,9 @@ public final class UpdatePlanGroupRequestBody {
         this.fallbackPlanId = fallbackPlanId;
         this.initialPlanId = initialPlanId;
         this.initialPlanPriceId = initialPlanPriceId;
+        this.optInEnabled = optInEnabled;
+        this.optInText = optInText;
+        this.optInTitle = optInTitle;
         this.orderedAddOns = orderedAddOns;
         this.orderedBundleList = orderedBundleList;
         this.orderedPlans = orderedPlans;
@@ -230,6 +242,21 @@ public final class UpdatePlanGroupRequestBody {
     @JsonProperty("initial_plan_price_id")
     public Optional<String> getInitialPlanPriceId() {
         return initialPlanPriceId;
+    }
+
+    @JsonProperty("opt_in_enabled")
+    public boolean getOptInEnabled() {
+        return optInEnabled;
+    }
+
+    @JsonProperty("opt_in_text")
+    public Optional<String> getOptInText() {
+        return optInText;
+    }
+
+    @JsonProperty("opt_in_title")
+    public Optional<String> getOptInTitle() {
+        return optInTitle;
     }
 
     @JsonProperty("ordered_add_ons")
@@ -361,6 +388,9 @@ public final class UpdatePlanGroupRequestBody {
                 && fallbackPlanId.equals(other.fallbackPlanId)
                 && initialPlanId.equals(other.initialPlanId)
                 && initialPlanPriceId.equals(other.initialPlanPriceId)
+                && optInEnabled == other.optInEnabled
+                && optInText.equals(other.optInText)
+                && optInTitle.equals(other.optInTitle)
                 && orderedAddOns.equals(other.orderedAddOns)
                 && orderedBundleList.equals(other.orderedBundleList)
                 && orderedPlans.equals(other.orderedPlans)
@@ -399,6 +429,9 @@ public final class UpdatePlanGroupRequestBody {
                 this.fallbackPlanId,
                 this.initialPlanId,
                 this.initialPlanPriceId,
+                this.optInEnabled,
+                this.optInText,
+                this.optInTitle,
                 this.orderedAddOns,
                 this.orderedBundleList,
                 this.orderedPlans,
@@ -446,7 +479,11 @@ public final class UpdatePlanGroupRequestBody {
     }
 
     public interface EnableTaxCollectionStage {
-        PreventDowngradesWhenOverLimitStage enableTaxCollection(boolean enableTaxCollection);
+        OptInEnabledStage enableTaxCollection(boolean enableTaxCollection);
+    }
+
+    public interface OptInEnabledStage {
+        PreventDowngradesWhenOverLimitStage optInEnabled(boolean optInEnabled);
     }
 
     public interface PreventDowngradesWhenOverLimitStage {
@@ -533,6 +570,14 @@ public final class UpdatePlanGroupRequestBody {
 
         _FinalStage initialPlanPriceId(String initialPlanPriceId);
 
+        _FinalStage optInText(Optional<String> optInText);
+
+        _FinalStage optInText(String optInText);
+
+        _FinalStage optInTitle(Optional<String> optInTitle);
+
+        _FinalStage optInTitle(String optInTitle);
+
         _FinalStage orderedAddOns(List<OrderedPlansInGroup> orderedAddOns);
 
         _FinalStage addOrderedAddOns(OrderedPlansInGroup orderedAddOns);
@@ -590,6 +635,7 @@ public final class UpdatePlanGroupRequestBody {
                     CheckoutCollectEmailStage,
                     CheckoutCollectPhoneStage,
                     EnableTaxCollectionStage,
+                    OptInEnabledStage,
                     PreventDowngradesWhenOverLimitStage,
                     PreventSelfServiceDowngradeStage,
                     ProrationBehaviorStage,
@@ -608,6 +654,8 @@ public final class UpdatePlanGroupRequestBody {
         private boolean checkoutCollectPhone;
 
         private boolean enableTaxCollection;
+
+        private boolean optInEnabled;
 
         private boolean preventDowngradesWhenOverLimit;
 
@@ -651,6 +699,10 @@ public final class UpdatePlanGroupRequestBody {
 
         private List<OrderedPlansInGroup> orderedAddOns = new ArrayList<>();
 
+        private Optional<String> optInTitle = Optional.empty();
+
+        private Optional<String> optInText = Optional.empty();
+
         private Optional<String> initialPlanPriceId = Optional.empty();
 
         private Optional<String> initialPlanId = Optional.empty();
@@ -686,6 +738,9 @@ public final class UpdatePlanGroupRequestBody {
             fallbackPlanId(other.getFallbackPlanId());
             initialPlanId(other.getInitialPlanId());
             initialPlanPriceId(other.getInitialPlanPriceId());
+            optInEnabled(other.getOptInEnabled());
+            optInText(other.getOptInText());
+            optInTitle(other.getOptInTitle());
             orderedAddOns(other.getOrderedAddOns());
             orderedBundleList(other.getOrderedBundleList());
             orderedPlans(other.getOrderedPlans());
@@ -733,8 +788,15 @@ public final class UpdatePlanGroupRequestBody {
 
         @java.lang.Override
         @JsonSetter("enable_tax_collection")
-        public PreventDowngradesWhenOverLimitStage enableTaxCollection(boolean enableTaxCollection) {
+        public OptInEnabledStage enableTaxCollection(boolean enableTaxCollection) {
             this.enableTaxCollection = enableTaxCollection;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("opt_in_enabled")
+        public PreventDowngradesWhenOverLimitStage optInEnabled(boolean optInEnabled) {
+            this.optInEnabled = optInEnabled;
             return this;
         }
 
@@ -988,6 +1050,32 @@ public final class UpdatePlanGroupRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage optInTitle(String optInTitle) {
+            this.optInTitle = Optional.ofNullable(optInTitle);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "opt_in_title", nulls = Nulls.SKIP)
+        public _FinalStage optInTitle(Optional<String> optInTitle) {
+            this.optInTitle = optInTitle;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage optInText(String optInText) {
+            this.optInText = Optional.ofNullable(optInText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "opt_in_text", nulls = Nulls.SKIP)
+        public _FinalStage optInText(Optional<String> optInText) {
+            this.optInText = optInText;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage initialPlanPriceId(String initialPlanPriceId) {
             this.initialPlanPriceId = Optional.ofNullable(initialPlanPriceId);
             return this;
@@ -1128,6 +1216,9 @@ public final class UpdatePlanGroupRequestBody {
                     fallbackPlanId,
                     initialPlanId,
                     initialPlanPriceId,
+                    optInEnabled,
+                    optInText,
+                    optInTitle,
                     orderedAddOns,
                     orderedBundleList,
                     orderedPlans,

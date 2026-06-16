@@ -16,6 +16,9 @@ public final class BillingCreditGrantZeroedOutReason {
     public static final BillingCreditGrantZeroedOutReason PLAN_PERIOD_RESET =
             new BillingCreditGrantZeroedOutReason(Value.PLAN_PERIOD_RESET, "plan_period_reset");
 
+    public static final BillingCreditGrantZeroedOutReason RECONCILED =
+            new BillingCreditGrantZeroedOutReason(Value.RECONCILED, "reconciled");
+
     public static final BillingCreditGrantZeroedOutReason MANUAL =
             new BillingCreditGrantZeroedOutReason(Value.MANUAL, "manual");
 
@@ -58,6 +61,8 @@ public final class BillingCreditGrantZeroedOutReason {
                 return visitor.visitExpired();
             case PLAN_PERIOD_RESET:
                 return visitor.visitPlanPeriodReset();
+            case RECONCILED:
+                return visitor.visitReconciled();
             case MANUAL:
                 return visitor.visitManual();
             case UNKNOWN:
@@ -75,6 +80,8 @@ public final class BillingCreditGrantZeroedOutReason {
                 return EXPIRED;
             case "plan_period_reset":
                 return PLAN_PERIOD_RESET;
+            case "reconciled":
+                return RECONCILED;
             case "manual":
                 return MANUAL;
             default:
@@ -91,6 +98,8 @@ public final class BillingCreditGrantZeroedOutReason {
 
         PLAN_PERIOD_RESET,
 
+        RECONCILED,
+
         UNKNOWN
     }
 
@@ -102,6 +111,8 @@ public final class BillingCreditGrantZeroedOutReason {
         T visitPlanChange();
 
         T visitPlanPeriodReset();
+
+        T visitReconciled();
 
         T visitUnknown(String unknownType);
     }

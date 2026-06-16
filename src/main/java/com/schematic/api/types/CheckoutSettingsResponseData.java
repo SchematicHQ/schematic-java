@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CheckoutSettingsResponseData.Builder.class)
@@ -24,16 +26,28 @@ public final class CheckoutSettingsResponseData {
 
     private final boolean collectPhone;
 
+    private final boolean optInEnabled;
+
+    private final Optional<String> optInText;
+
+    private final Optional<String> optInTitle;
+
     private final Map<String, Object> additionalProperties;
 
     private CheckoutSettingsResponseData(
             boolean collectAddress,
             boolean collectEmail,
             boolean collectPhone,
+            boolean optInEnabled,
+            Optional<String> optInText,
+            Optional<String> optInTitle,
             Map<String, Object> additionalProperties) {
         this.collectAddress = collectAddress;
         this.collectEmail = collectEmail;
         this.collectPhone = collectPhone;
+        this.optInEnabled = optInEnabled;
+        this.optInText = optInText;
+        this.optInTitle = optInTitle;
         this.additionalProperties = additionalProperties;
     }
 
@@ -52,6 +66,21 @@ public final class CheckoutSettingsResponseData {
         return collectPhone;
     }
 
+    @JsonProperty("opt_in_enabled")
+    public boolean getOptInEnabled() {
+        return optInEnabled;
+    }
+
+    @JsonProperty("opt_in_text")
+    public Optional<String> getOptInText() {
+        return optInText;
+    }
+
+    @JsonProperty("opt_in_title")
+    public Optional<String> getOptInTitle() {
+        return optInTitle;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -66,12 +95,21 @@ public final class CheckoutSettingsResponseData {
     private boolean equalTo(CheckoutSettingsResponseData other) {
         return collectAddress == other.collectAddress
                 && collectEmail == other.collectEmail
-                && collectPhone == other.collectPhone;
+                && collectPhone == other.collectPhone
+                && optInEnabled == other.optInEnabled
+                && optInText.equals(other.optInText)
+                && optInTitle.equals(other.optInTitle);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.collectAddress, this.collectEmail, this.collectPhone);
+        return Objects.hash(
+                this.collectAddress,
+                this.collectEmail,
+                this.collectPhone,
+                this.optInEnabled,
+                this.optInText,
+                this.optInTitle);
     }
 
     @java.lang.Override
@@ -94,7 +132,11 @@ public final class CheckoutSettingsResponseData {
     }
 
     public interface CollectPhoneStage {
-        _FinalStage collectPhone(boolean collectPhone);
+        OptInEnabledStage collectPhone(boolean collectPhone);
+    }
+
+    public interface OptInEnabledStage {
+        _FinalStage optInEnabled(boolean optInEnabled);
     }
 
     public interface _FinalStage {
@@ -103,16 +145,30 @@ public final class CheckoutSettingsResponseData {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage optInText(Optional<String> optInText);
+
+        _FinalStage optInText(String optInText);
+
+        _FinalStage optInTitle(Optional<String> optInTitle);
+
+        _FinalStage optInTitle(String optInTitle);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CollectAddressStage, CollectEmailStage, CollectPhoneStage, _FinalStage {
+            implements CollectAddressStage, CollectEmailStage, CollectPhoneStage, OptInEnabledStage, _FinalStage {
         private boolean collectAddress;
 
         private boolean collectEmail;
 
         private boolean collectPhone;
+
+        private boolean optInEnabled;
+
+        private Optional<String> optInTitle = Optional.empty();
+
+        private Optional<String> optInText = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -124,6 +180,9 @@ public final class CheckoutSettingsResponseData {
             collectAddress(other.getCollectAddress());
             collectEmail(other.getCollectEmail());
             collectPhone(other.getCollectPhone());
+            optInEnabled(other.getOptInEnabled());
+            optInText(other.getOptInText());
+            optInTitle(other.getOptInTitle());
             return this;
         }
 
@@ -143,14 +202,54 @@ public final class CheckoutSettingsResponseData {
 
         @java.lang.Override
         @JsonSetter("collect_phone")
-        public _FinalStage collectPhone(boolean collectPhone) {
+        public OptInEnabledStage collectPhone(boolean collectPhone) {
             this.collectPhone = collectPhone;
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("opt_in_enabled")
+        public _FinalStage optInEnabled(boolean optInEnabled) {
+            this.optInEnabled = optInEnabled;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage optInTitle(String optInTitle) {
+            this.optInTitle = Optional.ofNullable(optInTitle);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "opt_in_title", nulls = Nulls.SKIP)
+        public _FinalStage optInTitle(Optional<String> optInTitle) {
+            this.optInTitle = optInTitle;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage optInText(String optInText) {
+            this.optInText = Optional.ofNullable(optInText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "opt_in_text", nulls = Nulls.SKIP)
+        public _FinalStage optInText(Optional<String> optInText) {
+            this.optInText = optInText;
+            return this;
+        }
+
+        @java.lang.Override
         public CheckoutSettingsResponseData build() {
-            return new CheckoutSettingsResponseData(collectAddress, collectEmail, collectPhone, additionalProperties);
+            return new CheckoutSettingsResponseData(
+                    collectAddress,
+                    collectEmail,
+                    collectPhone,
+                    optInEnabled,
+                    optInText,
+                    optInTitle,
+                    additionalProperties);
         }
 
         @java.lang.Override

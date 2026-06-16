@@ -34,6 +34,12 @@ public final class PreviewSubscriptionChangeResponseData {
 
     private final long newCharges;
 
+    private final boolean optInRequired;
+
+    private final Optional<String> optInText;
+
+    private final Optional<String> optInTitle;
+
     private final boolean paymentMethodRequired;
 
     private final double percentOff;
@@ -58,6 +64,9 @@ public final class PreviewSubscriptionChangeResponseData {
             Optional<PreviewSubscriptionFinanceResponseData> finance,
             boolean isScheduledDowngrade,
             long newCharges,
+            boolean optInRequired,
+            Optional<String> optInText,
+            Optional<String> optInTitle,
             boolean paymentMethodRequired,
             double percentOff,
             OffsetDateTime periodStart,
@@ -72,6 +81,9 @@ public final class PreviewSubscriptionChangeResponseData {
         this.finance = finance;
         this.isScheduledDowngrade = isScheduledDowngrade;
         this.newCharges = newCharges;
+        this.optInRequired = optInRequired;
+        this.optInText = optInText;
+        this.optInTitle = optInTitle;
         this.paymentMethodRequired = paymentMethodRequired;
         this.percentOff = percentOff;
         this.periodStart = periodStart;
@@ -106,6 +118,21 @@ public final class PreviewSubscriptionChangeResponseData {
     @JsonProperty("new_charges")
     public long getNewCharges() {
         return newCharges;
+    }
+
+    @JsonProperty("opt_in_required")
+    public boolean getOptInRequired() {
+        return optInRequired;
+    }
+
+    @JsonProperty("opt_in_text")
+    public Optional<String> getOptInText() {
+        return optInText;
+    }
+
+    @JsonProperty("opt_in_title")
+    public Optional<String> getOptInTitle() {
+        return optInTitle;
     }
 
     @JsonProperty("payment_method_required")
@@ -166,6 +193,9 @@ public final class PreviewSubscriptionChangeResponseData {
                 && finance.equals(other.finance)
                 && isScheduledDowngrade == other.isScheduledDowngrade
                 && newCharges == other.newCharges
+                && optInRequired == other.optInRequired
+                && optInText.equals(other.optInText)
+                && optInTitle.equals(other.optInTitle)
                 && paymentMethodRequired == other.paymentMethodRequired
                 && percentOff == other.percentOff
                 && periodStart.equals(other.periodStart)
@@ -184,6 +214,9 @@ public final class PreviewSubscriptionChangeResponseData {
                 this.finance,
                 this.isScheduledDowngrade,
                 this.newCharges,
+                this.optInRequired,
+                this.optInText,
+                this.optInTitle,
                 this.paymentMethodRequired,
                 this.percentOff,
                 this.periodStart,
@@ -218,7 +251,11 @@ public final class PreviewSubscriptionChangeResponseData {
     }
 
     public interface NewChargesStage {
-        PaymentMethodRequiredStage newCharges(long newCharges);
+        OptInRequiredStage newCharges(long newCharges);
+    }
+
+    public interface OptInRequiredStage {
+        PaymentMethodRequiredStage optInRequired(boolean optInRequired);
     }
 
     public interface PaymentMethodRequiredStage {
@@ -252,6 +289,14 @@ public final class PreviewSubscriptionChangeResponseData {
 
         _FinalStage finance(PreviewSubscriptionFinanceResponseData finance);
 
+        _FinalStage optInText(Optional<String> optInText);
+
+        _FinalStage optInText(String optInText);
+
+        _FinalStage optInTitle(Optional<String> optInTitle);
+
+        _FinalStage optInTitle(String optInTitle);
+
         _FinalStage scheduledChangeTime(Optional<OffsetDateTime> scheduledChangeTime);
 
         _FinalStage scheduledChangeTime(OffsetDateTime scheduledChangeTime);
@@ -273,6 +318,7 @@ public final class PreviewSubscriptionChangeResponseData {
                     DueNowStage,
                     IsScheduledDowngradeStage,
                     NewChargesStage,
+                    OptInRequiredStage,
                     PaymentMethodRequiredStage,
                     PercentOffStage,
                     PeriodStartStage,
@@ -286,6 +332,8 @@ public final class PreviewSubscriptionChangeResponseData {
         private boolean isScheduledDowngrade;
 
         private long newCharges;
+
+        private boolean optInRequired;
 
         private boolean paymentMethodRequired;
 
@@ -303,6 +351,10 @@ public final class PreviewSubscriptionChangeResponseData {
 
         private Optional<OffsetDateTime> scheduledChangeTime = Optional.empty();
 
+        private Optional<String> optInTitle = Optional.empty();
+
+        private Optional<String> optInText = Optional.empty();
+
         private Optional<PreviewSubscriptionFinanceResponseData> finance = Optional.empty();
 
         @JsonAnySetter
@@ -317,6 +369,9 @@ public final class PreviewSubscriptionChangeResponseData {
             finance(other.getFinance());
             isScheduledDowngrade(other.getIsScheduledDowngrade());
             newCharges(other.getNewCharges());
+            optInRequired(other.getOptInRequired());
+            optInText(other.getOptInText());
+            optInTitle(other.getOptInTitle());
             paymentMethodRequired(other.getPaymentMethodRequired());
             percentOff(other.getPercentOff());
             periodStart(other.getPeriodStart());
@@ -351,8 +406,15 @@ public final class PreviewSubscriptionChangeResponseData {
 
         @java.lang.Override
         @JsonSetter("new_charges")
-        public PaymentMethodRequiredStage newCharges(long newCharges) {
+        public OptInRequiredStage newCharges(long newCharges) {
             this.newCharges = newCharges;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("opt_in_required")
+        public PaymentMethodRequiredStage optInRequired(boolean optInRequired) {
+            this.optInRequired = optInRequired;
             return this;
         }
 
@@ -442,6 +504,32 @@ public final class PreviewSubscriptionChangeResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage optInTitle(String optInTitle) {
+            this.optInTitle = Optional.ofNullable(optInTitle);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "opt_in_title", nulls = Nulls.SKIP)
+        public _FinalStage optInTitle(Optional<String> optInTitle) {
+            this.optInTitle = optInTitle;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage optInText(String optInText) {
+            this.optInText = Optional.ofNullable(optInText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "opt_in_text", nulls = Nulls.SKIP)
+        public _FinalStage optInText(Optional<String> optInText) {
+            this.optInText = optInText;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage finance(PreviewSubscriptionFinanceResponseData finance) {
             this.finance = Optional.ofNullable(finance);
             return this;
@@ -462,6 +550,9 @@ public final class PreviewSubscriptionChangeResponseData {
                     finance,
                     isScheduledDowngrade,
                     newCharges,
+                    optInRequired,
+                    optInText,
+                    optInTitle,
                     paymentMethodRequired,
                     percentOff,
                     periodStart,

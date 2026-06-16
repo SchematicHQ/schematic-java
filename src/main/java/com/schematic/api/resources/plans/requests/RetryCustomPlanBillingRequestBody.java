@@ -13,10 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CustomPlanActivationStrategy;
-import com.schematic.api.types.UpdatePayInAdvanceRequestBody;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,20 +28,16 @@ public final class RetryCustomPlanBillingRequestBody {
 
     private final Optional<Long> daysUntilDue;
 
-    private final List<UpdatePayInAdvanceRequestBody> payInAdvance;
-
     private final Map<String, Object> additionalProperties;
 
     private RetryCustomPlanBillingRequestBody(
             Optional<CustomPlanActivationStrategy> activationStrategy,
             String customerEmail,
             Optional<Long> daysUntilDue,
-            List<UpdatePayInAdvanceRequestBody> payInAdvance,
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.customerEmail = customerEmail;
         this.daysUntilDue = daysUntilDue;
-        this.payInAdvance = payInAdvance;
         this.additionalProperties = additionalProperties;
     }
 
@@ -63,11 +56,6 @@ public final class RetryCustomPlanBillingRequestBody {
         return daysUntilDue;
     }
 
-    @JsonProperty("pay_in_advance")
-    public List<UpdatePayInAdvanceRequestBody> getPayInAdvance() {
-        return payInAdvance;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -82,13 +70,12 @@ public final class RetryCustomPlanBillingRequestBody {
     private boolean equalTo(RetryCustomPlanBillingRequestBody other) {
         return activationStrategy.equals(other.activationStrategy)
                 && customerEmail.equals(other.customerEmail)
-                && daysUntilDue.equals(other.daysUntilDue)
-                && payInAdvance.equals(other.payInAdvance);
+                && daysUntilDue.equals(other.daysUntilDue);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.activationStrategy, this.customerEmail, this.daysUntilDue, this.payInAdvance);
+        return Objects.hash(this.activationStrategy, this.customerEmail, this.daysUntilDue);
     }
 
     @java.lang.Override
@@ -120,19 +107,11 @@ public final class RetryCustomPlanBillingRequestBody {
         _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
 
         _FinalStage daysUntilDue(Long daysUntilDue);
-
-        _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
-
-        _FinalStage addPayInAdvance(UpdatePayInAdvanceRequestBody payInAdvance);
-
-        _FinalStage addAllPayInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements CustomerEmailStage, _FinalStage {
         private String customerEmail;
-
-        private List<UpdatePayInAdvanceRequestBody> payInAdvance = new ArrayList<>();
 
         private Optional<Long> daysUntilDue = Optional.empty();
 
@@ -148,7 +127,6 @@ public final class RetryCustomPlanBillingRequestBody {
             activationStrategy(other.getActivationStrategy());
             customerEmail(other.getCustomerEmail());
             daysUntilDue(other.getDaysUntilDue());
-            payInAdvance(other.getPayInAdvance());
             return this;
         }
 
@@ -156,30 +134,6 @@ public final class RetryCustomPlanBillingRequestBody {
         @JsonSetter("customer_email")
         public _FinalStage customerEmail(@NotNull String customerEmail) {
             this.customerEmail = Objects.requireNonNull(customerEmail, "customerEmail must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage addAllPayInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance) {
-            if (payInAdvance != null) {
-                this.payInAdvance.addAll(payInAdvance);
-            }
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage addPayInAdvance(UpdatePayInAdvanceRequestBody payInAdvance) {
-            this.payInAdvance.add(payInAdvance);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "pay_in_advance", nulls = Nulls.SKIP)
-        public _FinalStage payInAdvance(List<UpdatePayInAdvanceRequestBody> payInAdvance) {
-            this.payInAdvance.clear();
-            if (payInAdvance != null) {
-                this.payInAdvance.addAll(payInAdvance);
-            }
             return this;
         }
 
@@ -212,7 +166,7 @@ public final class RetryCustomPlanBillingRequestBody {
         @java.lang.Override
         public RetryCustomPlanBillingRequestBody build() {
             return new RetryCustomPlanBillingRequestBody(
-                    activationStrategy, customerEmail, daysUntilDue, payInAdvance, additionalProperties);
+                    activationStrategy, customerEmail, daysUntilDue, additionalProperties);
         }
 
         @java.lang.Override

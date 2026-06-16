@@ -28,6 +28,10 @@ public final class RulesengineFeatureEntitlement {
 
     private final Optional<Double> creditRemaining;
 
+    private final Optional<Double> creditReserved;
+
+    private final Optional<Double> creditSettled;
+
     private final Optional<Double> creditTotal;
 
     private final Optional<Double> creditUsed;
@@ -56,6 +60,8 @@ public final class RulesengineFeatureEntitlement {
             Optional<Long> allocation,
             Optional<String> creditId,
             Optional<Double> creditRemaining,
+            Optional<Double> creditReserved,
+            Optional<Double> creditSettled,
             Optional<Double> creditTotal,
             Optional<Double> creditUsed,
             Optional<String> eventName,
@@ -71,6 +77,8 @@ public final class RulesengineFeatureEntitlement {
         this.allocation = allocation;
         this.creditId = creditId;
         this.creditRemaining = creditRemaining;
+        this.creditReserved = creditReserved;
+        this.creditSettled = creditSettled;
         this.creditTotal = creditTotal;
         this.creditUsed = creditUsed;
         this.eventName = eventName;
@@ -102,11 +110,27 @@ public final class RulesengineFeatureEntitlement {
     }
 
     /**
-     * @return If the company has a credit-based entitlement for this feature, the remaining credit amount
+     * @return If the company has a credit-based entitlement for this feature, the credit available to fund new consumption or a new lease hold — open lease holds are excluded. Clients that hold a lease should gate on this plus their own unspent hold; clients with no lease awareness should use credit_settled instead
      */
     @JsonProperty("credit_remaining")
     public Optional<Double> getCreditRemaining() {
         return creditRemaining;
+    }
+
+    /**
+     * @return If the company has a credit-based entitlement for this feature, the unspent amount held by an open credit lease. Returns to credit_remaining when the lease is released
+     */
+    @JsonProperty("credit_reserved")
+    public Optional<Double> getCreditReserved() {
+        return creditReserved;
+    }
+
+    /**
+     * @return If the company has a credit-based entitlement for this feature, the balance net of actual consumption, unaffected by open lease holds (credit_remaining plus credit_reserved). The number to display to end users
+     */
+    @JsonProperty("credit_settled")
+    public Optional<Double> getCreditSettled() {
+        return creditSettled;
     }
 
     /**
@@ -212,6 +236,8 @@ public final class RulesengineFeatureEntitlement {
         return allocation.equals(other.allocation)
                 && creditId.equals(other.creditId)
                 && creditRemaining.equals(other.creditRemaining)
+                && creditReserved.equals(other.creditReserved)
+                && creditSettled.equals(other.creditSettled)
                 && creditTotal.equals(other.creditTotal)
                 && creditUsed.equals(other.creditUsed)
                 && eventName.equals(other.eventName)
@@ -231,6 +257,8 @@ public final class RulesengineFeatureEntitlement {
                 this.allocation,
                 this.creditId,
                 this.creditRemaining,
+                this.creditReserved,
+                this.creditSettled,
                 this.creditTotal,
                 this.creditUsed,
                 this.eventName,
@@ -298,11 +326,25 @@ public final class RulesengineFeatureEntitlement {
         _FinalStage creditId(String creditId);
 
         /**
-         * <p>If the company has a credit-based entitlement for this feature, the remaining credit amount</p>
+         * <p>If the company has a credit-based entitlement for this feature, the credit available to fund new consumption or a new lease hold — open lease holds are excluded. Clients that hold a lease should gate on this plus their own unspent hold; clients with no lease awareness should use credit_settled instead</p>
          */
         _FinalStage creditRemaining(Optional<Double> creditRemaining);
 
         _FinalStage creditRemaining(Double creditRemaining);
+
+        /**
+         * <p>If the company has a credit-based entitlement for this feature, the unspent amount held by an open credit lease. Returns to credit_remaining when the lease is released</p>
+         */
+        _FinalStage creditReserved(Optional<Double> creditReserved);
+
+        _FinalStage creditReserved(Double creditReserved);
+
+        /**
+         * <p>If the company has a credit-based entitlement for this feature, the balance net of actual consumption, unaffected by open lease holds (credit_remaining plus credit_reserved). The number to display to end users</p>
+         */
+        _FinalStage creditSettled(Optional<Double> creditSettled);
+
+        _FinalStage creditSettled(Double creditSettled);
 
         /**
          * <p>If the company has a credit-based entitlement for this feature, the total credit amount</p>
@@ -385,6 +427,10 @@ public final class RulesengineFeatureEntitlement {
 
         private Optional<Double> creditTotal = Optional.empty();
 
+        private Optional<Double> creditSettled = Optional.empty();
+
+        private Optional<Double> creditReserved = Optional.empty();
+
         private Optional<Double> creditRemaining = Optional.empty();
 
         private Optional<String> creditId = Optional.empty();
@@ -401,6 +447,8 @@ public final class RulesengineFeatureEntitlement {
             allocation(other.getAllocation());
             creditId(other.getCreditId());
             creditRemaining(other.getCreditRemaining());
+            creditReserved(other.getCreditReserved());
+            creditSettled(other.getCreditSettled());
             creditTotal(other.getCreditTotal());
             creditUsed(other.getCreditUsed());
             eventName(other.getEventName());
@@ -612,7 +660,47 @@ public final class RulesengineFeatureEntitlement {
         }
 
         /**
-         * <p>If the company has a credit-based entitlement for this feature, the remaining credit amount</p>
+         * <p>If the company has a credit-based entitlement for this feature, the balance net of actual consumption, unaffected by open lease holds (credit_remaining plus credit_reserved). The number to display to end users</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage creditSettled(Double creditSettled) {
+            this.creditSettled = Optional.ofNullable(creditSettled);
+            return this;
+        }
+
+        /**
+         * <p>If the company has a credit-based entitlement for this feature, the balance net of actual consumption, unaffected by open lease holds (credit_remaining plus credit_reserved). The number to display to end users</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "credit_settled", nulls = Nulls.SKIP)
+        public _FinalStage creditSettled(Optional<Double> creditSettled) {
+            this.creditSettled = creditSettled;
+            return this;
+        }
+
+        /**
+         * <p>If the company has a credit-based entitlement for this feature, the unspent amount held by an open credit lease. Returns to credit_remaining when the lease is released</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage creditReserved(Double creditReserved) {
+            this.creditReserved = Optional.ofNullable(creditReserved);
+            return this;
+        }
+
+        /**
+         * <p>If the company has a credit-based entitlement for this feature, the unspent amount held by an open credit lease. Returns to credit_remaining when the lease is released</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "credit_reserved", nulls = Nulls.SKIP)
+        public _FinalStage creditReserved(Optional<Double> creditReserved) {
+            this.creditReserved = creditReserved;
+            return this;
+        }
+
+        /**
+         * <p>If the company has a credit-based entitlement for this feature, the credit available to fund new consumption or a new lease hold — open lease holds are excluded. Clients that hold a lease should gate on this plus their own unspent hold; clients with no lease awareness should use credit_settled instead</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -622,7 +710,7 @@ public final class RulesengineFeatureEntitlement {
         }
 
         /**
-         * <p>If the company has a credit-based entitlement for this feature, the remaining credit amount</p>
+         * <p>If the company has a credit-based entitlement for this feature, the credit available to fund new consumption or a new lease hold — open lease holds are excluded. Clients that hold a lease should gate on this plus their own unspent hold; clients with no lease awareness should use credit_settled instead</p>
          */
         @java.lang.Override
         @JsonSetter(value = "credit_remaining", nulls = Nulls.SKIP)
@@ -677,6 +765,8 @@ public final class RulesengineFeatureEntitlement {
                     allocation,
                     creditId,
                     creditRemaining,
+                    creditReserved,
+                    creditSettled,
                     creditTotal,
                     creditUsed,
                     eventName,

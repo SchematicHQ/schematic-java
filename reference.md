@@ -1,4 +1,29 @@
 # Reference
+<details><summary><code>client.getCreditLedger()</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.getCreditLedger();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## accounts
 <details><summary><code>client.accounts.listAccountMembers() -> ListAccountMembersResponse</code></summary>
 <dl>
@@ -5186,222 +5211,6 @@ client.credits().releaseCreditLease(
 <dd>
 
 **request:** `Map<String, Object>` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.credits.getEnrichedCreditLedger() -> GetEnrichedCreditLedgerResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.credits().getEnrichedCreditLedger(
-    GetEnrichedCreditLedgerRequest
-        .builder()
-        .companyId("company_id")
-        .period(CreditLedgerPeriod.DAILY)
-        .billingCreditId("billing_credit_id")
-        .featureId("feature_id")
-        .startTime("start_time")
-        .endTime("end_time")
-        .limit(1000000L)
-        .offset(1000000L)
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**companyId:** `String` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**billingCreditId:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**featureId:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**period:** `CreditLedgerPeriod` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**startTime:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**endTime:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**limit:** `Optional<Long>` — Page limit (default 100)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**offset:** `Optional<Long>` — Page offset (default 0)
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.credits.countCreditLedger() -> CountCreditLedgerResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.credits().countCreditLedger(
-    CountCreditLedgerRequest
-        .builder()
-        .companyId("company_id")
-        .period(CreditLedgerPeriod.DAILY)
-        .billingCreditId("billing_credit_id")
-        .featureId("feature_id")
-        .startTime("start_time")
-        .endTime("end_time")
-        .limit(1000000L)
-        .offset(1000000L)
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**companyId:** `String` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**billingCreditId:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**featureId:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**period:** `CreditLedgerPeriod` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**startTime:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**endTime:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**limit:** `Optional<Long>` — Page limit (default 100)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -12002,15 +11811,6 @@ client.plans().retryCustomPlanBilling(
     RetryCustomPlanBillingRequestBody
         .builder()
         .customerEmail("customer_email")
-        .payInAdvance(
-            Arrays.asList(
-                UpdatePayInAdvanceRequestBody
-                    .builder()
-                    .priceId("price_id")
-                    .quantity(1000000L)
-                    .build()
-            )
-        )
         .build()
 );
 ```
@@ -12052,14 +11852,6 @@ client.plans().retryCustomPlanBilling(
 <dd>
 
 **daysUntilDue:** `Optional<Long>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**payInAdvance:** `List<UpdatePayInAdvanceRequestBody>` 
     
 </dd>
 </dl>
@@ -13152,15 +12944,6 @@ client.plans().publishPlanVersion(
         .excludedCompanyIds(
             Arrays.asList("excluded_company_ids")
         )
-        .payInAdvance(
-            Arrays.asList(
-                UpdatePayInAdvanceRequestBody
-                    .builder()
-                    .priceId("price_id")
-                    .quantity(1000000L)
-                    .build()
-            )
-        )
         .build()
 );
 ```
@@ -13218,14 +13001,6 @@ client.plans().publishPlanVersion(
 <dd>
 
 **migrationStrategy:** `PlanVersionMigrationStrategy` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**payInAdvance:** `List<UpdatePayInAdvanceRequestBody>` 
     
 </dd>
 </dl>
@@ -16515,6 +16290,7 @@ client.plangroups().createPlanGroup(
         .checkoutCollectEmail(true)
         .checkoutCollectPhone(true)
         .enableTaxCollection(true)
+        .optInEnabled(true)
         .preventDowngradesWhenOverLimit(true)
         .preventSelfServiceDowngrade(true)
         .prorationBehavior(ProrationBehavior.CREATE_PRORATIONS)
@@ -16657,6 +16433,30 @@ client.plangroups().createPlanGroup(
 <dd>
 
 **initialPlanPriceId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**optInEnabled:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**optInText:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**optInTitle:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -16857,6 +16657,7 @@ client.plangroups().updatePlanGroup(
         .checkoutCollectEmail(true)
         .checkoutCollectPhone(true)
         .enableTaxCollection(true)
+        .optInEnabled(true)
         .preventDowngradesWhenOverLimit(true)
         .preventSelfServiceDowngrade(true)
         .prorationBehavior(ProrationBehavior.CREATE_PRORATIONS)
@@ -17007,6 +16808,30 @@ client.plangroups().updatePlanGroup(
 <dd>
 
 **initialPlanPriceId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**optInEnabled:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**optInText:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**optInTitle:** `Optional<String>` 
     
 </dd>
 </dl>

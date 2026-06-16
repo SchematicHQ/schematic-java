@@ -25,13 +25,11 @@ import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrants
 import com.schematic.api.resources.credits.requests.CountCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.CountCreditEventLedgerRequest;
-import com.schematic.api.resources.credits.requests.CountCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
 import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
 import com.schematic.api.resources.credits.requests.ExtendCreditLeaseRequestBody;
-import com.schematic.api.resources.credits.requests.GetEnrichedCreditLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCompanyCreditBalancesRequest;
@@ -49,7 +47,6 @@ import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsRes
 import com.schematic.api.resources.credits.types.CountCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.CountCreditEventLedgerResponse;
-import com.schematic.api.resources.credits.types.CountCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.CreateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.CreateCreditBundleResponse;
@@ -57,7 +54,6 @@ import com.schematic.api.resources.credits.types.DeleteBillingPlanCreditGrantRes
 import com.schematic.api.resources.credits.types.DeleteCreditBundleResponse;
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
-import com.schematic.api.resources.credits.types.GetEnrichedCreditLedgerResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.GrantBillingCreditsToCompanyResponse;
@@ -2243,231 +2239,6 @@ public class AsyncRawCreditsClient {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBodyString, ReleaseCreditLeaseResponse.class),
-                                response));
-                        return;
-                    }
-                    try {
-                        switch (response.code()) {
-                            case 400:
-                                future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 401:
-                                future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 403:
-                                future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 404:
-                                future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 500:
-                                future.completeExceptionally(new InternalServerError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                        }
-                    } catch (JsonProcessingException ignored) {
-                        // unable to map error response, throwing generic error
-                    }
-                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
-                    future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(), response.code(), errorBody, response));
-                    return;
-                } catch (IOException e) {
-                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<GetEnrichedCreditLedgerResponse>> getEnrichedCreditLedger(
-            GetEnrichedCreditLedgerRequest request) {
-        return getEnrichedCreditLedger(request, null);
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<GetEnrichedCreditLedgerResponse>> getEnrichedCreditLedger(
-            GetEnrichedCreditLedgerRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("billing/credits/ledger");
-        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
-        if (request.getBillingCreditId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "billing_credit_id", request.getBillingCreditId().get(), false);
-        }
-        if (request.getFeatureId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "feature_id", request.getFeatureId().get(), false);
-        }
-        QueryStringMapper.addQueryParameter(httpUrl, "period", request.getPeriod(), false);
-        if (request.getStartTime().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "start_time", request.getStartTime().get(), false);
-        }
-        if (request.getEndTime().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "end_time", request.getEndTime().get(), false);
-        }
-        if (request.getLimit().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "limit", request.getLimit().get(), false);
-        }
-        if (request.getOffset().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "offset", request.getOffset().get(), false);
-        }
-        if (requestOptions != null) {
-            requestOptions.getQueryParameters().forEach((_key, _value) -> {
-                httpUrl.addQueryParameter(_key, _value);
-            });
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        CompletableFuture<BaseSchematicHttpResponse<GetEnrichedCreditLedgerResponse>> future =
-                new CompletableFuture<>();
-        client.newCall(okhttpRequest).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-                    if (response.isSuccessful()) {
-                        future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, GetEnrichedCreditLedgerResponse.class),
-                                response));
-                        return;
-                    }
-                    try {
-                        switch (response.code()) {
-                            case 400:
-                                future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 401:
-                                future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 403:
-                                future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 404:
-                                future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                            case 500:
-                                future.completeExceptionally(new InternalServerError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
-                                        response));
-                                return;
-                        }
-                    } catch (JsonProcessingException ignored) {
-                        // unable to map error response, throwing generic error
-                    }
-                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
-                    future.completeExceptionally(new BaseSchematicApiException(
-                            "Error with status code " + response.code(), response.code(), errorBody, response));
-                    return;
-                } catch (IOException e) {
-                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<CountCreditLedgerResponse>> countCreditLedger(
-            CountCreditLedgerRequest request) {
-        return countCreditLedger(request, null);
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<CountCreditLedgerResponse>> countCreditLedger(
-            CountCreditLedgerRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("billing/credits/ledger/count");
-        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
-        if (request.getBillingCreditId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "billing_credit_id", request.getBillingCreditId().get(), false);
-        }
-        if (request.getFeatureId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "feature_id", request.getFeatureId().get(), false);
-        }
-        QueryStringMapper.addQueryParameter(httpUrl, "period", request.getPeriod(), false);
-        if (request.getStartTime().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "start_time", request.getStartTime().get(), false);
-        }
-        if (request.getEndTime().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "end_time", request.getEndTime().get(), false);
-        }
-        if (request.getLimit().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "limit", request.getLimit().get(), false);
-        }
-        if (request.getOffset().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "offset", request.getOffset().get(), false);
-        }
-        if (requestOptions != null) {
-            requestOptions.getQueryParameters().forEach((_key, _value) -> {
-                httpUrl.addQueryParameter(_key, _value);
-            });
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        CompletableFuture<BaseSchematicHttpResponse<CountCreditLedgerResponse>> future = new CompletableFuture<>();
-        client.newCall(okhttpRequest).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-                    if (response.isSuccessful()) {
-                        future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, CountCreditLedgerResponse.class),
                                 response));
                         return;
                     }
