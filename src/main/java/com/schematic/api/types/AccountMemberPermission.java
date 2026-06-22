@@ -46,9 +46,6 @@ public final class AccountMemberPermission {
     public static final AccountMemberPermission OVERRIDES_EDIT =
             new AccountMemberPermission(Value.OVERRIDES_EDIT, "overrides_edit");
 
-    public static final AccountMemberPermission BILLING_CREDITS_EDIT =
-            new AccountMemberPermission(Value.BILLING_CREDITS_EDIT, "billing_credits_edit");
-
     public static final AccountMemberPermission DATA_EXPORTS_EDIT =
             new AccountMemberPermission(Value.DATA_EXPORTS_EDIT, "data_exports_edit");
 
@@ -111,8 +108,6 @@ public final class AccountMemberPermission {
                 return visitor.visitComponentsEdit();
             case OVERRIDES_EDIT:
                 return visitor.visitOverridesEdit();
-            case BILLING_CREDITS_EDIT:
-                return visitor.visitBillingCreditsEdit();
             case DATA_EXPORTS_EDIT:
                 return visitor.visitDataExportsEdit();
             case UNKNOWN:
@@ -150,8 +145,6 @@ public final class AccountMemberPermission {
                 return COMPONENTS_EDIT;
             case "overrides_edit":
                 return OVERRIDES_EDIT;
-            case "billing_credits_edit":
-                return BILLING_CREDITS_EDIT;
             case "data_exports_edit":
                 return DATA_EXPORTS_EDIT;
             default:
@@ -160,8 +153,6 @@ public final class AccountMemberPermission {
     }
 
     public enum Value {
-        BILLING_CREDITS_EDIT,
-
         COMPANIES_EDIT,
 
         COMPANY_USERS_EDIT,
@@ -194,8 +185,6 @@ public final class AccountMemberPermission {
     }
 
     public interface Visitor<T> {
-        T visitBillingCreditsEdit();
-
         T visitCompaniesEdit();
 
         T visitCompanyUsersEdit();

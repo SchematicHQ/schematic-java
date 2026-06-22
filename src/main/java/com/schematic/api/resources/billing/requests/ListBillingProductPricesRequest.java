@@ -39,6 +39,8 @@ public final class ListBillingProductPricesRequest {
 
     private final Optional<Boolean> isActive;
 
+    private final Optional<String> planVersionId;
+
     private final Optional<Long> price;
 
     private final Optional<String> productId;
@@ -67,6 +69,7 @@ public final class ListBillingProductPricesRequest {
             Optional<Boolean> forTrialExpiryPlan,
             Optional<String> interval,
             Optional<Boolean> isActive,
+            Optional<String> planVersionId,
             Optional<Long> price,
             Optional<String> productId,
             Optional<BillingProviderType> providerType,
@@ -84,6 +87,7 @@ public final class ListBillingProductPricesRequest {
         this.forTrialExpiryPlan = forTrialExpiryPlan;
         this.interval = interval;
         this.isActive = isActive;
+        this.planVersionId = planVersionId;
         this.price = price;
         this.productId = productId;
         this.providerType = providerType;
@@ -141,6 +145,14 @@ public final class ListBillingProductPricesRequest {
     @JsonProperty("is_active")
     public Optional<Boolean> getIsActive() {
         return isActive;
+    }
+
+    /**
+     * @return Filter for prices belonging to a specific plan version (e.g. the latest published version)
+     */
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
     }
 
     @JsonProperty("price")
@@ -216,6 +228,7 @@ public final class ListBillingProductPricesRequest {
                 && forTrialExpiryPlan.equals(other.forTrialExpiryPlan)
                 && interval.equals(other.interval)
                 && isActive.equals(other.isActive)
+                && planVersionId.equals(other.planVersionId)
                 && price.equals(other.price)
                 && productId.equals(other.productId)
                 && providerType.equals(other.providerType)
@@ -237,6 +250,7 @@ public final class ListBillingProductPricesRequest {
                 this.forTrialExpiryPlan,
                 this.interval,
                 this.isActive,
+                this.planVersionId,
                 this.price,
                 this.productId,
                 this.providerType,
@@ -273,6 +287,8 @@ public final class ListBillingProductPricesRequest {
 
         private Optional<Boolean> isActive = Optional.empty();
 
+        private Optional<String> planVersionId = Optional.empty();
+
         private Optional<Long> price = Optional.empty();
 
         private Optional<String> productId = Optional.empty();
@@ -304,6 +320,7 @@ public final class ListBillingProductPricesRequest {
             forTrialExpiryPlan(other.getForTrialExpiryPlan());
             interval(other.getInterval());
             isActive(other.getIsActive());
+            planVersionId(other.getPlanVersionId());
             price(other.getPrice());
             productId(other.getProductId());
             providerType(other.getProviderType());
@@ -412,6 +429,20 @@ public final class ListBillingProductPricesRequest {
 
         public Builder isActive(Boolean isActive) {
             this.isActive = Optional.ofNullable(isActive);
+            return this;
+        }
+
+        /**
+         * <p>Filter for prices belonging to a specific plan version (e.g. the latest published version)</p>
+         */
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
             return this;
         }
 
@@ -532,6 +563,7 @@ public final class ListBillingProductPricesRequest {
                     forTrialExpiryPlan,
                     interval,
                     isActive,
+                    planVersionId,
                     price,
                     productId,
                     providerType,

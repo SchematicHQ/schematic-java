@@ -2233,6 +2233,7 @@ client.billing().listBillingPrices(
         .forTrialExpiryPlan(true)
         .interval("interval")
         .isActive(true)
+        .planVersionId("plan_version_id")
         .price(1000000L)
         .productId("product_id")
         .providerType(BillingProviderType.METRONOME)
@@ -2299,6 +2300,14 @@ client.billing().listBillingPrices(
 <dd>
 
 **isActive:** `Optional<Boolean>` — Filter for active prices on active products (defaults to true if not specified)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` — Filter for prices belonging to a specific plan version (e.g. the latest published version)
     
 </dd>
 </dl>
@@ -2646,6 +2655,7 @@ client.billing().listBillingProductPrices(
         .forTrialExpiryPlan(true)
         .interval("interval")
         .isActive(true)
+        .planVersionId("plan_version_id")
         .price(1000000L)
         .productId("product_id")
         .providerType(BillingProviderType.METRONOME)
@@ -2712,6 +2722,14 @@ client.billing().listBillingProductPrices(
 <dd>
 
 **isActive:** `Optional<Boolean>` — Filter for active prices on active products (defaults to true if not specified)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` — Filter for prices belonging to a specific plan version (e.g. the latest published version)
     
 </dd>
 </dl>
