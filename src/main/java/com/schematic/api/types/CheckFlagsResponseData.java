@@ -22,6 +22,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CheckFlagsResponseData.Builder.class)
 public final class CheckFlagsResponseData {
+    private final Optional<Map<String, CompanyCreditBalance>> creditBalances;
+
     private final List<CheckFlagResponseData> flags;
 
     private final Optional<DatastreamCompanyPlan> plan;
@@ -29,12 +31,22 @@ public final class CheckFlagsResponseData {
     private final Map<String, Object> additionalProperties;
 
     private CheckFlagsResponseData(
+            Optional<Map<String, CompanyCreditBalance>> creditBalances,
             List<CheckFlagResponseData> flags,
             Optional<DatastreamCompanyPlan> plan,
             Map<String, Object> additionalProperties) {
+        this.creditBalances = creditBalances;
         this.flags = flags;
         this.plan = plan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Lease-aware credit balances keyed by credit ID, covering every credit type the company holds a balance in
+     */
+    @JsonProperty("credit_balances")
+    public Optional<Map<String, CompanyCreditBalance>> getCreditBalances() {
+        return creditBalances;
     }
 
     @JsonProperty("flags")
@@ -59,12 +71,12 @@ public final class CheckFlagsResponseData {
     }
 
     private boolean equalTo(CheckFlagsResponseData other) {
-        return flags.equals(other.flags) && plan.equals(other.plan);
+        return creditBalances.equals(other.creditBalances) && flags.equals(other.flags) && plan.equals(other.plan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.flags, this.plan);
+        return Objects.hash(this.creditBalances, this.flags, this.plan);
     }
 
     @java.lang.Override
@@ -78,6 +90,8 @@ public final class CheckFlagsResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Map<String, CompanyCreditBalance>> creditBalances = Optional.empty();
+
         private List<CheckFlagResponseData> flags = new ArrayList<>();
 
         private Optional<DatastreamCompanyPlan> plan = Optional.empty();
@@ -88,8 +102,23 @@ public final class CheckFlagsResponseData {
         private Builder() {}
 
         public Builder from(CheckFlagsResponseData other) {
+            creditBalances(other.getCreditBalances());
             flags(other.getFlags());
             plan(other.getPlan());
+            return this;
+        }
+
+        /**
+         * <p>Lease-aware credit balances keyed by credit ID, covering every credit type the company holds a balance in</p>
+         */
+        @JsonSetter(value = "credit_balances", nulls = Nulls.SKIP)
+        public Builder creditBalances(Optional<Map<String, CompanyCreditBalance>> creditBalances) {
+            this.creditBalances = creditBalances;
+            return this;
+        }
+
+        public Builder creditBalances(Map<String, CompanyCreditBalance> creditBalances) {
+            this.creditBalances = Optional.ofNullable(creditBalances);
             return this;
         }
 
@@ -126,7 +155,7 @@ public final class CheckFlagsResponseData {
         }
 
         public CheckFlagsResponseData build() {
-            return new CheckFlagsResponseData(flags, plan, additionalProperties);
+            return new CheckFlagsResponseData(creditBalances, flags, plan, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

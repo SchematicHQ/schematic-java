@@ -38,6 +38,8 @@ public final class CompanySubscriptionResponseData {
 
     private final String interval;
 
+    private final boolean isInitial;
+
     private final Optional<InvoiceResponseData> latestInvoice;
 
     private final Optional<PaymentMethodResponseData> paymentMethod;
@@ -64,6 +66,7 @@ public final class CompanySubscriptionResponseData {
             List<BillingSubscriptionDiscountView> discounts,
             Optional<OffsetDateTime> expiredAt,
             String interval,
+            boolean isInitial,
             Optional<InvoiceResponseData> latestInvoice,
             Optional<PaymentMethodResponseData> paymentMethod,
             List<BillingProductForSubscriptionResponseData> products,
@@ -80,6 +83,7 @@ public final class CompanySubscriptionResponseData {
         this.discounts = discounts;
         this.expiredAt = expiredAt;
         this.interval = interval;
+        this.isInitial = isInitial;
         this.latestInvoice = latestInvoice;
         this.paymentMethod = paymentMethod;
         this.products = products;
@@ -124,6 +128,11 @@ public final class CompanySubscriptionResponseData {
     @JsonProperty("interval")
     public String getInterval() {
         return interval;
+    }
+
+    @JsonProperty("is_initial")
+    public boolean getIsInitial() {
+        return isInitial;
     }
 
     @JsonProperty("latest_invoice")
@@ -185,6 +194,7 @@ public final class CompanySubscriptionResponseData {
                 && discounts.equals(other.discounts)
                 && expiredAt.equals(other.expiredAt)
                 && interval.equals(other.interval)
+                && isInitial == other.isInitial
                 && latestInvoice.equals(other.latestInvoice)
                 && paymentMethod.equals(other.paymentMethod)
                 && products.equals(other.products)
@@ -205,6 +215,7 @@ public final class CompanySubscriptionResponseData {
                 this.discounts,
                 this.expiredAt,
                 this.interval,
+                this.isInitial,
                 this.latestInvoice,
                 this.paymentMethod,
                 this.products,
@@ -239,7 +250,11 @@ public final class CompanySubscriptionResponseData {
     }
 
     public interface IntervalStage {
-        ProviderTypeStage interval(@NotNull String interval);
+        IsInitialStage interval(@NotNull String interval);
+    }
+
+    public interface IsInitialStage {
+        ProviderTypeStage isInitial(boolean isInitial);
     }
 
     public interface ProviderTypeStage {
@@ -304,6 +319,7 @@ public final class CompanySubscriptionResponseData {
                     CurrencyStage,
                     CustomerExternalIdStage,
                     IntervalStage,
+                    IsInitialStage,
                     ProviderTypeStage,
                     StatusStage,
                     SubscriptionExternalIdStage,
@@ -316,6 +332,8 @@ public final class CompanySubscriptionResponseData {
         private String customerExternalId;
 
         private String interval;
+
+        private boolean isInitial;
 
         private BillingProviderType providerType;
 
@@ -353,6 +371,7 @@ public final class CompanySubscriptionResponseData {
             discounts(other.getDiscounts());
             expiredAt(other.getExpiredAt());
             interval(other.getInterval());
+            isInitial(other.getIsInitial());
             latestInvoice(other.getLatestInvoice());
             paymentMethod(other.getPaymentMethod());
             products(other.getProducts());
@@ -387,8 +406,15 @@ public final class CompanySubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public ProviderTypeStage interval(@NotNull String interval) {
+        public IsInitialStage interval(@NotNull String interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("is_initial")
+        public ProviderTypeStage isInitial(boolean isInitial) {
+            this.isInitial = isInitial;
             return this;
         }
 
@@ -544,6 +570,7 @@ public final class CompanySubscriptionResponseData {
                     discounts,
                     expiredAt,
                     interval,
+                    isInitial,
                     latestInvoice,
                     paymentMethod,
                     products,

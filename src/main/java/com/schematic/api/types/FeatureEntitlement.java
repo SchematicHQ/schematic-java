@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class FeatureEntitlement {
     private final Optional<Long> allocation;
 
+    private final Optional<Double> consumptionRate;
+
     private final Optional<String> creditId;
 
     private final Optional<Double> creditRemaining;
@@ -37,6 +39,8 @@ public final class FeatureEntitlement {
     private final Optional<Double> creditUsed;
 
     private final Optional<String> eventName;
+
+    private final Optional<String> eventSubtype;
 
     private final String featureId;
 
@@ -58,6 +62,7 @@ public final class FeatureEntitlement {
 
     private FeatureEntitlement(
             Optional<Long> allocation,
+            Optional<Double> consumptionRate,
             Optional<String> creditId,
             Optional<Double> creditRemaining,
             Optional<Double> creditReserved,
@@ -65,6 +70,7 @@ public final class FeatureEntitlement {
             Optional<Double> creditTotal,
             Optional<Double> creditUsed,
             Optional<String> eventName,
+            Optional<String> eventSubtype,
             String featureId,
             String featureKey,
             Optional<MetricPeriod> metricPeriod,
@@ -75,6 +81,7 @@ public final class FeatureEntitlement {
             EntitlementValueType valueType,
             Map<String, Object> additionalProperties) {
         this.allocation = allocation;
+        this.consumptionRate = consumptionRate;
         this.creditId = creditId;
         this.creditRemaining = creditRemaining;
         this.creditReserved = creditReserved;
@@ -82,6 +89,7 @@ public final class FeatureEntitlement {
         this.creditTotal = creditTotal;
         this.creditUsed = creditUsed;
         this.eventName = eventName;
+        this.eventSubtype = eventSubtype;
         this.featureId = featureId;
         this.featureKey = featureKey;
         this.metricPeriod = metricPeriod;
@@ -99,6 +107,14 @@ public final class FeatureEntitlement {
     @JsonProperty("allocation")
     public Optional<Long> getAllocation() {
         return allocation;
+    }
+
+    /**
+     * @return If the company has a credit-based entitlement for this feature, the credit cost per unit of usage
+     */
+    @JsonProperty("consumption_rate")
+    public Optional<Double> getConsumptionRate() {
+        return consumptionRate;
     }
 
     /**
@@ -155,6 +171,14 @@ public final class FeatureEntitlement {
     @JsonProperty("event_name")
     public Optional<String> getEventName() {
         return eventName;
+    }
+
+    /**
+     * @return For event-based or credit-metered feature entitlements, the event subtype whose usage is tracked
+     */
+    @JsonProperty("event_subtype")
+    public Optional<String> getEventSubtype() {
+        return eventSubtype;
     }
 
     /**
@@ -234,6 +258,7 @@ public final class FeatureEntitlement {
 
     private boolean equalTo(FeatureEntitlement other) {
         return allocation.equals(other.allocation)
+                && consumptionRate.equals(other.consumptionRate)
                 && creditId.equals(other.creditId)
                 && creditRemaining.equals(other.creditRemaining)
                 && creditReserved.equals(other.creditReserved)
@@ -241,6 +266,7 @@ public final class FeatureEntitlement {
                 && creditTotal.equals(other.creditTotal)
                 && creditUsed.equals(other.creditUsed)
                 && eventName.equals(other.eventName)
+                && eventSubtype.equals(other.eventSubtype)
                 && featureId.equals(other.featureId)
                 && featureKey.equals(other.featureKey)
                 && metricPeriod.equals(other.metricPeriod)
@@ -255,6 +281,7 @@ public final class FeatureEntitlement {
     public int hashCode() {
         return Objects.hash(
                 this.allocation,
+                this.consumptionRate,
                 this.creditId,
                 this.creditRemaining,
                 this.creditReserved,
@@ -262,6 +289,7 @@ public final class FeatureEntitlement {
                 this.creditTotal,
                 this.creditUsed,
                 this.eventName,
+                this.eventSubtype,
                 this.featureId,
                 this.featureKey,
                 this.metricPeriod,
@@ -319,6 +347,13 @@ public final class FeatureEntitlement {
         _FinalStage allocation(Long allocation);
 
         /**
+         * <p>If the company has a credit-based entitlement for this feature, the credit cost per unit of usage</p>
+         */
+        _FinalStage consumptionRate(Optional<Double> consumptionRate);
+
+        _FinalStage consumptionRate(Double consumptionRate);
+
+        /**
          * <p>If the company has a credit-based entitlement for this feature, the ID of the credit</p>
          */
         _FinalStage creditId(Optional<String> creditId);
@@ -366,6 +401,13 @@ public final class FeatureEntitlement {
         _FinalStage eventName(Optional<String> eventName);
 
         _FinalStage eventName(String eventName);
+
+        /**
+         * <p>For event-based or credit-metered feature entitlements, the event subtype whose usage is tracked</p>
+         */
+        _FinalStage eventSubtype(Optional<String> eventSubtype);
+
+        _FinalStage eventSubtype(String eventSubtype);
 
         /**
          * <p>For event-based feature entitlements, the period over which usage is tracked</p>
@@ -421,6 +463,8 @@ public final class FeatureEntitlement {
 
         private Optional<MetricPeriod> metricPeriod = Optional.empty();
 
+        private Optional<String> eventSubtype = Optional.empty();
+
         private Optional<String> eventName = Optional.empty();
 
         private Optional<Double> creditUsed = Optional.empty();
@@ -435,6 +479,8 @@ public final class FeatureEntitlement {
 
         private Optional<String> creditId = Optional.empty();
 
+        private Optional<Double> consumptionRate = Optional.empty();
+
         private Optional<Long> allocation = Optional.empty();
 
         @JsonAnySetter
@@ -445,6 +491,7 @@ public final class FeatureEntitlement {
         @java.lang.Override
         public Builder from(FeatureEntitlement other) {
             allocation(other.getAllocation());
+            consumptionRate(other.getConsumptionRate());
             creditId(other.getCreditId());
             creditRemaining(other.getCreditRemaining());
             creditReserved(other.getCreditReserved());
@@ -452,6 +499,7 @@ public final class FeatureEntitlement {
             creditTotal(other.getCreditTotal());
             creditUsed(other.getCreditUsed());
             eventName(other.getEventName());
+            eventSubtype(other.getEventSubtype());
             featureId(other.getFeatureId());
             featureKey(other.getFeatureKey());
             metricPeriod(other.getMetricPeriod());
@@ -600,6 +648,26 @@ public final class FeatureEntitlement {
         }
 
         /**
+         * <p>For event-based or credit-metered feature entitlements, the event subtype whose usage is tracked</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage eventSubtype(String eventSubtype) {
+            this.eventSubtype = Optional.ofNullable(eventSubtype);
+            return this;
+        }
+
+        /**
+         * <p>For event-based or credit-metered feature entitlements, the event subtype whose usage is tracked</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "event_subtype", nulls = Nulls.SKIP)
+        public _FinalStage eventSubtype(Optional<String> eventSubtype) {
+            this.eventSubtype = eventSubtype;
+            return this;
+        }
+
+        /**
          * <p>If the feature is event-based, the name of the event tracked for usage</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -740,6 +808,26 @@ public final class FeatureEntitlement {
         }
 
         /**
+         * <p>If the company has a credit-based entitlement for this feature, the credit cost per unit of usage</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage consumptionRate(Double consumptionRate) {
+            this.consumptionRate = Optional.ofNullable(consumptionRate);
+            return this;
+        }
+
+        /**
+         * <p>If the company has a credit-based entitlement for this feature, the credit cost per unit of usage</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "consumption_rate", nulls = Nulls.SKIP)
+        public _FinalStage consumptionRate(Optional<Double> consumptionRate) {
+            this.consumptionRate = consumptionRate;
+            return this;
+        }
+
+        /**
          * <p>If the company has a numeric entitlement for this feature, the allocated amount</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -763,6 +851,7 @@ public final class FeatureEntitlement {
         public FeatureEntitlement build() {
             return new FeatureEntitlement(
                     allocation,
+                    consumptionRate,
                     creditId,
                     creditRemaining,
                     creditReserved,
@@ -770,6 +859,7 @@ public final class FeatureEntitlement {
                     creditTotal,
                     creditUsed,
                     eventName,
+                    eventSubtype,
                     featureId,
                     featureKey,
                     metricPeriod,

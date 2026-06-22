@@ -1024,6 +1024,10 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "is_active", request.getIsActive().get(), false);
         }
+        if (request.getPlanVersionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
+        }
         if (request.getPrice().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "price", request.getPrice().get(), false);
@@ -1293,6 +1297,10 @@ public class RawBillingClient {
         if (request.getIsActive().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "is_active", request.getIsActive().get(), false);
+        }
+        if (request.getPlanVersionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
         }
         if (request.getPrice().isPresent()) {
             QueryStringMapper.addQueryParameter(

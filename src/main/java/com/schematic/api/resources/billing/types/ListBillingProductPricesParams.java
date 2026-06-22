@@ -40,6 +40,8 @@ public final class ListBillingProductPricesParams {
 
     private final Optional<Long> offset;
 
+    private final Optional<String> planVersionId;
+
     private final Optional<Long> price;
 
     private final Optional<String> productId;
@@ -67,6 +69,7 @@ public final class ListBillingProductPricesParams {
             Optional<Boolean> isActive,
             Optional<Long> limit,
             Optional<Long> offset,
+            Optional<String> planVersionId,
             Optional<Long> price,
             Optional<String> productId,
             Optional<List<String>> productIds,
@@ -84,6 +87,7 @@ public final class ListBillingProductPricesParams {
         this.isActive = isActive;
         this.limit = limit;
         this.offset = offset;
+        this.planVersionId = planVersionId;
         this.price = price;
         this.productId = productId;
         this.productIds = productIds;
@@ -153,6 +157,14 @@ public final class ListBillingProductPricesParams {
         return offset;
     }
 
+    /**
+     * @return Filter for prices belonging to a specific plan version (e.g. the latest published version)
+     */
+    @JsonProperty("plan_version_id")
+    public Optional<String> getPlanVersionId() {
+        return planVersionId;
+    }
+
     @JsonProperty("price")
     public Optional<Long> getPrice() {
         return price;
@@ -216,6 +228,7 @@ public final class ListBillingProductPricesParams {
                 && isActive.equals(other.isActive)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
+                && planVersionId.equals(other.planVersionId)
                 && price.equals(other.price)
                 && productId.equals(other.productId)
                 && productIds.equals(other.productIds)
@@ -237,6 +250,7 @@ public final class ListBillingProductPricesParams {
                 this.isActive,
                 this.limit,
                 this.offset,
+                this.planVersionId,
                 this.price,
                 this.productId,
                 this.productIds,
@@ -274,6 +288,8 @@ public final class ListBillingProductPricesParams {
 
         private Optional<Long> offset = Optional.empty();
 
+        private Optional<String> planVersionId = Optional.empty();
+
         private Optional<Long> price = Optional.empty();
 
         private Optional<String> productId = Optional.empty();
@@ -304,6 +320,7 @@ public final class ListBillingProductPricesParams {
             isActive(other.getIsActive());
             limit(other.getLimit());
             offset(other.getOffset());
+            planVersionId(other.getPlanVersionId());
             price(other.getPrice());
             productId(other.getProductId());
             productIds(other.getProductIds());
@@ -421,6 +438,20 @@ public final class ListBillingProductPricesParams {
             return this;
         }
 
+        /**
+         * <p>Filter for prices belonging to a specific plan version (e.g. the latest published version)</p>
+         */
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public Builder planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
+            return this;
+        }
+
+        public Builder planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
         @JsonSetter(value = "price", nulls = Nulls.SKIP)
         public Builder price(Optional<Long> price) {
             this.price = price;
@@ -522,6 +553,7 @@ public final class ListBillingProductPricesParams {
                     isActive,
                     limit,
                     offset,
+                    planVersionId,
                     price,
                     productId,
                     productIds,
