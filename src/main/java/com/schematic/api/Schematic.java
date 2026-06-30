@@ -597,7 +597,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     public void track(
             String eventName, Map<String, String> company, Map<String, String> user, Map<String, Object> traits) {
-        track(eventName, company, user, traits, 1, null);
+        track(eventName, company, user, traits, 1L, null);
     }
 
     public void track(
@@ -605,7 +605,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             Map<String, String> company,
             Map<String, String> user,
             Map<String, Object> traits,
-            Integer quantity) {
+            Long quantity) {
         track(eventName, company, user, traits, quantity, null);
     }
 
@@ -615,7 +615,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             Map<String, String> user,
             Map<String, Object> traits,
             TrackOptions options) {
-        track(eventName, company, user, traits, 1, options);
+        track(eventName, company, user, traits, 1L, options);
     }
 
     public void track(
@@ -623,7 +623,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             Map<String, String> company,
             Map<String, String> user,
             Map<String, Object> traits,
-            Integer quantity,
+            Long quantity,
             TrackOptions options) {
         if (offline) return;
 

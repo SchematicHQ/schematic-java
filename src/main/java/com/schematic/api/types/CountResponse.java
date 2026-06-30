@@ -20,11 +20,11 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountResponse.Builder.class)
 public final class CountResponse {
-    private final Optional<Integer> count;
+    private final Optional<Long> count;
 
     private final Map<String, Object> additionalProperties;
 
-    private CountResponse(Optional<Integer> count, Map<String, Object> additionalProperties) {
+    private CountResponse(Optional<Long> count, Map<String, Object> additionalProperties) {
         this.count = count;
         this.additionalProperties = additionalProperties;
     }
@@ -33,7 +33,7 @@ public final class CountResponse {
      * @return The number of resources
      */
     @JsonProperty("count")
-    public Optional<Integer> getCount() {
+    public Optional<Long> getCount() {
         return count;
     }
 
@@ -68,7 +68,7 @@ public final class CountResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<Integer> count = Optional.empty();
+        private Optional<Long> count = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -84,12 +84,12 @@ public final class CountResponse {
          * <p>The number of resources</p>
          */
         @JsonSetter(value = "count", nulls = Nulls.SKIP)
-        public Builder count(Optional<Integer> count) {
+        public Builder count(Optional<Long> count) {
             this.count = count;
             return this;
         }
 
-        public Builder count(Integer count) {
+        public Builder count(Long count) {
             this.count = Optional.ofNullable(count);
             return this;
         }

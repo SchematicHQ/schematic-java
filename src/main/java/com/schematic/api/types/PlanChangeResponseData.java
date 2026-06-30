@@ -52,6 +52,8 @@ public final class PlanChangeResponseData {
 
     private final String id;
 
+    private final Optional<IntegrationResponseData> integration;
+
     private final boolean isVersionUpgrade;
 
     private final Optional<PlanSnapshotView> previousBasePlan;
@@ -87,6 +89,7 @@ public final class PlanChangeResponseData {
             OffsetDateTime createdAt,
             String environmentId,
             String id,
+            Optional<IntegrationResponseData> integration,
             boolean isVersionUpgrade,
             Optional<PlanSnapshotView> previousBasePlan,
             Optional<PlanVersionSnapshotView> previousBasePlanVersion,
@@ -111,6 +114,7 @@ public final class PlanChangeResponseData {
         this.createdAt = createdAt;
         this.environmentId = environmentId;
         this.id = id;
+        this.integration = integration;
         this.isVersionUpgrade = isVersionUpgrade;
         this.previousBasePlan = previousBasePlan;
         this.previousBasePlanVersion = previousBasePlanVersion;
@@ -200,6 +204,14 @@ public final class PlanChangeResponseData {
     }
 
     /**
+     * @return The integration that performed this change, when the actor is an integration-owned API key (e.g. a billing-provider sync).
+     */
+    @JsonProperty("integration")
+    public Optional<IntegrationResponseData> getIntegration() {
+        return integration;
+    }
+
+    /**
      * @return True when this change moved the company to a different version of the same plan (e.g. a plan version migration) rather than to a different plan.
      */
     @JsonProperty("is_version_upgrade")
@@ -282,6 +294,7 @@ public final class PlanChangeResponseData {
                 && createdAt.equals(other.createdAt)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
+                && integration.equals(other.integration)
                 && isVersionUpgrade == other.isVersionUpgrade
                 && previousBasePlan.equals(other.previousBasePlan)
                 && previousBasePlanVersion.equals(other.previousBasePlanVersion)
@@ -310,6 +323,7 @@ public final class PlanChangeResponseData {
                 this.createdAt,
                 this.environmentId,
                 this.id,
+                this.integration,
                 this.isVersionUpgrade,
                 this.previousBasePlan,
                 this.previousBasePlanVersion,
@@ -416,6 +430,13 @@ public final class PlanChangeResponseData {
 
         _FinalStage company(CompanyResponseData company);
 
+        /**
+         * <p>The integration that performed this change, when the actor is an integration-owned API key (e.g. a billing-provider sync).</p>
+         */
+        _FinalStage integration(Optional<IntegrationResponseData> integration);
+
+        _FinalStage integration(IntegrationResponseData integration);
+
         _FinalStage previousBasePlan(Optional<PlanSnapshotView> previousBasePlan);
 
         _FinalStage previousBasePlan(PlanSnapshotView previousBasePlan);
@@ -497,6 +518,8 @@ public final class PlanChangeResponseData {
 
         private Optional<PlanSnapshotView> previousBasePlan = Optional.empty();
 
+        private Optional<IntegrationResponseData> integration = Optional.empty();
+
         private Optional<CompanyResponseData> company = Optional.empty();
 
         private Optional<PlanVersionSnapshotView> basePlanVersion = Optional.empty();
@@ -534,6 +557,7 @@ public final class PlanChangeResponseData {
             createdAt(other.getCreatedAt());
             environmentId(other.getEnvironmentId());
             id(other.getId());
+            integration(other.getIntegration());
             isVersionUpgrade(other.getIsVersionUpgrade());
             previousBasePlan(other.getPreviousBasePlan());
             previousBasePlanVersion(other.getPreviousBasePlanVersion());
@@ -734,6 +758,26 @@ public final class PlanChangeResponseData {
             return this;
         }
 
+        /**
+         * <p>The integration that performed this change, when the actor is an integration-owned API key (e.g. a billing-provider sync).</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage integration(IntegrationResponseData integration) {
+            this.integration = Optional.ofNullable(integration);
+            return this;
+        }
+
+        /**
+         * <p>The integration that performed this change, when the actor is an integration-owned API key (e.g. a billing-provider sync).</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "integration", nulls = Nulls.SKIP)
+        public _FinalStage integration(Optional<IntegrationResponseData> integration) {
+            this.integration = integration;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage company(CompanyResponseData company) {
             this.company = Optional.ofNullable(company);
@@ -891,6 +935,7 @@ public final class PlanChangeResponseData {
                     createdAt,
                     environmentId,
                     id,
+                    integration,
                     isVersionUpgrade,
                     previousBasePlan,
                     previousBasePlanVersion,

@@ -62,7 +62,7 @@ public final class CreditEventLedgerResponseData {
 
     private final Optional<String> grantId;
 
-    private final Optional<Long> grantQuantity;
+    private final Optional<Double> grantQuantity;
 
     private final Optional<Double> grantQuantityRemaining;
 
@@ -109,7 +109,7 @@ public final class CreditEventLedgerResponseData {
             Optional<String> fromGrantId,
             Optional<OffsetDateTime> grantExpiresAt,
             Optional<String> grantId,
-            Optional<Long> grantQuantity,
+            Optional<Double> grantQuantity,
             Optional<Double> grantQuantityRemaining,
             Optional<BillingCreditGrantReason> grantReason,
             Optional<OffsetDateTime> grantValidFrom,
@@ -258,7 +258,7 @@ public final class CreditEventLedgerResponseData {
     }
 
     @JsonProperty("grant_quantity")
-    public Optional<Long> getGrantQuantity() {
+    public Optional<Double> getGrantQuantity() {
         return grantQuantity;
     }
 
@@ -502,9 +502,9 @@ public final class CreditEventLedgerResponseData {
 
         _FinalStage grantId(String grantId);
 
-        _FinalStage grantQuantity(Optional<Long> grantQuantity);
+        _FinalStage grantQuantity(Optional<Double> grantQuantity);
 
-        _FinalStage grantQuantity(Long grantQuantity);
+        _FinalStage grantQuantity(Double grantQuantity);
 
         _FinalStage grantQuantityRemaining(Optional<Double> grantQuantityRemaining);
 
@@ -597,7 +597,7 @@ public final class CreditEventLedgerResponseData {
 
         private Optional<Double> grantQuantityRemaining = Optional.empty();
 
-        private Optional<Long> grantQuantity = Optional.empty();
+        private Optional<Double> grantQuantity = Optional.empty();
 
         private Optional<String> grantId = Optional.empty();
 
@@ -859,14 +859,14 @@ public final class CreditEventLedgerResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage grantQuantity(Long grantQuantity) {
+        public _FinalStage grantQuantity(Double grantQuantity) {
             this.grantQuantity = Optional.ofNullable(grantQuantity);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "grant_quantity", nulls = Nulls.SKIP)
-        public _FinalStage grantQuantity(Optional<Long> grantQuantity) {
+        public _FinalStage grantQuantity(Optional<Double> grantQuantity) {
             this.grantQuantity = grantQuantity;
             return this;
         }

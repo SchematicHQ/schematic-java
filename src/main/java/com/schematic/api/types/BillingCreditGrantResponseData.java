@@ -49,7 +49,7 @@ public final class BillingCreditGrantResponseData {
 
     private final Optional<BillingPriceResponseData> price;
 
-    private final long quantity;
+    private final double quantity;
 
     private final double quantityRemaining;
 
@@ -93,7 +93,7 @@ public final class BillingCreditGrantResponseData {
             Optional<String> planId,
             Optional<String> planName,
             Optional<BillingPriceResponseData> price,
-            long quantity,
+            double quantity,
             double quantityRemaining,
             double quantityUsed,
             boolean renewalEnabled,
@@ -204,7 +204,7 @@ public final class BillingCreditGrantResponseData {
     }
 
     @JsonProperty("quantity")
-    public long getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
@@ -389,7 +389,7 @@ public final class BillingCreditGrantResponseData {
     }
 
     public interface QuantityStage {
-        QuantityRemainingStage quantity(long quantity);
+        QuantityRemainingStage quantity(double quantity);
     }
 
     public interface QuantityRemainingStage {
@@ -509,7 +509,7 @@ public final class BillingCreditGrantResponseData {
 
         private String id;
 
-        private long quantity;
+        private double quantity;
 
         private double quantityRemaining;
 
@@ -637,7 +637,7 @@ public final class BillingCreditGrantResponseData {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public QuantityRemainingStage quantity(long quantity) {
+        public QuantityRemainingStage quantity(double quantity) {
             this.quantity = quantity;
             return this;
         }
