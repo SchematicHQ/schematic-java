@@ -27,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 public final class PublishPlanVersionRequestBody {
     private final Optional<CustomPlanActivationStrategy> activationStrategy;
 
+    private final Optional<String> couponExternalId;
+
     private final Optional<String> customerEmail;
 
     private final Optional<Long> daysUntilDue;
@@ -39,12 +41,14 @@ public final class PublishPlanVersionRequestBody {
 
     private PublishPlanVersionRequestBody(
             Optional<CustomPlanActivationStrategy> activationStrategy,
+            Optional<String> couponExternalId,
             Optional<String> customerEmail,
             Optional<Long> daysUntilDue,
             List<String> excludedCompanyIds,
             PlanVersionMigrationStrategy migrationStrategy,
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
+        this.couponExternalId = couponExternalId;
         this.customerEmail = customerEmail;
         this.daysUntilDue = daysUntilDue;
         this.excludedCompanyIds = excludedCompanyIds;
@@ -55,6 +59,11 @@ public final class PublishPlanVersionRequestBody {
     @JsonProperty("activation_strategy")
     public Optional<CustomPlanActivationStrategy> getActivationStrategy() {
         return activationStrategy;
+    }
+
+    @JsonProperty("coupon_external_id")
+    public Optional<String> getCouponExternalId() {
+        return couponExternalId;
     }
 
     @JsonProperty("customer_email")
@@ -90,6 +99,7 @@ public final class PublishPlanVersionRequestBody {
 
     private boolean equalTo(PublishPlanVersionRequestBody other) {
         return activationStrategy.equals(other.activationStrategy)
+                && couponExternalId.equals(other.couponExternalId)
                 && customerEmail.equals(other.customerEmail)
                 && daysUntilDue.equals(other.daysUntilDue)
                 && excludedCompanyIds.equals(other.excludedCompanyIds)
@@ -100,6 +110,7 @@ public final class PublishPlanVersionRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.activationStrategy,
+                this.couponExternalId,
                 this.customerEmail,
                 this.daysUntilDue,
                 this.excludedCompanyIds,
@@ -132,6 +143,10 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage activationStrategy(CustomPlanActivationStrategy activationStrategy);
 
+        _FinalStage couponExternalId(Optional<String> couponExternalId);
+
+        _FinalStage couponExternalId(String couponExternalId);
+
         _FinalStage customerEmail(Optional<String> customerEmail);
 
         _FinalStage customerEmail(String customerEmail);
@@ -157,6 +172,8 @@ public final class PublishPlanVersionRequestBody {
 
         private Optional<String> customerEmail = Optional.empty();
 
+        private Optional<String> couponExternalId = Optional.empty();
+
         private Optional<CustomPlanActivationStrategy> activationStrategy = Optional.empty();
 
         @JsonAnySetter
@@ -167,6 +184,7 @@ public final class PublishPlanVersionRequestBody {
         @java.lang.Override
         public Builder from(PublishPlanVersionRequestBody other) {
             activationStrategy(other.getActivationStrategy());
+            couponExternalId(other.getCouponExternalId());
             customerEmail(other.getCustomerEmail());
             daysUntilDue(other.getDaysUntilDue());
             excludedCompanyIds(other.getExcludedCompanyIds());
@@ -232,6 +250,19 @@ public final class PublishPlanVersionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage couponExternalId(String couponExternalId) {
+            this.couponExternalId = Optional.ofNullable(couponExternalId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "coupon_external_id", nulls = Nulls.SKIP)
+        public _FinalStage couponExternalId(Optional<String> couponExternalId) {
+            this.couponExternalId = couponExternalId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage activationStrategy(CustomPlanActivationStrategy activationStrategy) {
             this.activationStrategy = Optional.ofNullable(activationStrategy);
             return this;
@@ -248,6 +279,7 @@ public final class PublishPlanVersionRequestBody {
         public PublishPlanVersionRequestBody build() {
             return new PublishPlanVersionRequestBody(
                     activationStrategy,
+                    couponExternalId,
                     customerEmail,
                     daysUntilDue,
                     excludedCompanyIds,

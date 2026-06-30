@@ -25,6 +25,9 @@ import com.schematic.api.resources.billing.requests.ListMetersRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
+import com.schematic.api.resources.billing.types.DeleteBillingCouponResponse;
+import com.schematic.api.resources.billing.types.DeleteBillingCustomerResponse;
+import com.schematic.api.resources.billing.types.DeleteBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
@@ -87,6 +90,24 @@ public class AsyncBillingClient {
     public CompletableFuture<UpsertBillingCouponResponse> upsertBillingCoupon(
             CreateCouponRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.upsertBillingCoupon(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeleteBillingCouponResponse> deleteBillingCoupon(String billingId) {
+        return this.rawClient.deleteBillingCoupon(billingId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeleteBillingCouponResponse> deleteBillingCoupon(
+            String billingId, RequestOptions requestOptions) {
+        return this.rawClient.deleteBillingCoupon(billingId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeleteBillingCustomerResponse> deleteBillingCustomer(String billingId) {
+        return this.rawClient.deleteBillingCustomer(billingId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeleteBillingCustomerResponse> deleteBillingCustomer(
+            String billingId, RequestOptions requestOptions) {
+        return this.rawClient.deleteBillingCustomer(billingId, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<UpsertBillingCustomerResponse> upsertBillingCustomer(
@@ -153,6 +174,15 @@ public class AsyncBillingClient {
     public CompletableFuture<UpsertInvoiceResponse> upsertInvoice(
             CreateInvoiceRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.upsertInvoice(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeleteBillingInvoiceResponse> deleteBillingInvoice(String billingId) {
+        return this.rawClient.deleteBillingInvoice(billingId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeleteBillingInvoiceResponse> deleteBillingInvoice(
+            String billingId, RequestOptions requestOptions) {
+        return this.rawClient.deleteBillingInvoice(billingId, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListMetersResponse> listMeters() {

@@ -23,13 +23,19 @@ import org.jetbrains.annotations.NotNull;
 public final class CheckoutDataRequestBody {
     private final String companyId;
 
+    private final Optional<String> currency;
+
     private final Optional<String> selectedPlanId;
 
     private final Map<String, Object> additionalProperties;
 
     private CheckoutDataRequestBody(
-            String companyId, Optional<String> selectedPlanId, Map<String, Object> additionalProperties) {
+            String companyId,
+            Optional<String> currency,
+            Optional<String> selectedPlanId,
+            Map<String, Object> additionalProperties) {
         this.companyId = companyId;
+        this.currency = currency;
         this.selectedPlanId = selectedPlanId;
         this.additionalProperties = additionalProperties;
     }
@@ -37,6 +43,11 @@ public final class CheckoutDataRequestBody {
     @JsonProperty("company_id")
     public String getCompanyId() {
         return companyId;
+    }
+
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
     }
 
     @JsonProperty("selected_plan_id")
@@ -56,12 +67,14 @@ public final class CheckoutDataRequestBody {
     }
 
     private boolean equalTo(CheckoutDataRequestBody other) {
-        return companyId.equals(other.companyId) && selectedPlanId.equals(other.selectedPlanId);
+        return companyId.equals(other.companyId)
+                && currency.equals(other.currency)
+                && selectedPlanId.equals(other.selectedPlanId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.selectedPlanId);
+        return Objects.hash(this.companyId, this.currency, this.selectedPlanId);
     }
 
     @java.lang.Override
@@ -86,6 +99,10 @@ public final class CheckoutDataRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
+
         _FinalStage selectedPlanId(Optional<String> selectedPlanId);
 
         _FinalStage selectedPlanId(String selectedPlanId);
@@ -97,6 +114,8 @@ public final class CheckoutDataRequestBody {
 
         private Optional<String> selectedPlanId = Optional.empty();
 
+        private Optional<String> currency = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -105,6 +124,7 @@ public final class CheckoutDataRequestBody {
         @java.lang.Override
         public Builder from(CheckoutDataRequestBody other) {
             companyId(other.getCompanyId());
+            currency(other.getCurrency());
             selectedPlanId(other.getSelectedPlanId());
             return this;
         }
@@ -130,8 +150,21 @@ public final class CheckoutDataRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        @java.lang.Override
         public CheckoutDataRequestBody build() {
-            return new CheckoutDataRequestBody(companyId, selectedPlanId, additionalProperties);
+            return new CheckoutDataRequestBody(companyId, currency, selectedPlanId, additionalProperties);
         }
 
         @java.lang.Override

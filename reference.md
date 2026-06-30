@@ -1304,6 +1304,86 @@ client.billing().upsertBillingCoupon(
 </dl>
 </details>
 
+<details><summary><code>client.billing.deleteBillingCoupon(billingId) -> DeleteBillingCouponResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().deleteBillingCoupon("billing_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingId:** `String` — billing_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.deleteBillingCustomer(billingId) -> DeleteBillingCustomerResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().deleteBillingCustomer("billing_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingId:** `String` — billing_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.billing.upsertBillingCustomer(request) -> UpsertBillingCustomerResponse</code></summary>
 <dl>
 <dd>
@@ -1805,6 +1885,46 @@ client.billing().upsertInvoice(
 <dd>
 
 **url:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.deleteBillingInvoice(billingId) -> DeleteBillingInvoiceResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().deleteBillingInvoice("billing_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingId:** `String` — billing_id
     
 </dd>
 </dl>
@@ -6009,6 +6129,14 @@ client.checkout().getCheckoutData(
 <dd>
 
 **companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**currency:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -12994,6 +13122,14 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
+**couponExternalId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **customerEmail:** `Optional<String>` 
     
 </dd>
@@ -18421,6 +18557,60 @@ client.webhooks().deleteWebhook("webhook_id");
 <dd>
 
 **webhookId:** `String` — webhook_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhooks.sendTestWebhookAction(webhookId, request) -> SendTestWebhookActionResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.webhooks().sendTestWebhookAction(
+    "webhook_id",
+    TestWebhookRequestBody
+        .builder()
+        .requestType(WebhookRequestType.SUBSCRIPTION_TRIAL_ENDED)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**webhookId:** `String` — webhook_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestType:** `WebhookRequestType` 
     
 </dd>
 </dl>

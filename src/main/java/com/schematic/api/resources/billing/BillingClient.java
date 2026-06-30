@@ -25,6 +25,9 @@ import com.schematic.api.resources.billing.requests.ListMetersRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
+import com.schematic.api.resources.billing.types.DeleteBillingCouponResponse;
+import com.schematic.api.resources.billing.types.DeleteBillingCustomerResponse;
+import com.schematic.api.resources.billing.types.DeleteBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
@@ -87,6 +90,22 @@ public class BillingClient {
         return this.rawClient.upsertBillingCoupon(request, requestOptions).body();
     }
 
+    public DeleteBillingCouponResponse deleteBillingCoupon(String billingId) {
+        return this.rawClient.deleteBillingCoupon(billingId).body();
+    }
+
+    public DeleteBillingCouponResponse deleteBillingCoupon(String billingId, RequestOptions requestOptions) {
+        return this.rawClient.deleteBillingCoupon(billingId, requestOptions).body();
+    }
+
+    public DeleteBillingCustomerResponse deleteBillingCustomer(String billingId) {
+        return this.rawClient.deleteBillingCustomer(billingId).body();
+    }
+
+    public DeleteBillingCustomerResponse deleteBillingCustomer(String billingId, RequestOptions requestOptions) {
+        return this.rawClient.deleteBillingCustomer(billingId, requestOptions).body();
+    }
+
     public UpsertBillingCustomerResponse upsertBillingCustomer(CreateBillingCustomerRequestBody request) {
         return this.rawClient.upsertBillingCustomer(request).body();
     }
@@ -146,6 +165,14 @@ public class BillingClient {
 
     public UpsertInvoiceResponse upsertInvoice(CreateInvoiceRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.upsertInvoice(request, requestOptions).body();
+    }
+
+    public DeleteBillingInvoiceResponse deleteBillingInvoice(String billingId) {
+        return this.rawClient.deleteBillingInvoice(billingId).body();
+    }
+
+    public DeleteBillingInvoiceResponse deleteBillingInvoice(String billingId, RequestOptions requestOptions) {
+        return this.rawClient.deleteBillingInvoice(billingId, requestOptions).body();
     }
 
     public ListMetersResponse listMeters() {

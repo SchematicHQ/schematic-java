@@ -28,7 +28,7 @@ public final class EventBodyTrack {
 
     private final Optional<String> leaseId;
 
-    private final Optional<Integer> quantity;
+    private final Optional<Long> quantity;
 
     private final Optional<Map<String, JsonNode>> traits;
 
@@ -40,7 +40,7 @@ public final class EventBodyTrack {
             Optional<Map<String, String>> company,
             String event,
             Optional<String> leaseId,
-            Optional<Integer> quantity,
+            Optional<Long> quantity,
             Optional<Map<String, JsonNode>> traits,
             Optional<Map<String, String>> user,
             Map<String, Object> additionalProperties) {
@@ -81,7 +81,7 @@ public final class EventBodyTrack {
      * @return Optionally specify the quantity of the event
      */
     @JsonProperty("quantity")
-    public Optional<Integer> getQuantity() {
+    public Optional<Long> getQuantity() {
         return quantity;
     }
 
@@ -168,9 +168,9 @@ public final class EventBodyTrack {
         /**
          * <p>Optionally specify the quantity of the event</p>
          */
-        _FinalStage quantity(Optional<Integer> quantity);
+        _FinalStage quantity(Optional<Long> quantity);
 
-        _FinalStage quantity(Integer quantity);
+        _FinalStage quantity(Long quantity);
 
         /**
          * <p>A map of trait names to trait values</p>
@@ -195,7 +195,7 @@ public final class EventBodyTrack {
 
         private Optional<Map<String, JsonNode>> traits = Optional.empty();
 
-        private Optional<Integer> quantity = Optional.empty();
+        private Optional<Long> quantity = Optional.empty();
 
         private Optional<String> leaseId = Optional.empty();
 
@@ -274,7 +274,7 @@ public final class EventBodyTrack {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage quantity(Integer quantity) {
+        public _FinalStage quantity(Long quantity) {
             this.quantity = Optional.ofNullable(quantity);
             return this;
         }
@@ -284,7 +284,7 @@ public final class EventBodyTrack {
          */
         @java.lang.Override
         @JsonSetter(value = "quantity", nulls = Nulls.SKIP)
-        public _FinalStage quantity(Optional<Integer> quantity) {
+        public _FinalStage quantity(Optional<Long> quantity) {
             this.quantity = quantity;
             return this;
         }
