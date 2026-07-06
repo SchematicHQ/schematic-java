@@ -13,6 +13,8 @@ import com.schematic.api.resources.companies.requests.CountUsersRequest;
 import com.schematic.api.resources.companies.requests.CreateEntityTraitDefinitionRequestBody;
 import com.schematic.api.resources.companies.requests.DeleteCompanyRequest;
 import com.schematic.api.resources.companies.requests.GetActiveCompanySubscriptionRequest;
+import com.schematic.api.resources.companies.requests.GetBillingEntityChildSubscriptionsRequest;
+import com.schematic.api.resources.companies.requests.GetCompanyBillingEntityRequest;
 import com.schematic.api.resources.companies.requests.GetEntityTraitValuesRequest;
 import com.schematic.api.resources.companies.requests.GetOrCreateCompanyMembershipRequestBody;
 import com.schematic.api.resources.companies.requests.ListCompaniesRequest;
@@ -39,6 +41,8 @@ import com.schematic.api.resources.companies.types.DeleteCompanyResponse;
 import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
+import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscriptionsResponse;
+import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitValuesResponse;
@@ -189,6 +193,44 @@ public class CompaniesClient {
      */
     public LookupCompanyResponse lookupCompany(LookupCompanyRequest request, RequestOptions requestOptions) {
         return this.rawClient.lookupCompany(request, requestOptions).body();
+    }
+
+    public GetCompanyBillingEntityResponse getCompanyBillingEntity() {
+        return this.rawClient.getCompanyBillingEntity().body();
+    }
+
+    public GetCompanyBillingEntityResponse getCompanyBillingEntity(RequestOptions requestOptions) {
+        return this.rawClient.getCompanyBillingEntity(requestOptions).body();
+    }
+
+    public GetCompanyBillingEntityResponse getCompanyBillingEntity(GetCompanyBillingEntityRequest request) {
+        return this.rawClient.getCompanyBillingEntity(request).body();
+    }
+
+    public GetCompanyBillingEntityResponse getCompanyBillingEntity(
+            GetCompanyBillingEntityRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getCompanyBillingEntity(request, requestOptions).body();
+    }
+
+    public GetBillingEntityChildSubscriptionsResponse getBillingEntityChildSubscriptions() {
+        return this.rawClient.getBillingEntityChildSubscriptions().body();
+    }
+
+    public GetBillingEntityChildSubscriptionsResponse getBillingEntityChildSubscriptions(
+            RequestOptions requestOptions) {
+        return this.rawClient.getBillingEntityChildSubscriptions(requestOptions).body();
+    }
+
+    public GetBillingEntityChildSubscriptionsResponse getBillingEntityChildSubscriptions(
+            GetBillingEntityChildSubscriptionsRequest request) {
+        return this.rawClient.getBillingEntityChildSubscriptions(request).body();
+    }
+
+    public GetBillingEntityChildSubscriptionsResponse getBillingEntityChildSubscriptions(
+            GetBillingEntityChildSubscriptionsRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .getBillingEntityChildSubscriptions(request, requestOptions)
+                .body();
     }
 
     public ListCompanyMembershipsResponse listCompanyMemberships() {

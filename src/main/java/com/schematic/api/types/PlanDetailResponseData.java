@@ -40,6 +40,8 @@ public final class PlanDetailResponseData {
 
     private final Optional<String> companyId;
 
+    private final Optional<String> companyLogoUrl;
+
     private final Optional<String> companyName;
 
     private final BillingProviderType controlledBy;
@@ -47,6 +49,8 @@ public final class PlanDetailResponseData {
     private final Optional<String> copiedFromPlanId;
 
     private final OffsetDateTime createdAt;
+
+    private final List<BillingCreditResponseData> credits;
 
     private final List<PlanCurrencyPricesResponseData> currencyPrices;
 
@@ -99,10 +103,12 @@ public final class PlanDetailResponseData {
             ChargeType chargeType,
             long companyCount,
             Optional<String> companyId,
+            Optional<String> companyLogoUrl,
             Optional<String> companyName,
             BillingProviderType controlledBy,
             Optional<String> copiedFromPlanId,
             OffsetDateTime createdAt,
+            List<BillingCreditResponseData> credits,
             List<PlanCurrencyPricesResponseData> currencyPrices,
             String description,
             Optional<PlanVersionResponseData> draftVersion,
@@ -132,10 +138,12 @@ public final class PlanDetailResponseData {
         this.chargeType = chargeType;
         this.companyCount = companyCount;
         this.companyId = companyId;
+        this.companyLogoUrl = companyLogoUrl;
         this.companyName = companyName;
         this.controlledBy = controlledBy;
         this.copiedFromPlanId = copiedFromPlanId;
         this.createdAt = createdAt;
+        this.credits = credits;
         this.currencyPrices = currencyPrices;
         this.description = description;
         this.draftVersion = draftVersion;
@@ -199,6 +207,11 @@ public final class PlanDetailResponseData {
         return companyId;
     }
 
+    @JsonProperty("company_logo_url")
+    public Optional<String> getCompanyLogoUrl() {
+        return companyLogoUrl;
+    }
+
     @JsonProperty("company_name")
     public Optional<String> getCompanyName() {
         return companyName;
@@ -217,6 +230,11 @@ public final class PlanDetailResponseData {
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("credits")
+    public List<BillingCreditResponseData> getCredits() {
+        return credits;
     }
 
     @JsonProperty("currency_prices")
@@ -342,10 +360,12 @@ public final class PlanDetailResponseData {
                 && chargeType.equals(other.chargeType)
                 && companyCount == other.companyCount
                 && companyId.equals(other.companyId)
+                && companyLogoUrl.equals(other.companyLogoUrl)
                 && companyName.equals(other.companyName)
                 && controlledBy.equals(other.controlledBy)
                 && copiedFromPlanId.equals(other.copiedFromPlanId)
                 && createdAt.equals(other.createdAt)
+                && credits.equals(other.credits)
                 && currencyPrices.equals(other.currencyPrices)
                 && description.equals(other.description)
                 && draftVersion.equals(other.draftVersion)
@@ -379,10 +399,12 @@ public final class PlanDetailResponseData {
                 this.chargeType,
                 this.companyCount,
                 this.companyId,
+                this.companyLogoUrl,
                 this.companyName,
                 this.controlledBy,
                 this.copiedFromPlanId,
                 this.createdAt,
+                this.credits,
                 this.currencyPrices,
                 this.description,
                 this.draftVersion,
@@ -502,6 +524,10 @@ public final class PlanDetailResponseData {
 
         _FinalStage companyId(String companyId);
 
+        _FinalStage companyLogoUrl(Optional<String> companyLogoUrl);
+
+        _FinalStage companyLogoUrl(String companyLogoUrl);
+
         _FinalStage companyName(Optional<String> companyName);
 
         _FinalStage companyName(String companyName);
@@ -509,6 +535,12 @@ public final class PlanDetailResponseData {
         _FinalStage copiedFromPlanId(Optional<String> copiedFromPlanId);
 
         _FinalStage copiedFromPlanId(String copiedFromPlanId);
+
+        _FinalStage credits(List<BillingCreditResponseData> credits);
+
+        _FinalStage addCredits(BillingCreditResponseData credits);
+
+        _FinalStage addAllCredits(List<BillingCreditResponseData> credits);
 
         _FinalStage currencyPrices(List<PlanCurrencyPricesResponseData> currencyPrices);
 
@@ -628,9 +660,13 @@ public final class PlanDetailResponseData {
 
         private List<PlanCurrencyPricesResponseData> currencyPrices = new ArrayList<>();
 
+        private List<BillingCreditResponseData> credits = new ArrayList<>();
+
         private Optional<String> copiedFromPlanId = Optional.empty();
 
         private Optional<String> companyName = Optional.empty();
+
+        private Optional<String> companyLogoUrl = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
 
@@ -657,10 +693,12 @@ public final class PlanDetailResponseData {
             chargeType(other.getChargeType());
             companyCount(other.getCompanyCount());
             companyId(other.getCompanyId());
+            companyLogoUrl(other.getCompanyLogoUrl());
             companyName(other.getCompanyName());
             controlledBy(other.getControlledBy());
             copiedFromPlanId(other.getCopiedFromPlanId());
             createdAt(other.getCreatedAt());
+            credits(other.getCredits());
             currencyPrices(other.getCurrencyPrices());
             description(other.getDescription());
             draftVersion(other.getDraftVersion());
@@ -965,6 +1003,30 @@ public final class PlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCredits(List<BillingCreditResponseData> credits) {
+            if (credits != null) {
+                this.credits.addAll(credits);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCredits(BillingCreditResponseData credits) {
+            this.credits.add(credits);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credits", nulls = Nulls.SKIP)
+        public _FinalStage credits(List<BillingCreditResponseData> credits) {
+            this.credits.clear();
+            if (credits != null) {
+                this.credits.addAll(credits);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage copiedFromPlanId(String copiedFromPlanId) {
             this.copiedFromPlanId = Optional.ofNullable(copiedFromPlanId);
             return this;
@@ -987,6 +1049,19 @@ public final class PlanDetailResponseData {
         @JsonSetter(value = "company_name", nulls = Nulls.SKIP)
         public _FinalStage companyName(Optional<String> companyName) {
             this.companyName = companyName;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage companyLogoUrl(String companyLogoUrl) {
+            this.companyLogoUrl = Optional.ofNullable(companyLogoUrl);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_logo_url", nulls = Nulls.SKIP)
+        public _FinalStage companyLogoUrl(Optional<String> companyLogoUrl) {
+            this.companyLogoUrl = companyLogoUrl;
             return this;
         }
 
@@ -1066,10 +1141,12 @@ public final class PlanDetailResponseData {
                     chargeType,
                     companyCount,
                     companyId,
+                    companyLogoUrl,
                     companyName,
                     controlledBy,
                     copiedFromPlanId,
                     createdAt,
+                    credits,
                     currencyPrices,
                     description,
                     draftVersion,

@@ -32,6 +32,8 @@ public final class ManagePlanRequest {
 
     private final Optional<String> basePlanVersionId;
 
+    private final Optional<String> billingEntityId;
+
     private final Optional<Boolean> cancelImmediately;
 
     private final String companyId;
@@ -59,6 +61,7 @@ public final class ManagePlanRequest {
             Optional<String> basePlanId,
             Optional<String> basePlanPriceId,
             Optional<String> basePlanVersionId,
+            Optional<String> billingEntityId,
             Optional<Boolean> cancelImmediately,
             String companyId,
             Optional<String> couponExternalId,
@@ -74,6 +77,7 @@ public final class ManagePlanRequest {
         this.basePlanId = basePlanId;
         this.basePlanPriceId = basePlanPriceId;
         this.basePlanVersionId = basePlanVersionId;
+        this.billingEntityId = billingEntityId;
         this.cancelImmediately = cancelImmediately;
         this.companyId = companyId;
         this.couponExternalId = couponExternalId;
@@ -105,6 +109,14 @@ public final class ManagePlanRequest {
     @JsonProperty("base_plan_version_id")
     public Optional<String> getBasePlanVersionId() {
         return basePlanVersionId;
+    }
+
+    /**
+     * @return The company that pays for this subscription. Must already have a Stripe customer. Only honored when starting a new subscription.
+     */
+    @JsonProperty("billing_entity_id")
+    public Optional<String> getBillingEntityId() {
+        return billingEntityId;
     }
 
     /**
@@ -179,6 +191,7 @@ public final class ManagePlanRequest {
                 && basePlanId.equals(other.basePlanId)
                 && basePlanPriceId.equals(other.basePlanPriceId)
                 && basePlanVersionId.equals(other.basePlanVersionId)
+                && billingEntityId.equals(other.billingEntityId)
                 && cancelImmediately.equals(other.cancelImmediately)
                 && companyId.equals(other.companyId)
                 && couponExternalId.equals(other.couponExternalId)
@@ -198,6 +211,7 @@ public final class ManagePlanRequest {
                 this.basePlanId,
                 this.basePlanPriceId,
                 this.basePlanVersionId,
+                this.billingEntityId,
                 this.cancelImmediately,
                 this.companyId,
                 this.couponExternalId,
@@ -249,6 +263,13 @@ public final class ManagePlanRequest {
         _FinalStage basePlanVersionId(Optional<String> basePlanVersionId);
 
         _FinalStage basePlanVersionId(String basePlanVersionId);
+
+        /**
+         * <p>The company that pays for this subscription. Must already have a Stripe customer. Only honored when starting a new subscription.</p>
+         */
+        _FinalStage billingEntityId(Optional<String> billingEntityId);
+
+        _FinalStage billingEntityId(String billingEntityId);
 
         /**
          * <p>If false, subscription cancels at period end. Only applies when removing all plans. Defaults to true.</p>
@@ -321,6 +342,8 @@ public final class ManagePlanRequest {
 
         private Optional<Boolean> cancelImmediately = Optional.empty();
 
+        private Optional<String> billingEntityId = Optional.empty();
+
         private Optional<String> basePlanVersionId = Optional.empty();
 
         private Optional<String> basePlanPriceId = Optional.empty();
@@ -340,6 +363,7 @@ public final class ManagePlanRequest {
             basePlanId(other.getBasePlanId());
             basePlanPriceId(other.getBasePlanPriceId());
             basePlanVersionId(other.getBasePlanVersionId());
+            billingEntityId(other.getBillingEntityId());
             cancelImmediately(other.getCancelImmediately());
             companyId(other.getCompanyId());
             couponExternalId(other.getCouponExternalId());
@@ -525,6 +549,26 @@ public final class ManagePlanRequest {
             return this;
         }
 
+        /**
+         * <p>The company that pays for this subscription. Must already have a Stripe customer. Only honored when starting a new subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingEntityId(String billingEntityId) {
+            this.billingEntityId = Optional.ofNullable(billingEntityId);
+            return this;
+        }
+
+        /**
+         * <p>The company that pays for this subscription. Must already have a Stripe customer. Only honored when starting a new subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_entity_id", nulls = Nulls.SKIP)
+        public _FinalStage billingEntityId(Optional<String> billingEntityId) {
+            this.billingEntityId = billingEntityId;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage basePlanVersionId(String basePlanVersionId) {
             this.basePlanVersionId = Optional.ofNullable(basePlanVersionId);
@@ -595,6 +639,7 @@ public final class ManagePlanRequest {
                     basePlanId,
                     basePlanPriceId,
                     basePlanVersionId,
+                    billingEntityId,
                     cancelImmediately,
                     companyId,
                     couponExternalId,

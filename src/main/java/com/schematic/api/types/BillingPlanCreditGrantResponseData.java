@@ -26,6 +26,8 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final Optional<String> autoTopupAmountType;
 
+    private final BillingCreditAutoTopupAvailability autoTopupAvailability;
+
     private final boolean autoTopupEnabled;
 
     private final Optional<BillingCreditExpiryType> autoTopupExpiryType;
@@ -39,6 +41,8 @@ public final class BillingPlanCreditGrantResponseData {
     private final Optional<Long> autoTopupThresholdCredits;
 
     private final Optional<Long> autoTopupThresholdPercent;
+
+    private final boolean canBuyBundles;
 
     private final OffsetDateTime createdAt;
 
@@ -85,6 +89,7 @@ public final class BillingPlanCreditGrantResponseData {
     private BillingPlanCreditGrantResponseData(
             Optional<Long> autoTopupAmount,
             Optional<String> autoTopupAmountType,
+            BillingCreditAutoTopupAvailability autoTopupAvailability,
             boolean autoTopupEnabled,
             Optional<BillingCreditExpiryType> autoTopupExpiryType,
             Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit,
@@ -92,6 +97,7 @@ public final class BillingPlanCreditGrantResponseData {
             boolean autoTopupSelfService,
             Optional<Long> autoTopupThresholdCredits,
             Optional<Long> autoTopupThresholdPercent,
+            boolean canBuyBundles,
             OffsetDateTime createdAt,
             Optional<BillingCreditResponseData> credit,
             long creditAmount,
@@ -115,6 +121,7 @@ public final class BillingPlanCreditGrantResponseData {
             Map<String, Object> additionalProperties) {
         this.autoTopupAmount = autoTopupAmount;
         this.autoTopupAmountType = autoTopupAmountType;
+        this.autoTopupAvailability = autoTopupAvailability;
         this.autoTopupEnabled = autoTopupEnabled;
         this.autoTopupExpiryType = autoTopupExpiryType;
         this.autoTopupExpiryUnit = autoTopupExpiryUnit;
@@ -122,6 +129,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.autoTopupSelfService = autoTopupSelfService;
         this.autoTopupThresholdCredits = autoTopupThresholdCredits;
         this.autoTopupThresholdPercent = autoTopupThresholdPercent;
+        this.canBuyBundles = canBuyBundles;
         this.createdAt = createdAt;
         this.credit = credit;
         this.creditAmount = creditAmount;
@@ -155,6 +163,14 @@ public final class BillingPlanCreditGrantResponseData {
         return autoTopupAmountType;
     }
 
+    @JsonProperty("auto_topup_availability")
+    public BillingCreditAutoTopupAvailability getAutoTopupAvailability() {
+        return autoTopupAvailability;
+    }
+
+    /**
+     * @return Derived from auto_topup_availability; use that instead.
+     */
     @JsonProperty("auto_topup_enabled")
     public boolean getAutoTopupEnabled() {
         return autoTopupEnabled;
@@ -175,6 +191,9 @@ public final class BillingPlanCreditGrantResponseData {
         return autoTopupExpiryUnitCount;
     }
 
+    /**
+     * @return Derived from auto_topup_availability; use that instead.
+     */
     @JsonProperty("auto_topup_self_service")
     public boolean getAutoTopupSelfService() {
         return autoTopupSelfService;
@@ -188,6 +207,14 @@ public final class BillingPlanCreditGrantResponseData {
     @JsonProperty("auto_topup_threshold_percent")
     public Optional<Long> getAutoTopupThresholdPercent() {
         return autoTopupThresholdPercent;
+    }
+
+    /**
+     * @return Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.
+     */
+    @JsonProperty("can_buy_bundles")
+    public boolean getCanBuyBundles() {
+        return canBuyBundles;
     }
 
     @JsonProperty("created_at")
@@ -320,6 +347,7 @@ public final class BillingPlanCreditGrantResponseData {
     private boolean equalTo(BillingPlanCreditGrantResponseData other) {
         return autoTopupAmount.equals(other.autoTopupAmount)
                 && autoTopupAmountType.equals(other.autoTopupAmountType)
+                && autoTopupAvailability.equals(other.autoTopupAvailability)
                 && autoTopupEnabled == other.autoTopupEnabled
                 && autoTopupExpiryType.equals(other.autoTopupExpiryType)
                 && autoTopupExpiryUnit.equals(other.autoTopupExpiryUnit)
@@ -327,6 +355,7 @@ public final class BillingPlanCreditGrantResponseData {
                 && autoTopupSelfService == other.autoTopupSelfService
                 && autoTopupThresholdCredits.equals(other.autoTopupThresholdCredits)
                 && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
+                && canBuyBundles == other.canBuyBundles
                 && createdAt.equals(other.createdAt)
                 && credit.equals(other.credit)
                 && creditAmount == other.creditAmount
@@ -354,6 +383,7 @@ public final class BillingPlanCreditGrantResponseData {
         return Objects.hash(
                 this.autoTopupAmount,
                 this.autoTopupAmountType,
+                this.autoTopupAvailability,
                 this.autoTopupEnabled,
                 this.autoTopupExpiryType,
                 this.autoTopupExpiryUnit,
@@ -361,6 +391,7 @@ public final class BillingPlanCreditGrantResponseData {
                 this.autoTopupSelfService,
                 this.autoTopupThresholdCredits,
                 this.autoTopupThresholdPercent,
+                this.canBuyBundles,
                 this.createdAt,
                 this.credit,
                 this.creditAmount,
@@ -388,18 +419,35 @@ public final class BillingPlanCreditGrantResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static AutoTopupEnabledStage builder() {
+    public static AutoTopupAvailabilityStage builder() {
         return new Builder();
     }
 
-    public interface AutoTopupEnabledStage {
-        AutoTopupSelfServiceStage autoTopupEnabled(boolean autoTopupEnabled);
+    public interface AutoTopupAvailabilityStage {
+        AutoTopupEnabledStage autoTopupAvailability(@NotNull BillingCreditAutoTopupAvailability autoTopupAvailability);
 
         Builder from(BillingPlanCreditGrantResponseData other);
     }
 
+    public interface AutoTopupEnabledStage {
+        /**
+         * <p>Derived from auto_topup_availability; use that instead.</p>
+         */
+        AutoTopupSelfServiceStage autoTopupEnabled(boolean autoTopupEnabled);
+    }
+
     public interface AutoTopupSelfServiceStage {
-        CreatedAtStage autoTopupSelfService(boolean autoTopupSelfService);
+        /**
+         * <p>Derived from auto_topup_availability; use that instead.</p>
+         */
+        CanBuyBundlesStage autoTopupSelfService(boolean autoTopupSelfService);
+    }
+
+    public interface CanBuyBundlesStage {
+        /**
+         * <p>Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.</p>
+         */
+        CreatedAtStage canBuyBundles(boolean canBuyBundles);
     }
 
     public interface CreatedAtStage {
@@ -535,8 +583,10 @@ public final class BillingPlanCreditGrantResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements AutoTopupEnabledStage,
+            implements AutoTopupAvailabilityStage,
+                    AutoTopupEnabledStage,
                     AutoTopupSelfServiceStage,
+                    CanBuyBundlesStage,
                     CreatedAtStage,
                     CreditAmountStage,
                     CreditIdStage,
@@ -547,9 +597,13 @@ public final class BillingPlanCreditGrantResponseData {
                     RolloverPercentageStage,
                     UpdatedAtStage,
                     _FinalStage {
+        private BillingCreditAutoTopupAvailability autoTopupAvailability;
+
         private boolean autoTopupEnabled;
 
         private boolean autoTopupSelfService;
+
+        private boolean canBuyBundles;
 
         private OffsetDateTime createdAt;
 
@@ -614,6 +668,7 @@ public final class BillingPlanCreditGrantResponseData {
         public Builder from(BillingPlanCreditGrantResponseData other) {
             autoTopupAmount(other.getAutoTopupAmount());
             autoTopupAmountType(other.getAutoTopupAmountType());
+            autoTopupAvailability(other.getAutoTopupAvailability());
             autoTopupEnabled(other.getAutoTopupEnabled());
             autoTopupExpiryType(other.getAutoTopupExpiryType());
             autoTopupExpiryUnit(other.getAutoTopupExpiryUnit());
@@ -621,6 +676,7 @@ public final class BillingPlanCreditGrantResponseData {
             autoTopupSelfService(other.getAutoTopupSelfService());
             autoTopupThresholdCredits(other.getAutoTopupThresholdCredits());
             autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
+            canBuyBundles(other.getCanBuyBundles());
             createdAt(other.getCreatedAt());
             credit(other.getCredit());
             creditAmount(other.getCreditAmount());
@@ -645,16 +701,47 @@ public final class BillingPlanCreditGrantResponseData {
         }
 
         @java.lang.Override
+        @JsonSetter("auto_topup_availability")
+        public AutoTopupEnabledStage autoTopupAvailability(
+                @NotNull BillingCreditAutoTopupAvailability autoTopupAvailability) {
+            this.autoTopupAvailability =
+                    Objects.requireNonNull(autoTopupAvailability, "autoTopupAvailability must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Derived from auto_topup_availability; use that instead.</p>
+         * <p>Derived from auto_topup_availability; use that instead.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
         @JsonSetter("auto_topup_enabled")
         public AutoTopupSelfServiceStage autoTopupEnabled(boolean autoTopupEnabled) {
             this.autoTopupEnabled = autoTopupEnabled;
             return this;
         }
 
+        /**
+         * <p>Derived from auto_topup_availability; use that instead.</p>
+         * <p>Derived from auto_topup_availability; use that instead.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("auto_topup_self_service")
-        public CreatedAtStage autoTopupSelfService(boolean autoTopupSelfService) {
+        public CanBuyBundlesStage autoTopupSelfService(boolean autoTopupSelfService) {
             this.autoTopupSelfService = autoTopupSelfService;
+            return this;
+        }
+
+        /**
+         * <p>Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.</p>
+         * <p>Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("can_buy_bundles")
+        public CreatedAtStage canBuyBundles(boolean canBuyBundles) {
+            this.canBuyBundles = canBuyBundles;
             return this;
         }
 
@@ -989,6 +1076,7 @@ public final class BillingPlanCreditGrantResponseData {
             return new BillingPlanCreditGrantResponseData(
                     autoTopupAmount,
                     autoTopupAmountType,
+                    autoTopupAvailability,
                     autoTopupEnabled,
                     autoTopupExpiryType,
                     autoTopupExpiryUnit,
@@ -996,6 +1084,7 @@ public final class BillingPlanCreditGrantResponseData {
                     autoTopupSelfService,
                     autoTopupThresholdCredits,
                     autoTopupThresholdPercent,
+                    canBuyBundles,
                     createdAt,
                     credit,
                     creditAmount,

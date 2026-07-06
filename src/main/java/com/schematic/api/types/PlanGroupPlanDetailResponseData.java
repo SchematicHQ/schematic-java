@@ -42,6 +42,8 @@ public final class PlanGroupPlanDetailResponseData {
 
     private final Optional<String> companyId;
 
+    private final Optional<String> companyLogoUrl;
+
     private final Optional<String> companyName;
 
     private final List<String> compatiblePlanIds;
@@ -51,6 +53,8 @@ public final class PlanGroupPlanDetailResponseData {
     private final Optional<String> copiedFromPlanId;
 
     private final OffsetDateTime createdAt;
+
+    private final List<BillingCreditResponseData> credits;
 
     private final List<PlanCurrencyPricesResponseData> currencyPrices;
 
@@ -108,11 +112,13 @@ public final class PlanGroupPlanDetailResponseData {
             ChargeType chargeType,
             long companyCount,
             Optional<String> companyId,
+            Optional<String> companyLogoUrl,
             Optional<String> companyName,
             List<String> compatiblePlanIds,
             BillingProviderType controlledBy,
             Optional<String> copiedFromPlanId,
             OffsetDateTime createdAt,
+            List<BillingCreditResponseData> credits,
             List<PlanCurrencyPricesResponseData> currencyPrices,
             Optional<CustomPlanViewConfigResponseData> customPlanConfig,
             String description,
@@ -145,11 +151,13 @@ public final class PlanGroupPlanDetailResponseData {
         this.chargeType = chargeType;
         this.companyCount = companyCount;
         this.companyId = companyId;
+        this.companyLogoUrl = companyLogoUrl;
         this.companyName = companyName;
         this.compatiblePlanIds = compatiblePlanIds;
         this.controlledBy = controlledBy;
         this.copiedFromPlanId = copiedFromPlanId;
         this.createdAt = createdAt;
+        this.credits = credits;
         this.currencyPrices = currencyPrices;
         this.customPlanConfig = customPlanConfig;
         this.description = description;
@@ -220,6 +228,11 @@ public final class PlanGroupPlanDetailResponseData {
         return companyId;
     }
 
+    @JsonProperty("company_logo_url")
+    public Optional<String> getCompanyLogoUrl() {
+        return companyLogoUrl;
+    }
+
     @JsonProperty("company_name")
     public Optional<String> getCompanyName() {
         return companyName;
@@ -243,6 +256,11 @@ public final class PlanGroupPlanDetailResponseData {
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("credits")
+    public List<BillingCreditResponseData> getCredits() {
+        return credits;
     }
 
     @JsonProperty("currency_prices")
@@ -379,11 +397,13 @@ public final class PlanGroupPlanDetailResponseData {
                 && chargeType.equals(other.chargeType)
                 && companyCount == other.companyCount
                 && companyId.equals(other.companyId)
+                && companyLogoUrl.equals(other.companyLogoUrl)
                 && companyName.equals(other.companyName)
                 && compatiblePlanIds.equals(other.compatiblePlanIds)
                 && controlledBy.equals(other.controlledBy)
                 && copiedFromPlanId.equals(other.copiedFromPlanId)
                 && createdAt.equals(other.createdAt)
+                && credits.equals(other.credits)
                 && currencyPrices.equals(other.currencyPrices)
                 && customPlanConfig.equals(other.customPlanConfig)
                 && description.equals(other.description)
@@ -420,11 +440,13 @@ public final class PlanGroupPlanDetailResponseData {
                 this.chargeType,
                 this.companyCount,
                 this.companyId,
+                this.companyLogoUrl,
                 this.companyName,
                 this.compatiblePlanIds,
                 this.controlledBy,
                 this.copiedFromPlanId,
                 this.createdAt,
+                this.credits,
                 this.currencyPrices,
                 this.customPlanConfig,
                 this.description,
@@ -556,6 +578,10 @@ public final class PlanGroupPlanDetailResponseData {
 
         _FinalStage companyId(String companyId);
 
+        _FinalStage companyLogoUrl(Optional<String> companyLogoUrl);
+
+        _FinalStage companyLogoUrl(String companyLogoUrl);
+
         _FinalStage companyName(Optional<String> companyName);
 
         _FinalStage companyName(String companyName);
@@ -569,6 +595,12 @@ public final class PlanGroupPlanDetailResponseData {
         _FinalStage copiedFromPlanId(Optional<String> copiedFromPlanId);
 
         _FinalStage copiedFromPlanId(String copiedFromPlanId);
+
+        _FinalStage credits(List<BillingCreditResponseData> credits);
+
+        _FinalStage addCredits(BillingCreditResponseData credits);
+
+        _FinalStage addAllCredits(List<BillingCreditResponseData> credits);
 
         _FinalStage currencyPrices(List<PlanCurrencyPricesResponseData> currencyPrices);
 
@@ -697,11 +729,15 @@ public final class PlanGroupPlanDetailResponseData {
 
         private List<PlanCurrencyPricesResponseData> currencyPrices = new ArrayList<>();
 
+        private List<BillingCreditResponseData> credits = new ArrayList<>();
+
         private Optional<String> copiedFromPlanId = Optional.empty();
 
         private List<String> compatiblePlanIds = new ArrayList<>();
 
         private Optional<String> companyName = Optional.empty();
+
+        private Optional<String> companyLogoUrl = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
 
@@ -731,11 +767,13 @@ public final class PlanGroupPlanDetailResponseData {
             chargeType(other.getChargeType());
             companyCount(other.getCompanyCount());
             companyId(other.getCompanyId());
+            companyLogoUrl(other.getCompanyLogoUrl());
             companyName(other.getCompanyName());
             compatiblePlanIds(other.getCompatiblePlanIds());
             controlledBy(other.getControlledBy());
             copiedFromPlanId(other.getCopiedFromPlanId());
             createdAt(other.getCreatedAt());
+            credits(other.getCredits());
             currencyPrices(other.getCurrencyPrices());
             customPlanConfig(other.getCustomPlanConfig());
             description(other.getDescription());
@@ -1062,6 +1100,30 @@ public final class PlanGroupPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCredits(List<BillingCreditResponseData> credits) {
+            if (credits != null) {
+                this.credits.addAll(credits);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCredits(BillingCreditResponseData credits) {
+            this.credits.add(credits);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credits", nulls = Nulls.SKIP)
+        public _FinalStage credits(List<BillingCreditResponseData> credits) {
+            this.credits.clear();
+            if (credits != null) {
+                this.credits.addAll(credits);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage copiedFromPlanId(String copiedFromPlanId) {
             this.copiedFromPlanId = Optional.ofNullable(copiedFromPlanId);
             return this;
@@ -1108,6 +1170,19 @@ public final class PlanGroupPlanDetailResponseData {
         @JsonSetter(value = "company_name", nulls = Nulls.SKIP)
         public _FinalStage companyName(Optional<String> companyName) {
             this.companyName = companyName;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage companyLogoUrl(String companyLogoUrl) {
+            this.companyLogoUrl = Optional.ofNullable(companyLogoUrl);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_logo_url", nulls = Nulls.SKIP)
+        public _FinalStage companyLogoUrl(Optional<String> companyLogoUrl) {
+            this.companyLogoUrl = companyLogoUrl;
             return this;
         }
 
@@ -1212,11 +1287,13 @@ public final class PlanGroupPlanDetailResponseData {
                     chargeType,
                     companyCount,
                     companyId,
+                    companyLogoUrl,
                     companyName,
                     compatiblePlanIds,
                     controlledBy,
                     copiedFromPlanId,
                     createdAt,
+                    credits,
                     currencyPrices,
                     customPlanConfig,
                     description,

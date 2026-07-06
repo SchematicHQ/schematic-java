@@ -3456,6 +3456,14 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
+**companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **currency:** `String` 
     
 </dd>
@@ -7285,6 +7293,96 @@ client.companies().lookupCompany(
 <dd>
 
 **keys:** `Map<String, String>` — Key/value pairs
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.companies.getCompanyBillingEntity() -> GetCompanyBillingEntityResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().getCompanyBillingEntity(
+    GetCompanyBillingEntityRequest
+        .builder()
+        .companyId("company_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.companies.getBillingEntityChildSubscriptions() -> GetBillingEntityChildSubscriptionsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().getBillingEntityChildSubscriptions(
+    GetBillingEntityChildSubscriptionsRequest
+        .builder()
+        .companyId("company_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
     
 </dd>
 </dl>

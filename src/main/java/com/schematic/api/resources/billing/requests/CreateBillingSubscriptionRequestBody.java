@@ -35,6 +35,8 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private final boolean cancelAtPeriodEnd;
 
+    private final Optional<String> companyId;
+
     private final String currency;
 
     private final String customerExternalId;
@@ -75,6 +77,7 @@ public final class CreateBillingSubscriptionRequestBody {
             Optional<String> applicationId,
             Optional<Long> cancelAt,
             boolean cancelAtPeriodEnd,
+            Optional<String> companyId,
             String currency,
             String customerExternalId,
             Optional<String> defaultPaymentMethodExternalId,
@@ -96,6 +99,7 @@ public final class CreateBillingSubscriptionRequestBody {
         this.applicationId = applicationId;
         this.cancelAt = cancelAt;
         this.cancelAtPeriodEnd = cancelAtPeriodEnd;
+        this.companyId = companyId;
         this.currency = currency;
         this.customerExternalId = customerExternalId;
         this.defaultPaymentMethodExternalId = defaultPaymentMethodExternalId;
@@ -129,6 +133,11 @@ public final class CreateBillingSubscriptionRequestBody {
     @JsonProperty("cancel_at_period_end")
     public boolean getCancelAtPeriodEnd() {
         return cancelAtPeriodEnd;
+    }
+
+    @JsonProperty("company_id")
+    public Optional<String> getCompanyId() {
+        return companyId;
     }
 
     @JsonProperty("currency")
@@ -232,6 +241,7 @@ public final class CreateBillingSubscriptionRequestBody {
         return applicationId.equals(other.applicationId)
                 && cancelAt.equals(other.cancelAt)
                 && cancelAtPeriodEnd == other.cancelAtPeriodEnd
+                && companyId.equals(other.companyId)
                 && currency.equals(other.currency)
                 && customerExternalId.equals(other.customerExternalId)
                 && defaultPaymentMethodExternalId.equals(other.defaultPaymentMethodExternalId)
@@ -257,6 +267,7 @@ public final class CreateBillingSubscriptionRequestBody {
                 this.applicationId,
                 this.cancelAt,
                 this.cancelAtPeriodEnd,
+                this.companyId,
                 this.currency,
                 this.customerExternalId,
                 this.defaultPaymentMethodExternalId,
@@ -325,6 +336,10 @@ public final class CreateBillingSubscriptionRequestBody {
         _FinalStage cancelAt(Optional<Long> cancelAt);
 
         _FinalStage cancelAt(Long cancelAt);
+
+        _FinalStage companyId(Optional<String> companyId);
+
+        _FinalStage companyId(String companyId);
 
         _FinalStage defaultPaymentMethodExternalId(Optional<String> defaultPaymentMethodExternalId);
 
@@ -424,6 +439,8 @@ public final class CreateBillingSubscriptionRequestBody {
 
         private Optional<String> defaultPaymentMethodExternalId = Optional.empty();
 
+        private Optional<String> companyId = Optional.empty();
+
         private Optional<Long> cancelAt = Optional.empty();
 
         private Optional<String> applicationId = Optional.empty();
@@ -438,6 +455,7 @@ public final class CreateBillingSubscriptionRequestBody {
             applicationId(other.getApplicationId());
             cancelAt(other.getCancelAt());
             cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
+            companyId(other.getCompanyId());
             currency(other.getCurrency());
             customerExternalId(other.getCustomerExternalId());
             defaultPaymentMethodExternalId(other.getDefaultPaymentMethodExternalId());
@@ -680,6 +698,19 @@ public final class CreateBillingSubscriptionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage companyId(String companyId) {
+            this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
+        public _FinalStage companyId(Optional<String> companyId) {
+            this.companyId = companyId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage cancelAt(Long cancelAt) {
             this.cancelAt = Optional.ofNullable(cancelAt);
             return this;
@@ -711,6 +742,7 @@ public final class CreateBillingSubscriptionRequestBody {
                     applicationId,
                     cancelAt,
                     cancelAtPeriodEnd,
+                    companyId,
                     currency,
                     customerExternalId,
                     defaultPaymentMethodExternalId,
