@@ -466,7 +466,7 @@ public class DataStreamClient implements Closeable {
         }
 
         String eventName = event.getEvent();
-        int quantity = event.getQuantity().orElse(1);
+        long quantity = event.getQuantity().orElse(1L);
 
         List<RulesengineCompanyMetric> updatedMetrics = new ArrayList<>();
         for (RulesengineCompanyMetric metric : company.getMetrics()) {

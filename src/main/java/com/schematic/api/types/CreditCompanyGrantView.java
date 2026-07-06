@@ -63,7 +63,7 @@ public final class CreditCompanyGrantView {
 
     private final Optional<BillingProductPriceResponseData> price;
 
-    private final long quantity;
+    private final double quantity;
 
     private final double quantityRemaining;
 
@@ -116,7 +116,7 @@ public final class CreditCompanyGrantView {
             Optional<String> planName,
             Optional<String> pluralName,
             Optional<BillingProductPriceResponseData> price,
-            long quantity,
+            double quantity,
             double quantityRemaining,
             double quantityUsed,
             boolean renewalEnabled,
@@ -271,7 +271,7 @@ public final class CreditCompanyGrantView {
     }
 
     @JsonProperty("quantity")
-    public long getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
@@ -478,7 +478,7 @@ public final class CreditCompanyGrantView {
     }
 
     public interface QuantityStage {
-        QuantityRemainingStage quantity(long quantity);
+        QuantityRemainingStage quantity(double quantity);
     }
 
     public interface QuantityRemainingStage {
@@ -626,7 +626,7 @@ public final class CreditCompanyGrantView {
 
         private String id;
 
-        private long quantity;
+        private double quantity;
 
         private double quantityRemaining;
 
@@ -783,7 +783,7 @@ public final class CreditCompanyGrantView {
 
         @java.lang.Override
         @JsonSetter("quantity")
-        public QuantityRemainingStage quantity(long quantity) {
+        public QuantityRemainingStage quantity(double quantity) {
             this.quantity = quantity;
             return this;
         }

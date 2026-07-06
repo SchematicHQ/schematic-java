@@ -261,7 +261,7 @@ public final class App {
             String event = (String) body.get("event");
             Map<String, String> company = toStringMap(body.get("company"));
             Map<String, String> user = toStringMap(body.get("user"));
-            Integer quantity = body.containsKey("quantity") ? ((Number) body.get("quantity")).intValue() : null;
+            Long quantity = body.containsKey("quantity") ? ((Number) body.get("quantity")).longValue() : null;
 
             if (quantity != null) {
                 client.track(event, company, user, null, quantity);

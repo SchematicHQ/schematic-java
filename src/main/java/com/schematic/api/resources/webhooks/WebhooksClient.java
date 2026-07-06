@@ -10,6 +10,7 @@ import com.schematic.api.resources.webhooks.requests.CountWebhooksRequest;
 import com.schematic.api.resources.webhooks.requests.CreateWebhookRequestBody;
 import com.schematic.api.resources.webhooks.requests.ListWebhookEventsRequest;
 import com.schematic.api.resources.webhooks.requests.ListWebhooksRequest;
+import com.schematic.api.resources.webhooks.requests.TestWebhookRequestBody;
 import com.schematic.api.resources.webhooks.requests.UpdateWebhookRequestBody;
 import com.schematic.api.resources.webhooks.types.CountWebhookEventsResponse;
 import com.schematic.api.resources.webhooks.types.CountWebhooksResponse;
@@ -19,6 +20,7 @@ import com.schematic.api.resources.webhooks.types.GetWebhookEventResponse;
 import com.schematic.api.resources.webhooks.types.GetWebhookResponse;
 import com.schematic.api.resources.webhooks.types.ListWebhookEventsResponse;
 import com.schematic.api.resources.webhooks.types.ListWebhooksResponse;
+import com.schematic.api.resources.webhooks.types.SendTestWebhookActionResponse;
 import com.schematic.api.resources.webhooks.types.UpdateWebhookResponse;
 
 public class WebhooksClient {
@@ -135,6 +137,17 @@ public class WebhooksClient {
 
     public DeleteWebhookResponse deleteWebhook(String webhookId, RequestOptions requestOptions) {
         return this.rawClient.deleteWebhook(webhookId, requestOptions).body();
+    }
+
+    public SendTestWebhookActionResponse sendTestWebhookAction(String webhookId, TestWebhookRequestBody request) {
+        return this.rawClient.sendTestWebhookAction(webhookId, request).body();
+    }
+
+    public SendTestWebhookActionResponse sendTestWebhookAction(
+            String webhookId, TestWebhookRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .sendTestWebhookAction(webhookId, request, requestOptions)
+                .body();
     }
 
     public CountWebhooksResponse countWebhooks() {

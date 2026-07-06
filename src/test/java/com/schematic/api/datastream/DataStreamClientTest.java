@@ -784,7 +784,7 @@ class DataStreamClientTest {
         EventBodyTrack trackEvent = EventBodyTrack.builder()
                 .event("api_calls")
                 .company(Collections.singletonMap("customer_id", "cust-1"))
-                .quantity(5)
+                .quantity(5L)
                 .build();
 
         client.updateCompanyMetrics(trackEvent);
@@ -805,7 +805,7 @@ class DataStreamClientTest {
         EventBodyTrack trackEvent = EventBodyTrack.builder()
                 .event("api_calls")
                 .company(Collections.singletonMap("customer_id", "nonexistent"))
-                .quantity(1)
+                .quantity(1L)
                 .build();
 
         assertDoesNotThrow(() -> client.updateCompanyMetrics(trackEvent));
@@ -814,7 +814,7 @@ class DataStreamClientTest {
     @Test
     void updateCompanyMetrics_noCompanyKeys_noOp() {
         EventBodyTrack trackEvent =
-                EventBodyTrack.builder().event("api_calls").quantity(1).build();
+                EventBodyTrack.builder().event("api_calls").quantity(1L).build();
 
         assertDoesNotThrow(() -> client.updateCompanyMetrics(trackEvent));
     }
