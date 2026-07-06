@@ -27,6 +27,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
     private final Optional<String> autoTopupAmountType;
 
+    private final Optional<BillingCreditAutoTopupAvailability> autoTopupAvailability;
+
     private final Optional<Boolean> autoTopupEnabled;
 
     private final Optional<BillingCreditExpiryType> autoTopupExpiryType;
@@ -40,6 +42,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
     private final Optional<Long> autoTopupThresholdCredits;
 
     private final Optional<Long> autoTopupThresholdPercent;
+
+    private final Optional<Boolean> canBuyBundles;
 
     private final Optional<Long> creditAmount;
 
@@ -63,6 +67,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             Optional<Boolean> applyToExisting,
             Optional<Long> autoTopupAmount,
             Optional<String> autoTopupAmountType,
+            Optional<BillingCreditAutoTopupAvailability> autoTopupAvailability,
             Optional<Boolean> autoTopupEnabled,
             Optional<BillingCreditExpiryType> autoTopupExpiryType,
             Optional<BillingCreditExpiryUnit> autoTopupExpiryUnit,
@@ -70,6 +75,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             Optional<Boolean> autoTopupSelfService,
             Optional<Long> autoTopupThresholdCredits,
             Optional<Long> autoTopupThresholdPercent,
+            Optional<Boolean> canBuyBundles,
             Optional<Long> creditAmount,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
@@ -82,6 +88,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         this.applyToExisting = applyToExisting;
         this.autoTopupAmount = autoTopupAmount;
         this.autoTopupAmountType = autoTopupAmountType;
+        this.autoTopupAvailability = autoTopupAvailability;
         this.autoTopupEnabled = autoTopupEnabled;
         this.autoTopupExpiryType = autoTopupExpiryType;
         this.autoTopupExpiryUnit = autoTopupExpiryUnit;
@@ -89,6 +96,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         this.autoTopupSelfService = autoTopupSelfService;
         this.autoTopupThresholdCredits = autoTopupThresholdCredits;
         this.autoTopupThresholdPercent = autoTopupThresholdPercent;
+        this.canBuyBundles = canBuyBundles;
         this.creditAmount = creditAmount;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
@@ -113,6 +121,11 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
     @JsonProperty("auto_topup_amount_type")
     public Optional<String> getAutoTopupAmountType() {
         return autoTopupAmountType;
+    }
+
+    @JsonProperty("auto_topup_availability")
+    public Optional<BillingCreditAutoTopupAvailability> getAutoTopupAvailability() {
+        return autoTopupAvailability;
     }
 
     @JsonProperty("auto_topup_enabled")
@@ -148,6 +161,11 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
     @JsonProperty("auto_topup_threshold_percent")
     public Optional<Long> getAutoTopupThresholdPercent() {
         return autoTopupThresholdPercent;
+    }
+
+    @JsonProperty("can_buy_bundles")
+    public Optional<Boolean> getCanBuyBundles() {
+        return canBuyBundles;
     }
 
     @JsonProperty("credit_amount")
@@ -209,6 +227,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         return applyToExisting.equals(other.applyToExisting)
                 && autoTopupAmount.equals(other.autoTopupAmount)
                 && autoTopupAmountType.equals(other.autoTopupAmountType)
+                && autoTopupAvailability.equals(other.autoTopupAvailability)
                 && autoTopupEnabled.equals(other.autoTopupEnabled)
                 && autoTopupExpiryType.equals(other.autoTopupExpiryType)
                 && autoTopupExpiryUnit.equals(other.autoTopupExpiryUnit)
@@ -216,6 +235,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 && autoTopupSelfService.equals(other.autoTopupSelfService)
                 && autoTopupThresholdCredits.equals(other.autoTopupThresholdCredits)
                 && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
+                && canBuyBundles.equals(other.canBuyBundles)
                 && creditAmount.equals(other.creditAmount)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
@@ -232,6 +252,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 this.applyToExisting,
                 this.autoTopupAmount,
                 this.autoTopupAmountType,
+                this.autoTopupAvailability,
                 this.autoTopupEnabled,
                 this.autoTopupExpiryType,
                 this.autoTopupExpiryUnit,
@@ -239,6 +260,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 this.autoTopupSelfService,
                 this.autoTopupThresholdCredits,
                 this.autoTopupThresholdPercent,
+                this.canBuyBundles,
                 this.creditAmount,
                 this.expiryType,
                 this.expiryUnit,
@@ -287,6 +309,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
         _FinalStage autoTopupAmountType(String autoTopupAmountType);
 
+        _FinalStage autoTopupAvailability(Optional<BillingCreditAutoTopupAvailability> autoTopupAvailability);
+
+        _FinalStage autoTopupAvailability(BillingCreditAutoTopupAvailability autoTopupAvailability);
+
         _FinalStage autoTopupEnabled(Optional<Boolean> autoTopupEnabled);
 
         _FinalStage autoTopupEnabled(Boolean autoTopupEnabled);
@@ -314,6 +340,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         _FinalStage autoTopupThresholdPercent(Optional<Long> autoTopupThresholdPercent);
 
         _FinalStage autoTopupThresholdPercent(Long autoTopupThresholdPercent);
+
+        _FinalStage canBuyBundles(Optional<Boolean> canBuyBundles);
+
+        _FinalStage canBuyBundles(Boolean canBuyBundles);
 
         _FinalStage creditAmount(Optional<Long> creditAmount);
 
@@ -361,6 +391,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
         private Optional<Long> creditAmount = Optional.empty();
 
+        private Optional<Boolean> canBuyBundles = Optional.empty();
+
         private Optional<Long> autoTopupThresholdPercent = Optional.empty();
 
         private Optional<Long> autoTopupThresholdCredits = Optional.empty();
@@ -374,6 +406,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         private Optional<BillingCreditExpiryType> autoTopupExpiryType = Optional.empty();
 
         private Optional<Boolean> autoTopupEnabled = Optional.empty();
+
+        private Optional<BillingCreditAutoTopupAvailability> autoTopupAvailability = Optional.empty();
 
         private Optional<String> autoTopupAmountType = Optional.empty();
 
@@ -391,6 +425,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             applyToExisting(other.getApplyToExisting());
             autoTopupAmount(other.getAutoTopupAmount());
             autoTopupAmountType(other.getAutoTopupAmountType());
+            autoTopupAvailability(other.getAutoTopupAvailability());
             autoTopupEnabled(other.getAutoTopupEnabled());
             autoTopupExpiryType(other.getAutoTopupExpiryType());
             autoTopupExpiryUnit(other.getAutoTopupExpiryUnit());
@@ -398,6 +433,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             autoTopupSelfService(other.getAutoTopupSelfService());
             autoTopupThresholdCredits(other.getAutoTopupThresholdCredits());
             autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
+            canBuyBundles(other.getCanBuyBundles());
             creditAmount(other.getCreditAmount());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
@@ -509,6 +545,19 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage canBuyBundles(Boolean canBuyBundles) {
+            this.canBuyBundles = Optional.ofNullable(canBuyBundles);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "can_buy_bundles", nulls = Nulls.SKIP)
+        public _FinalStage canBuyBundles(Optional<Boolean> canBuyBundles) {
+            this.canBuyBundles = canBuyBundles;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage autoTopupThresholdPercent(Long autoTopupThresholdPercent) {
             this.autoTopupThresholdPercent = Optional.ofNullable(autoTopupThresholdPercent);
             return this;
@@ -600,6 +649,19 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage autoTopupAvailability(BillingCreditAutoTopupAvailability autoTopupAvailability) {
+            this.autoTopupAvailability = Optional.ofNullable(autoTopupAvailability);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "auto_topup_availability", nulls = Nulls.SKIP)
+        public _FinalStage autoTopupAvailability(Optional<BillingCreditAutoTopupAvailability> autoTopupAvailability) {
+            this.autoTopupAvailability = autoTopupAvailability;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage autoTopupAmountType(String autoTopupAmountType) {
             this.autoTopupAmountType = Optional.ofNullable(autoTopupAmountType);
             return this;
@@ -644,6 +706,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                     applyToExisting,
                     autoTopupAmount,
                     autoTopupAmountType,
+                    autoTopupAvailability,
                     autoTopupEnabled,
                     autoTopupExpiryType,
                     autoTopupExpiryUnit,
@@ -651,6 +714,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                     autoTopupSelfService,
                     autoTopupThresholdCredits,
                     autoTopupThresholdPercent,
+                    canBuyBundles,
                     creditAmount,
                     expiryType,
                     expiryUnit,

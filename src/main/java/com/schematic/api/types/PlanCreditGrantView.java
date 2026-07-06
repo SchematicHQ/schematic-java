@@ -26,6 +26,8 @@ public final class PlanCreditGrantView {
 
     private final Optional<String> billingCreditAutoTopupAmountType;
 
+    private final Optional<BillingCreditAutoTopupAvailability> billingCreditAutoTopupAvailability;
+
     private final boolean billingCreditAutoTopupEnabled;
 
     private final Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType;
@@ -39,6 +41,8 @@ public final class PlanCreditGrantView {
     private final Optional<Long> billingCreditAutoTopupThresholdCredits;
 
     private final Optional<Long> billingCreditAutoTopupThresholdPercent;
+
+    private final boolean billingCreditCanBuyBundles;
 
     private final OffsetDateTime createdAt;
 
@@ -87,6 +91,7 @@ public final class PlanCreditGrantView {
     private PlanCreditGrantView(
             Optional<Long> billingCreditAutoTopupAmount,
             Optional<String> billingCreditAutoTopupAmountType,
+            Optional<BillingCreditAutoTopupAvailability> billingCreditAutoTopupAvailability,
             boolean billingCreditAutoTopupEnabled,
             Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType,
             Optional<BillingCreditExpiryUnit> billingCreditAutoTopupExpiryUnit,
@@ -94,6 +99,7 @@ public final class PlanCreditGrantView {
             boolean billingCreditAutoTopupSelfService,
             Optional<Long> billingCreditAutoTopupThresholdCredits,
             Optional<Long> billingCreditAutoTopupThresholdPercent,
+            boolean billingCreditCanBuyBundles,
             OffsetDateTime createdAt,
             Optional<BillingCreditView> credit,
             long creditAmount,
@@ -118,6 +124,7 @@ public final class PlanCreditGrantView {
             Map<String, Object> additionalProperties) {
         this.billingCreditAutoTopupAmount = billingCreditAutoTopupAmount;
         this.billingCreditAutoTopupAmountType = billingCreditAutoTopupAmountType;
+        this.billingCreditAutoTopupAvailability = billingCreditAutoTopupAvailability;
         this.billingCreditAutoTopupEnabled = billingCreditAutoTopupEnabled;
         this.billingCreditAutoTopupExpiryType = billingCreditAutoTopupExpiryType;
         this.billingCreditAutoTopupExpiryUnit = billingCreditAutoTopupExpiryUnit;
@@ -125,6 +132,7 @@ public final class PlanCreditGrantView {
         this.billingCreditAutoTopupSelfService = billingCreditAutoTopupSelfService;
         this.billingCreditAutoTopupThresholdCredits = billingCreditAutoTopupThresholdCredits;
         this.billingCreditAutoTopupThresholdPercent = billingCreditAutoTopupThresholdPercent;
+        this.billingCreditCanBuyBundles = billingCreditCanBuyBundles;
         this.createdAt = createdAt;
         this.credit = credit;
         this.creditAmount = creditAmount;
@@ -157,6 +165,11 @@ public final class PlanCreditGrantView {
     @JsonProperty("billing_credit_auto_topup_amount_type")
     public Optional<String> getBillingCreditAutoTopupAmountType() {
         return billingCreditAutoTopupAmountType;
+    }
+
+    @JsonProperty("billing_credit_auto_topup_availability")
+    public Optional<BillingCreditAutoTopupAvailability> getBillingCreditAutoTopupAvailability() {
+        return billingCreditAutoTopupAvailability;
     }
 
     @JsonProperty("billing_credit_auto_topup_enabled")
@@ -192,6 +205,11 @@ public final class PlanCreditGrantView {
     @JsonProperty("billing_credit_auto_topup_threshold_percent")
     public Optional<Long> getBillingCreditAutoTopupThresholdPercent() {
         return billingCreditAutoTopupThresholdPercent;
+    }
+
+    @JsonProperty("billing_credit_can_buy_bundles")
+    public boolean getBillingCreditCanBuyBundles() {
+        return billingCreditCanBuyBundles;
     }
 
     @JsonProperty("created_at")
@@ -328,6 +346,7 @@ public final class PlanCreditGrantView {
     private boolean equalTo(PlanCreditGrantView other) {
         return billingCreditAutoTopupAmount.equals(other.billingCreditAutoTopupAmount)
                 && billingCreditAutoTopupAmountType.equals(other.billingCreditAutoTopupAmountType)
+                && billingCreditAutoTopupAvailability.equals(other.billingCreditAutoTopupAvailability)
                 && billingCreditAutoTopupEnabled == other.billingCreditAutoTopupEnabled
                 && billingCreditAutoTopupExpiryType.equals(other.billingCreditAutoTopupExpiryType)
                 && billingCreditAutoTopupExpiryUnit.equals(other.billingCreditAutoTopupExpiryUnit)
@@ -335,6 +354,7 @@ public final class PlanCreditGrantView {
                 && billingCreditAutoTopupSelfService == other.billingCreditAutoTopupSelfService
                 && billingCreditAutoTopupThresholdCredits.equals(other.billingCreditAutoTopupThresholdCredits)
                 && billingCreditAutoTopupThresholdPercent.equals(other.billingCreditAutoTopupThresholdPercent)
+                && billingCreditCanBuyBundles == other.billingCreditCanBuyBundles
                 && createdAt.equals(other.createdAt)
                 && credit.equals(other.credit)
                 && creditAmount == other.creditAmount
@@ -363,6 +383,7 @@ public final class PlanCreditGrantView {
         return Objects.hash(
                 this.billingCreditAutoTopupAmount,
                 this.billingCreditAutoTopupAmountType,
+                this.billingCreditAutoTopupAvailability,
                 this.billingCreditAutoTopupEnabled,
                 this.billingCreditAutoTopupExpiryType,
                 this.billingCreditAutoTopupExpiryUnit,
@@ -370,6 +391,7 @@ public final class PlanCreditGrantView {
                 this.billingCreditAutoTopupSelfService,
                 this.billingCreditAutoTopupThresholdCredits,
                 this.billingCreditAutoTopupThresholdPercent,
+                this.billingCreditCanBuyBundles,
                 this.createdAt,
                 this.credit,
                 this.creditAmount,
@@ -409,7 +431,11 @@ public final class PlanCreditGrantView {
     }
 
     public interface BillingCreditAutoTopupSelfServiceStage {
-        CreatedAtStage billingCreditAutoTopupSelfService(boolean billingCreditAutoTopupSelfService);
+        BillingCreditCanBuyBundlesStage billingCreditAutoTopupSelfService(boolean billingCreditAutoTopupSelfService);
+    }
+
+    public interface BillingCreditCanBuyBundlesStage {
+        CreatedAtStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles);
     }
 
     public interface CreatedAtStage {
@@ -472,6 +498,12 @@ public final class PlanCreditGrantView {
         _FinalStage billingCreditAutoTopupAmountType(Optional<String> billingCreditAutoTopupAmountType);
 
         _FinalStage billingCreditAutoTopupAmountType(String billingCreditAutoTopupAmountType);
+
+        _FinalStage billingCreditAutoTopupAvailability(
+                Optional<BillingCreditAutoTopupAvailability> billingCreditAutoTopupAvailability);
+
+        _FinalStage billingCreditAutoTopupAvailability(
+                BillingCreditAutoTopupAvailability billingCreditAutoTopupAvailability);
 
         _FinalStage billingCreditAutoTopupExpiryType(
                 Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType);
@@ -553,6 +585,7 @@ public final class PlanCreditGrantView {
     public static final class Builder
             implements BillingCreditAutoTopupEnabledStage,
                     BillingCreditAutoTopupSelfServiceStage,
+                    BillingCreditCanBuyBundlesStage,
                     CreatedAtStage,
                     CreditAmountStage,
                     CreditDescriptionStage,
@@ -567,6 +600,8 @@ public final class PlanCreditGrantView {
         private boolean billingCreditAutoTopupEnabled;
 
         private boolean billingCreditAutoTopupSelfService;
+
+        private boolean billingCreditCanBuyBundles;
 
         private OffsetDateTime createdAt;
 
@@ -620,6 +655,8 @@ public final class PlanCreditGrantView {
 
         private Optional<BillingCreditExpiryType> billingCreditAutoTopupExpiryType = Optional.empty();
 
+        private Optional<BillingCreditAutoTopupAvailability> billingCreditAutoTopupAvailability = Optional.empty();
+
         private Optional<String> billingCreditAutoTopupAmountType = Optional.empty();
 
         private Optional<Long> billingCreditAutoTopupAmount = Optional.empty();
@@ -633,6 +670,7 @@ public final class PlanCreditGrantView {
         public Builder from(PlanCreditGrantView other) {
             billingCreditAutoTopupAmount(other.getBillingCreditAutoTopupAmount());
             billingCreditAutoTopupAmountType(other.getBillingCreditAutoTopupAmountType());
+            billingCreditAutoTopupAvailability(other.getBillingCreditAutoTopupAvailability());
             billingCreditAutoTopupEnabled(other.getBillingCreditAutoTopupEnabled());
             billingCreditAutoTopupExpiryType(other.getBillingCreditAutoTopupExpiryType());
             billingCreditAutoTopupExpiryUnit(other.getBillingCreditAutoTopupExpiryUnit());
@@ -640,6 +678,7 @@ public final class PlanCreditGrantView {
             billingCreditAutoTopupSelfService(other.getBillingCreditAutoTopupSelfService());
             billingCreditAutoTopupThresholdCredits(other.getBillingCreditAutoTopupThresholdCredits());
             billingCreditAutoTopupThresholdPercent(other.getBillingCreditAutoTopupThresholdPercent());
+            billingCreditCanBuyBundles(other.getBillingCreditCanBuyBundles());
             createdAt(other.getCreatedAt());
             credit(other.getCredit());
             creditAmount(other.getCreditAmount());
@@ -674,8 +713,16 @@ public final class PlanCreditGrantView {
 
         @java.lang.Override
         @JsonSetter("billing_credit_auto_topup_self_service")
-        public CreatedAtStage billingCreditAutoTopupSelfService(boolean billingCreditAutoTopupSelfService) {
+        public BillingCreditCanBuyBundlesStage billingCreditAutoTopupSelfService(
+                boolean billingCreditAutoTopupSelfService) {
             this.billingCreditAutoTopupSelfService = billingCreditAutoTopupSelfService;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_credit_can_buy_bundles")
+        public CreatedAtStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles) {
+            this.billingCreditCanBuyBundles = billingCreditCanBuyBundles;
             return this;
         }
 
@@ -993,6 +1040,21 @@ public final class PlanCreditGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage billingCreditAutoTopupAvailability(
+                BillingCreditAutoTopupAvailability billingCreditAutoTopupAvailability) {
+            this.billingCreditAutoTopupAvailability = Optional.ofNullable(billingCreditAutoTopupAvailability);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_auto_topup_availability", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditAutoTopupAvailability(
+                Optional<BillingCreditAutoTopupAvailability> billingCreditAutoTopupAvailability) {
+            this.billingCreditAutoTopupAvailability = billingCreditAutoTopupAvailability;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingCreditAutoTopupAmountType(String billingCreditAutoTopupAmountType) {
             this.billingCreditAutoTopupAmountType = Optional.ofNullable(billingCreditAutoTopupAmountType);
             return this;
@@ -1023,6 +1085,7 @@ public final class PlanCreditGrantView {
             return new PlanCreditGrantView(
                     billingCreditAutoTopupAmount,
                     billingCreditAutoTopupAmountType,
+                    billingCreditAutoTopupAvailability,
                     billingCreditAutoTopupEnabled,
                     billingCreditAutoTopupExpiryType,
                     billingCreditAutoTopupExpiryUnit,
@@ -1030,6 +1093,7 @@ public final class PlanCreditGrantView {
                     billingCreditAutoTopupSelfService,
                     billingCreditAutoTopupThresholdCredits,
                     billingCreditAutoTopupThresholdPercent,
+                    billingCreditCanBuyBundles,
                     createdAt,
                     credit,
                     creditAmount,

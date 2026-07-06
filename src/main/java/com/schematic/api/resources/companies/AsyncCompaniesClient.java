@@ -13,6 +13,8 @@ import com.schematic.api.resources.companies.requests.CountUsersRequest;
 import com.schematic.api.resources.companies.requests.CreateEntityTraitDefinitionRequestBody;
 import com.schematic.api.resources.companies.requests.DeleteCompanyRequest;
 import com.schematic.api.resources.companies.requests.GetActiveCompanySubscriptionRequest;
+import com.schematic.api.resources.companies.requests.GetBillingEntityChildSubscriptionsRequest;
+import com.schematic.api.resources.companies.requests.GetCompanyBillingEntityRequest;
 import com.schematic.api.resources.companies.requests.GetEntityTraitValuesRequest;
 import com.schematic.api.resources.companies.requests.GetOrCreateCompanyMembershipRequestBody;
 import com.schematic.api.resources.companies.requests.ListCompaniesRequest;
@@ -39,6 +41,8 @@ import com.schematic.api.resources.companies.types.DeleteCompanyResponse;
 import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
+import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscriptionsResponse;
+import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitValuesResponse;
@@ -196,6 +200,45 @@ public class AsyncCompaniesClient {
     public CompletableFuture<LookupCompanyResponse> lookupCompany(
             LookupCompanyRequest request, RequestOptions requestOptions) {
         return this.rawClient.lookupCompany(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCompanyBillingEntityResponse> getCompanyBillingEntity() {
+        return this.rawClient.getCompanyBillingEntity().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCompanyBillingEntityResponse> getCompanyBillingEntity(RequestOptions requestOptions) {
+        return this.rawClient.getCompanyBillingEntity(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCompanyBillingEntityResponse> getCompanyBillingEntity(
+            GetCompanyBillingEntityRequest request) {
+        return this.rawClient.getCompanyBillingEntity(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCompanyBillingEntityResponse> getCompanyBillingEntity(
+            GetCompanyBillingEntityRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getCompanyBillingEntity(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetBillingEntityChildSubscriptionsResponse> getBillingEntityChildSubscriptions() {
+        return this.rawClient.getBillingEntityChildSubscriptions().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetBillingEntityChildSubscriptionsResponse> getBillingEntityChildSubscriptions(
+            RequestOptions requestOptions) {
+        return this.rawClient.getBillingEntityChildSubscriptions(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetBillingEntityChildSubscriptionsResponse> getBillingEntityChildSubscriptions(
+            GetBillingEntityChildSubscriptionsRequest request) {
+        return this.rawClient.getBillingEntityChildSubscriptions(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetBillingEntityChildSubscriptionsResponse> getBillingEntityChildSubscriptions(
+            GetBillingEntityChildSubscriptionsRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .getBillingEntityChildSubscriptions(request, requestOptions)
+                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListCompanyMembershipsResponse> listCompanyMemberships() {
