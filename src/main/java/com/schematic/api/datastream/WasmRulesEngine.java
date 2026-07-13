@@ -52,6 +52,7 @@ public class WasmRulesEngine implements RulesEngine {
     private ExportFunction allocFn;
     private ExportFunction deallocFn;
     private ExportFunction checkFlagFn;
+    private ExportFunction setTimeFn;
     private ExportFunction getResultJsonFn;
     private ExportFunction getResultJsonLengthFn;
 
@@ -106,6 +107,15 @@ public class WasmRulesEngine implements RulesEngine {
             allocFn = instance.export("alloc");
             deallocFn = instance.export("dealloc");
             checkFlagFn = instance.export("checkFlagCombined");
+            // Optional: feed the wasm the current wall-clock time before each
+            // check. The raw wasm has no clock under Chicory (SCHY-471); without
+            // it, metric-period reset timestamps are omitted. Absent on older
+            // wasm builds, so resolve it defensively.
+            try {
+                setTimeFn = instance.export("setCurrentTimeMillis");
+            } catch (Exception e) {
+                setTimeFn = null;
+            }
             getResultJsonFn = instance.export("getResultJson");
             getResultJsonLengthFn = instance.export("getResultJsonLength");
 
@@ -196,6 +206,12 @@ public class WasmRulesEngine implements RulesEngine {
 
         try {
             memory.write(ptr, data);
+
+            // Supply the host's current time so the engine can compute
+            // metric-period reset timestamps (SCHY-471). No-op on older wasm.
+            if (setTimeFn != null) {
+                setTimeFn.apply(System.currentTimeMillis());
+            }
 
             long[] checkResult = checkFlagFn.apply(ptr, length);
             int resultLen = (int) checkResult[0];
