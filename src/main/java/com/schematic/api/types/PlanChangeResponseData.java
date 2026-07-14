@@ -614,7 +614,6 @@ public final class PlanChangeResponseData {
 
         /**
          * <p>True when this change moved the company to a different version of the same plan (e.g. a plan version migration) rather than to a different plan.</p>
-         * <p>True when this change moved the company to a different version of the same plan (e.g. a plan version migration) rather than to a different plan.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

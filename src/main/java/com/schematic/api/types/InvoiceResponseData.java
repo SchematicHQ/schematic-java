@@ -40,6 +40,8 @@ public final class InvoiceResponseData {
 
     private final Optional<OffsetDateTime> dueDate;
 
+    private final long endingBalance;
+
     private final String environmentId;
 
     private final Optional<String> externalId;
@@ -49,6 +51,8 @@ public final class InvoiceResponseData {
     private final Optional<String> paymentMethodExternalId;
 
     private final BillingProviderType providerType;
+
+    private final long startingBalance;
 
     private final Optional<InvoiceStatus> status;
 
@@ -72,11 +76,13 @@ public final class InvoiceResponseData {
             String currency,
             String customerExternalId,
             Optional<OffsetDateTime> dueDate,
+            long endingBalance,
             String environmentId,
             Optional<String> externalId,
             String id,
             Optional<String> paymentMethodExternalId,
             BillingProviderType providerType,
+            long startingBalance,
             Optional<InvoiceStatus> status,
             Optional<String> subscriptionExternalId,
             long subtotal,
@@ -92,11 +98,13 @@ public final class InvoiceResponseData {
         this.currency = currency;
         this.customerExternalId = customerExternalId;
         this.dueDate = dueDate;
+        this.endingBalance = endingBalance;
         this.environmentId = environmentId;
         this.externalId = externalId;
         this.id = id;
         this.paymentMethodExternalId = paymentMethodExternalId;
         this.providerType = providerType;
+        this.startingBalance = startingBalance;
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.subtotal = subtotal;
@@ -150,6 +158,11 @@ public final class InvoiceResponseData {
         return dueDate;
     }
 
+    @JsonProperty("ending_balance")
+    public long getEndingBalance() {
+        return endingBalance;
+    }
+
     @JsonProperty("environment_id")
     public String getEnvironmentId() {
         return environmentId;
@@ -173,6 +186,11 @@ public final class InvoiceResponseData {
     @JsonProperty("provider_type")
     public BillingProviderType getProviderType() {
         return providerType;
+    }
+
+    @JsonProperty("starting_balance")
+    public long getStartingBalance() {
+        return startingBalance;
     }
 
     @JsonProperty("status")
@@ -221,11 +239,13 @@ public final class InvoiceResponseData {
                 && currency.equals(other.currency)
                 && customerExternalId.equals(other.customerExternalId)
                 && dueDate.equals(other.dueDate)
+                && endingBalance == other.endingBalance
                 && environmentId.equals(other.environmentId)
                 && externalId.equals(other.externalId)
                 && id.equals(other.id)
                 && paymentMethodExternalId.equals(other.paymentMethodExternalId)
                 && providerType.equals(other.providerType)
+                && startingBalance == other.startingBalance
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && subtotal == other.subtotal
@@ -245,11 +265,13 @@ public final class InvoiceResponseData {
                 this.currency,
                 this.customerExternalId,
                 this.dueDate,
+                this.endingBalance,
                 this.environmentId,
                 this.externalId,
                 this.id,
                 this.paymentMethodExternalId,
                 this.providerType,
+                this.startingBalance,
                 this.status,
                 this.subscriptionExternalId,
                 this.subtotal,
@@ -293,7 +315,11 @@ public final class InvoiceResponseData {
     }
 
     public interface CustomerExternalIdStage {
-        EnvironmentIdStage customerExternalId(@NotNull String customerExternalId);
+        EndingBalanceStage customerExternalId(@NotNull String customerExternalId);
+    }
+
+    public interface EndingBalanceStage {
+        EnvironmentIdStage endingBalance(long endingBalance);
     }
 
     public interface EnvironmentIdStage {
@@ -305,7 +331,11 @@ public final class InvoiceResponseData {
     }
 
     public interface ProviderTypeStage {
-        SubtotalStage providerType(@NotNull BillingProviderType providerType);
+        StartingBalanceStage providerType(@NotNull BillingProviderType providerType);
+    }
+
+    public interface StartingBalanceStage {
+        SubtotalStage startingBalance(long startingBalance);
     }
 
     public interface SubtotalStage {
@@ -361,9 +391,11 @@ public final class InvoiceResponseData {
                     CreatedAtStage,
                     CurrencyStage,
                     CustomerExternalIdStage,
+                    EndingBalanceStage,
                     EnvironmentIdStage,
                     IdStage,
                     ProviderTypeStage,
+                    StartingBalanceStage,
                     SubtotalStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -381,11 +413,15 @@ public final class InvoiceResponseData {
 
         private String customerExternalId;
 
+        private long endingBalance;
+
         private String environmentId;
 
         private String id;
 
         private BillingProviderType providerType;
+
+        private long startingBalance;
 
         private long subtotal;
 
@@ -421,11 +457,13 @@ public final class InvoiceResponseData {
             currency(other.getCurrency());
             customerExternalId(other.getCustomerExternalId());
             dueDate(other.getDueDate());
+            endingBalance(other.getEndingBalance());
             environmentId(other.getEnvironmentId());
             externalId(other.getExternalId());
             id(other.getId());
             paymentMethodExternalId(other.getPaymentMethodExternalId());
             providerType(other.getProviderType());
+            startingBalance(other.getStartingBalance());
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             subtotal(other.getSubtotal());
@@ -478,8 +516,15 @@ public final class InvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("customer_external_id")
-        public EnvironmentIdStage customerExternalId(@NotNull String customerExternalId) {
+        public EndingBalanceStage customerExternalId(@NotNull String customerExternalId) {
             this.customerExternalId = Objects.requireNonNull(customerExternalId, "customerExternalId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("ending_balance")
+        public EnvironmentIdStage endingBalance(long endingBalance) {
+            this.endingBalance = endingBalance;
             return this;
         }
 
@@ -499,8 +544,15 @@ public final class InvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("provider_type")
-        public SubtotalStage providerType(@NotNull BillingProviderType providerType) {
+        public StartingBalanceStage providerType(@NotNull BillingProviderType providerType) {
             this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("starting_balance")
+        public SubtotalStage startingBalance(long startingBalance) {
+            this.startingBalance = startingBalance;
             return this;
         }
 
@@ -621,11 +673,13 @@ public final class InvoiceResponseData {
                     currency,
                     customerExternalId,
                     dueDate,
+                    endingBalance,
                     environmentId,
                     externalId,
                     id,
                     paymentMethodExternalId,
                     providerType,
+                    startingBalance,
                     status,
                     subscriptionExternalId,
                     subtotal,

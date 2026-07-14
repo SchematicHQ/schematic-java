@@ -711,7 +711,6 @@ public final class BillingPlanCreditGrantResponseData {
 
         /**
          * <p>Derived from auto_topup_availability; use that instead.</p>
-         * <p>Derived from auto_topup_availability; use that instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -723,7 +722,6 @@ public final class BillingPlanCreditGrantResponseData {
 
         /**
          * <p>Derived from auto_topup_availability; use that instead.</p>
-         * <p>Derived from auto_topup_availability; use that instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -734,7 +732,6 @@ public final class BillingPlanCreditGrantResponseData {
         }
 
         /**
-         * <p>Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.</p>
          * <p>Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -768,7 +765,6 @@ public final class BillingPlanCreditGrantResponseData {
 
         /**
          * <p>Use credit.name from the nested credit object instead</p>
-         * <p>Use credit.name from the nested credit object instead</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -794,7 +790,6 @@ public final class BillingPlanCreditGrantResponseData {
 
         /**
          * <p>Use plan.name from the nested plan object instead</p>
-         * <p>Use plan.name from the nested plan object instead</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -805,7 +800,6 @@ public final class BillingPlanCreditGrantResponseData {
         }
 
         /**
-         * <p>Percentage of unused credits that carry over when this grant resets. Only meaningful when reset_type is plan_period.</p>
          * <p>Percentage of unused credits that carry over when this grant resets. Only meaningful when reset_type is plan_period.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

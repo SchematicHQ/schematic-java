@@ -3,12 +3,14 @@
  */
 package com.schematic.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.core.RetryInterceptor;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -46,6 +48,15 @@ public class RawBaseSchematic {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
@@ -55,6 +66,8 @@ public class RawBaseSchematic {
             Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BaseSchematicApiException(
                     "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
         } catch (IOException e) {
             throw new BaseSchematicException("Network error executing HTTP request", e);
         }

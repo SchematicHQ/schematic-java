@@ -219,7 +219,6 @@ public final class EventBodyTrack {
 
         /**
          * <p>The name of the type of track event</p>
-         * <p>The name of the type of track event</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

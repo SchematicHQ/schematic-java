@@ -82,6 +82,8 @@ public final class PlanEntitlementResponseData {
 
     private final EntitlementValueType valueType;
 
+    private final List<WarningTierResponseData> warningTiers;
+
     private final Map<String, Object> additionalProperties;
 
     private PlanEntitlementResponseData(
@@ -114,6 +116,7 @@ public final class PlanEntitlementResponseData {
             Optional<EntityTraitDefinitionResponseData> valueTrait,
             Optional<String> valueTraitId,
             EntitlementValueType valueType,
+            List<WarningTierResponseData> warningTiers,
             Map<String, Object> additionalProperties) {
         this.billingLinkedResource = billingLinkedResource;
         this.billingThreshold = billingThreshold;
@@ -144,6 +147,7 @@ public final class PlanEntitlementResponseData {
         this.valueTrait = valueTrait;
         this.valueTraitId = valueTraitId;
         this.valueType = valueType;
+        this.warningTiers = warningTiers;
         this.additionalProperties = additionalProperties;
     }
 
@@ -295,6 +299,11 @@ public final class PlanEntitlementResponseData {
         return valueType;
     }
 
+    @JsonProperty("warning_tiers")
+    public List<WarningTierResponseData> getWarningTiers() {
+        return warningTiers;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -335,7 +344,8 @@ public final class PlanEntitlementResponseData {
                 && valueNumeric.equals(other.valueNumeric)
                 && valueTrait.equals(other.valueTrait)
                 && valueTraitId.equals(other.valueTraitId)
-                && valueType.equals(other.valueType);
+                && valueType.equals(other.valueType)
+                && warningTiers.equals(other.warningTiers);
     }
 
     @java.lang.Override
@@ -369,7 +379,8 @@ public final class PlanEntitlementResponseData {
                 this.valueNumeric,
                 this.valueTrait,
                 this.valueTraitId,
-                this.valueType);
+                this.valueType,
+                this.warningTiers);
     }
 
     @java.lang.Override
@@ -510,6 +521,12 @@ public final class PlanEntitlementResponseData {
         _FinalStage valueTraitId(Optional<String> valueTraitId);
 
         _FinalStage valueTraitId(String valueTraitId);
+
+        _FinalStage warningTiers(List<WarningTierResponseData> warningTiers);
+
+        _FinalStage addWarningTiers(WarningTierResponseData warningTiers);
+
+        _FinalStage addAllWarningTiers(List<WarningTierResponseData> warningTiers);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -538,6 +555,8 @@ public final class PlanEntitlementResponseData {
         private OffsetDateTime updatedAt;
 
         private EntitlementValueType valueType;
+
+        private List<WarningTierResponseData> warningTiers = new ArrayList<>();
 
         private Optional<String> valueTraitId = Optional.empty();
 
@@ -617,6 +636,7 @@ public final class PlanEntitlementResponseData {
             valueTrait(other.getValueTrait());
             valueTraitId(other.getValueTraitId());
             valueType(other.getValueType());
+            warningTiers(other.getWarningTiers());
             return this;
         }
 
@@ -673,6 +693,30 @@ public final class PlanEntitlementResponseData {
         @JsonSetter("value_type")
         public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllWarningTiers(List<WarningTierResponseData> warningTiers) {
+            if (warningTiers != null) {
+                this.warningTiers.addAll(warningTiers);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addWarningTiers(WarningTierResponseData warningTiers) {
+            this.warningTiers.add(warningTiers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "warning_tiers", nulls = Nulls.SKIP)
+        public _FinalStage warningTiers(List<WarningTierResponseData> warningTiers) {
+            this.warningTiers.clear();
+            if (warningTiers != null) {
+                this.warningTiers.addAll(warningTiers);
+            }
             return this;
         }
 
@@ -999,6 +1043,7 @@ public final class PlanEntitlementResponseData {
                     valueTrait,
                     valueTraitId,
                     valueType,
+                    warningTiers,
                     additionalProperties);
         }
 

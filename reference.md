@@ -1844,6 +1844,14 @@ client.billing().upsertInvoice(
 <dl>
 <dd>
 
+**endingBalance:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **externalId:** `Optional<String>` 
     
 </dd>
@@ -1853,6 +1861,14 @@ client.billing().upsertInvoice(
 <dd>
 
 **paymentMethodExternalId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startingBalance:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -10858,6 +10874,14 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
+**warningTiers:** `Optional<List<WarningTierRequestBody>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **yearlyMeteredPriceId:** `Optional<String>` 
     
 </dd>
@@ -11177,6 +11201,14 @@ client.entitlements().updatePlanEntitlement(
 <dd>
 
 **valueType:** `EntitlementValueType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**warningTiers:** `Optional<List<WarningTierRequestBody>>` 
     
 </dd>
 </dl>
@@ -11538,6 +11570,14 @@ client.entitlements().upsertPlanEntitlementForBillingProduct(
 <dd>
 
 **valueType:** `EntitlementValueType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**warningTiers:** `Optional<List<WarningTierRequestBody>>` 
     
 </dd>
 </dl>
@@ -13801,14 +13841,6 @@ client.planbundle().createPlanBundle(
     
 </dd>
 </dl>
-
-<dl>
-<dd>
-
-**traits:** `Optional<List<UpdatePlanTraitTraitRequestBody>>` 
-    
-</dd>
-</dl>
 </dd>
 </dl>
 
@@ -13899,14 +13931,6 @@ client.planbundle().updatePlanBundle(
 <dd>
 
 **planVersionId:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**traits:** `Optional<List<UpdatePlanTraitTraitRequestBody>>` 
     
 </dd>
 </dl>

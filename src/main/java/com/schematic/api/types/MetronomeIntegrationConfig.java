@@ -7,29 +7,55 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MetronomeIntegrationConfig.Builder.class)
 public final class MetronomeIntegrationConfig {
+    private final Optional<String> externalCustomerIdKey;
+
     private final Map<String, Object> additionalProperties;
 
-    private MetronomeIntegrationConfig(Map<String, Object> additionalProperties) {
+    private MetronomeIntegrationConfig(
+            Optional<String> externalCustomerIdKey, Map<String, Object> additionalProperties) {
+        this.externalCustomerIdKey = externalCustomerIdKey;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Schematic company key used to store the Metronome customer's ingest alias; when unset, imported customers carry only metronome_customer_id
+     */
+    @JsonProperty("external_customer_id_key")
+    public Optional<String> getExternalCustomerIdKey() {
+        return externalCustomerIdKey;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof MetronomeIntegrationConfig;
+        return other instanceof MetronomeIntegrationConfig && equalTo((MetronomeIntegrationConfig) other);
     }
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
+    }
+
+    private boolean equalTo(MetronomeIntegrationConfig other) {
+        return externalCustomerIdKey.equals(other.externalCustomerIdKey);
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return Objects.hash(this.externalCustomerIdKey);
     }
 
     @java.lang.Override
@@ -43,17 +69,34 @@ public final class MetronomeIntegrationConfig {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> externalCustomerIdKey = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         public Builder from(MetronomeIntegrationConfig other) {
+            externalCustomerIdKey(other.getExternalCustomerIdKey());
+            return this;
+        }
+
+        /**
+         * <p>Schematic company key used to store the Metronome customer's ingest alias; when unset, imported customers carry only metronome_customer_id</p>
+         */
+        @JsonSetter(value = "external_customer_id_key", nulls = Nulls.SKIP)
+        public Builder externalCustomerIdKey(Optional<String> externalCustomerIdKey) {
+            this.externalCustomerIdKey = externalCustomerIdKey;
+            return this;
+        }
+
+        public Builder externalCustomerIdKey(String externalCustomerIdKey) {
+            this.externalCustomerIdKey = Optional.ofNullable(externalCustomerIdKey);
             return this;
         }
 
         public MetronomeIntegrationConfig build() {
-            return new MetronomeIntegrationConfig(additionalProperties);
+            return new MetronomeIntegrationConfig(externalCustomerIdKey, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

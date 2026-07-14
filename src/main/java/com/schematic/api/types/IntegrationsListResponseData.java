@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,6 +32,8 @@ public final class IntegrationsListResponseData {
 
     private final boolean isConnectInstall;
 
+    private final Optional<OffsetDateTime> lastWebhookReceivedAt;
+
     private final IntegrationState state;
 
     private final IntegrationType type;
@@ -43,6 +46,7 @@ public final class IntegrationsListResponseData {
             String id,
             boolean isAppInstall,
             boolean isConnectInstall,
+            Optional<OffsetDateTime> lastWebhookReceivedAt,
             IntegrationState state,
             IntegrationType type,
             Map<String, Object> additionalProperties) {
@@ -51,6 +55,7 @@ public final class IntegrationsListResponseData {
         this.id = id;
         this.isAppInstall = isAppInstall;
         this.isConnectInstall = isConnectInstall;
+        this.lastWebhookReceivedAt = lastWebhookReceivedAt;
         this.state = state;
         this.type = type;
         this.additionalProperties = additionalProperties;
@@ -81,6 +86,11 @@ public final class IntegrationsListResponseData {
         return isConnectInstall;
     }
 
+    @JsonProperty("last_webhook_received_at")
+    public Optional<OffsetDateTime> getLastWebhookReceivedAt() {
+        return lastWebhookReceivedAt;
+    }
+
     @JsonProperty("state")
     public IntegrationState getState() {
         return state;
@@ -108,6 +118,7 @@ public final class IntegrationsListResponseData {
                 && id.equals(other.id)
                 && isAppInstall == other.isAppInstall
                 && isConnectInstall == other.isConnectInstall
+                && lastWebhookReceivedAt.equals(other.lastWebhookReceivedAt)
                 && state.equals(other.state)
                 && type.equals(other.type);
     }
@@ -120,6 +131,7 @@ public final class IntegrationsListResponseData {
                 this.id,
                 this.isAppInstall,
                 this.isConnectInstall,
+                this.lastWebhookReceivedAt,
                 this.state,
                 this.type);
     }
@@ -169,6 +181,10 @@ public final class IntegrationsListResponseData {
         _FinalStage config(Optional<IntegrationConfig> config);
 
         _FinalStage config(IntegrationConfig config);
+
+        _FinalStage lastWebhookReceivedAt(Optional<OffsetDateTime> lastWebhookReceivedAt);
+
+        _FinalStage lastWebhookReceivedAt(OffsetDateTime lastWebhookReceivedAt);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -192,6 +208,8 @@ public final class IntegrationsListResponseData {
 
         private IntegrationType type;
 
+        private Optional<OffsetDateTime> lastWebhookReceivedAt = Optional.empty();
+
         private Optional<IntegrationConfig> config = Optional.empty();
 
         @JsonAnySetter
@@ -206,6 +224,7 @@ public final class IntegrationsListResponseData {
             id(other.getId());
             isAppInstall(other.getIsAppInstall());
             isConnectInstall(other.getIsConnectInstall());
+            lastWebhookReceivedAt(other.getLastWebhookReceivedAt());
             state(other.getState());
             type(other.getType());
             return this;
@@ -254,6 +273,19 @@ public final class IntegrationsListResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage lastWebhookReceivedAt(OffsetDateTime lastWebhookReceivedAt) {
+            this.lastWebhookReceivedAt = Optional.ofNullable(lastWebhookReceivedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "last_webhook_received_at", nulls = Nulls.SKIP)
+        public _FinalStage lastWebhookReceivedAt(Optional<OffsetDateTime> lastWebhookReceivedAt) {
+            this.lastWebhookReceivedAt = lastWebhookReceivedAt;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage config(IntegrationConfig config) {
             this.config = Optional.ofNullable(config);
             return this;
@@ -269,7 +301,15 @@ public final class IntegrationsListResponseData {
         @java.lang.Override
         public IntegrationsListResponseData build() {
             return new IntegrationsListResponseData(
-                    capabilities, config, id, isAppInstall, isConnectInstall, state, type, additionalProperties);
+                    capabilities,
+                    config,
+                    id,
+                    isAppInstall,
+                    isConnectInstall,
+                    lastWebhookReceivedAt,
+                    state,
+                    type,
+                    additionalProperties);
         }
 
         @java.lang.Override

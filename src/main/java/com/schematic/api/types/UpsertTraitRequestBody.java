@@ -198,7 +198,6 @@ public final class UpsertTraitRequestBody {
 
         /**
          * <p>Name of the trait to update</p>
-         * <p>Name of the trait to update</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

@@ -10,8 +10,14 @@ public final class BillingPlanCreditGrantResetCadence {
     public static final BillingPlanCreditGrantResetCadence YEARLY =
             new BillingPlanCreditGrantResetCadence(Value.YEARLY, "yearly");
 
+    public static final BillingPlanCreditGrantResetCadence QUARTERLY =
+            new BillingPlanCreditGrantResetCadence(Value.QUARTERLY, "quarterly");
+
     public static final BillingPlanCreditGrantResetCadence DAILY =
             new BillingPlanCreditGrantResetCadence(Value.DAILY, "daily");
+
+    public static final BillingPlanCreditGrantResetCadence EVERY_6_MONTHS =
+            new BillingPlanCreditGrantResetCadence(Value.EVERY_6_MONTHS, "every_6_months");
 
     public static final BillingPlanCreditGrantResetCadence WEEKLY =
             new BillingPlanCreditGrantResetCadence(Value.WEEKLY, "weekly");
@@ -54,8 +60,12 @@ public final class BillingPlanCreditGrantResetCadence {
         switch (value) {
             case YEARLY:
                 return visitor.visitYearly();
+            case QUARTERLY:
+                return visitor.visitQuarterly();
             case DAILY:
                 return visitor.visitDaily();
+            case EVERY_6_MONTHS:
+                return visitor.visitEvery6Months();
             case WEEKLY:
                 return visitor.visitWeekly();
             case MONTHLY:
@@ -71,8 +81,12 @@ public final class BillingPlanCreditGrantResetCadence {
         switch (value) {
             case "yearly":
                 return YEARLY;
+            case "quarterly":
+                return QUARTERLY;
             case "daily":
                 return DAILY;
+            case "every_6_months":
+                return EVERY_6_MONTHS;
             case "weekly":
                 return WEEKLY;
             case "monthly":
@@ -85,7 +99,11 @@ public final class BillingPlanCreditGrantResetCadence {
     public enum Value {
         DAILY,
 
+        EVERY_6_MONTHS,
+
         MONTHLY,
+
+        QUARTERLY,
 
         WEEKLY,
 
@@ -97,7 +115,11 @@ public final class BillingPlanCreditGrantResetCadence {
     public interface Visitor<T> {
         T visitDaily();
 
+        T visitEvery6Months();
+
         T visitMonthly();
+
+        T visitQuarterly();
 
         T visitWeekly();
 

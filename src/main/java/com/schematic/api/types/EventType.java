@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class EventType {
+    public static final EventType INFERENCE = new EventType(Value.INFERENCE, "inference");
+
     public static final EventType FLAG_CHECK = new EventType(Value.FLAG_CHECK, "flag_check");
 
     public static final EventType TRACK = new EventType(Value.TRACK, "track");
@@ -44,6 +46,8 @@ public final class EventType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case INFERENCE:
+                return visitor.visitInference();
             case FLAG_CHECK:
                 return visitor.visitFlagCheck();
             case TRACK:
@@ -59,6 +63,8 @@ public final class EventType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static EventType valueOf(String value) {
         switch (value) {
+            case "inference":
+                return INFERENCE;
             case "flag_check":
                 return FLAG_CHECK;
             case "track":
@@ -75,6 +81,8 @@ public final class EventType {
 
         IDENTIFY,
 
+        INFERENCE,
+
         TRACK,
 
         UNKNOWN
@@ -84,6 +92,8 @@ public final class EventType {
         T visitFlagCheck();
 
         T visitIdentify();
+
+        T visitInference();
 
         T visitTrack();
 

@@ -742,7 +742,6 @@ public final class PlanCreditGrantView {
 
         /**
          * <p>Deprecated field, will be removed in the future. Use Credit.Description instead.</p>
-         * <p>Deprecated field, will be removed in the future. Use Credit.Description instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -760,7 +759,6 @@ public final class PlanCreditGrantView {
         }
 
         /**
-         * <p>Deprecated field, will be removed in the future. Use Credit.Name instead.</p>
          * <p>Deprecated field, will be removed in the future. Use Credit.Name instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

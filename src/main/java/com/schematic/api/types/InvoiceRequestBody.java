@@ -36,7 +36,11 @@ public final class InvoiceRequestBody {
 
     private final Optional<OffsetDateTime> dueDate;
 
+    private final Optional<Long> endingBalance;
+
     private final Optional<String> paymentMethodExternalId;
+
+    private final Optional<Long> startingBalance;
 
     private final Optional<InvoiceStatus> status;
 
@@ -56,7 +60,9 @@ public final class InvoiceRequestBody {
             String currency,
             String customerExternalId,
             Optional<OffsetDateTime> dueDate,
+            Optional<Long> endingBalance,
             Optional<String> paymentMethodExternalId,
+            Optional<Long> startingBalance,
             Optional<InvoiceStatus> status,
             Optional<String> subscriptionExternalId,
             long subtotal,
@@ -69,7 +75,9 @@ public final class InvoiceRequestBody {
         this.currency = currency;
         this.customerExternalId = customerExternalId;
         this.dueDate = dueDate;
+        this.endingBalance = endingBalance;
         this.paymentMethodExternalId = paymentMethodExternalId;
+        this.startingBalance = startingBalance;
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.subtotal = subtotal;
@@ -112,9 +120,19 @@ public final class InvoiceRequestBody {
         return dueDate;
     }
 
+    @JsonProperty("ending_balance")
+    public Optional<Long> getEndingBalance() {
+        return endingBalance;
+    }
+
     @JsonProperty("payment_method_external_id")
     public Optional<String> getPaymentMethodExternalId() {
         return paymentMethodExternalId;
+    }
+
+    @JsonProperty("starting_balance")
+    public Optional<Long> getStartingBalance() {
+        return startingBalance;
     }
 
     @JsonProperty("status")
@@ -156,7 +174,9 @@ public final class InvoiceRequestBody {
                 && currency.equals(other.currency)
                 && customerExternalId.equals(other.customerExternalId)
                 && dueDate.equals(other.dueDate)
+                && endingBalance.equals(other.endingBalance)
                 && paymentMethodExternalId.equals(other.paymentMethodExternalId)
+                && startingBalance.equals(other.startingBalance)
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && subtotal == other.subtotal
@@ -173,7 +193,9 @@ public final class InvoiceRequestBody {
                 this.currency,
                 this.customerExternalId,
                 this.dueDate,
+                this.endingBalance,
                 this.paymentMethodExternalId,
+                this.startingBalance,
                 this.status,
                 this.subscriptionExternalId,
                 this.subtotal,
@@ -230,9 +252,17 @@ public final class InvoiceRequestBody {
 
         _FinalStage dueDate(OffsetDateTime dueDate);
 
+        _FinalStage endingBalance(Optional<Long> endingBalance);
+
+        _FinalStage endingBalance(Long endingBalance);
+
         _FinalStage paymentMethodExternalId(Optional<String> paymentMethodExternalId);
 
         _FinalStage paymentMethodExternalId(String paymentMethodExternalId);
+
+        _FinalStage startingBalance(Optional<Long> startingBalance);
+
+        _FinalStage startingBalance(Long startingBalance);
 
         _FinalStage status(Optional<InvoiceStatus> status);
 
@@ -277,7 +307,11 @@ public final class InvoiceRequestBody {
 
         private Optional<InvoiceStatus> status = Optional.empty();
 
+        private Optional<Long> startingBalance = Optional.empty();
+
         private Optional<String> paymentMethodExternalId = Optional.empty();
+
+        private Optional<Long> endingBalance = Optional.empty();
 
         private Optional<OffsetDateTime> dueDate = Optional.empty();
 
@@ -295,7 +329,9 @@ public final class InvoiceRequestBody {
             currency(other.getCurrency());
             customerExternalId(other.getCustomerExternalId());
             dueDate(other.getDueDate());
+            endingBalance(other.getEndingBalance());
             paymentMethodExternalId(other.getPaymentMethodExternalId());
+            startingBalance(other.getStartingBalance());
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             subtotal(other.getSubtotal());
@@ -392,6 +428,19 @@ public final class InvoiceRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage startingBalance(Long startingBalance) {
+            this.startingBalance = Optional.ofNullable(startingBalance);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "starting_balance", nulls = Nulls.SKIP)
+        public _FinalStage startingBalance(Optional<Long> startingBalance) {
+            this.startingBalance = startingBalance;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage paymentMethodExternalId(String paymentMethodExternalId) {
             this.paymentMethodExternalId = Optional.ofNullable(paymentMethodExternalId);
             return this;
@@ -401,6 +450,19 @@ public final class InvoiceRequestBody {
         @JsonSetter(value = "payment_method_external_id", nulls = Nulls.SKIP)
         public _FinalStage paymentMethodExternalId(Optional<String> paymentMethodExternalId) {
             this.paymentMethodExternalId = paymentMethodExternalId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage endingBalance(Long endingBalance) {
+            this.endingBalance = Optional.ofNullable(endingBalance);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "ending_balance", nulls = Nulls.SKIP)
+        public _FinalStage endingBalance(Optional<Long> endingBalance) {
+            this.endingBalance = endingBalance;
             return this;
         }
 
@@ -427,7 +489,9 @@ public final class InvoiceRequestBody {
                     currency,
                     customerExternalId,
                     dueDate,
+                    endingBalance,
                     paymentMethodExternalId,
+                    startingBalance,
                     status,
                     subscriptionExternalId,
                     subtotal,

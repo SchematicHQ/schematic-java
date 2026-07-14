@@ -29,8 +29,6 @@ public final class PlanBundleResponseData {
 
     private final Optional<PlanResponseData> plan;
 
-    private final Optional<List<PlanTraitResponseData>> traits;
-
     private final Map<String, Object> additionalProperties;
 
     private PlanBundleResponseData(
@@ -38,13 +36,11 @@ public final class PlanBundleResponseData {
             Optional<List<BillingPlanCreditGrantResponseData>> creditGrants,
             Optional<List<PlanEntitlementResponseData>> entitlements,
             Optional<PlanResponseData> plan,
-            Optional<List<PlanTraitResponseData>> traits,
             Map<String, Object> additionalProperties) {
         this.billingProduct = billingProduct;
         this.creditGrants = creditGrants;
         this.entitlements = entitlements;
         this.plan = plan;
-        this.traits = traits;
         this.additionalProperties = additionalProperties;
     }
 
@@ -68,11 +64,6 @@ public final class PlanBundleResponseData {
         return plan;
     }
 
-    @JsonProperty("traits")
-    public Optional<List<PlanTraitResponseData>> getTraits() {
-        return traits;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -88,13 +79,12 @@ public final class PlanBundleResponseData {
         return billingProduct.equals(other.billingProduct)
                 && creditGrants.equals(other.creditGrants)
                 && entitlements.equals(other.entitlements)
-                && plan.equals(other.plan)
-                && traits.equals(other.traits);
+                && plan.equals(other.plan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.billingProduct, this.creditGrants, this.entitlements, this.plan, this.traits);
+        return Objects.hash(this.billingProduct, this.creditGrants, this.entitlements, this.plan);
     }
 
     @java.lang.Override
@@ -116,8 +106,6 @@ public final class PlanBundleResponseData {
 
         private Optional<PlanResponseData> plan = Optional.empty();
 
-        private Optional<List<PlanTraitResponseData>> traits = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -128,7 +116,6 @@ public final class PlanBundleResponseData {
             creditGrants(other.getCreditGrants());
             entitlements(other.getEntitlements());
             plan(other.getPlan());
-            traits(other.getTraits());
             return this;
         }
 
@@ -176,20 +163,8 @@ public final class PlanBundleResponseData {
             return this;
         }
 
-        @JsonSetter(value = "traits", nulls = Nulls.SKIP)
-        public Builder traits(Optional<List<PlanTraitResponseData>> traits) {
-            this.traits = traits;
-            return this;
-        }
-
-        public Builder traits(List<PlanTraitResponseData> traits) {
-            this.traits = Optional.ofNullable(traits);
-            return this;
-        }
-
         public PlanBundleResponseData build() {
-            return new PlanBundleResponseData(
-                    billingProduct, creditGrants, entitlements, plan, traits, additionalProperties);
+            return new PlanBundleResponseData(billingProduct, creditGrants, entitlements, plan, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

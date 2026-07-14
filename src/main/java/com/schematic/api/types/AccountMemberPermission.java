@@ -19,6 +19,9 @@ public final class AccountMemberPermission {
     public static final AccountMemberPermission FEATURES_EDIT =
             new AccountMemberPermission(Value.FEATURES_EDIT, "features_edit");
 
+    public static final AccountMemberPermission CUSTOM_PLANS_EDIT =
+            new AccountMemberPermission(Value.CUSTOM_PLANS_EDIT, "custom_plans_edit");
+
     public static final AccountMemberPermission PLAN_ENTITLEMENTS_EDIT =
             new AccountMemberPermission(Value.PLAN_ENTITLEMENTS_EDIT, "plan_entitlements_edit");
 
@@ -90,6 +93,8 @@ public final class AccountMemberPermission {
                 return visitor.visitPlanBillingEdit();
             case FEATURES_EDIT:
                 return visitor.visitFeaturesEdit();
+            case CUSTOM_PLANS_EDIT:
+                return visitor.visitCustomPlansEdit();
             case PLAN_ENTITLEMENTS_EDIT:
                 return visitor.visitPlanEntitlementsEdit();
             case FLAG_RULES_EDIT:
@@ -127,6 +132,8 @@ public final class AccountMemberPermission {
                 return PLAN_BILLING_EDIT;
             case "features_edit":
                 return FEATURES_EDIT;
+            case "custom_plans_edit":
+                return CUSTOM_PLANS_EDIT;
             case "plan_entitlements_edit":
                 return PLAN_ENTITLEMENTS_EDIT;
             case "flag_rules_edit":
@@ -159,6 +166,8 @@ public final class AccountMemberPermission {
 
         COMPONENTS_EDIT,
 
+        CUSTOM_PLANS_EDIT,
+
         DATA_EXPORTS_EDIT,
 
         FEATURES_EDIT,
@@ -190,6 +199,8 @@ public final class AccountMemberPermission {
         T visitCompanyUsersEdit();
 
         T visitComponentsEdit();
+
+        T visitCustomPlansEdit();
 
         T visitDataExportsEdit();
 

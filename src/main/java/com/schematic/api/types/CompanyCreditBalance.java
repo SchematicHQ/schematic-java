@@ -141,7 +141,6 @@ public final class CompanyCreditBalance {
 
         /**
          * <p>Remaining credit, excluding any open lease hold (the value SDKs gate on)</p>
-         * <p>Remaining credit, excluding any open lease hold (the value SDKs gate on)</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -153,7 +152,6 @@ public final class CompanyCreditBalance {
 
         /**
          * <p>Amount held by the company's open credit lease, 0 when none is open</p>
-         * <p>Amount held by the company's open credit lease, 0 when none is open</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -164,7 +162,6 @@ public final class CompanyCreditBalance {
         }
 
         /**
-         * <p>Spendable balance including the open lease hold (remaining + reserved)</p>
          * <p>Spendable balance including the open lease hold (remaining + reserved)</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

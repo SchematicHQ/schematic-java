@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class BillingCreditGrantZeroedOutReason {
+    public static final BillingCreditGrantZeroedOutReason INTEGRATION_UNINSTALLED =
+            new BillingCreditGrantZeroedOutReason(Value.INTEGRATION_UNINSTALLED, "integration_uninstalled");
+
     public static final BillingCreditGrantZeroedOutReason PLAN_CHANGE =
             new BillingCreditGrantZeroedOutReason(Value.PLAN_CHANGE, "plan_change");
 
@@ -15,6 +18,9 @@ public final class BillingCreditGrantZeroedOutReason {
 
     public static final BillingCreditGrantZeroedOutReason PLAN_PERIOD_RESET =
             new BillingCreditGrantZeroedOutReason(Value.PLAN_PERIOD_RESET, "plan_period_reset");
+
+    public static final BillingCreditGrantZeroedOutReason CUSTOMER_ARCHIVED =
+            new BillingCreditGrantZeroedOutReason(Value.CUSTOMER_ARCHIVED, "customer_archived");
 
     public static final BillingCreditGrantZeroedOutReason RECONCILED =
             new BillingCreditGrantZeroedOutReason(Value.RECONCILED, "reconciled");
@@ -55,12 +61,16 @@ public final class BillingCreditGrantZeroedOutReason {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case INTEGRATION_UNINSTALLED:
+                return visitor.visitIntegrationUninstalled();
             case PLAN_CHANGE:
                 return visitor.visitPlanChange();
             case EXPIRED:
                 return visitor.visitExpired();
             case PLAN_PERIOD_RESET:
                 return visitor.visitPlanPeriodReset();
+            case CUSTOMER_ARCHIVED:
+                return visitor.visitCustomerArchived();
             case RECONCILED:
                 return visitor.visitReconciled();
             case MANUAL:
@@ -74,12 +84,16 @@ public final class BillingCreditGrantZeroedOutReason {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static BillingCreditGrantZeroedOutReason valueOf(String value) {
         switch (value) {
+            case "integration_uninstalled":
+                return INTEGRATION_UNINSTALLED;
             case "plan_change":
                 return PLAN_CHANGE;
             case "expired":
                 return EXPIRED;
             case "plan_period_reset":
                 return PLAN_PERIOD_RESET;
+            case "customer_archived":
+                return CUSTOMER_ARCHIVED;
             case "reconciled":
                 return RECONCILED;
             case "manual":
@@ -90,7 +104,11 @@ public final class BillingCreditGrantZeroedOutReason {
     }
 
     public enum Value {
+        CUSTOMER_ARCHIVED,
+
         EXPIRED,
+
+        INTEGRATION_UNINSTALLED,
 
         MANUAL,
 
@@ -104,7 +122,11 @@ public final class BillingCreditGrantZeroedOutReason {
     }
 
     public interface Visitor<T> {
+        T visitCustomerArchived();
+
         T visitExpired();
+
+        T visitIntegrationUninstalled();
 
         T visitManual();
 

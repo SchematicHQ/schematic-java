@@ -15,7 +15,6 @@ import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.PlanBundleCreditGrantRequestBody;
 import com.schematic.api.types.PlanBundleEntitlementRequestBody;
 import com.schematic.api.types.UpdatePlanRequestBody;
-import com.schematic.api.types.UpdatePlanTraitTraitRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +36,6 @@ public final class UpdatePlanBundleRequestBody {
 
     private final Optional<String> planVersionId;
 
-    private final Optional<List<UpdatePlanTraitTraitRequestBody>> traits;
-
     private final Map<String, Object> additionalProperties;
 
     private UpdatePlanBundleRequestBody(
@@ -47,14 +44,12 @@ public final class UpdatePlanBundleRequestBody {
             List<PlanBundleEntitlementRequestBody> entitlements,
             Optional<UpdatePlanRequestBody> plan,
             Optional<String> planVersionId,
-            Optional<List<UpdatePlanTraitTraitRequestBody>> traits,
             Map<String, Object> additionalProperties) {
         this.billingProduct = billingProduct;
         this.creditGrants = creditGrants;
         this.entitlements = entitlements;
         this.plan = plan;
         this.planVersionId = planVersionId;
-        this.traits = traits;
         this.additionalProperties = additionalProperties;
     }
 
@@ -83,11 +78,6 @@ public final class UpdatePlanBundleRequestBody {
         return planVersionId;
     }
 
-    @JsonProperty("traits")
-    public Optional<List<UpdatePlanTraitTraitRequestBody>> getTraits() {
-        return traits;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -104,14 +94,12 @@ public final class UpdatePlanBundleRequestBody {
                 && creditGrants.equals(other.creditGrants)
                 && entitlements.equals(other.entitlements)
                 && plan.equals(other.plan)
-                && planVersionId.equals(other.planVersionId)
-                && traits.equals(other.traits);
+                && planVersionId.equals(other.planVersionId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.billingProduct, this.creditGrants, this.entitlements, this.plan, this.planVersionId, this.traits);
+        return Objects.hash(this.billingProduct, this.creditGrants, this.entitlements, this.plan, this.planVersionId);
     }
 
     @java.lang.Override
@@ -135,8 +123,6 @@ public final class UpdatePlanBundleRequestBody {
 
         private Optional<String> planVersionId = Optional.empty();
 
-        private Optional<List<UpdatePlanTraitTraitRequestBody>> traits = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -148,7 +134,6 @@ public final class UpdatePlanBundleRequestBody {
             entitlements(other.getEntitlements());
             plan(other.getPlan());
             planVersionId(other.getPlanVersionId());
-            traits(other.getTraits());
             return this;
         }
 
@@ -217,20 +202,9 @@ public final class UpdatePlanBundleRequestBody {
             return this;
         }
 
-        @JsonSetter(value = "traits", nulls = Nulls.SKIP)
-        public Builder traits(Optional<List<UpdatePlanTraitTraitRequestBody>> traits) {
-            this.traits = traits;
-            return this;
-        }
-
-        public Builder traits(List<UpdatePlanTraitTraitRequestBody> traits) {
-            this.traits = Optional.ofNullable(traits);
-            return this;
-        }
-
         public UpdatePlanBundleRequestBody build() {
             return new UpdatePlanBundleRequestBody(
-                    billingProduct, creditGrants, entitlements, plan, planVersionId, traits, additionalProperties);
+                    billingProduct, creditGrants, entitlements, plan, planVersionId, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

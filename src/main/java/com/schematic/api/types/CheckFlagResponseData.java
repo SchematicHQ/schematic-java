@@ -441,7 +441,6 @@ public final class CheckFlagResponseData {
 
         /**
          * <p>The key used to check the flag</p>
-         * <p>The key used to check the flag</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -453,7 +452,6 @@ public final class CheckFlagResponseData {
 
         /**
          * <p>A human-readable explanation of the result</p>
-         * <p>A human-readable explanation of the result</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -464,7 +462,6 @@ public final class CheckFlagResponseData {
         }
 
         /**
-         * <p>A boolean flag check result; for feature entitlements, this represents whether further consumption of the feature is permitted</p>
          * <p>A boolean flag check result; for feature entitlements, this represents whether further consumption of the feature is permitted</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
