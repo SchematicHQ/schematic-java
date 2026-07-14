@@ -833,7 +833,6 @@ public final class FeatureUsageResponseData {
 
         /**
          * <p>Whether further usage is permitted.</p>
-         * <p>Whether further usage is permitted.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -844,7 +843,6 @@ public final class FeatureUsageResponseData {
         }
 
         /**
-         * <p>The type of allocation that is being used.</p>
          * <p>The type of allocation that is being used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

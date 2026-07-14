@@ -121,7 +121,6 @@ public final class ListPlanIssuesResponse {
 
         /**
          * <p>Input parameters</p>
-         * <p>Input parameters</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

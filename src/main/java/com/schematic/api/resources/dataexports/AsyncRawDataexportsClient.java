@@ -12,6 +12,7 @@ import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.ResponseBodyInputStream;
+import com.schematic.api.core.RetryInterceptor;
 import com.schematic.api.errors.BadRequestError;
 import com.schematic.api.errors.ForbiddenError;
 import com.schematic.api.errors.InternalServerError;
@@ -74,6 +75,15 @@ public class AsyncRawDataexportsClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
         CompletableFuture<BaseSchematicHttpResponse<CreateDataExportResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
@@ -121,6 +131,9 @@ public class AsyncRawDataexportsClient {
                     future.completeExceptionally(new BaseSchematicApiException(
                             "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e));
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
                 }
@@ -159,6 +172,15 @@ public class AsyncRawDataexportsClient {
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
         }
         CompletableFuture<BaseSchematicHttpResponse<InputStream>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
@@ -202,6 +224,9 @@ public class AsyncRawDataexportsClient {
                     future.completeExceptionally(new BaseSchematicApiException(
                             "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e));
                 } catch (IOException e) {
                     future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
                 }

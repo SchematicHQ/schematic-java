@@ -173,7 +173,6 @@ public final class ListBillingProductMatchCompaniesRequest {
 
         /**
          * <p>The plan ID to find billing product match companies for</p>
-         * <p>The plan ID to find billing product match companies for</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

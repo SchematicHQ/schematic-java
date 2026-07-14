@@ -320,7 +320,6 @@ public final class EventBodyFlagCheck {
 
         /**
          * <p>The key of the flag being checked</p>
-         * <p>The key of the flag being checked</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -332,7 +331,6 @@ public final class EventBodyFlagCheck {
 
         /**
          * <p>The reason why the value was returned</p>
-         * <p>The reason why the value was returned</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -343,7 +341,6 @@ public final class EventBodyFlagCheck {
         }
 
         /**
-         * <p>The value of the flag for the given company and/or user</p>
          * <p>The value of the flag for the given company and/or user</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

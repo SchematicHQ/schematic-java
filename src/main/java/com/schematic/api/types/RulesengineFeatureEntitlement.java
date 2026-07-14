@@ -513,7 +513,6 @@ public final class RulesengineFeatureEntitlement {
 
         /**
          * <p>The ID of the feature</p>
-         * <p>The ID of the feature</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -525,7 +524,6 @@ public final class RulesengineFeatureEntitlement {
 
         /**
          * <p>The key of the flag associated with the feature</p>
-         * <p>The key of the flag associated with the feature</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -536,7 +534,6 @@ public final class RulesengineFeatureEntitlement {
         }
 
         /**
-         * <p>The type of the entitlement value</p>
          * <p>The type of the entitlement value</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

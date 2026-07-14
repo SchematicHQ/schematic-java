@@ -223,7 +223,6 @@ public final class StripeIntegrationConfig {
 
         /**
          * <p>Whether the integration is connected to a Stripe sandbox account</p>
-         * <p>Whether the integration is connected to a Stripe sandbox account</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -234,7 +233,6 @@ public final class StripeIntegrationConfig {
         }
 
         /**
-         * <p>Whether the integration is connected to a live Stripe account</p>
          * <p>Whether the integration is connected to a live Stripe account</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

@@ -38,6 +38,8 @@ public final class EventBody {
             return visitor.visit((EventBodyFlagCheck) this.value);
         } else if (this.type == 2) {
             return visitor.visit((EventBodyIdentify) this.value);
+        } else if (this.type == 3) {
+            return visitor.visit((EventBodyInference) this.value);
         }
         throw new IllegalStateException("Failed to visit value. This should never happen.");
     }
@@ -74,12 +76,18 @@ public final class EventBody {
         return new EventBody(value, 2);
     }
 
+    public static EventBody of(EventBodyInference value) {
+        return new EventBody(value, 3);
+    }
+
     public interface Visitor<T> {
         T visit(EventBodyTrack value);
 
         T visit(EventBodyFlagCheck value);
 
         T visit(EventBodyIdentify value);
+
+        T visit(EventBodyInference value);
     }
 
     static final class Deserializer extends StdDeserializer<EventBody> {
@@ -108,6 +116,17 @@ public final class EventBody {
             if (value instanceof Map<?, ?> && ((Map<?, ?>) value).containsKey("keys")) {
                 try {
                     return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyIdentify.class));
+                } catch (RuntimeException e) {
+                }
+            }
+            if (value instanceof Map<?, ?>
+                    && ((Map<?, ?>) value).containsKey("company")
+                    && ((Map<?, ?>) value).containsKey("input_tokens")
+                    && ((Map<?, ?>) value).containsKey("output_tokens")
+                    && ((Map<?, ?>) value).containsKey("provider")
+                    && ((Map<?, ?>) value).containsKey("response_model")) {
+                try {
+                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyInference.class));
                 } catch (RuntimeException e) {
                 }
             }

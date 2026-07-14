@@ -17,29 +17,34 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ApiError.Builder.class)
-public final class ApiError {
-    private final String error;
+@JsonDeserialize(builder = WarningTierRequestBody.Builder.class)
+public final class WarningTierRequestBody {
+    private final String key;
+
+    private final long value;
 
     private final Map<String, Object> additionalProperties;
 
-    private ApiError(String error, Map<String, Object> additionalProperties) {
-        this.error = error;
+    private WarningTierRequestBody(String key, long value, Map<String, Object> additionalProperties) {
+        this.key = key;
+        this.value = value;
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return Error message
-     */
-    @JsonProperty("error")
-    public String getError() {
-        return error;
+    @JsonProperty("key")
+    public String getKey() {
+        return key;
+    }
+
+    @JsonProperty("value")
+    public long getValue() {
+        return value;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ApiError && equalTo((ApiError) other);
+        return other instanceof WarningTierRequestBody && equalTo((WarningTierRequestBody) other);
     }
 
     @JsonAnyGetter
@@ -47,13 +52,13 @@ public final class ApiError {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ApiError other) {
-        return error.equals(other.error);
+    private boolean equalTo(WarningTierRequestBody other) {
+        return key.equals(other.key) && value == other.value;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.error);
+        return Objects.hash(this.key, this.value);
     }
 
     @java.lang.Override
@@ -61,21 +66,22 @@ public final class ApiError {
         return ObjectMappers.stringify(this);
     }
 
-    public static ErrorStage builder() {
+    public static KeyStage builder() {
         return new Builder();
     }
 
-    public interface ErrorStage {
-        /**
-         * <p>Error message</p>
-         */
-        _FinalStage error(@NotNull String error);
+    public interface KeyStage {
+        ValueStage key(@NotNull String key);
 
-        Builder from(ApiError other);
+        Builder from(WarningTierRequestBody other);
+    }
+
+    public interface ValueStage {
+        _FinalStage value(long value);
     }
 
     public interface _FinalStage {
-        ApiError build();
+        WarningTierRequestBody build();
 
         _FinalStage additionalProperty(String key, Object value);
 
@@ -83,8 +89,10 @@ public final class ApiError {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ErrorStage, _FinalStage {
-        private String error;
+    public static final class Builder implements KeyStage, ValueStage, _FinalStage {
+        private String key;
+
+        private long value;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -92,25 +100,29 @@ public final class ApiError {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(ApiError other) {
-            error(other.getError());
-            return this;
-        }
-
-        /**
-         * <p>Error message</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("error")
-        public _FinalStage error(@NotNull String error) {
-            this.error = Objects.requireNonNull(error, "error must not be null");
+        public Builder from(WarningTierRequestBody other) {
+            key(other.getKey());
+            value(other.getValue());
             return this;
         }
 
         @java.lang.Override
-        public ApiError build() {
-            return new ApiError(error, additionalProperties);
+        @JsonSetter("key")
+        public ValueStage key(@NotNull String key) {
+            this.key = Objects.requireNonNull(key, "key must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("value")
+        public _FinalStage value(long value) {
+            this.value = value;
+            return this;
+        }
+
+        @java.lang.Override
+        public WarningTierRequestBody build() {
+            return new WarningTierRequestBody(key, value, additionalProperties);
         }
 
         @java.lang.Override

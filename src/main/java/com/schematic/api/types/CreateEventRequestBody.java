@@ -214,7 +214,6 @@ public final class CreateEventRequestBody {
 
         /**
          * <p>Either 'identify' or 'track'</p>
-         * <p>Either 'identify' or 'track'</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

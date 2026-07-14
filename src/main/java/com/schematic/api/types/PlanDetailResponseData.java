@@ -787,7 +787,6 @@ public final class PlanDetailResponseData {
 
         /**
          * <p>Deprecated: Use BillingStrategy instead</p>
-         * <p>Deprecated: Use BillingStrategy instead</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
