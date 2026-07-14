@@ -77,7 +77,6 @@ class WasmRulesEngineClockTest {
 
         // setCurrentTimeMillis lets the engine compute the next reset boundary.
         assertTrue(
-                result.getFeatureUsageResetAt().isPresent(),
-                "reset-at should be computed from the injected host time");
+                result.getFeatureUsageResetAt().isPresent(), "reset-at should be computed from the injected host time");
     }
 }
