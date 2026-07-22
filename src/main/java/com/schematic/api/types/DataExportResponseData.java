@@ -9,12 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -26,13 +28,13 @@ public final class DataExportResponseData {
 
     private final String environmentId;
 
-    private final String exportType;
+    private final DataExportType exportType;
 
     private final String id;
 
-    private final String metadata;
+    private final Optional<DataExportMetadata> metadata;
 
-    private final String outputFileType;
+    private final DataExportOutputFileType outputFileType;
 
     private final DataExportStatus status;
 
@@ -44,10 +46,10 @@ public final class DataExportResponseData {
             String accountId,
             OffsetDateTime createdAt,
             String environmentId,
-            String exportType,
+            DataExportType exportType,
             String id,
-            String metadata,
-            String outputFileType,
+            Optional<DataExportMetadata> metadata,
+            DataExportOutputFileType outputFileType,
             DataExportStatus status,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -79,7 +81,7 @@ public final class DataExportResponseData {
     }
 
     @JsonProperty("export_type")
-    public String getExportType() {
+    public DataExportType getExportType() {
         return exportType;
     }
 
@@ -89,12 +91,12 @@ public final class DataExportResponseData {
     }
 
     @JsonProperty("metadata")
-    public String getMetadata() {
+    public Optional<DataExportMetadata> getMetadata() {
         return metadata;
     }
 
     @JsonProperty("output_file_type")
-    public String getOutputFileType() {
+    public DataExportOutputFileType getOutputFileType() {
         return outputFileType;
     }
 
@@ -169,19 +171,15 @@ public final class DataExportResponseData {
     }
 
     public interface ExportTypeStage {
-        IdStage exportType(@NotNull String exportType);
+        IdStage exportType(@NotNull DataExportType exportType);
     }
 
     public interface IdStage {
-        MetadataStage id(@NotNull String id);
-    }
-
-    public interface MetadataStage {
-        OutputFileTypeStage metadata(@NotNull String metadata);
+        OutputFileTypeStage id(@NotNull String id);
     }
 
     public interface OutputFileTypeStage {
-        StatusStage outputFileType(@NotNull String outputFileType);
+        StatusStage outputFileType(@NotNull DataExportOutputFileType outputFileType);
     }
 
     public interface StatusStage {
@@ -198,6 +196,10 @@ public final class DataExportResponseData {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage metadata(Optional<DataExportMetadata> metadata);
+
+        _FinalStage metadata(DataExportMetadata metadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -207,7 +209,6 @@ public final class DataExportResponseData {
                     EnvironmentIdStage,
                     ExportTypeStage,
                     IdStage,
-                    MetadataStage,
                     OutputFileTypeStage,
                     StatusStage,
                     UpdatedAtStage,
@@ -218,17 +219,17 @@ public final class DataExportResponseData {
 
         private String environmentId;
 
-        private String exportType;
+        private DataExportType exportType;
 
         private String id;
 
-        private String metadata;
-
-        private String outputFileType;
+        private DataExportOutputFileType outputFileType;
 
         private DataExportStatus status;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<DataExportMetadata> metadata = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -272,28 +273,21 @@ public final class DataExportResponseData {
 
         @java.lang.Override
         @JsonSetter("export_type")
-        public IdStage exportType(@NotNull String exportType) {
+        public IdStage exportType(@NotNull DataExportType exportType) {
             this.exportType = Objects.requireNonNull(exportType, "exportType must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public MetadataStage id(@NotNull String id) {
+        public OutputFileTypeStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("metadata")
-        public OutputFileTypeStage metadata(@NotNull String metadata) {
-            this.metadata = Objects.requireNonNull(metadata, "metadata must not be null");
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter("output_file_type")
-        public StatusStage outputFileType(@NotNull String outputFileType) {
+        public StatusStage outputFileType(@NotNull DataExportOutputFileType outputFileType) {
             this.outputFileType = Objects.requireNonNull(outputFileType, "outputFileType must not be null");
             return this;
         }
@@ -309,6 +303,19 @@ public final class DataExportResponseData {
         @JsonSetter("updated_at")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage metadata(DataExportMetadata metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<DataExportMetadata> metadata) {
+            this.metadata = metadata;
             return this;
         }
 

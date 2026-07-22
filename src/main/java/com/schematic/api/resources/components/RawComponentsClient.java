@@ -18,11 +18,13 @@ import com.schematic.api.errors.ForbiddenError;
 import com.schematic.api.errors.InternalServerError;
 import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
+import com.schematic.api.resources.components.requests.BindCatalogRequestBody;
 import com.schematic.api.resources.components.requests.CountComponentsRequest;
 import com.schematic.api.resources.components.requests.CreateComponentRequestBody;
 import com.schematic.api.resources.components.requests.ListComponentsRequest;
 import com.schematic.api.resources.components.requests.PreviewComponentDataRequest;
 import com.schematic.api.resources.components.requests.UpdateComponentRequestBody;
+import com.schematic.api.resources.components.types.BindCatalogResponse;
 import com.schematic.api.resources.components.types.CountComponentsResponse;
 import com.schematic.api.resources.components.types.CreateComponentResponse;
 import com.schematic.api.resources.components.types.DeleteComponentResponse;
@@ -419,6 +421,97 @@ public class RawComponentsClient {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DeleteComponentResponse.class),
                         response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<BindCatalogResponse> bindCatalog(String componentId) {
+        return bindCatalog(componentId, BindCatalogRequestBody.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<BindCatalogResponse> bindCatalog(
+            String componentId, RequestOptions requestOptions) {
+        return bindCatalog(componentId, BindCatalogRequestBody.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<BindCatalogResponse> bindCatalog(
+            String componentId, BindCatalogRequestBody request) {
+        return bindCatalog(componentId, request, null);
+    }
+
+    public BaseSchematicHttpResponse<BindCatalogResponse> bindCatalog(
+            String componentId, BindCatalogRequestBody request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("components")
+                .addPathSegment(componentId)
+                .addPathSegments("catalog");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("PUT", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BindCatalogResponse.class), response);
             }
             try {
                 switch (response.code()) {

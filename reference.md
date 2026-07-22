@@ -6026,6 +6026,759 @@ client.credits().countCreditEventLedger(
 </dl>
 </details>
 
+## catalogs
+<details><summary><code>client.catalogs.listCatalogs() -> ListCatalogsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().listCatalogs(
+    ListCatalogsRequest
+        .builder()
+        .isDefault(true)
+        .q("q")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**isDefault:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` — Search by catalog name
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.createCatalog(request) -> CreateCatalogResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().createCatalog(
+    CreateCatalogRequestBody
+        .builder()
+        .isDefault(true)
+        .name("name")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**description:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**isDefault:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.getCatalog(catalogId) -> GetCatalogResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().getCatalog("catalog_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.updateCatalog(catalogId, request) -> UpdateCatalogResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().updateCatalog(
+    "catalog_id",
+    UpdateCatalogRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**isDefault:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.deleteCatalog(catalogId) -> DeleteCatalogResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().deleteCatalog("catalog_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.getConfiguration(catalogId) -> GetConfigurationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().getConfiguration("catalog_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.updateConfiguration(catalogId, request) -> UpdateConfigurationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().updateConfiguration(
+    "catalog_id",
+    UpdateCatalogConfigurationRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customPlanCtaText:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customPlanCtaUrl:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customPlanPriceText:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customPlansVisible:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**orderedAddOns:** `Optional<List<CatalogConfigOrderedPlan>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**orderedBundles:** `Optional<List<CatalogConfigOrderedBundle>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**orderedPlans:** `Optional<List<CatalogConfigOrderedPlan>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pricingModel:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pricingUrl:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.getCreditBundlesInCatalog(catalogId) -> GetCreditBundlesInCatalogResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().getCreditBundlesInCatalog("catalog_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.addCreditBundle(catalogId, creditBundleId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().addCreditBundle("catalog_id", "credit_bundle_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditBundleId:** `String` — credit_bundle_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.removeCreditBundle(catalogId, creditBundleId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().removeCreditBundle("catalog_id", "credit_bundle_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditBundleId:** `String` — credit_bundle_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.getDerivedFeatures(catalogId) -> GetDerivedFeaturesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().getDerivedFeatures("catalog_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.getPlansInCatalog(catalogId) -> GetPlansInCatalogResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().getPlansInCatalog("catalog_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.addPlan(catalogId, planId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().addPlan("catalog_id", "plan_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planId:** `String` — plan_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.removePlan(catalogId, planId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().removePlan("catalog_id", "plan_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planId:** `String` — plan_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## checkout
 <details><summary><code>client.checkout.internal(request) -> CheckoutInternalResponse</code></summary>
 <dl>
@@ -6261,6 +7014,132 @@ client.checkout().previewCheckoutInternal(
 <dd>
 
 **request:** `ChangeSubscriptionInternalRequestBody` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.checkout.getCompanyBillingDetails(companyId) -> GetCompanyBillingDetailsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.checkout().getCompanyBillingDetails("company_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.checkout.updateCompanyBillingDetails(companyId, request) -> UpdateCompanyBillingDetailsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.checkout().updateCompanyBillingDetails(
+    "company_id",
+    UpdateCompanyBillingDetailsRequestBody
+        .builder()
+        .values(
+            Arrays.asList(
+                CheckoutFieldValue
+                    .builder()
+                    .id("id")
+                    .value("value")
+                    .build()
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**address:** `Optional<CustomerBillingAddress>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**email:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**phone:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**values:** `List<CheckoutFieldValue>` 
     
 </dd>
 </dl>
@@ -13587,6 +14466,59 @@ client.components().deleteComponent("component_id");
 </dl>
 </details>
 
+<details><summary><code>client.components.bindCatalog(componentId, request) -> BindCatalogResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.components().bindCatalog(
+    "component_id",
+    BindCatalogRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**componentId:** `String` — component_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**catalogId:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.components.countComponents() -> CountComponentsResponse</code></summary>
 <dl>
 <dd>
@@ -13746,6 +14678,14 @@ client.planbundle().createCustomPlanBundle(
 <dd>
 
 **billingProduct:** `Optional<UpsertBillingProductRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditGrants:** `Optional<List<PlanBundleCreditGrantRequestBody>>` 
     
 </dd>
 </dl>
@@ -13943,7 +14883,7 @@ client.planbundle().updatePlanBundle(
 </details>
 
 ## dataexports
-<details><summary><code>client.dataexports.createDataExport(request) -> CreateDataExportResponse</code></summary>
+<details><summary><code>client.dataexports.listDataExports() -> ListDataExportsResponse</code></summary>
 <dl>
 <dd>
 
@@ -13956,12 +14896,13 @@ client.planbundle().updatePlanBundle(
 <dd>
 
 ```java
-client.dataexports().createDataExport(
-    CreateDataExportRequestBody
+client.dataexports().listDataExports(
+    ListDataExportsRequest
         .builder()
-        .exportType("company-feature-usage")
-        .metadata("metadata")
-        .outputFileType("csv")
+        .exportType(DataExportType.AUDIT_LOG)
+        .status(DataExportStatus.FAILURE)
+        .limit(1000000L)
+        .offset(1000000L)
         .build()
 );
 ```
@@ -13978,7 +14919,7 @@ client.dataexports().createDataExport(
 <dl>
 <dd>
 
-**exportType:** `String` 
+**exportType:** `Optional<DataExportType>` 
     
 </dd>
 </dl>
@@ -13986,7 +14927,7 @@ client.dataexports().createDataExport(
 <dl>
 <dd>
 
-**metadata:** `String` 
+**status:** `Optional<DataExportStatus>` 
     
 </dd>
 </dl>
@@ -13994,7 +14935,117 @@ client.dataexports().createDataExport(
 <dl>
 <dd>
 
-**outputFileType:** `String` 
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.dataexports.createDataExport(request) -> CreateDataExportResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.dataexports().createDataExport(
+    CreateDataExportRequestBody
+        .builder()
+        .exportType(DataExportType.AUDIT_LOG)
+        .outputFileType(DataExportOutputFileType.CSV)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**exportType:** `DataExportType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metadata:** `Optional<DataExportMetadata>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**outputFileType:** `DataExportOutputFileType` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.dataexports.getDataExport(dataExportId) -> GetDataExportResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.dataexports().getDataExport("data_export_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**dataExportId:** `String` — data_export_id
     
 </dd>
 </dl>

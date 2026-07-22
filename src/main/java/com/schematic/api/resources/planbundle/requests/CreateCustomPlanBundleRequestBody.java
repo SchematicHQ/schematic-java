@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CreateCustomPlanBundlePlanRequestBody;
+import com.schematic.api.types.PlanBundleCreditGrantRequestBody;
 import com.schematic.api.types.PlanBundleEntitlementRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import java.util.Optional;
 public final class CreateCustomPlanBundleRequestBody {
     private final Optional<UpsertBillingProductRequestBody> billingProduct;
 
+    private final Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants;
+
     private final List<PlanBundleEntitlementRequestBody> entitlements;
 
     private final Optional<CreateCustomPlanBundlePlanRequestBody> plan;
@@ -35,10 +38,12 @@ public final class CreateCustomPlanBundleRequestBody {
 
     private CreateCustomPlanBundleRequestBody(
             Optional<UpsertBillingProductRequestBody> billingProduct,
+            Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants,
             List<PlanBundleEntitlementRequestBody> entitlements,
             Optional<CreateCustomPlanBundlePlanRequestBody> plan,
             Map<String, Object> additionalProperties) {
         this.billingProduct = billingProduct;
+        this.creditGrants = creditGrants;
         this.entitlements = entitlements;
         this.plan = plan;
         this.additionalProperties = additionalProperties;
@@ -47,6 +52,11 @@ public final class CreateCustomPlanBundleRequestBody {
     @JsonProperty("billing_product")
     public Optional<UpsertBillingProductRequestBody> getBillingProduct() {
         return billingProduct;
+    }
+
+    @JsonProperty("credit_grants")
+    public Optional<List<PlanBundleCreditGrantRequestBody>> getCreditGrants() {
+        return creditGrants;
     }
 
     @JsonProperty("entitlements")
@@ -72,13 +82,14 @@ public final class CreateCustomPlanBundleRequestBody {
 
     private boolean equalTo(CreateCustomPlanBundleRequestBody other) {
         return billingProduct.equals(other.billingProduct)
+                && creditGrants.equals(other.creditGrants)
                 && entitlements.equals(other.entitlements)
                 && plan.equals(other.plan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.billingProduct, this.entitlements, this.plan);
+        return Objects.hash(this.billingProduct, this.creditGrants, this.entitlements, this.plan);
     }
 
     @java.lang.Override
@@ -94,6 +105,8 @@ public final class CreateCustomPlanBundleRequestBody {
     public static final class Builder {
         private Optional<UpsertBillingProductRequestBody> billingProduct = Optional.empty();
 
+        private Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants = Optional.empty();
+
         private List<PlanBundleEntitlementRequestBody> entitlements = new ArrayList<>();
 
         private Optional<CreateCustomPlanBundlePlanRequestBody> plan = Optional.empty();
@@ -105,6 +118,7 @@ public final class CreateCustomPlanBundleRequestBody {
 
         public Builder from(CreateCustomPlanBundleRequestBody other) {
             billingProduct(other.getBillingProduct());
+            creditGrants(other.getCreditGrants());
             entitlements(other.getEntitlements());
             plan(other.getPlan());
             return this;
@@ -118,6 +132,17 @@ public final class CreateCustomPlanBundleRequestBody {
 
         public Builder billingProduct(UpsertBillingProductRequestBody billingProduct) {
             this.billingProduct = Optional.ofNullable(billingProduct);
+            return this;
+        }
+
+        @JsonSetter(value = "credit_grants", nulls = Nulls.SKIP)
+        public Builder creditGrants(Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants) {
+            this.creditGrants = creditGrants;
+            return this;
+        }
+
+        public Builder creditGrants(List<PlanBundleCreditGrantRequestBody> creditGrants) {
+            this.creditGrants = Optional.ofNullable(creditGrants);
             return this;
         }
 
@@ -154,7 +179,8 @@ public final class CreateCustomPlanBundleRequestBody {
         }
 
         public CreateCustomPlanBundleRequestBody build() {
-            return new CreateCustomPlanBundleRequestBody(billingProduct, entitlements, plan, additionalProperties);
+            return new CreateCustomPlanBundleRequestBody(
+                    billingProduct, creditGrants, entitlements, plan, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

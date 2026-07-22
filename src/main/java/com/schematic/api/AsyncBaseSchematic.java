@@ -9,6 +9,7 @@ import com.schematic.api.core.Suppliers;
 import com.schematic.api.resources.accesstokens.AsyncAccesstokensClient;
 import com.schematic.api.resources.accounts.AsyncAccountsClient;
 import com.schematic.api.resources.billing.AsyncBillingClient;
+import com.schematic.api.resources.catalogs.AsyncCatalogsClient;
 import com.schematic.api.resources.checkout.AsyncCheckoutClient;
 import com.schematic.api.resources.companies.AsyncCompaniesClient;
 import com.schematic.api.resources.components.AsyncComponentsClient;
@@ -39,6 +40,8 @@ public class AsyncBaseSchematic {
     protected final Supplier<AsyncBillingClient> billingClient;
 
     protected final Supplier<AsyncCreditsClient> creditsClient;
+
+    protected final Supplier<AsyncCatalogsClient> catalogsClient;
 
     protected final Supplier<AsyncCheckoutClient> checkoutClient;
 
@@ -80,6 +83,7 @@ public class AsyncBaseSchematic {
         this.accountsClient = Suppliers.memoize(() -> new AsyncAccountsClient(clientOptions));
         this.billingClient = Suppliers.memoize(() -> new AsyncBillingClient(clientOptions));
         this.creditsClient = Suppliers.memoize(() -> new AsyncCreditsClient(clientOptions));
+        this.catalogsClient = Suppliers.memoize(() -> new AsyncCatalogsClient(clientOptions));
         this.checkoutClient = Suppliers.memoize(() -> new AsyncCheckoutClient(clientOptions));
         this.companiesClient = Suppliers.memoize(() -> new AsyncCompaniesClient(clientOptions));
         this.entitlementsClient = Suppliers.memoize(() -> new AsyncEntitlementsClient(clientOptions));
@@ -124,6 +128,10 @@ public class AsyncBaseSchematic {
 
     public AsyncCreditsClient credits() {
         return this.creditsClient.get();
+    }
+
+    public AsyncCatalogsClient catalogs() {
+        return this.catalogsClient.get();
     }
 
     public AsyncCheckoutClient checkout() {

@@ -6,7 +6,10 @@ package com.schematic.api.resources.dataexports;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.dataexports.requests.CreateDataExportRequestBody;
+import com.schematic.api.resources.dataexports.requests.ListDataExportsRequest;
 import com.schematic.api.resources.dataexports.types.CreateDataExportResponse;
+import com.schematic.api.resources.dataexports.types.GetDataExportResponse;
+import com.schematic.api.resources.dataexports.types.ListDataExportsResponse;
 import java.io.InputStream;
 
 public class DataexportsClient {
@@ -26,6 +29,22 @@ public class DataexportsClient {
         return this.rawClient;
     }
 
+    public ListDataExportsResponse listDataExports() {
+        return this.rawClient.listDataExports().body();
+    }
+
+    public ListDataExportsResponse listDataExports(RequestOptions requestOptions) {
+        return this.rawClient.listDataExports(requestOptions).body();
+    }
+
+    public ListDataExportsResponse listDataExports(ListDataExportsRequest request) {
+        return this.rawClient.listDataExports(request).body();
+    }
+
+    public ListDataExportsResponse listDataExports(ListDataExportsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listDataExports(request, requestOptions).body();
+    }
+
     public CreateDataExportResponse createDataExport(CreateDataExportRequestBody request) {
         return this.rawClient.createDataExport(request).body();
     }
@@ -33,6 +52,14 @@ public class DataexportsClient {
     public CreateDataExportResponse createDataExport(
             CreateDataExportRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.createDataExport(request, requestOptions).body();
+    }
+
+    public GetDataExportResponse getDataExport(String dataExportId) {
+        return this.rawClient.getDataExport(dataExportId).body();
+    }
+
+    public GetDataExportResponse getDataExport(String dataExportId, RequestOptions requestOptions) {
+        return this.rawClient.getDataExport(dataExportId, requestOptions).body();
     }
 
     public InputStream getDataExportArtifact(String dataExportId) {

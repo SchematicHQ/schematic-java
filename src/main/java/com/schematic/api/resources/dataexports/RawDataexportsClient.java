@@ -10,6 +10,7 @@ import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.ResponseBodyInputStream;
 import com.schematic.api.core.RetryInterceptor;
@@ -19,7 +20,10 @@ import com.schematic.api.errors.InternalServerError;
 import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.dataexports.requests.CreateDataExportRequestBody;
+import com.schematic.api.resources.dataexports.requests.ListDataExportsRequest;
 import com.schematic.api.resources.dataexports.types.CreateDataExportResponse;
+import com.schematic.api.resources.dataexports.types.GetDataExportResponse;
+import com.schematic.api.resources.dataexports.types.ListDataExportsResponse;
 import com.schematic.api.types.ApiError;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +40,102 @@ public class RawDataexportsClient {
 
     public RawDataexportsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+    }
+
+    public BaseSchematicHttpResponse<ListDataExportsResponse> listDataExports() {
+        return listDataExports(ListDataExportsRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<ListDataExportsResponse> listDataExports(RequestOptions requestOptions) {
+        return listDataExports(ListDataExportsRequest.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<ListDataExportsResponse> listDataExports(ListDataExportsRequest request) {
+        return listDataExports(request, null);
+    }
+
+    public BaseSchematicHttpResponse<ListDataExportsResponse> listDataExports(
+            ListDataExportsRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("data-exports");
+        if (request.getExportType().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "export_type", request.getExportType().get(), false);
+        }
+        if (request.getStatus().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "status", request.getStatus().get(), false);
+        }
+        if (request.getLimit().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "limit", request.getLimit().get(), false);
+        }
+        if (request.getOffset().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "offset", request.getOffset().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListDataExportsResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
     }
 
     public BaseSchematicHttpResponse<CreateDataExportResponse> createDataExport(CreateDataExportRequestBody request) {
@@ -92,6 +192,75 @@ public class RawDataexportsClient {
                     case 400:
                         throw new BadRequestError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<GetDataExportResponse> getDataExport(String dataExportId) {
+        return getDataExport(dataExportId, null);
+    }
+
+    public BaseSchematicHttpResponse<GetDataExportResponse> getDataExport(
+            String dataExportId, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("data-exports")
+                .addPathSegment(dataExportId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetDataExportResponse.class), response);
+            }
+            try {
+                switch (response.code()) {
                     case 401:
                         throw new UnauthorizedError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);

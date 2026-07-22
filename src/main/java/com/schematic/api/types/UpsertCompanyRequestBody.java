@@ -23,6 +23,10 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpsertCompanyRequestBody.Builder.class)
 public final class UpsertCompanyRequestBody {
+    private final Optional<String> basePlanId;
+
+    private final Optional<String> basePlanPriceId;
+
     private final Optional<String> id;
 
     private final Map<String, String> keys;
@@ -40,6 +44,8 @@ public final class UpsertCompanyRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private UpsertCompanyRequestBody(
+            Optional<String> basePlanId,
+            Optional<String> basePlanPriceId,
             Optional<String> id,
             Map<String, String> keys,
             Optional<OffsetDateTime> lastSeenAt,
@@ -48,6 +54,8 @@ public final class UpsertCompanyRequestBody {
             Optional<Map<String, JsonNode>> traits,
             Optional<Boolean> updateOnly,
             Map<String, Object> additionalProperties) {
+        this.basePlanId = basePlanId;
+        this.basePlanPriceId = basePlanPriceId;
         this.id = id;
         this.keys = keys;
         this.lastSeenAt = lastSeenAt;
@@ -56,6 +64,22 @@ public final class UpsertCompanyRequestBody {
         this.traits = traits;
         this.updateOnly = updateOnly;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Assign this base plan when creating the company (starts with plan_). Takes precedence over the environment's initial plan and must be provisionable without a payment method.
+     */
+    @JsonProperty("base_plan_id")
+    public Optional<String> getBasePlanId() {
+        return basePlanId;
+    }
+
+    /**
+     * @return The Schematic price to provision for base_plan_id (starts with bilpp_). Required and must be $0 for a billing-linked plan; omit for a plan that is not billing-linked.
+     */
+    @JsonProperty("base_plan_price_id")
+    public Optional<String> getBasePlanPriceId() {
+        return basePlanPriceId;
     }
 
     /**
@@ -114,7 +138,9 @@ public final class UpsertCompanyRequestBody {
     }
 
     private boolean equalTo(UpsertCompanyRequestBody other) {
-        return id.equals(other.id)
+        return basePlanId.equals(other.basePlanId)
+                && basePlanPriceId.equals(other.basePlanPriceId)
+                && id.equals(other.id)
                 && keys.equals(other.keys)
                 && lastSeenAt.equals(other.lastSeenAt)
                 && name.equals(other.name)
@@ -126,7 +152,15 @@ public final class UpsertCompanyRequestBody {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.id, this.keys, this.lastSeenAt, this.name, this.preventKeyRemap, this.traits, this.updateOnly);
+                this.basePlanId,
+                this.basePlanPriceId,
+                this.id,
+                this.keys,
+                this.lastSeenAt,
+                this.name,
+                this.preventKeyRemap,
+                this.traits,
+                this.updateOnly);
     }
 
     @java.lang.Override
@@ -140,6 +174,10 @@ public final class UpsertCompanyRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> basePlanId = Optional.empty();
+
+        private Optional<String> basePlanPriceId = Optional.empty();
+
         private Optional<String> id = Optional.empty();
 
         private Map<String, String> keys = new LinkedHashMap<>();
@@ -160,6 +198,8 @@ public final class UpsertCompanyRequestBody {
         private Builder() {}
 
         public Builder from(UpsertCompanyRequestBody other) {
+            basePlanId(other.getBasePlanId());
+            basePlanPriceId(other.getBasePlanPriceId());
             id(other.getId());
             keys(other.getKeys());
             lastSeenAt(other.getLastSeenAt());
@@ -167,6 +207,34 @@ public final class UpsertCompanyRequestBody {
             preventKeyRemap(other.getPreventKeyRemap());
             traits(other.getTraits());
             updateOnly(other.getUpdateOnly());
+            return this;
+        }
+
+        /**
+         * <p>Assign this base plan when creating the company (starts with plan_). Takes precedence over the environment's initial plan and must be provisionable without a payment method.</p>
+         */
+        @JsonSetter(value = "base_plan_id", nulls = Nulls.SKIP)
+        public Builder basePlanId(Optional<String> basePlanId) {
+            this.basePlanId = basePlanId;
+            return this;
+        }
+
+        public Builder basePlanId(String basePlanId) {
+            this.basePlanId = Optional.ofNullable(basePlanId);
+            return this;
+        }
+
+        /**
+         * <p>The Schematic price to provision for base_plan_id (starts with bilpp_). Required and must be $0 for a billing-linked plan; omit for a plan that is not billing-linked.</p>
+         */
+        @JsonSetter(value = "base_plan_price_id", nulls = Nulls.SKIP)
+        public Builder basePlanPriceId(Optional<String> basePlanPriceId) {
+            this.basePlanPriceId = basePlanPriceId;
+            return this;
+        }
+
+        public Builder basePlanPriceId(String basePlanPriceId) {
+            this.basePlanPriceId = Optional.ofNullable(basePlanPriceId);
             return this;
         }
 
@@ -268,7 +336,16 @@ public final class UpsertCompanyRequestBody {
 
         public UpsertCompanyRequestBody build() {
             return new UpsertCompanyRequestBody(
-                    id, keys, lastSeenAt, name, preventKeyRemap, traits, updateOnly, additionalProperties);
+                    basePlanId,
+                    basePlanPriceId,
+                    id,
+                    keys,
+                    lastSeenAt,
+                    name,
+                    preventKeyRemap,
+                    traits,
+                    updateOnly,
+                    additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

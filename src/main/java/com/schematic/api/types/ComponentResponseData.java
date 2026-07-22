@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class ComponentResponseData {
     private final Optional<Map<String, Double>> ast;
 
+    private final Optional<String> catalogId;
+
     private final OffsetDateTime createdAt;
 
     private final String id;
@@ -40,6 +42,7 @@ public final class ComponentResponseData {
 
     private ComponentResponseData(
             Optional<Map<String, Double>> ast,
+            Optional<String> catalogId,
             OffsetDateTime createdAt,
             String id,
             String name,
@@ -48,6 +51,7 @@ public final class ComponentResponseData {
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.ast = ast;
+        this.catalogId = catalogId;
         this.createdAt = createdAt;
         this.id = id;
         this.name = name;
@@ -60,6 +64,11 @@ public final class ComponentResponseData {
     @JsonProperty("ast")
     public Optional<Map<String, Double>> getAst() {
         return ast;
+    }
+
+    @JsonProperty("catalog_id")
+    public Optional<String> getCatalogId() {
+        return catalogId;
     }
 
     @JsonProperty("created_at")
@@ -105,6 +114,7 @@ public final class ComponentResponseData {
 
     private boolean equalTo(ComponentResponseData other) {
         return ast.equals(other.ast)
+                && catalogId.equals(other.catalogId)
                 && createdAt.equals(other.createdAt)
                 && id.equals(other.id)
                 && name.equals(other.name)
@@ -115,7 +125,8 @@ public final class ComponentResponseData {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.ast, this.createdAt, this.id, this.name, this.state, this.type, this.updatedAt);
+        return Objects.hash(
+                this.ast, this.catalogId, this.createdAt, this.id, this.name, this.state, this.type, this.updatedAt);
     }
 
     @java.lang.Override
@@ -163,6 +174,10 @@ public final class ComponentResponseData {
         _FinalStage ast(Optional<Map<String, Double>> ast);
 
         _FinalStage ast(Map<String, Double> ast);
+
+        _FinalStage catalogId(Optional<String> catalogId);
+
+        _FinalStage catalogId(String catalogId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -180,6 +195,8 @@ public final class ComponentResponseData {
 
         private OffsetDateTime updatedAt;
 
+        private Optional<String> catalogId = Optional.empty();
+
         private Optional<Map<String, Double>> ast = Optional.empty();
 
         @JsonAnySetter
@@ -190,6 +207,7 @@ public final class ComponentResponseData {
         @java.lang.Override
         public Builder from(ComponentResponseData other) {
             ast(other.getAst());
+            catalogId(other.getCatalogId());
             createdAt(other.getCreatedAt());
             id(other.getId());
             name(other.getName());
@@ -242,6 +260,19 @@ public final class ComponentResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage catalogId(String catalogId) {
+            this.catalogId = Optional.ofNullable(catalogId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "catalog_id", nulls = Nulls.SKIP)
+        public _FinalStage catalogId(Optional<String> catalogId) {
+            this.catalogId = catalogId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage ast(Map<String, Double> ast) {
             this.ast = Optional.ofNullable(ast);
             return this;
@@ -256,7 +287,8 @@ public final class ComponentResponseData {
 
         @java.lang.Override
         public ComponentResponseData build() {
-            return new ComponentResponseData(ast, createdAt, id, name, state, type, updatedAt, additionalProperties);
+            return new ComponentResponseData(
+                    ast, catalogId, createdAt, id, name, state, type, updatedAt, additionalProperties);
         }
 
         @java.lang.Override

@@ -9,26 +9,34 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.DataExportMetadata;
+import com.schematic.api.types.DataExportOutputFileType;
+import com.schematic.api.types.DataExportType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateDataExportRequestBody.Builder.class)
 public final class CreateDataExportRequestBody {
-    private final String exportType;
+    private final DataExportType exportType;
 
-    private final String metadata;
+    private final Optional<DataExportMetadata> metadata;
 
-    private final String outputFileType;
+    private final DataExportOutputFileType outputFileType;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateDataExportRequestBody(
-            String exportType, String metadata, String outputFileType, Map<String, Object> additionalProperties) {
+            DataExportType exportType,
+            Optional<DataExportMetadata> metadata,
+            DataExportOutputFileType outputFileType,
+            Map<String, Object> additionalProperties) {
         this.exportType = exportType;
         this.metadata = metadata;
         this.outputFileType = outputFileType;
@@ -36,17 +44,17 @@ public final class CreateDataExportRequestBody {
     }
 
     @JsonProperty("export_type")
-    public String getExportType() {
+    public DataExportType getExportType() {
         return exportType;
     }
 
     @JsonProperty("metadata")
-    public String getMetadata() {
+    public Optional<DataExportMetadata> getMetadata() {
         return metadata;
     }
 
     @JsonProperty("output_file_type")
-    public String getOutputFileType() {
+    public DataExportOutputFileType getOutputFileType() {
         return outputFileType;
     }
 
@@ -82,17 +90,13 @@ public final class CreateDataExportRequestBody {
     }
 
     public interface ExportTypeStage {
-        MetadataStage exportType(@NotNull String exportType);
+        OutputFileTypeStage exportType(@NotNull DataExportType exportType);
 
         Builder from(CreateDataExportRequestBody other);
     }
 
-    public interface MetadataStage {
-        OutputFileTypeStage metadata(@NotNull String metadata);
-    }
-
     public interface OutputFileTypeStage {
-        _FinalStage outputFileType(@NotNull String outputFileType);
+        _FinalStage outputFileType(@NotNull DataExportOutputFileType outputFileType);
     }
 
     public interface _FinalStage {
@@ -101,15 +105,19 @@ public final class CreateDataExportRequestBody {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage metadata(Optional<DataExportMetadata> metadata);
+
+        _FinalStage metadata(DataExportMetadata metadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ExportTypeStage, MetadataStage, OutputFileTypeStage, _FinalStage {
-        private String exportType;
+    public static final class Builder implements ExportTypeStage, OutputFileTypeStage, _FinalStage {
+        private DataExportType exportType;
 
-        private String metadata;
+        private DataExportOutputFileType outputFileType;
 
-        private String outputFileType;
+        private Optional<DataExportMetadata> metadata = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -126,22 +134,28 @@ public final class CreateDataExportRequestBody {
 
         @java.lang.Override
         @JsonSetter("export_type")
-        public MetadataStage exportType(@NotNull String exportType) {
+        public OutputFileTypeStage exportType(@NotNull DataExportType exportType) {
             this.exportType = Objects.requireNonNull(exportType, "exportType must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("metadata")
-        public OutputFileTypeStage metadata(@NotNull String metadata) {
-            this.metadata = Objects.requireNonNull(metadata, "metadata must not be null");
+        @JsonSetter("output_file_type")
+        public _FinalStage outputFileType(@NotNull DataExportOutputFileType outputFileType) {
+            this.outputFileType = Objects.requireNonNull(outputFileType, "outputFileType must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("output_file_type")
-        public _FinalStage outputFileType(@NotNull String outputFileType) {
-            this.outputFileType = Objects.requireNonNull(outputFileType, "outputFileType must not be null");
+        public _FinalStage metadata(DataExportMetadata metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<DataExportMetadata> metadata) {
+            this.metadata = metadata;
             return this;
         }
 
