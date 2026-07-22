@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -58,6 +59,8 @@ public final class FeatureEntitlement {
 
     private final EntitlementValueType valueType;
 
+    private final Optional<List<WarningTier>> warningTiers;
+
     private final Map<String, Object> additionalProperties;
 
     private FeatureEntitlement(
@@ -79,6 +82,7 @@ public final class FeatureEntitlement {
             Optional<Long> softLimit,
             Optional<Long> usage,
             EntitlementValueType valueType,
+            Optional<List<WarningTier>> warningTiers,
             Map<String, Object> additionalProperties) {
         this.allocation = allocation;
         this.consumptionRate = consumptionRate;
@@ -98,6 +102,7 @@ public final class FeatureEntitlement {
         this.softLimit = softLimit;
         this.usage = usage;
         this.valueType = valueType;
+        this.warningTiers = warningTiers;
         this.additionalProperties = additionalProperties;
     }
 
@@ -245,6 +250,14 @@ public final class FeatureEntitlement {
         return valueType;
     }
 
+    /**
+     * @return Customer-defined usage warning thresholds configured on this entitlement
+     */
+    @JsonProperty("warning_tiers")
+    public Optional<List<WarningTier>> getWarningTiers() {
+        return warningTiers;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -274,7 +287,8 @@ public final class FeatureEntitlement {
                 && monthReset.equals(other.monthReset)
                 && softLimit.equals(other.softLimit)
                 && usage.equals(other.usage)
-                && valueType.equals(other.valueType);
+                && valueType.equals(other.valueType)
+                && warningTiers.equals(other.warningTiers);
     }
 
     @java.lang.Override
@@ -297,7 +311,8 @@ public final class FeatureEntitlement {
                 this.monthReset,
                 this.softLimit,
                 this.usage,
-                this.valueType);
+                this.valueType,
+                this.warningTiers);
     }
 
     @java.lang.Override
@@ -443,6 +458,13 @@ public final class FeatureEntitlement {
         _FinalStage usage(Optional<Long> usage);
 
         _FinalStage usage(Long usage);
+
+        /**
+         * <p>Customer-defined usage warning thresholds configured on this entitlement</p>
+         */
+        _FinalStage warningTiers(Optional<List<WarningTier>> warningTiers);
+
+        _FinalStage warningTiers(List<WarningTier> warningTiers);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -452,6 +474,8 @@ public final class FeatureEntitlement {
         private String featureKey;
 
         private EntitlementValueType valueType;
+
+        private Optional<List<WarningTier>> warningTiers = Optional.empty();
 
         private Optional<Long> usage = Optional.empty();
 
@@ -508,6 +532,7 @@ public final class FeatureEntitlement {
             softLimit(other.getSoftLimit());
             usage(other.getUsage());
             valueType(other.getValueType());
+            warningTiers(other.getWarningTiers());
             return this;
         }
 
@@ -541,6 +566,26 @@ public final class FeatureEntitlement {
         @JsonSetter("value_type")
         public _FinalStage valueType(@NotNull EntitlementValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "valueType must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Customer-defined usage warning thresholds configured on this entitlement</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage warningTiers(List<WarningTier> warningTiers) {
+            this.warningTiers = Optional.ofNullable(warningTiers);
+            return this;
+        }
+
+        /**
+         * <p>Customer-defined usage warning thresholds configured on this entitlement</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "warning_tiers", nulls = Nulls.SKIP)
+        public _FinalStage warningTiers(Optional<List<WarningTier>> warningTiers) {
+            this.warningTiers = warningTiers;
             return this;
         }
 
@@ -865,6 +910,7 @@ public final class FeatureEntitlement {
                     softLimit,
                     usage,
                     valueType,
+                    warningTiers,
                     additionalProperties);
         }
 

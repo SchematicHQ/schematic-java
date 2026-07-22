@@ -101,12 +101,18 @@ public final class WebhookRequestType {
     public static final WebhookRequestType COMPANY_CREATED =
             new WebhookRequestType(Value.COMPANY_CREATED, "company.created");
 
+    public static final WebhookRequestType AUTO_TOPUP_SUCCESS =
+            new WebhookRequestType(Value.AUTO_TOPUP_SUCCESS, "auto.topup.success");
+
     public static final WebhookRequestType ENTITLEMENT_TIER_LIMIT_WARNING =
             new WebhookRequestType(Value.ENTITLEMENT_TIER_LIMIT_WARNING, "entitlement.tier_limit.warning");
 
     public static final WebhookRequestType FLAG_DELETED = new WebhookRequestType(Value.FLAG_DELETED, "flag.deleted");
 
     public static final WebhookRequestType PLAN_CREATED = new WebhookRequestType(Value.PLAN_CREATED, "plan.created");
+
+    public static final WebhookRequestType CREDIT_PURCHASE_SUCCESS =
+            new WebhookRequestType(Value.CREDIT_PURCHASE_SUCCESS, "credit.purchase.success");
 
     public static final WebhookRequestType TEST_SEND = new WebhookRequestType(Value.TEST_SEND, "test.send");
 
@@ -213,12 +219,16 @@ public final class WebhookRequestType {
                 return visitor.visitCompanyUpdated();
             case COMPANY_CREATED:
                 return visitor.visitCompanyCreated();
+            case AUTO_TOPUP_SUCCESS:
+                return visitor.visitAutoTopupSuccess();
             case ENTITLEMENT_TIER_LIMIT_WARNING:
                 return visitor.visitEntitlementTierLimitWarning();
             case FLAG_DELETED:
                 return visitor.visitFlagDeleted();
             case PLAN_CREATED:
                 return visitor.visitPlanCreated();
+            case CREDIT_PURCHASE_SUCCESS:
+                return visitor.visitCreditPurchaseSuccess();
             case TEST_SEND:
                 return visitor.visitTestSend();
             case FEATURE_UPDATED:
@@ -300,12 +310,16 @@ public final class WebhookRequestType {
                 return COMPANY_UPDATED;
             case "company.created":
                 return COMPANY_CREATED;
+            case "auto.topup.success":
+                return AUTO_TOPUP_SUCCESS;
             case "entitlement.tier_limit.warning":
                 return ENTITLEMENT_TIER_LIMIT_WARNING;
             case "flag.deleted":
                 return FLAG_DELETED;
             case "plan.created":
                 return PLAN_CREATED;
+            case "credit.purchase.success":
+                return CREDIT_PURCHASE_SUCCESS;
             case "test.send":
                 return TEST_SEND;
             case "feature.updated":
@@ -339,6 +353,8 @@ public final class WebhookRequestType {
         CREDIT_LIMIT_REACHED,
 
         CREDIT_LIMIT_WARNING,
+
+        CREDIT_PURCHASE_SUCCESS,
 
         ENTITLEMENT_LIMIT_REACHED,
 
@@ -394,6 +410,8 @@ public final class WebhookRequestType {
 
         AUTO_TOPUP_RETRY_EXCEEDED,
 
+        AUTO_TOPUP_SUCCESS,
+
         UNKNOWN
     }
 
@@ -421,6 +439,8 @@ public final class WebhookRequestType {
         T visitCreditLimitReached();
 
         T visitCreditLimitWarning();
+
+        T visitCreditPurchaseSuccess();
 
         T visitEntitlementLimitReached();
 
@@ -475,6 +495,8 @@ public final class WebhookRequestType {
         T visitAutoTopupHardFailure();
 
         T visitAutoTopupRetryExceeded();
+
+        T visitAutoTopupSuccess();
 
         T visitUnknown(String unknownType);
     }

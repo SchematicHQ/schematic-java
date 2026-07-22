@@ -26,11 +26,15 @@ import org.jetbrains.annotations.NotNull;
 public final class PreviewSubscriptionFinanceResponseData {
     private final long amountOff;
 
+    private final List<PreviewSubscriptionDiscountResponseData> discounts;
+
     private final long dueNow;
 
     private final long newCharges;
 
     private final double percentOff;
+
+    private final OffsetDateTime periodEnd;
 
     private final OffsetDateTime periodStart;
 
@@ -54,9 +58,11 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private PreviewSubscriptionFinanceResponseData(
             long amountOff,
+            List<PreviewSubscriptionDiscountResponseData> discounts,
             long dueNow,
             long newCharges,
             double percentOff,
+            OffsetDateTime periodEnd,
             OffsetDateTime periodStart,
             boolean promoCodeApplied,
             long proration,
@@ -68,9 +74,11 @@ public final class PreviewSubscriptionFinanceResponseData {
             List<PreviewSubscriptionUpcomingInvoiceLineItems> upcomingInvoiceLineItems,
             Map<String, Object> additionalProperties) {
         this.amountOff = amountOff;
+        this.discounts = discounts;
         this.dueNow = dueNow;
         this.newCharges = newCharges;
         this.percentOff = percentOff;
+        this.periodEnd = periodEnd;
         this.periodStart = periodStart;
         this.promoCodeApplied = promoCodeApplied;
         this.proration = proration;
@@ -88,6 +96,11 @@ public final class PreviewSubscriptionFinanceResponseData {
         return amountOff;
     }
 
+    @JsonProperty("discounts")
+    public List<PreviewSubscriptionDiscountResponseData> getDiscounts() {
+        return discounts;
+    }
+
     @JsonProperty("due_now")
     public long getDueNow() {
         return dueNow;
@@ -101,6 +114,11 @@ public final class PreviewSubscriptionFinanceResponseData {
     @JsonProperty("percent_off")
     public double getPercentOff() {
         return percentOff;
+    }
+
+    @JsonProperty("period_end")
+    public OffsetDateTime getPeriodEnd() {
+        return periodEnd;
     }
 
     @JsonProperty("period_start")
@@ -162,9 +180,11 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private boolean equalTo(PreviewSubscriptionFinanceResponseData other) {
         return amountOff == other.amountOff
+                && discounts.equals(other.discounts)
                 && dueNow == other.dueNow
                 && newCharges == other.newCharges
                 && percentOff == other.percentOff
+                && periodEnd.equals(other.periodEnd)
                 && periodStart.equals(other.periodStart)
                 && promoCodeApplied == other.promoCodeApplied
                 && proration == other.proration
@@ -180,9 +200,11 @@ public final class PreviewSubscriptionFinanceResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.amountOff,
+                this.discounts,
                 this.dueNow,
                 this.newCharges,
                 this.percentOff,
+                this.periodEnd,
                 this.periodStart,
                 this.promoCodeApplied,
                 this.proration,
@@ -218,7 +240,11 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     public interface PercentOffStage {
-        PeriodStartStage percentOff(double percentOff);
+        PeriodEndStage percentOff(double percentOff);
+    }
+
+    public interface PeriodEndStage {
+        PeriodStartStage periodEnd(@NotNull OffsetDateTime periodEnd);
     }
 
     public interface PeriodStartStage {
@@ -248,6 +274,12 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage discounts(List<PreviewSubscriptionDiscountResponseData> discounts);
+
+        _FinalStage addDiscounts(PreviewSubscriptionDiscountResponseData discounts);
+
+        _FinalStage addAllDiscounts(List<PreviewSubscriptionDiscountResponseData> discounts);
+
         _FinalStage taxAmount(Optional<Long> taxAmount);
 
         _FinalStage taxAmount(Long taxAmount);
@@ -275,6 +307,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                     DueNowStage,
                     NewChargesStage,
                     PercentOffStage,
+                    PeriodEndStage,
                     PeriodStartStage,
                     PromoCodeAppliedStage,
                     ProrationStage,
@@ -288,6 +321,8 @@ public final class PreviewSubscriptionFinanceResponseData {
         private long newCharges;
 
         private double percentOff;
+
+        private OffsetDateTime periodEnd;
 
         private OffsetDateTime periodStart;
 
@@ -307,6 +342,8 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         private Optional<Long> taxAmount = Optional.empty();
 
+        private List<PreviewSubscriptionDiscountResponseData> discounts = new ArrayList<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -315,9 +352,11 @@ public final class PreviewSubscriptionFinanceResponseData {
         @java.lang.Override
         public Builder from(PreviewSubscriptionFinanceResponseData other) {
             amountOff(other.getAmountOff());
+            discounts(other.getDiscounts());
             dueNow(other.getDueNow());
             newCharges(other.getNewCharges());
             percentOff(other.getPercentOff());
+            periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
             promoCodeApplied(other.getPromoCodeApplied());
             proration(other.getProration());
@@ -353,8 +392,15 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         @java.lang.Override
         @JsonSetter("percent_off")
-        public PeriodStartStage percentOff(double percentOff) {
+        public PeriodEndStage percentOff(double percentOff) {
             this.percentOff = percentOff;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("period_end")
+        public PeriodStartStage periodEnd(@NotNull OffsetDateTime periodEnd) {
+            this.periodEnd = Objects.requireNonNull(periodEnd, "periodEnd must not be null");
             return this;
         }
 
@@ -460,12 +506,38 @@ public final class PreviewSubscriptionFinanceResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllDiscounts(List<PreviewSubscriptionDiscountResponseData> discounts) {
+            if (discounts != null) {
+                this.discounts.addAll(discounts);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addDiscounts(PreviewSubscriptionDiscountResponseData discounts) {
+            this.discounts.add(discounts);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "discounts", nulls = Nulls.SKIP)
+        public _FinalStage discounts(List<PreviewSubscriptionDiscountResponseData> discounts) {
+            this.discounts.clear();
+            if (discounts != null) {
+                this.discounts.addAll(discounts);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public PreviewSubscriptionFinanceResponseData build() {
             return new PreviewSubscriptionFinanceResponseData(
                     amountOff,
+                    discounts,
                     dueNow,
                     newCharges,
                     percentOff,
+                    periodEnd,
                     periodStart,
                     promoCodeApplied,
                     proration,

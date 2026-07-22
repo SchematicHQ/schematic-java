@@ -80,6 +80,8 @@ public final class CreateEntitlementInBundleRequestBody {
 
     private final EntitlementValueType valueType;
 
+    private final Optional<List<WarningTierRequestBody>> warningTiers;
+
     private final Optional<String> yearlyMeteredPriceId;
 
     private final Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers;
@@ -120,6 +122,7 @@ public final class CreateEntitlementInBundleRequestBody {
             Optional<Long> valueNumeric,
             Optional<String> valueTraitId,
             EntitlementValueType valueType,
+            Optional<List<WarningTierRequestBody>> warningTiers,
             Optional<String> yearlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers,
             Optional<Long> yearlyUnitPrice,
@@ -154,6 +157,7 @@ public final class CreateEntitlementInBundleRequestBody {
         this.valueNumeric = valueNumeric;
         this.valueTraitId = valueTraitId;
         this.valueType = valueType;
+        this.warningTiers = warningTiers;
         this.yearlyMeteredPriceId = yearlyMeteredPriceId;
         this.yearlyPriceTiers = yearlyPriceTiers;
         this.yearlyUnitPrice = yearlyUnitPrice;
@@ -312,6 +316,11 @@ public final class CreateEntitlementInBundleRequestBody {
         return valueType;
     }
 
+    @JsonProperty("warning_tiers")
+    public Optional<List<WarningTierRequestBody>> getWarningTiers() {
+        return warningTiers;
+    }
+
     @JsonProperty("yearly_metered_price_id")
     public Optional<String> getYearlyMeteredPriceId() {
         return yearlyMeteredPriceId;
@@ -374,6 +383,7 @@ public final class CreateEntitlementInBundleRequestBody {
                 && valueNumeric.equals(other.valueNumeric)
                 && valueTraitId.equals(other.valueTraitId)
                 && valueType.equals(other.valueType)
+                && warningTiers.equals(other.warningTiers)
                 && yearlyMeteredPriceId.equals(other.yearlyMeteredPriceId)
                 && yearlyPriceTiers.equals(other.yearlyPriceTiers)
                 && yearlyUnitPrice.equals(other.yearlyUnitPrice)
@@ -412,6 +422,7 @@ public final class CreateEntitlementInBundleRequestBody {
                 this.valueNumeric,
                 this.valueTraitId,
                 this.valueType,
+                this.warningTiers,
                 this.yearlyMeteredPriceId,
                 this.yearlyPriceTiers,
                 this.yearlyUnitPrice,
@@ -558,6 +569,10 @@ public final class CreateEntitlementInBundleRequestBody {
 
         _FinalStage valueTraitId(String valueTraitId);
 
+        _FinalStage warningTiers(Optional<List<WarningTierRequestBody>> warningTiers);
+
+        _FinalStage warningTiers(List<WarningTierRequestBody> warningTiers);
+
         _FinalStage yearlyMeteredPriceId(Optional<String> yearlyMeteredPriceId);
 
         _FinalStage yearlyMeteredPriceId(String yearlyMeteredPriceId);
@@ -590,6 +605,8 @@ public final class CreateEntitlementInBundleRequestBody {
         private Optional<List<CreatePriceTierRequestBody>> yearlyPriceTiers = Optional.empty();
 
         private Optional<String> yearlyMeteredPriceId = Optional.empty();
+
+        private Optional<List<WarningTierRequestBody>> warningTiers = Optional.empty();
 
         private Optional<String> valueTraitId = Optional.empty();
 
@@ -679,6 +696,7 @@ public final class CreateEntitlementInBundleRequestBody {
             valueNumeric(other.getValueNumeric());
             valueTraitId(other.getValueTraitId());
             valueType(other.getValueType());
+            warningTiers(other.getWarningTiers());
             yearlyMeteredPriceId(other.getYearlyMeteredPriceId());
             yearlyPriceTiers(other.getYearlyPriceTiers());
             yearlyUnitPrice(other.getYearlyUnitPrice());
@@ -756,6 +774,19 @@ public final class CreateEntitlementInBundleRequestBody {
         @JsonSetter(value = "yearly_metered_price_id", nulls = Nulls.SKIP)
         public _FinalStage yearlyMeteredPriceId(Optional<String> yearlyMeteredPriceId) {
             this.yearlyMeteredPriceId = yearlyMeteredPriceId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage warningTiers(List<WarningTierRequestBody> warningTiers) {
+            this.warningTiers = Optional.ofNullable(warningTiers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "warning_tiers", nulls = Nulls.SKIP)
+        public _FinalStage warningTiers(Optional<List<WarningTierRequestBody>> warningTiers) {
+            this.warningTiers = warningTiers;
             return this;
         }
 
@@ -1143,6 +1174,7 @@ public final class CreateEntitlementInBundleRequestBody {
                     valueNumeric,
                     valueTraitId,
                     valueType,
+                    warningTiers,
                     yearlyMeteredPriceId,
                     yearlyPriceTiers,
                     yearlyUnitPrice,

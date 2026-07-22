@@ -36,6 +36,8 @@ public final class CompanyPlanDetailResponseData {
 
     private final BillingStrategy billingStrategy;
 
+    private final Optional<List<PlanCatalogMembershipResponseData>> catalogs;
+
     private final ChargeType chargeType;
 
     private final boolean companyCanTrial;
@@ -121,6 +123,7 @@ public final class CompanyPlanDetailResponseData {
             Optional<BillingLinkedResourceResponseData> billingLinkedResource,
             Optional<BillingProductDetailResponseData> billingProduct,
             BillingStrategy billingStrategy,
+            Optional<List<PlanCatalogMembershipResponseData>> catalogs,
             ChargeType chargeType,
             boolean companyCanTrial,
             long companyCount,
@@ -166,6 +169,7 @@ public final class CompanyPlanDetailResponseData {
         this.billingLinkedResource = billingLinkedResource;
         this.billingProduct = billingProduct;
         this.billingStrategy = billingStrategy;
+        this.catalogs = catalogs;
         this.chargeType = chargeType;
         this.companyCanTrial = companyCanTrial;
         this.companyCount = companyCount;
@@ -235,6 +239,11 @@ public final class CompanyPlanDetailResponseData {
     @JsonProperty("billing_strategy")
     public BillingStrategy getBillingStrategy() {
         return billingStrategy;
+    }
+
+    @JsonProperty("catalogs")
+    public Optional<List<PlanCatalogMembershipResponseData>> getCatalogs() {
+        return catalogs;
     }
 
     @JsonProperty("charge_type")
@@ -448,6 +457,7 @@ public final class CompanyPlanDetailResponseData {
                 && billingLinkedResource.equals(other.billingLinkedResource)
                 && billingProduct.equals(other.billingProduct)
                 && billingStrategy.equals(other.billingStrategy)
+                && catalogs.equals(other.catalogs)
                 && chargeType.equals(other.chargeType)
                 && companyCanTrial == other.companyCanTrial
                 && companyCount == other.companyCount
@@ -497,6 +507,7 @@ public final class CompanyPlanDetailResponseData {
                 this.billingLinkedResource,
                 this.billingProduct,
                 this.billingStrategy,
+                this.catalogs,
                 this.chargeType,
                 this.companyCanTrial,
                 this.companyCount,
@@ -655,6 +666,10 @@ public final class CompanyPlanDetailResponseData {
         _FinalStage billingProduct(Optional<BillingProductDetailResponseData> billingProduct);
 
         _FinalStage billingProduct(BillingProductDetailResponseData billingProduct);
+
+        _FinalStage catalogs(Optional<List<PlanCatalogMembershipResponseData>> catalogs);
+
+        _FinalStage catalogs(List<PlanCatalogMembershipResponseData> catalogs);
 
         _FinalStage companyId(Optional<String> companyId);
 
@@ -851,6 +866,8 @@ public final class CompanyPlanDetailResponseData {
 
         private Optional<String> companyId = Optional.empty();
 
+        private Optional<List<PlanCatalogMembershipResponseData>> catalogs = Optional.empty();
+
         private Optional<BillingProductDetailResponseData> billingProduct = Optional.empty();
 
         private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
@@ -874,6 +891,7 @@ public final class CompanyPlanDetailResponseData {
             billingLinkedResource(other.getBillingLinkedResource());
             billingProduct(other.getBillingProduct());
             billingStrategy(other.getBillingStrategy());
+            catalogs(other.getCatalogs());
             chargeType(other.getChargeType());
             companyCanTrial(other.getCompanyCanTrial());
             companyCount(other.getCompanyCount());
@@ -1390,6 +1408,19 @@ public final class CompanyPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage catalogs(List<PlanCatalogMembershipResponseData> catalogs) {
+            this.catalogs = Optional.ofNullable(catalogs);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "catalogs", nulls = Nulls.SKIP)
+        public _FinalStage catalogs(Optional<List<PlanCatalogMembershipResponseData>> catalogs) {
+            this.catalogs = catalogs;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingProduct(BillingProductDetailResponseData billingProduct) {
             this.billingProduct = Optional.ofNullable(billingProduct);
             return this;
@@ -1474,6 +1505,7 @@ public final class CompanyPlanDetailResponseData {
                     billingLinkedResource,
                     billingProduct,
                     billingStrategy,
+                    catalogs,
                     chargeType,
                     companyCanTrial,
                     companyCount,

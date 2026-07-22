@@ -5,11 +5,13 @@ package com.schematic.api.resources.components;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.components.requests.BindCatalogRequestBody;
 import com.schematic.api.resources.components.requests.CountComponentsRequest;
 import com.schematic.api.resources.components.requests.CreateComponentRequestBody;
 import com.schematic.api.resources.components.requests.ListComponentsRequest;
 import com.schematic.api.resources.components.requests.PreviewComponentDataRequest;
 import com.schematic.api.resources.components.requests.UpdateComponentRequestBody;
+import com.schematic.api.resources.components.types.BindCatalogResponse;
 import com.schematic.api.resources.components.types.CountComponentsResponse;
 import com.schematic.api.resources.components.types.CreateComponentResponse;
 import com.schematic.api.resources.components.types.DeleteComponentResponse;
@@ -98,6 +100,23 @@ public class AsyncComponentsClient {
     public CompletableFuture<DeleteComponentResponse> deleteComponent(
             String componentId, RequestOptions requestOptions) {
         return this.rawClient.deleteComponent(componentId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<BindCatalogResponse> bindCatalog(String componentId) {
+        return this.rawClient.bindCatalog(componentId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<BindCatalogResponse> bindCatalog(String componentId, RequestOptions requestOptions) {
+        return this.rawClient.bindCatalog(componentId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<BindCatalogResponse> bindCatalog(String componentId, BindCatalogRequestBody request) {
+        return this.rawClient.bindCatalog(componentId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<BindCatalogResponse> bindCatalog(
+            String componentId, BindCatalogRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.bindCatalog(componentId, request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountComponentsResponse> countComponents() {

@@ -7,13 +7,16 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.checkout.requests.CancelSubscriptionRequest;
 import com.schematic.api.resources.checkout.requests.CheckoutDataRequestBody;
+import com.schematic.api.resources.checkout.requests.UpdateCompanyBillingDetailsRequestBody;
 import com.schematic.api.resources.checkout.requests.UpdateTrialEndRequestBody;
 import com.schematic.api.resources.checkout.types.CancelSubscriptionResponse;
 import com.schematic.api.resources.checkout.types.CheckoutInternalResponse;
 import com.schematic.api.resources.checkout.types.GetCheckoutDataResponse;
+import com.schematic.api.resources.checkout.types.GetCompanyBillingDetailsResponse;
 import com.schematic.api.resources.checkout.types.ManagePlanResponse;
 import com.schematic.api.resources.checkout.types.PreviewCheckoutInternalResponse;
 import com.schematic.api.resources.checkout.types.PreviewManagePlanResponse;
+import com.schematic.api.resources.checkout.types.UpdateCompanyBillingDetailsResponse;
 import com.schematic.api.resources.checkout.types.UpdateCustomerSubscriptionTrialEndResponse;
 import com.schematic.api.types.ChangeSubscriptionInternalRequestBody;
 import com.schematic.api.types.ManagePlanRequest;
@@ -62,6 +65,29 @@ public class AsyncCheckoutClient {
     public CompletableFuture<PreviewCheckoutInternalResponse> previewCheckoutInternal(
             ChangeSubscriptionInternalRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.previewCheckoutInternal(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCompanyBillingDetailsResponse> getCompanyBillingDetails(String companyId) {
+        return this.rawClient.getCompanyBillingDetails(companyId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCompanyBillingDetailsResponse> getCompanyBillingDetails(
+            String companyId, RequestOptions requestOptions) {
+        return this.rawClient
+                .getCompanyBillingDetails(companyId, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpdateCompanyBillingDetailsResponse> updateCompanyBillingDetails(
+            String companyId, UpdateCompanyBillingDetailsRequestBody request) {
+        return this.rawClient.updateCompanyBillingDetails(companyId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpdateCompanyBillingDetailsResponse> updateCompanyBillingDetails(
+            String companyId, UpdateCompanyBillingDetailsRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateCompanyBillingDetails(companyId, request, requestOptions)
+                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<ManagePlanResponse> managePlan(ManagePlanRequest request) {

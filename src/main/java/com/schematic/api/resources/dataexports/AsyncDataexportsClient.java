@@ -6,7 +6,10 @@ package com.schematic.api.resources.dataexports;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.dataexports.requests.CreateDataExportRequestBody;
+import com.schematic.api.resources.dataexports.requests.ListDataExportsRequest;
 import com.schematic.api.resources.dataexports.types.CreateDataExportResponse;
+import com.schematic.api.resources.dataexports.types.GetDataExportResponse;
+import com.schematic.api.resources.dataexports.types.ListDataExportsResponse;
 import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
 
@@ -27,6 +30,23 @@ public class AsyncDataexportsClient {
         return this.rawClient;
     }
 
+    public CompletableFuture<ListDataExportsResponse> listDataExports() {
+        return this.rawClient.listDataExports().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListDataExportsResponse> listDataExports(RequestOptions requestOptions) {
+        return this.rawClient.listDataExports(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListDataExportsResponse> listDataExports(ListDataExportsRequest request) {
+        return this.rawClient.listDataExports(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListDataExportsResponse> listDataExports(
+            ListDataExportsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listDataExports(request, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CreateDataExportResponse> createDataExport(CreateDataExportRequestBody request) {
         return this.rawClient.createDataExport(request).thenApply(response -> response.body());
     }
@@ -34,6 +54,14 @@ public class AsyncDataexportsClient {
     public CompletableFuture<CreateDataExportResponse> createDataExport(
             CreateDataExportRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.createDataExport(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetDataExportResponse> getDataExport(String dataExportId) {
+        return this.rawClient.getDataExport(dataExportId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetDataExportResponse> getDataExport(String dataExportId, RequestOptions requestOptions) {
+        return this.rawClient.getDataExport(dataExportId, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<InputStream> getDataExportArtifact(String dataExportId) {
