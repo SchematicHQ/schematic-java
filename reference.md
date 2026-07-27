@@ -45,6 +45,7 @@ client.accounts().listAccountMembers(
             Arrays.asList("ids")
         )
         .q("q")
+        .role(AccountMemberRole.ADMIN)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -72,6 +73,14 @@ client.accounts().listAccountMembers(
 <dd>
 
 **q:** `Optional<String>` — Search filter
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**role:** `Optional<AccountMemberRole>` — Filter by member role
     
 </dd>
 </dl>
@@ -159,6 +168,7 @@ client.accounts().countAccountMembers(
             Arrays.asList("ids")
         )
         .q("q")
+        .role(AccountMemberRole.ADMIN)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -186,6 +196,14 @@ client.accounts().countAccountMembers(
 <dd>
 
 **q:** `Optional<String>` — Search filter
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**role:** `Optional<AccountMemberRole>` — Filter by member role
     
 </dd>
 </dl>
@@ -17551,6 +17569,217 @@ client.integrationsapi().uninstallIntegration("integration_id");
 </dl>
 </details>
 
+## licenses
+<details><summary><code>client.licenses.listLicenses() -> ListLicensesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.licenses().listLicenses(
+    ListLicensesRequest
+        .builder()
+        .featureIds(
+            Arrays.asList("feature_ids")
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
+        .name("name")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**featureIds:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.licenses.getSingleLicense(licenseId) -> GetSingleLicenseResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.licenses().getSingleLicense("license_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**licenseId:** `String` — license_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.licenses.countLicenses() -> CountLicensesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.licenses().countLicenses(
+    CountLicensesRequest
+        .builder()
+        .featureIds(
+            Arrays.asList("feature_ids")
+        )
+        .ids(
+            Arrays.asList("ids")
+        )
+        .name("name")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**featureIds:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**ids:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## plangroups
 <details><summary><code>client.plangroups.getPlanGroup() -> GetPlanGroupResponse</code></summary>
 <dl>
@@ -18875,6 +19104,80 @@ client.planmigrations().countMigrations(
 <dd>
 
 **offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.planmigrations.previewMigration(request) -> PreviewMigrationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().previewMigration(
+    PreviewMigrationRequestBody
+        .builder()
+        .planId("plan_id")
+        .planVersionIdTo("plan_version_id_to")
+        .targetPlanType(PlanType.PLAN)
+        .companyIds(
+            Arrays.asList("company_ids")
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyIds:** `List<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionIdTo:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**targetPlanType:** `PlanType` 
     
 </dd>
 </dl>

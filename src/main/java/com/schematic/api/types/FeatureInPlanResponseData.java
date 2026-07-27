@@ -42,6 +42,8 @@ public final class FeatureInPlanResponseData {
 
     private final String id;
 
+    private final Optional<String> licenseId;
+
     private final Optional<FeatureLifecyclePhase> lifecyclePhase;
 
     private final Optional<String> maintainerAccountMemberId;
@@ -60,6 +62,8 @@ public final class FeatureInPlanResponseData {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<String> usageLimitTraitId;
+
     private final Map<String, Object> additionalProperties;
 
     private FeatureInPlanResponseData(
@@ -72,6 +76,7 @@ public final class FeatureInPlanResponseData {
             List<FlagInPlanResponseData> flags,
             String icon,
             String id,
+            Optional<String> licenseId,
             Optional<FeatureLifecyclePhase> lifecyclePhase,
             Optional<String> maintainerAccountMemberId,
             String name,
@@ -81,6 +86,7 @@ public final class FeatureInPlanResponseData {
             Optional<EntityTraitDefinitionResponseData> trait,
             Optional<String> traitId,
             OffsetDateTime updatedAt,
+            Optional<String> usageLimitTraitId,
             Map<String, Object> additionalProperties) {
         this.billingLinkedResource = billingLinkedResource;
         this.createdAt = createdAt;
@@ -91,6 +97,7 @@ public final class FeatureInPlanResponseData {
         this.flags = flags;
         this.icon = icon;
         this.id = id;
+        this.licenseId = licenseId;
         this.lifecyclePhase = lifecyclePhase;
         this.maintainerAccountMemberId = maintainerAccountMemberId;
         this.name = name;
@@ -100,6 +107,7 @@ public final class FeatureInPlanResponseData {
         this.trait = trait;
         this.traitId = traitId;
         this.updatedAt = updatedAt;
+        this.usageLimitTraitId = usageLimitTraitId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -148,6 +156,14 @@ public final class FeatureInPlanResponseData {
         return id;
     }
 
+    /**
+     * @return The license sold through this feature. Set only on features of type license, and created automatically with them.
+     */
+    @JsonProperty("license_id")
+    public Optional<String> getLicenseId() {
+        return licenseId;
+    }
+
     @JsonProperty("lifecycle_phase")
     public Optional<FeatureLifecyclePhase> getLifecyclePhase() {
         return lifecyclePhase;
@@ -193,6 +209,14 @@ public final class FeatureInPlanResponseData {
         return updatedAt;
     }
 
+    /**
+     * @return Set when the feature carries a pay-in-advance quantity. Provisioned lazily for other feature types, and at creation for license features.
+     */
+    @JsonProperty("usage_limit_trait_id")
+    public Optional<String> getUsageLimitTraitId() {
+        return usageLimitTraitId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -214,6 +238,7 @@ public final class FeatureInPlanResponseData {
                 && flags.equals(other.flags)
                 && icon.equals(other.icon)
                 && id.equals(other.id)
+                && licenseId.equals(other.licenseId)
                 && lifecyclePhase.equals(other.lifecyclePhase)
                 && maintainerAccountMemberId.equals(other.maintainerAccountMemberId)
                 && name.equals(other.name)
@@ -222,7 +247,8 @@ public final class FeatureInPlanResponseData {
                 && singularName.equals(other.singularName)
                 && trait.equals(other.trait)
                 && traitId.equals(other.traitId)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && usageLimitTraitId.equals(other.usageLimitTraitId);
     }
 
     @java.lang.Override
@@ -237,6 +263,7 @@ public final class FeatureInPlanResponseData {
                 this.flags,
                 this.icon,
                 this.id,
+                this.licenseId,
                 this.lifecyclePhase,
                 this.maintainerAccountMemberId,
                 this.name,
@@ -245,7 +272,8 @@ public final class FeatureInPlanResponseData {
                 this.singularName,
                 this.trait,
                 this.traitId,
-                this.updatedAt);
+                this.updatedAt,
+                this.usageLimitTraitId);
     }
 
     @java.lang.Override
@@ -312,6 +340,13 @@ public final class FeatureInPlanResponseData {
 
         _FinalStage addAllFlags(List<FlagInPlanResponseData> flags);
 
+        /**
+         * <p>The license sold through this feature. Set only on features of type license, and created automatically with them.</p>
+         */
+        _FinalStage licenseId(Optional<String> licenseId);
+
+        _FinalStage licenseId(String licenseId);
+
         _FinalStage lifecyclePhase(Optional<FeatureLifecyclePhase> lifecyclePhase);
 
         _FinalStage lifecyclePhase(FeatureLifecyclePhase lifecyclePhase);
@@ -341,6 +376,13 @@ public final class FeatureInPlanResponseData {
         _FinalStage traitId(Optional<String> traitId);
 
         _FinalStage traitId(String traitId);
+
+        /**
+         * <p>Set when the feature carries a pay-in-advance quantity. Provisioned lazily for other feature types, and at creation for license features.</p>
+         */
+        _FinalStage usageLimitTraitId(Optional<String> usageLimitTraitId);
+
+        _FinalStage usageLimitTraitId(String usageLimitTraitId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -367,6 +409,8 @@ public final class FeatureInPlanResponseData {
 
         private OffsetDateTime updatedAt;
 
+        private Optional<String> usageLimitTraitId = Optional.empty();
+
         private Optional<String> traitId = Optional.empty();
 
         private Optional<EntityTraitDefinitionResponseData> trait = Optional.empty();
@@ -380,6 +424,8 @@ public final class FeatureInPlanResponseData {
         private Optional<String> maintainerAccountMemberId = Optional.empty();
 
         private Optional<FeatureLifecyclePhase> lifecyclePhase = Optional.empty();
+
+        private Optional<String> licenseId = Optional.empty();
 
         private List<FlagInPlanResponseData> flags = new ArrayList<>();
 
@@ -405,6 +451,7 @@ public final class FeatureInPlanResponseData {
             flags(other.getFlags());
             icon(other.getIcon());
             id(other.getId());
+            licenseId(other.getLicenseId());
             lifecyclePhase(other.getLifecyclePhase());
             maintainerAccountMemberId(other.getMaintainerAccountMemberId());
             name(other.getName());
@@ -414,6 +461,7 @@ public final class FeatureInPlanResponseData {
             trait(other.getTrait());
             traitId(other.getTraitId());
             updatedAt(other.getUpdatedAt());
+            usageLimitTraitId(other.getUsageLimitTraitId());
             return this;
         }
 
@@ -463,6 +511,26 @@ public final class FeatureInPlanResponseData {
         @JsonSetter("updated_at")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Set when the feature carries a pay-in-advance quantity. Provisioned lazily for other feature types, and at creation for license features.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage usageLimitTraitId(String usageLimitTraitId) {
+            this.usageLimitTraitId = Optional.ofNullable(usageLimitTraitId);
+            return this;
+        }
+
+        /**
+         * <p>Set when the feature carries a pay-in-advance quantity. Provisioned lazily for other feature types, and at creation for license features.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "usage_limit_trait_id", nulls = Nulls.SKIP)
+        public _FinalStage usageLimitTraitId(Optional<String> usageLimitTraitId) {
+            this.usageLimitTraitId = usageLimitTraitId;
             return this;
         }
 
@@ -568,6 +636,26 @@ public final class FeatureInPlanResponseData {
             return this;
         }
 
+        /**
+         * <p>The license sold through this feature. Set only on features of type license, and created automatically with them.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage licenseId(String licenseId) {
+            this.licenseId = Optional.ofNullable(licenseId);
+            return this;
+        }
+
+        /**
+         * <p>The license sold through this feature. Set only on features of type license, and created automatically with them.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "license_id", nulls = Nulls.SKIP)
+        public _FinalStage licenseId(Optional<String> licenseId) {
+            this.licenseId = licenseId;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllFlags(List<FlagInPlanResponseData> flags) {
             if (flags != null) {
@@ -643,6 +731,7 @@ public final class FeatureInPlanResponseData {
                     flags,
                     icon,
                     id,
+                    licenseId,
                     lifecyclePhase,
                     maintainerAccountMemberId,
                     name,
@@ -652,6 +741,7 @@ public final class FeatureInPlanResponseData {
                     trait,
                     traitId,
                     updatedAt,
+                    usageLimitTraitId,
                     additionalProperties);
         }
 
