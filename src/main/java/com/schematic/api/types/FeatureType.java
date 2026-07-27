@@ -13,6 +13,8 @@ public final class FeatureType {
 
     public static final FeatureType EVENT = new FeatureType(Value.EVENT, "event");
 
+    public static final FeatureType LICENSE = new FeatureType(Value.LICENSE, "license");
+
     private final Value value;
 
     private final String string;
@@ -50,6 +52,8 @@ public final class FeatureType {
                 return visitor.visitBoolean();
             case EVENT:
                 return visitor.visitEvent();
+            case LICENSE:
+                return visitor.visitLicense();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -65,6 +69,8 @@ public final class FeatureType {
                 return BOOLEAN;
             case "event":
                 return EVENT;
+            case "license":
+                return LICENSE;
             default:
                 return new FeatureType(Value.UNKNOWN, value);
         }
@@ -75,6 +81,8 @@ public final class FeatureType {
 
         EVENT,
 
+        LICENSE,
+
         TRAIT,
 
         UNKNOWN
@@ -84,6 +92,8 @@ public final class FeatureType {
         T visitBoolean();
 
         T visitEvent();
+
+        T visitLicense();
 
         T visitTrait();
 

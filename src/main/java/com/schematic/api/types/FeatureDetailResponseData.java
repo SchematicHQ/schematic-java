@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public final class FeatureDetailResponseData {
     private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
 
+    private final Optional<BillingProductResponseData> billingProduct;
+
     private final OffsetDateTime createdAt;
 
     private final String description;
@@ -41,6 +43,8 @@ public final class FeatureDetailResponseData {
     private final String icon;
 
     private final String id;
+
+    private final Optional<String> licenseId;
 
     private final Optional<FeatureLifecyclePhase> lifecyclePhase;
 
@@ -62,10 +66,13 @@ public final class FeatureDetailResponseData {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<String> usageLimitTraitId;
+
     private final Map<String, Object> additionalProperties;
 
     private FeatureDetailResponseData(
             Optional<BillingLinkedResourceResponseData> billingLinkedResource,
+            Optional<BillingProductResponseData> billingProduct,
             OffsetDateTime createdAt,
             String description,
             Optional<String> eventSubtype,
@@ -74,6 +81,7 @@ public final class FeatureDetailResponseData {
             List<FlagDetailResponseData> flags,
             String icon,
             String id,
+            Optional<String> licenseId,
             Optional<FeatureLifecyclePhase> lifecyclePhase,
             Optional<AccountMemberResponseData> maintainer,
             Optional<String> maintainerAccountMemberId,
@@ -84,8 +92,10 @@ public final class FeatureDetailResponseData {
             Optional<EntityTraitDefinitionResponseData> trait,
             Optional<String> traitId,
             OffsetDateTime updatedAt,
+            Optional<String> usageLimitTraitId,
             Map<String, Object> additionalProperties) {
         this.billingLinkedResource = billingLinkedResource;
+        this.billingProduct = billingProduct;
         this.createdAt = createdAt;
         this.description = description;
         this.eventSubtype = eventSubtype;
@@ -94,6 +104,7 @@ public final class FeatureDetailResponseData {
         this.flags = flags;
         this.icon = icon;
         this.id = id;
+        this.licenseId = licenseId;
         this.lifecyclePhase = lifecyclePhase;
         this.maintainer = maintainer;
         this.maintainerAccountMemberId = maintainerAccountMemberId;
@@ -104,12 +115,21 @@ public final class FeatureDetailResponseData {
         this.trait = trait;
         this.traitId = traitId;
         this.updatedAt = updatedAt;
+        this.usageLimitTraitId = usageLimitTraitId;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("billing_linked_resource")
     public Optional<BillingLinkedResourceResponseData> getBillingLinkedResource() {
         return billingLinkedResource;
+    }
+
+    /**
+     * @return The billing provider product that sells this feature in the current environment. Set for license features once they have been priced in a plan; a feature priced in several environments has a different product in each.
+     */
+    @JsonProperty("billing_product")
+    public Optional<BillingProductResponseData> getBillingProduct() {
+        return billingProduct;
     }
 
     @JsonProperty("created_at")
@@ -150,6 +170,14 @@ public final class FeatureDetailResponseData {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    /**
+     * @return The license sold through this feature. Set only on features of type license, and created automatically with them.
+     */
+    @JsonProperty("license_id")
+    public Optional<String> getLicenseId() {
+        return licenseId;
     }
 
     @JsonProperty("lifecycle_phase")
@@ -202,6 +230,14 @@ public final class FeatureDetailResponseData {
         return updatedAt;
     }
 
+    /**
+     * @return Set when the feature carries a pay-in-advance quantity. Provisioned lazily for other feature types, and at creation for license features.
+     */
+    @JsonProperty("usage_limit_trait_id")
+    public Optional<String> getUsageLimitTraitId() {
+        return usageLimitTraitId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -215,6 +251,7 @@ public final class FeatureDetailResponseData {
 
     private boolean equalTo(FeatureDetailResponseData other) {
         return billingLinkedResource.equals(other.billingLinkedResource)
+                && billingProduct.equals(other.billingProduct)
                 && createdAt.equals(other.createdAt)
                 && description.equals(other.description)
                 && eventSubtype.equals(other.eventSubtype)
@@ -223,6 +260,7 @@ public final class FeatureDetailResponseData {
                 && flags.equals(other.flags)
                 && icon.equals(other.icon)
                 && id.equals(other.id)
+                && licenseId.equals(other.licenseId)
                 && lifecyclePhase.equals(other.lifecyclePhase)
                 && maintainer.equals(other.maintainer)
                 && maintainerAccountMemberId.equals(other.maintainerAccountMemberId)
@@ -232,13 +270,15 @@ public final class FeatureDetailResponseData {
                 && singularName.equals(other.singularName)
                 && trait.equals(other.trait)
                 && traitId.equals(other.traitId)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && usageLimitTraitId.equals(other.usageLimitTraitId);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
                 this.billingLinkedResource,
+                this.billingProduct,
                 this.createdAt,
                 this.description,
                 this.eventSubtype,
@@ -247,6 +287,7 @@ public final class FeatureDetailResponseData {
                 this.flags,
                 this.icon,
                 this.id,
+                this.licenseId,
                 this.lifecyclePhase,
                 this.maintainer,
                 this.maintainerAccountMemberId,
@@ -256,7 +297,8 @@ public final class FeatureDetailResponseData {
                 this.singularName,
                 this.trait,
                 this.traitId,
-                this.updatedAt);
+                this.updatedAt,
+                this.usageLimitTraitId);
     }
 
     @java.lang.Override
@@ -309,6 +351,13 @@ public final class FeatureDetailResponseData {
 
         _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
 
+        /**
+         * <p>The billing provider product that sells this feature in the current environment. Set for license features once they have been priced in a plan; a feature priced in several environments has a different product in each.</p>
+         */
+        _FinalStage billingProduct(Optional<BillingProductResponseData> billingProduct);
+
+        _FinalStage billingProduct(BillingProductResponseData billingProduct);
+
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
         _FinalStage eventSubtype(String eventSubtype);
@@ -322,6 +371,13 @@ public final class FeatureDetailResponseData {
         _FinalStage addFlags(FlagDetailResponseData flags);
 
         _FinalStage addAllFlags(List<FlagDetailResponseData> flags);
+
+        /**
+         * <p>The license sold through this feature. Set only on features of type license, and created automatically with them.</p>
+         */
+        _FinalStage licenseId(Optional<String> licenseId);
+
+        _FinalStage licenseId(String licenseId);
 
         _FinalStage lifecyclePhase(Optional<FeatureLifecyclePhase> lifecyclePhase);
 
@@ -356,6 +412,13 @@ public final class FeatureDetailResponseData {
         _FinalStage traitId(Optional<String> traitId);
 
         _FinalStage traitId(String traitId);
+
+        /**
+         * <p>Set when the feature carries a pay-in-advance quantity. Provisioned lazily for other feature types, and at creation for license features.</p>
+         */
+        _FinalStage usageLimitTraitId(Optional<String> usageLimitTraitId);
+
+        _FinalStage usageLimitTraitId(String usageLimitTraitId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -382,6 +445,8 @@ public final class FeatureDetailResponseData {
 
         private OffsetDateTime updatedAt;
 
+        private Optional<String> usageLimitTraitId = Optional.empty();
+
         private Optional<String> traitId = Optional.empty();
 
         private Optional<EntityTraitDefinitionResponseData> trait = Optional.empty();
@@ -398,11 +463,15 @@ public final class FeatureDetailResponseData {
 
         private Optional<FeatureLifecyclePhase> lifecyclePhase = Optional.empty();
 
+        private Optional<String> licenseId = Optional.empty();
+
         private List<FlagDetailResponseData> flags = new ArrayList<>();
 
         private Optional<EventSummaryResponseData> eventSummary = Optional.empty();
 
         private Optional<String> eventSubtype = Optional.empty();
+
+        private Optional<BillingProductResponseData> billingProduct = Optional.empty();
 
         private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
 
@@ -414,6 +483,7 @@ public final class FeatureDetailResponseData {
         @java.lang.Override
         public Builder from(FeatureDetailResponseData other) {
             billingLinkedResource(other.getBillingLinkedResource());
+            billingProduct(other.getBillingProduct());
             createdAt(other.getCreatedAt());
             description(other.getDescription());
             eventSubtype(other.getEventSubtype());
@@ -422,6 +492,7 @@ public final class FeatureDetailResponseData {
             flags(other.getFlags());
             icon(other.getIcon());
             id(other.getId());
+            licenseId(other.getLicenseId());
             lifecyclePhase(other.getLifecyclePhase());
             maintainer(other.getMaintainer());
             maintainerAccountMemberId(other.getMaintainerAccountMemberId());
@@ -432,6 +503,7 @@ public final class FeatureDetailResponseData {
             trait(other.getTrait());
             traitId(other.getTraitId());
             updatedAt(other.getUpdatedAt());
+            usageLimitTraitId(other.getUsageLimitTraitId());
             return this;
         }
 
@@ -481,6 +553,26 @@ public final class FeatureDetailResponseData {
         @JsonSetter("updated_at")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Set when the feature carries a pay-in-advance quantity. Provisioned lazily for other feature types, and at creation for license features.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage usageLimitTraitId(String usageLimitTraitId) {
+            this.usageLimitTraitId = Optional.ofNullable(usageLimitTraitId);
+            return this;
+        }
+
+        /**
+         * <p>Set when the feature carries a pay-in-advance quantity. Provisioned lazily for other feature types, and at creation for license features.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "usage_limit_trait_id", nulls = Nulls.SKIP)
+        public _FinalStage usageLimitTraitId(Optional<String> usageLimitTraitId) {
+            this.usageLimitTraitId = usageLimitTraitId;
             return this;
         }
 
@@ -599,6 +691,26 @@ public final class FeatureDetailResponseData {
             return this;
         }
 
+        /**
+         * <p>The license sold through this feature. Set only on features of type license, and created automatically with them.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage licenseId(String licenseId) {
+            this.licenseId = Optional.ofNullable(licenseId);
+            return this;
+        }
+
+        /**
+         * <p>The license sold through this feature. Set only on features of type license, and created automatically with them.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "license_id", nulls = Nulls.SKIP)
+        public _FinalStage licenseId(Optional<String> licenseId) {
+            this.licenseId = licenseId;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllFlags(List<FlagDetailResponseData> flags) {
             if (flags != null) {
@@ -649,6 +761,26 @@ public final class FeatureDetailResponseData {
             return this;
         }
 
+        /**
+         * <p>The billing provider product that sells this feature in the current environment. Set for license features once they have been priced in a plan; a feature priced in several environments has a different product in each.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingProduct(BillingProductResponseData billingProduct) {
+            this.billingProduct = Optional.ofNullable(billingProduct);
+            return this;
+        }
+
+        /**
+         * <p>The billing provider product that sells this feature in the current environment. Set for license features once they have been priced in a plan; a feature priced in several environments has a different product in each.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_product", nulls = Nulls.SKIP)
+        public _FinalStage billingProduct(Optional<BillingProductResponseData> billingProduct) {
+            this.billingProduct = billingProduct;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource) {
             this.billingLinkedResource = Optional.ofNullable(billingLinkedResource);
@@ -666,6 +798,7 @@ public final class FeatureDetailResponseData {
         public FeatureDetailResponseData build() {
             return new FeatureDetailResponseData(
                     billingLinkedResource,
+                    billingProduct,
                     createdAt,
                     description,
                     eventSubtype,
@@ -674,6 +807,7 @@ public final class FeatureDetailResponseData {
                     flags,
                     icon,
                     id,
+                    licenseId,
                     lifecyclePhase,
                     maintainer,
                     maintainerAccountMemberId,
@@ -684,6 +818,7 @@ public final class FeatureDetailResponseData {
                     trait,
                     traitId,
                     updatedAt,
+                    usageLimitTraitId,
                     additionalProperties);
         }
 

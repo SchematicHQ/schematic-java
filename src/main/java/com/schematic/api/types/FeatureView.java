@@ -28,6 +28,8 @@ public final class FeatureView {
 
     private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
 
+    private final Optional<BillingProductResponseData> billingProduct;
+
     private final OffsetDateTime createdAt;
 
     private final String description;
@@ -43,6 +45,8 @@ public final class FeatureView {
     private final String icon;
 
     private final String id;
+
+    private final Optional<String> licenseId;
 
     private final Optional<FeatureLifecyclePhase> lifecyclePhase;
 
@@ -67,6 +71,7 @@ public final class FeatureView {
     private FeatureView(
             String accountId,
             Optional<BillingLinkedResourceResponseData> billingLinkedResource,
+            Optional<BillingProductResponseData> billingProduct,
             OffsetDateTime createdAt,
             String description,
             Optional<String> eventSubtype,
@@ -75,6 +80,7 @@ public final class FeatureView {
             List<FlagView> flags,
             String icon,
             String id,
+            Optional<String> licenseId,
             Optional<FeatureLifecyclePhase> lifecyclePhase,
             String name,
             List<PreviewObject> plans,
@@ -87,6 +93,7 @@ public final class FeatureView {
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.billingLinkedResource = billingLinkedResource;
+        this.billingProduct = billingProduct;
         this.createdAt = createdAt;
         this.description = description;
         this.eventSubtype = eventSubtype;
@@ -95,6 +102,7 @@ public final class FeatureView {
         this.flags = flags;
         this.icon = icon;
         this.id = id;
+        this.licenseId = licenseId;
         this.lifecyclePhase = lifecyclePhase;
         this.name = name;
         this.plans = plans;
@@ -115,6 +123,11 @@ public final class FeatureView {
     @JsonProperty("billing_linked_resource")
     public Optional<BillingLinkedResourceResponseData> getBillingLinkedResource() {
         return billingLinkedResource;
+    }
+
+    @JsonProperty("billing_product")
+    public Optional<BillingProductResponseData> getBillingProduct() {
+        return billingProduct;
     }
 
     @JsonProperty("created_at")
@@ -155,6 +168,11 @@ public final class FeatureView {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    @JsonProperty("license_id")
+    public Optional<String> getLicenseId() {
+        return licenseId;
     }
 
     @JsonProperty("lifecycle_phase")
@@ -216,6 +234,7 @@ public final class FeatureView {
     private boolean equalTo(FeatureView other) {
         return accountId.equals(other.accountId)
                 && billingLinkedResource.equals(other.billingLinkedResource)
+                && billingProduct.equals(other.billingProduct)
                 && createdAt.equals(other.createdAt)
                 && description.equals(other.description)
                 && eventSubtype.equals(other.eventSubtype)
@@ -224,6 +243,7 @@ public final class FeatureView {
                 && flags.equals(other.flags)
                 && icon.equals(other.icon)
                 && id.equals(other.id)
+                && licenseId.equals(other.licenseId)
                 && lifecyclePhase.equals(other.lifecyclePhase)
                 && name.equals(other.name)
                 && plans.equals(other.plans)
@@ -240,6 +260,7 @@ public final class FeatureView {
         return Objects.hash(
                 this.accountId,
                 this.billingLinkedResource,
+                this.billingProduct,
                 this.createdAt,
                 this.description,
                 this.eventSubtype,
@@ -248,6 +269,7 @@ public final class FeatureView {
                 this.flags,
                 this.icon,
                 this.id,
+                this.licenseId,
                 this.lifecyclePhase,
                 this.name,
                 this.plans,
@@ -313,6 +335,10 @@ public final class FeatureView {
 
         _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
 
+        _FinalStage billingProduct(Optional<BillingProductResponseData> billingProduct);
+
+        _FinalStage billingProduct(BillingProductResponseData billingProduct);
+
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
         _FinalStage eventSubtype(String eventSubtype);
@@ -326,6 +352,10 @@ public final class FeatureView {
         _FinalStage addFlags(FlagView flags);
 
         _FinalStage addAllFlags(List<FlagView> flags);
+
+        _FinalStage licenseId(Optional<String> licenseId);
+
+        _FinalStage licenseId(String licenseId);
 
         _FinalStage lifecyclePhase(Optional<FeatureLifecyclePhase> lifecyclePhase);
 
@@ -399,11 +429,15 @@ public final class FeatureView {
 
         private Optional<FeatureLifecyclePhase> lifecyclePhase = Optional.empty();
 
+        private Optional<String> licenseId = Optional.empty();
+
         private List<FlagView> flags = new ArrayList<>();
 
         private Optional<EventSummaryResponseData> eventSummary = Optional.empty();
 
         private Optional<String> eventSubtype = Optional.empty();
+
+        private Optional<BillingProductResponseData> billingProduct = Optional.empty();
 
         private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
 
@@ -416,6 +450,7 @@ public final class FeatureView {
         public Builder from(FeatureView other) {
             accountId(other.getAccountId());
             billingLinkedResource(other.getBillingLinkedResource());
+            billingProduct(other.getBillingProduct());
             createdAt(other.getCreatedAt());
             description(other.getDescription());
             eventSubtype(other.getEventSubtype());
@@ -424,6 +459,7 @@ public final class FeatureView {
             flags(other.getFlags());
             icon(other.getIcon());
             id(other.getId());
+            licenseId(other.getLicenseId());
             lifecyclePhase(other.getLifecyclePhase());
             name(other.getName());
             plans(other.getPlans());
@@ -595,6 +631,19 @@ public final class FeatureView {
         }
 
         @java.lang.Override
+        public _FinalStage licenseId(String licenseId) {
+            this.licenseId = Optional.ofNullable(licenseId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "license_id", nulls = Nulls.SKIP)
+        public _FinalStage licenseId(Optional<String> licenseId) {
+            this.licenseId = licenseId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllFlags(List<FlagView> flags) {
             if (flags != null) {
                 this.flags.addAll(flags);
@@ -645,6 +694,19 @@ public final class FeatureView {
         }
 
         @java.lang.Override
+        public _FinalStage billingProduct(BillingProductResponseData billingProduct) {
+            this.billingProduct = Optional.ofNullable(billingProduct);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_product", nulls = Nulls.SKIP)
+        public _FinalStage billingProduct(Optional<BillingProductResponseData> billingProduct) {
+            this.billingProduct = billingProduct;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource) {
             this.billingLinkedResource = Optional.ofNullable(billingLinkedResource);
             return this;
@@ -662,6 +724,7 @@ public final class FeatureView {
             return new FeatureView(
                     accountId,
                     billingLinkedResource,
+                    billingProduct,
                     createdAt,
                     description,
                     eventSubtype,
@@ -670,6 +733,7 @@ public final class FeatureView {
                     flags,
                     icon,
                     id,
+                    licenseId,
                     lifecyclePhase,
                     name,
                     plans,

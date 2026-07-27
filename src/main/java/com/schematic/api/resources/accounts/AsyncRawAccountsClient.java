@@ -91,6 +91,10 @@ public class AsyncRawAccountsClient {
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
+        if (request.getRole().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "role", request.getRole().get(), false);
+        }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "limit", request.getLimit().get(), false);
@@ -304,6 +308,10 @@ public class AsyncRawAccountsClient {
                 .addPathSegments("account-members/count");
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
+        }
+        if (request.getRole().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "role", request.getRole().get(), false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(

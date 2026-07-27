@@ -10,6 +10,7 @@ import com.schematic.api.resources.planmigrations.requests.CountMigrationsReques
 import com.schematic.api.resources.planmigrations.requests.CreateMigrationInput;
 import com.schematic.api.resources.planmigrations.requests.ListCompanyMigrationsRequest;
 import com.schematic.api.resources.planmigrations.requests.ListMigrationsRequest;
+import com.schematic.api.resources.planmigrations.requests.PreviewMigrationRequestBody;
 import com.schematic.api.resources.planmigrations.requests.RetryMigrationRequestBody;
 import com.schematic.api.resources.planmigrations.types.CountCompanyMigrationsResponse;
 import com.schematic.api.resources.planmigrations.types.CountMigrationsResponse;
@@ -17,6 +18,7 @@ import com.schematic.api.resources.planmigrations.types.CreateMigrationResponse;
 import com.schematic.api.resources.planmigrations.types.GetMigrationResponse;
 import com.schematic.api.resources.planmigrations.types.ListCompanyMigrationsResponse;
 import com.schematic.api.resources.planmigrations.types.ListMigrationsResponse;
+import com.schematic.api.resources.planmigrations.types.PreviewMigrationResponse;
 import com.schematic.api.resources.planmigrations.types.RetryCompanyMigrationResponse;
 import com.schematic.api.resources.planmigrations.types.RetryMigrationResponse;
 import java.util.concurrent.CompletableFuture;
@@ -152,5 +154,14 @@ public class AsyncPlanmigrationsClient {
     public CompletableFuture<CountMigrationsResponse> countMigrations(
             CountMigrationsRequest request, RequestOptions requestOptions) {
         return this.rawClient.countMigrations(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<PreviewMigrationResponse> previewMigration(PreviewMigrationRequestBody request) {
+        return this.rawClient.previewMigration(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<PreviewMigrationResponse> previewMigration(
+            PreviewMigrationRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.previewMigration(request, requestOptions).thenApply(response -> response.body());
     }
 }

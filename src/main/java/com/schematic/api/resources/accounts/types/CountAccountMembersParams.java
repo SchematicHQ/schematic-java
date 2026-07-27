@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.AccountMemberRole;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,8 @@ public final class CountAccountMembersParams {
 
     private final Optional<String> q;
 
+    private final Optional<AccountMemberRole> role;
+
     private final Map<String, Object> additionalProperties;
 
     private CountAccountMembersParams(
@@ -36,11 +39,13 @@ public final class CountAccountMembersParams {
             Optional<Long> limit,
             Optional<Long> offset,
             Optional<String> q,
+            Optional<AccountMemberRole> role,
             Map<String, Object> additionalProperties) {
         this.ids = ids;
         this.limit = limit;
         this.offset = offset;
         this.q = q;
+        this.role = role;
         this.additionalProperties = additionalProperties;
     }
 
@@ -73,6 +78,14 @@ public final class CountAccountMembersParams {
         return q;
     }
 
+    /**
+     * @return Filter by member role
+     */
+    @JsonProperty("role")
+    public Optional<AccountMemberRole> getRole() {
+        return role;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -85,12 +98,16 @@ public final class CountAccountMembersParams {
     }
 
     private boolean equalTo(CountAccountMembersParams other) {
-        return ids.equals(other.ids) && limit.equals(other.limit) && offset.equals(other.offset) && q.equals(other.q);
+        return ids.equals(other.ids)
+                && limit.equals(other.limit)
+                && offset.equals(other.offset)
+                && q.equals(other.q)
+                && role.equals(other.role);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.ids, this.limit, this.offset, this.q);
+        return Objects.hash(this.ids, this.limit, this.offset, this.q, this.role);
     }
 
     @java.lang.Override
@@ -112,6 +129,8 @@ public final class CountAccountMembersParams {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<AccountMemberRole> role = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -122,6 +141,7 @@ public final class CountAccountMembersParams {
             limit(other.getLimit());
             offset(other.getOffset());
             q(other.getQ());
+            role(other.getRole());
             return this;
         }
 
@@ -178,8 +198,22 @@ public final class CountAccountMembersParams {
             return this;
         }
 
+        /**
+         * <p>Filter by member role</p>
+         */
+        @JsonSetter(value = "role", nulls = Nulls.SKIP)
+        public Builder role(Optional<AccountMemberRole> role) {
+            this.role = role;
+            return this;
+        }
+
+        public Builder role(AccountMemberRole role) {
+            this.role = Optional.ofNullable(role);
+            return this;
+        }
+
         public CountAccountMembersParams build() {
-            return new CountAccountMembersParams(ids, limit, offset, q, additionalProperties);
+            return new CountAccountMembersParams(ids, limit, offset, q, role, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

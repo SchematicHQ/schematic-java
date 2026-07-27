@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class BillingCreditGrantZeroedOutReason {
+    public static final BillingCreditGrantZeroedOutReason LICENSE_RETIRED =
+            new BillingCreditGrantZeroedOutReason(Value.LICENSE_RETIRED, "license_retired");
+
     public static final BillingCreditGrantZeroedOutReason INTEGRATION_UNINSTALLED =
             new BillingCreditGrantZeroedOutReason(Value.INTEGRATION_UNINSTALLED, "integration_uninstalled");
 
@@ -61,6 +64,8 @@ public final class BillingCreditGrantZeroedOutReason {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case LICENSE_RETIRED:
+                return visitor.visitLicenseRetired();
             case INTEGRATION_UNINSTALLED:
                 return visitor.visitIntegrationUninstalled();
             case PLAN_CHANGE:
@@ -84,6 +89,8 @@ public final class BillingCreditGrantZeroedOutReason {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static BillingCreditGrantZeroedOutReason valueOf(String value) {
         switch (value) {
+            case "license_retired":
+                return LICENSE_RETIRED;
             case "integration_uninstalled":
                 return INTEGRATION_UNINSTALLED;
             case "plan_change":
@@ -110,6 +117,8 @@ public final class BillingCreditGrantZeroedOutReason {
 
         INTEGRATION_UNINSTALLED,
 
+        LICENSE_RETIRED,
+
         MANUAL,
 
         PLAN_CHANGE,
@@ -127,6 +136,8 @@ public final class BillingCreditGrantZeroedOutReason {
         T visitExpired();
 
         T visitIntegrationUninstalled();
+
+        T visitLicenseRetired();
 
         T visitManual();
 
