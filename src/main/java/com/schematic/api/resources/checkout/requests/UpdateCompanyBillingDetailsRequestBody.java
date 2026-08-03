@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CheckoutFieldValue;
 import com.schematic.api.types.CustomerBillingAddress;
+import com.schematic.api.types.TaxIdInput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,8 @@ public final class UpdateCompanyBillingDetailsRequestBody {
 
     private final Optional<String> phone;
 
+    private final Optional<TaxIdInput> taxId;
+
     private final List<CheckoutFieldValue> values;
 
     private final Map<String, Object> additionalProperties;
@@ -38,11 +41,13 @@ public final class UpdateCompanyBillingDetailsRequestBody {
             Optional<CustomerBillingAddress> address,
             Optional<String> email,
             Optional<String> phone,
+            Optional<TaxIdInput> taxId,
             List<CheckoutFieldValue> values,
             Map<String, Object> additionalProperties) {
         this.address = address;
         this.email = email;
         this.phone = phone;
+        this.taxId = taxId;
         this.values = values;
         this.additionalProperties = additionalProperties;
     }
@@ -60,6 +65,11 @@ public final class UpdateCompanyBillingDetailsRequestBody {
     @JsonProperty("phone")
     public Optional<String> getPhone() {
         return phone;
+    }
+
+    @JsonProperty("tax_id")
+    public Optional<TaxIdInput> getTaxId() {
+        return taxId;
     }
 
     @JsonProperty("values")
@@ -83,12 +93,13 @@ public final class UpdateCompanyBillingDetailsRequestBody {
         return address.equals(other.address)
                 && email.equals(other.email)
                 && phone.equals(other.phone)
+                && taxId.equals(other.taxId)
                 && values.equals(other.values);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.address, this.email, this.phone, this.values);
+        return Objects.hash(this.address, this.email, this.phone, this.taxId, this.values);
     }
 
     @java.lang.Override
@@ -108,6 +119,8 @@ public final class UpdateCompanyBillingDetailsRequestBody {
 
         private Optional<String> phone = Optional.empty();
 
+        private Optional<TaxIdInput> taxId = Optional.empty();
+
         private List<CheckoutFieldValue> values = new ArrayList<>();
 
         @JsonAnySetter
@@ -119,6 +132,7 @@ public final class UpdateCompanyBillingDetailsRequestBody {
             address(other.getAddress());
             email(other.getEmail());
             phone(other.getPhone());
+            taxId(other.getTaxId());
             values(other.getValues());
             return this;
         }
@@ -156,6 +170,17 @@ public final class UpdateCompanyBillingDetailsRequestBody {
             return this;
         }
 
+        @JsonSetter(value = "tax_id", nulls = Nulls.SKIP)
+        public Builder taxId(Optional<TaxIdInput> taxId) {
+            this.taxId = taxId;
+            return this;
+        }
+
+        public Builder taxId(TaxIdInput taxId) {
+            this.taxId = Optional.ofNullable(taxId);
+            return this;
+        }
+
         @JsonSetter(value = "values", nulls = Nulls.SKIP)
         public Builder values(List<CheckoutFieldValue> values) {
             this.values.clear();
@@ -178,7 +203,8 @@ public final class UpdateCompanyBillingDetailsRequestBody {
         }
 
         public UpdateCompanyBillingDetailsRequestBody build() {
-            return new UpdateCompanyBillingDetailsRequestBody(address, email, phone, values, additionalProperties);
+            return new UpdateCompanyBillingDetailsRequestBody(
+                    address, email, phone, taxId, values, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

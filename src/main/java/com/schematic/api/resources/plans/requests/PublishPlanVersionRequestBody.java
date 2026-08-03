@@ -12,8 +12,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CheckoutFieldValue;
 import com.schematic.api.types.CustomPlanActivationStrategy;
+import com.schematic.api.types.CustomerBillingAddress;
 import com.schematic.api.types.PlanVersionMigrationStrategy;
+import com.schematic.api.types.TaxIdInput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +30,11 @@ import org.jetbrains.annotations.NotNull;
 public final class PublishPlanVersionRequestBody {
     private final Optional<CustomPlanActivationStrategy> activationStrategy;
 
+    private final Optional<CustomerBillingAddress> address;
+
     private final Optional<String> couponExternalId;
+
+    private final Optional<List<CheckoutFieldValue>> customFieldValues;
 
     private final Optional<String> customerEmail;
 
@@ -37,22 +44,38 @@ public final class PublishPlanVersionRequestBody {
 
     private final PlanVersionMigrationStrategy migrationStrategy;
 
+    private final Optional<String> phone;
+
+    private final Optional<Boolean> sendInvoice;
+
+    private final Optional<TaxIdInput> taxId;
+
     private final Map<String, Object> additionalProperties;
 
     private PublishPlanVersionRequestBody(
             Optional<CustomPlanActivationStrategy> activationStrategy,
+            Optional<CustomerBillingAddress> address,
             Optional<String> couponExternalId,
+            Optional<List<CheckoutFieldValue>> customFieldValues,
             Optional<String> customerEmail,
             Optional<Long> daysUntilDue,
             List<String> excludedCompanyIds,
             PlanVersionMigrationStrategy migrationStrategy,
+            Optional<String> phone,
+            Optional<Boolean> sendInvoice,
+            Optional<TaxIdInput> taxId,
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
+        this.address = address;
         this.couponExternalId = couponExternalId;
+        this.customFieldValues = customFieldValues;
         this.customerEmail = customerEmail;
         this.daysUntilDue = daysUntilDue;
         this.excludedCompanyIds = excludedCompanyIds;
         this.migrationStrategy = migrationStrategy;
+        this.phone = phone;
+        this.sendInvoice = sendInvoice;
+        this.taxId = taxId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -61,9 +84,19 @@ public final class PublishPlanVersionRequestBody {
         return activationStrategy;
     }
 
+    @JsonProperty("address")
+    public Optional<CustomerBillingAddress> getAddress() {
+        return address;
+    }
+
     @JsonProperty("coupon_external_id")
     public Optional<String> getCouponExternalId() {
         return couponExternalId;
+    }
+
+    @JsonProperty("custom_field_values")
+    public Optional<List<CheckoutFieldValue>> getCustomFieldValues() {
+        return customFieldValues;
     }
 
     @JsonProperty("customer_email")
@@ -86,6 +119,24 @@ public final class PublishPlanVersionRequestBody {
         return migrationStrategy;
     }
 
+    @JsonProperty("phone")
+    public Optional<String> getPhone() {
+        return phone;
+    }
+
+    /**
+     * @return Whether Stripe emails the invoice when it is finalized. Defaults to true.
+     */
+    @JsonProperty("send_invoice")
+    public Optional<Boolean> getSendInvoice() {
+        return sendInvoice;
+    }
+
+    @JsonProperty("tax_id")
+    public Optional<TaxIdInput> getTaxId() {
+        return taxId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -99,22 +150,32 @@ public final class PublishPlanVersionRequestBody {
 
     private boolean equalTo(PublishPlanVersionRequestBody other) {
         return activationStrategy.equals(other.activationStrategy)
+                && address.equals(other.address)
                 && couponExternalId.equals(other.couponExternalId)
+                && customFieldValues.equals(other.customFieldValues)
                 && customerEmail.equals(other.customerEmail)
                 && daysUntilDue.equals(other.daysUntilDue)
                 && excludedCompanyIds.equals(other.excludedCompanyIds)
-                && migrationStrategy.equals(other.migrationStrategy);
+                && migrationStrategy.equals(other.migrationStrategy)
+                && phone.equals(other.phone)
+                && sendInvoice.equals(other.sendInvoice)
+                && taxId.equals(other.taxId);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
                 this.activationStrategy,
+                this.address,
                 this.couponExternalId,
+                this.customFieldValues,
                 this.customerEmail,
                 this.daysUntilDue,
                 this.excludedCompanyIds,
-                this.migrationStrategy);
+                this.migrationStrategy,
+                this.phone,
+                this.sendInvoice,
+                this.taxId);
     }
 
     @java.lang.Override
@@ -143,9 +204,17 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage activationStrategy(CustomPlanActivationStrategy activationStrategy);
 
+        _FinalStage address(Optional<CustomerBillingAddress> address);
+
+        _FinalStage address(CustomerBillingAddress address);
+
         _FinalStage couponExternalId(Optional<String> couponExternalId);
 
         _FinalStage couponExternalId(String couponExternalId);
+
+        _FinalStage customFieldValues(Optional<List<CheckoutFieldValue>> customFieldValues);
+
+        _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues);
 
         _FinalStage customerEmail(Optional<String> customerEmail);
 
@@ -160,11 +229,32 @@ public final class PublishPlanVersionRequestBody {
         _FinalStage addExcludedCompanyIds(String excludedCompanyIds);
 
         _FinalStage addAllExcludedCompanyIds(List<String> excludedCompanyIds);
+
+        _FinalStage phone(Optional<String> phone);
+
+        _FinalStage phone(String phone);
+
+        /**
+         * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
+         */
+        _FinalStage sendInvoice(Optional<Boolean> sendInvoice);
+
+        _FinalStage sendInvoice(Boolean sendInvoice);
+
+        _FinalStage taxId(Optional<TaxIdInput> taxId);
+
+        _FinalStage taxId(TaxIdInput taxId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MigrationStrategyStage, _FinalStage {
         private PlanVersionMigrationStrategy migrationStrategy;
+
+        private Optional<TaxIdInput> taxId = Optional.empty();
+
+        private Optional<Boolean> sendInvoice = Optional.empty();
+
+        private Optional<String> phone = Optional.empty();
 
         private List<String> excludedCompanyIds = new ArrayList<>();
 
@@ -172,7 +262,11 @@ public final class PublishPlanVersionRequestBody {
 
         private Optional<String> customerEmail = Optional.empty();
 
+        private Optional<List<CheckoutFieldValue>> customFieldValues = Optional.empty();
+
         private Optional<String> couponExternalId = Optional.empty();
+
+        private Optional<CustomerBillingAddress> address = Optional.empty();
 
         private Optional<CustomPlanActivationStrategy> activationStrategy = Optional.empty();
 
@@ -184,11 +278,16 @@ public final class PublishPlanVersionRequestBody {
         @java.lang.Override
         public Builder from(PublishPlanVersionRequestBody other) {
             activationStrategy(other.getActivationStrategy());
+            address(other.getAddress());
             couponExternalId(other.getCouponExternalId());
+            customFieldValues(other.getCustomFieldValues());
             customerEmail(other.getCustomerEmail());
             daysUntilDue(other.getDaysUntilDue());
             excludedCompanyIds(other.getExcludedCompanyIds());
             migrationStrategy(other.getMigrationStrategy());
+            phone(other.getPhone());
+            sendInvoice(other.getSendInvoice());
+            taxId(other.getTaxId());
             return this;
         }
 
@@ -196,6 +295,52 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter("migration_strategy")
         public _FinalStage migrationStrategy(@NotNull PlanVersionMigrationStrategy migrationStrategy) {
             this.migrationStrategy = Objects.requireNonNull(migrationStrategy, "migrationStrategy must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage taxId(TaxIdInput taxId) {
+            this.taxId = Optional.ofNullable(taxId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "tax_id", nulls = Nulls.SKIP)
+        public _FinalStage taxId(Optional<TaxIdInput> taxId) {
+            this.taxId = taxId;
+            return this;
+        }
+
+        /**
+         * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage sendInvoice(Boolean sendInvoice) {
+            this.sendInvoice = Optional.ofNullable(sendInvoice);
+            return this;
+        }
+
+        /**
+         * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "send_invoice", nulls = Nulls.SKIP)
+        public _FinalStage sendInvoice(Optional<Boolean> sendInvoice) {
+            this.sendInvoice = sendInvoice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage phone(String phone) {
+            this.phone = Optional.ofNullable(phone);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "phone", nulls = Nulls.SKIP)
+        public _FinalStage phone(Optional<String> phone) {
+            this.phone = phone;
             return this;
         }
 
@@ -250,6 +395,19 @@ public final class PublishPlanVersionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues) {
+            this.customFieldValues = Optional.ofNullable(customFieldValues);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_field_values", nulls = Nulls.SKIP)
+        public _FinalStage customFieldValues(Optional<List<CheckoutFieldValue>> customFieldValues) {
+            this.customFieldValues = customFieldValues;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage couponExternalId(String couponExternalId) {
             this.couponExternalId = Optional.ofNullable(couponExternalId);
             return this;
@@ -259,6 +417,19 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter(value = "coupon_external_id", nulls = Nulls.SKIP)
         public _FinalStage couponExternalId(Optional<String> couponExternalId) {
             this.couponExternalId = couponExternalId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage address(CustomerBillingAddress address) {
+            this.address = Optional.ofNullable(address);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "address", nulls = Nulls.SKIP)
+        public _FinalStage address(Optional<CustomerBillingAddress> address) {
+            this.address = address;
             return this;
         }
 
@@ -279,11 +450,16 @@ public final class PublishPlanVersionRequestBody {
         public PublishPlanVersionRequestBody build() {
             return new PublishPlanVersionRequestBody(
                     activationStrategy,
+                    address,
                     couponExternalId,
+                    customFieldValues,
                     customerEmail,
                     daysUntilDue,
                     excludedCompanyIds,
                     migrationStrategy,
+                    phone,
+                    sendInvoice,
+                    taxId,
                     additionalProperties);
         }
 

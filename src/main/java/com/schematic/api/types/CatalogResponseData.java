@@ -36,8 +36,6 @@ public final class CatalogResponseData {
 
     private final Optional<String> description;
 
-    private final String environmentId;
-
     private final String id;
 
     private final boolean isDefault;
@@ -60,7 +58,6 @@ public final class CatalogResponseData {
             Optional<String> customPlanPriceText,
             boolean customPlansVisible,
             Optional<String> description,
-            String environmentId,
             String id,
             boolean isDefault,
             String name,
@@ -75,7 +72,6 @@ public final class CatalogResponseData {
         this.customPlanPriceText = customPlanPriceText;
         this.customPlansVisible = customPlansVisible;
         this.description = description;
-        this.environmentId = environmentId;
         this.id = id;
         this.isDefault = isDefault;
         this.name = name;
@@ -118,11 +114,6 @@ public final class CatalogResponseData {
     @JsonProperty("description")
     public Optional<String> getDescription() {
         return description;
-    }
-
-    @JsonProperty("environment_id")
-    public String getEnvironmentId() {
-        return environmentId;
     }
 
     @JsonProperty("id")
@@ -174,7 +165,6 @@ public final class CatalogResponseData {
                 && customPlanPriceText.equals(other.customPlanPriceText)
                 && customPlansVisible == other.customPlansVisible
                 && description.equals(other.description)
-                && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
                 && isDefault == other.isDefault
                 && name.equals(other.name)
@@ -193,7 +183,6 @@ public final class CatalogResponseData {
                 this.customPlanPriceText,
                 this.customPlansVisible,
                 this.description,
-                this.environmentId,
                 this.id,
                 this.isDefault,
                 this.name,
@@ -222,11 +211,7 @@ public final class CatalogResponseData {
     }
 
     public interface CustomPlansVisibleStage {
-        EnvironmentIdStage customPlansVisible(boolean customPlansVisible);
-    }
-
-    public interface EnvironmentIdStage {
-        IdStage environmentId(@NotNull String environmentId);
+        IdStage customPlansVisible(boolean customPlansVisible);
     }
 
     public interface IdStage {
@@ -282,7 +267,6 @@ public final class CatalogResponseData {
             implements AccountIdStage,
                     CreatedAtStage,
                     CustomPlansVisibleStage,
-                    EnvironmentIdStage,
                     IdStage,
                     IsDefaultStage,
                     NameStage,
@@ -293,8 +277,6 @@ public final class CatalogResponseData {
         private OffsetDateTime createdAt;
 
         private boolean customPlansVisible;
-
-        private String environmentId;
 
         private String id;
 
@@ -330,7 +312,6 @@ public final class CatalogResponseData {
             customPlanPriceText(other.getCustomPlanPriceText());
             customPlansVisible(other.getCustomPlansVisible());
             description(other.getDescription());
-            environmentId(other.getEnvironmentId());
             id(other.getId());
             isDefault(other.getIsDefault());
             name(other.getName());
@@ -356,15 +337,8 @@ public final class CatalogResponseData {
 
         @java.lang.Override
         @JsonSetter("custom_plans_visible")
-        public EnvironmentIdStage customPlansVisible(boolean customPlansVisible) {
+        public IdStage customPlansVisible(boolean customPlansVisible) {
             this.customPlansVisible = customPlansVisible;
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("environment_id")
-        public IdStage environmentId(@NotNull String environmentId) {
-            this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
             return this;
         }
 
@@ -484,7 +458,6 @@ public final class CatalogResponseData {
                     customPlanPriceText,
                     customPlansVisible,
                     description,
-                    environmentId,
                     id,
                     isDefault,
                     name,

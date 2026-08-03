@@ -40,6 +40,8 @@ public final class ApiKeyCreateResponseData {
 
     private final String name;
 
+    private final Optional<Long> rateLimitPercent;
+
     private final boolean readonly;
 
     private final List<ApiKeyScope> scopes;
@@ -59,6 +61,7 @@ public final class ApiKeyCreateResponseData {
             Optional<ApiKeyIntegrationResponseData> integration,
             Optional<OffsetDateTime> lastUsedAt,
             String name,
+            Optional<Long> rateLimitPercent,
             boolean readonly,
             List<ApiKeyScope> scopes,
             String secret,
@@ -72,6 +75,7 @@ public final class ApiKeyCreateResponseData {
         this.integration = integration;
         this.lastUsedAt = lastUsedAt;
         this.name = name;
+        this.rateLimitPercent = rateLimitPercent;
         this.readonly = readonly;
         this.scopes = scopes;
         this.secret = secret;
@@ -119,6 +123,11 @@ public final class ApiKeyCreateResponseData {
         return name;
     }
 
+    @JsonProperty("rate_limit_percent")
+    public Optional<Long> getRateLimitPercent() {
+        return rateLimitPercent;
+    }
+
     @JsonProperty("readonly")
     public boolean getReadonly() {
         return readonly;
@@ -159,6 +168,7 @@ public final class ApiKeyCreateResponseData {
                 && integration.equals(other.integration)
                 && lastUsedAt.equals(other.lastUsedAt)
                 && name.equals(other.name)
+                && rateLimitPercent.equals(other.rateLimitPercent)
                 && readonly == other.readonly
                 && scopes.equals(other.scopes)
                 && secret.equals(other.secret)
@@ -176,6 +186,7 @@ public final class ApiKeyCreateResponseData {
                 this.integration,
                 this.lastUsedAt,
                 this.name,
+                this.rateLimitPercent,
                 this.readonly,
                 this.scopes,
                 this.secret,
@@ -244,6 +255,10 @@ public final class ApiKeyCreateResponseData {
 
         _FinalStage lastUsedAt(OffsetDateTime lastUsedAt);
 
+        _FinalStage rateLimitPercent(Optional<Long> rateLimitPercent);
+
+        _FinalStage rateLimitPercent(Long rateLimitPercent);
+
         _FinalStage scopes(List<ApiKeyScope> scopes);
 
         _FinalStage addScopes(ApiKeyScope scopes);
@@ -267,6 +282,8 @@ public final class ApiKeyCreateResponseData {
         private OffsetDateTime updatedAt;
 
         private List<ApiKeyScope> scopes = new ArrayList<>();
+
+        private Optional<Long> rateLimitPercent = Optional.empty();
 
         private Optional<OffsetDateTime> lastUsedAt = Optional.empty();
 
@@ -293,6 +310,7 @@ public final class ApiKeyCreateResponseData {
             integration(other.getIntegration());
             lastUsedAt(other.getLastUsedAt());
             name(other.getName());
+            rateLimitPercent(other.getRateLimitPercent());
             readonly(other.getReadonly());
             scopes(other.getScopes());
             secret(other.getSecret());
@@ -363,6 +381,19 @@ public final class ApiKeyCreateResponseData {
             if (scopes != null) {
                 this.scopes.addAll(scopes);
             }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage rateLimitPercent(Long rateLimitPercent) {
+            this.rateLimitPercent = Optional.ofNullable(rateLimitPercent);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "rate_limit_percent", nulls = Nulls.SKIP)
+        public _FinalStage rateLimitPercent(Optional<Long> rateLimitPercent) {
+            this.rateLimitPercent = rateLimitPercent;
             return this;
         }
 
@@ -442,6 +473,7 @@ public final class ApiKeyCreateResponseData {
                     integration,
                     lastUsedAt,
                     name,
+                    rateLimitPercent,
                     readonly,
                     scopes,
                     secret,

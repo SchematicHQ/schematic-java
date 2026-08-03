@@ -360,6 +360,14 @@ client.accounts().createApiKey(
 <dl>
 <dd>
 
+**rateLimitPercent:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **readonly:** `Optional<Boolean>` 
     
 </dd>
@@ -462,6 +470,14 @@ client.accounts().updateApiKey(
 <dd>
 
 **name:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rateLimitPercent:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -2386,6 +2402,7 @@ client.billing().listBillingPrices(
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
         .interval("interval")
+        .intervalCount(1000000L)
         .isActive(true)
         .planVersionId("plan_version_id")
         .price(1000000L)
@@ -2446,6 +2463,14 @@ client.billing().listBillingPrices(
 <dd>
 
 **interval:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**intervalCount:** `Optional<Long>` — Filter for prices billed every N intervals; combine with interval (e.g. interval=month, interval_count=3 for quarterly)
     
 </dd>
 </dl>
@@ -2808,6 +2833,7 @@ client.billing().listBillingProductPrices(
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
         .interval("interval")
+        .intervalCount(1000000L)
         .isActive(true)
         .planVersionId("plan_version_id")
         .price(1000000L)
@@ -2868,6 +2894,14 @@ client.billing().listBillingProductPrices(
 <dd>
 
 **interval:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**intervalCount:** `Optional<Long>` — Filter for prices billed every N intervals; combine with interval (e.g. interval=month, interval_count=3 for quarterly)
     
 </dd>
 </dl>
@@ -6133,7 +6167,6 @@ client.catalogs().listCatalogs(
 client.catalogs().createCatalog(
     CreateCatalogRequestBody
         .builder()
-        .isDefault(true)
         .name("name")
         .build()
 );
@@ -6152,14 +6185,6 @@ client.catalogs().createCatalog(
 <dd>
 
 **description:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**isDefault:** `Boolean` 
     
 </dd>
 </dl>
@@ -7150,6 +7175,14 @@ client.checkout().updateCompanyBillingDetails(
 <dd>
 
 **phone:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**taxId:** `Optional<TaxIdInput>` 
     
 </dd>
 </dl>
@@ -12764,6 +12797,150 @@ client.entitlements().getFeatureUsageByCompany(
 </dl>
 </details>
 
+<details><summary><code>client.entitlements.getUserUsageByCompany() -> GetUserUsageByCompanyResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.entitlements().getUserUsageByCompany(
+    GetUserUsageByCompanyRequest
+        .builder()
+        .companyId("company_id")
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .featureId("feature_id")
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — Company to break usage down for
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `Optional<OffsetDateTime>` — End of the usage window (exclusive); defaults to now
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureId:** `Optional<String>` — Restrict to a single event-based feature
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `Optional<OffsetDateTime>` — Start of the usage window; defaults to 30 days before the end
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entitlements.getUserUsageDetail() -> GetUserUsageDetailResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.entitlements().getUserUsageDetail(
+    GetUserUsageDetailRequest
+        .builder()
+        .companyId("company_id")
+        .userId("user_id")
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — Company the user belongs to
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `Optional<OffsetDateTime>` — End of the usage window (exclusive); defaults to now
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `Optional<OffsetDateTime>` — Start of the usage window; defaults to 30 days before the end
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userId:** `String` — User to break usage down for
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## plans
 <details><summary><code>client.plans.updateCompanyPlans(companyPlanId, request) -> UpdateCompanyPlansResponse</code></summary>
 <dl>
@@ -13033,6 +13210,14 @@ client.plans().retryCustomPlanBilling(
 <dd>
 
 **daysUntilDue:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sendInvoice:** `Optional<Boolean>` — Whether Stripe emails the invoice when it is finalized. Defaults to true.
     
 </dd>
 </dl>
@@ -14157,7 +14342,23 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
+**address:** `Optional<CustomerBillingAddress>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **couponExternalId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customFieldValues:** `Optional<List<CheckoutFieldValue>>` 
     
 </dd>
 </dl>
@@ -14190,6 +14391,30 @@ client.plans().publishPlanVersion(
 <dd>
 
 **migrationStrategy:** `PlanVersionMigrationStrategy` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**phone:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sendInvoice:** `Optional<Boolean>` — Whether Stripe emails the invoice when it is finalized. Defaults to true.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**taxId:** `Optional<TaxIdInput>` 
     
 </dd>
 </dl>

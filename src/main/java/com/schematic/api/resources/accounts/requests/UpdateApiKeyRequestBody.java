@@ -24,12 +24,18 @@ public final class UpdateApiKeyRequestBody {
 
     private final Optional<String> name;
 
+    private final Optional<Long> rateLimitPercent;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateApiKeyRequestBody(
-            Optional<String> description, Optional<String> name, Map<String, Object> additionalProperties) {
+            Optional<String> description,
+            Optional<String> name,
+            Optional<Long> rateLimitPercent,
+            Map<String, Object> additionalProperties) {
         this.description = description;
         this.name = name;
+        this.rateLimitPercent = rateLimitPercent;
         this.additionalProperties = additionalProperties;
     }
 
@@ -41,6 +47,11 @@ public final class UpdateApiKeyRequestBody {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    @JsonProperty("rate_limit_percent")
+    public Optional<Long> getRateLimitPercent() {
+        return rateLimitPercent;
     }
 
     @java.lang.Override
@@ -55,12 +66,14 @@ public final class UpdateApiKeyRequestBody {
     }
 
     private boolean equalTo(UpdateApiKeyRequestBody other) {
-        return description.equals(other.description) && name.equals(other.name);
+        return description.equals(other.description)
+                && name.equals(other.name)
+                && rateLimitPercent.equals(other.rateLimitPercent);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.description, this.name);
+        return Objects.hash(this.description, this.name, this.rateLimitPercent);
     }
 
     @java.lang.Override
@@ -78,6 +91,8 @@ public final class UpdateApiKeyRequestBody {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<Long> rateLimitPercent = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -86,6 +101,7 @@ public final class UpdateApiKeyRequestBody {
         public Builder from(UpdateApiKeyRequestBody other) {
             description(other.getDescription());
             name(other.getName());
+            rateLimitPercent(other.getRateLimitPercent());
             return this;
         }
 
@@ -111,8 +127,19 @@ public final class UpdateApiKeyRequestBody {
             return this;
         }
 
+        @JsonSetter(value = "rate_limit_percent", nulls = Nulls.SKIP)
+        public Builder rateLimitPercent(Optional<Long> rateLimitPercent) {
+            this.rateLimitPercent = rateLimitPercent;
+            return this;
+        }
+
+        public Builder rateLimitPercent(Long rateLimitPercent) {
+            this.rateLimitPercent = Optional.ofNullable(rateLimitPercent);
+            return this;
+        }
+
         public UpdateApiKeyRequestBody build() {
-            return new UpdateApiKeyRequestBody(description, name, additionalProperties);
+            return new UpdateApiKeyRequestBody(description, name, rateLimitPercent, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

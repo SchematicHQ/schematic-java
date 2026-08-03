@@ -34,6 +34,8 @@ public final class ListBillingProductPricesParams {
 
     private final Optional<String> interval;
 
+    private final Optional<Long> intervalCount;
+
     private final Optional<Boolean> isActive;
 
     private final Optional<Long> limit;
@@ -66,6 +68,7 @@ public final class ListBillingProductPricesParams {
             Optional<Boolean> forTrialExpiryPlan,
             Optional<List<String>> ids,
             Optional<String> interval,
+            Optional<Long> intervalCount,
             Optional<Boolean> isActive,
             Optional<Long> limit,
             Optional<Long> offset,
@@ -84,6 +87,7 @@ public final class ListBillingProductPricesParams {
         this.forTrialExpiryPlan = forTrialExpiryPlan;
         this.ids = ids;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.isActive = isActive;
         this.limit = limit;
         this.offset = offset;
@@ -131,6 +135,14 @@ public final class ListBillingProductPricesParams {
     @JsonProperty("interval")
     public Optional<String> getInterval() {
         return interval;
+    }
+
+    /**
+     * @return Filter for prices billed every N intervals; combine with interval (e.g. interval=month, interval_count=3 for quarterly)
+     */
+    @JsonProperty("interval_count")
+    public Optional<Long> getIntervalCount() {
+        return intervalCount;
     }
 
     /**
@@ -225,6 +237,7 @@ public final class ListBillingProductPricesParams {
                 && forTrialExpiryPlan.equals(other.forTrialExpiryPlan)
                 && ids.equals(other.ids)
                 && interval.equals(other.interval)
+                && intervalCount.equals(other.intervalCount)
                 && isActive.equals(other.isActive)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
@@ -247,6 +260,7 @@ public final class ListBillingProductPricesParams {
                 this.forTrialExpiryPlan,
                 this.ids,
                 this.interval,
+                this.intervalCount,
                 this.isActive,
                 this.limit,
                 this.offset,
@@ -281,6 +295,8 @@ public final class ListBillingProductPricesParams {
         private Optional<List<String>> ids = Optional.empty();
 
         private Optional<String> interval = Optional.empty();
+
+        private Optional<Long> intervalCount = Optional.empty();
 
         private Optional<Boolean> isActive = Optional.empty();
 
@@ -317,6 +333,7 @@ public final class ListBillingProductPricesParams {
             forTrialExpiryPlan(other.getForTrialExpiryPlan());
             ids(other.getIds());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             isActive(other.getIsActive());
             limit(other.getLimit());
             offset(other.getOffset());
@@ -393,6 +410,20 @@ public final class ListBillingProductPricesParams {
 
         public Builder interval(String interval) {
             this.interval = Optional.ofNullable(interval);
+            return this;
+        }
+
+        /**
+         * <p>Filter for prices billed every N intervals; combine with interval (e.g. interval=month, interval_count=3 for quarterly)</p>
+         */
+        @JsonSetter(value = "interval_count", nulls = Nulls.SKIP)
+        public Builder intervalCount(Optional<Long> intervalCount) {
+            this.intervalCount = intervalCount;
+            return this;
+        }
+
+        public Builder intervalCount(Long intervalCount) {
+            this.intervalCount = Optional.ofNullable(intervalCount);
             return this;
         }
 
@@ -550,6 +581,7 @@ public final class ListBillingProductPricesParams {
                     forTrialExpiryPlan,
                     ids,
                     interval,
+                    intervalCount,
                     isActive,
                     limit,
                     offset,

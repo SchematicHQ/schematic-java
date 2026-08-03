@@ -17,36 +17,34 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = CatalogConfigOrderedEntitlementResponseData.Builder.class)
-public final class CatalogConfigOrderedEntitlementResponseData {
-    private final String featureId;
+@JsonDeserialize(builder = TaxIdInput.Builder.class)
+public final class TaxIdInput {
+    private final TaxIdType type;
 
-    private final boolean visible;
+    private final String value;
 
     private final Map<String, Object> additionalProperties;
 
-    private CatalogConfigOrderedEntitlementResponseData(
-            String featureId, boolean visible, Map<String, Object> additionalProperties) {
-        this.featureId = featureId;
-        this.visible = visible;
+    private TaxIdInput(TaxIdType type, String value, Map<String, Object> additionalProperties) {
+        this.type = type;
+        this.value = value;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("feature_id")
-    public String getFeatureId() {
-        return featureId;
+    @JsonProperty("type")
+    public TaxIdType getType() {
+        return type;
     }
 
-    @JsonProperty("visible")
-    public boolean getVisible() {
-        return visible;
+    @JsonProperty("value")
+    public String getValue() {
+        return value;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof CatalogConfigOrderedEntitlementResponseData
-                && equalTo((CatalogConfigOrderedEntitlementResponseData) other);
+        return other instanceof TaxIdInput && equalTo((TaxIdInput) other);
     }
 
     @JsonAnyGetter
@@ -54,13 +52,13 @@ public final class CatalogConfigOrderedEntitlementResponseData {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(CatalogConfigOrderedEntitlementResponseData other) {
-        return featureId.equals(other.featureId) && visible == other.visible;
+    private boolean equalTo(TaxIdInput other) {
+        return type.equals(other.type) && value.equals(other.value);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.featureId, this.visible);
+        return Objects.hash(this.type, this.value);
     }
 
     @java.lang.Override
@@ -68,22 +66,22 @@ public final class CatalogConfigOrderedEntitlementResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static FeatureIdStage builder() {
+    public static TypeStage builder() {
         return new Builder();
     }
 
-    public interface FeatureIdStage {
-        VisibleStage featureId(@NotNull String featureId);
+    public interface TypeStage {
+        ValueStage type(@NotNull TaxIdType type);
 
-        Builder from(CatalogConfigOrderedEntitlementResponseData other);
+        Builder from(TaxIdInput other);
     }
 
-    public interface VisibleStage {
-        _FinalStage visible(boolean visible);
+    public interface ValueStage {
+        _FinalStage value(@NotNull String value);
     }
 
     public interface _FinalStage {
-        CatalogConfigOrderedEntitlementResponseData build();
+        TaxIdInput build();
 
         _FinalStage additionalProperty(String key, Object value);
 
@@ -91,10 +89,10 @@ public final class CatalogConfigOrderedEntitlementResponseData {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements FeatureIdStage, VisibleStage, _FinalStage {
-        private String featureId;
+    public static final class Builder implements TypeStage, ValueStage, _FinalStage {
+        private TaxIdType type;
 
-        private boolean visible;
+        private String value;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -102,29 +100,29 @@ public final class CatalogConfigOrderedEntitlementResponseData {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(CatalogConfigOrderedEntitlementResponseData other) {
-            featureId(other.getFeatureId());
-            visible(other.getVisible());
+        public Builder from(TaxIdInput other) {
+            type(other.getType());
+            value(other.getValue());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("feature_id")
-        public VisibleStage featureId(@NotNull String featureId) {
-            this.featureId = Objects.requireNonNull(featureId, "featureId must not be null");
+        @JsonSetter("type")
+        public ValueStage type(@NotNull TaxIdType type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("visible")
-        public _FinalStage visible(boolean visible) {
-            this.visible = visible;
+        @JsonSetter("value")
+        public _FinalStage value(@NotNull String value) {
+            this.value = Objects.requireNonNull(value, "value must not be null");
             return this;
         }
 
         @java.lang.Override
-        public CatalogConfigOrderedEntitlementResponseData build() {
-            return new CatalogConfigOrderedEntitlementResponseData(featureId, visible, additionalProperties);
+        public TaxIdInput build() {
+            return new TaxIdInput(type, value, additionalProperties);
         }
 
         @java.lang.Override

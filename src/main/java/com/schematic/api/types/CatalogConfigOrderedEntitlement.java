@@ -21,22 +21,22 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CatalogConfigOrderedEntitlement.Builder.class)
 public final class CatalogConfigOrderedEntitlement {
-    private final String planEntitlementId;
+    private final String featureId;
 
     private final Optional<Boolean> visible;
 
     private final Map<String, Object> additionalProperties;
 
     private CatalogConfigOrderedEntitlement(
-            String planEntitlementId, Optional<Boolean> visible, Map<String, Object> additionalProperties) {
-        this.planEntitlementId = planEntitlementId;
+            String featureId, Optional<Boolean> visible, Map<String, Object> additionalProperties) {
+        this.featureId = featureId;
         this.visible = visible;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("plan_entitlement_id")
-    public String getPlanEntitlementId() {
-        return planEntitlementId;
+    @JsonProperty("feature_id")
+    public String getFeatureId() {
+        return featureId;
     }
 
     @JsonProperty("visible")
@@ -56,12 +56,12 @@ public final class CatalogConfigOrderedEntitlement {
     }
 
     private boolean equalTo(CatalogConfigOrderedEntitlement other) {
-        return planEntitlementId.equals(other.planEntitlementId) && visible.equals(other.visible);
+        return featureId.equals(other.featureId) && visible.equals(other.visible);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.planEntitlementId, this.visible);
+        return Objects.hash(this.featureId, this.visible);
     }
 
     @java.lang.Override
@@ -69,12 +69,12 @@ public final class CatalogConfigOrderedEntitlement {
         return ObjectMappers.stringify(this);
     }
 
-    public static PlanEntitlementIdStage builder() {
+    public static FeatureIdStage builder() {
         return new Builder();
     }
 
-    public interface PlanEntitlementIdStage {
-        _FinalStage planEntitlementId(@NotNull String planEntitlementId);
+    public interface FeatureIdStage {
+        _FinalStage featureId(@NotNull String featureId);
 
         Builder from(CatalogConfigOrderedEntitlement other);
     }
@@ -92,8 +92,8 @@ public final class CatalogConfigOrderedEntitlement {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements PlanEntitlementIdStage, _FinalStage {
-        private String planEntitlementId;
+    public static final class Builder implements FeatureIdStage, _FinalStage {
+        private String featureId;
 
         private Optional<Boolean> visible = Optional.empty();
 
@@ -104,15 +104,15 @@ public final class CatalogConfigOrderedEntitlement {
 
         @java.lang.Override
         public Builder from(CatalogConfigOrderedEntitlement other) {
-            planEntitlementId(other.getPlanEntitlementId());
+            featureId(other.getFeatureId());
             visible(other.getVisible());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("plan_entitlement_id")
-        public _FinalStage planEntitlementId(@NotNull String planEntitlementId) {
-            this.planEntitlementId = Objects.requireNonNull(planEntitlementId, "planEntitlementId must not be null");
+        @JsonSetter("feature_id")
+        public _FinalStage featureId(@NotNull String featureId) {
+            this.featureId = Objects.requireNonNull(featureId, "featureId must not be null");
             return this;
         }
 
@@ -131,7 +131,7 @@ public final class CatalogConfigOrderedEntitlement {
 
         @java.lang.Override
         public CatalogConfigOrderedEntitlement build() {
-            return new CatalogConfigOrderedEntitlement(planEntitlementId, visible, additionalProperties);
+            return new CatalogConfigOrderedEntitlement(featureId, visible, additionalProperties);
         }
 
         @java.lang.Override

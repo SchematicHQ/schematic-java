@@ -37,6 +37,8 @@ public final class ListBillingProductPricesRequest {
 
     private final Optional<String> interval;
 
+    private final Optional<Long> intervalCount;
+
     private final Optional<Boolean> isActive;
 
     private final Optional<String> planVersionId;
@@ -68,6 +70,7 @@ public final class ListBillingProductPricesRequest {
             Optional<Boolean> forInitialPlan,
             Optional<Boolean> forTrialExpiryPlan,
             Optional<String> interval,
+            Optional<Long> intervalCount,
             Optional<Boolean> isActive,
             Optional<String> planVersionId,
             Optional<Long> price,
@@ -86,6 +89,7 @@ public final class ListBillingProductPricesRequest {
         this.forInitialPlan = forInitialPlan;
         this.forTrialExpiryPlan = forTrialExpiryPlan;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.isActive = isActive;
         this.planVersionId = planVersionId;
         this.price = price;
@@ -137,6 +141,14 @@ public final class ListBillingProductPricesRequest {
     @JsonProperty("interval")
     public Optional<String> getInterval() {
         return interval;
+    }
+
+    /**
+     * @return Filter for prices billed every N intervals; combine with interval (e.g. interval=month, interval_count=3 for quarterly)
+     */
+    @JsonProperty("interval_count")
+    public Optional<Long> getIntervalCount() {
+        return intervalCount;
     }
 
     /**
@@ -227,6 +239,7 @@ public final class ListBillingProductPricesRequest {
                 && forInitialPlan.equals(other.forInitialPlan)
                 && forTrialExpiryPlan.equals(other.forTrialExpiryPlan)
                 && interval.equals(other.interval)
+                && intervalCount.equals(other.intervalCount)
                 && isActive.equals(other.isActive)
                 && planVersionId.equals(other.planVersionId)
                 && price.equals(other.price)
@@ -249,6 +262,7 @@ public final class ListBillingProductPricesRequest {
                 this.forInitialPlan,
                 this.forTrialExpiryPlan,
                 this.interval,
+                this.intervalCount,
                 this.isActive,
                 this.planVersionId,
                 this.price,
@@ -285,6 +299,8 @@ public final class ListBillingProductPricesRequest {
 
         private Optional<String> interval = Optional.empty();
 
+        private Optional<Long> intervalCount = Optional.empty();
+
         private Optional<Boolean> isActive = Optional.empty();
 
         private Optional<String> planVersionId = Optional.empty();
@@ -319,6 +335,7 @@ public final class ListBillingProductPricesRequest {
             forInitialPlan(other.getForInitialPlan());
             forTrialExpiryPlan(other.getForTrialExpiryPlan());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             isActive(other.getIsActive());
             planVersionId(other.getPlanVersionId());
             price(other.getPrice());
@@ -415,6 +432,20 @@ public final class ListBillingProductPricesRequest {
 
         public Builder interval(String interval) {
             this.interval = Optional.ofNullable(interval);
+            return this;
+        }
+
+        /**
+         * <p>Filter for prices billed every N intervals; combine with interval (e.g. interval=month, interval_count=3 for quarterly)</p>
+         */
+        @JsonSetter(value = "interval_count", nulls = Nulls.SKIP)
+        public Builder intervalCount(Optional<Long> intervalCount) {
+            this.intervalCount = intervalCount;
+            return this;
+        }
+
+        public Builder intervalCount(Long intervalCount) {
+            this.intervalCount = Optional.ofNullable(intervalCount);
             return this;
         }
 
@@ -562,6 +593,7 @@ public final class ListBillingProductPricesRequest {
                     forInitialPlan,
                     forTrialExpiryPlan,
                     interval,
+                    intervalCount,
                     isActive,
                     planVersionId,
                     price,
