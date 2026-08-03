@@ -1375,6 +1375,10 @@ public class RawBillingClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "interval", request.getInterval().get(), false);
         }
+        if (request.getIntervalCount().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "interval_count", request.getIntervalCount().get(), false);
+        }
         if (request.getIsActive().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "is_active", request.getIsActive().get(), false);
@@ -1681,6 +1685,10 @@ public class RawBillingClient {
         if (request.getInterval().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "interval", request.getInterval().get(), false);
+        }
+        if (request.getIntervalCount().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "interval_count", request.getIntervalCount().get(), false);
         }
         if (request.getIsActive().isPresent()) {
             QueryStringMapper.addQueryParameter(

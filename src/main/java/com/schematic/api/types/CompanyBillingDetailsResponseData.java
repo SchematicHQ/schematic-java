@@ -33,6 +33,8 @@ public final class CompanyBillingDetailsResponseData {
 
     private final Optional<String> phone;
 
+    private final List<CompanyTaxIdView> taxIds;
+
     private final Map<String, Object> additionalProperties;
 
     private CompanyBillingDetailsResponseData(
@@ -41,12 +43,14 @@ public final class CompanyBillingDetailsResponseData {
             List<CheckoutFieldWithValue> customFields,
             Optional<String> email,
             Optional<String> phone,
+            List<CompanyTaxIdView> taxIds,
             Map<String, Object> additionalProperties) {
         this.address = address;
         this.checkoutSettings = checkoutSettings;
         this.customFields = customFields;
         this.email = email;
         this.phone = phone;
+        this.taxIds = taxIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -75,6 +79,11 @@ public final class CompanyBillingDetailsResponseData {
         return phone;
     }
 
+    @JsonProperty("tax_ids")
+    public List<CompanyTaxIdView> getTaxIds() {
+        return taxIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -91,12 +100,14 @@ public final class CompanyBillingDetailsResponseData {
                 && checkoutSettings.equals(other.checkoutSettings)
                 && customFields.equals(other.customFields)
                 && email.equals(other.email)
-                && phone.equals(other.phone);
+                && phone.equals(other.phone)
+                && taxIds.equals(other.taxIds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.address, this.checkoutSettings, this.customFields, this.email, this.phone);
+        return Objects.hash(
+                this.address, this.checkoutSettings, this.customFields, this.email, this.phone, this.taxIds);
     }
 
     @java.lang.Override
@@ -138,11 +149,19 @@ public final class CompanyBillingDetailsResponseData {
         _FinalStage phone(Optional<String> phone);
 
         _FinalStage phone(String phone);
+
+        _FinalStage taxIds(List<CompanyTaxIdView> taxIds);
+
+        _FinalStage addTaxIds(CompanyTaxIdView taxIds);
+
+        _FinalStage addAllTaxIds(List<CompanyTaxIdView> taxIds);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements CheckoutSettingsStage, _FinalStage {
         private CompanyBillingCheckoutSettings checkoutSettings;
+
+        private List<CompanyTaxIdView> taxIds = new ArrayList<>();
 
         private Optional<String> phone = Optional.empty();
 
@@ -164,6 +183,7 @@ public final class CompanyBillingDetailsResponseData {
             customFields(other.getCustomFields());
             email(other.getEmail());
             phone(other.getPhone());
+            taxIds(other.getTaxIds());
             return this;
         }
 
@@ -171,6 +191,30 @@ public final class CompanyBillingDetailsResponseData {
         @JsonSetter("checkout_settings")
         public _FinalStage checkoutSettings(@NotNull CompanyBillingCheckoutSettings checkoutSettings) {
             this.checkoutSettings = Objects.requireNonNull(checkoutSettings, "checkoutSettings must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllTaxIds(List<CompanyTaxIdView> taxIds) {
+            if (taxIds != null) {
+                this.taxIds.addAll(taxIds);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addTaxIds(CompanyTaxIdView taxIds) {
+            this.taxIds.add(taxIds);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "tax_ids", nulls = Nulls.SKIP)
+        public _FinalStage taxIds(List<CompanyTaxIdView> taxIds) {
+            this.taxIds.clear();
+            if (taxIds != null) {
+                this.taxIds.addAll(taxIds);
+            }
             return this;
         }
 
@@ -240,7 +284,7 @@ public final class CompanyBillingDetailsResponseData {
         @java.lang.Override
         public CompanyBillingDetailsResponseData build() {
             return new CompanyBillingDetailsResponseData(
-                    address, checkoutSettings, customFields, email, phone, additionalProperties);
+                    address, checkoutSettings, customFields, email, phone, taxIds, additionalProperties);
         }
 
         @java.lang.Override

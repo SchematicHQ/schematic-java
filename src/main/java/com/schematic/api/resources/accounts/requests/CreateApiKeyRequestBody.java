@@ -27,6 +27,8 @@ public final class CreateApiKeyRequestBody {
 
     private final String name;
 
+    private final Optional<Long> rateLimitPercent;
+
     private final Optional<Boolean> readonly;
 
     private final Map<String, Object> additionalProperties;
@@ -35,11 +37,13 @@ public final class CreateApiKeyRequestBody {
             Optional<String> description,
             Optional<String> environmentId,
             String name,
+            Optional<Long> rateLimitPercent,
             Optional<Boolean> readonly,
             Map<String, Object> additionalProperties) {
         this.description = description;
         this.environmentId = environmentId;
         this.name = name;
+        this.rateLimitPercent = rateLimitPercent;
         this.readonly = readonly;
         this.additionalProperties = additionalProperties;
     }
@@ -57,6 +61,11 @@ public final class CreateApiKeyRequestBody {
     @JsonProperty("name")
     public String getName() {
         return name;
+    }
+
+    @JsonProperty("rate_limit_percent")
+    public Optional<Long> getRateLimitPercent() {
+        return rateLimitPercent;
     }
 
     @JsonProperty("readonly")
@@ -79,12 +88,13 @@ public final class CreateApiKeyRequestBody {
         return description.equals(other.description)
                 && environmentId.equals(other.environmentId)
                 && name.equals(other.name)
+                && rateLimitPercent.equals(other.rateLimitPercent)
                 && readonly.equals(other.readonly);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.description, this.environmentId, this.name, this.readonly);
+        return Objects.hash(this.description, this.environmentId, this.name, this.rateLimitPercent, this.readonly);
     }
 
     @java.lang.Override
@@ -117,6 +127,10 @@ public final class CreateApiKeyRequestBody {
 
         _FinalStage environmentId(String environmentId);
 
+        _FinalStage rateLimitPercent(Optional<Long> rateLimitPercent);
+
+        _FinalStage rateLimitPercent(Long rateLimitPercent);
+
         _FinalStage readonly(Optional<Boolean> readonly);
 
         _FinalStage readonly(Boolean readonly);
@@ -127,6 +141,8 @@ public final class CreateApiKeyRequestBody {
         private String name;
 
         private Optional<Boolean> readonly = Optional.empty();
+
+        private Optional<Long> rateLimitPercent = Optional.empty();
 
         private Optional<String> environmentId = Optional.empty();
 
@@ -142,6 +158,7 @@ public final class CreateApiKeyRequestBody {
             description(other.getDescription());
             environmentId(other.getEnvironmentId());
             name(other.getName());
+            rateLimitPercent(other.getRateLimitPercent());
             readonly(other.getReadonly());
             return this;
         }
@@ -163,6 +180,19 @@ public final class CreateApiKeyRequestBody {
         @JsonSetter(value = "readonly", nulls = Nulls.SKIP)
         public _FinalStage readonly(Optional<Boolean> readonly) {
             this.readonly = readonly;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage rateLimitPercent(Long rateLimitPercent) {
+            this.rateLimitPercent = Optional.ofNullable(rateLimitPercent);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "rate_limit_percent", nulls = Nulls.SKIP)
+        public _FinalStage rateLimitPercent(Optional<Long> rateLimitPercent) {
+            this.rateLimitPercent = rateLimitPercent;
             return this;
         }
 
@@ -194,7 +224,8 @@ public final class CreateApiKeyRequestBody {
 
         @java.lang.Override
         public CreateApiKeyRequestBody build() {
-            return new CreateApiKeyRequestBody(description, environmentId, name, readonly, additionalProperties);
+            return new CreateApiKeyRequestBody(
+                    description, environmentId, name, rateLimitPercent, readonly, additionalProperties);
         }
 
         @java.lang.Override

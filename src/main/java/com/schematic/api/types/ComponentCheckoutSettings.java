@@ -14,6 +14,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ComponentCheckoutSettings.Builder.class)
@@ -24,6 +25,8 @@ public final class ComponentCheckoutSettings {
 
     private final boolean collectPhone;
 
+    private final ProrationBehavior prorationBehavior;
+
     private final boolean taxCollectionEnabled;
 
     private final Map<String, Object> additionalProperties;
@@ -32,11 +35,13 @@ public final class ComponentCheckoutSettings {
             boolean collectAddress,
             boolean collectEmail,
             boolean collectPhone,
+            ProrationBehavior prorationBehavior,
             boolean taxCollectionEnabled,
             Map<String, Object> additionalProperties) {
         this.collectAddress = collectAddress;
         this.collectEmail = collectEmail;
         this.collectPhone = collectPhone;
+        this.prorationBehavior = prorationBehavior;
         this.taxCollectionEnabled = taxCollectionEnabled;
         this.additionalProperties = additionalProperties;
     }
@@ -54,6 +59,11 @@ public final class ComponentCheckoutSettings {
     @JsonProperty("collect_phone")
     public boolean getCollectPhone() {
         return collectPhone;
+    }
+
+    @JsonProperty("proration_behavior")
+    public ProrationBehavior getProrationBehavior() {
+        return prorationBehavior;
     }
 
     @JsonProperty("tax_collection_enabled")
@@ -76,12 +86,18 @@ public final class ComponentCheckoutSettings {
         return collectAddress == other.collectAddress
                 && collectEmail == other.collectEmail
                 && collectPhone == other.collectPhone
+                && prorationBehavior.equals(other.prorationBehavior)
                 && taxCollectionEnabled == other.taxCollectionEnabled;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.collectAddress, this.collectEmail, this.collectPhone, this.taxCollectionEnabled);
+        return Objects.hash(
+                this.collectAddress,
+                this.collectEmail,
+                this.collectPhone,
+                this.prorationBehavior,
+                this.taxCollectionEnabled);
     }
 
     @java.lang.Override
@@ -104,7 +120,11 @@ public final class ComponentCheckoutSettings {
     }
 
     public interface CollectPhoneStage {
-        TaxCollectionEnabledStage collectPhone(boolean collectPhone);
+        ProrationBehaviorStage collectPhone(boolean collectPhone);
+    }
+
+    public interface ProrationBehaviorStage {
+        TaxCollectionEnabledStage prorationBehavior(@NotNull ProrationBehavior prorationBehavior);
     }
 
     public interface TaxCollectionEnabledStage {
@@ -124,6 +144,7 @@ public final class ComponentCheckoutSettings {
             implements CollectAddressStage,
                     CollectEmailStage,
                     CollectPhoneStage,
+                    ProrationBehaviorStage,
                     TaxCollectionEnabledStage,
                     _FinalStage {
         private boolean collectAddress;
@@ -131,6 +152,8 @@ public final class ComponentCheckoutSettings {
         private boolean collectEmail;
 
         private boolean collectPhone;
+
+        private ProrationBehavior prorationBehavior;
 
         private boolean taxCollectionEnabled;
 
@@ -144,6 +167,7 @@ public final class ComponentCheckoutSettings {
             collectAddress(other.getCollectAddress());
             collectEmail(other.getCollectEmail());
             collectPhone(other.getCollectPhone());
+            prorationBehavior(other.getProrationBehavior());
             taxCollectionEnabled(other.getTaxCollectionEnabled());
             return this;
         }
@@ -164,8 +188,15 @@ public final class ComponentCheckoutSettings {
 
         @java.lang.Override
         @JsonSetter("collect_phone")
-        public TaxCollectionEnabledStage collectPhone(boolean collectPhone) {
+        public ProrationBehaviorStage collectPhone(boolean collectPhone) {
             this.collectPhone = collectPhone;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("proration_behavior")
+        public TaxCollectionEnabledStage prorationBehavior(@NotNull ProrationBehavior prorationBehavior) {
+            this.prorationBehavior = Objects.requireNonNull(prorationBehavior, "prorationBehavior must not be null");
             return this;
         }
 
@@ -179,7 +210,12 @@ public final class ComponentCheckoutSettings {
         @java.lang.Override
         public ComponentCheckoutSettings build() {
             return new ComponentCheckoutSettings(
-                    collectAddress, collectEmail, collectPhone, taxCollectionEnabled, additionalProperties);
+                    collectAddress,
+                    collectEmail,
+                    collectPhone,
+                    prorationBehavior,
+                    taxCollectionEnabled,
+                    additionalProperties);
         }
 
         @java.lang.Override

@@ -29,6 +29,8 @@ import com.schematic.api.resources.entitlements.requests.CreatePlanEntitlementRe
 import com.schematic.api.resources.entitlements.requests.DuplicatePlanEntitlementsRequestBody;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageByCompanyRequest;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageTimeSeriesRequest;
+import com.schematic.api.resources.entitlements.requests.GetUserUsageByCompanyRequest;
+import com.schematic.api.resources.entitlements.requests.GetUserUsageDetailRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsageRequest;
@@ -50,6 +52,8 @@ import com.schematic.api.resources.entitlements.types.GetCompanyOverrideResponse
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageByCompanyResponse;
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageTimeSeriesResponse;
 import com.schematic.api.resources.entitlements.types.GetPlanEntitlementResponse;
+import com.schematic.api.resources.entitlements.types.GetUserUsageByCompanyResponse;
+import com.schematic.api.resources.entitlements.types.GetUserUsageDetailResponse;
 import com.schematic.api.resources.entitlements.types.ListCompanyOverridesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureCompaniesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureUsageResponse;
@@ -2036,6 +2040,168 @@ public class RawEntitlementsClient {
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetFeatureUsageByCompanyResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<GetUserUsageByCompanyResponse> getUserUsageByCompany(
+            GetUserUsageByCompanyRequest request) {
+        return getUserUsageByCompany(request, null);
+    }
+
+    public BaseSchematicHttpResponse<GetUserUsageByCompanyResponse> getUserUsageByCompany(
+            GetUserUsageByCompanyRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("user-usage-by-company");
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
+        if (request.getEndTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_time", request.getEndTime().get(), false);
+        }
+        if (request.getFeatureId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "feature_id", request.getFeatureId().get(), false);
+        }
+        if (request.getStartTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start_time", request.getStartTime().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetUserUsageByCompanyResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<GetUserUsageDetailResponse> getUserUsageDetail(GetUserUsageDetailRequest request) {
+        return getUserUsageDetail(request, null);
+    }
+
+    public BaseSchematicHttpResponse<GetUserUsageDetailResponse> getUserUsageDetail(
+            GetUserUsageDetailRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("user-usage-detail");
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
+        if (request.getEndTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_time", request.getEndTime().get(), false);
+        }
+        if (request.getStartTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start_time", request.getStartTime().get(), false);
+        }
+        QueryStringMapper.addQueryParameter(httpUrl, "user_id", request.getUserId(), false);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetUserUsageDetailResponse.class),
                         response);
             }
             try {

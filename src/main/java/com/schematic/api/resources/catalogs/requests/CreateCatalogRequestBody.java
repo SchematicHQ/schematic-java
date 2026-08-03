@@ -23,16 +23,13 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateCatalogRequestBody {
     private final Optional<String> description;
 
-    private final boolean isDefault;
-
     private final String name;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateCatalogRequestBody(
-            Optional<String> description, boolean isDefault, String name, Map<String, Object> additionalProperties) {
+            Optional<String> description, String name, Map<String, Object> additionalProperties) {
         this.description = description;
-        this.isDefault = isDefault;
         this.name = name;
         this.additionalProperties = additionalProperties;
     }
@@ -40,11 +37,6 @@ public final class CreateCatalogRequestBody {
     @JsonProperty("description")
     public Optional<String> getDescription() {
         return description;
-    }
-
-    @JsonProperty("is_default")
-    public boolean getIsDefault() {
-        return isDefault;
     }
 
     @JsonProperty("name")
@@ -64,12 +56,12 @@ public final class CreateCatalogRequestBody {
     }
 
     private boolean equalTo(CreateCatalogRequestBody other) {
-        return description.equals(other.description) && isDefault == other.isDefault && name.equals(other.name);
+        return description.equals(other.description) && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.description, this.isDefault, this.name);
+        return Objects.hash(this.description, this.name);
     }
 
     @java.lang.Override
@@ -77,18 +69,14 @@ public final class CreateCatalogRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static IsDefaultStage builder() {
+    public static NameStage builder() {
         return new Builder();
-    }
-
-    public interface IsDefaultStage {
-        NameStage isDefault(boolean isDefault);
-
-        Builder from(CreateCatalogRequestBody other);
     }
 
     public interface NameStage {
         _FinalStage name(@NotNull String name);
+
+        Builder from(CreateCatalogRequestBody other);
     }
 
     public interface _FinalStage {
@@ -104,9 +92,7 @@ public final class CreateCatalogRequestBody {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IsDefaultStage, NameStage, _FinalStage {
-        private boolean isDefault;
-
+    public static final class Builder implements NameStage, _FinalStage {
         private String name;
 
         private Optional<String> description = Optional.empty();
@@ -119,15 +105,7 @@ public final class CreateCatalogRequestBody {
         @java.lang.Override
         public Builder from(CreateCatalogRequestBody other) {
             description(other.getDescription());
-            isDefault(other.getIsDefault());
             name(other.getName());
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("is_default")
-        public NameStage isDefault(boolean isDefault) {
-            this.isDefault = isDefault;
             return this;
         }
 
@@ -153,7 +131,7 @@ public final class CreateCatalogRequestBody {
 
         @java.lang.Override
         public CreateCatalogRequestBody build() {
-            return new CreateCatalogRequestBody(description, isDefault, name, additionalProperties);
+            return new CreateCatalogRequestBody(description, name, additionalProperties);
         }
 
         @java.lang.Override

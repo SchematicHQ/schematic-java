@@ -28,16 +28,20 @@ public final class RetryCustomPlanBillingRequestBody {
 
     private final Optional<Long> daysUntilDue;
 
+    private final Optional<Boolean> sendInvoice;
+
     private final Map<String, Object> additionalProperties;
 
     private RetryCustomPlanBillingRequestBody(
             Optional<CustomPlanActivationStrategy> activationStrategy,
             String customerEmail,
             Optional<Long> daysUntilDue,
+            Optional<Boolean> sendInvoice,
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.customerEmail = customerEmail;
         this.daysUntilDue = daysUntilDue;
+        this.sendInvoice = sendInvoice;
         this.additionalProperties = additionalProperties;
     }
 
@@ -56,6 +60,14 @@ public final class RetryCustomPlanBillingRequestBody {
         return daysUntilDue;
     }
 
+    /**
+     * @return Whether Stripe emails the invoice when it is finalized. Defaults to true.
+     */
+    @JsonProperty("send_invoice")
+    public Optional<Boolean> getSendInvoice() {
+        return sendInvoice;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -70,12 +82,13 @@ public final class RetryCustomPlanBillingRequestBody {
     private boolean equalTo(RetryCustomPlanBillingRequestBody other) {
         return activationStrategy.equals(other.activationStrategy)
                 && customerEmail.equals(other.customerEmail)
-                && daysUntilDue.equals(other.daysUntilDue);
+                && daysUntilDue.equals(other.daysUntilDue)
+                && sendInvoice.equals(other.sendInvoice);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.activationStrategy, this.customerEmail, this.daysUntilDue);
+        return Objects.hash(this.activationStrategy, this.customerEmail, this.daysUntilDue, this.sendInvoice);
     }
 
     @java.lang.Override
@@ -107,11 +120,20 @@ public final class RetryCustomPlanBillingRequestBody {
         _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
 
         _FinalStage daysUntilDue(Long daysUntilDue);
+
+        /**
+         * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
+         */
+        _FinalStage sendInvoice(Optional<Boolean> sendInvoice);
+
+        _FinalStage sendInvoice(Boolean sendInvoice);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements CustomerEmailStage, _FinalStage {
         private String customerEmail;
+
+        private Optional<Boolean> sendInvoice = Optional.empty();
 
         private Optional<Long> daysUntilDue = Optional.empty();
 
@@ -127,6 +149,7 @@ public final class RetryCustomPlanBillingRequestBody {
             activationStrategy(other.getActivationStrategy());
             customerEmail(other.getCustomerEmail());
             daysUntilDue(other.getDaysUntilDue());
+            sendInvoice(other.getSendInvoice());
             return this;
         }
 
@@ -134,6 +157,26 @@ public final class RetryCustomPlanBillingRequestBody {
         @JsonSetter("customer_email")
         public _FinalStage customerEmail(@NotNull String customerEmail) {
             this.customerEmail = Objects.requireNonNull(customerEmail, "customerEmail must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage sendInvoice(Boolean sendInvoice) {
+            this.sendInvoice = Optional.ofNullable(sendInvoice);
+            return this;
+        }
+
+        /**
+         * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "send_invoice", nulls = Nulls.SKIP)
+        public _FinalStage sendInvoice(Optional<Boolean> sendInvoice) {
+            this.sendInvoice = sendInvoice;
             return this;
         }
 
@@ -166,7 +209,7 @@ public final class RetryCustomPlanBillingRequestBody {
         @java.lang.Override
         public RetryCustomPlanBillingRequestBody build() {
             return new RetryCustomPlanBillingRequestBody(
-                    activationStrategy, customerEmail, daysUntilDue, additionalProperties);
+                    activationStrategy, customerEmail, daysUntilDue, sendInvoice, additionalProperties);
         }
 
         @java.lang.Override

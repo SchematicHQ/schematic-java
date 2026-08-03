@@ -66,6 +66,8 @@ public final class PlanCreditGrantView {
 
     private final String id;
 
+    private final Optional<String> licenseId;
+
     private final Optional<GenericPreviewObject> plan;
 
     private final String planId;
@@ -81,6 +83,8 @@ public final class PlanCreditGrantView {
     private final BillingPlanCreditGrantResetType resetType;
 
     private final long rolloverPercentage;
+
+    private final PlanCreditGrantScaling scaling;
 
     private final Optional<String> singularName;
 
@@ -111,6 +115,7 @@ public final class PlanCreditGrantView {
             Optional<BillingCreditExpiryUnit> expiryUnit,
             Optional<Long> expiryUnitCount,
             String id,
+            Optional<String> licenseId,
             Optional<GenericPreviewObject> plan,
             String planId,
             Optional<String> planVersionId,
@@ -119,6 +124,7 @@ public final class PlanCreditGrantView {
             Optional<BillingPlanCreditGrantResetStart> resetStart,
             BillingPlanCreditGrantResetType resetType,
             long rolloverPercentage,
+            PlanCreditGrantScaling scaling,
             Optional<String> singularName,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -144,6 +150,7 @@ public final class PlanCreditGrantView {
         this.expiryUnit = expiryUnit;
         this.expiryUnitCount = expiryUnitCount;
         this.id = id;
+        this.licenseId = licenseId;
         this.plan = plan;
         this.planId = planId;
         this.planVersionId = planVersionId;
@@ -152,6 +159,7 @@ public final class PlanCreditGrantView {
         this.resetStart = resetStart;
         this.resetType = resetType;
         this.rolloverPercentage = rolloverPercentage;
+        this.scaling = scaling;
         this.singularName = singularName;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
@@ -276,6 +284,11 @@ public final class PlanCreditGrantView {
         return id;
     }
 
+    @JsonProperty("license_id")
+    public Optional<String> getLicenseId() {
+        return licenseId;
+    }
+
     @JsonProperty("plan")
     public Optional<GenericPreviewObject> getPlan() {
         return plan;
@@ -317,6 +330,11 @@ public final class PlanCreditGrantView {
     @JsonProperty("rollover_percentage")
     public long getRolloverPercentage() {
         return rolloverPercentage;
+    }
+
+    @JsonProperty("scaling")
+    public PlanCreditGrantScaling getScaling() {
+        return scaling;
     }
 
     /**
@@ -366,6 +384,7 @@ public final class PlanCreditGrantView {
                 && expiryUnit.equals(other.expiryUnit)
                 && expiryUnitCount.equals(other.expiryUnitCount)
                 && id.equals(other.id)
+                && licenseId.equals(other.licenseId)
                 && plan.equals(other.plan)
                 && planId.equals(other.planId)
                 && planVersionId.equals(other.planVersionId)
@@ -374,6 +393,7 @@ public final class PlanCreditGrantView {
                 && resetStart.equals(other.resetStart)
                 && resetType.equals(other.resetType)
                 && rolloverPercentage == other.rolloverPercentage
+                && scaling.equals(other.scaling)
                 && singularName.equals(other.singularName)
                 && updatedAt.equals(other.updatedAt);
     }
@@ -403,6 +423,7 @@ public final class PlanCreditGrantView {
                 this.expiryUnit,
                 this.expiryUnitCount,
                 this.id,
+                this.licenseId,
                 this.plan,
                 this.planId,
                 this.planVersionId,
@@ -411,6 +432,7 @@ public final class PlanCreditGrantView {
                 this.resetStart,
                 this.resetType,
                 this.rolloverPercentage,
+                this.scaling,
                 this.singularName,
                 this.updatedAt);
     }
@@ -477,7 +499,11 @@ public final class PlanCreditGrantView {
     }
 
     public interface RolloverPercentageStage {
-        UpdatedAtStage rolloverPercentage(long rolloverPercentage);
+        ScalingStage rolloverPercentage(long rolloverPercentage);
+    }
+
+    public interface ScalingStage {
+        UpdatedAtStage scaling(@NotNull PlanCreditGrantScaling scaling);
     }
 
     public interface UpdatedAtStage {
@@ -550,6 +576,10 @@ public final class PlanCreditGrantView {
 
         _FinalStage expiryUnitCount(Long expiryUnitCount);
 
+        _FinalStage licenseId(Optional<String> licenseId);
+
+        _FinalStage licenseId(String licenseId);
+
         _FinalStage plan(Optional<GenericPreviewObject> plan);
 
         _FinalStage plan(GenericPreviewObject plan);
@@ -595,6 +625,7 @@ public final class PlanCreditGrantView {
                     PlanIdStage,
                     ResetTypeStage,
                     RolloverPercentageStage,
+                    ScalingStage,
                     UpdatedAtStage,
                     _FinalStage {
         private boolean billingCreditAutoTopupEnabled;
@@ -621,6 +652,8 @@ public final class PlanCreditGrantView {
 
         private long rolloverPercentage;
 
+        private PlanCreditGrantScaling scaling;
+
         private OffsetDateTime updatedAt;
 
         private Optional<String> singularName = Optional.empty();
@@ -634,6 +667,8 @@ public final class PlanCreditGrantView {
         private Optional<String> planVersionId = Optional.empty();
 
         private Optional<GenericPreviewObject> plan = Optional.empty();
+
+        private Optional<String> licenseId = Optional.empty();
 
         private Optional<Long> expiryUnitCount = Optional.empty();
 
@@ -690,6 +725,7 @@ public final class PlanCreditGrantView {
             expiryUnit(other.getExpiryUnit());
             expiryUnitCount(other.getExpiryUnitCount());
             id(other.getId());
+            licenseId(other.getLicenseId());
             plan(other.getPlan());
             planId(other.getPlanId());
             planVersionId(other.getPlanVersionId());
@@ -698,6 +734,7 @@ public final class PlanCreditGrantView {
             resetStart(other.getResetStart());
             resetType(other.getResetType());
             rolloverPercentage(other.getRolloverPercentage());
+            scaling(other.getScaling());
             singularName(other.getSingularName());
             updatedAt(other.getUpdatedAt());
             return this;
@@ -792,8 +829,15 @@ public final class PlanCreditGrantView {
 
         @java.lang.Override
         @JsonSetter("rollover_percentage")
-        public UpdatedAtStage rolloverPercentage(long rolloverPercentage) {
+        public ScalingStage rolloverPercentage(long rolloverPercentage) {
             this.rolloverPercentage = rolloverPercentage;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("scaling")
+        public UpdatedAtStage scaling(@NotNull PlanCreditGrantScaling scaling) {
+            this.scaling = Objects.requireNonNull(scaling, "scaling must not be null");
             return this;
         }
 
@@ -893,6 +937,19 @@ public final class PlanCreditGrantView {
         @JsonSetter(value = "plan", nulls = Nulls.SKIP)
         public _FinalStage plan(Optional<GenericPreviewObject> plan) {
             this.plan = plan;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage licenseId(String licenseId) {
+            this.licenseId = Optional.ofNullable(licenseId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "license_id", nulls = Nulls.SKIP)
+        public _FinalStage licenseId(Optional<String> licenseId) {
+            this.licenseId = licenseId;
             return this;
         }
 
@@ -1103,6 +1160,7 @@ public final class PlanCreditGrantView {
                     expiryUnit,
                     expiryUnitCount,
                     id,
+                    licenseId,
                     plan,
                     planId,
                     planVersionId,
@@ -1111,6 +1169,7 @@ public final class PlanCreditGrantView {
                     resetStart,
                     resetType,
                     rolloverPercentage,
+                    scaling,
                     singularName,
                     updatedAt,
                     additionalProperties);

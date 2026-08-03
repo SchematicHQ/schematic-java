@@ -66,6 +66,8 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final String id;
 
+    private final Optional<String> licenseId;
+
     private final Optional<PreviewObjectResponseData> plan;
 
     private final String planId;
@@ -81,6 +83,8 @@ public final class BillingPlanCreditGrantResponseData {
     private final Optional<BillingPlanCreditGrantResetType> resetType;
 
     private final long rolloverPercentage;
+
+    private final PlanCreditGrantScaling scaling;
 
     private final OffsetDateTime updatedAt;
 
@@ -109,6 +113,7 @@ public final class BillingPlanCreditGrantResponseData {
             Optional<BillingCreditExpiryUnit> expiryUnit,
             Optional<Long> expiryUnitCount,
             String id,
+            Optional<String> licenseId,
             Optional<PreviewObjectResponseData> plan,
             String planId,
             String planName,
@@ -117,6 +122,7 @@ public final class BillingPlanCreditGrantResponseData {
             Optional<BillingPlanCreditGrantResetStart> resetStart,
             Optional<BillingPlanCreditGrantResetType> resetType,
             long rolloverPercentage,
+            PlanCreditGrantScaling scaling,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.autoTopupAmount = autoTopupAmount;
@@ -141,6 +147,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.expiryUnit = expiryUnit;
         this.expiryUnitCount = expiryUnitCount;
         this.id = id;
+        this.licenseId = licenseId;
         this.plan = plan;
         this.planId = planId;
         this.planName = planName;
@@ -149,6 +156,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.resetStart = resetStart;
         this.resetType = resetType;
         this.rolloverPercentage = rolloverPercentage;
+        this.scaling = scaling;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -281,6 +289,14 @@ public final class BillingPlanCreditGrantResponseData {
         return id;
     }
 
+    /**
+     * @return The license whose quantity scales this grant. Set only when scaling is per_license.
+     */
+    @JsonProperty("license_id")
+    public Optional<String> getLicenseId() {
+        return licenseId;
+    }
+
     @JsonProperty("plan")
     public Optional<PreviewObjectResponseData> getPlan() {
         return plan;
@@ -327,6 +343,14 @@ public final class BillingPlanCreditGrantResponseData {
         return rolloverPercentage;
     }
 
+    /**
+     * @return Whether the grant is a fixed amount per company, or issued once per license the company holds.
+     */
+    @JsonProperty("scaling")
+    public PlanCreditGrantScaling getScaling() {
+        return scaling;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -367,6 +391,7 @@ public final class BillingPlanCreditGrantResponseData {
                 && expiryUnit.equals(other.expiryUnit)
                 && expiryUnitCount.equals(other.expiryUnitCount)
                 && id.equals(other.id)
+                && licenseId.equals(other.licenseId)
                 && plan.equals(other.plan)
                 && planId.equals(other.planId)
                 && planName.equals(other.planName)
@@ -375,6 +400,7 @@ public final class BillingPlanCreditGrantResponseData {
                 && resetStart.equals(other.resetStart)
                 && resetType.equals(other.resetType)
                 && rolloverPercentage == other.rolloverPercentage
+                && scaling.equals(other.scaling)
                 && updatedAt.equals(other.updatedAt);
     }
 
@@ -403,6 +429,7 @@ public final class BillingPlanCreditGrantResponseData {
                 this.expiryUnit,
                 this.expiryUnitCount,
                 this.id,
+                this.licenseId,
                 this.plan,
                 this.planId,
                 this.planName,
@@ -411,6 +438,7 @@ public final class BillingPlanCreditGrantResponseData {
                 this.resetStart,
                 this.resetType,
                 this.rolloverPercentage,
+                this.scaling,
                 this.updatedAt);
     }
 
@@ -488,7 +516,14 @@ public final class BillingPlanCreditGrantResponseData {
         /**
          * <p>Percentage of unused credits that carry over when this grant resets. Only meaningful when reset_type is plan_period.</p>
          */
-        UpdatedAtStage rolloverPercentage(long rolloverPercentage);
+        ScalingStage rolloverPercentage(long rolloverPercentage);
+    }
+
+    public interface ScalingStage {
+        /**
+         * <p>Whether the grant is a fixed amount per company, or issued once per license the company holds.</p>
+         */
+        UpdatedAtStage scaling(@NotNull PlanCreditGrantScaling scaling);
     }
 
     public interface UpdatedAtStage {
@@ -560,6 +595,13 @@ public final class BillingPlanCreditGrantResponseData {
 
         _FinalStage expiryUnitCount(Long expiryUnitCount);
 
+        /**
+         * <p>The license whose quantity scales this grant. Set only when scaling is per_license.</p>
+         */
+        _FinalStage licenseId(Optional<String> licenseId);
+
+        _FinalStage licenseId(String licenseId);
+
         _FinalStage plan(Optional<PreviewObjectResponseData> plan);
 
         _FinalStage plan(PreviewObjectResponseData plan);
@@ -595,6 +637,7 @@ public final class BillingPlanCreditGrantResponseData {
                     PlanIdStage,
                     PlanNameStage,
                     RolloverPercentageStage,
+                    ScalingStage,
                     UpdatedAtStage,
                     _FinalStage {
         private BillingCreditAutoTopupAvailability autoTopupAvailability;
@@ -621,6 +664,8 @@ public final class BillingPlanCreditGrantResponseData {
 
         private long rolloverPercentage;
 
+        private PlanCreditGrantScaling scaling;
+
         private OffsetDateTime updatedAt;
 
         private Optional<BillingPlanCreditGrantResetType> resetType = Optional.empty();
@@ -632,6 +677,8 @@ public final class BillingPlanCreditGrantResponseData {
         private Optional<String> planVersionId = Optional.empty();
 
         private Optional<PreviewObjectResponseData> plan = Optional.empty();
+
+        private Optional<String> licenseId = Optional.empty();
 
         private Optional<Long> expiryUnitCount = Optional.empty();
 
@@ -688,6 +735,7 @@ public final class BillingPlanCreditGrantResponseData {
             expiryUnit(other.getExpiryUnit());
             expiryUnitCount(other.getExpiryUnitCount());
             id(other.getId());
+            licenseId(other.getLicenseId());
             plan(other.getPlan());
             planId(other.getPlanId());
             planName(other.getPlanName());
@@ -696,6 +744,7 @@ public final class BillingPlanCreditGrantResponseData {
             resetStart(other.getResetStart());
             resetType(other.getResetType());
             rolloverPercentage(other.getRolloverPercentage());
+            scaling(other.getScaling());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -805,8 +854,19 @@ public final class BillingPlanCreditGrantResponseData {
          */
         @java.lang.Override
         @JsonSetter("rollover_percentage")
-        public UpdatedAtStage rolloverPercentage(long rolloverPercentage) {
+        public ScalingStage rolloverPercentage(long rolloverPercentage) {
             this.rolloverPercentage = rolloverPercentage;
+            return this;
+        }
+
+        /**
+         * <p>Whether the grant is a fixed amount per company, or issued once per license the company holds.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("scaling")
+        public UpdatedAtStage scaling(@NotNull PlanCreditGrantScaling scaling) {
+            this.scaling = Objects.requireNonNull(scaling, "scaling must not be null");
             return this;
         }
 
@@ -879,6 +939,26 @@ public final class BillingPlanCreditGrantResponseData {
         @JsonSetter(value = "plan", nulls = Nulls.SKIP)
         public _FinalStage plan(Optional<PreviewObjectResponseData> plan) {
             this.plan = plan;
+            return this;
+        }
+
+        /**
+         * <p>The license whose quantity scales this grant. Set only when scaling is per_license.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage licenseId(String licenseId) {
+            this.licenseId = Optional.ofNullable(licenseId);
+            return this;
+        }
+
+        /**
+         * <p>The license whose quantity scales this grant. Set only when scaling is per_license.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "license_id", nulls = Nulls.SKIP)
+        public _FinalStage licenseId(Optional<String> licenseId) {
+            this.licenseId = licenseId;
             return this;
         }
 
@@ -1090,6 +1170,7 @@ public final class BillingPlanCreditGrantResponseData {
                     expiryUnit,
                     expiryUnitCount,
                     id,
+                    licenseId,
                     plan,
                     planId,
                     planName,
@@ -1098,6 +1179,7 @@ public final class BillingPlanCreditGrantResponseData {
                     resetStart,
                     resetType,
                     rolloverPercentage,
+                    scaling,
                     updatedAt,
                     additionalProperties);
         }

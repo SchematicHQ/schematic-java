@@ -16,6 +16,8 @@ import com.schematic.api.resources.entitlements.requests.CreatePlanEntitlementRe
 import com.schematic.api.resources.entitlements.requests.DuplicatePlanEntitlementsRequestBody;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageByCompanyRequest;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageTimeSeriesRequest;
+import com.schematic.api.resources.entitlements.requests.GetUserUsageByCompanyRequest;
+import com.schematic.api.resources.entitlements.requests.GetUserUsageDetailRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsageRequest;
@@ -37,6 +39,8 @@ import com.schematic.api.resources.entitlements.types.GetCompanyOverrideResponse
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageByCompanyResponse;
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageTimeSeriesResponse;
 import com.schematic.api.resources.entitlements.types.GetPlanEntitlementResponse;
+import com.schematic.api.resources.entitlements.types.GetUserUsageByCompanyResponse;
+import com.schematic.api.resources.entitlements.types.GetUserUsageDetailResponse;
 import com.schematic.api.resources.entitlements.types.ListCompanyOverridesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureCompaniesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureUsageResponse;
@@ -320,5 +324,23 @@ public class EntitlementsClient {
     public GetFeatureUsageByCompanyResponse getFeatureUsageByCompany(
             GetFeatureUsageByCompanyRequest request, RequestOptions requestOptions) {
         return this.rawClient.getFeatureUsageByCompany(request, requestOptions).body();
+    }
+
+    public GetUserUsageByCompanyResponse getUserUsageByCompany(GetUserUsageByCompanyRequest request) {
+        return this.rawClient.getUserUsageByCompany(request).body();
+    }
+
+    public GetUserUsageByCompanyResponse getUserUsageByCompany(
+            GetUserUsageByCompanyRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getUserUsageByCompany(request, requestOptions).body();
+    }
+
+    public GetUserUsageDetailResponse getUserUsageDetail(GetUserUsageDetailRequest request) {
+        return this.rawClient.getUserUsageDetail(request).body();
+    }
+
+    public GetUserUsageDetailResponse getUserUsageDetail(
+            GetUserUsageDetailRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getUserUsageDetail(request, requestOptions).body();
     }
 }

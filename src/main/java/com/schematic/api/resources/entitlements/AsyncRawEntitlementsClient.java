@@ -29,6 +29,8 @@ import com.schematic.api.resources.entitlements.requests.CreatePlanEntitlementRe
 import com.schematic.api.resources.entitlements.requests.DuplicatePlanEntitlementsRequestBody;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageByCompanyRequest;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageTimeSeriesRequest;
+import com.schematic.api.resources.entitlements.requests.GetUserUsageByCompanyRequest;
+import com.schematic.api.resources.entitlements.requests.GetUserUsageDetailRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsageRequest;
@@ -50,6 +52,8 @@ import com.schematic.api.resources.entitlements.types.GetCompanyOverrideResponse
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageByCompanyResponse;
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageTimeSeriesResponse;
 import com.schematic.api.resources.entitlements.types.GetPlanEntitlementResponse;
+import com.schematic.api.resources.entitlements.types.GetUserUsageByCompanyResponse;
+import com.schematic.api.resources.entitlements.types.GetUserUsageDetailResponse;
 import com.schematic.api.resources.entitlements.types.ListCompanyOverridesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureCompaniesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureUsageResponse;
@@ -2574,6 +2578,215 @@ public class AsyncRawEntitlementsClient {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBodyString, GetFeatureUsageByCompanyResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<GetUserUsageByCompanyResponse>> getUserUsageByCompany(
+            GetUserUsageByCompanyRequest request) {
+        return getUserUsageByCompany(request, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<GetUserUsageByCompanyResponse>> getUserUsageByCompany(
+            GetUserUsageByCompanyRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("user-usage-by-company");
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
+        if (request.getEndTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_time", request.getEndTime().get(), false);
+        }
+        if (request.getFeatureId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "feature_id", request.getFeatureId().get(), false);
+        }
+        if (request.getStartTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start_time", request.getStartTime().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<BaseSchematicHttpResponse<GetUserUsageByCompanyResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, GetUserUsageByCompanyResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<GetUserUsageDetailResponse>> getUserUsageDetail(
+            GetUserUsageDetailRequest request) {
+        return getUserUsageDetail(request, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<GetUserUsageDetailResponse>> getUserUsageDetail(
+            GetUserUsageDetailRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("user-usage-detail");
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
+        if (request.getEndTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_time", request.getEndTime().get(), false);
+        }
+        if (request.getStartTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start_time", request.getStartTime().get(), false);
+        }
+        QueryStringMapper.addQueryParameter(httpUrl, "user_id", request.getUserId(), false);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<BaseSchematicHttpResponse<GetUserUsageDetailResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, GetUserUsageDetailResponse.class),
                                 response));
                         return;
                     }

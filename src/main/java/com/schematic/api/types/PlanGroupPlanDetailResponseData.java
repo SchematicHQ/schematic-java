@@ -80,7 +80,7 @@ public final class PlanGroupPlanDetailResponseData {
 
     private final boolean isDefault;
 
-    private final boolean isFree;
+    private final Optional<Boolean> isFree;
 
     private final boolean isTrialable;
 
@@ -133,7 +133,7 @@ public final class PlanGroupPlanDetailResponseData {
             Optional<List<BillingPlanCreditGrantResponseData>> includedCreditGrants,
             boolean isCustom,
             boolean isDefault,
-            boolean isFree,
+            Optional<Boolean> isFree,
             boolean isTrialable,
             Optional<BillingPriceResponseData> monthlyPrice,
             String name,
@@ -328,10 +328,10 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     /**
-     * @return Deprecated: Use BillingStrategy instead
+     * @return Deprecated: reports the plan's charge type, not its price. Read the plan's prices to tell whether it costs anything, or billing_strategy to tell how it is billed.
      */
     @JsonProperty("is_free")
-    public boolean getIsFree() {
+    public Optional<Boolean> getIsFree() {
         return isFree;
     }
 
@@ -425,7 +425,7 @@ public final class PlanGroupPlanDetailResponseData {
                 && includedCreditGrants.equals(other.includedCreditGrants)
                 && isCustom == other.isCustom
                 && isDefault == other.isDefault
-                && isFree == other.isFree
+                && isFree.equals(other.isFree)
                 && isTrialable == other.isTrialable
                 && monthlyPrice.equals(other.monthlyPrice)
                 && name.equals(other.name)
@@ -530,14 +530,7 @@ public final class PlanGroupPlanDetailResponseData {
     }
 
     public interface IsDefaultStage {
-        IsFreeStage isDefault(boolean isDefault);
-    }
-
-    public interface IsFreeStage {
-        /**
-         * <p>Deprecated: Use BillingStrategy instead</p>
-         */
-        IsTrialableStage isFree(boolean isFree);
+        IsTrialableStage isDefault(boolean isDefault);
     }
 
     public interface IsTrialableStage {
@@ -645,6 +638,13 @@ public final class PlanGroupPlanDetailResponseData {
 
         _FinalStage includedCreditGrants(List<BillingPlanCreditGrantResponseData> includedCreditGrants);
 
+        /**
+         * <p>Deprecated: reports the plan's charge type, not its price. Read the plan's prices to tell whether it costs anything, or billing_strategy to tell how it is billed.</p>
+         */
+        _FinalStage isFree(Optional<Boolean> isFree);
+
+        _FinalStage isFree(Boolean isFree);
+
         _FinalStage monthlyPrice(Optional<BillingPriceResponseData> monthlyPrice);
 
         _FinalStage monthlyPrice(BillingPriceResponseData monthlyPrice);
@@ -684,7 +684,6 @@ public final class PlanGroupPlanDetailResponseData {
                     IdStage,
                     IsCustomStage,
                     IsDefaultStage,
-                    IsFreeStage,
                     IsTrialableStage,
                     NameStage,
                     PlanTypeStage,
@@ -710,8 +709,6 @@ public final class PlanGroupPlanDetailResponseData {
 
         private boolean isDefault;
 
-        private boolean isFree;
-
         private boolean isTrialable;
 
         private String name;
@@ -731,6 +728,8 @@ public final class PlanGroupPlanDetailResponseData {
         private Optional<BillingPriceResponseData> oneTimePrice = Optional.empty();
 
         private Optional<BillingPriceResponseData> monthlyPrice = Optional.empty();
+
+        private Optional<Boolean> isFree = Optional.empty();
 
         private Optional<List<BillingPlanCreditGrantResponseData>> includedCreditGrants = Optional.empty();
 
@@ -882,19 +881,8 @@ public final class PlanGroupPlanDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("is_default")
-        public IsFreeStage isDefault(boolean isDefault) {
+        public IsTrialableStage isDefault(boolean isDefault) {
             this.isDefault = isDefault;
-            return this;
-        }
-
-        /**
-         * <p>Deprecated: Use BillingStrategy instead</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("is_free")
-        public IsTrialableStage isFree(boolean isFree) {
-            this.isFree = isFree;
             return this;
         }
 
@@ -1012,6 +1000,26 @@ public final class PlanGroupPlanDetailResponseData {
         @JsonSetter(value = "monthly_price", nulls = Nulls.SKIP)
         public _FinalStage monthlyPrice(Optional<BillingPriceResponseData> monthlyPrice) {
             this.monthlyPrice = monthlyPrice;
+            return this;
+        }
+
+        /**
+         * <p>Deprecated: reports the plan's charge type, not its price. Read the plan's prices to tell whether it costs anything, or billing_strategy to tell how it is billed.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage isFree(Boolean isFree) {
+            this.isFree = Optional.ofNullable(isFree);
+            return this;
+        }
+
+        /**
+         * <p>Deprecated: reports the plan's charge type, not its price. Read the plan's prices to tell whether it costs anything, or billing_strategy to tell how it is billed.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "is_free", nulls = Nulls.SKIP)
+        public _FinalStage isFree(Optional<Boolean> isFree) {
+            this.isFree = isFree;
             return this;
         }
 

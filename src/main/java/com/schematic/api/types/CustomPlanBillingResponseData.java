@@ -40,6 +40,8 @@ public final class CustomPlanBillingResponseData {
 
     private final Optional<OffsetDateTime> publishedAt;
 
+    private final boolean sendInvoice;
+
     private final CustomPlanBillingStatus status;
 
     private final Optional<String> stripeInvoiceUrl;
@@ -58,6 +60,7 @@ public final class CustomPlanBillingResponseData {
             Optional<OffsetDateTime> paidAt,
             String planId,
             Optional<OffsetDateTime> publishedAt,
+            boolean sendInvoice,
             CustomPlanBillingStatus status,
             Optional<String> stripeInvoiceUrl,
             OffsetDateTime updatedAt,
@@ -71,6 +74,7 @@ public final class CustomPlanBillingResponseData {
         this.paidAt = paidAt;
         this.planId = planId;
         this.publishedAt = publishedAt;
+        this.sendInvoice = sendInvoice;
         this.status = status;
         this.stripeInvoiceUrl = stripeInvoiceUrl;
         this.updatedAt = updatedAt;
@@ -122,6 +126,11 @@ public final class CustomPlanBillingResponseData {
         return publishedAt;
     }
 
+    @JsonProperty("send_invoice")
+    public boolean getSendInvoice() {
+        return sendInvoice;
+    }
+
     @JsonProperty("status")
     public CustomPlanBillingStatus getStatus() {
         return status;
@@ -158,6 +167,7 @@ public final class CustomPlanBillingResponseData {
                 && paidAt.equals(other.paidAt)
                 && planId.equals(other.planId)
                 && publishedAt.equals(other.publishedAt)
+                && sendInvoice == other.sendInvoice
                 && status.equals(other.status)
                 && stripeInvoiceUrl.equals(other.stripeInvoiceUrl)
                 && updatedAt.equals(other.updatedAt);
@@ -175,6 +185,7 @@ public final class CustomPlanBillingResponseData {
                 this.paidAt,
                 this.planId,
                 this.publishedAt,
+                this.sendInvoice,
                 this.status,
                 this.stripeInvoiceUrl,
                 this.updatedAt);
@@ -212,7 +223,11 @@ public final class CustomPlanBillingResponseData {
     }
 
     public interface PlanIdStage {
-        StatusStage planId(@NotNull String planId);
+        SendInvoiceStage planId(@NotNull String planId);
+    }
+
+    public interface SendInvoiceStage {
+        StatusStage sendInvoice(boolean sendInvoice);
     }
 
     public interface StatusStage {
@@ -255,6 +270,7 @@ public final class CustomPlanBillingResponseData {
                     DaysUntilDueStage,
                     IdStage,
                     PlanIdStage,
+                    SendInvoiceStage,
                     StatusStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -269,6 +285,8 @@ public final class CustomPlanBillingResponseData {
         private String id;
 
         private String planId;
+
+        private boolean sendInvoice;
 
         private CustomPlanBillingStatus status;
 
@@ -298,6 +316,7 @@ public final class CustomPlanBillingResponseData {
             paidAt(other.getPaidAt());
             planId(other.getPlanId());
             publishedAt(other.getPublishedAt());
+            sendInvoice(other.getSendInvoice());
             status(other.getStatus());
             stripeInvoiceUrl(other.getStripeInvoiceUrl());
             updatedAt(other.getUpdatedAt());
@@ -341,8 +360,15 @@ public final class CustomPlanBillingResponseData {
 
         @java.lang.Override
         @JsonSetter("plan_id")
-        public StatusStage planId(@NotNull String planId) {
+        public SendInvoiceStage planId(@NotNull String planId) {
             this.planId = Objects.requireNonNull(planId, "planId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("send_invoice")
+        public StatusStage sendInvoice(boolean sendInvoice) {
+            this.sendInvoice = sendInvoice;
             return this;
         }
 
@@ -424,6 +450,7 @@ public final class CustomPlanBillingResponseData {
                     paidAt,
                     planId,
                     publishedAt,
+                    sendInvoice,
                     status,
                     stripeInvoiceUrl,
                     updatedAt,
