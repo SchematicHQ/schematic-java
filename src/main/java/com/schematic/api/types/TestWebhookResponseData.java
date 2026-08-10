@@ -9,25 +9,39 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TestWebhookResponseData.Builder.class)
 public final class TestWebhookResponseData {
+    private final Optional<String> failureReason;
+
     private final long responseCode;
 
     private final boolean success;
 
     private final Map<String, Object> additionalProperties;
 
-    private TestWebhookResponseData(long responseCode, boolean success, Map<String, Object> additionalProperties) {
+    private TestWebhookResponseData(
+            Optional<String> failureReason,
+            long responseCode,
+            boolean success,
+            Map<String, Object> additionalProperties) {
+        this.failureReason = failureReason;
         this.responseCode = responseCode;
         this.success = success;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("failure_reason")
+    public Optional<String> getFailureReason() {
+        return failureReason;
     }
 
     @JsonProperty("response_code")
@@ -52,12 +66,14 @@ public final class TestWebhookResponseData {
     }
 
     private boolean equalTo(TestWebhookResponseData other) {
-        return responseCode == other.responseCode && success == other.success;
+        return failureReason.equals(other.failureReason)
+                && responseCode == other.responseCode
+                && success == other.success;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.responseCode, this.success);
+        return Objects.hash(this.failureReason, this.responseCode, this.success);
     }
 
     @java.lang.Override
@@ -85,6 +101,10 @@ public final class TestWebhookResponseData {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage failureReason(Optional<String> failureReason);
+
+        _FinalStage failureReason(String failureReason);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -93,6 +113,8 @@ public final class TestWebhookResponseData {
 
         private boolean success;
 
+        private Optional<String> failureReason = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -100,6 +122,7 @@ public final class TestWebhookResponseData {
 
         @java.lang.Override
         public Builder from(TestWebhookResponseData other) {
+            failureReason(other.getFailureReason());
             responseCode(other.getResponseCode());
             success(other.getSuccess());
             return this;
@@ -120,8 +143,21 @@ public final class TestWebhookResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage failureReason(String failureReason) {
+            this.failureReason = Optional.ofNullable(failureReason);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "failure_reason", nulls = Nulls.SKIP)
+        public _FinalStage failureReason(Optional<String> failureReason) {
+            this.failureReason = failureReason;
+            return this;
+        }
+
+        @java.lang.Override
         public TestWebhookResponseData build() {
-            return new TestWebhookResponseData(responseCode, success, additionalProperties);
+            return new TestWebhookResponseData(failureReason, responseCode, success, additionalProperties);
         }
 
         @java.lang.Override

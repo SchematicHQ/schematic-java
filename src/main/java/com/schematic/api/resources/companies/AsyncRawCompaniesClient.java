@@ -20,6 +20,7 @@ import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.companies.requests.CountCompaniesRequest;
 import com.schematic.api.resources.companies.requests.CountEntityKeyDefinitionsRequest;
+import com.schematic.api.resources.companies.requests.CountEntityKeysRequest;
 import com.schematic.api.resources.companies.requests.CountEntityTraitDefinitionsRequest;
 import com.schematic.api.resources.companies.requests.CountPlanTraitsRequest;
 import com.schematic.api.resources.companies.requests.CountUsersRequest;
@@ -43,6 +44,7 @@ import com.schematic.api.resources.companies.requests.UpdateEntityTraitDefinitio
 import com.schematic.api.resources.companies.requests.UpdatePlanTraitBulkRequestBody;
 import com.schematic.api.resources.companies.types.CountCompaniesResponse;
 import com.schematic.api.resources.companies.types.CountEntityKeyDefinitionsResponse;
+import com.schematic.api.resources.companies.types.CountEntityKeysResponse;
 import com.schematic.api.resources.companies.types.CountEntityTraitDefinitionsResponse;
 import com.schematic.api.resources.companies.types.CountPlanTraitsResponse;
 import com.schematic.api.resources.companies.types.CountUsersResponse;
@@ -51,6 +53,7 @@ import com.schematic.api.resources.companies.types.CreateUserResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyMembershipResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyResponse;
+import com.schematic.api.resources.companies.types.DeleteEntityKeyDefinitionResponse;
 import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
@@ -2077,6 +2080,106 @@ public class AsyncRawCompaniesClient {
         return future;
     }
 
+    public CompletableFuture<BaseSchematicHttpResponse<DeleteEntityKeyDefinitionResponse>> deleteEntityKeyDefinition(
+            String entityKeyDefinitionId) {
+        return deleteEntityKeyDefinition(entityKeyDefinitionId, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<DeleteEntityKeyDefinitionResponse>> deleteEntityKeyDefinition(
+            String entityKeyDefinitionId, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("entity-key-definitions")
+                .addPathSegment(entityKeyDefinitionId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<BaseSchematicHttpResponse<DeleteEntityKeyDefinitionResponse>> future =
+                new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, DeleteEntityKeyDefinitionResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
     public CompletableFuture<BaseSchematicHttpResponse<CountEntityKeyDefinitionsResponse>> countEntityKeyDefinitions() {
         return countEntityKeyDefinitions(
                 CountEntityKeyDefinitionsRequest.builder().build());
@@ -2151,6 +2254,128 @@ public class AsyncRawCompaniesClient {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBodyString, CountEntityKeyDefinitionsResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountEntityKeysResponse>> countEntityKeys() {
+        return countEntityKeys(CountEntityKeysRequest.builder().build());
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountEntityKeysResponse>> countEntityKeys(
+            RequestOptions requestOptions) {
+        return countEntityKeys(CountEntityKeysRequest.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountEntityKeysResponse>> countEntityKeys(
+            CountEntityKeysRequest request) {
+        return countEntityKeys(request, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<CountEntityKeysResponse>> countEntityKeys(
+            CountEntityKeysRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("entity-keys/count");
+        if (request.getDefinitionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "definition_id", request.getDefinitionId().get(), false);
+        }
+        if (request.getEntityType().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "entity_type", request.getEntityType().get(), false);
+        }
+        if (request.getLimit().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "limit", request.getLimit().get(), false);
+        }
+        if (request.getOffset().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "offset", request.getOffset().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<BaseSchematicHttpResponse<CountEntityKeysResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountEntityKeysResponse.class),
                                 response));
                         return;
                     }

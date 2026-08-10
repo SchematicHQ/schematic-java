@@ -8713,6 +8713,46 @@ client.companies().listEntityKeyDefinitions(
 </dl>
 </details>
 
+<details><summary><code>client.companies.deleteEntityKeyDefinition(entityKeyDefinitionId) -> DeleteEntityKeyDefinitionResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().deleteEntityKeyDefinition("entity_key_definition_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**entityKeyDefinitionId:** `String` — entity_key_definition_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.companies.countEntityKeyDefinitions() -> CountEntityKeyDefinitionsResponse</code></summary>
 <dl>
 <dd>
@@ -8769,6 +8809,78 @@ client.companies().countEntityKeyDefinitions(
 <dd>
 
 **q:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.companies.countEntityKeys() -> CountEntityKeysResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().countEntityKeys(
+    CountEntityKeysRequest
+        .builder()
+        .definitionId("definition_id")
+        .entityType(EntityType.COMPANY)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**definitionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**entityType:** `Optional<EntityType>` 
     
 </dd>
 </dl>

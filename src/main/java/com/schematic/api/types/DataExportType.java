@@ -12,6 +12,8 @@ public final class DataExportType {
 
     public static final DataExportType AUDIT_LOG = new DataExportType(Value.AUDIT_LOG, "audit-log");
 
+    public static final DataExportType EVENT = new DataExportType(Value.EVENT, "event");
+
     private final Value value;
 
     private final String string;
@@ -48,6 +50,8 @@ public final class DataExportType {
                 return visitor.visitCompanyFeatureUsage();
             case AUDIT_LOG:
                 return visitor.visitAuditLog();
+            case EVENT:
+                return visitor.visitEvent();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -61,6 +65,8 @@ public final class DataExportType {
                 return COMPANY_FEATURE_USAGE;
             case "audit-log":
                 return AUDIT_LOG;
+            case "event":
+                return EVENT;
             default:
                 return new DataExportType(Value.UNKNOWN, value);
         }
@@ -71,6 +77,8 @@ public final class DataExportType {
 
         COMPANY_FEATURE_USAGE,
 
+        EVENT,
+
         UNKNOWN
     }
 
@@ -78,6 +86,8 @@ public final class DataExportType {
         T visitAuditLog();
 
         T visitCompanyFeatureUsage();
+
+        T visitEvent();
 
         T visitUnknown(String unknownType);
     }
