@@ -60,7 +60,7 @@ public final class BillingCreditView {
 
     private final Optional<String> pricePerUnitDecimal;
 
-    private final Optional<BillingProductResponseData> product;
+    private final Optional<BillingProductRecordResponseData> product;
 
     private final Optional<String> singularName;
 
@@ -87,7 +87,7 @@ public final class BillingCreditView {
             Optional<BillingPriceView> price,
             Optional<Long> pricePerUnit,
             Optional<String> pricePerUnitDecimal,
-            Optional<BillingProductResponseData> product,
+            Optional<BillingProductRecordResponseData> product,
             Optional<String> singularName,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -206,7 +206,7 @@ public final class BillingCreditView {
     }
 
     @JsonProperty("product")
-    public Optional<BillingProductResponseData> getProduct() {
+    public Optional<BillingProductRecordResponseData> getProduct() {
         return product;
     }
 
@@ -377,9 +377,9 @@ public final class BillingCreditView {
 
         _FinalStage pricePerUnitDecimal(String pricePerUnitDecimal);
 
-        _FinalStage product(Optional<BillingProductResponseData> product);
+        _FinalStage product(Optional<BillingProductRecordResponseData> product);
 
-        _FinalStage product(BillingProductResponseData product);
+        _FinalStage product(BillingProductRecordResponseData product);
 
         _FinalStage singularName(Optional<String> singularName);
 
@@ -427,7 +427,7 @@ public final class BillingCreditView {
 
         private Optional<String> singularName = Optional.empty();
 
-        private Optional<BillingProductResponseData> product = Optional.empty();
+        private Optional<BillingProductRecordResponseData> product = Optional.empty();
 
         private Optional<String> pricePerUnitDecimal = Optional.empty();
 
@@ -573,14 +573,14 @@ public final class BillingCreditView {
         }
 
         @java.lang.Override
-        public _FinalStage product(BillingProductResponseData product) {
+        public _FinalStage product(BillingProductRecordResponseData product) {
             this.product = Optional.ofNullable(product);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "product", nulls = Nulls.SKIP)
-        public _FinalStage product(Optional<BillingProductResponseData> product) {
+        public _FinalStage product(Optional<BillingProductRecordResponseData> product) {
             this.product = product;
             return this;
         }

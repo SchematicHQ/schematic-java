@@ -28,7 +28,7 @@ public final class FeatureView {
 
     private final Optional<BillingLinkedResourceResponseData> billingLinkedResource;
 
-    private final Optional<BillingProductResponseData> billingProduct;
+    private final Optional<BillingProductRecordResponseData> billingProduct;
 
     private final OffsetDateTime createdAt;
 
@@ -71,7 +71,7 @@ public final class FeatureView {
     private FeatureView(
             String accountId,
             Optional<BillingLinkedResourceResponseData> billingLinkedResource,
-            Optional<BillingProductResponseData> billingProduct,
+            Optional<BillingProductRecordResponseData> billingProduct,
             OffsetDateTime createdAt,
             String description,
             Optional<String> eventSubtype,
@@ -126,7 +126,7 @@ public final class FeatureView {
     }
 
     @JsonProperty("billing_product")
-    public Optional<BillingProductResponseData> getBillingProduct() {
+    public Optional<BillingProductRecordResponseData> getBillingProduct() {
         return billingProduct;
     }
 
@@ -335,9 +335,9 @@ public final class FeatureView {
 
         _FinalStage billingLinkedResource(BillingLinkedResourceResponseData billingLinkedResource);
 
-        _FinalStage billingProduct(Optional<BillingProductResponseData> billingProduct);
+        _FinalStage billingProduct(Optional<BillingProductRecordResponseData> billingProduct);
 
-        _FinalStage billingProduct(BillingProductResponseData billingProduct);
+        _FinalStage billingProduct(BillingProductRecordResponseData billingProduct);
 
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
@@ -437,7 +437,7 @@ public final class FeatureView {
 
         private Optional<String> eventSubtype = Optional.empty();
 
-        private Optional<BillingProductResponseData> billingProduct = Optional.empty();
+        private Optional<BillingProductRecordResponseData> billingProduct = Optional.empty();
 
         private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
 
@@ -694,14 +694,14 @@ public final class FeatureView {
         }
 
         @java.lang.Override
-        public _FinalStage billingProduct(BillingProductResponseData billingProduct) {
+        public _FinalStage billingProduct(BillingProductRecordResponseData billingProduct) {
             this.billingProduct = Optional.ofNullable(billingProduct);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "billing_product", nulls = Nulls.SKIP)
-        public _FinalStage billingProduct(Optional<BillingProductResponseData> billingProduct) {
+        public _FinalStage billingProduct(Optional<BillingProductRecordResponseData> billingProduct) {
             this.billingProduct = billingProduct;
             return this;
         }

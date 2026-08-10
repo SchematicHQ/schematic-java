@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ public final class CompanyFeatureUsageExportMetadata {
 
     private final Optional<List<String>> creditTypeIds;
 
-    private final List<String> featureIds;
+    private final Optional<List<String>> featureIds;
 
     private final Optional<Boolean> hasScheduledDowngrade;
 
@@ -42,9 +41,15 @@ public final class CompanyFeatureUsageExportMetadata {
 
     private final Optional<String> q;
 
+    private final Optional<String> sortOrderColumn;
+
+    private final Optional<CompanyFeatureUsageExportMetadataSortOrderDirection> sortOrderDirection;
+
     private final Optional<List<String>> subscriptionStatuses;
 
     private final Optional<List<String>> subscriptionTypes;
+
+    private final Optional<List<CompanyFeatureUsageExportMetadataVisibleColumnsItem>> visibleColumns;
 
     private final Optional<String> withEntitlementFor;
 
@@ -61,7 +66,7 @@ public final class CompanyFeatureUsageExportMetadata {
     private CompanyFeatureUsageExportMetadata(
             Optional<List<String>> companyIds,
             Optional<List<String>> creditTypeIds,
-            List<String> featureIds,
+            Optional<List<String>> featureIds,
             Optional<Boolean> hasScheduledDowngrade,
             Optional<Boolean> monetizedSubscriptions,
             Optional<List<String>> notificationEmailRecipientEmailAddresses,
@@ -69,8 +74,11 @@ public final class CompanyFeatureUsageExportMetadata {
             Optional<List<String>> planIds,
             Optional<String> planVersionId,
             Optional<String> q,
+            Optional<String> sortOrderColumn,
+            Optional<CompanyFeatureUsageExportMetadataSortOrderDirection> sortOrderDirection,
             Optional<List<String>> subscriptionStatuses,
             Optional<List<String>> subscriptionTypes,
+            Optional<List<CompanyFeatureUsageExportMetadataVisibleColumnsItem>> visibleColumns,
             Optional<String> withEntitlementFor,
             Optional<Boolean> withSubscription,
             Optional<String> withoutFeatureOverrideFor,
@@ -87,8 +95,11 @@ public final class CompanyFeatureUsageExportMetadata {
         this.planIds = planIds;
         this.planVersionId = planVersionId;
         this.q = q;
+        this.sortOrderColumn = sortOrderColumn;
+        this.sortOrderDirection = sortOrderDirection;
         this.subscriptionStatuses = subscriptionStatuses;
         this.subscriptionTypes = subscriptionTypes;
+        this.visibleColumns = visibleColumns;
         this.withEntitlementFor = withEntitlementFor;
         this.withSubscription = withSubscription;
         this.withoutFeatureOverrideFor = withoutFeatureOverrideFor;
@@ -114,10 +125,10 @@ public final class CompanyFeatureUsageExportMetadata {
     }
 
     /**
-     * @return Schematic feature IDs (starting with 'feat_') to include as usage columns; at least one is required
+     * @return Schematic feature IDs (starting with 'feat_') to include as usage columns; empty means no usage columns
      */
     @JsonProperty("feature_ids")
-    public List<String> getFeatureIds() {
+    public Optional<List<String>> getFeatureIds() {
         return featureIds;
     }
 
@@ -178,6 +189,22 @@ public final class CompanyFeatureUsageExportMetadata {
     }
 
     /**
+     * @return Column to sort the exported rows by (e.g. name, created_at, plan); defaults to name
+     */
+    @JsonProperty("sort_order_column")
+    public Optional<String> getSortOrderColumn() {
+        return sortOrderColumn;
+    }
+
+    /**
+     * @return Direction to sort the exported rows by; defaults to asc
+     */
+    @JsonProperty("sort_order_direction")
+    public Optional<CompanyFeatureUsageExportMetadataSortOrderDirection> getSortOrderDirection() {
+        return sortOrderDirection;
+    }
+
+    /**
      * @return Restrict the export to companies whose subscription has one of these statuses
      */
     @JsonProperty("subscription_statuses")
@@ -191,6 +218,14 @@ public final class CompanyFeatureUsageExportMetadata {
     @JsonProperty("subscription_types")
     public Optional<List<String>> getSubscriptionTypes() {
         return subscriptionTypes;
+    }
+
+    /**
+     * @return Company columns to include, mirroring the companies list; omit to include the plan column only
+     */
+    @JsonProperty("visible_columns")
+    public Optional<List<CompanyFeatureUsageExportMetadataVisibleColumnsItem>> getVisibleColumns() {
+        return visibleColumns;
     }
 
     /**
@@ -255,8 +290,11 @@ public final class CompanyFeatureUsageExportMetadata {
                 && planIds.equals(other.planIds)
                 && planVersionId.equals(other.planVersionId)
                 && q.equals(other.q)
+                && sortOrderColumn.equals(other.sortOrderColumn)
+                && sortOrderDirection.equals(other.sortOrderDirection)
                 && subscriptionStatuses.equals(other.subscriptionStatuses)
                 && subscriptionTypes.equals(other.subscriptionTypes)
+                && visibleColumns.equals(other.visibleColumns)
                 && withEntitlementFor.equals(other.withEntitlementFor)
                 && withSubscription.equals(other.withSubscription)
                 && withoutFeatureOverrideFor.equals(other.withoutFeatureOverrideFor)
@@ -277,8 +315,11 @@ public final class CompanyFeatureUsageExportMetadata {
                 this.planIds,
                 this.planVersionId,
                 this.q,
+                this.sortOrderColumn,
+                this.sortOrderDirection,
                 this.subscriptionStatuses,
                 this.subscriptionTypes,
+                this.visibleColumns,
                 this.withEntitlementFor,
                 this.withSubscription,
                 this.withoutFeatureOverrideFor,
@@ -301,7 +342,7 @@ public final class CompanyFeatureUsageExportMetadata {
 
         private Optional<List<String>> creditTypeIds = Optional.empty();
 
-        private List<String> featureIds = new ArrayList<>();
+        private Optional<List<String>> featureIds = Optional.empty();
 
         private Optional<Boolean> hasScheduledDowngrade = Optional.empty();
 
@@ -317,9 +358,15 @@ public final class CompanyFeatureUsageExportMetadata {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<String> sortOrderColumn = Optional.empty();
+
+        private Optional<CompanyFeatureUsageExportMetadataSortOrderDirection> sortOrderDirection = Optional.empty();
+
         private Optional<List<String>> subscriptionStatuses = Optional.empty();
 
         private Optional<List<String>> subscriptionTypes = Optional.empty();
+
+        private Optional<List<CompanyFeatureUsageExportMetadataVisibleColumnsItem>> visibleColumns = Optional.empty();
 
         private Optional<String> withEntitlementFor = Optional.empty();
 
@@ -347,8 +394,11 @@ public final class CompanyFeatureUsageExportMetadata {
             planIds(other.getPlanIds());
             planVersionId(other.getPlanVersionId());
             q(other.getQ());
+            sortOrderColumn(other.getSortOrderColumn());
+            sortOrderDirection(other.getSortOrderDirection());
             subscriptionStatuses(other.getSubscriptionStatuses());
             subscriptionTypes(other.getSubscriptionTypes());
+            visibleColumns(other.getVisibleColumns());
             withEntitlementFor(other.getWithEntitlementFor());
             withSubscription(other.getWithSubscription());
             withoutFeatureOverrideFor(other.getWithoutFeatureOverrideFor());
@@ -386,26 +436,16 @@ public final class CompanyFeatureUsageExportMetadata {
         }
 
         /**
-         * <p>Schematic feature IDs (starting with 'feat_') to include as usage columns; at least one is required</p>
+         * <p>Schematic feature IDs (starting with 'feat_') to include as usage columns; empty means no usage columns</p>
          */
         @JsonSetter(value = "feature_ids", nulls = Nulls.SKIP)
+        public Builder featureIds(Optional<List<String>> featureIds) {
+            this.featureIds = featureIds;
+            return this;
+        }
+
         public Builder featureIds(List<String> featureIds) {
-            this.featureIds.clear();
-            if (featureIds != null) {
-                this.featureIds.addAll(featureIds);
-            }
-            return this;
-        }
-
-        public Builder addFeatureIds(String featureIds) {
-            this.featureIds.add(featureIds);
-            return this;
-        }
-
-        public Builder addAllFeatureIds(List<String> featureIds) {
-            if (featureIds != null) {
-                this.featureIds.addAll(featureIds);
-            }
+            this.featureIds = Optional.ofNullable(featureIds);
             return this;
         }
 
@@ -510,6 +550,35 @@ public final class CompanyFeatureUsageExportMetadata {
         }
 
         /**
+         * <p>Column to sort the exported rows by (e.g. name, created_at, plan); defaults to name</p>
+         */
+        @JsonSetter(value = "sort_order_column", nulls = Nulls.SKIP)
+        public Builder sortOrderColumn(Optional<String> sortOrderColumn) {
+            this.sortOrderColumn = sortOrderColumn;
+            return this;
+        }
+
+        public Builder sortOrderColumn(String sortOrderColumn) {
+            this.sortOrderColumn = Optional.ofNullable(sortOrderColumn);
+            return this;
+        }
+
+        /**
+         * <p>Direction to sort the exported rows by; defaults to asc</p>
+         */
+        @JsonSetter(value = "sort_order_direction", nulls = Nulls.SKIP)
+        public Builder sortOrderDirection(
+                Optional<CompanyFeatureUsageExportMetadataSortOrderDirection> sortOrderDirection) {
+            this.sortOrderDirection = sortOrderDirection;
+            return this;
+        }
+
+        public Builder sortOrderDirection(CompanyFeatureUsageExportMetadataSortOrderDirection sortOrderDirection) {
+            this.sortOrderDirection = Optional.ofNullable(sortOrderDirection);
+            return this;
+        }
+
+        /**
          * <p>Restrict the export to companies whose subscription has one of these statuses</p>
          */
         @JsonSetter(value = "subscription_statuses", nulls = Nulls.SKIP)
@@ -534,6 +603,21 @@ public final class CompanyFeatureUsageExportMetadata {
 
         public Builder subscriptionTypes(List<String> subscriptionTypes) {
             this.subscriptionTypes = Optional.ofNullable(subscriptionTypes);
+            return this;
+        }
+
+        /**
+         * <p>Company columns to include, mirroring the companies list; omit to include the plan column only</p>
+         */
+        @JsonSetter(value = "visible_columns", nulls = Nulls.SKIP)
+        public Builder visibleColumns(
+                Optional<List<CompanyFeatureUsageExportMetadataVisibleColumnsItem>> visibleColumns) {
+            this.visibleColumns = visibleColumns;
+            return this;
+        }
+
+        public Builder visibleColumns(List<CompanyFeatureUsageExportMetadataVisibleColumnsItem> visibleColumns) {
+            this.visibleColumns = Optional.ofNullable(visibleColumns);
             return this;
         }
 
@@ -619,8 +703,11 @@ public final class CompanyFeatureUsageExportMetadata {
                     planIds,
                     planVersionId,
                     q,
+                    sortOrderColumn,
+                    sortOrderDirection,
                     subscriptionStatuses,
                     subscriptionTypes,
+                    visibleColumns,
                     withEntitlementFor,
                     withSubscription,
                     withoutFeatureOverrideFor,

@@ -34,12 +34,20 @@ public final class DataExportMetadata {
         return new DataExportMetadata(new CompanyFeatureUsageValue(value));
     }
 
+    public static DataExportMetadata event(EventExportMetadata value) {
+        return new DataExportMetadata(new EventValue(value));
+    }
+
     public boolean isAuditLog() {
         return value instanceof AuditLogValue;
     }
 
     public boolean isCompanyFeatureUsage() {
         return value instanceof CompanyFeatureUsageValue;
+    }
+
+    public boolean isEvent() {
+        return value instanceof EventValue;
     }
 
     public boolean _isUnknown() {
@@ -56,6 +64,13 @@ public final class DataExportMetadata {
     public Optional<CompanyFeatureUsageExportMetadata> getCompanyFeatureUsage() {
         if (isCompanyFeatureUsage()) {
             return Optional.of(((CompanyFeatureUsageValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<EventExportMetadata> getEvent() {
+        if (isEvent()) {
+            return Optional.of(((EventValue) value).value);
         }
         return Optional.empty();
     }
@@ -93,6 +108,8 @@ public final class DataExportMetadata {
 
         T visitCompanyFeatureUsage(CompanyFeatureUsageExportMetadata companyFeatureUsage);
 
+        T visitEvent(EventExportMetadata event);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -101,7 +118,11 @@ public final class DataExportMetadata {
             property = "export_type",
             visible = true,
             defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({@JsonSubTypes.Type(AuditLogValue.class), @JsonSubTypes.Type(CompanyFeatureUsageValue.class)})
+    @JsonSubTypes({
+        @JsonSubTypes.Type(AuditLogValue.class),
+        @JsonSubTypes.Type(CompanyFeatureUsageValue.class),
+        @JsonSubTypes.Type(EventValue.class)
+    })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -173,6 +194,46 @@ public final class DataExportMetadata {
         }
 
         private boolean equalTo(CompanyFeatureUsageValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "DataExportMetadata{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("event")
+    @JsonIgnoreProperties("export_type")
+    private static final class EventValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "export_type", allowSetters = true)
+        private EventExportMetadata value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private EventValue() {}
+
+        private EventValue(EventExportMetadata value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitEvent(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof EventValue && equalTo((EventValue) other);
+        }
+
+        private boolean equalTo(EventValue other) {
             return value.equals(other.value);
         }
 
