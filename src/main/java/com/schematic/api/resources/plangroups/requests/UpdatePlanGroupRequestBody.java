@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CheckoutBundlePurchaseBehavior;
 import com.schematic.api.types.CheckoutFieldInput;
 import com.schematic.api.types.CompatiblePlans;
 import com.schematic.api.types.CustomPlanConfig;
@@ -34,11 +35,15 @@ public final class UpdatePlanGroupRequestBody {
 
     private final List<String> addOnIds;
 
+    private final CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior;
+
     private final boolean checkoutCollectAddress;
 
     private final boolean checkoutCollectEmail;
 
     private final boolean checkoutCollectPhone;
+
+    private final boolean checkoutCollectTaxId;
 
     private final Optional<List<CheckoutFieldInput>> customCheckoutFields;
 
@@ -107,9 +112,11 @@ public final class UpdatePlanGroupRequestBody {
     private UpdatePlanGroupRequestBody(
             Optional<List<CompatiblePlans>> addOnCompatibilities,
             List<String> addOnIds,
+            CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior,
             boolean checkoutCollectAddress,
             boolean checkoutCollectEmail,
             boolean checkoutCollectPhone,
+            boolean checkoutCollectTaxId,
             Optional<List<CheckoutFieldInput>> customCheckoutFields,
             Optional<CustomPlanConfig> customPlanConfig,
             Optional<String> customPlanId,
@@ -144,9 +151,11 @@ public final class UpdatePlanGroupRequestBody {
             Map<String, Object> additionalProperties) {
         this.addOnCompatibilities = addOnCompatibilities;
         this.addOnIds = addOnIds;
+        this.checkoutBundlePurchaseBehavior = checkoutBundlePurchaseBehavior;
         this.checkoutCollectAddress = checkoutCollectAddress;
         this.checkoutCollectEmail = checkoutCollectEmail;
         this.checkoutCollectPhone = checkoutCollectPhone;
+        this.checkoutCollectTaxId = checkoutCollectTaxId;
         this.customCheckoutFields = customCheckoutFields;
         this.customPlanConfig = customPlanConfig;
         this.customPlanId = customPlanId;
@@ -194,6 +203,11 @@ public final class UpdatePlanGroupRequestBody {
         return addOnIds;
     }
 
+    @JsonProperty("checkout_bundle_purchase_behavior")
+    public CheckoutBundlePurchaseBehavior getCheckoutBundlePurchaseBehavior() {
+        return checkoutBundlePurchaseBehavior;
+    }
+
     @JsonProperty("checkout_collect_address")
     public boolean getCheckoutCollectAddress() {
         return checkoutCollectAddress;
@@ -207,6 +221,11 @@ public final class UpdatePlanGroupRequestBody {
     @JsonProperty("checkout_collect_phone")
     public boolean getCheckoutCollectPhone() {
         return checkoutCollectPhone;
+    }
+
+    @JsonProperty("checkout_collect_tax_id")
+    public boolean getCheckoutCollectTaxId() {
+        return checkoutCollectTaxId;
     }
 
     @JsonProperty("custom_checkout_fields")
@@ -378,9 +397,11 @@ public final class UpdatePlanGroupRequestBody {
     private boolean equalTo(UpdatePlanGroupRequestBody other) {
         return addOnCompatibilities.equals(other.addOnCompatibilities)
                 && addOnIds.equals(other.addOnIds)
+                && checkoutBundlePurchaseBehavior.equals(other.checkoutBundlePurchaseBehavior)
                 && checkoutCollectAddress == other.checkoutCollectAddress
                 && checkoutCollectEmail == other.checkoutCollectEmail
                 && checkoutCollectPhone == other.checkoutCollectPhone
+                && checkoutCollectTaxId == other.checkoutCollectTaxId
                 && customCheckoutFields.equals(other.customCheckoutFields)
                 && customPlanConfig.equals(other.customPlanConfig)
                 && customPlanId.equals(other.customPlanId)
@@ -419,9 +440,11 @@ public final class UpdatePlanGroupRequestBody {
         return Objects.hash(
                 this.addOnCompatibilities,
                 this.addOnIds,
+                this.checkoutBundlePurchaseBehavior,
                 this.checkoutCollectAddress,
                 this.checkoutCollectEmail,
                 this.checkoutCollectPhone,
+                this.checkoutCollectTaxId,
                 this.customCheckoutFields,
                 this.customPlanConfig,
                 this.customPlanId,
@@ -460,14 +483,19 @@ public final class UpdatePlanGroupRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static CheckoutCollectAddressStage builder() {
+    public static CheckoutBundlePurchaseBehaviorStage builder() {
         return new Builder();
+    }
+
+    public interface CheckoutBundlePurchaseBehaviorStage {
+        CheckoutCollectAddressStage checkoutBundlePurchaseBehavior(
+                @NotNull CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior);
+
+        Builder from(UpdatePlanGroupRequestBody other);
     }
 
     public interface CheckoutCollectAddressStage {
         CheckoutCollectEmailStage checkoutCollectAddress(boolean checkoutCollectAddress);
-
-        Builder from(UpdatePlanGroupRequestBody other);
     }
 
     public interface CheckoutCollectEmailStage {
@@ -475,7 +503,11 @@ public final class UpdatePlanGroupRequestBody {
     }
 
     public interface CheckoutCollectPhoneStage {
-        EnableTaxCollectionStage checkoutCollectPhone(boolean checkoutCollectPhone);
+        CheckoutCollectTaxIdStage checkoutCollectPhone(boolean checkoutCollectPhone);
+    }
+
+    public interface CheckoutCollectTaxIdStage {
+        EnableTaxCollectionStage checkoutCollectTaxId(boolean checkoutCollectTaxId);
     }
 
     public interface EnableTaxCollectionStage {
@@ -631,9 +663,11 @@ public final class UpdatePlanGroupRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CheckoutCollectAddressStage,
+            implements CheckoutBundlePurchaseBehaviorStage,
+                    CheckoutCollectAddressStage,
                     CheckoutCollectEmailStage,
                     CheckoutCollectPhoneStage,
+                    CheckoutCollectTaxIdStage,
                     EnableTaxCollectionStage,
                     OptInEnabledStage,
                     PreventDowngradesWhenOverLimitStage,
@@ -647,11 +681,15 @@ public final class UpdatePlanGroupRequestBody {
                     ShowZeroPriceAsFreeStage,
                     SyncCustomerBillingDetailsStage,
                     _FinalStage {
+        private CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior;
+
         private boolean checkoutCollectAddress;
 
         private boolean checkoutCollectEmail;
 
         private boolean checkoutCollectPhone;
+
+        private boolean checkoutCollectTaxId;
 
         private boolean enableTaxCollection;
 
@@ -728,9 +766,11 @@ public final class UpdatePlanGroupRequestBody {
         public Builder from(UpdatePlanGroupRequestBody other) {
             addOnCompatibilities(other.getAddOnCompatibilities());
             addOnIds(other.getAddOnIds());
+            checkoutBundlePurchaseBehavior(other.getCheckoutBundlePurchaseBehavior());
             checkoutCollectAddress(other.getCheckoutCollectAddress());
             checkoutCollectEmail(other.getCheckoutCollectEmail());
             checkoutCollectPhone(other.getCheckoutCollectPhone());
+            checkoutCollectTaxId(other.getCheckoutCollectTaxId());
             customCheckoutFields(other.getCustomCheckoutFields());
             customPlanConfig(other.getCustomPlanConfig());
             customPlanId(other.getCustomPlanId());
@@ -766,6 +806,15 @@ public final class UpdatePlanGroupRequestBody {
         }
 
         @java.lang.Override
+        @JsonSetter("checkout_bundle_purchase_behavior")
+        public CheckoutCollectAddressStage checkoutBundlePurchaseBehavior(
+                @NotNull CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior) {
+            this.checkoutBundlePurchaseBehavior = Objects.requireNonNull(
+                    checkoutBundlePurchaseBehavior, "checkoutBundlePurchaseBehavior must not be null");
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("checkout_collect_address")
         public CheckoutCollectEmailStage checkoutCollectAddress(boolean checkoutCollectAddress) {
             this.checkoutCollectAddress = checkoutCollectAddress;
@@ -781,8 +830,15 @@ public final class UpdatePlanGroupRequestBody {
 
         @java.lang.Override
         @JsonSetter("checkout_collect_phone")
-        public EnableTaxCollectionStage checkoutCollectPhone(boolean checkoutCollectPhone) {
+        public CheckoutCollectTaxIdStage checkoutCollectPhone(boolean checkoutCollectPhone) {
             this.checkoutCollectPhone = checkoutCollectPhone;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("checkout_collect_tax_id")
+        public EnableTaxCollectionStage checkoutCollectTaxId(boolean checkoutCollectTaxId) {
+            this.checkoutCollectTaxId = checkoutCollectTaxId;
             return this;
         }
 
@@ -1206,9 +1262,11 @@ public final class UpdatePlanGroupRequestBody {
             return new UpdatePlanGroupRequestBody(
                     addOnCompatibilities,
                     addOnIds,
+                    checkoutBundlePurchaseBehavior,
                     checkoutCollectAddress,
                     checkoutCollectEmail,
                     checkoutCollectPhone,
+                    checkoutCollectTaxId,
                     customCheckoutFields,
                     customPlanConfig,
                     customPlanId,

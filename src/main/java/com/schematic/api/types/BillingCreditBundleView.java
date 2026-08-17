@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public final class BillingCreditBundleView {
     private final String bundleType;
 
+    private final List<String> compatiblePlanIds;
+
     private final OffsetDateTime createdAt;
 
     private final Optional<String> creditDescription;
@@ -68,6 +70,7 @@ public final class BillingCreditBundleView {
 
     private BillingCreditBundleView(
             String bundleType,
+            List<String> compatiblePlanIds,
             OffsetDateTime createdAt,
             Optional<String> creditDescription,
             Optional<String> creditIcon,
@@ -89,6 +92,7 @@ public final class BillingCreditBundleView {
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.bundleType = bundleType;
+        this.compatiblePlanIds = compatiblePlanIds;
         this.createdAt = createdAt;
         this.creditDescription = creditDescription;
         this.creditIcon = creditIcon;
@@ -114,6 +118,11 @@ public final class BillingCreditBundleView {
     @JsonProperty("bundle_type")
     public String getBundleType() {
         return bundleType;
+    }
+
+    @JsonProperty("compatible_plan_ids")
+    public List<String> getCompatiblePlanIds() {
+        return compatiblePlanIds;
     }
 
     @JsonProperty("created_at")
@@ -224,6 +233,7 @@ public final class BillingCreditBundleView {
 
     private boolean equalTo(BillingCreditBundleView other) {
         return bundleType.equals(other.bundleType)
+                && compatiblePlanIds.equals(other.compatiblePlanIds)
                 && createdAt.equals(other.createdAt)
                 && creditDescription.equals(other.creditDescription)
                 && creditIcon.equals(other.creditIcon)
@@ -249,6 +259,7 @@ public final class BillingCreditBundleView {
     public int hashCode() {
         return Objects.hash(
                 this.bundleType,
+                this.compatiblePlanIds,
                 this.createdAt,
                 this.creditDescription,
                 this.creditIcon,
@@ -331,6 +342,12 @@ public final class BillingCreditBundleView {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage compatiblePlanIds(List<String> compatiblePlanIds);
+
+        _FinalStage addCompatiblePlanIds(String compatiblePlanIds);
+
+        _FinalStage addAllCompatiblePlanIds(List<String> compatiblePlanIds);
 
         _FinalStage creditDescription(Optional<String> creditDescription);
 
@@ -425,6 +442,8 @@ public final class BillingCreditBundleView {
 
         private Optional<String> creditDescription = Optional.empty();
 
+        private List<String> compatiblePlanIds = new ArrayList<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -433,6 +452,7 @@ public final class BillingCreditBundleView {
         @java.lang.Override
         public Builder from(BillingCreditBundleView other) {
             bundleType(other.getBundleType());
+            compatiblePlanIds(other.getCompatiblePlanIds());
             createdAt(other.getCreatedAt());
             creditDescription(other.getCreditDescription());
             creditIcon(other.getCreditIcon());
@@ -661,9 +681,34 @@ public final class BillingCreditBundleView {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCompatiblePlanIds(List<String> compatiblePlanIds) {
+            if (compatiblePlanIds != null) {
+                this.compatiblePlanIds.addAll(compatiblePlanIds);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCompatiblePlanIds(String compatiblePlanIds) {
+            this.compatiblePlanIds.add(compatiblePlanIds);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "compatible_plan_ids", nulls = Nulls.SKIP)
+        public _FinalStage compatiblePlanIds(List<String> compatiblePlanIds) {
+            this.compatiblePlanIds.clear();
+            if (compatiblePlanIds != null) {
+                this.compatiblePlanIds.addAll(compatiblePlanIds);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public BillingCreditBundleView build() {
             return new BillingCreditBundleView(
                     bundleType,
+                    compatiblePlanIds,
                     createdAt,
                     creditDescription,
                     creditIcon,

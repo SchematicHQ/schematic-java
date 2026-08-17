@@ -13,41 +13,45 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.PlanType;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PreviewMigrationRequestBody.Builder.class)
 public final class PreviewMigrationRequestBody {
-    private final List<String> companyIds;
+    private final Optional<List<String>> companyIds;
 
     private final String planId;
 
     private final String planVersionIdTo;
+
+    private final Optional<List<String>> planVersionIdsFrom;
 
     private final PlanType targetPlanType;
 
     private final Map<String, Object> additionalProperties;
 
     private PreviewMigrationRequestBody(
-            List<String> companyIds,
+            Optional<List<String>> companyIds,
             String planId,
             String planVersionIdTo,
+            Optional<List<String>> planVersionIdsFrom,
             PlanType targetPlanType,
             Map<String, Object> additionalProperties) {
         this.companyIds = companyIds;
         this.planId = planId;
         this.planVersionIdTo = planVersionIdTo;
+        this.planVersionIdsFrom = planVersionIdsFrom;
         this.targetPlanType = targetPlanType;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("company_ids")
-    public List<String> getCompanyIds() {
+    public Optional<List<String>> getCompanyIds() {
         return companyIds;
     }
 
@@ -59,6 +63,11 @@ public final class PreviewMigrationRequestBody {
     @JsonProperty("plan_version_id_to")
     public String getPlanVersionIdTo() {
         return planVersionIdTo;
+    }
+
+    @JsonProperty("plan_version_ids_from")
+    public Optional<List<String>> getPlanVersionIdsFrom() {
+        return planVersionIdsFrom;
     }
 
     @JsonProperty("target_plan_type")
@@ -81,12 +90,14 @@ public final class PreviewMigrationRequestBody {
         return companyIds.equals(other.companyIds)
                 && planId.equals(other.planId)
                 && planVersionIdTo.equals(other.planVersionIdTo)
+                && planVersionIdsFrom.equals(other.planVersionIdsFrom)
                 && targetPlanType.equals(other.targetPlanType);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyIds, this.planId, this.planVersionIdTo, this.targetPlanType);
+        return Objects.hash(
+                this.companyIds, this.planId, this.planVersionIdTo, this.planVersionIdsFrom, this.targetPlanType);
     }
 
     @java.lang.Override
@@ -119,11 +130,13 @@ public final class PreviewMigrationRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage companyIds(Optional<List<String>> companyIds);
+
         _FinalStage companyIds(List<String> companyIds);
 
-        _FinalStage addCompanyIds(String companyIds);
+        _FinalStage planVersionIdsFrom(Optional<List<String>> planVersionIdsFrom);
 
-        _FinalStage addAllCompanyIds(List<String> companyIds);
+        _FinalStage planVersionIdsFrom(List<String> planVersionIdsFrom);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -134,7 +147,9 @@ public final class PreviewMigrationRequestBody {
 
         private PlanType targetPlanType;
 
-        private List<String> companyIds = new ArrayList<>();
+        private Optional<List<String>> planVersionIdsFrom = Optional.empty();
+
+        private Optional<List<String>> companyIds = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -146,6 +161,7 @@ public final class PreviewMigrationRequestBody {
             companyIds(other.getCompanyIds());
             planId(other.getPlanId());
             planVersionIdTo(other.getPlanVersionIdTo());
+            planVersionIdsFrom(other.getPlanVersionIdsFrom());
             targetPlanType(other.getTargetPlanType());
             return this;
         }
@@ -172,33 +188,35 @@ public final class PreviewMigrationRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage addAllCompanyIds(List<String> companyIds) {
-            if (companyIds != null) {
-                this.companyIds.addAll(companyIds);
-            }
+        public _FinalStage planVersionIdsFrom(List<String> planVersionIdsFrom) {
+            this.planVersionIdsFrom = Optional.ofNullable(planVersionIdsFrom);
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage addCompanyIds(String companyIds) {
-            this.companyIds.add(companyIds);
+        @JsonSetter(value = "plan_version_ids_from", nulls = Nulls.SKIP)
+        public _FinalStage planVersionIdsFrom(Optional<List<String>> planVersionIdsFrom) {
+            this.planVersionIdsFrom = planVersionIdsFrom;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage companyIds(List<String> companyIds) {
+            this.companyIds = Optional.ofNullable(companyIds);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
-        public _FinalStage companyIds(List<String> companyIds) {
-            this.companyIds.clear();
-            if (companyIds != null) {
-                this.companyIds.addAll(companyIds);
-            }
+        public _FinalStage companyIds(Optional<List<String>> companyIds) {
+            this.companyIds = companyIds;
             return this;
         }
 
         @java.lang.Override
         public PreviewMigrationRequestBody build() {
             return new PreviewMigrationRequestBody(
-                    companyIds, planId, planVersionIdTo, targetPlanType, additionalProperties);
+                    companyIds, planId, planVersionIdTo, planVersionIdsFrom, targetPlanType, additionalProperties);
         }
 
         @java.lang.Override

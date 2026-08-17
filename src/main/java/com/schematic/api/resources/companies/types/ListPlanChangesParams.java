@@ -35,8 +35,6 @@ public final class ListPlanChangesParams {
 
     private final Optional<Long> offset;
 
-    private final Optional<List<String>> planIds;
-
     private final Map<String, Object> additionalProperties;
 
     private ListPlanChangesParams(
@@ -46,7 +44,6 @@ public final class ListPlanChangesParams {
             Optional<List<String>> companyIds,
             Optional<Long> limit,
             Optional<Long> offset,
-            Optional<List<String>> planIds,
             Map<String, Object> additionalProperties) {
         this.action = action;
         this.basePlanAction = basePlanAction;
@@ -54,7 +51,6 @@ public final class ListPlanChangesParams {
         this.companyIds = companyIds;
         this.limit = limit;
         this.offset = offset;
-        this.planIds = planIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -94,11 +90,6 @@ public final class ListPlanChangesParams {
         return offset;
     }
 
-    @JsonProperty("plan_ids")
-    public Optional<List<String>> getPlanIds() {
-        return planIds;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -116,20 +107,12 @@ public final class ListPlanChangesParams {
                 && companyId.equals(other.companyId)
                 && companyIds.equals(other.companyIds)
                 && limit.equals(other.limit)
-                && offset.equals(other.offset)
-                && planIds.equals(other.planIds);
+                && offset.equals(other.offset);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.action,
-                this.basePlanAction,
-                this.companyId,
-                this.companyIds,
-                this.limit,
-                this.offset,
-                this.planIds);
+        return Objects.hash(this.action, this.basePlanAction, this.companyId, this.companyIds, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -155,8 +138,6 @@ public final class ListPlanChangesParams {
 
         private Optional<Long> offset = Optional.empty();
 
-        private Optional<List<String>> planIds = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -169,7 +150,6 @@ public final class ListPlanChangesParams {
             companyIds(other.getCompanyIds());
             limit(other.getLimit());
             offset(other.getOffset());
-            planIds(other.getPlanIds());
             return this;
         }
 
@@ -245,20 +225,9 @@ public final class ListPlanChangesParams {
             return this;
         }
 
-        @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
-        public Builder planIds(Optional<List<String>> planIds) {
-            this.planIds = planIds;
-            return this;
-        }
-
-        public Builder planIds(List<String> planIds) {
-            this.planIds = Optional.ofNullable(planIds);
-            return this;
-        }
-
         public ListPlanChangesParams build() {
             return new ListPlanChangesParams(
-                    action, basePlanAction, companyId, companyIds, limit, offset, planIds, additionalProperties);
+                    action, basePlanAction, companyId, companyIds, limit, offset, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -19,11 +19,15 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ComponentCheckoutSettings.Builder.class)
 public final class ComponentCheckoutSettings {
+    private final CheckoutBundlePurchaseBehavior bundlePurchaseBehavior;
+
     private final boolean collectAddress;
 
     private final boolean collectEmail;
 
     private final boolean collectPhone;
+
+    private final boolean collectTaxId;
 
     private final ProrationBehavior prorationBehavior;
 
@@ -32,18 +36,27 @@ public final class ComponentCheckoutSettings {
     private final Map<String, Object> additionalProperties;
 
     private ComponentCheckoutSettings(
+            CheckoutBundlePurchaseBehavior bundlePurchaseBehavior,
             boolean collectAddress,
             boolean collectEmail,
             boolean collectPhone,
+            boolean collectTaxId,
             ProrationBehavior prorationBehavior,
             boolean taxCollectionEnabled,
             Map<String, Object> additionalProperties) {
+        this.bundlePurchaseBehavior = bundlePurchaseBehavior;
         this.collectAddress = collectAddress;
         this.collectEmail = collectEmail;
         this.collectPhone = collectPhone;
+        this.collectTaxId = collectTaxId;
         this.prorationBehavior = prorationBehavior;
         this.taxCollectionEnabled = taxCollectionEnabled;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("bundle_purchase_behavior")
+    public CheckoutBundlePurchaseBehavior getBundlePurchaseBehavior() {
+        return bundlePurchaseBehavior;
     }
 
     @JsonProperty("collect_address")
@@ -59,6 +72,11 @@ public final class ComponentCheckoutSettings {
     @JsonProperty("collect_phone")
     public boolean getCollectPhone() {
         return collectPhone;
+    }
+
+    @JsonProperty("collect_tax_id")
+    public boolean getCollectTaxId() {
+        return collectTaxId;
     }
 
     @JsonProperty("proration_behavior")
@@ -83,9 +101,11 @@ public final class ComponentCheckoutSettings {
     }
 
     private boolean equalTo(ComponentCheckoutSettings other) {
-        return collectAddress == other.collectAddress
+        return bundlePurchaseBehavior.equals(other.bundlePurchaseBehavior)
+                && collectAddress == other.collectAddress
                 && collectEmail == other.collectEmail
                 && collectPhone == other.collectPhone
+                && collectTaxId == other.collectTaxId
                 && prorationBehavior.equals(other.prorationBehavior)
                 && taxCollectionEnabled == other.taxCollectionEnabled;
     }
@@ -93,9 +113,11 @@ public final class ComponentCheckoutSettings {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.bundlePurchaseBehavior,
                 this.collectAddress,
                 this.collectEmail,
                 this.collectPhone,
+                this.collectTaxId,
                 this.prorationBehavior,
                 this.taxCollectionEnabled);
     }
@@ -105,14 +127,18 @@ public final class ComponentCheckoutSettings {
         return ObjectMappers.stringify(this);
     }
 
-    public static CollectAddressStage builder() {
+    public static BundlePurchaseBehaviorStage builder() {
         return new Builder();
+    }
+
+    public interface BundlePurchaseBehaviorStage {
+        CollectAddressStage bundlePurchaseBehavior(@NotNull CheckoutBundlePurchaseBehavior bundlePurchaseBehavior);
+
+        Builder from(ComponentCheckoutSettings other);
     }
 
     public interface CollectAddressStage {
         CollectEmailStage collectAddress(boolean collectAddress);
-
-        Builder from(ComponentCheckoutSettings other);
     }
 
     public interface CollectEmailStage {
@@ -120,7 +146,11 @@ public final class ComponentCheckoutSettings {
     }
 
     public interface CollectPhoneStage {
-        ProrationBehaviorStage collectPhone(boolean collectPhone);
+        CollectTaxIdStage collectPhone(boolean collectPhone);
+    }
+
+    public interface CollectTaxIdStage {
+        ProrationBehaviorStage collectTaxId(boolean collectTaxId);
     }
 
     public interface ProrationBehaviorStage {
@@ -141,17 +171,23 @@ public final class ComponentCheckoutSettings {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CollectAddressStage,
+            implements BundlePurchaseBehaviorStage,
+                    CollectAddressStage,
                     CollectEmailStage,
                     CollectPhoneStage,
+                    CollectTaxIdStage,
                     ProrationBehaviorStage,
                     TaxCollectionEnabledStage,
                     _FinalStage {
+        private CheckoutBundlePurchaseBehavior bundlePurchaseBehavior;
+
         private boolean collectAddress;
 
         private boolean collectEmail;
 
         private boolean collectPhone;
+
+        private boolean collectTaxId;
 
         private ProrationBehavior prorationBehavior;
 
@@ -164,11 +200,22 @@ public final class ComponentCheckoutSettings {
 
         @java.lang.Override
         public Builder from(ComponentCheckoutSettings other) {
+            bundlePurchaseBehavior(other.getBundlePurchaseBehavior());
             collectAddress(other.getCollectAddress());
             collectEmail(other.getCollectEmail());
             collectPhone(other.getCollectPhone());
+            collectTaxId(other.getCollectTaxId());
             prorationBehavior(other.getProrationBehavior());
             taxCollectionEnabled(other.getTaxCollectionEnabled());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("bundle_purchase_behavior")
+        public CollectAddressStage bundlePurchaseBehavior(
+                @NotNull CheckoutBundlePurchaseBehavior bundlePurchaseBehavior) {
+            this.bundlePurchaseBehavior =
+                    Objects.requireNonNull(bundlePurchaseBehavior, "bundlePurchaseBehavior must not be null");
             return this;
         }
 
@@ -188,8 +235,15 @@ public final class ComponentCheckoutSettings {
 
         @java.lang.Override
         @JsonSetter("collect_phone")
-        public ProrationBehaviorStage collectPhone(boolean collectPhone) {
+        public CollectTaxIdStage collectPhone(boolean collectPhone) {
             this.collectPhone = collectPhone;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("collect_tax_id")
+        public ProrationBehaviorStage collectTaxId(boolean collectTaxId) {
+            this.collectTaxId = collectTaxId;
             return this;
         }
 
@@ -210,9 +264,11 @@ public final class ComponentCheckoutSettings {
         @java.lang.Override
         public ComponentCheckoutSettings build() {
             return new ComponentCheckoutSettings(
+                    bundlePurchaseBehavior,
                     collectAddress,
                     collectEmail,
                     collectPhone,
+                    collectTaxId,
                     prorationBehavior,
                     taxCollectionEnabled,
                     additionalProperties);

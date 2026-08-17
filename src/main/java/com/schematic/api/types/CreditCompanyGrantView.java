@@ -29,6 +29,8 @@ public final class CreditCompanyGrantView {
 
     private final String companyId;
 
+    private final Optional<String> companyLicenseId;
+
     private final String companyName;
 
     private final OffsetDateTime createdAt;
@@ -54,6 +56,8 @@ public final class CreditCompanyGrantView {
     private final BillingCreditGrantReason grantReason;
 
     private final String id;
+
+    private final Optional<String> licenseName;
 
     private final Optional<String> planId;
 
@@ -99,6 +103,7 @@ public final class CreditCompanyGrantView {
             Optional<String> billingCreditBundleId,
             String billingCreditId,
             String companyId,
+            Optional<String> companyLicenseId,
             String companyName,
             OffsetDateTime createdAt,
             String creditDescription,
@@ -112,6 +117,7 @@ public final class CreditCompanyGrantView {
             Optional<Long> expiryUnitCount,
             BillingCreditGrantReason grantReason,
             String id,
+            Optional<String> licenseName,
             Optional<String> planId,
             Optional<String> planName,
             Optional<String> pluralName,
@@ -135,6 +141,7 @@ public final class CreditCompanyGrantView {
         this.billingCreditBundleId = billingCreditBundleId;
         this.billingCreditId = billingCreditId;
         this.companyId = companyId;
+        this.companyLicenseId = companyLicenseId;
         this.companyName = companyName;
         this.createdAt = createdAt;
         this.creditDescription = creditDescription;
@@ -148,6 +155,7 @@ public final class CreditCompanyGrantView {
         this.expiryUnitCount = expiryUnitCount;
         this.grantReason = grantReason;
         this.id = id;
+        this.licenseName = licenseName;
         this.planId = planId;
         this.planName = planName;
         this.pluralName = pluralName;
@@ -183,6 +191,11 @@ public final class CreditCompanyGrantView {
     @JsonProperty("company_id")
     public String getCompanyId() {
         return companyId;
+    }
+
+    @JsonProperty("company_license_id")
+    public Optional<String> getCompanyLicenseId() {
+        return companyLicenseId;
     }
 
     @JsonProperty("company_name")
@@ -248,6 +261,11 @@ public final class CreditCompanyGrantView {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    @JsonProperty("license_name")
+    public Optional<String> getLicenseName() {
+        return licenseName;
     }
 
     @JsonProperty("plan_id")
@@ -360,6 +378,7 @@ public final class CreditCompanyGrantView {
         return billingCreditBundleId.equals(other.billingCreditBundleId)
                 && billingCreditId.equals(other.billingCreditId)
                 && companyId.equals(other.companyId)
+                && companyLicenseId.equals(other.companyLicenseId)
                 && companyName.equals(other.companyName)
                 && createdAt.equals(other.createdAt)
                 && creditDescription.equals(other.creditDescription)
@@ -373,6 +392,7 @@ public final class CreditCompanyGrantView {
                 && expiryUnitCount.equals(other.expiryUnitCount)
                 && grantReason.equals(other.grantReason)
                 && id.equals(other.id)
+                && licenseName.equals(other.licenseName)
                 && planId.equals(other.planId)
                 && planName.equals(other.planName)
                 && pluralName.equals(other.pluralName)
@@ -400,6 +420,7 @@ public final class CreditCompanyGrantView {
                 this.billingCreditBundleId,
                 this.billingCreditId,
                 this.companyId,
+                this.companyLicenseId,
                 this.companyName,
                 this.createdAt,
                 this.creditDescription,
@@ -413,6 +434,7 @@ public final class CreditCompanyGrantView {
                 this.expiryUnitCount,
                 this.grantReason,
                 this.id,
+                this.licenseName,
                 this.planId,
                 this.planName,
                 this.pluralName,
@@ -512,6 +534,10 @@ public final class CreditCompanyGrantView {
 
         _FinalStage billingCreditBundleId(String billingCreditBundleId);
 
+        _FinalStage companyLicenseId(Optional<String> companyLicenseId);
+
+        _FinalStage companyLicenseId(String companyLicenseId);
+
         _FinalStage creditIcon(Optional<String> creditIcon);
 
         _FinalStage creditIcon(String creditIcon);
@@ -539,6 +565,10 @@ public final class CreditCompanyGrantView {
         _FinalStage expiryUnitCount(Optional<Long> expiryUnitCount);
 
         _FinalStage expiryUnitCount(Long expiryUnitCount);
+
+        _FinalStage licenseName(Optional<String> licenseName);
+
+        _FinalStage licenseName(String licenseName);
 
         _FinalStage planId(Optional<String> planId);
 
@@ -664,6 +694,8 @@ public final class CreditCompanyGrantView {
 
         private Optional<String> planId = Optional.empty();
 
+        private Optional<String> licenseName = Optional.empty();
+
         private Optional<Long> expiryUnitCount = Optional.empty();
 
         private Optional<BillingCreditExpiryUnit> expiryUnit = Optional.empty();
@@ -678,6 +710,8 @@ public final class CreditCompanyGrantView {
 
         private Optional<String> creditIcon = Optional.empty();
 
+        private Optional<String> companyLicenseId = Optional.empty();
+
         private Optional<String> billingCreditBundleId = Optional.empty();
 
         @JsonAnySetter
@@ -690,6 +724,7 @@ public final class CreditCompanyGrantView {
             billingCreditBundleId(other.getBillingCreditBundleId());
             billingCreditId(other.getBillingCreditId());
             companyId(other.getCompanyId());
+            companyLicenseId(other.getCompanyLicenseId());
             companyName(other.getCompanyName());
             createdAt(other.getCreatedAt());
             creditDescription(other.getCreditDescription());
@@ -703,6 +738,7 @@ public final class CreditCompanyGrantView {
             expiryUnitCount(other.getExpiryUnitCount());
             grantReason(other.getGrantReason());
             id(other.getId());
+            licenseName(other.getLicenseName());
             planId(other.getPlanId());
             planName(other.getPlanName());
             pluralName(other.getPluralName());
@@ -993,6 +1029,19 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage licenseName(String licenseName) {
+            this.licenseName = Optional.ofNullable(licenseName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "license_name", nulls = Nulls.SKIP)
+        public _FinalStage licenseName(Optional<String> licenseName) {
+            this.licenseName = licenseName;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage expiryUnitCount(Long expiryUnitCount) {
             this.expiryUnitCount = Optional.ofNullable(expiryUnitCount);
             return this;
@@ -1084,6 +1133,19 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage companyLicenseId(String companyLicenseId) {
+            this.companyLicenseId = Optional.ofNullable(companyLicenseId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_license_id", nulls = Nulls.SKIP)
+        public _FinalStage companyLicenseId(Optional<String> companyLicenseId) {
+            this.companyLicenseId = companyLicenseId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingCreditBundleId(String billingCreditBundleId) {
             this.billingCreditBundleId = Optional.ofNullable(billingCreditBundleId);
             return this;
@@ -1102,6 +1164,7 @@ public final class CreditCompanyGrantView {
                     billingCreditBundleId,
                     billingCreditId,
                     companyId,
+                    companyLicenseId,
                     companyName,
                     createdAt,
                     creditDescription,
@@ -1115,6 +1178,7 @@ public final class CreditCompanyGrantView {
                     expiryUnitCount,
                     grantReason,
                     id,
+                    licenseName,
                     planId,
                     planName,
                     pluralName,

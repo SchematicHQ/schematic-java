@@ -24,16 +24,20 @@ public final class CompanyBillingCheckoutSettings {
 
     private final boolean collectPhone;
 
+    private final boolean collectTaxId;
+
     private final Map<String, Object> additionalProperties;
 
     private CompanyBillingCheckoutSettings(
             boolean collectAddress,
             boolean collectEmail,
             boolean collectPhone,
+            boolean collectTaxId,
             Map<String, Object> additionalProperties) {
         this.collectAddress = collectAddress;
         this.collectEmail = collectEmail;
         this.collectPhone = collectPhone;
+        this.collectTaxId = collectTaxId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -52,6 +56,11 @@ public final class CompanyBillingCheckoutSettings {
         return collectPhone;
     }
 
+    @JsonProperty("collect_tax_id")
+    public boolean getCollectTaxId() {
+        return collectTaxId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -66,12 +75,13 @@ public final class CompanyBillingCheckoutSettings {
     private boolean equalTo(CompanyBillingCheckoutSettings other) {
         return collectAddress == other.collectAddress
                 && collectEmail == other.collectEmail
-                && collectPhone == other.collectPhone;
+                && collectPhone == other.collectPhone
+                && collectTaxId == other.collectTaxId;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.collectAddress, this.collectEmail, this.collectPhone);
+        return Objects.hash(this.collectAddress, this.collectEmail, this.collectPhone, this.collectTaxId);
     }
 
     @java.lang.Override
@@ -94,7 +104,11 @@ public final class CompanyBillingCheckoutSettings {
     }
 
     public interface CollectPhoneStage {
-        _FinalStage collectPhone(boolean collectPhone);
+        CollectTaxIdStage collectPhone(boolean collectPhone);
+    }
+
+    public interface CollectTaxIdStage {
+        _FinalStage collectTaxId(boolean collectTaxId);
     }
 
     public interface _FinalStage {
@@ -107,12 +121,14 @@ public final class CompanyBillingCheckoutSettings {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CollectAddressStage, CollectEmailStage, CollectPhoneStage, _FinalStage {
+            implements CollectAddressStage, CollectEmailStage, CollectPhoneStage, CollectTaxIdStage, _FinalStage {
         private boolean collectAddress;
 
         private boolean collectEmail;
 
         private boolean collectPhone;
+
+        private boolean collectTaxId;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -124,6 +140,7 @@ public final class CompanyBillingCheckoutSettings {
             collectAddress(other.getCollectAddress());
             collectEmail(other.getCollectEmail());
             collectPhone(other.getCollectPhone());
+            collectTaxId(other.getCollectTaxId());
             return this;
         }
 
@@ -143,14 +160,22 @@ public final class CompanyBillingCheckoutSettings {
 
         @java.lang.Override
         @JsonSetter("collect_phone")
-        public _FinalStage collectPhone(boolean collectPhone) {
+        public CollectTaxIdStage collectPhone(boolean collectPhone) {
             this.collectPhone = collectPhone;
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("collect_tax_id")
+        public _FinalStage collectTaxId(boolean collectTaxId) {
+            this.collectTaxId = collectTaxId;
+            return this;
+        }
+
+        @java.lang.Override
         public CompanyBillingCheckoutSettings build() {
-            return new CompanyBillingCheckoutSettings(collectAddress, collectEmail, collectPhone, additionalProperties);
+            return new CompanyBillingCheckoutSettings(
+                    collectAddress, collectEmail, collectPhone, collectTaxId, additionalProperties);
         }
 
         @java.lang.Override

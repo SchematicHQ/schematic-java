@@ -44,6 +44,8 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final boolean canBuyBundles;
 
+    private final long companyCreditAmount;
+
     private final OffsetDateTime createdAt;
 
     private final Optional<BillingCreditResponseData> credit;
@@ -102,6 +104,7 @@ public final class BillingPlanCreditGrantResponseData {
             Optional<Long> autoTopupThresholdCredits,
             Optional<Long> autoTopupThresholdPercent,
             boolean canBuyBundles,
+            long companyCreditAmount,
             OffsetDateTime createdAt,
             Optional<BillingCreditResponseData> credit,
             long creditAmount,
@@ -136,6 +139,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.autoTopupThresholdCredits = autoTopupThresholdCredits;
         this.autoTopupThresholdPercent = autoTopupThresholdPercent;
         this.canBuyBundles = canBuyBundles;
+        this.companyCreditAmount = companyCreditAmount;
         this.createdAt = createdAt;
         this.credit = credit;
         this.creditAmount = creditAmount;
@@ -223,6 +227,14 @@ public final class BillingPlanCreditGrantResponseData {
     @JsonProperty("can_buy_bundles")
     public boolean getCanBuyBundles() {
         return canBuyBundles;
+    }
+
+    /**
+     * @return Credits granted once per company on top of the per-license amount. Always 0 when scaling is fixed.
+     */
+    @JsonProperty("company_credit_amount")
+    public long getCompanyCreditAmount() {
+        return companyCreditAmount;
     }
 
     @JsonProperty("created_at")
@@ -380,6 +392,7 @@ public final class BillingPlanCreditGrantResponseData {
                 && autoTopupThresholdCredits.equals(other.autoTopupThresholdCredits)
                 && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
                 && canBuyBundles == other.canBuyBundles
+                && companyCreditAmount == other.companyCreditAmount
                 && createdAt.equals(other.createdAt)
                 && credit.equals(other.credit)
                 && creditAmount == other.creditAmount
@@ -418,6 +431,7 @@ public final class BillingPlanCreditGrantResponseData {
                 this.autoTopupThresholdCredits,
                 this.autoTopupThresholdPercent,
                 this.canBuyBundles,
+                this.companyCreditAmount,
                 this.createdAt,
                 this.credit,
                 this.creditAmount,
@@ -475,7 +489,14 @@ public final class BillingPlanCreditGrantResponseData {
         /**
          * <p>Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.</p>
          */
-        CreatedAtStage canBuyBundles(boolean canBuyBundles);
+        CompanyCreditAmountStage canBuyBundles(boolean canBuyBundles);
+    }
+
+    public interface CompanyCreditAmountStage {
+        /**
+         * <p>Credits granted once per company on top of the per-license amount. Always 0 when scaling is fixed.</p>
+         */
+        CreatedAtStage companyCreditAmount(long companyCreditAmount);
     }
 
     public interface CreatedAtStage {
@@ -629,6 +650,7 @@ public final class BillingPlanCreditGrantResponseData {
                     AutoTopupEnabledStage,
                     AutoTopupSelfServiceStage,
                     CanBuyBundlesStage,
+                    CompanyCreditAmountStage,
                     CreatedAtStage,
                     CreditAmountStage,
                     CreditIdStage,
@@ -647,6 +669,8 @@ public final class BillingPlanCreditGrantResponseData {
         private boolean autoTopupSelfService;
 
         private boolean canBuyBundles;
+
+        private long companyCreditAmount;
 
         private OffsetDateTime createdAt;
 
@@ -724,6 +748,7 @@ public final class BillingPlanCreditGrantResponseData {
             autoTopupThresholdCredits(other.getAutoTopupThresholdCredits());
             autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
             canBuyBundles(other.getCanBuyBundles());
+            companyCreditAmount(other.getCompanyCreditAmount());
             createdAt(other.getCreatedAt());
             credit(other.getCredit());
             creditAmount(other.getCreditAmount());
@@ -786,8 +811,19 @@ public final class BillingPlanCreditGrantResponseData {
          */
         @java.lang.Override
         @JsonSetter("can_buy_bundles")
-        public CreatedAtStage canBuyBundles(boolean canBuyBundles) {
+        public CompanyCreditAmountStage canBuyBundles(boolean canBuyBundles) {
             this.canBuyBundles = canBuyBundles;
+            return this;
+        }
+
+        /**
+         * <p>Credits granted once per company on top of the per-license amount. Always 0 when scaling is fixed.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("company_credit_amount")
+        public CreatedAtStage companyCreditAmount(long companyCreditAmount) {
+            this.companyCreditAmount = companyCreditAmount;
             return this;
         }
 
@@ -1159,6 +1195,7 @@ public final class BillingPlanCreditGrantResponseData {
                     autoTopupThresholdCredits,
                     autoTopupThresholdPercent,
                     canBuyBundles,
+                    companyCreditAmount,
                     createdAt,
                     credit,
                     creditAmount,

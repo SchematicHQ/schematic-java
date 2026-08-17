@@ -44,6 +44,8 @@ public final class PlanVersionMigrationResponseData {
 
     private final List<String> planVersionIdsFrom;
 
+    private final Optional<MigrationProrationBehavior> prorationBehavior;
+
     private final long skippedCompanies;
 
     private final Optional<OffsetDateTime> startedAt;
@@ -69,6 +71,7 @@ public final class PlanVersionMigrationResponseData {
             Optional<String> planVersionIdFrom,
             String planVersionIdTo,
             List<String> planVersionIdsFrom,
+            Optional<MigrationProrationBehavior> prorationBehavior,
             long skippedCompanies,
             Optional<OffsetDateTime> startedAt,
             PlanVersionMigrationStatus status,
@@ -86,6 +89,7 @@ public final class PlanVersionMigrationResponseData {
         this.planVersionIdFrom = planVersionIdFrom;
         this.planVersionIdTo = planVersionIdTo;
         this.planVersionIdsFrom = planVersionIdsFrom;
+        this.prorationBehavior = prorationBehavior;
         this.skippedCompanies = skippedCompanies;
         this.startedAt = startedAt;
         this.status = status;
@@ -145,6 +149,11 @@ public final class PlanVersionMigrationResponseData {
         return planVersionIdsFrom;
     }
 
+    @JsonProperty("proration_behavior")
+    public Optional<MigrationProrationBehavior> getProrationBehavior() {
+        return prorationBehavior;
+    }
+
     @JsonProperty("skipped_companies")
     public long getSkippedCompanies() {
         return skippedCompanies;
@@ -197,6 +206,7 @@ public final class PlanVersionMigrationResponseData {
                 && planVersionIdFrom.equals(other.planVersionIdFrom)
                 && planVersionIdTo.equals(other.planVersionIdTo)
                 && planVersionIdsFrom.equals(other.planVersionIdsFrom)
+                && prorationBehavior.equals(other.prorationBehavior)
                 && skippedCompanies == other.skippedCompanies
                 && startedAt.equals(other.startedAt)
                 && status.equals(other.status)
@@ -218,6 +228,7 @@ public final class PlanVersionMigrationResponseData {
                 this.planVersionIdFrom,
                 this.planVersionIdTo,
                 this.planVersionIdsFrom,
+                this.prorationBehavior,
                 this.skippedCompanies,
                 this.startedAt,
                 this.status,
@@ -306,6 +317,10 @@ public final class PlanVersionMigrationResponseData {
 
         _FinalStage addAllPlanVersionIdsFrom(List<String> planVersionIdsFrom);
 
+        _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior);
+
+        _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior);
+
         _FinalStage startedAt(Optional<OffsetDateTime> startedAt);
 
         _FinalStage startedAt(OffsetDateTime startedAt);
@@ -349,6 +364,8 @@ public final class PlanVersionMigrationResponseData {
 
         private Optional<OffsetDateTime> startedAt = Optional.empty();
 
+        private Optional<MigrationProrationBehavior> prorationBehavior = Optional.empty();
+
         private List<String> planVersionIdsFrom = new ArrayList<>();
 
         private Optional<String> planVersionIdFrom = Optional.empty();
@@ -374,6 +391,7 @@ public final class PlanVersionMigrationResponseData {
             planVersionIdFrom(other.getPlanVersionIdFrom());
             planVersionIdTo(other.getPlanVersionIdTo());
             planVersionIdsFrom(other.getPlanVersionIdsFrom());
+            prorationBehavior(other.getProrationBehavior());
             skippedCompanies(other.getSkippedCompanies());
             startedAt(other.getStartedAt());
             status(other.getStatus());
@@ -474,6 +492,19 @@ public final class PlanVersionMigrationResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior) {
+            this.prorationBehavior = Optional.ofNullable(prorationBehavior);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "proration_behavior", nulls = Nulls.SKIP)
+        public _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior) {
+            this.prorationBehavior = prorationBehavior;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllPlanVersionIdsFrom(List<String> planVersionIdsFrom) {
             if (planVersionIdsFrom != null) {
                 this.planVersionIdsFrom.addAll(planVersionIdsFrom);
@@ -549,6 +580,7 @@ public final class PlanVersionMigrationResponseData {
                     planVersionIdFrom,
                     planVersionIdTo,
                     planVersionIdsFrom,
+                    prorationBehavior,
                     skippedCompanies,
                     startedAt,
                     status,

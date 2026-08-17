@@ -72,16 +72,16 @@ public class RawPlansClient {
     }
 
     public BaseSchematicHttpResponse<UpdateCompanyPlansResponse> updateCompanyPlans(
-            String companyPlanId, UpdateCompanyPlansRequestBody request) {
-        return updateCompanyPlans(companyPlanId, request, null);
+            String companyId, UpdateCompanyPlansRequestBody request) {
+        return updateCompanyPlans(companyId, request, null);
     }
 
     public BaseSchematicHttpResponse<UpdateCompanyPlansResponse> updateCompanyPlans(
-            String companyPlanId, UpdateCompanyPlansRequestBody request, RequestOptions requestOptions) {
+            String companyId, UpdateCompanyPlansRequestBody request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("company-plans")
-                .addPathSegment(companyPlanId);
+                .addPathSegment(companyId);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -179,6 +179,13 @@ public class RawPlansClient {
         if (request.getPlanId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_id", request.getPlanId().get(), false);
+        }
+        if (request.getPlanBillingSource().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "plan_billing_source",
+                    request.getPlanBillingSource().get(),
+                    false);
         }
         if (request.getStatus().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1563,26 +1570,28 @@ public class RawPlansClient {
         }
     }
 
-    public BaseSchematicHttpResponse<DeletePlanVersionResponse> deletePlanVersion(String planId) {
-        return deletePlanVersion(planId, DeletePlanVersionRequest.builder().build());
+    public BaseSchematicHttpResponse<DeletePlanVersionResponse> deletePlanVersion(String planVersionId) {
+        return deletePlanVersion(
+                planVersionId, DeletePlanVersionRequest.builder().build());
     }
 
     public BaseSchematicHttpResponse<DeletePlanVersionResponse> deletePlanVersion(
-            String planId, RequestOptions requestOptions) {
-        return deletePlanVersion(planId, DeletePlanVersionRequest.builder().build(), requestOptions);
+            String planVersionId, RequestOptions requestOptions) {
+        return deletePlanVersion(
+                planVersionId, DeletePlanVersionRequest.builder().build(), requestOptions);
     }
 
     public BaseSchematicHttpResponse<DeletePlanVersionResponse> deletePlanVersion(
-            String planId, DeletePlanVersionRequest request) {
-        return deletePlanVersion(planId, request, null);
+            String planVersionId, DeletePlanVersionRequest request) {
+        return deletePlanVersion(planVersionId, request, null);
     }
 
     public BaseSchematicHttpResponse<DeletePlanVersionResponse> deletePlanVersion(
-            String planId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
+            String planVersionId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans/version")
-                .addPathSegment(planId);
+                .addPathSegment(planVersionId);
         if (request.getPromoteArchivedVersion().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -1654,16 +1663,16 @@ public class RawPlansClient {
     }
 
     public BaseSchematicHttpResponse<PublishPlanVersionResponse> publishPlanVersion(
-            String planId, PublishPlanVersionRequestBody request) {
-        return publishPlanVersion(planId, request, null);
+            String planVersionId, PublishPlanVersionRequestBody request) {
+        return publishPlanVersion(planVersionId, request, null);
     }
 
     public BaseSchematicHttpResponse<PublishPlanVersionResponse> publishPlanVersion(
-            String planId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
+            String planVersionId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans/version")
-                .addPathSegment(planId)
+                .addPathSegment(planVersionId)
                 .addPathSegments("publish");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {

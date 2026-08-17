@@ -28,6 +28,8 @@ public final class BillingCreditBundleResponseData {
 
     private final String bundleType;
 
+    private final List<String> compatiblePlanIds;
+
     private final OffsetDateTime createdAt;
 
     private final Optional<String> creditDescription;
@@ -71,6 +73,7 @@ public final class BillingCreditBundleResponseData {
     private BillingCreditBundleResponseData(
             Optional<String> billingInvoiceId,
             String bundleType,
+            List<String> compatiblePlanIds,
             OffsetDateTime createdAt,
             Optional<String> creditDescription,
             Optional<String> creditIcon,
@@ -93,6 +96,7 @@ public final class BillingCreditBundleResponseData {
             Map<String, Object> additionalProperties) {
         this.billingInvoiceId = billingInvoiceId;
         this.bundleType = bundleType;
+        this.compatiblePlanIds = compatiblePlanIds;
         this.createdAt = createdAt;
         this.creditDescription = creditDescription;
         this.creditIcon = creditIcon;
@@ -123,6 +127,14 @@ public final class BillingCreditBundleResponseData {
     @JsonProperty("bundle_type")
     public String getBundleType() {
         return bundleType;
+    }
+
+    /**
+     * @return Plans whose companies may purchase this bundle. Empty means the bundle is purchasable on every plan.
+     */
+    @JsonProperty("compatible_plan_ids")
+    public List<String> getCompatiblePlanIds() {
+        return compatiblePlanIds;
     }
 
     @JsonProperty("created_at")
@@ -234,6 +246,7 @@ public final class BillingCreditBundleResponseData {
     private boolean equalTo(BillingCreditBundleResponseData other) {
         return billingInvoiceId.equals(other.billingInvoiceId)
                 && bundleType.equals(other.bundleType)
+                && compatiblePlanIds.equals(other.compatiblePlanIds)
                 && createdAt.equals(other.createdAt)
                 && creditDescription.equals(other.creditDescription)
                 && creditIcon.equals(other.creditIcon)
@@ -260,6 +273,7 @@ public final class BillingCreditBundleResponseData {
         return Objects.hash(
                 this.billingInvoiceId,
                 this.bundleType,
+                this.compatiblePlanIds,
                 this.createdAt,
                 this.creditDescription,
                 this.creditIcon,
@@ -346,6 +360,15 @@ public final class BillingCreditBundleResponseData {
         _FinalStage billingInvoiceId(Optional<String> billingInvoiceId);
 
         _FinalStage billingInvoiceId(String billingInvoiceId);
+
+        /**
+         * <p>Plans whose companies may purchase this bundle. Empty means the bundle is purchasable on every plan.</p>
+         */
+        _FinalStage compatiblePlanIds(List<String> compatiblePlanIds);
+
+        _FinalStage addCompatiblePlanIds(String compatiblePlanIds);
+
+        _FinalStage addAllCompatiblePlanIds(List<String> compatiblePlanIds);
 
         _FinalStage creditDescription(Optional<String> creditDescription);
 
@@ -440,6 +463,8 @@ public final class BillingCreditBundleResponseData {
 
         private Optional<String> creditDescription = Optional.empty();
 
+        private List<String> compatiblePlanIds = new ArrayList<>();
+
         private Optional<String> billingInvoiceId = Optional.empty();
 
         @JsonAnySetter
@@ -451,6 +476,7 @@ public final class BillingCreditBundleResponseData {
         public Builder from(BillingCreditBundleResponseData other) {
             billingInvoiceId(other.getBillingInvoiceId());
             bundleType(other.getBundleType());
+            compatiblePlanIds(other.getCompatiblePlanIds());
             createdAt(other.getCreatedAt());
             creditDescription(other.getCreditDescription());
             creditIcon(other.getCreditIcon());
@@ -678,6 +704,41 @@ public final class BillingCreditBundleResponseData {
             return this;
         }
 
+        /**
+         * <p>Plans whose companies may purchase this bundle. Empty means the bundle is purchasable on every plan.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllCompatiblePlanIds(List<String> compatiblePlanIds) {
+            if (compatiblePlanIds != null) {
+                this.compatiblePlanIds.addAll(compatiblePlanIds);
+            }
+            return this;
+        }
+
+        /**
+         * <p>Plans whose companies may purchase this bundle. Empty means the bundle is purchasable on every plan.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addCompatiblePlanIds(String compatiblePlanIds) {
+            this.compatiblePlanIds.add(compatiblePlanIds);
+            return this;
+        }
+
+        /**
+         * <p>Plans whose companies may purchase this bundle. Empty means the bundle is purchasable on every plan.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "compatible_plan_ids", nulls = Nulls.SKIP)
+        public _FinalStage compatiblePlanIds(List<String> compatiblePlanIds) {
+            this.compatiblePlanIds.clear();
+            if (compatiblePlanIds != null) {
+                this.compatiblePlanIds.addAll(compatiblePlanIds);
+            }
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage billingInvoiceId(String billingInvoiceId) {
             this.billingInvoiceId = Optional.ofNullable(billingInvoiceId);
@@ -696,6 +757,7 @@ public final class BillingCreditBundleResponseData {
             return new BillingCreditBundleResponseData(
                     billingInvoiceId,
                     bundleType,
+                    compatiblePlanIds,
                     createdAt,
                     creditDescription,
                     creditIcon,

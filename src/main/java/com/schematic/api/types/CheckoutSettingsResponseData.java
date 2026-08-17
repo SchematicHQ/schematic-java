@@ -16,15 +16,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CheckoutSettingsResponseData.Builder.class)
 public final class CheckoutSettingsResponseData {
+    private final CheckoutBundlePurchaseBehavior bundlePurchaseBehavior;
+
     private final boolean collectAddress;
 
     private final boolean collectEmail;
 
     private final boolean collectPhone;
+
+    private final boolean collectTaxId;
 
     private final boolean optInEnabled;
 
@@ -35,20 +40,29 @@ public final class CheckoutSettingsResponseData {
     private final Map<String, Object> additionalProperties;
 
     private CheckoutSettingsResponseData(
+            CheckoutBundlePurchaseBehavior bundlePurchaseBehavior,
             boolean collectAddress,
             boolean collectEmail,
             boolean collectPhone,
+            boolean collectTaxId,
             boolean optInEnabled,
             Optional<String> optInText,
             Optional<String> optInTitle,
             Map<String, Object> additionalProperties) {
+        this.bundlePurchaseBehavior = bundlePurchaseBehavior;
         this.collectAddress = collectAddress;
         this.collectEmail = collectEmail;
         this.collectPhone = collectPhone;
+        this.collectTaxId = collectTaxId;
         this.optInEnabled = optInEnabled;
         this.optInText = optInText;
         this.optInTitle = optInTitle;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("bundle_purchase_behavior")
+    public CheckoutBundlePurchaseBehavior getBundlePurchaseBehavior() {
+        return bundlePurchaseBehavior;
     }
 
     @JsonProperty("collect_address")
@@ -64,6 +78,11 @@ public final class CheckoutSettingsResponseData {
     @JsonProperty("collect_phone")
     public boolean getCollectPhone() {
         return collectPhone;
+    }
+
+    @JsonProperty("collect_tax_id")
+    public boolean getCollectTaxId() {
+        return collectTaxId;
     }
 
     @JsonProperty("opt_in_enabled")
@@ -93,9 +112,11 @@ public final class CheckoutSettingsResponseData {
     }
 
     private boolean equalTo(CheckoutSettingsResponseData other) {
-        return collectAddress == other.collectAddress
+        return bundlePurchaseBehavior.equals(other.bundlePurchaseBehavior)
+                && collectAddress == other.collectAddress
                 && collectEmail == other.collectEmail
                 && collectPhone == other.collectPhone
+                && collectTaxId == other.collectTaxId
                 && optInEnabled == other.optInEnabled
                 && optInText.equals(other.optInText)
                 && optInTitle.equals(other.optInTitle);
@@ -104,9 +125,11 @@ public final class CheckoutSettingsResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.bundlePurchaseBehavior,
                 this.collectAddress,
                 this.collectEmail,
                 this.collectPhone,
+                this.collectTaxId,
                 this.optInEnabled,
                 this.optInText,
                 this.optInTitle);
@@ -117,14 +140,18 @@ public final class CheckoutSettingsResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static CollectAddressStage builder() {
+    public static BundlePurchaseBehaviorStage builder() {
         return new Builder();
+    }
+
+    public interface BundlePurchaseBehaviorStage {
+        CollectAddressStage bundlePurchaseBehavior(@NotNull CheckoutBundlePurchaseBehavior bundlePurchaseBehavior);
+
+        Builder from(CheckoutSettingsResponseData other);
     }
 
     public interface CollectAddressStage {
         CollectEmailStage collectAddress(boolean collectAddress);
-
-        Builder from(CheckoutSettingsResponseData other);
     }
 
     public interface CollectEmailStage {
@@ -132,7 +159,11 @@ public final class CheckoutSettingsResponseData {
     }
 
     public interface CollectPhoneStage {
-        OptInEnabledStage collectPhone(boolean collectPhone);
+        CollectTaxIdStage collectPhone(boolean collectPhone);
+    }
+
+    public interface CollectTaxIdStage {
+        OptInEnabledStage collectTaxId(boolean collectTaxId);
     }
 
     public interface OptInEnabledStage {
@@ -157,12 +188,22 @@ public final class CheckoutSettingsResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CollectAddressStage, CollectEmailStage, CollectPhoneStage, OptInEnabledStage, _FinalStage {
+            implements BundlePurchaseBehaviorStage,
+                    CollectAddressStage,
+                    CollectEmailStage,
+                    CollectPhoneStage,
+                    CollectTaxIdStage,
+                    OptInEnabledStage,
+                    _FinalStage {
+        private CheckoutBundlePurchaseBehavior bundlePurchaseBehavior;
+
         private boolean collectAddress;
 
         private boolean collectEmail;
 
         private boolean collectPhone;
+
+        private boolean collectTaxId;
 
         private boolean optInEnabled;
 
@@ -177,12 +218,23 @@ public final class CheckoutSettingsResponseData {
 
         @java.lang.Override
         public Builder from(CheckoutSettingsResponseData other) {
+            bundlePurchaseBehavior(other.getBundlePurchaseBehavior());
             collectAddress(other.getCollectAddress());
             collectEmail(other.getCollectEmail());
             collectPhone(other.getCollectPhone());
+            collectTaxId(other.getCollectTaxId());
             optInEnabled(other.getOptInEnabled());
             optInText(other.getOptInText());
             optInTitle(other.getOptInTitle());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("bundle_purchase_behavior")
+        public CollectAddressStage bundlePurchaseBehavior(
+                @NotNull CheckoutBundlePurchaseBehavior bundlePurchaseBehavior) {
+            this.bundlePurchaseBehavior =
+                    Objects.requireNonNull(bundlePurchaseBehavior, "bundlePurchaseBehavior must not be null");
             return this;
         }
 
@@ -202,8 +254,15 @@ public final class CheckoutSettingsResponseData {
 
         @java.lang.Override
         @JsonSetter("collect_phone")
-        public OptInEnabledStage collectPhone(boolean collectPhone) {
+        public CollectTaxIdStage collectPhone(boolean collectPhone) {
             this.collectPhone = collectPhone;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("collect_tax_id")
+        public OptInEnabledStage collectTaxId(boolean collectTaxId) {
+            this.collectTaxId = collectTaxId;
             return this;
         }
 
@@ -243,9 +302,11 @@ public final class CheckoutSettingsResponseData {
         @java.lang.Override
         public CheckoutSettingsResponseData build() {
             return new CheckoutSettingsResponseData(
+                    bundlePurchaseBehavior,
                     collectAddress,
                     collectEmail,
                     collectPhone,
+                    collectTaxId,
                     optInEnabled,
                     optInText,
                     optInTitle,

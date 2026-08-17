@@ -50,6 +50,8 @@ public final class CompanyPlanCreditGrantView {
 
     private final Optional<Long> companyAutoTopupThresholdCredits;
 
+    private final long companyCreditAmount;
+
     private final OffsetDateTime createdAt;
 
     private final Optional<BillingCreditView> credit;
@@ -113,6 +115,7 @@ public final class CompanyPlanCreditGrantView {
             Optional<Long> companyAutoTopupAmount,
             Optional<Boolean> companyAutoTopupEnabled,
             Optional<Long> companyAutoTopupThresholdCredits,
+            long companyCreditAmount,
             OffsetDateTime createdAt,
             Optional<BillingCreditView> credit,
             long creditAmount,
@@ -151,6 +154,7 @@ public final class CompanyPlanCreditGrantView {
         this.companyAutoTopupAmount = companyAutoTopupAmount;
         this.companyAutoTopupEnabled = companyAutoTopupEnabled;
         this.companyAutoTopupThresholdCredits = companyAutoTopupThresholdCredits;
+        this.companyCreditAmount = companyCreditAmount;
         this.createdAt = createdAt;
         this.credit = credit;
         this.creditAmount = creditAmount;
@@ -245,6 +249,11 @@ public final class CompanyPlanCreditGrantView {
     @JsonProperty("company_auto_topup_threshold_credits")
     public Optional<Long> getCompanyAutoTopupThresholdCredits() {
         return companyAutoTopupThresholdCredits;
+    }
+
+    @JsonProperty("company_credit_amount")
+    public long getCompanyCreditAmount() {
+        return companyCreditAmount;
     }
 
     @JsonProperty("created_at")
@@ -403,6 +412,7 @@ public final class CompanyPlanCreditGrantView {
                 && companyAutoTopupAmount.equals(other.companyAutoTopupAmount)
                 && companyAutoTopupEnabled.equals(other.companyAutoTopupEnabled)
                 && companyAutoTopupThresholdCredits.equals(other.companyAutoTopupThresholdCredits)
+                && companyCreditAmount == other.companyCreditAmount
                 && createdAt.equals(other.createdAt)
                 && credit.equals(other.credit)
                 && creditAmount == other.creditAmount
@@ -445,6 +455,7 @@ public final class CompanyPlanCreditGrantView {
                 this.companyAutoTopupAmount,
                 this.companyAutoTopupEnabled,
                 this.companyAutoTopupThresholdCredits,
+                this.companyCreditAmount,
                 this.createdAt,
                 this.credit,
                 this.creditAmount,
@@ -490,7 +501,11 @@ public final class CompanyPlanCreditGrantView {
     }
 
     public interface BillingCreditCanBuyBundlesStage {
-        CreatedAtStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles);
+        CompanyCreditAmountStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles);
+    }
+
+    public interface CompanyCreditAmountStage {
+        CreatedAtStage companyCreditAmount(long companyCreditAmount);
     }
 
     public interface CreatedAtStage {
@@ -661,6 +676,7 @@ public final class CompanyPlanCreditGrantView {
             implements BillingCreditAutoTopupEnabledStage,
                     BillingCreditAutoTopupSelfServiceStage,
                     BillingCreditCanBuyBundlesStage,
+                    CompanyCreditAmountStage,
                     CreatedAtStage,
                     CreditAmountStage,
                     CreditDescriptionStage,
@@ -678,6 +694,8 @@ public final class CompanyPlanCreditGrantView {
         private boolean billingCreditAutoTopupSelfService;
 
         private boolean billingCreditCanBuyBundles;
+
+        private long companyCreditAmount;
 
         private OffsetDateTime createdAt;
 
@@ -768,6 +786,7 @@ public final class CompanyPlanCreditGrantView {
             companyAutoTopupAmount(other.getCompanyAutoTopupAmount());
             companyAutoTopupEnabled(other.getCompanyAutoTopupEnabled());
             companyAutoTopupThresholdCredits(other.getCompanyAutoTopupThresholdCredits());
+            companyCreditAmount(other.getCompanyCreditAmount());
             createdAt(other.getCreatedAt());
             credit(other.getCredit());
             creditAmount(other.getCreditAmount());
@@ -812,8 +831,15 @@ public final class CompanyPlanCreditGrantView {
 
         @java.lang.Override
         @JsonSetter("billing_credit_can_buy_bundles")
-        public CreatedAtStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles) {
+        public CompanyCreditAmountStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles) {
             this.billingCreditCanBuyBundles = billingCreditCanBuyBundles;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("company_credit_amount")
+        public CreatedAtStage companyCreditAmount(long companyCreditAmount) {
+            this.companyCreditAmount = companyCreditAmount;
             return this;
         }
 
@@ -1245,6 +1271,7 @@ public final class CompanyPlanCreditGrantView {
                     companyAutoTopupAmount,
                     companyAutoTopupEnabled,
                     companyAutoTopupThresholdCredits,
+                    companyCreditAmount,
                     createdAt,
                     credit,
                     creditAmount,

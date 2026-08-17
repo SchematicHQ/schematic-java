@@ -25,6 +25,10 @@ public final class CompanyFeatureUsageExportMetadata {
 
     private final Optional<List<String>> creditTypeIds;
 
+    private final Optional<List<String>> entityKeyDefinitionIds;
+
+    private final Optional<List<String>> entityTraitDefinitionIds;
+
     private final Optional<List<String>> featureIds;
 
     private final Optional<Boolean> hasScheduledDowngrade;
@@ -66,6 +70,8 @@ public final class CompanyFeatureUsageExportMetadata {
     private CompanyFeatureUsageExportMetadata(
             Optional<List<String>> companyIds,
             Optional<List<String>> creditTypeIds,
+            Optional<List<String>> entityKeyDefinitionIds,
+            Optional<List<String>> entityTraitDefinitionIds,
             Optional<List<String>> featureIds,
             Optional<Boolean> hasScheduledDowngrade,
             Optional<Boolean> monetizedSubscriptions,
@@ -87,6 +93,8 @@ public final class CompanyFeatureUsageExportMetadata {
             Map<String, Object> additionalProperties) {
         this.companyIds = companyIds;
         this.creditTypeIds = creditTypeIds;
+        this.entityKeyDefinitionIds = entityKeyDefinitionIds;
+        this.entityTraitDefinitionIds = entityTraitDefinitionIds;
         this.featureIds = featureIds;
         this.hasScheduledDowngrade = hasScheduledDowngrade;
         this.monetizedSubscriptions = monetizedSubscriptions;
@@ -122,6 +130,22 @@ public final class CompanyFeatureUsageExportMetadata {
     @JsonProperty("credit_type_ids")
     public Optional<List<String>> getCreditTypeIds() {
         return creditTypeIds;
+    }
+
+    /**
+     * @return Company key definition IDs to include as columns, one column per definition, mirroring the companies list
+     */
+    @JsonProperty("entity_key_definition_ids")
+    public Optional<List<String>> getEntityKeyDefinitionIds() {
+        return entityKeyDefinitionIds;
+    }
+
+    /**
+     * @return Company trait definition IDs to include as columns, one column per definition, mirroring the companies list
+     */
+    @JsonProperty("entity_trait_definition_ids")
+    public Optional<List<String>> getEntityTraitDefinitionIds() {
+        return entityTraitDefinitionIds;
     }
 
     /**
@@ -282,6 +306,8 @@ public final class CompanyFeatureUsageExportMetadata {
     private boolean equalTo(CompanyFeatureUsageExportMetadata other) {
         return companyIds.equals(other.companyIds)
                 && creditTypeIds.equals(other.creditTypeIds)
+                && entityKeyDefinitionIds.equals(other.entityKeyDefinitionIds)
+                && entityTraitDefinitionIds.equals(other.entityTraitDefinitionIds)
                 && featureIds.equals(other.featureIds)
                 && hasScheduledDowngrade.equals(other.hasScheduledDowngrade)
                 && monetizedSubscriptions.equals(other.monetizedSubscriptions)
@@ -307,6 +333,8 @@ public final class CompanyFeatureUsageExportMetadata {
         return Objects.hash(
                 this.companyIds,
                 this.creditTypeIds,
+                this.entityKeyDefinitionIds,
+                this.entityTraitDefinitionIds,
                 this.featureIds,
                 this.hasScheduledDowngrade,
                 this.monetizedSubscriptions,
@@ -341,6 +369,10 @@ public final class CompanyFeatureUsageExportMetadata {
         private Optional<List<String>> companyIds = Optional.empty();
 
         private Optional<List<String>> creditTypeIds = Optional.empty();
+
+        private Optional<List<String>> entityKeyDefinitionIds = Optional.empty();
+
+        private Optional<List<String>> entityTraitDefinitionIds = Optional.empty();
 
         private Optional<List<String>> featureIds = Optional.empty();
 
@@ -386,6 +418,8 @@ public final class CompanyFeatureUsageExportMetadata {
         public Builder from(CompanyFeatureUsageExportMetadata other) {
             companyIds(other.getCompanyIds());
             creditTypeIds(other.getCreditTypeIds());
+            entityKeyDefinitionIds(other.getEntityKeyDefinitionIds());
+            entityTraitDefinitionIds(other.getEntityTraitDefinitionIds());
             featureIds(other.getFeatureIds());
             hasScheduledDowngrade(other.getHasScheduledDowngrade());
             monetizedSubscriptions(other.getMonetizedSubscriptions());
@@ -432,6 +466,34 @@ public final class CompanyFeatureUsageExportMetadata {
 
         public Builder creditTypeIds(List<String> creditTypeIds) {
             this.creditTypeIds = Optional.ofNullable(creditTypeIds);
+            return this;
+        }
+
+        /**
+         * <p>Company key definition IDs to include as columns, one column per definition, mirroring the companies list</p>
+         */
+        @JsonSetter(value = "entity_key_definition_ids", nulls = Nulls.SKIP)
+        public Builder entityKeyDefinitionIds(Optional<List<String>> entityKeyDefinitionIds) {
+            this.entityKeyDefinitionIds = entityKeyDefinitionIds;
+            return this;
+        }
+
+        public Builder entityKeyDefinitionIds(List<String> entityKeyDefinitionIds) {
+            this.entityKeyDefinitionIds = Optional.ofNullable(entityKeyDefinitionIds);
+            return this;
+        }
+
+        /**
+         * <p>Company trait definition IDs to include as columns, one column per definition, mirroring the companies list</p>
+         */
+        @JsonSetter(value = "entity_trait_definition_ids", nulls = Nulls.SKIP)
+        public Builder entityTraitDefinitionIds(Optional<List<String>> entityTraitDefinitionIds) {
+            this.entityTraitDefinitionIds = entityTraitDefinitionIds;
+            return this;
+        }
+
+        public Builder entityTraitDefinitionIds(List<String> entityTraitDefinitionIds) {
+            this.entityTraitDefinitionIds = Optional.ofNullable(entityTraitDefinitionIds);
             return this;
         }
 
@@ -695,6 +757,8 @@ public final class CompanyFeatureUsageExportMetadata {
             return new CompanyFeatureUsageExportMetadata(
                     companyIds,
                     creditTypeIds,
+                    entityKeyDefinitionIds,
+                    entityTraitDefinitionIds,
                     featureIds,
                     hasScheduledDowngrade,
                     monetizedSubscriptions,

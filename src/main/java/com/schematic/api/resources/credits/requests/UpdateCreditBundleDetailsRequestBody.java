@@ -28,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdateCreditBundleDetailsRequestBody {
     private final String bundleName;
 
+    private final Optional<List<String>> compatiblePlanIds;
+
     private final Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices;
 
     private final Optional<BillingCreditExpiryType> expiryType;
@@ -48,6 +50,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
     private UpdateCreditBundleDetailsRequestBody(
             String bundleName,
+            Optional<List<String>> compatiblePlanIds,
             Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
@@ -58,6 +61,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
             Optional<BillingCreditBundleStatus> status,
             Map<String, Object> additionalProperties) {
         this.bundleName = bundleName;
+        this.compatiblePlanIds = compatiblePlanIds;
         this.currencyPrices = currencyPrices;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
@@ -72,6 +76,14 @@ public final class UpdateCreditBundleDetailsRequestBody {
     @JsonProperty("bundle_name")
     public String getBundleName() {
         return bundleName;
+    }
+
+    /**
+     * @return Plans whose companies may purchase this bundle. Omitted leaves compatibility unchanged; empty resets the bundle to purchasable on every plan.
+     */
+    @JsonProperty("compatible_plan_ids")
+    public Optional<List<String>> getCompatiblePlanIds() {
+        return compatiblePlanIds;
     }
 
     @JsonProperty("currency_prices")
@@ -128,6 +140,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
     private boolean equalTo(UpdateCreditBundleDetailsRequestBody other) {
         return bundleName.equals(other.bundleName)
+                && compatiblePlanIds.equals(other.compatiblePlanIds)
                 && currencyPrices.equals(other.currencyPrices)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
@@ -142,6 +155,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.bundleName,
+                this.compatiblePlanIds,
                 this.currencyPrices,
                 this.expiryType,
                 this.expiryUnit,
@@ -177,6 +191,13 @@ public final class UpdateCreditBundleDetailsRequestBody {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        /**
+         * <p>Plans whose companies may purchase this bundle. Omitted leaves compatibility unchanged; empty resets the bundle to purchasable on every plan.</p>
+         */
+        _FinalStage compatiblePlanIds(Optional<List<String>> compatiblePlanIds);
+
+        _FinalStage compatiblePlanIds(List<String> compatiblePlanIds);
 
         _FinalStage currencyPrices(Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices);
 
@@ -227,6 +248,8 @@ public final class UpdateCreditBundleDetailsRequestBody {
 
         private Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices = Optional.empty();
 
+        private Optional<List<String>> compatiblePlanIds = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -235,6 +258,7 @@ public final class UpdateCreditBundleDetailsRequestBody {
         @java.lang.Override
         public Builder from(UpdateCreditBundleDetailsRequestBody other) {
             bundleName(other.getBundleName());
+            compatiblePlanIds(other.getCompatiblePlanIds());
             currencyPrices(other.getCurrencyPrices());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
@@ -351,10 +375,31 @@ public final class UpdateCreditBundleDetailsRequestBody {
             return this;
         }
 
+        /**
+         * <p>Plans whose companies may purchase this bundle. Omitted leaves compatibility unchanged; empty resets the bundle to purchasable on every plan.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage compatiblePlanIds(List<String> compatiblePlanIds) {
+            this.compatiblePlanIds = Optional.ofNullable(compatiblePlanIds);
+            return this;
+        }
+
+        /**
+         * <p>Plans whose companies may purchase this bundle. Omitted leaves compatibility unchanged; empty resets the bundle to purchasable on every plan.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "compatible_plan_ids", nulls = Nulls.SKIP)
+        public _FinalStage compatiblePlanIds(Optional<List<String>> compatiblePlanIds) {
+            this.compatiblePlanIds = compatiblePlanIds;
+            return this;
+        }
+
         @java.lang.Override
         public UpdateCreditBundleDetailsRequestBody build() {
             return new UpdateCreditBundleDetailsRequestBody(
                     bundleName,
+                    compatiblePlanIds,
                     currencyPrices,
                     expiryType,
                     expiryUnit,

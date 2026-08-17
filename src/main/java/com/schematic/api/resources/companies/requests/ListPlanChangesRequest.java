@@ -26,8 +26,6 @@ import java.util.Optional;
 public final class ListPlanChangesRequest {
     private final Optional<List<String>> companyIds;
 
-    private final Optional<List<String>> planIds;
-
     private final Optional<PlanChangeAction> action;
 
     private final Optional<PlanChangeBasePlanAction> basePlanAction;
@@ -42,7 +40,6 @@ public final class ListPlanChangesRequest {
 
     private ListPlanChangesRequest(
             Optional<List<String>> companyIds,
-            Optional<List<String>> planIds,
             Optional<PlanChangeAction> action,
             Optional<PlanChangeBasePlanAction> basePlanAction,
             Optional<String> companyId,
@@ -50,7 +47,6 @@ public final class ListPlanChangesRequest {
             Optional<Long> offset,
             Map<String, Object> additionalProperties) {
         this.companyIds = companyIds;
-        this.planIds = planIds;
         this.action = action;
         this.basePlanAction = basePlanAction;
         this.companyId = companyId;
@@ -62,11 +58,6 @@ public final class ListPlanChangesRequest {
     @JsonProperty("company_ids")
     public Optional<List<String>> getCompanyIds() {
         return companyIds;
-    }
-
-    @JsonProperty("plan_ids")
-    public Optional<List<String>> getPlanIds() {
-        return planIds;
     }
 
     @JsonProperty("action")
@@ -113,7 +104,6 @@ public final class ListPlanChangesRequest {
 
     private boolean equalTo(ListPlanChangesRequest other) {
         return companyIds.equals(other.companyIds)
-                && planIds.equals(other.planIds)
                 && action.equals(other.action)
                 && basePlanAction.equals(other.basePlanAction)
                 && companyId.equals(other.companyId)
@@ -123,14 +113,7 @@ public final class ListPlanChangesRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.companyIds,
-                this.planIds,
-                this.action,
-                this.basePlanAction,
-                this.companyId,
-                this.limit,
-                this.offset);
+        return Objects.hash(this.companyIds, this.action, this.basePlanAction, this.companyId, this.limit, this.offset);
     }
 
     @java.lang.Override
@@ -145,8 +128,6 @@ public final class ListPlanChangesRequest {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<List<String>> companyIds = Optional.empty();
-
-        private Optional<List<String>> planIds = Optional.empty();
 
         private Optional<PlanChangeAction> action = Optional.empty();
 
@@ -165,7 +146,6 @@ public final class ListPlanChangesRequest {
 
         public Builder from(ListPlanChangesRequest other) {
             companyIds(other.getCompanyIds());
-            planIds(other.getPlanIds());
             action(other.getAction());
             basePlanAction(other.getBasePlanAction());
             companyId(other.getCompanyId());
@@ -187,22 +167,6 @@ public final class ListPlanChangesRequest {
 
         public Builder companyIds(String companyIds) {
             this.companyIds = Optional.of(Collections.singletonList(companyIds));
-            return this;
-        }
-
-        @JsonSetter(value = "plan_ids", nulls = Nulls.SKIP)
-        public Builder planIds(Optional<List<String>> planIds) {
-            this.planIds = planIds;
-            return this;
-        }
-
-        public Builder planIds(List<String> planIds) {
-            this.planIds = Optional.ofNullable(planIds);
-            return this;
-        }
-
-        public Builder planIds(String planIds) {
-            this.planIds = Optional.of(Collections.singletonList(planIds));
             return this;
         }
 
@@ -269,7 +233,7 @@ public final class ListPlanChangesRequest {
 
         public ListPlanChangesRequest build() {
             return new ListPlanChangesRequest(
-                    companyIds, planIds, action, basePlanAction, companyId, limit, offset, additionalProperties);
+                    companyIds, action, basePlanAction, companyId, limit, offset, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

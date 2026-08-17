@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CustomPlanBillingStatus;
+import com.schematic.api.types.PlanBillingSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ public final class ListCustomPlanBillingsParams {
 
     private final Optional<Long> offset;
 
+    private final Optional<PlanBillingSource> planBillingSource;
+
     private final Optional<String> planId;
 
     private final Optional<CustomPlanBillingStatus> status;
@@ -40,6 +43,7 @@ public final class ListCustomPlanBillingsParams {
             Optional<String> companyId,
             Optional<Long> limit,
             Optional<Long> offset,
+            Optional<PlanBillingSource> planBillingSource,
             Optional<String> planId,
             Optional<CustomPlanBillingStatus> status,
             Optional<List<CustomPlanBillingStatus>> statuses,
@@ -47,6 +51,7 @@ public final class ListCustomPlanBillingsParams {
         this.companyId = companyId;
         this.limit = limit;
         this.offset = offset;
+        this.planBillingSource = planBillingSource;
         this.planId = planId;
         this.status = status;
         this.statuses = statuses;
@@ -75,6 +80,14 @@ public final class ListCustomPlanBillingsParams {
     @JsonProperty("offset")
     public Optional<Long> getOffset() {
         return offset;
+    }
+
+    /**
+     * @return Filter by the flow that created the billing record. Defaults to custom_plan.
+     */
+    @JsonProperty("plan_billing_source")
+    public Optional<PlanBillingSource> getPlanBillingSource() {
+        return planBillingSource;
     }
 
     /**
@@ -116,6 +129,7 @@ public final class ListCustomPlanBillingsParams {
         return companyId.equals(other.companyId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
+                && planBillingSource.equals(other.planBillingSource)
                 && planId.equals(other.planId)
                 && status.equals(other.status)
                 && statuses.equals(other.statuses);
@@ -123,7 +137,14 @@ public final class ListCustomPlanBillingsParams {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.limit, this.offset, this.planId, this.status, this.statuses);
+        return Objects.hash(
+                this.companyId,
+                this.limit,
+                this.offset,
+                this.planBillingSource,
+                this.planId,
+                this.status,
+                this.statuses);
     }
 
     @java.lang.Override
@@ -143,6 +164,8 @@ public final class ListCustomPlanBillingsParams {
 
         private Optional<Long> offset = Optional.empty();
 
+        private Optional<PlanBillingSource> planBillingSource = Optional.empty();
+
         private Optional<String> planId = Optional.empty();
 
         private Optional<CustomPlanBillingStatus> status = Optional.empty();
@@ -158,6 +181,7 @@ public final class ListCustomPlanBillingsParams {
             companyId(other.getCompanyId());
             limit(other.getLimit());
             offset(other.getOffset());
+            planBillingSource(other.getPlanBillingSource());
             planId(other.getPlanId());
             status(other.getStatus());
             statuses(other.getStatuses());
@@ -207,6 +231,20 @@ public final class ListCustomPlanBillingsParams {
         }
 
         /**
+         * <p>Filter by the flow that created the billing record. Defaults to custom_plan.</p>
+         */
+        @JsonSetter(value = "plan_billing_source", nulls = Nulls.SKIP)
+        public Builder planBillingSource(Optional<PlanBillingSource> planBillingSource) {
+            this.planBillingSource = planBillingSource;
+            return this;
+        }
+
+        public Builder planBillingSource(PlanBillingSource planBillingSource) {
+            this.planBillingSource = Optional.ofNullable(planBillingSource);
+            return this;
+        }
+
+        /**
          * <p>Filter by plan ID</p>
          */
         @JsonSetter(value = "plan_id", nulls = Nulls.SKIP)
@@ -250,7 +288,7 @@ public final class ListCustomPlanBillingsParams {
 
         public ListCustomPlanBillingsParams build() {
             return new ListCustomPlanBillingsParams(
-                    companyId, limit, offset, planId, status, statuses, additionalProperties);
+                    companyId, limit, offset, planBillingSource, planId, status, statuses, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {
