@@ -61,14 +61,14 @@ public class AsyncPlansClient {
     }
 
     public CompletableFuture<UpdateCompanyPlansResponse> updateCompanyPlans(
-            String companyPlanId, UpdateCompanyPlansRequestBody request) {
-        return this.rawClient.updateCompanyPlans(companyPlanId, request).thenApply(response -> response.body());
+            String companyId, UpdateCompanyPlansRequestBody request) {
+        return this.rawClient.updateCompanyPlans(companyId, request).thenApply(response -> response.body());
     }
 
     public CompletableFuture<UpdateCompanyPlansResponse> updateCompanyPlans(
-            String companyPlanId, UpdateCompanyPlansRequestBody request, RequestOptions requestOptions) {
+            String companyId, UpdateCompanyPlansRequestBody request, RequestOptions requestOptions) {
         return this.rawClient
-                .updateCompanyPlans(companyPlanId, request, requestOptions)
+                .updateCompanyPlans(companyId, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -259,34 +259,36 @@ public class AsyncPlansClient {
         return this.rawClient.listPlanIssues(request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(String planId) {
-        return this.rawClient.deletePlanVersion(planId).thenApply(response -> response.body());
+    public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(String planVersionId) {
+        return this.rawClient.deletePlanVersion(planVersionId).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(
-            String planId, RequestOptions requestOptions) {
-        return this.rawClient.deletePlanVersion(planId, requestOptions).thenApply(response -> response.body());
+            String planVersionId, RequestOptions requestOptions) {
+        return this.rawClient.deletePlanVersion(planVersionId, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(
-            String planId, DeletePlanVersionRequest request) {
-        return this.rawClient.deletePlanVersion(planId, request).thenApply(response -> response.body());
+            String planVersionId, DeletePlanVersionRequest request) {
+        return this.rawClient.deletePlanVersion(planVersionId, request).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(
-            String planId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
-        return this.rawClient.deletePlanVersion(planId, request, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<PublishPlanVersionResponse> publishPlanVersion(
-            String planId, PublishPlanVersionRequestBody request) {
-        return this.rawClient.publishPlanVersion(planId, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<PublishPlanVersionResponse> publishPlanVersion(
-            String planId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
+            String planVersionId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
         return this.rawClient
-                .publishPlanVersion(planId, request, requestOptions)
+                .deletePlanVersion(planVersionId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<PublishPlanVersionResponse> publishPlanVersion(
+            String planVersionId, PublishPlanVersionRequestBody request) {
+        return this.rawClient.publishPlanVersion(planVersionId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<PublishPlanVersionResponse> publishPlanVersion(
+            String planVersionId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .publishPlanVersion(planVersionId, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

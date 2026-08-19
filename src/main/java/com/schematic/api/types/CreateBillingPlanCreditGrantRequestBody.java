@@ -45,6 +45,8 @@ public final class CreateBillingPlanCreditGrantRequestBody {
 
     private final Optional<Boolean> canBuyBundles;
 
+    private final Optional<Long> companyCreditAmount;
+
     private final long creditAmount;
 
     private final String creditId;
@@ -86,6 +88,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
             Optional<Long> autoTopupThresholdCredits,
             Optional<Long> autoTopupThresholdPercent,
             Optional<Boolean> canBuyBundles,
+            Optional<Long> companyCreditAmount,
             long creditAmount,
             String creditId,
             Optional<BillingCreditExpiryType> expiryType,
@@ -112,6 +115,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         this.autoTopupThresholdCredits = autoTopupThresholdCredits;
         this.autoTopupThresholdPercent = autoTopupThresholdPercent;
         this.canBuyBundles = canBuyBundles;
+        this.companyCreditAmount = companyCreditAmount;
         this.creditAmount = creditAmount;
         this.creditId = creditId;
         this.expiryType = expiryType;
@@ -186,6 +190,14 @@ public final class CreateBillingPlanCreditGrantRequestBody {
     @JsonProperty("can_buy_bundles")
     public Optional<Boolean> getCanBuyBundles() {
         return canBuyBundles;
+    }
+
+    /**
+     * @return Credits granted once per company on top of the per-license amount. Only valid when scaling is per_license. Defaults to 0.
+     */
+    @JsonProperty("company_credit_amount")
+    public Optional<Long> getCompanyCreditAmount() {
+        return companyCreditAmount;
     }
 
     @JsonProperty("credit_amount")
@@ -287,6 +299,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
                 && autoTopupThresholdCredits.equals(other.autoTopupThresholdCredits)
                 && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
                 && canBuyBundles.equals(other.canBuyBundles)
+                && companyCreditAmount.equals(other.companyCreditAmount)
                 && creditAmount == other.creditAmount
                 && creditId.equals(other.creditId)
                 && expiryType.equals(other.expiryType)
@@ -317,6 +330,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
                 this.autoTopupThresholdCredits,
                 this.autoTopupThresholdPercent,
                 this.canBuyBundles,
+                this.companyCreditAmount,
                 this.creditAmount,
                 this.creditId,
                 this.expiryType,
@@ -418,6 +432,13 @@ public final class CreateBillingPlanCreditGrantRequestBody {
 
         _FinalStage canBuyBundles(Boolean canBuyBundles);
 
+        /**
+         * <p>Credits granted once per company on top of the per-license amount. Only valid when scaling is per_license. Defaults to 0.</p>
+         */
+        _FinalStage companyCreditAmount(Optional<Long> companyCreditAmount);
+
+        _FinalStage companyCreditAmount(Long companyCreditAmount);
+
         _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
 
         _FinalStage expiryType(BillingCreditExpiryType expiryType);
@@ -489,6 +510,8 @@ public final class CreateBillingPlanCreditGrantRequestBody {
 
         private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
 
+        private Optional<Long> companyCreditAmount = Optional.empty();
+
         private Optional<Boolean> canBuyBundles = Optional.empty();
 
         private Optional<Long> autoTopupThresholdPercent = Optional.empty();
@@ -532,6 +555,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
             autoTopupThresholdCredits(other.getAutoTopupThresholdCredits());
             autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
             canBuyBundles(other.getCanBuyBundles());
+            companyCreditAmount(other.getCompanyCreditAmount());
             creditAmount(other.getCreditAmount());
             creditId(other.getCreditId());
             expiryType(other.getExpiryType());
@@ -708,6 +732,26 @@ public final class CreateBillingPlanCreditGrantRequestBody {
             return this;
         }
 
+        /**
+         * <p>Credits granted once per company on top of the per-license amount. Only valid when scaling is per_license. Defaults to 0.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage companyCreditAmount(Long companyCreditAmount) {
+            this.companyCreditAmount = Optional.ofNullable(companyCreditAmount);
+            return this;
+        }
+
+        /**
+         * <p>Credits granted once per company on top of the per-license amount. Only valid when scaling is per_license. Defaults to 0.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "company_credit_amount", nulls = Nulls.SKIP)
+        public _FinalStage companyCreditAmount(Optional<Long> companyCreditAmount) {
+            this.companyCreditAmount = companyCreditAmount;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage canBuyBundles(Boolean canBuyBundles) {
             this.canBuyBundles = Optional.ofNullable(canBuyBundles);
@@ -879,6 +923,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
                     autoTopupThresholdCredits,
                     autoTopupThresholdPercent,
                     canBuyBundles,
+                    companyCreditAmount,
                     creditAmount,
                     creditId,
                     expiryType,

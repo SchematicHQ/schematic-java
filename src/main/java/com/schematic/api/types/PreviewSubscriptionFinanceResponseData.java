@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public final class PreviewSubscriptionFinanceResponseData {
     private final long amountOff;
 
+    private final long discountAmount;
+
     private final List<PreviewSubscriptionDiscountResponseData> discounts;
 
     private final long dueNow;
@@ -58,6 +60,7 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private PreviewSubscriptionFinanceResponseData(
             long amountOff,
+            long discountAmount,
             List<PreviewSubscriptionDiscountResponseData> discounts,
             long dueNow,
             long newCharges,
@@ -74,6 +77,7 @@ public final class PreviewSubscriptionFinanceResponseData {
             List<PreviewSubscriptionUpcomingInvoiceLineItems> upcomingInvoiceLineItems,
             Map<String, Object> additionalProperties) {
         this.amountOff = amountOff;
+        this.discountAmount = discountAmount;
         this.discounts = discounts;
         this.dueNow = dueNow;
         this.newCharges = newCharges;
@@ -94,6 +98,11 @@ public final class PreviewSubscriptionFinanceResponseData {
     @JsonProperty("amount_off")
     public long getAmountOff() {
         return amountOff;
+    }
+
+    @JsonProperty("discount_amount")
+    public long getDiscountAmount() {
+        return discountAmount;
     }
 
     @JsonProperty("discounts")
@@ -180,6 +189,7 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private boolean equalTo(PreviewSubscriptionFinanceResponseData other) {
         return amountOff == other.amountOff
+                && discountAmount == other.discountAmount
                 && discounts.equals(other.discounts)
                 && dueNow == other.dueNow
                 && newCharges == other.newCharges
@@ -200,6 +210,7 @@ public final class PreviewSubscriptionFinanceResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.amountOff,
+                this.discountAmount,
                 this.discounts,
                 this.dueNow,
                 this.newCharges,
@@ -226,9 +237,13 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     public interface AmountOffStage {
-        DueNowStage amountOff(long amountOff);
+        DiscountAmountStage amountOff(long amountOff);
 
         Builder from(PreviewSubscriptionFinanceResponseData other);
+    }
+
+    public interface DiscountAmountStage {
+        DueNowStage discountAmount(long discountAmount);
     }
 
     public interface DueNowStage {
@@ -304,6 +319,7 @@ public final class PreviewSubscriptionFinanceResponseData {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements AmountOffStage,
+                    DiscountAmountStage,
                     DueNowStage,
                     NewChargesStage,
                     PercentOffStage,
@@ -315,6 +331,8 @@ public final class PreviewSubscriptionFinanceResponseData {
                     TotalPerBillingPeriodStage,
                     _FinalStage {
         private long amountOff;
+
+        private long discountAmount;
 
         private long dueNow;
 
@@ -352,6 +370,7 @@ public final class PreviewSubscriptionFinanceResponseData {
         @java.lang.Override
         public Builder from(PreviewSubscriptionFinanceResponseData other) {
             amountOff(other.getAmountOff());
+            discountAmount(other.getDiscountAmount());
             discounts(other.getDiscounts());
             dueNow(other.getDueNow());
             newCharges(other.getNewCharges());
@@ -371,8 +390,15 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         @java.lang.Override
         @JsonSetter("amount_off")
-        public DueNowStage amountOff(long amountOff) {
+        public DiscountAmountStage amountOff(long amountOff) {
             this.amountOff = amountOff;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("discount_amount")
+        public DueNowStage discountAmount(long discountAmount) {
+            this.discountAmount = discountAmount;
             return this;
         }
 
@@ -533,6 +559,7 @@ public final class PreviewSubscriptionFinanceResponseData {
         public PreviewSubscriptionFinanceResponseData build() {
             return new PreviewSubscriptionFinanceResponseData(
                     amountOff,
+                    discountAmount,
                     discounts,
                     dueNow,
                     newCharges,

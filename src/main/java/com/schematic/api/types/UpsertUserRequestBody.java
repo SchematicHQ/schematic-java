@@ -40,6 +40,8 @@ public final class UpsertUserRequestBody {
 
     private final Optional<String> name;
 
+    private final Optional<List<String>> removeKeys;
+
     private final Optional<Map<String, JsonNode>> traits;
 
     private final Optional<Boolean> updateOnly;
@@ -55,6 +57,7 @@ public final class UpsertUserRequestBody {
             Map<String, String> keys,
             Optional<OffsetDateTime> lastSeenAt,
             Optional<String> name,
+            Optional<List<String>> removeKeys,
             Optional<Map<String, JsonNode>> traits,
             Optional<Boolean> updateOnly,
             Map<String, Object> additionalProperties) {
@@ -66,6 +69,7 @@ public final class UpsertUserRequestBody {
         this.keys = keys;
         this.lastSeenAt = lastSeenAt;
         this.name = name;
+        this.removeKeys = removeKeys;
         this.traits = traits;
         this.updateOnly = updateOnly;
         this.additionalProperties = additionalProperties;
@@ -130,6 +134,14 @@ public final class UpsertUserRequestBody {
     }
 
     /**
+     * @return Names of keys to remove from the user. Removing a key the user does not have does nothing, and a user must keep at least one key.
+     */
+    @JsonProperty("remove_keys")
+    public Optional<List<String>> getRemoveKeys() {
+        return removeKeys;
+    }
+
+    /**
      * @return A map of trait names to trait values
      */
     @JsonProperty("traits")
@@ -162,6 +174,7 @@ public final class UpsertUserRequestBody {
                 && keys.equals(other.keys)
                 && lastSeenAt.equals(other.lastSeenAt)
                 && name.equals(other.name)
+                && removeKeys.equals(other.removeKeys)
                 && traits.equals(other.traits)
                 && updateOnly.equals(other.updateOnly);
     }
@@ -177,6 +190,7 @@ public final class UpsertUserRequestBody {
                 this.keys,
                 this.lastSeenAt,
                 this.name,
+                this.removeKeys,
                 this.traits,
                 this.updateOnly);
     }
@@ -208,6 +222,8 @@ public final class UpsertUserRequestBody {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<List<String>> removeKeys = Optional.empty();
+
         private Optional<Map<String, JsonNode>> traits = Optional.empty();
 
         private Optional<Boolean> updateOnly = Optional.empty();
@@ -226,6 +242,7 @@ public final class UpsertUserRequestBody {
             keys(other.getKeys());
             lastSeenAt(other.getLastSeenAt());
             name(other.getName());
+            removeKeys(other.getRemoveKeys());
             traits(other.getTraits());
             updateOnly(other.getUpdateOnly());
             return this;
@@ -348,6 +365,20 @@ public final class UpsertUserRequestBody {
         }
 
         /**
+         * <p>Names of keys to remove from the user. Removing a key the user does not have does nothing, and a user must keep at least one key.</p>
+         */
+        @JsonSetter(value = "remove_keys", nulls = Nulls.SKIP)
+        public Builder removeKeys(Optional<List<String>> removeKeys) {
+            this.removeKeys = removeKeys;
+            return this;
+        }
+
+        public Builder removeKeys(List<String> removeKeys) {
+            this.removeKeys = Optional.ofNullable(removeKeys);
+            return this;
+        }
+
+        /**
          * <p>A map of trait names to trait values</p>
          */
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
@@ -382,6 +413,7 @@ public final class UpsertUserRequestBody {
                     keys,
                     lastSeenAt,
                     name,
+                    removeKeys,
                     traits,
                     updateOnly,
                     additionalProperties);

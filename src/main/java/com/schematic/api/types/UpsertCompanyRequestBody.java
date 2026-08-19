@@ -16,6 +16,7 @@ import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,6 +38,8 @@ public final class UpsertCompanyRequestBody {
 
     private final Optional<Boolean> preventKeyRemap;
 
+    private final Optional<List<String>> removeKeys;
+
     private final Optional<Map<String, JsonNode>> traits;
 
     private final Optional<Boolean> updateOnly;
@@ -51,6 +54,7 @@ public final class UpsertCompanyRequestBody {
             Optional<OffsetDateTime> lastSeenAt,
             Optional<String> name,
             Optional<Boolean> preventKeyRemap,
+            Optional<List<String>> removeKeys,
             Optional<Map<String, JsonNode>> traits,
             Optional<Boolean> updateOnly,
             Map<String, Object> additionalProperties) {
@@ -61,6 +65,7 @@ public final class UpsertCompanyRequestBody {
         this.lastSeenAt = lastSeenAt;
         this.name = name;
         this.preventKeyRemap = preventKeyRemap;
+        this.removeKeys = removeKeys;
         this.traits = traits;
         this.updateOnly = updateOnly;
         this.additionalProperties = additionalProperties;
@@ -114,6 +119,14 @@ public final class UpsertCompanyRequestBody {
     }
 
     /**
+     * @return Names of keys to remove from the company. Removing a key the company does not have does nothing, and a company must keep at least one key.
+     */
+    @JsonProperty("remove_keys")
+    public Optional<List<String>> getRemoveKeys() {
+        return removeKeys;
+    }
+
+    /**
      * @return A map of trait names to trait values
      */
     @JsonProperty("traits")
@@ -145,6 +158,7 @@ public final class UpsertCompanyRequestBody {
                 && lastSeenAt.equals(other.lastSeenAt)
                 && name.equals(other.name)
                 && preventKeyRemap.equals(other.preventKeyRemap)
+                && removeKeys.equals(other.removeKeys)
                 && traits.equals(other.traits)
                 && updateOnly.equals(other.updateOnly);
     }
@@ -159,6 +173,7 @@ public final class UpsertCompanyRequestBody {
                 this.lastSeenAt,
                 this.name,
                 this.preventKeyRemap,
+                this.removeKeys,
                 this.traits,
                 this.updateOnly);
     }
@@ -188,6 +203,8 @@ public final class UpsertCompanyRequestBody {
 
         private Optional<Boolean> preventKeyRemap = Optional.empty();
 
+        private Optional<List<String>> removeKeys = Optional.empty();
+
         private Optional<Map<String, JsonNode>> traits = Optional.empty();
 
         private Optional<Boolean> updateOnly = Optional.empty();
@@ -205,6 +222,7 @@ public final class UpsertCompanyRequestBody {
             lastSeenAt(other.getLastSeenAt());
             name(other.getName());
             preventKeyRemap(other.getPreventKeyRemap());
+            removeKeys(other.getRemoveKeys());
             traits(other.getTraits());
             updateOnly(other.getUpdateOnly());
             return this;
@@ -310,6 +328,20 @@ public final class UpsertCompanyRequestBody {
         }
 
         /**
+         * <p>Names of keys to remove from the company. Removing a key the company does not have does nothing, and a company must keep at least one key.</p>
+         */
+        @JsonSetter(value = "remove_keys", nulls = Nulls.SKIP)
+        public Builder removeKeys(Optional<List<String>> removeKeys) {
+            this.removeKeys = removeKeys;
+            return this;
+        }
+
+        public Builder removeKeys(List<String> removeKeys) {
+            this.removeKeys = Optional.ofNullable(removeKeys);
+            return this;
+        }
+
+        /**
          * <p>A map of trait names to trait values</p>
          */
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
@@ -343,6 +375,7 @@ public final class UpsertCompanyRequestBody {
                     lastSeenAt,
                     name,
                     preventKeyRemap,
+                    removeKeys,
                     traits,
                     updateOnly,
                     additionalProperties);

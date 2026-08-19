@@ -29,6 +29,8 @@ public final class PlanBundleResponseData {
 
     private final Optional<PlanResponseData> plan;
 
+    private final Optional<PlanVersionResponseData> planVersion;
+
     private final Map<String, Object> additionalProperties;
 
     private PlanBundleResponseData(
@@ -36,11 +38,13 @@ public final class PlanBundleResponseData {
             Optional<List<BillingPlanCreditGrantResponseData>> creditGrants,
             Optional<List<PlanEntitlementResponseData>> entitlements,
             Optional<PlanResponseData> plan,
+            Optional<PlanVersionResponseData> planVersion,
             Map<String, Object> additionalProperties) {
         this.billingProduct = billingProduct;
         this.creditGrants = creditGrants;
         this.entitlements = entitlements;
         this.plan = plan;
+        this.planVersion = planVersion;
         this.additionalProperties = additionalProperties;
     }
 
@@ -64,6 +68,11 @@ public final class PlanBundleResponseData {
         return plan;
     }
 
+    @JsonProperty("plan_version")
+    public Optional<PlanVersionResponseData> getPlanVersion() {
+        return planVersion;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -79,12 +88,13 @@ public final class PlanBundleResponseData {
         return billingProduct.equals(other.billingProduct)
                 && creditGrants.equals(other.creditGrants)
                 && entitlements.equals(other.entitlements)
-                && plan.equals(other.plan);
+                && plan.equals(other.plan)
+                && planVersion.equals(other.planVersion);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.billingProduct, this.creditGrants, this.entitlements, this.plan);
+        return Objects.hash(this.billingProduct, this.creditGrants, this.entitlements, this.plan, this.planVersion);
     }
 
     @java.lang.Override
@@ -106,6 +116,8 @@ public final class PlanBundleResponseData {
 
         private Optional<PlanResponseData> plan = Optional.empty();
 
+        private Optional<PlanVersionResponseData> planVersion = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -116,6 +128,7 @@ public final class PlanBundleResponseData {
             creditGrants(other.getCreditGrants());
             entitlements(other.getEntitlements());
             plan(other.getPlan());
+            planVersion(other.getPlanVersion());
             return this;
         }
 
@@ -163,8 +176,20 @@ public final class PlanBundleResponseData {
             return this;
         }
 
+        @JsonSetter(value = "plan_version", nulls = Nulls.SKIP)
+        public Builder planVersion(Optional<PlanVersionResponseData> planVersion) {
+            this.planVersion = planVersion;
+            return this;
+        }
+
+        public Builder planVersion(PlanVersionResponseData planVersion) {
+            this.planVersion = Optional.ofNullable(planVersion);
+            return this;
+        }
+
         public PlanBundleResponseData build() {
-            return new PlanBundleResponseData(billingProduct, creditGrants, entitlements, plan, additionalProperties);
+            return new PlanBundleResponseData(
+                    billingProduct, creditGrants, entitlements, plan, planVersion, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

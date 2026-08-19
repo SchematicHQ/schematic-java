@@ -202,16 +202,16 @@ public class RawPlanbundleClient {
     }
 
     public BaseSchematicHttpResponse<UpdatePlanBundleResponse> updatePlanBundle(
-            String planBundleId, UpdatePlanBundleRequestBody request) {
-        return updatePlanBundle(planBundleId, request, null);
+            String planId, UpdatePlanBundleRequestBody request) {
+        return updatePlanBundle(planId, request, null);
     }
 
     public BaseSchematicHttpResponse<UpdatePlanBundleResponse> updatePlanBundle(
-            String planBundleId, UpdatePlanBundleRequestBody request, RequestOptions requestOptions) {
+            String planId, UpdatePlanBundleRequestBody request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-bundles")
-                .addPathSegment(planBundleId);
+                .addPathSegment(planId);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);

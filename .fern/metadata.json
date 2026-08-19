@@ -14,10 +14,10 @@
       "implementation redis.clients:jedis:5.2.0"
     ]
   },
-  "originGitCommit": "8cfe954dda14329fc30a4f80b915db0acf608382",
+  "originGitCommit": "1ab5d36abb4de887dde605f8b82a71dce464a26b",
   "originGitCommitIsDirty": false,
   "invokedBy": "ci",
-  "requestedVersion": "1.5.5",
+  "requestedVersion": "1.5.6",
   "ciProvider": "github",
-  "sdkVersion": "1.5.5"
+  "sdkVersion": "1.5.6"
 }

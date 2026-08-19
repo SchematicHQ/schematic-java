@@ -22,6 +22,7 @@ import com.schematic.api.resources.companies.requests.CountCompaniesRequest;
 import com.schematic.api.resources.companies.requests.CountEntityKeyDefinitionsRequest;
 import com.schematic.api.resources.companies.requests.CountEntityKeysRequest;
 import com.schematic.api.resources.companies.requests.CountEntityTraitDefinitionsRequest;
+import com.schematic.api.resources.companies.requests.CountEntityTraitsRequest;
 import com.schematic.api.resources.companies.requests.CountPlanTraitsRequest;
 import com.schematic.api.resources.companies.requests.CountUsersRequest;
 import com.schematic.api.resources.companies.requests.CreateEntityTraitDefinitionRequestBody;
@@ -46,6 +47,7 @@ import com.schematic.api.resources.companies.types.CountCompaniesResponse;
 import com.schematic.api.resources.companies.types.CountEntityKeyDefinitionsResponse;
 import com.schematic.api.resources.companies.types.CountEntityKeysResponse;
 import com.schematic.api.resources.companies.types.CountEntityTraitDefinitionsResponse;
+import com.schematic.api.resources.companies.types.CountEntityTraitsResponse;
 import com.schematic.api.resources.companies.types.CountPlanTraitsResponse;
 import com.schematic.api.resources.companies.types.CountUsersResponse;
 import com.schematic.api.resources.companies.types.CreateCompanyResponse;
@@ -54,6 +56,7 @@ import com.schematic.api.resources.companies.types.DeleteCompanyByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyMembershipResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyResponse;
 import com.schematic.api.resources.companies.types.DeleteEntityKeyDefinitionResponse;
+import com.schematic.api.resources.companies.types.DeleteEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
@@ -61,6 +64,7 @@ import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscrip
 import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionResponse;
+import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionUsageResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitValuesResponse;
 import com.schematic.api.resources.companies.types.GetOrCreateCompanyMembershipResponse;
 import com.schematic.api.resources.companies.types.GetOrCreateEntityTraitDefinitionResponse;
@@ -2287,6 +2291,154 @@ public class RawCompaniesClient {
         }
     }
 
+    public BaseSchematicHttpResponse<DeleteEntityTraitDefinitionResponse> deleteEntityTraitDefinition(
+            String entityTraitDefinitionId) {
+        return deleteEntityTraitDefinition(entityTraitDefinitionId, null);
+    }
+
+    public BaseSchematicHttpResponse<DeleteEntityTraitDefinitionResponse> deleteEntityTraitDefinition(
+            String entityTraitDefinitionId, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("entity-trait-definitions")
+                .addPathSegment(entityTraitDefinitionId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, DeleteEntityTraitDefinitionResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<GetEntityTraitDefinitionUsageResponse> getEntityTraitDefinitionUsage(
+            String entityTraitDefinitionId) {
+        return getEntityTraitDefinitionUsage(entityTraitDefinitionId, null);
+    }
+
+    public BaseSchematicHttpResponse<GetEntityTraitDefinitionUsageResponse> getEntityTraitDefinitionUsage(
+            String entityTraitDefinitionId, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("entity-trait-definitions")
+                .addPathSegment(entityTraitDefinitionId)
+                .addPathSegments("usage");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, GetEntityTraitDefinitionUsageResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
     public BaseSchematicHttpResponse<CountEntityTraitDefinitionsResponse> countEntityTraitDefinitions() {
         return countEntityTraitDefinitions(
                 CountEntityTraitDefinitionsRequest.builder().build());
@@ -2483,6 +2635,102 @@ public class RawCompaniesClient {
         }
     }
 
+    public BaseSchematicHttpResponse<CountEntityTraitsResponse> countEntityTraits() {
+        return countEntityTraits(CountEntityTraitsRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<CountEntityTraitsResponse> countEntityTraits(RequestOptions requestOptions) {
+        return countEntityTraits(CountEntityTraitsRequest.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<CountEntityTraitsResponse> countEntityTraits(CountEntityTraitsRequest request) {
+        return countEntityTraits(request, null);
+    }
+
+    public BaseSchematicHttpResponse<CountEntityTraitsResponse> countEntityTraits(
+            CountEntityTraitsRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("entity-traits/count");
+        if (request.getDefinitionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "definition_id", request.getDefinitionId().get(), false);
+        }
+        if (request.getEntityType().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "entity_type", request.getEntityType().get(), false);
+        }
+        if (request.getLimit().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "limit", request.getLimit().get(), false);
+        }
+        if (request.getOffset().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "offset", request.getOffset().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountEntityTraitsResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
     public BaseSchematicHttpResponse<ListPlanChangesResponse> listPlanChanges() {
         return listPlanChanges(ListPlanChangesRequest.builder().build());
     }
@@ -2523,10 +2771,6 @@ public class RawCompaniesClient {
         if (request.getCompanyIds().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "company_ids", request.getCompanyIds().get(), true);
-        }
-        if (request.getPlanIds().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "plan_ids", request.getPlanIds().get(), true);
         }
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {

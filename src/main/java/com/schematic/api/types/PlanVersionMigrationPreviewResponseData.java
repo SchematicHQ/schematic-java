@@ -23,17 +23,27 @@ import java.util.Objects;
 public final class PlanVersionMigrationPreviewResponseData {
     private final List<PlanVersionMigrationPreviewCompanyResponseData> companies;
 
+    private final boolean hasBillingChanges;
+
     private final Map<String, Object> additionalProperties;
 
     private PlanVersionMigrationPreviewResponseData(
-            List<PlanVersionMigrationPreviewCompanyResponseData> companies, Map<String, Object> additionalProperties) {
+            List<PlanVersionMigrationPreviewCompanyResponseData> companies,
+            boolean hasBillingChanges,
+            Map<String, Object> additionalProperties) {
         this.companies = companies;
+        this.hasBillingChanges = hasBillingChanges;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("companies")
     public List<PlanVersionMigrationPreviewCompanyResponseData> getCompanies() {
         return companies;
+    }
+
+    @JsonProperty("has_billing_changes")
+    public boolean getHasBillingChanges() {
+        return hasBillingChanges;
     }
 
     @java.lang.Override
@@ -49,12 +59,12 @@ public final class PlanVersionMigrationPreviewResponseData {
     }
 
     private boolean equalTo(PlanVersionMigrationPreviewResponseData other) {
-        return companies.equals(other.companies);
+        return companies.equals(other.companies) && hasBillingChanges == other.hasBillingChanges;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companies);
+        return Objects.hash(this.companies, this.hasBillingChanges);
     }
 
     @java.lang.Override
@@ -62,12 +72,34 @@ public final class PlanVersionMigrationPreviewResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static HasBillingChangesStage builder() {
         return new Builder();
     }
 
+    public interface HasBillingChangesStage {
+        _FinalStage hasBillingChanges(boolean hasBillingChanges);
+
+        Builder from(PlanVersionMigrationPreviewResponseData other);
+    }
+
+    public interface _FinalStage {
+        PlanVersionMigrationPreviewResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage companies(List<PlanVersionMigrationPreviewCompanyResponseData> companies);
+
+        _FinalStage addCompanies(PlanVersionMigrationPreviewCompanyResponseData companies);
+
+        _FinalStage addAllCompanies(List<PlanVersionMigrationPreviewCompanyResponseData> companies);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
+    public static final class Builder implements HasBillingChangesStage, _FinalStage {
+        private boolean hasBillingChanges;
+
         private List<PlanVersionMigrationPreviewCompanyResponseData> companies = new ArrayList<>();
 
         @JsonAnySetter
@@ -75,13 +107,37 @@ public final class PlanVersionMigrationPreviewResponseData {
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(PlanVersionMigrationPreviewResponseData other) {
             companies(other.getCompanies());
+            hasBillingChanges(other.getHasBillingChanges());
             return this;
         }
 
+        @java.lang.Override
+        @JsonSetter("has_billing_changes")
+        public _FinalStage hasBillingChanges(boolean hasBillingChanges) {
+            this.hasBillingChanges = hasBillingChanges;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCompanies(List<PlanVersionMigrationPreviewCompanyResponseData> companies) {
+            if (companies != null) {
+                this.companies.addAll(companies);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCompanies(PlanVersionMigrationPreviewCompanyResponseData companies) {
+            this.companies.add(companies);
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter(value = "companies", nulls = Nulls.SKIP)
-        public Builder companies(List<PlanVersionMigrationPreviewCompanyResponseData> companies) {
+        public _FinalStage companies(List<PlanVersionMigrationPreviewCompanyResponseData> companies) {
             this.companies.clear();
             if (companies != null) {
                 this.companies.addAll(companies);
@@ -89,27 +145,18 @@ public final class PlanVersionMigrationPreviewResponseData {
             return this;
         }
 
-        public Builder addCompanies(PlanVersionMigrationPreviewCompanyResponseData companies) {
-            this.companies.add(companies);
-            return this;
-        }
-
-        public Builder addAllCompanies(List<PlanVersionMigrationPreviewCompanyResponseData> companies) {
-            if (companies != null) {
-                this.companies.addAll(companies);
-            }
-            return this;
-        }
-
+        @java.lang.Override
         public PlanVersionMigrationPreviewResponseData build() {
-            return new PlanVersionMigrationPreviewResponseData(companies, additionalProperties);
+            return new PlanVersionMigrationPreviewResponseData(companies, hasBillingChanges, additionalProperties);
         }
 
+        @java.lang.Override
         public Builder additionalProperty(String key, Object value) {
             this.additionalProperties.put(key, value);
             return this;
         }
 
+        @java.lang.Override
         public Builder additionalProperties(Map<String, Object> additionalProperties) {
             this.additionalProperties.putAll(additionalProperties);
             return this;

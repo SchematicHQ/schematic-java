@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ManagePlanRequest.Builder.class)
 public final class ManagePlanRequest {
+    private final Optional<Boolean> activateOnPayment;
+
     private final List<PlanSelection> addOnSelections;
 
     private final Optional<String> basePlanId;
@@ -32,9 +34,15 @@ public final class ManagePlanRequest {
 
     private final Optional<String> basePlanVersionId;
 
+    private final Optional<OffsetDateTime> billingCycleAnchor;
+
+    private final Optional<String> billingEmail;
+
     private final Optional<String> billingEntityId;
 
     private final Optional<Boolean> cancelImmediately;
+
+    private final Optional<BillingCollectionMethod> collectionMethod;
 
     private final String companyId;
 
@@ -44,6 +52,8 @@ public final class ManagePlanRequest {
 
     private final List<CheckoutFieldValue> customFieldValues;
 
+    private final Optional<Long> daysUntilDue;
+
     private final List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements;
 
     private final Optional<String> paymentMethodExternalId;
@@ -52,43 +62,69 @@ public final class ManagePlanRequest {
 
     private final Optional<Boolean> prorate;
 
+    private final Optional<Boolean> prorateFirstPeriod;
+
+    private final Optional<Boolean> sendInvoice;
+
     private final Optional<OffsetDateTime> trialEnd;
 
     private final Map<String, Object> additionalProperties;
 
     private ManagePlanRequest(
+            Optional<Boolean> activateOnPayment,
             List<PlanSelection> addOnSelections,
             Optional<String> basePlanId,
             Optional<String> basePlanPriceId,
             Optional<String> basePlanVersionId,
+            Optional<OffsetDateTime> billingCycleAnchor,
+            Optional<String> billingEmail,
             Optional<String> billingEntityId,
             Optional<Boolean> cancelImmediately,
+            Optional<BillingCollectionMethod> collectionMethod,
             String companyId,
             Optional<String> couponExternalId,
             List<UpdateCreditBundleRequestBody> creditBundles,
             List<CheckoutFieldValue> customFieldValues,
+            Optional<Long> daysUntilDue,
             List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements,
             Optional<String> paymentMethodExternalId,
             Optional<String> promoCode,
             Optional<Boolean> prorate,
+            Optional<Boolean> prorateFirstPeriod,
+            Optional<Boolean> sendInvoice,
             Optional<OffsetDateTime> trialEnd,
             Map<String, Object> additionalProperties) {
+        this.activateOnPayment = activateOnPayment;
         this.addOnSelections = addOnSelections;
         this.basePlanId = basePlanId;
         this.basePlanPriceId = basePlanPriceId;
         this.basePlanVersionId = basePlanVersionId;
+        this.billingCycleAnchor = billingCycleAnchor;
+        this.billingEmail = billingEmail;
         this.billingEntityId = billingEntityId;
         this.cancelImmediately = cancelImmediately;
+        this.collectionMethod = collectionMethod;
         this.companyId = companyId;
         this.couponExternalId = couponExternalId;
         this.creditBundles = creditBundles;
         this.customFieldValues = customFieldValues;
+        this.daysUntilDue = daysUntilDue;
         this.payInAdvanceEntitlements = payInAdvanceEntitlements;
         this.paymentMethodExternalId = paymentMethodExternalId;
         this.promoCode = promoCode;
         this.prorate = prorate;
+        this.prorateFirstPeriod = prorateFirstPeriod;
+        this.sendInvoice = sendInvoice;
         this.trialEnd = trialEnd;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return If true, the company gets the plan only once the first invoice is paid. Only applies to an invoiced subscription. Defaults to false.
+     */
+    @JsonProperty("activate_on_payment")
+    public Optional<Boolean> getActivateOnPayment() {
+        return activateOnPayment;
     }
 
     @JsonProperty("add_on_selections")
@@ -112,6 +148,22 @@ public final class ManagePlanRequest {
     }
 
     /**
+     * @return The date the subscription's billing period renews on. Only honored when starting a new subscription; changing the anchor on an existing subscription is not supported.
+     */
+    @JsonProperty("billing_cycle_anchor")
+    public Optional<OffsetDateTime> getBillingCycleAnchor() {
+        return billingCycleAnchor;
+    }
+
+    /**
+     * @return Address the invoice is sent to. Required when collection_method is send_invoice.
+     */
+    @JsonProperty("billing_email")
+    public Optional<String> getBillingEmail() {
+        return billingEmail;
+    }
+
+    /**
      * @return The company that pays for this subscription. Must already have a Stripe customer. Only honored when starting a new subscription.
      */
     @JsonProperty("billing_entity_id")
@@ -125,6 +177,14 @@ public final class ManagePlanRequest {
     @JsonProperty("cancel_immediately")
     public Optional<Boolean> getCancelImmediately() {
         return cancelImmediately;
+    }
+
+    /**
+     * @return How the subscription is paid: charged to a payment method on file, or invoiced with payment terms. Invoicing is only available when starting a new subscription. Defaults to charge_automatically.
+     */
+    @JsonProperty("collection_method")
+    public Optional<BillingCollectionMethod> getCollectionMethod() {
+        return collectionMethod;
     }
 
     @JsonProperty("company_id")
@@ -145,6 +205,14 @@ public final class ManagePlanRequest {
     @JsonProperty("custom_field_values")
     public List<CheckoutFieldValue> getCustomFieldValues() {
         return customFieldValues;
+    }
+
+    /**
+     * @return Payment terms in days for an invoiced subscription. Defaults to 30.
+     */
+    @JsonProperty("days_until_due")
+    public Optional<Long> getDaysUntilDue() {
+        return daysUntilDue;
     }
 
     @JsonProperty("pay_in_advance_entitlements")
@@ -170,6 +238,22 @@ public final class ManagePlanRequest {
         return prorate;
     }
 
+    /**
+     * @return When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.
+     */
+    @JsonProperty("prorate_first_period")
+    public Optional<Boolean> getProrateFirstPeriod() {
+        return prorateFirstPeriod;
+    }
+
+    /**
+     * @return Whether Stripe emails the invoice when it is finalized. Only applies to an invoiced subscription. Defaults to true.
+     */
+    @JsonProperty("send_invoice")
+    public Optional<Boolean> getSendInvoice() {
+        return sendInvoice;
+    }
+
     @JsonProperty("trial_end")
     public Optional<OffsetDateTime> getTrialEnd() {
         return trialEnd;
@@ -187,40 +271,54 @@ public final class ManagePlanRequest {
     }
 
     private boolean equalTo(ManagePlanRequest other) {
-        return addOnSelections.equals(other.addOnSelections)
+        return activateOnPayment.equals(other.activateOnPayment)
+                && addOnSelections.equals(other.addOnSelections)
                 && basePlanId.equals(other.basePlanId)
                 && basePlanPriceId.equals(other.basePlanPriceId)
                 && basePlanVersionId.equals(other.basePlanVersionId)
+                && billingCycleAnchor.equals(other.billingCycleAnchor)
+                && billingEmail.equals(other.billingEmail)
                 && billingEntityId.equals(other.billingEntityId)
                 && cancelImmediately.equals(other.cancelImmediately)
+                && collectionMethod.equals(other.collectionMethod)
                 && companyId.equals(other.companyId)
                 && couponExternalId.equals(other.couponExternalId)
                 && creditBundles.equals(other.creditBundles)
                 && customFieldValues.equals(other.customFieldValues)
+                && daysUntilDue.equals(other.daysUntilDue)
                 && payInAdvanceEntitlements.equals(other.payInAdvanceEntitlements)
                 && paymentMethodExternalId.equals(other.paymentMethodExternalId)
                 && promoCode.equals(other.promoCode)
                 && prorate.equals(other.prorate)
+                && prorateFirstPeriod.equals(other.prorateFirstPeriod)
+                && sendInvoice.equals(other.sendInvoice)
                 && trialEnd.equals(other.trialEnd);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.activateOnPayment,
                 this.addOnSelections,
                 this.basePlanId,
                 this.basePlanPriceId,
                 this.basePlanVersionId,
+                this.billingCycleAnchor,
+                this.billingEmail,
                 this.billingEntityId,
                 this.cancelImmediately,
+                this.collectionMethod,
                 this.companyId,
                 this.couponExternalId,
                 this.creditBundles,
                 this.customFieldValues,
+                this.daysUntilDue,
                 this.payInAdvanceEntitlements,
                 this.paymentMethodExternalId,
                 this.promoCode,
                 this.prorate,
+                this.prorateFirstPeriod,
+                this.sendInvoice,
                 this.trialEnd);
     }
 
@@ -246,6 +344,13 @@ public final class ManagePlanRequest {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>If true, the company gets the plan only once the first invoice is paid. Only applies to an invoiced subscription. Defaults to false.</p>
+         */
+        _FinalStage activateOnPayment(Optional<Boolean> activateOnPayment);
+
+        _FinalStage activateOnPayment(Boolean activateOnPayment);
+
         _FinalStage addOnSelections(List<PlanSelection> addOnSelections);
 
         _FinalStage addAddOnSelections(PlanSelection addOnSelections);
@@ -265,6 +370,20 @@ public final class ManagePlanRequest {
         _FinalStage basePlanVersionId(String basePlanVersionId);
 
         /**
+         * <p>The date the subscription's billing period renews on. Only honored when starting a new subscription; changing the anchor on an existing subscription is not supported.</p>
+         */
+        _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor);
+
+        _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
+
+        /**
+         * <p>Address the invoice is sent to. Required when collection_method is send_invoice.</p>
+         */
+        _FinalStage billingEmail(Optional<String> billingEmail);
+
+        _FinalStage billingEmail(String billingEmail);
+
+        /**
          * <p>The company that pays for this subscription. Must already have a Stripe customer. Only honored when starting a new subscription.</p>
          */
         _FinalStage billingEntityId(Optional<String> billingEntityId);
@@ -277,6 +396,13 @@ public final class ManagePlanRequest {
         _FinalStage cancelImmediately(Optional<Boolean> cancelImmediately);
 
         _FinalStage cancelImmediately(Boolean cancelImmediately);
+
+        /**
+         * <p>How the subscription is paid: charged to a payment method on file, or invoiced with payment terms. Invoicing is only available when starting a new subscription. Defaults to charge_automatically.</p>
+         */
+        _FinalStage collectionMethod(Optional<BillingCollectionMethod> collectionMethod);
+
+        _FinalStage collectionMethod(BillingCollectionMethod collectionMethod);
 
         _FinalStage couponExternalId(Optional<String> couponExternalId);
 
@@ -293,6 +419,13 @@ public final class ManagePlanRequest {
         _FinalStage addCustomFieldValues(CheckoutFieldValue customFieldValues);
 
         _FinalStage addAllCustomFieldValues(List<CheckoutFieldValue> customFieldValues);
+
+        /**
+         * <p>Payment terms in days for an invoiced subscription. Defaults to 30.</p>
+         */
+        _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
+
+        _FinalStage daysUntilDue(Long daysUntilDue);
 
         _FinalStage payInAdvanceEntitlements(List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements);
 
@@ -315,6 +448,20 @@ public final class ManagePlanRequest {
 
         _FinalStage prorate(Boolean prorate);
 
+        /**
+         * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
+         */
+        _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod);
+
+        _FinalStage prorateFirstPeriod(Boolean prorateFirstPeriod);
+
+        /**
+         * <p>Whether Stripe emails the invoice when it is finalized. Only applies to an invoiced subscription. Defaults to true.</p>
+         */
+        _FinalStage sendInvoice(Optional<Boolean> sendInvoice);
+
+        _FinalStage sendInvoice(Boolean sendInvoice);
+
         _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd);
 
         _FinalStage trialEnd(OffsetDateTime trialEnd);
@@ -326,6 +473,10 @@ public final class ManagePlanRequest {
 
         private Optional<OffsetDateTime> trialEnd = Optional.empty();
 
+        private Optional<Boolean> sendInvoice = Optional.empty();
+
+        private Optional<Boolean> prorateFirstPeriod = Optional.empty();
+
         private Optional<Boolean> prorate = Optional.empty();
 
         private Optional<String> promoCode = Optional.empty();
@@ -334,15 +485,23 @@ public final class ManagePlanRequest {
 
         private List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements = new ArrayList<>();
 
+        private Optional<Long> daysUntilDue = Optional.empty();
+
         private List<CheckoutFieldValue> customFieldValues = new ArrayList<>();
 
         private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
         private Optional<String> couponExternalId = Optional.empty();
 
+        private Optional<BillingCollectionMethod> collectionMethod = Optional.empty();
+
         private Optional<Boolean> cancelImmediately = Optional.empty();
 
         private Optional<String> billingEntityId = Optional.empty();
+
+        private Optional<String> billingEmail = Optional.empty();
+
+        private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
 
         private Optional<String> basePlanVersionId = Optional.empty();
 
@@ -352,6 +511,8 @@ public final class ManagePlanRequest {
 
         private List<PlanSelection> addOnSelections = new ArrayList<>();
 
+        private Optional<Boolean> activateOnPayment = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -359,20 +520,27 @@ public final class ManagePlanRequest {
 
         @java.lang.Override
         public Builder from(ManagePlanRequest other) {
+            activateOnPayment(other.getActivateOnPayment());
             addOnSelections(other.getAddOnSelections());
             basePlanId(other.getBasePlanId());
             basePlanPriceId(other.getBasePlanPriceId());
             basePlanVersionId(other.getBasePlanVersionId());
+            billingCycleAnchor(other.getBillingCycleAnchor());
+            billingEmail(other.getBillingEmail());
             billingEntityId(other.getBillingEntityId());
             cancelImmediately(other.getCancelImmediately());
+            collectionMethod(other.getCollectionMethod());
             companyId(other.getCompanyId());
             couponExternalId(other.getCouponExternalId());
             creditBundles(other.getCreditBundles());
             customFieldValues(other.getCustomFieldValues());
+            daysUntilDue(other.getDaysUntilDue());
             payInAdvanceEntitlements(other.getPayInAdvanceEntitlements());
             paymentMethodExternalId(other.getPaymentMethodExternalId());
             promoCode(other.getPromoCode());
             prorate(other.getProrate());
+            prorateFirstPeriod(other.getProrateFirstPeriod());
+            sendInvoice(other.getSendInvoice());
             trialEnd(other.getTrialEnd());
             return this;
         }
@@ -394,6 +562,46 @@ public final class ManagePlanRequest {
         @JsonSetter(value = "trial_end", nulls = Nulls.SKIP)
         public _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd) {
             this.trialEnd = trialEnd;
+            return this;
+        }
+
+        /**
+         * <p>Whether Stripe emails the invoice when it is finalized. Only applies to an invoiced subscription. Defaults to true.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage sendInvoice(Boolean sendInvoice) {
+            this.sendInvoice = Optional.ofNullable(sendInvoice);
+            return this;
+        }
+
+        /**
+         * <p>Whether Stripe emails the invoice when it is finalized. Only applies to an invoiced subscription. Defaults to true.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "send_invoice", nulls = Nulls.SKIP)
+        public _FinalStage sendInvoice(Optional<Boolean> sendInvoice) {
+            this.sendInvoice = sendInvoice;
+            return this;
+        }
+
+        /**
+         * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage prorateFirstPeriod(Boolean prorateFirstPeriod) {
+            this.prorateFirstPeriod = Optional.ofNullable(prorateFirstPeriod);
+            return this;
+        }
+
+        /**
+         * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "prorate_first_period", nulls = Nulls.SKIP)
+        public _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod) {
+            this.prorateFirstPeriod = prorateFirstPeriod;
             return this;
         }
 
@@ -468,6 +676,26 @@ public final class ManagePlanRequest {
             return this;
         }
 
+        /**
+         * <p>Payment terms in days for an invoiced subscription. Defaults to 30.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage daysUntilDue(Long daysUntilDue) {
+            this.daysUntilDue = Optional.ofNullable(daysUntilDue);
+            return this;
+        }
+
+        /**
+         * <p>Payment terms in days for an invoiced subscription. Defaults to 30.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "days_until_due", nulls = Nulls.SKIP)
+        public _FinalStage daysUntilDue(Optional<Long> daysUntilDue) {
+            this.daysUntilDue = daysUntilDue;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllCustomFieldValues(List<CheckoutFieldValue> customFieldValues) {
             if (customFieldValues != null) {
@@ -530,6 +758,26 @@ public final class ManagePlanRequest {
         }
 
         /**
+         * <p>How the subscription is paid: charged to a payment method on file, or invoiced with payment terms. Invoicing is only available when starting a new subscription. Defaults to charge_automatically.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage collectionMethod(BillingCollectionMethod collectionMethod) {
+            this.collectionMethod = Optional.ofNullable(collectionMethod);
+            return this;
+        }
+
+        /**
+         * <p>How the subscription is paid: charged to a payment method on file, or invoiced with payment terms. Invoicing is only available when starting a new subscription. Defaults to charge_automatically.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "collection_method", nulls = Nulls.SKIP)
+        public _FinalStage collectionMethod(Optional<BillingCollectionMethod> collectionMethod) {
+            this.collectionMethod = collectionMethod;
+            return this;
+        }
+
+        /**
          * <p>If false, subscription cancels at period end. Only applies when removing all plans. Defaults to true.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -566,6 +814,46 @@ public final class ManagePlanRequest {
         @JsonSetter(value = "billing_entity_id", nulls = Nulls.SKIP)
         public _FinalStage billingEntityId(Optional<String> billingEntityId) {
             this.billingEntityId = billingEntityId;
+            return this;
+        }
+
+        /**
+         * <p>Address the invoice is sent to. Required when collection_method is send_invoice.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingEmail(String billingEmail) {
+            this.billingEmail = Optional.ofNullable(billingEmail);
+            return this;
+        }
+
+        /**
+         * <p>Address the invoice is sent to. Required when collection_method is send_invoice.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_email", nulls = Nulls.SKIP)
+        public _FinalStage billingEmail(Optional<String> billingEmail) {
+            this.billingEmail = billingEmail;
+            return this;
+        }
+
+        /**
+         * <p>The date the subscription's billing period renews on. Only honored when starting a new subscription; changing the anchor on an existing subscription is not supported.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor) {
+            this.billingCycleAnchor = Optional.ofNullable(billingCycleAnchor);
+            return this;
+        }
+
+        /**
+         * <p>The date the subscription's billing period renews on. Only honored when starting a new subscription; changing the anchor on an existing subscription is not supported.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_cycle_anchor", nulls = Nulls.SKIP)
+        public _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor) {
+            this.billingCycleAnchor = billingCycleAnchor;
             return this;
         }
 
@@ -632,23 +920,50 @@ public final class ManagePlanRequest {
             return this;
         }
 
+        /**
+         * <p>If true, the company gets the plan only once the first invoice is paid. Only applies to an invoiced subscription. Defaults to false.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage activateOnPayment(Boolean activateOnPayment) {
+            this.activateOnPayment = Optional.ofNullable(activateOnPayment);
+            return this;
+        }
+
+        /**
+         * <p>If true, the company gets the plan only once the first invoice is paid. Only applies to an invoiced subscription. Defaults to false.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "activate_on_payment", nulls = Nulls.SKIP)
+        public _FinalStage activateOnPayment(Optional<Boolean> activateOnPayment) {
+            this.activateOnPayment = activateOnPayment;
+            return this;
+        }
+
         @java.lang.Override
         public ManagePlanRequest build() {
             return new ManagePlanRequest(
+                    activateOnPayment,
                     addOnSelections,
                     basePlanId,
                     basePlanPriceId,
                     basePlanVersionId,
+                    billingCycleAnchor,
+                    billingEmail,
                     billingEntityId,
                     cancelImmediately,
+                    collectionMethod,
                     companyId,
                     couponExternalId,
                     creditBundles,
                     customFieldValues,
+                    daysUntilDue,
                     payInAdvanceEntitlements,
                     paymentMethodExternalId,
                     promoCode,
                     prorate,
+                    prorateFirstPeriod,
+                    sendInvoice,
                     trialEnd,
                     additionalProperties);
         }

@@ -47,14 +47,12 @@ public class PlanbundleClient {
         return this.rawClient.createPlanBundle(request, requestOptions).body();
     }
 
-    public UpdatePlanBundleResponse updatePlanBundle(String planBundleId, UpdatePlanBundleRequestBody request) {
-        return this.rawClient.updatePlanBundle(planBundleId, request).body();
+    public UpdatePlanBundleResponse updatePlanBundle(String planId, UpdatePlanBundleRequestBody request) {
+        return this.rawClient.updatePlanBundle(planId, request).body();
     }
 
     public UpdatePlanBundleResponse updatePlanBundle(
-            String planBundleId, UpdatePlanBundleRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updatePlanBundle(planBundleId, request, requestOptions)
-                .body();
+            String planId, UpdatePlanBundleRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.updatePlanBundle(planId, request, requestOptions).body();
     }
 }

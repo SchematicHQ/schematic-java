@@ -59,14 +59,14 @@ public class PlansClient {
         return this.rawClient;
     }
 
-    public UpdateCompanyPlansResponse updateCompanyPlans(String companyPlanId, UpdateCompanyPlansRequestBody request) {
-        return this.rawClient.updateCompanyPlans(companyPlanId, request).body();
+    public UpdateCompanyPlansResponse updateCompanyPlans(String companyId, UpdateCompanyPlansRequestBody request) {
+        return this.rawClient.updateCompanyPlans(companyId, request).body();
     }
 
     public UpdateCompanyPlansResponse updateCompanyPlans(
-            String companyPlanId, UpdateCompanyPlansRequestBody request, RequestOptions requestOptions) {
+            String companyId, UpdateCompanyPlansRequestBody request, RequestOptions requestOptions) {
         return this.rawClient
-                .updateCompanyPlans(companyPlanId, request, requestOptions)
+                .updateCompanyPlans(companyId, request, requestOptions)
                 .body();
     }
 
@@ -251,31 +251,33 @@ public class PlansClient {
         return this.rawClient.listPlanIssues(request, requestOptions).body();
     }
 
-    public DeletePlanVersionResponse deletePlanVersion(String planId) {
-        return this.rawClient.deletePlanVersion(planId).body();
+    public DeletePlanVersionResponse deletePlanVersion(String planVersionId) {
+        return this.rawClient.deletePlanVersion(planVersionId).body();
     }
 
-    public DeletePlanVersionResponse deletePlanVersion(String planId, RequestOptions requestOptions) {
-        return this.rawClient.deletePlanVersion(planId, requestOptions).body();
+    public DeletePlanVersionResponse deletePlanVersion(String planVersionId, RequestOptions requestOptions) {
+        return this.rawClient.deletePlanVersion(planVersionId, requestOptions).body();
     }
 
-    public DeletePlanVersionResponse deletePlanVersion(String planId, DeletePlanVersionRequest request) {
-        return this.rawClient.deletePlanVersion(planId, request).body();
+    public DeletePlanVersionResponse deletePlanVersion(String planVersionId, DeletePlanVersionRequest request) {
+        return this.rawClient.deletePlanVersion(planVersionId, request).body();
     }
 
     public DeletePlanVersionResponse deletePlanVersion(
-            String planId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
-        return this.rawClient.deletePlanVersion(planId, request, requestOptions).body();
+            String planVersionId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .deletePlanVersion(planVersionId, request, requestOptions)
+                .body();
     }
 
-    public PublishPlanVersionResponse publishPlanVersion(String planId, PublishPlanVersionRequestBody request) {
-        return this.rawClient.publishPlanVersion(planId, request).body();
+    public PublishPlanVersionResponse publishPlanVersion(String planVersionId, PublishPlanVersionRequestBody request) {
+        return this.rawClient.publishPlanVersion(planVersionId, request).body();
     }
 
     public PublishPlanVersionResponse publishPlanVersion(
-            String planId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
+            String planVersionId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
         return this.rawClient
-                .publishPlanVersion(planId, request, requestOptions)
+                .publishPlanVersion(planVersionId, request, requestOptions)
                 .body();
     }
 }

@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 public final class BillingCreditGrantResponseData {
     private final String companyId;
 
+    private final Optional<String> companyLicenseId;
+
     private final String companyName;
 
     private final OffsetDateTime createdAt;
@@ -42,6 +44,8 @@ public final class BillingCreditGrantResponseData {
     private final BillingCreditGrantReason grantReason;
 
     private final String id;
+
+    private final Optional<String> licenseName;
 
     private final Optional<String> planId;
 
@@ -81,6 +85,7 @@ public final class BillingCreditGrantResponseData {
 
     private BillingCreditGrantResponseData(
             String companyId,
+            Optional<String> companyLicenseId,
             String companyName,
             OffsetDateTime createdAt,
             Optional<String> creditIcon,
@@ -90,6 +95,7 @@ public final class BillingCreditGrantResponseData {
             Optional<OffsetDateTime> expiresAt,
             BillingCreditGrantReason grantReason,
             String id,
+            Optional<String> licenseName,
             Optional<String> planId,
             Optional<String> planName,
             Optional<BillingPriceResponseData> price,
@@ -109,6 +115,7 @@ public final class BillingCreditGrantResponseData {
             Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
+        this.companyLicenseId = companyLicenseId;
         this.companyName = companyName;
         this.createdAt = createdAt;
         this.creditIcon = creditIcon;
@@ -118,6 +125,7 @@ public final class BillingCreditGrantResponseData {
         this.expiresAt = expiresAt;
         this.grantReason = grantReason;
         this.id = id;
+        this.licenseName = licenseName;
         this.planId = planId;
         this.planName = planName;
         this.price = price;
@@ -141,6 +149,14 @@ public final class BillingCreditGrantResponseData {
     @JsonProperty("company_id")
     public String getCompanyId() {
         return companyId;
+    }
+
+    /**
+     * @return The license instance this grant was issued for. Set only when a per-license plan grant issued it; null on a plan's own grant.
+     */
+    @JsonProperty("company_license_id")
+    public Optional<String> getCompanyLicenseId() {
+        return companyLicenseId;
     }
 
     @JsonProperty("company_name")
@@ -186,6 +202,14 @@ public final class BillingCreditGrantResponseData {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    /**
+     * @return Name of the license this grant was issued for, when it came from a per-license plan grant.
+     */
+    @JsonProperty("license_name")
+    public Optional<String> getLicenseName() {
+        return licenseName;
     }
 
     @JsonProperty("plan_id")
@@ -289,6 +313,7 @@ public final class BillingCreditGrantResponseData {
 
     private boolean equalTo(BillingCreditGrantResponseData other) {
         return companyId.equals(other.companyId)
+                && companyLicenseId.equals(other.companyLicenseId)
                 && companyName.equals(other.companyName)
                 && createdAt.equals(other.createdAt)
                 && creditIcon.equals(other.creditIcon)
@@ -298,6 +323,7 @@ public final class BillingCreditGrantResponseData {
                 && expiresAt.equals(other.expiresAt)
                 && grantReason.equals(other.grantReason)
                 && id.equals(other.id)
+                && licenseName.equals(other.licenseName)
                 && planId.equals(other.planId)
                 && planName.equals(other.planName)
                 && price.equals(other.price)
@@ -321,6 +347,7 @@ public final class BillingCreditGrantResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.companyId,
+                this.companyLicenseId,
                 this.companyName,
                 this.createdAt,
                 this.creditIcon,
@@ -330,6 +357,7 @@ public final class BillingCreditGrantResponseData {
                 this.expiresAt,
                 this.grantReason,
                 this.id,
+                this.licenseName,
                 this.planId,
                 this.planName,
                 this.price,
@@ -419,6 +447,13 @@ public final class BillingCreditGrantResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>The license instance this grant was issued for. Set only when a per-license plan grant issued it; null on a plan's own grant.</p>
+         */
+        _FinalStage companyLicenseId(Optional<String> companyLicenseId);
+
+        _FinalStage companyLicenseId(String companyLicenseId);
+
         _FinalStage creditIcon(Optional<String> creditIcon);
 
         _FinalStage creditIcon(String creditIcon);
@@ -430,6 +465,13 @@ public final class BillingCreditGrantResponseData {
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
         _FinalStage expiresAt(OffsetDateTime expiresAt);
+
+        /**
+         * <p>Name of the license this grant was issued for, when it came from a per-license plan grant.</p>
+         */
+        _FinalStage licenseName(Optional<String> licenseName);
+
+        _FinalStage licenseName(String licenseName);
 
         _FinalStage planId(Optional<String> planId);
 
@@ -543,11 +585,15 @@ public final class BillingCreditGrantResponseData {
 
         private Optional<String> planId = Optional.empty();
 
+        private Optional<String> licenseName = Optional.empty();
+
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
         private Optional<String> currency = Optional.empty();
 
         private Optional<String> creditIcon = Optional.empty();
+
+        private Optional<String> companyLicenseId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -557,6 +603,7 @@ public final class BillingCreditGrantResponseData {
         @java.lang.Override
         public Builder from(BillingCreditGrantResponseData other) {
             companyId(other.getCompanyId());
+            companyLicenseId(other.getCompanyLicenseId());
             companyName(other.getCompanyName());
             createdAt(other.getCreatedAt());
             creditIcon(other.getCreditIcon());
@@ -566,6 +613,7 @@ public final class BillingCreditGrantResponseData {
             expiresAt(other.getExpiresAt());
             grantReason(other.getGrantReason());
             id(other.getId());
+            licenseName(other.getLicenseName());
             planId(other.getPlanId());
             planName(other.getPlanName());
             price(other.getPrice());
@@ -827,6 +875,26 @@ public final class BillingCreditGrantResponseData {
             return this;
         }
 
+        /**
+         * <p>Name of the license this grant was issued for, when it came from a per-license plan grant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage licenseName(String licenseName) {
+            this.licenseName = Optional.ofNullable(licenseName);
+            return this;
+        }
+
+        /**
+         * <p>Name of the license this grant was issued for, when it came from a per-license plan grant.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "license_name", nulls = Nulls.SKIP)
+        public _FinalStage licenseName(Optional<String> licenseName) {
+            this.licenseName = licenseName;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage expiresAt(OffsetDateTime expiresAt) {
             this.expiresAt = Optional.ofNullable(expiresAt);
@@ -866,10 +934,31 @@ public final class BillingCreditGrantResponseData {
             return this;
         }
 
+        /**
+         * <p>The license instance this grant was issued for. Set only when a per-license plan grant issued it; null on a plan's own grant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage companyLicenseId(String companyLicenseId) {
+            this.companyLicenseId = Optional.ofNullable(companyLicenseId);
+            return this;
+        }
+
+        /**
+         * <p>The license instance this grant was issued for. Set only when a per-license plan grant issued it; null on a plan's own grant.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "company_license_id", nulls = Nulls.SKIP)
+        public _FinalStage companyLicenseId(Optional<String> companyLicenseId) {
+            this.companyLicenseId = companyLicenseId;
+            return this;
+        }
+
         @java.lang.Override
         public BillingCreditGrantResponseData build() {
             return new BillingCreditGrantResponseData(
                     companyId,
+                    companyLicenseId,
                     companyName,
                     createdAt,
                     creditIcon,
@@ -879,6 +968,7 @@ public final class BillingCreditGrantResponseData {
                     expiresAt,
                     grantReason,
                     id,
+                    licenseName,
                     planId,
                     planName,
                     price,

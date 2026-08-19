@@ -50,14 +50,12 @@ public class AsyncPlanbundleClient {
     }
 
     public CompletableFuture<UpdatePlanBundleResponse> updatePlanBundle(
-            String planBundleId, UpdatePlanBundleRequestBody request) {
-        return this.rawClient.updatePlanBundle(planBundleId, request).thenApply(response -> response.body());
+            String planId, UpdatePlanBundleRequestBody request) {
+        return this.rawClient.updatePlanBundle(planId, request).thenApply(response -> response.body());
     }
 
     public CompletableFuture<UpdatePlanBundleResponse> updatePlanBundle(
-            String planBundleId, UpdatePlanBundleRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updatePlanBundle(planBundleId, request, requestOptions)
-                .thenApply(response -> response.body());
+            String planId, UpdatePlanBundleRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.updatePlanBundle(planId, request, requestOptions).thenApply(response -> response.body());
     }
 }

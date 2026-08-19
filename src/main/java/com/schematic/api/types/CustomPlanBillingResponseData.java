@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class CustomPlanBillingResponseData {
     private final CustomPlanActivationStrategy activationStrategy;
 
+    private final Optional<OffsetDateTime> billingCycleAnchor;
+
     private final String companyId;
 
     private final OffsetDateTime createdAt;
@@ -35,6 +37,8 @@ public final class CustomPlanBillingResponseData {
     private final String id;
 
     private final Optional<OffsetDateTime> paidAt;
+
+    private final PlanBillingSource planBillingSource;
 
     private final String planId;
 
@@ -52,12 +56,14 @@ public final class CustomPlanBillingResponseData {
 
     private CustomPlanBillingResponseData(
             CustomPlanActivationStrategy activationStrategy,
+            Optional<OffsetDateTime> billingCycleAnchor,
             String companyId,
             OffsetDateTime createdAt,
             long daysUntilDue,
             Optional<String> externalInvoiceId,
             String id,
             Optional<OffsetDateTime> paidAt,
+            PlanBillingSource planBillingSource,
             String planId,
             Optional<OffsetDateTime> publishedAt,
             boolean sendInvoice,
@@ -66,12 +72,14 @@ public final class CustomPlanBillingResponseData {
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
+        this.billingCycleAnchor = billingCycleAnchor;
         this.companyId = companyId;
         this.createdAt = createdAt;
         this.daysUntilDue = daysUntilDue;
         this.externalInvoiceId = externalInvoiceId;
         this.id = id;
         this.paidAt = paidAt;
+        this.planBillingSource = planBillingSource;
         this.planId = planId;
         this.publishedAt = publishedAt;
         this.sendInvoice = sendInvoice;
@@ -84,6 +92,14 @@ public final class CustomPlanBillingResponseData {
     @JsonProperty("activation_strategy")
     public CustomPlanActivationStrategy getActivationStrategy() {
         return activationStrategy;
+    }
+
+    /**
+     * @return The billing period renewal date pinned when the subscription started, when one was set. When no invoice exists yet, the first invoice is raised on this date.
+     */
+    @JsonProperty("billing_cycle_anchor")
+    public Optional<OffsetDateTime> getBillingCycleAnchor() {
+        return billingCycleAnchor;
     }
 
     @JsonProperty("company_id")
@@ -114,6 +130,14 @@ public final class CustomPlanBillingResponseData {
     @JsonProperty("paid_at")
     public Optional<OffsetDateTime> getPaidAt() {
         return paidAt;
+    }
+
+    /**
+     * @return The flow that created this billing record: a custom plan, or a standard plan assigned by invoice through Manage Plan.
+     */
+    @JsonProperty("plan_billing_source")
+    public PlanBillingSource getPlanBillingSource() {
+        return planBillingSource;
     }
 
     @JsonProperty("plan_id")
@@ -159,12 +183,14 @@ public final class CustomPlanBillingResponseData {
 
     private boolean equalTo(CustomPlanBillingResponseData other) {
         return activationStrategy.equals(other.activationStrategy)
+                && billingCycleAnchor.equals(other.billingCycleAnchor)
                 && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
                 && daysUntilDue == other.daysUntilDue
                 && externalInvoiceId.equals(other.externalInvoiceId)
                 && id.equals(other.id)
                 && paidAt.equals(other.paidAt)
+                && planBillingSource.equals(other.planBillingSource)
                 && planId.equals(other.planId)
                 && publishedAt.equals(other.publishedAt)
                 && sendInvoice == other.sendInvoice
@@ -177,12 +203,14 @@ public final class CustomPlanBillingResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.activationStrategy,
+                this.billingCycleAnchor,
                 this.companyId,
                 this.createdAt,
                 this.daysUntilDue,
                 this.externalInvoiceId,
                 this.id,
                 this.paidAt,
+                this.planBillingSource,
                 this.planId,
                 this.publishedAt,
                 this.sendInvoice,
@@ -219,7 +247,14 @@ public final class CustomPlanBillingResponseData {
     }
 
     public interface IdStage {
-        PlanIdStage id(@NotNull String id);
+        PlanBillingSourceStage id(@NotNull String id);
+    }
+
+    public interface PlanBillingSourceStage {
+        /**
+         * <p>The flow that created this billing record: a custom plan, or a standard plan assigned by invoice through Manage Plan.</p>
+         */
+        PlanIdStage planBillingSource(@NotNull PlanBillingSource planBillingSource);
     }
 
     public interface PlanIdStage {
@@ -245,6 +280,13 @@ public final class CustomPlanBillingResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>The billing period renewal date pinned when the subscription started, when one was set. When no invoice exists yet, the first invoice is raised on this date.</p>
+         */
+        _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor);
+
+        _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
+
         _FinalStage externalInvoiceId(Optional<String> externalInvoiceId);
 
         _FinalStage externalInvoiceId(String externalInvoiceId);
@@ -269,6 +311,7 @@ public final class CustomPlanBillingResponseData {
                     CreatedAtStage,
                     DaysUntilDueStage,
                     IdStage,
+                    PlanBillingSourceStage,
                     PlanIdStage,
                     SendInvoiceStage,
                     StatusStage,
@@ -283,6 +326,8 @@ public final class CustomPlanBillingResponseData {
         private long daysUntilDue;
 
         private String id;
+
+        private PlanBillingSource planBillingSource;
 
         private String planId;
 
@@ -300,6 +345,8 @@ public final class CustomPlanBillingResponseData {
 
         private Optional<String> externalInvoiceId = Optional.empty();
 
+        private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -308,12 +355,14 @@ public final class CustomPlanBillingResponseData {
         @java.lang.Override
         public Builder from(CustomPlanBillingResponseData other) {
             activationStrategy(other.getActivationStrategy());
+            billingCycleAnchor(other.getBillingCycleAnchor());
             companyId(other.getCompanyId());
             createdAt(other.getCreatedAt());
             daysUntilDue(other.getDaysUntilDue());
             externalInvoiceId(other.getExternalInvoiceId());
             id(other.getId());
             paidAt(other.getPaidAt());
+            planBillingSource(other.getPlanBillingSource());
             planId(other.getPlanId());
             publishedAt(other.getPublishedAt());
             sendInvoice(other.getSendInvoice());
@@ -353,8 +402,19 @@ public final class CustomPlanBillingResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public PlanIdStage id(@NotNull String id) {
+        public PlanBillingSourceStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The flow that created this billing record: a custom plan, or a standard plan assigned by invoice through Manage Plan.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("plan_billing_source")
+        public PlanIdStage planBillingSource(@NotNull PlanBillingSource planBillingSource) {
+            this.planBillingSource = Objects.requireNonNull(planBillingSource, "planBillingSource must not be null");
             return this;
         }
 
@@ -438,16 +498,38 @@ public final class CustomPlanBillingResponseData {
             return this;
         }
 
+        /**
+         * <p>The billing period renewal date pinned when the subscription started, when one was set. When no invoice exists yet, the first invoice is raised on this date.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor) {
+            this.billingCycleAnchor = Optional.ofNullable(billingCycleAnchor);
+            return this;
+        }
+
+        /**
+         * <p>The billing period renewal date pinned when the subscription started, when one was set. When no invoice exists yet, the first invoice is raised on this date.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_cycle_anchor", nulls = Nulls.SKIP)
+        public _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor) {
+            this.billingCycleAnchor = billingCycleAnchor;
+            return this;
+        }
+
         @java.lang.Override
         public CustomPlanBillingResponseData build() {
             return new CustomPlanBillingResponseData(
                     activationStrategy,
+                    billingCycleAnchor,
                     companyId,
                     createdAt,
                     daysUntilDue,
                     externalInvoiceId,
                     id,
                     paidAt,
+                    planBillingSource,
                     planId,
                     publishedAt,
                     sendInvoice,

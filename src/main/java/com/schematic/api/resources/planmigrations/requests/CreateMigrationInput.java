@@ -12,27 +12,30 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.MigrationProrationBehavior;
 import com.schematic.api.types.PlanType;
 import com.schematic.api.types.PlanVersionMigrationStrategy;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateMigrationInput.Builder.class)
 public final class CreateMigrationInput {
-    private final List<String> companyIds;
+    private final Optional<List<String>> companyIds;
 
-    private final List<String> excludedCompanyIds;
+    private final Optional<List<String>> excludedCompanyIds;
 
     private final String planId;
 
     private final String planVersionIdTo;
 
-    private final List<String> planVersionIdsFrom;
+    private final Optional<List<String>> planVersionIdsFrom;
+
+    private final Optional<MigrationProrationBehavior> prorationBehavior;
 
     private final PlanVersionMigrationStrategy strategy;
 
@@ -41,11 +44,12 @@ public final class CreateMigrationInput {
     private final Map<String, Object> additionalProperties;
 
     private CreateMigrationInput(
-            List<String> companyIds,
-            List<String> excludedCompanyIds,
+            Optional<List<String>> companyIds,
+            Optional<List<String>> excludedCompanyIds,
             String planId,
             String planVersionIdTo,
-            List<String> planVersionIdsFrom,
+            Optional<List<String>> planVersionIdsFrom,
+            Optional<MigrationProrationBehavior> prorationBehavior,
             PlanVersionMigrationStrategy strategy,
             PlanType targetPlanType,
             Map<String, Object> additionalProperties) {
@@ -54,18 +58,19 @@ public final class CreateMigrationInput {
         this.planId = planId;
         this.planVersionIdTo = planVersionIdTo;
         this.planVersionIdsFrom = planVersionIdsFrom;
+        this.prorationBehavior = prorationBehavior;
         this.strategy = strategy;
         this.targetPlanType = targetPlanType;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("company_ids")
-    public List<String> getCompanyIds() {
+    public Optional<List<String>> getCompanyIds() {
         return companyIds;
     }
 
     @JsonProperty("excluded_company_ids")
-    public List<String> getExcludedCompanyIds() {
+    public Optional<List<String>> getExcludedCompanyIds() {
         return excludedCompanyIds;
     }
 
@@ -80,8 +85,13 @@ public final class CreateMigrationInput {
     }
 
     @JsonProperty("plan_version_ids_from")
-    public List<String> getPlanVersionIdsFrom() {
+    public Optional<List<String>> getPlanVersionIdsFrom() {
         return planVersionIdsFrom;
+    }
+
+    @JsonProperty("proration_behavior")
+    public Optional<MigrationProrationBehavior> getProrationBehavior() {
+        return prorationBehavior;
     }
 
     @JsonProperty("strategy")
@@ -111,6 +121,7 @@ public final class CreateMigrationInput {
                 && planId.equals(other.planId)
                 && planVersionIdTo.equals(other.planVersionIdTo)
                 && planVersionIdsFrom.equals(other.planVersionIdsFrom)
+                && prorationBehavior.equals(other.prorationBehavior)
                 && strategy.equals(other.strategy)
                 && targetPlanType.equals(other.targetPlanType);
     }
@@ -123,6 +134,7 @@ public final class CreateMigrationInput {
                 this.planId,
                 this.planVersionIdTo,
                 this.planVersionIdsFrom,
+                this.prorationBehavior,
                 this.strategy,
                 this.targetPlanType);
     }
@@ -161,23 +173,21 @@ public final class CreateMigrationInput {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage companyIds(Optional<List<String>> companyIds);
+
         _FinalStage companyIds(List<String> companyIds);
 
-        _FinalStage addCompanyIds(String companyIds);
-
-        _FinalStage addAllCompanyIds(List<String> companyIds);
+        _FinalStage excludedCompanyIds(Optional<List<String>> excludedCompanyIds);
 
         _FinalStage excludedCompanyIds(List<String> excludedCompanyIds);
 
-        _FinalStage addExcludedCompanyIds(String excludedCompanyIds);
-
-        _FinalStage addAllExcludedCompanyIds(List<String> excludedCompanyIds);
+        _FinalStage planVersionIdsFrom(Optional<List<String>> planVersionIdsFrom);
 
         _FinalStage planVersionIdsFrom(List<String> planVersionIdsFrom);
 
-        _FinalStage addPlanVersionIdsFrom(String planVersionIdsFrom);
+        _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior);
 
-        _FinalStage addAllPlanVersionIdsFrom(List<String> planVersionIdsFrom);
+        _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -191,11 +201,13 @@ public final class CreateMigrationInput {
 
         private PlanType targetPlanType;
 
-        private List<String> planVersionIdsFrom = new ArrayList<>();
+        private Optional<MigrationProrationBehavior> prorationBehavior = Optional.empty();
 
-        private List<String> excludedCompanyIds = new ArrayList<>();
+        private Optional<List<String>> planVersionIdsFrom = Optional.empty();
 
-        private List<String> companyIds = new ArrayList<>();
+        private Optional<List<String>> excludedCompanyIds = Optional.empty();
+
+        private Optional<List<String>> companyIds = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -209,6 +221,7 @@ public final class CreateMigrationInput {
             planId(other.getPlanId());
             planVersionIdTo(other.getPlanVersionIdTo());
             planVersionIdsFrom(other.getPlanVersionIdsFrom());
+            prorationBehavior(other.getProrationBehavior());
             strategy(other.getStrategy());
             targetPlanType(other.getTargetPlanType());
             return this;
@@ -243,74 +256,54 @@ public final class CreateMigrationInput {
         }
 
         @java.lang.Override
-        public _FinalStage addAllPlanVersionIdsFrom(List<String> planVersionIdsFrom) {
-            if (planVersionIdsFrom != null) {
-                this.planVersionIdsFrom.addAll(planVersionIdsFrom);
-            }
+        public _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior) {
+            this.prorationBehavior = Optional.ofNullable(prorationBehavior);
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage addPlanVersionIdsFrom(String planVersionIdsFrom) {
-            this.planVersionIdsFrom.add(planVersionIdsFrom);
+        @JsonSetter(value = "proration_behavior", nulls = Nulls.SKIP)
+        public _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior) {
+            this.prorationBehavior = prorationBehavior;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage planVersionIdsFrom(List<String> planVersionIdsFrom) {
+            this.planVersionIdsFrom = Optional.ofNullable(planVersionIdsFrom);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "plan_version_ids_from", nulls = Nulls.SKIP)
-        public _FinalStage planVersionIdsFrom(List<String> planVersionIdsFrom) {
-            this.planVersionIdsFrom.clear();
-            if (planVersionIdsFrom != null) {
-                this.planVersionIdsFrom.addAll(planVersionIdsFrom);
-            }
+        public _FinalStage planVersionIdsFrom(Optional<List<String>> planVersionIdsFrom) {
+            this.planVersionIdsFrom = planVersionIdsFrom;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage addAllExcludedCompanyIds(List<String> excludedCompanyIds) {
-            if (excludedCompanyIds != null) {
-                this.excludedCompanyIds.addAll(excludedCompanyIds);
-            }
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage addExcludedCompanyIds(String excludedCompanyIds) {
-            this.excludedCompanyIds.add(excludedCompanyIds);
+        public _FinalStage excludedCompanyIds(List<String> excludedCompanyIds) {
+            this.excludedCompanyIds = Optional.ofNullable(excludedCompanyIds);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "excluded_company_ids", nulls = Nulls.SKIP)
-        public _FinalStage excludedCompanyIds(List<String> excludedCompanyIds) {
-            this.excludedCompanyIds.clear();
-            if (excludedCompanyIds != null) {
-                this.excludedCompanyIds.addAll(excludedCompanyIds);
-            }
+        public _FinalStage excludedCompanyIds(Optional<List<String>> excludedCompanyIds) {
+            this.excludedCompanyIds = excludedCompanyIds;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage addAllCompanyIds(List<String> companyIds) {
-            if (companyIds != null) {
-                this.companyIds.addAll(companyIds);
-            }
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage addCompanyIds(String companyIds) {
-            this.companyIds.add(companyIds);
+        public _FinalStage companyIds(List<String> companyIds) {
+            this.companyIds = Optional.ofNullable(companyIds);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "company_ids", nulls = Nulls.SKIP)
-        public _FinalStage companyIds(List<String> companyIds) {
-            this.companyIds.clear();
-            if (companyIds != null) {
-                this.companyIds.addAll(companyIds);
-            }
+        public _FinalStage companyIds(Optional<List<String>> companyIds) {
+            this.companyIds = companyIds;
             return this;
         }
 
@@ -322,6 +315,7 @@ public final class CreateMigrationInput {
                     planId,
                     planVersionIdTo,
                     planVersionIdsFrom,
+                    prorationBehavior,
                     strategy,
                     targetPlanType,
                     additionalProperties);

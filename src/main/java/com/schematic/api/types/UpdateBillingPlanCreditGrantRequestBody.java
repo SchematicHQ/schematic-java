@@ -45,6 +45,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
     private final Optional<Boolean> canBuyBundles;
 
+    private final Optional<Long> companyCreditAmount;
+
     private final Optional<Long> creditAmount;
 
     private final Optional<BillingCreditExpiryType> expiryType;
@@ -80,6 +82,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             Optional<Long> autoTopupThresholdCredits,
             Optional<Long> autoTopupThresholdPercent,
             Optional<Boolean> canBuyBundles,
+            Optional<Long> companyCreditAmount,
             Optional<Long> creditAmount,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
@@ -103,6 +106,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         this.autoTopupThresholdCredits = autoTopupThresholdCredits;
         this.autoTopupThresholdPercent = autoTopupThresholdPercent;
         this.canBuyBundles = canBuyBundles;
+        this.companyCreditAmount = companyCreditAmount;
         this.creditAmount = creditAmount;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
@@ -176,6 +180,14 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         return canBuyBundles;
     }
 
+    /**
+     * @return Credits granted once per company on top of the per-license amount. Only valid when the grant scales per license.
+     */
+    @JsonProperty("company_credit_amount")
+    public Optional<Long> getCompanyCreditAmount() {
+        return companyCreditAmount;
+    }
+
     @JsonProperty("credit_amount")
     public Optional<Long> getCreditAmount() {
         return creditAmount;
@@ -197,7 +209,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
     }
 
     /**
-     * @return The license whose quantity scales this grant. Cannot be changed after creation.
+     * @return The license whose quantity scales this grant. Cleared when the grant moves off per-license scaling.
      */
     @JsonProperty("license_id")
     public Optional<String> getLicenseId() {
@@ -228,7 +240,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
     }
 
     /**
-     * @return Whether the grant is a fixed amount per company, or issued once per license the company holds. Cannot be changed after creation.
+     * @return Whether the grant is a fixed amount per company, or issued once per license the company holds. Changing this re-issues the credits companies already hold for this grant.
      */
     @JsonProperty("scaling")
     public Optional<PlanCreditGrantScaling> getScaling() {
@@ -260,6 +272,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 && autoTopupThresholdCredits.equals(other.autoTopupThresholdCredits)
                 && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
                 && canBuyBundles.equals(other.canBuyBundles)
+                && companyCreditAmount.equals(other.companyCreditAmount)
                 && creditAmount.equals(other.creditAmount)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
@@ -287,6 +300,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 this.autoTopupThresholdCredits,
                 this.autoTopupThresholdPercent,
                 this.canBuyBundles,
+                this.companyCreditAmount,
                 this.creditAmount,
                 this.expiryType,
                 this.expiryUnit,
@@ -373,6 +387,13 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
         _FinalStage canBuyBundles(Boolean canBuyBundles);
 
+        /**
+         * <p>Credits granted once per company on top of the per-license amount. Only valid when the grant scales per license.</p>
+         */
+        _FinalStage companyCreditAmount(Optional<Long> companyCreditAmount);
+
+        _FinalStage companyCreditAmount(Long companyCreditAmount);
+
         _FinalStage creditAmount(Optional<Long> creditAmount);
 
         _FinalStage creditAmount(Long creditAmount);
@@ -390,7 +411,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         _FinalStage expiryUnitCount(Long expiryUnitCount);
 
         /**
-         * <p>The license whose quantity scales this grant. Cannot be changed after creation.</p>
+         * <p>The license whose quantity scales this grant. Cleared when the grant moves off per-license scaling.</p>
          */
         _FinalStage licenseId(Optional<String> licenseId);
 
@@ -408,7 +429,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         _FinalStage rolloverPercentage(Long rolloverPercentage);
 
         /**
-         * <p>Whether the grant is a fixed amount per company, or issued once per license the company holds. Cannot be changed after creation.</p>
+         * <p>Whether the grant is a fixed amount per company, or issued once per license the company holds. Changing this re-issues the credits companies already hold for this grant.</p>
          */
         _FinalStage scaling(Optional<PlanCreditGrantScaling> scaling);
 
@@ -436,6 +457,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
 
         private Optional<Long> creditAmount = Optional.empty();
+
+        private Optional<Long> companyCreditAmount = Optional.empty();
 
         private Optional<Boolean> canBuyBundles = Optional.empty();
 
@@ -480,6 +503,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             autoTopupThresholdCredits(other.getAutoTopupThresholdCredits());
             autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
             canBuyBundles(other.getCanBuyBundles());
+            companyCreditAmount(other.getCompanyCreditAmount());
             creditAmount(other.getCreditAmount());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
@@ -508,7 +532,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         }
 
         /**
-         * <p>Whether the grant is a fixed amount per company, or issued once per license the company holds. Cannot be changed after creation.</p>
+         * <p>Whether the grant is a fixed amount per company, or issued once per license the company holds. Changing this re-issues the credits companies already hold for this grant.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -518,7 +542,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         }
 
         /**
-         * <p>Whether the grant is a fixed amount per company, or issued once per license the company holds. Cannot be changed after creation.</p>
+         * <p>Whether the grant is a fixed amount per company, or issued once per license the company holds. Changing this re-issues the credits companies already hold for this grant.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "scaling", nulls = Nulls.SKIP)
@@ -561,7 +585,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         }
 
         /**
-         * <p>The license whose quantity scales this grant. Cannot be changed after creation.</p>
+         * <p>The license whose quantity scales this grant. Cleared when the grant moves off per-license scaling.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -571,7 +595,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         }
 
         /**
-         * <p>The license whose quantity scales this grant. Cannot be changed after creation.</p>
+         * <p>The license whose quantity scales this grant. Cleared when the grant moves off per-license scaling.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "license_id", nulls = Nulls.SKIP)
@@ -629,6 +653,26 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         @JsonSetter(value = "credit_amount", nulls = Nulls.SKIP)
         public _FinalStage creditAmount(Optional<Long> creditAmount) {
             this.creditAmount = creditAmount;
+            return this;
+        }
+
+        /**
+         * <p>Credits granted once per company on top of the per-license amount. Only valid when the grant scales per license.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage companyCreditAmount(Long companyCreditAmount) {
+            this.companyCreditAmount = Optional.ofNullable(companyCreditAmount);
+            return this;
+        }
+
+        /**
+         * <p>Credits granted once per company on top of the per-license amount. Only valid when the grant scales per license.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "company_credit_amount", nulls = Nulls.SKIP)
+        public _FinalStage companyCreditAmount(Optional<Long> companyCreditAmount) {
+            this.companyCreditAmount = companyCreditAmount;
             return this;
         }
 
@@ -803,6 +847,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                     autoTopupThresholdCredits,
                     autoTopupThresholdPercent,
                     canBuyBundles,
+                    companyCreditAmount,
                     creditAmount,
                     expiryType,
                     expiryUnit,

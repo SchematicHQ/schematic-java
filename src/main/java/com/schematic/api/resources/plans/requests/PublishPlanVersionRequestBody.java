@@ -15,6 +15,7 @@ import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CheckoutFieldValue;
 import com.schematic.api.types.CustomPlanActivationStrategy;
 import com.schematic.api.types.CustomerBillingAddress;
+import com.schematic.api.types.MigrationProrationBehavior;
 import com.schematic.api.types.PlanVersionMigrationStrategy;
 import com.schematic.api.types.TaxIdInput;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public final class PublishPlanVersionRequestBody {
 
     private final Optional<String> phone;
 
+    private final Optional<MigrationProrationBehavior> prorationBehavior;
+
     private final Optional<Boolean> sendInvoice;
 
     private final Optional<TaxIdInput> taxId;
@@ -62,6 +65,7 @@ public final class PublishPlanVersionRequestBody {
             List<String> excludedCompanyIds,
             PlanVersionMigrationStrategy migrationStrategy,
             Optional<String> phone,
+            Optional<MigrationProrationBehavior> prorationBehavior,
             Optional<Boolean> sendInvoice,
             Optional<TaxIdInput> taxId,
             Map<String, Object> additionalProperties) {
@@ -74,6 +78,7 @@ public final class PublishPlanVersionRequestBody {
         this.excludedCompanyIds = excludedCompanyIds;
         this.migrationStrategy = migrationStrategy;
         this.phone = phone;
+        this.prorationBehavior = prorationBehavior;
         this.sendInvoice = sendInvoice;
         this.taxId = taxId;
         this.additionalProperties = additionalProperties;
@@ -124,6 +129,11 @@ public final class PublishPlanVersionRequestBody {
         return phone;
     }
 
+    @JsonProperty("proration_behavior")
+    public Optional<MigrationProrationBehavior> getProrationBehavior() {
+        return prorationBehavior;
+    }
+
     /**
      * @return Whether Stripe emails the invoice when it is finalized. Defaults to true.
      */
@@ -158,6 +168,7 @@ public final class PublishPlanVersionRequestBody {
                 && excludedCompanyIds.equals(other.excludedCompanyIds)
                 && migrationStrategy.equals(other.migrationStrategy)
                 && phone.equals(other.phone)
+                && prorationBehavior.equals(other.prorationBehavior)
                 && sendInvoice.equals(other.sendInvoice)
                 && taxId.equals(other.taxId);
     }
@@ -174,6 +185,7 @@ public final class PublishPlanVersionRequestBody {
                 this.excludedCompanyIds,
                 this.migrationStrategy,
                 this.phone,
+                this.prorationBehavior,
                 this.sendInvoice,
                 this.taxId);
     }
@@ -234,6 +246,10 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage phone(String phone);
 
+        _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior);
+
+        _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior);
+
         /**
          * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
          */
@@ -253,6 +269,8 @@ public final class PublishPlanVersionRequestBody {
         private Optional<TaxIdInput> taxId = Optional.empty();
 
         private Optional<Boolean> sendInvoice = Optional.empty();
+
+        private Optional<MigrationProrationBehavior> prorationBehavior = Optional.empty();
 
         private Optional<String> phone = Optional.empty();
 
@@ -286,6 +304,7 @@ public final class PublishPlanVersionRequestBody {
             excludedCompanyIds(other.getExcludedCompanyIds());
             migrationStrategy(other.getMigrationStrategy());
             phone(other.getPhone());
+            prorationBehavior(other.getProrationBehavior());
             sendInvoice(other.getSendInvoice());
             taxId(other.getTaxId());
             return this;
@@ -328,6 +347,19 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter(value = "send_invoice", nulls = Nulls.SKIP)
         public _FinalStage sendInvoice(Optional<Boolean> sendInvoice) {
             this.sendInvoice = sendInvoice;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior) {
+            this.prorationBehavior = Optional.ofNullable(prorationBehavior);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "proration_behavior", nulls = Nulls.SKIP)
+        public _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior) {
+            this.prorationBehavior = prorationBehavior;
             return this;
         }
 
@@ -458,6 +490,7 @@ public final class PublishPlanVersionRequestBody {
                     excludedCompanyIds,
                     migrationStrategy,
                     phone,
+                    prorationBehavior,
                     sendInvoice,
                     taxId,
                     additionalProperties);

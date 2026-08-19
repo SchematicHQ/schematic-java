@@ -30,6 +30,8 @@ public final class CreateCreditBundleRequestBody {
 
     private final Optional<String> bundleType;
 
+    private final Optional<List<String>> compatiblePlanIds;
+
     private final String creditId;
 
     private final String currency;
@@ -55,6 +57,7 @@ public final class CreateCreditBundleRequestBody {
     private CreateCreditBundleRequestBody(
             String bundleName,
             Optional<String> bundleType,
+            Optional<List<String>> compatiblePlanIds,
             String creditId,
             String currency,
             Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices,
@@ -68,6 +71,7 @@ public final class CreateCreditBundleRequestBody {
             Map<String, Object> additionalProperties) {
         this.bundleName = bundleName;
         this.bundleType = bundleType;
+        this.compatiblePlanIds = compatiblePlanIds;
         this.creditId = creditId;
         this.currency = currency;
         this.currencyPrices = currencyPrices;
@@ -89,6 +93,14 @@ public final class CreateCreditBundleRequestBody {
     @JsonProperty("bundle_type")
     public Optional<String> getBundleType() {
         return bundleType;
+    }
+
+    /**
+     * @return Plans whose companies may purchase this bundle. Omitted or empty means the bundle is purchasable on every plan.
+     */
+    @JsonProperty("compatible_plan_ids")
+    public Optional<List<String>> getCompatiblePlanIds() {
+        return compatiblePlanIds;
     }
 
     @JsonProperty("credit_id")
@@ -155,6 +167,7 @@ public final class CreateCreditBundleRequestBody {
     private boolean equalTo(CreateCreditBundleRequestBody other) {
         return bundleName.equals(other.bundleName)
                 && bundleType.equals(other.bundleType)
+                && compatiblePlanIds.equals(other.compatiblePlanIds)
                 && creditId.equals(other.creditId)
                 && currency.equals(other.currency)
                 && currencyPrices.equals(other.currencyPrices)
@@ -172,6 +185,7 @@ public final class CreateCreditBundleRequestBody {
         return Objects.hash(
                 this.bundleName,
                 this.bundleType,
+                this.compatiblePlanIds,
                 this.creditId,
                 this.currency,
                 this.currencyPrices,
@@ -221,6 +235,13 @@ public final class CreateCreditBundleRequestBody {
         _FinalStage bundleType(Optional<String> bundleType);
 
         _FinalStage bundleType(String bundleType);
+
+        /**
+         * <p>Plans whose companies may purchase this bundle. Omitted or empty means the bundle is purchasable on every plan.</p>
+         */
+        _FinalStage compatiblePlanIds(Optional<List<String>> compatiblePlanIds);
+
+        _FinalStage compatiblePlanIds(List<String> compatiblePlanIds);
 
         _FinalStage currencyPrices(Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices);
 
@@ -276,6 +297,8 @@ public final class CreateCreditBundleRequestBody {
 
         private Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices = Optional.empty();
 
+        private Optional<List<String>> compatiblePlanIds = Optional.empty();
+
         private Optional<String> bundleType = Optional.empty();
 
         @JsonAnySetter
@@ -287,6 +310,7 @@ public final class CreateCreditBundleRequestBody {
         public Builder from(CreateCreditBundleRequestBody other) {
             bundleName(other.getBundleName());
             bundleType(other.getBundleType());
+            compatiblePlanIds(other.getCompatiblePlanIds());
             creditId(other.getCreditId());
             currency(other.getCurrency());
             currencyPrices(other.getCurrencyPrices());
@@ -419,6 +443,26 @@ public final class CreateCreditBundleRequestBody {
             return this;
         }
 
+        /**
+         * <p>Plans whose companies may purchase this bundle. Omitted or empty means the bundle is purchasable on every plan.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage compatiblePlanIds(List<String> compatiblePlanIds) {
+            this.compatiblePlanIds = Optional.ofNullable(compatiblePlanIds);
+            return this;
+        }
+
+        /**
+         * <p>Plans whose companies may purchase this bundle. Omitted or empty means the bundle is purchasable on every plan.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "compatible_plan_ids", nulls = Nulls.SKIP)
+        public _FinalStage compatiblePlanIds(Optional<List<String>> compatiblePlanIds) {
+            this.compatiblePlanIds = compatiblePlanIds;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage bundleType(String bundleType) {
             this.bundleType = Optional.ofNullable(bundleType);
@@ -437,6 +481,7 @@ public final class CreateCreditBundleRequestBody {
             return new CreateCreditBundleRequestBody(
                     bundleName,
                     bundleType,
+                    compatiblePlanIds,
                     creditId,
                     currency,
                     currencyPrices,

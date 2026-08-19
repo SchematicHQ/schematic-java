@@ -1099,6 +1099,99 @@ client.accounts().deleteEnvironment("environment_id");
 </dl>
 </details>
 
+<details><summary><code>client.accounts.getOnboardingState() -> GetOnboardingStateResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.accounts().getOnboardingState();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.accounts.updateOnboardingState(request) -> UpdateOnboardingStateResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.accounts().updateOnboardingState(
+    UpdateOnboardingStateRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**path:** `Optional<OnboardingPath>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pricingPageUrl:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**track:** `Optional<OnboardingTrack>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**websiteUrl:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.accounts.quickstart() -> QuickstartResponse</code></summary>
 <dl>
 <dd>
@@ -4302,6 +4395,14 @@ client.credits().createCreditBundle(
 <dl>
 <dd>
 
+**compatiblePlanIds:** `Optional<List<String>>` — Plans whose companies may purchase this bundle. Omitted or empty means the bundle is purchasable on every plan.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **creditId:** `String` 
     
 </dd>
@@ -4470,6 +4571,14 @@ client.credits().updateCreditBundleDetails(
 <dd>
 
 **bundleName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**compatiblePlanIds:** `Optional<List<String>>` — Plans whose companies may purchase this bundle. Omitted leaves compatibility unchanged; empty resets the bundle to purchasable on every plan.
     
 </dd>
 </dl>
@@ -9186,6 +9295,86 @@ client.companies().updateEntityTraitDefinition(
 </dl>
 </details>
 
+<details><summary><code>client.companies.deleteEntityTraitDefinition(entityTraitDefinitionId) -> DeleteEntityTraitDefinitionResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().deleteEntityTraitDefinition("entity_trait_definition_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**entityTraitDefinitionId:** `String` — entity_trait_definition_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.companies.getEntityTraitDefinitionUsage(entityTraitDefinitionId) -> GetEntityTraitDefinitionUsageResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().getEntityTraitDefinitionUsage("entity_trait_definition_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**entityTraitDefinitionId:** `String` — entity_trait_definition_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.companies.countEntityTraitDefinitions() -> CountEntityTraitDefinitionsResponse</code></summary>
 <dl>
 <dd>
@@ -9361,6 +9550,78 @@ client.companies().getEntityTraitValues(
 </dl>
 </details>
 
+<details><summary><code>client.companies.countEntityTraits() -> CountEntityTraitsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().countEntityTraits(
+    CountEntityTraitsRequest
+        .builder()
+        .definitionId("definition_id")
+        .entityType(EntityType.COMPANY)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**definitionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**entityType:** `Optional<EntityType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.companies.listPlanChanges() -> ListPlanChangesResponse</code></summary>
 <dl>
 <dd>
@@ -9379,9 +9640,6 @@ client.companies().listPlanChanges(
         .builder()
         .companyIds(
             Arrays.asList("company_ids")
-        )
-        .planIds(
-            Arrays.asList("plan_ids")
         )
         .action(PlanChangeAction.CHECKOUT)
         .basePlanAction(PlanChangeBasePlanAction.FALLBACK)
@@ -9429,14 +9687,6 @@ client.companies().listPlanChanges(
 <dd>
 
 **companyIds:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**planIds:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -13054,7 +13304,7 @@ client.entitlements().getUserUsageDetail(
 </details>
 
 ## plans
-<details><summary><code>client.plans.updateCompanyPlans(companyPlanId, request) -> UpdateCompanyPlansResponse</code></summary>
+<details><summary><code>client.plans.updateCompanyPlans(companyId, request) -> UpdateCompanyPlansResponse</code></summary>
 <dl>
 <dd>
 
@@ -13068,7 +13318,7 @@ client.entitlements().getUserUsageDetail(
 
 ```java
 client.plans().updateCompanyPlans(
-    "company_plan_id",
+    "company_id",
     UpdateCompanyPlansRequestBody
         .builder()
         .addOnIds(
@@ -13090,7 +13340,7 @@ client.plans().updateCompanyPlans(
 <dl>
 <dd>
 
-**companyPlanId:** `String` — company_plan_id
+**companyId:** `String` — company_id
     
 </dd>
 </dl>
@@ -13139,6 +13389,7 @@ client.plans().listCustomPlanBillings(
         )
         .companyId("company_id")
         .planId("plan_id")
+        .planBillingSource(PlanBillingSource.CUSTOM_PLAN)
         .status(CustomPlanBillingStatus.ACTIVE)
         .limit(1000000L)
         .offset(1000000L)
@@ -13167,6 +13418,14 @@ client.plans().listCustomPlanBillings(
 <dd>
 
 **planId:** `Optional<String>` — Filter by plan ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planBillingSource:** `Optional<PlanBillingSource>` — Filter by the flow that created the billing record. Defaults to custom_plan.
     
 </dd>
 </dl>
@@ -14347,7 +14606,7 @@ client.plans().listPlanIssues(
 </dl>
 </details>
 
-<details><summary><code>client.plans.deletePlanVersion(planId) -> DeletePlanVersionResponse</code></summary>
+<details><summary><code>client.plans.deletePlanVersion(planVersionId) -> DeletePlanVersionResponse</code></summary>
 <dl>
 <dd>
 
@@ -14361,7 +14620,7 @@ client.plans().listPlanIssues(
 
 ```java
 client.plans().deletePlanVersion(
-    "plan_id",
+    "plan_version_id",
     DeletePlanVersionRequest
         .builder()
         .promoteArchivedVersion(true)
@@ -14381,7 +14640,7 @@ client.plans().deletePlanVersion(
 <dl>
 <dd>
 
-**planId:** `String` — plan_id
+**planVersionId:** `String` — plan_version_id
     
 </dd>
 </dl>
@@ -14401,7 +14660,7 @@ client.plans().deletePlanVersion(
 </dl>
 </details>
 
-<details><summary><code>client.plans.publishPlanVersion(planId, request) -> PublishPlanVersionResponse</code></summary>
+<details><summary><code>client.plans.publishPlanVersion(planVersionId, request) -> PublishPlanVersionResponse</code></summary>
 <dl>
 <dd>
 
@@ -14415,7 +14674,7 @@ client.plans().deletePlanVersion(
 
 ```java
 client.plans().publishPlanVersion(
-    "plan_id",
+    "plan_version_id",
     PublishPlanVersionRequestBody
         .builder()
         .migrationStrategy(PlanVersionMigrationStrategy.IMMEDIATE)
@@ -14438,7 +14697,7 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
-**planId:** `String` — plan_id
+**planVersionId:** `String` — plan_version_id
     
 </dd>
 </dl>
@@ -14511,6 +14770,14 @@ client.plans().publishPlanVersion(
 <dd>
 
 **phone:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prorationBehavior:** `Optional<MigrationProrationBehavior>` 
     
 </dd>
 </dl>
@@ -15144,7 +15411,7 @@ client.planbundle().createPlanBundle(
 </dl>
 </details>
 
-<details><summary><code>client.planbundle.updatePlanBundle(planBundleId, request) -> UpdatePlanBundleResponse</code></summary>
+<details><summary><code>client.planbundle.updatePlanBundle(planId, request) -> UpdatePlanBundleResponse</code></summary>
 <dl>
 <dd>
 
@@ -15158,7 +15425,7 @@ client.planbundle().createPlanBundle(
 
 ```java
 client.planbundle().updatePlanBundle(
-    "plan_bundle_id",
+    "plan_id",
     UpdatePlanBundleRequestBody
         .builder()
         .entitlements(
@@ -15185,7 +15452,7 @@ client.planbundle().updatePlanBundle(
 <dl>
 <dd>
 
-**planBundleId:** `String` — plan_bundle_id
+**planId:** `String` — plan_id
     
 </dd>
 </dl>
@@ -18179,9 +18446,11 @@ client.plangroups().getPlanGroup(
 client.plangroups().createPlanGroup(
     CreatePlanGroupRequestBody
         .builder()
+        .checkoutBundlePurchaseBehavior(CheckoutBundlePurchaseBehavior.INDIVIDUAL)
         .checkoutCollectAddress(true)
         .checkoutCollectEmail(true)
         .checkoutCollectPhone(true)
+        .checkoutCollectTaxId(true)
         .enableTaxCollection(true)
         .optInEnabled(true)
         .preventDowngradesWhenOverLimit(true)
@@ -18253,6 +18522,14 @@ client.plangroups().createPlanGroup(
 <dl>
 <dd>
 
+**checkoutBundlePurchaseBehavior:** `CheckoutBundlePurchaseBehavior` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **checkoutCollectAddress:** `Boolean` 
     
 </dd>
@@ -18270,6 +18547,14 @@ client.plangroups().createPlanGroup(
 <dd>
 
 **checkoutCollectPhone:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**checkoutCollectTaxId:** `Boolean` 
     
 </dd>
 </dl>
@@ -18546,9 +18831,11 @@ client.plangroups().updatePlanGroup(
     "plan_group_id",
     UpdatePlanGroupRequestBody
         .builder()
+        .checkoutBundlePurchaseBehavior(CheckoutBundlePurchaseBehavior.INDIVIDUAL)
         .checkoutCollectAddress(true)
         .checkoutCollectEmail(true)
         .checkoutCollectPhone(true)
+        .checkoutCollectTaxId(true)
         .enableTaxCollection(true)
         .optInEnabled(true)
         .preventDowngradesWhenOverLimit(true)
@@ -18628,6 +18915,14 @@ client.plangroups().updatePlanGroup(
 <dl>
 <dd>
 
+**checkoutBundlePurchaseBehavior:** `CheckoutBundlePurchaseBehavior` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **checkoutCollectAddress:** `Boolean` 
     
 </dd>
@@ -18645,6 +18940,14 @@ client.plangroups().updatePlanGroup(
 <dd>
 
 **checkoutCollectPhone:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**checkoutCollectTaxId:** `Boolean` 
     
 </dd>
 </dl>
@@ -19199,15 +19502,6 @@ client.planmigrations().createMigration(
         .planVersionIdTo("plan_version_id_to")
         .strategy(PlanVersionMigrationStrategy.IMMEDIATE)
         .targetPlanType(PlanType.PLAN)
-        .companyIds(
-            Arrays.asList("company_ids")
-        )
-        .excludedCompanyIds(
-            Arrays.asList("excluded_company_ids")
-        )
-        .planVersionIdsFrom(
-            Arrays.asList("plan_version_ids_from")
-        )
         .build()
 );
 ```
@@ -19224,7 +19518,7 @@ client.planmigrations().createMigration(
 <dl>
 <dd>
 
-**companyIds:** `List<String>` 
+**companyIds:** `Optional<List<String>>` 
     
 </dd>
 </dl>
@@ -19232,7 +19526,7 @@ client.planmigrations().createMigration(
 <dl>
 <dd>
 
-**excludedCompanyIds:** `List<String>` 
+**excludedCompanyIds:** `Optional<List<String>>` 
     
 </dd>
 </dl>
@@ -19256,7 +19550,15 @@ client.planmigrations().createMigration(
 <dl>
 <dd>
 
-**planVersionIdsFrom:** `List<String>` 
+**planVersionIdsFrom:** `Optional<List<String>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prorationBehavior:** `Optional<MigrationProrationBehavior>` 
     
 </dd>
 </dl>
@@ -19471,9 +19773,6 @@ client.planmigrations().previewMigration(
         .planId("plan_id")
         .planVersionIdTo("plan_version_id_to")
         .targetPlanType(PlanType.PLAN)
-        .companyIds(
-            Arrays.asList("company_ids")
-        )
         .build()
 );
 ```
@@ -19490,7 +19789,7 @@ client.planmigrations().previewMigration(
 <dl>
 <dd>
 
-**companyIds:** `List<String>` 
+**companyIds:** `Optional<List<String>>` 
     
 </dd>
 </dl>
@@ -19507,6 +19806,14 @@ client.planmigrations().previewMigration(
 <dd>
 
 **planVersionIdTo:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionIdsFrom:** `Optional<List<String>>` 
     
 </dd>
 </dl>

@@ -16,6 +16,7 @@ import com.schematic.api.resources.accounts.requests.ListAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.ListEnvironmentsRequest;
 import com.schematic.api.resources.accounts.requests.UpdateApiKeyRequestBody;
 import com.schematic.api.resources.accounts.requests.UpdateEnvironmentRequestBody;
+import com.schematic.api.resources.accounts.requests.UpdateOnboardingStateRequestBody;
 import com.schematic.api.resources.accounts.types.CountAccountMembersResponse;
 import com.schematic.api.resources.accounts.types.CountApiKeysResponse;
 import com.schematic.api.resources.accounts.types.CountAuditLogsResponse;
@@ -27,6 +28,7 @@ import com.schematic.api.resources.accounts.types.GetAccountMemberResponse;
 import com.schematic.api.resources.accounts.types.GetApiKeyResponse;
 import com.schematic.api.resources.accounts.types.GetAuditLogResponse;
 import com.schematic.api.resources.accounts.types.GetEnvironmentResponse;
+import com.schematic.api.resources.accounts.types.GetOnboardingStateResponse;
 import com.schematic.api.resources.accounts.types.GetWhoAmIResponse;
 import com.schematic.api.resources.accounts.types.ListAccountMembersResponse;
 import com.schematic.api.resources.accounts.types.ListApiKeysResponse;
@@ -35,6 +37,7 @@ import com.schematic.api.resources.accounts.types.ListEnvironmentsResponse;
 import com.schematic.api.resources.accounts.types.QuickstartResponse;
 import com.schematic.api.resources.accounts.types.UpdateApiKeyResponse;
 import com.schematic.api.resources.accounts.types.UpdateEnvironmentResponse;
+import com.schematic.api.resources.accounts.types.UpdateOnboardingStateResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncAccountsClient {
@@ -262,6 +265,32 @@ public class AsyncAccountsClient {
     public CompletableFuture<DeleteEnvironmentResponse> deleteEnvironment(
             String environmentId, RequestOptions requestOptions) {
         return this.rawClient.deleteEnvironment(environmentId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetOnboardingStateResponse> getOnboardingState() {
+        return this.rawClient.getOnboardingState().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetOnboardingStateResponse> getOnboardingState(RequestOptions requestOptions) {
+        return this.rawClient.getOnboardingState(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpdateOnboardingStateResponse> updateOnboardingState() {
+        return this.rawClient.updateOnboardingState().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpdateOnboardingStateResponse> updateOnboardingState(RequestOptions requestOptions) {
+        return this.rawClient.updateOnboardingState(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpdateOnboardingStateResponse> updateOnboardingState(
+            UpdateOnboardingStateRequestBody request) {
+        return this.rawClient.updateOnboardingState(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpdateOnboardingStateResponse> updateOnboardingState(
+            UpdateOnboardingStateRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.updateOnboardingState(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<QuickstartResponse> quickstart() {

@@ -9,6 +9,7 @@ import com.schematic.api.resources.companies.requests.CountCompaniesRequest;
 import com.schematic.api.resources.companies.requests.CountEntityKeyDefinitionsRequest;
 import com.schematic.api.resources.companies.requests.CountEntityKeysRequest;
 import com.schematic.api.resources.companies.requests.CountEntityTraitDefinitionsRequest;
+import com.schematic.api.resources.companies.requests.CountEntityTraitsRequest;
 import com.schematic.api.resources.companies.requests.CountPlanTraitsRequest;
 import com.schematic.api.resources.companies.requests.CountUsersRequest;
 import com.schematic.api.resources.companies.requests.CreateEntityTraitDefinitionRequestBody;
@@ -33,6 +34,7 @@ import com.schematic.api.resources.companies.types.CountCompaniesResponse;
 import com.schematic.api.resources.companies.types.CountEntityKeyDefinitionsResponse;
 import com.schematic.api.resources.companies.types.CountEntityKeysResponse;
 import com.schematic.api.resources.companies.types.CountEntityTraitDefinitionsResponse;
+import com.schematic.api.resources.companies.types.CountEntityTraitsResponse;
 import com.schematic.api.resources.companies.types.CountPlanTraitsResponse;
 import com.schematic.api.resources.companies.types.CountUsersResponse;
 import com.schematic.api.resources.companies.types.CreateCompanyResponse;
@@ -41,6 +43,7 @@ import com.schematic.api.resources.companies.types.DeleteCompanyByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyMembershipResponse;
 import com.schematic.api.resources.companies.types.DeleteCompanyResponse;
 import com.schematic.api.resources.companies.types.DeleteEntityKeyDefinitionResponse;
+import com.schematic.api.resources.companies.types.DeleteEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
@@ -48,6 +51,7 @@ import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscrip
 import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionResponse;
+import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionUsageResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitValuesResponse;
 import com.schematic.api.resources.companies.types.GetOrCreateCompanyMembershipResponse;
 import com.schematic.api.resources.companies.types.GetOrCreateEntityTraitDefinitionResponse;
@@ -424,6 +428,32 @@ public class CompaniesClient {
                 .body();
     }
 
+    public DeleteEntityTraitDefinitionResponse deleteEntityTraitDefinition(String entityTraitDefinitionId) {
+        return this.rawClient
+                .deleteEntityTraitDefinition(entityTraitDefinitionId)
+                .body();
+    }
+
+    public DeleteEntityTraitDefinitionResponse deleteEntityTraitDefinition(
+            String entityTraitDefinitionId, RequestOptions requestOptions) {
+        return this.rawClient
+                .deleteEntityTraitDefinition(entityTraitDefinitionId, requestOptions)
+                .body();
+    }
+
+    public GetEntityTraitDefinitionUsageResponse getEntityTraitDefinitionUsage(String entityTraitDefinitionId) {
+        return this.rawClient
+                .getEntityTraitDefinitionUsage(entityTraitDefinitionId)
+                .body();
+    }
+
+    public GetEntityTraitDefinitionUsageResponse getEntityTraitDefinitionUsage(
+            String entityTraitDefinitionId, RequestOptions requestOptions) {
+        return this.rawClient
+                .getEntityTraitDefinitionUsage(entityTraitDefinitionId, requestOptions)
+                .body();
+    }
+
     public CountEntityTraitDefinitionsResponse countEntityTraitDefinitions() {
         return this.rawClient.countEntityTraitDefinitions().body();
     }
@@ -450,6 +480,23 @@ public class CompaniesClient {
     public GetEntityTraitValuesResponse getEntityTraitValues(
             GetEntityTraitValuesRequest request, RequestOptions requestOptions) {
         return this.rawClient.getEntityTraitValues(request, requestOptions).body();
+    }
+
+    public CountEntityTraitsResponse countEntityTraits() {
+        return this.rawClient.countEntityTraits().body();
+    }
+
+    public CountEntityTraitsResponse countEntityTraits(RequestOptions requestOptions) {
+        return this.rawClient.countEntityTraits(requestOptions).body();
+    }
+
+    public CountEntityTraitsResponse countEntityTraits(CountEntityTraitsRequest request) {
+        return this.rawClient.countEntityTraits(request).body();
+    }
+
+    public CountEntityTraitsResponse countEntityTraits(
+            CountEntityTraitsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countEntityTraits(request, requestOptions).body();
     }
 
     public ListPlanChangesResponse listPlanChanges() {

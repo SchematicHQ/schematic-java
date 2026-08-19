@@ -35,6 +35,8 @@ public final class WhoAmIResponseData {
 
     private final List<EnvironmentResponseData> environments;
 
+    private final boolean onboardingComplete;
+
     private final Optional<String> stripeUserId;
 
     private final Optional<String> userId;
@@ -50,6 +52,7 @@ public final class WhoAmIResponseData {
             Optional<String> apiKeyId,
             Optional<String> environmentId,
             List<EnvironmentResponseData> environments,
+            boolean onboardingComplete,
             Optional<String> stripeUserId,
             Optional<String> userId,
             Optional<String> userName,
@@ -60,6 +63,7 @@ public final class WhoAmIResponseData {
         this.apiKeyId = apiKeyId;
         this.environmentId = environmentId;
         this.environments = environments;
+        this.onboardingComplete = onboardingComplete;
         this.stripeUserId = stripeUserId;
         this.userId = userId;
         this.userName = userName;
@@ -96,6 +100,11 @@ public final class WhoAmIResponseData {
         return environments;
     }
 
+    @JsonProperty("onboarding_complete")
+    public boolean getOnboardingComplete() {
+        return onboardingComplete;
+    }
+
     @JsonProperty("stripe_user_id")
     public Optional<String> getStripeUserId() {
         return stripeUserId;
@@ -129,6 +138,7 @@ public final class WhoAmIResponseData {
                 && apiKeyId.equals(other.apiKeyId)
                 && environmentId.equals(other.environmentId)
                 && environments.equals(other.environments)
+                && onboardingComplete == other.onboardingComplete
                 && stripeUserId.equals(other.stripeUserId)
                 && userId.equals(other.userId)
                 && userName.equals(other.userName);
@@ -143,6 +153,7 @@ public final class WhoAmIResponseData {
                 this.apiKeyId,
                 this.environmentId,
                 this.environments,
+                this.onboardingComplete,
                 this.stripeUserId,
                 this.userId,
                 this.userName);
@@ -168,7 +179,11 @@ public final class WhoAmIResponseData {
     }
 
     public interface ActorTypeStage {
-        _FinalStage actorType(@NotNull ActorType actorType);
+        OnboardingCompleteStage actorType(@NotNull ActorType actorType);
+    }
+
+    public interface OnboardingCompleteStage {
+        _FinalStage onboardingComplete(boolean onboardingComplete);
     }
 
     public interface _FinalStage {
@@ -206,12 +221,15 @@ public final class WhoAmIResponseData {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements AccountIdStage, AccountNameStage, ActorTypeStage, _FinalStage {
+    public static final class Builder
+            implements AccountIdStage, AccountNameStage, ActorTypeStage, OnboardingCompleteStage, _FinalStage {
         private String accountId;
 
         private String accountName;
 
         private ActorType actorType;
+
+        private boolean onboardingComplete;
 
         private Optional<String> userName = Optional.empty();
 
@@ -238,6 +256,7 @@ public final class WhoAmIResponseData {
             apiKeyId(other.getApiKeyId());
             environmentId(other.getEnvironmentId());
             environments(other.getEnvironments());
+            onboardingComplete(other.getOnboardingComplete());
             stripeUserId(other.getStripeUserId());
             userId(other.getUserId());
             userName(other.getUserName());
@@ -260,8 +279,15 @@ public final class WhoAmIResponseData {
 
         @java.lang.Override
         @JsonSetter("actor_type")
-        public _FinalStage actorType(@NotNull ActorType actorType) {
+        public OnboardingCompleteStage actorType(@NotNull ActorType actorType) {
             this.actorType = Objects.requireNonNull(actorType, "actorType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("onboarding_complete")
+        public _FinalStage onboardingComplete(boolean onboardingComplete) {
+            this.onboardingComplete = onboardingComplete;
             return this;
         }
 
@@ -363,6 +389,7 @@ public final class WhoAmIResponseData {
                     apiKeyId,
                     environmentId,
                     environments,
+                    onboardingComplete,
                     stripeUserId,
                     userId,
                     userName,
