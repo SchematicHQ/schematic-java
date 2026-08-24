@@ -43,6 +43,8 @@ public final class CompanyFeatureUsageExportMetadata {
 
     private final Optional<String> planVersionId;
 
+    private final Optional<Boolean> planVersionUnpublished;
+
     private final Optional<String> q;
 
     private final Optional<String> sortOrderColumn;
@@ -79,6 +81,7 @@ public final class CompanyFeatureUsageExportMetadata {
             Optional<String> planId,
             Optional<List<String>> planIds,
             Optional<String> planVersionId,
+            Optional<Boolean> planVersionUnpublished,
             Optional<String> q,
             Optional<String> sortOrderColumn,
             Optional<CompanyFeatureUsageExportMetadataSortOrderDirection> sortOrderDirection,
@@ -102,6 +105,7 @@ public final class CompanyFeatureUsageExportMetadata {
         this.planId = planId;
         this.planIds = planIds;
         this.planVersionId = planVersionId;
+        this.planVersionUnpublished = planVersionUnpublished;
         this.q = q;
         this.sortOrderColumn = sortOrderColumn;
         this.sortOrderDirection = sortOrderDirection;
@@ -202,6 +206,14 @@ public final class CompanyFeatureUsageExportMetadata {
     @JsonProperty("plan_version_id")
     public Optional<String> getPlanVersionId() {
         return planVersionId;
+    }
+
+    /**
+     * @return Restrict the export to companies on a plan version that is no longer published
+     */
+    @JsonProperty("plan_version_unpublished")
+    public Optional<Boolean> getPlanVersionUnpublished() {
+        return planVersionUnpublished;
     }
 
     /**
@@ -315,6 +327,7 @@ public final class CompanyFeatureUsageExportMetadata {
                 && planId.equals(other.planId)
                 && planIds.equals(other.planIds)
                 && planVersionId.equals(other.planVersionId)
+                && planVersionUnpublished.equals(other.planVersionUnpublished)
                 && q.equals(other.q)
                 && sortOrderColumn.equals(other.sortOrderColumn)
                 && sortOrderDirection.equals(other.sortOrderDirection)
@@ -342,6 +355,7 @@ public final class CompanyFeatureUsageExportMetadata {
                 this.planId,
                 this.planIds,
                 this.planVersionId,
+                this.planVersionUnpublished,
                 this.q,
                 this.sortOrderColumn,
                 this.sortOrderDirection,
@@ -388,6 +402,8 @@ public final class CompanyFeatureUsageExportMetadata {
 
         private Optional<String> planVersionId = Optional.empty();
 
+        private Optional<Boolean> planVersionUnpublished = Optional.empty();
+
         private Optional<String> q = Optional.empty();
 
         private Optional<String> sortOrderColumn = Optional.empty();
@@ -427,6 +443,7 @@ public final class CompanyFeatureUsageExportMetadata {
             planId(other.getPlanId());
             planIds(other.getPlanIds());
             planVersionId(other.getPlanVersionId());
+            planVersionUnpublished(other.getPlanVersionUnpublished());
             q(other.getQ());
             sortOrderColumn(other.getSortOrderColumn());
             sortOrderDirection(other.getSortOrderDirection());
@@ -594,6 +611,20 @@ public final class CompanyFeatureUsageExportMetadata {
 
         public Builder planVersionId(String planVersionId) {
             this.planVersionId = Optional.ofNullable(planVersionId);
+            return this;
+        }
+
+        /**
+         * <p>Restrict the export to companies on a plan version that is no longer published</p>
+         */
+        @JsonSetter(value = "plan_version_unpublished", nulls = Nulls.SKIP)
+        public Builder planVersionUnpublished(Optional<Boolean> planVersionUnpublished) {
+            this.planVersionUnpublished = planVersionUnpublished;
+            return this;
+        }
+
+        public Builder planVersionUnpublished(Boolean planVersionUnpublished) {
+            this.planVersionUnpublished = Optional.ofNullable(planVersionUnpublished);
             return this;
         }
 
@@ -766,6 +797,7 @@ public final class CompanyFeatureUsageExportMetadata {
                     planId,
                     planIds,
                     planVersionId,
+                    planVersionUnpublished,
                     q,
                     sortOrderColumn,
                     sortOrderDirection,

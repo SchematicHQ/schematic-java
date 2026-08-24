@@ -45,6 +45,8 @@ public final class CountCompaniesRequest {
 
     private final Optional<String> planVersionId;
 
+    private final Optional<Boolean> planVersionUnpublished;
+
     private final Optional<String> q;
 
     private final Optional<String> sortOrderColumn;
@@ -78,6 +80,7 @@ public final class CountCompaniesRequest {
             Optional<Boolean> monetizedSubscriptions,
             Optional<String> planId,
             Optional<String> planVersionId,
+            Optional<Boolean> planVersionUnpublished,
             Optional<String> q,
             Optional<String> sortOrderColumn,
             Optional<SortDirection> sortOrderDirection,
@@ -99,6 +102,7 @@ public final class CountCompaniesRequest {
         this.monetizedSubscriptions = monetizedSubscriptions;
         this.planId = planId;
         this.planVersionId = planVersionId;
+        this.planVersionUnpublished = planVersionUnpublished;
         this.q = q;
         this.sortOrderColumn = sortOrderColumn;
         this.sortOrderDirection = sortOrderDirection;
@@ -190,6 +194,14 @@ public final class CountCompaniesRequest {
     @JsonProperty("plan_version_id")
     public Optional<String> getPlanVersionId() {
         return planVersionId;
+    }
+
+    /**
+     * @return Filter companies assigned to a plan version that is no longer published, meaning the plan has since moved on to a newer version
+     */
+    @JsonProperty("plan_version_unpublished")
+    public Optional<Boolean> getPlanVersionUnpublished() {
+        return planVersionUnpublished;
     }
 
     /**
@@ -294,6 +306,7 @@ public final class CountCompaniesRequest {
                 && monetizedSubscriptions.equals(other.monetizedSubscriptions)
                 && planId.equals(other.planId)
                 && planVersionId.equals(other.planVersionId)
+                && planVersionUnpublished.equals(other.planVersionUnpublished)
                 && q.equals(other.q)
                 && sortOrderColumn.equals(other.sortOrderColumn)
                 && sortOrderDirection.equals(other.sortOrderDirection)
@@ -319,6 +332,7 @@ public final class CountCompaniesRequest {
                 this.monetizedSubscriptions,
                 this.planId,
                 this.planVersionId,
+                this.planVersionUnpublished,
                 this.q,
                 this.sortOrderColumn,
                 this.sortOrderDirection,
@@ -362,6 +376,8 @@ public final class CountCompaniesRequest {
 
         private Optional<String> planVersionId = Optional.empty();
 
+        private Optional<Boolean> planVersionUnpublished = Optional.empty();
+
         private Optional<String> q = Optional.empty();
 
         private Optional<String> sortOrderColumn = Optional.empty();
@@ -398,6 +414,7 @@ public final class CountCompaniesRequest {
             monetizedSubscriptions(other.getMonetizedSubscriptions());
             planId(other.getPlanId());
             planVersionId(other.getPlanVersionId());
+            planVersionUnpublished(other.getPlanVersionUnpublished());
             q(other.getQ());
             sortOrderColumn(other.getSortOrderColumn());
             sortOrderDirection(other.getSortOrderDirection());
@@ -582,6 +599,20 @@ public final class CountCompaniesRequest {
         }
 
         /**
+         * <p>Filter companies assigned to a plan version that is no longer published, meaning the plan has since moved on to a newer version</p>
+         */
+        @JsonSetter(value = "plan_version_unpublished", nulls = Nulls.SKIP)
+        public Builder planVersionUnpublished(Optional<Boolean> planVersionUnpublished) {
+            this.planVersionUnpublished = planVersionUnpublished;
+            return this;
+        }
+
+        public Builder planVersionUnpublished(Boolean planVersionUnpublished) {
+            this.planVersionUnpublished = Optional.ofNullable(planVersionUnpublished);
+            return this;
+        }
+
+        /**
          * <p>Search for companies by name, keys or string traits</p>
          */
         @JsonSetter(value = "q", nulls = Nulls.SKIP)
@@ -733,6 +764,7 @@ public final class CountCompaniesRequest {
                     monetizedSubscriptions,
                     planId,
                     planVersionId,
+                    planVersionUnpublished,
                     q,
                     sortOrderColumn,
                     sortOrderDirection,

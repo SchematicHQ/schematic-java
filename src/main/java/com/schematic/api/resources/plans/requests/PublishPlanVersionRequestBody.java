@@ -49,6 +49,8 @@ public final class PublishPlanVersionRequestBody {
 
     private final Optional<MigrationProrationBehavior> prorationBehavior;
 
+    private final Optional<Boolean> requireNoMigration;
+
     private final Optional<Boolean> sendInvoice;
 
     private final Optional<TaxIdInput> taxId;
@@ -66,6 +68,7 @@ public final class PublishPlanVersionRequestBody {
             PlanVersionMigrationStrategy migrationStrategy,
             Optional<String> phone,
             Optional<MigrationProrationBehavior> prorationBehavior,
+            Optional<Boolean> requireNoMigration,
             Optional<Boolean> sendInvoice,
             Optional<TaxIdInput> taxId,
             Map<String, Object> additionalProperties) {
@@ -79,6 +82,7 @@ public final class PublishPlanVersionRequestBody {
         this.migrationStrategy = migrationStrategy;
         this.phone = phone;
         this.prorationBehavior = prorationBehavior;
+        this.requireNoMigration = requireNoMigration;
         this.sendInvoice = sendInvoice;
         this.taxId = taxId;
         this.additionalProperties = additionalProperties;
@@ -135,6 +139,14 @@ public final class PublishPlanVersionRequestBody {
     }
 
     /**
+     * @return Refuse the publish if any company would be migrated onto the new version
+     */
+    @JsonProperty("require_no_migration")
+    public Optional<Boolean> getRequireNoMigration() {
+        return requireNoMigration;
+    }
+
+    /**
      * @return Whether Stripe emails the invoice when it is finalized. Defaults to true.
      */
     @JsonProperty("send_invoice")
@@ -169,6 +181,7 @@ public final class PublishPlanVersionRequestBody {
                 && migrationStrategy.equals(other.migrationStrategy)
                 && phone.equals(other.phone)
                 && prorationBehavior.equals(other.prorationBehavior)
+                && requireNoMigration.equals(other.requireNoMigration)
                 && sendInvoice.equals(other.sendInvoice)
                 && taxId.equals(other.taxId);
     }
@@ -186,6 +199,7 @@ public final class PublishPlanVersionRequestBody {
                 this.migrationStrategy,
                 this.phone,
                 this.prorationBehavior,
+                this.requireNoMigration,
                 this.sendInvoice,
                 this.taxId);
     }
@@ -251,6 +265,13 @@ public final class PublishPlanVersionRequestBody {
         _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior);
 
         /**
+         * <p>Refuse the publish if any company would be migrated onto the new version</p>
+         */
+        _FinalStage requireNoMigration(Optional<Boolean> requireNoMigration);
+
+        _FinalStage requireNoMigration(Boolean requireNoMigration);
+
+        /**
          * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
          */
         _FinalStage sendInvoice(Optional<Boolean> sendInvoice);
@@ -269,6 +290,8 @@ public final class PublishPlanVersionRequestBody {
         private Optional<TaxIdInput> taxId = Optional.empty();
 
         private Optional<Boolean> sendInvoice = Optional.empty();
+
+        private Optional<Boolean> requireNoMigration = Optional.empty();
 
         private Optional<MigrationProrationBehavior> prorationBehavior = Optional.empty();
 
@@ -305,6 +328,7 @@ public final class PublishPlanVersionRequestBody {
             migrationStrategy(other.getMigrationStrategy());
             phone(other.getPhone());
             prorationBehavior(other.getProrationBehavior());
+            requireNoMigration(other.getRequireNoMigration());
             sendInvoice(other.getSendInvoice());
             taxId(other.getTaxId());
             return this;
@@ -347,6 +371,26 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter(value = "send_invoice", nulls = Nulls.SKIP)
         public _FinalStage sendInvoice(Optional<Boolean> sendInvoice) {
             this.sendInvoice = sendInvoice;
+            return this;
+        }
+
+        /**
+         * <p>Refuse the publish if any company would be migrated onto the new version</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage requireNoMigration(Boolean requireNoMigration) {
+            this.requireNoMigration = Optional.ofNullable(requireNoMigration);
+            return this;
+        }
+
+        /**
+         * <p>Refuse the publish if any company would be migrated onto the new version</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "require_no_migration", nulls = Nulls.SKIP)
+        public _FinalStage requireNoMigration(Optional<Boolean> requireNoMigration) {
+            this.requireNoMigration = requireNoMigration;
             return this;
         }
 
@@ -491,6 +535,7 @@ public final class PublishPlanVersionRequestBody {
                     migrationStrategy,
                     phone,
                     prorationBehavior,
+                    requireNoMigration,
                     sendInvoice,
                     taxId,
                     additionalProperties);

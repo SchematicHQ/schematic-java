@@ -26,7 +26,9 @@ public final class CreateCustomPlanRequestBody {
 
     private final Optional<String> copiedFromPlanId;
 
-    private final String description;
+    private final Optional<String> copiedPriceId;
+
+    private final Optional<String> description;
 
     private final Optional<PlanIcon> icon;
 
@@ -37,12 +39,14 @@ public final class CreateCustomPlanRequestBody {
     private CreateCustomPlanRequestBody(
             String companyId,
             Optional<String> copiedFromPlanId,
-            String description,
+            Optional<String> copiedPriceId,
+            Optional<String> description,
             Optional<PlanIcon> icon,
             String name,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.copiedFromPlanId = copiedFromPlanId;
+        this.copiedPriceId = copiedPriceId;
         this.description = description;
         this.icon = icon;
         this.name = name;
@@ -59,8 +63,13 @@ public final class CreateCustomPlanRequestBody {
         return copiedFromPlanId;
     }
 
+    @JsonProperty("copied_price_id")
+    public Optional<String> getCopiedPriceId() {
+        return copiedPriceId;
+    }
+
     @JsonProperty("description")
-    public String getDescription() {
+    public Optional<String> getDescription() {
         return description;
     }
 
@@ -88,6 +97,7 @@ public final class CreateCustomPlanRequestBody {
     private boolean equalTo(CreateCustomPlanRequestBody other) {
         return companyId.equals(other.companyId)
                 && copiedFromPlanId.equals(other.copiedFromPlanId)
+                && copiedPriceId.equals(other.copiedPriceId)
                 && description.equals(other.description)
                 && icon.equals(other.icon)
                 && name.equals(other.name);
@@ -95,7 +105,8 @@ public final class CreateCustomPlanRequestBody {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.copiedFromPlanId, this.description, this.icon, this.name);
+        return Objects.hash(
+                this.companyId, this.copiedFromPlanId, this.copiedPriceId, this.description, this.icon, this.name);
     }
 
     @java.lang.Override
@@ -108,13 +119,9 @@ public final class CreateCustomPlanRequestBody {
     }
 
     public interface CompanyIdStage {
-        DescriptionStage companyId(@NotNull String companyId);
+        NameStage companyId(@NotNull String companyId);
 
         Builder from(CreateCustomPlanRequestBody other);
-    }
-
-    public interface DescriptionStage {
-        NameStage description(@NotNull String description);
     }
 
     public interface NameStage {
@@ -132,20 +139,30 @@ public final class CreateCustomPlanRequestBody {
 
         _FinalStage copiedFromPlanId(String copiedFromPlanId);
 
+        _FinalStage copiedPriceId(Optional<String> copiedPriceId);
+
+        _FinalStage copiedPriceId(String copiedPriceId);
+
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
+
         _FinalStage icon(Optional<PlanIcon> icon);
 
         _FinalStage icon(PlanIcon icon);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CompanyIdStage, DescriptionStage, NameStage, _FinalStage {
+    public static final class Builder implements CompanyIdStage, NameStage, _FinalStage {
         private String companyId;
-
-        private String description;
 
         private String name;
 
         private Optional<PlanIcon> icon = Optional.empty();
+
+        private Optional<String> description = Optional.empty();
+
+        private Optional<String> copiedPriceId = Optional.empty();
 
         private Optional<String> copiedFromPlanId = Optional.empty();
 
@@ -158,6 +175,7 @@ public final class CreateCustomPlanRequestBody {
         public Builder from(CreateCustomPlanRequestBody other) {
             companyId(other.getCompanyId());
             copiedFromPlanId(other.getCopiedFromPlanId());
+            copiedPriceId(other.getCopiedPriceId());
             description(other.getDescription());
             icon(other.getIcon());
             name(other.getName());
@@ -166,15 +184,8 @@ public final class CreateCustomPlanRequestBody {
 
         @java.lang.Override
         @JsonSetter("company_id")
-        public DescriptionStage companyId(@NotNull String companyId) {
+        public NameStage companyId(@NotNull String companyId) {
             this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("description")
-        public NameStage description(@NotNull String description) {
-            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
@@ -199,6 +210,32 @@ public final class CreateCustomPlanRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage copiedPriceId(String copiedPriceId) {
+            this.copiedPriceId = Optional.ofNullable(copiedPriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "copied_price_id", nulls = Nulls.SKIP)
+        public _FinalStage copiedPriceId(Optional<String> copiedPriceId) {
+            this.copiedPriceId = copiedPriceId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage copiedFromPlanId(String copiedFromPlanId) {
             this.copiedFromPlanId = Optional.ofNullable(copiedFromPlanId);
             return this;
@@ -214,7 +251,7 @@ public final class CreateCustomPlanRequestBody {
         @java.lang.Override
         public CreateCustomPlanRequestBody build() {
             return new CreateCustomPlanRequestBody(
-                    companyId, copiedFromPlanId, description, icon, name, additionalProperties);
+                    companyId, copiedFromPlanId, copiedPriceId, description, icon, name, additionalProperties);
         }
 
         @java.lang.Override

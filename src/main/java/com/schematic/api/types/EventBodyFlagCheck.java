@@ -29,6 +29,8 @@ public final class EventBodyFlagCheck {
 
     private final String flagKey;
 
+    private final Optional<Boolean> preflight;
+
     private final String reason;
 
     private final Optional<Map<String, String>> reqCompany;
@@ -48,6 +50,7 @@ public final class EventBodyFlagCheck {
             Optional<String> error,
             Optional<String> flagId,
             String flagKey,
+            Optional<Boolean> preflight,
             String reason,
             Optional<Map<String, String>> reqCompany,
             Optional<Map<String, String>> reqUser,
@@ -59,6 +62,7 @@ public final class EventBodyFlagCheck {
         this.error = error;
         this.flagId = flagId;
         this.flagKey = flagKey;
+        this.preflight = preflight;
         this.reason = reason;
         this.reqCompany = reqCompany;
         this.reqUser = reqUser;
@@ -98,6 +102,14 @@ public final class EventBodyFlagCheck {
     @JsonProperty("flag_key")
     public String getFlagKey() {
         return flagKey;
+    }
+
+    /**
+     * @return Whether the check was a preflight, asking whether an action would be allowed rather than reporting one that happened. Absent on ordinary checks
+     */
+    @JsonProperty("preflight")
+    public Optional<Boolean> getPreflight() {
+        return preflight;
     }
 
     /**
@@ -164,6 +176,7 @@ public final class EventBodyFlagCheck {
                 && error.equals(other.error)
                 && flagId.equals(other.flagId)
                 && flagKey.equals(other.flagKey)
+                && preflight.equals(other.preflight)
                 && reason.equals(other.reason)
                 && reqCompany.equals(other.reqCompany)
                 && reqUser.equals(other.reqUser)
@@ -179,6 +192,7 @@ public final class EventBodyFlagCheck {
                 this.error,
                 this.flagId,
                 this.flagKey,
+                this.preflight,
                 this.reason,
                 this.reqCompany,
                 this.reqUser,
@@ -248,6 +262,13 @@ public final class EventBodyFlagCheck {
         _FinalStage flagId(String flagId);
 
         /**
+         * <p>Whether the check was a preflight, asking whether an action would be allowed rather than reporting one that happened. Absent on ordinary checks</p>
+         */
+        _FinalStage preflight(Optional<Boolean> preflight);
+
+        _FinalStage preflight(Boolean preflight);
+
+        /**
          * <p>Key-value pairs used to to identify company for which the flag was checked</p>
          */
         _FinalStage reqCompany(Optional<Map<String, String>> reqCompany);
@@ -292,6 +313,8 @@ public final class EventBodyFlagCheck {
 
         private Optional<Map<String, String>> reqCompany = Optional.empty();
 
+        private Optional<Boolean> preflight = Optional.empty();
+
         private Optional<String> flagId = Optional.empty();
 
         private Optional<String> error = Optional.empty();
@@ -309,6 +332,7 @@ public final class EventBodyFlagCheck {
             error(other.getError());
             flagId(other.getFlagId());
             flagKey(other.getFlagKey());
+            preflight(other.getPreflight());
             reason(other.getReason());
             reqCompany(other.getReqCompany());
             reqUser(other.getReqUser());
@@ -432,6 +456,26 @@ public final class EventBodyFlagCheck {
         }
 
         /**
+         * <p>Whether the check was a preflight, asking whether an action would be allowed rather than reporting one that happened. Absent on ordinary checks</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage preflight(Boolean preflight) {
+            this.preflight = Optional.ofNullable(preflight);
+            return this;
+        }
+
+        /**
+         * <p>Whether the check was a preflight, asking whether an action would be allowed rather than reporting one that happened. Absent on ordinary checks</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "preflight", nulls = Nulls.SKIP)
+        public _FinalStage preflight(Optional<Boolean> preflight) {
+            this.preflight = preflight;
+            return this;
+        }
+
+        /**
          * <p>Schematic flag ID (starting with 'flag_') for the flag matching the key, if any</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -498,6 +542,7 @@ public final class EventBodyFlagCheck {
                     error,
                     flagId,
                     flagKey,
+                    preflight,
                     reason,
                     reqCompany,
                     reqUser,

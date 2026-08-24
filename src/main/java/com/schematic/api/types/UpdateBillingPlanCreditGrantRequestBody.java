@@ -175,6 +175,9 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         return autoTopupThresholdPercent;
     }
 
+    /**
+     * @return Deprecated: use compatible_plan_ids on credit bundles instead. Still accepted; writes through to the credit's bundle compatibility.
+     */
     @JsonProperty("can_buy_bundles")
     public Optional<Boolean> getCanBuyBundles() {
         return canBuyBundles;
@@ -383,6 +386,9 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
         _FinalStage autoTopupThresholdPercent(Long autoTopupThresholdPercent);
 
+        /**
+         * <p>Deprecated: use compatible_plan_ids on credit bundles instead. Still accepted; writes through to the credit's bundle compatibility.</p>
+         */
         _FinalStage canBuyBundles(Optional<Boolean> canBuyBundles);
 
         _FinalStage canBuyBundles(Boolean canBuyBundles);
@@ -676,12 +682,19 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             return this;
         }
 
+        /**
+         * <p>Deprecated: use compatible_plan_ids on credit bundles instead. Still accepted; writes through to the credit's bundle compatibility.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage canBuyBundles(Boolean canBuyBundles) {
             this.canBuyBundles = Optional.ofNullable(canBuyBundles);
             return this;
         }
 
+        /**
+         * <p>Deprecated: use compatible_plan_ids on credit bundles instead. Still accepted; writes through to the credit's bundle compatibility.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "can_buy_bundles", nulls = Nulls.SKIP)
         public _FinalStage canBuyBundles(Optional<Boolean> canBuyBundles) {

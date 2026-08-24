@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreatePlanRequestBody.Builder.class)
 public final class CreatePlanRequestBody {
-    private final String description;
+    private final Optional<String> description;
 
     private final Optional<PlanIcon> icon;
 
@@ -32,7 +32,7 @@ public final class CreatePlanRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private CreatePlanRequestBody(
-            String description,
+            Optional<String> description,
             Optional<PlanIcon> icon,
             String name,
             PlanType planType,
@@ -45,7 +45,7 @@ public final class CreatePlanRequestBody {
     }
 
     @JsonProperty("description")
-    public String getDescription() {
+    public Optional<String> getDescription() {
         return description;
     }
 
@@ -92,18 +92,14 @@ public final class CreatePlanRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static DescriptionStage builder() {
+    public static NameStage builder() {
         return new Builder();
-    }
-
-    public interface DescriptionStage {
-        NameStage description(@NotNull String description);
-
-        Builder from(CreatePlanRequestBody other);
     }
 
     public interface NameStage {
         PlanTypeStage name(@NotNull String name);
+
+        Builder from(CreatePlanRequestBody other);
     }
 
     public interface PlanTypeStage {
@@ -117,20 +113,24 @@ public final class CreatePlanRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
+
         _FinalStage icon(Optional<PlanIcon> icon);
 
         _FinalStage icon(PlanIcon icon);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements DescriptionStage, NameStage, PlanTypeStage, _FinalStage {
-        private String description;
-
+    public static final class Builder implements NameStage, PlanTypeStage, _FinalStage {
         private String name;
 
         private PlanType planType;
 
         private Optional<PlanIcon> icon = Optional.empty();
+
+        private Optional<String> description = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -143,13 +143,6 @@ public final class CreatePlanRequestBody {
             icon(other.getIcon());
             name(other.getName());
             planType(other.getPlanType());
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("description")
-        public NameStage description(@NotNull String description) {
-            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
@@ -177,6 +170,19 @@ public final class CreatePlanRequestBody {
         @JsonSetter(value = "icon", nulls = Nulls.SKIP)
         public _FinalStage icon(Optional<PlanIcon> icon) {
             this.icon = icon;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
             return this;
         }
 

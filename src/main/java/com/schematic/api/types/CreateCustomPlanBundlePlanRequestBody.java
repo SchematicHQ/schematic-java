@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateCustomPlanBundlePlanRequestBody {
     private final String companyId;
 
-    private final String description;
+    private final Optional<String> description;
 
     private final Optional<PlanIcon> icon;
 
@@ -33,7 +33,7 @@ public final class CreateCustomPlanBundlePlanRequestBody {
 
     private CreateCustomPlanBundlePlanRequestBody(
             String companyId,
-            String description,
+            Optional<String> description,
             Optional<PlanIcon> icon,
             String name,
             Map<String, Object> additionalProperties) {
@@ -50,7 +50,7 @@ public final class CreateCustomPlanBundlePlanRequestBody {
     }
 
     @JsonProperty("description")
-    public String getDescription() {
+    public Optional<String> getDescription() {
         return description;
     }
 
@@ -98,13 +98,9 @@ public final class CreateCustomPlanBundlePlanRequestBody {
     }
 
     public interface CompanyIdStage {
-        DescriptionStage companyId(@NotNull String companyId);
+        NameStage companyId(@NotNull String companyId);
 
         Builder from(CreateCustomPlanBundlePlanRequestBody other);
-    }
-
-    public interface DescriptionStage {
-        NameStage description(@NotNull String description);
     }
 
     public interface NameStage {
@@ -118,20 +114,24 @@ public final class CreateCustomPlanBundlePlanRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
+
         _FinalStage icon(Optional<PlanIcon> icon);
 
         _FinalStage icon(PlanIcon icon);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CompanyIdStage, DescriptionStage, NameStage, _FinalStage {
+    public static final class Builder implements CompanyIdStage, NameStage, _FinalStage {
         private String companyId;
-
-        private String description;
 
         private String name;
 
         private Optional<PlanIcon> icon = Optional.empty();
+
+        private Optional<String> description = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -149,15 +149,8 @@ public final class CreateCustomPlanBundlePlanRequestBody {
 
         @java.lang.Override
         @JsonSetter("company_id")
-        public DescriptionStage companyId(@NotNull String companyId) {
+        public NameStage companyId(@NotNull String companyId) {
             this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("description")
-        public NameStage description(@NotNull String description) {
-            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
@@ -178,6 +171,19 @@ public final class CreateCustomPlanBundlePlanRequestBody {
         @JsonSetter(value = "icon", nulls = Nulls.SKIP)
         public _FinalStage icon(Optional<PlanIcon> icon) {
             this.icon = icon;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
             return this;
         }
 

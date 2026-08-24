@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdatePlanBundleRequestBody.Builder.class)
@@ -32,7 +33,7 @@ public final class UpdatePlanBundleRequestBody {
 
     private final List<PlanBundleEntitlementRequestBody> entitlements;
 
-    private final Optional<UpdatePlanRequestBody> plan;
+    private final UpdatePlanRequestBody plan;
 
     private final Optional<String> planVersionId;
 
@@ -42,7 +43,7 @@ public final class UpdatePlanBundleRequestBody {
             Optional<UpsertBillingProductRequestBody> billingProduct,
             Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants,
             List<PlanBundleEntitlementRequestBody> entitlements,
-            Optional<UpdatePlanRequestBody> plan,
+            UpdatePlanRequestBody plan,
             Optional<String> planVersionId,
             Map<String, Object> additionalProperties) {
         this.billingProduct = billingProduct;
@@ -69,7 +70,7 @@ public final class UpdatePlanBundleRequestBody {
     }
 
     @JsonProperty("plan")
-    public Optional<UpdatePlanRequestBody> getPlan() {
+    public UpdatePlanRequestBody getPlan() {
         return plan;
     }
 
@@ -107,27 +108,60 @@ public final class UpdatePlanBundleRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static PlanStage builder() {
         return new Builder();
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private Optional<UpsertBillingProductRequestBody> billingProduct = Optional.empty();
+    public interface PlanStage {
+        _FinalStage plan(@NotNull UpdatePlanRequestBody plan);
 
-        private Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants = Optional.empty();
+        Builder from(UpdatePlanBundleRequestBody other);
+    }
+
+    public interface _FinalStage {
+        UpdatePlanBundleRequestBody build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage billingProduct(Optional<UpsertBillingProductRequestBody> billingProduct);
+
+        _FinalStage billingProduct(UpsertBillingProductRequestBody billingProduct);
+
+        _FinalStage creditGrants(Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants);
+
+        _FinalStage creditGrants(List<PlanBundleCreditGrantRequestBody> creditGrants);
+
+        _FinalStage entitlements(List<PlanBundleEntitlementRequestBody> entitlements);
+
+        _FinalStage addEntitlements(PlanBundleEntitlementRequestBody entitlements);
+
+        _FinalStage addAllEntitlements(List<PlanBundleEntitlementRequestBody> entitlements);
+
+        _FinalStage planVersionId(Optional<String> planVersionId);
+
+        _FinalStage planVersionId(String planVersionId);
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static final class Builder implements PlanStage, _FinalStage {
+        private UpdatePlanRequestBody plan;
+
+        private Optional<String> planVersionId = Optional.empty();
 
         private List<PlanBundleEntitlementRequestBody> entitlements = new ArrayList<>();
 
-        private Optional<UpdatePlanRequestBody> plan = Optional.empty();
+        private Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants = Optional.empty();
 
-        private Optional<String> planVersionId = Optional.empty();
+        private Optional<UpsertBillingProductRequestBody> billingProduct = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(UpdatePlanBundleRequestBody other) {
             billingProduct(other.getBillingProduct());
             creditGrants(other.getCreditGrants());
@@ -137,30 +171,43 @@ public final class UpdatePlanBundleRequestBody {
             return this;
         }
 
-        @JsonSetter(value = "billing_product", nulls = Nulls.SKIP)
-        public Builder billingProduct(Optional<UpsertBillingProductRequestBody> billingProduct) {
-            this.billingProduct = billingProduct;
+        @java.lang.Override
+        @JsonSetter("plan")
+        public _FinalStage plan(@NotNull UpdatePlanRequestBody plan) {
+            this.plan = Objects.requireNonNull(plan, "plan must not be null");
             return this;
         }
 
-        public Builder billingProduct(UpsertBillingProductRequestBody billingProduct) {
-            this.billingProduct = Optional.ofNullable(billingProduct);
+        @java.lang.Override
+        public _FinalStage planVersionId(String planVersionId) {
+            this.planVersionId = Optional.ofNullable(planVersionId);
             return this;
         }
 
-        @JsonSetter(value = "credit_grants", nulls = Nulls.SKIP)
-        public Builder creditGrants(Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants) {
-            this.creditGrants = creditGrants;
+        @java.lang.Override
+        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
+        public _FinalStage planVersionId(Optional<String> planVersionId) {
+            this.planVersionId = planVersionId;
             return this;
         }
 
-        public Builder creditGrants(List<PlanBundleCreditGrantRequestBody> creditGrants) {
-            this.creditGrants = Optional.ofNullable(creditGrants);
+        @java.lang.Override
+        public _FinalStage addAllEntitlements(List<PlanBundleEntitlementRequestBody> entitlements) {
+            if (entitlements != null) {
+                this.entitlements.addAll(entitlements);
+            }
             return this;
         }
 
+        @java.lang.Override
+        public _FinalStage addEntitlements(PlanBundleEntitlementRequestBody entitlements) {
+            this.entitlements.add(entitlements);
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter(value = "entitlements", nulls = Nulls.SKIP)
-        public Builder entitlements(List<PlanBundleEntitlementRequestBody> entitlements) {
+        public _FinalStage entitlements(List<PlanBundleEntitlementRequestBody> entitlements) {
             this.entitlements.clear();
             if (entitlements != null) {
                 this.entitlements.addAll(entitlements);
@@ -168,50 +215,45 @@ public final class UpdatePlanBundleRequestBody {
             return this;
         }
 
-        public Builder addEntitlements(PlanBundleEntitlementRequestBody entitlements) {
-            this.entitlements.add(entitlements);
+        @java.lang.Override
+        public _FinalStage creditGrants(List<PlanBundleCreditGrantRequestBody> creditGrants) {
+            this.creditGrants = Optional.ofNullable(creditGrants);
             return this;
         }
 
-        public Builder addAllEntitlements(List<PlanBundleEntitlementRequestBody> entitlements) {
-            if (entitlements != null) {
-                this.entitlements.addAll(entitlements);
-            }
+        @java.lang.Override
+        @JsonSetter(value = "credit_grants", nulls = Nulls.SKIP)
+        public _FinalStage creditGrants(Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants) {
+            this.creditGrants = creditGrants;
             return this;
         }
 
-        @JsonSetter(value = "plan", nulls = Nulls.SKIP)
-        public Builder plan(Optional<UpdatePlanRequestBody> plan) {
-            this.plan = plan;
+        @java.lang.Override
+        public _FinalStage billingProduct(UpsertBillingProductRequestBody billingProduct) {
+            this.billingProduct = Optional.ofNullable(billingProduct);
             return this;
         }
 
-        public Builder plan(UpdatePlanRequestBody plan) {
-            this.plan = Optional.ofNullable(plan);
+        @java.lang.Override
+        @JsonSetter(value = "billing_product", nulls = Nulls.SKIP)
+        public _FinalStage billingProduct(Optional<UpsertBillingProductRequestBody> billingProduct) {
+            this.billingProduct = billingProduct;
             return this;
         }
 
-        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
-        public Builder planVersionId(Optional<String> planVersionId) {
-            this.planVersionId = planVersionId;
-            return this;
-        }
-
-        public Builder planVersionId(String planVersionId) {
-            this.planVersionId = Optional.ofNullable(planVersionId);
-            return this;
-        }
-
+        @java.lang.Override
         public UpdatePlanBundleRequestBody build() {
             return new UpdatePlanBundleRequestBody(
                     billingProduct, creditGrants, entitlements, plan, planVersionId, additionalProperties);
         }
 
+        @java.lang.Override
         public Builder additionalProperty(String key, Object value) {
             this.additionalProperties.put(key, value);
             return this;
         }
 
+        @java.lang.Override
         public Builder additionalProperties(Map<String, Object> additionalProperties) {
             this.additionalProperties.putAll(additionalProperties);
             return this;

@@ -33,6 +33,7 @@ import com.schematic.api.resources.entitlements.requests.GetUserUsageByCompanyRe
 import com.schematic.api.resources.entitlements.requests.GetUserUsageDetailRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
+import com.schematic.api.resources.entitlements.requests.ListFeatureUsageHistoryRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsageRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsersRequest;
 import com.schematic.api.resources.entitlements.requests.ListPlanEntitlementsRequest;
@@ -56,6 +57,7 @@ import com.schematic.api.resources.entitlements.types.GetUserUsageByCompanyRespo
 import com.schematic.api.resources.entitlements.types.GetUserUsageDetailResponse;
 import com.schematic.api.resources.entitlements.types.ListCompanyOverridesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureCompaniesResponse;
+import com.schematic.api.resources.entitlements.types.ListFeatureUsageHistoryResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureUsageResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureUsersResponse;
 import com.schematic.api.resources.entitlements.types.ListPlanEntitlementsResponse;
@@ -1084,6 +1086,127 @@ public class AsyncRawEntitlementsClient {
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListFeatureUsageResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListFeatureUsageHistoryResponse>> listFeatureUsageHistory(
+            ListFeatureUsageHistoryRequest request) {
+        return listFeatureUsageHistory(request, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<ListFeatureUsageHistoryResponse>> listFeatureUsageHistory(
+            ListFeatureUsageHistoryRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("feature-usage-history");
+        QueryStringMapper.addQueryParameter(httpUrl, "end_time", request.getEndTime(), false);
+        if (request.getGranularity().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "granularity", request.getGranularity().get(), false);
+        }
+        QueryStringMapper.addQueryParameter(httpUrl, "start_time", request.getStartTime(), false);
+        if (request.getLimit().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "limit", request.getLimit().get(), false);
+        }
+        if (request.getOffset().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "offset", request.getOffset().get(), false);
+        }
+        if (request.getCompanyIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "company_ids", request.getCompanyIds().get(), true);
+        }
+        if (request.getFeatureIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "feature_ids", request.getFeatureIds().get(), true);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<BaseSchematicHttpResponse<ListFeatureUsageHistoryResponse>> future =
+                new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, ListFeatureUsageHistoryResponse.class),
                                 response));
                         return;
                     }

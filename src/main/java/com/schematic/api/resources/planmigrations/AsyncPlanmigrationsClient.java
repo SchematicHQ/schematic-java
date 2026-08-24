@@ -40,14 +40,6 @@ public class AsyncPlanmigrationsClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<ListCompanyMigrationsResponse> listCompanyMigrations() {
-        return this.rawClient.listCompanyMigrations().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<ListCompanyMigrationsResponse> listCompanyMigrations(RequestOptions requestOptions) {
-        return this.rawClient.listCompanyMigrations(requestOptions).thenApply(response -> response.body());
-    }
-
     public CompletableFuture<ListCompanyMigrationsResponse> listCompanyMigrations(
             ListCompanyMigrationsRequest request) {
         return this.rawClient.listCompanyMigrations(request).thenApply(response -> response.body());
@@ -72,14 +64,6 @@ public class AsyncPlanmigrationsClient {
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<CountCompanyMigrationsResponse> countCompanyMigrations() {
-        return this.rawClient.countCompanyMigrations().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<CountCompanyMigrationsResponse> countCompanyMigrations(RequestOptions requestOptions) {
-        return this.rawClient.countCompanyMigrations(requestOptions).thenApply(response -> response.body());
-    }
-
     public CompletableFuture<CountCompanyMigrationsResponse> countCompanyMigrations(
             CountCompanyMigrationsRequest request) {
         return this.rawClient.countCompanyMigrations(request).thenApply(response -> response.body());
@@ -88,14 +72,6 @@ public class AsyncPlanmigrationsClient {
     public CompletableFuture<CountCompanyMigrationsResponse> countCompanyMigrations(
             CountCompanyMigrationsRequest request, RequestOptions requestOptions) {
         return this.rawClient.countCompanyMigrations(request, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<ListMigrationsResponse> listMigrations() {
-        return this.rawClient.listMigrations().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<ListMigrationsResponse> listMigrations(RequestOptions requestOptions) {
-        return this.rawClient.listMigrations(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListMigrationsResponse> listMigrations(ListMigrationsRequest request) {
@@ -137,14 +113,6 @@ public class AsyncPlanmigrationsClient {
         return this.rawClient
                 .retryMigration(planVersionMigrationId, request, requestOptions)
                 .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<CountMigrationsResponse> countMigrations() {
-        return this.rawClient.countMigrations().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<CountMigrationsResponse> countMigrations(RequestOptions requestOptions) {
-        return this.rawClient.countMigrations(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountMigrationsResponse> countMigrations(CountMigrationsRequest request) {

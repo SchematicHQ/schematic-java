@@ -44,6 +44,8 @@ public final class CountCompaniesParams {
 
     private final Optional<List<String>> planVersionIds;
 
+    private final Optional<Boolean> planVersionUnpublished;
+
     private final Optional<String> q;
 
     private final Optional<String> sortOrderColumn;
@@ -77,6 +79,7 @@ public final class CountCompaniesParams {
             Optional<List<String>> planIds,
             Optional<String> planVersionId,
             Optional<List<String>> planVersionIds,
+            Optional<Boolean> planVersionUnpublished,
             Optional<String> q,
             Optional<String> sortOrderColumn,
             Optional<SortDirection> sortOrderDirection,
@@ -98,6 +101,7 @@ public final class CountCompaniesParams {
         this.planIds = planIds;
         this.planVersionId = planVersionId;
         this.planVersionIds = planVersionIds;
+        this.planVersionUnpublished = planVersionUnpublished;
         this.q = q;
         this.sortOrderColumn = sortOrderColumn;
         this.sortOrderDirection = sortOrderDirection;
@@ -189,6 +193,14 @@ public final class CountCompaniesParams {
     @JsonProperty("plan_version_ids")
     public Optional<List<String>> getPlanVersionIds() {
         return planVersionIds;
+    }
+
+    /**
+     * @return Filter companies assigned to a plan version that is no longer published, meaning the plan has since moved on to a newer version
+     */
+    @JsonProperty("plan_version_unpublished")
+    public Optional<Boolean> getPlanVersionUnpublished() {
+        return planVersionUnpublished;
     }
 
     /**
@@ -293,6 +305,7 @@ public final class CountCompaniesParams {
                 && planIds.equals(other.planIds)
                 && planVersionId.equals(other.planVersionId)
                 && planVersionIds.equals(other.planVersionIds)
+                && planVersionUnpublished.equals(other.planVersionUnpublished)
                 && q.equals(other.q)
                 && sortOrderColumn.equals(other.sortOrderColumn)
                 && sortOrderDirection.equals(other.sortOrderDirection)
@@ -318,6 +331,7 @@ public final class CountCompaniesParams {
                 this.planIds,
                 this.planVersionId,
                 this.planVersionIds,
+                this.planVersionUnpublished,
                 this.q,
                 this.sortOrderColumn,
                 this.sortOrderDirection,
@@ -361,6 +375,8 @@ public final class CountCompaniesParams {
 
         private Optional<List<String>> planVersionIds = Optional.empty();
 
+        private Optional<Boolean> planVersionUnpublished = Optional.empty();
+
         private Optional<String> q = Optional.empty();
 
         private Optional<String> sortOrderColumn = Optional.empty();
@@ -397,6 +413,7 @@ public final class CountCompaniesParams {
             planIds(other.getPlanIds());
             planVersionId(other.getPlanVersionId());
             planVersionIds(other.getPlanVersionIds());
+            planVersionUnpublished(other.getPlanVersionUnpublished());
             q(other.getQ());
             sortOrderColumn(other.getSortOrderColumn());
             sortOrderDirection(other.getSortOrderDirection());
@@ -547,6 +564,20 @@ public final class CountCompaniesParams {
 
         public Builder planVersionIds(List<String> planVersionIds) {
             this.planVersionIds = Optional.ofNullable(planVersionIds);
+            return this;
+        }
+
+        /**
+         * <p>Filter companies assigned to a plan version that is no longer published, meaning the plan has since moved on to a newer version</p>
+         */
+        @JsonSetter(value = "plan_version_unpublished", nulls = Nulls.SKIP)
+        public Builder planVersionUnpublished(Optional<Boolean> planVersionUnpublished) {
+            this.planVersionUnpublished = planVersionUnpublished;
+            return this;
+        }
+
+        public Builder planVersionUnpublished(Boolean planVersionUnpublished) {
+            this.planVersionUnpublished = Optional.ofNullable(planVersionUnpublished);
             return this;
         }
 
@@ -702,6 +733,7 @@ public final class CountCompaniesParams {
                     planIds,
                     planVersionId,
                     planVersionIds,
+                    planVersionUnpublished,
                     q,
                     sortOrderColumn,
                     sortOrderDirection,

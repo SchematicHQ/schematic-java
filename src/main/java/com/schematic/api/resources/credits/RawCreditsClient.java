@@ -1348,14 +1348,6 @@ public class RawCreditsClient {
         }
     }
 
-    public BaseSchematicHttpResponse<CountCompanyGrantsResponse> countCompanyGrants() {
-        return countCompanyGrants(CountCompanyGrantsRequest.builder().build());
-    }
-
-    public BaseSchematicHttpResponse<CountCompanyGrantsResponse> countCompanyGrants(RequestOptions requestOptions) {
-        return countCompanyGrants(CountCompanyGrantsRequest.builder().build(), requestOptions);
-    }
-
     public BaseSchematicHttpResponse<CountCompanyGrantsResponse> countCompanyGrants(CountCompanyGrantsRequest request) {
         return countCompanyGrants(request, null);
     }
@@ -1365,10 +1357,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/grants/company/count");
-        if (request.getCompanyId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "company_id", request.getCompanyId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
         if (request.getOrder().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "order", request.getOrder().get(), false);
@@ -1447,14 +1436,6 @@ public class RawCreditsClient {
         }
     }
 
-    public BaseSchematicHttpResponse<ListCompanyGrantsResponse> listCompanyGrants() {
-        return listCompanyGrants(ListCompanyGrantsRequest.builder().build());
-    }
-
-    public BaseSchematicHttpResponse<ListCompanyGrantsResponse> listCompanyGrants(RequestOptions requestOptions) {
-        return listCompanyGrants(ListCompanyGrantsRequest.builder().build(), requestOptions);
-    }
-
     public BaseSchematicHttpResponse<ListCompanyGrantsResponse> listCompanyGrants(ListCompanyGrantsRequest request) {
         return listCompanyGrants(request, null);
     }
@@ -1464,10 +1445,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/grants/company/list");
-        if (request.getCompanyId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "company_id", request.getCompanyId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
         if (request.getOrder().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "order", request.getOrder().get(), false);

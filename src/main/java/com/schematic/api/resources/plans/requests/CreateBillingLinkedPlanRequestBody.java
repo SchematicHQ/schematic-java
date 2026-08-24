@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateBillingLinkedPlanRequestBody {
     private final BillingProviderType billingProvider;
 
-    private final String description;
+    private final Optional<String> description;
 
     private final String externalResourceId;
 
@@ -42,7 +42,7 @@ public final class CreateBillingLinkedPlanRequestBody {
 
     private CreateBillingLinkedPlanRequestBody(
             BillingProviderType billingProvider,
-            String description,
+            Optional<String> description,
             String externalResourceId,
             Optional<String> externalResourceVersion,
             Optional<PlanIcon> icon,
@@ -65,7 +65,7 @@ public final class CreateBillingLinkedPlanRequestBody {
     }
 
     @JsonProperty("description")
-    public String getDescription() {
+    public Optional<String> getDescription() {
         return description;
     }
 
@@ -138,13 +138,9 @@ public final class CreateBillingLinkedPlanRequestBody {
     }
 
     public interface BillingProviderStage {
-        DescriptionStage billingProvider(@NotNull BillingProviderType billingProvider);
+        ExternalResourceIdStage billingProvider(@NotNull BillingProviderType billingProvider);
 
         Builder from(CreateBillingLinkedPlanRequestBody other);
-    }
-
-    public interface DescriptionStage {
-        ExternalResourceIdStage description(@NotNull String description);
     }
 
     public interface ExternalResourceIdStage {
@@ -166,6 +162,10 @@ public final class CreateBillingLinkedPlanRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
+
         _FinalStage externalResourceVersion(Optional<String> externalResourceVersion);
 
         _FinalStage externalResourceVersion(String externalResourceVersion);
@@ -177,15 +177,8 @@ public final class CreateBillingLinkedPlanRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements BillingProviderStage,
-                    DescriptionStage,
-                    ExternalResourceIdStage,
-                    NameStage,
-                    PlanTypeStage,
-                    _FinalStage {
+            implements BillingProviderStage, ExternalResourceIdStage, NameStage, PlanTypeStage, _FinalStage {
         private BillingProviderType billingProvider;
-
-        private String description;
 
         private String externalResourceId;
 
@@ -196,6 +189,8 @@ public final class CreateBillingLinkedPlanRequestBody {
         private Optional<PlanIcon> icon = Optional.empty();
 
         private Optional<String> externalResourceVersion = Optional.empty();
+
+        private Optional<String> description = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -216,15 +211,8 @@ public final class CreateBillingLinkedPlanRequestBody {
 
         @java.lang.Override
         @JsonSetter("billing_provider")
-        public DescriptionStage billingProvider(@NotNull BillingProviderType billingProvider) {
+        public ExternalResourceIdStage billingProvider(@NotNull BillingProviderType billingProvider) {
             this.billingProvider = Objects.requireNonNull(billingProvider, "billingProvider must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("description")
-        public ExternalResourceIdStage description(@NotNull String description) {
-            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
@@ -272,6 +260,19 @@ public final class CreateBillingLinkedPlanRequestBody {
         @JsonSetter(value = "external_resource_version", nulls = Nulls.SKIP)
         public _FinalStage externalResourceVersion(Optional<String> externalResourceVersion) {
             this.externalResourceVersion = externalResourceVersion;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
             return this;
         }
 

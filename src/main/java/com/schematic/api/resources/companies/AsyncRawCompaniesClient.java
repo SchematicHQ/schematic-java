@@ -152,6 +152,13 @@ public class AsyncRawCompaniesClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
         }
+        if (request.getPlanVersionUnpublished().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "plan_version_unpublished",
+                    request.getPlanVersionUnpublished().get(),
+                    false);
+        }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -675,6 +682,13 @@ public class AsyncRawCompaniesClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
         }
+        if (request.getPlanVersionUnpublished().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "plan_version_unpublished",
+                    request.getPlanVersionUnpublished().get(),
+                    false);
+        }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -1164,15 +1178,6 @@ public class AsyncRawCompaniesClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<GetCompanyBillingEntityResponse>> getCompanyBillingEntity() {
-        return getCompanyBillingEntity(GetCompanyBillingEntityRequest.builder().build());
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<GetCompanyBillingEntityResponse>> getCompanyBillingEntity(
-            RequestOptions requestOptions) {
-        return getCompanyBillingEntity(GetCompanyBillingEntityRequest.builder().build(), requestOptions);
-    }
-
     public CompletableFuture<BaseSchematicHttpResponse<GetCompanyBillingEntityResponse>> getCompanyBillingEntity(
             GetCompanyBillingEntityRequest request) {
         return getCompanyBillingEntity(request, null);
@@ -1183,10 +1188,7 @@ public class AsyncRawCompaniesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("company-billing-entity");
-        if (request.getCompanyId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "company_id", request.getCompanyId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1277,18 +1279,6 @@ public class AsyncRawCompaniesClient {
     }
 
     public CompletableFuture<BaseSchematicHttpResponse<GetBillingEntityChildSubscriptionsResponse>>
-            getBillingEntityChildSubscriptions() {
-        return getBillingEntityChildSubscriptions(
-                GetBillingEntityChildSubscriptionsRequest.builder().build());
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<GetBillingEntityChildSubscriptionsResponse>>
-            getBillingEntityChildSubscriptions(RequestOptions requestOptions) {
-        return getBillingEntityChildSubscriptions(
-                GetBillingEntityChildSubscriptionsRequest.builder().build(), requestOptions);
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<GetBillingEntityChildSubscriptionsResponse>>
             getBillingEntityChildSubscriptions(GetBillingEntityChildSubscriptionsRequest request) {
         return getBillingEntityChildSubscriptions(request, null);
     }
@@ -1299,10 +1289,7 @@ public class AsyncRawCompaniesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("company-billing-entity-subscriptions");
-        if (request.getCompanyId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "company_id", request.getCompanyId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);

@@ -264,14 +264,6 @@ public class AsyncCreditsClient {
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<CountCompanyGrantsResponse> countCompanyGrants() {
-        return this.rawClient.countCompanyGrants().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<CountCompanyGrantsResponse> countCompanyGrants(RequestOptions requestOptions) {
-        return this.rawClient.countCompanyGrants(requestOptions).thenApply(response -> response.body());
-    }
-
     public CompletableFuture<CountCompanyGrantsResponse> countCompanyGrants(CountCompanyGrantsRequest request) {
         return this.rawClient.countCompanyGrants(request).thenApply(response -> response.body());
     }
@@ -279,14 +271,6 @@ public class AsyncCreditsClient {
     public CompletableFuture<CountCompanyGrantsResponse> countCompanyGrants(
             CountCompanyGrantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.countCompanyGrants(request, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<ListCompanyGrantsResponse> listCompanyGrants() {
-        return this.rawClient.listCompanyGrants().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<ListCompanyGrantsResponse> listCompanyGrants(RequestOptions requestOptions) {
-        return this.rawClient.listCompanyGrants(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListCompanyGrantsResponse> listCompanyGrants(ListCompanyGrantsRequest request) {

@@ -22,15 +22,19 @@ import java.util.Optional;
 public final class CheckFlagRequestBody {
     private final Optional<Map<String, String>> company;
 
+    private final Optional<PreflightRequestBody> preflight;
+
     private final Optional<Map<String, String>> user;
 
     private final Map<String, Object> additionalProperties;
 
     private CheckFlagRequestBody(
             Optional<Map<String, String>> company,
+            Optional<PreflightRequestBody> preflight,
             Optional<Map<String, String>> user,
             Map<String, Object> additionalProperties) {
         this.company = company;
+        this.preflight = preflight;
         this.user = user;
         this.additionalProperties = additionalProperties;
     }
@@ -38,6 +42,14 @@ public final class CheckFlagRequestBody {
     @JsonProperty("company")
     public Optional<Map<String, String>> getCompany() {
         return company;
+    }
+
+    /**
+     * @return Hypothetical usage to evaluate the flag against, for answering &quot;would this action be allowed?&quot; before performing it. Only supported when checking a single flag. Values are caller-asserted and can widen a verdict as well as narrow it, so do not forward untrusted input here when the result gates access. Only the flag value reflects the preflight; the entitlement and usage figures in the response are the company's current, unsimulated ones
+     */
+    @JsonProperty("preflight")
+    public Optional<PreflightRequestBody> getPreflight() {
+        return preflight;
     }
 
     @JsonProperty("user")
@@ -57,12 +69,12 @@ public final class CheckFlagRequestBody {
     }
 
     private boolean equalTo(CheckFlagRequestBody other) {
-        return company.equals(other.company) && user.equals(other.user);
+        return company.equals(other.company) && preflight.equals(other.preflight) && user.equals(other.user);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.company, this.user);
+        return Objects.hash(this.company, this.preflight, this.user);
     }
 
     @java.lang.Override
@@ -78,6 +90,8 @@ public final class CheckFlagRequestBody {
     public static final class Builder {
         private Optional<Map<String, String>> company = Optional.empty();
 
+        private Optional<PreflightRequestBody> preflight = Optional.empty();
+
         private Optional<Map<String, String>> user = Optional.empty();
 
         @JsonAnySetter
@@ -87,6 +101,7 @@ public final class CheckFlagRequestBody {
 
         public Builder from(CheckFlagRequestBody other) {
             company(other.getCompany());
+            preflight(other.getPreflight());
             user(other.getUser());
             return this;
         }
@@ -102,6 +117,20 @@ public final class CheckFlagRequestBody {
             return this;
         }
 
+        /**
+         * <p>Hypothetical usage to evaluate the flag against, for answering &quot;would this action be allowed?&quot; before performing it. Only supported when checking a single flag. Values are caller-asserted and can widen a verdict as well as narrow it, so do not forward untrusted input here when the result gates access. Only the flag value reflects the preflight; the entitlement and usage figures in the response are the company's current, unsimulated ones</p>
+         */
+        @JsonSetter(value = "preflight", nulls = Nulls.SKIP)
+        public Builder preflight(Optional<PreflightRequestBody> preflight) {
+            this.preflight = preflight;
+            return this;
+        }
+
+        public Builder preflight(PreflightRequestBody preflight) {
+            this.preflight = Optional.ofNullable(preflight);
+            return this;
+        }
+
         @JsonSetter(value = "user", nulls = Nulls.SKIP)
         public Builder user(Optional<Map<String, String>> user) {
             this.user = user;
@@ -114,7 +143,7 @@ public final class CheckFlagRequestBody {
         }
 
         public CheckFlagRequestBody build() {
-            return new CheckFlagRequestBody(company, user, additionalProperties);
+            return new CheckFlagRequestBody(company, preflight, user, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

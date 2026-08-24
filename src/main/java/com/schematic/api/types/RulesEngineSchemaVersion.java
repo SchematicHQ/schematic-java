@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class RulesEngineSchemaVersion {
-    public static final RulesEngineSchemaVersion V_5_B_3_E_7220 =
-            new RulesEngineSchemaVersion(Value.V_5_B_3_E_7220, "v5b3e7220");
+    public static final RulesEngineSchemaVersion VC_8_EB_8_DF_4 =
+            new RulesEngineSchemaVersion(Value.VC_8_EB_8_DF_4, "vc8eb8df4");
 
     public static final RulesEngineSchemaVersion PLACEHOLDER_FOR_FERN_COMPATIBILITY = new RulesEngineSchemaVersion(
             Value.PLACEHOLDER_FOR_FERN_COMPATIBILITY, "placeholder-for-fern-compatibility");
@@ -46,8 +46,8 @@ public final class RulesEngineSchemaVersion {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case V_5_B_3_E_7220:
-                return visitor.visitV5B3E7220();
+            case VC_8_EB_8_DF_4:
+                return visitor.visitVc8Eb8Df4();
             case PLACEHOLDER_FOR_FERN_COMPATIBILITY:
                 return visitor.visitPlaceholderForFernCompatibility();
             case UNKNOWN:
@@ -59,8 +59,8 @@ public final class RulesEngineSchemaVersion {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static RulesEngineSchemaVersion valueOf(String value) {
         switch (value) {
-            case "v5b3e7220":
-                return V_5_B_3_E_7220;
+            case "vc8eb8df4":
+                return VC_8_EB_8_DF_4;
             case "placeholder-for-fern-compatibility":
                 return PLACEHOLDER_FOR_FERN_COMPATIBILITY;
             default:
@@ -69,7 +69,7 @@ public final class RulesEngineSchemaVersion {
     }
 
     public enum Value {
-        V_5_B_3_E_7220,
+        VC_8_EB_8_DF_4,
 
         PLACEHOLDER_FOR_FERN_COMPATIBILITY,
 
@@ -77,7 +77,7 @@ public final class RulesEngineSchemaVersion {
     }
 
     public interface Visitor<T> {
-        T visitV5B3E7220();
+        T visitVc8Eb8Df4();
 
         T visitPlaceholderForFernCompatibility();
 

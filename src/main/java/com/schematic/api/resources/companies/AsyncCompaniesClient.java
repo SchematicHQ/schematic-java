@@ -209,14 +209,6 @@ public class AsyncCompaniesClient {
         return this.rawClient.lookupCompany(request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<GetCompanyBillingEntityResponse> getCompanyBillingEntity() {
-        return this.rawClient.getCompanyBillingEntity().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<GetCompanyBillingEntityResponse> getCompanyBillingEntity(RequestOptions requestOptions) {
-        return this.rawClient.getCompanyBillingEntity(requestOptions).thenApply(response -> response.body());
-    }
-
     public CompletableFuture<GetCompanyBillingEntityResponse> getCompanyBillingEntity(
             GetCompanyBillingEntityRequest request) {
         return this.rawClient.getCompanyBillingEntity(request).thenApply(response -> response.body());
@@ -225,15 +217,6 @@ public class AsyncCompaniesClient {
     public CompletableFuture<GetCompanyBillingEntityResponse> getCompanyBillingEntity(
             GetCompanyBillingEntityRequest request, RequestOptions requestOptions) {
         return this.rawClient.getCompanyBillingEntity(request, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<GetBillingEntityChildSubscriptionsResponse> getBillingEntityChildSubscriptions() {
-        return this.rawClient.getBillingEntityChildSubscriptions().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<GetBillingEntityChildSubscriptionsResponse> getBillingEntityChildSubscriptions(
-            RequestOptions requestOptions) {
-        return this.rawClient.getBillingEntityChildSubscriptions(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<GetBillingEntityChildSubscriptionsResponse> getBillingEntityChildSubscriptions(
