@@ -17,11 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListMigrationsRequest.Builder.class)
 public final class ListMigrationsRequest {
-    private final Optional<String> planVersionId;
+    private final String planVersionId;
 
     private final Optional<PlanVersionMigrationStatus> status;
 
@@ -32,7 +33,7 @@ public final class ListMigrationsRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListMigrationsRequest(
-            Optional<String> planVersionId,
+            String planVersionId,
             Optional<PlanVersionMigrationStatus> status,
             Optional<Long> limit,
             Optional<Long> offset,
@@ -45,7 +46,7 @@ public final class ListMigrationsRequest {
     }
 
     @JsonProperty("plan_version_id")
-    public Optional<String> getPlanVersionId() {
+    public String getPlanVersionId() {
         return planVersionId;
     }
 
@@ -98,25 +99,58 @@ public final class ListMigrationsRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static PlanVersionIdStage builder() {
         return new Builder();
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private Optional<String> planVersionId = Optional.empty();
+    public interface PlanVersionIdStage {
+        _FinalStage planVersionId(@NotNull String planVersionId);
 
-        private Optional<PlanVersionMigrationStatus> status = Optional.empty();
+        Builder from(ListMigrationsRequest other);
+    }
+
+    public interface _FinalStage {
+        ListMigrationsRequest build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage status(Optional<PlanVersionMigrationStatus> status);
+
+        _FinalStage status(PlanVersionMigrationStatus status);
+
+        /**
+         * <p>Page limit (default 100)</p>
+         */
+        _FinalStage limit(Optional<Long> limit);
+
+        _FinalStage limit(Long limit);
+
+        /**
+         * <p>Page offset (default 0)</p>
+         */
+        _FinalStage offset(Optional<Long> offset);
+
+        _FinalStage offset(Long offset);
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static final class Builder implements PlanVersionIdStage, _FinalStage {
+        private String planVersionId;
+
+        private Optional<Long> offset = Optional.empty();
 
         private Optional<Long> limit = Optional.empty();
 
-        private Optional<Long> offset = Optional.empty();
+        private Optional<PlanVersionMigrationStatus> status = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(ListMigrationsRequest other) {
             planVersionId(other.getPlanVersionId());
             status(other.getStatus());
@@ -125,65 +159,78 @@ public final class ListMigrationsRequest {
             return this;
         }
 
-        @JsonSetter(value = "plan_version_id", nulls = Nulls.SKIP)
-        public Builder planVersionId(Optional<String> planVersionId) {
-            this.planVersionId = planVersionId;
-            return this;
-        }
-
-        public Builder planVersionId(String planVersionId) {
-            this.planVersionId = Optional.ofNullable(planVersionId);
-            return this;
-        }
-
-        @JsonSetter(value = "status", nulls = Nulls.SKIP)
-        public Builder status(Optional<PlanVersionMigrationStatus> status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder status(PlanVersionMigrationStatus status) {
-            this.status = Optional.ofNullable(status);
+        @java.lang.Override
+        @JsonSetter("plan_version_id")
+        public _FinalStage planVersionId(@NotNull String planVersionId) {
+            this.planVersionId = Objects.requireNonNull(planVersionId, "planVersionId must not be null");
             return this;
         }
 
         /**
-         * <p>Page limit (default 100)</p>
+         * <p>Page offset (default 0)</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
          */
-        @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Long> limit) {
-            this.limit = limit;
-            return this;
-        }
-
-        public Builder limit(Long limit) {
-            this.limit = Optional.ofNullable(limit);
+        @java.lang.Override
+        public _FinalStage offset(Long offset) {
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
         /**
          * <p>Page offset (default 0)</p>
          */
+        @java.lang.Override
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Long> offset) {
+        public _FinalStage offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Long offset) {
-            this.offset = Optional.ofNullable(offset);
+        /**
+         * <p>Page limit (default 100)</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage limit(Long limit) {
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "limit", nulls = Nulls.SKIP)
+        public _FinalStage limit(Optional<Long> limit) {
+            this.limit = limit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage status(PlanVersionMigrationStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<PlanVersionMigrationStatus> status) {
+            this.status = status;
+            return this;
+        }
+
+        @java.lang.Override
         public ListMigrationsRequest build() {
             return new ListMigrationsRequest(planVersionId, status, limit, offset, additionalProperties);
         }
 
+        @java.lang.Override
         public Builder additionalProperty(String key, Object value) {
             this.additionalProperties.put(key, value);
             return this;
         }
 
+        @java.lang.Override
         public Builder additionalProperties(Map<String, Object> additionalProperties) {
             this.additionalProperties.putAll(additionalProperties);
             return this;

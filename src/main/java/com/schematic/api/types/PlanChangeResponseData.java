@@ -66,6 +66,12 @@ public final class PlanChangeResponseData {
 
     private final List<SubscriptionTraitUpdate> traitsUpdated;
 
+    private final Optional<OffsetDateTime> trialConvertedAt;
+
+    private final Optional<OffsetDateTime> trialExpiresAt;
+
+    private final Optional<TrialStatus> trialStatus;
+
     private final OffsetDateTime updatedAt;
 
     private final Optional<String> userId;
@@ -96,6 +102,9 @@ public final class PlanChangeResponseData {
             Optional<String> requestId,
             Optional<PlanChangeSubscriptionAction> subscriptionChangeAction,
             List<SubscriptionTraitUpdate> traitsUpdated,
+            Optional<OffsetDateTime> trialConvertedAt,
+            Optional<OffsetDateTime> trialExpiresAt,
+            Optional<TrialStatus> trialStatus,
             OffsetDateTime updatedAt,
             Optional<String> userId,
             Optional<String> userName,
@@ -121,6 +130,9 @@ public final class PlanChangeResponseData {
         this.requestId = requestId;
         this.subscriptionChangeAction = subscriptionChangeAction;
         this.traitsUpdated = traitsUpdated;
+        this.trialConvertedAt = trialConvertedAt;
+        this.trialExpiresAt = trialExpiresAt;
+        this.trialStatus = trialStatus;
         this.updatedAt = updatedAt;
         this.userId = userId;
         this.userName = userName;
@@ -253,6 +265,30 @@ public final class PlanChangeResponseData {
         return traitsUpdated;
     }
 
+    /**
+     * @return When the company's trial had converted to a paid subscription as of this change. Null when the trial had not converted, or for changes recorded before trial status was tracked.
+     */
+    @JsonProperty("trial_converted_at")
+    public Optional<OffsetDateTime> getTrialConvertedAt() {
+        return trialConvertedAt;
+    }
+
+    /**
+     * @return When the company's trial was set to end as of this change. Null when the company had never trialed, or for changes recorded before trial status was tracked.
+     */
+    @JsonProperty("trial_expires_at")
+    public Optional<OffsetDateTime> getTrialExpiresAt() {
+        return trialExpiresAt;
+    }
+
+    /**
+     * @return The company's trial status. Null when the company had never trialed, or for changes recorded before trial status was tracked.
+     */
+    @JsonProperty("trial_status")
+    public Optional<TrialStatus> getTrialStatus() {
+        return trialStatus;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -301,6 +337,9 @@ public final class PlanChangeResponseData {
                 && requestId.equals(other.requestId)
                 && subscriptionChangeAction.equals(other.subscriptionChangeAction)
                 && traitsUpdated.equals(other.traitsUpdated)
+                && trialConvertedAt.equals(other.trialConvertedAt)
+                && trialExpiresAt.equals(other.trialExpiresAt)
+                && trialStatus.equals(other.trialStatus)
                 && updatedAt.equals(other.updatedAt)
                 && userId.equals(other.userId)
                 && userName.equals(other.userName);
@@ -330,6 +369,9 @@ public final class PlanChangeResponseData {
                 this.requestId,
                 this.subscriptionChangeAction,
                 this.traitsUpdated,
+                this.trialConvertedAt,
+                this.trialExpiresAt,
+                this.trialStatus,
                 this.updatedAt,
                 this.userId,
                 this.userName);
@@ -468,6 +510,27 @@ public final class PlanChangeResponseData {
 
         _FinalStage addAllTraitsUpdated(List<SubscriptionTraitUpdate> traitsUpdated);
 
+        /**
+         * <p>When the company's trial had converted to a paid subscription as of this change. Null when the trial had not converted, or for changes recorded before trial status was tracked.</p>
+         */
+        _FinalStage trialConvertedAt(Optional<OffsetDateTime> trialConvertedAt);
+
+        _FinalStage trialConvertedAt(OffsetDateTime trialConvertedAt);
+
+        /**
+         * <p>When the company's trial was set to end as of this change. Null when the company had never trialed, or for changes recorded before trial status was tracked.</p>
+         */
+        _FinalStage trialExpiresAt(Optional<OffsetDateTime> trialExpiresAt);
+
+        _FinalStage trialExpiresAt(OffsetDateTime trialExpiresAt);
+
+        /**
+         * <p>The company's trial status. Null when the company had never trialed, or for changes recorded before trial status was tracked.</p>
+         */
+        _FinalStage trialStatus(Optional<TrialStatus> trialStatus);
+
+        _FinalStage trialStatus(TrialStatus trialStatus);
+
         _FinalStage userId(Optional<String> userId);
 
         _FinalStage userId(String userId);
@@ -507,6 +570,12 @@ public final class PlanChangeResponseData {
         private Optional<String> userName = Optional.empty();
 
         private Optional<String> userId = Optional.empty();
+
+        private Optional<TrialStatus> trialStatus = Optional.empty();
+
+        private Optional<OffsetDateTime> trialExpiresAt = Optional.empty();
+
+        private Optional<OffsetDateTime> trialConvertedAt = Optional.empty();
 
         private List<SubscriptionTraitUpdate> traitsUpdated = new ArrayList<>();
 
@@ -564,6 +633,9 @@ public final class PlanChangeResponseData {
             requestId(other.getRequestId());
             subscriptionChangeAction(other.getSubscriptionChangeAction());
             traitsUpdated(other.getTraitsUpdated());
+            trialConvertedAt(other.getTrialConvertedAt());
+            trialExpiresAt(other.getTrialExpiresAt());
+            trialStatus(other.getTrialStatus());
             updatedAt(other.getUpdatedAt());
             userId(other.getUserId());
             userName(other.getUserName());
@@ -653,6 +725,66 @@ public final class PlanChangeResponseData {
         @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
         public _FinalStage userId(Optional<String> userId) {
             this.userId = userId;
+            return this;
+        }
+
+        /**
+         * <p>The company's trial status. Null when the company had never trialed, or for changes recorded before trial status was tracked.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage trialStatus(TrialStatus trialStatus) {
+            this.trialStatus = Optional.ofNullable(trialStatus);
+            return this;
+        }
+
+        /**
+         * <p>The company's trial status. Null when the company had never trialed, or for changes recorded before trial status was tracked.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "trial_status", nulls = Nulls.SKIP)
+        public _FinalStage trialStatus(Optional<TrialStatus> trialStatus) {
+            this.trialStatus = trialStatus;
+            return this;
+        }
+
+        /**
+         * <p>When the company's trial was set to end as of this change. Null when the company had never trialed, or for changes recorded before trial status was tracked.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage trialExpiresAt(OffsetDateTime trialExpiresAt) {
+            this.trialExpiresAt = Optional.ofNullable(trialExpiresAt);
+            return this;
+        }
+
+        /**
+         * <p>When the company's trial was set to end as of this change. Null when the company had never trialed, or for changes recorded before trial status was tracked.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "trial_expires_at", nulls = Nulls.SKIP)
+        public _FinalStage trialExpiresAt(Optional<OffsetDateTime> trialExpiresAt) {
+            this.trialExpiresAt = trialExpiresAt;
+            return this;
+        }
+
+        /**
+         * <p>When the company's trial had converted to a paid subscription as of this change. Null when the trial had not converted, or for changes recorded before trial status was tracked.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage trialConvertedAt(OffsetDateTime trialConvertedAt) {
+            this.trialConvertedAt = Optional.ofNullable(trialConvertedAt);
+            return this;
+        }
+
+        /**
+         * <p>When the company's trial had converted to a paid subscription as of this change. Null when the trial had not converted, or for changes recorded before trial status was tracked.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "trial_converted_at", nulls = Nulls.SKIP)
+        public _FinalStage trialConvertedAt(Optional<OffsetDateTime> trialConvertedAt) {
+            this.trialConvertedAt = trialConvertedAt;
             return this;
         }
 
@@ -941,6 +1073,9 @@ public final class PlanChangeResponseData {
                     requestId,
                     subscriptionChangeAction,
                     traitsUpdated,
+                    trialConvertedAt,
+                    trialExpiresAt,
+                    trialStatus,
                     updatedAt,
                     userId,
                     userName,

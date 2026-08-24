@@ -5086,7 +5086,7 @@ client.credits().countCompanyGrants(
 <dl>
 <dd>
 
-**companyId:** `Optional<String>` 
+**companyId:** `String` 
     
 </dd>
 </dl>
@@ -5167,7 +5167,7 @@ client.credits().listCompanyGrants(
 <dl>
 <dd>
 
-**companyId:** `Optional<String>` 
+**companyId:** `String` 
     
 </dd>
 </dl>
@@ -7624,6 +7624,7 @@ client.companies().listCompanies(
         .monetizedSubscriptions(true)
         .planId("plan_id")
         .planVersionId("plan_version_id")
+        .planVersionUnpublished(true)
         .q("q")
         .sortOrderColumn("sort_order_column")
         .sortOrderDirection(SortDirection.ASC)
@@ -7707,6 +7708,14 @@ client.companies().listCompanies(
 <dd>
 
 **planVersionIds:** `Optional<String>` — Filter companies by one or more plan version IDs (each ID starts with plvr_). Takes precedence over plan_version_id when set.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionUnpublished:** `Optional<Boolean>` — Filter companies assigned to a plan version that is no longer published, meaning the plan has since moved on to a newer version
     
 </dd>
 </dl>
@@ -8004,6 +8013,7 @@ client.companies().countCompanies(
         .monetizedSubscriptions(true)
         .planId("plan_id")
         .planVersionId("plan_version_id")
+        .planVersionUnpublished(true)
         .q("q")
         .sortOrderColumn("sort_order_column")
         .sortOrderDirection(SortDirection.ASC)
@@ -8087,6 +8097,14 @@ client.companies().countCompanies(
 <dd>
 
 **planVersionIds:** `Optional<String>` — Filter companies by one or more plan version IDs (each ID starts with plvr_). Takes precedence over plan_version_id when set.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionUnpublished:** `Optional<Boolean>` — Filter companies assigned to a plan version that is no longer published, meaning the plan has since moved on to a newer version
     
 </dd>
 </dl>
@@ -8392,7 +8410,7 @@ client.companies().getCompanyBillingEntity(
 <dl>
 <dd>
 
-**companyId:** `Optional<String>` 
+**companyId:** `String` 
     
 </dd>
 </dl>
@@ -8437,7 +8455,7 @@ client.companies().getBillingEntityChildSubscriptions(
 <dl>
 <dd>
 
-**companyId:** `Optional<String>` 
+**companyId:** `String` 
     
 </dd>
 </dl>
@@ -11413,6 +11431,109 @@ client.entitlements().listFeatureUsage(
 </dl>
 </details>
 
+<details><summary><code>client.entitlements.listFeatureUsageHistory() -> ListFeatureUsageHistoryResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.entitlements().listFeatureUsageHistory(
+    ListFeatureUsageHistoryRequest
+        .builder()
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .companyIds(
+            Arrays.asList("company_ids")
+        )
+        .featureIds(
+            Arrays.asList("feature_ids")
+        )
+        .granularity(TimeSeriesGranularity.DAILY)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyIds:** `Optional<String>` — Restrict to these company IDs; omit for every company in the environment
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `OffsetDateTime` — Exclusive end of the window; must fall on an hour boundary
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureIds:** `Optional<String>` — Restrict to these event features; omit for every event feature in the environment. Where several features measure the same event, each is reported separately and a page may carry more rows than the requested limit
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**granularity:** `Optional<TimeSeriesGranularity>` — Bucket the window; omit for a single total per company and feature
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `OffsetDateTime` — Inclusive start of the window; must fall on an hour boundary
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.entitlements.getFeatureUsageTimeSeries() -> GetFeatureUsageTimeSeriesResponse</code></summary>
 <dl>
 <dd>
@@ -13617,7 +13738,6 @@ client.plans().createCustomPlan(
     CreateCustomPlanRequestBody
         .builder()
         .companyId("company_id")
-        .description("description")
         .name("name")
         .build()
 );
@@ -13651,7 +13771,15 @@ client.plans().createCustomPlan(
 <dl>
 <dd>
 
-**description:** `String` 
+**copiedPriceId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -13886,7 +14014,6 @@ client.plans().listPlans(
 client.plans().createPlan(
     CreatePlanRequestBody
         .builder()
-        .description("description")
         .name("name")
         .planType(PlanType.PLAN)
         .build()
@@ -14137,7 +14264,6 @@ client.plans().upsertPlanForBillingProduct(
     CreateBillingLinkedPlanRequestBody
         .builder()
         .billingProvider(BillingProviderType.METRONOME)
-        .description("description")
         .externalResourceId("external_resource_id")
         .name("name")
         .planType(PlanType.PLAN)
@@ -14165,7 +14291,7 @@ client.plans().upsertPlanForBillingProduct(
 <dl>
 <dd>
 
-**description:** `String` 
+**description:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -14785,6 +14911,14 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
+**requireNoMigration:** `Optional<Boolean>` — Refuse the publish if any company would be migrated onto the new version
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **sendInvoice:** `Optional<Boolean>` — Whether Stripe emails the invoice when it is finalized. Defaults to true.
     
 </dd>
@@ -15275,6 +15409,20 @@ client.components().previewComponentData(
 client.planbundle().createCustomPlanBundle(
     CreateCustomPlanBundleRequestBody
         .builder()
+        .billingProduct(
+            UpsertBillingProductRequestBody
+                .builder()
+                .chargeType(ChargeType.FREE)
+                .isTrialable(true)
+                .build()
+        )
+        .plan(
+            CreateCustomPlanBundlePlanRequestBody
+                .builder()
+                .companyId("company_id")
+                .name("name")
+                .build()
+        )
         .entitlements(
             Arrays.asList(
                 PlanBundleEntitlementRequestBody
@@ -15299,7 +15447,7 @@ client.planbundle().createCustomPlanBundle(
 <dl>
 <dd>
 
-**billingProduct:** `Optional<UpsertBillingProductRequestBody>` 
+**billingProduct:** `UpsertBillingProductRequestBody` 
     
 </dd>
 </dl>
@@ -15323,7 +15471,7 @@ client.planbundle().createCustomPlanBundle(
 <dl>
 <dd>
 
-**plan:** `Optional<CreateCustomPlanBundlePlanRequestBody>` 
+**plan:** `CreateCustomPlanBundlePlanRequestBody` 
     
 </dd>
 </dl>
@@ -15351,6 +15499,13 @@ client.planbundle().createCustomPlanBundle(
 client.planbundle().createPlanBundle(
     CreatePlanBundleRequestBody
         .builder()
+        .plan(
+            CreatePlanRequestBody
+                .builder()
+                .name("name")
+                .planType(PlanType.PLAN)
+                .build()
+        )
         .entitlements(
             Arrays.asList(
                 PlanBundleEntitlementRequestBody
@@ -15399,7 +15554,7 @@ client.planbundle().createPlanBundle(
 <dl>
 <dd>
 
-**plan:** `Optional<CreatePlanRequestBody>` 
+**plan:** `CreatePlanRequestBody` 
     
 </dd>
 </dl>
@@ -15428,6 +15583,12 @@ client.planbundle().updatePlanBundle(
     "plan_id",
     UpdatePlanBundleRequestBody
         .builder()
+        .plan(
+            UpdatePlanRequestBody
+                .builder()
+                .name("name")
+                .build()
+        )
         .entitlements(
             Arrays.asList(
                 PlanBundleEntitlementRequestBody
@@ -15484,7 +15645,7 @@ client.planbundle().updatePlanBundle(
 <dl>
 <dd>
 
-**plan:** `Optional<UpdatePlanRequestBody>` 
+**plan:** `UpdatePlanRequestBody` 
     
 </dd>
 </dl>
@@ -18446,7 +18607,6 @@ client.plangroups().getPlanGroup(
 client.plangroups().createPlanGroup(
     CreatePlanGroupRequestBody
         .builder()
-        .checkoutBundlePurchaseBehavior(CheckoutBundlePurchaseBehavior.INDIVIDUAL)
         .checkoutCollectAddress(true)
         .checkoutCollectEmail(true)
         .checkoutCollectPhone(true)
@@ -18522,7 +18682,7 @@ client.plangroups().createPlanGroup(
 <dl>
 <dd>
 
-**checkoutBundlePurchaseBehavior:** `CheckoutBundlePurchaseBehavior` 
+**checkoutBundlePurchaseBehavior:** `Optional<CheckoutBundlePurchaseBehavior>` 
     
 </dd>
 </dl>
@@ -18831,7 +18991,6 @@ client.plangroups().updatePlanGroup(
     "plan_group_id",
     UpdatePlanGroupRequestBody
         .builder()
-        .checkoutBundlePurchaseBehavior(CheckoutBundlePurchaseBehavior.INDIVIDUAL)
         .checkoutCollectAddress(true)
         .checkoutCollectEmail(true)
         .checkoutCollectPhone(true)
@@ -18915,7 +19074,7 @@ client.plangroups().updatePlanGroup(
 <dl>
 <dd>
 
-**checkoutBundlePurchaseBehavior:** `CheckoutBundlePurchaseBehavior` 
+**checkoutBundlePurchaseBehavior:** `Optional<CheckoutBundlePurchaseBehavior>` 
     
 </dd>
 </dl>
@@ -19245,7 +19404,7 @@ client.planmigrations().listCompanyMigrations(
 <dl>
 <dd>
 
-**migrationId:** `Optional<String>` 
+**migrationId:** `String` 
     
 </dd>
 </dl>
@@ -19366,7 +19525,7 @@ client.planmigrations().countCompanyMigrations(
 <dl>
 <dd>
 
-**migrationId:** `Optional<String>` 
+**migrationId:** `String` 
     
 </dd>
 </dl>
@@ -19446,7 +19605,7 @@ client.planmigrations().listMigrations(
 <dl>
 <dd>
 
-**planVersionId:** `Optional<String>` 
+**planVersionId:** `String` 
     
 </dd>
 </dl>
@@ -19718,7 +19877,7 @@ client.planmigrations().countMigrations(
 <dl>
 <dd>
 
-**planVersionId:** `Optional<String>` 
+**planVersionId:** `String` 
     
 </dd>
 </dl>

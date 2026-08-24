@@ -202,14 +202,6 @@ public class CompaniesClient {
         return this.rawClient.lookupCompany(request, requestOptions).body();
     }
 
-    public GetCompanyBillingEntityResponse getCompanyBillingEntity() {
-        return this.rawClient.getCompanyBillingEntity().body();
-    }
-
-    public GetCompanyBillingEntityResponse getCompanyBillingEntity(RequestOptions requestOptions) {
-        return this.rawClient.getCompanyBillingEntity(requestOptions).body();
-    }
-
     public GetCompanyBillingEntityResponse getCompanyBillingEntity(GetCompanyBillingEntityRequest request) {
         return this.rawClient.getCompanyBillingEntity(request).body();
     }
@@ -217,15 +209,6 @@ public class CompaniesClient {
     public GetCompanyBillingEntityResponse getCompanyBillingEntity(
             GetCompanyBillingEntityRequest request, RequestOptions requestOptions) {
         return this.rawClient.getCompanyBillingEntity(request, requestOptions).body();
-    }
-
-    public GetBillingEntityChildSubscriptionsResponse getBillingEntityChildSubscriptions() {
-        return this.rawClient.getBillingEntityChildSubscriptions().body();
-    }
-
-    public GetBillingEntityChildSubscriptionsResponse getBillingEntityChildSubscriptions(
-            RequestOptions requestOptions) {
-        return this.rawClient.getBillingEntityChildSubscriptions(requestOptions).body();
     }
 
     public GetBillingEntityChildSubscriptionsResponse getBillingEntityChildSubscriptions(

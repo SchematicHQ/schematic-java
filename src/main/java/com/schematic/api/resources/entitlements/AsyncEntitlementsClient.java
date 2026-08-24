@@ -20,6 +20,7 @@ import com.schematic.api.resources.entitlements.requests.GetUserUsageByCompanyRe
 import com.schematic.api.resources.entitlements.requests.GetUserUsageDetailRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
+import com.schematic.api.resources.entitlements.requests.ListFeatureUsageHistoryRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsageRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsersRequest;
 import com.schematic.api.resources.entitlements.requests.ListPlanEntitlementsRequest;
@@ -43,6 +44,7 @@ import com.schematic.api.resources.entitlements.types.GetUserUsageByCompanyRespo
 import com.schematic.api.resources.entitlements.types.GetUserUsageDetailResponse;
 import com.schematic.api.resources.entitlements.types.ListCompanyOverridesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureCompaniesResponse;
+import com.schematic.api.resources.entitlements.types.ListFeatureUsageHistoryResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureUsageResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureUsersResponse;
 import com.schematic.api.resources.entitlements.types.ListPlanEntitlementsResponse;
@@ -181,6 +183,16 @@ public class AsyncEntitlementsClient {
     public CompletableFuture<ListFeatureUsageResponse> listFeatureUsage(
             ListFeatureUsageRequest request, RequestOptions requestOptions) {
         return this.rawClient.listFeatureUsage(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListFeatureUsageHistoryResponse> listFeatureUsageHistory(
+            ListFeatureUsageHistoryRequest request) {
+        return this.rawClient.listFeatureUsageHistory(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListFeatureUsageHistoryResponse> listFeatureUsageHistory(
+            ListFeatureUsageHistoryRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listFeatureUsageHistory(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<GetFeatureUsageTimeSeriesResponse> getFeatureUsageTimeSeries(

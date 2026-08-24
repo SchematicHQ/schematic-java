@@ -51,15 +51,6 @@ public class RawPlanmigrationsClient {
         this.clientOptions = clientOptions;
     }
 
-    public BaseSchematicHttpResponse<ListCompanyMigrationsResponse> listCompanyMigrations() {
-        return listCompanyMigrations(ListCompanyMigrationsRequest.builder().build());
-    }
-
-    public BaseSchematicHttpResponse<ListCompanyMigrationsResponse> listCompanyMigrations(
-            RequestOptions requestOptions) {
-        return listCompanyMigrations(ListCompanyMigrationsRequest.builder().build(), requestOptions);
-    }
-
     public BaseSchematicHttpResponse<ListCompanyMigrationsResponse> listCompanyMigrations(
             ListCompanyMigrationsRequest request) {
         return listCompanyMigrations(request, null);
@@ -70,10 +61,7 @@ public class RawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-company-migrations");
-        if (request.getMigrationId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "migration_id", request.getMigrationId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "migration_id", request.getMigrationId(), false);
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -227,15 +215,6 @@ public class RawPlanmigrationsClient {
         }
     }
 
-    public BaseSchematicHttpResponse<CountCompanyMigrationsResponse> countCompanyMigrations() {
-        return countCompanyMigrations(CountCompanyMigrationsRequest.builder().build());
-    }
-
-    public BaseSchematicHttpResponse<CountCompanyMigrationsResponse> countCompanyMigrations(
-            RequestOptions requestOptions) {
-        return countCompanyMigrations(CountCompanyMigrationsRequest.builder().build(), requestOptions);
-    }
-
     public BaseSchematicHttpResponse<CountCompanyMigrationsResponse> countCompanyMigrations(
             CountCompanyMigrationsRequest request) {
         return countCompanyMigrations(request, null);
@@ -246,10 +225,7 @@ public class RawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-company-migrations/count");
-        if (request.getMigrationId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "migration_id", request.getMigrationId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "migration_id", request.getMigrationId(), false);
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -328,14 +304,6 @@ public class RawPlanmigrationsClient {
         }
     }
 
-    public BaseSchematicHttpResponse<ListMigrationsResponse> listMigrations() {
-        return listMigrations(ListMigrationsRequest.builder().build());
-    }
-
-    public BaseSchematicHttpResponse<ListMigrationsResponse> listMigrations(RequestOptions requestOptions) {
-        return listMigrations(ListMigrationsRequest.builder().build(), requestOptions);
-    }
-
     public BaseSchematicHttpResponse<ListMigrationsResponse> listMigrations(ListMigrationsRequest request) {
         return listMigrations(request, null);
     }
@@ -345,10 +313,7 @@ public class RawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations");
-        if (request.getPlanVersionId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "plan_version_id", request.getPlanVersionId(), false);
         if (request.getStatus().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "status", request.getStatus().get(), false);
@@ -656,14 +621,6 @@ public class RawPlanmigrationsClient {
         }
     }
 
-    public BaseSchematicHttpResponse<CountMigrationsResponse> countMigrations() {
-        return countMigrations(CountMigrationsRequest.builder().build());
-    }
-
-    public BaseSchematicHttpResponse<CountMigrationsResponse> countMigrations(RequestOptions requestOptions) {
-        return countMigrations(CountMigrationsRequest.builder().build(), requestOptions);
-    }
-
     public BaseSchematicHttpResponse<CountMigrationsResponse> countMigrations(CountMigrationsRequest request) {
         return countMigrations(request, null);
     }
@@ -673,10 +630,7 @@ public class RawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations/count");
-        if (request.getPlanVersionId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "plan_version_id", request.getPlanVersionId(), false);
         if (request.getStatus().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "status", request.getStatus().get(), false);

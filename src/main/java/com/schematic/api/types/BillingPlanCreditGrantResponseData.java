@@ -222,7 +222,7 @@ public final class BillingPlanCreditGrantResponseData {
     }
 
     /**
-     * @return Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.
+     * @return Deprecated: bundle availability is a per-bundle plan compatibility set now; use compatible_plan_ids on credit bundles instead.
      */
     @JsonProperty("can_buy_bundles")
     public boolean getCanBuyBundles() {
@@ -487,7 +487,7 @@ public final class BillingPlanCreditGrantResponseData {
 
     public interface CanBuyBundlesStage {
         /**
-         * <p>Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.</p>
+         * <p>Deprecated: bundle availability is a per-bundle plan compatibility set now; use compatible_plan_ids on credit bundles instead.</p>
          */
         CompanyCreditAmountStage canBuyBundles(boolean canBuyBundles);
     }
@@ -806,7 +806,7 @@ public final class BillingPlanCreditGrantResponseData {
         }
 
         /**
-         * <p>Whether buyers can purchase one-time credit bundles on this grant, independent of auto top-up availability.</p>
+         * <p>Deprecated: bundle availability is a per-bundle plan compatibility set now; use compatible_plan_ids on credit bundles instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

@@ -55,15 +55,6 @@ public class AsyncRawPlanmigrationsClient {
         this.clientOptions = clientOptions;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<ListCompanyMigrationsResponse>> listCompanyMigrations() {
-        return listCompanyMigrations(ListCompanyMigrationsRequest.builder().build());
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<ListCompanyMigrationsResponse>> listCompanyMigrations(
-            RequestOptions requestOptions) {
-        return listCompanyMigrations(ListCompanyMigrationsRequest.builder().build(), requestOptions);
-    }
-
     public CompletableFuture<BaseSchematicHttpResponse<ListCompanyMigrationsResponse>> listCompanyMigrations(
             ListCompanyMigrationsRequest request) {
         return listCompanyMigrations(request, null);
@@ -74,10 +65,7 @@ public class AsyncRawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-company-migrations");
-        if (request.getMigrationId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "migration_id", request.getMigrationId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "migration_id", request.getMigrationId(), false);
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -281,15 +269,6 @@ public class AsyncRawPlanmigrationsClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<CountCompanyMigrationsResponse>> countCompanyMigrations() {
-        return countCompanyMigrations(CountCompanyMigrationsRequest.builder().build());
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<CountCompanyMigrationsResponse>> countCompanyMigrations(
-            RequestOptions requestOptions) {
-        return countCompanyMigrations(CountCompanyMigrationsRequest.builder().build(), requestOptions);
-    }
-
     public CompletableFuture<BaseSchematicHttpResponse<CountCompanyMigrationsResponse>> countCompanyMigrations(
             CountCompanyMigrationsRequest request) {
         return countCompanyMigrations(request, null);
@@ -300,10 +279,7 @@ public class AsyncRawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-company-migrations/count");
-        if (request.getMigrationId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "migration_id", request.getMigrationId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "migration_id", request.getMigrationId(), false);
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
         }
@@ -407,15 +383,6 @@ public class AsyncRawPlanmigrationsClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<ListMigrationsResponse>> listMigrations() {
-        return listMigrations(ListMigrationsRequest.builder().build());
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<ListMigrationsResponse>> listMigrations(
-            RequestOptions requestOptions) {
-        return listMigrations(ListMigrationsRequest.builder().build(), requestOptions);
-    }
-
     public CompletableFuture<BaseSchematicHttpResponse<ListMigrationsResponse>> listMigrations(
             ListMigrationsRequest request) {
         return listMigrations(request, null);
@@ -426,10 +393,7 @@ public class AsyncRawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations");
-        if (request.getPlanVersionId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "plan_version_id", request.getPlanVersionId(), false);
         if (request.getStatus().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "status", request.getStatus().get(), false);
@@ -834,15 +798,6 @@ public class AsyncRawPlanmigrationsClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<CountMigrationsResponse>> countMigrations() {
-        return countMigrations(CountMigrationsRequest.builder().build());
-    }
-
-    public CompletableFuture<BaseSchematicHttpResponse<CountMigrationsResponse>> countMigrations(
-            RequestOptions requestOptions) {
-        return countMigrations(CountMigrationsRequest.builder().build(), requestOptions);
-    }
-
     public CompletableFuture<BaseSchematicHttpResponse<CountMigrationsResponse>> countMigrations(
             CountMigrationsRequest request) {
         return countMigrations(request, null);
@@ -853,10 +808,7 @@ public class AsyncRawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations/count");
-        if (request.getPlanVersionId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
-        }
+        QueryStringMapper.addQueryParameter(httpUrl, "plan_version_id", request.getPlanVersionId(), false);
         if (request.getStatus().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "status", request.getStatus().get(), false);

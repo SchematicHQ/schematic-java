@@ -39,14 +39,6 @@ public class PlanmigrationsClient {
         return this.rawClient;
     }
 
-    public ListCompanyMigrationsResponse listCompanyMigrations() {
-        return this.rawClient.listCompanyMigrations().body();
-    }
-
-    public ListCompanyMigrationsResponse listCompanyMigrations(RequestOptions requestOptions) {
-        return this.rawClient.listCompanyMigrations(requestOptions).body();
-    }
-
     public ListCompanyMigrationsResponse listCompanyMigrations(ListCompanyMigrationsRequest request) {
         return this.rawClient.listCompanyMigrations(request).body();
     }
@@ -69,14 +61,6 @@ public class PlanmigrationsClient {
                 .body();
     }
 
-    public CountCompanyMigrationsResponse countCompanyMigrations() {
-        return this.rawClient.countCompanyMigrations().body();
-    }
-
-    public CountCompanyMigrationsResponse countCompanyMigrations(RequestOptions requestOptions) {
-        return this.rawClient.countCompanyMigrations(requestOptions).body();
-    }
-
     public CountCompanyMigrationsResponse countCompanyMigrations(CountCompanyMigrationsRequest request) {
         return this.rawClient.countCompanyMigrations(request).body();
     }
@@ -84,14 +68,6 @@ public class PlanmigrationsClient {
     public CountCompanyMigrationsResponse countCompanyMigrations(
             CountCompanyMigrationsRequest request, RequestOptions requestOptions) {
         return this.rawClient.countCompanyMigrations(request, requestOptions).body();
-    }
-
-    public ListMigrationsResponse listMigrations() {
-        return this.rawClient.listMigrations().body();
-    }
-
-    public ListMigrationsResponse listMigrations(RequestOptions requestOptions) {
-        return this.rawClient.listMigrations(requestOptions).body();
     }
 
     public ListMigrationsResponse listMigrations(ListMigrationsRequest request) {
@@ -129,14 +105,6 @@ public class PlanmigrationsClient {
         return this.rawClient
                 .retryMigration(planVersionMigrationId, request, requestOptions)
                 .body();
-    }
-
-    public CountMigrationsResponse countMigrations() {
-        return this.rawClient.countMigrations().body();
-    }
-
-    public CountMigrationsResponse countMigrations(RequestOptions requestOptions) {
-        return this.rawClient.countMigrations(requestOptions).body();
     }
 
     public CountMigrationsResponse countMigrations(CountMigrationsRequest request) {

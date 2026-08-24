@@ -44,6 +44,8 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private final long proration;
 
+    private final Optional<OffsetDateTime> prorationBilledAt;
+
     private final Optional<Long> taxAmount;
 
     private final Optional<String> taxDisplayName;
@@ -69,6 +71,7 @@ public final class PreviewSubscriptionFinanceResponseData {
             OffsetDateTime periodStart,
             boolean promoCodeApplied,
             long proration,
+            Optional<OffsetDateTime> prorationBilledAt,
             Optional<Long> taxAmount,
             Optional<String> taxDisplayName,
             boolean taxRequireBillingDetails,
@@ -86,6 +89,7 @@ public final class PreviewSubscriptionFinanceResponseData {
         this.periodStart = periodStart;
         this.promoCodeApplied = promoCodeApplied;
         this.proration = proration;
+        this.prorationBilledAt = prorationBilledAt;
         this.taxAmount = taxAmount;
         this.taxDisplayName = taxDisplayName;
         this.taxRequireBillingDetails = taxRequireBillingDetails;
@@ -145,6 +149,11 @@ public final class PreviewSubscriptionFinanceResponseData {
         return proration;
     }
 
+    @JsonProperty("proration_billed_at")
+    public Optional<OffsetDateTime> getProrationBilledAt() {
+        return prorationBilledAt;
+    }
+
     @JsonProperty("tax_amount")
     public Optional<Long> getTaxAmount() {
         return taxAmount;
@@ -198,6 +207,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                 && periodStart.equals(other.periodStart)
                 && promoCodeApplied == other.promoCodeApplied
                 && proration == other.proration
+                && prorationBilledAt.equals(other.prorationBilledAt)
                 && taxAmount.equals(other.taxAmount)
                 && taxDisplayName.equals(other.taxDisplayName)
                 && taxRequireBillingDetails == other.taxRequireBillingDetails
@@ -219,6 +229,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                 this.periodStart,
                 this.promoCodeApplied,
                 this.proration,
+                this.prorationBilledAt,
                 this.taxAmount,
                 this.taxDisplayName,
                 this.taxRequireBillingDetails,
@@ -295,6 +306,10 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         _FinalStage addAllDiscounts(List<PreviewSubscriptionDiscountResponseData> discounts);
 
+        _FinalStage prorationBilledAt(Optional<OffsetDateTime> prorationBilledAt);
+
+        _FinalStage prorationBilledAt(OffsetDateTime prorationBilledAt);
+
         _FinalStage taxAmount(Optional<Long> taxAmount);
 
         _FinalStage taxAmount(Long taxAmount);
@@ -360,6 +375,8 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         private Optional<Long> taxAmount = Optional.empty();
 
+        private Optional<OffsetDateTime> prorationBilledAt = Optional.empty();
+
         private List<PreviewSubscriptionDiscountResponseData> discounts = new ArrayList<>();
 
         @JsonAnySetter
@@ -379,6 +396,7 @@ public final class PreviewSubscriptionFinanceResponseData {
             periodStart(other.getPeriodStart());
             promoCodeApplied(other.getPromoCodeApplied());
             proration(other.getProration());
+            prorationBilledAt(other.getProrationBilledAt());
             taxAmount(other.getTaxAmount());
             taxDisplayName(other.getTaxDisplayName());
             taxRequireBillingDetails(other.getTaxRequireBillingDetails());
@@ -532,6 +550,19 @@ public final class PreviewSubscriptionFinanceResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage prorationBilledAt(OffsetDateTime prorationBilledAt) {
+            this.prorationBilledAt = Optional.ofNullable(prorationBilledAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "proration_billed_at", nulls = Nulls.SKIP)
+        public _FinalStage prorationBilledAt(Optional<OffsetDateTime> prorationBilledAt) {
+            this.prorationBilledAt = prorationBilledAt;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllDiscounts(List<PreviewSubscriptionDiscountResponseData> discounts) {
             if (discounts != null) {
                 this.discounts.addAll(discounts);
@@ -568,6 +599,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                     periodStart,
                     promoCodeApplied,
                     proration,
+                    prorationBilledAt,
                     taxAmount,
                     taxDisplayName,
                     taxRequireBillingDetails,

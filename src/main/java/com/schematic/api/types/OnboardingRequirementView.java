@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,8 @@ public final class OnboardingRequirementView {
 
     private final OnboardingRequirement id;
 
+    private final Optional<OffsetDateTime> reachedAt;
+
     private final Optional<String> satisfiedBy;
 
     private final OnboardingRequirementStatus status;
@@ -35,11 +38,13 @@ public final class OnboardingRequirementView {
     private OnboardingRequirementView(
             Optional<List<OnboardingRequirement>> blockedBy,
             OnboardingRequirement id,
+            Optional<OffsetDateTime> reachedAt,
             Optional<String> satisfiedBy,
             OnboardingRequirementStatus status,
             Map<String, Object> additionalProperties) {
         this.blockedBy = blockedBy;
         this.id = id;
+        this.reachedAt = reachedAt;
         this.satisfiedBy = satisfiedBy;
         this.status = status;
         this.additionalProperties = additionalProperties;
@@ -53,6 +58,11 @@ public final class OnboardingRequirementView {
     @JsonProperty("id")
     public OnboardingRequirement getId() {
         return id;
+    }
+
+    @JsonProperty("reached_at")
+    public Optional<OffsetDateTime> getReachedAt() {
+        return reachedAt;
     }
 
     @JsonProperty("satisfied_by")
@@ -79,13 +89,14 @@ public final class OnboardingRequirementView {
     private boolean equalTo(OnboardingRequirementView other) {
         return blockedBy.equals(other.blockedBy)
                 && id.equals(other.id)
+                && reachedAt.equals(other.reachedAt)
                 && satisfiedBy.equals(other.satisfiedBy)
                 && status.equals(other.status);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.blockedBy, this.id, this.satisfiedBy, this.status);
+        return Objects.hash(this.blockedBy, this.id, this.reachedAt, this.satisfiedBy, this.status);
     }
 
     @java.lang.Override
@@ -118,6 +129,10 @@ public final class OnboardingRequirementView {
 
         _FinalStage blockedBy(List<OnboardingRequirement> blockedBy);
 
+        _FinalStage reachedAt(Optional<OffsetDateTime> reachedAt);
+
+        _FinalStage reachedAt(OffsetDateTime reachedAt);
+
         _FinalStage satisfiedBy(Optional<String> satisfiedBy);
 
         _FinalStage satisfiedBy(String satisfiedBy);
@@ -131,6 +146,8 @@ public final class OnboardingRequirementView {
 
         private Optional<String> satisfiedBy = Optional.empty();
 
+        private Optional<OffsetDateTime> reachedAt = Optional.empty();
+
         private Optional<List<OnboardingRequirement>> blockedBy = Optional.empty();
 
         @JsonAnySetter
@@ -142,6 +159,7 @@ public final class OnboardingRequirementView {
         public Builder from(OnboardingRequirementView other) {
             blockedBy(other.getBlockedBy());
             id(other.getId());
+            reachedAt(other.getReachedAt());
             satisfiedBy(other.getSatisfiedBy());
             status(other.getStatus());
             return this;
@@ -175,6 +193,19 @@ public final class OnboardingRequirementView {
         }
 
         @java.lang.Override
+        public _FinalStage reachedAt(OffsetDateTime reachedAt) {
+            this.reachedAt = Optional.ofNullable(reachedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "reached_at", nulls = Nulls.SKIP)
+        public _FinalStage reachedAt(Optional<OffsetDateTime> reachedAt) {
+            this.reachedAt = reachedAt;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage blockedBy(List<OnboardingRequirement> blockedBy) {
             this.blockedBy = Optional.ofNullable(blockedBy);
             return this;
@@ -189,7 +220,7 @@ public final class OnboardingRequirementView {
 
         @java.lang.Override
         public OnboardingRequirementView build() {
-            return new OnboardingRequirementView(blockedBy, id, satisfiedBy, status, additionalProperties);
+            return new OnboardingRequirementView(blockedBy, id, reachedAt, satisfiedBy, status, additionalProperties);
         }
 
         @java.lang.Override

@@ -77,7 +77,7 @@ public final class ComponentPreviewResponseData {
 
     private final Optional<Boolean> trialPaymentMethodRequired;
 
-    private final Optional<InvoiceResponseData> upcomingInvoice;
+    private final Optional<UpcomingInvoiceResponseData> upcomingInvoice;
 
     private final Map<String, Object> additionalProperties;
 
@@ -109,7 +109,7 @@ public final class ComponentPreviewResponseData {
             Optional<StripeEmbedInfo> stripeEmbed,
             Optional<CompanySubscriptionResponseData> subscription,
             Optional<Boolean> trialPaymentMethodRequired,
-            Optional<InvoiceResponseData> upcomingInvoice,
+            Optional<UpcomingInvoiceResponseData> upcomingInvoice,
             Map<String, Object> additionalProperties) {
         this.activeAddOns = activeAddOns;
         this.activePlans = activePlans;
@@ -278,7 +278,7 @@ public final class ComponentPreviewResponseData {
     }
 
     @JsonProperty("upcoming_invoice")
-    public Optional<InvoiceResponseData> getUpcomingInvoice() {
+    public Optional<UpcomingInvoiceResponseData> getUpcomingInvoice() {
         return upcomingInvoice;
     }
 
@@ -500,9 +500,9 @@ public final class ComponentPreviewResponseData {
 
         _FinalStage trialPaymentMethodRequired(Boolean trialPaymentMethodRequired);
 
-        _FinalStage upcomingInvoice(Optional<InvoiceResponseData> upcomingInvoice);
+        _FinalStage upcomingInvoice(Optional<UpcomingInvoiceResponseData> upcomingInvoice);
 
-        _FinalStage upcomingInvoice(InvoiceResponseData upcomingInvoice);
+        _FinalStage upcomingInvoice(UpcomingInvoiceResponseData upcomingInvoice);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -529,7 +529,7 @@ public final class ComponentPreviewResponseData {
 
         private boolean showZeroPriceAsFree;
 
-        private Optional<InvoiceResponseData> upcomingInvoice = Optional.empty();
+        private Optional<UpcomingInvoiceResponseData> upcomingInvoice = Optional.empty();
 
         private Optional<Boolean> trialPaymentMethodRequired = Optional.empty();
 
@@ -659,14 +659,14 @@ public final class ComponentPreviewResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage upcomingInvoice(InvoiceResponseData upcomingInvoice) {
+        public _FinalStage upcomingInvoice(UpcomingInvoiceResponseData upcomingInvoice) {
             this.upcomingInvoice = Optional.ofNullable(upcomingInvoice);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "upcoming_invoice", nulls = Nulls.SKIP)
-        public _FinalStage upcomingInvoice(Optional<InvoiceResponseData> upcomingInvoice) {
+        public _FinalStage upcomingInvoice(Optional<UpcomingInvoiceResponseData> upcomingInvoice) {
             this.upcomingInvoice = upcomingInvoice;
             return this;
         }

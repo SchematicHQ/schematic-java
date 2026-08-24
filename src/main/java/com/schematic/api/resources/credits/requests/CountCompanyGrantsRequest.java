@@ -18,11 +18,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountCompanyGrantsRequest.Builder.class)
 public final class CountCompanyGrantsRequest {
-    private final Optional<String> companyId;
+    private final String companyId;
 
     private final Optional<CreditGrantSortOrder> order;
 
@@ -35,7 +36,7 @@ public final class CountCompanyGrantsRequest {
     private final Map<String, Object> additionalProperties;
 
     private CountCompanyGrantsRequest(
-            Optional<String> companyId,
+            String companyId,
             Optional<CreditGrantSortOrder> order,
             Optional<SortDirection> dir,
             Optional<Long> limit,
@@ -50,7 +51,7 @@ public final class CountCompanyGrantsRequest {
     }
 
     @JsonProperty("company_id")
-    public Optional<String> getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
@@ -109,27 +110,64 @@ public final class CountCompanyGrantsRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static CompanyIdStage builder() {
         return new Builder();
     }
 
+    public interface CompanyIdStage {
+        _FinalStage companyId(@NotNull String companyId);
+
+        Builder from(CountCompanyGrantsRequest other);
+    }
+
+    public interface _FinalStage {
+        CountCompanyGrantsRequest build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage order(Optional<CreditGrantSortOrder> order);
+
+        _FinalStage order(CreditGrantSortOrder order);
+
+        _FinalStage dir(Optional<SortDirection> dir);
+
+        _FinalStage dir(SortDirection dir);
+
+        /**
+         * <p>Page limit (default 100)</p>
+         */
+        _FinalStage limit(Optional<Long> limit);
+
+        _FinalStage limit(Long limit);
+
+        /**
+         * <p>Page offset (default 0)</p>
+         */
+        _FinalStage offset(Optional<Long> offset);
+
+        _FinalStage offset(Long offset);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private Optional<String> companyId = Optional.empty();
+    public static final class Builder implements CompanyIdStage, _FinalStage {
+        private String companyId;
 
-        private Optional<CreditGrantSortOrder> order = Optional.empty();
-
-        private Optional<SortDirection> dir = Optional.empty();
+        private Optional<Long> offset = Optional.empty();
 
         private Optional<Long> limit = Optional.empty();
 
-        private Optional<Long> offset = Optional.empty();
+        private Optional<SortDirection> dir = Optional.empty();
+
+        private Optional<CreditGrantSortOrder> order = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(CountCompanyGrantsRequest other) {
             companyId(other.getCompanyId());
             order(other.getOrder());
@@ -139,76 +177,91 @@ public final class CountCompanyGrantsRequest {
             return this;
         }
 
-        @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
-        public Builder companyId(Optional<String> companyId) {
-            this.companyId = companyId;
-            return this;
-        }
-
-        public Builder companyId(String companyId) {
-            this.companyId = Optional.ofNullable(companyId);
-            return this;
-        }
-
-        @JsonSetter(value = "order", nulls = Nulls.SKIP)
-        public Builder order(Optional<CreditGrantSortOrder> order) {
-            this.order = order;
-            return this;
-        }
-
-        public Builder order(CreditGrantSortOrder order) {
-            this.order = Optional.ofNullable(order);
-            return this;
-        }
-
-        @JsonSetter(value = "dir", nulls = Nulls.SKIP)
-        public Builder dir(Optional<SortDirection> dir) {
-            this.dir = dir;
-            return this;
-        }
-
-        public Builder dir(SortDirection dir) {
-            this.dir = Optional.ofNullable(dir);
+        @java.lang.Override
+        @JsonSetter("company_id")
+        public _FinalStage companyId(@NotNull String companyId) {
+            this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
             return this;
         }
 
         /**
-         * <p>Page limit (default 100)</p>
+         * <p>Page offset (default 0)</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
          */
-        @JsonSetter(value = "limit", nulls = Nulls.SKIP)
-        public Builder limit(Optional<Long> limit) {
-            this.limit = limit;
-            return this;
-        }
-
-        public Builder limit(Long limit) {
-            this.limit = Optional.ofNullable(limit);
+        @java.lang.Override
+        public _FinalStage offset(Long offset) {
+            this.offset = Optional.ofNullable(offset);
             return this;
         }
 
         /**
          * <p>Page offset (default 0)</p>
          */
+        @java.lang.Override
         @JsonSetter(value = "offset", nulls = Nulls.SKIP)
-        public Builder offset(Optional<Long> offset) {
+        public _FinalStage offset(Optional<Long> offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder offset(Long offset) {
-            this.offset = Optional.ofNullable(offset);
+        /**
+         * <p>Page limit (default 100)</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage limit(Long limit) {
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
+        /**
+         * <p>Page limit (default 100)</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "limit", nulls = Nulls.SKIP)
+        public _FinalStage limit(Optional<Long> limit) {
+            this.limit = limit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage dir(SortDirection dir) {
+            this.dir = Optional.ofNullable(dir);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "dir", nulls = Nulls.SKIP)
+        public _FinalStage dir(Optional<SortDirection> dir) {
+            this.dir = dir;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage order(CreditGrantSortOrder order) {
+            this.order = Optional.ofNullable(order);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "order", nulls = Nulls.SKIP)
+        public _FinalStage order(Optional<CreditGrantSortOrder> order) {
+            this.order = order;
+            return this;
+        }
+
+        @java.lang.Override
         public CountCompanyGrantsRequest build() {
             return new CountCompanyGrantsRequest(companyId, order, dir, limit, offset, additionalProperties);
         }
 
+        @java.lang.Override
         public Builder additionalProperty(String key, Object value) {
             this.additionalProperties.put(key, value);
             return this;
         }
 
+        @java.lang.Override
         public Builder additionalProperties(Map<String, Object> additionalProperties) {
             this.additionalProperties.putAll(additionalProperties);
             return this;

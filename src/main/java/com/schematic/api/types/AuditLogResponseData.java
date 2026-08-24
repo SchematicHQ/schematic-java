@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AuditLogResponseData.Builder.class)
 public final class AuditLogResponseData {
+    private final Optional<String> accountMemberId;
+
     private final ActorType actorType;
 
     private final Optional<ApiKeyResponseData> apiKey;
@@ -65,6 +67,7 @@ public final class AuditLogResponseData {
     private final Map<String, Object> additionalProperties;
 
     private AuditLogResponseData(
+            Optional<String> accountMemberId,
             ActorType actorType,
             Optional<ApiKeyResponseData> apiKey,
             Optional<String> apiKeyId,
@@ -86,6 +89,7 @@ public final class AuditLogResponseData {
             Optional<String> userId,
             Optional<String> userName,
             Map<String, Object> additionalProperties) {
+        this.accountMemberId = accountMemberId;
         this.actorType = actorType;
         this.apiKey = apiKey;
         this.apiKeyId = apiKeyId;
@@ -107,6 +111,11 @@ public final class AuditLogResponseData {
         this.userId = userId;
         this.userName = userName;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("account_member_id")
+    public Optional<String> getAccountMemberId() {
+        return accountMemberId;
     }
 
     @JsonProperty("actor_type")
@@ -221,7 +230,8 @@ public final class AuditLogResponseData {
     }
 
     private boolean equalTo(AuditLogResponseData other) {
-        return actorType.equals(other.actorType)
+        return accountMemberId.equals(other.accountMemberId)
+                && actorType.equals(other.actorType)
                 && apiKey.equals(other.apiKey)
                 && apiKeyId.equals(other.apiKeyId)
                 && endedAt.equals(other.endedAt)
@@ -246,6 +256,7 @@ public final class AuditLogResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.accountMemberId,
                 this.actorType,
                 this.apiKey,
                 this.apiKeyId,
@@ -305,6 +316,10 @@ public final class AuditLogResponseData {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage accountMemberId(Optional<String> accountMemberId);
+
+        _FinalStage accountMemberId(String accountMemberId);
 
         _FinalStage apiKey(Optional<ApiKeyResponseData> apiKey);
 
@@ -410,6 +425,8 @@ public final class AuditLogResponseData {
 
         private Optional<ApiKeyResponseData> apiKey = Optional.empty();
 
+        private Optional<String> accountMemberId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -417,6 +434,7 @@ public final class AuditLogResponseData {
 
         @java.lang.Override
         public Builder from(AuditLogResponseData other) {
+            accountMemberId(other.getAccountMemberId());
             actorType(other.getActorType());
             apiKey(other.getApiKey());
             apiKeyId(other.getApiKeyId());
@@ -671,8 +689,22 @@ public final class AuditLogResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage accountMemberId(String accountMemberId) {
+            this.accountMemberId = Optional.ofNullable(accountMemberId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "account_member_id", nulls = Nulls.SKIP)
+        public _FinalStage accountMemberId(Optional<String> accountMemberId) {
+            this.accountMemberId = accountMemberId;
+            return this;
+        }
+
+        @java.lang.Override
         public AuditLogResponseData build() {
             return new AuditLogResponseData(
+                    accountMemberId,
                     actorType,
                     apiKey,
                     apiKeyId,

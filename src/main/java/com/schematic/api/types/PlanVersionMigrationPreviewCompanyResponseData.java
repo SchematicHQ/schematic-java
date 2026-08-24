@@ -33,6 +33,8 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
 
     private final boolean willUpdateSubscription;
 
+    private final boolean wouldFail;
+
     private final Map<String, Object> additionalProperties;
 
     private PlanVersionMigrationPreviewCompanyResponseData(
@@ -42,6 +44,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
             Optional<String> note,
             Optional<String> planVersionIdFrom,
             boolean willUpdateSubscription,
+            boolean wouldFail,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.hasBillingChanges = hasBillingChanges;
@@ -49,6 +52,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
         this.note = note;
         this.planVersionIdFrom = planVersionIdFrom;
         this.willUpdateSubscription = willUpdateSubscription;
+        this.wouldFail = wouldFail;
         this.additionalProperties = additionalProperties;
     }
 
@@ -82,6 +86,11 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
         return willUpdateSubscription;
     }
 
+    @JsonProperty("would_fail")
+    public boolean getWouldFail() {
+        return wouldFail;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -100,7 +109,8 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
                 && hasCustomPricing == other.hasCustomPricing
                 && note.equals(other.note)
                 && planVersionIdFrom.equals(other.planVersionIdFrom)
-                && willUpdateSubscription == other.willUpdateSubscription;
+                && willUpdateSubscription == other.willUpdateSubscription
+                && wouldFail == other.wouldFail;
     }
 
     @java.lang.Override
@@ -111,7 +121,8 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
                 this.hasCustomPricing,
                 this.note,
                 this.planVersionIdFrom,
-                this.willUpdateSubscription);
+                this.willUpdateSubscription,
+                this.wouldFail);
     }
 
     @java.lang.Override
@@ -138,7 +149,11 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
     }
 
     public interface WillUpdateSubscriptionStage {
-        _FinalStage willUpdateSubscription(boolean willUpdateSubscription);
+        WouldFailStage willUpdateSubscription(boolean willUpdateSubscription);
+    }
+
+    public interface WouldFailStage {
+        _FinalStage wouldFail(boolean wouldFail);
     }
 
     public interface _FinalStage {
@@ -163,6 +178,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
                     HasBillingChangesStage,
                     HasCustomPricingStage,
                     WillUpdateSubscriptionStage,
+                    WouldFailStage,
                     _FinalStage {
         private String companyId;
 
@@ -171,6 +187,8 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
         private boolean hasCustomPricing;
 
         private boolean willUpdateSubscription;
+
+        private boolean wouldFail;
 
         private Optional<String> planVersionIdFrom = Optional.empty();
 
@@ -189,6 +207,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
             note(other.getNote());
             planVersionIdFrom(other.getPlanVersionIdFrom());
             willUpdateSubscription(other.getWillUpdateSubscription());
+            wouldFail(other.getWouldFail());
             return this;
         }
 
@@ -215,8 +234,15 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
 
         @java.lang.Override
         @JsonSetter("will_update_subscription")
-        public _FinalStage willUpdateSubscription(boolean willUpdateSubscription) {
+        public WouldFailStage willUpdateSubscription(boolean willUpdateSubscription) {
             this.willUpdateSubscription = willUpdateSubscription;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("would_fail")
+        public _FinalStage wouldFail(boolean wouldFail) {
+            this.wouldFail = wouldFail;
             return this;
         }
 
@@ -255,6 +281,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
                     note,
                     planVersionIdFrom,
                     willUpdateSubscription,
+                    wouldFail,
                     additionalProperties);
         }
 

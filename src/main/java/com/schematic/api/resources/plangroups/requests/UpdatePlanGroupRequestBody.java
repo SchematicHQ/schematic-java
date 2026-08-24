@@ -35,7 +35,7 @@ public final class UpdatePlanGroupRequestBody {
 
     private final List<String> addOnIds;
 
-    private final CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior;
+    private final Optional<CheckoutBundlePurchaseBehavior> checkoutBundlePurchaseBehavior;
 
     private final boolean checkoutCollectAddress;
 
@@ -112,7 +112,7 @@ public final class UpdatePlanGroupRequestBody {
     private UpdatePlanGroupRequestBody(
             Optional<List<CompatiblePlans>> addOnCompatibilities,
             List<String> addOnIds,
-            CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior,
+            Optional<CheckoutBundlePurchaseBehavior> checkoutBundlePurchaseBehavior,
             boolean checkoutCollectAddress,
             boolean checkoutCollectEmail,
             boolean checkoutCollectPhone,
@@ -204,7 +204,7 @@ public final class UpdatePlanGroupRequestBody {
     }
 
     @JsonProperty("checkout_bundle_purchase_behavior")
-    public CheckoutBundlePurchaseBehavior getCheckoutBundlePurchaseBehavior() {
+    public Optional<CheckoutBundlePurchaseBehavior> getCheckoutBundlePurchaseBehavior() {
         return checkoutBundlePurchaseBehavior;
     }
 
@@ -483,19 +483,14 @@ public final class UpdatePlanGroupRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static CheckoutBundlePurchaseBehaviorStage builder() {
+    public static CheckoutCollectAddressStage builder() {
         return new Builder();
-    }
-
-    public interface CheckoutBundlePurchaseBehaviorStage {
-        CheckoutCollectAddressStage checkoutBundlePurchaseBehavior(
-                @NotNull CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior);
-
-        Builder from(UpdatePlanGroupRequestBody other);
     }
 
     public interface CheckoutCollectAddressStage {
         CheckoutCollectEmailStage checkoutCollectAddress(boolean checkoutCollectAddress);
+
+        Builder from(UpdatePlanGroupRequestBody other);
     }
 
     public interface CheckoutCollectEmailStage {
@@ -577,6 +572,11 @@ public final class UpdatePlanGroupRequestBody {
         _FinalStage addAddOnIds(String addOnIds);
 
         _FinalStage addAllAddOnIds(List<String> addOnIds);
+
+        _FinalStage checkoutBundlePurchaseBehavior(
+                Optional<CheckoutBundlePurchaseBehavior> checkoutBundlePurchaseBehavior);
+
+        _FinalStage checkoutBundlePurchaseBehavior(CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior);
 
         _FinalStage customCheckoutFields(Optional<List<CheckoutFieldInput>> customCheckoutFields);
 
@@ -663,8 +663,7 @@ public final class UpdatePlanGroupRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CheckoutBundlePurchaseBehaviorStage,
-                    CheckoutCollectAddressStage,
+            implements CheckoutCollectAddressStage,
                     CheckoutCollectEmailStage,
                     CheckoutCollectPhoneStage,
                     CheckoutCollectTaxIdStage,
@@ -681,8 +680,6 @@ public final class UpdatePlanGroupRequestBody {
                     ShowZeroPriceAsFreeStage,
                     SyncCustomerBillingDetailsStage,
                     _FinalStage {
-        private CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior;
-
         private boolean checkoutCollectAddress;
 
         private boolean checkoutCollectEmail;
@@ -753,6 +750,8 @@ public final class UpdatePlanGroupRequestBody {
 
         private Optional<List<CheckoutFieldInput>> customCheckoutFields = Optional.empty();
 
+        private Optional<CheckoutBundlePurchaseBehavior> checkoutBundlePurchaseBehavior = Optional.empty();
+
         private List<String> addOnIds = new ArrayList<>();
 
         private Optional<List<CompatiblePlans>> addOnCompatibilities = Optional.empty();
@@ -802,15 +801,6 @@ public final class UpdatePlanGroupRequestBody {
             trialExpiryPlanId(other.getTrialExpiryPlanId());
             trialExpiryPlanPriceId(other.getTrialExpiryPlanPriceId());
             trialPaymentMethodRequired(other.getTrialPaymentMethodRequired());
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("checkout_bundle_purchase_behavior")
-        public CheckoutCollectAddressStage checkoutBundlePurchaseBehavior(
-                @NotNull CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior) {
-            this.checkoutBundlePurchaseBehavior = Objects.requireNonNull(
-                    checkoutBundlePurchaseBehavior, "checkoutBundlePurchaseBehavior must not be null");
             return this;
         }
 
@@ -1206,6 +1196,21 @@ public final class UpdatePlanGroupRequestBody {
         @JsonSetter(value = "custom_checkout_fields", nulls = Nulls.SKIP)
         public _FinalStage customCheckoutFields(Optional<List<CheckoutFieldInput>> customCheckoutFields) {
             this.customCheckoutFields = customCheckoutFields;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage checkoutBundlePurchaseBehavior(
+                CheckoutBundlePurchaseBehavior checkoutBundlePurchaseBehavior) {
+            this.checkoutBundlePurchaseBehavior = Optional.ofNullable(checkoutBundlePurchaseBehavior);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "checkout_bundle_purchase_behavior", nulls = Nulls.SKIP)
+        public _FinalStage checkoutBundlePurchaseBehavior(
+                Optional<CheckoutBundlePurchaseBehavior> checkoutBundlePurchaseBehavior) {
+            this.checkoutBundlePurchaseBehavior = checkoutBundlePurchaseBehavior;
             return this;
         }
 

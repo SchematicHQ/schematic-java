@@ -9,28 +9,27 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetCompanyBillingEntityRequest.Builder.class)
 public final class GetCompanyBillingEntityRequest {
-    private final Optional<String> companyId;
+    private final String companyId;
 
     private final Map<String, Object> additionalProperties;
 
-    private GetCompanyBillingEntityRequest(Optional<String> companyId, Map<String, Object> additionalProperties) {
+    private GetCompanyBillingEntityRequest(String companyId, Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("company_id")
-    public Optional<String> getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
@@ -59,44 +58,58 @@ public final class GetCompanyBillingEntityRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static CompanyIdStage builder() {
         return new Builder();
     }
 
+    public interface CompanyIdStage {
+        _FinalStage companyId(@NotNull String companyId);
+
+        Builder from(GetCompanyBillingEntityRequest other);
+    }
+
+    public interface _FinalStage {
+        GetCompanyBillingEntityRequest build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private Optional<String> companyId = Optional.empty();
+    public static final class Builder implements CompanyIdStage, _FinalStage {
+        private String companyId;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(GetCompanyBillingEntityRequest other) {
             companyId(other.getCompanyId());
             return this;
         }
 
-        @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
-        public Builder companyId(Optional<String> companyId) {
-            this.companyId = companyId;
+        @java.lang.Override
+        @JsonSetter("company_id")
+        public _FinalStage companyId(@NotNull String companyId) {
+            this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
             return this;
         }
 
-        public Builder companyId(String companyId) {
-            this.companyId = Optional.ofNullable(companyId);
-            return this;
-        }
-
+        @java.lang.Override
         public GetCompanyBillingEntityRequest build() {
             return new GetCompanyBillingEntityRequest(companyId, additionalProperties);
         }
 
+        @java.lang.Override
         public Builder additionalProperty(String key, Object value) {
             this.additionalProperties.put(key, value);
             return this;
         }
 
+        @java.lang.Override
         public Builder additionalProperties(Map<String, Object> additionalProperties) {
             this.additionalProperties.putAll(additionalProperties);
             return this;

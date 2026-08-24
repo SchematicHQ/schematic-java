@@ -13,6 +13,8 @@ public final class MigrationProrationBehavior {
     public static final MigrationProrationBehavior CREATE_PRORATIONS =
             new MigrationProrationBehavior(Value.CREATE_PRORATIONS, "create_prorations");
 
+    public static final MigrationProrationBehavior NONE = new MigrationProrationBehavior(Value.NONE, "none");
+
     private final Value value;
 
     private final String string;
@@ -50,6 +52,8 @@ public final class MigrationProrationBehavior {
                 return visitor.visitAlwaysInvoice();
             case CREATE_PRORATIONS:
                 return visitor.visitCreateProrations();
+            case NONE:
+                return visitor.visitNone();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -63,6 +67,8 @@ public final class MigrationProrationBehavior {
                 return ALWAYS_INVOICE;
             case "create_prorations":
                 return CREATE_PRORATIONS;
+            case "none":
+                return NONE;
             default:
                 return new MigrationProrationBehavior(Value.UNKNOWN, value);
         }
@@ -73,6 +79,8 @@ public final class MigrationProrationBehavior {
 
         CREATE_PRORATIONS,
 
+        NONE,
+
         UNKNOWN
     }
 
@@ -80,6 +88,8 @@ public final class MigrationProrationBehavior {
         T visitAlwaysInvoice();
 
         T visitCreateProrations();
+
+        T visitNone();
 
         T visitUnknown(String unknownType);
     }

@@ -257,14 +257,6 @@ public class CreditsClient {
                 .body();
     }
 
-    public CountCompanyGrantsResponse countCompanyGrants() {
-        return this.rawClient.countCompanyGrants().body();
-    }
-
-    public CountCompanyGrantsResponse countCompanyGrants(RequestOptions requestOptions) {
-        return this.rawClient.countCompanyGrants(requestOptions).body();
-    }
-
     public CountCompanyGrantsResponse countCompanyGrants(CountCompanyGrantsRequest request) {
         return this.rawClient.countCompanyGrants(request).body();
     }
@@ -272,14 +264,6 @@ public class CreditsClient {
     public CountCompanyGrantsResponse countCompanyGrants(
             CountCompanyGrantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.countCompanyGrants(request, requestOptions).body();
-    }
-
-    public ListCompanyGrantsResponse listCompanyGrants() {
-        return this.rawClient.listCompanyGrants().body();
-    }
-
-    public ListCompanyGrantsResponse listCompanyGrants(RequestOptions requestOptions) {
-        return this.rawClient.listCompanyGrants(requestOptions).body();
     }
 
     public ListCompanyGrantsResponse listCompanyGrants(ListCompanyGrantsRequest request) {

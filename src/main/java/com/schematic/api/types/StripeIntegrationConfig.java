@@ -32,6 +32,8 @@ public final class StripeIntegrationConfig {
 
     private final Optional<String> onboardUrl;
 
+    private final Optional<String> returnTo;
+
     private final Map<String, Object> additionalProperties;
 
     private StripeIntegrationConfig(
@@ -41,6 +43,7 @@ public final class StripeIntegrationConfig {
             boolean isSandbox,
             boolean liveMode,
             Optional<String> onboardUrl,
+            Optional<String> returnTo,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.accountName = accountName;
@@ -48,6 +51,7 @@ public final class StripeIntegrationConfig {
         this.isSandbox = isSandbox;
         this.liveMode = liveMode;
         this.onboardUrl = onboardUrl;
+        this.returnTo = returnTo;
         this.additionalProperties = additionalProperties;
     }
 
@@ -99,6 +103,14 @@ public final class StripeIntegrationConfig {
         return onboardUrl;
     }
 
+    /**
+     * @return App location that started the connect flow; the OAuth callback redirects back there on success
+     */
+    @JsonProperty("return_to")
+    public Optional<String> getReturnTo() {
+        return returnTo;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -116,7 +128,8 @@ public final class StripeIntegrationConfig {
                 && companyUpdateOnly.equals(other.companyUpdateOnly)
                 && isSandbox == other.isSandbox
                 && liveMode == other.liveMode
-                && onboardUrl.equals(other.onboardUrl);
+                && onboardUrl.equals(other.onboardUrl)
+                && returnTo.equals(other.returnTo);
     }
 
     @java.lang.Override
@@ -127,7 +140,8 @@ public final class StripeIntegrationConfig {
                 this.companyUpdateOnly,
                 this.isSandbox,
                 this.liveMode,
-                this.onboardUrl);
+                this.onboardUrl,
+                this.returnTo);
     }
 
     @java.lang.Override
@@ -189,6 +203,13 @@ public final class StripeIntegrationConfig {
         _FinalStage onboardUrl(Optional<String> onboardUrl);
 
         _FinalStage onboardUrl(String onboardUrl);
+
+        /**
+         * <p>App location that started the connect flow; the OAuth callback redirects back there on success</p>
+         */
+        _FinalStage returnTo(Optional<String> returnTo);
+
+        _FinalStage returnTo(String returnTo);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -196,6 +217,8 @@ public final class StripeIntegrationConfig {
         private boolean isSandbox;
 
         private boolean liveMode;
+
+        private Optional<String> returnTo = Optional.empty();
 
         private Optional<String> onboardUrl = Optional.empty();
 
@@ -218,6 +241,7 @@ public final class StripeIntegrationConfig {
             isSandbox(other.getIsSandbox());
             liveMode(other.getLiveMode());
             onboardUrl(other.getOnboardUrl());
+            returnTo(other.getReturnTo());
             return this;
         }
 
@@ -240,6 +264,26 @@ public final class StripeIntegrationConfig {
         @JsonSetter("live_mode")
         public _FinalStage liveMode(boolean liveMode) {
             this.liveMode = liveMode;
+            return this;
+        }
+
+        /**
+         * <p>App location that started the connect flow; the OAuth callback redirects back there on success</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage returnTo(String returnTo) {
+            this.returnTo = Optional.ofNullable(returnTo);
+            return this;
+        }
+
+        /**
+         * <p>App location that started the connect flow; the OAuth callback redirects back there on success</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "return_to", nulls = Nulls.SKIP)
+        public _FinalStage returnTo(Optional<String> returnTo) {
+            this.returnTo = returnTo;
             return this;
         }
 
@@ -326,7 +370,14 @@ public final class StripeIntegrationConfig {
         @java.lang.Override
         public StripeIntegrationConfig build() {
             return new StripeIntegrationConfig(
-                    accountId, accountName, companyUpdateOnly, isSandbox, liveMode, onboardUrl, additionalProperties);
+                    accountId,
+                    accountName,
+                    companyUpdateOnly,
+                    isSandbox,
+                    liveMode,
+                    onboardUrl,
+                    returnTo,
+                    additionalProperties);
         }
 
         @java.lang.Override
