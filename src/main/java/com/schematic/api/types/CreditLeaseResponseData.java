@@ -36,6 +36,8 @@ public final class CreditLeaseResponseData {
 
     private final Optional<OffsetDateTime> releasedAt;
 
+    private final double trackedAmount;
+
     private final OffsetDateTime updatedAt;
 
     private final Map<String, Object> additionalProperties;
@@ -48,6 +50,7 @@ public final class CreditLeaseResponseData {
             double grantedAmount,
             String id,
             Optional<OffsetDateTime> releasedAt,
+            double trackedAmount,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
@@ -57,6 +60,7 @@ public final class CreditLeaseResponseData {
         this.grantedAmount = grantedAmount;
         this.id = id;
         this.releasedAt = releasedAt;
+        this.trackedAmount = trackedAmount;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -96,6 +100,11 @@ public final class CreditLeaseResponseData {
         return releasedAt;
     }
 
+    @JsonProperty("tracked_amount")
+    public double getTrackedAmount() {
+        return trackedAmount;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -120,6 +129,7 @@ public final class CreditLeaseResponseData {
                 && grantedAmount == other.grantedAmount
                 && id.equals(other.id)
                 && releasedAt.equals(other.releasedAt)
+                && trackedAmount == other.trackedAmount
                 && updatedAt.equals(other.updatedAt);
     }
 
@@ -133,6 +143,7 @@ public final class CreditLeaseResponseData {
                 this.grantedAmount,
                 this.id,
                 this.releasedAt,
+                this.trackedAmount,
                 this.updatedAt);
     }
 
@@ -168,7 +179,11 @@ public final class CreditLeaseResponseData {
     }
 
     public interface IdStage {
-        UpdatedAtStage id(@NotNull String id);
+        TrackedAmountStage id(@NotNull String id);
+    }
+
+    public interface TrackedAmountStage {
+        UpdatedAtStage trackedAmount(double trackedAmount);
     }
 
     public interface UpdatedAtStage {
@@ -195,6 +210,7 @@ public final class CreditLeaseResponseData {
                     ExpiresAtStage,
                     GrantedAmountStage,
                     IdStage,
+                    TrackedAmountStage,
                     UpdatedAtStage,
                     _FinalStage {
         private String companyId;
@@ -208,6 +224,8 @@ public final class CreditLeaseResponseData {
         private double grantedAmount;
 
         private String id;
+
+        private double trackedAmount;
 
         private OffsetDateTime updatedAt;
 
@@ -227,6 +245,7 @@ public final class CreditLeaseResponseData {
             grantedAmount(other.getGrantedAmount());
             id(other.getId());
             releasedAt(other.getReleasedAt());
+            trackedAmount(other.getTrackedAmount());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -268,8 +287,15 @@ public final class CreditLeaseResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public UpdatedAtStage id(@NotNull String id) {
+        public TrackedAmountStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("tracked_amount")
+        public UpdatedAtStage trackedAmount(double trackedAmount) {
+            this.trackedAmount = trackedAmount;
             return this;
         }
 
@@ -303,6 +329,7 @@ public final class CreditLeaseResponseData {
                     grantedAmount,
                     id,
                     releasedAt,
+                    trackedAmount,
                     updatedAt,
                     additionalProperties);
         }

@@ -5,6 +5,7 @@ package com.schematic.api.resources.planmigrations;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.planmigrations.requests.CompleteMigrationNowRequestBody;
 import com.schematic.api.resources.planmigrations.requests.CountCompanyMigrationsRequest;
 import com.schematic.api.resources.planmigrations.requests.CountMigrationsRequest;
 import com.schematic.api.resources.planmigrations.requests.CreateMigrationInput;
@@ -12,6 +13,8 @@ import com.schematic.api.resources.planmigrations.requests.ListCompanyMigrations
 import com.schematic.api.resources.planmigrations.requests.ListMigrationsRequest;
 import com.schematic.api.resources.planmigrations.requests.PreviewMigrationRequestBody;
 import com.schematic.api.resources.planmigrations.requests.RetryMigrationRequestBody;
+import com.schematic.api.resources.planmigrations.types.CancelMigrationResponse;
+import com.schematic.api.resources.planmigrations.types.CompleteMigrationNowResponse;
 import com.schematic.api.resources.planmigrations.types.CountCompanyMigrationsResponse;
 import com.schematic.api.resources.planmigrations.types.CountMigrationsResponse;
 import com.schematic.api.resources.planmigrations.types.CreateMigrationResponse;
@@ -93,6 +96,41 @@ public class PlanmigrationsClient {
     public GetMigrationResponse getMigration(String planVersionMigrationId, RequestOptions requestOptions) {
         return this.rawClient
                 .getMigration(planVersionMigrationId, requestOptions)
+                .body();
+    }
+
+    public CancelMigrationResponse cancelMigration(String planVersionMigrationId) {
+        return this.rawClient.cancelMigration(planVersionMigrationId).body();
+    }
+
+    public CancelMigrationResponse cancelMigration(String planVersionMigrationId, RequestOptions requestOptions) {
+        return this.rawClient
+                .cancelMigration(planVersionMigrationId, requestOptions)
+                .body();
+    }
+
+    public CompleteMigrationNowResponse completeMigrationNow(String planVersionMigrationId) {
+        return this.rawClient.completeMigrationNow(planVersionMigrationId).body();
+    }
+
+    public CompleteMigrationNowResponse completeMigrationNow(
+            String planVersionMigrationId, RequestOptions requestOptions) {
+        return this.rawClient
+                .completeMigrationNow(planVersionMigrationId, requestOptions)
+                .body();
+    }
+
+    public CompleteMigrationNowResponse completeMigrationNow(
+            String planVersionMigrationId, CompleteMigrationNowRequestBody request) {
+        return this.rawClient
+                .completeMigrationNow(planVersionMigrationId, request)
+                .body();
+    }
+
+    public CompleteMigrationNowResponse completeMigrationNow(
+            String planVersionMigrationId, CompleteMigrationNowRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .completeMigrationNow(planVersionMigrationId, request, requestOptions)
                 .body();
     }
 

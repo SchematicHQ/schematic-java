@@ -22,6 +22,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateOnboardingStateRequestBody.Builder.class)
 public final class UpdateOnboardingStateRequestBody {
+    private final Optional<Boolean> dismissed;
+
     private final Optional<OnboardingPath> path;
 
     private final Optional<String> pricingPageUrl;
@@ -33,16 +35,23 @@ public final class UpdateOnboardingStateRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private UpdateOnboardingStateRequestBody(
+            Optional<Boolean> dismissed,
             Optional<OnboardingPath> path,
             Optional<String> pricingPageUrl,
             Optional<OnboardingTrack> track,
             Optional<String> websiteUrl,
             Map<String, Object> additionalProperties) {
+        this.dismissed = dismissed;
         this.path = path;
         this.pricingPageUrl = pricingPageUrl;
         this.track = track;
         this.websiteUrl = websiteUrl;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("dismissed")
+    public Optional<Boolean> getDismissed() {
+        return dismissed;
     }
 
     @JsonProperty("path")
@@ -77,7 +86,8 @@ public final class UpdateOnboardingStateRequestBody {
     }
 
     private boolean equalTo(UpdateOnboardingStateRequestBody other) {
-        return path.equals(other.path)
+        return dismissed.equals(other.dismissed)
+                && path.equals(other.path)
                 && pricingPageUrl.equals(other.pricingPageUrl)
                 && track.equals(other.track)
                 && websiteUrl.equals(other.websiteUrl);
@@ -85,7 +95,7 @@ public final class UpdateOnboardingStateRequestBody {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.path, this.pricingPageUrl, this.track, this.websiteUrl);
+        return Objects.hash(this.dismissed, this.path, this.pricingPageUrl, this.track, this.websiteUrl);
     }
 
     @java.lang.Override
@@ -99,6 +109,8 @@ public final class UpdateOnboardingStateRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Boolean> dismissed = Optional.empty();
+
         private Optional<OnboardingPath> path = Optional.empty();
 
         private Optional<String> pricingPageUrl = Optional.empty();
@@ -113,10 +125,22 @@ public final class UpdateOnboardingStateRequestBody {
         private Builder() {}
 
         public Builder from(UpdateOnboardingStateRequestBody other) {
+            dismissed(other.getDismissed());
             path(other.getPath());
             pricingPageUrl(other.getPricingPageUrl());
             track(other.getTrack());
             websiteUrl(other.getWebsiteUrl());
+            return this;
+        }
+
+        @JsonSetter(value = "dismissed", nulls = Nulls.SKIP)
+        public Builder dismissed(Optional<Boolean> dismissed) {
+            this.dismissed = dismissed;
+            return this;
+        }
+
+        public Builder dismissed(Boolean dismissed) {
+            this.dismissed = Optional.ofNullable(dismissed);
             return this;
         }
 
@@ -165,7 +189,8 @@ public final class UpdateOnboardingStateRequestBody {
         }
 
         public UpdateOnboardingStateRequestBody build() {
-            return new UpdateOnboardingStateRequestBody(path, pricingPageUrl, track, websiteUrl, additionalProperties);
+            return new UpdateOnboardingStateRequestBody(
+                    dismissed, path, pricingPageUrl, track, websiteUrl, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -40,6 +40,8 @@ public final class PlanVersionCompanyMigrationResponseData {
 
     private final Optional<String> planVersionIdFrom;
 
+    private final Optional<OffsetDateTime> scheduledFor;
+
     private final Optional<OffsetDateTime> startedAt;
 
     private final PlanVersionCompanyMigrationStatus status;
@@ -58,6 +60,7 @@ public final class PlanVersionCompanyMigrationResponseData {
             String id,
             String migrationId,
             Optional<String> planVersionIdFrom,
+            Optional<OffsetDateTime> scheduledFor,
             Optional<OffsetDateTime> startedAt,
             PlanVersionCompanyMigrationStatus status,
             OffsetDateTime updatedAt,
@@ -71,6 +74,7 @@ public final class PlanVersionCompanyMigrationResponseData {
         this.id = id;
         this.migrationId = migrationId;
         this.planVersionIdFrom = planVersionIdFrom;
+        this.scheduledFor = scheduledFor;
         this.startedAt = startedAt;
         this.status = status;
         this.updatedAt = updatedAt;
@@ -122,6 +126,14 @@ public final class PlanVersionCompanyMigrationResponseData {
         return planVersionIdFrom;
     }
 
+    /**
+     * @return When this company is expected to migrate, for a migration scheduled at the end of the billing period: the end of the company's current billing period. Only set while both the company and the migration are still pending. A value at or before the time of the request means the company has no active subscription and migrates as soon as processing runs. Null means no upcoming renewal could be determined from the company's current billing status (for example, a past-due subscription or one set to cancel); it does not mean the company will never migrate.
+     */
+    @JsonProperty("scheduled_for")
+    public Optional<OffsetDateTime> getScheduledFor() {
+        return scheduledFor;
+    }
+
     @JsonProperty("started_at")
     public Optional<OffsetDateTime> getStartedAt() {
         return startedAt;
@@ -159,6 +171,7 @@ public final class PlanVersionCompanyMigrationResponseData {
                 && id.equals(other.id)
                 && migrationId.equals(other.migrationId)
                 && planVersionIdFrom.equals(other.planVersionIdFrom)
+                && scheduledFor.equals(other.scheduledFor)
                 && startedAt.equals(other.startedAt)
                 && status.equals(other.status)
                 && updatedAt.equals(other.updatedAt);
@@ -176,6 +189,7 @@ public final class PlanVersionCompanyMigrationResponseData {
                 this.id,
                 this.migrationId,
                 this.planVersionIdFrom,
+                this.scheduledFor,
                 this.startedAt,
                 this.status,
                 this.updatedAt);
@@ -243,6 +257,13 @@ public final class PlanVersionCompanyMigrationResponseData {
 
         _FinalStage planVersionIdFrom(String planVersionIdFrom);
 
+        /**
+         * <p>When this company is expected to migrate, for a migration scheduled at the end of the billing period: the end of the company's current billing period. Only set while both the company and the migration are still pending. A value at or before the time of the request means the company has no active subscription and migrates as soon as processing runs. Null means no upcoming renewal could be determined from the company's current billing status (for example, a past-due subscription or one set to cancel); it does not mean the company will never migrate.</p>
+         */
+        _FinalStage scheduledFor(Optional<OffsetDateTime> scheduledFor);
+
+        _FinalStage scheduledFor(OffsetDateTime scheduledFor);
+
         _FinalStage startedAt(Optional<OffsetDateTime> startedAt);
 
         _FinalStage startedAt(OffsetDateTime startedAt);
@@ -274,6 +295,8 @@ public final class PlanVersionCompanyMigrationResponseData {
 
         private Optional<OffsetDateTime> startedAt = Optional.empty();
 
+        private Optional<OffsetDateTime> scheduledFor = Optional.empty();
+
         private Optional<String> planVersionIdFrom = Optional.empty();
 
         private Optional<MigrationErrorCode> errorCode = Optional.empty();
@@ -298,6 +321,7 @@ public final class PlanVersionCompanyMigrationResponseData {
             id(other.getId());
             migrationId(other.getMigrationId());
             planVersionIdFrom(other.getPlanVersionIdFrom());
+            scheduledFor(other.getScheduledFor());
             startedAt(other.getStartedAt());
             status(other.getStatus());
             updatedAt(other.getUpdatedAt());
@@ -366,6 +390,26 @@ public final class PlanVersionCompanyMigrationResponseData {
             return this;
         }
 
+        /**
+         * <p>When this company is expected to migrate, for a migration scheduled at the end of the billing period: the end of the company's current billing period. Only set while both the company and the migration are still pending. A value at or before the time of the request means the company has no active subscription and migrates as soon as processing runs. Null means no upcoming renewal could be determined from the company's current billing status (for example, a past-due subscription or one set to cancel); it does not mean the company will never migrate.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage scheduledFor(OffsetDateTime scheduledFor) {
+            this.scheduledFor = Optional.ofNullable(scheduledFor);
+            return this;
+        }
+
+        /**
+         * <p>When this company is expected to migrate, for a migration scheduled at the end of the billing period: the end of the company's current billing period. Only set while both the company and the migration are still pending. A value at or before the time of the request means the company has no active subscription and migrates as soon as processing runs. Null means no upcoming renewal could be determined from the company's current billing status (for example, a past-due subscription or one set to cancel); it does not mean the company will never migrate.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_for", nulls = Nulls.SKIP)
+        public _FinalStage scheduledFor(Optional<OffsetDateTime> scheduledFor) {
+            this.scheduledFor = scheduledFor;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage planVersionIdFrom(String planVersionIdFrom) {
             this.planVersionIdFrom = Optional.ofNullable(planVersionIdFrom);
@@ -430,6 +474,7 @@ public final class PlanVersionCompanyMigrationResponseData {
                     id,
                     migrationId,
                     planVersionIdFrom,
+                    scheduledFor,
                     startedAt,
                     status,
                     updatedAt,

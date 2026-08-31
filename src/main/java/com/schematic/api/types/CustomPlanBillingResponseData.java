@@ -42,6 +42,8 @@ public final class CustomPlanBillingResponseData {
 
     private final String planId;
 
+    private final Optional<Boolean> prorateFirstPeriod;
+
     private final Optional<OffsetDateTime> publishedAt;
 
     private final boolean sendInvoice;
@@ -65,6 +67,7 @@ public final class CustomPlanBillingResponseData {
             Optional<OffsetDateTime> paidAt,
             PlanBillingSource planBillingSource,
             String planId,
+            Optional<Boolean> prorateFirstPeriod,
             Optional<OffsetDateTime> publishedAt,
             boolean sendInvoice,
             CustomPlanBillingStatus status,
@@ -81,6 +84,7 @@ public final class CustomPlanBillingResponseData {
         this.paidAt = paidAt;
         this.planBillingSource = planBillingSource;
         this.planId = planId;
+        this.prorateFirstPeriod = prorateFirstPeriod;
         this.publishedAt = publishedAt;
         this.sendInvoice = sendInvoice;
         this.status = status;
@@ -145,6 +149,14 @@ public final class CustomPlanBillingResponseData {
         return planId;
     }
 
+    /**
+     * @return Whether the shortened period the renewal date created was billed pro rata when the subscription started. False means that period is free and the first invoice is the one raised on the renewal date.
+     */
+    @JsonProperty("prorate_first_period")
+    public Optional<Boolean> getProrateFirstPeriod() {
+        return prorateFirstPeriod;
+    }
+
     @JsonProperty("published_at")
     public Optional<OffsetDateTime> getPublishedAt() {
         return publishedAt;
@@ -192,6 +204,7 @@ public final class CustomPlanBillingResponseData {
                 && paidAt.equals(other.paidAt)
                 && planBillingSource.equals(other.planBillingSource)
                 && planId.equals(other.planId)
+                && prorateFirstPeriod.equals(other.prorateFirstPeriod)
                 && publishedAt.equals(other.publishedAt)
                 && sendInvoice == other.sendInvoice
                 && status.equals(other.status)
@@ -212,6 +225,7 @@ public final class CustomPlanBillingResponseData {
                 this.paidAt,
                 this.planBillingSource,
                 this.planId,
+                this.prorateFirstPeriod,
                 this.publishedAt,
                 this.sendInvoice,
                 this.status,
@@ -295,6 +309,13 @@ public final class CustomPlanBillingResponseData {
 
         _FinalStage paidAt(OffsetDateTime paidAt);
 
+        /**
+         * <p>Whether the shortened period the renewal date created was billed pro rata when the subscription started. False means that period is free and the first invoice is the one raised on the renewal date.</p>
+         */
+        _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod);
+
+        _FinalStage prorateFirstPeriod(Boolean prorateFirstPeriod);
+
         _FinalStage publishedAt(Optional<OffsetDateTime> publishedAt);
 
         _FinalStage publishedAt(OffsetDateTime publishedAt);
@@ -341,6 +362,8 @@ public final class CustomPlanBillingResponseData {
 
         private Optional<OffsetDateTime> publishedAt = Optional.empty();
 
+        private Optional<Boolean> prorateFirstPeriod = Optional.empty();
+
         private Optional<OffsetDateTime> paidAt = Optional.empty();
 
         private Optional<String> externalInvoiceId = Optional.empty();
@@ -364,6 +387,7 @@ public final class CustomPlanBillingResponseData {
             paidAt(other.getPaidAt());
             planBillingSource(other.getPlanBillingSource());
             planId(other.getPlanId());
+            prorateFirstPeriod(other.getProrateFirstPeriod());
             publishedAt(other.getPublishedAt());
             sendInvoice(other.getSendInvoice());
             status(other.getStatus());
@@ -472,6 +496,26 @@ public final class CustomPlanBillingResponseData {
             return this;
         }
 
+        /**
+         * <p>Whether the shortened period the renewal date created was billed pro rata when the subscription started. False means that period is free and the first invoice is the one raised on the renewal date.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage prorateFirstPeriod(Boolean prorateFirstPeriod) {
+            this.prorateFirstPeriod = Optional.ofNullable(prorateFirstPeriod);
+            return this;
+        }
+
+        /**
+         * <p>Whether the shortened period the renewal date created was billed pro rata when the subscription started. False means that period is free and the first invoice is the one raised on the renewal date.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "prorate_first_period", nulls = Nulls.SKIP)
+        public _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod) {
+            this.prorateFirstPeriod = prorateFirstPeriod;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage paidAt(OffsetDateTime paidAt) {
             this.paidAt = Optional.ofNullable(paidAt);
@@ -531,6 +575,7 @@ public final class CustomPlanBillingResponseData {
                     paidAt,
                     planBillingSource,
                     planId,
+                    prorateFirstPeriod,
                     publishedAt,
                     sendInvoice,
                     status,

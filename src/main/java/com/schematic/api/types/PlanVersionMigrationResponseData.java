@@ -36,6 +36,8 @@ public final class PlanVersionMigrationResponseData {
 
     private final String id;
 
+    private final Optional<OffsetDateTime> nextDueAt;
+
     private final String planId;
 
     private final Optional<String> planVersionIdFrom;
@@ -67,6 +69,7 @@ public final class PlanVersionMigrationResponseData {
             Optional<String> error,
             long failedCompanies,
             String id,
+            Optional<OffsetDateTime> nextDueAt,
             String planId,
             Optional<String> planVersionIdFrom,
             String planVersionIdTo,
@@ -85,6 +88,7 @@ public final class PlanVersionMigrationResponseData {
         this.error = error;
         this.failedCompanies = failedCompanies;
         this.id = id;
+        this.nextDueAt = nextDueAt;
         this.planId = planId;
         this.planVersionIdFrom = planVersionIdFrom;
         this.planVersionIdTo = planVersionIdTo;
@@ -127,6 +131,11 @@ public final class PlanVersionMigrationResponseData {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    @JsonProperty("next_due_at")
+    public Optional<OffsetDateTime> getNextDueAt() {
+        return nextDueAt;
     }
 
     @JsonProperty("plan_id")
@@ -202,6 +211,7 @@ public final class PlanVersionMigrationResponseData {
                 && error.equals(other.error)
                 && failedCompanies == other.failedCompanies
                 && id.equals(other.id)
+                && nextDueAt.equals(other.nextDueAt)
                 && planId.equals(other.planId)
                 && planVersionIdFrom.equals(other.planVersionIdFrom)
                 && planVersionIdTo.equals(other.planVersionIdTo)
@@ -224,6 +234,7 @@ public final class PlanVersionMigrationResponseData {
                 this.error,
                 this.failedCompanies,
                 this.id,
+                this.nextDueAt,
                 this.planId,
                 this.planVersionIdFrom,
                 this.planVersionIdTo,
@@ -307,6 +318,10 @@ public final class PlanVersionMigrationResponseData {
 
         _FinalStage error(String error);
 
+        _FinalStage nextDueAt(Optional<OffsetDateTime> nextDueAt);
+
+        _FinalStage nextDueAt(OffsetDateTime nextDueAt);
+
         _FinalStage planVersionIdFrom(Optional<String> planVersionIdFrom);
 
         _FinalStage planVersionIdFrom(String planVersionIdFrom);
@@ -370,6 +385,8 @@ public final class PlanVersionMigrationResponseData {
 
         private Optional<String> planVersionIdFrom = Optional.empty();
 
+        private Optional<OffsetDateTime> nextDueAt = Optional.empty();
+
         private Optional<String> error = Optional.empty();
 
         private Optional<OffsetDateTime> completedAt = Optional.empty();
@@ -387,6 +404,7 @@ public final class PlanVersionMigrationResponseData {
             error(other.getError());
             failedCompanies(other.getFailedCompanies());
             id(other.getId());
+            nextDueAt(other.getNextDueAt());
             planId(other.getPlanId());
             planVersionIdFrom(other.getPlanVersionIdFrom());
             planVersionIdTo(other.getPlanVersionIdTo());
@@ -542,6 +560,19 @@ public final class PlanVersionMigrationResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage nextDueAt(OffsetDateTime nextDueAt) {
+            this.nextDueAt = Optional.ofNullable(nextDueAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "next_due_at", nulls = Nulls.SKIP)
+        public _FinalStage nextDueAt(Optional<OffsetDateTime> nextDueAt) {
+            this.nextDueAt = nextDueAt;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage error(String error) {
             this.error = Optional.ofNullable(error);
             return this;
@@ -576,6 +607,7 @@ public final class PlanVersionMigrationResponseData {
                     error,
                     failedCompanies,
                     id,
+                    nextDueAt,
                     planId,
                     planVersionIdFrom,
                     planVersionIdTo,

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,35 +23,65 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetOnboardingStateResp.Builder.class)
 public final class GetOnboardingStateResp {
+    private final Optional<OffsetDateTime> agentConnectedAt;
+
+    private final Optional<OffsetDateTime> dismissedAt;
+
     private final Optional<String> environmentId;
 
     private final List<OnboardingMilestoneView> milestones;
 
     private final Optional<OnboardingPath> path;
 
+    private final Optional<String> pricingPageUrl;
+
     private final List<OnboardingRequirementView> requirements;
+
+    private final Optional<OnboardingStripeImport> stripeImport;
 
     private final List<OnboardingRequirement> suggestedNext;
 
     private final Optional<OnboardingTrack> track;
 
+    private final Optional<String> websiteUrl;
+
     private final Map<String, Object> additionalProperties;
 
     private GetOnboardingStateResp(
+            Optional<OffsetDateTime> agentConnectedAt,
+            Optional<OffsetDateTime> dismissedAt,
             Optional<String> environmentId,
             List<OnboardingMilestoneView> milestones,
             Optional<OnboardingPath> path,
+            Optional<String> pricingPageUrl,
             List<OnboardingRequirementView> requirements,
+            Optional<OnboardingStripeImport> stripeImport,
             List<OnboardingRequirement> suggestedNext,
             Optional<OnboardingTrack> track,
+            Optional<String> websiteUrl,
             Map<String, Object> additionalProperties) {
+        this.agentConnectedAt = agentConnectedAt;
+        this.dismissedAt = dismissedAt;
         this.environmentId = environmentId;
         this.milestones = milestones;
         this.path = path;
+        this.pricingPageUrl = pricingPageUrl;
         this.requirements = requirements;
+        this.stripeImport = stripeImport;
         this.suggestedNext = suggestedNext;
         this.track = track;
+        this.websiteUrl = websiteUrl;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("agent_connected_at")
+    public Optional<OffsetDateTime> getAgentConnectedAt() {
+        return agentConnectedAt;
+    }
+
+    @JsonProperty("dismissed_at")
+    public Optional<OffsetDateTime> getDismissedAt() {
+        return dismissedAt;
     }
 
     @JsonProperty("environment_id")
@@ -68,9 +99,19 @@ public final class GetOnboardingStateResp {
         return path;
     }
 
+    @JsonProperty("pricing_page_url")
+    public Optional<String> getPricingPageUrl() {
+        return pricingPageUrl;
+    }
+
     @JsonProperty("requirements")
     public List<OnboardingRequirementView> getRequirements() {
         return requirements;
+    }
+
+    @JsonProperty("stripe_import")
+    public Optional<OnboardingStripeImport> getStripeImport() {
+        return stripeImport;
     }
 
     @JsonProperty("suggested_next")
@@ -81,6 +122,11 @@ public final class GetOnboardingStateResp {
     @JsonProperty("track")
     public Optional<OnboardingTrack> getTrack() {
         return track;
+    }
+
+    @JsonProperty("website_url")
+    public Optional<String> getWebsiteUrl() {
+        return websiteUrl;
     }
 
     @java.lang.Override
@@ -95,18 +141,33 @@ public final class GetOnboardingStateResp {
     }
 
     private boolean equalTo(GetOnboardingStateResp other) {
-        return environmentId.equals(other.environmentId)
+        return agentConnectedAt.equals(other.agentConnectedAt)
+                && dismissedAt.equals(other.dismissedAt)
+                && environmentId.equals(other.environmentId)
                 && milestones.equals(other.milestones)
                 && path.equals(other.path)
+                && pricingPageUrl.equals(other.pricingPageUrl)
                 && requirements.equals(other.requirements)
+                && stripeImport.equals(other.stripeImport)
                 && suggestedNext.equals(other.suggestedNext)
-                && track.equals(other.track);
+                && track.equals(other.track)
+                && websiteUrl.equals(other.websiteUrl);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.environmentId, this.milestones, this.path, this.requirements, this.suggestedNext, this.track);
+                this.agentConnectedAt,
+                this.dismissedAt,
+                this.environmentId,
+                this.milestones,
+                this.path,
+                this.pricingPageUrl,
+                this.requirements,
+                this.stripeImport,
+                this.suggestedNext,
+                this.track,
+                this.websiteUrl);
     }
 
     @java.lang.Override
@@ -120,17 +181,27 @@ public final class GetOnboardingStateResp {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<OffsetDateTime> agentConnectedAt = Optional.empty();
+
+        private Optional<OffsetDateTime> dismissedAt = Optional.empty();
+
         private Optional<String> environmentId = Optional.empty();
 
         private List<OnboardingMilestoneView> milestones = new ArrayList<>();
 
         private Optional<OnboardingPath> path = Optional.empty();
 
+        private Optional<String> pricingPageUrl = Optional.empty();
+
         private List<OnboardingRequirementView> requirements = new ArrayList<>();
+
+        private Optional<OnboardingStripeImport> stripeImport = Optional.empty();
 
         private List<OnboardingRequirement> suggestedNext = new ArrayList<>();
 
         private Optional<OnboardingTrack> track = Optional.empty();
+
+        private Optional<String> websiteUrl = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -138,12 +209,39 @@ public final class GetOnboardingStateResp {
         private Builder() {}
 
         public Builder from(GetOnboardingStateResp other) {
+            agentConnectedAt(other.getAgentConnectedAt());
+            dismissedAt(other.getDismissedAt());
             environmentId(other.getEnvironmentId());
             milestones(other.getMilestones());
             path(other.getPath());
+            pricingPageUrl(other.getPricingPageUrl());
             requirements(other.getRequirements());
+            stripeImport(other.getStripeImport());
             suggestedNext(other.getSuggestedNext());
             track(other.getTrack());
+            websiteUrl(other.getWebsiteUrl());
+            return this;
+        }
+
+        @JsonSetter(value = "agent_connected_at", nulls = Nulls.SKIP)
+        public Builder agentConnectedAt(Optional<OffsetDateTime> agentConnectedAt) {
+            this.agentConnectedAt = agentConnectedAt;
+            return this;
+        }
+
+        public Builder agentConnectedAt(OffsetDateTime agentConnectedAt) {
+            this.agentConnectedAt = Optional.ofNullable(agentConnectedAt);
+            return this;
+        }
+
+        @JsonSetter(value = "dismissed_at", nulls = Nulls.SKIP)
+        public Builder dismissedAt(Optional<OffsetDateTime> dismissedAt) {
+            this.dismissedAt = dismissedAt;
+            return this;
+        }
+
+        public Builder dismissedAt(OffsetDateTime dismissedAt) {
+            this.dismissedAt = Optional.ofNullable(dismissedAt);
             return this;
         }
 
@@ -190,6 +288,17 @@ public final class GetOnboardingStateResp {
             return this;
         }
 
+        @JsonSetter(value = "pricing_page_url", nulls = Nulls.SKIP)
+        public Builder pricingPageUrl(Optional<String> pricingPageUrl) {
+            this.pricingPageUrl = pricingPageUrl;
+            return this;
+        }
+
+        public Builder pricingPageUrl(String pricingPageUrl) {
+            this.pricingPageUrl = Optional.ofNullable(pricingPageUrl);
+            return this;
+        }
+
         @JsonSetter(value = "requirements", nulls = Nulls.SKIP)
         public Builder requirements(List<OnboardingRequirementView> requirements) {
             this.requirements.clear();
@@ -208,6 +317,17 @@ public final class GetOnboardingStateResp {
             if (requirements != null) {
                 this.requirements.addAll(requirements);
             }
+            return this;
+        }
+
+        @JsonSetter(value = "stripe_import", nulls = Nulls.SKIP)
+        public Builder stripeImport(Optional<OnboardingStripeImport> stripeImport) {
+            this.stripeImport = stripeImport;
+            return this;
+        }
+
+        public Builder stripeImport(OnboardingStripeImport stripeImport) {
+            this.stripeImport = Optional.ofNullable(stripeImport);
             return this;
         }
 
@@ -243,9 +363,31 @@ public final class GetOnboardingStateResp {
             return this;
         }
 
+        @JsonSetter(value = "website_url", nulls = Nulls.SKIP)
+        public Builder websiteUrl(Optional<String> websiteUrl) {
+            this.websiteUrl = websiteUrl;
+            return this;
+        }
+
+        public Builder websiteUrl(String websiteUrl) {
+            this.websiteUrl = Optional.ofNullable(websiteUrl);
+            return this;
+        }
+
         public GetOnboardingStateResp build() {
             return new GetOnboardingStateResp(
-                    environmentId, milestones, path, requirements, suggestedNext, track, additionalProperties);
+                    agentConnectedAt,
+                    dismissedAt,
+                    environmentId,
+                    milestones,
+                    path,
+                    pricingPageUrl,
+                    requirements,
+                    stripeImport,
+                    suggestedNext,
+                    track,
+                    websiteUrl,
+                    additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

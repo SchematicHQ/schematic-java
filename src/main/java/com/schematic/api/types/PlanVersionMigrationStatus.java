@@ -17,6 +17,9 @@ public final class PlanVersionMigrationStatus {
     public static final PlanVersionMigrationStatus COMPLETED =
             new PlanVersionMigrationStatus(Value.COMPLETED, "completed");
 
+    public static final PlanVersionMigrationStatus CANCELLED =
+            new PlanVersionMigrationStatus(Value.CANCELLED, "cancelled");
+
     private final Value value;
 
     private final String string;
@@ -58,6 +61,8 @@ public final class PlanVersionMigrationStatus {
                 return visitor.visitPending();
             case COMPLETED:
                 return visitor.visitCompleted();
+            case CANCELLED:
+                return visitor.visitCancelled();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -75,12 +80,16 @@ public final class PlanVersionMigrationStatus {
                 return PENDING;
             case "completed":
                 return COMPLETED;
+            case "cancelled":
+                return CANCELLED;
             default:
                 return new PlanVersionMigrationStatus(Value.UNKNOWN, value);
         }
     }
 
     public enum Value {
+        CANCELLED,
+
         COMPLETED,
 
         FAILED,
@@ -93,6 +102,8 @@ public final class PlanVersionMigrationStatus {
     }
 
     public interface Visitor<T> {
+        T visitCancelled();
+
         T visitCompleted();
 
         T visitFailed();

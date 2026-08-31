@@ -10,6 +10,9 @@ public final class PlanVersionMigrationStrategy {
     public static final PlanVersionMigrationStrategy IMMEDIATE =
             new PlanVersionMigrationStrategy(Value.IMMEDIATE, "immediate");
 
+    public static final PlanVersionMigrationStrategy END_OF_BILLING_PERIOD =
+            new PlanVersionMigrationStrategy(Value.END_OF_BILLING_PERIOD, "end_of_billing_period");
+
     public static final PlanVersionMigrationStrategy LEAVE = new PlanVersionMigrationStrategy(Value.LEAVE, "leave");
 
     private final Value value;
@@ -47,6 +50,8 @@ public final class PlanVersionMigrationStrategy {
         switch (value) {
             case IMMEDIATE:
                 return visitor.visitImmediate();
+            case END_OF_BILLING_PERIOD:
+                return visitor.visitEndOfBillingPeriod();
             case LEAVE:
                 return visitor.visitLeave();
             case UNKNOWN:
@@ -60,6 +65,8 @@ public final class PlanVersionMigrationStrategy {
         switch (value) {
             case "immediate":
                 return IMMEDIATE;
+            case "end_of_billing_period":
+                return END_OF_BILLING_PERIOD;
             case "leave":
                 return LEAVE;
             default:
@@ -68,6 +75,8 @@ public final class PlanVersionMigrationStrategy {
     }
 
     public enum Value {
+        END_OF_BILLING_PERIOD,
+
         IMMEDIATE,
 
         LEAVE,
@@ -76,6 +85,8 @@ public final class PlanVersionMigrationStrategy {
     }
 
     public interface Visitor<T> {
+        T visitEndOfBillingPeriod();
+
         T visitImmediate();
 
         T visitLeave();
