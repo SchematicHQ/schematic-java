@@ -1156,6 +1156,14 @@ client.accounts().updateOnboardingState(
 <dl>
 <dd>
 
+**dismissed:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **path:** `Optional<OnboardingPath>` 
     
 </dd>
@@ -13693,6 +13701,14 @@ client.plans().retryCustomPlanBilling(
 <dl>
 <dd>
 
+**billingCycleAnchor:** `Optional<OffsetDateTime>` — The date the subscription's billing period renews on. Only honored when the retry creates a subscription.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **customerEmail:** `String` 
     
 </dd>
@@ -13702,6 +13718,14 @@ client.plans().retryCustomPlanBilling(
 <dd>
 
 **daysUntilDue:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prorateFirstPeriod:** `Optional<Boolean>` — When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.
     
 </dd>
 </dl>
@@ -14803,7 +14827,7 @@ client.plans().publishPlanVersion(
     "plan_version_id",
     PublishPlanVersionRequestBody
         .builder()
-        .migrationStrategy(PlanVersionMigrationStrategy.IMMEDIATE)
+        .migrationStrategy(PlanVersionMigrationStrategy.END_OF_BILLING_PERIOD)
         .excludedCompanyIds(
             Arrays.asList("excluded_company_ids")
         )
@@ -14840,6 +14864,14 @@ client.plans().publishPlanVersion(
 <dd>
 
 **address:** `Optional<CustomerBillingAddress>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**billingCycleAnchor:** `Optional<OffsetDateTime>` — The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.
     
 </dd>
 </dl>
@@ -14896,6 +14928,14 @@ client.plans().publishPlanVersion(
 <dd>
 
 **phone:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prorateFirstPeriod:** `Optional<Boolean>` — When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.
     
 </dd>
 </dl>
@@ -19385,7 +19425,7 @@ client.planmigrations().listCompanyMigrations(
         .builder()
         .migrationId("migration_id")
         .q("q")
-        .status(PlanVersionCompanyMigrationStatus.COMPLETED)
+        .status(PlanVersionCompanyMigrationStatus.CANCELLED)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -19506,7 +19546,7 @@ client.planmigrations().countCompanyMigrations(
         .builder()
         .migrationId("migration_id")
         .q("q")
-        .status(PlanVersionCompanyMigrationStatus.COMPLETED)
+        .status(PlanVersionCompanyMigrationStatus.CANCELLED)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -19586,7 +19626,7 @@ client.planmigrations().listMigrations(
     ListMigrationsRequest
         .builder()
         .planVersionId("plan_version_id")
-        .status(PlanVersionMigrationStatus.COMPLETED)
+        .status(PlanVersionMigrationStatus.CANCELLED)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -19659,7 +19699,7 @@ client.planmigrations().createMigration(
         .builder()
         .planId("plan_id")
         .planVersionIdTo("plan_version_id_to")
-        .strategy(PlanVersionMigrationStrategy.IMMEDIATE)
+        .strategy(PlanVersionMigrationStrategy.END_OF_BILLING_PERIOD)
         .targetPlanType(PlanType.PLAN)
         .build()
 );
@@ -19785,6 +19825,99 @@ client.planmigrations().getMigration("plan_version_migration_id");
 </dl>
 </details>
 
+<details><summary><code>client.planmigrations.cancelMigration(planVersionMigrationId) -> CancelMigrationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().cancelMigration("plan_version_migration_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planVersionMigrationId:** `String` — plan_version_migration_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.planmigrations.completeMigrationNow(planVersionMigrationId, request) -> CompleteMigrationNowResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.planmigrations().completeMigrationNow(
+    "plan_version_migration_id",
+    CompleteMigrationNowRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planVersionMigrationId:** `String` — plan_version_migration_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prorationBehavior:** `Optional<MigrationProrationBehavior>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.planmigrations.retryMigration(planVersionMigrationId, request) -> RetryMigrationResponse</code></summary>
 <dl>
 <dd>
@@ -19858,7 +19991,7 @@ client.planmigrations().countMigrations(
     CountMigrationsRequest
         .builder()
         .planVersionId("plan_version_id")
-        .status(PlanVersionMigrationStatus.COMPLETED)
+        .status(PlanVersionMigrationStatus.CANCELLED)
         .limit(1000000L)
         .offset(1000000L)
         .build()

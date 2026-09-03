@@ -18,6 +18,7 @@ import com.schematic.api.types.CustomerBillingAddress;
 import com.schematic.api.types.MigrationProrationBehavior;
 import com.schematic.api.types.PlanVersionMigrationStrategy;
 import com.schematic.api.types.TaxIdInput;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,8 @@ public final class PublishPlanVersionRequestBody {
 
     private final Optional<CustomerBillingAddress> address;
 
+    private final Optional<OffsetDateTime> billingCycleAnchor;
+
     private final Optional<String> couponExternalId;
 
     private final Optional<List<CheckoutFieldValue>> customFieldValues;
@@ -47,6 +50,8 @@ public final class PublishPlanVersionRequestBody {
 
     private final Optional<String> phone;
 
+    private final Optional<Boolean> prorateFirstPeriod;
+
     private final Optional<MigrationProrationBehavior> prorationBehavior;
 
     private final Optional<Boolean> requireNoMigration;
@@ -60,6 +65,7 @@ public final class PublishPlanVersionRequestBody {
     private PublishPlanVersionRequestBody(
             Optional<CustomPlanActivationStrategy> activationStrategy,
             Optional<CustomerBillingAddress> address,
+            Optional<OffsetDateTime> billingCycleAnchor,
             Optional<String> couponExternalId,
             Optional<List<CheckoutFieldValue>> customFieldValues,
             Optional<String> customerEmail,
@@ -67,6 +73,7 @@ public final class PublishPlanVersionRequestBody {
             List<String> excludedCompanyIds,
             PlanVersionMigrationStrategy migrationStrategy,
             Optional<String> phone,
+            Optional<Boolean> prorateFirstPeriod,
             Optional<MigrationProrationBehavior> prorationBehavior,
             Optional<Boolean> requireNoMigration,
             Optional<Boolean> sendInvoice,
@@ -74,6 +81,7 @@ public final class PublishPlanVersionRequestBody {
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.address = address;
+        this.billingCycleAnchor = billingCycleAnchor;
         this.couponExternalId = couponExternalId;
         this.customFieldValues = customFieldValues;
         this.customerEmail = customerEmail;
@@ -81,6 +89,7 @@ public final class PublishPlanVersionRequestBody {
         this.excludedCompanyIds = excludedCompanyIds;
         this.migrationStrategy = migrationStrategy;
         this.phone = phone;
+        this.prorateFirstPeriod = prorateFirstPeriod;
         this.prorationBehavior = prorationBehavior;
         this.requireNoMigration = requireNoMigration;
         this.sendInvoice = sendInvoice;
@@ -96,6 +105,14 @@ public final class PublishPlanVersionRequestBody {
     @JsonProperty("address")
     public Optional<CustomerBillingAddress> getAddress() {
         return address;
+    }
+
+    /**
+     * @return The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.
+     */
+    @JsonProperty("billing_cycle_anchor")
+    public Optional<OffsetDateTime> getBillingCycleAnchor() {
+        return billingCycleAnchor;
     }
 
     @JsonProperty("coupon_external_id")
@@ -131,6 +148,14 @@ public final class PublishPlanVersionRequestBody {
     @JsonProperty("phone")
     public Optional<String> getPhone() {
         return phone;
+    }
+
+    /**
+     * @return When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.
+     */
+    @JsonProperty("prorate_first_period")
+    public Optional<Boolean> getProrateFirstPeriod() {
+        return prorateFirstPeriod;
     }
 
     @JsonProperty("proration_behavior")
@@ -173,6 +198,7 @@ public final class PublishPlanVersionRequestBody {
     private boolean equalTo(PublishPlanVersionRequestBody other) {
         return activationStrategy.equals(other.activationStrategy)
                 && address.equals(other.address)
+                && billingCycleAnchor.equals(other.billingCycleAnchor)
                 && couponExternalId.equals(other.couponExternalId)
                 && customFieldValues.equals(other.customFieldValues)
                 && customerEmail.equals(other.customerEmail)
@@ -180,6 +206,7 @@ public final class PublishPlanVersionRequestBody {
                 && excludedCompanyIds.equals(other.excludedCompanyIds)
                 && migrationStrategy.equals(other.migrationStrategy)
                 && phone.equals(other.phone)
+                && prorateFirstPeriod.equals(other.prorateFirstPeriod)
                 && prorationBehavior.equals(other.prorationBehavior)
                 && requireNoMigration.equals(other.requireNoMigration)
                 && sendInvoice.equals(other.sendInvoice)
@@ -191,6 +218,7 @@ public final class PublishPlanVersionRequestBody {
         return Objects.hash(
                 this.activationStrategy,
                 this.address,
+                this.billingCycleAnchor,
                 this.couponExternalId,
                 this.customFieldValues,
                 this.customerEmail,
@@ -198,6 +226,7 @@ public final class PublishPlanVersionRequestBody {
                 this.excludedCompanyIds,
                 this.migrationStrategy,
                 this.phone,
+                this.prorateFirstPeriod,
                 this.prorationBehavior,
                 this.requireNoMigration,
                 this.sendInvoice,
@@ -234,6 +263,13 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage address(CustomerBillingAddress address);
 
+        /**
+         * <p>The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.</p>
+         */
+        _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor);
+
+        _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
+
         _FinalStage couponExternalId(Optional<String> couponExternalId);
 
         _FinalStage couponExternalId(String couponExternalId);
@@ -259,6 +295,13 @@ public final class PublishPlanVersionRequestBody {
         _FinalStage phone(Optional<String> phone);
 
         _FinalStage phone(String phone);
+
+        /**
+         * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
+         */
+        _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod);
+
+        _FinalStage prorateFirstPeriod(Boolean prorateFirstPeriod);
 
         _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior);
 
@@ -295,6 +338,8 @@ public final class PublishPlanVersionRequestBody {
 
         private Optional<MigrationProrationBehavior> prorationBehavior = Optional.empty();
 
+        private Optional<Boolean> prorateFirstPeriod = Optional.empty();
+
         private Optional<String> phone = Optional.empty();
 
         private List<String> excludedCompanyIds = new ArrayList<>();
@@ -306,6 +351,8 @@ public final class PublishPlanVersionRequestBody {
         private Optional<List<CheckoutFieldValue>> customFieldValues = Optional.empty();
 
         private Optional<String> couponExternalId = Optional.empty();
+
+        private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
 
         private Optional<CustomerBillingAddress> address = Optional.empty();
 
@@ -320,6 +367,7 @@ public final class PublishPlanVersionRequestBody {
         public Builder from(PublishPlanVersionRequestBody other) {
             activationStrategy(other.getActivationStrategy());
             address(other.getAddress());
+            billingCycleAnchor(other.getBillingCycleAnchor());
             couponExternalId(other.getCouponExternalId());
             customFieldValues(other.getCustomFieldValues());
             customerEmail(other.getCustomerEmail());
@@ -327,6 +375,7 @@ public final class PublishPlanVersionRequestBody {
             excludedCompanyIds(other.getExcludedCompanyIds());
             migrationStrategy(other.getMigrationStrategy());
             phone(other.getPhone());
+            prorateFirstPeriod(other.getProrateFirstPeriod());
             prorationBehavior(other.getProrationBehavior());
             requireNoMigration(other.getRequireNoMigration());
             sendInvoice(other.getSendInvoice());
@@ -404,6 +453,26 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter(value = "proration_behavior", nulls = Nulls.SKIP)
         public _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior) {
             this.prorationBehavior = prorationBehavior;
+            return this;
+        }
+
+        /**
+         * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage prorateFirstPeriod(Boolean prorateFirstPeriod) {
+            this.prorateFirstPeriod = Optional.ofNullable(prorateFirstPeriod);
+            return this;
+        }
+
+        /**
+         * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "prorate_first_period", nulls = Nulls.SKIP)
+        public _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod) {
+            this.prorateFirstPeriod = prorateFirstPeriod;
             return this;
         }
 
@@ -496,6 +565,26 @@ public final class PublishPlanVersionRequestBody {
             return this;
         }
 
+        /**
+         * <p>The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor) {
+            this.billingCycleAnchor = Optional.ofNullable(billingCycleAnchor);
+            return this;
+        }
+
+        /**
+         * <p>The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_cycle_anchor", nulls = Nulls.SKIP)
+        public _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor) {
+            this.billingCycleAnchor = billingCycleAnchor;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage address(CustomerBillingAddress address) {
             this.address = Optional.ofNullable(address);
@@ -527,6 +616,7 @@ public final class PublishPlanVersionRequestBody {
             return new PublishPlanVersionRequestBody(
                     activationStrategy,
                     address,
+                    billingCycleAnchor,
                     couponExternalId,
                     customFieldValues,
                     customerEmail,
@@ -534,6 +624,7 @@ public final class PublishPlanVersionRequestBody {
                     excludedCompanyIds,
                     migrationStrategy,
                     phone,
+                    prorateFirstPeriod,
                     prorationBehavior,
                     requireNoMigration,
                     sendInvoice,

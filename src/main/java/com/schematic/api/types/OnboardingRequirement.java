@@ -18,6 +18,9 @@ public final class OnboardingRequirement {
     public static final OnboardingRequirement FIRST_FLAG_CHECK =
             new OnboardingRequirement(Value.FIRST_FLAG_CHECK, "first_flag_check");
 
+    public static final OnboardingRequirement CONNECT_AGENT =
+            new OnboardingRequirement(Value.CONNECT_AGENT, "connect_agent");
+
     public static final OnboardingRequirement CONNECT_BILLING =
             new OnboardingRequirement(Value.CONNECT_BILLING, "connect_billing");
 
@@ -65,6 +68,8 @@ public final class OnboardingRequirement {
                 return visitor.visitSendEvents();
             case FIRST_FLAG_CHECK:
                 return visitor.visitFirstFlagCheck();
+            case CONNECT_AGENT:
+                return visitor.visitConnectAgent();
             case CONNECT_BILLING:
                 return visitor.visitConnectBilling();
             case MODEL_PACKAGING:
@@ -86,6 +91,8 @@ public final class OnboardingRequirement {
                 return SEND_EVENTS;
             case "first_flag_check":
                 return FIRST_FLAG_CHECK;
+            case "connect_agent":
+                return CONNECT_AGENT;
             case "connect_billing":
                 return CONNECT_BILLING;
             case "model_packaging":
@@ -96,6 +103,8 @@ public final class OnboardingRequirement {
     }
 
     public enum Value {
+        CONNECT_AGENT,
+
         CONNECT_BILLING,
 
         CREATE_API_KEY,
@@ -112,6 +121,8 @@ public final class OnboardingRequirement {
     }
 
     public interface Visitor<T> {
+        T visitConnectAgent();
+
         T visitConnectBilling();
 
         T visitCreateApiKey();

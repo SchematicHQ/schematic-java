@@ -59,6 +59,8 @@ public final class CompanyDetailResponseData {
 
     private final List<PaymentMethodResponseData> paymentMethods;
 
+    private final Optional<PendingMigrationResponseData> pendingMigration;
+
     private final Optional<CompanyPlanWithBillingSubView> plan;
 
     private final List<GenericPreviewObject> plans;
@@ -93,6 +95,7 @@ public final class CompanyDetailResponseData {
             List<CompanyEventPeriodMetricsResponseData> metrics,
             String name,
             List<PaymentMethodResponseData> paymentMethods,
+            Optional<PendingMigrationResponseData> pendingMigration,
             Optional<CompanyPlanWithBillingSubView> plan,
             List<GenericPreviewObject> plans,
             List<Rule> rules,
@@ -118,6 +121,7 @@ public final class CompanyDetailResponseData {
         this.metrics = metrics;
         this.name = name;
         this.paymentMethods = paymentMethods;
+        this.pendingMigration = pendingMigration;
         this.plan = plan;
         this.plans = plans;
         this.rules = rules;
@@ -213,6 +217,11 @@ public final class CompanyDetailResponseData {
         return paymentMethods;
     }
 
+    @JsonProperty("pending_migration")
+    public Optional<PendingMigrationResponseData> getPendingMigration() {
+        return pendingMigration;
+    }
+
     @JsonProperty("plan")
     public Optional<CompanyPlanWithBillingSubView> getPlan() {
         return plan;
@@ -280,6 +289,7 @@ public final class CompanyDetailResponseData {
                 && metrics.equals(other.metrics)
                 && name.equals(other.name)
                 && paymentMethods.equals(other.paymentMethods)
+                && pendingMigration.equals(other.pendingMigration)
                 && plan.equals(other.plan)
                 && plans.equals(other.plans)
                 && rules.equals(other.rules)
@@ -309,6 +319,7 @@ public final class CompanyDetailResponseData {
                 this.metrics,
                 this.name,
                 this.paymentMethods,
+                this.pendingMigration,
                 this.plan,
                 this.plans,
                 this.rules,
@@ -428,6 +439,10 @@ public final class CompanyDetailResponseData {
 
         _FinalStage addAllPaymentMethods(List<PaymentMethodResponseData> paymentMethods);
 
+        _FinalStage pendingMigration(Optional<PendingMigrationResponseData> pendingMigration);
+
+        _FinalStage pendingMigration(PendingMigrationResponseData pendingMigration);
+
         _FinalStage plan(Optional<CompanyPlanWithBillingSubView> plan);
 
         _FinalStage plan(CompanyPlanWithBillingSubView plan);
@@ -487,6 +502,8 @@ public final class CompanyDetailResponseData {
 
         private Optional<CompanyPlanWithBillingSubView> plan = Optional.empty();
 
+        private Optional<PendingMigrationResponseData> pendingMigration = Optional.empty();
+
         private List<PaymentMethodResponseData> paymentMethods = new ArrayList<>();
 
         private List<CompanyEventPeriodMetricsResponseData> metrics = new ArrayList<>();
@@ -537,6 +554,7 @@ public final class CompanyDetailResponseData {
             metrics(other.getMetrics());
             name(other.getName());
             paymentMethods(other.getPaymentMethods());
+            pendingMigration(other.getPendingMigration());
             plan(other.getPlan());
             plans(other.getPlans());
             rules(other.getRules());
@@ -680,6 +698,19 @@ public final class CompanyDetailResponseData {
         @JsonSetter(value = "plan", nulls = Nulls.SKIP)
         public _FinalStage plan(Optional<CompanyPlanWithBillingSubView> plan) {
             this.plan = plan;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage pendingMigration(PendingMigrationResponseData pendingMigration) {
+            this.pendingMigration = Optional.ofNullable(pendingMigration);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pending_migration", nulls = Nulls.SKIP)
+        public _FinalStage pendingMigration(Optional<PendingMigrationResponseData> pendingMigration) {
+            this.pendingMigration = pendingMigration;
             return this;
         }
 
@@ -960,6 +991,7 @@ public final class CompanyDetailResponseData {
                     metrics,
                     name,
                     paymentMethods,
+                    pendingMigration,
                     plan,
                     plans,
                     rules,

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CustomPlanActivationStrategy;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,9 +25,13 @@ import org.jetbrains.annotations.NotNull;
 public final class RetryCustomPlanBillingRequestBody {
     private final Optional<CustomPlanActivationStrategy> activationStrategy;
 
+    private final Optional<OffsetDateTime> billingCycleAnchor;
+
     private final String customerEmail;
 
     private final Optional<Long> daysUntilDue;
+
+    private final Optional<Boolean> prorateFirstPeriod;
 
     private final Optional<Boolean> sendInvoice;
 
@@ -34,13 +39,17 @@ public final class RetryCustomPlanBillingRequestBody {
 
     private RetryCustomPlanBillingRequestBody(
             Optional<CustomPlanActivationStrategy> activationStrategy,
+            Optional<OffsetDateTime> billingCycleAnchor,
             String customerEmail,
             Optional<Long> daysUntilDue,
+            Optional<Boolean> prorateFirstPeriod,
             Optional<Boolean> sendInvoice,
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
+        this.billingCycleAnchor = billingCycleAnchor;
         this.customerEmail = customerEmail;
         this.daysUntilDue = daysUntilDue;
+        this.prorateFirstPeriod = prorateFirstPeriod;
         this.sendInvoice = sendInvoice;
         this.additionalProperties = additionalProperties;
     }
@@ -48,6 +57,14 @@ public final class RetryCustomPlanBillingRequestBody {
     @JsonProperty("activation_strategy")
     public Optional<CustomPlanActivationStrategy> getActivationStrategy() {
         return activationStrategy;
+    }
+
+    /**
+     * @return The date the subscription's billing period renews on. Only honored when the retry creates a subscription.
+     */
+    @JsonProperty("billing_cycle_anchor")
+    public Optional<OffsetDateTime> getBillingCycleAnchor() {
+        return billingCycleAnchor;
     }
 
     @JsonProperty("customer_email")
@@ -58,6 +75,14 @@ public final class RetryCustomPlanBillingRequestBody {
     @JsonProperty("days_until_due")
     public Optional<Long> getDaysUntilDue() {
         return daysUntilDue;
+    }
+
+    /**
+     * @return When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.
+     */
+    @JsonProperty("prorate_first_period")
+    public Optional<Boolean> getProrateFirstPeriod() {
+        return prorateFirstPeriod;
     }
 
     /**
@@ -81,14 +106,22 @@ public final class RetryCustomPlanBillingRequestBody {
 
     private boolean equalTo(RetryCustomPlanBillingRequestBody other) {
         return activationStrategy.equals(other.activationStrategy)
+                && billingCycleAnchor.equals(other.billingCycleAnchor)
                 && customerEmail.equals(other.customerEmail)
                 && daysUntilDue.equals(other.daysUntilDue)
+                && prorateFirstPeriod.equals(other.prorateFirstPeriod)
                 && sendInvoice.equals(other.sendInvoice);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.activationStrategy, this.customerEmail, this.daysUntilDue, this.sendInvoice);
+        return Objects.hash(
+                this.activationStrategy,
+                this.billingCycleAnchor,
+                this.customerEmail,
+                this.daysUntilDue,
+                this.prorateFirstPeriod,
+                this.sendInvoice);
     }
 
     @java.lang.Override
@@ -117,9 +150,23 @@ public final class RetryCustomPlanBillingRequestBody {
 
         _FinalStage activationStrategy(CustomPlanActivationStrategy activationStrategy);
 
+        /**
+         * <p>The date the subscription's billing period renews on. Only honored when the retry creates a subscription.</p>
+         */
+        _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor);
+
+        _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
+
         _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
 
         _FinalStage daysUntilDue(Long daysUntilDue);
+
+        /**
+         * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
+         */
+        _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod);
+
+        _FinalStage prorateFirstPeriod(Boolean prorateFirstPeriod);
 
         /**
          * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
@@ -135,7 +182,11 @@ public final class RetryCustomPlanBillingRequestBody {
 
         private Optional<Boolean> sendInvoice = Optional.empty();
 
+        private Optional<Boolean> prorateFirstPeriod = Optional.empty();
+
         private Optional<Long> daysUntilDue = Optional.empty();
+
+        private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
 
         private Optional<CustomPlanActivationStrategy> activationStrategy = Optional.empty();
 
@@ -147,8 +198,10 @@ public final class RetryCustomPlanBillingRequestBody {
         @java.lang.Override
         public Builder from(RetryCustomPlanBillingRequestBody other) {
             activationStrategy(other.getActivationStrategy());
+            billingCycleAnchor(other.getBillingCycleAnchor());
             customerEmail(other.getCustomerEmail());
             daysUntilDue(other.getDaysUntilDue());
+            prorateFirstPeriod(other.getProrateFirstPeriod());
             sendInvoice(other.getSendInvoice());
             return this;
         }
@@ -180,6 +233,26 @@ public final class RetryCustomPlanBillingRequestBody {
             return this;
         }
 
+        /**
+         * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage prorateFirstPeriod(Boolean prorateFirstPeriod) {
+            this.prorateFirstPeriod = Optional.ofNullable(prorateFirstPeriod);
+            return this;
+        }
+
+        /**
+         * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "prorate_first_period", nulls = Nulls.SKIP)
+        public _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod) {
+            this.prorateFirstPeriod = prorateFirstPeriod;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage daysUntilDue(Long daysUntilDue) {
             this.daysUntilDue = Optional.ofNullable(daysUntilDue);
@@ -190,6 +263,26 @@ public final class RetryCustomPlanBillingRequestBody {
         @JsonSetter(value = "days_until_due", nulls = Nulls.SKIP)
         public _FinalStage daysUntilDue(Optional<Long> daysUntilDue) {
             this.daysUntilDue = daysUntilDue;
+            return this;
+        }
+
+        /**
+         * <p>The date the subscription's billing period renews on. Only honored when the retry creates a subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor) {
+            this.billingCycleAnchor = Optional.ofNullable(billingCycleAnchor);
+            return this;
+        }
+
+        /**
+         * <p>The date the subscription's billing period renews on. Only honored when the retry creates a subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_cycle_anchor", nulls = Nulls.SKIP)
+        public _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor) {
+            this.billingCycleAnchor = billingCycleAnchor;
             return this;
         }
 
@@ -209,7 +302,13 @@ public final class RetryCustomPlanBillingRequestBody {
         @java.lang.Override
         public RetryCustomPlanBillingRequestBody build() {
             return new RetryCustomPlanBillingRequestBody(
-                    activationStrategy, customerEmail, daysUntilDue, sendInvoice, additionalProperties);
+                    activationStrategy,
+                    billingCycleAnchor,
+                    customerEmail,
+                    daysUntilDue,
+                    prorateFirstPeriod,
+                    sendInvoice,
+                    additionalProperties);
         }
 
         @java.lang.Override
