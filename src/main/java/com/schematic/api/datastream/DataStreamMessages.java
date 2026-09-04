@@ -1,5 +1,6 @@
 package com.schematic.api.datastream;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Map;
@@ -88,6 +89,8 @@ public final class DataStreamMessages {
     }
 
     /** Request message sent to the datastream server. */
+    // The server may add envelope fields (e.g. stream_id); never reject a message for one.
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class DataStreamReq {
         @JsonProperty("action")
         private final Action action;
@@ -118,6 +121,8 @@ public final class DataStreamMessages {
     }
 
     /** Wrapper for request messages. */
+    // The server may add envelope fields (e.g. stream_id); never reject a message for one.
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class DataStreamBaseReq {
         @JsonProperty("data")
         private final DataStreamReq data;
@@ -132,6 +137,8 @@ public final class DataStreamMessages {
     }
 
     /** Response message received from the datastream server. */
+    // The server may add envelope fields (e.g. stream_id); never reject a message for one.
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class DataStreamResp {
         @JsonProperty("data")
         private JsonNode data;
@@ -145,7 +152,15 @@ public final class DataStreamMessages {
         @JsonProperty("message_type")
         private String messageType;
 
+        /** Server-side stream ID of the message; absent on snapshots. Recorded for replay on reconnect. */
+        @JsonProperty("stream_id")
+        private String streamId;
+
         public DataStreamResp() {}
+
+        public String getStreamId() {
+            return streamId;
+        }
 
         public JsonNode getData() {
             return data;
@@ -173,6 +188,8 @@ public final class DataStreamMessages {
     }
 
     /** Error message from the datastream server. */
+    // The server may add envelope fields (e.g. stream_id); never reject a message for one.
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class DataStreamError {
         @JsonProperty("error")
         private String error;
