@@ -56,6 +56,10 @@ public final class CompanyOverrideResponseData {
 
     private final Optional<Boolean> valueBool;
 
+    private final Optional<BillingCreditResponseData> valueCredit;
+
+    private final Optional<String> valueCreditId;
+
     private final Optional<Long> valueNumeric;
 
     private final Optional<EntityTraitDefinitionResponseData> valueTrait;
@@ -83,6 +87,8 @@ public final class CompanyOverrideResponseData {
             Optional<String> ruleIdUsageExceeded,
             OffsetDateTime updatedAt,
             Optional<Boolean> valueBool,
+            Optional<BillingCreditResponseData> valueCredit,
+            Optional<String> valueCreditId,
             Optional<Long> valueNumeric,
             Optional<EntityTraitDefinitionResponseData> valueTrait,
             Optional<String> valueTraitId,
@@ -104,6 +110,8 @@ public final class CompanyOverrideResponseData {
         this.ruleIdUsageExceeded = ruleIdUsageExceeded;
         this.updatedAt = updatedAt;
         this.valueBool = valueBool;
+        this.valueCredit = valueCredit;
+        this.valueCreditId = valueCreditId;
         this.valueNumeric = valueNumeric;
         this.valueTrait = valueTrait;
         this.valueTraitId = valueTraitId;
@@ -191,6 +199,16 @@ public final class CompanyOverrideResponseData {
         return valueBool;
     }
 
+    @JsonProperty("value_credit")
+    public Optional<BillingCreditResponseData> getValueCredit() {
+        return valueCredit;
+    }
+
+    @JsonProperty("value_credit_id")
+    public Optional<String> getValueCreditId() {
+        return valueCreditId;
+    }
+
     @JsonProperty("value_numeric")
     public Optional<Long> getValueNumeric() {
         return valueNumeric;
@@ -239,6 +257,8 @@ public final class CompanyOverrideResponseData {
                 && ruleIdUsageExceeded.equals(other.ruleIdUsageExceeded)
                 && updatedAt.equals(other.updatedAt)
                 && valueBool.equals(other.valueBool)
+                && valueCredit.equals(other.valueCredit)
+                && valueCreditId.equals(other.valueCreditId)
                 && valueNumeric.equals(other.valueNumeric)
                 && valueTrait.equals(other.valueTrait)
                 && valueTraitId.equals(other.valueTraitId)
@@ -264,6 +284,8 @@ public final class CompanyOverrideResponseData {
                 this.ruleIdUsageExceeded,
                 this.updatedAt,
                 this.valueBool,
+                this.valueCredit,
+                this.valueCreditId,
                 this.valueNumeric,
                 this.valueTrait,
                 this.valueTraitId,
@@ -358,6 +380,14 @@ public final class CompanyOverrideResponseData {
 
         _FinalStage valueBool(Boolean valueBool);
 
+        _FinalStage valueCredit(Optional<BillingCreditResponseData> valueCredit);
+
+        _FinalStage valueCredit(BillingCreditResponseData valueCredit);
+
+        _FinalStage valueCreditId(Optional<String> valueCreditId);
+
+        _FinalStage valueCreditId(String valueCreditId);
+
         _FinalStage valueNumeric(Optional<Long> valueNumeric);
 
         _FinalStage valueNumeric(Long valueNumeric);
@@ -400,6 +430,10 @@ public final class CompanyOverrideResponseData {
         private Optional<EntityTraitDefinitionResponseData> valueTrait = Optional.empty();
 
         private Optional<Long> valueNumeric = Optional.empty();
+
+        private Optional<String> valueCreditId = Optional.empty();
+
+        private Optional<BillingCreditResponseData> valueCredit = Optional.empty();
 
         private Optional<Boolean> valueBool = Optional.empty();
 
@@ -444,6 +478,8 @@ public final class CompanyOverrideResponseData {
             ruleIdUsageExceeded(other.getRuleIdUsageExceeded());
             updatedAt(other.getUpdatedAt());
             valueBool(other.getValueBool());
+            valueCredit(other.getValueCredit());
+            valueCreditId(other.getValueCreditId());
             valueNumeric(other.getValueNumeric());
             valueTrait(other.getValueTrait());
             valueTraitId(other.getValueTraitId());
@@ -536,6 +572,32 @@ public final class CompanyOverrideResponseData {
         @JsonSetter(value = "value_numeric", nulls = Nulls.SKIP)
         public _FinalStage valueNumeric(Optional<Long> valueNumeric) {
             this.valueNumeric = valueNumeric;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage valueCreditId(String valueCreditId) {
+            this.valueCreditId = Optional.ofNullable(valueCreditId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "value_credit_id", nulls = Nulls.SKIP)
+        public _FinalStage valueCreditId(Optional<String> valueCreditId) {
+            this.valueCreditId = valueCreditId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage valueCredit(BillingCreditResponseData valueCredit) {
+            this.valueCredit = Optional.ofNullable(valueCredit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "value_credit", nulls = Nulls.SKIP)
+        public _FinalStage valueCredit(Optional<BillingCreditResponseData> valueCredit) {
+            this.valueCredit = valueCredit;
             return this;
         }
 
@@ -699,6 +761,8 @@ public final class CompanyOverrideResponseData {
                     ruleIdUsageExceeded,
                     updatedAt,
                     valueBool,
+                    valueCredit,
+                    valueCreditId,
                     valueNumeric,
                     valueTrait,
                     valueTraitId,

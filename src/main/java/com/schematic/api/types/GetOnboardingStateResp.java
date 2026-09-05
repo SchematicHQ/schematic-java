@@ -25,6 +25,8 @@ import java.util.Optional;
 public final class GetOnboardingStateResp {
     private final Optional<OffsetDateTime> agentConnectedAt;
 
+    private final Optional<String> country;
+
     private final Optional<OffsetDateTime> dismissedAt;
 
     private final Optional<String> environmentId;
@@ -49,6 +51,7 @@ public final class GetOnboardingStateResp {
 
     private GetOnboardingStateResp(
             Optional<OffsetDateTime> agentConnectedAt,
+            Optional<String> country,
             Optional<OffsetDateTime> dismissedAt,
             Optional<String> environmentId,
             List<OnboardingMilestoneView> milestones,
@@ -61,6 +64,7 @@ public final class GetOnboardingStateResp {
             Optional<String> websiteUrl,
             Map<String, Object> additionalProperties) {
         this.agentConnectedAt = agentConnectedAt;
+        this.country = country;
         this.dismissedAt = dismissedAt;
         this.environmentId = environmentId;
         this.milestones = milestones;
@@ -77,6 +81,11 @@ public final class GetOnboardingStateResp {
     @JsonProperty("agent_connected_at")
     public Optional<OffsetDateTime> getAgentConnectedAt() {
         return agentConnectedAt;
+    }
+
+    @JsonProperty("country")
+    public Optional<String> getCountry() {
+        return country;
     }
 
     @JsonProperty("dismissed_at")
@@ -142,6 +151,7 @@ public final class GetOnboardingStateResp {
 
     private boolean equalTo(GetOnboardingStateResp other) {
         return agentConnectedAt.equals(other.agentConnectedAt)
+                && country.equals(other.country)
                 && dismissedAt.equals(other.dismissedAt)
                 && environmentId.equals(other.environmentId)
                 && milestones.equals(other.milestones)
@@ -158,6 +168,7 @@ public final class GetOnboardingStateResp {
     public int hashCode() {
         return Objects.hash(
                 this.agentConnectedAt,
+                this.country,
                 this.dismissedAt,
                 this.environmentId,
                 this.milestones,
@@ -182,6 +193,8 @@ public final class GetOnboardingStateResp {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<OffsetDateTime> agentConnectedAt = Optional.empty();
+
+        private Optional<String> country = Optional.empty();
 
         private Optional<OffsetDateTime> dismissedAt = Optional.empty();
 
@@ -210,6 +223,7 @@ public final class GetOnboardingStateResp {
 
         public Builder from(GetOnboardingStateResp other) {
             agentConnectedAt(other.getAgentConnectedAt());
+            country(other.getCountry());
             dismissedAt(other.getDismissedAt());
             environmentId(other.getEnvironmentId());
             milestones(other.getMilestones());
@@ -231,6 +245,17 @@ public final class GetOnboardingStateResp {
 
         public Builder agentConnectedAt(OffsetDateTime agentConnectedAt) {
             this.agentConnectedAt = Optional.ofNullable(agentConnectedAt);
+            return this;
+        }
+
+        @JsonSetter(value = "country", nulls = Nulls.SKIP)
+        public Builder country(Optional<String> country) {
+            this.country = country;
+            return this;
+        }
+
+        public Builder country(String country) {
+            this.country = Optional.ofNullable(country);
             return this;
         }
 
@@ -377,6 +402,7 @@ public final class GetOnboardingStateResp {
         public GetOnboardingStateResp build() {
             return new GetOnboardingStateResp(
                     agentConnectedAt,
+                    country,
                     dismissedAt,
                     environmentId,
                     milestones,

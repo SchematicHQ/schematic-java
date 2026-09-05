@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,6 +24,12 @@ public final class StripeIntegrationConfig {
     private final Optional<String> accountId;
 
     private final Optional<String> accountName;
+
+    private final Optional<OffsetDateTime> claimableSandboxExpiresAt;
+
+    private final Optional<String> claimableSandboxId;
+
+    private final Optional<String> claimableSandboxStatus;
 
     private final Optional<Boolean> companyUpdateOnly;
 
@@ -39,6 +46,9 @@ public final class StripeIntegrationConfig {
     private StripeIntegrationConfig(
             Optional<String> accountId,
             Optional<String> accountName,
+            Optional<OffsetDateTime> claimableSandboxExpiresAt,
+            Optional<String> claimableSandboxId,
+            Optional<String> claimableSandboxStatus,
             Optional<Boolean> companyUpdateOnly,
             boolean isSandbox,
             boolean liveMode,
@@ -47,6 +57,9 @@ public final class StripeIntegrationConfig {
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.accountName = accountName;
+        this.claimableSandboxExpiresAt = claimableSandboxExpiresAt;
+        this.claimableSandboxId = claimableSandboxId;
+        this.claimableSandboxStatus = claimableSandboxStatus;
         this.companyUpdateOnly = companyUpdateOnly;
         this.isSandbox = isSandbox;
         this.liveMode = liveMode;
@@ -69,6 +82,30 @@ public final class StripeIntegrationConfig {
     @JsonProperty("account_name")
     public Optional<String> getAccountName() {
         return accountName;
+    }
+
+    /**
+     * @return When Stripe deletes the sandbox if nobody claims it, 60 days from creation; absent on sandboxes created before it was recorded
+     */
+    @JsonProperty("claimable_sandbox_expires_at")
+    public Optional<OffsetDateTime> getClaimableSandboxExpiresAt() {
+        return claimableSandboxExpiresAt;
+    }
+
+    /**
+     * @return Stripe claimable sandbox this connection was provisioned from; absent for an OAuth connect
+     */
+    @JsonProperty("claimable_sandbox_id")
+    public Optional<String> getClaimableSandboxId() {
+        return claimableSandboxId;
+    }
+
+    /**
+     * @return Stripe's claim status for the sandbox: unclaimed, claimed, or live
+     */
+    @JsonProperty("claimable_sandbox_status")
+    public Optional<String> getClaimableSandboxStatus() {
+        return claimableSandboxStatus;
     }
 
     /**
@@ -125,6 +162,9 @@ public final class StripeIntegrationConfig {
     private boolean equalTo(StripeIntegrationConfig other) {
         return accountId.equals(other.accountId)
                 && accountName.equals(other.accountName)
+                && claimableSandboxExpiresAt.equals(other.claimableSandboxExpiresAt)
+                && claimableSandboxId.equals(other.claimableSandboxId)
+                && claimableSandboxStatus.equals(other.claimableSandboxStatus)
                 && companyUpdateOnly.equals(other.companyUpdateOnly)
                 && isSandbox == other.isSandbox
                 && liveMode == other.liveMode
@@ -137,6 +177,9 @@ public final class StripeIntegrationConfig {
         return Objects.hash(
                 this.accountId,
                 this.accountName,
+                this.claimableSandboxExpiresAt,
+                this.claimableSandboxId,
+                this.claimableSandboxStatus,
                 this.companyUpdateOnly,
                 this.isSandbox,
                 this.liveMode,
@@ -191,6 +234,27 @@ public final class StripeIntegrationConfig {
         _FinalStage accountName(String accountName);
 
         /**
+         * <p>When Stripe deletes the sandbox if nobody claims it, 60 days from creation; absent on sandboxes created before it was recorded</p>
+         */
+        _FinalStage claimableSandboxExpiresAt(Optional<OffsetDateTime> claimableSandboxExpiresAt);
+
+        _FinalStage claimableSandboxExpiresAt(OffsetDateTime claimableSandboxExpiresAt);
+
+        /**
+         * <p>Stripe claimable sandbox this connection was provisioned from; absent for an OAuth connect</p>
+         */
+        _FinalStage claimableSandboxId(Optional<String> claimableSandboxId);
+
+        _FinalStage claimableSandboxId(String claimableSandboxId);
+
+        /**
+         * <p>Stripe's claim status for the sandbox: unclaimed, claimed, or live</p>
+         */
+        _FinalStage claimableSandboxStatus(Optional<String> claimableSandboxStatus);
+
+        _FinalStage claimableSandboxStatus(String claimableSandboxStatus);
+
+        /**
          * <p>When importing Stripe customers, only update existing companies, do not create new companies</p>
          */
         _FinalStage companyUpdateOnly(Optional<Boolean> companyUpdateOnly);
@@ -224,6 +288,12 @@ public final class StripeIntegrationConfig {
 
         private Optional<Boolean> companyUpdateOnly = Optional.empty();
 
+        private Optional<String> claimableSandboxStatus = Optional.empty();
+
+        private Optional<String> claimableSandboxId = Optional.empty();
+
+        private Optional<OffsetDateTime> claimableSandboxExpiresAt = Optional.empty();
+
         private Optional<String> accountName = Optional.empty();
 
         private Optional<String> accountId = Optional.empty();
@@ -237,6 +307,9 @@ public final class StripeIntegrationConfig {
         public Builder from(StripeIntegrationConfig other) {
             accountId(other.getAccountId());
             accountName(other.getAccountName());
+            claimableSandboxExpiresAt(other.getClaimableSandboxExpiresAt());
+            claimableSandboxId(other.getClaimableSandboxId());
+            claimableSandboxStatus(other.getClaimableSandboxStatus());
             companyUpdateOnly(other.getCompanyUpdateOnly());
             isSandbox(other.getIsSandbox());
             liveMode(other.getLiveMode());
@@ -328,6 +401,66 @@ public final class StripeIntegrationConfig {
         }
 
         /**
+         * <p>Stripe's claim status for the sandbox: unclaimed, claimed, or live</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage claimableSandboxStatus(String claimableSandboxStatus) {
+            this.claimableSandboxStatus = Optional.ofNullable(claimableSandboxStatus);
+            return this;
+        }
+
+        /**
+         * <p>Stripe's claim status for the sandbox: unclaimed, claimed, or live</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "claimable_sandbox_status", nulls = Nulls.SKIP)
+        public _FinalStage claimableSandboxStatus(Optional<String> claimableSandboxStatus) {
+            this.claimableSandboxStatus = claimableSandboxStatus;
+            return this;
+        }
+
+        /**
+         * <p>Stripe claimable sandbox this connection was provisioned from; absent for an OAuth connect</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage claimableSandboxId(String claimableSandboxId) {
+            this.claimableSandboxId = Optional.ofNullable(claimableSandboxId);
+            return this;
+        }
+
+        /**
+         * <p>Stripe claimable sandbox this connection was provisioned from; absent for an OAuth connect</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "claimable_sandbox_id", nulls = Nulls.SKIP)
+        public _FinalStage claimableSandboxId(Optional<String> claimableSandboxId) {
+            this.claimableSandboxId = claimableSandboxId;
+            return this;
+        }
+
+        /**
+         * <p>When Stripe deletes the sandbox if nobody claims it, 60 days from creation; absent on sandboxes created before it was recorded</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage claimableSandboxExpiresAt(OffsetDateTime claimableSandboxExpiresAt) {
+            this.claimableSandboxExpiresAt = Optional.ofNullable(claimableSandboxExpiresAt);
+            return this;
+        }
+
+        /**
+         * <p>When Stripe deletes the sandbox if nobody claims it, 60 days from creation; absent on sandboxes created before it was recorded</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "claimable_sandbox_expires_at", nulls = Nulls.SKIP)
+        public _FinalStage claimableSandboxExpiresAt(Optional<OffsetDateTime> claimableSandboxExpiresAt) {
+            this.claimableSandboxExpiresAt = claimableSandboxExpiresAt;
+            return this;
+        }
+
+        /**
          * <p>Display name of the connected Stripe account</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -372,6 +505,9 @@ public final class StripeIntegrationConfig {
             return new StripeIntegrationConfig(
                     accountId,
                     accountName,
+                    claimableSandboxExpiresAt,
+                    claimableSandboxId,
+                    claimableSandboxStatus,
                     companyUpdateOnly,
                     isSandbox,
                     liveMode,

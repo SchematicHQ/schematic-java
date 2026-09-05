@@ -5,13 +5,20 @@ package com.schematic.api.resources.integrationsapi;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.integrationsapi.requests.ClaimStripeSandboxKeysRequestBody;
+import com.schematic.api.resources.integrationsapi.requests.InstallStripeSandboxRequestBody;
 import com.schematic.api.resources.integrationsapi.requests.ListIntegrationsRequest;
 import com.schematic.api.resources.integrationsapi.requests.StartDataImportRequestBody;
 import com.schematic.api.resources.integrationsapi.types.AssumeStripeInstalledResponse;
+import com.schematic.api.resources.integrationsapi.types.ClaimStripeSandboxKeysResponse;
 import com.schematic.api.resources.integrationsapi.types.GetIntegrationWebhookUrlResponse;
+import com.schematic.api.resources.integrationsapi.types.GetStripeSandboxClaimLinkResponse;
+import com.schematic.api.resources.integrationsapi.types.GetStripeSandboxKeysResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallIntegrationResponse;
+import com.schematic.api.resources.integrationsapi.types.InstallStripeClaimableSandboxResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallStripeResponse;
 import com.schematic.api.resources.integrationsapi.types.ListIntegrationsResponse;
+import com.schematic.api.resources.integrationsapi.types.ListStripeSandboxCountriesResponse;
 import com.schematic.api.resources.integrationsapi.types.LoadSampleDataSetResponse;
 import com.schematic.api.resources.integrationsapi.types.RunIntegrationResponse;
 import com.schematic.api.resources.integrationsapi.types.StartDataImportResponse;
@@ -92,6 +99,31 @@ public class IntegrationsapiClient {
         return this.rawClient.loadSampleDataSet(requestOptions).body();
     }
 
+    public GetStripeSandboxClaimLinkResponse getStripeSandboxClaimLink() {
+        return this.rawClient.getStripeSandboxClaimLink().body();
+    }
+
+    public GetStripeSandboxClaimLinkResponse getStripeSandboxClaimLink(RequestOptions requestOptions) {
+        return this.rawClient.getStripeSandboxClaimLink(requestOptions).body();
+    }
+
+    public GetStripeSandboxKeysResponse getStripeSandboxKeys() {
+        return this.rawClient.getStripeSandboxKeys().body();
+    }
+
+    public GetStripeSandboxKeysResponse getStripeSandboxKeys(RequestOptions requestOptions) {
+        return this.rawClient.getStripeSandboxKeys(requestOptions).body();
+    }
+
+    public ClaimStripeSandboxKeysResponse claimStripeSandboxKeys(ClaimStripeSandboxKeysRequestBody request) {
+        return this.rawClient.claimStripeSandboxKeys(request).body();
+    }
+
+    public ClaimStripeSandboxKeysResponse claimStripeSandboxKeys(
+            ClaimStripeSandboxKeysRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.claimStripeSandboxKeys(request, requestOptions).body();
+    }
+
     public AssumeStripeInstalledResponse assumeStripeInstalled(InstallIntegrationRequestBody request) {
         return this.rawClient.assumeStripeInstalled(request).body();
     }
@@ -107,6 +139,26 @@ public class IntegrationsapiClient {
 
     public InstallStripeResponse installStripe(InstallIntegrationRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.installStripe(request, requestOptions).body();
+    }
+
+    public InstallStripeClaimableSandboxResponse installStripeClaimableSandbox(
+            InstallStripeSandboxRequestBody request) {
+        return this.rawClient.installStripeClaimableSandbox(request).body();
+    }
+
+    public InstallStripeClaimableSandboxResponse installStripeClaimableSandbox(
+            InstallStripeSandboxRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .installStripeClaimableSandbox(request, requestOptions)
+                .body();
+    }
+
+    public ListStripeSandboxCountriesResponse listStripeSandboxCountries() {
+        return this.rawClient.listStripeSandboxCountries().body();
+    }
+
+    public ListStripeSandboxCountriesResponse listStripeSandboxCountries(RequestOptions requestOptions) {
+        return this.rawClient.listStripeSandboxCountries(requestOptions).body();
     }
 
     public UninstallIntegrationResponse uninstallIntegration(String integrationId) {

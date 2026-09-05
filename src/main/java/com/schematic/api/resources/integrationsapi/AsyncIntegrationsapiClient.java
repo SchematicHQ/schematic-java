@@ -5,13 +5,20 @@ package com.schematic.api.resources.integrationsapi;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.integrationsapi.requests.ClaimStripeSandboxKeysRequestBody;
+import com.schematic.api.resources.integrationsapi.requests.InstallStripeSandboxRequestBody;
 import com.schematic.api.resources.integrationsapi.requests.ListIntegrationsRequest;
 import com.schematic.api.resources.integrationsapi.requests.StartDataImportRequestBody;
 import com.schematic.api.resources.integrationsapi.types.AssumeStripeInstalledResponse;
+import com.schematic.api.resources.integrationsapi.types.ClaimStripeSandboxKeysResponse;
 import com.schematic.api.resources.integrationsapi.types.GetIntegrationWebhookUrlResponse;
+import com.schematic.api.resources.integrationsapi.types.GetStripeSandboxClaimLinkResponse;
+import com.schematic.api.resources.integrationsapi.types.GetStripeSandboxKeysResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallIntegrationResponse;
+import com.schematic.api.resources.integrationsapi.types.InstallStripeClaimableSandboxResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallStripeResponse;
 import com.schematic.api.resources.integrationsapi.types.ListIntegrationsResponse;
+import com.schematic.api.resources.integrationsapi.types.ListStripeSandboxCountriesResponse;
 import com.schematic.api.resources.integrationsapi.types.LoadSampleDataSetResponse;
 import com.schematic.api.resources.integrationsapi.types.RunIntegrationResponse;
 import com.schematic.api.resources.integrationsapi.types.StartDataImportResponse;
@@ -97,6 +104,33 @@ public class AsyncIntegrationsapiClient {
         return this.rawClient.loadSampleDataSet(requestOptions).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<GetStripeSandboxClaimLinkResponse> getStripeSandboxClaimLink() {
+        return this.rawClient.getStripeSandboxClaimLink().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetStripeSandboxClaimLinkResponse> getStripeSandboxClaimLink(
+            RequestOptions requestOptions) {
+        return this.rawClient.getStripeSandboxClaimLink(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetStripeSandboxKeysResponse> getStripeSandboxKeys() {
+        return this.rawClient.getStripeSandboxKeys().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetStripeSandboxKeysResponse> getStripeSandboxKeys(RequestOptions requestOptions) {
+        return this.rawClient.getStripeSandboxKeys(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ClaimStripeSandboxKeysResponse> claimStripeSandboxKeys(
+            ClaimStripeSandboxKeysRequestBody request) {
+        return this.rawClient.claimStripeSandboxKeys(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ClaimStripeSandboxKeysResponse> claimStripeSandboxKeys(
+            ClaimStripeSandboxKeysRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.claimStripeSandboxKeys(request, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<AssumeStripeInstalledResponse> assumeStripeInstalled(
             InstallIntegrationRequestBody request) {
         return this.rawClient.assumeStripeInstalled(request).thenApply(response -> response.body());
@@ -114,6 +148,27 @@ public class AsyncIntegrationsapiClient {
     public CompletableFuture<InstallStripeResponse> installStripe(
             InstallIntegrationRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.installStripe(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InstallStripeClaimableSandboxResponse> installStripeClaimableSandbox(
+            InstallStripeSandboxRequestBody request) {
+        return this.rawClient.installStripeClaimableSandbox(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InstallStripeClaimableSandboxResponse> installStripeClaimableSandbox(
+            InstallStripeSandboxRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .installStripeClaimableSandbox(request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListStripeSandboxCountriesResponse> listStripeSandboxCountries() {
+        return this.rawClient.listStripeSandboxCountries().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListStripeSandboxCountriesResponse> listStripeSandboxCountries(
+            RequestOptions requestOptions) {
+        return this.rawClient.listStripeSandboxCountries(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<UninstallIntegrationResponse> uninstallIntegration(String integrationId) {
