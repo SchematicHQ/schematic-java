@@ -13,9 +13,11 @@ import com.schematic.api.resources.credits.requests.CountBillingPlanCreditGrants
 import com.schematic.api.resources.credits.requests.CountCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.CountCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.CountCreditEventLedgerRequest;
+import com.schematic.api.resources.credits.requests.CountCreditSpendPoliciesRequest;
 import com.schematic.api.resources.credits.requests.CreateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.CreateCompanyCreditGrant;
 import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBody;
+import com.schematic.api.resources.credits.requests.CreateCreditSpendPolicyRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
 import com.schematic.api.resources.credits.requests.ExtendCreditLeaseRequestBody;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
@@ -24,9 +26,11 @@ import com.schematic.api.resources.credits.requests.ListCompanyCreditBalancesReq
 import com.schematic.api.resources.credits.requests.ListCompanyGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.ListCreditEventLedgerRequest;
+import com.schematic.api.resources.credits.requests.ListCreditSpendPoliciesRequest;
 import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
+import com.schematic.api.resources.credits.requests.UpdateCreditSpendPolicyRequestBody;
 import com.schematic.api.resources.credits.requests.ZeroOutGrantRequestBody;
 import com.schematic.api.resources.credits.types.AcquireCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.CountBillingCreditsGrantsResponse;
@@ -35,13 +39,17 @@ import com.schematic.api.resources.credits.types.CountBillingPlanCreditGrantsRes
 import com.schematic.api.resources.credits.types.CountCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.CountCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.CountCreditEventLedgerResponse;
+import com.schematic.api.resources.credits.types.CountCreditSpendPoliciesResponse;
 import com.schematic.api.resources.credits.types.CreateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.CreateBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.CreateCreditBundleResponse;
+import com.schematic.api.resources.credits.types.CreateCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.DeleteBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.DeleteCreditBundleResponse;
+import com.schematic.api.resources.credits.types.DeleteCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
+import com.schematic.api.resources.credits.types.GetCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.GrantBillingCreditsToCompanyResponse;
@@ -51,12 +59,14 @@ import com.schematic.api.resources.credits.types.ListCompanyCreditBalancesRespon
 import com.schematic.api.resources.credits.types.ListCompanyGrantsResponse;
 import com.schematic.api.resources.credits.types.ListCreditBundlesResponse;
 import com.schematic.api.resources.credits.types.ListCreditEventLedgerResponse;
+import com.schematic.api.resources.credits.types.ListCreditSpendPoliciesResponse;
 import com.schematic.api.resources.credits.types.ListGrantsForCreditResponse;
 import com.schematic.api.resources.credits.types.ReleaseCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.SoftDeleteBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.UpdateCreditBundleDetailsResponse;
+import com.schematic.api.resources.credits.types.UpdateCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.ZeroOutGrantResponse;
 import com.schematic.api.types.CreateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.types.UpdateBillingPlanCreditGrantRequestBody;
@@ -435,6 +445,93 @@ public class CreditsClient {
         return this.rawClient
                 .countBillingPlanCreditGrants(request, requestOptions)
                 .body();
+    }
+
+    public ListCreditSpendPoliciesResponse listCreditSpendPolicies() {
+        return this.rawClient.listCreditSpendPolicies().body();
+    }
+
+    public ListCreditSpendPoliciesResponse listCreditSpendPolicies(RequestOptions requestOptions) {
+        return this.rawClient.listCreditSpendPolicies(requestOptions).body();
+    }
+
+    public ListCreditSpendPoliciesResponse listCreditSpendPolicies(ListCreditSpendPoliciesRequest request) {
+        return this.rawClient.listCreditSpendPolicies(request).body();
+    }
+
+    public ListCreditSpendPoliciesResponse listCreditSpendPolicies(
+            ListCreditSpendPoliciesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listCreditSpendPolicies(request, requestOptions).body();
+    }
+
+    public CreateCreditSpendPolicyResponse createCreditSpendPolicy(CreateCreditSpendPolicyRequestBody request) {
+        return this.rawClient.createCreditSpendPolicy(request).body();
+    }
+
+    public CreateCreditSpendPolicyResponse createCreditSpendPolicy(
+            CreateCreditSpendPolicyRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.createCreditSpendPolicy(request, requestOptions).body();
+    }
+
+    public GetCreditSpendPolicyResponse getCreditSpendPolicy(String spendPolicyId) {
+        return this.rawClient.getCreditSpendPolicy(spendPolicyId).body();
+    }
+
+    public GetCreditSpendPolicyResponse getCreditSpendPolicy(String spendPolicyId, RequestOptions requestOptions) {
+        return this.rawClient
+                .getCreditSpendPolicy(spendPolicyId, requestOptions)
+                .body();
+    }
+
+    public UpdateCreditSpendPolicyResponse updateCreditSpendPolicy(String spendPolicyId) {
+        return this.rawClient.updateCreditSpendPolicy(spendPolicyId).body();
+    }
+
+    public UpdateCreditSpendPolicyResponse updateCreditSpendPolicy(
+            String spendPolicyId, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateCreditSpendPolicy(spendPolicyId, requestOptions)
+                .body();
+    }
+
+    public UpdateCreditSpendPolicyResponse updateCreditSpendPolicy(
+            String spendPolicyId, UpdateCreditSpendPolicyRequestBody request) {
+        return this.rawClient.updateCreditSpendPolicy(spendPolicyId, request).body();
+    }
+
+    public UpdateCreditSpendPolicyResponse updateCreditSpendPolicy(
+            String spendPolicyId, UpdateCreditSpendPolicyRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateCreditSpendPolicy(spendPolicyId, request, requestOptions)
+                .body();
+    }
+
+    public DeleteCreditSpendPolicyResponse deleteCreditSpendPolicy(String spendPolicyId) {
+        return this.rawClient.deleteCreditSpendPolicy(spendPolicyId).body();
+    }
+
+    public DeleteCreditSpendPolicyResponse deleteCreditSpendPolicy(
+            String spendPolicyId, RequestOptions requestOptions) {
+        return this.rawClient
+                .deleteCreditSpendPolicy(spendPolicyId, requestOptions)
+                .body();
+    }
+
+    public CountCreditSpendPoliciesResponse countCreditSpendPolicies() {
+        return this.rawClient.countCreditSpendPolicies().body();
+    }
+
+    public CountCreditSpendPoliciesResponse countCreditSpendPolicies(RequestOptions requestOptions) {
+        return this.rawClient.countCreditSpendPolicies(requestOptions).body();
+    }
+
+    public CountCreditSpendPoliciesResponse countCreditSpendPolicies(CountCreditSpendPoliciesRequest request) {
+        return this.rawClient.countCreditSpendPolicies(request).body();
+    }
+
+    public CountCreditSpendPoliciesResponse countCreditSpendPolicies(
+            CountCreditSpendPoliciesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countCreditSpendPolicies(request, requestOptions).body();
     }
 
     public ListCreditEventLedgerResponse listCreditEventLedger(ListCreditEventLedgerRequest request) {

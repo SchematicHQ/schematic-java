@@ -50,6 +50,8 @@ public final class RuleConditionDetailResponseData {
 
     private final ComparableOperator operator;
 
+    private final Optional<List<RuleConditionPlanVersionResponseData>> planVersions;
+
     private final List<String> resourceIds;
 
     private final List<PreviewObjectResponseData> resources;
@@ -82,6 +84,7 @@ public final class RuleConditionDetailResponseData {
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Long> metricValue,
             ComparableOperator operator,
+            Optional<List<RuleConditionPlanVersionResponseData>> planVersions,
             List<String> resourceIds,
             List<PreviewObjectResponseData> resources,
             String ruleId,
@@ -104,6 +107,7 @@ public final class RuleConditionDetailResponseData {
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.metricValue = metricValue;
         this.operator = operator;
+        this.planVersions = planVersions;
         this.resourceIds = resourceIds;
         this.resources = resources;
         this.ruleId = ruleId;
@@ -180,6 +184,11 @@ public final class RuleConditionDetailResponseData {
         return operator;
     }
 
+    @JsonProperty("plan_versions")
+    public Optional<List<RuleConditionPlanVersionResponseData>> getPlanVersions() {
+        return planVersions;
+    }
+
     @JsonProperty("resource_ids")
     public List<String> getResourceIds() {
         return resourceIds;
@@ -245,6 +254,7 @@ public final class RuleConditionDetailResponseData {
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && metricValue.equals(other.metricValue)
                 && operator.equals(other.operator)
+                && planVersions.equals(other.planVersions)
                 && resourceIds.equals(other.resourceIds)
                 && resources.equals(other.resources)
                 && ruleId.equals(other.ruleId)
@@ -271,6 +281,7 @@ public final class RuleConditionDetailResponseData {
                 this.metricPeriodMonthReset,
                 this.metricValue,
                 this.operator,
+                this.planVersions,
                 this.resourceIds,
                 this.resources,
                 this.ruleId,
@@ -363,6 +374,10 @@ public final class RuleConditionDetailResponseData {
 
         _FinalStage metricValue(Long metricValue);
 
+        _FinalStage planVersions(Optional<List<RuleConditionPlanVersionResponseData>> planVersions);
+
+        _FinalStage planVersions(List<RuleConditionPlanVersionResponseData> planVersions);
+
         _FinalStage resourceIds(List<String> resourceIds);
 
         _FinalStage addResourceIds(String resourceIds);
@@ -425,6 +440,8 @@ public final class RuleConditionDetailResponseData {
 
         private List<String> resourceIds = new ArrayList<>();
 
+        private Optional<List<RuleConditionPlanVersionResponseData>> planVersions = Optional.empty();
+
         private Optional<Long> metricValue = Optional.empty();
 
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
@@ -461,6 +478,7 @@ public final class RuleConditionDetailResponseData {
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             metricValue(other.getMetricValue());
             operator(other.getOperator());
+            planVersions(other.getPlanVersions());
             resourceIds(other.getResourceIds());
             resources(other.getResources());
             ruleId(other.getRuleId());
@@ -616,6 +634,19 @@ public final class RuleConditionDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage planVersions(List<RuleConditionPlanVersionResponseData> planVersions) {
+            this.planVersions = Optional.ofNullable(planVersions);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "plan_versions", nulls = Nulls.SKIP)
+        public _FinalStage planVersions(Optional<List<RuleConditionPlanVersionResponseData>> planVersions) {
+            this.planVersions = planVersions;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage metricValue(Long metricValue) {
             this.metricValue = Optional.ofNullable(metricValue);
             return this;
@@ -735,6 +766,7 @@ public final class RuleConditionDetailResponseData {
                     metricPeriodMonthReset,
                     metricValue,
                     operator,
+                    planVersions,
                     resourceIds,
                     resources,
                     ruleId,

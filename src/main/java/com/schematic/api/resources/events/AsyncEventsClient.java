@@ -8,12 +8,16 @@ import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.events.requests.CreateEventBatchRequestBody;
 import com.schematic.api.resources.events.requests.GetEventSummariesRequest;
 import com.schematic.api.resources.events.requests.ListEventsRequest;
+import com.schematic.api.resources.events.requests.UpsertOtlpEnvironmentSettingsRequestBody;
 import com.schematic.api.resources.events.types.CreateEventBatchResponse;
 import com.schematic.api.resources.events.types.CreateEventResponse;
+import com.schematic.api.resources.events.types.DeleteOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetEventResponse;
 import com.schematic.api.resources.events.types.GetEventSummariesResponse;
+import com.schematic.api.resources.events.types.GetOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetSegmentIntegrationStatusResponse;
 import com.schematic.api.resources.events.types.ListEventsResponse;
+import com.schematic.api.resources.events.types.UpsertOtlpEnvironmentSettingsResponse;
 import com.schematic.api.types.CreateEventRequestBody;
 import java.util.concurrent.CompletableFuture;
 
@@ -91,6 +95,36 @@ public class AsyncEventsClient {
 
     public CompletableFuture<GetEventResponse> getEvent(String eventId, RequestOptions requestOptions) {
         return this.rawClient.getEvent(eventId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetOtlpEnvironmentSettingsResponse> getOtlpEnvironmentSettings() {
+        return this.rawClient.getOtlpEnvironmentSettings().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetOtlpEnvironmentSettingsResponse> getOtlpEnvironmentSettings(
+            RequestOptions requestOptions) {
+        return this.rawClient.getOtlpEnvironmentSettings(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpsertOtlpEnvironmentSettingsResponse> upsertOtlpEnvironmentSettings(
+            UpsertOtlpEnvironmentSettingsRequestBody request) {
+        return this.rawClient.upsertOtlpEnvironmentSettings(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<UpsertOtlpEnvironmentSettingsResponse> upsertOtlpEnvironmentSettings(
+            UpsertOtlpEnvironmentSettingsRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .upsertOtlpEnvironmentSettings(request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeleteOtlpEnvironmentSettingsResponse> deleteOtlpEnvironmentSettings() {
+        return this.rawClient.deleteOtlpEnvironmentSettings().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DeleteOtlpEnvironmentSettingsResponse> deleteOtlpEnvironmentSettings(
+            RequestOptions requestOptions) {
+        return this.rawClient.deleteOtlpEnvironmentSettings(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<GetSegmentIntegrationStatusResponse> getSegmentIntegrationStatus() {

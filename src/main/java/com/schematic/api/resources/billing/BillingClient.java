@@ -18,11 +18,13 @@ import com.schematic.api.resources.billing.requests.CreatePaymentMethodRequestBo
 import com.schematic.api.resources.billing.requests.ListBillingPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductsRequest;
+import com.schematic.api.resources.billing.requests.ListCompanyBillingProfilesRequest;
 import com.schematic.api.resources.billing.requests.ListCouponsRequest;
 import com.schematic.api.resources.billing.requests.ListCustomersWithSubscriptionsRequest;
 import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
+import com.schematic.api.resources.billing.requests.UpdateCompanyBillingProfileRequestBody;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingCouponResponse;
@@ -34,11 +36,13 @@ import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
+import com.schematic.api.resources.billing.types.ListCompanyBillingProfilesResponse;
 import com.schematic.api.resources.billing.types.ListCouponsResponse;
 import com.schematic.api.resources.billing.types.ListCustomersWithSubscriptionsResponse;
 import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
+import com.schematic.api.resources.billing.types.UpdateCompanyBillingProfileResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingMeterResponse;
@@ -329,6 +333,39 @@ public class BillingClient {
     public CountBillingProductsResponse countBillingProducts(
             CountBillingProductsRequest request, RequestOptions requestOptions) {
         return this.rawClient.countBillingProducts(request, requestOptions).body();
+    }
+
+    public ListCompanyBillingProfilesResponse listCompanyBillingProfiles() {
+        return this.rawClient.listCompanyBillingProfiles().body();
+    }
+
+    public ListCompanyBillingProfilesResponse listCompanyBillingProfiles(RequestOptions requestOptions) {
+        return this.rawClient.listCompanyBillingProfiles(requestOptions).body();
+    }
+
+    public ListCompanyBillingProfilesResponse listCompanyBillingProfiles(ListCompanyBillingProfilesRequest request) {
+        return this.rawClient.listCompanyBillingProfiles(request).body();
+    }
+
+    public ListCompanyBillingProfilesResponse listCompanyBillingProfiles(
+            ListCompanyBillingProfilesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .listCompanyBillingProfiles(request, requestOptions)
+                .body();
+    }
+
+    public UpdateCompanyBillingProfileResponse updateCompanyBillingProfile(
+            String billingProfileId, UpdateCompanyBillingProfileRequestBody request) {
+        return this.rawClient
+                .updateCompanyBillingProfile(billingProfileId, request)
+                .body();
+    }
+
+    public UpdateCompanyBillingProfileResponse updateCompanyBillingProfile(
+            String billingProfileId, UpdateCompanyBillingProfileRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateCompanyBillingProfile(billingProfileId, request, requestOptions)
+                .body();
     }
 
     public UpsertBillingSubscriptionResponse upsertBillingSubscription(CreateBillingSubscriptionRequestBody request) {

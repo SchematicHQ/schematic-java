@@ -1156,6 +1156,14 @@ client.accounts().updateOnboardingState(
 <dl>
 <dd>
 
+**country:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **dismissed:** `Optional<Boolean>` 
     
 </dd>
@@ -3527,6 +3535,181 @@ client.billing().countBillingProducts(
 <dd>
 
 **offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.listCompanyBillingProfiles() -> ListCompanyBillingProfilesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().listCompanyBillingProfiles(
+    ListCompanyBillingProfilesRequest
+        .builder()
+        .companyId("company_id")
+        .isDefault(true)
+        .providerType(BillingProviderType.METRONOME)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**isDefault:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**providerType:** `Optional<BillingProviderType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.updateCompanyBillingProfile(billingProfileId, request) -> UpdateCompanyBillingProfileResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().updateCompanyBillingProfile(
+    "billing_profile_id",
+    UpdateCompanyBillingProfileRequestBody
+        .builder()
+        .collectionMethod(BillingCollectionMethod.CHARGE_AUTOMATICALLY)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProfileId:** `String` — billing_profile_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**collectionMethod:** `BillingCollectionMethod` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**daysUntilDue:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**isDefault:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**paymentMethodId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prorationBehavior:** `Optional<ProrationBehavior>` 
     
 </dd>
 </dl>
@@ -5952,6 +6135,427 @@ client.credits().countBillingPlanCreditGrants(
 <dd>
 
 **planVersionIds:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.listCreditSpendPolicies() -> ListCreditSpendPoliciesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().listCreditSpendPolicies(
+    ListCreditSpendPoliciesRequest
+        .builder()
+        .userIds(
+            Arrays.asList("user_ids")
+        )
+        .billingCreditId("billing_credit_id")
+        .companyId("company_id")
+        .scopeType(CreditSpendPolicyScope.COMPANY)
+        .userId("user_id")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingCreditId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**scopeType:** `Optional<CreditSpendPolicyScope>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userIds:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.createCreditSpendPolicy(request) -> CreateCreditSpendPolicyResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().createCreditSpendPolicy(
+    CreateCreditSpendPolicyRequestBody
+        .builder()
+        .billingCreditId("billing_credit_id")
+        .maxPerDraw(1.1)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingCreditId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` — The company the cap applies to. Set exactly one of company_id and user_id.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**label:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**maxPerDraw:** `Double` — The largest number of credits a single draw may spend.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userId:** `Optional<String>` — The user the cap applies to. Set exactly one of company_id and user_id.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.getCreditSpendPolicy(spendPolicyId) -> GetCreditSpendPolicyResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().getCreditSpendPolicy("spend_policy_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**spendPolicyId:** `String` — spend_policy_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.updateCreditSpendPolicy(spendPolicyId, request) -> UpdateCreditSpendPolicyResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().updateCreditSpendPolicy(
+    "spend_policy_id",
+    UpdateCreditSpendPolicyRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**spendPolicyId:** `String` — spend_policy_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**label:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**maxPerDraw:** `Optional<Double>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.deleteCreditSpendPolicy(spendPolicyId) -> DeleteCreditSpendPolicyResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().deleteCreditSpendPolicy("spend_policy_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**spendPolicyId:** `String` — spend_policy_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.countCreditSpendPolicies() -> CountCreditSpendPoliciesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().countCreditSpendPolicies(
+    CountCreditSpendPoliciesRequest
+        .builder()
+        .userIds(
+            Arrays.asList("user_ids")
+        )
+        .billingCreditId("billing_credit_id")
+        .companyId("company_id")
+        .scopeType(CreditSpendPolicyScope.COMPANY)
+        .userId("user_id")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingCreditId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**scopeType:** `Optional<CreditSpendPolicyScope>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userIds:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -16242,6 +16846,133 @@ client.events().getEvent("event_id");
 </dl>
 </details>
 
+<details><summary><code>client.events.getOtlpEnvironmentSettings() -> GetOtlpEnvironmentSettingsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().getOtlpEnvironmentSettings();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.upsertOtlpEnvironmentSettings(request) -> UpsertOtlpEnvironmentSettingsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().upsertOtlpEnvironmentSettings(
+    UpsertOtlpEnvironmentSettingsRequestBody
+        .builder()
+        .toolEventsEnabled(true)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyAttribute:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyKey:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**toolEventsEnabled:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userAttribute:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userKey:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.deleteOtlpEnvironmentSettings() -> DeleteOtlpEnvironmentSettingsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().deleteOtlpEnvironmentSettings();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.events.getSegmentIntegrationStatus() -> GetSegmentIntegrationStatusResponse</code></summary>
 <dl>
 <dd>
@@ -18244,6 +18975,101 @@ client.integrationsapi().loadSampleDataSet();
 </dl>
 </details>
 
+<details><summary><code>client.integrationsapi.getStripeSandboxClaimLink() -> GetStripeSandboxClaimLinkResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().getStripeSandboxClaimLink();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.getStripeSandboxKeys() -> GetStripeSandboxKeysResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().getStripeSandboxKeys();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.claimStripeSandboxKeys(request) -> ClaimStripeSandboxKeysResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().claimStripeSandboxKeys(
+    ClaimStripeSandboxKeysRequestBody
+        .builder()
+        .token("token")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**token:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.integrationsapi.assumeStripeInstalled(request) -> AssumeStripeInstalledResponse</code></summary>
 <dl>
 <dd>
@@ -18324,6 +19150,100 @@ client.integrationsapi().installStripe(
 
 **request:** `InstallIntegrationRequestBody` 
     
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.installStripeClaimableSandbox(request) -> InstallStripeClaimableSandboxResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().installStripeClaimableSandbox(
+    InstallStripeSandboxRequestBody
+        .builder()
+        .email("email")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**country:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**email:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**seedSampleData:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.integrationsapi.listStripeSandboxCountries() -> ListStripeSandboxCountriesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().listStripeSandboxCountries();
+```
 </dd>
 </dl>
 </dd>

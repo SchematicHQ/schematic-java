@@ -8,12 +8,16 @@ import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.events.requests.CreateEventBatchRequestBody;
 import com.schematic.api.resources.events.requests.GetEventSummariesRequest;
 import com.schematic.api.resources.events.requests.ListEventsRequest;
+import com.schematic.api.resources.events.requests.UpsertOtlpEnvironmentSettingsRequestBody;
 import com.schematic.api.resources.events.types.CreateEventBatchResponse;
 import com.schematic.api.resources.events.types.CreateEventResponse;
+import com.schematic.api.resources.events.types.DeleteOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetEventResponse;
 import com.schematic.api.resources.events.types.GetEventSummariesResponse;
+import com.schematic.api.resources.events.types.GetOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetSegmentIntegrationStatusResponse;
 import com.schematic.api.resources.events.types.ListEventsResponse;
+import com.schematic.api.resources.events.types.UpsertOtlpEnvironmentSettingsResponse;
 import com.schematic.api.types.CreateEventRequestBody;
 
 public class EventsClient {
@@ -89,6 +93,34 @@ public class EventsClient {
 
     public GetEventResponse getEvent(String eventId, RequestOptions requestOptions) {
         return this.rawClient.getEvent(eventId, requestOptions).body();
+    }
+
+    public GetOtlpEnvironmentSettingsResponse getOtlpEnvironmentSettings() {
+        return this.rawClient.getOtlpEnvironmentSettings().body();
+    }
+
+    public GetOtlpEnvironmentSettingsResponse getOtlpEnvironmentSettings(RequestOptions requestOptions) {
+        return this.rawClient.getOtlpEnvironmentSettings(requestOptions).body();
+    }
+
+    public UpsertOtlpEnvironmentSettingsResponse upsertOtlpEnvironmentSettings(
+            UpsertOtlpEnvironmentSettingsRequestBody request) {
+        return this.rawClient.upsertOtlpEnvironmentSettings(request).body();
+    }
+
+    public UpsertOtlpEnvironmentSettingsResponse upsertOtlpEnvironmentSettings(
+            UpsertOtlpEnvironmentSettingsRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .upsertOtlpEnvironmentSettings(request, requestOptions)
+                .body();
+    }
+
+    public DeleteOtlpEnvironmentSettingsResponse deleteOtlpEnvironmentSettings() {
+        return this.rawClient.deleteOtlpEnvironmentSettings().body();
+    }
+
+    public DeleteOtlpEnvironmentSettingsResponse deleteOtlpEnvironmentSettings(RequestOptions requestOptions) {
+        return this.rawClient.deleteOtlpEnvironmentSettings(requestOptions).body();
     }
 
     public GetSegmentIntegrationStatusResponse getSegmentIntegrationStatus() {

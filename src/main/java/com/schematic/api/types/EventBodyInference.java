@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventBodyInference.Builder.class)
 public final class EventBodyInference {
+    private final Optional<Long> cacheCreationInputTokens;
+
     private final Optional<Long> cachedInputTokens;
 
     private final Map<String, String> company;
@@ -53,6 +55,7 @@ public final class EventBodyInference {
     private final Map<String, Object> additionalProperties;
 
     private EventBodyInference(
+            Optional<Long> cacheCreationInputTokens,
             Optional<Long> cachedInputTokens,
             Map<String, String> company,
             Optional<String> cost,
@@ -68,6 +71,7 @@ public final class EventBodyInference {
             String responseModel,
             Optional<Map<String, String>> user,
             Map<String, Object> additionalProperties) {
+        this.cacheCreationInputTokens = cacheCreationInputTokens;
         this.cachedInputTokens = cachedInputTokens;
         this.company = company;
         this.cost = cost;
@@ -86,7 +90,15 @@ public final class EventBodyInference {
     }
 
     /**
-     * @return Number of input tokens served from cache
+     * @return Number of input tokens written to a prompt cache; a subset of input_tokens
+     */
+    @JsonProperty("cache_creation_input_tokens")
+    public Optional<Long> getCacheCreationInputTokens() {
+        return cacheCreationInputTokens;
+    }
+
+    /**
+     * @return Number of input tokens served from cache; a subset of input_tokens
      */
     @JsonProperty("cached_input_tokens")
     public Optional<Long> getCachedInputTokens() {
@@ -126,7 +138,7 @@ public final class EventBodyInference {
     }
 
     /**
-     * @return Number of input tokens for the inference request
+     * @return Total number of input tokens for the inference request, including those served from and written to a prompt cache
      */
     @JsonProperty("input_tokens")
     public long getInputTokens() {
@@ -209,7 +221,8 @@ public final class EventBodyInference {
     }
 
     private boolean equalTo(EventBodyInference other) {
-        return cachedInputTokens.equals(other.cachedInputTokens)
+        return cacheCreationInputTokens.equals(other.cacheCreationInputTokens)
+                && cachedInputTokens.equals(other.cachedInputTokens)
                 && company.equals(other.company)
                 && cost.equals(other.cost)
                 && currency.equals(other.currency)
@@ -228,6 +241,7 @@ public final class EventBodyInference {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cacheCreationInputTokens,
                 this.cachedInputTokens,
                 this.company,
                 this.cost,
@@ -255,7 +269,7 @@ public final class EventBodyInference {
 
     public interface InputTokensStage {
         /**
-         * <p>Number of input tokens for the inference request</p>
+         * <p>Total number of input tokens for the inference request, including those served from and written to a prompt cache</p>
          */
         OutputTokensStage inputTokens(long inputTokens);
 
@@ -291,7 +305,14 @@ public final class EventBodyInference {
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         /**
-         * <p>Number of input tokens served from cache</p>
+         * <p>Number of input tokens written to a prompt cache; a subset of input_tokens</p>
+         */
+        _FinalStage cacheCreationInputTokens(Optional<Long> cacheCreationInputTokens);
+
+        _FinalStage cacheCreationInputTokens(Long cacheCreationInputTokens);
+
+        /**
+         * <p>Number of input tokens served from cache; a subset of input_tokens</p>
          */
         _FinalStage cachedInputTokens(Optional<Long> cachedInputTokens);
 
@@ -394,6 +415,8 @@ public final class EventBodyInference {
 
         private Optional<Long> cachedInputTokens = Optional.empty();
 
+        private Optional<Long> cacheCreationInputTokens = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -401,6 +424,7 @@ public final class EventBodyInference {
 
         @java.lang.Override
         public Builder from(EventBodyInference other) {
+            cacheCreationInputTokens(other.getCacheCreationInputTokens());
             cachedInputTokens(other.getCachedInputTokens());
             company(other.getCompany());
             cost(other.getCost());
@@ -419,7 +443,7 @@ public final class EventBodyInference {
         }
 
         /**
-         * <p>Number of input tokens for the inference request</p>
+         * <p>Total number of input tokens for the inference request, including those served from and written to a prompt cache</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -658,7 +682,7 @@ public final class EventBodyInference {
         }
 
         /**
-         * <p>Number of input tokens served from cache</p>
+         * <p>Number of input tokens served from cache; a subset of input_tokens</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -668,7 +692,7 @@ public final class EventBodyInference {
         }
 
         /**
-         * <p>Number of input tokens served from cache</p>
+         * <p>Number of input tokens served from cache; a subset of input_tokens</p>
          */
         @java.lang.Override
         @JsonSetter(value = "cached_input_tokens", nulls = Nulls.SKIP)
@@ -677,9 +701,30 @@ public final class EventBodyInference {
             return this;
         }
 
+        /**
+         * <p>Number of input tokens written to a prompt cache; a subset of input_tokens</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cacheCreationInputTokens(Long cacheCreationInputTokens) {
+            this.cacheCreationInputTokens = Optional.ofNullable(cacheCreationInputTokens);
+            return this;
+        }
+
+        /**
+         * <p>Number of input tokens written to a prompt cache; a subset of input_tokens</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "cache_creation_input_tokens", nulls = Nulls.SKIP)
+        public _FinalStage cacheCreationInputTokens(Optional<Long> cacheCreationInputTokens) {
+            this.cacheCreationInputTokens = cacheCreationInputTokens;
+            return this;
+        }
+
         @java.lang.Override
         public EventBodyInference build() {
             return new EventBodyInference(
+                    cacheCreationInputTokens,
                     cachedInputTokens,
                     company,
                     cost,
