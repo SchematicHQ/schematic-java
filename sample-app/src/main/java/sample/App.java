@@ -157,8 +157,12 @@ public final class App {
 
             // DataStream configuration
             if (useDataStream) {
-                DatastreamOptions.Builder dsBuilder =
-                        DatastreamOptions.builder().cacheTTL(Duration.ofMillis(CACHE_TTL_MS));
+                // Entity caches keep the SDK default TTL, matching the other testapps.
+                // The short CACHE_TTL_MS is only for the flag-check cache above; in
+                // replicator mode the replicator owns the Redis entries and a short TTL
+                // on the SDK's write-back (track -> company metrics update) expires them,
+                // after which every check logs "Company not found in cache".
+                DatastreamOptions.Builder dsBuilder = DatastreamOptions.builder();
 
                 if (redisUrl != null) {
                     RedisCacheConfig.Builder redisConfig = RedisCacheConfig.builder().endpoint(redisUrl);
