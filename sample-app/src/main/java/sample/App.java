@@ -22,6 +22,7 @@ import com.schematic.api.Schematic;
 import com.schematic.api.cache.LocalCache;
 import com.schematic.api.cache.RedisCacheConfig;
 import com.schematic.api.datastream.DatastreamOptions;
+import com.schematic.api.logger.LogLevel;
 import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.EventBodyIdentify;
 import com.schematic.api.types.EventBodyIdentifyCompany;
@@ -101,6 +102,9 @@ public final class App {
             boolean useDataStream = Boolean.TRUE.equals(config.get("useDataStream"));
             String redisUrl = (String) config.get("redisUrl");
             String replicatorUrl = (String) config.get("replicatorUrl");
+            // Optional Redis key prefix, as a README-following user would set it. In
+            // replicator mode it must match the keys the replicator writes ("schematic:").
+            String redisKeyPrefix = (String) config.get("redisKeyPrefix");
 
             // Parse flag defaults
             Map<String, Boolean> flagDefaults = new HashMap<>();
@@ -120,7 +124,9 @@ public final class App {
                 }
             }
 
-            Schematic.Builder builder = Schematic.builder().apiKey(apiKey);
+            // Debug so the SDK's "falling back to API" and replicator health lines
+            // show up in the E2E job's test app log, as in the other testapps.
+            Schematic.Builder builder = Schematic.builder().apiKey(apiKey).logLevel(LogLevel.DEBUG);
 
             if (baseUrl != null) {
                 builder.basePath(baseUrl);
@@ -151,16 +157,27 @@ public final class App {
 
             // DataStream configuration
             if (useDataStream) {
-                DatastreamOptions.Builder dsBuilder =
-                        DatastreamOptions.builder().cacheTTL(Duration.ofMillis(CACHE_TTL_MS));
+                // Entity caches keep the SDK default TTL, matching the other testapps.
+                // The short CACHE_TTL_MS is only for the flag-check cache above; in
+                // replicator mode the replicator owns the Redis entries and a short TTL
+                // on the SDK's write-back (track -> company metrics update) expires them,
+                // after which every check logs "Company not found in cache".
+                DatastreamOptions.Builder dsBuilder = DatastreamOptions.builder();
 
                 if (redisUrl != null) {
-                    dsBuilder.redisCache(
-                            RedisCacheConfig.builder().endpoint(redisUrl).build());
+                    RedisCacheConfig.Builder redisConfig = RedisCacheConfig.builder().endpoint(redisUrl);
+                    if (redisKeyPrefix != null && !redisKeyPrefix.isEmpty()) {
+                        redisConfig.keyPrefix(redisKeyPrefix);
+                    }
+                    dsBuilder.redisCache(redisConfig.build());
                 }
 
                 if (replicatorUrl != null) {
-                    dsBuilder.withReplicatorMode(replicatorUrl);
+                    // The health URL is the replicator's readiness endpoint, as in the
+                    // other testapps. The bare base URL is a 404, which the SDK reads
+                    // as "not ready", so every check fell back to the REST API and
+                    // replicator mode was never exercised here.
+                    dsBuilder.withReplicatorMode(replicatorUrl + "/ready");
                 }
 
                 builder.datastreamOptions(dsBuilder.build());
