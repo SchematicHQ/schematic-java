@@ -101,6 +101,9 @@ public final class App {
             boolean useDataStream = Boolean.TRUE.equals(config.get("useDataStream"));
             String redisUrl = (String) config.get("redisUrl");
             String replicatorUrl = (String) config.get("replicatorUrl");
+            // Optional Redis key prefix, as a README-following user would set it. In
+            // replicator mode it must match the keys the replicator writes ("schematic:").
+            String redisKeyPrefix = (String) config.get("redisKeyPrefix");
 
             // Parse flag defaults
             Map<String, Boolean> flagDefaults = new HashMap<>();
@@ -155,8 +158,11 @@ public final class App {
                         DatastreamOptions.builder().cacheTTL(Duration.ofMillis(CACHE_TTL_MS));
 
                 if (redisUrl != null) {
-                    dsBuilder.redisCache(
-                            RedisCacheConfig.builder().endpoint(redisUrl).build());
+                    RedisCacheConfig.Builder redisConfig = RedisCacheConfig.builder().endpoint(redisUrl);
+                    if (redisKeyPrefix != null && !redisKeyPrefix.isEmpty()) {
+                        redisConfig.keyPrefix(redisKeyPrefix);
+                    }
+                    dsBuilder.redisCache(redisConfig.build());
                 }
 
                 if (replicatorUrl != null) {
