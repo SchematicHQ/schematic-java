@@ -22,6 +22,7 @@ import com.schematic.api.Schematic;
 import com.schematic.api.cache.LocalCache;
 import com.schematic.api.cache.RedisCacheConfig;
 import com.schematic.api.datastream.DatastreamOptions;
+import com.schematic.api.logger.LogLevel;
 import com.schematic.api.types.CheckFlagRequestBody;
 import com.schematic.api.types.EventBodyIdentify;
 import com.schematic.api.types.EventBodyIdentifyCompany;
@@ -123,7 +124,9 @@ public final class App {
                 }
             }
 
-            Schematic.Builder builder = Schematic.builder().apiKey(apiKey);
+            // Debug so the SDK's "falling back to API" and replicator health lines
+            // show up in the E2E job's test app log, as in the other testapps.
+            Schematic.Builder builder = Schematic.builder().apiKey(apiKey).logLevel(LogLevel.DEBUG);
 
             if (baseUrl != null) {
                 builder.basePath(baseUrl);
