@@ -166,7 +166,11 @@ public final class App {
                 }
 
                 if (replicatorUrl != null) {
-                    dsBuilder.withReplicatorMode(replicatorUrl);
+                    // The health URL is the replicator's readiness endpoint, as in the
+                    // other testapps. The bare base URL is a 404, which the SDK reads
+                    // as "not ready", so every check fell back to the REST API and
+                    // replicator mode was never exercised here.
+                    dsBuilder.withReplicatorMode(replicatorUrl + "/ready");
                 }
 
                 builder.datastreamOptions(dsBuilder.build());
