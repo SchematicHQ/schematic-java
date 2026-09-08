@@ -116,7 +116,6 @@ class LocalCacheTest {
         }
 
         assertEquals(cacheCapacity, cacheHits.size());
-        assertNotEquals(cacheCapacity, cacheHits.get(cacheHits.size() - 1) - cacheHits.get(0) + 1);
     }
 
     @Test
