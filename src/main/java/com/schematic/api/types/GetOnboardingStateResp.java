@@ -39,6 +39,8 @@ public final class GetOnboardingStateResp {
 
     private final List<OnboardingRequirementView> requirements;
 
+    private final Optional<SlackConnectInviteView> slackConnect;
+
     private final Optional<OnboardingStripeImport> stripeImport;
 
     private final List<OnboardingRequirement> suggestedNext;
@@ -58,6 +60,7 @@ public final class GetOnboardingStateResp {
             Optional<OnboardingPath> path,
             Optional<String> pricingPageUrl,
             List<OnboardingRequirementView> requirements,
+            Optional<SlackConnectInviteView> slackConnect,
             Optional<OnboardingStripeImport> stripeImport,
             List<OnboardingRequirement> suggestedNext,
             Optional<OnboardingTrack> track,
@@ -71,6 +74,7 @@ public final class GetOnboardingStateResp {
         this.path = path;
         this.pricingPageUrl = pricingPageUrl;
         this.requirements = requirements;
+        this.slackConnect = slackConnect;
         this.stripeImport = stripeImport;
         this.suggestedNext = suggestedNext;
         this.track = track;
@@ -118,6 +122,11 @@ public final class GetOnboardingStateResp {
         return requirements;
     }
 
+    @JsonProperty("slack_connect")
+    public Optional<SlackConnectInviteView> getSlackConnect() {
+        return slackConnect;
+    }
+
     @JsonProperty("stripe_import")
     public Optional<OnboardingStripeImport> getStripeImport() {
         return stripeImport;
@@ -158,6 +167,7 @@ public final class GetOnboardingStateResp {
                 && path.equals(other.path)
                 && pricingPageUrl.equals(other.pricingPageUrl)
                 && requirements.equals(other.requirements)
+                && slackConnect.equals(other.slackConnect)
                 && stripeImport.equals(other.stripeImport)
                 && suggestedNext.equals(other.suggestedNext)
                 && track.equals(other.track)
@@ -175,6 +185,7 @@ public final class GetOnboardingStateResp {
                 this.path,
                 this.pricingPageUrl,
                 this.requirements,
+                this.slackConnect,
                 this.stripeImport,
                 this.suggestedNext,
                 this.track,
@@ -208,6 +219,8 @@ public final class GetOnboardingStateResp {
 
         private List<OnboardingRequirementView> requirements = new ArrayList<>();
 
+        private Optional<SlackConnectInviteView> slackConnect = Optional.empty();
+
         private Optional<OnboardingStripeImport> stripeImport = Optional.empty();
 
         private List<OnboardingRequirement> suggestedNext = new ArrayList<>();
@@ -230,6 +243,7 @@ public final class GetOnboardingStateResp {
             path(other.getPath());
             pricingPageUrl(other.getPricingPageUrl());
             requirements(other.getRequirements());
+            slackConnect(other.getSlackConnect());
             stripeImport(other.getStripeImport());
             suggestedNext(other.getSuggestedNext());
             track(other.getTrack());
@@ -345,6 +359,17 @@ public final class GetOnboardingStateResp {
             return this;
         }
 
+        @JsonSetter(value = "slack_connect", nulls = Nulls.SKIP)
+        public Builder slackConnect(Optional<SlackConnectInviteView> slackConnect) {
+            this.slackConnect = slackConnect;
+            return this;
+        }
+
+        public Builder slackConnect(SlackConnectInviteView slackConnect) {
+            this.slackConnect = Optional.ofNullable(slackConnect);
+            return this;
+        }
+
         @JsonSetter(value = "stripe_import", nulls = Nulls.SKIP)
         public Builder stripeImport(Optional<OnboardingStripeImport> stripeImport) {
             this.stripeImport = stripeImport;
@@ -409,6 +434,7 @@ public final class GetOnboardingStateResp {
                     path,
                     pricingPageUrl,
                     requirements,
+                    slackConnect,
                     stripeImport,
                     suggestedNext,
                     track,
