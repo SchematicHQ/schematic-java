@@ -4,7 +4,12 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
+    // Only the SDK itself, published there by scripts/e2e-pack.sh.
+    mavenLocal {
+        content {
+            includeGroup 'com.schematichq'
+        }
+    }
     mavenCentral()
     maven {
         url 'https://s01.oss.sonatype.org/content/repositories/releases/'
@@ -15,10 +20,13 @@ repositories {
 // 'pack' resolves the artifact published to the local Maven repo by
 // scripts/e2e-pack.sh, the way an end user would.
 def sdkSource = (findProperty('sdkSource') ?: 'local').toString()
-def schematicVersion = (findProperty('schematicVersion') ?: rootProject.version).toString()
 
 dependencies {
     if (sdkSource == 'pack') {
+        def schematicVersion = findProperty('schematicVersion')
+        if (!schematicVersion) {
+            throw new GradleException('-PsdkSource=pack requires -PschematicVersion (see scripts/e2e-pack.sh)')
+        }
         implementation "com.schematichq:schematic-java:${schematicVersion}"
     } else {
         implementation rootProject
