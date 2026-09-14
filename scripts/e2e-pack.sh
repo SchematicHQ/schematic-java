@@ -23,17 +23,13 @@ cd "$REPO_ROOT"
 PACK_VERSION="${SCHEMATIC_PACK_VERSION:-0.0.0-e2e}"
 
 INIT_SCRIPT="$SCRIPT_DIR/e2e-pack.init.gradle"
-WASM_SOURCE="$REPO_ROOT/src/main/resources/wasm/rulesengine.wasm"
 WASM_RESOURCE="wasm/rulesengine.wasm"
 M2_DIR="$HOME/.m2/repository/com/schematichq/schematic-java/$PACK_VERSION"
 JAR="$M2_DIR/schematic-java-$PACK_VERSION.jar"
 
-if [ -f "$WASM_SOURCE" ]; then
-    echo "==> rules engine WASM already present at $WASM_SOURCE, skipping download"
-else
-    echo "==> downloading rules engine WASM"
-    ./scripts/download-wasm.sh
-fi
+# download-wasm.sh is a no-op when the pinned WASM_VERSION is already present.
+echo "==> fetching rules engine WASM"
+./scripts/download-wasm.sh
 
 echo "==> publishing com.schematichq:schematic-java:$PACK_VERSION to the local Maven repo"
 rm -rf "$M2_DIR"
