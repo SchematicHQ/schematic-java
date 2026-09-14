@@ -3,11 +3,19 @@ plugins {
     id 'application'
 }
 
+// SDK E2E install mode. 'local' (the default) builds against the source tree;
+// 'pack' resolves the artifact published to the local Maven repo by
+// scripts/e2e-pack.sh, the way an end user would; 'published' resolves the
+// release on Maven Central (-PschematicVersion pins one, else the latest).
+def sdkSource = (findProperty('sdkSource') ?: 'local').toString()
+
 repositories {
-    // Only the SDK itself, published there by scripts/e2e-pack.sh.
-    mavenLocal {
-        content {
-            includeGroup 'com.schematichq'
+    if (sdkSource == 'pack') {
+        // Only the SDK itself, published there by scripts/e2e-pack.sh.
+        mavenLocal {
+            content {
+                includeGroup 'com.schematichq'
+            }
         }
     }
     mavenCentral()
@@ -16,11 +24,6 @@ repositories {
     }
 }
 
-// SDK E2E install mode. 'local' (the default) builds against the source tree;
-// 'pack' resolves the artifact published to the local Maven repo by
-// scripts/e2e-pack.sh, the way an end user would.
-def sdkSource = (findProperty('sdkSource') ?: 'local').toString()
-
 dependencies {
     if (sdkSource == 'pack') {
         def schematicVersion = findProperty('schematicVersion')
@@ -28,8 +31,12 @@ dependencies {
             throw new GradleException('-PsdkSource=pack requires -PschematicVersion (see scripts/e2e-pack.sh)')
         }
         implementation "com.schematichq:schematic-java:${schematicVersion}"
-    } else {
+    } else if (sdkSource == 'published') {
+        implementation "com.schematichq:schematic-java:${findProperty('schematicVersion') ?: '+'}"
+    } else if (sdkSource == 'local') {
         implementation rootProject
+    } else {
+        throw new GradleException("unsupported -PsdkSource=${sdkSource}; use local, pack or published")
     }
 }
 
