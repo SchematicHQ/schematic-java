@@ -677,6 +677,10 @@ public class AsyncRawPlansClient {
                     request.getExcludeCompanyScoped().get(),
                     false);
         }
+        if (request.getExcludeUnused().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "exclude_unused", request.getExcludeUnused().get(), false);
+        }
         if (request.getForFallbackPlan().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "for_fallback_plan", request.getForFallbackPlan().get(), false);
@@ -1720,6 +1724,10 @@ public class AsyncRawPlansClient {
                     "exclude_company_scoped",
                     request.getExcludeCompanyScoped().get(),
                     false);
+        }
+        if (request.getExcludeUnused().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "exclude_unused", request.getExcludeUnused().get(), false);
         }
         if (request.getForFallbackPlan().isPresent()) {
             QueryStringMapper.addQueryParameter(

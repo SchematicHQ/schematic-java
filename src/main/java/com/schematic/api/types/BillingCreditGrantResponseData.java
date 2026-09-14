@@ -31,6 +31,8 @@ public final class BillingCreditGrantResponseData {
 
     private final OffsetDateTime createdAt;
 
+    private final Optional<String> creditBundleId;
+
     private final Optional<String> creditIcon;
 
     private final String creditId;
@@ -50,6 +52,12 @@ public final class BillingCreditGrantResponseData {
     private final Optional<String> planId;
 
     private final Optional<String> planName;
+
+    private final Optional<Long> postpaidChargeAmount;
+
+    private final Optional<String> postpaidChargeCurrency;
+
+    private final Optional<Double> postpaidChargedCredits;
 
     private final Optional<BillingPriceResponseData> price;
 
@@ -88,6 +96,7 @@ public final class BillingCreditGrantResponseData {
             Optional<String> companyLicenseId,
             String companyName,
             OffsetDateTime createdAt,
+            Optional<String> creditBundleId,
             Optional<String> creditIcon,
             String creditId,
             String creditName,
@@ -98,6 +107,9 @@ public final class BillingCreditGrantResponseData {
             Optional<String> licenseName,
             Optional<String> planId,
             Optional<String> planName,
+            Optional<Long> postpaidChargeAmount,
+            Optional<String> postpaidChargeCurrency,
+            Optional<Double> postpaidChargedCredits,
             Optional<BillingPriceResponseData> price,
             double quantity,
             double quantityRemaining,
@@ -118,6 +130,7 @@ public final class BillingCreditGrantResponseData {
         this.companyLicenseId = companyLicenseId;
         this.companyName = companyName;
         this.createdAt = createdAt;
+        this.creditBundleId = creditBundleId;
         this.creditIcon = creditIcon;
         this.creditId = creditId;
         this.creditName = creditName;
@@ -128,6 +141,9 @@ public final class BillingCreditGrantResponseData {
         this.licenseName = licenseName;
         this.planId = planId;
         this.planName = planName;
+        this.postpaidChargeAmount = postpaidChargeAmount;
+        this.postpaidChargeCurrency = postpaidChargeCurrency;
+        this.postpaidChargedCredits = postpaidChargedCredits;
         this.price = price;
         this.quantity = quantity;
         this.quantityRemaining = quantityRemaining;
@@ -167,6 +183,14 @@ public final class BillingCreditGrantResponseData {
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    /**
+     * @return The catalog bundle this grant was issued from, when the company bought one.
+     */
+    @JsonProperty("credit_bundle_id")
+    public Optional<String> getCreditBundleId() {
+        return creditBundleId;
     }
 
     @JsonProperty("credit_icon")
@@ -220,6 +244,27 @@ public final class BillingCreditGrantResponseData {
     @JsonProperty("plan_name")
     public Optional<String> getPlanName() {
         return planName;
+    }
+
+    /**
+     * @return What the postpaid charges costs, in the currency's minor unit.
+     */
+    @JsonProperty("postpaid_charge_amount")
+    public Optional<Long> getPostpaidChargeAmount() {
+        return postpaidChargeAmount;
+    }
+
+    @JsonProperty("postpaid_charge_currency")
+    public Optional<String> getPostpaidChargeCurrency() {
+        return postpaidChargeCurrency;
+    }
+
+    /**
+     * @return Credits consumed past a zero balance in the window still open.
+     */
+    @JsonProperty("postpaid_charged_credits")
+    public Optional<Double> getPostpaidChargedCredits() {
+        return postpaidChargedCredits;
     }
 
     @JsonProperty("price")
@@ -316,6 +361,7 @@ public final class BillingCreditGrantResponseData {
                 && companyLicenseId.equals(other.companyLicenseId)
                 && companyName.equals(other.companyName)
                 && createdAt.equals(other.createdAt)
+                && creditBundleId.equals(other.creditBundleId)
                 && creditIcon.equals(other.creditIcon)
                 && creditId.equals(other.creditId)
                 && creditName.equals(other.creditName)
@@ -326,6 +372,9 @@ public final class BillingCreditGrantResponseData {
                 && licenseName.equals(other.licenseName)
                 && planId.equals(other.planId)
                 && planName.equals(other.planName)
+                && postpaidChargeAmount.equals(other.postpaidChargeAmount)
+                && postpaidChargeCurrency.equals(other.postpaidChargeCurrency)
+                && postpaidChargedCredits.equals(other.postpaidChargedCredits)
                 && price.equals(other.price)
                 && quantity == other.quantity
                 && quantityRemaining == other.quantityRemaining
@@ -350,6 +399,7 @@ public final class BillingCreditGrantResponseData {
                 this.companyLicenseId,
                 this.companyName,
                 this.createdAt,
+                this.creditBundleId,
                 this.creditIcon,
                 this.creditId,
                 this.creditName,
@@ -360,6 +410,9 @@ public final class BillingCreditGrantResponseData {
                 this.licenseName,
                 this.planId,
                 this.planName,
+                this.postpaidChargeAmount,
+                this.postpaidChargeCurrency,
+                this.postpaidChargedCredits,
                 this.price,
                 this.quantity,
                 this.quantityRemaining,
@@ -454,6 +507,13 @@ public final class BillingCreditGrantResponseData {
 
         _FinalStage companyLicenseId(String companyLicenseId);
 
+        /**
+         * <p>The catalog bundle this grant was issued from, when the company bought one.</p>
+         */
+        _FinalStage creditBundleId(Optional<String> creditBundleId);
+
+        _FinalStage creditBundleId(String creditBundleId);
+
         _FinalStage creditIcon(Optional<String> creditIcon);
 
         _FinalStage creditIcon(String creditIcon);
@@ -480,6 +540,24 @@ public final class BillingCreditGrantResponseData {
         _FinalStage planName(Optional<String> planName);
 
         _FinalStage planName(String planName);
+
+        /**
+         * <p>What the postpaid charges costs, in the currency's minor unit.</p>
+         */
+        _FinalStage postpaidChargeAmount(Optional<Long> postpaidChargeAmount);
+
+        _FinalStage postpaidChargeAmount(Long postpaidChargeAmount);
+
+        _FinalStage postpaidChargeCurrency(Optional<String> postpaidChargeCurrency);
+
+        _FinalStage postpaidChargeCurrency(String postpaidChargeCurrency);
+
+        /**
+         * <p>Credits consumed past a zero balance in the window still open.</p>
+         */
+        _FinalStage postpaidChargedCredits(Optional<Double> postpaidChargedCredits);
+
+        _FinalStage postpaidChargedCredits(Double postpaidChargedCredits);
 
         _FinalStage price(Optional<BillingPriceResponseData> price);
 
@@ -581,6 +659,12 @@ public final class BillingCreditGrantResponseData {
 
         private Optional<BillingPriceResponseData> price = Optional.empty();
 
+        private Optional<Double> postpaidChargedCredits = Optional.empty();
+
+        private Optional<String> postpaidChargeCurrency = Optional.empty();
+
+        private Optional<Long> postpaidChargeAmount = Optional.empty();
+
         private Optional<String> planName = Optional.empty();
 
         private Optional<String> planId = Optional.empty();
@@ -592,6 +676,8 @@ public final class BillingCreditGrantResponseData {
         private Optional<String> currency = Optional.empty();
 
         private Optional<String> creditIcon = Optional.empty();
+
+        private Optional<String> creditBundleId = Optional.empty();
 
         private Optional<String> companyLicenseId = Optional.empty();
 
@@ -606,6 +692,7 @@ public final class BillingCreditGrantResponseData {
             companyLicenseId(other.getCompanyLicenseId());
             companyName(other.getCompanyName());
             createdAt(other.getCreatedAt());
+            creditBundleId(other.getCreditBundleId());
             creditIcon(other.getCreditIcon());
             creditId(other.getCreditId());
             creditName(other.getCreditName());
@@ -616,6 +703,9 @@ public final class BillingCreditGrantResponseData {
             licenseName(other.getLicenseName());
             planId(other.getPlanId());
             planName(other.getPlanName());
+            postpaidChargeAmount(other.getPostpaidChargeAmount());
+            postpaidChargeCurrency(other.getPostpaidChargeCurrency());
+            postpaidChargedCredits(other.getPostpaidChargedCredits());
             price(other.getPrice());
             quantity(other.getQuantity());
             quantityRemaining(other.getQuantityRemaining());
@@ -849,6 +939,59 @@ public final class BillingCreditGrantResponseData {
             return this;
         }
 
+        /**
+         * <p>Credits consumed past a zero balance in the window still open.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage postpaidChargedCredits(Double postpaidChargedCredits) {
+            this.postpaidChargedCredits = Optional.ofNullable(postpaidChargedCredits);
+            return this;
+        }
+
+        /**
+         * <p>Credits consumed past a zero balance in the window still open.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_charged_credits", nulls = Nulls.SKIP)
+        public _FinalStage postpaidChargedCredits(Optional<Double> postpaidChargedCredits) {
+            this.postpaidChargedCredits = postpaidChargedCredits;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage postpaidChargeCurrency(String postpaidChargeCurrency) {
+            this.postpaidChargeCurrency = Optional.ofNullable(postpaidChargeCurrency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_charge_currency", nulls = Nulls.SKIP)
+        public _FinalStage postpaidChargeCurrency(Optional<String> postpaidChargeCurrency) {
+            this.postpaidChargeCurrency = postpaidChargeCurrency;
+            return this;
+        }
+
+        /**
+         * <p>What the postpaid charges costs, in the currency's minor unit.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage postpaidChargeAmount(Long postpaidChargeAmount) {
+            this.postpaidChargeAmount = Optional.ofNullable(postpaidChargeAmount);
+            return this;
+        }
+
+        /**
+         * <p>What the postpaid charges costs, in the currency's minor unit.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_charge_amount", nulls = Nulls.SKIP)
+        public _FinalStage postpaidChargeAmount(Optional<Long> postpaidChargeAmount) {
+            this.postpaidChargeAmount = postpaidChargeAmount;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage planName(String planName) {
             this.planName = Optional.ofNullable(planName);
@@ -935,6 +1078,26 @@ public final class BillingCreditGrantResponseData {
         }
 
         /**
+         * <p>The catalog bundle this grant was issued from, when the company bought one.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage creditBundleId(String creditBundleId) {
+            this.creditBundleId = Optional.ofNullable(creditBundleId);
+            return this;
+        }
+
+        /**
+         * <p>The catalog bundle this grant was issued from, when the company bought one.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "credit_bundle_id", nulls = Nulls.SKIP)
+        public _FinalStage creditBundleId(Optional<String> creditBundleId) {
+            this.creditBundleId = creditBundleId;
+            return this;
+        }
+
+        /**
          * <p>The license instance this grant was issued for. Set only when a per-license plan grant issued it; null on a plan's own grant.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -961,6 +1124,7 @@ public final class BillingCreditGrantResponseData {
                     companyLicenseId,
                     companyName,
                     createdAt,
+                    creditBundleId,
                     creditIcon,
                     creditId,
                     creditName,
@@ -971,6 +1135,9 @@ public final class BillingCreditGrantResponseData {
                     licenseName,
                     planId,
                     planName,
+                    postpaidChargeAmount,
+                    postpaidChargeCurrency,
+                    postpaidChargedCredits,
                     price,
                     quantity,
                     quantityRemaining,

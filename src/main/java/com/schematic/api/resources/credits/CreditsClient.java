@@ -28,6 +28,7 @@ import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.ListCreditEventLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListCreditSpendPoliciesRequest;
 import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
+import com.schematic.api.resources.credits.requests.ReserveCreditsRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditSpendPolicyRequestBody;
@@ -62,6 +63,8 @@ import com.schematic.api.resources.credits.types.ListCreditEventLedgerResponse;
 import com.schematic.api.resources.credits.types.ListCreditSpendPoliciesResponse;
 import com.schematic.api.resources.credits.types.ListGrantsForCreditResponse;
 import com.schematic.api.resources.credits.types.ReleaseCreditLeaseResponse;
+import com.schematic.api.resources.credits.types.ReleaseCreditReservationResponse;
+import com.schematic.api.resources.credits.types.ReserveCreditsResponse;
 import com.schematic.api.resources.credits.types.SoftDeleteBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantResponse;
@@ -444,6 +447,26 @@ public class CreditsClient {
             CountBillingPlanCreditGrantsRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .countBillingPlanCreditGrants(request, requestOptions)
+                .body();
+    }
+
+    public ReserveCreditsResponse reserveCredits(ReserveCreditsRequestBody request) {
+        return this.rawClient.reserveCredits(request).body();
+    }
+
+    public ReserveCreditsResponse reserveCredits(ReserveCreditsRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.reserveCredits(request, requestOptions).body();
+    }
+
+    public ReleaseCreditReservationResponse releaseCreditReservation(
+            String reservationId, Map<String, JsonNode> request) {
+        return this.rawClient.releaseCreditReservation(reservationId, request).body();
+    }
+
+    public ReleaseCreditReservationResponse releaseCreditReservation(
+            String reservationId, Map<String, JsonNode> request, RequestOptions requestOptions) {
+        return this.rawClient
+                .releaseCreditReservation(reservationId, request, requestOptions)
                 .body();
     }
 

@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreditCompanyGrantView.Builder.class)
 public final class CreditCompanyGrantView {
+    private final Optional<BillingArrearsCadence> arrearsCadence;
+
     private final Optional<String> billingCreditBundleId;
 
     private final String billingCreditId;
@@ -65,6 +67,18 @@ public final class CreditCompanyGrantView {
 
     private final Optional<String> pluralName;
 
+    private final Optional<Long> postpaidChargeAmount;
+
+    private final Optional<String> postpaidChargeCurrency;
+
+    private final Optional<Double> postpaidChargedCredits;
+
+    private final Optional<OffsetDateTime> postpaidPeriodEnd;
+
+    private final Optional<Long> postpaidRate;
+
+    private final Optional<String> postpaidRateDecimal;
+
     private final Optional<BillingProductPriceResponseData> price;
 
     private final double quantity;
@@ -100,6 +114,7 @@ public final class CreditCompanyGrantView {
     private final Map<String, Object> additionalProperties;
 
     private CreditCompanyGrantView(
+            Optional<BillingArrearsCadence> arrearsCadence,
             Optional<String> billingCreditBundleId,
             String billingCreditId,
             String companyId,
@@ -121,6 +136,12 @@ public final class CreditCompanyGrantView {
             Optional<String> planId,
             Optional<String> planName,
             Optional<String> pluralName,
+            Optional<Long> postpaidChargeAmount,
+            Optional<String> postpaidChargeCurrency,
+            Optional<Double> postpaidChargedCredits,
+            Optional<OffsetDateTime> postpaidPeriodEnd,
+            Optional<Long> postpaidRate,
+            Optional<String> postpaidRateDecimal,
             Optional<BillingProductPriceResponseData> price,
             double quantity,
             double quantityRemaining,
@@ -138,6 +159,7 @@ public final class CreditCompanyGrantView {
             Optional<OffsetDateTime> zeroedOutDate,
             Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason,
             Map<String, Object> additionalProperties) {
+        this.arrearsCadence = arrearsCadence;
         this.billingCreditBundleId = billingCreditBundleId;
         this.billingCreditId = billingCreditId;
         this.companyId = companyId;
@@ -159,6 +181,12 @@ public final class CreditCompanyGrantView {
         this.planId = planId;
         this.planName = planName;
         this.pluralName = pluralName;
+        this.postpaidChargeAmount = postpaidChargeAmount;
+        this.postpaidChargeCurrency = postpaidChargeCurrency;
+        this.postpaidChargedCredits = postpaidChargedCredits;
+        this.postpaidPeriodEnd = postpaidPeriodEnd;
+        this.postpaidRate = postpaidRate;
+        this.postpaidRateDecimal = postpaidRateDecimal;
         this.price = price;
         this.quantity = quantity;
         this.quantityRemaining = quantityRemaining;
@@ -176,6 +204,11 @@ public final class CreditCompanyGrantView {
         this.zeroedOutDate = zeroedOutDate;
         this.zeroedOutReason = zeroedOutReason;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("arrears_cadence")
+    public Optional<BillingArrearsCadence> getArrearsCadence() {
+        return arrearsCadence;
     }
 
     @JsonProperty("billing_credit_bundle_id")
@@ -283,6 +316,36 @@ public final class CreditCompanyGrantView {
         return pluralName;
     }
 
+    @JsonProperty("postpaid_charge_amount")
+    public Optional<Long> getPostpaidChargeAmount() {
+        return postpaidChargeAmount;
+    }
+
+    @JsonProperty("postpaid_charge_currency")
+    public Optional<String> getPostpaidChargeCurrency() {
+        return postpaidChargeCurrency;
+    }
+
+    @JsonProperty("postpaid_charged_credits")
+    public Optional<Double> getPostpaidChargedCredits() {
+        return postpaidChargedCredits;
+    }
+
+    @JsonProperty("postpaid_period_end")
+    public Optional<OffsetDateTime> getPostpaidPeriodEnd() {
+        return postpaidPeriodEnd;
+    }
+
+    @JsonProperty("postpaid_rate")
+    public Optional<Long> getPostpaidRate() {
+        return postpaidRate;
+    }
+
+    @JsonProperty("postpaid_rate_decimal")
+    public Optional<String> getPostpaidRateDecimal() {
+        return postpaidRateDecimal;
+    }
+
     @JsonProperty("price")
     public Optional<BillingProductPriceResponseData> getPrice() {
         return price;
@@ -375,7 +438,8 @@ public final class CreditCompanyGrantView {
     }
 
     private boolean equalTo(CreditCompanyGrantView other) {
-        return billingCreditBundleId.equals(other.billingCreditBundleId)
+        return arrearsCadence.equals(other.arrearsCadence)
+                && billingCreditBundleId.equals(other.billingCreditBundleId)
                 && billingCreditId.equals(other.billingCreditId)
                 && companyId.equals(other.companyId)
                 && companyLicenseId.equals(other.companyLicenseId)
@@ -396,6 +460,12 @@ public final class CreditCompanyGrantView {
                 && planId.equals(other.planId)
                 && planName.equals(other.planName)
                 && pluralName.equals(other.pluralName)
+                && postpaidChargeAmount.equals(other.postpaidChargeAmount)
+                && postpaidChargeCurrency.equals(other.postpaidChargeCurrency)
+                && postpaidChargedCredits.equals(other.postpaidChargedCredits)
+                && postpaidPeriodEnd.equals(other.postpaidPeriodEnd)
+                && postpaidRate.equals(other.postpaidRate)
+                && postpaidRateDecimal.equals(other.postpaidRateDecimal)
                 && price.equals(other.price)
                 && quantity == other.quantity
                 && quantityRemaining == other.quantityRemaining
@@ -417,6 +487,7 @@ public final class CreditCompanyGrantView {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.arrearsCadence,
                 this.billingCreditBundleId,
                 this.billingCreditId,
                 this.companyId,
@@ -438,6 +509,12 @@ public final class CreditCompanyGrantView {
                 this.planId,
                 this.planName,
                 this.pluralName,
+                this.postpaidChargeAmount,
+                this.postpaidChargeCurrency,
+                this.postpaidChargedCredits,
+                this.postpaidPeriodEnd,
+                this.postpaidRate,
+                this.postpaidRateDecimal,
                 this.price,
                 this.quantity,
                 this.quantityRemaining,
@@ -530,6 +607,10 @@ public final class CreditCompanyGrantView {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage arrearsCadence(Optional<BillingArrearsCadence> arrearsCadence);
+
+        _FinalStage arrearsCadence(BillingArrearsCadence arrearsCadence);
+
         _FinalStage billingCreditBundleId(Optional<String> billingCreditBundleId);
 
         _FinalStage billingCreditBundleId(String billingCreditBundleId);
@@ -581,6 +662,30 @@ public final class CreditCompanyGrantView {
         _FinalStage pluralName(Optional<String> pluralName);
 
         _FinalStage pluralName(String pluralName);
+
+        _FinalStage postpaidChargeAmount(Optional<Long> postpaidChargeAmount);
+
+        _FinalStage postpaidChargeAmount(Long postpaidChargeAmount);
+
+        _FinalStage postpaidChargeCurrency(Optional<String> postpaidChargeCurrency);
+
+        _FinalStage postpaidChargeCurrency(String postpaidChargeCurrency);
+
+        _FinalStage postpaidChargedCredits(Optional<Double> postpaidChargedCredits);
+
+        _FinalStage postpaidChargedCredits(Double postpaidChargedCredits);
+
+        _FinalStage postpaidPeriodEnd(Optional<OffsetDateTime> postpaidPeriodEnd);
+
+        _FinalStage postpaidPeriodEnd(OffsetDateTime postpaidPeriodEnd);
+
+        _FinalStage postpaidRate(Optional<Long> postpaidRate);
+
+        _FinalStage postpaidRate(Long postpaidRate);
+
+        _FinalStage postpaidRateDecimal(Optional<String> postpaidRateDecimal);
+
+        _FinalStage postpaidRateDecimal(String postpaidRateDecimal);
 
         _FinalStage price(Optional<BillingProductPriceResponseData> price);
 
@@ -688,6 +793,18 @@ public final class CreditCompanyGrantView {
 
         private Optional<BillingProductPriceResponseData> price = Optional.empty();
 
+        private Optional<String> postpaidRateDecimal = Optional.empty();
+
+        private Optional<Long> postpaidRate = Optional.empty();
+
+        private Optional<OffsetDateTime> postpaidPeriodEnd = Optional.empty();
+
+        private Optional<Double> postpaidChargedCredits = Optional.empty();
+
+        private Optional<String> postpaidChargeCurrency = Optional.empty();
+
+        private Optional<Long> postpaidChargeAmount = Optional.empty();
+
         private Optional<String> pluralName = Optional.empty();
 
         private Optional<String> planName = Optional.empty();
@@ -714,6 +831,8 @@ public final class CreditCompanyGrantView {
 
         private Optional<String> billingCreditBundleId = Optional.empty();
 
+        private Optional<BillingArrearsCadence> arrearsCadence = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -721,6 +840,7 @@ public final class CreditCompanyGrantView {
 
         @java.lang.Override
         public Builder from(CreditCompanyGrantView other) {
+            arrearsCadence(other.getArrearsCadence());
             billingCreditBundleId(other.getBillingCreditBundleId());
             billingCreditId(other.getBillingCreditId());
             companyId(other.getCompanyId());
@@ -742,6 +862,12 @@ public final class CreditCompanyGrantView {
             planId(other.getPlanId());
             planName(other.getPlanName());
             pluralName(other.getPluralName());
+            postpaidChargeAmount(other.getPostpaidChargeAmount());
+            postpaidChargeCurrency(other.getPostpaidChargeCurrency());
+            postpaidChargedCredits(other.getPostpaidChargedCredits());
+            postpaidPeriodEnd(other.getPostpaidPeriodEnd());
+            postpaidRate(other.getPostpaidRate());
+            postpaidRateDecimal(other.getPostpaidRateDecimal());
             price(other.getPrice());
             quantity(other.getQuantity());
             quantityRemaining(other.getQuantityRemaining());
@@ -990,6 +1116,84 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage postpaidRateDecimal(String postpaidRateDecimal) {
+            this.postpaidRateDecimal = Optional.ofNullable(postpaidRateDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_rate_decimal", nulls = Nulls.SKIP)
+        public _FinalStage postpaidRateDecimal(Optional<String> postpaidRateDecimal) {
+            this.postpaidRateDecimal = postpaidRateDecimal;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage postpaidRate(Long postpaidRate) {
+            this.postpaidRate = Optional.ofNullable(postpaidRate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_rate", nulls = Nulls.SKIP)
+        public _FinalStage postpaidRate(Optional<Long> postpaidRate) {
+            this.postpaidRate = postpaidRate;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage postpaidPeriodEnd(OffsetDateTime postpaidPeriodEnd) {
+            this.postpaidPeriodEnd = Optional.ofNullable(postpaidPeriodEnd);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_period_end", nulls = Nulls.SKIP)
+        public _FinalStage postpaidPeriodEnd(Optional<OffsetDateTime> postpaidPeriodEnd) {
+            this.postpaidPeriodEnd = postpaidPeriodEnd;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage postpaidChargedCredits(Double postpaidChargedCredits) {
+            this.postpaidChargedCredits = Optional.ofNullable(postpaidChargedCredits);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_charged_credits", nulls = Nulls.SKIP)
+        public _FinalStage postpaidChargedCredits(Optional<Double> postpaidChargedCredits) {
+            this.postpaidChargedCredits = postpaidChargedCredits;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage postpaidChargeCurrency(String postpaidChargeCurrency) {
+            this.postpaidChargeCurrency = Optional.ofNullable(postpaidChargeCurrency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_charge_currency", nulls = Nulls.SKIP)
+        public _FinalStage postpaidChargeCurrency(Optional<String> postpaidChargeCurrency) {
+            this.postpaidChargeCurrency = postpaidChargeCurrency;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage postpaidChargeAmount(Long postpaidChargeAmount) {
+            this.postpaidChargeAmount = Optional.ofNullable(postpaidChargeAmount);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_charge_amount", nulls = Nulls.SKIP)
+        public _FinalStage postpaidChargeAmount(Optional<Long> postpaidChargeAmount) {
+            this.postpaidChargeAmount = postpaidChargeAmount;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage pluralName(String pluralName) {
             this.pluralName = Optional.ofNullable(pluralName);
             return this;
@@ -1159,8 +1363,22 @@ public final class CreditCompanyGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage arrearsCadence(BillingArrearsCadence arrearsCadence) {
+            this.arrearsCadence = Optional.ofNullable(arrearsCadence);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "arrears_cadence", nulls = Nulls.SKIP)
+        public _FinalStage arrearsCadence(Optional<BillingArrearsCadence> arrearsCadence) {
+            this.arrearsCadence = arrearsCadence;
+            return this;
+        }
+
+        @java.lang.Override
         public CreditCompanyGrantView build() {
             return new CreditCompanyGrantView(
+                    arrearsCadence,
                     billingCreditBundleId,
                     billingCreditId,
                     companyId,
@@ -1182,6 +1400,12 @@ public final class CreditCompanyGrantView {
                     planId,
                     planName,
                     pluralName,
+                    postpaidChargeAmount,
+                    postpaidChargeCurrency,
+                    postpaidChargedCredits,
+                    postpaidPeriodEnd,
+                    postpaidRate,
+                    postpaidRateDecimal,
                     price,
                     quantity,
                     quantityRemaining,

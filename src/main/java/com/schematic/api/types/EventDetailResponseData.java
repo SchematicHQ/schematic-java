@@ -62,6 +62,8 @@ public final class EventDetailResponseData {
 
     private final long quantity;
 
+    private final Optional<String> reservationId;
+
     private final Optional<OffsetDateTime> sentAt;
 
     private final EventStatus status;
@@ -97,6 +99,7 @@ public final class EventDetailResponseData {
             Optional<OffsetDateTime> loadedAt,
             Optional<OffsetDateTime> processedAt,
             long quantity,
+            Optional<String> reservationId,
             Optional<OffsetDateTime> sentAt,
             EventStatus status,
             Optional<String> subtype,
@@ -123,6 +126,7 @@ public final class EventDetailResponseData {
         this.loadedAt = loadedAt;
         this.processedAt = processedAt;
         this.quantity = quantity;
+        this.reservationId = reservationId;
         this.sentAt = sentAt;
         this.status = status;
         this.subtype = subtype;
@@ -223,6 +227,11 @@ public final class EventDetailResponseData {
         return quantity;
     }
 
+    @JsonProperty("reservation_id")
+    public Optional<String> getReservationId() {
+        return reservationId;
+    }
+
     @JsonProperty("sent_at")
     public Optional<OffsetDateTime> getSentAt() {
         return sentAt;
@@ -288,6 +297,7 @@ public final class EventDetailResponseData {
                 && loadedAt.equals(other.loadedAt)
                 && processedAt.equals(other.processedAt)
                 && quantity == other.quantity
+                && reservationId.equals(other.reservationId)
                 && sentAt.equals(other.sentAt)
                 && status.equals(other.status)
                 && subtype.equals(other.subtype)
@@ -318,6 +328,7 @@ public final class EventDetailResponseData {
                 this.loadedAt,
                 this.processedAt,
                 this.quantity,
+                this.reservationId,
                 this.sentAt,
                 this.status,
                 this.subtype,
@@ -431,6 +442,10 @@ public final class EventDetailResponseData {
 
         _FinalStage processedAt(OffsetDateTime processedAt);
 
+        _FinalStage reservationId(Optional<String> reservationId);
+
+        _FinalStage reservationId(String reservationId);
+
         _FinalStage sentAt(Optional<OffsetDateTime> sentAt);
 
         _FinalStage sentAt(OffsetDateTime sentAt);
@@ -476,6 +491,8 @@ public final class EventDetailResponseData {
         private Optional<String> subtype = Optional.empty();
 
         private Optional<OffsetDateTime> sentAt = Optional.empty();
+
+        private Optional<String> reservationId = Optional.empty();
 
         private Optional<OffsetDateTime> processedAt = Optional.empty();
 
@@ -530,6 +547,7 @@ public final class EventDetailResponseData {
             loadedAt(other.getLoadedAt());
             processedAt(other.getProcessedAt());
             quantity(other.getQuantity());
+            reservationId(other.getReservationId());
             sentAt(other.getSentAt());
             status(other.getStatus());
             subtype(other.getSubtype());
@@ -644,6 +662,19 @@ public final class EventDetailResponseData {
         @JsonSetter(value = "sent_at", nulls = Nulls.SKIP)
         public _FinalStage sentAt(Optional<OffsetDateTime> sentAt) {
             this.sentAt = sentAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage reservationId(String reservationId) {
+            this.reservationId = Optional.ofNullable(reservationId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "reservation_id", nulls = Nulls.SKIP)
+        public _FinalStage reservationId(Optional<String> reservationId) {
+            this.reservationId = reservationId;
             return this;
         }
 
@@ -883,6 +914,7 @@ public final class EventDetailResponseData {
                     loadedAt,
                     processedAt,
                     quantity,
+                    reservationId,
                     sentAt,
                     status,
                     subtype,

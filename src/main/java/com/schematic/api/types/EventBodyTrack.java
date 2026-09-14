@@ -30,6 +30,8 @@ public final class EventBodyTrack {
 
     private final Optional<Long> quantity;
 
+    private final Optional<String> reservationId;
+
     private final Optional<Map<String, JsonNode>> traits;
 
     private final Optional<Map<String, String>> user;
@@ -41,6 +43,7 @@ public final class EventBodyTrack {
             String event,
             Optional<String> leaseId,
             Optional<Long> quantity,
+            Optional<String> reservationId,
             Optional<Map<String, JsonNode>> traits,
             Optional<Map<String, String>> user,
             Map<String, Object> additionalProperties) {
@@ -48,6 +51,7 @@ public final class EventBodyTrack {
         this.event = event;
         this.leaseId = leaseId;
         this.quantity = quantity;
+        this.reservationId = reservationId;
         this.traits = traits;
         this.user = user;
         this.additionalProperties = additionalProperties;
@@ -86,6 +90,14 @@ public final class EventBodyTrack {
     }
 
     /**
+     * @return Credit reservation ID this track event settles. lease_id takes precedence when both are set
+     */
+    @JsonProperty("reservation_id")
+    public Optional<String> getReservationId() {
+        return reservationId;
+    }
+
+    /**
      * @return A map of trait names to trait values
      */
     @JsonProperty("traits")
@@ -117,13 +129,15 @@ public final class EventBodyTrack {
                 && event.equals(other.event)
                 && leaseId.equals(other.leaseId)
                 && quantity.equals(other.quantity)
+                && reservationId.equals(other.reservationId)
                 && traits.equals(other.traits)
                 && user.equals(other.user);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.company, this.event, this.leaseId, this.quantity, this.traits, this.user);
+        return Objects.hash(
+                this.company, this.event, this.leaseId, this.quantity, this.reservationId, this.traits, this.user);
     }
 
     @java.lang.Override
@@ -173,6 +187,13 @@ public final class EventBodyTrack {
         _FinalStage quantity(Long quantity);
 
         /**
+         * <p>Credit reservation ID this track event settles. lease_id takes precedence when both are set</p>
+         */
+        _FinalStage reservationId(Optional<String> reservationId);
+
+        _FinalStage reservationId(String reservationId);
+
+        /**
          * <p>A map of trait names to trait values</p>
          */
         _FinalStage traits(Optional<Map<String, JsonNode>> traits);
@@ -195,6 +216,8 @@ public final class EventBodyTrack {
 
         private Optional<Map<String, JsonNode>> traits = Optional.empty();
 
+        private Optional<String> reservationId = Optional.empty();
+
         private Optional<Long> quantity = Optional.empty();
 
         private Optional<String> leaseId = Optional.empty();
@@ -212,6 +235,7 @@ public final class EventBodyTrack {
             event(other.getEvent());
             leaseId(other.getLeaseId());
             quantity(other.getQuantity());
+            reservationId(other.getReservationId());
             traits(other.getTraits());
             user(other.getUser());
             return this;
@@ -265,6 +289,26 @@ public final class EventBodyTrack {
         @JsonSetter(value = "traits", nulls = Nulls.SKIP)
         public _FinalStage traits(Optional<Map<String, JsonNode>> traits) {
             this.traits = traits;
+            return this;
+        }
+
+        /**
+         * <p>Credit reservation ID this track event settles. lease_id takes precedence when both are set</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage reservationId(String reservationId) {
+            this.reservationId = Optional.ofNullable(reservationId);
+            return this;
+        }
+
+        /**
+         * <p>Credit reservation ID this track event settles. lease_id takes precedence when both are set</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "reservation_id", nulls = Nulls.SKIP)
+        public _FinalStage reservationId(Optional<String> reservationId) {
+            this.reservationId = reservationId;
             return this;
         }
 
@@ -330,7 +374,8 @@ public final class EventBodyTrack {
 
         @java.lang.Override
         public EventBodyTrack build() {
-            return new EventBodyTrack(company, event, leaseId, quantity, traits, user, additionalProperties);
+            return new EventBodyTrack(
+                    company, event, leaseId, quantity, reservationId, traits, user, additionalProperties);
         }
 
         @java.lang.Override

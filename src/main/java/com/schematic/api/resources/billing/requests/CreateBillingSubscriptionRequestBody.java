@@ -61,6 +61,8 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private final Optional<BillingProviderType> providerType;
 
+    private final Optional<OffsetDateTime> startedAt;
+
     private final Optional<String> status;
 
     private final String subscriptionExternalId;
@@ -90,6 +92,7 @@ public final class CreateBillingSubscriptionRequestBody {
             Optional<Long> periodStart,
             List<BillingProductPricing> productExternalIds,
             Optional<BillingProviderType> providerType,
+            Optional<OffsetDateTime> startedAt,
             Optional<String> status,
             String subscriptionExternalId,
             long totalPrice,
@@ -112,6 +115,7 @@ public final class CreateBillingSubscriptionRequestBody {
         this.periodStart = periodStart;
         this.productExternalIds = productExternalIds;
         this.providerType = providerType;
+        this.startedAt = startedAt;
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.totalPrice = totalPrice;
@@ -200,6 +204,11 @@ public final class CreateBillingSubscriptionRequestBody {
         return providerType;
     }
 
+    @JsonProperty("started_at")
+    public Optional<OffsetDateTime> getStartedAt() {
+        return startedAt;
+    }
+
     @JsonProperty("status")
     public Optional<String> getStatus() {
         return status;
@@ -254,6 +263,7 @@ public final class CreateBillingSubscriptionRequestBody {
                 && periodStart.equals(other.periodStart)
                 && productExternalIds.equals(other.productExternalIds)
                 && providerType.equals(other.providerType)
+                && startedAt.equals(other.startedAt)
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && totalPrice == other.totalPrice
@@ -280,6 +290,7 @@ public final class CreateBillingSubscriptionRequestBody {
                 this.periodStart,
                 this.productExternalIds,
                 this.providerType,
+                this.startedAt,
                 this.status,
                 this.subscriptionExternalId,
                 this.totalPrice,
@@ -381,6 +392,10 @@ public final class CreateBillingSubscriptionRequestBody {
 
         _FinalStage providerType(BillingProviderType providerType);
 
+        _FinalStage startedAt(Optional<OffsetDateTime> startedAt);
+
+        _FinalStage startedAt(OffsetDateTime startedAt);
+
         _FinalStage status(Optional<String> status);
 
         _FinalStage status(String status);
@@ -420,6 +435,8 @@ public final class CreateBillingSubscriptionRequestBody {
         private Optional<Long> trialEnd = Optional.empty();
 
         private Optional<String> status = Optional.empty();
+
+        private Optional<OffsetDateTime> startedAt = Optional.empty();
 
         private Optional<BillingProviderType> providerType = Optional.empty();
 
@@ -468,6 +485,7 @@ public final class CreateBillingSubscriptionRequestBody {
             periodStart(other.getPeriodStart());
             productExternalIds(other.getProductExternalIds());
             providerType(other.getProviderType());
+            startedAt(other.getStartedAt());
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             totalPrice(other.getTotalPrice());
@@ -555,6 +573,19 @@ public final class CreateBillingSubscriptionRequestBody {
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
         public _FinalStage status(Optional<String> status) {
             this.status = status;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage startedAt(OffsetDateTime startedAt) {
+            this.startedAt = Optional.ofNullable(startedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "started_at", nulls = Nulls.SKIP)
+        public _FinalStage startedAt(Optional<OffsetDateTime> startedAt) {
+            this.startedAt = startedAt;
             return this;
         }
 
@@ -755,6 +786,7 @@ public final class CreateBillingSubscriptionRequestBody {
                     periodStart,
                     productExternalIds,
                     providerType,
+                    startedAt,
                     status,
                     subscriptionExternalId,
                     totalPrice,
