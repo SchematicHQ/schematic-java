@@ -48,7 +48,7 @@ if [ ! -f "$JAR" ]; then
 fi
 
 echo "==> checking $WASM_RESOURCE is inside $JAR"
-if ! unzip -l "$JAR" | grep -q "$WASM_RESOURCE"; then
+if ! unzip -l "$JAR" "$WASM_RESOURCE" >/dev/null 2>&1; then
     echo "ERROR: $WASM_RESOURCE is missing from the published jar." >&2
     echo "The rules engine would fail at runtime for anyone consuming this release." >&2
     echo "Jar contents:" >&2
