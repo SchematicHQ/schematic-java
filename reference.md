@@ -3912,6 +3912,14 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
+**startedAt:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **status:** `Optional<String>` 
     
 </dd>
@@ -5149,6 +5157,14 @@ client.credits().grantBillingCreditsToCompany(
 <dd>
 
 **companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditBundleId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -14457,6 +14473,7 @@ client.plans().listPlans(
         .companyId("company_id")
         .companyScopedOnly(true)
         .excludeCompanyScoped(true)
+        .excludeUnused(true)
         .forFallbackPlan(true)
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
@@ -14503,6 +14520,14 @@ client.plans().listPlans(
 <dd>
 
 **excludeCompanyScoped:** `Optional<Boolean>` — Exclude plans that are scoped to a company (custom plans assigned to a company)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**excludeUnused:** `Optional<Boolean>` — Exclude plans that nothing is using: no company is on the plan and it has no draft version
     
 </dd>
 </dl>
@@ -15137,6 +15162,7 @@ client.plans().countPlans(
         .companyId("company_id")
         .companyScopedOnly(true)
         .excludeCompanyScoped(true)
+        .excludeUnused(true)
         .forFallbackPlan(true)
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
@@ -15183,6 +15209,14 @@ client.plans().countPlans(
 <dd>
 
 **excludeCompanyScoped:** `Optional<Boolean>` — Exclude plans that are scoped to a company (custom plans assigned to a company)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**excludeUnused:** `Optional<Boolean>` — Exclude plans that nothing is using: no company is on the plan and it has no draft version
     
 </dd>
 </dl>
@@ -19906,6 +19940,14 @@ client.plangroups().createPlanGroup(
 <dl>
 <dd>
 
+**trialEligibilityPerPlan:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **trialExpiryPlanId:** `Optional<String>` 
     
 </dd>
@@ -20291,6 +20333,14 @@ client.plangroups().updatePlanGroup(
 <dd>
 
 **trialDays:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**trialEligibilityPerPlan:** `Optional<Boolean>` 
     
 </dd>
 </dl>

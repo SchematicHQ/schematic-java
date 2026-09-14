@@ -28,6 +28,8 @@ public final class ListPlansParams {
 
     private final Optional<Boolean> excludeCompanyScoped;
 
+    private final Optional<Boolean> excludeUnused;
+
     private final Optional<Boolean> forFallbackPlan;
 
     private final Optional<Boolean> forInitialPlan;
@@ -62,6 +64,7 @@ public final class ListPlansParams {
             Optional<String> companyId,
             Optional<Boolean> companyScopedOnly,
             Optional<Boolean> excludeCompanyScoped,
+            Optional<Boolean> excludeUnused,
             Optional<Boolean> forFallbackPlan,
             Optional<Boolean> forInitialPlan,
             Optional<Boolean> forTrialExpiryPlan,
@@ -80,6 +83,7 @@ public final class ListPlansParams {
         this.companyId = companyId;
         this.companyScopedOnly = companyScopedOnly;
         this.excludeCompanyScoped = excludeCompanyScoped;
+        this.excludeUnused = excludeUnused;
         this.forFallbackPlan = forFallbackPlan;
         this.forInitialPlan = forInitialPlan;
         this.forTrialExpiryPlan = forTrialExpiryPlan;
@@ -116,6 +120,14 @@ public final class ListPlansParams {
     @JsonProperty("exclude_company_scoped")
     public Optional<Boolean> getExcludeCompanyScoped() {
         return excludeCompanyScoped;
+    }
+
+    /**
+     * @return Exclude plans that nothing is using: no company is on the plan and it has no draft version
+     */
+    @JsonProperty("exclude_unused")
+    public Optional<Boolean> getExcludeUnused() {
+        return excludeUnused;
     }
 
     /**
@@ -239,6 +251,7 @@ public final class ListPlansParams {
         return companyId.equals(other.companyId)
                 && companyScopedOnly.equals(other.companyScopedOnly)
                 && excludeCompanyScoped.equals(other.excludeCompanyScoped)
+                && excludeUnused.equals(other.excludeUnused)
                 && forFallbackPlan.equals(other.forFallbackPlan)
                 && forInitialPlan.equals(other.forInitialPlan)
                 && forTrialExpiryPlan.equals(other.forTrialExpiryPlan)
@@ -261,6 +274,7 @@ public final class ListPlansParams {
                 this.companyId,
                 this.companyScopedOnly,
                 this.excludeCompanyScoped,
+                this.excludeUnused,
                 this.forFallbackPlan,
                 this.forInitialPlan,
                 this.forTrialExpiryPlan,
@@ -293,6 +307,8 @@ public final class ListPlansParams {
         private Optional<Boolean> companyScopedOnly = Optional.empty();
 
         private Optional<Boolean> excludeCompanyScoped = Optional.empty();
+
+        private Optional<Boolean> excludeUnused = Optional.empty();
 
         private Optional<Boolean> forFallbackPlan = Optional.empty();
 
@@ -331,6 +347,7 @@ public final class ListPlansParams {
             companyId(other.getCompanyId());
             companyScopedOnly(other.getCompanyScopedOnly());
             excludeCompanyScoped(other.getExcludeCompanyScoped());
+            excludeUnused(other.getExcludeUnused());
             forFallbackPlan(other.getForFallbackPlan());
             forInitialPlan(other.getForInitialPlan());
             forTrialExpiryPlan(other.getForTrialExpiryPlan());
@@ -384,6 +401,20 @@ public final class ListPlansParams {
 
         public Builder excludeCompanyScoped(Boolean excludeCompanyScoped) {
             this.excludeCompanyScoped = Optional.ofNullable(excludeCompanyScoped);
+            return this;
+        }
+
+        /**
+         * <p>Exclude plans that nothing is using: no company is on the plan and it has no draft version</p>
+         */
+        @JsonSetter(value = "exclude_unused", nulls = Nulls.SKIP)
+        public Builder excludeUnused(Optional<Boolean> excludeUnused) {
+            this.excludeUnused = excludeUnused;
+            return this;
+        }
+
+        public Builder excludeUnused(Boolean excludeUnused) {
+            this.excludeUnused = Optional.ofNullable(excludeUnused);
             return this;
         }
 
@@ -582,6 +613,7 @@ public final class ListPlansParams {
                     companyId,
                     companyScopedOnly,
                     excludeCompanyScoped,
+                    excludeUnused,
                     forFallbackPlan,
                     forInitialPlan,
                     forTrialExpiryPlan,

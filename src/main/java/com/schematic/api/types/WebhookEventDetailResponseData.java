@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WebhookEventDetailResponseData.Builder.class)
 public final class WebhookEventDetailResponseData {
+    private final long attemptCount;
+
     private final OffsetDateTime createdAt;
 
     private final String id;
@@ -45,6 +47,7 @@ public final class WebhookEventDetailResponseData {
     private final Map<String, Object> additionalProperties;
 
     private WebhookEventDetailResponseData(
+            long attemptCount,
             OffsetDateTime createdAt,
             String id,
             Optional<String> payload,
@@ -56,6 +59,7 @@ public final class WebhookEventDetailResponseData {
             Optional<WebhookResponseData> webhook,
             String webhookId,
             Map<String, Object> additionalProperties) {
+        this.attemptCount = attemptCount;
         this.createdAt = createdAt;
         this.id = id;
         this.payload = payload;
@@ -67,6 +71,11 @@ public final class WebhookEventDetailResponseData {
         this.webhook = webhook;
         this.webhookId = webhookId;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("attempt_count")
+    public long getAttemptCount() {
+        return attemptCount;
     }
 
     @JsonProperty("created_at")
@@ -131,7 +140,8 @@ public final class WebhookEventDetailResponseData {
     }
 
     private boolean equalTo(WebhookEventDetailResponseData other) {
-        return createdAt.equals(other.createdAt)
+        return attemptCount == other.attemptCount
+                && createdAt.equals(other.createdAt)
                 && id.equals(other.id)
                 && payload.equals(other.payload)
                 && requestType.equals(other.requestType)
@@ -146,6 +156,7 @@ public final class WebhookEventDetailResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.attemptCount,
                 this.createdAt,
                 this.id,
                 this.payload,
@@ -163,14 +174,18 @@ public final class WebhookEventDetailResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static CreatedAtStage builder() {
+    public static AttemptCountStage builder() {
         return new Builder();
+    }
+
+    public interface AttemptCountStage {
+        CreatedAtStage attemptCount(long attemptCount);
+
+        Builder from(WebhookEventDetailResponseData other);
     }
 
     public interface CreatedAtStage {
         IdStage createdAt(@NotNull OffsetDateTime createdAt);
-
-        Builder from(WebhookEventDetailResponseData other);
     }
 
     public interface IdStage {
@@ -219,13 +234,16 @@ public final class WebhookEventDetailResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CreatedAtStage,
+            implements AttemptCountStage,
+                    CreatedAtStage,
                     IdStage,
                     RequestTypeStage,
                     StatusStage,
                     UpdatedAtStage,
                     WebhookIdStage,
                     _FinalStage {
+        private long attemptCount;
+
         private OffsetDateTime createdAt;
 
         private String id;
@@ -253,6 +271,7 @@ public final class WebhookEventDetailResponseData {
 
         @java.lang.Override
         public Builder from(WebhookEventDetailResponseData other) {
+            attemptCount(other.getAttemptCount());
             createdAt(other.getCreatedAt());
             id(other.getId());
             payload(other.getPayload());
@@ -263,6 +282,13 @@ public final class WebhookEventDetailResponseData {
             updatedAt(other.getUpdatedAt());
             webhook(other.getWebhook());
             webhookId(other.getWebhookId());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("attempt_count")
+        public CreatedAtStage attemptCount(long attemptCount) {
+            this.attemptCount = attemptCount;
             return this;
         }
 
@@ -363,6 +389,7 @@ public final class WebhookEventDetailResponseData {
         @java.lang.Override
         public WebhookEventDetailResponseData build() {
             return new WebhookEventDetailResponseData(
+                    attemptCount,
                     createdAt,
                     id,
                     payload,
