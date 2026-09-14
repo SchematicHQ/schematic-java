@@ -73,6 +73,8 @@ public final class PlanGroupResponseData {
 
     private final Optional<Long> trialDays;
 
+    private final boolean trialEligibilityPerPlan;
+
     private final Optional<String> trialExpiryPlanId;
 
     private final Optional<String> trialExpiryPlanPriceId;
@@ -107,6 +109,7 @@ public final class PlanGroupResponseData {
             boolean syncCustomerBillingDetails,
             boolean taxCollectionEnabled,
             Optional<Long> trialDays,
+            boolean trialEligibilityPerPlan,
             Optional<String> trialExpiryPlanId,
             Optional<String> trialExpiryPlanPriceId,
             Optional<Boolean> trialPaymentMethodRequired,
@@ -136,6 +139,7 @@ public final class PlanGroupResponseData {
         this.syncCustomerBillingDetails = syncCustomerBillingDetails;
         this.taxCollectionEnabled = taxCollectionEnabled;
         this.trialDays = trialDays;
+        this.trialEligibilityPerPlan = trialEligibilityPerPlan;
         this.trialExpiryPlanId = trialExpiryPlanId;
         this.trialExpiryPlanPriceId = trialExpiryPlanPriceId;
         this.trialPaymentMethodRequired = trialPaymentMethodRequired;
@@ -267,6 +271,11 @@ public final class PlanGroupResponseData {
         return trialDays;
     }
 
+    @JsonProperty("trial_eligibility_per_plan")
+    public boolean getTrialEligibilityPerPlan() {
+        return trialEligibilityPerPlan;
+    }
+
     @JsonProperty("trial_expiry_plan_id")
     public Optional<String> getTrialExpiryPlanId() {
         return trialExpiryPlanId;
@@ -319,6 +328,7 @@ public final class PlanGroupResponseData {
                 && syncCustomerBillingDetails == other.syncCustomerBillingDetails
                 && taxCollectionEnabled == other.taxCollectionEnabled
                 && trialDays.equals(other.trialDays)
+                && trialEligibilityPerPlan == other.trialEligibilityPerPlan
                 && trialExpiryPlanId.equals(other.trialExpiryPlanId)
                 && trialExpiryPlanPriceId.equals(other.trialExpiryPlanPriceId)
                 && trialPaymentMethodRequired.equals(other.trialPaymentMethodRequired);
@@ -352,6 +362,7 @@ public final class PlanGroupResponseData {
                 this.syncCustomerBillingDetails,
                 this.taxCollectionEnabled,
                 this.trialDays,
+                this.trialEligibilityPerPlan,
                 this.trialExpiryPlanId,
                 this.trialExpiryPlanPriceId,
                 this.trialPaymentMethodRequired);
@@ -413,7 +424,11 @@ public final class PlanGroupResponseData {
     }
 
     public interface TaxCollectionEnabledStage {
-        _FinalStage taxCollectionEnabled(boolean taxCollectionEnabled);
+        TrialEligibilityPerPlanStage taxCollectionEnabled(boolean taxCollectionEnabled);
+    }
+
+    public interface TrialEligibilityPerPlanStage {
+        _FinalStage trialEligibilityPerPlan(boolean trialEligibilityPerPlan);
     }
 
     public interface _FinalStage {
@@ -510,6 +525,7 @@ public final class PlanGroupResponseData {
                     ShowZeroPriceAsFreeStage,
                     SyncCustomerBillingDetailsStage,
                     TaxCollectionEnabledStage,
+                    TrialEligibilityPerPlanStage,
                     _FinalStage {
         private CheckoutSettingsResponseData checkoutSettings;
 
@@ -534,6 +550,8 @@ public final class PlanGroupResponseData {
         private boolean syncCustomerBillingDetails;
 
         private boolean taxCollectionEnabled;
+
+        private boolean trialEligibilityPerPlan;
 
         private Optional<Boolean> trialPaymentMethodRequired = Optional.empty();
 
@@ -599,6 +617,7 @@ public final class PlanGroupResponseData {
             syncCustomerBillingDetails(other.getSyncCustomerBillingDetails());
             taxCollectionEnabled(other.getTaxCollectionEnabled());
             trialDays(other.getTrialDays());
+            trialEligibilityPerPlan(other.getTrialEligibilityPerPlan());
             trialExpiryPlanId(other.getTrialExpiryPlanId());
             trialExpiryPlanPriceId(other.getTrialExpiryPlanPriceId());
             trialPaymentMethodRequired(other.getTrialPaymentMethodRequired());
@@ -684,8 +703,15 @@ public final class PlanGroupResponseData {
 
         @java.lang.Override
         @JsonSetter("tax_collection_enabled")
-        public _FinalStage taxCollectionEnabled(boolean taxCollectionEnabled) {
+        public TrialEligibilityPerPlanStage taxCollectionEnabled(boolean taxCollectionEnabled) {
             this.taxCollectionEnabled = taxCollectionEnabled;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("trial_eligibility_per_plan")
+        public _FinalStage trialEligibilityPerPlan(boolean trialEligibilityPerPlan) {
+            this.trialEligibilityPerPlan = trialEligibilityPerPlan;
             return this;
         }
 
@@ -971,6 +997,7 @@ public final class PlanGroupResponseData {
                     syncCustomerBillingDetails,
                     taxCollectionEnabled,
                     trialDays,
+                    trialEligibilityPerPlan,
                     trialExpiryPlanId,
                     trialExpiryPlanPriceId,
                     trialPaymentMethodRequired,

@@ -32,6 +32,8 @@ public final class CheckoutDataResponseData {
 
     private final Optional<CompanyDetailResponseData> company;
 
+    private final boolean companyCanTrialSelectedPlan;
+
     private final List<CheckoutFieldWithValue> customCheckoutFields;
 
     private final Optional<FeatureUsageDetailResponseData> featureUsage;
@@ -39,6 +41,8 @@ public final class CheckoutDataResponseData {
     private final List<CreditBundlePurchaseResponseData> selectedCreditBundles;
 
     private final Optional<PlanDetailResponseData> selectedPlan;
+
+    private final boolean selectedPlanAlreadyTrialed;
 
     private final List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements;
 
@@ -52,10 +56,12 @@ public final class CheckoutDataResponseData {
             List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements,
             List<BillingCreditBundleResponseData> availableCreditBundles,
             Optional<CompanyDetailResponseData> company,
+            boolean companyCanTrialSelectedPlan,
             List<CheckoutFieldWithValue> customCheckoutFields,
             Optional<FeatureUsageDetailResponseData> featureUsage,
             List<CreditBundlePurchaseResponseData> selectedCreditBundles,
             Optional<PlanDetailResponseData> selectedPlan,
+            boolean selectedPlanAlreadyTrialed,
             List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements,
             Optional<CompanySubscriptionResponseData> subscription,
             Map<String, Object> additionalProperties) {
@@ -64,10 +70,12 @@ public final class CheckoutDataResponseData {
         this.activeUsageBasedEntitlements = activeUsageBasedEntitlements;
         this.availableCreditBundles = availableCreditBundles;
         this.company = company;
+        this.companyCanTrialSelectedPlan = companyCanTrialSelectedPlan;
         this.customCheckoutFields = customCheckoutFields;
         this.featureUsage = featureUsage;
         this.selectedCreditBundles = selectedCreditBundles;
         this.selectedPlan = selectedPlan;
+        this.selectedPlanAlreadyTrialed = selectedPlanAlreadyTrialed;
         this.selectedUsageBasedEntitlements = selectedUsageBasedEntitlements;
         this.subscription = subscription;
         this.additionalProperties = additionalProperties;
@@ -98,6 +106,11 @@ public final class CheckoutDataResponseData {
         return company;
     }
 
+    @JsonProperty("company_can_trial_selected_plan")
+    public boolean getCompanyCanTrialSelectedPlan() {
+        return companyCanTrialSelectedPlan;
+    }
+
     @JsonProperty("custom_checkout_fields")
     public List<CheckoutFieldWithValue> getCustomCheckoutFields() {
         return customCheckoutFields;
@@ -116,6 +129,11 @@ public final class CheckoutDataResponseData {
     @JsonProperty("selected_plan")
     public Optional<PlanDetailResponseData> getSelectedPlan() {
         return selectedPlan;
+    }
+
+    @JsonProperty("selected_plan_already_trialed")
+    public boolean getSelectedPlanAlreadyTrialed() {
+        return selectedPlanAlreadyTrialed;
     }
 
     @JsonProperty("selected_usage_based_entitlements")
@@ -145,10 +163,12 @@ public final class CheckoutDataResponseData {
                 && activeUsageBasedEntitlements.equals(other.activeUsageBasedEntitlements)
                 && availableCreditBundles.equals(other.availableCreditBundles)
                 && company.equals(other.company)
+                && companyCanTrialSelectedPlan == other.companyCanTrialSelectedPlan
                 && customCheckoutFields.equals(other.customCheckoutFields)
                 && featureUsage.equals(other.featureUsage)
                 && selectedCreditBundles.equals(other.selectedCreditBundles)
                 && selectedPlan.equals(other.selectedPlan)
+                && selectedPlanAlreadyTrialed == other.selectedPlanAlreadyTrialed
                 && selectedUsageBasedEntitlements.equals(other.selectedUsageBasedEntitlements)
                 && subscription.equals(other.subscription);
     }
@@ -161,10 +181,12 @@ public final class CheckoutDataResponseData {
                 this.activeUsageBasedEntitlements,
                 this.availableCreditBundles,
                 this.company,
+                this.companyCanTrialSelectedPlan,
                 this.customCheckoutFields,
                 this.featureUsage,
                 this.selectedCreditBundles,
                 this.selectedPlan,
+                this.selectedPlanAlreadyTrialed,
                 this.selectedUsageBasedEntitlements,
                 this.subscription);
     }
@@ -174,207 +196,185 @@ public final class CheckoutDataResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static CompanyCanTrialSelectedPlanStage builder() {
         return new Builder();
     }
 
+    public interface CompanyCanTrialSelectedPlanStage {
+        SelectedPlanAlreadyTrialedStage companyCanTrialSelectedPlan(boolean companyCanTrialSelectedPlan);
+
+        Builder from(CheckoutDataResponseData other);
+    }
+
+    public interface SelectedPlanAlreadyTrialedStage {
+        _FinalStage selectedPlanAlreadyTrialed(boolean selectedPlanAlreadyTrialed);
+    }
+
+    public interface _FinalStage {
+        CheckoutDataResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage activeAddOns(List<PlanDetailResponseData> activeAddOns);
+
+        _FinalStage addActiveAddOns(PlanDetailResponseData activeAddOns);
+
+        _FinalStage addAllActiveAddOns(List<PlanDetailResponseData> activeAddOns);
+
+        _FinalStage activePlan(Optional<PlanDetailResponseData> activePlan);
+
+        _FinalStage activePlan(PlanDetailResponseData activePlan);
+
+        _FinalStage activeUsageBasedEntitlements(List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements);
+
+        _FinalStage addActiveUsageBasedEntitlements(UsageBasedEntitlementResponseData activeUsageBasedEntitlements);
+
+        _FinalStage addAllActiveUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements);
+
+        _FinalStage availableCreditBundles(List<BillingCreditBundleResponseData> availableCreditBundles);
+
+        _FinalStage addAvailableCreditBundles(BillingCreditBundleResponseData availableCreditBundles);
+
+        _FinalStage addAllAvailableCreditBundles(List<BillingCreditBundleResponseData> availableCreditBundles);
+
+        _FinalStage company(Optional<CompanyDetailResponseData> company);
+
+        _FinalStage company(CompanyDetailResponseData company);
+
+        _FinalStage customCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields);
+
+        _FinalStage addCustomCheckoutFields(CheckoutFieldWithValue customCheckoutFields);
+
+        _FinalStage addAllCustomCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields);
+
+        _FinalStage featureUsage(Optional<FeatureUsageDetailResponseData> featureUsage);
+
+        _FinalStage featureUsage(FeatureUsageDetailResponseData featureUsage);
+
+        _FinalStage selectedCreditBundles(List<CreditBundlePurchaseResponseData> selectedCreditBundles);
+
+        _FinalStage addSelectedCreditBundles(CreditBundlePurchaseResponseData selectedCreditBundles);
+
+        _FinalStage addAllSelectedCreditBundles(List<CreditBundlePurchaseResponseData> selectedCreditBundles);
+
+        _FinalStage selectedPlan(Optional<PlanDetailResponseData> selectedPlan);
+
+        _FinalStage selectedPlan(PlanDetailResponseData selectedPlan);
+
+        _FinalStage selectedUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements);
+
+        _FinalStage addSelectedUsageBasedEntitlements(UsageBasedEntitlementResponseData selectedUsageBasedEntitlements);
+
+        _FinalStage addAllSelectedUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements);
+
+        _FinalStage subscription(Optional<CompanySubscriptionResponseData> subscription);
+
+        _FinalStage subscription(CompanySubscriptionResponseData subscription);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private List<PlanDetailResponseData> activeAddOns = new ArrayList<>();
+    public static final class Builder
+            implements CompanyCanTrialSelectedPlanStage, SelectedPlanAlreadyTrialedStage, _FinalStage {
+        private boolean companyCanTrialSelectedPlan;
 
-        private Optional<PlanDetailResponseData> activePlan = Optional.empty();
+        private boolean selectedPlanAlreadyTrialed;
 
-        private List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements = new ArrayList<>();
-
-        private List<BillingCreditBundleResponseData> availableCreditBundles = new ArrayList<>();
-
-        private Optional<CompanyDetailResponseData> company = Optional.empty();
-
-        private List<CheckoutFieldWithValue> customCheckoutFields = new ArrayList<>();
-
-        private Optional<FeatureUsageDetailResponseData> featureUsage = Optional.empty();
-
-        private List<CreditBundlePurchaseResponseData> selectedCreditBundles = new ArrayList<>();
-
-        private Optional<PlanDetailResponseData> selectedPlan = Optional.empty();
+        private Optional<CompanySubscriptionResponseData> subscription = Optional.empty();
 
         private List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements = new ArrayList<>();
 
-        private Optional<CompanySubscriptionResponseData> subscription = Optional.empty();
+        private Optional<PlanDetailResponseData> selectedPlan = Optional.empty();
+
+        private List<CreditBundlePurchaseResponseData> selectedCreditBundles = new ArrayList<>();
+
+        private Optional<FeatureUsageDetailResponseData> featureUsage = Optional.empty();
+
+        private List<CheckoutFieldWithValue> customCheckoutFields = new ArrayList<>();
+
+        private Optional<CompanyDetailResponseData> company = Optional.empty();
+
+        private List<BillingCreditBundleResponseData> availableCreditBundles = new ArrayList<>();
+
+        private List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements = new ArrayList<>();
+
+        private Optional<PlanDetailResponseData> activePlan = Optional.empty();
+
+        private List<PlanDetailResponseData> activeAddOns = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(CheckoutDataResponseData other) {
             activeAddOns(other.getActiveAddOns());
             activePlan(other.getActivePlan());
             activeUsageBasedEntitlements(other.getActiveUsageBasedEntitlements());
             availableCreditBundles(other.getAvailableCreditBundles());
             company(other.getCompany());
+            companyCanTrialSelectedPlan(other.getCompanyCanTrialSelectedPlan());
             customCheckoutFields(other.getCustomCheckoutFields());
             featureUsage(other.getFeatureUsage());
             selectedCreditBundles(other.getSelectedCreditBundles());
             selectedPlan(other.getSelectedPlan());
+            selectedPlanAlreadyTrialed(other.getSelectedPlanAlreadyTrialed());
             selectedUsageBasedEntitlements(other.getSelectedUsageBasedEntitlements());
             subscription(other.getSubscription());
             return this;
         }
 
-        @JsonSetter(value = "active_add_ons", nulls = Nulls.SKIP)
-        public Builder activeAddOns(List<PlanDetailResponseData> activeAddOns) {
-            this.activeAddOns.clear();
-            if (activeAddOns != null) {
-                this.activeAddOns.addAll(activeAddOns);
+        @java.lang.Override
+        @JsonSetter("company_can_trial_selected_plan")
+        public SelectedPlanAlreadyTrialedStage companyCanTrialSelectedPlan(boolean companyCanTrialSelectedPlan) {
+            this.companyCanTrialSelectedPlan = companyCanTrialSelectedPlan;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("selected_plan_already_trialed")
+        public _FinalStage selectedPlanAlreadyTrialed(boolean selectedPlanAlreadyTrialed) {
+            this.selectedPlanAlreadyTrialed = selectedPlanAlreadyTrialed;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage subscription(CompanySubscriptionResponseData subscription) {
+            this.subscription = Optional.ofNullable(subscription);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "subscription", nulls = Nulls.SKIP)
+        public _FinalStage subscription(Optional<CompanySubscriptionResponseData> subscription) {
+            this.subscription = subscription;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllSelectedUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements) {
+            if (selectedUsageBasedEntitlements != null) {
+                this.selectedUsageBasedEntitlements.addAll(selectedUsageBasedEntitlements);
             }
             return this;
         }
 
-        public Builder addActiveAddOns(PlanDetailResponseData activeAddOns) {
-            this.activeAddOns.add(activeAddOns);
+        @java.lang.Override
+        public _FinalStage addSelectedUsageBasedEntitlements(
+                UsageBasedEntitlementResponseData selectedUsageBasedEntitlements) {
+            this.selectedUsageBasedEntitlements.add(selectedUsageBasedEntitlements);
             return this;
         }
 
-        public Builder addAllActiveAddOns(List<PlanDetailResponseData> activeAddOns) {
-            if (activeAddOns != null) {
-                this.activeAddOns.addAll(activeAddOns);
-            }
-            return this;
-        }
-
-        @JsonSetter(value = "active_plan", nulls = Nulls.SKIP)
-        public Builder activePlan(Optional<PlanDetailResponseData> activePlan) {
-            this.activePlan = activePlan;
-            return this;
-        }
-
-        public Builder activePlan(PlanDetailResponseData activePlan) {
-            this.activePlan = Optional.ofNullable(activePlan);
-            return this;
-        }
-
-        @JsonSetter(value = "active_usage_based_entitlements", nulls = Nulls.SKIP)
-        public Builder activeUsageBasedEntitlements(
-                List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements) {
-            this.activeUsageBasedEntitlements.clear();
-            if (activeUsageBasedEntitlements != null) {
-                this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
-            }
-            return this;
-        }
-
-        public Builder addActiveUsageBasedEntitlements(UsageBasedEntitlementResponseData activeUsageBasedEntitlements) {
-            this.activeUsageBasedEntitlements.add(activeUsageBasedEntitlements);
-            return this;
-        }
-
-        public Builder addAllActiveUsageBasedEntitlements(
-                List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements) {
-            if (activeUsageBasedEntitlements != null) {
-                this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
-            }
-            return this;
-        }
-
-        @JsonSetter(value = "available_credit_bundles", nulls = Nulls.SKIP)
-        public Builder availableCreditBundles(List<BillingCreditBundleResponseData> availableCreditBundles) {
-            this.availableCreditBundles.clear();
-            if (availableCreditBundles != null) {
-                this.availableCreditBundles.addAll(availableCreditBundles);
-            }
-            return this;
-        }
-
-        public Builder addAvailableCreditBundles(BillingCreditBundleResponseData availableCreditBundles) {
-            this.availableCreditBundles.add(availableCreditBundles);
-            return this;
-        }
-
-        public Builder addAllAvailableCreditBundles(List<BillingCreditBundleResponseData> availableCreditBundles) {
-            if (availableCreditBundles != null) {
-                this.availableCreditBundles.addAll(availableCreditBundles);
-            }
-            return this;
-        }
-
-        @JsonSetter(value = "company", nulls = Nulls.SKIP)
-        public Builder company(Optional<CompanyDetailResponseData> company) {
-            this.company = company;
-            return this;
-        }
-
-        public Builder company(CompanyDetailResponseData company) {
-            this.company = Optional.ofNullable(company);
-            return this;
-        }
-
-        @JsonSetter(value = "custom_checkout_fields", nulls = Nulls.SKIP)
-        public Builder customCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
-            this.customCheckoutFields.clear();
-            if (customCheckoutFields != null) {
-                this.customCheckoutFields.addAll(customCheckoutFields);
-            }
-            return this;
-        }
-
-        public Builder addCustomCheckoutFields(CheckoutFieldWithValue customCheckoutFields) {
-            this.customCheckoutFields.add(customCheckoutFields);
-            return this;
-        }
-
-        public Builder addAllCustomCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
-            if (customCheckoutFields != null) {
-                this.customCheckoutFields.addAll(customCheckoutFields);
-            }
-            return this;
-        }
-
-        @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
-        public Builder featureUsage(Optional<FeatureUsageDetailResponseData> featureUsage) {
-            this.featureUsage = featureUsage;
-            return this;
-        }
-
-        public Builder featureUsage(FeatureUsageDetailResponseData featureUsage) {
-            this.featureUsage = Optional.ofNullable(featureUsage);
-            return this;
-        }
-
-        @JsonSetter(value = "selected_credit_bundles", nulls = Nulls.SKIP)
-        public Builder selectedCreditBundles(List<CreditBundlePurchaseResponseData> selectedCreditBundles) {
-            this.selectedCreditBundles.clear();
-            if (selectedCreditBundles != null) {
-                this.selectedCreditBundles.addAll(selectedCreditBundles);
-            }
-            return this;
-        }
-
-        public Builder addSelectedCreditBundles(CreditBundlePurchaseResponseData selectedCreditBundles) {
-            this.selectedCreditBundles.add(selectedCreditBundles);
-            return this;
-        }
-
-        public Builder addAllSelectedCreditBundles(List<CreditBundlePurchaseResponseData> selectedCreditBundles) {
-            if (selectedCreditBundles != null) {
-                this.selectedCreditBundles.addAll(selectedCreditBundles);
-            }
-            return this;
-        }
-
-        @JsonSetter(value = "selected_plan", nulls = Nulls.SKIP)
-        public Builder selectedPlan(Optional<PlanDetailResponseData> selectedPlan) {
-            this.selectedPlan = selectedPlan;
-            return this;
-        }
-
-        public Builder selectedPlan(PlanDetailResponseData selectedPlan) {
-            this.selectedPlan = Optional.ofNullable(selectedPlan);
-            return this;
-        }
-
+        @java.lang.Override
         @JsonSetter(value = "selected_usage_based_entitlements", nulls = Nulls.SKIP)
-        public Builder selectedUsageBasedEntitlements(
+        public _FinalStage selectedUsageBasedEntitlements(
                 List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements) {
             this.selectedUsageBasedEntitlements.clear();
             if (selectedUsageBasedEntitlements != null) {
@@ -383,31 +383,182 @@ public final class CheckoutDataResponseData {
             return this;
         }
 
-        public Builder addSelectedUsageBasedEntitlements(
-                UsageBasedEntitlementResponseData selectedUsageBasedEntitlements) {
-            this.selectedUsageBasedEntitlements.add(selectedUsageBasedEntitlements);
+        @java.lang.Override
+        public _FinalStage selectedPlan(PlanDetailResponseData selectedPlan) {
+            this.selectedPlan = Optional.ofNullable(selectedPlan);
             return this;
         }
 
-        public Builder addAllSelectedUsageBasedEntitlements(
-                List<UsageBasedEntitlementResponseData> selectedUsageBasedEntitlements) {
-            if (selectedUsageBasedEntitlements != null) {
-                this.selectedUsageBasedEntitlements.addAll(selectedUsageBasedEntitlements);
+        @java.lang.Override
+        @JsonSetter(value = "selected_plan", nulls = Nulls.SKIP)
+        public _FinalStage selectedPlan(Optional<PlanDetailResponseData> selectedPlan) {
+            this.selectedPlan = selectedPlan;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllSelectedCreditBundles(List<CreditBundlePurchaseResponseData> selectedCreditBundles) {
+            if (selectedCreditBundles != null) {
+                this.selectedCreditBundles.addAll(selectedCreditBundles);
             }
             return this;
         }
 
-        @JsonSetter(value = "subscription", nulls = Nulls.SKIP)
-        public Builder subscription(Optional<CompanySubscriptionResponseData> subscription) {
-            this.subscription = subscription;
+        @java.lang.Override
+        public _FinalStage addSelectedCreditBundles(CreditBundlePurchaseResponseData selectedCreditBundles) {
+            this.selectedCreditBundles.add(selectedCreditBundles);
             return this;
         }
 
-        public Builder subscription(CompanySubscriptionResponseData subscription) {
-            this.subscription = Optional.ofNullable(subscription);
+        @java.lang.Override
+        @JsonSetter(value = "selected_credit_bundles", nulls = Nulls.SKIP)
+        public _FinalStage selectedCreditBundles(List<CreditBundlePurchaseResponseData> selectedCreditBundles) {
+            this.selectedCreditBundles.clear();
+            if (selectedCreditBundles != null) {
+                this.selectedCreditBundles.addAll(selectedCreditBundles);
+            }
             return this;
         }
 
+        @java.lang.Override
+        public _FinalStage featureUsage(FeatureUsageDetailResponseData featureUsage) {
+            this.featureUsage = Optional.ofNullable(featureUsage);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "feature_usage", nulls = Nulls.SKIP)
+        public _FinalStage featureUsage(Optional<FeatureUsageDetailResponseData> featureUsage) {
+            this.featureUsage = featureUsage;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllCustomCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCustomCheckoutFields(CheckoutFieldWithValue customCheckoutFields) {
+            this.customCheckoutFields.add(customCheckoutFields);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_checkout_fields", nulls = Nulls.SKIP)
+        public _FinalStage customCheckoutFields(List<CheckoutFieldWithValue> customCheckoutFields) {
+            this.customCheckoutFields.clear();
+            if (customCheckoutFields != null) {
+                this.customCheckoutFields.addAll(customCheckoutFields);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage company(CompanyDetailResponseData company) {
+            this.company = Optional.ofNullable(company);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company", nulls = Nulls.SKIP)
+        public _FinalStage company(Optional<CompanyDetailResponseData> company) {
+            this.company = company;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllAvailableCreditBundles(List<BillingCreditBundleResponseData> availableCreditBundles) {
+            if (availableCreditBundles != null) {
+                this.availableCreditBundles.addAll(availableCreditBundles);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAvailableCreditBundles(BillingCreditBundleResponseData availableCreditBundles) {
+            this.availableCreditBundles.add(availableCreditBundles);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "available_credit_bundles", nulls = Nulls.SKIP)
+        public _FinalStage availableCreditBundles(List<BillingCreditBundleResponseData> availableCreditBundles) {
+            this.availableCreditBundles.clear();
+            if (availableCreditBundles != null) {
+                this.availableCreditBundles.addAll(availableCreditBundles);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllActiveUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements) {
+            if (activeUsageBasedEntitlements != null) {
+                this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addActiveUsageBasedEntitlements(
+                UsageBasedEntitlementResponseData activeUsageBasedEntitlements) {
+            this.activeUsageBasedEntitlements.add(activeUsageBasedEntitlements);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "active_usage_based_entitlements", nulls = Nulls.SKIP)
+        public _FinalStage activeUsageBasedEntitlements(
+                List<UsageBasedEntitlementResponseData> activeUsageBasedEntitlements) {
+            this.activeUsageBasedEntitlements.clear();
+            if (activeUsageBasedEntitlements != null) {
+                this.activeUsageBasedEntitlements.addAll(activeUsageBasedEntitlements);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage activePlan(PlanDetailResponseData activePlan) {
+            this.activePlan = Optional.ofNullable(activePlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "active_plan", nulls = Nulls.SKIP)
+        public _FinalStage activePlan(Optional<PlanDetailResponseData> activePlan) {
+            this.activePlan = activePlan;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllActiveAddOns(List<PlanDetailResponseData> activeAddOns) {
+            if (activeAddOns != null) {
+                this.activeAddOns.addAll(activeAddOns);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addActiveAddOns(PlanDetailResponseData activeAddOns) {
+            this.activeAddOns.add(activeAddOns);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "active_add_ons", nulls = Nulls.SKIP)
+        public _FinalStage activeAddOns(List<PlanDetailResponseData> activeAddOns) {
+            this.activeAddOns.clear();
+            if (activeAddOns != null) {
+                this.activeAddOns.addAll(activeAddOns);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public CheckoutDataResponseData build() {
             return new CheckoutDataResponseData(
                     activeAddOns,
@@ -415,20 +566,24 @@ public final class CheckoutDataResponseData {
                     activeUsageBasedEntitlements,
                     availableCreditBundles,
                     company,
+                    companyCanTrialSelectedPlan,
                     customCheckoutFields,
                     featureUsage,
                     selectedCreditBundles,
                     selectedPlan,
+                    selectedPlanAlreadyTrialed,
                     selectedUsageBasedEntitlements,
                     subscription,
                     additionalProperties);
         }
 
+        @java.lang.Override
         public Builder additionalProperty(String key, Object value) {
             this.additionalProperties.put(key, value);
             return this;
         }
 
+        @java.lang.Override
         public Builder additionalProperties(Map<String, Object> additionalProperties) {
             this.additionalProperties.putAll(additionalProperties);
             return this;

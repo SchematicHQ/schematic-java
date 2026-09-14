@@ -18,6 +18,7 @@ import com.schematic.api.errors.ForbiddenError;
 import com.schematic.api.errors.InternalServerError;
 import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
+import com.schematic.api.resources.features.requests.CheckAndReserveFlagRequestBody;
 import com.schematic.api.resources.features.requests.CheckFlagsBulkRequestBody;
 import com.schematic.api.resources.features.requests.CountFeaturesRequest;
 import com.schematic.api.resources.features.requests.CountFlagsRequest;
@@ -27,6 +28,7 @@ import com.schematic.api.resources.features.requests.ListFeaturesRequest;
 import com.schematic.api.resources.features.requests.ListFlagsRequest;
 import com.schematic.api.resources.features.requests.UpdateFeatureRequestBody;
 import com.schematic.api.resources.features.requests.UpdateFlagRulesRequestBody;
+import com.schematic.api.resources.features.types.CheckAndReserveFlagResponse;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
 import com.schematic.api.resources.features.types.CheckFlagsBulkResponse;
 import com.schematic.api.resources.features.types.CheckFlagsResponse;
@@ -1241,6 +1243,98 @@ public class RawFeaturesClient {
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CheckFlagResponse.class), response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<CheckAndReserveFlagResponse> checkAndReserveFlag(String key) {
+        return checkAndReserveFlag(key, CheckAndReserveFlagRequestBody.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<CheckAndReserveFlagResponse> checkAndReserveFlag(
+            String key, RequestOptions requestOptions) {
+        return checkAndReserveFlag(key, CheckAndReserveFlagRequestBody.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<CheckAndReserveFlagResponse> checkAndReserveFlag(
+            String key, CheckAndReserveFlagRequestBody request) {
+        return checkAndReserveFlag(key, request, null);
+    }
+
+    public BaseSchematicHttpResponse<CheckAndReserveFlagResponse> checkAndReserveFlag(
+            String key, CheckAndReserveFlagRequestBody request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("flags")
+                .addPathSegment(key)
+                .addPathSegments("check-and-reserve");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CheckAndReserveFlagResponse.class),
+                        response);
             }
             try {
                 switch (response.code()) {

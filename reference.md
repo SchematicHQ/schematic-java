@@ -3912,6 +3912,14 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
+**startedAt:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **status:** `Optional<String>` 
     
 </dd>
@@ -5156,6 +5164,14 @@ client.credits().grantBillingCreditsToCompany(
 <dl>
 <dd>
 
+**creditBundleId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **creditId:** `String` 
     
 </dd>
@@ -5683,7 +5699,7 @@ client.credits().extendCreditLease(
 </dl>
 </details>
 
-<details><summary><code>client.credits.releaseCreditLease(leaseId, request) -> ReleaseCreditLeaseResponse</code></summary>
+<details><summary><code>client.credits.releaseCreditLease(leaseId) -> ReleaseCreditLeaseResponse</code></summary>
 <dl>
 <dd>
 
@@ -5696,12 +5712,7 @@ client.credits().extendCreditLease(
 <dd>
 
 ```java
-client.credits().releaseCreditLease(
-    "lease_id",
-    new HashMap<String, JsonNode>() {{
-        put("key", ObjectMappers.JSON_MAPPER.valueToTree("value"));
-    }}
-);
+client.credits().releaseCreditLease("lease_id");
 ```
 </dd>
 </dl>
@@ -5717,14 +5728,6 @@ client.credits().releaseCreditLease(
 <dd>
 
 **leaseId:** `String` — lease_id
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Map<String, Object>` 
     
 </dd>
 </dl>
@@ -6151,6 +6154,125 @@ client.credits().countBillingPlanCreditGrants(
 <dd>
 
 **offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.reserveCredits(request) -> ReserveCreditsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().reserveCredits(
+    ReserveCreditsRequestBody
+        .builder()
+        .amount(1.1)
+        .companyId("company_id")
+        .creditTypeId("credit_type_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**amount:** `Double` — Credits to hold for the operation. The full amount must be available; a partial hold is never taken
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**creditTypeId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expiresAt:** `Optional<OffsetDateTime>` — When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — A caller-chosen key for safe retries: a second request with the same key returns the original reservation instead of taking another hold
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.credits.releaseCreditReservation(reservationId) -> ReleaseCreditReservationResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().releaseCreditReservation("reservation_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**reservationId:** `String` — reservation_id
     
 </dd>
 </dl>
@@ -14457,6 +14579,7 @@ client.plans().listPlans(
         .companyId("company_id")
         .companyScopedOnly(true)
         .excludeCompanyScoped(true)
+        .excludeUnused(true)
         .forFallbackPlan(true)
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
@@ -14503,6 +14626,14 @@ client.plans().listPlans(
 <dd>
 
 **excludeCompanyScoped:** `Optional<Boolean>` — Exclude plans that are scoped to a company (custom plans assigned to a company)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**excludeUnused:** `Optional<Boolean>` — Exclude plans that nothing is using: no company is on the plan and it has no draft version
     
 </dd>
 </dl>
@@ -15137,6 +15268,7 @@ client.plans().countPlans(
         .companyId("company_id")
         .companyScopedOnly(true)
         .excludeCompanyScoped(true)
+        .excludeUnused(true)
         .forFallbackPlan(true)
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
@@ -15183,6 +15315,14 @@ client.plans().countPlans(
 <dd>
 
 **excludeCompanyScoped:** `Optional<Boolean>` — Exclude plans that are scoped to a company (custom plans assigned to a company)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**excludeUnused:** `Optional<Boolean>` — Exclude plans that nothing is using: no company is on the plan and it has no draft version
     
 </dd>
 </dl>
@@ -18161,6 +18301,91 @@ client.features().checkFlag(
 </dl>
 </details>
 
+<details><summary><code>client.features.checkAndReserveFlag(key, request) -> CheckAndReserveFlagResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.features().checkAndReserveFlag(
+    "key",
+    CheckAndReserveFlagRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**key:** `String` — key
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**company:** `Optional<Map<String, String>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expiresAt:** `Optional<OffsetDateTime>` — When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**preflight:** `Optional<PreflightRequestBody>` — Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is quantity times the entitlement's consumption rate
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quantity:** `Optional<Double>` — Units of the feature the operation will consume; defaults to 1. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user:** `Optional<Map<String, String>>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.features.checkFlags(request) -> CheckFlagsResponse</code></summary>
 <dl>
 <dd>
@@ -19906,6 +20131,14 @@ client.plangroups().createPlanGroup(
 <dl>
 <dd>
 
+**trialEligibilityPerPlan:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **trialExpiryPlanId:** `Optional<String>` 
     
 </dd>
@@ -20291,6 +20524,14 @@ client.plangroups().updatePlanGroup(
 <dd>
 
 **trialDays:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**trialEligibilityPerPlan:** `Optional<Boolean>` 
     
 </dd>
 </dl>

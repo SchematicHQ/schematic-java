@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class RulesEngineSchemaVersion {
-    public static final RulesEngineSchemaVersion VC_8_EB_8_DF_4 =
-            new RulesEngineSchemaVersion(Value.VC_8_EB_8_DF_4, "vc8eb8df4");
+    public static final RulesEngineSchemaVersion V_94_B_8_F_7_A_7 =
+            new RulesEngineSchemaVersion(Value.V_94_B_8_F_7_A_7, "v94b8f7a7");
 
     public static final RulesEngineSchemaVersion PLACEHOLDER_FOR_FERN_COMPATIBILITY = new RulesEngineSchemaVersion(
             Value.PLACEHOLDER_FOR_FERN_COMPATIBILITY, "placeholder-for-fern-compatibility");
@@ -46,8 +46,8 @@ public final class RulesEngineSchemaVersion {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case VC_8_EB_8_DF_4:
-                return visitor.visitVc8Eb8Df4();
+            case V_94_B_8_F_7_A_7:
+                return visitor.visitV94B8F7A7();
             case PLACEHOLDER_FOR_FERN_COMPATIBILITY:
                 return visitor.visitPlaceholderForFernCompatibility();
             case UNKNOWN:
@@ -59,8 +59,8 @@ public final class RulesEngineSchemaVersion {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static RulesEngineSchemaVersion valueOf(String value) {
         switch (value) {
-            case "vc8eb8df4":
-                return VC_8_EB_8_DF_4;
+            case "v94b8f7a7":
+                return V_94_B_8_F_7_A_7;
             case "placeholder-for-fern-compatibility":
                 return PLACEHOLDER_FOR_FERN_COMPATIBILITY;
             default:
@@ -69,7 +69,7 @@ public final class RulesEngineSchemaVersion {
     }
 
     public enum Value {
-        VC_8_EB_8_DF_4,
+        V_94_B_8_F_7_A_7,
 
         PLACEHOLDER_FOR_FERN_COMPATIBILITY,
 
@@ -77,7 +77,7 @@ public final class RulesEngineSchemaVersion {
     }
 
     public interface Visitor<T> {
-        T visitVc8Eb8Df4();
+        T visitV94B8F7A7();
 
         T visitPlaceholderForFernCompatibility();
 

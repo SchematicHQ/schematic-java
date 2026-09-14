@@ -10,6 +10,9 @@ public final class OnboardingRequirement {
     public static final OnboardingRequirement CREATE_API_KEY =
             new OnboardingRequirement(Value.CREATE_API_KEY, "create_api_key");
 
+    public static final OnboardingRequirement GENERATE_ROADMAP =
+            new OnboardingRequirement(Value.GENERATE_ROADMAP, "generate_roadmap");
+
     public static final OnboardingRequirement IMPORT_COMPANIES =
             new OnboardingRequirement(Value.IMPORT_COMPANIES, "import_companies");
 
@@ -62,6 +65,8 @@ public final class OnboardingRequirement {
         switch (value) {
             case CREATE_API_KEY:
                 return visitor.visitCreateApiKey();
+            case GENERATE_ROADMAP:
+                return visitor.visitGenerateRoadmap();
             case IMPORT_COMPANIES:
                 return visitor.visitImportCompanies();
             case SEND_EVENTS:
@@ -85,6 +90,8 @@ public final class OnboardingRequirement {
         switch (value) {
             case "create_api_key":
                 return CREATE_API_KEY;
+            case "generate_roadmap":
+                return GENERATE_ROADMAP;
             case "import_companies":
                 return IMPORT_COMPANIES;
             case "send_events":
@@ -111,6 +118,8 @@ public final class OnboardingRequirement {
 
         FIRST_FLAG_CHECK,
 
+        GENERATE_ROADMAP,
+
         IMPORT_COMPANIES,
 
         MODEL_PACKAGING,
@@ -128,6 +137,8 @@ public final class OnboardingRequirement {
         T visitCreateApiKey();
 
         T visitFirstFlagCheck();
+
+        T visitGenerateRoadmap();
 
         T visitImportCompanies();
 

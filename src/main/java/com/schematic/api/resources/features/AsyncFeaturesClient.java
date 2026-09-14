@@ -5,6 +5,7 @@ package com.schematic.api.resources.features;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.features.requests.CheckAndReserveFlagRequestBody;
 import com.schematic.api.resources.features.requests.CheckFlagsBulkRequestBody;
 import com.schematic.api.resources.features.requests.CountFeaturesRequest;
 import com.schematic.api.resources.features.requests.CountFlagsRequest;
@@ -14,6 +15,7 @@ import com.schematic.api.resources.features.requests.ListFeaturesRequest;
 import com.schematic.api.resources.features.requests.ListFlagsRequest;
 import com.schematic.api.resources.features.requests.UpdateFeatureRequestBody;
 import com.schematic.api.resources.features.requests.UpdateFlagRulesRequestBody;
+import com.schematic.api.resources.features.types.CheckAndReserveFlagResponse;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
 import com.schematic.api.resources.features.types.CheckFlagsBulkResponse;
 import com.schematic.api.resources.features.types.CheckFlagsResponse;
@@ -215,6 +217,25 @@ public class AsyncFeaturesClient {
     public CompletableFuture<CheckFlagResponse> checkFlag(
             String key, CheckFlagRequestBody request, RequestOptions requestOptions) {
         return this.rawClient.checkFlag(key, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CheckAndReserveFlagResponse> checkAndReserveFlag(String key) {
+        return this.rawClient.checkAndReserveFlag(key).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CheckAndReserveFlagResponse> checkAndReserveFlag(
+            String key, RequestOptions requestOptions) {
+        return this.rawClient.checkAndReserveFlag(key, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CheckAndReserveFlagResponse> checkAndReserveFlag(
+            String key, CheckAndReserveFlagRequestBody request) {
+        return this.rawClient.checkAndReserveFlag(key, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CheckAndReserveFlagResponse> checkAndReserveFlag(
+            String key, CheckAndReserveFlagRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.checkAndReserveFlag(key, request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CheckFlagsResponse> checkFlags() {

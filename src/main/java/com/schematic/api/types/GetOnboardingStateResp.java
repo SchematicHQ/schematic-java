@@ -39,6 +39,8 @@ public final class GetOnboardingStateResp {
 
     private final List<OnboardingRequirementView> requirements;
 
+    private final Optional<OnboardingRoadmapView> roadmap;
+
     private final Optional<SlackConnectInviteView> slackConnect;
 
     private final Optional<OnboardingStripeImport> stripeImport;
@@ -60,6 +62,7 @@ public final class GetOnboardingStateResp {
             Optional<OnboardingPath> path,
             Optional<String> pricingPageUrl,
             List<OnboardingRequirementView> requirements,
+            Optional<OnboardingRoadmapView> roadmap,
             Optional<SlackConnectInviteView> slackConnect,
             Optional<OnboardingStripeImport> stripeImport,
             List<OnboardingRequirement> suggestedNext,
@@ -74,6 +77,7 @@ public final class GetOnboardingStateResp {
         this.path = path;
         this.pricingPageUrl = pricingPageUrl;
         this.requirements = requirements;
+        this.roadmap = roadmap;
         this.slackConnect = slackConnect;
         this.stripeImport = stripeImport;
         this.suggestedNext = suggestedNext;
@@ -122,6 +126,11 @@ public final class GetOnboardingStateResp {
         return requirements;
     }
 
+    @JsonProperty("roadmap")
+    public Optional<OnboardingRoadmapView> getRoadmap() {
+        return roadmap;
+    }
+
     @JsonProperty("slack_connect")
     public Optional<SlackConnectInviteView> getSlackConnect() {
         return slackConnect;
@@ -167,6 +176,7 @@ public final class GetOnboardingStateResp {
                 && path.equals(other.path)
                 && pricingPageUrl.equals(other.pricingPageUrl)
                 && requirements.equals(other.requirements)
+                && roadmap.equals(other.roadmap)
                 && slackConnect.equals(other.slackConnect)
                 && stripeImport.equals(other.stripeImport)
                 && suggestedNext.equals(other.suggestedNext)
@@ -185,6 +195,7 @@ public final class GetOnboardingStateResp {
                 this.path,
                 this.pricingPageUrl,
                 this.requirements,
+                this.roadmap,
                 this.slackConnect,
                 this.stripeImport,
                 this.suggestedNext,
@@ -219,6 +230,8 @@ public final class GetOnboardingStateResp {
 
         private List<OnboardingRequirementView> requirements = new ArrayList<>();
 
+        private Optional<OnboardingRoadmapView> roadmap = Optional.empty();
+
         private Optional<SlackConnectInviteView> slackConnect = Optional.empty();
 
         private Optional<OnboardingStripeImport> stripeImport = Optional.empty();
@@ -243,6 +256,7 @@ public final class GetOnboardingStateResp {
             path(other.getPath());
             pricingPageUrl(other.getPricingPageUrl());
             requirements(other.getRequirements());
+            roadmap(other.getRoadmap());
             slackConnect(other.getSlackConnect());
             stripeImport(other.getStripeImport());
             suggestedNext(other.getSuggestedNext());
@@ -359,6 +373,17 @@ public final class GetOnboardingStateResp {
             return this;
         }
 
+        @JsonSetter(value = "roadmap", nulls = Nulls.SKIP)
+        public Builder roadmap(Optional<OnboardingRoadmapView> roadmap) {
+            this.roadmap = roadmap;
+            return this;
+        }
+
+        public Builder roadmap(OnboardingRoadmapView roadmap) {
+            this.roadmap = Optional.ofNullable(roadmap);
+            return this;
+        }
+
         @JsonSetter(value = "slack_connect", nulls = Nulls.SKIP)
         public Builder slackConnect(Optional<SlackConnectInviteView> slackConnect) {
             this.slackConnect = slackConnect;
@@ -434,6 +459,7 @@ public final class GetOnboardingStateResp {
                     path,
                     pricingPageUrl,
                     requirements,
+                    roadmap,
                     slackConnect,
                     stripeImport,
                     suggestedNext,

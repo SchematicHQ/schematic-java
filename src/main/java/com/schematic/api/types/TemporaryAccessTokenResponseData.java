@@ -9,18 +9,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TemporaryAccessTokenResponseData.Builder.class)
 public final class TemporaryAccessTokenResponseData {
-    private final String apiKeyId;
+    private final Optional<String> apiKeyId;
 
     private final OffsetDateTime createdAt;
 
@@ -30,6 +32,8 @@ public final class TemporaryAccessTokenResponseData {
 
     private final String id;
 
+    private final TemporaryAccessTokenIssuerType issuerType;
+
     private final String resourceType;
 
     private final OffsetDateTime updatedAt;
@@ -37,11 +41,12 @@ public final class TemporaryAccessTokenResponseData {
     private final Map<String, Object> additionalProperties;
 
     private TemporaryAccessTokenResponseData(
-            String apiKeyId,
+            Optional<String> apiKeyId,
             OffsetDateTime createdAt,
             String environmentId,
             OffsetDateTime expiredAt,
             String id,
+            TemporaryAccessTokenIssuerType issuerType,
             String resourceType,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
@@ -50,13 +55,14 @@ public final class TemporaryAccessTokenResponseData {
         this.environmentId = environmentId;
         this.expiredAt = expiredAt;
         this.id = id;
+        this.issuerType = issuerType;
         this.resourceType = resourceType;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("api_key_id")
-    public String getApiKeyId() {
+    public Optional<String> getApiKeyId() {
         return apiKeyId;
     }
 
@@ -78,6 +84,11 @@ public final class TemporaryAccessTokenResponseData {
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    @JsonProperty("issuer_type")
+    public TemporaryAccessTokenIssuerType getIssuerType() {
+        return issuerType;
     }
 
     @JsonProperty("resource_type")
@@ -107,6 +118,7 @@ public final class TemporaryAccessTokenResponseData {
                 && environmentId.equals(other.environmentId)
                 && expiredAt.equals(other.expiredAt)
                 && id.equals(other.id)
+                && issuerType.equals(other.issuerType)
                 && resourceType.equals(other.resourceType)
                 && updatedAt.equals(other.updatedAt);
     }
@@ -119,6 +131,7 @@ public final class TemporaryAccessTokenResponseData {
                 this.environmentId,
                 this.expiredAt,
                 this.id,
+                this.issuerType,
                 this.resourceType,
                 this.updatedAt);
     }
@@ -128,18 +141,14 @@ public final class TemporaryAccessTokenResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static ApiKeyIdStage builder() {
+    public static CreatedAtStage builder() {
         return new Builder();
-    }
-
-    public interface ApiKeyIdStage {
-        CreatedAtStage apiKeyId(@NotNull String apiKeyId);
-
-        Builder from(TemporaryAccessTokenResponseData other);
     }
 
     public interface CreatedAtStage {
         EnvironmentIdStage createdAt(@NotNull OffsetDateTime createdAt);
+
+        Builder from(TemporaryAccessTokenResponseData other);
     }
 
     public interface EnvironmentIdStage {
@@ -151,7 +160,11 @@ public final class TemporaryAccessTokenResponseData {
     }
 
     public interface IdStage {
-        ResourceTypeStage id(@NotNull String id);
+        IssuerTypeStage id(@NotNull String id);
+    }
+
+    public interface IssuerTypeStage {
+        ResourceTypeStage issuerType(@NotNull TemporaryAccessTokenIssuerType issuerType);
     }
 
     public interface ResourceTypeStage {
@@ -168,20 +181,22 @@ public final class TemporaryAccessTokenResponseData {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage apiKeyId(Optional<String> apiKeyId);
+
+        _FinalStage apiKeyId(String apiKeyId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements ApiKeyIdStage,
-                    CreatedAtStage,
+            implements CreatedAtStage,
                     EnvironmentIdStage,
                     ExpiredAtStage,
                     IdStage,
+                    IssuerTypeStage,
                     ResourceTypeStage,
                     UpdatedAtStage,
                     _FinalStage {
-        private String apiKeyId;
-
         private OffsetDateTime createdAt;
 
         private String environmentId;
@@ -190,9 +205,13 @@ public final class TemporaryAccessTokenResponseData {
 
         private String id;
 
+        private TemporaryAccessTokenIssuerType issuerType;
+
         private String resourceType;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<String> apiKeyId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -206,15 +225,9 @@ public final class TemporaryAccessTokenResponseData {
             environmentId(other.getEnvironmentId());
             expiredAt(other.getExpiredAt());
             id(other.getId());
+            issuerType(other.getIssuerType());
             resourceType(other.getResourceType());
             updatedAt(other.getUpdatedAt());
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("api_key_id")
-        public CreatedAtStage apiKeyId(@NotNull String apiKeyId) {
-            this.apiKeyId = Objects.requireNonNull(apiKeyId, "apiKeyId must not be null");
             return this;
         }
 
@@ -241,8 +254,15 @@ public final class TemporaryAccessTokenResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public ResourceTypeStage id(@NotNull String id) {
+        public IssuerTypeStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("issuer_type")
+        public ResourceTypeStage issuerType(@NotNull TemporaryAccessTokenIssuerType issuerType) {
+            this.issuerType = Objects.requireNonNull(issuerType, "issuerType must not be null");
             return this;
         }
 
@@ -261,9 +281,30 @@ public final class TemporaryAccessTokenResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage apiKeyId(String apiKeyId) {
+            this.apiKeyId = Optional.ofNullable(apiKeyId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "api_key_id", nulls = Nulls.SKIP)
+        public _FinalStage apiKeyId(Optional<String> apiKeyId) {
+            this.apiKeyId = apiKeyId;
+            return this;
+        }
+
+        @java.lang.Override
         public TemporaryAccessTokenResponseData build() {
             return new TemporaryAccessTokenResponseData(
-                    apiKeyId, createdAt, environmentId, expiredAt, id, resourceType, updatedAt, additionalProperties);
+                    apiKeyId,
+                    createdAt,
+                    environmentId,
+                    expiredAt,
+                    id,
+                    issuerType,
+                    resourceType,
+                    updatedAt,
+                    additionalProperties);
         }
 
         @java.lang.Override

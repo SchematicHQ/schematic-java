@@ -4,7 +4,6 @@
 package com.schematic.api.resources.credits;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.BaseSchematicHttpResponse;
@@ -42,6 +41,7 @@ import com.schematic.api.resources.credits.requests.ListCreditBundlesRequest;
 import com.schematic.api.resources.credits.requests.ListCreditEventLedgerRequest;
 import com.schematic.api.resources.credits.requests.ListCreditSpendPoliciesRequest;
 import com.schematic.api.resources.credits.requests.ListGrantsForCreditRequest;
+import com.schematic.api.resources.credits.requests.ReserveCreditsRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateBillingCreditRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditBundleDetailsRequestBody;
 import com.schematic.api.resources.credits.requests.UpdateCreditSpendPolicyRequestBody;
@@ -76,6 +76,8 @@ import com.schematic.api.resources.credits.types.ListCreditEventLedgerResponse;
 import com.schematic.api.resources.credits.types.ListCreditSpendPoliciesResponse;
 import com.schematic.api.resources.credits.types.ListGrantsForCreditResponse;
 import com.schematic.api.resources.credits.types.ReleaseCreditLeaseResponse;
+import com.schematic.api.resources.credits.types.ReleaseCreditReservationResponse;
+import com.schematic.api.resources.credits.types.ReserveCreditsResponse;
 import com.schematic.api.resources.credits.types.SoftDeleteBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingCreditResponse;
 import com.schematic.api.resources.credits.types.UpdateBillingPlanCreditGrantResponse;
@@ -86,7 +88,6 @@ import com.schematic.api.types.ApiError;
 import com.schematic.api.types.CreateBillingPlanCreditGrantRequestBody;
 import com.schematic.api.types.UpdateBillingPlanCreditGrantRequestBody;
 import java.io.IOException;
-import java.util.Map;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -1901,13 +1902,12 @@ public class RawCreditsClient {
         }
     }
 
-    public BaseSchematicHttpResponse<ReleaseCreditLeaseResponse> releaseCreditLease(
-            String leaseId, Map<String, JsonNode> request) {
-        return releaseCreditLease(leaseId, request, null);
+    public BaseSchematicHttpResponse<ReleaseCreditLeaseResponse> releaseCreditLease(String leaseId) {
+        return releaseCreditLease(leaseId, null);
     }
 
     public BaseSchematicHttpResponse<ReleaseCreditLeaseResponse> releaseCreditLease(
-            String leaseId, Map<String, JsonNode> request, RequestOptions requestOptions) {
+            String leaseId, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/lease")
@@ -1918,18 +1918,10 @@ public class RawCreditsClient {
                 httpUrl.addQueryParameter(_key, _value);
             });
         }
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BaseSchematicException("Failed to serialize request", e);
-        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl.build())
-                .method("PUT", body)
+                .method("PUT", RequestBody.create("", null))
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
@@ -2511,6 +2503,163 @@ public class RawCreditsClient {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(
                                 responseBodyString, CountBillingPlanCreditGrantsResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<ReserveCreditsResponse> reserveCredits(ReserveCreditsRequestBody request) {
+        return reserveCredits(request, null);
+    }
+
+    public BaseSchematicHttpResponse<ReserveCreditsResponse> reserveCredits(
+            ReserveCreditsRequestBody request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/credits/reservations");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ReserveCreditsResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 402:
+                        throw new PaymentRequiredError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<ReleaseCreditReservationResponse> releaseCreditReservation(String reservationId) {
+        return releaseCreditReservation(reservationId, null);
+    }
+
+    public BaseSchematicHttpResponse<ReleaseCreditReservationResponse> releaseCreditReservation(
+            String reservationId, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/credits/reservations")
+                .addPathSegment(reservationId)
+                .addPathSegments("release");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("PUT", RequestBody.create("", null))
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ReleaseCreditReservationResponse.class),
                         response);
             }
             try {
