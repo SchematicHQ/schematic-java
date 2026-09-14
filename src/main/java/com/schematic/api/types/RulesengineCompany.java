@@ -32,6 +32,8 @@ public final class RulesengineCompany {
 
     private final Map<String, Double> creditBalances;
 
+    private final Optional<Map<String, RulesengineCreditPostpaidConfig>> creditPostpaid;
+
     private final Optional<List<RulesengineFeatureEntitlement>> entitlements;
 
     private final String environmentId;
@@ -59,6 +61,7 @@ public final class RulesengineCompany {
             Optional<String> basePlanId,
             List<String> billingProductIds,
             Map<String, Double> creditBalances,
+            Optional<Map<String, RulesengineCreditPostpaidConfig>> creditPostpaid,
             Optional<List<RulesengineFeatureEntitlement>> entitlements,
             String environmentId,
             String id,
@@ -74,6 +77,7 @@ public final class RulesengineCompany {
         this.basePlanId = basePlanId;
         this.billingProductIds = billingProductIds;
         this.creditBalances = creditBalances;
+        this.creditPostpaid = creditPostpaid;
         this.entitlements = entitlements;
         this.environmentId = environmentId;
         this.id = id;
@@ -105,6 +109,11 @@ public final class RulesengineCompany {
     @JsonProperty("credit_balances")
     public Map<String, Double> getCreditBalances() {
         return creditBalances;
+    }
+
+    @JsonProperty("credit_postpaid")
+    public Optional<Map<String, RulesengineCreditPostpaidConfig>> getCreditPostpaid() {
+        return creditPostpaid;
     }
 
     @JsonProperty("entitlements")
@@ -173,6 +182,7 @@ public final class RulesengineCompany {
                 && basePlanId.equals(other.basePlanId)
                 && billingProductIds.equals(other.billingProductIds)
                 && creditBalances.equals(other.creditBalances)
+                && creditPostpaid.equals(other.creditPostpaid)
                 && entitlements.equals(other.entitlements)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
@@ -192,6 +202,7 @@ public final class RulesengineCompany {
                 this.basePlanId,
                 this.billingProductIds,
                 this.creditBalances,
+                this.creditPostpaid,
                 this.entitlements,
                 this.environmentId,
                 this.id,
@@ -249,6 +260,10 @@ public final class RulesengineCompany {
         _FinalStage putAllCreditBalances(Map<String, Double> creditBalances);
 
         _FinalStage creditBalances(String key, Double value);
+
+        _FinalStage creditPostpaid(Optional<Map<String, RulesengineCreditPostpaidConfig>> creditPostpaid);
+
+        _FinalStage creditPostpaid(Map<String, RulesengineCreditPostpaidConfig> creditPostpaid);
 
         _FinalStage entitlements(Optional<List<RulesengineFeatureEntitlement>> entitlements);
 
@@ -319,6 +334,8 @@ public final class RulesengineCompany {
 
         private Optional<List<RulesengineFeatureEntitlement>> entitlements = Optional.empty();
 
+        private Optional<Map<String, RulesengineCreditPostpaidConfig>> creditPostpaid = Optional.empty();
+
         private Map<String, Double> creditBalances = new LinkedHashMap<>();
 
         private List<String> billingProductIds = new ArrayList<>();
@@ -336,6 +353,7 @@ public final class RulesengineCompany {
             basePlanId(other.getBasePlanId());
             billingProductIds(other.getBillingProductIds());
             creditBalances(other.getCreditBalances());
+            creditPostpaid(other.getCreditPostpaid());
             entitlements(other.getEntitlements());
             environmentId(other.getEnvironmentId());
             id(other.getId());
@@ -541,6 +559,19 @@ public final class RulesengineCompany {
         }
 
         @java.lang.Override
+        public _FinalStage creditPostpaid(Map<String, RulesengineCreditPostpaidConfig> creditPostpaid) {
+            this.creditPostpaid = Optional.ofNullable(creditPostpaid);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_postpaid", nulls = Nulls.SKIP)
+        public _FinalStage creditPostpaid(Optional<Map<String, RulesengineCreditPostpaidConfig>> creditPostpaid) {
+            this.creditPostpaid = creditPostpaid;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage creditBalances(String key, Double value) {
             this.creditBalances.put(key, value);
             return this;
@@ -608,6 +639,7 @@ public final class RulesengineCompany {
                     basePlanId,
                     billingProductIds,
                     creditBalances,
+                    creditPostpaid,
                     entitlements,
                     environmentId,
                     id,

@@ -22,6 +22,10 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyPlanCreditGrantView.Builder.class)
 public final class CompanyPlanCreditGrantView {
+    private final Optional<BillingArrearsAnchor> billingCreditArrearsAnchor;
+
+    private final Optional<BillingArrearsCadence> billingCreditArrearsCadence;
+
     private final Optional<Long> billingCreditAutoTopupAmount;
 
     private final Optional<String> billingCreditAutoTopupAmountType;
@@ -43,6 +47,14 @@ public final class CompanyPlanCreditGrantView {
     private final Optional<Long> billingCreditAutoTopupThresholdPercent;
 
     private final boolean billingCreditCanBuyBundles;
+
+    private final Optional<Double> billingCreditOverdraftLimit;
+
+    private final boolean billingCreditPostpaidEnabled;
+
+    private final Optional<Long> billingCreditPostpaidRatePerUnit;
+
+    private final Optional<String> billingCreditPostpaidRatePerUnitDecimal;
 
     private final Optional<Long> companyAutoTopupAmount;
 
@@ -101,6 +113,8 @@ public final class CompanyPlanCreditGrantView {
     private final Map<String, Object> additionalProperties;
 
     private CompanyPlanCreditGrantView(
+            Optional<BillingArrearsAnchor> billingCreditArrearsAnchor,
+            Optional<BillingArrearsCadence> billingCreditArrearsCadence,
             Optional<Long> billingCreditAutoTopupAmount,
             Optional<String> billingCreditAutoTopupAmountType,
             Optional<BillingCreditAutoTopupAvailability> billingCreditAutoTopupAvailability,
@@ -112,6 +126,10 @@ public final class CompanyPlanCreditGrantView {
             Optional<Long> billingCreditAutoTopupThresholdCredits,
             Optional<Long> billingCreditAutoTopupThresholdPercent,
             boolean billingCreditCanBuyBundles,
+            Optional<Double> billingCreditOverdraftLimit,
+            boolean billingCreditPostpaidEnabled,
+            Optional<Long> billingCreditPostpaidRatePerUnit,
+            Optional<String> billingCreditPostpaidRatePerUnitDecimal,
             Optional<Long> companyAutoTopupAmount,
             Optional<Boolean> companyAutoTopupEnabled,
             Optional<Long> companyAutoTopupThresholdCredits,
@@ -140,6 +158,8 @@ public final class CompanyPlanCreditGrantView {
             Optional<String> singularName,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
+        this.billingCreditArrearsAnchor = billingCreditArrearsAnchor;
+        this.billingCreditArrearsCadence = billingCreditArrearsCadence;
         this.billingCreditAutoTopupAmount = billingCreditAutoTopupAmount;
         this.billingCreditAutoTopupAmountType = billingCreditAutoTopupAmountType;
         this.billingCreditAutoTopupAvailability = billingCreditAutoTopupAvailability;
@@ -151,6 +171,10 @@ public final class CompanyPlanCreditGrantView {
         this.billingCreditAutoTopupThresholdCredits = billingCreditAutoTopupThresholdCredits;
         this.billingCreditAutoTopupThresholdPercent = billingCreditAutoTopupThresholdPercent;
         this.billingCreditCanBuyBundles = billingCreditCanBuyBundles;
+        this.billingCreditOverdraftLimit = billingCreditOverdraftLimit;
+        this.billingCreditPostpaidEnabled = billingCreditPostpaidEnabled;
+        this.billingCreditPostpaidRatePerUnit = billingCreditPostpaidRatePerUnit;
+        this.billingCreditPostpaidRatePerUnitDecimal = billingCreditPostpaidRatePerUnitDecimal;
         this.companyAutoTopupAmount = companyAutoTopupAmount;
         this.companyAutoTopupEnabled = companyAutoTopupEnabled;
         this.companyAutoTopupThresholdCredits = companyAutoTopupThresholdCredits;
@@ -179,6 +203,16 @@ public final class CompanyPlanCreditGrantView {
         this.singularName = singularName;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_credit_arrears_anchor")
+    public Optional<BillingArrearsAnchor> getBillingCreditArrearsAnchor() {
+        return billingCreditArrearsAnchor;
+    }
+
+    @JsonProperty("billing_credit_arrears_cadence")
+    public Optional<BillingArrearsCadence> getBillingCreditArrearsCadence() {
+        return billingCreditArrearsCadence;
     }
 
     @JsonProperty("billing_credit_auto_topup_amount")
@@ -234,6 +268,26 @@ public final class CompanyPlanCreditGrantView {
     @JsonProperty("billing_credit_can_buy_bundles")
     public boolean getBillingCreditCanBuyBundles() {
         return billingCreditCanBuyBundles;
+    }
+
+    @JsonProperty("billing_credit_overdraft_limit")
+    public Optional<Double> getBillingCreditOverdraftLimit() {
+        return billingCreditOverdraftLimit;
+    }
+
+    @JsonProperty("billing_credit_postpaid_enabled")
+    public boolean getBillingCreditPostpaidEnabled() {
+        return billingCreditPostpaidEnabled;
+    }
+
+    @JsonProperty("billing_credit_postpaid_rate_per_unit")
+    public Optional<Long> getBillingCreditPostpaidRatePerUnit() {
+        return billingCreditPostpaidRatePerUnit;
+    }
+
+    @JsonProperty("billing_credit_postpaid_rate_per_unit_decimal")
+    public Optional<String> getBillingCreditPostpaidRatePerUnitDecimal() {
+        return billingCreditPostpaidRatePerUnitDecimal;
     }
 
     @JsonProperty("company_auto_topup_amount")
@@ -398,7 +452,9 @@ public final class CompanyPlanCreditGrantView {
     }
 
     private boolean equalTo(CompanyPlanCreditGrantView other) {
-        return billingCreditAutoTopupAmount.equals(other.billingCreditAutoTopupAmount)
+        return billingCreditArrearsAnchor.equals(other.billingCreditArrearsAnchor)
+                && billingCreditArrearsCadence.equals(other.billingCreditArrearsCadence)
+                && billingCreditAutoTopupAmount.equals(other.billingCreditAutoTopupAmount)
                 && billingCreditAutoTopupAmountType.equals(other.billingCreditAutoTopupAmountType)
                 && billingCreditAutoTopupAvailability.equals(other.billingCreditAutoTopupAvailability)
                 && billingCreditAutoTopupEnabled == other.billingCreditAutoTopupEnabled
@@ -409,6 +465,10 @@ public final class CompanyPlanCreditGrantView {
                 && billingCreditAutoTopupThresholdCredits.equals(other.billingCreditAutoTopupThresholdCredits)
                 && billingCreditAutoTopupThresholdPercent.equals(other.billingCreditAutoTopupThresholdPercent)
                 && billingCreditCanBuyBundles == other.billingCreditCanBuyBundles
+                && billingCreditOverdraftLimit.equals(other.billingCreditOverdraftLimit)
+                && billingCreditPostpaidEnabled == other.billingCreditPostpaidEnabled
+                && billingCreditPostpaidRatePerUnit.equals(other.billingCreditPostpaidRatePerUnit)
+                && billingCreditPostpaidRatePerUnitDecimal.equals(other.billingCreditPostpaidRatePerUnitDecimal)
                 && companyAutoTopupAmount.equals(other.companyAutoTopupAmount)
                 && companyAutoTopupEnabled.equals(other.companyAutoTopupEnabled)
                 && companyAutoTopupThresholdCredits.equals(other.companyAutoTopupThresholdCredits)
@@ -441,6 +501,8 @@ public final class CompanyPlanCreditGrantView {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingCreditArrearsAnchor,
+                this.billingCreditArrearsCadence,
                 this.billingCreditAutoTopupAmount,
                 this.billingCreditAutoTopupAmountType,
                 this.billingCreditAutoTopupAvailability,
@@ -452,6 +514,10 @@ public final class CompanyPlanCreditGrantView {
                 this.billingCreditAutoTopupThresholdCredits,
                 this.billingCreditAutoTopupThresholdPercent,
                 this.billingCreditCanBuyBundles,
+                this.billingCreditOverdraftLimit,
+                this.billingCreditPostpaidEnabled,
+                this.billingCreditPostpaidRatePerUnit,
+                this.billingCreditPostpaidRatePerUnitDecimal,
                 this.companyAutoTopupAmount,
                 this.companyAutoTopupEnabled,
                 this.companyAutoTopupThresholdCredits,
@@ -501,7 +567,11 @@ public final class CompanyPlanCreditGrantView {
     }
 
     public interface BillingCreditCanBuyBundlesStage {
-        CompanyCreditAmountStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles);
+        BillingCreditPostpaidEnabledStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles);
+    }
+
+    public interface BillingCreditPostpaidEnabledStage {
+        CompanyCreditAmountStage billingCreditPostpaidEnabled(boolean billingCreditPostpaidEnabled);
     }
 
     public interface CompanyCreditAmountStage {
@@ -565,6 +635,14 @@ public final class CompanyPlanCreditGrantView {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage billingCreditArrearsAnchor(Optional<BillingArrearsAnchor> billingCreditArrearsAnchor);
+
+        _FinalStage billingCreditArrearsAnchor(BillingArrearsAnchor billingCreditArrearsAnchor);
+
+        _FinalStage billingCreditArrearsCadence(Optional<BillingArrearsCadence> billingCreditArrearsCadence);
+
+        _FinalStage billingCreditArrearsCadence(BillingArrearsCadence billingCreditArrearsCadence);
+
         _FinalStage billingCreditAutoTopupAmount(Optional<Long> billingCreditAutoTopupAmount);
 
         _FinalStage billingCreditAutoTopupAmount(Long billingCreditAutoTopupAmount);
@@ -600,6 +678,18 @@ public final class CompanyPlanCreditGrantView {
         _FinalStage billingCreditAutoTopupThresholdPercent(Optional<Long> billingCreditAutoTopupThresholdPercent);
 
         _FinalStage billingCreditAutoTopupThresholdPercent(Long billingCreditAutoTopupThresholdPercent);
+
+        _FinalStage billingCreditOverdraftLimit(Optional<Double> billingCreditOverdraftLimit);
+
+        _FinalStage billingCreditOverdraftLimit(Double billingCreditOverdraftLimit);
+
+        _FinalStage billingCreditPostpaidRatePerUnit(Optional<Long> billingCreditPostpaidRatePerUnit);
+
+        _FinalStage billingCreditPostpaidRatePerUnit(Long billingCreditPostpaidRatePerUnit);
+
+        _FinalStage billingCreditPostpaidRatePerUnitDecimal(Optional<String> billingCreditPostpaidRatePerUnitDecimal);
+
+        _FinalStage billingCreditPostpaidRatePerUnitDecimal(String billingCreditPostpaidRatePerUnitDecimal);
 
         _FinalStage companyAutoTopupAmount(Optional<Long> companyAutoTopupAmount);
 
@@ -676,6 +766,7 @@ public final class CompanyPlanCreditGrantView {
             implements BillingCreditAutoTopupEnabledStage,
                     BillingCreditAutoTopupSelfServiceStage,
                     BillingCreditCanBuyBundlesStage,
+                    BillingCreditPostpaidEnabledStage,
                     CompanyCreditAmountStage,
                     CreatedAtStage,
                     CreditAmountStage,
@@ -694,6 +785,8 @@ public final class CompanyPlanCreditGrantView {
         private boolean billingCreditAutoTopupSelfService;
 
         private boolean billingCreditCanBuyBundles;
+
+        private boolean billingCreditPostpaidEnabled;
 
         private long companyCreditAmount;
 
@@ -749,6 +842,12 @@ public final class CompanyPlanCreditGrantView {
 
         private Optional<Long> companyAutoTopupAmount = Optional.empty();
 
+        private Optional<String> billingCreditPostpaidRatePerUnitDecimal = Optional.empty();
+
+        private Optional<Long> billingCreditPostpaidRatePerUnit = Optional.empty();
+
+        private Optional<Double> billingCreditOverdraftLimit = Optional.empty();
+
         private Optional<Long> billingCreditAutoTopupThresholdPercent = Optional.empty();
 
         private Optional<Long> billingCreditAutoTopupThresholdCredits = Optional.empty();
@@ -765,6 +864,10 @@ public final class CompanyPlanCreditGrantView {
 
         private Optional<Long> billingCreditAutoTopupAmount = Optional.empty();
 
+        private Optional<BillingArrearsCadence> billingCreditArrearsCadence = Optional.empty();
+
+        private Optional<BillingArrearsAnchor> billingCreditArrearsAnchor = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -772,6 +875,8 @@ public final class CompanyPlanCreditGrantView {
 
         @java.lang.Override
         public Builder from(CompanyPlanCreditGrantView other) {
+            billingCreditArrearsAnchor(other.getBillingCreditArrearsAnchor());
+            billingCreditArrearsCadence(other.getBillingCreditArrearsCadence());
             billingCreditAutoTopupAmount(other.getBillingCreditAutoTopupAmount());
             billingCreditAutoTopupAmountType(other.getBillingCreditAutoTopupAmountType());
             billingCreditAutoTopupAvailability(other.getBillingCreditAutoTopupAvailability());
@@ -783,6 +888,10 @@ public final class CompanyPlanCreditGrantView {
             billingCreditAutoTopupThresholdCredits(other.getBillingCreditAutoTopupThresholdCredits());
             billingCreditAutoTopupThresholdPercent(other.getBillingCreditAutoTopupThresholdPercent());
             billingCreditCanBuyBundles(other.getBillingCreditCanBuyBundles());
+            billingCreditOverdraftLimit(other.getBillingCreditOverdraftLimit());
+            billingCreditPostpaidEnabled(other.getBillingCreditPostpaidEnabled());
+            billingCreditPostpaidRatePerUnit(other.getBillingCreditPostpaidRatePerUnit());
+            billingCreditPostpaidRatePerUnitDecimal(other.getBillingCreditPostpaidRatePerUnitDecimal());
             companyAutoTopupAmount(other.getCompanyAutoTopupAmount());
             companyAutoTopupEnabled(other.getCompanyAutoTopupEnabled());
             companyAutoTopupThresholdCredits(other.getCompanyAutoTopupThresholdCredits());
@@ -831,8 +940,15 @@ public final class CompanyPlanCreditGrantView {
 
         @java.lang.Override
         @JsonSetter("billing_credit_can_buy_bundles")
-        public CompanyCreditAmountStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles) {
+        public BillingCreditPostpaidEnabledStage billingCreditCanBuyBundles(boolean billingCreditCanBuyBundles) {
             this.billingCreditCanBuyBundles = billingCreditCanBuyBundles;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_credit_postpaid_enabled")
+        public CompanyCreditAmountStage billingCreditPostpaidEnabled(boolean billingCreditPostpaidEnabled) {
+            this.billingCreditPostpaidEnabled = billingCreditPostpaidEnabled;
             return this;
         }
 
@@ -1145,6 +1261,46 @@ public final class CompanyPlanCreditGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage billingCreditPostpaidRatePerUnitDecimal(String billingCreditPostpaidRatePerUnitDecimal) {
+            this.billingCreditPostpaidRatePerUnitDecimal = Optional.ofNullable(billingCreditPostpaidRatePerUnitDecimal);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_postpaid_rate_per_unit_decimal", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditPostpaidRatePerUnitDecimal(
+                Optional<String> billingCreditPostpaidRatePerUnitDecimal) {
+            this.billingCreditPostpaidRatePerUnitDecimal = billingCreditPostpaidRatePerUnitDecimal;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingCreditPostpaidRatePerUnit(Long billingCreditPostpaidRatePerUnit) {
+            this.billingCreditPostpaidRatePerUnit = Optional.ofNullable(billingCreditPostpaidRatePerUnit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_postpaid_rate_per_unit", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditPostpaidRatePerUnit(Optional<Long> billingCreditPostpaidRatePerUnit) {
+            this.billingCreditPostpaidRatePerUnit = billingCreditPostpaidRatePerUnit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingCreditOverdraftLimit(Double billingCreditOverdraftLimit) {
+            this.billingCreditOverdraftLimit = Optional.ofNullable(billingCreditOverdraftLimit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_overdraft_limit", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditOverdraftLimit(Optional<Double> billingCreditOverdraftLimit) {
+            this.billingCreditOverdraftLimit = billingCreditOverdraftLimit;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingCreditAutoTopupThresholdPercent(Long billingCreditAutoTopupThresholdPercent) {
             this.billingCreditAutoTopupThresholdPercent = Optional.ofNullable(billingCreditAutoTopupThresholdPercent);
             return this;
@@ -1255,8 +1411,36 @@ public final class CompanyPlanCreditGrantView {
         }
 
         @java.lang.Override
+        public _FinalStage billingCreditArrearsCadence(BillingArrearsCadence billingCreditArrearsCadence) {
+            this.billingCreditArrearsCadence = Optional.ofNullable(billingCreditArrearsCadence);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_arrears_cadence", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditArrearsCadence(Optional<BillingArrearsCadence> billingCreditArrearsCadence) {
+            this.billingCreditArrearsCadence = billingCreditArrearsCadence;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingCreditArrearsAnchor(BillingArrearsAnchor billingCreditArrearsAnchor) {
+            this.billingCreditArrearsAnchor = Optional.ofNullable(billingCreditArrearsAnchor);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_arrears_anchor", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditArrearsAnchor(Optional<BillingArrearsAnchor> billingCreditArrearsAnchor) {
+            this.billingCreditArrearsAnchor = billingCreditArrearsAnchor;
+            return this;
+        }
+
+        @java.lang.Override
         public CompanyPlanCreditGrantView build() {
             return new CompanyPlanCreditGrantView(
+                    billingCreditArrearsAnchor,
+                    billingCreditArrearsCadence,
                     billingCreditAutoTopupAmount,
                     billingCreditAutoTopupAmountType,
                     billingCreditAutoTopupAvailability,
@@ -1268,6 +1452,10 @@ public final class CompanyPlanCreditGrantView {
                     billingCreditAutoTopupThresholdCredits,
                     billingCreditAutoTopupThresholdPercent,
                     billingCreditCanBuyBundles,
+                    billingCreditOverdraftLimit,
+                    billingCreditPostpaidEnabled,
+                    billingCreditPostpaidRatePerUnit,
+                    billingCreditPostpaidRatePerUnitDecimal,
                     companyAutoTopupAmount,
                     companyAutoTopupEnabled,
                     companyAutoTopupThresholdCredits,

@@ -14,7 +14,13 @@ public final class CreditUsageReason {
     public static final CreditUsageReason MANUAL_ADJUSTMENT =
             new CreditUsageReason(Value.MANUAL_ADJUSTMENT, "manual_adjustment");
 
+    public static final CreditUsageReason RESERVATION_RELEASE =
+            new CreditUsageReason(Value.RESERVATION_RELEASE, "reservation_release");
+
     public static final CreditUsageReason LEASE_RELEASE = new CreditUsageReason(Value.LEASE_RELEASE, "lease_release");
+
+    public static final CreditUsageReason RESERVATION_HOLD =
+            new CreditUsageReason(Value.RESERVATION_HOLD, "reservation_hold");
 
     public static final CreditUsageReason RECONCILIATION =
             new CreditUsageReason(Value.RECONCILIATION, "reconciliation");
@@ -57,8 +63,12 @@ public final class CreditUsageReason {
                 return visitor.visitTrack();
             case MANUAL_ADJUSTMENT:
                 return visitor.visitManualAdjustment();
+            case RESERVATION_RELEASE:
+                return visitor.visitReservationRelease();
             case LEASE_RELEASE:
                 return visitor.visitLeaseRelease();
+            case RESERVATION_HOLD:
+                return visitor.visitReservationHold();
             case RECONCILIATION:
                 return visitor.visitReconciliation();
             case UNKNOWN:
@@ -76,8 +86,12 @@ public final class CreditUsageReason {
                 return TRACK;
             case "manual_adjustment":
                 return MANUAL_ADJUSTMENT;
+            case "reservation_release":
+                return RESERVATION_RELEASE;
             case "lease_release":
                 return LEASE_RELEASE;
+            case "reservation_hold":
+                return RESERVATION_HOLD;
             case "reconciliation":
                 return RECONCILIATION;
             default:
@@ -94,6 +108,10 @@ public final class CreditUsageReason {
 
         RECONCILIATION,
 
+        RESERVATION_HOLD,
+
+        RESERVATION_RELEASE,
+
         TRACK,
 
         UNKNOWN
@@ -107,6 +125,10 @@ public final class CreditUsageReason {
         T visitManualAdjustment();
 
         T visitReconciliation();
+
+        T visitReservationHold();
+
+        T visitReservationRelease();
 
         T visitTrack();
 

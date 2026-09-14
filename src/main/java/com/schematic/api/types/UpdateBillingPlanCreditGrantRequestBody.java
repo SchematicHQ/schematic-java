@@ -23,6 +23,10 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdateBillingPlanCreditGrantRequestBody {
     private final Optional<Boolean> applyToExisting;
 
+    private final Optional<BillingArrearsAnchor> arrearsAnchor;
+
+    private final Optional<BillingArrearsCadence> arrearsCadence;
+
     private final Optional<Long> autoTopupAmount;
 
     private final Optional<String> autoTopupAmountType;
@@ -57,6 +61,14 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
     private final Optional<String> licenseId;
 
+    private final Optional<Double> overdraftLimit;
+
+    private final Optional<Boolean> postpaidEnabled;
+
+    private final Optional<Long> postpaidRatePerUnit;
+
+    private final Optional<String> postpaidRatePerUnitDecimal;
+
     private final BillingPlanCreditGrantResetCadence resetCadence;
 
     private final BillingPlanCreditGrantResetStart resetStart;
@@ -71,6 +83,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
     private UpdateBillingPlanCreditGrantRequestBody(
             Optional<Boolean> applyToExisting,
+            Optional<BillingArrearsAnchor> arrearsAnchor,
+            Optional<BillingArrearsCadence> arrearsCadence,
             Optional<Long> autoTopupAmount,
             Optional<String> autoTopupAmountType,
             Optional<BillingCreditAutoTopupAvailability> autoTopupAvailability,
@@ -88,6 +102,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             Optional<BillingCreditExpiryUnit> expiryUnit,
             Optional<Long> expiryUnitCount,
             Optional<String> licenseId,
+            Optional<Double> overdraftLimit,
+            Optional<Boolean> postpaidEnabled,
+            Optional<Long> postpaidRatePerUnit,
+            Optional<String> postpaidRatePerUnitDecimal,
             BillingPlanCreditGrantResetCadence resetCadence,
             BillingPlanCreditGrantResetStart resetStart,
             Optional<BillingPlanCreditGrantResetType> resetType,
@@ -95,6 +113,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             Optional<PlanCreditGrantScaling> scaling,
             Map<String, Object> additionalProperties) {
         this.applyToExisting = applyToExisting;
+        this.arrearsAnchor = arrearsAnchor;
+        this.arrearsCadence = arrearsCadence;
         this.autoTopupAmount = autoTopupAmount;
         this.autoTopupAmountType = autoTopupAmountType;
         this.autoTopupAvailability = autoTopupAvailability;
@@ -112,6 +132,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         this.expiryUnit = expiryUnit;
         this.expiryUnitCount = expiryUnitCount;
         this.licenseId = licenseId;
+        this.overdraftLimit = overdraftLimit;
+        this.postpaidEnabled = postpaidEnabled;
+        this.postpaidRatePerUnit = postpaidRatePerUnit;
+        this.postpaidRatePerUnitDecimal = postpaidRatePerUnitDecimal;
         this.resetCadence = resetCadence;
         this.resetStart = resetStart;
         this.resetType = resetType;
@@ -123,6 +147,22 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
     @JsonProperty("apply_to_existing")
     public Optional<Boolean> getApplyToExisting() {
         return applyToExisting;
+    }
+
+    /**
+     * @return Which boundary closes a monthly arrears window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end). Only applies when arrears_cadence is monthly; defaults to billing_period_start. Send null to fall back to the default.
+     */
+    @JsonProperty("arrears_anchor")
+    public Optional<BillingArrearsAnchor> getArrearsAnchor() {
+        return arrearsAnchor;
+    }
+
+    /**
+     * @return How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Send null to fall back to the default.
+     */
+    @JsonProperty("arrears_cadence")
+    public Optional<BillingArrearsCadence> getArrearsCadence() {
+        return arrearsCadence;
     }
 
     @JsonProperty("auto_topup_amount")
@@ -219,6 +259,38 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         return licenseId;
     }
 
+    /**
+     * @return Optional limit on how far the balance may go below zero, in credits. It is a floor on the balance rather than an allowance per invoice window: the balance may run down to minus this figure, and beyond it the flag check denies the same way an exhausted balance does with postpaid off. Nothing resets when an invoice window rolls, so a company that reaches the limit stays denied until a new grant lands or the negative balance is settled. Send null to remove the limit.
+     */
+    @JsonProperty("overdraft_limit")
+    public Optional<Double> getOverdraftLimit() {
+        return overdraftLimit;
+    }
+
+    /**
+     * @return Whether consumption may continue past a zero balance. When false (the default) the flag check denies once the balance is exhausted, which is the existing behavior. When true, consumption continues and accrues at postpaid_rate_per_unit, settled on arrears_cadence. Intended for invoice-billed customers on net terms, who have no card for auto top-up to charge.
+     */
+    @JsonProperty("postpaid_enabled")
+    public Optional<Boolean> getPostpaidEnabled() {
+        return postpaidEnabled;
+    }
+
+    /**
+     * @return Amount charged per credit consumed past a zero balance, in the currency's minor unit. Send null to clear it, in which case an enabled grant falls back to the credit's own cost basis (price_per_unit).
+     */
+    @JsonProperty("postpaid_rate_per_unit")
+    public Optional<Long> getPostpaidRatePerUnit() {
+        return postpaidRatePerUnit;
+    }
+
+    /**
+     * @return Decimal string form of postpaid_rate_per_unit, for rates finer than one minor unit (for example 0.0002). Takes precedence over postpaid_rate_per_unit when both are set, matching how the credit's own price_per_unit_decimal behaves. Send null to clear it.
+     */
+    @JsonProperty("postpaid_rate_per_unit_decimal")
+    public Optional<String> getPostpaidRatePerUnitDecimal() {
+        return postpaidRatePerUnitDecimal;
+    }
+
     @JsonProperty("reset_cadence")
     public BillingPlanCreditGrantResetCadence getResetCadence() {
         return resetCadence;
@@ -264,6 +336,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
     private boolean equalTo(UpdateBillingPlanCreditGrantRequestBody other) {
         return applyToExisting.equals(other.applyToExisting)
+                && arrearsAnchor.equals(other.arrearsAnchor)
+                && arrearsCadence.equals(other.arrearsCadence)
                 && autoTopupAmount.equals(other.autoTopupAmount)
                 && autoTopupAmountType.equals(other.autoTopupAmountType)
                 && autoTopupAvailability.equals(other.autoTopupAvailability)
@@ -281,6 +355,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 && expiryUnit.equals(other.expiryUnit)
                 && expiryUnitCount.equals(other.expiryUnitCount)
                 && licenseId.equals(other.licenseId)
+                && overdraftLimit.equals(other.overdraftLimit)
+                && postpaidEnabled.equals(other.postpaidEnabled)
+                && postpaidRatePerUnit.equals(other.postpaidRatePerUnit)
+                && postpaidRatePerUnitDecimal.equals(other.postpaidRatePerUnitDecimal)
                 && resetCadence.equals(other.resetCadence)
                 && resetStart.equals(other.resetStart)
                 && resetType.equals(other.resetType)
@@ -292,6 +370,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.applyToExisting,
+                this.arrearsAnchor,
+                this.arrearsCadence,
                 this.autoTopupAmount,
                 this.autoTopupAmountType,
                 this.autoTopupAvailability,
@@ -309,6 +389,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 this.expiryUnit,
                 this.expiryUnitCount,
                 this.licenseId,
+                this.overdraftLimit,
+                this.postpaidEnabled,
+                this.postpaidRatePerUnit,
+                this.postpaidRatePerUnitDecimal,
                 this.resetCadence,
                 this.resetStart,
                 this.resetType,
@@ -345,6 +429,20 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         _FinalStage applyToExisting(Optional<Boolean> applyToExisting);
 
         _FinalStage applyToExisting(Boolean applyToExisting);
+
+        /**
+         * <p>Which boundary closes a monthly arrears window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end). Only applies when arrears_cadence is monthly; defaults to billing_period_start. Send null to fall back to the default.</p>
+         */
+        _FinalStage arrearsAnchor(Optional<BillingArrearsAnchor> arrearsAnchor);
+
+        _FinalStage arrearsAnchor(BillingArrearsAnchor arrearsAnchor);
+
+        /**
+         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Send null to fall back to the default.</p>
+         */
+        _FinalStage arrearsCadence(Optional<BillingArrearsCadence> arrearsCadence);
+
+        _FinalStage arrearsCadence(BillingArrearsCadence arrearsCadence);
 
         _FinalStage autoTopupAmount(Optional<Long> autoTopupAmount);
 
@@ -423,6 +521,34 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
         _FinalStage licenseId(String licenseId);
 
+        /**
+         * <p>Optional limit on how far the balance may go below zero, in credits. It is a floor on the balance rather than an allowance per invoice window: the balance may run down to minus this figure, and beyond it the flag check denies the same way an exhausted balance does with postpaid off. Nothing resets when an invoice window rolls, so a company that reaches the limit stays denied until a new grant lands or the negative balance is settled. Send null to remove the limit.</p>
+         */
+        _FinalStage overdraftLimit(Optional<Double> overdraftLimit);
+
+        _FinalStage overdraftLimit(Double overdraftLimit);
+
+        /**
+         * <p>Whether consumption may continue past a zero balance. When false (the default) the flag check denies once the balance is exhausted, which is the existing behavior. When true, consumption continues and accrues at postpaid_rate_per_unit, settled on arrears_cadence. Intended for invoice-billed customers on net terms, who have no card for auto top-up to charge.</p>
+         */
+        _FinalStage postpaidEnabled(Optional<Boolean> postpaidEnabled);
+
+        _FinalStage postpaidEnabled(Boolean postpaidEnabled);
+
+        /**
+         * <p>Amount charged per credit consumed past a zero balance, in the currency's minor unit. Send null to clear it, in which case an enabled grant falls back to the credit's own cost basis (price_per_unit).</p>
+         */
+        _FinalStage postpaidRatePerUnit(Optional<Long> postpaidRatePerUnit);
+
+        _FinalStage postpaidRatePerUnit(Long postpaidRatePerUnit);
+
+        /**
+         * <p>Decimal string form of postpaid_rate_per_unit, for rates finer than one minor unit (for example 0.0002). Takes precedence over postpaid_rate_per_unit when both are set, matching how the credit's own price_per_unit_decimal behaves. Send null to clear it.</p>
+         */
+        _FinalStage postpaidRatePerUnitDecimal(Optional<String> postpaidRatePerUnitDecimal);
+
+        _FinalStage postpaidRatePerUnitDecimal(String postpaidRatePerUnitDecimal);
+
         _FinalStage resetType(Optional<BillingPlanCreditGrantResetType> resetType);
 
         _FinalStage resetType(BillingPlanCreditGrantResetType resetType);
@@ -453,6 +579,14 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         private Optional<Long> rolloverPercentage = Optional.empty();
 
         private Optional<BillingPlanCreditGrantResetType> resetType = Optional.empty();
+
+        private Optional<String> postpaidRatePerUnitDecimal = Optional.empty();
+
+        private Optional<Long> postpaidRatePerUnit = Optional.empty();
+
+        private Optional<Boolean> postpaidEnabled = Optional.empty();
+
+        private Optional<Double> overdraftLimit = Optional.empty();
 
         private Optional<String> licenseId = Optional.empty();
 
@@ -488,6 +622,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
         private Optional<Long> autoTopupAmount = Optional.empty();
 
+        private Optional<BillingArrearsCadence> arrearsCadence = Optional.empty();
+
+        private Optional<BillingArrearsAnchor> arrearsAnchor = Optional.empty();
+
         private Optional<Boolean> applyToExisting = Optional.empty();
 
         @JsonAnySetter
@@ -498,6 +636,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         @java.lang.Override
         public Builder from(UpdateBillingPlanCreditGrantRequestBody other) {
             applyToExisting(other.getApplyToExisting());
+            arrearsAnchor(other.getArrearsAnchor());
+            arrearsCadence(other.getArrearsCadence());
             autoTopupAmount(other.getAutoTopupAmount());
             autoTopupAmountType(other.getAutoTopupAmountType());
             autoTopupAvailability(other.getAutoTopupAvailability());
@@ -515,6 +655,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             expiryUnit(other.getExpiryUnit());
             expiryUnitCount(other.getExpiryUnitCount());
             licenseId(other.getLicenseId());
+            overdraftLimit(other.getOverdraftLimit());
+            postpaidEnabled(other.getPostpaidEnabled());
+            postpaidRatePerUnit(other.getPostpaidRatePerUnit());
+            postpaidRatePerUnitDecimal(other.getPostpaidRatePerUnitDecimal());
             resetCadence(other.getResetCadence());
             resetStart(other.getResetStart());
             resetType(other.getResetType());
@@ -587,6 +731,86 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         @JsonSetter(value = "reset_type", nulls = Nulls.SKIP)
         public _FinalStage resetType(Optional<BillingPlanCreditGrantResetType> resetType) {
             this.resetType = resetType;
+            return this;
+        }
+
+        /**
+         * <p>Decimal string form of postpaid_rate_per_unit, for rates finer than one minor unit (for example 0.0002). Takes precedence over postpaid_rate_per_unit when both are set, matching how the credit's own price_per_unit_decimal behaves. Send null to clear it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage postpaidRatePerUnitDecimal(String postpaidRatePerUnitDecimal) {
+            this.postpaidRatePerUnitDecimal = Optional.ofNullable(postpaidRatePerUnitDecimal);
+            return this;
+        }
+
+        /**
+         * <p>Decimal string form of postpaid_rate_per_unit, for rates finer than one minor unit (for example 0.0002). Takes precedence over postpaid_rate_per_unit when both are set, matching how the credit's own price_per_unit_decimal behaves. Send null to clear it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_rate_per_unit_decimal", nulls = Nulls.SKIP)
+        public _FinalStage postpaidRatePerUnitDecimal(Optional<String> postpaidRatePerUnitDecimal) {
+            this.postpaidRatePerUnitDecimal = postpaidRatePerUnitDecimal;
+            return this;
+        }
+
+        /**
+         * <p>Amount charged per credit consumed past a zero balance, in the currency's minor unit. Send null to clear it, in which case an enabled grant falls back to the credit's own cost basis (price_per_unit).</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage postpaidRatePerUnit(Long postpaidRatePerUnit) {
+            this.postpaidRatePerUnit = Optional.ofNullable(postpaidRatePerUnit);
+            return this;
+        }
+
+        /**
+         * <p>Amount charged per credit consumed past a zero balance, in the currency's minor unit. Send null to clear it, in which case an enabled grant falls back to the credit's own cost basis (price_per_unit).</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_rate_per_unit", nulls = Nulls.SKIP)
+        public _FinalStage postpaidRatePerUnit(Optional<Long> postpaidRatePerUnit) {
+            this.postpaidRatePerUnit = postpaidRatePerUnit;
+            return this;
+        }
+
+        /**
+         * <p>Whether consumption may continue past a zero balance. When false (the default) the flag check denies once the balance is exhausted, which is the existing behavior. When true, consumption continues and accrues at postpaid_rate_per_unit, settled on arrears_cadence. Intended for invoice-billed customers on net terms, who have no card for auto top-up to charge.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage postpaidEnabled(Boolean postpaidEnabled) {
+            this.postpaidEnabled = Optional.ofNullable(postpaidEnabled);
+            return this;
+        }
+
+        /**
+         * <p>Whether consumption may continue past a zero balance. When false (the default) the flag check denies once the balance is exhausted, which is the existing behavior. When true, consumption continues and accrues at postpaid_rate_per_unit, settled on arrears_cadence. Intended for invoice-billed customers on net terms, who have no card for auto top-up to charge.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "postpaid_enabled", nulls = Nulls.SKIP)
+        public _FinalStage postpaidEnabled(Optional<Boolean> postpaidEnabled) {
+            this.postpaidEnabled = postpaidEnabled;
+            return this;
+        }
+
+        /**
+         * <p>Optional limit on how far the balance may go below zero, in credits. It is a floor on the balance rather than an allowance per invoice window: the balance may run down to minus this figure, and beyond it the flag check denies the same way an exhausted balance does with postpaid off. Nothing resets when an invoice window rolls, so a company that reaches the limit stays denied until a new grant lands or the negative balance is settled. Send null to remove the limit.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage overdraftLimit(Double overdraftLimit) {
+            this.overdraftLimit = Optional.ofNullable(overdraftLimit);
+            return this;
+        }
+
+        /**
+         * <p>Optional limit on how far the balance may go below zero, in credits. It is a floor on the balance rather than an allowance per invoice window: the balance may run down to minus this figure, and beyond it the flag check denies the same way an exhausted balance does with postpaid off. Nothing resets when an invoice window rolls, so a company that reaches the limit stays denied until a new grant lands or the negative balance is settled. Send null to remove the limit.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "overdraft_limit", nulls = Nulls.SKIP)
+        public _FinalStage overdraftLimit(Optional<Double> overdraftLimit) {
+            this.overdraftLimit = overdraftLimit;
             return this;
         }
 
@@ -832,6 +1056,46 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             return this;
         }
 
+        /**
+         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Send null to fall back to the default.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage arrearsCadence(BillingArrearsCadence arrearsCadence) {
+            this.arrearsCadence = Optional.ofNullable(arrearsCadence);
+            return this;
+        }
+
+        /**
+         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Send null to fall back to the default.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "arrears_cadence", nulls = Nulls.SKIP)
+        public _FinalStage arrearsCadence(Optional<BillingArrearsCadence> arrearsCadence) {
+            this.arrearsCadence = arrearsCadence;
+            return this;
+        }
+
+        /**
+         * <p>Which boundary closes a monthly arrears window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end). Only applies when arrears_cadence is monthly; defaults to billing_period_start. Send null to fall back to the default.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage arrearsAnchor(BillingArrearsAnchor arrearsAnchor) {
+            this.arrearsAnchor = Optional.ofNullable(arrearsAnchor);
+            return this;
+        }
+
+        /**
+         * <p>Which boundary closes a monthly arrears window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end). Only applies when arrears_cadence is monthly; defaults to billing_period_start. Send null to fall back to the default.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "arrears_anchor", nulls = Nulls.SKIP)
+        public _FinalStage arrearsAnchor(Optional<BillingArrearsAnchor> arrearsAnchor) {
+            this.arrearsAnchor = arrearsAnchor;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage applyToExisting(Boolean applyToExisting) {
             this.applyToExisting = Optional.ofNullable(applyToExisting);
@@ -849,6 +1113,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         public UpdateBillingPlanCreditGrantRequestBody build() {
             return new UpdateBillingPlanCreditGrantRequestBody(
                     applyToExisting,
+                    arrearsAnchor,
+                    arrearsCadence,
                     autoTopupAmount,
                     autoTopupAmountType,
                     autoTopupAvailability,
@@ -866,6 +1132,10 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                     expiryUnit,
                     expiryUnitCount,
                     licenseId,
+                    overdraftLimit,
+                    postpaidEnabled,
+                    postpaidRatePerUnit,
+                    postpaidRatePerUnitDecimal,
                     resetCadence,
                     resetStart,
                     resetType,

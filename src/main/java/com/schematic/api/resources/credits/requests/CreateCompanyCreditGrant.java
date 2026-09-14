@@ -30,6 +30,8 @@ public final class CreateCompanyCreditGrant {
 
     private final String companyId;
 
+    private final Optional<String> creditBundleId;
+
     private final String creditId;
 
     private final Optional<String> currency;
@@ -55,6 +57,7 @@ public final class CreateCompanyCreditGrant {
     private CreateCompanyCreditGrant(
             Optional<Long> billingPeriodsCount,
             String companyId,
+            Optional<String> creditBundleId,
             String creditId,
             Optional<String> currency,
             Optional<OffsetDateTime> expiresAt,
@@ -68,6 +71,7 @@ public final class CreateCompanyCreditGrant {
             Map<String, Object> additionalProperties) {
         this.billingPeriodsCount = billingPeriodsCount;
         this.companyId = companyId;
+        this.creditBundleId = creditBundleId;
         this.creditId = creditId;
         this.currency = currency;
         this.expiresAt = expiresAt;
@@ -89,6 +93,11 @@ public final class CreateCompanyCreditGrant {
     @JsonProperty("company_id")
     public String getCompanyId() {
         return companyId;
+    }
+
+    @JsonProperty("credit_bundle_id")
+    public Optional<String> getCreditBundleId() {
+        return creditBundleId;
     }
 
     @JsonProperty("credit_id")
@@ -155,6 +164,7 @@ public final class CreateCompanyCreditGrant {
     private boolean equalTo(CreateCompanyCreditGrant other) {
         return billingPeriodsCount.equals(other.billingPeriodsCount)
                 && companyId.equals(other.companyId)
+                && creditBundleId.equals(other.creditBundleId)
                 && creditId.equals(other.creditId)
                 && currency.equals(other.currency)
                 && expiresAt.equals(other.expiresAt)
@@ -172,6 +182,7 @@ public final class CreateCompanyCreditGrant {
         return Objects.hash(
                 this.billingPeriodsCount,
                 this.companyId,
+                this.creditBundleId,
                 this.creditId,
                 this.currency,
                 this.expiresAt,
@@ -221,6 +232,10 @@ public final class CreateCompanyCreditGrant {
         _FinalStage billingPeriodsCount(Optional<Long> billingPeriodsCount);
 
         _FinalStage billingPeriodsCount(Long billingPeriodsCount);
+
+        _FinalStage creditBundleId(Optional<String> creditBundleId);
+
+        _FinalStage creditBundleId(String creditBundleId);
 
         _FinalStage currency(Optional<String> currency);
 
@@ -276,6 +291,8 @@ public final class CreateCompanyCreditGrant {
 
         private Optional<String> currency = Optional.empty();
 
+        private Optional<String> creditBundleId = Optional.empty();
+
         private Optional<Long> billingPeriodsCount = Optional.empty();
 
         @JsonAnySetter
@@ -287,6 +304,7 @@ public final class CreateCompanyCreditGrant {
         public Builder from(CreateCompanyCreditGrant other) {
             billingPeriodsCount(other.getBillingPeriodsCount());
             companyId(other.getCompanyId());
+            creditBundleId(other.getCreditBundleId());
             creditId(other.getCreditId());
             currency(other.getCurrency());
             expiresAt(other.getExpiresAt());
@@ -420,6 +438,19 @@ public final class CreateCompanyCreditGrant {
         }
 
         @java.lang.Override
+        public _FinalStage creditBundleId(String creditBundleId) {
+            this.creditBundleId = Optional.ofNullable(creditBundleId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_bundle_id", nulls = Nulls.SKIP)
+        public _FinalStage creditBundleId(Optional<String> creditBundleId) {
+            this.creditBundleId = creditBundleId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingPeriodsCount(Long billingPeriodsCount) {
             this.billingPeriodsCount = Optional.ofNullable(billingPeriodsCount);
             return this;
@@ -437,6 +468,7 @@ public final class CreateCompanyCreditGrant {
             return new CreateCompanyCreditGrant(
                     billingPeriodsCount,
                     companyId,
+                    creditBundleId,
                     creditId,
                     currency,
                     expiresAt,

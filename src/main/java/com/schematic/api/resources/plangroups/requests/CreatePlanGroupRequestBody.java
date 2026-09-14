@@ -101,6 +101,8 @@ public final class CreatePlanGroupRequestBody {
 
     private final Optional<Long> trialDays;
 
+    private final Optional<Boolean> trialEligibilityPerPlan;
+
     private final Optional<String> trialExpiryPlanId;
 
     private final Optional<String> trialExpiryPlanPriceId;
@@ -145,6 +147,7 @@ public final class CreatePlanGroupRequestBody {
             boolean showZeroPriceAsFree,
             boolean syncCustomerBillingDetails,
             Optional<Long> trialDays,
+            Optional<Boolean> trialEligibilityPerPlan,
             Optional<String> trialExpiryPlanId,
             Optional<String> trialExpiryPlanPriceId,
             Optional<Boolean> trialPaymentMethodRequired,
@@ -184,6 +187,7 @@ public final class CreatePlanGroupRequestBody {
         this.showZeroPriceAsFree = showZeroPriceAsFree;
         this.syncCustomerBillingDetails = syncCustomerBillingDetails;
         this.trialDays = trialDays;
+        this.trialEligibilityPerPlan = trialEligibilityPerPlan;
         this.trialExpiryPlanId = trialExpiryPlanId;
         this.trialExpiryPlanPriceId = trialExpiryPlanPriceId;
         this.trialPaymentMethodRequired = trialPaymentMethodRequired;
@@ -368,6 +372,11 @@ public final class CreatePlanGroupRequestBody {
         return trialDays;
     }
 
+    @JsonProperty("trial_eligibility_per_plan")
+    public Optional<Boolean> getTrialEligibilityPerPlan() {
+        return trialEligibilityPerPlan;
+    }
+
     @JsonProperty("trial_expiry_plan_id")
     public Optional<String> getTrialExpiryPlanId() {
         return trialExpiryPlanId;
@@ -430,6 +439,7 @@ public final class CreatePlanGroupRequestBody {
                 && showZeroPriceAsFree == other.showZeroPriceAsFree
                 && syncCustomerBillingDetails == other.syncCustomerBillingDetails
                 && trialDays.equals(other.trialDays)
+                && trialEligibilityPerPlan.equals(other.trialEligibilityPerPlan)
                 && trialExpiryPlanId.equals(other.trialExpiryPlanId)
                 && trialExpiryPlanPriceId.equals(other.trialExpiryPlanPriceId)
                 && trialPaymentMethodRequired.equals(other.trialPaymentMethodRequired);
@@ -473,6 +483,7 @@ public final class CreatePlanGroupRequestBody {
                 this.showZeroPriceAsFree,
                 this.syncCustomerBillingDetails,
                 this.trialDays,
+                this.trialEligibilityPerPlan,
                 this.trialExpiryPlanId,
                 this.trialExpiryPlanPriceId,
                 this.trialPaymentMethodRequired);
@@ -648,6 +659,10 @@ public final class CreatePlanGroupRequestBody {
 
         _FinalStage trialDays(Long trialDays);
 
+        _FinalStage trialEligibilityPerPlan(Optional<Boolean> trialEligibilityPerPlan);
+
+        _FinalStage trialEligibilityPerPlan(Boolean trialEligibilityPerPlan);
+
         _FinalStage trialExpiryPlanId(Optional<String> trialExpiryPlanId);
 
         _FinalStage trialExpiryPlanId(String trialExpiryPlanId);
@@ -717,6 +732,8 @@ public final class CreatePlanGroupRequestBody {
         private Optional<String> trialExpiryPlanPriceId = Optional.empty();
 
         private Optional<String> trialExpiryPlanId = Optional.empty();
+
+        private Optional<Boolean> trialEligibilityPerPlan = Optional.empty();
 
         private Optional<Long> trialDays = Optional.empty();
 
@@ -798,6 +815,7 @@ public final class CreatePlanGroupRequestBody {
             showZeroPriceAsFree(other.getShowZeroPriceAsFree());
             syncCustomerBillingDetails(other.getSyncCustomerBillingDetails());
             trialDays(other.getTrialDays());
+            trialEligibilityPerPlan(other.getTrialEligibilityPerPlan());
             trialExpiryPlanId(other.getTrialExpiryPlanId());
             trialExpiryPlanPriceId(other.getTrialExpiryPlanPriceId());
             trialPaymentMethodRequired(other.getTrialPaymentMethodRequired());
@@ -952,6 +970,19 @@ public final class CreatePlanGroupRequestBody {
         @JsonSetter(value = "trial_expiry_plan_id", nulls = Nulls.SKIP)
         public _FinalStage trialExpiryPlanId(Optional<String> trialExpiryPlanId) {
             this.trialExpiryPlanId = trialExpiryPlanId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage trialEligibilityPerPlan(Boolean trialEligibilityPerPlan) {
+            this.trialEligibilityPerPlan = Optional.ofNullable(trialEligibilityPerPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "trial_eligibility_per_plan", nulls = Nulls.SKIP)
+        public _FinalStage trialEligibilityPerPlan(Optional<Boolean> trialEligibilityPerPlan) {
+            this.trialEligibilityPerPlan = trialEligibilityPerPlan;
             return this;
         }
 
@@ -1300,6 +1331,7 @@ public final class CreatePlanGroupRequestBody {
                     showZeroPriceAsFree,
                     syncCustomerBillingDetails,
                     trialDays,
+                    trialEligibilityPerPlan,
                     trialExpiryPlanId,
                     trialExpiryPlanPriceId,
                     trialPaymentMethodRequired,
