@@ -4,14 +4,25 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven {
         url 'https://s01.oss.sonatype.org/content/repositories/releases/'
     }
 }
 
+// SDK E2E install mode. 'local' (the default) builds against the source tree;
+// 'pack' resolves the artifact published to the local Maven repo by
+// scripts/e2e-pack.sh, the way an end user would.
+def sdkSource = (findProperty('sdkSource') ?: 'local').toString()
+def schematicVersion = (findProperty('schematicVersion') ?: rootProject.version).toString()
+
 dependencies {
-    implementation rootProject
+    if (sdkSource == 'pack') {
+        implementation "com.schematichq:schematic-java:${schematicVersion}"
+    } else {
+        implementation rootProject
+    }
 }
 
 application {
