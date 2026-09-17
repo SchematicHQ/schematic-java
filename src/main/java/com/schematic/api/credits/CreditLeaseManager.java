@@ -339,6 +339,18 @@ public final class CreditLeaseManager implements AutoCloseable {
      * server already swept them. Best-effort, with failures falling back to server-side expiry.
      */
     public void releaseAllLocalLeases() {
+        releaseAllLocalLeases(CreditLeaseDefaults.SHUTDOWN_DRAIN_TIMEOUT);
+    }
+
+    /**
+     * Releases every live lease this process exclusively holds, within {@code budget}.
+     *
+     * <p>Each release is its own synchronous round trip, so a process holding many slots behind a
+     * slow server would otherwise stretch a shutdown by the sum of them. Once the budget is gone
+     * the loop stops issuing releases and says how many leases were left behind; those expire
+     * server-side, which is where a failed release leaves them too.
+     */
+    public void releaseAllLocalLeases(Duration budget) {
         if (!(leases instanceof LeaseLister)) {
             return;
         }
@@ -349,9 +361,15 @@ public final class CreditLeaseManager implements AutoCloseable {
             warn("Failed to enumerate leases on close: " + e);
             return;
         }
+        long deadline = System.nanoTime() + Math.max(0, budget.toNanos());
         Instant now = now();
+        int abandoned = 0;
         for (LeaseState entry : entries) {
             if (!entry.isLiveAt(now)) {
+                continue;
+            }
+            if (System.nanoTime() - deadline >= 0) {
+                abandoned++;
                 continue;
             }
             try {
@@ -362,6 +380,10 @@ public final class CreditLeaseManager implements AutoCloseable {
                 warn("Failed to release credit lease " + entry.getLeaseId() + " on close (it will expire "
                         + "server-side): " + e);
             }
+        }
+        if (abandoned > 0) {
+            warn("Ran out of shutdown budget with " + abandoned + " credit lease(s) still held; they will "
+                    + "expire server-side");
         }
     }
 
@@ -458,8 +480,19 @@ public final class CreditLeaseManager implements AutoCloseable {
     /** Stops the manager and drains what it has in flight. Leases are released by the caller. */
     @Override
     public void close() {
+        close(CreditLeaseDefaults.SHUTDOWN_DRAIN_TIMEOUT);
+    }
+
+    /**
+     * Stops the manager and drains what it has in flight within {@code budget}. Leases are
+     * released by the caller.
+     *
+     * <p>A caller closing several components under one deadline passes what is left of it, so the
+     * bound it promised is not reset to a full drain timeout here.
+     */
+    public void close(Duration budget) {
         stop();
-        drain(CreditLeaseDefaults.SHUTDOWN_DRAIN_TIMEOUT);
+        drain(budget);
         executor.shutdown();
     }
 

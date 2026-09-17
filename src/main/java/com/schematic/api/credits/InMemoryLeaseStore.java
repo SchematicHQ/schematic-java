@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
 
 /**
  * Keeps lease slots in this process only, so it gates a single process. Swap in
@@ -31,21 +32,13 @@ public final class InMemoryLeaseStore implements LeaseStore, LeaseLister {
     @Override
     public LeaseState get(String companyId, String creditTypeId) {
         String key = LeaseStore.leaseKey(companyId, creditTypeId);
-        ReentrantLock lock = lockFor(key);
-        lock.lock();
-        try {
-            return leases.get(key);
-        } finally {
-            lock.unlock();
-        }
+        return withLock(key, () -> leases.get(key));
     }
 
     @Override
     public boolean replace(LeaseGrant grant) {
         String key = LeaseStore.leaseKey(grant.getCompanyId(), grant.getCreditTypeId());
-        ReentrantLock lock = lockFor(key);
-        lock.lock();
-        try {
+        return withLock(key, () -> {
             LeaseState existing = leases.get(key);
             if (existing != null && existing.isLiveAt(now())) {
                 // A live lease already holds this slot: preserve its already-debited balance
@@ -70,9 +63,7 @@ public final class InMemoryLeaseStore implements LeaseStore, LeaseLister {
                             grant.getGrantedAmount(),
                             grant.getExpiresAt()));
             return true;
-        } finally {
-            lock.unlock();
-        }
+        });
     }
 
     @Override
@@ -83,9 +74,7 @@ public final class InMemoryLeaseStore implements LeaseStore, LeaseLister {
             return null;
         }
         String key = LeaseStore.leaseKey(companyId, creditTypeId);
-        ReentrantLock lock = lockFor(key);
-        lock.lock();
-        try {
+        return withLock(key, () -> {
             LeaseState entry = leases.get(key);
             if (entry == null) {
                 return null;
@@ -103,9 +92,7 @@ public final class InMemoryLeaseStore implements LeaseStore, LeaseLister {
             // The lease id is read under the same lock as the debit: the caller pins its hold to
             // it, so a read after the lock could name a lease that replaced this one in between.
             return new ReserveResult(balance, entry.getLeaseId());
-        } finally {
-            lock.unlock();
-        }
+        });
     }
 
     @Override
@@ -114,56 +101,60 @@ public final class InMemoryLeaseStore implements LeaseStore, LeaseLister {
             return;
         }
         String key = LeaseStore.leaseKey(companyId, creditTypeId);
-        ReentrantLock lock = lockFor(key);
-        lock.lock();
-        try {
+        withLock(key, () -> {
             LeaseState entry = leases.get(key);
             if (entry == null) {
-                return;
+                return null;
             }
             if (pinLeaseId != null
                     && !pinLeaseId.isEmpty()
                     && !entry.getLeaseId().equals(pinLeaseId)) {
-                return;
+                return null;
             }
             double balance = Math.min(entry.getLocalRemainingCredits() + credits, entry.getGrantedAmount());
             leases.put(key, withBalance(entry, balance));
-        } finally {
-            lock.unlock();
-        }
+            return null;
+        });
     }
 
     @Override
     public void extend(
             String companyId, String creditTypeId, double grantedTotal, Instant newExpiresAt, String pinLeaseId) {
         String key = LeaseStore.leaseKey(companyId, creditTypeId);
-        ReentrantLock lock = lockFor(key);
-        lock.lock();
-        try {
+        withLock(key, () -> {
             LeaseState entry = leases.get(key);
             if (entry == null) {
-                return;
+                return null;
             }
             if (pinLeaseId != null
                     && !pinLeaseId.isEmpty()
                     && !entry.getLeaseId().equals(pinLeaseId)) {
-                return;
+                return null;
             }
             leases.put(key, reconcile(entry, grantedTotal, newExpiresAt));
-        } finally {
-            lock.unlock();
-        }
+            return null;
+        });
     }
 
     @Override
     public void drop(String companyId, String creditTypeId) {
         String key = LeaseStore.leaseKey(companyId, creditTypeId);
-        ReentrantLock lock = lockFor(key);
-        lock.lock();
-        try {
-            leases.remove(key);
-        } finally {
-            lock.unlock();
+        while (true) {
+            ReentrantLock lock = lockFor(key);
+            lock.lock();
+            try {
+                if (locks.get(key) != lock) {
+                    continue;
+                }
+                leases.remove(key);
+                // Retire the lock with the state it guarded, so neither map grows with every
+                // company this process has ever leased against. Retiring it last, and while
+                // holding it, is what lets a waiter notice and retake the replacement.
+                locks.remove(key, lock);
+                return;
+            } finally {
+                lock.unlock();
+            }
         }
     }
 
@@ -201,6 +192,30 @@ public final class InMemoryLeaseStore implements LeaseStore, LeaseLister {
                 entry.getGrantedAmount(),
                 balance,
                 entry.getExpiresAt());
+    }
+
+    /**
+     * Runs {@code body} under the slot's lock, and only ever under the lock currently registered
+     * for that key.
+     *
+     * <p>{@link #drop} retires a lock along with the state it guarded. A thread that was already
+     * waiting on that lock wakes up holding a retired one, while a newcomer serialises on the
+     * replacement, so it re-checks and retakes the replacement instead of mutating the slot
+     * behind the newcomer's back. A lock can only be retired by a drop, so the retry terminates.
+     */
+    private <T> T withLock(String key, Supplier<T> body) {
+        while (true) {
+            ReentrantLock lock = lockFor(key);
+            lock.lock();
+            try {
+                if (locks.get(key) != lock) {
+                    continue;
+                }
+                return body.get();
+            } finally {
+                lock.unlock();
+            }
+        }
     }
 
     private ReentrantLock lockFor(String key) {

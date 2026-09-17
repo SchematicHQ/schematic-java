@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import redis.clients.jedis.JedisPooled;
 
 /**
  * High-level DataStream client that manages WebSocket connections (or replicator mode),
@@ -60,7 +61,7 @@ public class DataStreamClient implements Closeable {
     private final SchematicLogger logger;
     private final ObjectMapper objectMapper;
     private final RulesEngine rulesEngine;
-    private final redis.clients.jedis.JedisPooled redisClient;
+    private final JedisPooled redisClient;
     private final String redisKeyPrefix;
 
     // Typed entity caches
@@ -115,8 +116,7 @@ public class DataStreamClient implements Closeable {
         this.rulesEngine = rulesEngine;
 
         // Build cache providers via factory: custom > Redis > local
-        redis.clients.jedis.JedisPooled redisClient =
-                DataStreamCacheFactory.buildRedisClient(options.getRedisCacheConfig());
+        JedisPooled redisClient = DataStreamCacheFactory.buildRedisClient(options.getRedisCacheConfig());
         String keyPrefix = options.getRedisCacheConfig() != null
                 ? options.getRedisCacheConfig().getKeyPrefix()
                 : "schematic:";
@@ -138,19 +138,6 @@ public class DataStreamClient implements Closeable {
      * Starts the DataStream client. In direct mode, connects via WebSocket.
      * In replicator mode, starts periodic health checks.
      */
-    /**
-     * The Redis client the caches were configured with, or null when they are local. Credit leases
-     * reuse it so an existing Redis setup gates them across pods with no second client to wire up.
-     */
-    public redis.clients.jedis.JedisPooled getRedisClient() {
-        return redisClient;
-    }
-
-    /** The key prefix the caches were configured with. */
-    public String getRedisKeyPrefix() {
-        return redisKeyPrefix;
-    }
-
     public void start() {
         if (closed.get()) {
             throw new IllegalStateException("DataStreamClient has been closed");
@@ -161,6 +148,19 @@ public class DataStreamClient implements Closeable {
         } else {
             startDirectMode();
         }
+    }
+
+    /**
+     * The Redis client the caches were configured with, or null when they are local. Credit leases
+     * reuse it so an existing Redis setup gates them across pods with no second client to wire up.
+     */
+    public JedisPooled getRedisClient() {
+        return redisClient;
+    }
+
+    /** The key prefix the caches were configured with, which credit lease keys are built under. */
+    public String getRedisKeyPrefix() {
+        return redisKeyPrefix;
     }
 
     /**

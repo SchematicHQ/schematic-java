@@ -341,6 +341,27 @@ class SchematicTest {
         }
     }
 
+    @Test
+    void check_WithAZeroUsageStaysPlainAndKeepsTheFlagCache() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(true));
+
+        CheckOptions zeroUsage = CheckOptions.builder().usage(0).build();
+        CheckResult first = spySchematic.check("test_flag", null, null, zeroUsage);
+        CheckResult second = spySchematic.check("test_flag", null, null, zeroUsage);
+
+        assertTrue(first.isAllowed());
+        assertTrue(second.isAllowed());
+        ArgumentCaptor<CheckFlagRequestBody> body = ArgumentCaptor.forClass(CheckFlagRequestBody.class);
+        // The API treats a zero usage as no usage, so sending it would cost the check its cache
+        // and buy nothing: one call answers both.
+        verify(featuresClient, times(1)).checkFlag(eq("test_flag"), body.capture());
+        assertFalse(body.getValue().getPreflight().isPresent());
+    }
+
     private static CheckFlagResponse apiResponse(boolean value) {
         return CheckFlagResponse.builder()
                 .data(CheckFlagResponseData.builder()
