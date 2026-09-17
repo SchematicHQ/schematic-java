@@ -7,6 +7,7 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.Environment;
 import com.schematic.api.core.NoOpHttpClient;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.RequestOptions;
 import com.schematic.api.credits.ApiLeaseWireClient;
 import com.schematic.api.credits.CheckOptions;
 import com.schematic.api.credits.CheckRequest;
@@ -23,6 +24,7 @@ import com.schematic.api.credits.InMemoryReservationStore;
 import com.schematic.api.credits.LeaseStore;
 import com.schematic.api.credits.OnAcquireFailure;
 import com.schematic.api.credits.PreflightOptions;
+import com.schematic.api.credits.PrewarmCompanyResolver;
 import com.schematic.api.credits.RedisLeaseStore;
 import com.schematic.api.credits.RedisReservationStore;
 import com.schematic.api.credits.Reservation;
@@ -49,7 +51,6 @@ import com.schematic.api.types.EventBodyIdentifyCompany;
 import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.EventType;
 import com.schematic.api.types.RulesengineCheckFlagResult;
-import com.schematic.api.types.RulesengineCompany;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -207,14 +208,12 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             // scaled pods. An explicit client wins; otherwise reuse the one the DataStream caches
             // are already configured with, so an existing Redis setup backs leases with no second
             // client to wire up.
-            JedisPooled redisClient = creditLeases.getRedisClient();
-            String keyPrefix = creditLeases.getRedisKeyPrefix();
-            if (redisClient == null && this.dataStreamClient != null) {
-                redisClient = this.dataStreamClient.getRedisClient();
-                if (keyPrefix == null) {
-                    keyPrefix = this.dataStreamClient.getRedisKeyPrefix();
-                }
-            }
+            JedisPooled redisClient = inheritFromDataStream(
+                    creditLeases.getRedisClient(),
+                    this.dataStreamClient == null ? null : this.dataStreamClient.getRedisClient());
+            String keyPrefix = inheritFromDataStream(
+                    creditLeases.getRedisKeyPrefix(),
+                    this.dataStreamClient == null ? null : this.dataStreamClient.getRedisKeyPrefix());
             if (redisClient != null) {
                 sharedBackend = true;
                 leases = new RedisLeaseStore(redisClient, keyPrefix, creditLeases.getDefaultLeaseDuration(), null);
@@ -732,6 +731,11 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      */
     private RulesengineCheckFlagResult checkFlagViaApi(
             String flagKey, Map<String, String> company, Map<String, String> user) {
+        return checkFlagViaApi(flagKey, company, user, null);
+    }
+
+    private RulesengineCheckFlagResult checkFlagViaApi(
+            String flagKey, Map<String, String> company, Map<String, String> user, Duration timeout) {
         try {
             RulesengineCheckFlagResult cached = getCachedFlag(flagKey, company, user);
             if (cached != null) {
@@ -740,7 +744,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
             CheckFlagRequestBody request =
                     CheckFlagRequestBody.builder().company(company).user(user).build();
-            CheckFlagResponse response = features().checkFlag(flagKey, request);
+            CheckFlagResponse response = timeout == null
+                    ? features().checkFlag(flagKey, request)
+                    : features()
+                            .checkFlag(
+                                    flagKey,
+                                    request,
+                                    RequestOptions.builder()
+                                            .timeout((int) timeout.toMillis(), TimeUnit.MILLISECONDS)
+                                            .build());
             RulesengineCheckFlagResult result = toRulesengineResult(response.getData());
 
             cacheFlag(flagKey, result, company, user);
@@ -926,42 +938,20 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      * the prewarm resolve timeout.
      */
     private String resolveCompanyIdWithWait(Map<String, String> company) {
-        String id = company.get("id");
-        if (id != null && !id.isEmpty()) {
-            return id;
+        if (dataStreamClient == null) {
+            return company.get("id");
         }
-        if (dataStreamClient == null || prewarmResolveTimeout.toMillis() <= 0) {
-            return null;
-        }
-        RulesengineCompany cached = dataStreamClient.getCachedCompany(company);
-        if (cached != null) {
-            return cached.getId();
-        }
-        // Retry across the brief connecting window at boot, bounded by the resolve timeout. A new
-        // company needs the preceding identify ingested before the server can stream it back.
-        long deadline = System.nanoTime() + prewarmResolveTimeout.toNanos();
-        while (true) {
-            if (closing) {
-                return null;
-            }
-            try {
-                RulesengineCompany resolved = dataStreamClient.getCompany(company);
-                if (resolved != null) {
-                    return resolved.getId();
-                }
-            } catch (RuntimeException e) {
-                logger.debug("prewarm: the DataStream company fetch failed (" + e + ")");
-            }
-            if (System.nanoTime() >= deadline) {
-                return null;
-            }
-            try {
-                Thread.sleep(CreditLeaseDefaults.PREWARM_POLL_INTERVAL.toMillis());
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return null;
-            }
-        }
+        return PrewarmCompanyResolver.resolve(
+                company,
+                dataStreamClient::getCachedCompany,
+                dataStreamClient::getCompany,
+                prewarmResolveTimeout,
+                CreditLeaseDefaults.PREWARM_POLL_INTERVAL,
+                () -> closing,
+                error -> {
+                    logger.debug("prewarm: the DataStream company fetch failed (" + error + ")");
+                    return null;
+                });
     }
 
     /** The plain flag check a credit-aware check defers to, with the caller's preflight threaded through. */
@@ -984,7 +974,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 result = dsResult;
             } else {
                 // The REST path takes no preflight: it answers against the server's own balance.
-                result = checkFlagViaApi(flagKey, company, user);
+                // The caller's timeout still applies, since this is the call it is waiting on.
+                result = checkFlagViaApi(flagKey, company, user, options.getTimeout());
             }
         }
         return new CheckResult(
@@ -1203,6 +1194,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         } catch (Exception e) {
             logger.error("Error closing Schematic client: " + e.getMessage());
         }
+    }
+
+    /**
+     * Resolves one lease Redis setting against the DataStream cache's. The client and the key
+     * prefix resolve independently: a lease client of its own does not cost a caller the
+     * DataStream prefix, which would split the key layout of a mixed fleet sharing those leases.
+     */
+    static <T> T inheritFromDataStream(T configured, T fromDataStream) {
+        return configured != null ? configured : fromDataStream;
     }
 
     /**

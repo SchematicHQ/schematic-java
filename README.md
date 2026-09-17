@@ -248,6 +248,8 @@ if (result.getReservation() != null) {
 
 A check can allow without taking a hold, when the feature is not credit-metered, when `usage` is 0, or when the check failed open, and that usage still has to be tracked.
 
+`CheckOptions.timeout` bounds the call the check waits on: the check-and-reserve call in server mode, and the REST flag check when the check falls back to one. Client-mode lease acquires and extends take the client's own timeouts, since one caller's timeout would otherwise govern every caller that joins the same single-flighted acquire.
+
 An unsettled hold expires after `defaultReservationTtl` and its credits return to the lease. A late settle still bills the usage, since the track event carries a deterministic idempotency key that keeps it from double-billing, but it does not re-debit the local lease. Set `defaultReservationTtl` above the longest expected gap between the check and the settle.
 
 ### Pre-warming

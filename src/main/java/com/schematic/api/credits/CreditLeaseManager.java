@@ -184,13 +184,18 @@ public final class CreditLeaseManager implements AutoCloseable {
         if (current != null && !current.getLeaseId().equals(grant.getLeaseId())) {
             debug("Lost acquire race for " + companyId + "/" + creditTypeId + "; releasing redundant lease "
                     + grant.getLeaseId());
-            spawn(() -> {
-                try {
-                    wire.release(grant.getLeaseId());
-                } catch (RuntimeException e) {
-                    warn("Failed to release redundant credit lease " + grant.getLeaseId() + ": " + e);
-                }
-            });
+            // Tracked even once the manager is stopping: this lease is already granted and nobody
+            // will draw on it, so refusing the release would hold its credits until the server
+            // expires them. The drain waits it out within its own bound.
+            spawn(
+                    () -> {
+                        try {
+                            wire.release(grant.getLeaseId());
+                        } catch (RuntimeException e) {
+                            warn("Failed to release redundant credit lease " + grant.getLeaseId() + ": " + e);
+                        }
+                    },
+                    true);
         } else {
             debug("Lost acquire race for " + companyId + "/" + creditTypeId + "; the server returned the installed "
                     + "lease " + grant.getLeaseId() + ", nothing to release");
@@ -458,13 +463,19 @@ public final class CreditLeaseManager implements AutoCloseable {
         executor.shutdown();
     }
 
-    /**
-     * Runs a fire-and-forget step. It refuses after {@link #stop()}, where the work would touch a
-     * manager that is being torn down, and it never lets an exception escape: these paths are
-     * unawaited, so there is nobody to catch for them.
-     */
+    /** Runs a fire-and-forget step, refused once the manager is stopped. */
     private void spawn(Runnable step) {
-        if (stopped) {
+        spawn(step, false);
+    }
+
+    /**
+     * Runs a fire-and-forget step. {@code afterStop} keeps work that has to happen even once the
+     * manager is stopping, which is what the drain is there to wait out; everything else is
+     * refused after {@link #stop()}, where it would touch a manager being torn down. Nothing here
+     * lets an exception escape: these paths are unawaited, so there is nobody to catch for them.
+     */
+    private void spawn(Runnable step, boolean afterStop) {
+        if (stopped && !afterStop) {
             return;
         }
         CompletableFuture<Void> landed = new CompletableFuture<>();
