@@ -11,6 +11,7 @@ import com.schematic.api.types.ApiError;
 import com.schematic.api.types.CheckAndReserveFlagResponseData;
 import com.schematic.api.types.FeatureEntitlement;
 import com.schematic.api.types.FlagCheckReservationResponseData;
+import com.schematic.api.types.PreflightRequestBody;
 import com.schematic.api.types.RulesengineFeatureEntitlement;
 import java.time.Clock;
 import java.time.Duration;
@@ -93,8 +94,9 @@ public final class ServerCreditCheck {
             body.user(request.getUser());
         }
         PreflightOptions preflight = PreflightOptions.fromUsage(request.getUsage(), request.getEventSubtype());
-        if (preflight != null) {
-            body.preflight(preflight.toRequestBody());
+        PreflightRequestBody preflightBody = preflight != null ? preflight.toRequestBody() : null;
+        if (preflightBody != null) {
+            body.preflight(preflightBody);
         }
         // One key per check, minted before the call so the transport's retries resend the same
         // one: a 502 from a load balancer after the API committed the hold then collapses onto

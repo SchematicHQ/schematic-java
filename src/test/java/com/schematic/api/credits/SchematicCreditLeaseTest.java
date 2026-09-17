@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
+import com.schematic.api.IdentifyOptions;
 import com.schematic.api.Schematic;
 import com.schematic.api.logger.SchematicLogger;
 import java.time.Duration;
@@ -54,6 +55,49 @@ class SchematicCreditLeaseTest {
             verify(logger, atLeastOnce()).warn(contains("shared Redis backend"));
             assertFalse(schematic.isOffline());
         }
+    }
+
+    @Test
+    void prewarmWithoutCreditTypesIsANoOp() {
+        SchematicLogger logger = mock(SchematicLogger.class);
+
+        try (Schematic schematic = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .creditLeases(
+                        CreditLeaseConfig.builder().mode(CreditLeaseMode.CLIENT).build())
+                .build()) {
+            // Nothing named is nothing to warm, not something to throw at a caller who passed a
+            // list their own configuration left empty.
+            schematic.prewarm(Collections.singletonMap("id", "co_1"), null);
+            schematic.prewarm(Collections.singletonMap("id", "co_1"), Collections.<String>emptyList());
+            verify(logger, never()).error(anyString());
+        }
+    }
+
+    @Test
+    void identifyWithAPrewarmAfterCloseDropsItInsteadOfThrowing() {
+        SchematicLogger logger = mock(SchematicLogger.class);
+        Schematic schematic = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .creditLeases(
+                        CreditLeaseConfig.builder().mode(CreditLeaseMode.CLIENT).build())
+                .build();
+        schematic.close();
+
+        // The prewarm executor is shut down by now, and a caller identifying on a closed client
+        // should not have to catch the shutdown race that queuing onto it loses.
+        schematic.identify(
+                Collections.singletonMap("id", "user_1"),
+                null,
+                null,
+                null,
+                IdentifyOptions.builder()
+                        .prewarm(Collections.singletonList("ct_1"))
+                        .build());
+
+        verify(logger).debug(contains("skipping the prewarm"));
     }
 
     @Test

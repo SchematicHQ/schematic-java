@@ -88,16 +88,29 @@ public final class PreflightOptions {
         return eventUsage;
     }
 
-    /** The same preflight as the API's request body, for the paths that gate server-side. */
+    /**
+     * The same preflight as the API's request body, for the paths that gate server-side. Null
+     * when nothing in it would change the answer, so the caller can send a plain request.
+     *
+     * <p>A zero usage and a zero event quantity are dropped: the API documents them as having no
+     * effect, and a request that carries one is still a preflighted request, which costs it the
+     * flag check cache for nothing. A zero credit cost stays, because that one says something,
+     * namely that this call is free rather than unpriced.
+     */
     public PreflightRequestBody toRequestBody() {
+        boolean hasUsage = usage != null && usage != 0;
+        boolean hasEventUsage = eventUsage != null && eventUsage.getQuantity() != 0;
+        if (creditCost == null && !hasUsage && !hasEventUsage) {
+            return null;
+        }
         PreflightRequestBody.Builder builder = PreflightRequestBody.builder();
         if (creditCost != null) {
             builder.creditCost(creditCost);
         }
-        if (usage != null) {
+        if (hasUsage) {
             builder.usage(usage);
         }
-        if (eventUsage != null) {
+        if (hasEventUsage) {
             builder.eventUsage(PreflightEventUsageRequestBody.builder()
                     .eventSubtype(eventUsage.getEventSubtype())
                     .quantity(eventUsage.getQuantity())

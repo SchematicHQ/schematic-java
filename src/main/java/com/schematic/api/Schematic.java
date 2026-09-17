@@ -50,6 +50,7 @@ import com.schematic.api.types.EventBodyIdentify;
 import com.schematic.api.types.EventBodyIdentifyCompany;
 import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.EventType;
+import com.schematic.api.types.PreflightRequestBody;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import java.time.Clock;
 import java.time.Duration;
@@ -62,6 +63,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import redis.clients.jedis.JedisPooled;
@@ -743,11 +745,14 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             Duration timeout,
             PreflightOptions preflight) {
         try {
+            // Null once a preflight that the API would ignore, such as a zero usage, has been
+            // dropped: such a check is a plain one and keeps the cache.
+            PreflightRequestBody preflightBody = preflight != null ? preflight.toRequestBody() : null;
             // The cache is keyed by flag, company and user, and a preflighted check asks a
             // different question than a plain one: whether the action about to run would be
             // allowed. So a preflighted verdict is neither answered from the cache nor written
             // back to it.
-            if (preflight == null) {
+            if (preflightBody == null) {
                 RulesengineCheckFlagResult cached = getCachedFlag(flagKey, company, user);
                 if (cached != null) {
                     return cached;
@@ -756,8 +761,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
             CheckFlagRequestBody.Builder request =
                     CheckFlagRequestBody.builder().company(company).user(user);
-            if (preflight != null) {
-                request.preflight(preflight.toRequestBody());
+            if (preflightBody != null) {
+                request.preflight(preflightBody);
             }
             CheckFlagResponse response = timeout == null
                     ? features().checkFlag(flagKey, request.build())
@@ -770,7 +775,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                                             .build());
             RulesengineCheckFlagResult result = toRulesengineResult(response.getData());
 
-            if (preflight == null) {
+            if (preflightBody == null) {
                 cacheFlag(flagKey, result, company, user);
             }
             return result;
@@ -928,6 +933,10 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             logger.debug("prewarm needs company keys");
             return;
         }
+        if (creditTypeIds == null || creditTypeIds.isEmpty()) {
+            logger.debug("prewarm was given no credit types");
+            return;
+        }
         if (closing) {
             // close() only waits out the prewarms it spawned; a caller invoking prewarm directly
             // would otherwise install a lease after the release has already listed the store.
@@ -1059,18 +1068,25 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             Map<String, String> companyKeys = company != null ? company.getKeys() : null;
             // Flush first so the server processes the identify promptly: without it the company
             // can sit in the buffer for a full flush interval while the prewarm waits on us.
-            prewarms.execute(() -> {
-                try {
-                    eventBuffer.flush();
-                } catch (RuntimeException e) {
-                    logger.debug("identify: the flush before the prewarm failed: " + e);
-                }
-                try {
-                    prewarm(companyKeys, creditTypeIds);
-                } catch (RuntimeException e) {
-                    logger.warn("identify: the prewarm failed: " + e);
-                }
-            });
+            try {
+                prewarms.execute(() -> {
+                    try {
+                        eventBuffer.flush();
+                    } catch (RuntimeException e) {
+                        logger.debug("identify: the flush before the prewarm failed: " + e);
+                    }
+                    try {
+                        prewarm(companyKeys, creditTypeIds);
+                    } catch (RuntimeException e) {
+                        logger.warn("identify: the prewarm failed: " + e);
+                    }
+                });
+            } catch (RejectedExecutionException e) {
+                // identify still recorded the company; only the warm-up is dropped, and a
+                // caller identifying after close() should not be handed a shutdown race to
+                // catch.
+                logger.debug("identify: the client is closed, skipping the prewarm");
+            }
         }
     }
 
@@ -1199,9 +1215,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 // Never release leases held in a shared backend: a sibling process is still
                 // drawing on them.
                 if (!leaseBackendShared) {
-                    creditLeaseManager.releaseAllLocalLeases();
+                    creditLeaseManager.releaseAllLocalLeases(remaining(deadline));
                 }
-                creditLeaseManager.close();
+                creditLeaseManager.close(remaining(deadline));
             }
 
             if (dataStreamClient != null) {

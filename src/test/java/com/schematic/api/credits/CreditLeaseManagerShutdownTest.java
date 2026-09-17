@@ -1,6 +1,8 @@
 package com.schematic.api.credits;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -43,6 +45,59 @@ class CreditLeaseManagerShutdownTest {
         public void release(String leaseId) {
             released.add(leaseId);
         }
+    }
+
+    /** Grants a fixed lease, and takes its time handing one back. */
+    private static final class SlowWire implements LeaseWireClient {
+        private final long releaseMillis;
+        final List<String> released = Collections.synchronizedList(new ArrayList<>());
+
+        SlowWire(long releaseMillis) {
+            this.releaseMillis = releaseMillis;
+        }
+
+        @Override
+        public LeaseGrant acquire(String companyId, String creditTypeId, double requestedAmount, Instant expiresAt) {
+            return new LeaseGrant("lse_wire", companyId, creditTypeId, requestedAmount, expiresAt);
+        }
+
+        @Override
+        public LeaseGrant extend(String leaseId, double additionalAmount, Instant expiresAt) {
+            return new LeaseGrant(leaseId, "co_1", "ct_1", additionalAmount, expiresAt);
+        }
+
+        @Override
+        public void release(String leaseId) {
+            try {
+                Thread.sleep(releaseMillis);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            released.add(leaseId);
+        }
+    }
+
+    @Test
+    void shuttingDownStaysInsideItsBudgetWithManySlotsAndASlowWire() {
+        InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
+        SlowWire wire = new SlowWire(100);
+        CreditLeaseManager manager = new CreditLeaseManager(
+                wire, leases, holds, CreditLeaseConfig.builder().build(), null, CLOCK);
+        for (int i = 0; i < 50; i++) {
+            leases.replace(new LeaseGrant("lse_" + i, "co_" + i, "ct_1", 1000, NOW.plusSeconds(300)));
+        }
+
+        long startedAt = System.nanoTime();
+        manager.releaseAllLocalLeases(Duration.ofMillis(300));
+        manager.close(Duration.ofMillis(100));
+        long tookMillis = (System.nanoTime() - startedAt) / 1_000_000;
+
+        // Releasing all fifty in turn is five seconds of shutdown. A caller that asked for a
+        // bounded close gets one, and the leases left behind expire server-side.
+        assertTrue(tookMillis < 2000, "shutdown took " + tookMillis + "ms");
+        assertFalse(wire.released.isEmpty());
+        assertTrue(wire.released.size() < 50, "released " + wire.released.size() + " of 50");
     }
 
     @Test
