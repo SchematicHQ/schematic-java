@@ -77,6 +77,14 @@ public class AsyncPlanmigrationsClient {
         return this.rawClient.countCompanyMigrations(request, requestOptions).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ListMigrationsResponse> listMigrations() {
+        return this.rawClient.listMigrations().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListMigrationsResponse> listMigrations(RequestOptions requestOptions) {
+        return this.rawClient.listMigrations(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ListMigrationsResponse> listMigrations(ListMigrationsRequest request) {
         return this.rawClient.listMigrations(request).thenApply(response -> response.body());
     }
@@ -152,6 +160,14 @@ public class AsyncPlanmigrationsClient {
         return this.rawClient
                 .retryMigration(planVersionMigrationId, request, requestOptions)
                 .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountMigrationsResponse> countMigrations() {
+        return this.rawClient.countMigrations().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountMigrationsResponse> countMigrations(RequestOptions requestOptions) {
+        return this.rawClient.countMigrations(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<CountMigrationsResponse> countMigrations(CountMigrationsRequest request) {

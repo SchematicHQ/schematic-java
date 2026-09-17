@@ -25,12 +25,18 @@ public final class ExtendCreditLeaseRequestBody {
 
     private final Optional<OffsetDateTime> expiresAt;
 
+    private final Optional<String> idempotencyKey;
+
     private final Map<String, Object> additionalProperties;
 
     private ExtendCreditLeaseRequestBody(
-            double additionalAmount, Optional<OffsetDateTime> expiresAt, Map<String, Object> additionalProperties) {
+            double additionalAmount,
+            Optional<OffsetDateTime> expiresAt,
+            Optional<String> idempotencyKey,
+            Map<String, Object> additionalProperties) {
         this.additionalAmount = additionalAmount;
         this.expiresAt = expiresAt;
+        this.idempotencyKey = idempotencyKey;
         this.additionalProperties = additionalProperties;
     }
 
@@ -39,9 +45,20 @@ public final class ExtendCreditLeaseRequestBody {
         return additionalAmount;
     }
 
+    /**
+     * @return Pushes the lease's expiry out; may be at most one hour from now. Leave unset to keep the expiry the lease already has
+     */
     @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
         return expiresAt;
+    }
+
+    /**
+     * @return A caller-chosen key for safe retries: a second request with the same key returns the lease as it stands instead of growing it again. Keys are unique per environment across every extend
+     */
+    @JsonProperty("idempotency_key")
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
     }
 
     @java.lang.Override
@@ -56,12 +73,14 @@ public final class ExtendCreditLeaseRequestBody {
     }
 
     private boolean equalTo(ExtendCreditLeaseRequestBody other) {
-        return additionalAmount == other.additionalAmount && expiresAt.equals(other.expiresAt);
+        return additionalAmount == other.additionalAmount
+                && expiresAt.equals(other.expiresAt)
+                && idempotencyKey.equals(other.idempotencyKey);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.additionalAmount, this.expiresAt);
+        return Objects.hash(this.additionalAmount, this.expiresAt, this.idempotencyKey);
     }
 
     @java.lang.Override
@@ -86,14 +105,26 @@ public final class ExtendCreditLeaseRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Pushes the lease's expiry out; may be at most one hour from now. Leave unset to keep the expiry the lease already has</p>
+         */
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
         _FinalStage expiresAt(OffsetDateTime expiresAt);
+
+        /**
+         * <p>A caller-chosen key for safe retries: a second request with the same key returns the lease as it stands instead of growing it again. Keys are unique per environment across every extend</p>
+         */
+        _FinalStage idempotencyKey(Optional<String> idempotencyKey);
+
+        _FinalStage idempotencyKey(String idempotencyKey);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements AdditionalAmountStage, _FinalStage {
         private double additionalAmount;
+
+        private Optional<String> idempotencyKey = Optional.empty();
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
@@ -106,6 +137,7 @@ public final class ExtendCreditLeaseRequestBody {
         public Builder from(ExtendCreditLeaseRequestBody other) {
             additionalAmount(other.getAdditionalAmount());
             expiresAt(other.getExpiresAt());
+            idempotencyKey(other.getIdempotencyKey());
             return this;
         }
 
@@ -116,12 +148,39 @@ public final class ExtendCreditLeaseRequestBody {
             return this;
         }
 
+        /**
+         * <p>A caller-chosen key for safe retries: a second request with the same key returns the lease as it stands instead of growing it again. Keys are unique per environment across every extend</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
+            return this;
+        }
+
+        /**
+         * <p>A caller-chosen key for safe retries: a second request with the same key returns the lease as it stands instead of growing it again. Keys are unique per environment across every extend</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "idempotency_key", nulls = Nulls.SKIP)
+        public _FinalStage idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        /**
+         * <p>Pushes the lease's expiry out; may be at most one hour from now. Leave unset to keep the expiry the lease already has</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage expiresAt(OffsetDateTime expiresAt) {
             this.expiresAt = Optional.ofNullable(expiresAt);
             return this;
         }
 
+        /**
+         * <p>Pushes the lease's expiry out; may be at most one hour from now. Leave unset to keep the expiry the lease already has</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt) {
@@ -131,7 +190,7 @@ public final class ExtendCreditLeaseRequestBody {
 
         @java.lang.Override
         public ExtendCreditLeaseRequestBody build() {
-            return new ExtendCreditLeaseRequestBody(additionalAmount, expiresAt, additionalProperties);
+            return new ExtendCreditLeaseRequestBody(additionalAmount, expiresAt, idempotencyKey, additionalProperties);
         }
 
         @java.lang.Override

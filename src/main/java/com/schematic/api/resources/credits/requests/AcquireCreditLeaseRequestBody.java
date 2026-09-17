@@ -55,6 +55,9 @@ public final class AcquireCreditLeaseRequestBody {
         return creditTypeId;
     }
 
+    /**
+     * @return When the hold lapses if the lease is never released; defaults to five minutes from now and may be at most one hour out. The unspent hold is refunded on expiry
+     */
     @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
         return expiresAt;
@@ -118,6 +121,9 @@ public final class AcquireCreditLeaseRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>When the hold lapses if the lease is never released; defaults to five minutes from now and may be at most one hour out. The unspent hold is refunded on expiry</p>
+         */
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
         _FinalStage expiresAt(OffsetDateTime expiresAt);
@@ -168,12 +174,19 @@ public final class AcquireCreditLeaseRequestBody {
             return this;
         }
 
+        /**
+         * <p>When the hold lapses if the lease is never released; defaults to five minutes from now and may be at most one hour out. The unspent hold is refunded on expiry</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage expiresAt(OffsetDateTime expiresAt) {
             this.expiresAt = Optional.ofNullable(expiresAt);
             return this;
         }
 
+        /**
+         * <p>When the hold lapses if the lease is never released; defaults to five minutes from now and may be at most one hour out. The unspent hold is refunded on expiry</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt) {

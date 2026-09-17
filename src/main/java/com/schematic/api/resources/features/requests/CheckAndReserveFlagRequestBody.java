@@ -26,6 +26,8 @@ public final class CheckAndReserveFlagRequestBody {
 
     private final Optional<OffsetDateTime> expiresAt;
 
+    private final Optional<String> idempotencyKey;
+
     private final Optional<PreflightRequestBody> preflight;
 
     private final Optional<Double> quantity;
@@ -37,12 +39,14 @@ public final class CheckAndReserveFlagRequestBody {
     private CheckAndReserveFlagRequestBody(
             Optional<Map<String, String>> company,
             Optional<OffsetDateTime> expiresAt,
+            Optional<String> idempotencyKey,
             Optional<PreflightRequestBody> preflight,
             Optional<Double> quantity,
             Optional<Map<String, String>> user,
             Map<String, Object> additionalProperties) {
         this.company = company;
         this.expiresAt = expiresAt;
+        this.idempotencyKey = idempotencyKey;
         this.preflight = preflight;
         this.quantity = quantity;
         this.user = user;
@@ -63,7 +67,15 @@ public final class CheckAndReserveFlagRequestBody {
     }
 
     /**
-     * @return Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is quantity times the entitlement's consumption rate
+     * @return A caller-chosen key for safe retries: a second request with the same key returns the original reservation instead of taking another hold
+     */
+    @JsonProperty("idempotency_key")
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
+    }
+
+    /**
+     * @return Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is the entitlement's consumption rate times quantity, or, when quantity is omitted, times the usage stated here
      */
     @JsonProperty("preflight")
     public Optional<PreflightRequestBody> getPreflight() {
@@ -71,7 +83,7 @@ public final class CheckAndReserveFlagRequestBody {
     }
 
     /**
-     * @return Units of the feature the operation will consume; defaults to 1. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event
+     * @return Units of the feature the operation will consume. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event. When it is omitted the units come from preflight.event_usage.quantity, if that event subtype is the entitlement's, else from preflight.usage, else 1
      */
     @JsonProperty("quantity")
     public Optional<Double> getQuantity() {
@@ -97,6 +109,7 @@ public final class CheckAndReserveFlagRequestBody {
     private boolean equalTo(CheckAndReserveFlagRequestBody other) {
         return company.equals(other.company)
                 && expiresAt.equals(other.expiresAt)
+                && idempotencyKey.equals(other.idempotencyKey)
                 && preflight.equals(other.preflight)
                 && quantity.equals(other.quantity)
                 && user.equals(other.user);
@@ -104,7 +117,8 @@ public final class CheckAndReserveFlagRequestBody {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.company, this.expiresAt, this.preflight, this.quantity, this.user);
+        return Objects.hash(
+                this.company, this.expiresAt, this.idempotencyKey, this.preflight, this.quantity, this.user);
     }
 
     @java.lang.Override
@@ -122,6 +136,8 @@ public final class CheckAndReserveFlagRequestBody {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         private Optional<PreflightRequestBody> preflight = Optional.empty();
 
         private Optional<Double> quantity = Optional.empty();
@@ -136,6 +152,7 @@ public final class CheckAndReserveFlagRequestBody {
         public Builder from(CheckAndReserveFlagRequestBody other) {
             company(other.getCompany());
             expiresAt(other.getExpiresAt());
+            idempotencyKey(other.getIdempotencyKey());
             preflight(other.getPreflight());
             quantity(other.getQuantity());
             user(other.getUser());
@@ -168,7 +185,21 @@ public final class CheckAndReserveFlagRequestBody {
         }
 
         /**
-         * <p>Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is quantity times the entitlement's consumption rate</p>
+         * <p>A caller-chosen key for safe retries: a second request with the same key returns the original reservation instead of taking another hold</p>
+         */
+        @JsonSetter(value = "idempotency_key", nulls = Nulls.SKIP)
+        public Builder idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        public Builder idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
+            return this;
+        }
+
+        /**
+         * <p>Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is the entitlement's consumption rate times quantity, or, when quantity is omitted, times the usage stated here</p>
          */
         @JsonSetter(value = "preflight", nulls = Nulls.SKIP)
         public Builder preflight(Optional<PreflightRequestBody> preflight) {
@@ -182,7 +213,7 @@ public final class CheckAndReserveFlagRequestBody {
         }
 
         /**
-         * <p>Units of the feature the operation will consume; defaults to 1. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event</p>
+         * <p>Units of the feature the operation will consume. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event. When it is omitted the units come from preflight.event_usage.quantity, if that event subtype is the entitlement's, else from preflight.usage, else 1</p>
          */
         @JsonSetter(value = "quantity", nulls = Nulls.SKIP)
         public Builder quantity(Optional<Double> quantity) {
@@ -208,7 +239,7 @@ public final class CheckAndReserveFlagRequestBody {
 
         public CheckAndReserveFlagRequestBody build() {
             return new CheckAndReserveFlagRequestBody(
-                    company, expiresAt, preflight, quantity, user, additionalProperties);
+                    company, expiresAt, idempotencyKey, preflight, quantity, user, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

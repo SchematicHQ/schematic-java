@@ -54,7 +54,11 @@ public final class ListPlansParams {
 
     private final Optional<Boolean> withEntitlements;
 
+    private final Optional<Boolean> withPublishedVersion;
+
     private final Optional<String> withoutEntitlementFor;
+
+    private final Optional<Boolean> withoutEntitlementForIncludeDrafts;
 
     private final Optional<Boolean> withoutPaidProductId;
 
@@ -77,7 +81,9 @@ public final class ListPlansParams {
             Optional<String> q,
             Optional<String> scopedToCompanyId,
             Optional<Boolean> withEntitlements,
+            Optional<Boolean> withPublishedVersion,
             Optional<String> withoutEntitlementFor,
+            Optional<Boolean> withoutEntitlementForIncludeDrafts,
             Optional<Boolean> withoutPaidProductId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
@@ -96,7 +102,9 @@ public final class ListPlansParams {
         this.q = q;
         this.scopedToCompanyId = scopedToCompanyId;
         this.withEntitlements = withEntitlements;
+        this.withPublishedVersion = withPublishedVersion;
         this.withoutEntitlementFor = withoutEntitlementFor;
+        this.withoutEntitlementForIncludeDrafts = withoutEntitlementForIncludeDrafts;
         this.withoutPaidProductId = withoutPaidProductId;
         this.additionalProperties = additionalProperties;
     }
@@ -221,11 +229,27 @@ public final class ListPlansParams {
     }
 
     /**
+     * @return Only return plans that have a published version
+     */
+    @JsonProperty("with_published_version")
+    public Optional<Boolean> getWithPublishedVersion() {
+        return withPublishedVersion;
+    }
+
+    /**
      * @return Filter out plans that already have a plan entitlement for the specified feature ID
      */
     @JsonProperty("without_entitlement_for")
     public Optional<String> getWithoutEntitlementFor() {
         return withoutEntitlementFor;
+    }
+
+    /**
+     * @return With without_entitlement_for, also treat an entitlement on a plan's draft version as existing
+     */
+    @JsonProperty("without_entitlement_for_include_drafts")
+    public Optional<Boolean> getWithoutEntitlementForIncludeDrafts() {
+        return withoutEntitlementForIncludeDrafts;
     }
 
     /**
@@ -264,7 +288,9 @@ public final class ListPlansParams {
                 && q.equals(other.q)
                 && scopedToCompanyId.equals(other.scopedToCompanyId)
                 && withEntitlements.equals(other.withEntitlements)
+                && withPublishedVersion.equals(other.withPublishedVersion)
                 && withoutEntitlementFor.equals(other.withoutEntitlementFor)
+                && withoutEntitlementForIncludeDrafts.equals(other.withoutEntitlementForIncludeDrafts)
                 && withoutPaidProductId.equals(other.withoutPaidProductId);
     }
 
@@ -287,7 +313,9 @@ public final class ListPlansParams {
                 this.q,
                 this.scopedToCompanyId,
                 this.withEntitlements,
+                this.withPublishedVersion,
                 this.withoutEntitlementFor,
+                this.withoutEntitlementForIncludeDrafts,
                 this.withoutPaidProductId);
     }
 
@@ -334,7 +362,11 @@ public final class ListPlansParams {
 
         private Optional<Boolean> withEntitlements = Optional.empty();
 
+        private Optional<Boolean> withPublishedVersion = Optional.empty();
+
         private Optional<String> withoutEntitlementFor = Optional.empty();
+
+        private Optional<Boolean> withoutEntitlementForIncludeDrafts = Optional.empty();
 
         private Optional<Boolean> withoutPaidProductId = Optional.empty();
 
@@ -360,7 +392,9 @@ public final class ListPlansParams {
             q(other.getQ());
             scopedToCompanyId(other.getScopedToCompanyId());
             withEntitlements(other.getWithEntitlements());
+            withPublishedVersion(other.getWithPublishedVersion());
             withoutEntitlementFor(other.getWithoutEntitlementFor());
+            withoutEntitlementForIncludeDrafts(other.getWithoutEntitlementForIncludeDrafts());
             withoutPaidProductId(other.getWithoutPaidProductId());
             return this;
         }
@@ -581,6 +615,20 @@ public final class ListPlansParams {
         }
 
         /**
+         * <p>Only return plans that have a published version</p>
+         */
+        @JsonSetter(value = "with_published_version", nulls = Nulls.SKIP)
+        public Builder withPublishedVersion(Optional<Boolean> withPublishedVersion) {
+            this.withPublishedVersion = withPublishedVersion;
+            return this;
+        }
+
+        public Builder withPublishedVersion(Boolean withPublishedVersion) {
+            this.withPublishedVersion = Optional.ofNullable(withPublishedVersion);
+            return this;
+        }
+
+        /**
          * <p>Filter out plans that already have a plan entitlement for the specified feature ID</p>
          */
         @JsonSetter(value = "without_entitlement_for", nulls = Nulls.SKIP)
@@ -591,6 +639,20 @@ public final class ListPlansParams {
 
         public Builder withoutEntitlementFor(String withoutEntitlementFor) {
             this.withoutEntitlementFor = Optional.ofNullable(withoutEntitlementFor);
+            return this;
+        }
+
+        /**
+         * <p>With without_entitlement_for, also treat an entitlement on a plan's draft version as existing</p>
+         */
+        @JsonSetter(value = "without_entitlement_for_include_drafts", nulls = Nulls.SKIP)
+        public Builder withoutEntitlementForIncludeDrafts(Optional<Boolean> withoutEntitlementForIncludeDrafts) {
+            this.withoutEntitlementForIncludeDrafts = withoutEntitlementForIncludeDrafts;
+            return this;
+        }
+
+        public Builder withoutEntitlementForIncludeDrafts(Boolean withoutEntitlementForIncludeDrafts) {
+            this.withoutEntitlementForIncludeDrafts = Optional.ofNullable(withoutEntitlementForIncludeDrafts);
             return this;
         }
 
@@ -626,7 +688,9 @@ public final class ListPlansParams {
                     q,
                     scopedToCompanyId,
                     withEntitlements,
+                    withPublishedVersion,
                     withoutEntitlementFor,
+                    withoutEntitlementForIncludeDrafts,
                     withoutPaidProductId,
                     additionalProperties);
         }

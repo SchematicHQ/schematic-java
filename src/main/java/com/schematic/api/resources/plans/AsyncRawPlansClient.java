@@ -725,6 +725,20 @@ public class AsyncRawPlansClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "with_entitlements", request.getWithEntitlements().get(), false);
         }
+        if (request.getWithPublishedVersion().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "with_published_version",
+                    request.getWithPublishedVersion().get(),
+                    false);
+        }
+        if (request.getWithoutEntitlementForIncludeDrafts().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "without_entitlement_for_include_drafts",
+                    request.getWithoutEntitlementForIncludeDrafts().get(),
+                    false);
+        }
         if (request.getWithoutEntitlementFor().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -1772,6 +1786,20 @@ public class AsyncRawPlansClient {
         if (request.getWithEntitlements().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "with_entitlements", request.getWithEntitlements().get(), false);
+        }
+        if (request.getWithPublishedVersion().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "with_published_version",
+                    request.getWithPublishedVersion().get(),
+                    false);
+        }
+        if (request.getWithoutEntitlementForIncludeDrafts().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "without_entitlement_for_include_drafts",
+                    request.getWithoutEntitlementForIncludeDrafts().get(),
+                    false);
         }
         if (request.getWithoutEntitlementFor().isPresent()) {
             QueryStringMapper.addQueryParameter(

@@ -80,6 +80,8 @@ public final class CreditEventLedgerResponseData {
 
     private final Optional<String> toGrantId;
 
+    private final Optional<CreditTransferReason> transferReason;
+
     private final Optional<String> usageEventId;
 
     private final Optional<CreditUsageReason> usageReason;
@@ -118,6 +120,7 @@ public final class CreditEventLedgerResponseData {
             Optional<Double> quantityRemainingAtZeroOut,
             long sourceId,
             Optional<String> toGrantId,
+            Optional<CreditTransferReason> transferReason,
             Optional<String> usageEventId,
             Optional<CreditUsageReason> usageReason,
             Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason,
@@ -151,6 +154,7 @@ public final class CreditEventLedgerResponseData {
         this.quantityRemainingAtZeroOut = quantityRemainingAtZeroOut;
         this.sourceId = sourceId;
         this.toGrantId = toGrantId;
+        this.transferReason = transferReason;
         this.usageEventId = usageEventId;
         this.usageReason = usageReason;
         this.zeroedOutReason = zeroedOutReason;
@@ -302,6 +306,11 @@ public final class CreditEventLedgerResponseData {
         return toGrantId;
     }
 
+    @JsonProperty("transfer_reason")
+    public Optional<CreditTransferReason> getTransferReason() {
+        return transferReason;
+    }
+
     @JsonProperty("usage_event_id")
     public Optional<String> getUsageEventId() {
         return usageEventId;
@@ -358,6 +367,7 @@ public final class CreditEventLedgerResponseData {
                 && quantityRemainingAtZeroOut.equals(other.quantityRemainingAtZeroOut)
                 && sourceId == other.sourceId
                 && toGrantId.equals(other.toGrantId)
+                && transferReason.equals(other.transferReason)
                 && usageEventId.equals(other.usageEventId)
                 && usageReason.equals(other.usageReason)
                 && zeroedOutReason.equals(other.zeroedOutReason);
@@ -395,6 +405,7 @@ public final class CreditEventLedgerResponseData {
                 this.quantityRemainingAtZeroOut,
                 this.sourceId,
                 this.toGrantId,
+                this.transferReason,
                 this.usageEventId,
                 this.usageReason,
                 this.zeroedOutReason);
@@ -534,6 +545,10 @@ public final class CreditEventLedgerResponseData {
 
         _FinalStage toGrantId(String toGrantId);
 
+        _FinalStage transferReason(Optional<CreditTransferReason> transferReason);
+
+        _FinalStage transferReason(CreditTransferReason transferReason);
+
         _FinalStage usageEventId(Optional<String> usageEventId);
 
         _FinalStage usageEventId(String usageEventId);
@@ -582,6 +597,8 @@ public final class CreditEventLedgerResponseData {
         private Optional<CreditUsageReason> usageReason = Optional.empty();
 
         private Optional<String> usageEventId = Optional.empty();
+
+        private Optional<CreditTransferReason> transferReason = Optional.empty();
 
         private Optional<String> toGrantId = Optional.empty();
 
@@ -659,6 +676,7 @@ public final class CreditEventLedgerResponseData {
             quantityRemainingAtZeroOut(other.getQuantityRemainingAtZeroOut());
             sourceId(other.getSourceId());
             toGrantId(other.getToGrantId());
+            transferReason(other.getTransferReason());
             usageEventId(other.getUsageEventId());
             usageReason(other.getUsageReason());
             zeroedOutReason(other.getZeroedOutReason());
@@ -764,6 +782,19 @@ public final class CreditEventLedgerResponseData {
         @JsonSetter(value = "usage_event_id", nulls = Nulls.SKIP)
         public _FinalStage usageEventId(Optional<String> usageEventId) {
             this.usageEventId = usageEventId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage transferReason(CreditTransferReason transferReason) {
+            this.transferReason = Optional.ofNullable(transferReason);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "transfer_reason", nulls = Nulls.SKIP)
+        public _FinalStage transferReason(Optional<CreditTransferReason> transferReason) {
+            this.transferReason = transferReason;
             return this;
         }
 
@@ -1059,6 +1090,7 @@ public final class CreditEventLedgerResponseData {
                     quantityRemainingAtZeroOut,
                     sourceId,
                     toGrantId,
+                    transferReason,
                     usageEventId,
                     usageReason,
                     zeroedOutReason,
