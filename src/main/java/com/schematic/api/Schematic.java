@@ -727,35 +727,52 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     /**
-     * Checks a flag via the Schematic API, using the flag check result cache.
+     * Checks a flag via the Schematic API, using the flag check result cache. A preflighted check
+     * skips that cache in both directions, since it asks a different question than the plain
+     * check the cache is keyed for.
      */
     private RulesengineCheckFlagResult checkFlagViaApi(
             String flagKey, Map<String, String> company, Map<String, String> user) {
-        return checkFlagViaApi(flagKey, company, user, null);
+        return checkFlagViaApi(flagKey, company, user, null, null);
     }
 
     private RulesengineCheckFlagResult checkFlagViaApi(
-            String flagKey, Map<String, String> company, Map<String, String> user, Duration timeout) {
+            String flagKey,
+            Map<String, String> company,
+            Map<String, String> user,
+            Duration timeout,
+            PreflightOptions preflight) {
         try {
-            RulesengineCheckFlagResult cached = getCachedFlag(flagKey, company, user);
-            if (cached != null) {
-                return cached;
+            // The cache is keyed by flag, company and user, and a preflighted check asks a
+            // different question than a plain one: whether the action about to run would be
+            // allowed. So a preflighted verdict is neither answered from the cache nor written
+            // back to it.
+            if (preflight == null) {
+                RulesengineCheckFlagResult cached = getCachedFlag(flagKey, company, user);
+                if (cached != null) {
+                    return cached;
+                }
             }
 
-            CheckFlagRequestBody request =
-                    CheckFlagRequestBody.builder().company(company).user(user).build();
+            CheckFlagRequestBody.Builder request =
+                    CheckFlagRequestBody.builder().company(company).user(user);
+            if (preflight != null) {
+                request.preflight(preflight.toRequestBody());
+            }
             CheckFlagResponse response = timeout == null
-                    ? features().checkFlag(flagKey, request)
+                    ? features().checkFlag(flagKey, request.build())
                     : features()
                             .checkFlag(
                                     flagKey,
-                                    request,
+                                    request.build(),
                                     RequestOptions.builder()
                                             .timeout((int) timeout.toMillis(), TimeUnit.MILLISECONDS)
                                             .build());
             RulesengineCheckFlagResult result = toRulesengineResult(response.getData());
 
-            cacheFlag(flagKey, result, company, user);
+            if (preflight == null) {
+                cacheFlag(flagKey, result, company, user);
+            }
             return result;
         } catch (Exception e) {
             logger.error("Error checking flag via API: " + e.getMessage());
@@ -791,8 +808,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      * server-side.
      *
      * <p>Without credit leases, or without a usage, this is a plain flag check that issues no
-     * hold. The caller's preflight still reaches any local evaluation, so it gates on the
-     * post-call balance, just without a hold.
+     * hold. The caller's preflight still reaches whichever path answers it, local or the API, so
+     * the check gates on the post-call balance, just without a hold.
      */
     public CheckResult check(
             String flagKey, Map<String, String> company, Map<String, String> user, CheckOptions options) {
@@ -973,9 +990,10 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 enqueueFlagCheckEvent(flagKey, dsResult, company, user);
                 result = dsResult;
             } else {
-                // The REST path takes no preflight: it answers against the server's own balance.
-                // The caller's timeout still applies, since this is the call it is waiting on.
-                result = checkFlagViaApi(flagKey, company, user, options.getTimeout());
+                // The API answers a preflight too, so the caller's usage gates the REST path the
+                // same way it gates a local evaluation. The caller's timeout applies, since this
+                // is the call it is waiting on.
+                result = checkFlagViaApi(flagKey, company, user, options.getTimeout(), preflight);
             }
         }
         return new CheckResult(
