@@ -60,6 +60,8 @@ public class DataStreamClient implements Closeable {
     private final SchematicLogger logger;
     private final ObjectMapper objectMapper;
     private final RulesEngine rulesEngine;
+    private final redis.clients.jedis.JedisPooled redisClient;
+    private final String redisKeyPrefix;
 
     // Typed entity caches
     private final CacheProvider<RulesengineFlag> flagCache;
@@ -118,6 +120,8 @@ public class DataStreamClient implements Closeable {
         String keyPrefix = options.getRedisCacheConfig() != null
                 ? options.getRedisCacheConfig().getKeyPrefix()
                 : "schematic:";
+        this.redisClient = redisClient;
+        this.redisKeyPrefix = keyPrefix;
         this.flagCache = DataStreamCacheFactory.buildFlagCache(options, redisClient, keyPrefix);
         this.companyCache = DataStreamCacheFactory.buildCompanyCache(options, redisClient, keyPrefix);
         this.userCache = DataStreamCacheFactory.buildUserCache(options, redisClient, keyPrefix);
@@ -134,6 +138,19 @@ public class DataStreamClient implements Closeable {
      * Starts the DataStream client. In direct mode, connects via WebSocket.
      * In replicator mode, starts periodic health checks.
      */
+    /**
+     * The Redis client the caches were configured with, or null when they are local. Credit leases
+     * reuse it so an existing Redis setup gates them across pods with no second client to wire up.
+     */
+    public redis.clients.jedis.JedisPooled getRedisClient() {
+        return redisClient;
+    }
+
+    /** The key prefix the caches were configured with. */
+    public String getRedisKeyPrefix() {
+        return redisKeyPrefix;
+    }
+
     public void start() {
         if (closed.get()) {
             throw new IllegalStateException("DataStreamClient has been closed");
@@ -167,6 +184,17 @@ public class DataStreamClient implements Closeable {
      * Checks a flag using cached datastream data and the rules engine.
      */
     public RulesengineCheckFlagResult checkFlag(String flagKey, Map<String, String> company, Map<String, String> user) {
+        return checkFlag(flagKey, company, user, null);
+    }
+
+    /**
+     * Checks a flag using cached datastream data and the rules engine, with a preflight: what the
+     * call being gated is about to cost, before it has been recorded.
+     *
+     * @param preflight the preflight, or null for none
+     */
+    public RulesengineCheckFlagResult checkFlag(
+            String flagKey, Map<String, String> company, Map<String, String> user, CheckFlagOptions preflight) {
         // Step 1: Get flag from cache
         RulesengineFlag flag = flagCache.get(flagCacheKey(flagKey));
         if (flag == null) {
@@ -202,13 +230,13 @@ public class DataStreamClient implements Closeable {
 
         // Step 3: Replicator mode - evaluate with whatever we have
         if (options.isReplicatorMode()) {
-            return evaluateFlag(flag, cachedCompany, cachedUser);
+            return evaluateFlag(flag, cachedCompany, cachedUser, preflight);
         }
 
         // Step 4: Direct mode - if all needed data is cached, evaluate immediately
         if ((!needsCompany || cachedCompany != null) && (!needsUser || cachedUser != null)) {
             log("debug", "All required resources found in cache for flag " + flagKey);
-            return evaluateFlag(flag, cachedCompany, cachedUser);
+            return evaluateFlag(flag, cachedCompany, cachedUser, preflight);
         }
 
         // Step 5: Direct mode - fetch missing entities via datastream and wait for response
@@ -223,14 +251,15 @@ public class DataStreamClient implements Closeable {
             cachedUser = getUser(user);
         }
 
-        return evaluateFlag(flag, cachedCompany, cachedUser);
+        return evaluateFlag(flag, cachedCompany, cachedUser, preflight);
     }
 
     /**
      * Fetches a company via the datastream WebSocket, waiting for the response with a timeout.
-     * Deduplicates concurrent requests for the same entity.
+     * Deduplicates concurrent requests for the same entity. Returns null when the entity never
+     * arrives.
      */
-    private RulesengineCompany getCompany(Map<String, String> keys) {
+    public RulesengineCompany getCompany(Map<String, String> keys) {
         // Check cache first
         RulesengineCompany cached = getCachedCompany(keys);
         if (cached != null) {
@@ -261,7 +290,7 @@ public class DataStreamClient implements Closeable {
      * Fetches a user via the datastream WebSocket, waiting for the response with a timeout.
      * Deduplicates concurrent requests for the same entity.
      */
-    private RulesengineUser getUser(Map<String, String> keys) {
+    public RulesengineUser getUser(Map<String, String> keys) {
         // Check cache first
         RulesengineUser cached = getCachedUser(keys);
         if (cached != null) {
@@ -401,10 +430,49 @@ public class DataStreamClient implements Closeable {
     }
 
     /**
+     * Evaluates a flag with a preflight, propagating a failure instead of substituting the flag's
+     * default value. A credit-gated check needs that difference: a default returned as a verdict
+     * would leave the hold it took standing on an evaluation that never ran.
+     *
+     * @param preflight the preflight, or null for none
+     */
+    public RulesengineCheckFlagResult evaluateFlagWithOptions(
+            RulesengineFlag flag, RulesengineCompany company, RulesengineUser user, CheckFlagOptions preflight)
+            throws Exception {
+        if (rulesEngine == null || !rulesEngine.isInitialized()) {
+            throw new DataStreamException("Rules engine not available for flag " + flag.getKey());
+        }
+        RulesengineCheckFlagResult result = evaluate(flag, company, user, preflight);
+        return RulesengineCheckFlagResult.builder()
+                .from(result)
+                .companyId(result.getCompanyId().orElse(company != null ? company.getId() : null))
+                .userId(result.getUserId().orElse(user != null ? user.getId() : null))
+                .build();
+    }
+
+    /**
+     * Calls the rules engine, taking the preflight-free entry point when there is no preflight, so
+     * an engine that implements only that one still answers.
+     */
+    private RulesengineCheckFlagResult evaluate(
+            RulesengineFlag flag, RulesengineCompany company, RulesengineUser user, CheckFlagOptions preflight)
+            throws Exception {
+        if (preflight == null) {
+            return rulesEngine.checkFlag(flag, company, user);
+        }
+        return rulesEngine.checkFlag(flag, company, user, preflight);
+    }
+
+    /**
      * Evaluates a flag using the rules engine. Falls back to the flag's default value
      * if the rules engine is not available.
      */
     RulesengineCheckFlagResult evaluateFlag(RulesengineFlag flag, RulesengineCompany company, RulesengineUser user) {
+        return evaluateFlag(flag, company, user, null);
+    }
+
+    RulesengineCheckFlagResult evaluateFlag(
+            RulesengineFlag flag, RulesengineCompany company, RulesengineUser user, CheckFlagOptions preflight) {
         boolean defaultValue = flag.getDefaultValue();
         String flagKey = flag.getKey();
         String flagId = flag.getId();
@@ -413,7 +481,7 @@ public class DataStreamClient implements Closeable {
 
         if (rulesEngine != null && rulesEngine.isInitialized()) {
             try {
-                RulesengineCheckFlagResult result = rulesEngine.checkFlag(flag, company, user);
+                RulesengineCheckFlagResult result = evaluate(flag, company, user, preflight);
                 // The WASM engine returns a complete result — use it directly,
                 // enriching with IDs from context if the engine didn't set them
                 return RulesengineCheckFlagResult.builder()

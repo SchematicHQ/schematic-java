@@ -1,5 +1,7 @@
 package com.schematic.api;
 
+import java.util.List;
+
 /**
  * Optional metadata for an {@link Schematic#identify} event.
  *
@@ -8,9 +10,11 @@ package com.schematic.api;
 public final class IdentifyOptions {
 
     private final String idempotencyKey;
+    private final List<String> prewarm;
 
     private IdentifyOptions(Builder builder) {
         this.idempotencyKey = builder.idempotencyKey;
+        this.prewarm = builder.prewarm;
     }
 
     public static Builder builder() {
@@ -25,11 +29,27 @@ public final class IdentifyOptions {
         return idempotencyKey;
     }
 
+    /**
+     * Credit type ids to warm a lease for once the identify is enqueued, so the first
+     * credit-gated check does not pay the acquire round trip. A no-op unless credit leases are
+     * configured on the client.
+     */
+    public List<String> getPrewarm() {
+        return prewarm;
+    }
+
     public static final class Builder {
         private String idempotencyKey;
+        private List<String> prewarm;
 
         public Builder idempotencyKey(String idempotencyKey) {
             this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        /** Credit type ids to warm a lease for after this identify. */
+        public Builder prewarm(List<String> prewarm) {
+            this.prewarm = prewarm;
             return this;
         }
 

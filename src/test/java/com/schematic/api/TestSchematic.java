@@ -8,6 +8,9 @@ import static org.mockito.Mockito.*;
 
 import com.schematic.api.cache.CacheProvider;
 import com.schematic.api.cache.LocalCache;
+import com.schematic.api.credits.CreditLeaseMode;
+import com.schematic.api.credits.Reservation;
+import com.schematic.api.credits.ReservationSettlement;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.FeaturesClient;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
@@ -23,6 +26,7 @@ import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.EventType;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -226,6 +230,60 @@ class SchematicTest {
         OffsetDateTime sentAt = event.getSentAt().get();
         assertTrue(sentAt.isAfter(before) && sentAt.isBefore(after));
         assertEquals("idem-1", event.getIdempotencyKey().get());
+    }
+
+    // --- Reservation settles ---
+
+    private static Reservation reservation(CreditLeaseMode mode) {
+        return new Reservation(
+                "res_1",
+                mode == CreditLeaseMode.SERVER ? "res_1" : "lse_1",
+                mode,
+                "co_1",
+                "ct_1",
+                "inference_tokens",
+                10,
+                100,
+                10,
+                Instant.parse("2026-01-01T00:01:00Z"),
+                Collections.singletonMap("id", "co_1"),
+                null);
+    }
+
+    @Test
+    void buildReservationSettleEvent_clientModeRoutesThroughTheLeaseAndKeysOffTheHold() {
+        EventBodyTrack track = ReservationSettlement.buildTrackEvent(reservation(CreditLeaseMode.CLIENT), 4);
+
+        CreateEventRequestBody event = Schematic.buildReservationSettleEvent(track, null, "res_1");
+
+        assertEquals(EventType.TRACK, event.getEventType());
+        assertEquals("lease-reservation:res_1", event.getIdempotencyKey().get());
+        EventBodyTrack body = (EventBodyTrack) event.getBody().get().get();
+        assertEquals("inference_tokens", body.getEvent());
+        assertEquals(4L, body.getQuantity().get());
+        // The lease id routes the server-side consumption through the lease's sub-ledger instead
+        // of decrementing a grant the acquire already pre-debited.
+        assertEquals("lse_1", body.getLeaseId().get());
+        assertFalse(body.getReservationId().isPresent());
+    }
+
+    @Test
+    void buildReservationSettleEvent_serverModeRoutesByHoldIdAndNeverNamesALease() {
+        EventBodyTrack track = ReservationSettlement.buildTrackEvent(reservation(CreditLeaseMode.SERVER), 4);
+
+        CreateEventRequestBody event = Schematic.buildReservationSettleEvent(track, null, "res_1");
+
+        EventBodyTrack body = (EventBodyTrack) event.getBody().get().get();
+        assertEquals("res_1", body.getReservationId().get());
+        // The server prefers the lease id when both are set, and there is no lease here.
+        assertFalse(body.getLeaseId().isPresent());
+    }
+
+    @Test
+    void buildReservationSettleEvent_billsAWholeUnitForAFractionalSettle() {
+        EventBodyTrack track = ReservationSettlement.buildTrackEvent(reservation(CreditLeaseMode.CLIENT), 0.2);
+
+        assertEquals(1L, track.getQuantity().get());
     }
 
     @Test
