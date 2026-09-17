@@ -8,6 +8,9 @@ import static org.mockito.Mockito.*;
 
 import com.schematic.api.cache.CacheProvider;
 import com.schematic.api.cache.LocalCache;
+import com.schematic.api.core.RequestOptions;
+import com.schematic.api.credits.CheckOptions;
+import com.schematic.api.credits.CheckResult;
 import com.schematic.api.credits.CreditLeaseMode;
 import com.schematic.api.credits.Reservation;
 import com.schematic.api.credits.ReservationSettlement;
@@ -33,9 +36,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -230,6 +235,47 @@ class SchematicTest {
         OffsetDateTime sentAt = event.getSentAt().get();
         assertTrue(sentAt.isAfter(before) && sentAt.isBefore(after));
         assertEquals("idem-1", event.getIdempotencyKey().get());
+    }
+
+    // --- Credit-aware check plumbing ---
+
+    @Test
+    void check_ThreadsThePerCheckTimeoutToTheApiFallback() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+
+        CheckFlagResponse response = CheckFlagResponse.builder()
+                .data(CheckFlagResponseData.builder()
+                        .flag("test_flag")
+                        .reason("test_reason")
+                        .value(true)
+                        .build())
+                .build();
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class), any(RequestOptions.class)))
+                .thenReturn(response);
+
+        CheckResult result = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder().timeout(Duration.ofMillis(250)).build());
+
+        assertTrue(result.isAllowed());
+        ArgumentCaptor<RequestOptions> options = ArgumentCaptor.forClass(RequestOptions.class);
+        verify(featuresClient).checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class), options.capture());
+        // The caller is waiting on this call, so its timeout has to reach it.
+        assertEquals(250, options.getValue().getTimeout().get());
+        assertEquals(TimeUnit.MILLISECONDS, options.getValue().getTimeoutTimeUnit());
+    }
+
+    @Test
+    void inheritFromDataStream_ResolvesEachSettingOnItsOwn() {
+        // An explicit lease client must not cost the caller the DataStream key prefix: a mixed
+        // fleet sharing those leases would then read two different key layouts.
+        assertEquals("lease-client", Schematic.inheritFromDataStream("lease-client", "datastream-client"));
+        assertEquals("datastream:", Schematic.inheritFromDataStream(null, "datastream:"));
+        assertNull(Schematic.inheritFromDataStream(null, null));
     }
 
     // --- Reservation settles ---

@@ -203,6 +203,21 @@ public final class CreditCheck {
         if (reserve == null) {
             return failure(request, "insufficient_lease_balance", flag, company, user, creditId, companyId, userId);
         }
+        String debitedLeaseId = reserve.getLeaseId();
+        if (debitedLeaseId == null || debitedLeaseId.isEmpty()) {
+            // A store that debited without naming the lease leaves the hold nothing to pin its
+            // refunds to, and pinning the acquired lease instead would refund and bill a lease
+            // that never held these credits. Hand the debit straight back, unpinned since there is
+            // no id to pin it to, and resolve through the caller's contract.
+            error("Lease check: reserve against " + companyId + "/" + creditId + " named no lease");
+            try {
+                leases.refund(companyId, creditId, creditCost, null);
+            } catch (RuntimeException e) {
+                warn("Lease check: could not return an unattributed debit for " + companyId + "/" + creditId + " (" + e
+                        + "); the slice is reclaimed at lease expiry");
+            }
+            return failure(request, "lease_store_error", flag, company, user, creditId, companyId, userId);
+        }
 
         // Record the hold after the debit and before the gate. A crash between the debit and this
         // add leaks at most this one hold, reclaimed when the lease expires server-side; recording
@@ -214,8 +229,8 @@ public final class CreditCheck {
                 // The lease the debit came out of, which the slot may have taken on since the
                 // acquire above: the window between them spans the extend's network call. A hold
                 // pinned to the lease the acquire returned would have its refunds dropped and
-                // would bill the wrong lease.
-                reserve.getLeaseId() != null ? reserve.getLeaseId() : lease.getLeaseId(),
+                // would bill the wrong lease, so this is never the acquired id.
+                debitedLeaseId,
                 CreditLeaseMode.CLIENT,
                 companyId,
                 creditId,
