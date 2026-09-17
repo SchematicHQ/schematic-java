@@ -44,6 +44,8 @@ public final class BillingCreditResponseData {
 
     private final String id;
 
+    private final BillingCreditLedgerAuthority ledgerAuthority;
+
     private final String name;
 
     private final Optional<String> pluralName;
@@ -69,6 +71,7 @@ public final class BillingCreditResponseData {
             String description,
             Optional<String> icon,
             String id,
+            BillingCreditLedgerAuthority ledgerAuthority,
             String name,
             Optional<String> pluralName,
             Optional<BillingPriceResponseData> price,
@@ -86,6 +89,7 @@ public final class BillingCreditResponseData {
         this.description = description;
         this.icon = icon;
         this.id = id;
+        this.ledgerAuthority = ledgerAuthority;
         this.name = name;
         this.pluralName = pluralName;
         this.price = price;
@@ -145,6 +149,11 @@ public final class BillingCreditResponseData {
         return id;
     }
 
+    @JsonProperty("ledger_authority")
+    public BillingCreditLedgerAuthority getLedgerAuthority() {
+        return ledgerAuthority;
+    }
+
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -197,6 +206,7 @@ public final class BillingCreditResponseData {
                 && description.equals(other.description)
                 && icon.equals(other.icon)
                 && id.equals(other.id)
+                && ledgerAuthority.equals(other.ledgerAuthority)
                 && name.equals(other.name)
                 && pluralName.equals(other.pluralName)
                 && price.equals(other.price)
@@ -218,6 +228,7 @@ public final class BillingCreditResponseData {
                 this.description,
                 this.icon,
                 this.id,
+                this.ledgerAuthority,
                 this.name,
                 this.pluralName,
                 this.price,
@@ -262,7 +273,11 @@ public final class BillingCreditResponseData {
     }
 
     public interface IdStage {
-        NameStage id(@NotNull String id);
+        LedgerAuthorityStage id(@NotNull String id);
+    }
+
+    public interface LedgerAuthorityStage {
+        NameStage ledgerAuthority(@NotNull BillingCreditLedgerAuthority ledgerAuthority);
     }
 
     public interface NameStage {
@@ -320,6 +335,7 @@ public final class BillingCreditResponseData {
                     DefaultRolloverPolicyStage,
                     DescriptionStage,
                     IdStage,
+                    LedgerAuthorityStage,
                     NameStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -336,6 +352,8 @@ public final class BillingCreditResponseData {
         private String description;
 
         private String id;
+
+        private BillingCreditLedgerAuthority ledgerAuthority;
 
         private String name;
 
@@ -372,6 +390,7 @@ public final class BillingCreditResponseData {
             description(other.getDescription());
             icon(other.getIcon());
             id(other.getId());
+            ledgerAuthority(other.getLedgerAuthority());
             name(other.getName());
             pluralName(other.getPluralName());
             price(other.getPrice());
@@ -426,8 +445,15 @@ public final class BillingCreditResponseData {
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(@NotNull String id) {
+        public LedgerAuthorityStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("ledger_authority")
+        public NameStage ledgerAuthority(@NotNull BillingCreditLedgerAuthority ledgerAuthority) {
+            this.ledgerAuthority = Objects.requireNonNull(ledgerAuthority, "ledgerAuthority must not be null");
             return this;
         }
 
@@ -560,6 +586,7 @@ public final class BillingCreditResponseData {
                     description,
                     icon,
                     id,
+                    ledgerAuthority,
                     name,
                     pluralName,
                     price,

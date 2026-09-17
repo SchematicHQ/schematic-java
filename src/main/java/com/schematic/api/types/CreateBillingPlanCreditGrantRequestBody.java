@@ -170,7 +170,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
     }
 
     /**
-     * @return How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly.
+     * @return How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Quarterly is not available for postpaid charges.
      */
     @JsonProperty("arrears_cadence")
     public Optional<BillingArrearsCadence> getArrearsCadence() {
@@ -483,7 +483,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         _FinalStage arrearsAnchor(BillingArrearsAnchor arrearsAnchor);
 
         /**
-         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly.</p>
+         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Quarterly is not available for postpaid charges.</p>
          */
         _FinalStage arrearsCadence(Optional<BillingArrearsCadence> arrearsCadence);
 
@@ -1133,7 +1133,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         }
 
         /**
-         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly.</p>
+         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Quarterly is not available for postpaid charges.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1143,7 +1143,7 @@ public final class CreateBillingPlanCreditGrantRequestBody {
         }
 
         /**
-         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly.</p>
+         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Quarterly is not available for postpaid charges.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "arrears_cadence", nulls = Nulls.SKIP)

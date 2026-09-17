@@ -73,6 +73,14 @@ public class PlanmigrationsClient {
         return this.rawClient.countCompanyMigrations(request, requestOptions).body();
     }
 
+    public ListMigrationsResponse listMigrations() {
+        return this.rawClient.listMigrations().body();
+    }
+
+    public ListMigrationsResponse listMigrations(RequestOptions requestOptions) {
+        return this.rawClient.listMigrations(requestOptions).body();
+    }
+
     public ListMigrationsResponse listMigrations(ListMigrationsRequest request) {
         return this.rawClient.listMigrations(request).body();
     }
@@ -143,6 +151,14 @@ public class PlanmigrationsClient {
         return this.rawClient
                 .retryMigration(planVersionMigrationId, request, requestOptions)
                 .body();
+    }
+
+    public CountMigrationsResponse countMigrations() {
+        return this.rawClient.countMigrations().body();
+    }
+
+    public CountMigrationsResponse countMigrations(RequestOptions requestOptions) {
+        return this.rawClient.countMigrations(requestOptions).body();
     }
 
     public CountMigrationsResponse countMigrations(CountMigrationsRequest request) {

@@ -158,7 +158,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
     }
 
     /**
-     * @return How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Send null to fall back to the default.
+     * @return How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Quarterly is not available for postpaid charges. Send null to fall back to the default.
      */
     @JsonProperty("arrears_cadence")
     public Optional<BillingArrearsCadence> getArrearsCadence() {
@@ -438,7 +438,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         _FinalStage arrearsAnchor(BillingArrearsAnchor arrearsAnchor);
 
         /**
-         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Send null to fall back to the default.</p>
+         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Quarterly is not available for postpaid charges. Send null to fall back to the default.</p>
          */
         _FinalStage arrearsCadence(Optional<BillingArrearsCadence> arrearsCadence);
 
@@ -1057,7 +1057,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         }
 
         /**
-         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Send null to fall back to the default.</p>
+         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Quarterly is not available for postpaid charges. Send null to fall back to the default.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1067,7 +1067,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         }
 
         /**
-         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Send null to fall back to the default.</p>
+         * <p>How often postpaid charges are closed and invoiced: end_of_billing_period (the default) or monthly. Quarterly is not available for postpaid charges. Send null to fall back to the default.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "arrears_cadence", nulls = Nulls.SKIP)

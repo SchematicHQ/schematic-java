@@ -9,10 +9,19 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class BillingCreditGrantReason {
     public static final BillingCreditGrantReason PURCHASED = new BillingCreditGrantReason(Value.PURCHASED, "purchased");
 
+    public static final BillingCreditGrantReason POSTPAID_FORGIVEN =
+            new BillingCreditGrantReason(Value.POSTPAID_FORGIVEN, "postpaid_forgiven");
+
     public static final BillingCreditGrantReason ADJUSTMENT =
             new BillingCreditGrantReason(Value.ADJUSTMENT, "adjustment");
 
     public static final BillingCreditGrantReason PLAN = new BillingCreditGrantReason(Value.PLAN, "plan");
+
+    public static final BillingCreditGrantReason POSTPAID_SETTLEMENT =
+            new BillingCreditGrantReason(Value.POSTPAID_SETTLEMENT, "postpaid_settlement");
+
+    public static final BillingCreditGrantReason POSTPAID_OVERDRAFT =
+            new BillingCreditGrantReason(Value.POSTPAID_OVERDRAFT, "postpaid_overdraft");
 
     public static final BillingCreditGrantReason ROLLOVER = new BillingCreditGrantReason(Value.ROLLOVER, "rollover");
 
@@ -56,10 +65,16 @@ public final class BillingCreditGrantReason {
         switch (value) {
             case PURCHASED:
                 return visitor.visitPurchased();
+            case POSTPAID_FORGIVEN:
+                return visitor.visitPostpaidForgiven();
             case ADJUSTMENT:
                 return visitor.visitAdjustment();
             case PLAN:
                 return visitor.visitPlan();
+            case POSTPAID_SETTLEMENT:
+                return visitor.visitPostpaidSettlement();
+            case POSTPAID_OVERDRAFT:
+                return visitor.visitPostpaidOverdraft();
             case ROLLOVER:
                 return visitor.visitRollover();
             case BILLING_CREDIT_AUTO_TOPUP:
@@ -77,10 +92,16 @@ public final class BillingCreditGrantReason {
         switch (value) {
             case "purchased":
                 return PURCHASED;
+            case "postpaid_forgiven":
+                return POSTPAID_FORGIVEN;
             case "adjustment":
                 return ADJUSTMENT;
             case "plan":
                 return PLAN;
+            case "postpaid_settlement":
+                return POSTPAID_SETTLEMENT;
+            case "postpaid_overdraft":
+                return POSTPAID_OVERDRAFT;
             case "rollover":
                 return ROLLOVER;
             case "billing_credit_auto_topup":
@@ -101,6 +122,12 @@ public final class BillingCreditGrantReason {
 
         PLAN,
 
+        POSTPAID_FORGIVEN,
+
+        POSTPAID_OVERDRAFT,
+
+        POSTPAID_SETTLEMENT,
+
         PURCHASED,
 
         ROLLOVER,
@@ -116,6 +143,12 @@ public final class BillingCreditGrantReason {
         T visitFree();
 
         T visitPlan();
+
+        T visitPostpaidForgiven();
+
+        T visitPostpaidOverdraft();
+
+        T visitPostpaidSettlement();
 
         T visitPurchased();
 

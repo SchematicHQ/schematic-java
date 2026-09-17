@@ -307,6 +307,14 @@ public class RawPlanmigrationsClient {
         }
     }
 
+    public BaseSchematicHttpResponse<ListMigrationsResponse> listMigrations() {
+        return listMigrations(ListMigrationsRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<ListMigrationsResponse> listMigrations(RequestOptions requestOptions) {
+        return listMigrations(ListMigrationsRequest.builder().build(), requestOptions);
+    }
+
     public BaseSchematicHttpResponse<ListMigrationsResponse> listMigrations(ListMigrationsRequest request) {
         return listMigrations(request, null);
     }
@@ -316,7 +324,14 @@ public class RawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations");
-        QueryStringMapper.addQueryParameter(httpUrl, "plan_version_id", request.getPlanVersionId(), false);
+        if (request.getFeatureId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "feature_id", request.getFeatureId().get(), false);
+        }
+        if (request.getPlanVersionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
+        }
         if (request.getStatus().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "status", request.getStatus().get(), false);
@@ -795,6 +810,14 @@ public class RawPlanmigrationsClient {
         }
     }
 
+    public BaseSchematicHttpResponse<CountMigrationsResponse> countMigrations() {
+        return countMigrations(CountMigrationsRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<CountMigrationsResponse> countMigrations(RequestOptions requestOptions) {
+        return countMigrations(CountMigrationsRequest.builder().build(), requestOptions);
+    }
+
     public BaseSchematicHttpResponse<CountMigrationsResponse> countMigrations(CountMigrationsRequest request) {
         return countMigrations(request, null);
     }
@@ -804,7 +827,14 @@ public class RawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations/count");
-        QueryStringMapper.addQueryParameter(httpUrl, "plan_version_id", request.getPlanVersionId(), false);
+        if (request.getFeatureId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "feature_id", request.getFeatureId().get(), false);
+        }
+        if (request.getPlanVersionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
+        }
         if (request.getStatus().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "status", request.getStatus().get(), false);

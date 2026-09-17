@@ -5617,7 +5617,7 @@ client.credits().acquireCreditLease(
 <dl>
 <dd>
 
-**expiresAt:** `Optional<OffsetDateTime>` 
+**expiresAt:** `Optional<OffsetDateTime>` — When the hold lapses if the lease is never released; defaults to five minutes from now and may be at most one hour out. The unspent hold is refunded on expiry
     
 </dd>
 </dl>
@@ -5687,7 +5687,15 @@ client.credits().extendCreditLease(
 <dl>
 <dd>
 
-**expiresAt:** `Optional<OffsetDateTime>` 
+**expiresAt:** `Optional<OffsetDateTime>` — Pushes the lease's expiry out; may be at most one hour from now. Leave unset to keep the expiry the lease already has
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — A caller-chosen key for safe retries: a second request with the same key returns the lease as it stands instead of growing it again. Keys are unique per environment across every extend
     
 </dd>
 </dl>
@@ -12885,7 +12893,23 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
+**overageBillingCadence:** `Optional<BillingArrearsCadence>` — How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **overageBillingProductId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**overageInvoiceAnchor:** `Optional<BillingArrearsAnchor>` — Which boundary closes a monthly or quarterly overage window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end). Quarterly windows run in three-month blocks from the billing period start, held to the subscription's own period, or in calendar quarters at month_end. Only applies when overage_billing_cadence is monthly or quarterly, and must match metric_period_month_reset so each window closes when the allowance resets: billing_period_start for billing_cycle, month_end for first_of_month. Defaults to the anchor that matches the reset.
     
 </dd>
 </dl>
@@ -13235,7 +13259,23 @@ client.entitlements().updatePlanEntitlement(
 <dl>
 <dd>
 
+**overageBillingCadence:** `Optional<BillingArrearsCadence>` — How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **overageBillingProductId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**overageInvoiceAnchor:** `Optional<BillingArrearsAnchor>` — Which boundary closes a monthly or quarterly overage window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end). Quarterly windows run in three-month blocks from the billing period start, held to the subscription's own period, or in calendar quarters at month_end. Only applies when overage_billing_cadence is monthly or quarterly, and must match metric_period_month_reset so each window closes when the allowance resets: billing_period_start for billing_cycle, month_end for first_of_month. Defaults to the anchor that matches the reset.
     
 </dd>
 </dl>
@@ -13588,7 +13628,23 @@ client.entitlements().upsertPlanEntitlementForBillingProduct(
 <dl>
 <dd>
 
+**overageBillingCadence:** `Optional<BillingArrearsCadence>` — How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **overageBillingProductId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**overageInvoiceAnchor:** `Optional<BillingArrearsAnchor>` — Which boundary closes a monthly or quarterly overage window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end). Quarterly windows run in three-month blocks from the billing period start, held to the subscription's own period, or in calendar quarters at month_end. Only applies when overage_billing_cadence is monthly or quarterly, and must match metric_period_month_reset so each window closes when the allowance resets: billing_period_start for billing_cycle, month_end for first_of_month. Defaults to the anchor that matches the reset.
     
 </dd>
 </dl>
@@ -14589,6 +14645,8 @@ client.plans().listPlans(
         .q("q")
         .scopedToCompanyId("scoped_to_company_id")
         .withEntitlements(true)
+        .withPublishedVersion(true)
+        .withoutEntitlementForIncludeDrafts(true)
         .withoutEntitlementFor("without_entitlement_for")
         .withoutPaidProductId(true)
         .limit(1000000L)
@@ -14714,6 +14772,22 @@ client.plans().listPlans(
 <dd>
 
 **withEntitlements:** `Optional<Boolean>` — Include each plan's entitlements in the response
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**withPublishedVersion:** `Optional<Boolean>` — Only return plans that have a published version
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**withoutEntitlementForIncludeDrafts:** `Optional<Boolean>` — With without_entitlement_for, also treat an entitlement on a plan's draft version as existing
     
 </dd>
 </dl>
@@ -15278,6 +15352,8 @@ client.plans().countPlans(
         .q("q")
         .scopedToCompanyId("scoped_to_company_id")
         .withEntitlements(true)
+        .withPublishedVersion(true)
+        .withoutEntitlementForIncludeDrafts(true)
         .withoutEntitlementFor("without_entitlement_for")
         .withoutPaidProductId(true)
         .limit(1000000L)
@@ -15403,6 +15479,22 @@ client.plans().countPlans(
 <dd>
 
 **withEntitlements:** `Optional<Boolean>` — Include each plan's entitlements in the response
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**withPublishedVersion:** `Optional<Boolean>` — Only return plans that have a published version
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**withoutEntitlementForIncludeDrafts:** `Optional<Boolean>` — With without_entitlement_for, also treat an entitlement on a plan's draft version as existing
     
 </dd>
 </dl>
@@ -18358,7 +18450,7 @@ client.features().checkAndReserveFlag(
 <dl>
 <dd>
 
-**preflight:** `Optional<PreflightRequestBody>` — Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is quantity times the entitlement's consumption rate
+**idempotencyKey:** `Optional<String>` — A caller-chosen key for safe retries: a second request with the same key returns the original reservation instead of taking another hold
     
 </dd>
 </dl>
@@ -18366,7 +18458,15 @@ client.features().checkAndReserveFlag(
 <dl>
 <dd>
 
-**quantity:** `Optional<Double>` — Units of the feature the operation will consume; defaults to 1. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event
+**preflight:** `Optional<PreflightRequestBody>` — Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is the entitlement's consumption rate times quantity, or, when quantity is omitted, times the usage stated here
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quantity:** `Optional<Double>` — Units of the feature the operation will consume. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event. When it is omitted the units come from preflight.event_usage.quantity, if that event subtype is the entitlement's, else from preflight.usage, else 1
     
 </dd>
 </dl>
@@ -20786,6 +20886,7 @@ client.planmigrations().countCompanyMigrations(
 client.planmigrations().listMigrations(
     ListMigrationsRequest
         .builder()
+        .featureId("feature_id")
         .planVersionId("plan_version_id")
         .status(PlanVersionMigrationStatus.CANCELLED)
         .limit(1000000L)
@@ -20806,7 +20907,15 @@ client.planmigrations().listMigrations(
 <dl>
 <dd>
 
-**planVersionId:** `String` 
+**featureId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -21151,6 +21260,7 @@ client.planmigrations().retryMigration(
 client.planmigrations().countMigrations(
     CountMigrationsRequest
         .builder()
+        .featureId("feature_id")
         .planVersionId("plan_version_id")
         .status(PlanVersionMigrationStatus.CANCELLED)
         .limit(1000000L)
@@ -21171,7 +21281,15 @@ client.planmigrations().countMigrations(
 <dl>
 <dd>
 
-**planVersionId:** `String` 
+**featureId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planVersionId:** `Optional<String>` 
     
 </dd>
 </dl>

@@ -37,7 +37,11 @@ public final class UsageBasedEntitlementRequestBody {
 
     private final Optional<String> monthlyUnitPriceDecimal;
 
+    private final Optional<BillingArrearsCadence> overageBillingCadence;
+
     private final Optional<String> overageBillingProductId;
+
+    private final Optional<BillingArrearsAnchor> overageInvoiceAnchor;
 
     private final Optional<EntitlementPriceBehavior> priceBehavior;
 
@@ -76,7 +80,9 @@ public final class UsageBasedEntitlementRequestBody {
             Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers,
             Optional<Long> monthlyUnitPrice,
             Optional<String> monthlyUnitPriceDecimal,
+            Optional<BillingArrearsCadence> overageBillingCadence,
             Optional<String> overageBillingProductId,
+            Optional<BillingArrearsAnchor> overageInvoiceAnchor,
             Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<List<CreatePriceTierRequestBody>> priceTiers,
             Optional<String> quarterlyMeteredPriceId,
@@ -99,7 +105,9 @@ public final class UsageBasedEntitlementRequestBody {
         this.monthlyPriceTiers = monthlyPriceTiers;
         this.monthlyUnitPrice = monthlyUnitPrice;
         this.monthlyUnitPriceDecimal = monthlyUnitPriceDecimal;
+        this.overageBillingCadence = overageBillingCadence;
         this.overageBillingProductId = overageBillingProductId;
+        this.overageInvoiceAnchor = overageInvoiceAnchor;
         this.priceBehavior = priceBehavior;
         this.priceTiers = priceTiers;
         this.quarterlyMeteredPriceId = quarterlyMeteredPriceId;
@@ -156,9 +164,25 @@ public final class UsageBasedEntitlementRequestBody {
         return monthlyUnitPriceDecimal;
     }
 
+    /**
+     * @return How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
+     */
+    @JsonProperty("overage_billing_cadence")
+    public Optional<BillingArrearsCadence> getOverageBillingCadence() {
+        return overageBillingCadence;
+    }
+
     @JsonProperty("overage_billing_product_id")
     public Optional<String> getOverageBillingProductId() {
         return overageBillingProductId;
+    }
+
+    /**
+     * @return Which boundary closes a monthly or quarterly overage window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end). Quarterly windows run in three-month blocks from the billing period start, held to the subscription's own period, or in calendar quarters at month_end. Only applies when overage_billing_cadence is monthly or quarterly, and must match metric_period_month_reset so each window closes when the allowance resets: billing_period_start for billing_cycle, month_end for first_of_month. Defaults to the anchor that matches the reset.
+     */
+    @JsonProperty("overage_invoice_anchor")
+    public Optional<BillingArrearsAnchor> getOverageInvoiceAnchor() {
+        return overageInvoiceAnchor;
     }
 
     @JsonProperty("price_behavior")
@@ -252,7 +276,9 @@ public final class UsageBasedEntitlementRequestBody {
                 && monthlyPriceTiers.equals(other.monthlyPriceTiers)
                 && monthlyUnitPrice.equals(other.monthlyUnitPrice)
                 && monthlyUnitPriceDecimal.equals(other.monthlyUnitPriceDecimal)
+                && overageBillingCadence.equals(other.overageBillingCadence)
                 && overageBillingProductId.equals(other.overageBillingProductId)
+                && overageInvoiceAnchor.equals(other.overageInvoiceAnchor)
                 && priceBehavior.equals(other.priceBehavior)
                 && priceTiers.equals(other.priceTiers)
                 && quarterlyMeteredPriceId.equals(other.quarterlyMeteredPriceId)
@@ -279,7 +305,9 @@ public final class UsageBasedEntitlementRequestBody {
                 this.monthlyPriceTiers,
                 this.monthlyUnitPrice,
                 this.monthlyUnitPriceDecimal,
+                this.overageBillingCadence,
                 this.overageBillingProductId,
+                this.overageInvoiceAnchor,
                 this.priceBehavior,
                 this.priceTiers,
                 this.quarterlyMeteredPriceId,
@@ -322,7 +350,11 @@ public final class UsageBasedEntitlementRequestBody {
 
         private Optional<String> monthlyUnitPriceDecimal = Optional.empty();
 
+        private Optional<BillingArrearsCadence> overageBillingCadence = Optional.empty();
+
         private Optional<String> overageBillingProductId = Optional.empty();
+
+        private Optional<BillingArrearsAnchor> overageInvoiceAnchor = Optional.empty();
 
         private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
@@ -364,7 +396,9 @@ public final class UsageBasedEntitlementRequestBody {
             monthlyPriceTiers(other.getMonthlyPriceTiers());
             monthlyUnitPrice(other.getMonthlyUnitPrice());
             monthlyUnitPriceDecimal(other.getMonthlyUnitPriceDecimal());
+            overageBillingCadence(other.getOverageBillingCadence());
             overageBillingProductId(other.getOverageBillingProductId());
+            overageInvoiceAnchor(other.getOverageInvoiceAnchor());
             priceBehavior(other.getPriceBehavior());
             priceTiers(other.getPriceTiers());
             quarterlyMeteredPriceId(other.getQuarterlyMeteredPriceId());
@@ -469,6 +503,20 @@ public final class UsageBasedEntitlementRequestBody {
             return this;
         }
 
+        /**
+         * <p>How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.</p>
+         */
+        @JsonSetter(value = "overage_billing_cadence", nulls = Nulls.SKIP)
+        public Builder overageBillingCadence(Optional<BillingArrearsCadence> overageBillingCadence) {
+            this.overageBillingCadence = overageBillingCadence;
+            return this;
+        }
+
+        public Builder overageBillingCadence(BillingArrearsCadence overageBillingCadence) {
+            this.overageBillingCadence = Optional.ofNullable(overageBillingCadence);
+            return this;
+        }
+
         @JsonSetter(value = "overage_billing_product_id", nulls = Nulls.SKIP)
         public Builder overageBillingProductId(Optional<String> overageBillingProductId) {
             this.overageBillingProductId = overageBillingProductId;
@@ -477,6 +525,20 @@ public final class UsageBasedEntitlementRequestBody {
 
         public Builder overageBillingProductId(String overageBillingProductId) {
             this.overageBillingProductId = Optional.ofNullable(overageBillingProductId);
+            return this;
+        }
+
+        /**
+         * <p>Which boundary closes a monthly or quarterly overage window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end). Quarterly windows run in three-month blocks from the billing period start, held to the subscription's own period, or in calendar quarters at month_end. Only applies when overage_billing_cadence is monthly or quarterly, and must match metric_period_month_reset so each window closes when the allowance resets: billing_period_start for billing_cycle, month_end for first_of_month. Defaults to the anchor that matches the reset.</p>
+         */
+        @JsonSetter(value = "overage_invoice_anchor", nulls = Nulls.SKIP)
+        public Builder overageInvoiceAnchor(Optional<BillingArrearsAnchor> overageInvoiceAnchor) {
+            this.overageInvoiceAnchor = overageInvoiceAnchor;
+            return this;
+        }
+
+        public Builder overageInvoiceAnchor(BillingArrearsAnchor overageInvoiceAnchor) {
+            this.overageInvoiceAnchor = Optional.ofNullable(overageInvoiceAnchor);
             return this;
         }
 
@@ -639,7 +701,9 @@ public final class UsageBasedEntitlementRequestBody {
                     monthlyPriceTiers,
                     monthlyUnitPrice,
                     monthlyUnitPriceDecimal,
+                    overageBillingCadence,
                     overageBillingProductId,
+                    overageInvoiceAnchor,
                     priceBehavior,
                     priceTiers,
                     quarterlyMeteredPriceId,

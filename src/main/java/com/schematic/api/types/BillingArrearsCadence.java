@@ -10,6 +10,8 @@ public final class BillingArrearsCadence {
     public static final BillingArrearsCadence END_OF_BILLING_PERIOD =
             new BillingArrearsCadence(Value.END_OF_BILLING_PERIOD, "end_of_billing_period");
 
+    public static final BillingArrearsCadence QUARTERLY = new BillingArrearsCadence(Value.QUARTERLY, "quarterly");
+
     public static final BillingArrearsCadence MONTHLY = new BillingArrearsCadence(Value.MONTHLY, "monthly");
 
     private final Value value;
@@ -47,6 +49,8 @@ public final class BillingArrearsCadence {
         switch (value) {
             case END_OF_BILLING_PERIOD:
                 return visitor.visitEndOfBillingPeriod();
+            case QUARTERLY:
+                return visitor.visitQuarterly();
             case MONTHLY:
                 return visitor.visitMonthly();
             case UNKNOWN:
@@ -60,6 +64,8 @@ public final class BillingArrearsCadence {
         switch (value) {
             case "end_of_billing_period":
                 return END_OF_BILLING_PERIOD;
+            case "quarterly":
+                return QUARTERLY;
             case "monthly":
                 return MONTHLY;
             default:
@@ -72,6 +78,8 @@ public final class BillingArrearsCadence {
 
         MONTHLY,
 
+        QUARTERLY,
+
         UNKNOWN
     }
 
@@ -79,6 +87,8 @@ public final class BillingArrearsCadence {
         T visitEndOfBillingPeriod();
 
         T visitMonthly();
+
+        T visitQuarterly();
 
         T visitUnknown(String unknownType);
     }

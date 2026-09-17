@@ -34,6 +34,10 @@ public final class PlanVersionMigrationResponseData {
 
     private final long failedCompanies;
 
+    private final Optional<String> featureId;
+
+    private final Optional<String> featurePlanRolloutId;
+
     private final String id;
 
     private final Optional<OffsetDateTime> nextDueAt;
@@ -68,6 +72,8 @@ public final class PlanVersionMigrationResponseData {
             OffsetDateTime createdAt,
             Optional<String> error,
             long failedCompanies,
+            Optional<String> featureId,
+            Optional<String> featurePlanRolloutId,
             String id,
             Optional<OffsetDateTime> nextDueAt,
             String planId,
@@ -87,6 +93,8 @@ public final class PlanVersionMigrationResponseData {
         this.createdAt = createdAt;
         this.error = error;
         this.failedCompanies = failedCompanies;
+        this.featureId = featureId;
+        this.featurePlanRolloutId = featurePlanRolloutId;
         this.id = id;
         this.nextDueAt = nextDueAt;
         this.planId = planId;
@@ -126,6 +134,16 @@ public final class PlanVersionMigrationResponseData {
     @JsonProperty("failed_companies")
     public long getFailedCompanies() {
         return failedCompanies;
+    }
+
+    @JsonProperty("feature_id")
+    public Optional<String> getFeatureId() {
+        return featureId;
+    }
+
+    @JsonProperty("feature_plan_rollout_id")
+    public Optional<String> getFeaturePlanRolloutId() {
+        return featurePlanRolloutId;
     }
 
     @JsonProperty("id")
@@ -210,6 +228,8 @@ public final class PlanVersionMigrationResponseData {
                 && createdAt.equals(other.createdAt)
                 && error.equals(other.error)
                 && failedCompanies == other.failedCompanies
+                && featureId.equals(other.featureId)
+                && featurePlanRolloutId.equals(other.featurePlanRolloutId)
                 && id.equals(other.id)
                 && nextDueAt.equals(other.nextDueAt)
                 && planId.equals(other.planId)
@@ -233,6 +253,8 @@ public final class PlanVersionMigrationResponseData {
                 this.createdAt,
                 this.error,
                 this.failedCompanies,
+                this.featureId,
+                this.featurePlanRolloutId,
                 this.id,
                 this.nextDueAt,
                 this.planId,
@@ -318,6 +340,14 @@ public final class PlanVersionMigrationResponseData {
 
         _FinalStage error(String error);
 
+        _FinalStage featureId(Optional<String> featureId);
+
+        _FinalStage featureId(String featureId);
+
+        _FinalStage featurePlanRolloutId(Optional<String> featurePlanRolloutId);
+
+        _FinalStage featurePlanRolloutId(String featurePlanRolloutId);
+
         _FinalStage nextDueAt(Optional<OffsetDateTime> nextDueAt);
 
         _FinalStage nextDueAt(OffsetDateTime nextDueAt);
@@ -387,6 +417,10 @@ public final class PlanVersionMigrationResponseData {
 
         private Optional<OffsetDateTime> nextDueAt = Optional.empty();
 
+        private Optional<String> featurePlanRolloutId = Optional.empty();
+
+        private Optional<String> featureId = Optional.empty();
+
         private Optional<String> error = Optional.empty();
 
         private Optional<OffsetDateTime> completedAt = Optional.empty();
@@ -403,6 +437,8 @@ public final class PlanVersionMigrationResponseData {
             createdAt(other.getCreatedAt());
             error(other.getError());
             failedCompanies(other.getFailedCompanies());
+            featureId(other.getFeatureId());
+            featurePlanRolloutId(other.getFeaturePlanRolloutId());
             id(other.getId());
             nextDueAt(other.getNextDueAt());
             planId(other.getPlanId());
@@ -573,6 +609,32 @@ public final class PlanVersionMigrationResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage featurePlanRolloutId(String featurePlanRolloutId) {
+            this.featurePlanRolloutId = Optional.ofNullable(featurePlanRolloutId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "feature_plan_rollout_id", nulls = Nulls.SKIP)
+        public _FinalStage featurePlanRolloutId(Optional<String> featurePlanRolloutId) {
+            this.featurePlanRolloutId = featurePlanRolloutId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage featureId(String featureId) {
+            this.featureId = Optional.ofNullable(featureId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "feature_id", nulls = Nulls.SKIP)
+        public _FinalStage featureId(Optional<String> featureId) {
+            this.featureId = featureId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage error(String error) {
             this.error = Optional.ofNullable(error);
             return this;
@@ -606,6 +668,8 @@ public final class PlanVersionMigrationResponseData {
                     createdAt,
                     error,
                     failedCompanies,
+                    featureId,
+                    featurePlanRolloutId,
                     id,
                     nextDueAt,
                     planId,

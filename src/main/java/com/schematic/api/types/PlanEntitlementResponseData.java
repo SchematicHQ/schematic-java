@@ -52,6 +52,10 @@ public final class PlanEntitlementResponseData {
 
     private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
+    private final Optional<BillingArrearsCadence> overageBillingCadence;
+
+    private final Optional<BillingArrearsAnchor> overageInvoiceAnchor;
+
     private final Optional<PlanResponseData> plan;
 
     private final String planId;
@@ -101,6 +105,8 @@ public final class PlanEntitlementResponseData {
             Optional<BillingPriceView> meteredYearlyPrice,
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<BillingArrearsCadence> overageBillingCadence,
+            Optional<BillingArrearsAnchor> overageInvoiceAnchor,
             Optional<PlanResponseData> plan,
             String planId,
             Optional<EntitlementPriceBehavior> priceBehavior,
@@ -132,6 +138,8 @@ public final class PlanEntitlementResponseData {
         this.meteredYearlyPrice = meteredYearlyPrice;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.overageBillingCadence = overageBillingCadence;
+        this.overageInvoiceAnchor = overageInvoiceAnchor;
         this.plan = plan;
         this.planId = planId;
         this.priceBehavior = priceBehavior;
@@ -219,6 +227,22 @@ public final class PlanEntitlementResponseData {
     @JsonProperty("metric_period_month_reset")
     public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
+    }
+
+    /**
+     * @return How often overage charges are assessed and invoiced. Null or end_of_billing_period means the billing provider aggregates usage over the subscription's own period and bills it at period end. Monthly and quarterly mean Schematic assesses the overage each month or quarter and bills it on its own invoice. Only applies to overage price behavior.
+     */
+    @JsonProperty("overage_billing_cadence")
+    public Optional<BillingArrearsCadence> getOverageBillingCadence() {
+        return overageBillingCadence;
+    }
+
+    /**
+     * @return Which boundary closes a monthly or quarterly overage window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end), which for a quarterly window means calendar quarters. Only meaningful when overage_billing_cadence is monthly or quarterly.
+     */
+    @JsonProperty("overage_invoice_anchor")
+    public Optional<BillingArrearsAnchor> getOverageInvoiceAnchor() {
+        return overageInvoiceAnchor;
     }
 
     @JsonProperty("plan")
@@ -330,6 +354,8 @@ public final class PlanEntitlementResponseData {
                 && meteredYearlyPrice.equals(other.meteredYearlyPrice)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && overageBillingCadence.equals(other.overageBillingCadence)
+                && overageInvoiceAnchor.equals(other.overageInvoiceAnchor)
                 && plan.equals(other.plan)
                 && planId.equals(other.planId)
                 && priceBehavior.equals(other.priceBehavior)
@@ -365,6 +391,8 @@ public final class PlanEntitlementResponseData {
                 this.meteredYearlyPrice,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.overageBillingCadence,
+                this.overageInvoiceAnchor,
                 this.plan,
                 this.planId,
                 this.priceBehavior,
@@ -475,6 +503,20 @@ public final class PlanEntitlementResponseData {
 
         _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
+        /**
+         * <p>How often overage charges are assessed and invoiced. Null or end_of_billing_period means the billing provider aggregates usage over the subscription's own period and bills it at period end. Monthly and quarterly mean Schematic assesses the overage each month or quarter and bills it on its own invoice. Only applies to overage price behavior.</p>
+         */
+        _FinalStage overageBillingCadence(Optional<BillingArrearsCadence> overageBillingCadence);
+
+        _FinalStage overageBillingCadence(BillingArrearsCadence overageBillingCadence);
+
+        /**
+         * <p>Which boundary closes a monthly or quarterly overage window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end), which for a quarterly window means calendar quarters. Only meaningful when overage_billing_cadence is monthly or quarterly.</p>
+         */
+        _FinalStage overageInvoiceAnchor(Optional<BillingArrearsAnchor> overageInvoiceAnchor);
+
+        _FinalStage overageInvoiceAnchor(BillingArrearsAnchor overageInvoiceAnchor);
+
         _FinalStage plan(Optional<PlanResponseData> plan);
 
         _FinalStage plan(PlanResponseData plan);
@@ -580,6 +622,10 @@ public final class PlanEntitlementResponseData {
 
         private Optional<PlanResponseData> plan = Optional.empty();
 
+        private Optional<BillingArrearsAnchor> overageInvoiceAnchor = Optional.empty();
+
+        private Optional<BillingArrearsCadence> overageBillingCadence = Optional.empty();
+
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
         private Optional<MetricPeriod> metricPeriod = Optional.empty();
@@ -621,6 +667,8 @@ public final class PlanEntitlementResponseData {
             meteredYearlyPrice(other.getMeteredYearlyPrice());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            overageBillingCadence(other.getOverageBillingCadence());
+            overageInvoiceAnchor(other.getOverageInvoiceAnchor());
             plan(other.getPlan());
             planId(other.getPlanId());
             priceBehavior(other.getPriceBehavior());
@@ -870,6 +918,46 @@ public final class PlanEntitlementResponseData {
             return this;
         }
 
+        /**
+         * <p>Which boundary closes a monthly or quarterly overage window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end), which for a quarterly window means calendar quarters. Only meaningful when overage_billing_cadence is monthly or quarterly.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage overageInvoiceAnchor(BillingArrearsAnchor overageInvoiceAnchor) {
+            this.overageInvoiceAnchor = Optional.ofNullable(overageInvoiceAnchor);
+            return this;
+        }
+
+        /**
+         * <p>Which boundary closes a monthly or quarterly overage window: the subscription's own recurrence (billing_period_start) or the calendar month (month_end), which for a quarterly window means calendar quarters. Only meaningful when overage_billing_cadence is monthly or quarterly.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "overage_invoice_anchor", nulls = Nulls.SKIP)
+        public _FinalStage overageInvoiceAnchor(Optional<BillingArrearsAnchor> overageInvoiceAnchor) {
+            this.overageInvoiceAnchor = overageInvoiceAnchor;
+            return this;
+        }
+
+        /**
+         * <p>How often overage charges are assessed and invoiced. Null or end_of_billing_period means the billing provider aggregates usage over the subscription's own period and bills it at period end. Monthly and quarterly mean Schematic assesses the overage each month or quarter and bills it on its own invoice. Only applies to overage price behavior.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage overageBillingCadence(BillingArrearsCadence overageBillingCadence) {
+            this.overageBillingCadence = Optional.ofNullable(overageBillingCadence);
+            return this;
+        }
+
+        /**
+         * <p>How often overage charges are assessed and invoiced. Null or end_of_billing_period means the billing provider aggregates usage over the subscription's own period and bills it at period end. Monthly and quarterly mean Schematic assesses the overage each month or quarter and bills it on its own invoice. Only applies to overage price behavior.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "overage_billing_cadence", nulls = Nulls.SKIP)
+        public _FinalStage overageBillingCadence(Optional<BillingArrearsCadence> overageBillingCadence) {
+            this.overageBillingCadence = overageBillingCadence;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
@@ -1028,6 +1116,8 @@ public final class PlanEntitlementResponseData {
                     meteredYearlyPrice,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    overageBillingCadence,
+                    overageInvoiceAnchor,
                     plan,
                     planId,
                     priceBehavior,
