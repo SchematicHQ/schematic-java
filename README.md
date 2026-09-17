@@ -167,7 +167,7 @@ boolean flagValue = schematic.checkFlag("some-flag-key", company, user);
 
 ## Credit Leases and Reservations
 
-For features metered by credit burndown (inference tokens, for example), `check` holds credits for the work about to run and `trackWithReservation` settles the hold with the actual usage. The SDK gates in one of two modes:
+For features metered by credit burndown (inference tokens, for example), `check` reserves credits for the work about to run and `trackWithReservation` settles the reservation with the actual usage. The SDK gates in one of two modes:
 
 - **Client mode** acquires a **lease**, a tranche of credits held against the company's balance, and carves a per-request **reservation** out of it locally, so a check needs no API call. It requires [DataStream](#datastream) (or [Replicator Mode](#replicator-mode)) and, across multiple processes, a shared Redis so every instance gates against the same lease.
 - **Server mode** makes one check-and-reserve API call per check. No lease, no Redis, no local state.
@@ -191,7 +191,7 @@ Schematic schematic = Schematic.builder()
     .creditLeases(CreditLeaseConfig.builder()
         .defaultLeaseSize(10000)                            // credits requested per lease
         .defaultLeaseDuration(Duration.ofMinutes(5))        // lease lifetime
-        .defaultReservationTtl(Duration.ofSeconds(60))      // how long a hold stands if no track settles it
+        .defaultReservationTtl(Duration.ofSeconds(60))      // how long a reservation is held if no track settles it
         .redisClient(redisClient)                           // lease and reservation state
         .build())
     .build();
@@ -227,7 +227,7 @@ import java.util.Map;
 Map<String, String> company = new HashMap<>();
 company.put("id", "your-company-id");
 
-// Hold up to maxTokens for this operation.
+// Reserve up to maxTokens for this operation.
 CheckResult result = schematic.check("inference", company, null, CheckOptions.builder()
     .usage(maxTokens)                      // upper bound for this operation
     .eventSubtype("inference_tokens")      // the metered event
@@ -238,7 +238,7 @@ if (!result.isAllowed()) {
 
 long tokensUsed = runInference();
 
-// Report the actual usage; the unused slice of the hold is refunded.
+// Report the actual usage; the unused slice of the reservation is refunded.
 if (result.getReservation() != null) {
     schematic.trackWithReservation(result.getReservation(), tokensUsed);
 } else {
@@ -246,11 +246,11 @@ if (result.getReservation() != null) {
 }
 ```
 
-A check can allow without taking a hold, when the feature is not credit-metered, when `usage` is 0, or when the check failed open, and that usage still has to be tracked.
+A check can allow without reserving credits, when the feature is not credit-metered, when `usage` is 0, or when the check failed open, and that usage still has to be tracked.
 
-`CheckOptions.timeout` bounds the call the check waits on: the check-and-reserve call in server mode, and the REST flag check when the check falls back to one. Client-mode lease acquires and extends take the client's own timeouts, since one caller's timeout would otherwise govern every caller that joins the same single-flighted acquire.
+`CheckOptions.timeout` bounds the check-and-reserve call in server mode and the REST flag check a check can fall back to. Client-mode lease acquires and extends are shared between concurrent checks, so they use the client's timeout.
 
-An unsettled hold expires after `defaultReservationTtl` and its credits return to the lease. A late settle still bills the usage, since the track event carries a deterministic idempotency key that keeps it from double-billing, but it does not re-debit the local lease. Set `defaultReservationTtl` above the longest expected gap between the check and the settle.
+An unsettled reservation expires after `defaultReservationTtl` and its credits return to the lease. A late settle still bills the usage, since the track event carries a deterministic idempotency key that keeps it from double-billing, but it does not re-debit the local lease. Set `defaultReservationTtl` above the longest expected gap between the check and the settle.
 
 ### Pre-warming
 
@@ -297,6 +297,8 @@ CheckOptions options = CheckOptions.builder()
 ```
 
 In client mode `FAIL_OPEN` still evaluates the flag's rules with the credit balance assumed sufficient, so plan targeting and every non-credit condition apply and only the credit gate is bypassed. In server mode it returns the flag's default value, which is false unless the check passes `defaultValue` or the client configures a flag default.
+
+See [Credit Lease Options](#credit-lease-options) for the full set of options.
 
 ## Webhook Verification
 
@@ -416,13 +418,13 @@ Set with `creditLeases(CreditLeaseConfig.builder()...build())`. Per-credit-type 
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `mode` | `CreditLeaseMode` | `AUTO` | Where the credit hold lives; `AUTO` picks client when DataStream is enabled, server otherwise |
-| `defaultReservationTtl` | `Duration` | 60 seconds | How long an unsettled hold stands |
+| `mode` | `CreditLeaseMode` | `AUTO` | Where credits are reserved; `AUTO` picks client when DataStream is enabled, server otherwise |
+| `defaultReservationTtl` | `Duration` | 60 seconds | How long an unsettled reservation is held |
 | `defaultLeaseDuration` | `Duration` | 5 minutes | (client mode) Lease lifetime |
 | `defaultLeaseSize` | `double` | 10000 | (client mode) Credits requested per lease acquire or extend |
 | `lowWaterMark` | `double` | 0.25 | (client mode) Extend in the background when the lease balance dips below this fraction |
-| `sweepInterval` | `Duration` | 1 second | (client mode) How often expired holds are swept |
-| `prewarmResolveTimeout` | `Duration` | 5 seconds | (client mode) How long `prewarm` waits for a freshly identified company to surface |
+| `sweepInterval` | `Duration` | 1 second | (client mode) How often expired reservations are swept |
+| `prewarmResolveTimeout` | `Duration` | 5 seconds | (client mode) How long `prewarm` waits for a freshly identified company to surface; zero resolves from the DataStream cache only |
 | `redisClient` | `JedisPooled` | the DataStream cache's client | (client mode) Redis client for lease and reservation state |
 | `redisKeyPrefix` | `String` | the DataStream cache's prefix | (client mode) Key prefix for lease and reservation keys |
 | `overrides` | `Map<String, CreditLeaseOverride>` | none | (client mode) Per-credit-type overrides of the above, keyed by credit type id |
