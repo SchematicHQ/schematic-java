@@ -16,6 +16,8 @@ src/main/java/com/schematic/api/HttpEventSender.java
 src/main/java/com/schematic/api/IdentifyOptions.java
 src/main/java/com/schematic/api/Schematic.java
 src/main/java/com/schematic/api/TrackOptions.java
+src/main/java/com/schematic/api/credits/
+conformance/
 src/main/java/com/schematic/api/cache/CacheProvider.java
 src/main/java/com/schematic/api/cache/CachedItem.java
 src/main/java/com/schematic/api/cache/LocalCache.java
@@ -35,6 +37,7 @@ src/test/java/com/schematic/api/TestOfflineMode.java
 src/test/java/com/schematic/api/TestReadme.java
 src/test/java/com/schematic/api/TestSchematic.java
 src/test/java/com/schematic/api/cache/RedisCacheProviderTest.java
+src/test/java/com/schematic/api/credits/
 src/test/java/com/schematic/api/datastream/
 src/test/java/com/schematic/webhook/
 .fern/replay.lock
