@@ -27,6 +27,7 @@ import com.schematic.api.types.EventBodyIdentify;
 import com.schematic.api.types.EventBodyIdentifyCompany;
 import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.EventType;
+import com.schematic.api.types.PreflightRequestBody;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import java.time.Duration;
 import java.time.Instant;
@@ -267,6 +268,87 @@ class SchematicTest {
         // The caller is waiting on this call, so its timeout has to reach it.
         assertEquals(250, options.getValue().getTimeout().get());
         assertEquals(TimeUnit.MILLISECONDS, options.getValue().getTimeoutTimeUnit());
+    }
+
+    @Test
+    void check_SendsThePreflightOnTheApiFallback() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(true));
+
+        CheckResult result = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder()
+                        .usage(7.2)
+                        .eventSubtype("inference_tokens")
+                        .build());
+
+        assertTrue(result.isAllowed());
+        ArgumentCaptor<CheckFlagRequestBody> body = ArgumentCaptor.forClass(CheckFlagRequestBody.class);
+        verify(featuresClient).checkFlag(eq("test_flag"), body.capture());
+        PreflightRequestBody preflight = body.getValue().getPreflight().get();
+        assertEquals("inference_tokens", preflight.getEventUsage().get().getEventSubtype());
+        // A preflight asks an upper-bound question, so a fractional usage rounds up.
+        assertEquals(8L, preflight.getEventUsage().get().getQuantity());
+    }
+
+    @Test
+    void check_WithAPreflightNeitherReadsNorWritesTheFlagCache() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        // Cache a plain verdict for this flag, company and user.
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(true));
+        spySchematic.checkFlag("test_flag", null, null);
+        for (CacheProvider<RulesengineCheckFlagResult> provider : spySchematic.getFlagCheckCacheProviders()) {
+            assertNotNull(provider.get("test_flag"));
+        }
+
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(false));
+        CheckResult preflighted = spySchematic.check(
+                "test_flag", null, null, CheckOptions.builder().usage(5).build());
+
+        // The cached plain verdict answers a different question, so it is not served here.
+        assertFalse(preflighted.isAllowed());
+        for (CacheProvider<RulesengineCheckFlagResult> provider : spySchematic.getFlagCheckCacheProviders()) {
+            // And the preflighted verdict must not become the answer a plain check reads back.
+            assertTrue(provider.get("test_flag").getValue());
+        }
+    }
+
+    @Test
+    void check_WithoutAPreflightStillUsesTheFlagCache() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(true));
+
+        CheckResult first = spySchematic.check("test_flag", null, null, null);
+        CheckResult second = spySchematic.check("test_flag", null, null, null);
+
+        assertTrue(first.isAllowed());
+        assertTrue(second.isAllowed());
+        verify(featuresClient, times(1)).checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class));
+        for (CacheProvider<RulesengineCheckFlagResult> provider : spySchematic.getFlagCheckCacheProviders()) {
+            assertNotNull(provider.get("test_flag"));
+        }
+    }
+
+    private static CheckFlagResponse apiResponse(boolean value) {
+        return CheckFlagResponse.builder()
+                .data(CheckFlagResponseData.builder()
+                        .flag("test_flag")
+                        .reason("test_reason")
+                        .value(value)
+                        .build())
+                .build();
     }
 
     @Test

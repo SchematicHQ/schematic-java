@@ -53,6 +53,11 @@ public final class CheckOptions {
         /**
          * The units of the metered event the operation is about to record. The check holds
          * {@code usage} times the entitlement's consumption rate. Omit it for a plain flag check.
+         *
+         * <p>A usage also rides on every check that takes no hold, as the preflight a local
+         * evaluation and the API both answer, so the verdict accounts for what this call is about
+         * to spend. A preflighted verdict is never cached, since the cache answers the plain
+         * question.
          */
         public Builder usage(double usage) {
             this.usage = usage;
