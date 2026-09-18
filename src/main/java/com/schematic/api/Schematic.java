@@ -7,6 +7,31 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.Environment;
 import com.schematic.api.core.NoOpHttpClient;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.RequestOptions;
+import com.schematic.api.credits.ApiLeaseWireClient;
+import com.schematic.api.credits.CheckOptions;
+import com.schematic.api.credits.CheckRequest;
+import com.schematic.api.credits.CheckResult;
+import com.schematic.api.credits.CreditAmounts;
+import com.schematic.api.credits.CreditCheck;
+import com.schematic.api.credits.CreditLeaseConfig;
+import com.schematic.api.credits.CreditLeaseDefaults;
+import com.schematic.api.credits.CreditLeaseManager;
+import com.schematic.api.credits.CreditLeaseMode;
+import com.schematic.api.credits.DataStreamCreditCheckSource;
+import com.schematic.api.credits.InMemoryLeaseStore;
+import com.schematic.api.credits.InMemoryReservationStore;
+import com.schematic.api.credits.LeaseStore;
+import com.schematic.api.credits.OnAcquireFailure;
+import com.schematic.api.credits.PreflightOptions;
+import com.schematic.api.credits.PrewarmCompanyResolver;
+import com.schematic.api.credits.RedisLeaseStore;
+import com.schematic.api.credits.RedisReservationStore;
+import com.schematic.api.credits.Reservation;
+import com.schematic.api.credits.ReservationSettlement;
+import com.schematic.api.credits.ReservationStore;
+import com.schematic.api.credits.ServerCreditCheck;
+import com.schematic.api.datastream.CheckFlagOptions;
 import com.schematic.api.datastream.DataStreamClient;
 import com.schematic.api.datastream.DataStreamException;
 import com.schematic.api.datastream.DatastreamOptions;
@@ -25,7 +50,9 @@ import com.schematic.api.types.EventBodyIdentify;
 import com.schematic.api.types.EventBodyIdentifyCompany;
 import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.EventType;
+import com.schematic.api.types.PreflightRequestBody;
 import com.schematic.api.types.RulesengineCheckFlagResult;
+import java.time.Clock;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -33,9 +60,21 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import redis.clients.jedis.JedisPooled;
 
 public final class Schematic extends BaseSchematic implements AutoCloseable {
+
+    // Namespaces the settle key so a reservation id can never collide with a caller's own
+    // idempotency key, and so a recovery emit and an accidental second settle collapse to one
+    // billed event across pods and restarts.
+    private static final String RESERVATION_TRACK_IDEMPOTENCY_PREFIX = "lease-reservation:";
+
     private final Duration eventBufferInterval;
     private final EventBuffer eventBuffer;
     private final List<CacheProvider<RulesengineCheckFlagResult>> flagCheckCacheProviders;
@@ -45,8 +84,23 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     private final Thread shutdownHook;
     private final boolean offline;
     private final HttpEventSender eventSender;
-    private final DataStreamClient dataStreamClient;
+    // Not final: a DataStream that fails to start leaves none, and auto mode reads this per check.
+    private volatile DataStreamClient dataStreamClient;
     private final DatastreamOptions datastreamOptions;
+    // Credit leases. Null throughout when the caller did not configure them, which is what every
+    // credit-aware path checks before doing anything.
+    private final CreditLeaseMode creditLeaseMode;
+    private final LeaseStore leaseStore;
+    private final ReservationStore reservations;
+    private final CreditLeaseManager creditLeaseManager;
+    private final CreditCheck creditCheck;
+    private final boolean leaseBackendShared;
+    private final Duration serverReservationTtl;
+    private final Duration prewarmResolveTimeout;
+    // Runs the prewarms identify kicks off, so the caller's identify does not wait on a lease
+    // acquire. Null when leases are not configured.
+    private final ExecutorService prewarms;
+    private volatile boolean closing;
 
     private Schematic(Builder builder) {
         super(buildClientOptions(builder.apiKey, builder));
@@ -87,12 +141,156 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 rulesEngine = null;
             }
 
-            this.dataStreamClient = new DataStreamClient(
+            DataStreamClient started = new DataStreamClient(
                     this.datastreamOptions, this.apiKey, basePath, this.logger, rulesEngine, resolveSdkVersion());
-            this.dataStreamClient.start();
+            try {
+                started.start();
+            } catch (RuntimeException e) {
+                // Nothing here can serve a local evaluation, so the client is dropped rather than
+                // kept as a handle every later path has to re-test. Checks fall to the API, and
+                // auto mode resolves to server-side gating on the strength of this field.
+                this.logger.error("DataStream failed to start, falling back to API checks: " + e.getMessage());
+                try {
+                    started.close();
+                } catch (Exception closing) {
+                    this.logger.debug("DataStream close after a failed start: " + closing);
+                }
+                started = null;
+            }
+            this.dataStreamClient = started;
         } else {
             this.dataStreamClient = null;
         }
+
+        // Credit leases and reservations, if the caller opted in.
+        CreditLeaseConfig creditLeases = builder.creditLeases;
+        if (creditLeases != null && this.offline) {
+            this.logger.warn("creditLeases is configured but the client is offline, so checks return flag defaults "
+                    + "with no credit gating");
+        }
+        CreditLeaseMode mode = null;
+        Duration serverTtl = CreditLeaseDefaults.RESERVATION_TTL;
+        Duration prewarmTimeout = CreditLeaseDefaults.PREWARM_RESOLVE_TIMEOUT;
+        LeaseStore leases = null;
+        ReservationStore holds = null;
+        CreditLeaseManager manager = null;
+        CreditCheck check = null;
+        boolean sharedBackend = false;
+        // A DataStream alone is not enough to gate locally: without a loaded engine every
+        // evaluation throws and a client-mode check falls through to a plain, ungated one.
+        boolean localGatingReady = this.dataStreamClient != null && this.dataStreamClient.hasRulesEngine();
+        if (creditLeases != null && !this.offline) {
+            mode = creditLeases.getMode() != null ? creditLeases.getMode() : CreditLeaseMode.AUTO;
+            Duration configuredTtl = creditLeases.getDefaultReservationTtl() != null
+                    ? creditLeases.getDefaultReservationTtl()
+                    : CreditLeaseDefaults.RESERVATION_TTL;
+            // The API refuses a hold expiring more than an hour after its own clock, and this TTL
+            // is applied to the caller's, so clamp a step below the cap to leave room for skew.
+            // Only server mode sends the value to the API: in client mode it sizes the local
+            // sweep, so clamping it there would shorten holds for no reason.
+            Duration maxTtl =
+                    CreditLeaseDefaults.MAX_RESERVATION_TTL.minus(CreditLeaseDefaults.RESERVATION_TTL_SKEW_ALLOWANCE);
+            serverTtl = mode == CreditLeaseMode.CLIENT || configuredTtl.compareTo(maxTtl) <= 0 ? configuredTtl : maxTtl;
+            if (mode != CreditLeaseMode.CLIENT && configuredTtl.compareTo(maxTtl) > 0) {
+                this.logger.warn("creditLeases.defaultReservationTtl of " + configuredTtl.toMillis()
+                        + "ms is longer than the API will hold credits for; server-mode holds are clamped to "
+                        + maxTtl.toMillis() + "ms");
+            }
+            if (creditLeases.getPrewarmResolveTimeout() != null) {
+                prewarmTimeout = creditLeases.getPrewarmResolveTimeout();
+            }
+
+            // Server mode holds credits over the API, so none of the local plumbing is built and
+            // the options that only steer it would silently do nothing. Say so once, at startup.
+            if (mode == CreditLeaseMode.SERVER || (mode == CreditLeaseMode.AUTO && !localGatingReady)) {
+                String clientOnly = clientOnlyOptions(creditLeases);
+                if (!clientOnly.isEmpty()) {
+                    this.logger.warn("creditLeases resolves to server mode, so " + clientOnly
+                            + " will be ignored: those options only apply to client mode");
+                }
+            }
+            // Auto with no DataStream is the server-mode default, not a misconfiguration.
+            // Client without DataStream is the degraded path, where every check falls back to a
+            // plain flag check with the usage ignored, so it still warns.
+            if (mode == CreditLeaseMode.AUTO && this.dataStreamClient == null) {
+                this.logger.info("creditLeases is configured and DataStream is not enabled, so credit reservations "
+                        + "run in server mode, one check-and-reserve call per check");
+            }
+            if (mode == CreditLeaseMode.CLIENT && this.dataStreamClient == null) {
+                this.logger.warn("creditLeases is configured but DataStream is not enabled, so check() falls back to "
+                        + "plain flag checks with no credit gating");
+            } else if (mode == CreditLeaseMode.CLIENT && !this.dataStreamClient.hasRulesEngine()) {
+                // Auto resolves this away by gating server-side. An explicit client mode is the
+                // caller's choice to keep, so say what it costs rather than overriding it.
+                this.logger.warn("creditLeases is set to client mode but the rules engine did not load, so every "
+                        + "check() falls back to a plain flag check with no credit gating; use server mode until "
+                        + "the engine is available");
+            }
+        }
+        // The same readiness auto resolves on, so the stores, the manager and its sweeper are
+        // built exactly when a check will gate against them. Building them for an auto client
+        // that resolves to server mode leaves a sweeper polling an index nothing writes to.
+        boolean usesLeases = mode == CreditLeaseMode.CLIENT || (mode == CreditLeaseMode.AUTO && localGatingReady);
+        if (creditLeases != null && !this.offline && usesLeases) {
+            // Lease and hold state belongs in a shared cache so gating holds across horizontally
+            // scaled pods. An explicit client wins; otherwise reuse the one the DataStream caches
+            // are already configured with, so an existing Redis setup backs leases with no second
+            // client to wire up.
+            JedisPooled redisClient = inheritFromDataStream(
+                    creditLeases.getRedisClient(),
+                    this.dataStreamClient == null ? null : this.dataStreamClient.getRedisClient());
+            String keyPrefix = inheritFromDataStream(
+                    creditLeases.getRedisKeyPrefix(),
+                    this.dataStreamClient == null ? null : this.dataStreamClient.getRedisKeyPrefix());
+            if (redisClient != null) {
+                sharedBackend = true;
+                leases = new RedisLeaseStore(redisClient, keyPrefix, creditLeases.getDefaultLeaseDuration(), null);
+                holds = new RedisReservationStore(redisClient, leases, keyPrefix, null);
+            } else {
+                // Without a shared backend each pod gates against its own leases, which defeats
+                // the cross-pod protection that is the point of leasing, so warn rather than
+                // degrade silently.
+                this.logger.warn("creditLeases is enabled without a shared Redis backend, so lease and reservation "
+                        + "state is per-process; configure a Redis client so leases gate across SDK instances");
+                leases = new InMemoryLeaseStore(null);
+                holds = new InMemoryReservationStore(leases, null);
+            }
+            manager = new CreditLeaseManager(
+                    new ApiLeaseWireClient(credits()), leases, holds, creditLeases, this.logger, Clock.systemUTC());
+            manager.startSweep();
+            check = new CreditCheck(
+                    // Null rather than a source wrapping nothing: CreditCheck degrades to a plain
+                    // check on a null source, and a wrapper would sail past that guard and fail
+                    // on the first cached-flag read instead.
+                    this.dataStreamClient == null ? null : new DataStreamCreditCheckSource(this.dataStreamClient),
+                    leases,
+                    holds,
+                    manager,
+                    this.logger,
+                    Clock.systemUTC(),
+                    body -> eventBuffer.push(CreateEventRequestBody.builder()
+                            .eventType(EventType.FLAG_CHECK)
+                            .body(EventBody.of(body))
+                            .sentAt(OffsetDateTime.now())
+                            .build()),
+                    null);
+        }
+        this.creditLeaseMode = mode;
+        this.leaseStore = leases;
+        this.reservations = holds;
+        this.creditLeaseManager = manager;
+        this.creditCheck = check;
+        this.leaseBackendShared = sharedBackend;
+        this.serverReservationTtl = serverTtl;
+        this.prewarmResolveTimeout = prewarmTimeout;
+        this.prewarms = manager == null
+                ? null
+                : Executors.newSingleThreadExecutor(runnable -> {
+                    Thread thread = new Thread(runnable, "SchematicCreditLeasePrewarm");
+                    // Daemon, so a prewarm in flight can never hold a shutting-down process open.
+                    thread.setDaemon(true);
+                    return thread;
+                });
 
         this.shutdownHook = new Thread(
                 () -> {
@@ -163,6 +361,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         private Map<String, String> headers;
         private DatastreamOptions datastreamOptions;
         private String eventCaptureBaseUrl;
+        private CreditLeaseConfig creditLeases;
 
         public Builder apiKey(String apiKey) {
             this.apiKey = apiKey;
@@ -221,6 +420,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
         public Builder datastreamOptions(DatastreamOptions datastreamOptions) {
             this.datastreamOptions = datastreamOptions;
+            return this;
+        }
+
+        /**
+         * Enables credit holds on {@link Schematic#check} and
+         * {@link Schematic#trackWithReservation}. Omit it to leave the client credit-unaware.
+         */
+        public Builder creditLeases(CreditLeaseConfig creditLeases) {
+            this.creditLeases = creditLeases;
             return this;
         }
 
@@ -333,10 +541,20 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     private RulesengineCheckFlagResult defaultFlagResult(String flagKey, String reason, String err) {
+        return defaultFlagResult(flagKey, reason, err, null);
+    }
+
+    /**
+     * The result a check falls back to when it cannot get an answer. {@code perCheckDefault} is
+     * the caller's own default for this one check, which outranks the client-wide one; null means
+     * the caller did not name one.
+     */
+    private RulesengineCheckFlagResult defaultFlagResult(
+            String flagKey, String reason, String err, Boolean perCheckDefault) {
         return RulesengineCheckFlagResult.builder()
                 .flagKey(flagKey)
                 .reason(reason)
-                .value(getFlagDefault(flagKey))
+                .value(perCheckDefault != null ? perCheckDefault : getFlagDefault(flagKey))
                 .err(err)
                 .build();
     }
@@ -349,11 +567,16 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      */
     private RulesengineCheckFlagResult tryDatastreamCheckFlag(
             String flagKey, Map<String, String> company, Map<String, String> user) {
+        return tryDatastreamCheckFlag(flagKey, company, user, null);
+    }
+
+    private RulesengineCheckFlagResult tryDatastreamCheckFlag(
+            String flagKey, Map<String, String> company, Map<String, String> user, CheckFlagOptions preflight) {
         if (dataStreamClient == null || !dataStreamClient.isConnected()) {
             return null;
         }
         try {
-            return dataStreamClient.checkFlag(flagKey, company, user);
+            return dataStreamClient.checkFlag(flagKey, company, user, preflight);
         } catch (Exception e) {
             logger.debug("Datastream flag check failed for " + flagKey + ", falling back to API: " + e.getMessage());
             return null;
@@ -545,27 +768,377 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     /**
-     * Checks a flag via the Schematic API, using the flag check result cache.
+     * Checks a flag via the Schematic API, using the flag check result cache. A preflighted check
+     * skips that cache in both directions, since it asks a different question than the plain
+     * check the cache is keyed for.
      */
     private RulesengineCheckFlagResult checkFlagViaApi(
             String flagKey, Map<String, String> company, Map<String, String> user) {
+        return checkFlagViaApi(flagKey, company, user, null, null, null);
+    }
+
+    /**
+     * The REST flag check. {@code perCheckDefault} is what a failure resolves to, so a caller that
+     * named a default on this one check gets it rather than the client-wide one.
+     */
+    private RulesengineCheckFlagResult checkFlagViaApi(
+            String flagKey,
+            Map<String, String> company,
+            Map<String, String> user,
+            Duration timeout,
+            PreflightOptions preflight,
+            Boolean perCheckDefault) {
         try {
-            RulesengineCheckFlagResult cached = getCachedFlag(flagKey, company, user);
-            if (cached != null) {
-                return cached;
+            // Null once a preflight that the API would ignore, such as a zero usage, has been
+            // dropped: such a check is a plain one and keeps the cache.
+            PreflightRequestBody preflightBody = preflight != null ? preflight.toRequestBody() : null;
+            // The cache is keyed by flag, company and user, and a preflighted check asks a
+            // different question than a plain one: whether the action about to run would be
+            // allowed. So a preflighted verdict is neither answered from the cache nor written
+            // back to it.
+            if (preflightBody == null) {
+                RulesengineCheckFlagResult cached = getCachedFlag(flagKey, company, user);
+                if (cached != null) {
+                    return cached;
+                }
             }
 
-            CheckFlagRequestBody request =
-                    CheckFlagRequestBody.builder().company(company).user(user).build();
-            CheckFlagResponse response = features().checkFlag(flagKey, request);
+            CheckFlagRequestBody.Builder request =
+                    CheckFlagRequestBody.builder().company(company).user(user);
+            if (preflightBody != null) {
+                request.preflight(preflightBody);
+            }
+            CheckFlagResponse response = timeout == null
+                    ? features().checkFlag(flagKey, request.build())
+                    : features()
+                            .checkFlag(
+                                    flagKey,
+                                    request.build(),
+                                    RequestOptions.builder()
+                                            .timeout(CreditAmounts.millisAsInt(timeout), TimeUnit.MILLISECONDS)
+                                            .build());
             RulesengineCheckFlagResult result = toRulesengineResult(response.getData());
 
-            cacheFlag(flagKey, result, company, user);
+            if (preflightBody == null) {
+                cacheFlag(flagKey, result, company, user);
+            }
             return result;
         } catch (Exception e) {
             logger.error("Error checking flag via API: " + e.getMessage());
-            return defaultFlagResult(flagKey, "flag default", e.getMessage());
+            return defaultFlagResult(flagKey, "flag default", e.getMessage(), perCheckDefault);
         }
+    }
+
+    /**
+     * Which reservation mode a {@code check()} with usage resolves to right now. Null means no
+     * credit gating at all: leases are not configured, or the client is offline.
+     *
+     * <p>Auto resolves per check rather than once at startup: a DataStream that failed to start
+     * leaves no client behind, and the checks that follow gate server-side instead of silently
+     * dropping to a plain, ungated flag check. A DataStream that is merely disconnected stays in
+     * client mode and degrades through the plain check, which has its own story for that.
+     *
+     * <p>A loaded rules engine is part of that readiness. Without one, every local evaluation
+     * throws, so a client-mode check would fall through to a plain flag check that takes no hold
+     * and debits nothing: credits handed out ungated for as long as the engine is missing.
+     */
+    private CreditLeaseMode effectiveLeaseMode() {
+        if (creditLeaseMode == null || offline) {
+            return null;
+        }
+        if (creditLeaseMode != CreditLeaseMode.AUTO) {
+            return creditLeaseMode;
+        }
+        boolean clientPlumbingReady = creditCheck != null && leaseStore != null && reservations != null;
+        boolean localEvaluationReady = dataStreamClient != null && dataStreamClient.hasRulesEngine();
+        return localEvaluationReady && clientPlumbingReady ? CreditLeaseMode.CLIENT : CreditLeaseMode.SERVER;
+    }
+
+    /**
+     * Credit-aware feature check. With credit leases configured and a usage on the options, this
+     * gates the check against the company's credit balance and hands back a hold on success: pass
+     * it to {@link #trackWithReservation} when the work completes.
+     *
+     * <p>In client mode the hold is carved out of a local lease and the flag is evaluated locally;
+     * in server mode it is one check-and-reserve call that evaluates the flag and takes the hold
+     * server-side.
+     *
+     * <p>Without credit leases, or without a usage, this is a plain flag check that issues no
+     * hold. The caller's preflight still reaches whichever path answers it, local or the API, so
+     * the check gates on the post-call balance, just without a hold.
+     */
+    public CheckResult check(
+            String flagKey, Map<String, String> company, Map<String, String> user, CheckOptions options) {
+        CheckOptions opts = options != null ? options : CheckOptions.builder().build();
+        Callable<CheckResult> fallback = () -> plainCheck(flagKey, company, user, opts);
+        CreditLeaseMode mode = effectiveLeaseMode();
+        if (opts.getUsage() == null || mode == null) {
+            return plainCheck(flagKey, company, user, opts);
+        }
+
+        CheckRequest request = new CheckRequest(
+                flagKey,
+                company,
+                user,
+                opts.getUsage(),
+                opts.getEventSubtype(),
+                opts.getOnAcquireFailure() == OnAcquireFailure.FAIL_OPEN,
+                opts.getTimeout());
+        if (mode == CreditLeaseMode.SERVER) {
+            ServerCreditCheck serverCheck =
+                    new ServerCreditCheck(features(), credits(), logger, serverReservationTtl, Clock.systemUTC());
+            return serverCheck.check(request, opts.getTimeout(), () -> checkDefault(flagKey, opts), fallback);
+        }
+        // Client mode without the local plumbing keeps the old behavior: a plain, ungated check.
+        if (creditCheck == null) {
+            return plainCheck(flagKey, company, user, opts);
+        }
+        return creditCheck.check(request, fallback);
+    }
+
+    /**
+     * Settles a hold issued by {@link #check}. In client mode it refunds the unspent slice to the
+     * lease and emits a track event carrying the lease id; in server mode the event carries the
+     * reservation id and the server settles the hold when it processes the event.
+     *
+     * <p>When the work outlived the hold's TTL and the sweeper already returned it, the usage
+     * still has to be billed, so the event goes out anyway. A deterministic idempotency key
+     * derived from the reservation id keeps that recovery emit, and an accidental second settle,
+     * from billing twice.
+     */
+    public void trackWithReservation(Reservation reservation, double actualQuantity) {
+        trackWithReservation(reservation, actualQuantity, null);
+    }
+
+    /** Settles a hold, attaching traits to the event it emits. */
+    public void trackWithReservation(Reservation reservation, double actualQuantity, Map<String, Object> traits) {
+        if (offline) {
+            return;
+        }
+        // check() allows without a hold in several ordinary cases: the feature is not
+        // credit-metered, the check failed open, the usage was zero, or leases are not configured.
+        // Callers pass the result's reservation straight through, so take the null and say how to
+        // bill the usage instead of throwing on a settle with nothing to settle.
+        if (reservation == null) {
+            logger.error("trackWithReservation was called without a reservation: the check allowed without taking a "
+                    + "hold, so there is nothing to settle. Report the usage with track() instead.");
+            return;
+        }
+        // A non-finite quantity must reach neither the store, where the clamp would claim the hold
+        // with no refund of the unspent slice, nor the billing event. Skipping the settle leaves
+        // the hold to its TTL, where the sweeper refunds all of it, so no credits are lost and
+        // nothing bogus is billed.
+        if (!CreditAmounts.isValidQuantity(actualQuantity)) {
+            logger.error("trackWithReservation: invalid actualQuantity " + actualQuantity + " for reservation "
+                    + reservation.getId() + "; skipping the settle, the hold is refunded at its TTL");
+            return;
+        }
+
+        EventBodyTrack track;
+        boolean updateMetrics;
+        if (reservation.getMode() == CreditLeaseMode.SERVER || reservations == null) {
+            // Server mode holds the credits server-side, so there is nothing local to consume. A
+            // client-mode handle with no store still has to carry its lease id and its key, since
+            // dropping either would double-debit the grant or double-bill the usage.
+            track = ReservationSettlement.buildTrackEvent(reservation, actualQuantity);
+            updateMetrics = true;
+        } else {
+            try {
+                ReservationSettlement.SettleOutcome outcome =
+                        ReservationSettlement.settle(reservations, reservation, actualQuantity);
+                track = outcome.getTrack();
+                updateMetrics = outcome.isSettledLocally();
+                if (!updateMetrics) {
+                    logger.debug("trackWithReservation: reservation " + reservation.getId() + " was not settled "
+                            + "locally (expired, already settled, or the store was unreachable); emitting the track "
+                            + "keyed for server-side dedupe");
+                }
+            } catch (RuntimeException e) {
+                // The local settle failed, likely an unreachable Redis. The usage still has to be
+                // billed, and the un-settled hold is reclaimed by the sweeper or at lease expiry.
+                logger.warn("trackWithReservation: failed to settle reservation " + reservation.getId() + " locally ("
+                        + e + "); emitting the track anyway");
+                track = ReservationSettlement.buildTrackEvent(reservation, actualQuantity);
+                updateMetrics = false;
+            }
+        }
+
+        try {
+            eventBuffer.push(buildReservationSettleEvent(track, objectMapToJsonNode(traits), reservation.getId()));
+            // The cached metric moves only when this call moved local state with it. The event is
+            // keyed off the reservation id, so the server drops a retried settle as a duplicate;
+            // bumping the metric for one would have the caller's next local evaluation gate on
+            // usage that was counted twice.
+            if (updateMetrics) {
+                updateCompanyMetrics(track);
+            }
+        } catch (Exception e) {
+            logger.error("Error sending track event: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Folds a track event into the cached company's metrics, so a local evaluation right after it
+     * gates on the usage just recorded instead of waiting for the stream to push the new figure
+     * back. A settle is a track, and reads the same way.
+     */
+    private void updateCompanyMetrics(EventBodyTrack body) {
+        Map<String, String> company = body.getCompany().orElse(null);
+        if (company == null || company.isEmpty() || dataStreamClient == null || !dataStreamClient.isConnected()) {
+            return;
+        }
+        try {
+            dataStreamClient.updateCompanyMetrics(body);
+        } catch (Exception e) {
+            logger.error("Failed to update company metrics: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Warms a credit lease for each named credit type, so the first {@link #check} against it does
+     * not pay the acquire round trip. Failures are logged, never thrown.
+     *
+     * <p>The keys are looked up over the DataStream, which both resolves the id and warms the cache
+     * so the first check hits the lease path. Only a lookup that comes up empty falls back to
+     * reading a {@code comp_}-prefixed value as the id.
+     */
+    public void prewarm(Map<String, String> company, List<String> creditTypeIds) {
+        if (creditLeaseManager == null || leaseStore == null) {
+            logger.debug(
+                    effectiveLeaseMode() == CreditLeaseMode.SERVER
+                            ? "prewarm is a no-op in server mode, since there is no local lease to warm"
+                            : "prewarm was called but credit leases are not configured");
+            return;
+        }
+        if (company == null || company.isEmpty()) {
+            logger.debug("prewarm needs company keys");
+            return;
+        }
+        if (creditTypeIds == null || creditTypeIds.isEmpty()) {
+            logger.debug("prewarm was given no credit types");
+            return;
+        }
+        if (closing) {
+            // close() only waits out the prewarms it spawned; a caller invoking prewarm directly
+            // would otherwise install a lease after the release has already listed the store.
+            logger.debug("prewarm: the client is closing, skipping the acquire");
+            return;
+        }
+        String companyId = resolveCompanyIdWithWait(company);
+        if (companyId == null) {
+            logger.debug("prewarm: the company did not resolve within " + prewarmResolveTimeout.toMillis()
+                    + "ms (the first check will acquire)");
+            return;
+        }
+        for (String creditTypeId : creditTypeIds) {
+            try {
+                creditLeaseManager.acquireIfNeeded(companyId, creditTypeId);
+            } catch (RuntimeException e) {
+                logger.warn("prewarm: failed to acquire a lease for " + creditTypeId + ": " + e);
+            }
+        }
+    }
+
+    /**
+     * Resolves the company id the way the server does: the keys are looked up first, whatever they
+     * are named, actively fetching over the DataStream so the lookup warms the cache as a side
+     * effect. Only when nothing matches is a value read as the company's own id, by its
+     * {@code comp_} prefix. Null when the company never surfaced within the prewarm resolve
+     * timeout and the keys carry no Schematic id.
+     */
+    private String resolveCompanyIdWithWait(Map<String, String> company) {
+        if (dataStreamClient == null) {
+            return PrewarmCompanyResolver.schematicId(company, PrewarmCompanyResolver.COMPANY_ID_PREFIX);
+        }
+        return PrewarmCompanyResolver.resolve(
+                company,
+                dataStreamClient::getCachedCompany,
+                dataStreamClient::getCompany,
+                prewarmResolveTimeout,
+                CreditLeaseDefaults.PREWARM_POLL_INTERVAL,
+                () -> closing,
+                error -> {
+                    logger.debug("prewarm: the DataStream company fetch failed (" + error + ")");
+                    return null;
+                });
+    }
+
+    /**
+     * Whether the local engine declined to answer, leaving the DataStream client's stand-in
+     * verdict in place of a real one. The flag's own default stands in there, which is the right
+     * answer for a caller that named none and the wrong one for a caller that did.
+     */
+    private static boolean declinedByEngine(RulesengineCheckFlagResult result) {
+        String reason = result.getReason();
+        return "RULES_ENGINE_UNAVAILABLE".equals(reason) || "RULES_ENGINE_ERROR".equals(reason);
+    }
+
+    /** The plain flag check a credit-aware check defers to, with the caller's preflight threaded through. */
+    private CheckResult plainCheck(
+            String flagKey, Map<String, String> company, Map<String, String> user, CheckOptions options) {
+        PreflightOptions preflight = PreflightOptions.fromUsage(options.getUsage(), options.getEventSubtype());
+        RulesengineCheckFlagResult result;
+        if (offline) {
+            boolean value = checkDefault(flagKey, options);
+            result = RulesengineCheckFlagResult.builder()
+                    .flagKey(flagKey)
+                    .reason("flag default")
+                    .value(value)
+                    .build();
+        } else {
+            RulesengineCheckFlagResult dsResult = tryDatastreamCheckFlag(
+                    flagKey, company, user, DataStreamCreditCheckSource.toEngineOptions(preflight));
+            if (dsResult != null) {
+                // Reported before the substitution below, so the event records what the engine
+                // said rather than the default the caller resolved its own verdict with.
+                enqueueFlagCheckEvent(flagKey, dsResult, company, user);
+                // The engine declining to answer is the case defaultValue exists for, so resolve
+                // it the way the offline and API branches do rather than passing on the stand-in
+                // the DataStream client substituted.
+                result = declinedByEngine(dsResult)
+                        ? RulesengineCheckFlagResult.builder()
+                                .from(dsResult)
+                                .value(checkDefault(flagKey, options))
+                                .build()
+                        : dsResult;
+            } else {
+                // The API answers a preflight too, so the caller's usage gates the REST path the
+                // same way it gates a local evaluation. The caller's timeout applies, since this
+                // is the call it is waiting on.
+                result = checkFlagViaApi(
+                        flagKey, company, user, options.getTimeout(), preflight, options.getDefaultValue());
+            }
+        }
+        return new CheckResult(
+                result.getValue(),
+                result.getValue(),
+                result.getReason(),
+                result.getFlagKey(),
+                result.getFlagId().orElse(null),
+                result.getEntitlement().orElse(null),
+                null,
+                result.getErr().orElse(null));
+    }
+
+    /**
+     * Builds the event that settles a hold. Package-private for unit-testing the mapping. The key
+     * is derived from the reservation id, so a recovery emit and an accidental second settle
+     * collapse to one billed event server-side.
+     */
+    static CreateEventRequestBody buildReservationSettleEvent(
+            EventBodyTrack track, Map<String, JsonNode> traits, String reservationId) {
+        EventBodyTrack body =
+                EventBodyTrack.builder().from(track).traits(traits).build();
+        return buildTrackEvent(
+                EventBody.of(body),
+                TrackOptions.builder()
+                        .idempotencyKey(RESERVATION_TRACK_IDEMPOTENCY_PREFIX + reservationId)
+                        .build());
+    }
+
+    /** The caller's default for this flag: the per-check one when set, otherwise the client's. */
+    private boolean checkDefault(String flagKey, CheckOptions options) {
+        return options.getDefaultValue() != null ? options.getDefaultValue() : getFlagDefault(flagKey);
     }
 
     public void identify(
@@ -592,6 +1165,32 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             eventBuffer.push(buildIdentifyEvent(EventBody.of(body), options));
         } catch (Exception e) {
             logger.error("Error sending identify event: " + e.getMessage());
+        }
+
+        List<String> creditTypeIds = options != null ? options.getPrewarm() : null;
+        if (creditTypeIds != null && !creditTypeIds.isEmpty() && prewarms != null) {
+            Map<String, String> companyKeys = company != null ? company.getKeys() : null;
+            // Flush first so the server processes the identify promptly: without it the company
+            // can sit in the buffer for a full flush interval while the prewarm waits on us.
+            try {
+                prewarms.execute(() -> {
+                    try {
+                        eventBuffer.flush();
+                    } catch (RuntimeException e) {
+                        logger.debug("identify: the flush before the prewarm failed: " + e);
+                    }
+                    try {
+                        prewarm(companyKeys, creditTypeIds);
+                    } catch (RuntimeException e) {
+                        logger.warn("identify: the prewarm failed: " + e);
+                    }
+                });
+            } catch (RejectedExecutionException e) {
+                // identify still recorded the company; only the warm-up is dropped, and a
+                // caller identifying after close() should not be handed a shutdown race to
+                // catch.
+                logger.debug("identify: the client is closed, skipping the prewarm");
+            }
         }
     }
 
@@ -637,15 +1236,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .build();
 
             eventBuffer.push(buildTrackEvent(EventBody.of(body), options));
-
-            // Update cached company metrics if datastream is active
-            if (company != null && !company.isEmpty() && dataStreamClient != null && dataStreamClient.isConnected()) {
-                try {
-                    dataStreamClient.updateCompanyMetrics(body);
-                } catch (Exception e2) {
-                    logger.error("Failed to update company metrics: " + e2.getMessage());
-                }
-            }
+            updateCompanyMetrics(body);
         } catch (Exception e) {
             logger.error("Error sending track event: " + e.getMessage());
         }
@@ -688,12 +1279,41 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     @Override
     public void close() {
+        closing = true;
         try {
             // Remove shutdown hook if we're closing explicitly
             try {
                 Runtime.getRuntime().removeShutdownHook(this.shutdownHook);
             } catch (IllegalStateException e) {
                 // Shutdown is already in progress, hook will run automatically
+            }
+
+            if (creditLeaseManager != null) {
+                // Refuse new lease work first, so the waits below are waiting on work that is
+                // already unwinding rather than on work still starting. Both steps run for a
+                // shared backend too: the work must not outlive the client, even where there is
+                // nothing to release.
+                creditLeaseManager.stop();
+                // One budget across both waits, not each timeout in turn: a caller closing a
+                // client wants a bounded shutdown, not the sum of every wait inside it.
+                long deadline = System.nanoTime() + CreditLeaseDefaults.SHUTDOWN_DRAIN_TIMEOUT.toNanos();
+                if (prewarms != null) {
+                    prewarms.shutdown();
+                    try {
+                        if (!prewarms.awaitTermination(remaining(deadline).toMillis(), TimeUnit.MILLISECONDS)) {
+                            logger.warn("Timed out waiting for in-flight prewarms on close");
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                creditLeaseManager.drain(remaining(deadline));
+                // Never release leases held in a shared backend: a sibling process is still
+                // drawing on them.
+                if (!leaseBackendShared) {
+                    creditLeaseManager.releaseAllLocalLeases(remaining(deadline));
+                }
+                creditLeaseManager.close(remaining(deadline));
             }
 
             if (dataStreamClient != null) {
@@ -704,6 +1324,53 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         } catch (Exception e) {
             logger.error("Error closing Schematic client: " + e.getMessage());
         }
+    }
+
+    /**
+     * Resolves one lease Redis setting against the DataStream cache's. The client and the key
+     * prefix resolve independently: a lease client of its own does not cost a caller the
+     * DataStream prefix, which would split the key layout of a mixed fleet sharing those leases.
+     */
+    static <T> T inheritFromDataStream(T configured, T fromDataStream) {
+        return configured != null ? configured : fromDataStream;
+    }
+
+    /**
+     * Names the configured options that only steer client-mode plumbing, so server mode can say
+     * once that it is ignoring them.
+     */
+    private static String clientOnlyOptions(CreditLeaseConfig config) {
+        List<String> names = new ArrayList<>();
+        if (config.getDefaultLeaseDuration() != null) {
+            names.add("defaultLeaseDuration");
+        }
+        if (config.getDefaultLeaseSize() != null) {
+            names.add("defaultLeaseSize");
+        }
+        if (config.getLowWaterMark() != null) {
+            names.add("lowWaterMark");
+        }
+        if (config.getSweepInterval() != null) {
+            names.add("sweepInterval");
+        }
+        if (config.getRedisClient() != null) {
+            names.add("redisClient");
+        }
+        if (config.getRedisKeyPrefix() != null) {
+            names.add("redisKeyPrefix");
+        }
+        if (config.getPrewarmResolveTimeout() != null) {
+            names.add("prewarmResolveTimeout");
+        }
+        if (config.getOverrides() != null && !config.getOverrides().isEmpty()) {
+            names.add("overrides");
+        }
+        return String.join(", ", names);
+    }
+
+    private static Duration remaining(long deadlineNanos) {
+        long left = deadlineNanos - System.nanoTime();
+        return left <= 0 ? Duration.ZERO : Duration.ofNanos(left);
     }
 
     private boolean getFlagDefault(String flagKey) {
@@ -724,7 +1391,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         return key.toString();
     }
 
-    private Map<String, JsonNode> objectMapToJsonNode(Map<String, Object> map) {
+    private static Map<String, JsonNode> objectMapToJsonNode(Map<String, Object> map) {
         if (map == null) {
             return null;
         }

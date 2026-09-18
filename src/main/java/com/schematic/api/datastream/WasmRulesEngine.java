@@ -161,6 +161,13 @@ public class WasmRulesEngine implements RulesEngine {
     @Override
     public RulesengineCheckFlagResult checkFlag(RulesengineFlag flag, RulesengineCompany company, RulesengineUser user)
             throws Exception {
+        return checkFlag(flag, company, user, null);
+    }
+
+    @Override
+    public RulesengineCheckFlagResult checkFlag(
+            RulesengineFlag flag, RulesengineCompany company, RulesengineUser user, CheckFlagOptions options)
+            throws Exception {
         if (!initialized) {
             throw new IllegalStateException("WASM rules engine not initialized");
         }
@@ -180,6 +187,10 @@ public class WasmRulesEngine implements RulesEngine {
         if (user != null) {
             envelope.set("user", sanitize(mapper.valueToTree(user), "user"));
         }
+        ObjectNode preflight = preflightNode(mapper, options);
+        if (preflight != null) {
+            envelope.set("options", preflight);
+        }
 
         String inputJson = mapper.writeValueAsString(envelope);
         String resultJson = callWasm(inputJson);
@@ -190,6 +201,41 @@ public class WasmRulesEngine implements RulesEngine {
         JsonNode snakeNode = camelToSnakeKeys(camelNode);
 
         return mapper.treeToValue(snakeNode, RulesengineCheckFlagResult.class);
+    }
+
+    /**
+     * Writes a preflight quantity as the integer the engine reads. The engine's quantity fields
+     * are integers, and anything with a decimal point, a trailing {@code .0} included, fails to
+     * deserialize there and turns the whole evaluation into an error. A fraction rounds up rather
+     * than down, the same direction the request body takes: a preflight asks an upper bound, and
+     * the check must not pass on less usage than the call is about to record.
+     */
+    private static void putQuantity(ObjectNode node, String name, double quantity) {
+        node.put(name, (long) Math.ceil(quantity));
+    }
+
+    /**
+     * Builds the snake_case {@code options} envelope the engine reads, or null when there is no
+     * preflight to declare.
+     */
+    private static ObjectNode preflightNode(ObjectMapper mapper, CheckFlagOptions options) {
+        if (options == null) {
+            return null;
+        }
+        ObjectNode node = mapper.createObjectNode();
+        if (options.getCreditCost() != null) {
+            node.set("credit_cost", mapper.valueToTree(options.getCreditCost()));
+        }
+        if (options.getUsage() != null) {
+            putQuantity(node, "usage", options.getUsage());
+        }
+        if (options.getEventSubtype() != null && options.getEventQuantity() != null) {
+            ObjectNode eventUsage = mapper.createObjectNode();
+            eventUsage.put("event_subtype", options.getEventSubtype());
+            putQuantity(eventUsage, "quantity", options.getEventQuantity());
+            node.set("event_usage", eventUsage);
+        }
+        return node.size() == 0 ? null : node;
     }
 
     /**

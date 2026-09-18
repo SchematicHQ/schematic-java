@@ -8,6 +8,16 @@ import static org.mockito.Mockito.*;
 
 import com.schematic.api.cache.CacheProvider;
 import com.schematic.api.cache.LocalCache;
+import com.schematic.api.core.RequestOptions;
+import com.schematic.api.credits.CheckOptions;
+import com.schematic.api.credits.CheckResult;
+import com.schematic.api.credits.CreditLeaseConfig;
+import com.schematic.api.credits.CreditLeaseDefaults;
+import com.schematic.api.credits.CreditLeaseMode;
+import com.schematic.api.credits.Reservation;
+import com.schematic.api.credits.ReservationSettlement;
+import com.schematic.api.datastream.DataStreamClient;
+import com.schematic.api.datastream.DatastreamOptions;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.FeaturesClient;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
@@ -21,17 +31,22 @@ import com.schematic.api.types.EventBodyIdentify;
 import com.schematic.api.types.EventBodyIdentifyCompany;
 import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.EventType;
+import com.schematic.api.types.PreflightRequestBody;
 import com.schematic.api.types.RulesengineCheckFlagResult;
+import java.lang.reflect.Field;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -226,6 +241,366 @@ class SchematicTest {
         OffsetDateTime sentAt = event.getSentAt().get();
         assertTrue(sentAt.isAfter(before) && sentAt.isBefore(after));
         assertEquals("idem-1", event.getIdempotencyKey().get());
+    }
+
+    // --- Credit-aware check plumbing ---
+
+    @Test
+    void check_ThreadsThePerCheckTimeoutToTheApiFallback() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+
+        CheckFlagResponse response = CheckFlagResponse.builder()
+                .data(CheckFlagResponseData.builder()
+                        .flag("test_flag")
+                        .reason("test_reason")
+                        .value(true)
+                        .build())
+                .build();
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class), any(RequestOptions.class)))
+                .thenReturn(response);
+
+        CheckResult result = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder().timeout(Duration.ofMillis(250)).build());
+
+        assertTrue(result.isAllowed());
+        ArgumentCaptor<RequestOptions> options = ArgumentCaptor.forClass(RequestOptions.class);
+        verify(featuresClient).checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class), options.capture());
+        // The caller is waiting on this call, so its timeout has to reach it.
+        assertEquals(250, options.getValue().getTimeout().get());
+        assertEquals(TimeUnit.MILLISECONDS, options.getValue().getTimeoutTimeUnit());
+    }
+
+    @Test
+    void check_SendsThePreflightOnTheApiFallback() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(true));
+
+        CheckResult result = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder()
+                        .usage(7.2)
+                        .eventSubtype("inference_tokens")
+                        .build());
+
+        assertTrue(result.isAllowed());
+        ArgumentCaptor<CheckFlagRequestBody> body = ArgumentCaptor.forClass(CheckFlagRequestBody.class);
+        verify(featuresClient).checkFlag(eq("test_flag"), body.capture());
+        PreflightRequestBody preflight = body.getValue().getPreflight().get();
+        assertEquals("inference_tokens", preflight.getEventUsage().get().getEventSubtype());
+        // A preflight asks an upper-bound question, so a fractional usage rounds up.
+        assertEquals(8L, preflight.getEventUsage().get().getQuantity());
+    }
+
+    @Test
+    void check_WithAPreflightNeitherReadsNorWritesTheFlagCache() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        // Cache a plain verdict for this flag, company and user.
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(true));
+        spySchematic.checkFlag("test_flag", null, null);
+        for (CacheProvider<RulesengineCheckFlagResult> provider : spySchematic.getFlagCheckCacheProviders()) {
+            assertNotNull(provider.get("test_flag"));
+        }
+
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(false));
+        CheckResult preflighted = spySchematic.check(
+                "test_flag", null, null, CheckOptions.builder().usage(5).build());
+
+        // The cached plain verdict answers a different question, so it is not served here.
+        assertFalse(preflighted.isAllowed());
+        for (CacheProvider<RulesengineCheckFlagResult> provider : spySchematic.getFlagCheckCacheProviders()) {
+            // And the preflighted verdict must not become the answer a plain check reads back.
+            assertTrue(provider.get("test_flag").getValue());
+        }
+    }
+
+    @Test
+    void check_WithoutAPreflightStillUsesTheFlagCache() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(true));
+
+        CheckResult first = spySchematic.check("test_flag", null, null, null);
+        CheckResult second = spySchematic.check("test_flag", null, null, null);
+
+        assertTrue(first.isAllowed());
+        assertTrue(second.isAllowed());
+        verify(featuresClient, times(1)).checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class));
+        for (CacheProvider<RulesengineCheckFlagResult> provider : spySchematic.getFlagCheckCacheProviders()) {
+            assertNotNull(provider.get("test_flag"));
+        }
+    }
+
+    @Test
+    void check_WithAZeroUsageStaysPlainAndKeepsTheFlagCache() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenReturn(apiResponse(true));
+
+        CheckOptions zeroUsage = CheckOptions.builder().usage(0).build();
+        CheckResult first = spySchematic.check("test_flag", null, null, zeroUsage);
+        CheckResult second = spySchematic.check("test_flag", null, null, zeroUsage);
+
+        assertTrue(first.isAllowed());
+        assertTrue(second.isAllowed());
+        ArgumentCaptor<CheckFlagRequestBody> body = ArgumentCaptor.forClass(CheckFlagRequestBody.class);
+        // The API treats a zero usage as no usage, so sending it would cost the check its cache
+        // and buy nothing: one call answers both.
+        verify(featuresClient, times(1)).checkFlag(eq("test_flag"), body.capture());
+        assertFalse(body.getValue().getPreflight().isPresent());
+    }
+
+    @Test
+    void check_UsesThePerCheckDefaultWhenTheApiFallbackFails() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenThrow(new RuntimeException("connection refused"));
+
+        CheckResult result = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder().usage(5).defaultValue(true).build());
+
+        // A caller who named a default for this check gets it wherever the check lands on one,
+        // not just in offline mode.
+        assertTrue(result.isAllowed());
+        assertEquals("flag default", result.getReason());
+    }
+
+    @Test
+    void check_WithoutAPerCheckDefaultFallsBackToTheClientDefault() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenThrow(new RuntimeException("connection refused"));
+        spySchematic.setFlagDefault("test_flag", true);
+
+        CheckResult unnamed = spySchematic.check(
+                "test_flag", null, null, CheckOptions.builder().usage(5).build());
+
+        assertTrue(unnamed.isAllowed());
+        // And a per-check default still outranks the client-wide one.
+        CheckResult named = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder().usage(5).defaultValue(false).build());
+        assertFalse(named.isAllowed());
+    }
+
+    private static CheckFlagResponse apiResponse(boolean value) {
+        return CheckFlagResponse.builder()
+                .data(CheckFlagResponseData.builder()
+                        .flag("test_flag")
+                        .reason("test_reason")
+                        .value(value)
+                        .build())
+                .build();
+    }
+
+    @Test
+    void inheritFromDataStream_ResolvesEachSettingOnItsOwn() {
+        // An explicit lease client must not cost the caller the DataStream key prefix: a mixed
+        // fleet sharing those leases would then read two different key layouts.
+        assertEquals("lease-client", Schematic.inheritFromDataStream("lease-client", "datastream-client"));
+        assertEquals("datastream:", Schematic.inheritFromDataStream(null, "datastream:"));
+        assertNull(Schematic.inheritFromDataStream(null, null));
+    }
+
+    @Test
+    void trackWithReservation_FoldsTheSettleIntoTheCachedCompanyMetrics() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        Schematic spySchematic = spy(schematic);
+        setDataStreamClient(spySchematic, dataStream);
+
+        spySchematic.trackWithReservation(reservation(CreditLeaseMode.SERVER), 7, null);
+
+        // A settle is a track, so the cached usage has to move with it. Without this a local
+        // evaluation right after the settle gates on a figure the stream has not pushed back yet.
+        ArgumentCaptor<EventBodyTrack> recorded = ArgumentCaptor.forClass(EventBodyTrack.class);
+        verify(dataStream).updateCompanyMetrics(recorded.capture());
+        assertEquals("inference_tokens", recorded.getValue().getEvent());
+        assertEquals(7L, recorded.getValue().getQuantity().get());
+        assertEquals(
+                Collections.singletonMap("id", "co_1"),
+                recorded.getValue().getCompany().get());
+    }
+
+    @Test
+    void check_ResolvesTheCallersDefaultWhenTheEngineDeclinesOnTheDataStreamBranch() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        // What the DataStream client hands back when the engine cannot answer: the flag's own
+        // default standing in for a verdict.
+        when(dataStream.checkFlag(eq("test_flag"), any(), any(), any()))
+                .thenReturn(RulesengineCheckFlagResult.builder()
+                        .flagKey("test_flag")
+                        .reason("RULES_ENGINE_UNAVAILABLE")
+                        .value(true)
+                        .build());
+        Schematic spySchematic = spy(schematic);
+        setDataStreamClient(spySchematic, dataStream);
+        spySchematic.setFlagDefault("test_flag", false);
+
+        CheckResult named = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder().usage(5).defaultValue(true).build());
+        CheckResult unnamed = spySchematic.check(
+                "test_flag", null, null, CheckOptions.builder().usage(5).build());
+
+        // The engine declining is the case defaultValue exists for, so it applies on the branch
+        // that answers most checks and not just offline and on the API fallback.
+        assertTrue(named.isAllowed());
+        // With no caller default the registered one stands in, rather than the flag's own.
+        assertFalse(unnamed.isAllowed());
+    }
+
+    @Test
+    void check_AutoModeFallsToServerGatingWhenTheDataStreamIsGone() throws Exception {
+        Schematic leased = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .datastreamOptions(DatastreamOptions.builder().build())
+                .creditLeases(
+                        CreditLeaseConfig.builder().mode(CreditLeaseMode.AUTO).build())
+                .build();
+        try {
+            FeaturesClient featuresClient = mock(FeaturesClient.class);
+            Schematic spySchematic = spy(leased);
+            when(spySchematic.features()).thenReturn(featuresClient);
+            // What a DataStream that failed to start leaves behind. Auto has to notice at the
+            // check, not hold the verdict it reached at construction.
+            setDataStreamClient(spySchematic, null);
+
+            spySchematic.check(
+                    "test_flag",
+                    Collections.singletonMap("id", "co_1"),
+                    null,
+                    CheckOptions.builder().usage(5).build());
+
+            // Server gating, not a plain ungated check: the credits still have to be held.
+            verify(featuresClient).checkAndReserveFlag(eq("test_flag"), any(), any());
+        } finally {
+            leased.close();
+        }
+    }
+
+    @Test
+    void serverReservationTtl_IsClampedBelowTheApiCapButOnlyForServerMode() throws Exception {
+        Duration twoHours = Duration.ofHours(2);
+        Duration clamped =
+                CreditLeaseDefaults.MAX_RESERVATION_TTL.minus(CreditLeaseDefaults.RESERVATION_TTL_SKEW_ALLOWANCE);
+
+        try (Schematic server = leasedClient(CreditLeaseMode.SERVER, twoHours);
+                Schematic client = leasedClient(CreditLeaseMode.CLIENT, twoHours)) {
+            // The API refuses a hold expiring more than its cap ahead of its own clock, and this
+            // TTL is measured on ours, so the clamp leaves a step for the difference.
+            assertEquals(clamped, serverReservationTtl(server));
+            assertTrue(clamped.compareTo(CreditLeaseDefaults.MAX_RESERVATION_TTL) < 0);
+            // Client mode never sends it, so clamping there would shorten holds for nothing.
+            assertEquals(twoHours, serverReservationTtl(client));
+        }
+    }
+
+    private Schematic leasedClient(CreditLeaseMode mode, Duration ttl) {
+        return Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .creditLeases(CreditLeaseConfig.builder()
+                        .mode(mode)
+                        .defaultReservationTtl(ttl)
+                        .build())
+                .build();
+    }
+
+    private static void setDataStreamClient(Schematic target, DataStreamClient value) throws Exception {
+        Field field = Schematic.class.getDeclaredField("dataStreamClient");
+        field.setAccessible(true);
+        field.set(target, value);
+    }
+
+    private static Duration serverReservationTtl(Schematic target) throws Exception {
+        Field field = Schematic.class.getDeclaredField("serverReservationTtl");
+        field.setAccessible(true);
+        return (Duration) field.get(target);
+    }
+
+    // --- Reservation settles ---
+
+    private static Reservation reservation(CreditLeaseMode mode) {
+        return new Reservation(
+                "res_1",
+                mode == CreditLeaseMode.SERVER ? "res_1" : "lse_1",
+                mode,
+                "co_1",
+                "ct_1",
+                "inference_tokens",
+                10,
+                100,
+                10,
+                Instant.parse("2026-01-01T00:01:00Z"),
+                Collections.singletonMap("id", "co_1"),
+                null);
+    }
+
+    @Test
+    void buildReservationSettleEvent_clientModeRoutesThroughTheLeaseAndKeysOffTheHold() {
+        EventBodyTrack track = ReservationSettlement.buildTrackEvent(reservation(CreditLeaseMode.CLIENT), 4);
+
+        CreateEventRequestBody event = Schematic.buildReservationSettleEvent(track, null, "res_1");
+
+        assertEquals(EventType.TRACK, event.getEventType());
+        assertEquals("lease-reservation:res_1", event.getIdempotencyKey().get());
+        EventBodyTrack body = (EventBodyTrack) event.getBody().get().get();
+        assertEquals("inference_tokens", body.getEvent());
+        assertEquals(4L, body.getQuantity().get());
+        // The lease id routes the server-side consumption through the lease's sub-ledger instead
+        // of decrementing a grant the acquire already pre-debited.
+        assertEquals("lse_1", body.getLeaseId().get());
+        assertFalse(body.getReservationId().isPresent());
+    }
+
+    @Test
+    void buildReservationSettleEvent_serverModeRoutesByHoldIdAndNeverNamesALease() {
+        EventBodyTrack track = ReservationSettlement.buildTrackEvent(reservation(CreditLeaseMode.SERVER), 4);
+
+        CreateEventRequestBody event = Schematic.buildReservationSettleEvent(track, null, "res_1");
+
+        EventBodyTrack body = (EventBodyTrack) event.getBody().get().get();
+        assertEquals("res_1", body.getReservationId().get());
+        // The server prefers the lease id when both are set, and there is no lease here.
+        assertFalse(body.getLeaseId().isPresent());
+    }
+
+    @Test
+    void buildReservationSettleEvent_billsAWholeUnitForAFractionalSettle() {
+        EventBodyTrack track = ReservationSettlement.buildTrackEvent(reservation(CreditLeaseMode.CLIENT), 0.2);
+
+        assertEquals(1L, track.getQuantity().get());
     }
 
     @Test
