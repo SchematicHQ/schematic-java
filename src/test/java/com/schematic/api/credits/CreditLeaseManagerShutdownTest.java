@@ -2,6 +2,7 @@ package com.schematic.api.credits;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Clock;
@@ -11,6 +12,9 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.Test;
 
 /** What the manager still owes once it is stopping. */
@@ -75,6 +79,63 @@ class CreditLeaseManagerShutdownTest {
             }
             released.add(leaseId);
         }
+    }
+
+    @Test
+    void anErrorDuringAnAcquireDoesNotStrandTheJoinersWaitingOnIt() throws Exception {
+        InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
+        CountDownLatch acquiring = new CountDownLatch(1);
+        CountDownLatch release = new CountDownLatch(1);
+        LeaseWireClient wire = new LeaseWireClient() {
+            @Override
+            public LeaseGrant acquire(String companyId, String creditTypeId, double amount, Instant expiresAt) {
+                acquiring.countDown();
+                try {
+                    release.await();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                throw new StackOverflowError("the wire blew the stack");
+            }
+
+            @Override
+            public LeaseGrant extend(String leaseId, double additionalAmount, Instant expiresAt) {
+                return null;
+            }
+
+            @Override
+            public void release(String leaseId) {}
+        };
+        CreditLeaseManager manager = new CreditLeaseManager(
+                wire, leases, holds, CreditLeaseConfig.builder().build(), null, CLOCK);
+
+        Thread first = new Thread(() -> {
+            try {
+                manager.acquireIfNeeded("co_1", "ct_1");
+            } catch (Error expected) {
+                // An Error is the caller's to deal with; what matters is who else it takes down.
+            }
+        });
+        first.start();
+        assertTrue(acquiring.await(5, TimeUnit.SECONDS));
+
+        AtomicReference<LeaseState> joined = new AtomicReference<>();
+        CountDownLatch joinerDone = new CountDownLatch(1);
+        Thread joiner = new Thread(() -> {
+            joined.set(manager.acquireIfNeeded("co_1", "ct_1"));
+            joinerDone.countDown();
+        });
+        joiner.start();
+        release.countDown();
+
+        // Completing only on the return and the RuntimeException paths would park this joiner on
+        // an unfinished future for the life of the process.
+        assertTrue(joinerDone.await(5, TimeUnit.SECONDS), "the joiner never came back");
+        assertNull(joined.get());
+        first.join(5000);
+        joiner.join(5000);
+        manager.close();
     }
 
     @Test
