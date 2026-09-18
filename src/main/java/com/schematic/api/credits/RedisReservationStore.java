@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import redis.clients.jedis.AbstractTransaction;
 import redis.clients.jedis.JedisPooled;
 
 /**
@@ -15,9 +16,10 @@ import redis.clients.jedis.JedisPooled;
  *
  * <p>Each hold is a hash, indexed by expiry in a sorted set so the sweeper can pop expired
  * entries in O(log n), and by (company, credit type) so a balance display can sum a tenant's open
- * holds. Every mutation is a single-key operation, or single-key Lua, so the store is correct on
- * standalone and clustered Redis alike: the unspent-slice refund is delegated to the lease store
- * rather than reaching across to the lease hash inside a multi-key script.
+ * holds. Every mutation is a single-key operation, or single-key Lua, or a transaction over one
+ * key, so the store is correct on standalone and clustered Redis alike: the unspent-slice refund
+ * is delegated to the lease store rather than reaching across to the lease hash inside a
+ * multi-key script.
  */
 public final class RedisReservationStore implements ReservationStore {
 
@@ -91,12 +93,20 @@ public final class RedisReservationStore implements ReservationStore {
         hash.put("consumptionRate", CreditAmounts.format(reservation.getConsumptionRate()));
         hash.put("expiresAt", Long.toString(expiresMs));
         hash.put("evalCtx", encodeEvalCtx(reservation));
-        // The hash goes first so the reservation exists before anything references it. These are
-        // independent single-key ops rather than one multi-key script: a partial failure at worst
-        // leaves an un-indexed reservation that the TTL reaps (its slice reclaimed when the lease
-        // expires), never a double-spend.
-        jedis.hset(hashKey, hash);
-        jedis.pexpireAt(hashKey, expiresMs + RES_TTL_GRACE_MS);
+        // The hash and its expiry go out as one MULTI/EXEC. Written separately, a crash in the gap
+        // leaves a reservation row with no TTL: once the sweeper drops its index entry, nothing
+        // points at the row and nothing reaps it, so it sits in Redis for good. Both commands
+        // touch the one key, so this is Cluster-safe.
+        try (AbstractTransaction txn = jedis.multi()) {
+            txn.hset(hashKey, hash);
+            txn.pexpireAt(hashKey, expiresMs + RES_TTL_GRACE_MS);
+            txn.exec();
+        }
+        // The two indexes (expiry zset for the sweeper, per-tenant hash for reservedCredits) only
+        // depend on the hash existing, so they stay outside the transaction, where their keys are
+        // free to hash to other Cluster slots. A partial failure here at worst leaves an
+        // un-indexed reservation that the TTL reaps (its slice reclaimed when the lease expires),
+        // never a double-spend.
         jedis.zadd(
                 indexKey(),
                 (double) expiresMs,

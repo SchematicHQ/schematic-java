@@ -177,7 +177,10 @@ public final class CreditCheck {
             return fallBack(fallback);
         }
 
-        double creditCost = request.getUsage() * consumptionRate;
+        // Whole event units: a fraction of an event is not something the server bills, so the hold
+        // rounds up to what the settle will charge. Sizing it on the raw quantity would move the
+        // local ledger by less than the Track event, and the two would drift apart over a session.
+        double creditCost = Math.ceil(request.getUsage()) * consumptionRate;
         String companyId = company.getId();
         String userId = user == null ? null : user.getId();
 

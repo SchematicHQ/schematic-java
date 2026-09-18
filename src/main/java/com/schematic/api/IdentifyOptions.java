@@ -1,5 +1,6 @@
 package com.schematic.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +15,10 @@ public final class IdentifyOptions {
 
     private IdentifyOptions(Builder builder) {
         this.idempotencyKey = builder.idempotencyKey;
-        this.prewarm = builder.prewarm;
+        // Copied, because the prewarm runs in the background and reads this list after identify
+        // has returned: a caller who reuses and mutates their own list would otherwise decide,
+        // after the fact, which credit types get warmed.
+        this.prewarm = builder.prewarm != null ? new ArrayList<>(builder.prewarm) : null;
     }
 
     public static Builder builder() {

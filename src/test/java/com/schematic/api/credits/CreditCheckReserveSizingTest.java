@@ -108,6 +108,85 @@ class CreditCheckReserveSizingTest {
         }
     }
 
+    /** Delegates everything but the gate, which throws the way an unreachable store would. */
+    private static final class UnreachableOnReserve implements LeaseStore {
+        private final LeaseStore delegate;
+
+        UnreachableOnReserve(LeaseStore delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public LeaseState get(String companyId, String creditTypeId) {
+            return delegate.get(companyId, creditTypeId);
+        }
+
+        @Override
+        public boolean replace(LeaseGrant grant) {
+            return delegate.replace(grant);
+        }
+
+        @Override
+        public ReserveResult tryReserve(String companyId, String creditTypeId, double credits) {
+            throw new IllegalStateException("the lease store is unreachable");
+        }
+
+        @Override
+        public void refund(String companyId, String creditTypeId, double credits, String pinLeaseId) {
+            delegate.refund(companyId, creditTypeId, credits, pinLeaseId);
+        }
+
+        @Override
+        public void extend(
+                String companyId, String creditTypeId, double grantedTotal, Instant newExpiresAt, String pinLeaseId) {
+            delegate.extend(companyId, creditTypeId, grantedTotal, newExpiresAt, pinLeaseId);
+        }
+
+        @Override
+        public void drop(String companyId, String creditTypeId) {
+            delegate.drop(companyId, creditTypeId);
+        }
+    }
+
+    /** Takes the debit but refuses to record the hold, the window undoDebit exists for. */
+    private static final class UnreachableOnAdd implements ReservationStore {
+        private final ReservationStore delegate;
+
+        UnreachableOnAdd(ReservationStore delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void add(Reservation reservation) {
+            throw new IllegalStateException("the reservation store is unreachable");
+        }
+
+        @Override
+        public Reservation get(String id) {
+            return delegate.get(id);
+        }
+
+        @Override
+        public Double consume(String id, double creditsConsumed) {
+            return delegate.consume(id, creditsConsumed);
+        }
+
+        @Override
+        public double reservedCredits(String companyId, String creditTypeId) {
+            return delegate.reservedCredits(companyId, creditTypeId);
+        }
+
+        @Override
+        public int sweepExpired() {
+            return delegate.sweepExpired();
+        }
+
+        @Override
+        public int count() {
+            return delegate.count();
+        }
+    }
+
     private static final class Fixture {
         final InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
         final InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
@@ -120,6 +199,14 @@ class CreditCheckReserveSizingTest {
         }
 
         Fixture(Clock flowClock, CreditCheckDataStream source) {
+            this(flowClock, source, false, false);
+        }
+
+        /**
+         * The two stores the flow writes through can each be made unreachable, which is the only
+         * way to reach the paths that give a debit back.
+         */
+        Fixture(Clock flowClock, CreditCheckDataStream source, boolean breakReserve, boolean breakAdd) {
             LeaseWireClient wire = new LeaseWireClient() {
                 @Override
                 public LeaseGrant acquire(String companyId, String creditTypeId, double amount, Instant expiresAt) {
@@ -136,7 +223,15 @@ class CreditCheckReserveSizingTest {
             };
             manager = new CreditLeaseManager(
                     wire, leases, holds, CreditLeaseConfig.builder().build(), null, CLOCK);
-            flow = new CreditCheck(source, leases, holds, manager, null, flowClock, null, null);
+            flow = new CreditCheck(
+                    source,
+                    breakReserve ? new UnreachableOnReserve(leases) : leases,
+                    breakAdd ? new UnreachableOnAdd(holds) : holds,
+                    manager,
+                    null,
+                    flowClock,
+                    null,
+                    null);
             leases.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, NOW.plusSeconds(300)));
         }
 
@@ -161,7 +256,7 @@ class CreditCheckReserveSizingTest {
     }
 
     @Test
-    void aFractionalUsageHoldsExactlyUsageTimesTheRate() {
+    void aFractionalUsageHoldsAWholeEventUnitAtTheRate() {
         Fixture fixture = new Fixture(CLOCK);
 
         CheckResult result = fixture.run(0.5);
@@ -169,12 +264,12 @@ class CreditCheckReserveSizingTest {
         assertFalse(fixture.fellBack);
         assertTrue(result.isAllowed());
         assertNotNull(result.getReservation());
-        // The ledger figure is the raw product, which is what every SDK sharing this lease
-        // computes for the same check. The settling event rounds its own quantity up, because
-        // that field is an integer, but the hold does not follow it.
-        assertEquals(5.0, result.getReservation().getCreditsReserved());
+        // Half an event is not something the server bills, so the hold is sized at the whole unit
+        // the settle will charge for, while the reservation still records what the caller
+        // declared.
+        assertEquals(10.0, result.getReservation().getCreditsReserved());
         assertEquals(0.5, result.getReservation().getQuantityReserved());
-        assertEquals(995.0, fixture.leases.get("co_1", "ct_1").getLocalRemainingCredits());
+        assertEquals(990.0, fixture.leases.get("co_1", "ct_1").getLocalRemainingCredits());
     }
 
     @Test
@@ -205,6 +300,40 @@ class CreditCheckReserveSizingTest {
         assertEquals(0, fixture.holds.count());
         // Everything the hold needs is resolved before the debit, so a throw here cannot strand
         // credits on a lease with no reservation naming them.
+        assertEquals(1000.0, fixture.leases.get("co_1", "ct_1").getLocalRemainingCredits());
+    }
+
+    @Test
+    void anUnreachableLeaseStoreAtTheGateFailsClosedWithoutAHold() {
+        Fixture fixture = new Fixture(CLOCK, new AllowingDataStream(), true, false);
+
+        CheckResult result = fixture.run(10);
+
+        // The gate is the one step that cannot be guessed at: without the atomic check and debit
+        // there is no telling whether the credits are there, so the check resolves through its
+        // fail-closed contract rather than allowing on an unknown balance.
+        assertFalse(fixture.fellBack);
+        assertFalse(result.isAllowed());
+        assertNull(result.getReservation());
+        assertEquals("lease_store_error", result.getReason());
+        assertEquals(0, fixture.holds.count());
+        assertEquals(1000.0, fixture.leases.get("co_1", "ct_1").getLocalRemainingCredits());
+    }
+
+    @Test
+    void aHoldThatCannotBeRecordedGivesItsCreditsBack() {
+        Fixture fixture = new Fixture(CLOCK, new AllowingDataStream(), false, true);
+
+        CheckResult result = fixture.run(10);
+
+        // The debit landed and the hold that would have settled it did not, so the credits go
+        // back to the lease they came out of. Left alone they would sit debited with nothing to
+        // settle or sweep them, and the slot would leak a tranche at a time.
+        assertFalse(fixture.fellBack);
+        assertFalse(result.isAllowed());
+        assertNull(result.getReservation());
+        assertEquals("lease_store_error", result.getReason());
+        assertEquals(0, fixture.holds.count());
         assertEquals(1000.0, fixture.leases.get("co_1", "ct_1").getLocalRemainingCredits());
     }
 }

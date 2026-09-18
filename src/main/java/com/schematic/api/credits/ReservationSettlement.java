@@ -40,14 +40,14 @@ public final class ReservationSettlement {
      * still billed once the hold has been swept. Only the local bookkeeping clamps to the reserved
      * amount; the event carries the unclamped actual.
      *
-     * <p>The lease is debited the raw quantity times the rate, which is the figure every SDK
-     * computes for the same settle. The event's own quantity rounds up, because that field is an
-     * integer, so a fractional settle bills marginally more than it debits. Closing that gap is a
-     * change to the shared ledger, not to one port: SDKs sharing a Redis backend have to hold and
-     * release the same amount for the same call.
+     * <p>The debit rounds the actual up to whole event units, the same way the hold that it settles
+     * was sized. A fraction of an event is not something the server bills, so a raw-quantity debit
+     * would move the lease by less than the Track event charges, and the two would drift apart over
+     * a session.
      */
     public static SettleOutcome settle(ReservationStore reservations, Reservation reservation, double actualQuantity) {
-        Double claimed = reservations.consume(reservation.getId(), actualQuantity * reservation.getConsumptionRate());
+        Double claimed =
+                reservations.consume(reservation.getId(), Math.ceil(actualQuantity) * reservation.getConsumptionRate());
         return new SettleOutcome(buildTrackEvent(reservation, actualQuantity), claimed != null);
     }
 
@@ -78,9 +78,9 @@ public final class ReservationSettlement {
     }
 
     /**
-     * Casts a settled usage onto the integer a track event records. A hold can be sized from a
-     * fractional usage, but the event's quantity is an integer, so a partial unit settles as a
-     * whole one rather than as none.
+     * Casts a settled usage onto the integer a track event records. The wire field is an integer,
+     * so a partial unit is billed as a whole one, which is the same rounding the hold and the debit
+     * already apply.
      */
     public static long settleQuantity(double actualQuantity) {
         return (long) Math.ceil(actualQuantity);

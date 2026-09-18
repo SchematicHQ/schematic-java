@@ -17,6 +17,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Owns lease rows for one client: acquire on first use or after expiry, extend when the local
@@ -32,6 +33,13 @@ import java.util.concurrent.TimeoutException;
  * has nowhere to go.
  */
 public final class CreditLeaseManager implements AutoCloseable {
+
+    /**
+     * How many in-flight extends one caller waits out before issuing its own. Two covers the case
+     * the single-flight was written for: the flight a caller joins, and the follow-up another
+     * caller registers while it was waiting.
+     */
+    private static final int MAX_EXTEND_JOINS = 2;
 
     private final LeaseWireClient wire;
     private final LeaseStore leases;
@@ -55,7 +63,9 @@ public final class CreditLeaseManager implements AutoCloseable {
     // Held across the flag write in stop() and the re-check an acquire makes once it owns the
     // slot's flight, which is what stops a lease landing in a slot close() has already swept.
     private final Object stopLock = new Object();
-    private volatile boolean sweeping;
+    // Compare-and-set rather than a read then a write: two threads starting the sweep together
+    // would both pass a plain check and schedule a second sweeper onto the same store.
+    private final AtomicBoolean sweeping = new AtomicBoolean();
 
     public CreditLeaseManager(
             LeaseWireClient wire,
@@ -131,12 +141,12 @@ public final class CreditLeaseManager implements AutoCloseable {
         String key = LeaseStore.leaseKey(companyId, creditTypeId);
         Flight joined = acquireFlights.get(key);
         if (joined != null) {
-            return joined.await();
+            return joined.await(timeout);
         }
         Flight flight = new Flight(0);
         Flight raced = acquireFlights.putIfAbsent(key, flight);
         if (raced != null) {
-            return raced.await();
+            return raced.await(timeout);
         }
         try {
             boolean stoppedInTheGap;
@@ -249,107 +259,132 @@ public final class CreditLeaseManager implements AutoCloseable {
 
     /** Extends under the caller's per-check timeout, or the client's own when null. */
     public LeaseState maybeExtend(String companyId, String creditTypeId, Double requiredCredits, Duration timeout) {
-        return maybeExtend(companyId, creditTypeId, requiredCredits, true, true, timeout);
+        return maybeExtend(companyId, creditTypeId, requiredCredits, true, timeout);
     }
 
     private LeaseState maybeExtend(
-            String companyId,
-            String creditTypeId,
-            Double requiredCredits,
-            boolean allowFollowUp,
-            boolean joinInFlight,
-            Duration timeout) {
+            String companyId, String creditTypeId, Double requiredCredits, boolean joinInFlight, Duration timeout) {
         if (stopped) {
             // Extending past stop re-holds credits on a lease the close is about to release, or
             // has already released.
             debug("Not extending a credit lease for " + companyId + "/" + creditTypeId + ": the manager is stopped");
             return null;
         }
-        LeaseState entry;
-        try {
-            entry = leases.get(companyId, creditTypeId);
-        } catch (RuntimeException e) {
-            warn("Failed to read lease store for " + companyId + "/" + creditTypeId + ": " + e);
-            return null;
-        }
-        if (entry == null) {
-            return null;
-        }
-        // Never extend an expired lease: the server treats it as released and has already
-        // refunded its remainder, so the only correct move is a fresh acquire on the next check.
-        if (!entry.isLiveAt(now())) {
-            return null;
-        }
-        ResolvedLeaseConfig resolved = resolveConfig(creditTypeId);
-        boolean belowWatermark = atOrBelowWatermark(entry, resolved);
-        boolean belowRequired = requiredCredits != null && entry.getLocalRemainingCredits() < requiredCredits;
-        if (!belowWatermark && !belowRequired) {
-            return entry;
-        }
-        // Size the extend to cover the request that triggered it: a single check needing more
-        // than remaining plus one tranche would otherwise fail its post-extend retry forever,
-        // however much balance the server has. The steady-state path keeps asking for the
-        // configured tranche. Sized here, one level above the wire call, so the flight registered
-        // below and the request body provably carry the same number for a joiner to compare
-        // against.
-        double shortfall = requiredCredits != null ? requiredCredits - entry.getLocalRemainingCredits() : 0;
-        double additionalAmount = Math.max(resolved.getLeaseSize(), shortfall);
-
         String key = LeaseStore.leaseKey(companyId, creditTypeId);
-        Flight inFlight = extendFlights.get(key);
-        if (inFlight == null) {
-            Flight flight = new Flight(additionalAmount);
-            Flight raced = extendFlights.putIfAbsent(key, flight);
-            if (raced == null) {
-                try {
-                    // Re-read now that the slot's flight is ours. The row above was read before
-                    // the flight check, so a previous extend can have landed and deregistered in
-                    // between: that read says "below the mark" about a lease that has since been
-                    // topped up, and sending on it bills a second tranche nobody needs.
-                    LeaseState fresh = stillNeedsExtending(companyId, creditTypeId, requiredCredits, resolved);
-                    if (fresh == null) {
-                        return leases.get(companyId, creditTypeId);
-                    }
-                    flight.sentExtend = true;
-                    LeaseState result = extend(fresh, resolved, additionalAmount, timeout);
-                    flight.result.complete(result);
-                    return result;
-                } catch (RuntimeException e) {
-                    warn("Failed to extend credit lease " + entry.getLeaseId() + ": " + e);
-                    return null;
-                } finally {
-                    // Completing here and not only on the two paths above: an Error unwinding
-                    // past both would leave the future unfinished, and every joiner parks on it
-                    // forever. A no-op once the success path has already completed it.
-                    flight.result.complete(null);
-                    // Identity-guarded rather than an unconditional remove: a joiner whose
-                    // shortfall outran this flight registers a follow-up for the same key, and
-                    // this flight must not evict it.
-                    extendFlights.remove(key, flight);
-                }
+        // Joins are budgeted, extends of this caller's own are not: it waits out flights that ask
+        // for too little, but once the budget is spent it sends one extend of its own rather than
+        // joining again. Without the budget a caller could queue behind an unbounded run of other
+        // callers' follow-ups; without the extend of its own it would hand back a balance it
+        // already knows is short and fail its retry with credits still sitting on the server.
+        for (int joinsLeft = MAX_EXTEND_JOINS; ; joinsLeft--) {
+            LeaseState entry;
+            try {
+                entry = leases.get(companyId, creditTypeId);
+            } catch (RuntimeException e) {
+                warn("Failed to read lease store for " + companyId + "/" + creditTypeId + ": " + e);
+                return null;
             }
-            inFlight = raced;
+            if (entry == null) {
+                return null;
+            }
+            // Never extend an expired lease: the server treats it as released and has already
+            // refunded its remainder, so the only correct move is a fresh acquire on the next
+            // check.
+            if (!entry.isLiveAt(now())) {
+                return null;
+            }
+            ResolvedLeaseConfig resolved = resolveConfig(creditTypeId);
+            boolean belowWatermark = atOrBelowWatermark(entry, resolved);
+            boolean belowRequired = requiredCredits != null && entry.getLocalRemainingCredits() < requiredCredits;
+            if (!belowWatermark && !belowRequired) {
+                return entry;
+            }
+            // Size the extend to cover the request that triggered it: a single check needing more
+            // than remaining plus one tranche would otherwise fail its post-extend retry forever,
+            // however much balance the server has. The steady-state path keeps asking for the
+            // configured tranche. Sized here, one level above the wire call, so the flight
+            // registered below and the request body provably carry the same number for a joiner
+            // to compare against.
+            double shortfall = requiredCredits != null ? requiredCredits - entry.getLocalRemainingCredits() : 0;
+            double additionalAmount = Math.max(resolved.getLeaseSize(), shortfall);
+
+            Flight inFlight = extendFlights.get(key);
+            if (inFlight != null && joinsLeft > 0) {
+                if (!joinInFlight) {
+                    // The slot is already being topped up and nobody is waiting on this call's
+                    // result, so parking on that flight would hold a pool thread for a wire call
+                    // whose outcome this caller does not read.
+                    return null;
+                }
+                LeaseState joined = inFlight.await(timeout);
+                if (!inFlight.isDone()) {
+                    // The wait, not the flight, ran out of time. The extend runs on for everybody
+                    // still on it, and reporting no lease sends this caller down the fail-open or
+                    // fail-closed path its own timeout asked for.
+                    debug("An extend in flight for " + companyId + "/" + creditTypeId + " outlasted the caller's "
+                            + "timeout; not waiting on it");
+                    return null;
+                }
+                // The flight asked for at least what we need, which covers every watermark-driven
+                // joiner and any check the tranche fits. One wire call serves all of them, which
+                // is the point of single-flight. A flight that sent nothing covers nobody, so its
+                // ask does not stand in for ours.
+                if (inFlight.sentExtend && additionalAmount <= inFlight.requestedAdditional) {
+                    return joined;
+                }
+                // It asked for less than we need. Go round to re-read the slot it just moved, so
+                // the next ask is sized against the balance it left rather than the one this call
+                // started from.
+                continue;
+            }
+            return startExtend(
+                    key, companyId, creditTypeId, entry, resolved, requiredCredits, additionalAmount, timeout);
         }
-        if (!joinInFlight) {
-            // The slot is already being topped up and nobody is waiting on this call's result, so
-            // parking on that flight would hold a pool thread for a wire call whose outcome this
-            // caller does not read.
+    }
+
+    /**
+     * Registers this call as the slot's flight and sends its extend. The registration overwrites
+     * rather than yields: a caller arriving here has spent its joins on the flight it would be
+     * overwriting, so yielding to that flight again is the one thing it must not do.
+     * Deregistration is identity-guarded, so the overwritten flight cannot evict this one on its
+     * way out.
+     */
+    private LeaseState startExtend(
+            String key,
+            String companyId,
+            String creditTypeId,
+            LeaseState entry,
+            ResolvedLeaseConfig resolved,
+            Double requiredCredits,
+            double additionalAmount,
+            Duration timeout) {
+        Flight flight = new Flight(additionalAmount);
+        extendFlights.put(key, flight);
+        try {
+            // Re-read now that the slot's flight is ours. The row above was read before the
+            // flight check, so a previous extend can have landed and deregistered in between:
+            // that read says "below the mark" about a lease that has since been topped up, and
+            // sending on it bills a second tranche nobody needs.
+            LeaseState fresh = stillNeedsExtending(companyId, creditTypeId, requiredCredits, resolved);
+            if (fresh == null) {
+                return leases.get(companyId, creditTypeId);
+            }
+            flight.sentExtend = true;
+            LeaseState result = extend(fresh, resolved, additionalAmount, timeout);
+            flight.result.complete(result);
+            return result;
+        } catch (RuntimeException e) {
+            warn("Failed to extend credit lease " + entry.getLeaseId() + ": " + e);
             return null;
+        } finally {
+            // Completing here and not only on the two paths above: an Error unwinding past both
+            // would leave the future unfinished, and every joiner parks on it forever. A no-op
+            // once the success path has already completed it.
+            flight.result.complete(null);
+            // Identity-guarded rather than an unconditional remove: a caller that spent its joins
+            // registers a flight of its own for the same key, and this one must not evict it.
+            extendFlights.remove(key, flight);
         }
-        LeaseState joined = inFlight.await();
-        // The flight already asked for at least what we need, which covers every watermark-driven
-        // joiner and any check the tranche fits. One wire call serves all of them, which is the
-        // point of single-flight. A flight that sent nothing covers nobody, so its ask does not
-        // stand in for ours.
-        if ((inFlight.sentExtend && additionalAmount <= inFlight.requestedAdditional) || !allowFollowUp) {
-            return joined;
-        }
-        // Either our shortfall outran the flight's ask, or that flight decided against sending
-        // anything. We waited it out rather than racing a second extend onto the same lease, and
-        // now issue exactly one more, re-read against the slot as that flight left it. The
-        // follow-up is not allowed one of its own: a company whose balance simply cannot reach
-        // the request would otherwise spin.
-        return maybeExtend(companyId, creditTypeId, requiredCredits, false, true, timeout);
     }
 
     /**
@@ -361,10 +396,18 @@ public final class CreditLeaseManager implements AutoCloseable {
         // check calls this, and a lease sitting comfortably above its water mark is the common
         // case. Spawning first would queue a task per check onto an unbounded pool only to
         // discover there was nothing to do.
+        //
+        // The flight is tested first, and for the same reason. A slot stays below its water mark
+        // for as long as the top-up is on the wire, so every check allowed in that window would
+        // otherwise spawn a task that reads the store, finds the flight it must not join, and
+        // returns having done nothing.
+        if (extendFlights.containsKey(LeaseStore.leaseKey(companyId, creditTypeId))) {
+            return;
+        }
         if (!extendIsDue(companyId, creditTypeId)) {
             return;
         }
-        spawn(() -> maybeExtend(companyId, creditTypeId, null, true, false, null));
+        spawn(() -> maybeExtend(companyId, creditTypeId, null, false, null));
     }
 
     /** Whether the slot's lease has drawn down far enough to warrant a steady-state top-up. */
@@ -493,10 +536,9 @@ public final class CreditLeaseManager implements AutoCloseable {
      * without a reservation store or after {@link #stop()}.
      */
     public void startSweep() {
-        if (reservations == null || stopped || sweeping) {
+        if (reservations == null || stopped || !sweeping.compareAndSet(false, true)) {
             return;
         }
-        sweeping = true;
         long interval = Math.max(1, sweepInterval.toMillis());
         sweeper.scheduleWithFixedDelay(
                 () -> {
@@ -672,7 +714,7 @@ public final class CreditLeaseManager implements AutoCloseable {
     }
 
     /** One in-flight wire call for a slot, and the amount its extend asked the server for. */
-    private static final class Flight {
+    private final class Flight {
 
         private final double requestedAdditional;
         private final CompletableFuture<LeaseState> result = new CompletableFuture<>();
@@ -686,13 +728,31 @@ public final class CreditLeaseManager implements AutoCloseable {
             this.requestedAdditional = requestedAdditional;
         }
 
-        LeaseState await() {
+        boolean isDone() {
+            return result.isDone();
+        }
+
+        /**
+         * The flight's answer, waited for no longer than the joining caller's own deadline. The
+         * flight is shared, so a check that joins one someone else started would otherwise inherit
+         * a stranger's wire call and blow its timeout by however long that call runs. Abandoning
+         * the wait leaves the flight running for whoever else is on it, and the caller takes the
+         * failure path its mode chooses, the same as any other unresolved lease. Null timeout
+         * means the caller brought no deadline of its own.
+         */
+        LeaseState await(Duration timeout) {
             try {
-                return result.get();
+                return timeout == null
+                        ? result.get()
+                        : result.get(Math.max(1, timeout.toMillis()), TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return null;
             } catch (ExecutionException e) {
+                return null;
+            } catch (TimeoutException e) {
+                debug("Gave up waiting " + timeout.toMillis() + "ms on an in-flight credit lease call; it "
+                        + "continues for the callers still on it");
                 return null;
             }
         }

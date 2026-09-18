@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
@@ -72,20 +73,45 @@ class PrewarmCompanyResolverTest {
     }
 
     @Test
-    void anIdOnTheKeysNeedsNoResolution() {
-        AtomicInteger reads = new AtomicInteger();
+    void aKeyNamedIdIsLookedUpLikeAnyOtherKey() {
+        Map<String, String> keys = Collections.singletonMap("id", "acme");
+        AtomicReference<Map<String, String>> lookedUp = new AtomicReference<>();
 
         String id = resolve(
-                Collections.singletonMap("id", "co_9"),
-                keys -> {
-                    reads.incrementAndGet();
+                keys,
+                cachedKeys -> {
+                    lookedUp.set(cachedKeys);
                     return company();
                 },
                 NOT_CACHED,
                 Duration.ofSeconds(5));
 
-        assertEquals("co_9", id);
-        assertEquals(0, reads.get());
+        // An account is free to define an entity key called `id` holding its own identifier, so
+        // the lookup settles this, not the name of the key.
+        assertEquals("co_1", id);
+        assertEquals(keys, lookedUp.get());
+    }
+
+    @Test
+    void aLookupThatFindsNothingFallsBackToAPrefixedValueUnderAnyKeyName() {
+        String id = resolve(Collections.singletonMap("account_id", "comp_1"), NOT_CACHED, NOT_CACHED, Duration.ZERO);
+
+        assertEquals("comp_1", id);
+    }
+
+    @Test
+    void aLookupThatFindsNothingAndCarriesNoSchematicIdResolvesNothing() {
+        String id = resolve(Collections.singletonMap("id", "acme"), NOT_CACHED, NOT_CACHED, Duration.ZERO);
+
+        assertNull(id);
+    }
+
+    @Test
+    void aFetchThatNeverAnswersStillFallsBackToAPrefixedValue() {
+        String id = resolve(
+                Collections.singletonMap("account_id", "comp_1"), NOT_CACHED, keys -> null, Duration.ofMillis(20));
+
+        assertEquals("comp_1", id);
     }
 
     @Test

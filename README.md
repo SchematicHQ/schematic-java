@@ -250,11 +250,11 @@ if (result.getReservation() != null) {
 
 A check can allow without reserving credits, when the feature is not credit-metered, when `usage` is 0, or when the check failed open, and that usage still has to be tracked.
 
-`usage` may be fractional. A client-mode reservation holds it unrounded, as does the ledger debit a settle makes. The integer fields on the wire round up: the preflight quantity and the quantity a track event bills, so a partial unit is never billed as none.
+`usage` may be fractional, but credits are always sized in whole event units: a client-mode reservation records the fractional quantity, while the hold it takes and the debit its settle makes are both `ceil(usage) x consumption rate`, so the local ledger moves by exactly what the track event bills. The integer fields on the wire round up for the same reason: the preflight quantity and the quantity a track event bills, so a partial unit is never billed as none.
 
 `usage` still gates a check that reserves nothing: it is sent as a preflight, locally or to the API, so the verdict accounts for what the call is about to spend. Preflighted verdicts are not cached.
 
-`CheckOptions.timeout` bounds every call a check waits on: the check-and-reserve call in server mode, the REST flag check a check can fall back to, and the client-mode lease acquire and extend. Lease calls are shared between concurrent checks, so the timeout of whichever check opened the call governs the ones that join it, and background top-ups keep the client's own timeout.
+`CheckOptions.timeout` bounds every call a check waits on: the check-and-reserve call in server mode, the REST flag check a check can fall back to, and the client-mode lease acquire and extend. Lease calls are shared between concurrent checks, and a check that joins one somebody else opened waits no longer than its own timeout before giving up and taking its failure path, leaving that call running for the checks still on it. Background top-ups keep the client's own timeout.
 
 An unsettled reservation expires after `defaultReservationTtl` and its credits return to the lease. A late settle still bills the usage, since the track event carries a deterministic idempotency key that keeps it from double-billing, but it does not re-debit the local lease. Set `defaultReservationTtl` above the longest expected gap between the check and the settle.
 
@@ -288,6 +288,8 @@ schematic.identify(
 Identifying with a prewarm flushes the event buffer first, so the server has the company before the warm-up asks for a lease against it. That makes it a session-start call, not one to put on every event.
 
 Or call `schematic.prewarm(companyKeys, creditTypeIds)` directly. Both are no-ops in server mode.
+
+Pre-warming resolves the company the way the server does: it looks the keys up first, whatever they are named, and only when nothing matches does it read a value carrying Schematic's `comp_` prefix as the company id.
 
 ### Failure behavior
 

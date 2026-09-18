@@ -21,10 +21,35 @@ import java.util.function.Function;
  */
 public final class PrewarmCompanyResolver {
 
+    /** Prefix Schematic's company secure ids carry, whatever key name they are passed under. */
+    public static final String COMPANY_ID_PREFIX = "comp_";
+
     private PrewarmCompanyResolver() {}
 
     /**
-     * Returns the company id, or null when it does not surface in time.
+     * The Schematic id hiding among a set of entity keys, recognised by its secure-id prefix. The
+     * server reads keys this way once its own key lookup has come up empty, so
+     * {@code {account_id: "comp_1"}} resolves and {@code {id: "acme"}} does not: the prefix
+     * decides, not the name of the key the value arrived under.
+     */
+    public static String schematicId(Map<String, String> keys, String prefix) {
+        if (keys == null) {
+            return null;
+        }
+        for (String value : keys.values()) {
+            if (value != null && value.startsWith(prefix)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the company id, resolved in the server's order: every supplied key/value pair is an
+     * ordinary entity key and gets looked up first, and only when nothing matches is a value read
+     * as the company's own id, by its {@code comp_} prefix. An account is free to define a key
+     * called {@code id} holding its own identifier, so the name alone settles nothing. Null when
+     * the keys never resolve and carry no Schematic id.
      *
      * @param keys the caller's company keys
      * @param cached reads the company from the local cache only
@@ -45,10 +70,6 @@ public final class PrewarmCompanyResolver {
         if (keys == null || keys.isEmpty()) {
             return null;
         }
-        String id = keys.get("id");
-        if (id != null && !id.isEmpty()) {
-            return id;
-        }
         try {
             RulesengineCompany hit = cached.apply(keys);
             if (hit != null) {
@@ -62,7 +83,7 @@ public final class PrewarmCompanyResolver {
         // A zero timeout is cache-only, not a refusal: the caller asked not to wait on the wire,
         // and the cache has already answered above.
         if (timeout == null || timeout.toMillis() <= 0) {
-            return null;
+            return schematicId(keys, COMPANY_ID_PREFIX);
         }
 
         // Retry across the brief connecting window at boot. A new company needs the preceding
@@ -84,7 +105,7 @@ public final class PrewarmCompanyResolver {
                 }
                 long remaining = deadline - System.nanoTime();
                 if (remaining <= 0) {
-                    return null;
+                    return schematicId(keys, COMPANY_ID_PREFIX);
                 }
                 Future<RulesengineCompany> pending = fetcher.submit(() -> fetch.apply(keys));
                 try {
@@ -94,7 +115,7 @@ public final class PrewarmCompanyResolver {
                     }
                 } catch (TimeoutException e) {
                     pending.cancel(true);
-                    return null;
+                    return schematicId(keys, COMPANY_ID_PREFIX);
                 } catch (ExecutionException e) {
                     onFetchError.apply(asRuntime(e.getCause()));
                 } catch (InterruptedException e) {
@@ -102,7 +123,9 @@ public final class PrewarmCompanyResolver {
                     return null;
                 }
                 if (System.nanoTime() >= deadline) {
-                    return null;
+                    // The keys never resolved, so fall back to a comp_ value the way the server
+                    // does once its own key lookup comes up empty.
+                    return schematicId(keys, COMPANY_ID_PREFIX);
                 }
                 try {
                     Thread.sleep(pollInterval.toMillis());
