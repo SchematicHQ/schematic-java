@@ -1,10 +1,11 @@
 package com.schematic.api.credits;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.schematic.api.core.ObjectMappers;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -291,14 +292,17 @@ public final class RedisReservationStore implements ReservationStore {
     }
 
     private static Reservation decode(Map<String, String> raw) {
-        Map<String, Map<String, String>> ctx = Collections.emptyMap();
+        // Read field by field rather than binding the whole object to a map of string maps. The
+        // SDKs write the check's request body here, which carries more than company and user, so
+        // one sibling adding a field would otherwise fail the whole bind and silently drop the
+        // entity keys a recovered hold needs to bill its usage.
+        JsonNode ctx = null;
         String encoded = raw.get("evalCtx");
         if (encoded != null && !encoded.isEmpty()) {
             try {
-                ctx = ObjectMappers.JSON_MAPPER.readValue(
-                        encoded, new TypeReference<Map<String, Map<String, String>>>() {});
+                ctx = ObjectMappers.JSON_MAPPER.readTree(encoded);
             } catch (Exception e) {
-                ctx = Collections.emptyMap();
+                ctx = null;
             }
         }
         return new Reservation(
@@ -312,8 +316,28 @@ public final class RedisReservationStore implements ReservationStore {
                 CreditAmounts.parse(raw.get("creditsReserved"), 0),
                 CreditAmounts.parse(raw.get("consumptionRate"), 0),
                 Instant.ofEpochMilli((long) CreditAmounts.parse(raw.get("expiresAt"), 0)),
-                ctx.get("company"),
-                ctx.get("user"));
+                entityKeys(ctx, "company"),
+                entityKeys(ctx, "user"));
+    }
+
+    /** One entity's keys out of a decoded eval context, null when it carries none. */
+    private static Map<String, String> entityKeys(JsonNode ctx, String field) {
+        if (ctx == null) {
+            return null;
+        }
+        JsonNode node = ctx.get(field);
+        if (node == null || !node.isObject()) {
+            return null;
+        }
+        Map<String, String> keys = new LinkedHashMap<>();
+        Iterator<Map.Entry<String, JsonNode>> fields = node.fields();
+        while (fields.hasNext()) {
+            Map.Entry<String, JsonNode> entry = fields.next();
+            if (entry.getValue().isTextual()) {
+                keys.put(entry.getKey(), entry.getValue().asText());
+            }
+        }
+        return keys;
     }
 
     private static void ignoringFailures(Runnable step) {

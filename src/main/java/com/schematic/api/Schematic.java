@@ -826,6 +826,10 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      * leaves no client behind, and the checks that follow gate server-side instead of silently
      * dropping to a plain, ungated flag check. A DataStream that is merely disconnected stays in
      * client mode and degrades through the plain check, which has its own story for that.
+     *
+     * <p>A loaded rules engine is part of that readiness. Without one, every local evaluation
+     * throws, so a client-mode check would fall through to a plain flag check that takes no hold
+     * and debits nothing: credits handed out ungated for as long as the engine is missing.
      */
     private CreditLeaseMode effectiveLeaseMode() {
         if (creditLeaseMode == null || offline) {
@@ -835,7 +839,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             return creditLeaseMode;
         }
         boolean clientPlumbingReady = creditCheck != null && leaseStore != null && reservations != null;
-        return dataStreamClient != null && clientPlumbingReady ? CreditLeaseMode.CLIENT : CreditLeaseMode.SERVER;
+        boolean localEvaluationReady = dataStreamClient != null && dataStreamClient.hasRulesEngine();
+        return localEvaluationReady && clientPlumbingReady ? CreditLeaseMode.CLIENT : CreditLeaseMode.SERVER;
     }
 
     /**

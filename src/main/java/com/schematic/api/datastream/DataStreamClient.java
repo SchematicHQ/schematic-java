@@ -174,6 +174,14 @@ public class DataStreamClient implements Closeable {
     }
 
     /**
+     * Returns whether a rules engine is loaded and able to evaluate locally. False when the WASM
+     * engine failed to load, where every local evaluation throws and checks fall back to the API.
+     */
+    public boolean hasRulesEngine() {
+        return rulesEngine != null && rulesEngine.isInitialized();
+    }
+
+    /**
      * Returns whether this client is running in replicator mode.
      */
     public boolean isReplicatorMode() {

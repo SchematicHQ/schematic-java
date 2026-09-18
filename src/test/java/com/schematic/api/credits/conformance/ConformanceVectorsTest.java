@@ -1,5 +1,6 @@
 package com.schematic.api.credits.conformance;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -429,11 +430,18 @@ class ConformanceVectorsTest {
         double credits = op.get("credits").asDouble();
         if (op.has("crash_before_refund") && op.get("crash_before_refund").asBoolean()) {
             h.backend.crash.arm();
-            assertThrows(
-                    CrashingRefundLeaseStore.SimulatedCrash.class,
-                    () -> h.backend.reservations.consume(id, credits),
-                    "consume_reservation should have crashed before the refund");
-            assertTrue(expect.get("throws").asBoolean(), "consume_reservation throws");
+            // Driven by the vector rather than asserting the vector back at itself, which would
+            // pass whatever it said and break on a vector that omits the key.
+            if (expect.has("throws") && expect.get("throws").asBoolean()) {
+                assertThrows(
+                        CrashingRefundLeaseStore.SimulatedCrash.class,
+                        () -> h.backend.reservations.consume(id, credits),
+                        "consume_reservation should have crashed before the refund");
+            } else {
+                assertDoesNotThrow(
+                        () -> h.backend.reservations.consume(id, credits),
+                        "consume_reservation should not have crashed");
+            }
             return;
         }
         Double consumed = h.backend.reservations.consume(id, credits);
@@ -560,11 +568,9 @@ class ConformanceVectorsTest {
             assertEquals(want.get("event").asText(), track.getEvent(), "track event");
         }
         if (want.has("quantity")) {
-            // The vector states the caller's actual usage, which can be fractional. This SDK's
-            // event quantity is an integer on the wire, so a partial unit bills as the whole one
-            // the hold and the debit were already sized for.
-            long quantity = (long) Math.ceil(want.get("quantity").asDouble());
-            assertEquals(quantity, track.getQuantity().orElse(null), "track quantity");
+            // Asserted exactly as the vector states it. Rounding the expectation here would let a
+            // vector that states a fractional quantity pass in this SDK and fail in the others.
+            assertEquals(want.get("quantity").asLong(), track.getQuantity().orElse(null), "track quantity");
         }
         if (want.has("lease_id")) {
             assertEquals(want.get("lease_id").asText(), track.getLeaseId().orElse(null), "track lease_id");

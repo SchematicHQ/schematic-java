@@ -55,10 +55,17 @@ class CreditLeaseManagerShutdownTest {
     /** Grants a fixed lease, and takes its time handing one back. */
     private static final class SlowWire implements LeaseWireClient {
         private final long releaseMillis;
+        // The lease whose release never returns, standing in for a hung connection.
+        private final String hangsOn;
         final List<String> released = Collections.synchronizedList(new ArrayList<>());
 
         SlowWire(long releaseMillis) {
+            this(releaseMillis, null);
+        }
+
+        SlowWire(long releaseMillis, String hangsOn) {
             this.releaseMillis = releaseMillis;
+            this.hangsOn = hangsOn;
         }
 
         @Override
@@ -74,7 +81,7 @@ class CreditLeaseManagerShutdownTest {
         @Override
         public void release(String leaseId) {
             try {
-                Thread.sleep(releaseMillis);
+                Thread.sleep(leaseId.equals(hangsOn) ? Long.MAX_VALUE : releaseMillis);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -155,10 +162,11 @@ class CreditLeaseManagerShutdownTest {
     }
 
     @Test
-    void shuttingDownStaysInsideItsBudgetWithManySlotsAndASlowWire() {
+    void shuttingDownStaysInsideItsBudgetWithManySlotsAndASlowWire() throws Exception {
         InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
         InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
-        SlowWire wire = new SlowWire(100);
+        // One lease whose release never comes back, and forty-nine that take 100ms each.
+        SlowWire wire = new SlowWire(100, "lse_0");
         CreditLeaseManager manager = new CreditLeaseManager(
                 wire, leases, holds, CreditLeaseConfig.builder().build(), null, CLOCK);
         for (int i = 0; i < 50; i++) {
@@ -166,15 +174,18 @@ class CreditLeaseManagerShutdownTest {
         }
 
         long startedAt = System.nanoTime();
-        manager.releaseAllLocalLeases(Duration.ofMillis(300));
+        manager.releaseAllLocalLeases(Duration.ofSeconds(2));
         manager.close(Duration.ofMillis(100));
         long tookMillis = (System.nanoTime() - startedAt) / 1_000_000;
 
-        // Releasing all fifty in turn is five seconds of shutdown. A caller that asked for a
-        // bounded close gets one, and the leases left behind expire server-side.
-        assertTrue(tookMillis < 2000, "shutdown took " + tookMillis + "ms");
-        assertFalse(wire.released.isEmpty());
-        assertTrue(wire.released.size() < 50, "released " + wire.released.size() + " of 50");
+        // Releasing all fifty in turn is five seconds of shutdown, and one hung release would
+        // spend the whole budget on its own. Issued together, the budget bounds the set: the
+        // forty-nine land and the hung one is left to server-side expiry.
+        assertTrue(tookMillis < 4000, "shutdown took " + tookMillis + "ms");
+        assertFalse(wire.released.contains("lse_0"), "the hung release should not have landed");
+        for (int i = 1; i < 50; i++) {
+            assertTrue(wire.released.contains("lse_" + i), "lse_" + i + " was never released");
+        }
     }
 
     @Test
