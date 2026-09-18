@@ -96,7 +96,10 @@ public final class Reservation {
         return quantityReserved;
     }
 
-    /** {@code quantityReserved * consumptionRate}. */
+    /**
+     * {@code ceil(quantityReserved) * consumptionRate}. Whole event units, since a fraction of an
+     * event is not something the server bills, so this is what the settle will charge.
+     */
     public double getCreditsReserved() {
         return creditsReserved;
     }

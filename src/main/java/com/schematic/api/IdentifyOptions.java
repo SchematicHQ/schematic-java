@@ -1,6 +1,7 @@
 package com.schematic.api;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +40,9 @@ public final class IdentifyOptions {
      * configured on the client.
      */
     public List<String> getPrewarm() {
-        return prewarm;
+        // Unmodifiable for the same reason the constructor copies: the prewarm this list drives
+        // runs after identify returns, and a caller editing it in between would move the work.
+        return prewarm == null ? null : Collections.unmodifiableList(prewarm);
     }
 
     public static final class Builder {
