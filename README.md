@@ -211,7 +211,7 @@ import java.time.Duration;
 Schematic schematic = Schematic.builder()
     .apiKey("YOUR_API_KEY")
     .creditLeases(CreditLeaseConfig.builder()
-        .defaultReservationTtl(Duration.ofSeconds(60))      // at most one hour, which is as far out as the API will hold credits
+        .defaultReservationTtl(Duration.ofSeconds(60))      // just under an hour at most, which is as far out as the API will reserve credits
         .build())
     .build();
 ```
@@ -250,7 +250,7 @@ if (result.getReservation() != null) {
 
 A check can allow without reserving credits, when the feature is not credit-metered, when `usage` is 0, or when the check failed open, and that usage still has to be tracked.
 
-`usage` may be fractional, but credits are always sized in whole event units: a client-mode reservation records the fractional quantity, while the hold it takes and the debit its settle makes are both `ceil(usage) x consumption rate`, so the local ledger moves by exactly what the track event bills. The integer fields on the wire round up for the same reason: the preflight quantity and the quantity a track event bills, so a partial unit is never billed as none.
+`usage` may be fractional, but credits are always sized in whole event units: a client-mode reservation records the fractional quantity, while the credits it reserves and the debit its settle makes are both `ceil(usage) x consumption rate`, so the local ledger moves by exactly what the track event bills. The integer fields on the wire round up for the same reason: the preflight quantity and the quantity a track event bills, so a partial unit is never billed as none.
 
 `usage` still gates a check that reserves nothing: it is sent as a preflight, locally or to the API, so the verdict accounts for what the call is about to spend. Preflighted verdicts are not cached.
 

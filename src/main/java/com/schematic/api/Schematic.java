@@ -176,6 +176,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         CreditLeaseManager manager = null;
         CreditCheck check = null;
         boolean sharedBackend = false;
+        // A DataStream alone is not enough to gate locally: without a loaded engine every
+        // evaluation throws and a client-mode check falls through to a plain, ungated one.
+        boolean localGatingReady = this.dataStreamClient != null && this.dataStreamClient.hasRulesEngine();
         if (creditLeases != null && !this.offline) {
             mode = creditLeases.getMode() != null ? creditLeases.getMode() : CreditLeaseMode.AUTO;
             Duration configuredTtl = creditLeases.getDefaultReservationTtl() != null
@@ -199,7 +202,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
             // Server mode holds credits over the API, so none of the local plumbing is built and
             // the options that only steer it would silently do nothing. Say so once, at startup.
-            if (mode == CreditLeaseMode.SERVER || (mode == CreditLeaseMode.AUTO && this.dataStreamClient == null)) {
+            if (mode == CreditLeaseMode.SERVER || (mode == CreditLeaseMode.AUTO && !localGatingReady)) {
                 String clientOnly = clientOnlyOptions(creditLeases);
                 if (!clientOnly.isEmpty()) {
                     this.logger.warn("creditLeases resolves to server mode, so " + clientOnly
@@ -224,8 +227,10 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                         + "the engine is available");
             }
         }
-        boolean usesLeases =
-                mode == CreditLeaseMode.CLIENT || (mode == CreditLeaseMode.AUTO && this.dataStreamClient != null);
+        // The same readiness auto resolves on, so the stores, the manager and its sweeper are
+        // built exactly when a check will gate against them. Building them for an auto client
+        // that resolves to server mode leaves a sweeper polling an index nothing writes to.
+        boolean usesLeases = mode == CreditLeaseMode.CLIENT || (mode == CreditLeaseMode.AUTO && localGatingReady);
         if (creditLeases != null && !this.offline && usesLeases) {
             // Lease and hold state belongs in a shared cache so gating holds across horizontally
             // scaled pods. An explicit client wins; otherwise reuse the one the DataStream caches
