@@ -9,6 +9,7 @@ import com.schematic.api.types.RulesengineFeatureEntitlement;
 import com.schematic.api.types.RulesengineFlag;
 import com.schematic.api.types.RulesengineUser;
 import java.time.Clock;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -176,13 +177,31 @@ public final class CreditCheck {
             return fallBack(fallback);
         }
 
-        double creditCost = request.getUsage() * consumptionRate;
+        // Sized from the quantity the settle will bill, not the raw usage: the track event's
+        // quantity is an integer, so a fractional usage settles as a whole unit. Holding the
+        // fraction would under-reserve every fractional check by the difference.
+        double reservedQuantity = ReservationSettlement.settleQuantity(request.getUsage());
+        double creditCost = reservedQuantity * consumptionRate;
         String companyId = company.getId();
         String userId = user == null ? null : user.getId();
 
         LeaseState lease = manager.acquireIfNeeded(companyId, creditId);
         if (lease == null) {
             return failure(request, "lease_acquire_failed", flag, company, user, creditId, companyId, userId);
+        }
+
+        // Resolved before the debit, not after it. Each of these can throw, and between the debit
+        // and the record that pins it there is nothing to refund a stranded slice: it would sit on
+        // the lease until expiry with no hold naming it.
+        String reservationId;
+        Instant expiresAt;
+        try {
+            ResolvedLeaseConfig resolved = manager.resolveConfig(creditId);
+            reservationId = reservationIds.get();
+            expiresAt = clock.instant().plus(resolved.getReservationTtl());
+        } catch (RuntimeException e) {
+            error("Lease check: could not prepare a reservation for " + companyId + "/" + creditId + ": " + e);
+            return failure(request, "lease_store_error", flag, company, user, creditId, companyId, userId);
         }
 
         // tryReserve is the atomic gate: check and debit in one step, returning the post-debit
@@ -223,9 +242,8 @@ public final class CreditCheck {
         // add leaks at most this one hold, reclaimed when the lease expires server-side; recording
         // first would instead leave a record with no debit, which a later consume would refund
         // into a double-spend.
-        ResolvedLeaseConfig resolved = manager.resolveConfig(creditId);
         Reservation reservation = new Reservation(
-                reservationIds.get(),
+                reservationId,
                 // The lease the debit came out of, which the slot may have taken on since the
                 // acquire above: the window between them spans the extend's network call. A hold
                 // pinned to the lease the acquire returned would have its refunds dropped and
@@ -235,10 +253,10 @@ public final class CreditCheck {
                 companyId,
                 creditId,
                 eventSubtype,
-                request.getUsage(),
+                reservedQuantity,
                 creditCost,
                 consumptionRate,
-                clock.instant().plus(resolved.getReservationTtl()),
+                expiresAt,
                 request.getCompany(),
                 request.getUser());
         try {

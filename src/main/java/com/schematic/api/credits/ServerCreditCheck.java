@@ -85,7 +85,10 @@ public final class ServerCreditCheck {
         }
 
         CheckAndReserveFlagRequestBody.Builder body = CheckAndReserveFlagRequestBody.builder()
-                .quantity(request.getUsage())
+                // The quantity the settle will bill, not the raw usage: the track event's
+                // quantity is an integer, so a fractional usage settles as a whole unit and a
+                // hold sized from the fraction would come up short.
+                .quantity((double) ReservationSettlement.settleQuantity(request.getUsage()))
                 .expiresAt(OffsetDateTime.ofInstant(clock.instant().plus(reservationTtl), ZoneOffset.UTC));
         if (!request.getCompany().isEmpty()) {
             body.company(request.getCompany());
@@ -104,7 +107,7 @@ public final class ServerCreditCheck {
         body.idempotencyKey(UUID.randomUUID().toString());
         RequestOptions.Builder options = RequestOptions.builder();
         if (timeout != null) {
-            options.timeout((int) timeout.toMillis(), TimeUnit.MILLISECONDS);
+            options.timeout(CreditAmounts.millisAsInt(timeout), TimeUnit.MILLISECONDS);
         }
 
         CheckAndReserveFlagResponseData data;

@@ -52,6 +52,10 @@ public final class CreditLeaseManager implements AutoCloseable {
     private final ExecutorService executor;
     private final ScheduledExecutorService sweeper;
     private volatile boolean stopped;
+    // Held across the flag write in stop() and the re-check an acquire makes once it owns the
+    // slot's flight, which is what stops a lease landing in a slot close() has already swept.
+    private final Object stopLock = new Object();
+    private volatile boolean sweeping;
 
     public CreditLeaseManager(
             LeaseWireClient wire,
@@ -126,6 +130,19 @@ public final class CreditLeaseManager implements AutoCloseable {
             return raced.await();
         }
         try {
+            boolean stoppedInTheGap;
+            synchronized (stopLock) {
+                // Under the lock stop() takes, so this either sees the stop or provably ran
+                // before it. The check at the top of the method can go stale between there and
+                // here, and a lease installed past that point is one close() has already finished
+                // looking for.
+                stoppedInTheGap = stopped;
+            }
+            if (stoppedInTheGap) {
+                debug("Not acquiring a credit lease for " + companyId + "/" + creditTypeId
+                        + ": the manager stopped while the flight was being registered");
+                return null;
+            }
             LeaseState result = acquire(companyId, creditTypeId);
             flight.result.complete(result);
             return result;
@@ -174,6 +191,14 @@ public final class CreditLeaseManager implements AutoCloseable {
         if (wrote) {
             debug("Acquired credit lease " + grant.getLeaseId() + " for " + companyId + "/" + creditTypeId
                     + " (granted=" + grant.getGrantedAmount() + ", expires=" + grant.getExpiresAt() + ")");
+            if (stopped) {
+                // The stop landed while this lease was on the wire, so the close has already
+                // swept the slots and will not come back for this one. Hand it back here, on this
+                // thread: the drain does not wait on caller-thread acquires, so there is nobody
+                // else left to do it. Only a lease this call installed, never one a sibling put
+                // in the slot.
+                return releaseAfterStop(companyId, creditTypeId, current);
+            }
             return current;
         }
 
@@ -218,11 +243,15 @@ public final class CreditLeaseManager implements AutoCloseable {
      * ask and fail its post-extend retry with credits still sitting on the server.
      */
     public LeaseState maybeExtend(String companyId, String creditTypeId, Double requiredCredits) {
-        return maybeExtend(companyId, creditTypeId, requiredCredits, true);
+        return maybeExtend(companyId, creditTypeId, requiredCredits, true, true);
     }
 
     private LeaseState maybeExtend(
-            String companyId, String creditTypeId, Double requiredCredits, boolean allowFollowUp) {
+            String companyId,
+            String creditTypeId,
+            Double requiredCredits,
+            boolean allowFollowUp,
+            boolean joinInFlight) {
         if (stopped) {
             // Extending past stop re-holds credits on a lease the close is about to release, or
             // has already released.
@@ -245,8 +274,7 @@ public final class CreditLeaseManager implements AutoCloseable {
             return null;
         }
         ResolvedLeaseConfig resolved = resolveConfig(creditTypeId);
-        double ratio = entry.getLocalRemainingCredits() / Math.max(entry.getGrantedAmount(), 1);
-        boolean belowWatermark = ratio <= resolved.getLowWaterMark();
+        boolean belowWatermark = atOrBelowWatermark(entry, resolved);
         boolean belowRequired = requiredCredits != null && entry.getLocalRemainingCredits() < requiredCredits;
         if (!belowWatermark && !belowRequired) {
             return entry;
@@ -267,7 +295,15 @@ public final class CreditLeaseManager implements AutoCloseable {
             Flight raced = extendFlights.putIfAbsent(key, flight);
             if (raced == null) {
                 try {
-                    LeaseState result = extend(entry, resolved, additionalAmount);
+                    // Re-read now that the slot's flight is ours. The row above was read before
+                    // the flight check, so a previous extend can have landed and deregistered in
+                    // between: that read says "below the mark" about a lease that has since been
+                    // topped up, and sending on it bills a second tranche nobody needs.
+                    LeaseState fresh = stillNeedsExtending(companyId, creditTypeId, requiredCredits, resolved);
+                    if (fresh == null) {
+                        return leases.get(companyId, creditTypeId);
+                    }
+                    LeaseState result = extend(fresh, resolved, additionalAmount);
                     flight.result.complete(result);
                     return result;
                 } catch (RuntimeException e) {
@@ -286,6 +322,12 @@ public final class CreditLeaseManager implements AutoCloseable {
             }
             inFlight = raced;
         }
+        if (!joinInFlight) {
+            // The slot is already being topped up and nobody is waiting on this call's result, so
+            // parking on that flight would hold a pool thread for a wire call whose outcome this
+            // caller does not read.
+            return null;
+        }
         LeaseState joined = inFlight.await();
         // The flight already asked for at least what we need, which covers every watermark-driven
         // joiner and any check the tranche fits. One wire call serves all of them, which is the
@@ -297,7 +339,7 @@ public final class CreditLeaseManager implements AutoCloseable {
         // extend onto the same lease, and now top up the difference with exactly one more,
         // re-read against the slot that flight just moved. The follow-up is not allowed one of
         // its own: a company whose balance simply cannot reach the request would otherwise spin.
-        return maybeExtend(companyId, creditTypeId, requiredCredits, false);
+        return maybeExtend(companyId, creditTypeId, requiredCredits, false, true);
     }
 
     /**
@@ -305,7 +347,49 @@ public final class CreditLeaseManager implements AutoCloseable {
      * should not pay for the top-up.
      */
     public void extendInBackground(String companyId, String creditTypeId) {
-        spawn(() -> maybeExtend(companyId, creditTypeId, null));
+        // Tested here, on the caller's thread, rather than inside the spawned task: every allowed
+        // check calls this, and a lease sitting comfortably above its water mark is the common
+        // case. Spawning first would queue a task per check onto an unbounded pool only to
+        // discover there was nothing to do.
+        if (!extendIsDue(companyId, creditTypeId)) {
+            return;
+        }
+        spawn(() -> maybeExtend(companyId, creditTypeId, null, true, false));
+    }
+
+    /** Whether the slot's lease has drawn down far enough to warrant a steady-state top-up. */
+    private boolean extendIsDue(String companyId, String creditTypeId) {
+        if (stopped) {
+            return false;
+        }
+        LeaseState entry;
+        try {
+            entry = leases.get(companyId, creditTypeId);
+        } catch (RuntimeException e) {
+            warn("Failed to read lease store for " + companyId + "/" + creditTypeId + ": " + e);
+            return false;
+        }
+        return entry != null && entry.isLiveAt(now()) && atOrBelowWatermark(entry, resolveConfig(creditTypeId));
+    }
+
+    /**
+     * The slot's row if it still warrants the extend the caller sized, null if it no longer does.
+     * Read after winning the flight, so it reflects any extend that landed while this caller was
+     * deciding.
+     */
+    private LeaseState stillNeedsExtending(
+            String companyId, String creditTypeId, Double requiredCredits, ResolvedLeaseConfig resolved) {
+        LeaseState fresh = leases.get(companyId, creditTypeId);
+        if (fresh == null || !fresh.isLiveAt(now())) {
+            return null;
+        }
+        boolean belowRequired = requiredCredits != null && fresh.getLocalRemainingCredits() < requiredCredits;
+        return atOrBelowWatermark(fresh, resolved) || belowRequired ? fresh : null;
+    }
+
+    private static boolean atOrBelowWatermark(LeaseState entry, ResolvedLeaseConfig resolved) {
+        double ratio = entry.getLocalRemainingCredits() / Math.max(entry.getGrantedAmount(), 1);
+        return ratio <= resolved.getLowWaterMark();
     }
 
     private LeaseState extend(LeaseState entry, ResolvedLeaseConfig resolved, double additionalAmount) {
@@ -398,9 +482,10 @@ public final class CreditLeaseManager implements AutoCloseable {
      * without a reservation store or after {@link #stop()}.
      */
     public void startSweep() {
-        if (reservations == null || stopped) {
+        if (reservations == null || stopped || sweeping) {
             return;
         }
+        sweeping = true;
         long interval = Math.max(1, sweepInterval.toMillis());
         sweeper.scheduleWithFixedDelay(
                 () -> {
@@ -422,8 +507,34 @@ public final class CreditLeaseManager implements AutoCloseable {
      * makes the drain terminate, since nothing can queue behind it.
      */
     public void stop() {
-        stopped = true;
+        synchronized (stopLock) {
+            stopped = true;
+        }
         sweeper.shutdownNow();
+    }
+
+    /**
+     * Hands back a lease that landed after the close had already swept the slots, and clears the
+     * slot so nothing draws on it.
+     *
+     * <p>Best-effort: a failed release leaves the credits to expire server-side, which is where a
+     * lease nobody releases ends up anyway.
+     */
+    private LeaseState releaseAfterStop(String companyId, String creditTypeId, LeaseState installed) {
+        debug("Releasing credit lease " + installed.getLeaseId() + " for " + companyId + "/" + creditTypeId
+                + ": the manager stopped while the acquire was on the wire");
+        try {
+            wire.release(installed.getLeaseId());
+        } catch (RuntimeException e) {
+            warn("Failed to release credit lease " + installed.getLeaseId() + " after stop (it will expire "
+                    + "server-side): " + e);
+        }
+        try {
+            leases.drop(companyId, creditTypeId);
+        } catch (RuntimeException e) {
+            warn("Failed to clear credit lease slot " + companyId + "/" + creditTypeId + " after stop: " + e);
+        }
+        return null;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.schematic.api.credits;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.schematic.api.types.RulesengineCompany;
 import java.time.Duration;
@@ -103,5 +104,47 @@ class PrewarmCompanyResolverTest {
         String id = resolve(KEYS, NOT_CACHED, keys -> null, Duration.ofMillis(20));
 
         assertNull(id);
+    }
+
+    @Test
+    void aCacheThatThrowsIsAMissRatherThanAFailedPrewarm() {
+        AtomicInteger fetches = new AtomicInteger();
+
+        String id = resolve(
+                KEYS,
+                keys -> {
+                    throw new IllegalStateException("the cache is down");
+                },
+                keys -> {
+                    fetches.incrementAndGet();
+                    return company();
+                },
+                Duration.ofMillis(200));
+
+        assertEquals("co_1", id);
+        assertEquals(1, fetches.get());
+    }
+
+    @Test
+    void aFetchThatHangsIsBoundedByTheResolveTimeout() {
+        long startedAt = System.nanoTime();
+        String id = resolve(
+                KEYS,
+                NOT_CACHED,
+                keys -> {
+                    try {
+                        Thread.sleep(30_000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                    return company();
+                },
+                Duration.ofMillis(100));
+        long tookMillis = (System.nanoTime() - startedAt) / 1_000_000;
+
+        // The timeout bounds the fetch itself, not just the gaps between attempts: one call that
+        // never answers would otherwise hold the prewarm past every deadline the caller set.
+        assertNull(id);
+        assertTrue(tookMillis < 5000, "the resolve took " + tookMillis + "ms");
     }
 }

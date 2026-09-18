@@ -1,6 +1,7 @@
 package com.schematic.api.credits;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 
 /** Credit-amount helpers shared by the stores and the check flows. */
 public final class CreditAmounts {
@@ -43,6 +44,16 @@ public final class CreditAmounts {
             return 0;
         }
         return Math.min(creditsConsumed, creditsReserved);
+    }
+
+    /**
+     * A duration as the milliseconds an int-typed request option takes, clamped to the widest it
+     * can hold. Casting alone wraps anything past the int range into a negative, which the
+     * transport reads as an instant timeout: the opposite of the long wait the caller asked for.
+     */
+    public static int millisAsInt(Duration timeout) {
+        long millis = timeout.toMillis();
+        return millis > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) millis;
     }
 
     private CreditAmounts() {}

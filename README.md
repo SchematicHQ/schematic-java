@@ -248,6 +248,8 @@ if (result.getReservation() != null) {
 
 A check can allow without reserving credits, when the feature is not credit-metered, when `usage` is 0, or when the check failed open, and that usage still has to be tracked.
 
+A fractional `usage` is rounded up to a whole unit. The track event's quantity is an integer, so a usage of 0.5 bills one unit, and the reservation holds one unit's worth of credits to match.
+
 `usage` still gates a check that reserves nothing: it is sent as a preflight, locally or to the API, so the verdict accounts for what the call is about to spend. Preflighted verdicts are not cached.
 
 `CheckOptions.timeout` bounds the check-and-reserve call in server mode and the REST flag check a check can fall back to. Client-mode lease acquires and extends are shared between concurrent checks, so they use the client's timeout.
