@@ -39,9 +39,14 @@ public final class ReservationSettlement {
      * <p>The event comes from the caller-held reservation rather than the store, so the usage is
      * still billed once the hold has been swept. Only the local bookkeeping clamps to the reserved
      * amount; the event carries the unclamped actual.
+     *
+     * <p>The lease is debited for the quantity the event bills, not the raw one: the event rounds
+     * a fractional usage up to the whole unit it records, so consuming the fraction instead would
+     * leave the lease reading high by the difference on every fractional settle.
      */
     public static SettleOutcome settle(ReservationStore reservations, Reservation reservation, double actualQuantity) {
-        Double claimed = reservations.consume(reservation.getId(), actualQuantity * reservation.getConsumptionRate());
+        Double claimed = reservations.consume(
+                reservation.getId(), settleQuantity(actualQuantity) * reservation.getConsumptionRate());
         return new SettleOutcome(buildTrackEvent(reservation, actualQuantity), claimed != null);
     }
 

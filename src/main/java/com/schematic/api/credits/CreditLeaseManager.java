@@ -130,10 +130,13 @@ public final class CreditLeaseManager implements AutoCloseable {
             flight.result.complete(result);
             return result;
         } catch (RuntimeException e) {
-            flight.result.complete(null);
             error("Failed to acquire credit lease for " + companyId + "/" + creditTypeId + ": " + e);
             return null;
         } finally {
+            // Completing here and not only on the two paths above: an Error unwinding past both
+            // would leave the future unfinished, and every joiner parks on it forever. A no-op
+            // once the success path has already completed it.
+            flight.result.complete(null);
             acquireFlights.remove(key, flight);
         }
     }
@@ -268,10 +271,13 @@ public final class CreditLeaseManager implements AutoCloseable {
                     flight.result.complete(result);
                     return result;
                 } catch (RuntimeException e) {
-                    flight.result.complete(null);
                     warn("Failed to extend credit lease " + entry.getLeaseId() + ": " + e);
                     return null;
                 } finally {
+                    // Completing here and not only on the two paths above: an Error unwinding
+                    // past both would leave the future unfinished, and every joiner parks on it
+                    // forever. A no-op once the success path has already completed it.
+                    flight.result.complete(null);
                     // Identity-guarded rather than an unconditional remove: a joiner whose
                     // shortfall outran this flight registers a follow-up for the same key, and
                     // this flight must not evict it.

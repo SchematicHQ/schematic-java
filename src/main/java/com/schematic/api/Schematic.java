@@ -233,7 +233,10 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     new ApiLeaseWireClient(credits()), leases, holds, creditLeases, this.logger, Clock.systemUTC());
             manager.startSweep();
             check = new CreditCheck(
-                    new DataStreamCreditCheckSource(this.dataStreamClient),
+                    // Null rather than a source wrapping nothing: CreditCheck degrades to a plain
+                    // check on a null source, and a wrapper would sail past that guard and fail
+                    // on the first cached-flag read instead.
+                    this.dataStreamClient == null ? null : new DataStreamCreditCheckSource(this.dataStreamClient),
                     leases,
                     holds,
                     manager,
@@ -512,10 +515,20 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     private RulesengineCheckFlagResult defaultFlagResult(String flagKey, String reason, String err) {
+        return defaultFlagResult(flagKey, reason, err, null);
+    }
+
+    /**
+     * The result a check falls back to when it cannot get an answer. {@code perCheckDefault} is
+     * the caller's own default for this one check, which outranks the client-wide one; null means
+     * the caller did not name one.
+     */
+    private RulesengineCheckFlagResult defaultFlagResult(
+            String flagKey, String reason, String err, Boolean perCheckDefault) {
         return RulesengineCheckFlagResult.builder()
                 .flagKey(flagKey)
                 .reason(reason)
-                .value(getFlagDefault(flagKey))
+                .value(perCheckDefault != null ? perCheckDefault : getFlagDefault(flagKey))
                 .err(err)
                 .build();
     }
@@ -735,15 +748,20 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      */
     private RulesengineCheckFlagResult checkFlagViaApi(
             String flagKey, Map<String, String> company, Map<String, String> user) {
-        return checkFlagViaApi(flagKey, company, user, null, null);
+        return checkFlagViaApi(flagKey, company, user, null, null, null);
     }
 
+    /**
+     * The REST flag check. {@code perCheckDefault} is what a failure resolves to, so a caller that
+     * named a default on this one check gets it rather than the client-wide one.
+     */
     private RulesengineCheckFlagResult checkFlagViaApi(
             String flagKey,
             Map<String, String> company,
             Map<String, String> user,
             Duration timeout,
-            PreflightOptions preflight) {
+            PreflightOptions preflight,
+            Boolean perCheckDefault) {
         try {
             // Null once a preflight that the API would ignore, such as a zero usage, has been
             // dropped: such a check is a plain one and keeps the cache.
@@ -781,7 +799,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             return result;
         } catch (Exception e) {
             logger.error("Error checking flag via API: " + e.getMessage());
-            return defaultFlagResult(flagKey, "flag default", e.getMessage());
+            return defaultFlagResult(flagKey, "flag default", e.getMessage(), perCheckDefault);
         }
     }
 
@@ -1002,7 +1020,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 // The API answers a preflight too, so the caller's usage gates the REST path the
                 // same way it gates a local evaluation. The caller's timeout applies, since this
                 // is the call it is waiting on.
-                result = checkFlagViaApi(flagKey, company, user, options.getTimeout(), preflight);
+                result = checkFlagViaApi(
+                        flagKey, company, user, options.getTimeout(), preflight, options.getDefaultValue());
             }
         }
         return new CheckResult(

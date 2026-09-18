@@ -362,6 +362,48 @@ class SchematicTest {
         assertFalse(body.getValue().getPreflight().isPresent());
     }
 
+    @Test
+    void check_UsesThePerCheckDefaultWhenTheApiFallbackFails() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenThrow(new RuntimeException("connection refused"));
+
+        CheckResult result = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder().usage(5).defaultValue(true).build());
+
+        // A caller who named a default for this check gets it wherever the check lands on one,
+        // not just in offline mode.
+        assertTrue(result.isAllowed());
+        assertEquals("flag default", result.getReason());
+    }
+
+    @Test
+    void check_WithoutAPerCheckDefaultFallsBackToTheClientDefault() {
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("test_flag"), any(CheckFlagRequestBody.class)))
+                .thenThrow(new RuntimeException("connection refused"));
+        spySchematic.setFlagDefault("test_flag", true);
+
+        CheckResult unnamed = spySchematic.check(
+                "test_flag", null, null, CheckOptions.builder().usage(5).build());
+
+        assertTrue(unnamed.isAllowed());
+        // And a per-check default still outranks the client-wide one.
+        CheckResult named = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder().usage(5).defaultValue(false).build());
+        assertFalse(named.isAllowed());
+    }
+
     private static CheckFlagResponse apiResponse(boolean value) {
         return CheckFlagResponse.builder()
                 .data(CheckFlagResponseData.builder()

@@ -1,16 +1,22 @@
 package com.schematic.api.credits;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.schematic.api.IdentifyOptions;
 import com.schematic.api.Schematic;
 import com.schematic.api.logger.SchematicLogger;
+import com.schematic.api.resources.features.FeaturesClient;
+import com.schematic.api.types.CheckFlagRequestBody;
 import java.time.Duration;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
@@ -54,6 +60,36 @@ class SchematicCreditLeaseTest {
             // No shared backend either, which is its own warning.
             verify(logger, atLeastOnce()).warn(contains("shared Redis backend"));
             assertFalse(schematic.isOffline());
+        }
+    }
+
+    @Test
+    void clientModeWithoutDataStreamDegradesToAPlainCheckThatHonoursThePerCheckDefault() {
+        SchematicLogger logger = mock(SchematicLogger.class);
+
+        try (Schematic schematic = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .creditLeases(
+                        CreditLeaseConfig.builder().mode(CreditLeaseMode.CLIENT).build())
+                .build()) {
+            FeaturesClient features = mock(FeaturesClient.class);
+            Schematic spied = spy(schematic);
+            when(spied.features()).thenReturn(features);
+            when(features.checkFlag(anyString(), any(CheckFlagRequestBody.class)))
+                    .thenThrow(new RuntimeException("connection refused"));
+
+            CheckResult result = spied.check(
+                    "test_flag",
+                    Collections.singletonMap("id", "co_1"),
+                    null,
+                    CheckOptions.builder().usage(5).defaultValue(true).build());
+
+            // The intended degradation, rather than a null pointer from a source that wraps
+            // nothing and so sails past the guard meant to catch this.
+            verify(logger).debug(contains("no DataStream, using a plain check"));
+            verify(logger, never()).warn(contains("NullPointerException"));
+            assertTrue(result.isAllowed());
         }
     }
 

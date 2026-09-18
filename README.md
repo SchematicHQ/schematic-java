@@ -281,6 +281,8 @@ schematic.identify(
         .build());
 ```
 
+Identifying with a prewarm flushes the event buffer first, so the server has the company before the warm-up asks for a lease against it. That makes it a session-start call, not one to put on every event.
+
 Or call `schematic.prewarm(companyKeys, creditTypeIds)` directly. Both are no-ops in server mode.
 
 ### Failure behavior
