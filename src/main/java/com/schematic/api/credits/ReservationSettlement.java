@@ -40,13 +40,14 @@ public final class ReservationSettlement {
      * still billed once the hold has been swept. Only the local bookkeeping clamps to the reserved
      * amount; the event carries the unclamped actual.
      *
-     * <p>The lease is debited for the quantity the event bills, not the raw one: the event rounds
-     * a fractional usage up to the whole unit it records, so consuming the fraction instead would
-     * leave the lease reading high by the difference on every fractional settle.
+     * <p>The lease is debited the raw quantity times the rate, which is the figure every SDK
+     * computes for the same settle. The event's own quantity rounds up, because that field is an
+     * integer, so a fractional settle bills marginally more than it debits. Closing that gap is a
+     * change to the shared ledger, not to one port: SDKs sharing a Redis backend have to hold and
+     * release the same amount for the same call.
      */
     public static SettleOutcome settle(ReservationStore reservations, Reservation reservation, double actualQuantity) {
-        Double claimed = reservations.consume(
-                reservation.getId(), settleQuantity(actualQuantity) * reservation.getConsumptionRate());
+        Double claimed = reservations.consume(reservation.getId(), actualQuantity * reservation.getConsumptionRate());
         return new SettleOutcome(buildTrackEvent(reservation, actualQuantity), claimed != null);
     }
 

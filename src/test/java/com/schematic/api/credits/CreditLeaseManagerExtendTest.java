@@ -2,7 +2,6 @@ package com.schematic.api.credits;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Clock;
@@ -66,7 +65,7 @@ class CreditLeaseManagerExtendTest {
      * been topped up. That is the shape of a stale read: a concurrent extend lands between the
      * row the caller decided on and the moment it owns the slot's flight.
      */
-    private static final class ToppedUpAfterFirstRead implements LeaseStore {
+    private static class ToppedUpAfterFirstRead implements LeaseStore {
         private final InMemoryLeaseStore delegate;
         private final AtomicInteger reads = new AtomicInteger();
 
@@ -81,6 +80,48 @@ class CreditLeaseManagerExtendTest {
                 return entry;
             }
             return new LeaseState(entry.getLeaseId(), companyId, creditTypeId, 3000, 2900, entry.getExpiresAt());
+        }
+
+        @Override
+        public boolean replace(LeaseGrant grant) {
+            return delegate.replace(grant);
+        }
+
+        @Override
+        public ReserveResult tryReserve(String companyId, String creditTypeId, double credits) {
+            return delegate.tryReserve(companyId, creditTypeId, credits);
+        }
+
+        @Override
+        public void refund(String companyId, String creditTypeId, double credits, String pinLeaseId) {
+            delegate.refund(companyId, creditTypeId, credits, pinLeaseId);
+        }
+
+        @Override
+        public void extend(
+                String companyId, String creditTypeId, double grantedTotal, Instant newExpiresAt, String pinLeaseId) {
+            delegate.extend(companyId, creditTypeId, grantedTotal, newExpiresAt, pinLeaseId);
+        }
+
+        @Override
+        public void drop(String companyId, String creditTypeId) {
+            delegate.drop(companyId, creditTypeId);
+        }
+    }
+
+    /** Counts reads, so a task that would have read again is visible. */
+    private static final class CountingReads implements LeaseStore {
+        private final LeaseStore delegate;
+        final AtomicInteger reads = new AtomicInteger();
+
+        CountingReads(LeaseStore delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public LeaseState get(String companyId, String creditTypeId) {
+            reads.incrementAndGet();
+            return delegate.get(companyId, creditTypeId);
         }
 
         @Override
@@ -152,11 +193,16 @@ class CreditLeaseManagerExtendTest {
         return new CreditLeaseManager(wire, leases, holds, config, null, CLOCK);
     }
 
-    private static int poolThreads() {
+    /** How many threads are parked inside a lease flight right now, whichever pool they came from. */
+    private static int threadsParkedOnAFlight() {
         int count = 0;
-        for (Thread thread : Thread.getAllStackTraces().keySet()) {
-            if ("SchematicCreditLease".equals(thread.getName()) && thread.isAlive()) {
-                count++;
+        for (StackTraceElement[] stack : Thread.getAllStackTraces().values()) {
+            for (StackTraceElement frame : stack) {
+                if (frame.getClassName().startsWith(CreditLeaseManager.class.getName() + "$Flight")
+                        && "await".equals(frame.getMethodName())) {
+                    count++;
+                    break;
+                }
             }
         }
         return count;
@@ -172,39 +218,39 @@ class CreditLeaseManagerExtendTest {
         // Draw the lease under its water mark, so every check that follows warrants a top-up.
         leases.tryReserve("co_1", "ct_1", 900);
 
-        int before = poolThreads();
         manager.extendInBackground("co_1", "ct_1");
         assertTrue(wire.started.await(5, TimeUnit.SECONDS));
         for (int i = 0; i < 200; i++) {
             manager.extendInBackground("co_1", "ct_1");
         }
+        Thread.sleep(200);
 
         // Each of those checks found a top-up already on the wire. Joining it would have parked a
         // pool thread apiece for the length of one network call.
         assertEquals(1, wire.extends_.get());
-        int grew = poolThreads() - before;
-        assertTrue(grew < 20, "the pool grew by " + grew + " threads");
+        assertEquals(0, threadsParkedOnAFlight());
         wire.release.countDown();
         manager.close();
     }
 
     @Test
     void aHealthyLeaseSendsNoBackgroundWorkToThePool() {
-        InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
-        InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
+        InMemoryLeaseStore backing = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(backing, CLOCK);
+        CountingReads leases = new CountingReads(backing);
         CountingWire wire = new CountingWire(false);
         CreditLeaseManager manager = manager(wire, leases, holds);
-        leases.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, LIVE));
-        leases.tryReserve("co_1", "ct_1", 10);
+        backing.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, LIVE));
+        backing.tryReserve("co_1", "ct_1", 10);
 
-        int before = poolThreads();
         for (int i = 0; i < 200; i++) {
             manager.extendInBackground("co_1", "ct_1");
         }
 
-        // The water-mark test runs on the caller's thread, so a comfortable lease queues nothing.
+        // The water-mark test runs on the caller's thread, so a comfortable lease queues nothing:
+        // exactly one store read per call, and no task behind it to read again.
         assertEquals(0, wire.extends_.get());
-        assertEquals(before, poolThreads());
+        assertEquals(200, leases.reads.get());
         manager.close();
     }
 
@@ -227,7 +273,7 @@ class CreditLeaseManagerExtendTest {
     }
 
     @Test
-    void aLeaseAcquiredAfterTheCloseSweptTheSlotsIsReleasedInline() throws Exception {
+    void aLeaseThatLandsAfterStopIsLeftAloneRatherThanReleased() throws Exception {
         InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
         InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
         CountDownLatch onTheWire = new CountDownLatch(1);
@@ -257,21 +303,67 @@ class CreditLeaseManagerExtendTest {
         };
         CreditLeaseManager manager = manager(wire, leases, holds);
 
-        LeaseState[] acquired = new LeaseState[1];
-        Thread caller = new Thread(() -> acquired[0] = manager.acquireIfNeeded("co_1", "ct_1"));
+        Thread caller = new Thread(() -> manager.acquireIfNeeded("co_1", "ct_1"));
         caller.start();
         assertTrue(onTheWire.await(5, TimeUnit.SECONDS));
-        // The close runs its whole sequence while this acquire is still on the wire, so the
-        // release sweep sees an empty slot.
         manager.stop();
         manager.releaseAllLocalLeases();
         swept.countDown();
         caller.join(5000);
 
-        // Nothing is left holding credits that no close will come back for.
-        assertEquals(Collections.singletonList("lse_late"), released);
-        assertNull(acquired[0]);
-        assertNull(leases.get("co_1", "ct_1"));
+        // A lease that lands this late is left to the drain or to server-side expiry. Releasing
+        // it here would refund, on a shared backend, a lease sibling pods are still reserving
+        // against.
+        assertTrue(released.isEmpty(), "released " + released);
+        manager.close();
+    }
+
+    @Test
+    void aJoinerWhoseFlightSentNothingIssuesItsOwnExtend() throws Exception {
+        InMemoryLeaseStore backing = new InMemoryLeaseStore(CLOCK);
+        backing.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, LIVE));
+        backing.tryReserve("co_1", "ct_1", 900);
+        InMemoryReservationStore holds = new InMemoryReservationStore(backing, CLOCK);
+        CountDownLatch ownerReRead = new CountDownLatch(1);
+        CountDownLatch joinerRegistered = new CountDownLatch(1);
+        AtomicInteger readOrder = new AtomicInteger();
+        // The owner's first read sees the drawn-down row and decides to extend; its re-read, once
+        // the flight is registered, sees a slot another extend already topped up, so it sends
+        // nothing. The re-read is held open long enough for a joiner to queue behind that flight.
+        LeaseStore stalling = new ToppedUpAfterFirstRead(backing) {
+            @Override
+            public LeaseState get(String companyId, String creditTypeId) {
+                if (readOrder.incrementAndGet() == 2) {
+                    ownerReRead.countDown();
+                    try {
+                        joinerRegistered.await(5, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                return super.get(companyId, creditTypeId);
+            }
+        };
+        CountingWire wire = new CountingWire(false);
+        CreditLeaseManager manager = manager(wire, stalling, holds);
+
+        Thread owner = new Thread(() -> manager.maybeExtend("co_1", "ct_1", null));
+        owner.start();
+        assertTrue(ownerReRead.await(5, TimeUnit.SECONDS));
+        LeaseState[] joined = new LeaseState[1];
+        Thread joiner = new Thread(() -> joined[0] = manager.maybeExtend("co_1", "ct_1", 4000.0));
+        joiner.start();
+        // Let the joiner reach the flight it is queuing behind before the owner finishes.
+        Thread.sleep(100);
+        joinerRegistered.countDown();
+        owner.join(5000);
+        joiner.join(5000);
+
+        // The owner asked for a tranche but never sent it, so its ask stands in for nobody. A
+        // joiner that took it as covering its own shortfall would deny a check whose credits are
+        // still sitting on the server.
+        assertEquals(1, wire.extends_.get());
+        assertNotNull(joined[0]);
         manager.close();
     }
 

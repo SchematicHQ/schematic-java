@@ -143,7 +143,7 @@ class CreditCheckReserveSizingTest {
     }
 
     @Test
-    void aFractionalUsageHoldsTheWholeUnitTheSettleWillBill() {
+    void aFractionalUsageHoldsExactlyUsageTimesTheRate() {
         Fixture fixture = new Fixture(CLOCK);
 
         CheckResult result = fixture.run(0.5);
@@ -151,11 +151,12 @@ class CreditCheckReserveSizingTest {
         assertFalse(fixture.fellBack);
         assertTrue(result.isAllowed());
         assertNotNull(result.getReservation());
-        // Half a unit bills as one, so the hold covers one unit at ten credits each. Holding five
-        // would leave the settle billing credits the check never reserved.
-        assertEquals(10.0, result.getReservation().getCreditsReserved());
-        assertEquals(1.0, result.getReservation().getQuantityReserved());
-        assertEquals(990.0, fixture.leases.get("co_1", "ct_1").getLocalRemainingCredits());
+        // The ledger figure is the raw product, which is what every SDK sharing this lease
+        // computes for the same check. The settling event rounds its own quantity up, because
+        // that field is an integer, but the hold does not follow it.
+        assertEquals(5.0, result.getReservation().getCreditsReserved());
+        assertEquals(0.5, result.getReservation().getQuantityReserved());
+        assertEquals(995.0, fixture.leases.get("co_1", "ct_1").getLocalRemainingCredits());
     }
 
     @Test

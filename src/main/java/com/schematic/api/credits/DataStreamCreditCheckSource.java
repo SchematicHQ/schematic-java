@@ -28,12 +28,24 @@ public final class DataStreamCreditCheckSource implements CreditCheckDataStream 
 
     @Override
     public RulesengineCompany getCompany(Map<String, String> keys) {
-        return dataStream.getCompany(keys);
+        return liveFetchIsPossible() ? dataStream.getCompany(keys) : dataStream.getCachedCompany(keys);
     }
 
     @Override
     public RulesengineUser getUser(Map<String, String> keys) {
-        return dataStream.getUser(keys);
+        return liveFetchIsPossible() ? dataStream.getUser(keys) : dataStream.getCachedUser(keys);
+    }
+
+    /**
+     * Whether a cache miss can still be answered over the socket.
+     *
+     * <p>Replicator mode has no socket to ask, and a disconnected client has nothing to send the
+     * request on, so a live fetch in either state only waits out its own timeout before returning
+     * nothing. A check would pay that wait per call before falling back to the plain check, which
+     * bails on the same two states without waiting.
+     */
+    private boolean liveFetchIsPossible() {
+        return !dataStream.isReplicatorMode() && dataStream.isConnected();
     }
 
     @Override
