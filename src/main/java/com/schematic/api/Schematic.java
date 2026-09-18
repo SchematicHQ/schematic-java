@@ -789,7 +789,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                                     flagKey,
                                     request.build(),
                                     RequestOptions.builder()
-                                            .timeout((int) timeout.toMillis(), TimeUnit.MILLISECONDS)
+                                            .timeout(CreditAmounts.millisAsInt(timeout), TimeUnit.MILLISECONDS)
                                             .build());
             RulesengineCheckFlagResult result = toRulesengineResult(response.getData());
 
@@ -807,8 +807,10 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      * Which reservation mode a {@code check()} with usage resolves to right now. Null means no
      * credit gating at all: leases are not configured, or the client is offline.
      *
-     * <p>Auto resolves per check rather than once at startup, so a DataStream that failed to start
-     * falls to server mode instead of silently dropping every check to a plain, ungated check.
+     * <p>Auto is client mode whenever the DataStream is enabled, and server mode otherwise. That
+     * is settled once, by what the client was built with, not per check: a DataStream that is
+     * configured but currently disconnected stays in client mode and degrades through the plain
+     * check, rather than silently switching every check to a different gating path mid-run.
      */
     private CreditLeaseMode effectiveLeaseMode() {
         if (creditLeaseMode == null || offline) {

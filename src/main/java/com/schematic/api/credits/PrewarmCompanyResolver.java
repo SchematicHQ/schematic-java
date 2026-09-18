@@ -3,6 +3,12 @@ package com.schematic.api.credits;
 import com.schematic.api.types.RulesengineCompany;
 import java.time.Duration;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 
@@ -43,9 +49,15 @@ public final class PrewarmCompanyResolver {
         if (id != null && !id.isEmpty()) {
             return id;
         }
-        RulesengineCompany hit = cached.apply(keys);
-        if (hit != null) {
-            return hit.getId();
+        try {
+            RulesengineCompany hit = cached.apply(keys);
+            if (hit != null) {
+                return hit.getId();
+            }
+        } catch (RuntimeException e) {
+            // A cache that throws is a miss, not a failed prewarm: the fetch below answers the
+            // same question over the wire.
+            onFetchError.apply(e);
         }
         // A zero timeout is cache-only, not a refusal: the caller asked not to wait on the wire,
         // and the cache has already answered above.
@@ -56,27 +68,55 @@ public final class PrewarmCompanyResolver {
         // Retry across the brief connecting window at boot. A new company needs the preceding
         // identify ingested before the server can stream it back.
         long deadline = System.nanoTime() + timeout.toNanos();
-        while (true) {
-            if (abort.getAsBoolean()) {
-                return null;
-            }
-            try {
-                RulesengineCompany resolved = fetch.apply(keys);
-                if (resolved != null) {
-                    return resolved.getId();
+        // The fetch runs on its own thread so the timeout bounds the fetch itself, not just the
+        // gaps between attempts: a single call that never returns would otherwise hold the
+        // prewarm past every deadline the caller set. Daemon, so a stuck one cannot keep the
+        // process alive.
+        ExecutorService fetcher = Executors.newSingleThreadExecutor(runnable -> {
+            Thread thread = new Thread(runnable, "SchematicPrewarmResolve");
+            thread.setDaemon(true);
+            return thread;
+        });
+        try {
+            while (true) {
+                if (abort.getAsBoolean()) {
+                    return null;
                 }
-            } catch (RuntimeException e) {
-                onFetchError.apply(e);
+                long remaining = deadline - System.nanoTime();
+                if (remaining <= 0) {
+                    return null;
+                }
+                Future<RulesengineCompany> pending = fetcher.submit(() -> fetch.apply(keys));
+                try {
+                    RulesengineCompany resolved = pending.get(remaining, TimeUnit.NANOSECONDS);
+                    if (resolved != null) {
+                        return resolved.getId();
+                    }
+                } catch (TimeoutException e) {
+                    pending.cancel(true);
+                    return null;
+                } catch (ExecutionException e) {
+                    onFetchError.apply(asRuntime(e.getCause()));
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
+                if (System.nanoTime() >= deadline) {
+                    return null;
+                }
+                try {
+                    Thread.sleep(pollInterval.toMillis());
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
             }
-            if (System.nanoTime() >= deadline) {
-                return null;
-            }
-            try {
-                Thread.sleep(pollInterval.toMillis());
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return null;
-            }
+        } finally {
+            fetcher.shutdownNow();
         }
+    }
+
+    private static RuntimeException asRuntime(Throwable cause) {
+        return cause instanceof RuntimeException ? (RuntimeException) cause : new RuntimeException(cause);
     }
 }

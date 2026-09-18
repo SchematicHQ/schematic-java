@@ -131,6 +131,36 @@ class ServerCreditCheckTest {
     }
 
     @Test
+    void reservesTheWholeUnitAFractionalUsageWillBill() {
+        when(features.checkAndReserveFlag(eq("inference"), any(CheckAndReserveFlagRequestBody.class), any()))
+                .thenReturn(response(true, "ok", hold("inference_tokens")));
+
+        check.check(request(0.5, "inference_tokens", false), null, () -> false, fallback(new boolean[1]));
+
+        ArgumentCaptor<CheckAndReserveFlagRequestBody> body =
+                ArgumentCaptor.forClass(CheckAndReserveFlagRequestBody.class);
+        verify(features).checkAndReserveFlag(eq("inference"), body.capture(), any());
+        // The settle bills a whole unit, so the hold is taken for one. Reserving half would leave
+        // the settle billing credits the check never held.
+        assertEquals(1.0, body.getValue().getQuantity().orElse(null));
+    }
+
+    @Test
+    void clampsATimeoutTooLargeForTheRequestOption() {
+        when(features.checkAndReserveFlag(eq("inference"), any(CheckAndReserveFlagRequestBody.class), any()))
+                .thenReturn(response(true, "ok", hold("inference_tokens")));
+
+        check.check(request(10, "inference_tokens", false), Duration.ofDays(30), () -> false, fallback(new boolean[1]));
+
+        ArgumentCaptor<RequestOptions> options = ArgumentCaptor.forClass(RequestOptions.class);
+        verify(features)
+                .checkAndReserveFlag(eq("inference"), any(CheckAndReserveFlagRequestBody.class), options.capture());
+        // Casting alone would wrap this into a negative, which the transport reads as no time at
+        // all: the opposite of the long wait the caller asked for.
+        assertEquals(Integer.MAX_VALUE, options.getValue().getTimeout().orElse(null));
+    }
+
+    @Test
     void sendsTheGenericUsagePreflightWithoutASubtype() {
         when(features.checkAndReserveFlag(eq("inference"), any(CheckAndReserveFlagRequestBody.class), any()))
                 .thenReturn(response(true, "ok", hold("inference_tokens")));
