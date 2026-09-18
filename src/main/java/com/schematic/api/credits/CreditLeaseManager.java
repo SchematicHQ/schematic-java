@@ -88,6 +88,15 @@ public final class CreditLeaseManager implements AutoCloseable {
      * through fail-open or fail-closed.
      */
     public LeaseState acquireIfNeeded(String companyId, String creditTypeId) {
+        return acquireIfNeeded(companyId, creditTypeId, null);
+    }
+
+    /**
+     * Acquires under the caller's per-check timeout. The flight is shared, so the first caller's
+     * timeout governs everyone who joins it; a background caller passes null and takes the
+     * client's own.
+     */
+    public LeaseState acquireIfNeeded(String companyId, String creditTypeId, Duration timeout) {
         if (stopped) {
             // A lease installed after releaseAllLocalLeases has listed the slots would be held
             // until it expires server-side, with nobody left to release it.
@@ -143,7 +152,7 @@ public final class CreditLeaseManager implements AutoCloseable {
                         + ": the manager stopped while the flight was being registered");
                 return null;
             }
-            LeaseState result = acquire(companyId, creditTypeId);
+            LeaseState result = acquire(companyId, creditTypeId, timeout);
             flight.result.complete(result);
             return result;
         } catch (RuntimeException e) {
@@ -158,12 +167,12 @@ public final class CreditLeaseManager implements AutoCloseable {
         }
     }
 
-    private LeaseState acquire(String companyId, String creditTypeId) {
+    private LeaseState acquire(String companyId, String creditTypeId, Duration timeout) {
         ResolvedLeaseConfig resolved = resolveConfig(creditTypeId);
         LeaseGrant grant;
         try {
             grant = wire.acquire(
-                    companyId, creditTypeId, resolved.getLeaseSize(), now().plus(resolved.getLeaseDuration()));
+                    companyId, creditTypeId, resolved.getLeaseSize(), now().plus(resolved.getLeaseDuration()), timeout);
         } catch (RuntimeException e) {
             error("Failed to acquire credit lease for " + companyId + "/" + creditTypeId + ": " + e);
             return null;
@@ -235,7 +244,12 @@ public final class CreditLeaseManager implements AutoCloseable {
      * ask and fail its post-extend retry with credits still sitting on the server.
      */
     public LeaseState maybeExtend(String companyId, String creditTypeId, Double requiredCredits) {
-        return maybeExtend(companyId, creditTypeId, requiredCredits, true, true);
+        return maybeExtend(companyId, creditTypeId, requiredCredits, null);
+    }
+
+    /** Extends under the caller's per-check timeout, or the client's own when null. */
+    public LeaseState maybeExtend(String companyId, String creditTypeId, Double requiredCredits, Duration timeout) {
+        return maybeExtend(companyId, creditTypeId, requiredCredits, true, true, timeout);
     }
 
     private LeaseState maybeExtend(
@@ -243,7 +257,8 @@ public final class CreditLeaseManager implements AutoCloseable {
             String creditTypeId,
             Double requiredCredits,
             boolean allowFollowUp,
-            boolean joinInFlight) {
+            boolean joinInFlight,
+            Duration timeout) {
         if (stopped) {
             // Extending past stop re-holds credits on a lease the close is about to release, or
             // has already released.
@@ -296,7 +311,7 @@ public final class CreditLeaseManager implements AutoCloseable {
                         return leases.get(companyId, creditTypeId);
                     }
                     flight.sentExtend = true;
-                    LeaseState result = extend(fresh, resolved, additionalAmount);
+                    LeaseState result = extend(fresh, resolved, additionalAmount, timeout);
                     flight.result.complete(result);
                     return result;
                 } catch (RuntimeException e) {
@@ -334,7 +349,7 @@ public final class CreditLeaseManager implements AutoCloseable {
         // now issue exactly one more, re-read against the slot as that flight left it. The
         // follow-up is not allowed one of its own: a company whose balance simply cannot reach
         // the request would otherwise spin.
-        return maybeExtend(companyId, creditTypeId, requiredCredits, false, true);
+        return maybeExtend(companyId, creditTypeId, requiredCredits, false, true, timeout);
     }
 
     /**
@@ -349,7 +364,7 @@ public final class CreditLeaseManager implements AutoCloseable {
         if (!extendIsDue(companyId, creditTypeId)) {
             return;
         }
-        spawn(() -> maybeExtend(companyId, creditTypeId, null, true, false));
+        spawn(() -> maybeExtend(companyId, creditTypeId, null, true, false, null));
     }
 
     /** Whether the slot's lease has drawn down far enough to warrant a steady-state top-up. */
@@ -387,10 +402,11 @@ public final class CreditLeaseManager implements AutoCloseable {
         return ratio <= resolved.getLowWaterMark();
     }
 
-    private LeaseState extend(LeaseState entry, ResolvedLeaseConfig resolved, double additionalAmount) {
+    private LeaseState extend(
+            LeaseState entry, ResolvedLeaseConfig resolved, double additionalAmount, Duration timeout) {
         LeaseGrant grant;
         try {
-            grant = wire.extend(entry.getLeaseId(), additionalAmount, now().plus(resolved.getLeaseDuration()));
+            grant = wire.extend(entry.getLeaseId(), additionalAmount, now().plus(resolved.getLeaseDuration()), timeout);
         } catch (RuntimeException e) {
             warn("Failed to extend credit lease " + entry.getLeaseId() + ": " + e);
             return null;

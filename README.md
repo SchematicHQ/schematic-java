@@ -165,6 +165,8 @@ user.put("user_id", "your-user-id");
 boolean flagValue = schematic.checkFlag("some-flag-key", company, user);
 ```
 
+`checkFlagWithEntitlement` answers the same question and hands back the whole result: the value, the reason the rules engine gave, and the matched entitlement.
+
 ## Credit Leases and Reservations
 
 For features metered by credit burndown (inference tokens, for example), `check` reserves credits for the work about to run and `trackWithReservation` settles the reservation with the actual usage. The SDK gates in one of two modes:
@@ -197,7 +199,7 @@ Schematic schematic = Schematic.builder()
     .build();
 ```
 
-Leases reuse the Redis client the DataStream cache is configured with, so `redisClient` is only needed to keep lease state in a different Redis.
+Leases reuse the Redis client the DataStream cache is configured with, if there is one. The example above configures DataStream without a Redis cache, so it passes `redisClient` explicitly. Set it whenever the DataStream cache is local, or when lease state should live in a different Redis from the cache. With no Redis on either side the SDK falls back to per-process in-memory state, which gates one process only and warns at startup.
 
 Server mode needs only a TTL:
 
@@ -252,7 +254,7 @@ A check can allow without reserving credits, when the feature is not credit-mete
 
 `usage` still gates a check that reserves nothing: it is sent as a preflight, locally or to the API, so the verdict accounts for what the call is about to spend. Preflighted verdicts are not cached.
 
-`CheckOptions.timeout` bounds the check-and-reserve call in server mode and the REST flag check a check can fall back to. Client-mode lease acquires and extends are shared between concurrent checks, so they use the client's timeout.
+`CheckOptions.timeout` bounds every call a check waits on: the check-and-reserve call in server mode, the REST flag check a check can fall back to, and the client-mode lease acquire and extend. Lease calls are shared between concurrent checks, so the timeout of whichever check opened the call governs the ones that join it, and background top-ups keep the client's own timeout.
 
 An unsettled reservation expires after `defaultReservationTtl` and its credits return to the lease. A late settle still bills the usage, since the track event carries a deterministic idempotency key that keeps it from double-billing, but it does not re-debit the local lease. Set `defaultReservationTtl` above the longest expected gap between the check and the settle.
 

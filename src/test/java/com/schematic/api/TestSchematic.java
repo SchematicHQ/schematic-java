@@ -11,9 +11,13 @@ import com.schematic.api.cache.LocalCache;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.credits.CheckOptions;
 import com.schematic.api.credits.CheckResult;
+import com.schematic.api.credits.CreditLeaseConfig;
+import com.schematic.api.credits.CreditLeaseDefaults;
 import com.schematic.api.credits.CreditLeaseMode;
 import com.schematic.api.credits.Reservation;
 import com.schematic.api.credits.ReservationSettlement;
+import com.schematic.api.datastream.DataStreamClient;
+import com.schematic.api.datastream.DatastreamOptions;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.FeaturesClient;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
@@ -29,6 +33,7 @@ import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.EventType;
 import com.schematic.api.types.PreflightRequestBody;
 import com.schematic.api.types.RulesengineCheckFlagResult;
+import java.lang.reflect.Field;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -421,6 +426,96 @@ class SchematicTest {
         assertEquals("lease-client", Schematic.inheritFromDataStream("lease-client", "datastream-client"));
         assertEquals("datastream:", Schematic.inheritFromDataStream(null, "datastream:"));
         assertNull(Schematic.inheritFromDataStream(null, null));
+    }
+
+    @Test
+    void trackWithReservation_FoldsTheSettleIntoTheCachedCompanyMetrics() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        Schematic spySchematic = spy(schematic);
+        setDataStreamClient(spySchematic, dataStream);
+
+        spySchematic.trackWithReservation(reservation(CreditLeaseMode.SERVER), 7, null);
+
+        // A settle is a track, so the cached usage has to move with it. Without this a local
+        // evaluation right after the settle gates on a figure the stream has not pushed back yet.
+        ArgumentCaptor<EventBodyTrack> recorded = ArgumentCaptor.forClass(EventBodyTrack.class);
+        verify(dataStream).updateCompanyMetrics(recorded.capture());
+        assertEquals("inference_tokens", recorded.getValue().getEvent());
+        assertEquals(7L, recorded.getValue().getQuantity().get());
+        assertEquals(
+                Collections.singletonMap("id", "co_1"),
+                recorded.getValue().getCompany().get());
+    }
+
+    @Test
+    void check_AutoModeFallsToServerGatingWhenTheDataStreamIsGone() throws Exception {
+        Schematic leased = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .datastreamOptions(DatastreamOptions.builder().build())
+                .creditLeases(
+                        CreditLeaseConfig.builder().mode(CreditLeaseMode.AUTO).build())
+                .build();
+        try {
+            FeaturesClient featuresClient = mock(FeaturesClient.class);
+            Schematic spySchematic = spy(leased);
+            when(spySchematic.features()).thenReturn(featuresClient);
+            // What a DataStream that failed to start leaves behind. Auto has to notice at the
+            // check, not hold the verdict it reached at construction.
+            setDataStreamClient(spySchematic, null);
+
+            spySchematic.check(
+                    "test_flag",
+                    Collections.singletonMap("id", "co_1"),
+                    null,
+                    CheckOptions.builder().usage(5).build());
+
+            // Server gating, not a plain ungated check: the credits still have to be held.
+            verify(featuresClient).checkAndReserveFlag(eq("test_flag"), any(), any());
+        } finally {
+            leased.close();
+        }
+    }
+
+    @Test
+    void serverReservationTtl_IsClampedBelowTheApiCapButOnlyForServerMode() throws Exception {
+        Duration twoHours = Duration.ofHours(2);
+        Duration clamped =
+                CreditLeaseDefaults.MAX_RESERVATION_TTL.minus(CreditLeaseDefaults.RESERVATION_TTL_SKEW_ALLOWANCE);
+
+        try (Schematic server = leasedClient(CreditLeaseMode.SERVER, twoHours);
+                Schematic client = leasedClient(CreditLeaseMode.CLIENT, twoHours)) {
+            // The API refuses a hold expiring more than its cap ahead of its own clock, and this
+            // TTL is measured on ours, so the clamp leaves a step for the difference.
+            assertEquals(clamped, serverReservationTtl(server));
+            assertTrue(clamped.compareTo(CreditLeaseDefaults.MAX_RESERVATION_TTL) < 0);
+            // Client mode never sends it, so clamping there would shorten holds for nothing.
+            assertEquals(twoHours, serverReservationTtl(client));
+        }
+    }
+
+    private Schematic leasedClient(CreditLeaseMode mode, Duration ttl) {
+        return Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .creditLeases(CreditLeaseConfig.builder()
+                        .mode(mode)
+                        .defaultReservationTtl(ttl)
+                        .build())
+                .build();
+    }
+
+    private static void setDataStreamClient(Schematic target, DataStreamClient value) throws Exception {
+        Field field = Schematic.class.getDeclaredField("dataStreamClient");
+        field.setAccessible(true);
+        field.set(target, value);
+    }
+
+    private static Duration serverReservationTtl(Schematic target) throws Exception {
+        Field field = Schematic.class.getDeclaredField("serverReservationTtl");
+        field.setAccessible(true);
+        return (Duration) field.get(target);
     }
 
     // --- Reservation settles ---

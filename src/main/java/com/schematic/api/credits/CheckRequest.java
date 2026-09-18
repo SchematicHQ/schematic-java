@@ -1,5 +1,6 @@
 package com.schematic.api.credits;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ public final class CheckRequest {
     private final double usage;
     private final String eventSubtype;
     private final boolean failOpen;
+    private final Duration timeout;
 
     public CheckRequest(
             String flagKey,
@@ -21,12 +23,29 @@ public final class CheckRequest {
             double usage,
             String eventSubtype,
             boolean failOpen) {
+        this(flagKey, company, user, usage, eventSubtype, failOpen, null);
+    }
+
+    public CheckRequest(
+            String flagKey,
+            Map<String, String> company,
+            Map<String, String> user,
+            double usage,
+            String eventSubtype,
+            boolean failOpen,
+            Duration timeout) {
         this.flagKey = flagKey;
         this.company = copy(company);
         this.user = copy(user);
         this.usage = usage;
         this.eventSubtype = eventSubtype;
         this.failOpen = failOpen;
+        this.timeout = timeout;
+    }
+
+    /** The caller's per-check timeout, or null for the client's own. */
+    public Duration getTimeout() {
+        return timeout;
     }
 
     private static Map<String, String> copy(Map<String, String> keys) {

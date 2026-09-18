@@ -152,7 +152,14 @@ public final class RedisReservationStore implements ReservationStore {
 
     @Override
     public double reservedCredits(String companyId, String creditTypeId) {
-        Map<String, String> byCredit = jedis.hgetAll(byCreditKey(companyId, creditTypeId));
+        Map<String, String> byCredit;
+        try {
+            byCredit = jedis.hgetAll(byCreditKey(companyId, creditTypeId));
+        } catch (RuntimeException e) {
+            // A display-path read, not a gate. A Redis blip here reads as nothing reserved rather
+            // than as an exception thrown at a caller asking what the balance looks like.
+            return 0;
+        }
         if (byCredit == null) {
             return 0;
         }
@@ -208,7 +215,11 @@ public final class RedisReservationStore implements ReservationStore {
 
     @Override
     public int count() {
-        return (int) jedis.zcard(indexKey());
+        try {
+            return (int) jedis.zcard(indexKey());
+        } catch (RuntimeException e) {
+            return 0;
+        }
     }
 
     private String hashKey(String id) {

@@ -11,11 +11,11 @@ import java.util.Map;
 public final class CheckFlagOptions {
 
     private final Map<String, Double> creditCost;
-    private final Long usage;
+    private final Double usage;
     private final String eventSubtype;
-    private final Long eventQuantity;
+    private final Double eventQuantity;
 
-    private CheckFlagOptions(Map<String, Double> creditCost, Long usage, String eventSubtype, Long eventQuantity) {
+    private CheckFlagOptions(Map<String, Double> creditCost, Double usage, String eventSubtype, Double eventQuantity) {
         this.creditCost = creditCost == null || creditCost.isEmpty()
                 ? null
                 : Collections.unmodifiableMap(new LinkedHashMap<>(creditCost));
@@ -30,12 +30,12 @@ public final class CheckFlagOptions {
     }
 
     /** A simulated quantity, unscoped. */
-    public static CheckFlagOptions usage(long usage) {
+    public static CheckFlagOptions usage(double usage) {
         return new CheckFlagOptions(null, usage, null, null);
     }
 
     /** A simulated quantity scoped to the event subtype whose condition should answer it. */
-    public static CheckFlagOptions eventUsage(String eventSubtype, long quantity) {
+    public static CheckFlagOptions eventUsage(String eventSubtype, double quantity) {
         return new CheckFlagOptions(null, null, eventSubtype, quantity);
     }
 
@@ -43,7 +43,7 @@ public final class CheckFlagOptions {
         return creditCost;
     }
 
-    public Long getUsage() {
+    public Double getUsage() {
         return usage;
     }
 
@@ -51,7 +51,7 @@ public final class CheckFlagOptions {
         return eventSubtype;
     }
 
-    public Long getEventQuantity() {
+    public Double getEventQuantity() {
         return eventQuantity;
     }
 }
