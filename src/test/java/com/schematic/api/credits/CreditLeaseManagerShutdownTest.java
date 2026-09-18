@@ -121,21 +121,52 @@ class CreditLeaseManagerShutdownTest {
         assertTrue(acquiring.await(5, TimeUnit.SECONDS));
 
         AtomicReference<LeaseState> joined = new AtomicReference<>();
+        AtomicReference<Throwable> joinerThrew = new AtomicReference<>();
         CountDownLatch joinerDone = new CountDownLatch(1);
         Thread joiner = new Thread(() -> {
-            joined.set(manager.acquireIfNeeded("co_1", "ct_1"));
-            joinerDone.countDown();
+            try {
+                joined.set(manager.acquireIfNeeded("co_1", "ct_1"));
+            } catch (Throwable t) {
+                // Counted either way, so a regression reads as a failed assertion here rather
+                // than as a thread that dies quietly and a latch that never finishes.
+                joinerThrew.set(t);
+            } finally {
+                joinerDone.countDown();
+            }
         });
         joiner.start();
+        // Only fail the wire once the joiner is parked on the first flight. Releasing any sooner
+        // lets that flight finish and deregister, after which the joiner runs an acquire of its
+        // own and the test no longer covers joining a failed flight. Its thread state is the
+        // signal, since Flight.await is the one place acquireIfNeeded blocks.
+        assertTrue(parked(joiner), "the joiner never parked on the flight");
         release.countDown();
 
         // Completing only on the return and the RuntimeException paths would park this joiner on
         // an unfinished future for the life of the process.
-        assertTrue(joinerDone.await(5, TimeUnit.SECONDS), "the joiner never came back");
+        assertTrue(joinerDone.await(10, TimeUnit.SECONDS), "the joiner never came back");
+        assertNull(joinerThrew.get());
+        // Null because it joined the failed flight, rather than acquiring on its own.
         assertNull(joined.get());
         first.join(5000);
         joiner.join(5000);
         manager.close();
+    }
+
+    /** Waits, boundedly, for a thread to block. */
+    private static boolean parked(Thread thread) throws InterruptedException {
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (System.nanoTime() - deadline < 0) {
+            Thread.State state = thread.getState();
+            if (state == Thread.State.WAITING || state == Thread.State.TIMED_WAITING) {
+                return true;
+            }
+            if (state == Thread.State.TERMINATED) {
+                return false;
+            }
+            Thread.sleep(1);
+        }
+        return false;
     }
 
     @Test
