@@ -55,8 +55,9 @@ public final class PreflightOptions {
         if (usage == null || !CreditAmounts.isValidQuantity(usage)) {
             return null;
         }
-        // Kept as the caller gave it. The engine evaluates the real quantity, fraction and all;
-        // only the wire body rounds, and only because its field is an integer.
+        // Held as the caller gave it, fraction and all, so a client-mode hold can be sized off
+        // the same figure the reservation records. Rounding belongs at each boundary that needs
+        // it, not here: both the request body and the engine envelope take integers.
         if (eventSubtype != null && !eventSubtype.isEmpty()) {
             return new PreflightOptions(null, null, new EventUsage(eventSubtype, usage));
         }
@@ -71,7 +72,8 @@ public final class PreflightOptions {
     /**
      * Casts a usage onto the integer the request body carries. A preflight asks an upper-bound
      * question, so a fraction rounds up: the check must not pass on less usage than the operation
-     * is about to record. Only the wire needs this; a local evaluation reads the raw quantity.
+     * is about to record. The engine envelope rounds the same way, in
+     * {@code WasmRulesEngine.putQuantity}, so a local evaluation and the API answer one figure.
      */
     public static long preflightQuantity(double usage) {
         return (long) Math.ceil(usage);
@@ -108,7 +110,7 @@ public final class PreflightOptions {
         if (creditCost != null) {
             builder.creditCost(creditCost);
         }
-        // The wire fields are integers, so the rounding happens here and nowhere else.
+        // The wire fields are integers, so the rounding happens on the way out, not on the way in.
         if (hasUsage) {
             builder.usage(preflightQuantity(usage));
         }

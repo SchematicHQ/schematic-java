@@ -1084,6 +1084,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             RulesengineCheckFlagResult dsResult = tryDatastreamCheckFlag(
                     flagKey, company, user, DataStreamCreditCheckSource.toEngineOptions(preflight));
             if (dsResult != null) {
+                // Reported before the substitution below, so the event records what the engine
+                // said rather than the default the caller resolved its own verdict with.
                 enqueueFlagCheckEvent(flagKey, dsResult, company, user);
                 // The engine declining to answer is the case defaultValue exists for, so resolve
                 // it the way the offline and API branches do rather than passing on the stand-in
