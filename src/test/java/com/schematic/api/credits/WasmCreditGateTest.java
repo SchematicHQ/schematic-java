@@ -252,6 +252,25 @@ class WasmCreditGateTest {
     }
 
     @Test
+    void aFractionalUsageIsCarriedRawAndRoundedUpOnlyAtTheEngine() throws Exception {
+        // The preflight keeps what the caller gave, so the hold can be sized from it exactly.
+        PreflightOptions preflight = PreflightOptions.fromUsage(0.5, SUBTYPE);
+        assertEquals(0.5, preflight.getEventUsage().getQuantity());
+        // The engine's quantity is an integer, so the boundary rounds up, which is the direction
+        // an upper-bound question has to round. A balance of one unit still admits half a unit.
+        RulesengineCheckFlagResult half = engine.checkFlag(
+                creditFlag(), company(1), null, DataStreamCreditCheckSource.toEngineOptions(preflight));
+        RulesengineCheckFlagResult two = engine.checkFlag(
+                creditFlag(),
+                company(1),
+                null,
+                DataStreamCreditCheckSource.toEngineOptions(PreflightOptions.fromUsage(2.0, SUBTYPE)));
+
+        assertTrue(half.getValue());
+        assertFalse(two.getValue());
+    }
+
+    @Test
     void gatesExactlyAtTheBalanceBoundary() throws Exception {
         // The contract the flow leans on: the preflight the SDK builds reaches the engine as the
         // event-scoped usage it gates the credit condition with.

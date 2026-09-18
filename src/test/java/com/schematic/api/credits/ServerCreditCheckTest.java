@@ -6,12 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.schematic.api.core.BaseSchematicApiException;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.errors.PaymentRequiredError;
 import com.schematic.api.resources.credits.CreditsClient;
@@ -183,6 +185,36 @@ class ServerCreditCheckTest {
                 .thenReturn(response(false, "Insufficient credits", null));
 
         CheckResult result = check.check(request(10, null, false), null, () -> false, fallback(new boolean[1]));
+
+        assertFalse(result.isAllowed());
+        assertNull(result.getReservation());
+        assertEquals("Insufficient credits", result.getReason());
+    }
+
+    @Test
+    void allowsWithoutAHoldWhenTheServerReturnsNoReservation() {
+        when(features.checkAndReserveFlag(eq("inference"), any(CheckAndReserveFlagRequestBody.class), any()))
+                .thenReturn(response(true, "ok", null));
+
+        boolean[] fellBack = new boolean[1];
+        CheckResult result = check.check(request(10, "inference_tokens", false), null, () -> false, fallback(fellBack));
+
+        // The feature is not credit-metered, so the server allowed it and held nothing. The
+        // caller gets the verdict and no handle, and has nothing to settle.
+        assertTrue(result.isAllowed());
+        assertNull(result.getReservation());
+        assertFalse(fellBack[0]);
+        verify(credits, never()).releaseCreditReservation(anyString());
+    }
+
+    @Test
+    void treatsAnyApiExceptionCarrying402AsADefinitiveDenial() {
+        // The endpoint answers 402 through whichever exception the transport builds; the status
+        // is what makes it definitive, not the class. Failing open must not override it.
+        when(features.checkAndReserveFlag(eq("inference"), any(CheckAndReserveFlagRequestBody.class), any()))
+                .thenThrow(new BaseSchematicApiException("payment required", 402, "out of credits"));
+
+        CheckResult result = check.check(request(10, null, true), null, () -> true, fallback(new boolean[1]));
 
         assertFalse(result.isAllowed());
         assertNull(result.getReservation());

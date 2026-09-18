@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -364,6 +365,55 @@ class CreditLeaseManagerExtendTest {
         // still sitting on the server.
         assertEquals(1, wire.extends_.get());
         assertNotNull(joined[0]);
+        manager.close();
+    }
+
+    @Test
+    void theCallersTimeoutReachesTheAcquireAndTheExtendButNotABackgroundTopUp() throws Exception {
+        InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
+        List<Duration> acquireTimeouts = Collections.synchronizedList(new ArrayList<>());
+        List<Duration> extendTimeouts = Collections.synchronizedList(new ArrayList<>());
+        LeaseWireClient wire = new LeaseWireClient() {
+            @Override
+            public LeaseGrant acquire(String companyId, String creditTypeId, double amount, Instant expiresAt) {
+                throw new UnsupportedOperationException("the timeout-carrying overload is the one under test");
+            }
+
+            @Override
+            public LeaseGrant acquire(
+                    String companyId, String creditTypeId, double amount, Instant expiresAt, Duration timeout) {
+                acquireTimeouts.add(timeout);
+                return new LeaseGrant("lse_1", companyId, creditTypeId, amount, expiresAt);
+            }
+
+            @Override
+            public LeaseGrant extend(String leaseId, double additionalAmount, Instant expiresAt) {
+                throw new UnsupportedOperationException("the timeout-carrying overload is the one under test");
+            }
+
+            @Override
+            public LeaseGrant extend(String leaseId, double additionalAmount, Instant expiresAt, Duration timeout) {
+                extendTimeouts.add(timeout);
+                return new LeaseGrant(leaseId, "co_1", "ct_1", 5000, expiresAt);
+            }
+
+            @Override
+            public void release(String leaseId) {}
+        };
+        CreditLeaseManager manager = manager(wire, leases, holds);
+        Duration perCheck = Duration.ofMillis(250);
+
+        manager.acquireIfNeeded("co_1", "ct_1", perCheck);
+        leases.tryReserve("co_1", "ct_1", 9900);
+        manager.maybeExtend("co_1", "ct_1", null, perCheck);
+        manager.extendInBackground("co_1", "ct_1");
+        manager.drain(Duration.ofSeconds(5));
+
+        // The caller is waiting on these two, so its deadline is the one that counts.
+        assertEquals(Collections.singletonList(perCheck), acquireTimeouts);
+        // And the background top-up, which nobody is waiting on, keeps the client's own.
+        assertEquals(Arrays.asList(perCheck, null), extendTimeouts);
         manager.close();
     }
 

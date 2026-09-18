@@ -84,7 +84,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     private final Thread shutdownHook;
     private final boolean offline;
     private final HttpEventSender eventSender;
-    private final DataStreamClient dataStreamClient;
+    // Not final: a DataStream that fails to start leaves none, and auto mode reads this per check.
+    private volatile DataStreamClient dataStreamClient;
     private final DatastreamOptions datastreamOptions;
     // Credit leases. Null throughout when the caller did not configure them, which is what every
     // credit-aware path checks before doing anything.
@@ -140,9 +141,23 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 rulesEngine = null;
             }
 
-            this.dataStreamClient = new DataStreamClient(
+            DataStreamClient started = new DataStreamClient(
                     this.datastreamOptions, this.apiKey, basePath, this.logger, rulesEngine, resolveSdkVersion());
-            this.dataStreamClient.start();
+            try {
+                started.start();
+            } catch (RuntimeException e) {
+                // Nothing here can serve a local evaluation, so the client is dropped rather than
+                // kept as a handle every later path has to re-test. Checks fall to the API, and
+                // auto mode resolves to server-side gating on the strength of this field.
+                this.logger.error("DataStream failed to start, falling back to API checks: " + e.getMessage());
+                try {
+                    started.close();
+                } catch (Exception closing) {
+                    this.logger.debug("DataStream close after a failed start: " + closing);
+                }
+                started = null;
+            }
+            this.dataStreamClient = started;
         } else {
             this.dataStreamClient = null;
         }
@@ -807,10 +822,10 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      * Which reservation mode a {@code check()} with usage resolves to right now. Null means no
      * credit gating at all: leases are not configured, or the client is offline.
      *
-     * <p>Auto is client mode whenever the DataStream is enabled, and server mode otherwise. That
-     * is settled once, by what the client was built with, not per check: a DataStream that is
-     * configured but currently disconnected stays in client mode and degrades through the plain
-     * check, rather than silently switching every check to a different gating path mid-run.
+     * <p>Auto resolves per check rather than once at startup: a DataStream that failed to start
+     * leaves no client behind, and the checks that follow gate server-side instead of silently
+     * dropping to a plain, ungated flag check. A DataStream that is merely disconnected stays in
+     * client mode and degrades through the plain check, which has its own story for that.
      */
     private CreditLeaseMode effectiveLeaseMode() {
         if (creditLeaseMode == null || offline) {
@@ -851,7 +866,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 user,
                 opts.getUsage(),
                 opts.getEventSubtype(),
-                opts.getOnAcquireFailure() == OnAcquireFailure.FAIL_OPEN);
+                opts.getOnAcquireFailure() == OnAcquireFailure.FAIL_OPEN,
+                opts.getTimeout());
         if (mode == CreditLeaseMode.SERVER) {
             ServerCreditCheck serverCheck =
                     new ServerCreditCheck(features(), credits(), logger, serverReservationTtl, Clock.systemUTC());
@@ -929,8 +945,26 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
         try {
             eventBuffer.push(buildReservationSettleEvent(track, objectMapToJsonNode(traits), reservation.getId()));
+            updateCompanyMetrics(track);
         } catch (Exception e) {
             logger.error("Error sending track event: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Folds a track event into the cached company's metrics, so a local evaluation right after it
+     * gates on the usage just recorded instead of waiting for the stream to push the new figure
+     * back. A settle is a track, and reads the same way.
+     */
+    private void updateCompanyMetrics(EventBodyTrack body) {
+        Map<String, String> company = body.getCompany().orElse(null);
+        if (company == null || company.isEmpty() || dataStreamClient == null || !dataStreamClient.isConnected()) {
+            return;
+        }
+        try {
+            dataStreamClient.updateCompanyMetrics(body);
+        } catch (Exception e) {
+            logger.error("Failed to update company metrics: " + e.getMessage());
         }
     }
 
@@ -1153,15 +1187,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     .build();
 
             eventBuffer.push(buildTrackEvent(EventBody.of(body), options));
-
-            // Update cached company metrics if datastream is active
-            if (company != null && !company.isEmpty() && dataStreamClient != null && dataStreamClient.isConnected()) {
-                try {
-                    dataStreamClient.updateCompanyMetrics(body);
-                } catch (Exception e2) {
-                    logger.error("Failed to update company metrics: " + e2.getMessage());
-                }
-            }
+            updateCompanyMetrics(body);
         } catch (Exception e) {
             logger.error("Error sending track event: " + e.getMessage());
         }

@@ -18,9 +18,9 @@ public final class PreflightOptions {
     /** A simulated quantity scoped to one event subtype. */
     public static final class EventUsage {
         private final String eventSubtype;
-        private final long quantity;
+        private final double quantity;
 
-        public EventUsage(String eventSubtype, long quantity) {
+        public EventUsage(String eventSubtype, double quantity) {
             this.eventSubtype = eventSubtype;
             this.quantity = quantity;
         }
@@ -29,16 +29,16 @@ public final class PreflightOptions {
             return eventSubtype;
         }
 
-        public long getQuantity() {
+        public double getQuantity() {
             return quantity;
         }
     }
 
     private final Map<String, Double> creditCost;
-    private final Long usage;
+    private final Double usage;
     private final EventUsage eventUsage;
 
-    private PreflightOptions(Map<String, Double> creditCost, Long usage, EventUsage eventUsage) {
+    private PreflightOptions(Map<String, Double> creditCost, Double usage, EventUsage eventUsage) {
         this.creditCost = creditCost == null || creditCost.isEmpty()
                 ? null
                 : Collections.unmodifiableMap(new LinkedHashMap<>(creditCost));
@@ -55,11 +55,12 @@ public final class PreflightOptions {
         if (usage == null || !CreditAmounts.isValidQuantity(usage)) {
             return null;
         }
-        long quantity = preflightQuantity(usage);
+        // Kept as the caller gave it. The engine evaluates the real quantity, fraction and all;
+        // only the wire body rounds, and only because its field is an integer.
         if (eventSubtype != null && !eventSubtype.isEmpty()) {
-            return new PreflightOptions(null, null, new EventUsage(eventSubtype, quantity));
+            return new PreflightOptions(null, null, new EventUsage(eventSubtype, usage));
         }
-        return new PreflightOptions(null, quantity, null);
+        return new PreflightOptions(null, usage, null);
     }
 
     /** Prices one credit type directly, bypassing the engine's own quantity times rate arithmetic. */
@@ -68,9 +69,9 @@ public final class PreflightOptions {
     }
 
     /**
-     * Casts a usage onto the integer a preflight carries. A hold can be sized from a fractional
-     * usage, but a preflight asks an upper-bound question, so a fraction rounds up: the check must
-     * not pass on less usage than the operation is about to record.
+     * Casts a usage onto the integer the request body carries. A preflight asks an upper-bound
+     * question, so a fraction rounds up: the check must not pass on less usage than the operation
+     * is about to record. Only the wire needs this; a local evaluation reads the raw quantity.
      */
     public static long preflightQuantity(double usage) {
         return (long) Math.ceil(usage);
@@ -80,7 +81,7 @@ public final class PreflightOptions {
         return creditCost;
     }
 
-    public Long getUsage() {
+    public Double getUsage() {
         return usage;
     }
 
@@ -107,13 +108,14 @@ public final class PreflightOptions {
         if (creditCost != null) {
             builder.creditCost(creditCost);
         }
+        // The wire fields are integers, so the rounding happens here and nowhere else.
         if (hasUsage) {
-            builder.usage(usage);
+            builder.usage(preflightQuantity(usage));
         }
         if (hasEventUsage) {
             builder.eventUsage(PreflightEventUsageRequestBody.builder()
                     .eventSubtype(eventUsage.getEventSubtype())
-                    .quantity(eventUsage.getQuantity())
+                    .quantity(preflightQuantity(eventUsage.getQuantity()))
                     .build());
         }
         return builder.build();

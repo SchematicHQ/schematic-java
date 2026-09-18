@@ -29,7 +29,7 @@ class CreditCheckReserveSizingTest {
     private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
 
     /** Allows, and meters the credit at ten credits a unit. */
-    private static final class AllowingDataStream implements CreditCheckDataStream {
+    private static class AllowingDataStream implements CreditCheckDataStream {
         @Override
         public RulesengineFlag getFlag(String flagKey) {
             return RulesengineFlag.builder()
@@ -94,6 +94,20 @@ class CreditCheckReserveSizingTest {
         }
     }
 
+    /** Allows the probe, then throws when the gate asks. */
+    private static final class ThrowingGateDataStream extends AllowingDataStream {
+        private int evaluations;
+
+        @Override
+        public RulesengineCheckFlagResult evaluateFlag(
+                RulesengineFlag flag, RulesengineCompany company, RulesengineUser user, PreflightOptions preflight) {
+            if (++evaluations > 1) {
+                throw new IllegalStateException("the engine blew up");
+            }
+            return super.evaluateFlag(flag, company, user, preflight);
+        }
+    }
+
     private static final class Fixture {
         final InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
         final InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
@@ -102,6 +116,10 @@ class CreditCheckReserveSizingTest {
         boolean fellBack;
 
         Fixture(Clock flowClock) {
+            this(flowClock, new AllowingDataStream());
+        }
+
+        Fixture(Clock flowClock, CreditCheckDataStream source) {
             LeaseWireClient wire = new LeaseWireClient() {
                 @Override
                 public LeaseGrant acquire(String companyId, String creditTypeId, double amount, Instant expiresAt) {
@@ -118,7 +136,7 @@ class CreditCheckReserveSizingTest {
             };
             manager = new CreditLeaseManager(
                     wire, leases, holds, CreditLeaseConfig.builder().build(), null, CLOCK);
-            flow = new CreditCheck(new AllowingDataStream(), leases, holds, manager, null, flowClock, null, null);
+            flow = new CreditCheck(source, leases, holds, manager, null, flowClock, null, null);
             leases.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, NOW.plusSeconds(300)));
         }
 
@@ -157,6 +175,22 @@ class CreditCheckReserveSizingTest {
         assertEquals(5.0, result.getReservation().getCreditsReserved());
         assertEquals(0.5, result.getReservation().getQuantityReserved());
         assertEquals(995.0, fixture.leases.get("co_1", "ct_1").getLocalRemainingCredits());
+    }
+
+    @Test
+    void anEngineThrowAtTheGateCancelsTheHoldItTookFirst() {
+        Fixture fixture = new Fixture(CLOCK, new ThrowingGateDataStream());
+
+        CheckResult result = fixture.run(10);
+
+        // A throw is not a verdict, so the check resolves through its fail-closed contract, and
+        // the credits debited before the gate go back rather than sitting on the lease.
+        assertFalse(fixture.fellBack);
+        assertFalse(result.isAllowed());
+        assertNull(result.getReservation());
+        assertTrue(result.getReason().startsWith("wasm_error"));
+        assertEquals(0, fixture.holds.count());
+        assertEquals(1000.0, fixture.leases.get("co_1", "ct_1").getLocalRemainingCredits());
     }
 
     @Test

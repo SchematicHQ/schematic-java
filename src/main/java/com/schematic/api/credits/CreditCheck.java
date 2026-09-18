@@ -181,7 +181,7 @@ public final class CreditCheck {
         String companyId = company.getId();
         String userId = user == null ? null : user.getId();
 
-        LeaseState lease = manager.acquireIfNeeded(companyId, creditId);
+        LeaseState lease = manager.acquireIfNeeded(companyId, creditId, request.getTimeout());
         if (lease == null) {
             return failure(request, "lease_acquire_failed", flag, company, user, creditId, companyId, userId);
         }
@@ -208,7 +208,7 @@ public final class CreditCheck {
             if (reserve == null) {
                 // Pass the cost as required credits so a single large request extends even while
                 // the ratio still sits above the water mark.
-                manager.maybeExtend(companyId, creditId, creditCost);
+                manager.maybeExtend(companyId, creditId, creditCost, request.getTimeout());
                 reserve = leases.tryReserve(companyId, creditId, creditCost);
             }
         } catch (RuntimeException e) {

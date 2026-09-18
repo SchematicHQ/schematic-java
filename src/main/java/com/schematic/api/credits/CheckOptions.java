@@ -89,11 +89,13 @@ public final class CheckOptions {
         }
 
         /**
-         * A per-call timeout for the call this check waits on: the check-and-reserve call in
-         * server mode, and the REST flag check when the check falls back to one. Client-mode
-         * lease acquires and extends take the client's own timeouts instead, since they are
-         * single-flighted per company and credit type and one caller's timeout would govern every
-         * caller that joins that flight.
+         * A per-call timeout for every call this check waits on: the check-and-reserve call in
+         * server mode, the REST flag check when the check falls back to one, and the client-mode
+         * lease acquire and extend.
+         *
+         * <p>Lease calls are single-flighted per company and credit type, so the timeout of
+         * whichever caller opened the flight governs everyone who joins it. Background top-ups,
+         * which no caller is waiting on, keep the client's own timeout.
          */
         public Builder timeout(Duration timeout) {
             this.timeout = timeout;

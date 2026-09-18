@@ -213,7 +213,54 @@ public final class CreditLeaseConfig {
         }
 
         public CreditLeaseConfig build() {
+            // Caught here rather than at the first check: a lease sized NaN or a water mark above
+            // one turns every later comparison into a silent no-op, and the symptom surfaces as
+            // checks that never gate rather than as the misconfiguration it is.
+            positiveAmount(defaultLeaseSize, "defaultLeaseSize");
+            fraction(lowWaterMark, "lowWaterMark");
+            positiveDuration(defaultLeaseDuration, "defaultLeaseDuration");
+            positiveDuration(defaultReservationTtl, "defaultReservationTtl");
+            positiveDuration(sweepInterval, "sweepInterval");
+            for (Map.Entry<String, CreditLeaseOverride> entry : overrides.entrySet()) {
+                CreditLeaseOverride override = entry.getValue();
+                if (override == null) {
+                    continue;
+                }
+                String where = " for credit type " + entry.getKey();
+                positiveAmount(override.getDefaultLeaseSize(), "defaultLeaseSize" + where);
+                fraction(override.getLowWaterMark(), "lowWaterMark" + where);
+                positiveDuration(override.getDefaultLeaseDuration(), "defaultLeaseDuration" + where);
+                positiveDuration(override.getDefaultReservationTtl(), "defaultReservationTtl" + where);
+            }
             return new CreditLeaseConfig(this);
+        }
+
+        private static void positiveAmount(Double value, String name) {
+            if (value == null) {
+                return;
+            }
+            if (Double.isNaN(value) || Double.isInfinite(value) || value <= 0) {
+                throw new IllegalArgumentException(name + " must be a positive finite number, got " + value);
+            }
+        }
+
+        private static void fraction(Double value, String name) {
+            if (value == null) {
+                return;
+            }
+            if (Double.isNaN(value) || value <= 0 || value >= 1) {
+                throw new IllegalArgumentException(
+                        name + " must be a fraction between 0 and 1, exclusive, got " + value);
+            }
+        }
+
+        private static void positiveDuration(Duration value, String name) {
+            if (value == null) {
+                return;
+            }
+            if (value.isZero() || value.isNegative()) {
+                throw new IllegalArgumentException(name + " must be a positive duration, got " + value);
+            }
         }
     }
 }
