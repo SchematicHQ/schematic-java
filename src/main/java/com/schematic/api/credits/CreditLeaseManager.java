@@ -191,14 +191,6 @@ public final class CreditLeaseManager implements AutoCloseable {
         if (wrote) {
             debug("Acquired credit lease " + grant.getLeaseId() + " for " + companyId + "/" + creditTypeId
                     + " (granted=" + grant.getGrantedAmount() + ", expires=" + grant.getExpiresAt() + ")");
-            if (stopped) {
-                // The stop landed while this lease was on the wire, so the close has already
-                // swept the slots and will not come back for this one. Hand it back here, on this
-                // thread: the drain does not wait on caller-thread acquires, so there is nobody
-                // else left to do it. Only a lease this call installed, never one a sibling put
-                // in the slot.
-                return releaseAfterStop(companyId, creditTypeId, current);
-            }
             return current;
         }
 
@@ -303,6 +295,7 @@ public final class CreditLeaseManager implements AutoCloseable {
                     if (fresh == null) {
                         return leases.get(companyId, creditTypeId);
                     }
+                    flight.sentExtend = true;
                     LeaseState result = extend(fresh, resolved, additionalAmount);
                     flight.result.complete(result);
                     return result;
@@ -331,14 +324,16 @@ public final class CreditLeaseManager implements AutoCloseable {
         LeaseState joined = inFlight.await();
         // The flight already asked for at least what we need, which covers every watermark-driven
         // joiner and any check the tranche fits. One wire call serves all of them, which is the
-        // point of single-flight.
-        if (additionalAmount <= inFlight.requestedAdditional || !allowFollowUp) {
+        // point of single-flight. A flight that sent nothing covers nobody, so its ask does not
+        // stand in for ours.
+        if ((inFlight.sentExtend && additionalAmount <= inFlight.requestedAdditional) || !allowFollowUp) {
             return joined;
         }
-        // Our shortfall outran the flight's ask. We waited it out rather than racing a second
-        // extend onto the same lease, and now top up the difference with exactly one more,
-        // re-read against the slot that flight just moved. The follow-up is not allowed one of
-        // its own: a company whose balance simply cannot reach the request would otherwise spin.
+        // Either our shortfall outran the flight's ask, or that flight decided against sending
+        // anything. We waited it out rather than racing a second extend onto the same lease, and
+        // now issue exactly one more, re-read against the slot as that flight left it. The
+        // follow-up is not allowed one of its own: a company whose balance simply cannot reach
+        // the request would otherwise spin.
         return maybeExtend(companyId, creditTypeId, requiredCredits, false, true);
     }
 
@@ -514,30 +509,6 @@ public final class CreditLeaseManager implements AutoCloseable {
     }
 
     /**
-     * Hands back a lease that landed after the close had already swept the slots, and clears the
-     * slot so nothing draws on it.
-     *
-     * <p>Best-effort: a failed release leaves the credits to expire server-side, which is where a
-     * lease nobody releases ends up anyway.
-     */
-    private LeaseState releaseAfterStop(String companyId, String creditTypeId, LeaseState installed) {
-        debug("Releasing credit lease " + installed.getLeaseId() + " for " + companyId + "/" + creditTypeId
-                + ": the manager stopped while the acquire was on the wire");
-        try {
-            wire.release(installed.getLeaseId());
-        } catch (RuntimeException e) {
-            warn("Failed to release credit lease " + installed.getLeaseId() + " after stop (it will expire "
-                    + "server-side): " + e);
-        }
-        try {
-            leases.drop(companyId, creditTypeId);
-        } catch (RuntimeException e) {
-            warn("Failed to clear credit lease slot " + companyId + "/" + creditTypeId + " after stop: " + e);
-        }
-        return null;
-    }
-
-    /**
      * Waits out lease work already on the wire, so a close releases what that work installs
      * instead of orphaning it. Bounded: whatever has not landed by {@code timeout} is abandoned
      * rather than stalling the caller's shutdown, and the credits it holds fall back to
@@ -689,6 +660,11 @@ public final class CreditLeaseManager implements AutoCloseable {
 
         private final double requestedAdditional;
         private final CompletableFuture<LeaseState> result = new CompletableFuture<>();
+        // What the flight asked for only bounds a joiner's shortfall if the flight went out at
+        // all. A flight that re-read the slot and found the extend unnecessary sends nothing, and
+        // a joiner holding that as its answer would deny a check whose credits are still on the
+        // server.
+        private volatile boolean sentExtend;
 
         Flight(double requestedAdditional) {
             this.requestedAdditional = requestedAdditional;

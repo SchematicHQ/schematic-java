@@ -177,11 +177,7 @@ public final class CreditCheck {
             return fallBack(fallback);
         }
 
-        // Sized from the quantity the settle will bill, not the raw usage: the track event's
-        // quantity is an integer, so a fractional usage settles as a whole unit. Holding the
-        // fraction would under-reserve every fractional check by the difference.
-        double reservedQuantity = ReservationSettlement.settleQuantity(request.getUsage());
-        double creditCost = reservedQuantity * consumptionRate;
+        double creditCost = request.getUsage() * consumptionRate;
         String companyId = company.getId();
         String userId = user == null ? null : user.getId();
 
@@ -253,7 +249,7 @@ public final class CreditCheck {
                 companyId,
                 creditId,
                 eventSubtype,
-                reservedQuantity,
+                request.getUsage(),
                 creditCost,
                 consumptionRate,
                 expiresAt,

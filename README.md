@@ -248,7 +248,7 @@ if (result.getReservation() != null) {
 
 A check can allow without reserving credits, when the feature is not credit-metered, when `usage` is 0, or when the check failed open, and that usage still has to be tracked.
 
-A fractional `usage` is rounded up to a whole unit. The track event's quantity is an integer, so a usage of 0.5 bills one unit, and the reservation holds one unit's worth of credits to match.
+`usage` may be fractional. A client-mode reservation holds it unrounded, as does the ledger debit a settle makes. The integer fields on the wire round up: the preflight quantity and the quantity a track event bills, so a partial unit is never billed as none.
 
 `usage` still gates a check that reserves nothing: it is sent as a preflight, locally or to the API, so the verdict accounts for what the call is about to spend. Preflighted verdicts are not cached.
 
@@ -288,6 +288,8 @@ Identifying with a prewarm flushes the event buffer first, so the server has the
 Or call `schematic.prewarm(companyKeys, creditTypeIds)` directly. Both are no-ops in server mode.
 
 ### Failure behavior
+
+In server mode, a check that times out after the server has already reserved leaves those credits reserved until the TTL expires, so keep `defaultReservationTtl` short there.
 
 A check that cannot gate, because the API is unreachable, Redis is down, or the lease is exhausted, fails closed by default. Override it per check:
 
