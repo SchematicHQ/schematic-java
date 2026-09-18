@@ -15,7 +15,7 @@ class ReservationSettlementTest {
     private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
 
     @Test
-    void aFractionalSettleDebitsTheRawProductAndBillsTheWholeUnit() {
+    void aFractionalSettleDebitsAndBillsTheSameWholeUnits() {
         InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
         InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
         leases.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, NOW.plusSeconds(300)));
@@ -41,10 +41,39 @@ class ReservationSettlementTest {
         assertTrue(outcome.isSettledLocally());
         // The event's quantity is an integer, so 7.2 bills as 8.
         assertEquals(8L, outcome.getTrack().getQuantity().get());
-        // The lease is debited the raw 7.2 at 2 credits a unit, which is the figure every SDK
-        // sharing this lease computes, and the 5.6 left of the hold goes back. The event billing
-        // marginally more than the ledger debits is a property of the shared spec, not of this
-        // port, and closing it would put this SDK out of step with the others on one Redis.
-        assertEquals(985.6, leases.get("co_1", "ct_1").getLocalRemainingCredits(), 1e-9);
+        // And the lease is debited for those same eight units at 2 credits apiece, with the 4
+        // credits left of the 20-credit hold going back. Debiting the raw 7.2 instead would move
+        // the local ledger by less than the event bills, and the two would drift over a session.
+        assertEquals(984.0, leases.get("co_1", "ct_1").getLocalRemainingCredits(), 1e-9);
+    }
+
+    @Test
+    void aSettleBelowOneWholeUnitStillBillsOne() {
+        InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
+        leases.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, NOW.plusSeconds(300)));
+        leases.tryReserve("co_1", "ct_1", 2);
+        Reservation reservation = new Reservation(
+                "rsv_1",
+                "lse_1",
+                CreditLeaseMode.CLIENT,
+                "co_1",
+                "ct_1",
+                "inference_tokens",
+                1,
+                2,
+                2,
+                NOW.plusSeconds(60),
+                null,
+                null);
+        holds.add(reservation);
+
+        ReservationSettlement.SettleOutcome outcome = ReservationSettlement.settle(holds, reservation, 0.5);
+
+        // The API takes the quantity as a float only to deserialize it, and rejects a non-integer
+        // while processing the event, so a raw 0.5 would be dropped server-side and never billed
+        // while the lease had already been debited for it.
+        assertEquals(1L, outcome.getTrack().getQuantity().get());
+        assertEquals(998.0, leases.get("co_1", "ct_1").getLocalRemainingCredits(), 1e-9);
     }
 }

@@ -1,5 +1,6 @@
 package com.schematic.api.credits;
 
+import static com.schematic.api.credits.TestThreads.parked;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -151,22 +152,6 @@ class CreditLeaseManagerShutdownTest {
         first.join(5000);
         joiner.join(5000);
         manager.close();
-    }
-
-    /** Waits, boundedly, for a thread to block. */
-    private static boolean parked(Thread thread) throws InterruptedException {
-        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
-        while (System.nanoTime() - deadline < 0) {
-            Thread.State state = thread.getState();
-            if (state == Thread.State.WAITING || state == Thread.State.TIMED_WAITING) {
-                return true;
-            }
-            if (state == Thread.State.TERMINATED) {
-                return false;
-            }
-            Thread.sleep(1);
-        }
-        return false;
     }
 
     @Test

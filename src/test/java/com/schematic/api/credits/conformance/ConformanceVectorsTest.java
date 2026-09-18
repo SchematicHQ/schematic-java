@@ -70,7 +70,65 @@ class ConformanceVectorsTest {
 
     private static final Set<String> MANAGER_CATEGORIES = new HashSet<>(Collections.singletonList("lease_manager"));
 
-    private static final Set<String> FLOW_CATEGORIES = new HashSet<>(Arrays.asList("check_flow", "track_settle"));
+    private static final Set<String> FLOW_CATEGORIES =
+            new HashSet<>(Arrays.asList("check_flow", "track_settle", "fractional_usage"));
+
+    private static final Set<String> RESERVATION_EXPECT_KEYS = keys(
+            "lease_id", "credit_type_id", "event_subtype", "quantity_reserved", "credits_reserved", "consumption_rate");
+
+    private static final Set<String> TRACK_EXPECT_KEYS = keys("event", "quantity", "lease_id", "reservation_id");
+
+    private static final Set<String> ENGINE_CALL_EXPECT_KEYS =
+            keys("credit_balance", "credit_cost", "event_usage", "usage");
+
+    private static final Set<String> EVENT_USAGE_EXPECT_KEYS = keys("event_subtype", "quantity");
+
+    /**
+     * What each op asserts. A vector re-synced from the reference implementation can carry an
+     * expectation this runner has never heard of; without this map the vector would pass while
+     * asserting nothing, so an unrecognised key fails the same way an unknown op does.
+     */
+    private static final Map<String, Set<String>> EXPECT_KEYS = expectKeys();
+
+    private static Map<String, Set<String>> expectKeys() {
+        Map<String, Set<String>> byOp = new HashMap<>();
+        byOp.put("advance_clock", keys());
+        byOp.put("replace_lease", keys("written"));
+        byOp.put("drop_lease", keys());
+        byOp.put("try_reserve", keys("balance", "lease_id"));
+        byOp.put("refund_lease", keys());
+        byOp.put("extend_lease", keys());
+        byOp.put("get_lease", keys("exists", "lease_id", "granted_amount", "local_remaining_credits"));
+        byOp.put("add_reservation", keys());
+        byOp.put("consume_reservation", keys("consumed", "throws"));
+        byOp.put("get_reservation", keys("exists"));
+        byOp.put("reserved_credits", keys("total"));
+        byOp.put("reservation_count", keys("count"));
+        byOp.put(
+                "check",
+                keys(
+                        "allowed",
+                        "reason",
+                        "err",
+                        "has_reservation",
+                        "fallback_called",
+                        "reservation",
+                        "engine_calls",
+                        "wire_extends",
+                        "last_extend_additional_amount"));
+        byOp.put("track", keys("settled_locally", "track"));
+        byOp.put(
+                "acquire_if_needed",
+                keys("lease_id", "wire_acquires", "last_acquire_requested_amount", "released_lease_ids"));
+        byOp.put("maybe_extend", keys("wire_extends", "last_extend_additional_amount", "last_extend_lease_id"));
+        byOp.put("release_all_local_leases", keys("released_lease_ids", "remaining_slots"));
+        byOp.put("sweep_expired", keys("swept"));
+        return byOp;
+    }
+
+    private static Set<String> keys(String... names) {
+        return new HashSet<>(Arrays.asList(names));
+    }
 
     @TestFactory
     Collection<DynamicTest> storeVectors() {
@@ -152,17 +210,18 @@ class ConformanceVectorsTest {
 
     private void runVector(String backendName, JsonNode vector) {
         Harness harness = new Harness(Backend.create(backendName), vector.get("given"));
+        String vectorName = vector.get("name").asText();
         try {
             harness.installGivenLeases();
             for (JsonNode op : vector.get("operations")) {
-                runOperation(harness, op);
+                runOperation(harness, op, vectorName);
             }
         } finally {
             harness.close();
         }
     }
 
-    private void runOperation(Harness h, JsonNode op) {
+    private void runOperation(Harness h, JsonNode op, String vectorName) {
         String name = op.get("op").asText();
         JsonNode expect = op.has("expect") ? op.get("expect") : MAPPER.createObjectNode();
         switch (name) {
@@ -242,6 +301,45 @@ class ConformanceVectorsTest {
                 break;
             default:
                 fail("unknown conformance op: " + name);
+        }
+        assertExpectHandled(name, expect, vectorName);
+    }
+
+    /** Fails on an expectation key no assertion above consumed, naming the key and the vector. */
+    private static void assertExpectHandled(String op, JsonNode expect, String vectorName) {
+        Set<String> known = EXPECT_KEYS.get(op);
+        assertNotNull(known, "conformance op " + op + " declares no expectation keys");
+        assertHandledKeys(expect, known, "expect", op, vectorName);
+        assertHandledKeys(expect.get("reservation"), RESERVATION_EXPECT_KEYS, "expect.reservation", op, vectorName);
+        assertHandledKeys(expect.get("track"), TRACK_EXPECT_KEYS, "expect.track", op, vectorName);
+        JsonNode calls = expect.get("engine_calls");
+        if (calls == null || !calls.isArray()) {
+            return;
+        }
+        for (int i = 0; i < calls.size(); i++) {
+            String where = "expect.engine_calls[" + i + "]";
+            assertHandledKeys(calls.get(i), ENGINE_CALL_EXPECT_KEYS, where, op, vectorName);
+            assertHandledKeys(
+                    calls.get(i).get("event_usage"), EVENT_USAGE_EXPECT_KEYS, where + ".event_usage", op, vectorName);
+        }
+    }
+
+    private static void assertHandledKeys(
+            JsonNode node, Set<String> known, String where, String op, String vectorName) {
+        if (node == null || !node.isObject()) {
+            return;
+        }
+        List<String> unhandled = new ArrayList<>();
+        Iterator<String> fields = node.fieldNames();
+        while (fields.hasNext()) {
+            String field = fields.next();
+            if (!known.contains(field)) {
+                unhandled.add(field);
+            }
+        }
+        if (!unhandled.isEmpty()) {
+            fail("unhandled conformance expectation " + unhandled + " in " + where + " of op " + op + " in vector "
+                    + vectorName);
         }
     }
 
@@ -462,7 +560,11 @@ class ConformanceVectorsTest {
             assertEquals(want.get("event").asText(), track.getEvent(), "track event");
         }
         if (want.has("quantity")) {
-            assertEquals(want.get("quantity").asLong(), track.getQuantity().orElse(null), "track quantity");
+            // The vector states the caller's actual usage, which can be fractional. This SDK's
+            // event quantity is an integer on the wire, so a partial unit bills as the whole one
+            // the hold and the debit were already sized for.
+            long quantity = (long) Math.ceil(want.get("quantity").asDouble());
+            assertEquals(quantity, track.getQuantity().orElse(null), "track quantity");
         }
         if (want.has("lease_id")) {
             assertEquals(want.get("lease_id").asText(), track.getLeaseId().orElse(null), "track lease_id");

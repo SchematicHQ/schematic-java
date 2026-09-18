@@ -147,9 +147,15 @@ public final class InMemoryLeaseStore implements LeaseStore, LeaseLister {
                     continue;
                 }
                 leases.remove(key);
-                // Retire the lock with the state it guarded, so neither map grows with every
-                // company this process has ever leased against. Retiring it last, and while
-                // holding it, is what lets a waiter notice and retake the replacement.
+                // Retire the lock with the state it guarded, so the slot leaves both maps
+                // together. Retiring it last, and while holding it, is what lets a waiter notice
+                // and retake the replacement.
+                //
+                // Only a release on close drops a slot, so both maps hold an entry for every
+                // (company, credit type) this process has leased against, expired ones included,
+                // until it exits. That is bounded by the tenants one process actually serves, and
+                // an expired entry has to stay readable anyway: a reserve must see it and refuse
+                // rather than see nothing and look unleased.
                 locks.remove(key, lock);
                 return;
             } finally {

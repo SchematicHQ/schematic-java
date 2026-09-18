@@ -919,17 +919,20 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         }
 
         EventBodyTrack track;
+        boolean updateMetrics;
         if (reservation.getMode() == CreditLeaseMode.SERVER || reservations == null) {
             // Server mode holds the credits server-side, so there is nothing local to consume. A
             // client-mode handle with no store still has to carry its lease id and its key, since
             // dropping either would double-debit the grant or double-bill the usage.
             track = ReservationSettlement.buildTrackEvent(reservation, actualQuantity);
+            updateMetrics = true;
         } else {
             try {
                 ReservationSettlement.SettleOutcome outcome =
                         ReservationSettlement.settle(reservations, reservation, actualQuantity);
                 track = outcome.getTrack();
-                if (!outcome.isSettledLocally()) {
+                updateMetrics = outcome.isSettledLocally();
+                if (!updateMetrics) {
                     logger.debug("trackWithReservation: reservation " + reservation.getId() + " was not settled "
                             + "locally (expired, already settled, or the store was unreachable); emitting the track "
                             + "keyed for server-side dedupe");
@@ -940,12 +943,19 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 logger.warn("trackWithReservation: failed to settle reservation " + reservation.getId() + " locally ("
                         + e + "); emitting the track anyway");
                 track = ReservationSettlement.buildTrackEvent(reservation, actualQuantity);
+                updateMetrics = false;
             }
         }
 
         try {
             eventBuffer.push(buildReservationSettleEvent(track, objectMapToJsonNode(traits), reservation.getId()));
-            updateCompanyMetrics(track);
+            // The cached metric moves only when this call moved local state with it. The event is
+            // keyed off the reservation id, so the server drops a retried settle as a duplicate;
+            // bumping the metric for one would have the caller's next local evaluation gate on
+            // usage that was counted twice.
+            if (updateMetrics) {
+                updateCompanyMetrics(track);
+            }
         } catch (Exception e) {
             logger.error("Error sending track event: " + e.getMessage());
         }
@@ -972,8 +982,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      * Warms a credit lease for each named credit type, so the first {@link #check} against it does
      * not pay the acquire round trip. Failures are logged, never thrown.
      *
-     * <p>When the company keys carry no id, this actively fetches the company over the DataStream,
-     * which both resolves the id and warms the cache so the first check hits the lease path.
+     * <p>The keys are looked up over the DataStream, which both resolves the id and warms the cache
+     * so the first check hits the lease path. Only a lookup that comes up empty falls back to
+     * reading a {@code comp_}-prefixed value as the id.
      */
     public void prewarm(Map<String, String> company, List<String> creditTypeIds) {
         if (creditLeaseManager == null || leaseStore == null) {
@@ -1013,13 +1024,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     /**
-     * Resolves the company id, actively fetching over the DataStream when only secondary keys were
-     * given, which warms the cache as a side effect. Null when the company never surfaced within
-     * the prewarm resolve timeout.
+     * Resolves the company id the way the server does: the keys are looked up first, whatever they
+     * are named, actively fetching over the DataStream so the lookup warms the cache as a side
+     * effect. Only when nothing matches is a value read as the company's own id, by its
+     * {@code comp_} prefix. Null when the company never surfaced within the prewarm resolve
+     * timeout and the keys carry no Schematic id.
      */
     private String resolveCompanyIdWithWait(Map<String, String> company) {
         if (dataStreamClient == null) {
-            return company.get("id");
+            return PrewarmCompanyResolver.schematicId(company, PrewarmCompanyResolver.COMPANY_ID_PREFIX);
         }
         return PrewarmCompanyResolver.resolve(
                 company,

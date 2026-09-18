@@ -1,5 +1,6 @@
 package com.schematic.api.credits;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,7 +19,9 @@ import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.features.FeaturesClient;
 import com.schematic.api.types.CheckFlagRequestBody;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /** The client-side wiring of credit leases: what each configured mode builds, and what it says. */
@@ -134,6 +137,20 @@ class SchematicCreditLeaseTest {
                         .build());
 
         verify(logger).debug(contains("skipping the prewarm"));
+    }
+
+    @Test
+    void aPrewarmListIsCopiedOutOfTheCallersHands() {
+        List<String> creditTypes = new ArrayList<>();
+        creditTypes.add("ct_1");
+
+        IdentifyOptions options = IdentifyOptions.builder().prewarm(creditTypes).build();
+        // The prewarm runs in the background and reads this list after identify has returned, so a
+        // caller reusing their own list must not get to change what gets warmed after the fact.
+        creditTypes.clear();
+        creditTypes.add("ct_2");
+
+        assertEquals(Collections.singletonList("ct_1"), options.getPrewarm());
     }
 
     @Test
