@@ -449,6 +449,37 @@ class SchematicTest {
     }
 
     @Test
+    void check_ResolvesTheCallersDefaultWhenTheEngineDeclinesOnTheDataStreamBranch() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        // What the DataStream client hands back when the engine cannot answer: the flag's own
+        // default standing in for a verdict.
+        when(dataStream.checkFlag(eq("test_flag"), any(), any(), any()))
+                .thenReturn(RulesengineCheckFlagResult.builder()
+                        .flagKey("test_flag")
+                        .reason("RULES_ENGINE_UNAVAILABLE")
+                        .value(true)
+                        .build());
+        Schematic spySchematic = spy(schematic);
+        setDataStreamClient(spySchematic, dataStream);
+        spySchematic.setFlagDefault("test_flag", false);
+
+        CheckResult named = spySchematic.check(
+                "test_flag",
+                null,
+                null,
+                CheckOptions.builder().usage(5).defaultValue(true).build());
+        CheckResult unnamed = spySchematic.check(
+                "test_flag", null, null, CheckOptions.builder().usage(5).build());
+
+        // The engine declining is the case defaultValue exists for, so it applies on the branch
+        // that answers most checks and not just offline and on the API fallback.
+        assertTrue(named.isAllowed());
+        // With no caller default the registered one stands in, rather than the flag's own.
+        assertFalse(unnamed.isAllowed());
+    }
+
+    @Test
     void check_AutoModeFallsToServerGatingWhenTheDataStreamIsGone() throws Exception {
         Schematic leased = Schematic.builder()
                 .apiKey("test_api_key")
