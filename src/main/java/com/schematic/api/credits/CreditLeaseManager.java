@@ -489,10 +489,11 @@ public final class CreditLeaseManager implements AutoCloseable {
     /**
      * Releases every live lease this process exclusively holds, within {@code budget}.
      *
-     * <p>Each release is its own synchronous round trip, so a process holding many slots behind a
-     * slow server would otherwise stretch a shutdown by the sum of them. Once the budget is gone
-     * the loop stops issuing releases and says how many leases were left behind; those expire
-     * server-side, which is where a failed release leaves them too.
+     * <p>The releases go out together and the budget bounds the whole set, not each one in turn.
+     * Issued serially, a process holding many slots behind a slow server would stretch a shutdown
+     * by the sum of them, and a single hung release would spend the entire budget on its own and
+     * abandon every lease behind it. Whatever has not landed by the deadline is left to
+     * server-side expiry, which is where a failed release leaves it too.
      */
     public void releaseAllLocalLeases(Duration budget) {
         if (!(leases instanceof LeaseLister)) {
@@ -507,27 +508,32 @@ public final class CreditLeaseManager implements AutoCloseable {
         }
         long deadline = System.nanoTime() + Math.max(0, budget.toNanos());
         Instant now = now();
-        int abandoned = 0;
+        List<CompletableFuture<?>> releases = new ArrayList<>();
         for (LeaseState entry : entries) {
             if (!entry.isLiveAt(now)) {
                 continue;
             }
-            if (System.nanoTime() - deadline >= 0) {
-                abandoned++;
-                continue;
-            }
+            CompletableFuture<Void> released = new CompletableFuture<>();
             try {
-                wire.release(entry.getLeaseId());
-                leases.drop(entry.getCompanyId(), entry.getCreditTypeId());
-                debug("Released credit lease " + entry.getLeaseId() + " on close");
-            } catch (RuntimeException e) {
-                warn("Failed to release credit lease " + entry.getLeaseId() + " on close (it will expire "
-                        + "server-side): " + e);
+                executor.execute(() -> {
+                    try {
+                        wire.release(entry.getLeaseId());
+                        leases.drop(entry.getCompanyId(), entry.getCreditTypeId());
+                        debug("Released credit lease " + entry.getLeaseId() + " on close");
+                    } catch (RuntimeException e) {
+                        warn("Failed to release credit lease " + entry.getLeaseId() + " on close (it will expire "
+                                + "server-side): " + e);
+                    } finally {
+                        released.complete(null);
+                    }
+                });
+                releases.add(released);
+            } catch (RejectedExecutionException e) {
+                debug("Credit lease executor is shut down; leaving " + entry.getLeaseId() + " to server-side expiry");
             }
         }
-        if (abandoned > 0) {
-            warn("Ran out of shutdown budget with " + abandoned + " credit lease(s) still held; they will "
-                    + "expire server-side");
+        if (!awaitAll(releases, deadline)) {
+            warn("Ran out of shutdown budget releasing credit leases; any still held will expire server-side");
         }
     }
 

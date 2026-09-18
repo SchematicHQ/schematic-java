@@ -47,13 +47,18 @@ public final class CreditAmounts {
     }
 
     /**
-     * A duration as the milliseconds an int-typed request option takes, clamped to the widest it
-     * can hold. Casting alone wraps anything past the int range into a negative, which the
-     * transport reads as an instant timeout: the opposite of the long wait the caller asked for.
+     * A duration as the milliseconds an int-typed request option takes, clamped at both ends.
+     * Casting alone wraps anything past the int range into a negative, which the transport reads
+     * as an instant timeout: the opposite of the long wait the caller asked for. A caller passing
+     * a negative or sub-millisecond duration lands on the same value, so the floor keeps it a
+     * timeout the transport can express rather than one that fails every call before it is sent.
      */
     public static int millisAsInt(Duration timeout) {
         long millis = timeout.toMillis();
-        return millis > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) millis;
+        if (millis > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        return millis < 1 ? 1 : (int) millis;
     }
 
     private CreditAmounts() {}

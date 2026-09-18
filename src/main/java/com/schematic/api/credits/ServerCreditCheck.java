@@ -125,6 +125,12 @@ public final class ServerCreditCheck {
             error("Server reservation: check-and-reserve for flag " + request.getFlagKey() + " failed: " + e);
             return failureResult(request, getDefault, "server_reservation_failed");
         }
+        if (data == null) {
+            // A 200 with an empty body answers nothing, so resolve it through the caller's
+            // contract rather than letting the read below surface as a null dereference.
+            error("Server reservation: check-and-reserve for flag " + request.getFlagKey() + " carried no data");
+            return failureResult(request, getDefault, "server_reservation_failed");
+        }
 
         RulesengineFeatureEntitlement entitlement =
                 toRulesengineEntitlement(data.getEntitlement().orElse(null));
