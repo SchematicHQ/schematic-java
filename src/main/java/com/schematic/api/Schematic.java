@@ -216,6 +216,12 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             if (mode == CreditLeaseMode.CLIENT && this.dataStreamClient == null) {
                 this.logger.warn("creditLeases is configured but DataStream is not enabled, so check() falls back to "
                         + "plain flag checks with no credit gating");
+            } else if (mode == CreditLeaseMode.CLIENT && !this.dataStreamClient.hasRulesEngine()) {
+                // Auto resolves this away by gating server-side. An explicit client mode is the
+                // caller's choice to keep, so say what it costs rather than overriding it.
+                this.logger.warn("creditLeases is set to client mode but the rules engine did not load, so every "
+                        + "check() falls back to a plain flag check with no credit gating; use server mode until "
+                        + "the engine is available");
             }
         }
         boolean usesLeases =
@@ -1052,6 +1058,16 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 });
     }
 
+    /**
+     * Whether the local engine declined to answer, leaving the DataStream client's stand-in
+     * verdict in place of a real one. The flag's own default stands in there, which is the right
+     * answer for a caller that named none and the wrong one for a caller that did.
+     */
+    private static boolean declinedByEngine(RulesengineCheckFlagResult result) {
+        String reason = result.getReason();
+        return "RULES_ENGINE_UNAVAILABLE".equals(reason) || "RULES_ENGINE_ERROR".equals(reason);
+    }
+
     /** The plain flag check a credit-aware check defers to, with the caller's preflight threaded through. */
     private CheckResult plainCheck(
             String flagKey, Map<String, String> company, Map<String, String> user, CheckOptions options) {
@@ -1069,7 +1085,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                     flagKey, company, user, DataStreamCreditCheckSource.toEngineOptions(preflight));
             if (dsResult != null) {
                 enqueueFlagCheckEvent(flagKey, dsResult, company, user);
-                result = dsResult;
+                // The engine declining to answer is the case defaultValue exists for, so resolve
+                // it the way the offline and API branches do rather than passing on the stand-in
+                // the DataStream client substituted.
+                result = declinedByEngine(dsResult)
+                        ? RulesengineCheckFlagResult.builder()
+                                .from(dsResult)
+                                .value(checkDefault(flagKey, options))
+                                .build()
+                        : dsResult;
             } else {
                 // The API answers a preflight too, so the caller's usage gates the REST path the
                 // same way it gates a local evaluation. The caller's timeout applies, since this
