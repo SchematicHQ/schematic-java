@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -45,6 +47,8 @@ public final class BillingPlanCreditGrantResponseData {
     private final Optional<Long> autoTopupThresholdCredits;
 
     private final Optional<Long> autoTopupThresholdPercent;
+
+    private final BillingPlanCreditGrantBillingMode billingMode;
 
     private final boolean canBuyBundles;
 
@@ -90,6 +94,10 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final Optional<String> postpaidRatePerUnitDecimal;
 
+    private final Optional<BillingPriceResponseData> price;
+
+    private final List<BillingPlanCreditGrantPriceTierResponseData> priceTiers;
+
     private final Optional<BillingPlanCreditGrantResetCadence> resetCadence;
 
     private final Optional<BillingPlanCreditGrantResetStart> resetStart;
@@ -99,6 +107,12 @@ public final class BillingPlanCreditGrantResponseData {
     private final long rolloverPercentage;
 
     private final PlanCreditGrantScaling scaling;
+
+    private final Optional<BillingTiersMode> tierMode;
+
+    private final Optional<Long> unitPrice;
+
+    private final Optional<String> unitPriceDecimal;
 
     private final OffsetDateTime updatedAt;
 
@@ -117,6 +131,7 @@ public final class BillingPlanCreditGrantResponseData {
             boolean autoTopupSelfService,
             Optional<Long> autoTopupThresholdCredits,
             Optional<Long> autoTopupThresholdPercent,
+            BillingPlanCreditGrantBillingMode billingMode,
             boolean canBuyBundles,
             long companyCreditAmount,
             OffsetDateTime createdAt,
@@ -139,11 +154,16 @@ public final class BillingPlanCreditGrantResponseData {
             boolean postpaidEnabled,
             Optional<Long> postpaidRatePerUnit,
             Optional<String> postpaidRatePerUnitDecimal,
+            Optional<BillingPriceResponseData> price,
+            List<BillingPlanCreditGrantPriceTierResponseData> priceTiers,
             Optional<BillingPlanCreditGrantResetCadence> resetCadence,
             Optional<BillingPlanCreditGrantResetStart> resetStart,
             Optional<BillingPlanCreditGrantResetType> resetType,
             long rolloverPercentage,
             PlanCreditGrantScaling scaling,
+            Optional<BillingTiersMode> tierMode,
+            Optional<Long> unitPrice,
+            Optional<String> unitPriceDecimal,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.arrearsAnchor = arrearsAnchor;
@@ -158,6 +178,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.autoTopupSelfService = autoTopupSelfService;
         this.autoTopupThresholdCredits = autoTopupThresholdCredits;
         this.autoTopupThresholdPercent = autoTopupThresholdPercent;
+        this.billingMode = billingMode;
         this.canBuyBundles = canBuyBundles;
         this.companyCreditAmount = companyCreditAmount;
         this.createdAt = createdAt;
@@ -180,11 +201,16 @@ public final class BillingPlanCreditGrantResponseData {
         this.postpaidEnabled = postpaidEnabled;
         this.postpaidRatePerUnit = postpaidRatePerUnit;
         this.postpaidRatePerUnitDecimal = postpaidRatePerUnitDecimal;
+        this.price = price;
+        this.priceTiers = priceTiers;
         this.resetCadence = resetCadence;
         this.resetStart = resetStart;
         this.resetType = resetType;
         this.rolloverPercentage = rolloverPercentage;
         this.scaling = scaling;
+        this.tierMode = tierMode;
+        this.unitPrice = unitPrice;
+        this.unitPriceDecimal = unitPriceDecimal;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -259,6 +285,14 @@ public final class BillingPlanCreditGrantResponseData {
     @JsonProperty("auto_topup_threshold_percent")
     public Optional<Long> getAutoTopupThresholdPercent() {
         return autoTopupThresholdPercent;
+    }
+
+    /**
+     * @return Whether the credits are included in the plan price (granted) or billed as their own subscription line at a price per credit (billed).
+     */
+    @JsonProperty("billing_mode")
+    public BillingPlanCreditGrantBillingMode getBillingMode() {
+        return billingMode;
     }
 
     /**
@@ -404,6 +438,22 @@ public final class BillingPlanCreditGrantResponseData {
         return postpaidRatePerUnitDecimal;
     }
 
+    /**
+     * @return The Stripe price a billed grant bills through. Minted when the plan version is published.
+     */
+    @JsonProperty("price")
+    public Optional<BillingPriceResponseData> getPrice() {
+        return price;
+    }
+
+    /**
+     * @return Tier table pricing the credits, cheapest bound first. Empty unless billing_mode is billed and the credits are priced on tiers.
+     */
+    @JsonProperty("price_tiers")
+    public List<BillingPlanCreditGrantPriceTierResponseData> getPriceTiers() {
+        return priceTiers;
+    }
+
     @JsonProperty("reset_cadence")
     public Optional<BillingPlanCreditGrantResetCadence> getResetCadence() {
         return resetCadence;
@@ -433,6 +483,30 @@ public final class BillingPlanCreditGrantResponseData {
     @JsonProperty("scaling")
     public PlanCreditGrantScaling getScaling() {
         return scaling;
+    }
+
+    /**
+     * @return How price_tiers apply: volume prices every credit at the rate of the tier the total lands in, graduated prices each tier's own credits at its own rate. Set only when price_tiers is non-empty.
+     */
+    @JsonProperty("tier_mode")
+    public Optional<BillingTiersMode> getTierMode() {
+        return tierMode;
+    }
+
+    /**
+     * @return Price per credit in the plan currency's smallest unit. Set only when billing_mode is billed and the credits are priced at one rate.
+     */
+    @JsonProperty("unit_price")
+    public Optional<Long> getUnitPrice() {
+        return unitPrice;
+    }
+
+    /**
+     * @return Price per credit as a decimal in the plan currency's smallest unit. Set only when billing_mode is billed and the rate is below one cent.
+     */
+    @JsonProperty("unit_price_decimal")
+    public Optional<String> getUnitPriceDecimal() {
+        return unitPriceDecimal;
     }
 
     @JsonProperty("updated_at")
@@ -465,6 +539,7 @@ public final class BillingPlanCreditGrantResponseData {
                 && autoTopupSelfService == other.autoTopupSelfService
                 && autoTopupThresholdCredits.equals(other.autoTopupThresholdCredits)
                 && autoTopupThresholdPercent.equals(other.autoTopupThresholdPercent)
+                && billingMode.equals(other.billingMode)
                 && canBuyBundles == other.canBuyBundles
                 && companyCreditAmount == other.companyCreditAmount
                 && createdAt.equals(other.createdAt)
@@ -487,11 +562,16 @@ public final class BillingPlanCreditGrantResponseData {
                 && postpaidEnabled == other.postpaidEnabled
                 && postpaidRatePerUnit.equals(other.postpaidRatePerUnit)
                 && postpaidRatePerUnitDecimal.equals(other.postpaidRatePerUnitDecimal)
+                && price.equals(other.price)
+                && priceTiers.equals(other.priceTiers)
                 && resetCadence.equals(other.resetCadence)
                 && resetStart.equals(other.resetStart)
                 && resetType.equals(other.resetType)
                 && rolloverPercentage == other.rolloverPercentage
                 && scaling.equals(other.scaling)
+                && tierMode.equals(other.tierMode)
+                && unitPrice.equals(other.unitPrice)
+                && unitPriceDecimal.equals(other.unitPriceDecimal)
                 && updatedAt.equals(other.updatedAt);
     }
 
@@ -510,6 +590,7 @@ public final class BillingPlanCreditGrantResponseData {
                 this.autoTopupSelfService,
                 this.autoTopupThresholdCredits,
                 this.autoTopupThresholdPercent,
+                this.billingMode,
                 this.canBuyBundles,
                 this.companyCreditAmount,
                 this.createdAt,
@@ -532,11 +613,16 @@ public final class BillingPlanCreditGrantResponseData {
                 this.postpaidEnabled,
                 this.postpaidRatePerUnit,
                 this.postpaidRatePerUnitDecimal,
+                this.price,
+                this.priceTiers,
                 this.resetCadence,
                 this.resetStart,
                 this.resetType,
                 this.rolloverPercentage,
                 this.scaling,
+                this.tierMode,
+                this.unitPrice,
+                this.unitPriceDecimal,
                 this.updatedAt);
     }
 
@@ -566,7 +652,14 @@ public final class BillingPlanCreditGrantResponseData {
         /**
          * <p>Derived from auto_topup_availability; use that instead.</p>
          */
-        CanBuyBundlesStage autoTopupSelfService(boolean autoTopupSelfService);
+        BillingModeStage autoTopupSelfService(boolean autoTopupSelfService);
+    }
+
+    public interface BillingModeStage {
+        /**
+         * <p>Whether the credits are included in the plan price (granted) or billed as their own subscription line at a price per credit (billed).</p>
+         */
+        CanBuyBundlesStage billingMode(@NotNull BillingPlanCreditGrantBillingMode billingMode);
     }
 
     public interface CanBuyBundlesStage {
@@ -757,6 +850,22 @@ public final class BillingPlanCreditGrantResponseData {
 
         _FinalStage postpaidRatePerUnitDecimal(String postpaidRatePerUnitDecimal);
 
+        /**
+         * <p>The Stripe price a billed grant bills through. Minted when the plan version is published.</p>
+         */
+        _FinalStage price(Optional<BillingPriceResponseData> price);
+
+        _FinalStage price(BillingPriceResponseData price);
+
+        /**
+         * <p>Tier table pricing the credits, cheapest bound first. Empty unless billing_mode is billed and the credits are priced on tiers.</p>
+         */
+        _FinalStage priceTiers(List<BillingPlanCreditGrantPriceTierResponseData> priceTiers);
+
+        _FinalStage addPriceTiers(BillingPlanCreditGrantPriceTierResponseData priceTiers);
+
+        _FinalStage addAllPriceTiers(List<BillingPlanCreditGrantPriceTierResponseData> priceTiers);
+
         _FinalStage resetCadence(Optional<BillingPlanCreditGrantResetCadence> resetCadence);
 
         _FinalStage resetCadence(BillingPlanCreditGrantResetCadence resetCadence);
@@ -768,6 +877,27 @@ public final class BillingPlanCreditGrantResponseData {
         _FinalStage resetType(Optional<BillingPlanCreditGrantResetType> resetType);
 
         _FinalStage resetType(BillingPlanCreditGrantResetType resetType);
+
+        /**
+         * <p>How price_tiers apply: volume prices every credit at the rate of the tier the total lands in, graduated prices each tier's own credits at its own rate. Set only when price_tiers is non-empty.</p>
+         */
+        _FinalStage tierMode(Optional<BillingTiersMode> tierMode);
+
+        _FinalStage tierMode(BillingTiersMode tierMode);
+
+        /**
+         * <p>Price per credit in the plan currency's smallest unit. Set only when billing_mode is billed and the credits are priced at one rate.</p>
+         */
+        _FinalStage unitPrice(Optional<Long> unitPrice);
+
+        _FinalStage unitPrice(Long unitPrice);
+
+        /**
+         * <p>Price per credit as a decimal in the plan currency's smallest unit. Set only when billing_mode is billed and the rate is below one cent.</p>
+         */
+        _FinalStage unitPriceDecimal(Optional<String> unitPriceDecimal);
+
+        _FinalStage unitPriceDecimal(String unitPriceDecimal);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -775,6 +905,7 @@ public final class BillingPlanCreditGrantResponseData {
             implements AutoTopupAvailabilityStage,
                     AutoTopupEnabledStage,
                     AutoTopupSelfServiceStage,
+                    BillingModeStage,
                     CanBuyBundlesStage,
                     CompanyCreditAmountStage,
                     CreatedAtStage,
@@ -794,6 +925,8 @@ public final class BillingPlanCreditGrantResponseData {
         private boolean autoTopupEnabled;
 
         private boolean autoTopupSelfService;
+
+        private BillingPlanCreditGrantBillingMode billingMode;
 
         private boolean canBuyBundles;
 
@@ -821,11 +954,21 @@ public final class BillingPlanCreditGrantResponseData {
 
         private OffsetDateTime updatedAt;
 
+        private Optional<String> unitPriceDecimal = Optional.empty();
+
+        private Optional<Long> unitPrice = Optional.empty();
+
+        private Optional<BillingTiersMode> tierMode = Optional.empty();
+
         private Optional<BillingPlanCreditGrantResetType> resetType = Optional.empty();
 
         private Optional<BillingPlanCreditGrantResetStart> resetStart = Optional.empty();
 
         private Optional<BillingPlanCreditGrantResetCadence> resetCadence = Optional.empty();
+
+        private List<BillingPlanCreditGrantPriceTierResponseData> priceTiers = new ArrayList<>();
+
+        private Optional<BillingPriceResponseData> price = Optional.empty();
 
         private Optional<String> postpaidRatePerUnitDecimal = Optional.empty();
 
@@ -888,6 +1031,7 @@ public final class BillingPlanCreditGrantResponseData {
             autoTopupSelfService(other.getAutoTopupSelfService());
             autoTopupThresholdCredits(other.getAutoTopupThresholdCredits());
             autoTopupThresholdPercent(other.getAutoTopupThresholdPercent());
+            billingMode(other.getBillingMode());
             canBuyBundles(other.getCanBuyBundles());
             companyCreditAmount(other.getCompanyCreditAmount());
             createdAt(other.getCreatedAt());
@@ -910,11 +1054,16 @@ public final class BillingPlanCreditGrantResponseData {
             postpaidEnabled(other.getPostpaidEnabled());
             postpaidRatePerUnit(other.getPostpaidRatePerUnit());
             postpaidRatePerUnitDecimal(other.getPostpaidRatePerUnitDecimal());
+            price(other.getPrice());
+            priceTiers(other.getPriceTiers());
             resetCadence(other.getResetCadence());
             resetStart(other.getResetStart());
             resetType(other.getResetType());
             rolloverPercentage(other.getRolloverPercentage());
             scaling(other.getScaling());
+            tierMode(other.getTierMode());
+            unitPrice(other.getUnitPrice());
+            unitPriceDecimal(other.getUnitPriceDecimal());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -945,8 +1094,19 @@ public final class BillingPlanCreditGrantResponseData {
          */
         @java.lang.Override
         @JsonSetter("auto_topup_self_service")
-        public CanBuyBundlesStage autoTopupSelfService(boolean autoTopupSelfService) {
+        public BillingModeStage autoTopupSelfService(boolean autoTopupSelfService) {
             this.autoTopupSelfService = autoTopupSelfService;
+            return this;
+        }
+
+        /**
+         * <p>Whether the credits are included in the plan price (granted) or billed as their own subscription line at a price per credit (billed).</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("billing_mode")
+        public CanBuyBundlesStage billingMode(@NotNull BillingPlanCreditGrantBillingMode billingMode) {
+            this.billingMode = Objects.requireNonNull(billingMode, "billingMode must not be null");
             return this;
         }
 
@@ -1069,6 +1229,66 @@ public final class BillingPlanCreditGrantResponseData {
             return this;
         }
 
+        /**
+         * <p>Price per credit as a decimal in the plan currency's smallest unit. Set only when billing_mode is billed and the rate is below one cent.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage unitPriceDecimal(String unitPriceDecimal) {
+            this.unitPriceDecimal = Optional.ofNullable(unitPriceDecimal);
+            return this;
+        }
+
+        /**
+         * <p>Price per credit as a decimal in the plan currency's smallest unit. Set only when billing_mode is billed and the rate is below one cent.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "unit_price_decimal", nulls = Nulls.SKIP)
+        public _FinalStage unitPriceDecimal(Optional<String> unitPriceDecimal) {
+            this.unitPriceDecimal = unitPriceDecimal;
+            return this;
+        }
+
+        /**
+         * <p>Price per credit in the plan currency's smallest unit. Set only when billing_mode is billed and the credits are priced at one rate.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage unitPrice(Long unitPrice) {
+            this.unitPrice = Optional.ofNullable(unitPrice);
+            return this;
+        }
+
+        /**
+         * <p>Price per credit in the plan currency's smallest unit. Set only when billing_mode is billed and the credits are priced at one rate.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "unit_price", nulls = Nulls.SKIP)
+        public _FinalStage unitPrice(Optional<Long> unitPrice) {
+            this.unitPrice = unitPrice;
+            return this;
+        }
+
+        /**
+         * <p>How price_tiers apply: volume prices every credit at the rate of the tier the total lands in, graduated prices each tier's own credits at its own rate. Set only when price_tiers is non-empty.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage tierMode(BillingTiersMode tierMode) {
+            this.tierMode = Optional.ofNullable(tierMode);
+            return this;
+        }
+
+        /**
+         * <p>How price_tiers apply: volume prices every credit at the rate of the tier the total lands in, graduated prices each tier's own credits at its own rate. Set only when price_tiers is non-empty.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "tier_mode", nulls = Nulls.SKIP)
+        public _FinalStage tierMode(Optional<BillingTiersMode> tierMode) {
+            this.tierMode = tierMode;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage resetType(BillingPlanCreditGrantResetType resetType) {
             this.resetType = Optional.ofNullable(resetType);
@@ -1105,6 +1325,61 @@ public final class BillingPlanCreditGrantResponseData {
         @JsonSetter(value = "reset_cadence", nulls = Nulls.SKIP)
         public _FinalStage resetCadence(Optional<BillingPlanCreditGrantResetCadence> resetCadence) {
             this.resetCadence = resetCadence;
+            return this;
+        }
+
+        /**
+         * <p>Tier table pricing the credits, cheapest bound first. Empty unless billing_mode is billed and the credits are priced on tiers.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllPriceTiers(List<BillingPlanCreditGrantPriceTierResponseData> priceTiers) {
+            if (priceTiers != null) {
+                this.priceTiers.addAll(priceTiers);
+            }
+            return this;
+        }
+
+        /**
+         * <p>Tier table pricing the credits, cheapest bound first. Empty unless billing_mode is billed and the credits are priced on tiers.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addPriceTiers(BillingPlanCreditGrantPriceTierResponseData priceTiers) {
+            this.priceTiers.add(priceTiers);
+            return this;
+        }
+
+        /**
+         * <p>Tier table pricing the credits, cheapest bound first. Empty unless billing_mode is billed and the credits are priced on tiers.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "price_tiers", nulls = Nulls.SKIP)
+        public _FinalStage priceTiers(List<BillingPlanCreditGrantPriceTierResponseData> priceTiers) {
+            this.priceTiers.clear();
+            if (priceTiers != null) {
+                this.priceTiers.addAll(priceTiers);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The Stripe price a billed grant bills through. Minted when the plan version is published.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage price(BillingPriceResponseData price) {
+            this.price = Optional.ofNullable(price);
+            return this;
+        }
+
+        /**
+         * <p>The Stripe price a billed grant bills through. Minted when the plan version is published.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "price", nulls = Nulls.SKIP)
+        public _FinalStage price(Optional<BillingPriceResponseData> price) {
+            this.price = price;
             return this;
         }
 
@@ -1452,6 +1727,7 @@ public final class BillingPlanCreditGrantResponseData {
                     autoTopupSelfService,
                     autoTopupThresholdCredits,
                     autoTopupThresholdPercent,
+                    billingMode,
                     canBuyBundles,
                     companyCreditAmount,
                     createdAt,
@@ -1474,11 +1750,16 @@ public final class BillingPlanCreditGrantResponseData {
                     postpaidEnabled,
                     postpaidRatePerUnit,
                     postpaidRatePerUnitDecimal,
+                    price,
+                    priceTiers,
                     resetCadence,
                     resetStart,
                     resetType,
                     rolloverPercentage,
                     scaling,
+                    tierMode,
+                    unitPrice,
+                    unitPriceDecimal,
                     updatedAt,
                     additionalProperties);
         }
