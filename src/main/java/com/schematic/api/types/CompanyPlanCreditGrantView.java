@@ -56,6 +56,10 @@ public final class CompanyPlanCreditGrantView {
 
     private final Optional<String> billingCreditPostpaidRatePerUnitDecimal;
 
+    private final BillingPlanCreditGrantBillingMode billingMode;
+
+    private final Optional<String> billingProductPriceId;
+
     private final Optional<Long> companyAutoTopupAmount;
 
     private final Optional<Boolean> companyAutoTopupEnabled;
@@ -96,6 +100,8 @@ public final class CompanyPlanCreditGrantView {
 
     private final Optional<String> pluralName;
 
+    private final Optional<BillingPriceView> price;
+
     private final Optional<BillingPlanCreditGrantResetCadence> resetCadence;
 
     private final Optional<BillingPlanCreditGrantResetStart> resetStart;
@@ -130,6 +136,8 @@ public final class CompanyPlanCreditGrantView {
             boolean billingCreditPostpaidEnabled,
             Optional<Long> billingCreditPostpaidRatePerUnit,
             Optional<String> billingCreditPostpaidRatePerUnitDecimal,
+            BillingPlanCreditGrantBillingMode billingMode,
+            Optional<String> billingProductPriceId,
             Optional<Long> companyAutoTopupAmount,
             Optional<Boolean> companyAutoTopupEnabled,
             Optional<Long> companyAutoTopupThresholdCredits,
@@ -150,6 +158,7 @@ public final class CompanyPlanCreditGrantView {
             String planId,
             Optional<String> planVersionId,
             Optional<String> pluralName,
+            Optional<BillingPriceView> price,
             Optional<BillingPlanCreditGrantResetCadence> resetCadence,
             Optional<BillingPlanCreditGrantResetStart> resetStart,
             BillingPlanCreditGrantResetType resetType,
@@ -175,6 +184,8 @@ public final class CompanyPlanCreditGrantView {
         this.billingCreditPostpaidEnabled = billingCreditPostpaidEnabled;
         this.billingCreditPostpaidRatePerUnit = billingCreditPostpaidRatePerUnit;
         this.billingCreditPostpaidRatePerUnitDecimal = billingCreditPostpaidRatePerUnitDecimal;
+        this.billingMode = billingMode;
+        this.billingProductPriceId = billingProductPriceId;
         this.companyAutoTopupAmount = companyAutoTopupAmount;
         this.companyAutoTopupEnabled = companyAutoTopupEnabled;
         this.companyAutoTopupThresholdCredits = companyAutoTopupThresholdCredits;
@@ -195,6 +206,7 @@ public final class CompanyPlanCreditGrantView {
         this.planId = planId;
         this.planVersionId = planVersionId;
         this.pluralName = pluralName;
+        this.price = price;
         this.resetCadence = resetCadence;
         this.resetStart = resetStart;
         this.resetType = resetType;
@@ -288,6 +300,16 @@ public final class CompanyPlanCreditGrantView {
     @JsonProperty("billing_credit_postpaid_rate_per_unit_decimal")
     public Optional<String> getBillingCreditPostpaidRatePerUnitDecimal() {
         return billingCreditPostpaidRatePerUnitDecimal;
+    }
+
+    @JsonProperty("billing_mode")
+    public BillingPlanCreditGrantBillingMode getBillingMode() {
+        return billingMode;
+    }
+
+    @JsonProperty("billing_product_price_id")
+    public Optional<String> getBillingProductPriceId() {
+        return billingProductPriceId;
     }
 
     @JsonProperty("company_auto_topup_amount")
@@ -402,6 +424,11 @@ public final class CompanyPlanCreditGrantView {
         return pluralName;
     }
 
+    @JsonProperty("price")
+    public Optional<BillingPriceView> getPrice() {
+        return price;
+    }
+
     @JsonProperty("reset_cadence")
     public Optional<BillingPlanCreditGrantResetCadence> getResetCadence() {
         return resetCadence;
@@ -469,6 +496,8 @@ public final class CompanyPlanCreditGrantView {
                 && billingCreditPostpaidEnabled == other.billingCreditPostpaidEnabled
                 && billingCreditPostpaidRatePerUnit.equals(other.billingCreditPostpaidRatePerUnit)
                 && billingCreditPostpaidRatePerUnitDecimal.equals(other.billingCreditPostpaidRatePerUnitDecimal)
+                && billingMode.equals(other.billingMode)
+                && billingProductPriceId.equals(other.billingProductPriceId)
                 && companyAutoTopupAmount.equals(other.companyAutoTopupAmount)
                 && companyAutoTopupEnabled.equals(other.companyAutoTopupEnabled)
                 && companyAutoTopupThresholdCredits.equals(other.companyAutoTopupThresholdCredits)
@@ -489,6 +518,7 @@ public final class CompanyPlanCreditGrantView {
                 && planId.equals(other.planId)
                 && planVersionId.equals(other.planVersionId)
                 && pluralName.equals(other.pluralName)
+                && price.equals(other.price)
                 && resetCadence.equals(other.resetCadence)
                 && resetStart.equals(other.resetStart)
                 && resetType.equals(other.resetType)
@@ -518,6 +548,8 @@ public final class CompanyPlanCreditGrantView {
                 this.billingCreditPostpaidEnabled,
                 this.billingCreditPostpaidRatePerUnit,
                 this.billingCreditPostpaidRatePerUnitDecimal,
+                this.billingMode,
+                this.billingProductPriceId,
                 this.companyAutoTopupAmount,
                 this.companyAutoTopupEnabled,
                 this.companyAutoTopupThresholdCredits,
@@ -538,6 +570,7 @@ public final class CompanyPlanCreditGrantView {
                 this.planId,
                 this.planVersionId,
                 this.pluralName,
+                this.price,
                 this.resetCadence,
                 this.resetStart,
                 this.resetType,
@@ -571,7 +604,11 @@ public final class CompanyPlanCreditGrantView {
     }
 
     public interface BillingCreditPostpaidEnabledStage {
-        CompanyCreditAmountStage billingCreditPostpaidEnabled(boolean billingCreditPostpaidEnabled);
+        BillingModeStage billingCreditPostpaidEnabled(boolean billingCreditPostpaidEnabled);
+    }
+
+    public interface BillingModeStage {
+        CompanyCreditAmountStage billingMode(@NotNull BillingPlanCreditGrantBillingMode billingMode);
     }
 
     public interface CompanyCreditAmountStage {
@@ -691,6 +728,10 @@ public final class CompanyPlanCreditGrantView {
 
         _FinalStage billingCreditPostpaidRatePerUnitDecimal(String billingCreditPostpaidRatePerUnitDecimal);
 
+        _FinalStage billingProductPriceId(Optional<String> billingProductPriceId);
+
+        _FinalStage billingProductPriceId(String billingProductPriceId);
+
         _FinalStage companyAutoTopupAmount(Optional<Long> companyAutoTopupAmount);
 
         _FinalStage companyAutoTopupAmount(Long companyAutoTopupAmount);
@@ -745,6 +786,10 @@ public final class CompanyPlanCreditGrantView {
 
         _FinalStage pluralName(String pluralName);
 
+        _FinalStage price(Optional<BillingPriceView> price);
+
+        _FinalStage price(BillingPriceView price);
+
         _FinalStage resetCadence(Optional<BillingPlanCreditGrantResetCadence> resetCadence);
 
         _FinalStage resetCadence(BillingPlanCreditGrantResetCadence resetCadence);
@@ -767,6 +812,7 @@ public final class CompanyPlanCreditGrantView {
                     BillingCreditAutoTopupSelfServiceStage,
                     BillingCreditCanBuyBundlesStage,
                     BillingCreditPostpaidEnabledStage,
+                    BillingModeStage,
                     CompanyCreditAmountStage,
                     CreatedAtStage,
                     CreditAmountStage,
@@ -787,6 +833,8 @@ public final class CompanyPlanCreditGrantView {
         private boolean billingCreditCanBuyBundles;
 
         private boolean billingCreditPostpaidEnabled;
+
+        private BillingPlanCreditGrantBillingMode billingMode;
 
         private long companyCreditAmount;
 
@@ -818,6 +866,8 @@ public final class CompanyPlanCreditGrantView {
 
         private Optional<BillingPlanCreditGrantResetCadence> resetCadence = Optional.empty();
 
+        private Optional<BillingPriceView> price = Optional.empty();
+
         private Optional<String> pluralName = Optional.empty();
 
         private Optional<String> planVersionId = Optional.empty();
@@ -841,6 +891,8 @@ public final class CompanyPlanCreditGrantView {
         private Optional<Boolean> companyAutoTopupEnabled = Optional.empty();
 
         private Optional<Long> companyAutoTopupAmount = Optional.empty();
+
+        private Optional<String> billingProductPriceId = Optional.empty();
 
         private Optional<String> billingCreditPostpaidRatePerUnitDecimal = Optional.empty();
 
@@ -892,6 +944,8 @@ public final class CompanyPlanCreditGrantView {
             billingCreditPostpaidEnabled(other.getBillingCreditPostpaidEnabled());
             billingCreditPostpaidRatePerUnit(other.getBillingCreditPostpaidRatePerUnit());
             billingCreditPostpaidRatePerUnitDecimal(other.getBillingCreditPostpaidRatePerUnitDecimal());
+            billingMode(other.getBillingMode());
+            billingProductPriceId(other.getBillingProductPriceId());
             companyAutoTopupAmount(other.getCompanyAutoTopupAmount());
             companyAutoTopupEnabled(other.getCompanyAutoTopupEnabled());
             companyAutoTopupThresholdCredits(other.getCompanyAutoTopupThresholdCredits());
@@ -912,6 +966,7 @@ public final class CompanyPlanCreditGrantView {
             planId(other.getPlanId());
             planVersionId(other.getPlanVersionId());
             pluralName(other.getPluralName());
+            price(other.getPrice());
             resetCadence(other.getResetCadence());
             resetStart(other.getResetStart());
             resetType(other.getResetType());
@@ -947,8 +1002,15 @@ public final class CompanyPlanCreditGrantView {
 
         @java.lang.Override
         @JsonSetter("billing_credit_postpaid_enabled")
-        public CompanyCreditAmountStage billingCreditPostpaidEnabled(boolean billingCreditPostpaidEnabled) {
+        public BillingModeStage billingCreditPostpaidEnabled(boolean billingCreditPostpaidEnabled) {
             this.billingCreditPostpaidEnabled = billingCreditPostpaidEnabled;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("billing_mode")
+        public CompanyCreditAmountStage billingMode(@NotNull BillingPlanCreditGrantBillingMode billingMode) {
+            this.billingMode = Objects.requireNonNull(billingMode, "billingMode must not be null");
             return this;
         }
 
@@ -1087,6 +1149,19 @@ public final class CompanyPlanCreditGrantView {
         @JsonSetter(value = "reset_cadence", nulls = Nulls.SKIP)
         public _FinalStage resetCadence(Optional<BillingPlanCreditGrantResetCadence> resetCadence) {
             this.resetCadence = resetCadence;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage price(BillingPriceView price) {
+            this.price = Optional.ofNullable(price);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "price", nulls = Nulls.SKIP)
+        public _FinalStage price(Optional<BillingPriceView> price) {
+            this.price = price;
             return this;
         }
 
@@ -1257,6 +1332,19 @@ public final class CompanyPlanCreditGrantView {
         @JsonSetter(value = "company_auto_topup_amount", nulls = Nulls.SKIP)
         public _FinalStage companyAutoTopupAmount(Optional<Long> companyAutoTopupAmount) {
             this.companyAutoTopupAmount = companyAutoTopupAmount;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingProductPriceId(String billingProductPriceId) {
+            this.billingProductPriceId = Optional.ofNullable(billingProductPriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_product_price_id", nulls = Nulls.SKIP)
+        public _FinalStage billingProductPriceId(Optional<String> billingProductPriceId) {
+            this.billingProductPriceId = billingProductPriceId;
             return this;
         }
 
@@ -1456,6 +1544,8 @@ public final class CompanyPlanCreditGrantView {
                     billingCreditPostpaidEnabled,
                     billingCreditPostpaidRatePerUnit,
                     billingCreditPostpaidRatePerUnitDecimal,
+                    billingMode,
+                    billingProductPriceId,
                     companyAutoTopupAmount,
                     companyAutoTopupEnabled,
                     companyAutoTopupThresholdCredits,
@@ -1476,6 +1566,7 @@ public final class CompanyPlanCreditGrantView {
                     planId,
                     planVersionId,
                     pluralName,
+                    price,
                     resetCadence,
                     resetStart,
                     resetType,
