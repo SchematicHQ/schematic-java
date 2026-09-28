@@ -86,6 +86,8 @@ public final class CreditEventLedgerResponseData {
 
     private final Optional<CreditUsageReason> usageReason;
 
+    private final Optional<String> userId;
+
     private final Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason;
 
     private final Map<String, Object> additionalProperties;
@@ -123,6 +125,7 @@ public final class CreditEventLedgerResponseData {
             Optional<CreditTransferReason> transferReason,
             Optional<String> usageEventId,
             Optional<CreditUsageReason> usageReason,
+            Optional<String> userId,
             Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason,
             Map<String, Object> additionalProperties) {
         this.amount = amount;
@@ -157,6 +160,7 @@ public final class CreditEventLedgerResponseData {
         this.transferReason = transferReason;
         this.usageEventId = usageEventId;
         this.usageReason = usageReason;
+        this.userId = userId;
         this.zeroedOutReason = zeroedOutReason;
         this.additionalProperties = additionalProperties;
     }
@@ -321,6 +325,11 @@ public final class CreditEventLedgerResponseData {
         return usageReason;
     }
 
+    @JsonProperty("user_id")
+    public Optional<String> getUserId() {
+        return userId;
+    }
+
     @JsonProperty("zeroed_out_reason")
     public Optional<BillingCreditGrantZeroedOutReason> getZeroedOutReason() {
         return zeroedOutReason;
@@ -370,6 +379,7 @@ public final class CreditEventLedgerResponseData {
                 && transferReason.equals(other.transferReason)
                 && usageEventId.equals(other.usageEventId)
                 && usageReason.equals(other.usageReason)
+                && userId.equals(other.userId)
                 && zeroedOutReason.equals(other.zeroedOutReason);
     }
 
@@ -408,6 +418,7 @@ public final class CreditEventLedgerResponseData {
                 this.transferReason,
                 this.usageEventId,
                 this.usageReason,
+                this.userId,
                 this.zeroedOutReason);
     }
 
@@ -557,6 +568,10 @@ public final class CreditEventLedgerResponseData {
 
         _FinalStage usageReason(CreditUsageReason usageReason);
 
+        _FinalStage userId(Optional<String> userId);
+
+        _FinalStage userId(String userId);
+
         _FinalStage zeroedOutReason(Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason);
 
         _FinalStage zeroedOutReason(BillingCreditGrantZeroedOutReason zeroedOutReason);
@@ -593,6 +608,8 @@ public final class CreditEventLedgerResponseData {
         private long sourceId;
 
         private Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason = Optional.empty();
+
+        private Optional<String> userId = Optional.empty();
 
         private Optional<CreditUsageReason> usageReason = Optional.empty();
 
@@ -679,6 +696,7 @@ public final class CreditEventLedgerResponseData {
             transferReason(other.getTransferReason());
             usageEventId(other.getUsageEventId());
             usageReason(other.getUsageReason());
+            userId(other.getUserId());
             zeroedOutReason(other.getZeroedOutReason());
             return this;
         }
@@ -756,6 +774,19 @@ public final class CreditEventLedgerResponseData {
         @JsonSetter(value = "zeroed_out_reason", nulls = Nulls.SKIP)
         public _FinalStage zeroedOutReason(Optional<BillingCreditGrantZeroedOutReason> zeroedOutReason) {
             this.zeroedOutReason = zeroedOutReason;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage userId(String userId) {
+            this.userId = Optional.ofNullable(userId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
+        public _FinalStage userId(Optional<String> userId) {
+            this.userId = userId;
             return this;
         }
 
@@ -1093,6 +1124,7 @@ public final class CreditEventLedgerResponseData {
                     transferReason,
                     usageEventId,
                     usageReason,
+                    userId,
                     zeroedOutReason,
                     additionalProperties);
         }

@@ -60,6 +60,8 @@ public final class InvoiceResponseData {
 
     private final long subtotal;
 
+    private final Optional<Long> total;
+
     private final OffsetDateTime updatedAt;
 
     private final Optional<String> url;
@@ -86,6 +88,7 @@ public final class InvoiceResponseData {
             Optional<InvoiceStatus> status,
             Optional<String> subscriptionExternalId,
             long subtotal,
+            Optional<Long> total,
             OffsetDateTime updatedAt,
             Optional<String> url,
             Map<String, Object> additionalProperties) {
@@ -108,6 +111,7 @@ public final class InvoiceResponseData {
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.subtotal = subtotal;
+        this.total = total;
         this.updatedAt = updatedAt;
         this.url = url;
         this.additionalProperties = additionalProperties;
@@ -208,6 +212,14 @@ public final class InvoiceResponseData {
         return subtotal;
     }
 
+    /**
+     * @return Amount after discounts and tax, before applying the customer balance. Null when the provider has not reported it: rows synced before the column existed, or pushed without one.
+     */
+    @JsonProperty("total")
+    public Optional<Long> getTotal() {
+        return total;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -249,6 +261,7 @@ public final class InvoiceResponseData {
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && subtotal == other.subtotal
+                && total.equals(other.total)
                 && updatedAt.equals(other.updatedAt)
                 && url.equals(other.url);
     }
@@ -275,6 +288,7 @@ public final class InvoiceResponseData {
                 this.status,
                 this.subscriptionExternalId,
                 this.subtotal,
+                this.total,
                 this.updatedAt,
                 this.url);
     }
@@ -377,6 +391,13 @@ public final class InvoiceResponseData {
 
         _FinalStage subscriptionExternalId(String subscriptionExternalId);
 
+        /**
+         * <p>Amount after discounts and tax, before applying the customer balance. Null when the provider has not reported it: rows synced before the column existed, or pushed without one.</p>
+         */
+        _FinalStage total(Optional<Long> total);
+
+        _FinalStage total(Long total);
+
         _FinalStage url(Optional<String> url);
 
         _FinalStage url(String url);
@@ -429,6 +450,8 @@ public final class InvoiceResponseData {
 
         private Optional<String> url = Optional.empty();
 
+        private Optional<Long> total = Optional.empty();
+
         private Optional<String> subscriptionExternalId = Optional.empty();
 
         private Optional<InvoiceStatus> status = Optional.empty();
@@ -467,6 +490,7 @@ public final class InvoiceResponseData {
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             subtotal(other.getSubtotal());
+            total(other.getTotal());
             updatedAt(other.getUpdatedAt());
             url(other.getUrl());
             return this;
@@ -583,6 +607,26 @@ public final class InvoiceResponseData {
             return this;
         }
 
+        /**
+         * <p>Amount after discounts and tax, before applying the customer balance. Null when the provider has not reported it: rows synced before the column existed, or pushed without one.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage total(Long total) {
+            this.total = Optional.ofNullable(total);
+            return this;
+        }
+
+        /**
+         * <p>Amount after discounts and tax, before applying the customer balance. Null when the provider has not reported it: rows synced before the column existed, or pushed without one.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "total", nulls = Nulls.SKIP)
+        public _FinalStage total(Optional<Long> total) {
+            this.total = total;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
             this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
@@ -683,6 +727,7 @@ public final class InvoiceResponseData {
                     status,
                     subscriptionExternalId,
                     subtotal,
+                    total,
                     updatedAt,
                     url,
                     additionalProperties);

@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public final class PreviewSubscriptionFinanceResponseData {
     private final long amountOff;
 
+    private final String currency;
+
     private final long discountAmount;
 
     private final List<PreviewSubscriptionDiscountResponseData> discounts;
@@ -62,6 +64,7 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private PreviewSubscriptionFinanceResponseData(
             long amountOff,
+            String currency,
             long discountAmount,
             List<PreviewSubscriptionDiscountResponseData> discounts,
             long dueNow,
@@ -80,6 +83,7 @@ public final class PreviewSubscriptionFinanceResponseData {
             List<PreviewSubscriptionUpcomingInvoiceLineItems> upcomingInvoiceLineItems,
             Map<String, Object> additionalProperties) {
         this.amountOff = amountOff;
+        this.currency = currency;
         this.discountAmount = discountAmount;
         this.discounts = discounts;
         this.dueNow = dueNow;
@@ -102,6 +106,14 @@ public final class PreviewSubscriptionFinanceResponseData {
     @JsonProperty("amount_off")
     public long getAmountOff() {
         return amountOff;
+    }
+
+    /**
+     * @return ISO 4217 currency every amount in this block is denominated in.
+     */
+    @JsonProperty("currency")
+    public String getCurrency() {
+        return currency;
     }
 
     @JsonProperty("discount_amount")
@@ -198,6 +210,7 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private boolean equalTo(PreviewSubscriptionFinanceResponseData other) {
         return amountOff == other.amountOff
+                && currency.equals(other.currency)
                 && discountAmount == other.discountAmount
                 && discounts.equals(other.discounts)
                 && dueNow == other.dueNow
@@ -220,6 +233,7 @@ public final class PreviewSubscriptionFinanceResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.amountOff,
+                this.currency,
                 this.discountAmount,
                 this.discounts,
                 this.dueNow,
@@ -248,9 +262,16 @@ public final class PreviewSubscriptionFinanceResponseData {
     }
 
     public interface AmountOffStage {
-        DiscountAmountStage amountOff(long amountOff);
+        CurrencyStage amountOff(long amountOff);
 
         Builder from(PreviewSubscriptionFinanceResponseData other);
+    }
+
+    public interface CurrencyStage {
+        /**
+         * <p>ISO 4217 currency every amount in this block is denominated in.</p>
+         */
+        DiscountAmountStage currency(@NotNull String currency);
     }
 
     public interface DiscountAmountStage {
@@ -334,6 +355,7 @@ public final class PreviewSubscriptionFinanceResponseData {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements AmountOffStage,
+                    CurrencyStage,
                     DiscountAmountStage,
                     DueNowStage,
                     NewChargesStage,
@@ -346,6 +368,8 @@ public final class PreviewSubscriptionFinanceResponseData {
                     TotalPerBillingPeriodStage,
                     _FinalStage {
         private long amountOff;
+
+        private String currency;
 
         private long discountAmount;
 
@@ -387,6 +411,7 @@ public final class PreviewSubscriptionFinanceResponseData {
         @java.lang.Override
         public Builder from(PreviewSubscriptionFinanceResponseData other) {
             amountOff(other.getAmountOff());
+            currency(other.getCurrency());
             discountAmount(other.getDiscountAmount());
             discounts(other.getDiscounts());
             dueNow(other.getDueNow());
@@ -408,8 +433,19 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         @java.lang.Override
         @JsonSetter("amount_off")
-        public DiscountAmountStage amountOff(long amountOff) {
+        public CurrencyStage amountOff(long amountOff) {
             this.amountOff = amountOff;
+            return this;
+        }
+
+        /**
+         * <p>ISO 4217 currency every amount in this block is denominated in.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("currency")
+        public DiscountAmountStage currency(@NotNull String currency) {
+            this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
@@ -590,6 +626,7 @@ public final class PreviewSubscriptionFinanceResponseData {
         public PreviewSubscriptionFinanceResponseData build() {
             return new PreviewSubscriptionFinanceResponseData(
                     amountOff,
+                    currency,
                     discountAmount,
                     discounts,
                     dueNow,

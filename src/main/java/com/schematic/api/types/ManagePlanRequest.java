@@ -50,6 +50,8 @@ public final class ManagePlanRequest {
 
     private final List<UpdateCreditBundleRequestBody> creditBundles;
 
+    private final Optional<String> currency;
+
     private final List<CheckoutFieldValue> customFieldValues;
 
     private final Optional<Long> daysUntilDue;
@@ -84,6 +86,7 @@ public final class ManagePlanRequest {
             String companyId,
             Optional<String> couponExternalId,
             List<UpdateCreditBundleRequestBody> creditBundles,
+            Optional<String> currency,
             List<CheckoutFieldValue> customFieldValues,
             Optional<Long> daysUntilDue,
             List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements,
@@ -107,6 +110,7 @@ public final class ManagePlanRequest {
         this.companyId = companyId;
         this.couponExternalId = couponExternalId;
         this.creditBundles = creditBundles;
+        this.currency = currency;
         this.customFieldValues = customFieldValues;
         this.daysUntilDue = daysUntilDue;
         this.payInAdvanceEntitlements = payInAdvanceEntitlements;
@@ -202,6 +206,14 @@ public final class ManagePlanRequest {
         return creditBundles;
     }
 
+    /**
+     * @return ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.
+     */
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
+    }
+
     @JsonProperty("custom_field_values")
     public List<CheckoutFieldValue> getCustomFieldValues() {
         return customFieldValues;
@@ -284,6 +296,7 @@ public final class ManagePlanRequest {
                 && companyId.equals(other.companyId)
                 && couponExternalId.equals(other.couponExternalId)
                 && creditBundles.equals(other.creditBundles)
+                && currency.equals(other.currency)
                 && customFieldValues.equals(other.customFieldValues)
                 && daysUntilDue.equals(other.daysUntilDue)
                 && payInAdvanceEntitlements.equals(other.payInAdvanceEntitlements)
@@ -311,6 +324,7 @@ public final class ManagePlanRequest {
                 this.companyId,
                 this.couponExternalId,
                 this.creditBundles,
+                this.currency,
                 this.customFieldValues,
                 this.daysUntilDue,
                 this.payInAdvanceEntitlements,
@@ -414,6 +428,13 @@ public final class ManagePlanRequest {
 
         _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles);
 
+        /**
+         * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.</p>
+         */
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
+
         _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues);
 
         _FinalStage addCustomFieldValues(CheckoutFieldValue customFieldValues);
@@ -489,6 +510,8 @@ public final class ManagePlanRequest {
 
         private List<CheckoutFieldValue> customFieldValues = new ArrayList<>();
 
+        private Optional<String> currency = Optional.empty();
+
         private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
         private Optional<String> couponExternalId = Optional.empty();
@@ -533,6 +556,7 @@ public final class ManagePlanRequest {
             companyId(other.getCompanyId());
             couponExternalId(other.getCouponExternalId());
             creditBundles(other.getCreditBundles());
+            currency(other.getCurrency());
             customFieldValues(other.getCustomFieldValues());
             daysUntilDue(other.getDaysUntilDue());
             payInAdvanceEntitlements(other.getPayInAdvanceEntitlements());
@@ -717,6 +741,26 @@ public final class ManagePlanRequest {
             if (customFieldValues != null) {
                 this.customFieldValues.addAll(customFieldValues);
             }
+            return this;
+        }
+
+        /**
+         * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        /**
+         * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
             return this;
         }
 
@@ -956,6 +1000,7 @@ public final class ManagePlanRequest {
                     companyId,
                     couponExternalId,
                     creditBundles,
+                    currency,
                     customFieldValues,
                     daysUntilDue,
                     payInAdvanceEntitlements,
