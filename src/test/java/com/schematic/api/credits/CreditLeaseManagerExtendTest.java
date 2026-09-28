@@ -419,10 +419,14 @@ class CreditLeaseManagerExtendTest {
         manager.extendInBackground("co_1", "ct_1");
         manager.drain(Duration.ofSeconds(5));
 
-        // The caller is waiting on these two, so its deadline is the one that counts.
+        // The caller is waiting on these two, so its deadline is the one that counts. The extend
+        // gets what is left of it by the time it goes out.
         assertEquals(Collections.singletonList(perCheck), acquireTimeouts);
+        assertEquals(2, extendTimeouts.size());
+        assertNotNull(extendTimeouts.get(0));
+        assertTrue(extendTimeouts.get(0).compareTo(perCheck) <= 0);
         // And the background top-up, which nobody is waiting on, keeps the client's own.
-        assertEquals(Arrays.asList(perCheck, null), extendTimeouts);
+        assertNull(extendTimeouts.get(1));
         manager.close();
     }
 
@@ -628,6 +632,77 @@ class CreditLeaseManagerExtendTest {
         assertTrue(
                 hungryGot[0].getLocalRemainingCredits() >= 19000,
                 "the hungry caller came back with " + hungryGot[0].getLocalRemainingCredits());
+        manager.close();
+    }
+
+    @Test
+    void aJoinerSpendsOneDeadlineAcrossItsJoinsAndItsOwnExtend() throws Exception {
+        InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
+        CountDownLatch firstOnTheWire = new CountDownLatch(1);
+        CountDownLatch releaseFirst = new CountDownLatch(1);
+        List<Duration> timeouts = Collections.synchronizedList(new ArrayList<>());
+        AtomicLong grantedTotal = new AtomicLong(20000);
+        LeaseWireClient wire = new LeaseWireClient() {
+            @Override
+            public LeaseGrant acquire(String companyId, String creditTypeId, double amount, Instant expiresAt) {
+                throw new UnsupportedOperationException("the slot already holds a lease");
+            }
+
+            @Override
+            public LeaseGrant extend(String leaseId, double additionalAmount, Instant expiresAt) {
+                return extend(leaseId, additionalAmount, expiresAt, null);
+            }
+
+            @Override
+            public LeaseGrant extend(String leaseId, double additionalAmount, Instant expiresAt, Duration timeout) {
+                timeouts.add(timeout);
+                if (firstOnTheWire.getCount() > 0) {
+                    firstOnTheWire.countDown();
+                    try {
+                        releaseFirst.await(10, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                return new LeaseGrant(
+                        leaseId, "co_1", "ct_1", grantedTotal.addAndGet((long) additionalAmount), expiresAt);
+            }
+
+            @Override
+            public void release(String leaseId) {}
+        };
+        CreditLeaseManager manager = manager(
+                wire,
+                leases,
+                holds,
+                CreditLeaseConfig.builder()
+                        .defaultLeaseSize(2000)
+                        .lowWaterMark(0.5)
+                        .build());
+        leases.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 20000, LIVE));
+        leases.tryReserve("co_1", "ct_1", 19000);
+
+        // Somebody else's extend, too small for the joiner, held on the wire.
+        Thread small = new Thread(() -> manager.maybeExtend("co_1", "ct_1", 4000.0), "small");
+        small.start();
+        assertTrue(firstOnTheWire.await(5, TimeUnit.SECONDS));
+
+        Duration perCheck = Duration.ofMillis(2000);
+        Thread hungry = new Thread(() -> manager.maybeExtend("co_1", "ct_1", 19000.0, perCheck), "hungry");
+        hungry.start();
+        assertTrue(parked(hungry), "the hungry caller never joined the first flight");
+        Thread.sleep(500);
+        releaseFirst.countDown();
+        small.join(5000);
+        hungry.join(5000);
+
+        // The joiner spent part of its budget waiting on the first flight, so the extend it sends
+        // for itself carries what is left, not a fresh copy of the whole timeout.
+        assertEquals(Arrays.asList(null, timeouts.get(1)), timeouts);
+        assertTrue(
+                timeouts.get(1).compareTo(perCheck.minusMillis(500)) <= 0,
+                "the joiner's own extend was handed " + timeouts.get(1));
         manager.close();
     }
 }

@@ -272,6 +272,9 @@ public final class CreditLeaseManager implements AutoCloseable {
             return null;
         }
         String key = LeaseStore.leaseKey(companyId, creditTypeId);
+        // Fixed once, so every join and the extend this call may send share one budget rather
+        // than each restarting the caller's timeout.
+        long startedAt = System.nanoTime();
         // Joins are budgeted, extends of this caller's own are not: it waits out flights that ask
         // for too little, but once the budget is spent it sends one extend of its own rather than
         // joining again. Without the budget a caller could queue behind an unbounded run of other
@@ -317,7 +320,7 @@ public final class CreditLeaseManager implements AutoCloseable {
                     // whose outcome this caller does not read.
                     return null;
                 }
-                LeaseState joined = inFlight.await(timeout);
+                LeaseState joined = inFlight.await(remaining(timeout, startedAt));
                 if (!inFlight.isDone()) {
                     // The wait, not the flight, ran out of time. The extend runs on for everybody
                     // still on it, and reporting no lease sends this caller down the fail-open or
@@ -339,7 +342,14 @@ public final class CreditLeaseManager implements AutoCloseable {
                 continue;
             }
             return startExtend(
-                    key, companyId, creditTypeId, entry, resolved, requiredCredits, additionalAmount, timeout);
+                    key,
+                    companyId,
+                    creditTypeId,
+                    entry,
+                    resolved,
+                    requiredCredits,
+                    additionalAmount,
+                    remaining(timeout, startedAt));
         }
     }
 
@@ -682,6 +692,15 @@ public final class CreditLeaseManager implements AutoCloseable {
             background.remove(landed);
             debug("Credit lease executor is shut down; skipping background work");
         }
+    }
+
+    /** What is left of {@code timeout} since {@code startedAt}, or null for no timeout. */
+    private static Duration remaining(Duration timeout, long startedAt) {
+        if (timeout == null) {
+            return null;
+        }
+        Duration left = timeout.minusNanos(System.nanoTime() - startedAt);
+        return left.isNegative() ? Duration.ZERO : left;
     }
 
     private Instant now() {

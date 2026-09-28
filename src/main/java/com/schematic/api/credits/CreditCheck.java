@@ -9,6 +9,7 @@ import com.schematic.api.types.RulesengineFeatureEntitlement;
 import com.schematic.api.types.RulesengineFlag;
 import com.schematic.api.types.RulesengineUser;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +66,10 @@ public final class CreditCheck {
      * fail-closed contract instead.
      */
     public CheckResult check(CheckRequest request, Callable<CheckResult> fallback) {
+        // The caller's timeout bounds the whole check, so the deadline is fixed here, once. Each
+        // lease step gets what is left of it: handed the full timeout instead, a check that joins
+        // an acquire and then an extend could spend it once per step.
+        long startedAt = System.nanoTime();
         // A malformed usage must never reach the stores: NaN slips through every numeric
         // comparison, and a NaN balance on a possibly shared lease would approve every later
         // reserve. The caller asked for a contract covering exactly this, so resolve it through
@@ -184,7 +189,7 @@ public final class CreditCheck {
         String companyId = company.getId();
         String userId = user == null ? null : user.getId();
 
-        LeaseState lease = manager.acquireIfNeeded(companyId, creditId, request.getTimeout());
+        LeaseState lease = manager.acquireIfNeeded(companyId, creditId, remaining(request, startedAt));
         if (lease == null) {
             return failure(request, "lease_acquire_failed", flag, company, user, creditId, companyId, userId);
         }
@@ -211,7 +216,7 @@ public final class CreditCheck {
             if (reserve == null) {
                 // Pass the cost as required credits so a single large request extends even while
                 // the ratio still sits above the water mark.
-                manager.maybeExtend(companyId, creditId, creditCost, request.getTimeout());
+                manager.maybeExtend(companyId, creditId, creditCost, remaining(request, startedAt));
                 reserve = leases.tryReserve(companyId, creditId, creditCost);
             }
         } catch (RuntimeException e) {
@@ -477,6 +482,16 @@ public final class CreditCheck {
         } catch (Exception e) {
             throw new IllegalStateException("plain flag check failed", e);
         }
+    }
+
+    /** What is left of the caller's timeout, or null when it brought none. */
+    private static Duration remaining(CheckRequest request, long startedAt) {
+        Duration timeout = request.getTimeout();
+        if (timeout == null) {
+            return null;
+        }
+        Duration left = timeout.minusNanos(System.nanoTime() - startedAt);
+        return left.isNegative() ? Duration.ZERO : left;
     }
 
     private static String orElse(String value, String fallback) {
