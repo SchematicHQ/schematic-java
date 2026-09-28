@@ -148,6 +148,7 @@ public final class CreditLeaseManager implements AutoCloseable {
         if (raced != null) {
             return raced.await(timeout);
         }
+        LeaseState result = null;
         try {
             boolean stoppedInTheGap;
             synchronized (stopLock) {
@@ -162,18 +163,18 @@ public final class CreditLeaseManager implements AutoCloseable {
                         + ": the manager stopped while the flight was being registered");
                 return null;
             }
-            LeaseState result = acquire(companyId, creditTypeId, timeout);
-            flight.result.complete(result);
+            result = acquire(companyId, creditTypeId, timeout);
             return result;
         } catch (RuntimeException e) {
             error("Failed to acquire credit lease for " + companyId + "/" + creditTypeId + ": " + e);
             return null;
         } finally {
-            // Completing here and not only on the two paths above: an Error unwinding past both
-            // would leave the future unfinished, and every joiner parks on it forever. A no-op
-            // once the success path has already completed it.
-            flight.result.complete(null);
+            // Completed here and not on the paths above: an Error unwinding past them would leave
+            // the future unfinished, and every joiner parks on it forever. Deregistered first,
+            // since drain() re-snapshots the flights until none is left, and a finished flight
+            // still registered would have it spin until this line ran.
             acquireFlights.remove(key, flight);
+            flight.result.complete(result);
         }
     }
 
@@ -360,6 +361,7 @@ public final class CreditLeaseManager implements AutoCloseable {
             Duration timeout) {
         Flight flight = new Flight(additionalAmount);
         extendFlights.put(key, flight);
+        LeaseState result = null;
         try {
             // Re-read now that the slot's flight is ours. The row above was read before the
             // flight check, so a previous extend can have landed and deregistered in between:
@@ -370,20 +372,18 @@ public final class CreditLeaseManager implements AutoCloseable {
                 return leases.get(companyId, creditTypeId);
             }
             flight.sentExtend = true;
-            LeaseState result = extend(fresh, resolved, additionalAmount, timeout);
-            flight.result.complete(result);
+            result = extend(fresh, resolved, additionalAmount, timeout);
             return result;
         } catch (RuntimeException e) {
             warn("Failed to extend credit lease " + entry.getLeaseId() + ": " + e);
             return null;
         } finally {
-            // Completing here and not only on the two paths above: an Error unwinding past both
-            // would leave the future unfinished, and every joiner parks on it forever. A no-op
-            // once the success path has already completed it.
-            flight.result.complete(null);
             // Identity-guarded rather than an unconditional remove: a caller that spent its joins
             // registers a flight of its own for the same key, and this one must not evict it.
+            // Deregistered before the future completes, so drain() never snapshots a finished
+            // flight and spins on it; completed here so an Error cannot leave joiners parked.
             extendFlights.remove(key, flight);
+            flight.result.complete(result);
         }
     }
 
@@ -672,8 +672,10 @@ public final class CreditLeaseManager implements AutoCloseable {
                 } catch (RuntimeException e) {
                     error("Background credit lease work failed: " + e);
                 } finally {
-                    landed.complete(null);
+                    // Removed before it completes, so drain() never snapshots finished work and
+                    // spins re-reading it.
                     background.remove(landed);
+                    landed.complete(null);
                 }
             });
         } catch (RejectedExecutionException e) {
