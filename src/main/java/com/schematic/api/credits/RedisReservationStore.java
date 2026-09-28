@@ -152,7 +152,12 @@ public final class RedisReservationStore implements ReservationStore {
 
         double consumed = CreditAmounts.clampConsumption(creditsConsumed, reserved);
         double refund = reserved - consumed;
-        if (refund > 0) {
+        // A hold that cannot name the lease it came out of is not refundable: crediting whichever
+        // lease holds the slot now could inflate a successor whose grant the server already
+        // issued whole, and the slice comes back when the lease expires anyway. Decided here,
+        // where the hold is, rather than left to the lease store, which reads an empty pin as no
+        // pin at all.
+        if (refund > 0 && InMemoryReservationStore.hasLeaseId(raw.get("leaseId"))) {
             // Delegated to the lease store, which owns the lease hash, so this cross-key write
             // stays out of a single Lua script. Pinned to the reservation's lease so a hold
             // carved out of an expired lease cannot inflate a successor's balance.

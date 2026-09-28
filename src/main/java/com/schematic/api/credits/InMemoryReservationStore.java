@@ -45,13 +45,20 @@ public final class InMemoryReservationStore implements ReservationStore {
         }
         double consumed = CreditAmounts.clampConsumption(creditsConsumed, reservation.getCreditsReserved());
         double refund = reservation.getCreditsReserved() - consumed;
-        if (refund > 0) {
+        // A hold that cannot name the lease it came out of is not refundable, the same judgement
+        // the Redis store makes: the slice comes back at lease expiry rather than risking a
+        // successor's balance.
+        if (refund > 0 && hasLeaseId(reservation.getLeaseId())) {
             // Pinned to the originating lease: if that lease has expired and a successor holds
             // the slot, the refund is dropped, because the expired lease's remainder already went
             // back to the company balance server-side.
             leases.refund(reservation.getCompanyId(), reservation.getCreditTypeId(), refund, reservation.getLeaseId());
         }
         return consumed;
+    }
+
+    static boolean hasLeaseId(String leaseId) {
+        return leaseId != null && !leaseId.isEmpty();
     }
 
     @Override
