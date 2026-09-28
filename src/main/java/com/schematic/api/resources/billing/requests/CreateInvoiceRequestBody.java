@@ -51,6 +51,8 @@ public final class CreateInvoiceRequestBody {
 
     private final long subtotal;
 
+    private final Optional<Long> total;
+
     private final Optional<String> url;
 
     private final Map<String, Object> additionalProperties;
@@ -70,6 +72,7 @@ public final class CreateInvoiceRequestBody {
             Optional<InvoiceStatus> status,
             Optional<String> subscriptionExternalId,
             long subtotal,
+            Optional<Long> total,
             Optional<String> url,
             Map<String, Object> additionalProperties) {
         this.amountDue = amountDue;
@@ -86,6 +89,7 @@ public final class CreateInvoiceRequestBody {
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.subtotal = subtotal;
+        this.total = total;
         this.url = url;
         this.additionalProperties = additionalProperties;
     }
@@ -160,6 +164,11 @@ public final class CreateInvoiceRequestBody {
         return subtotal;
     }
 
+    @JsonProperty("total")
+    public Optional<Long> getTotal() {
+        return total;
+    }
+
     @JsonProperty("url")
     public Optional<String> getUrl() {
         return url;
@@ -191,6 +200,7 @@ public final class CreateInvoiceRequestBody {
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && subtotal == other.subtotal
+                && total.equals(other.total)
                 && url.equals(other.url);
     }
 
@@ -211,6 +221,7 @@ public final class CreateInvoiceRequestBody {
                 this.status,
                 this.subscriptionExternalId,
                 this.subtotal,
+                this.total,
                 this.url);
     }
 
@@ -288,6 +299,10 @@ public final class CreateInvoiceRequestBody {
 
         _FinalStage subscriptionExternalId(String subscriptionExternalId);
 
+        _FinalStage total(Optional<Long> total);
+
+        _FinalStage total(Long total);
+
         _FinalStage url(Optional<String> url);
 
         _FinalStage url(String url);
@@ -318,6 +333,8 @@ public final class CreateInvoiceRequestBody {
         private long subtotal;
 
         private Optional<String> url = Optional.empty();
+
+        private Optional<Long> total = Optional.empty();
 
         private Optional<String> subscriptionExternalId = Optional.empty();
 
@@ -354,6 +371,7 @@ public final class CreateInvoiceRequestBody {
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             subtotal(other.getSubtotal());
+            total(other.getTotal());
             url(other.getUrl());
             return this;
         }
@@ -417,6 +435,19 @@ public final class CreateInvoiceRequestBody {
         @JsonSetter(value = "url", nulls = Nulls.SKIP)
         public _FinalStage url(Optional<String> url) {
             this.url = url;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage total(Long total) {
+            this.total = Optional.ofNullable(total);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "total", nulls = Nulls.SKIP)
+        public _FinalStage total(Optional<Long> total) {
+            this.total = total;
             return this;
         }
 
@@ -528,6 +559,7 @@ public final class CreateInvoiceRequestBody {
                     status,
                     subscriptionExternalId,
                     subtotal,
+                    total,
                     url,
                     additionalProperties);
         }

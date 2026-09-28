@@ -33,6 +33,8 @@ public final class ChangeSubscriptionRequestBody {
 
     private final List<UpdateCreditBundleRequestBody> creditBundles;
 
+    private final Optional<String> currency;
+
     private final List<CheckoutFieldValue> customFieldValues;
 
     private final String newPlanId;
@@ -57,6 +59,7 @@ public final class ChangeSubscriptionRequestBody {
             Optional<String> billingEntityId,
             Optional<String> couponExternalId,
             List<UpdateCreditBundleRequestBody> creditBundles,
+            Optional<String> currency,
             List<CheckoutFieldValue> customFieldValues,
             String newPlanId,
             String newPriceId,
@@ -71,6 +74,7 @@ public final class ChangeSubscriptionRequestBody {
         this.billingEntityId = billingEntityId;
         this.couponExternalId = couponExternalId;
         this.creditBundles = creditBundles;
+        this.currency = currency;
         this.customFieldValues = customFieldValues;
         this.newPlanId = newPlanId;
         this.newPriceId = newPriceId;
@@ -105,6 +109,14 @@ public final class ChangeSubscriptionRequestBody {
     @JsonProperty("credit_bundles")
     public List<UpdateCreditBundleRequestBody> getCreditBundles() {
         return creditBundles;
+    }
+
+    /**
+     * @return ISO 4217 currency this cart is being built in. Prices are still selected by id; this records the intent, and a cart that prices in another currency is reported as a problem.
+     */
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
     }
 
     @JsonProperty("custom_field_values")
@@ -164,6 +176,7 @@ public final class ChangeSubscriptionRequestBody {
                 && billingEntityId.equals(other.billingEntityId)
                 && couponExternalId.equals(other.couponExternalId)
                 && creditBundles.equals(other.creditBundles)
+                && currency.equals(other.currency)
                 && customFieldValues.equals(other.customFieldValues)
                 && newPlanId.equals(other.newPlanId)
                 && newPriceId.equals(other.newPriceId)
@@ -182,6 +195,7 @@ public final class ChangeSubscriptionRequestBody {
                 this.billingEntityId,
                 this.couponExternalId,
                 this.creditBundles,
+                this.currency,
                 this.customFieldValues,
                 this.newPlanId,
                 this.newPriceId,
@@ -248,6 +262,13 @@ public final class ChangeSubscriptionRequestBody {
 
         _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles);
 
+        /**
+         * <p>ISO 4217 currency this cart is being built in. Prices are still selected by id; this records the intent, and a cart that prices in another currency is reported as a problem.</p>
+         */
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
+
         _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues);
 
         _FinalStage addCustomFieldValues(CheckoutFieldValue customFieldValues);
@@ -291,6 +312,8 @@ public final class ChangeSubscriptionRequestBody {
 
         private List<CheckoutFieldValue> customFieldValues = new ArrayList<>();
 
+        private Optional<String> currency = Optional.empty();
+
         private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
         private Optional<String> couponExternalId = Optional.empty();
@@ -313,6 +336,7 @@ public final class ChangeSubscriptionRequestBody {
             billingEntityId(other.getBillingEntityId());
             couponExternalId(other.getCouponExternalId());
             creditBundles(other.getCreditBundles());
+            currency(other.getCurrency());
             customFieldValues(other.getCustomFieldValues());
             newPlanId(other.getNewPlanId());
             newPriceId(other.getNewPriceId());
@@ -432,6 +456,26 @@ public final class ChangeSubscriptionRequestBody {
             return this;
         }
 
+        /**
+         * <p>ISO 4217 currency this cart is being built in. Prices are still selected by id; this records the intent, and a cart that prices in another currency is reported as a problem.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        /**
+         * <p>ISO 4217 currency this cart is being built in. Prices are still selected by id; this records the intent, and a cart that prices in another currency is reported as a problem.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles) {
             if (creditBundles != null) {
@@ -538,6 +582,7 @@ public final class ChangeSubscriptionRequestBody {
                     billingEntityId,
                     couponExternalId,
                     creditBundles,
+                    currency,
                     customFieldValues,
                     newPlanId,
                     newPriceId,

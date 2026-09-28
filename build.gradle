@@ -63,7 +63,7 @@ java {
 
 group = 'com.schematichq'
 
-version = '1.6.1'
+version = '1.6.2'
 
 jar {
     dependsOn(":generatePomFileForMavenPublication")
@@ -94,7 +94,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.schematichq'
             artifactId = 'schematic-java'
-            version = '1.6.1'
+            version = '1.6.2'
             from components.java
             pom {
                 name = 'Schematic'

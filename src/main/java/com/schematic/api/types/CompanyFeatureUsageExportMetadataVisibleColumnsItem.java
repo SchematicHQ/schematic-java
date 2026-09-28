@@ -13,6 +13,9 @@ public final class CompanyFeatureUsageExportMetadataVisibleColumnsItem {
     public static final CompanyFeatureUsageExportMetadataVisibleColumnsItem SUBSCRIPTION =
             new CompanyFeatureUsageExportMetadataVisibleColumnsItem(Value.SUBSCRIPTION, "subscription");
 
+    public static final CompanyFeatureUsageExportMetadataVisibleColumnsItem CREATED_AT =
+            new CompanyFeatureUsageExportMetadataVisibleColumnsItem(Value.CREATED_AT, "created_at");
+
     public static final CompanyFeatureUsageExportMetadataVisibleColumnsItem USERS =
             new CompanyFeatureUsageExportMetadataVisibleColumnsItem(Value.USERS, "users");
 
@@ -56,6 +59,8 @@ public final class CompanyFeatureUsageExportMetadataVisibleColumnsItem {
                 return visitor.visitPlan();
             case SUBSCRIPTION:
                 return visitor.visitSubscription();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
             case USERS:
                 return visitor.visitUsers();
             case LAST_SEEN_AT:
@@ -73,6 +78,8 @@ public final class CompanyFeatureUsageExportMetadataVisibleColumnsItem {
                 return PLAN;
             case "subscription":
                 return SUBSCRIPTION;
+            case "created_at":
+                return CREATED_AT;
             case "users":
                 return USERS;
             case "last_seen_at":
@@ -91,6 +98,8 @@ public final class CompanyFeatureUsageExportMetadataVisibleColumnsItem {
 
         LAST_SEEN_AT,
 
+        CREATED_AT,
+
         UNKNOWN
     }
 
@@ -102,6 +111,8 @@ public final class CompanyFeatureUsageExportMetadataVisibleColumnsItem {
         T visitUsers();
 
         T visitLastSeenAt();
+
+        T visitCreatedAt();
 
         T visitUnknown(String unknownType);
     }

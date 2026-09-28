@@ -58,6 +58,8 @@ public final class UpcomingInvoiceResponseData {
 
     private final long subtotal;
 
+    private final Optional<Long> total;
+
     private final OffsetDateTime updatedAt;
 
     private final Optional<String> url;
@@ -83,6 +85,7 @@ public final class UpcomingInvoiceResponseData {
             Optional<InvoiceStatus> status,
             Optional<String> subscriptionExternalId,
             long subtotal,
+            Optional<Long> total,
             OffsetDateTime updatedAt,
             Optional<String> url,
             Map<String, Object> additionalProperties) {
@@ -104,6 +107,7 @@ public final class UpcomingInvoiceResponseData {
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.subtotal = subtotal;
+        this.total = total;
         this.updatedAt = updatedAt;
         this.url = url;
         this.additionalProperties = additionalProperties;
@@ -199,6 +203,14 @@ public final class UpcomingInvoiceResponseData {
         return subtotal;
     }
 
+    /**
+     * @return Amount after discounts and tax, before applying the customer balance. Null when the provider has not reported it.
+     */
+    @JsonProperty("total")
+    public Optional<Long> getTotal() {
+        return total;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -239,6 +251,7 @@ public final class UpcomingInvoiceResponseData {
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && subtotal == other.subtotal
+                && total.equals(other.total)
                 && updatedAt.equals(other.updatedAt)
                 && url.equals(other.url);
     }
@@ -264,6 +277,7 @@ public final class UpcomingInvoiceResponseData {
                 this.status,
                 this.subscriptionExternalId,
                 this.subtotal,
+                this.total,
                 this.updatedAt,
                 this.url);
     }
@@ -362,6 +376,13 @@ public final class UpcomingInvoiceResponseData {
 
         _FinalStage subscriptionExternalId(String subscriptionExternalId);
 
+        /**
+         * <p>Amount after discounts and tax, before applying the customer balance. Null when the provider has not reported it.</p>
+         */
+        _FinalStage total(Optional<Long> total);
+
+        _FinalStage total(Long total);
+
         _FinalStage url(Optional<String> url);
 
         _FinalStage url(String url);
@@ -411,6 +432,8 @@ public final class UpcomingInvoiceResponseData {
 
         private Optional<String> url = Optional.empty();
 
+        private Optional<Long> total = Optional.empty();
+
         private Optional<String> subscriptionExternalId = Optional.empty();
 
         private Optional<InvoiceStatus> status = Optional.empty();
@@ -448,6 +471,7 @@ public final class UpcomingInvoiceResponseData {
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             subtotal(other.getSubtotal());
+            total(other.getTotal());
             updatedAt(other.getUpdatedAt());
             url(other.getUrl());
             return this;
@@ -557,6 +581,26 @@ public final class UpcomingInvoiceResponseData {
             return this;
         }
 
+        /**
+         * <p>Amount after discounts and tax, before applying the customer balance. Null when the provider has not reported it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage total(Long total) {
+            this.total = Optional.ofNullable(total);
+            return this;
+        }
+
+        /**
+         * <p>Amount after discounts and tax, before applying the customer balance. Null when the provider has not reported it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "total", nulls = Nulls.SKIP)
+        public _FinalStage total(Optional<Long> total) {
+            this.total = total;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
             this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
@@ -656,6 +700,7 @@ public final class UpcomingInvoiceResponseData {
                     status,
                     subscriptionExternalId,
                     subtotal,
+                    total,
                     updatedAt,
                     url,
                     additionalProperties);

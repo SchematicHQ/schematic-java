@@ -45,7 +45,7 @@ public final class RulesengineCondition {
 
     private final Optional<Long> metricValue;
 
-    private final ComparableOperator operator;
+    private final RulesengineComparableOperator operator;
 
     private final List<String> resourceIds;
 
@@ -67,7 +67,7 @@ public final class RulesengineCondition {
             Optional<RulesengineMetricPeriod> metricPeriod,
             Optional<RulesengineMetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Long> metricValue,
-            ComparableOperator operator,
+            RulesengineComparableOperator operator,
             List<String> resourceIds,
             Optional<RulesengineTraitDefinition> traitDefinition,
             String traitValue,
@@ -146,7 +146,7 @@ public final class RulesengineCondition {
     }
 
     @JsonProperty("operator")
-    public ComparableOperator getOperator() {
+    public RulesengineComparableOperator getOperator() {
         return operator;
     }
 
@@ -242,7 +242,7 @@ public final class RulesengineCondition {
     }
 
     public interface OperatorStage {
-        TraitValueStage operator(@NotNull ComparableOperator operator);
+        TraitValueStage operator(@NotNull RulesengineComparableOperator operator);
     }
 
     public interface TraitValueStage {
@@ -312,7 +312,7 @@ public final class RulesengineCondition {
 
         private String id;
 
-        private ComparableOperator operator;
+        private RulesengineComparableOperator operator;
 
         private String traitValue;
 
@@ -389,7 +389,7 @@ public final class RulesengineCondition {
 
         @java.lang.Override
         @JsonSetter("operator")
-        public TraitValueStage operator(@NotNull ComparableOperator operator) {
+        public TraitValueStage operator(@NotNull RulesengineComparableOperator operator) {
             this.operator = Objects.requireNonNull(operator, "operator must not be null");
             return this;
         }
