@@ -85,7 +85,9 @@ public final class ServerCreditCheck {
         }
 
         CheckAndReserveFlagRequestBody.Builder body = CheckAndReserveFlagRequestBody.builder()
-                .quantity(request.getUsage())
+                // Whole event units, as the lease path holds and the settle bills: a fractional
+                // quantity would hold less than the track charges.
+                .quantity(Math.ceil(request.getUsage()))
                 .expiresAt(OffsetDateTime.ofInstant(clock.instant().plus(reservationTtl), ZoneOffset.UTC));
         if (!request.getCompany().isEmpty()) {
             body.company(request.getCompany());

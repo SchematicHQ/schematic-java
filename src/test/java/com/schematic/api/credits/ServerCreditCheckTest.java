@@ -133,7 +133,7 @@ class ServerCreditCheckTest {
     }
 
     @Test
-    void sendsAFractionalUsageAsTheQuantityToHold() {
+    void roundsAFractionalUsageUpBeforeHolding() {
         when(features.checkAndReserveFlag(eq("inference"), any(CheckAndReserveFlagRequestBody.class), any()))
                 .thenReturn(response(true, "ok", hold("inference_tokens")));
 
@@ -142,10 +142,9 @@ class ServerCreditCheckTest {
         ArgumentCaptor<CheckAndReserveFlagRequestBody> body =
                 ArgumentCaptor.forClass(CheckAndReserveFlagRequestBody.class);
         verify(features).checkAndReserveFlag(eq("inference"), body.capture(), any());
-        // The wire quantity is a decimal, so the raw usage goes out and the server holds the same
-        // amount every other SDK would. Only the preflight rounds up, and only because that field
-        // is an integer.
-        assertEquals(0.5, body.getValue().getQuantity().orElse(null));
+        // The settle bills whole units, so the hold must cover the rounded-up quantity or the
+        // track charges more than was held.
+        assertEquals(1.0, body.getValue().getQuantity().orElse(null));
         assertEquals(
                 1L, body.getValue().getPreflight().get().getEventUsage().get().getQuantity());
     }
