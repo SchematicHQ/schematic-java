@@ -639,37 +639,25 @@ public class DataStreamClient implements Closeable {
                     .build();
 
             try (Response response = httpClient.newCall(request).execute()) {
-                if (response.isSuccessful() && response.body() != null) {
-                    JsonNode body = objectMapper.readTree(response.body().string());
-                    boolean ready = body.has("ready") && body.get("ready").asBoolean(false);
-                    boolean wasReady = replicatorReady.getAndSet(ready);
+                // The replicator answers 503 with the same JSON body while it is not ready
+                // (for example when it has lost its connection to Schematic but still holds
+                // its cache). Read the body regardless of status so the cache version stays
+                // current; flag checks in replicator mode evaluate from that cache even when
+                // the replicator is not ready, and need the version to build cache keys.
+                JsonNode body = readHealthBody(response);
+                if (body != null) {
+                    updateReplicatorCacheVersion(body);
+                }
 
-                    String newCacheVersion = null;
-                    if (body.has("cache_version")) {
-                        newCacheVersion = body.get("cache_version").asText();
-                    } else if (body.has("cacheVersion")) {
-                        newCacheVersion = body.get("cacheVersion").asText();
-                    }
-                    if (newCacheVersion != null && !newCacheVersion.equals(replicatorCacheVersion)) {
-                        String oldVersion = replicatorCacheVersion;
-                        replicatorCacheVersion = newCacheVersion;
-                        log(
-                                "info",
-                                "Replicator cache version changed from "
-                                        + (oldVersion == null ? "(null)" : oldVersion) + " to "
-                                        + newCacheVersion);
-                    }
+                boolean ready = response.isSuccessful()
+                        && body != null
+                        && body.path("ready").asBoolean(false);
+                boolean wasReady = replicatorReady.getAndSet(ready);
 
-                    if (ready && !wasReady) {
-                        log("info", "Replicator is now ready");
-                    } else if (!ready && wasReady) {
-                        log("warn", "Replicator is no longer ready");
-                    }
-                } else {
-                    boolean wasReady = replicatorReady.getAndSet(false);
-                    if (wasReady) {
-                        log("warn", "Replicator health check failed with status: " + response.code());
-                    }
+                if (ready && !wasReady) {
+                    log("info", "Replicator is now ready");
+                } else if (!ready && wasReady) {
+                    log("warn", "Replicator is no longer ready (status: " + response.code() + ")");
                 }
             }
         } catch (IOException e) {
@@ -678,6 +666,38 @@ public class DataStreamClient implements Closeable {
                 log("warn", "Replicator health check failed: " + e.getMessage());
             }
             log("debug", "Replicator health check error: " + e.getMessage());
+        }
+    }
+
+    private JsonNode readHealthBody(Response response) {
+        if (response.body() == null) {
+            return null;
+        }
+        try {
+            JsonNode body = objectMapper.readTree(response.body().string());
+            return body != null && body.isObject() ? body : null;
+        } catch (IOException e) {
+            log("debug", "Failed to parse replicator health response: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private void updateReplicatorCacheVersion(JsonNode body) {
+        String newCacheVersion = null;
+        if (body.hasNonNull("cache_version")) {
+            newCacheVersion = body.get("cache_version").asText();
+        } else if (body.hasNonNull("cacheVersion")) {
+            newCacheVersion = body.get("cacheVersion").asText();
+        }
+        // Keep the last known version when the replicator reports none.
+        if (newCacheVersion != null && !newCacheVersion.isEmpty() && !newCacheVersion.equals(replicatorCacheVersion)) {
+            String oldVersion = replicatorCacheVersion;
+            replicatorCacheVersion = newCacheVersion;
+            log(
+                    "info",
+                    "Replicator cache version changed from "
+                            + (oldVersion == null ? "(null)" : oldVersion) + " to "
+                            + newCacheVersion);
         }
     }
 
