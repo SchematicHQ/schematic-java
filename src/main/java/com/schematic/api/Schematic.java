@@ -638,8 +638,13 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
             eventBuffer.push(buildTrackEvent(EventBody.of(body), options));
 
-            // Update cached company metrics if datastream is active
-            if (company != null && !company.isEmpty() && dataStreamClient != null && dataStreamClient.isConnected()) {
+            // Optimistically bump the cached company metrics so local flag checks see the
+            // usage before the server's update arrives. This is not gated on connection or
+            // replicator readiness: when the replicator loses Schematic it keeps serving its
+            // cache, and usage should keep counting against it. The server's next company
+            // update replaces the metric values outright, so the bump cannot double count,
+            // and a company that is not cached is left alone.
+            if (company != null && !company.isEmpty() && dataStreamClient != null) {
                 try {
                     dataStreamClient.updateCompanyMetrics(body);
                 } catch (Exception e2) {
