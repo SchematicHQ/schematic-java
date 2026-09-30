@@ -500,6 +500,22 @@ When running in Replicator Mode, the client will:
 - Use cached data populated by the external replicator service
 - Fall back to direct API calls if the replicator is not available
 
+### Cache Readiness
+
+The SDK serves flag checks from the replicator cache only once the replicator reports that its cache is ready. The SDK polls the health URL and reads `ready` and `cache_version` from the JSON body, including on the 503 the replicator returns while its cache is still loading. Until the replicator reports `ready: true`, `checkFlag`, `checkFlagWithEntitlement` and `checkFlags` skip the cache and call the Schematic API instead. If the API call fails, they return the flag default. Once the cache is ready, flag checks evaluate locally from the cache, and a flag missing from the cache still falls back to the API. Single and bulk flag checks follow the same rule.
+
+If the health URL can't be reached, times out, or returns a body that isn't JSON, the SDK treats the cache as not ready and keeps the last cache version it saw.
+
+`isCacheReady()` reports the same readiness the flag checks use:
+
+```java
+if (schematic.isCacheReady()) {
+    // Flag checks are evaluated locally from the replicator cache
+}
+```
+
+`isDatastreamConnected()` returns the same value in replicator mode and is kept for backward compatibility. Outside replicator mode `isCacheReady()` returns true whenever datastream is configured, since the SDK fills its own cache over the WebSocket.
+
 ## Contributing
 
 While we value open-source contributions to this SDK, this library is generated programmatically.
