@@ -1,11 +1,9 @@
 package com.schematic.api.credits;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.schematic.api.Schematic;
 import com.schematic.api.datastream.DataStreamClient;
@@ -18,19 +16,17 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 /**
- * A settle moves the cached company metrics only when it moved local state with it. The event is
- * keyed off the reservation id, so the server drops a retried settle as a duplicate: bumping the
- * cached metric for one would have the caller's next local evaluation gate on usage counted twice.
+ * A settle bumps the cached company metrics once per reservation, whatever happened locally. The
+ * server bills the first settle and drops a repeat as a duplicate, so the local count follows it.
  */
 class TrackWithReservationMetricsTest {
 
     @Test
     void aSettleThatClaimedTheHoldMovesTheCachedMetrics() {
         DataStreamClient dataStream = mock(DataStreamClient.class);
-        when(dataStream.isConnected()).thenReturn(true);
 
         try (Schematic schematic = client(dataStream)) {
-            Reservation reservation = reservation();
+            Reservation reservation = reservation(CreditLeaseMode.CLIENT);
             reservations(schematic).add(reservation);
 
             schematic.trackWithReservation(reservation, 3);
@@ -40,17 +36,33 @@ class TrackWithReservationMetricsTest {
     }
 
     @Test
-    void aSettleThatDidNotSettleLocallyLeavesTheCachedMetricsAlone() {
+    void aSettleOfAnExpiredHoldStillMovesTheCachedMetrics() {
         DataStreamClient dataStream = mock(DataStreamClient.class);
-        // Lenient because reaching the connection check at all is the regression this guards.
-        lenient().when(dataStream.isConnected()).thenReturn(true);
 
         try (Schematic schematic = client(dataStream)) {
-            // The hold was never added to the store, so the settle claims nothing: the state a
-            // retried settle, an expired hold or an unreachable store all leave behind.
-            schematic.trackWithReservation(reservation(), 3);
+            // Never added to the store, as if swept at its TTL: nothing to claim locally, but the
+            // event bills the usage for the first time.
+            schematic.trackWithReservation(reservation(CreditLeaseMode.CLIENT), 3);
 
-            verify(dataStream, never()).updateCompanyMetrics(any(EventBodyTrack.class));
+            verify(dataStream).updateCompanyMetrics(any(EventBodyTrack.class));
+        }
+    }
+
+    @Test
+    void aRepeatedSettleMovesTheCachedMetricsOnce() {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+
+        try (Schematic schematic = client(dataStream)) {
+            Reservation client = reservation(CreditLeaseMode.CLIENT);
+            reservations(schematic).add(client);
+            schematic.trackWithReservation(client, 3);
+            schematic.trackWithReservation(client, 3);
+
+            Reservation server = reservation(CreditLeaseMode.SERVER);
+            schematic.trackWithReservation(server, 3);
+            schematic.trackWithReservation(server, 3);
+
+            verify(dataStream, times(2)).updateCompanyMetrics(any(EventBodyTrack.class));
         }
     }
 
@@ -67,11 +79,11 @@ class TrackWithReservationMetricsTest {
         return schematic;
     }
 
-    private static Reservation reservation() {
+    private static Reservation reservation(CreditLeaseMode mode) {
         return new Reservation(
                 UUID.randomUUID().toString(),
                 "lse_1",
-                CreditLeaseMode.CLIENT,
+                mode,
                 "comp_1",
                 "bilcr_1",
                 "tokens",

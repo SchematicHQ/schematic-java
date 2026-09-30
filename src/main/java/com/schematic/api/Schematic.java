@@ -58,8 +58,10 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -84,7 +86,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     private final Thread shutdownHook;
     private final boolean offline;
     private final HttpEventSender eventSender;
-    // Not final: a DataStream that fails to start leaves none, and auto mode reads this per check.
+    // Set once in the constructor, and null when the DataStream failed to start.
     private volatile DataStreamClient dataStreamClient;
     private final DatastreamOptions datastreamOptions;
     // Credit leases. Null throughout when the caller did not configure them, which is what every
@@ -101,6 +103,15 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     // acquire. Null when leases are not configured.
     private final ExecutorService prewarms;
     private volatile boolean closing;
+    // Reservations whose usage has already bumped the cached metrics. Bounded, since a repeat
+    // settle comes soon after the first, and the next company update corrects anything missed.
+    private final Set<String> settledReservations =
+            Collections.synchronizedSet(Collections.newSetFromMap(new LinkedHashMap<String, Boolean>(16, 0.75f, false) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<String, Boolean> eldest) {
+                    return size() > 10_000;
+                }
+            }));
 
     private Schematic(Builder builder) {
         super(buildClientOptions(builder.apiKey, builder));
@@ -833,14 +844,11 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      * Which reservation mode a {@code check()} with usage resolves to right now. Null means no
      * credit gating at all: leases are not configured, or the client is offline.
      *
-     * <p>Auto resolves per check rather than once at startup: a DataStream that failed to start
-     * leaves no client behind, and the checks that follow gate server-side instead of silently
-     * dropping to a plain, ungated flag check. A DataStream that is merely disconnected stays in
-     * client mode and degrades through the plain check, which has its own story for that.
-     *
-     * <p>A loaded rules engine is part of that readiness. Without one, every local evaluation
-     * throws, so a client-mode check would fall through to a plain flag check that takes no hold
-     * and debits nothing: credits handed out ungated for as long as the engine is missing.
+     * <p>Auto picks client mode when the DataStream started and its rules engine is loaded, and
+     * server mode otherwise. Whether the DataStream started is fixed at construction; only the
+     * rules engine is re-checked per check, since without it every local evaluation throws and a
+     * client-mode check would fall through to an ungated plain check. A DataStream that started
+     * but is disconnected, or never connects, stays in client mode.
      */
     private CreditLeaseMode effectiveLeaseMode() {
         if (creditLeaseMode == null || offline) {
@@ -935,20 +943,17 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         }
 
         EventBodyTrack track;
-        boolean updateMetrics;
         if (reservation.getMode() == CreditLeaseMode.SERVER || reservations == null) {
             // Server mode holds the credits server-side, so there is nothing local to consume. A
             // client-mode handle with no store still has to carry its lease id and its key, since
             // dropping either would double-debit the grant or double-bill the usage.
             track = ReservationSettlement.buildTrackEvent(reservation, actualQuantity);
-            updateMetrics = true;
         } else {
             try {
                 ReservationSettlement.SettleOutcome outcome =
                         ReservationSettlement.settle(reservations, reservation, actualQuantity);
                 track = outcome.getTrack();
-                updateMetrics = outcome.isSettledLocally();
-                if (!updateMetrics) {
+                if (!outcome.isSettledLocally()) {
                     logger.debug("trackWithReservation: reservation " + reservation.getId() + " was not settled "
                             + "locally (expired, already settled, or the store was unreachable); emitting the track "
                             + "keyed for server-side dedupe");
@@ -959,17 +964,13 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                 logger.warn("trackWithReservation: failed to settle reservation " + reservation.getId() + " locally ("
                         + e + "); emitting the track anyway");
                 track = ReservationSettlement.buildTrackEvent(reservation, actualQuantity);
-                updateMetrics = false;
             }
         }
 
         try {
             eventBuffer.push(buildReservationSettleEvent(track, objectMapToJsonNode(traits), reservation.getId()));
-            // The cached metric moves only when this call moved local state with it. The event is
-            // keyed off the reservation id, so the server drops a retried settle as a duplicate;
-            // bumping the metric for one would have the caller's next local evaluation gate on
-            // usage that was counted twice.
-            if (updateMetrics) {
+            // Once per reservation, matching the server, which drops a repeat settle as a duplicate.
+            if (settledReservations.add(reservation.getId())) {
                 updateCompanyMetrics(track);
             }
         } catch (Exception e) {
@@ -978,16 +979,12 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     /**
-     * Folds a track event into the cached company's metrics, so a local evaluation right after it
-     * gates on the usage just recorded instead of waiting for the stream to push the new figure
-     * back. A settle is a track, and reads the same way.
+     * Optimistically bumps the cached company's metrics so local flag checks see the usage before
+     * the server's update arrives. Not gated on connection or replicator readiness: a replicator
+     * that loses Schematic keeps serving its cache, and usage should keep counting against it. The
+     * server's next company update replaces the values outright, and an uncached company is left
+     * alone.
      */
-    // Optimistically bump the cached company metrics so local flag checks see the
-    // usage before the server's update arrives. This is not gated on connection or
-    // replicator readiness: when the replicator loses Schematic it keeps serving its
-    // cache, and usage should keep counting against it. The server's next company
-    // update replaces the metric values outright, so the bump cannot double count,
-    // and a company that is not cached is left alone.
     private void updateCompanyMetrics(EventBodyTrack body) {
         Map<String, String> company = body.getCompany().orElse(null);
         if (company == null || company.isEmpty() || dataStreamClient == null) {
