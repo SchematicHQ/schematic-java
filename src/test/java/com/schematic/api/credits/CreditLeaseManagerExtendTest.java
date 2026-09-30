@@ -758,4 +758,145 @@ class CreditLeaseManagerExtendTest {
                 "the joiner's own extend was handed " + timeouts.get(1));
         manager.close();
     }
+
+    @Test
+    void aCallerOutOfJoinsStillJoinsAFlightThatCoversIt() throws Exception {
+        InMemoryLeaseStore backing = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(backing, CLOCK);
+        List<Double> asks = Collections.synchronizedList(new ArrayList<>());
+        List<CountDownLatch> onTheWire =
+                Arrays.asList(new CountDownLatch(1), new CountDownLatch(1), new CountDownLatch(1));
+        List<CountDownLatch> releases =
+                Arrays.asList(new CountDownLatch(1), new CountDownLatch(1), new CountDownLatch(1));
+        AtomicInteger wireCalls = new AtomicInteger();
+        AtomicLong grantedTotal = new AtomicLong(20000);
+        LeaseWireClient wire = new LeaseWireClient() {
+            @Override
+            public LeaseGrant acquire(String companyId, String creditTypeId, double amount, Instant expiresAt) {
+                return new LeaseGrant("lse_1", companyId, creditTypeId, amount, expiresAt);
+            }
+
+            @Override
+            public LeaseGrant extend(String leaseId, double additionalAmount, Instant expiresAt) {
+                asks.add(additionalAmount);
+                int call = wireCalls.incrementAndGet() - 1;
+                if (call < 3) {
+                    onTheWire.get(call).countDown();
+                    try {
+                        releases.get(call).await(10, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                return new LeaseGrant(
+                        leaseId, "co_1", "ct_1", grantedTotal.addAndGet((long) additionalAmount), expiresAt);
+            }
+
+            @Override
+            public void release(String leaseId) {}
+        };
+        AtomicInteger hungryReads = new AtomicInteger();
+        // The hungry caller is held at the re-read after each join until the next flight is on
+        // the wire: a small one after its first join, a large one after its second.
+        LeaseStore sequenced = new CountingReads(backing) {
+            @Override
+            public LeaseState get(String companyId, String creditTypeId) {
+                if ("hungry".equals(Thread.currentThread().getName())) {
+                    int read = hungryReads.incrementAndGet();
+                    try {
+                        if (read == 2) {
+                            onTheWire.get(1).await(10, TimeUnit.SECONDS);
+                        } else if (read == 3) {
+                            onTheWire.get(2).await(10, TimeUnit.SECONDS);
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                return super.get(companyId, creditTypeId);
+            }
+        };
+        CreditLeaseManager manager = manager(
+                wire,
+                sequenced,
+                holds,
+                CreditLeaseConfig.builder()
+                        .defaultLeaseSize(2000)
+                        .lowWaterMark(0.5)
+                        .build());
+        backing.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 20000, LIVE));
+        backing.tryReserve("co_1", "ct_1", 19000);
+
+        Thread small = new Thread(() -> manager.maybeExtend("co_1", "ct_1", 4000.0), "small");
+        small.start();
+        assertTrue(onTheWire.get(0).await(5, TimeUnit.SECONDS));
+        LeaseState[] hungryGot = new LeaseState[1];
+        Thread hungry = new Thread(() -> hungryGot[0] = manager.maybeExtend("co_1", "ct_1", 19000.0), "hungry");
+        hungry.start();
+        assertTrue(parked(hungry), "the hungry caller never joined the first flight");
+        releases.get(0).countDown();
+        small.join(5000);
+
+        Thread second = new Thread(() -> manager.maybeExtend("co_1", "ct_1", 5000.0), "second");
+        second.start();
+        assertTrue(onTheWire.get(1).await(5, TimeUnit.SECONDS));
+        releases.get(1).countDown();
+        second.join(5000);
+
+        // Two joins spent. The next flight asks for 19000 against the 13000 the hungry caller
+        // still needs, so it joins rather than sending a 13000 extend alongside.
+        Thread big = new Thread(() -> manager.maybeExtend("co_1", "ct_1", 25000.0), "big");
+        big.start();
+        assertTrue(onTheWire.get(2).await(5, TimeUnit.SECONDS));
+        assertTrue(parked(hungry), "the hungry caller never joined the covering flight");
+        releases.get(2).countDown();
+        big.join(5000);
+        hungry.join(5000);
+
+        assertFalse(hungry.isAlive());
+        assertEquals(Arrays.asList(3000.0, 2000.0, 19000.0), asks);
+        assertNotNull(hungryGot[0]);
+        manager.close();
+    }
+
+    @Test
+    void aCallerWithNoTimeLeftSendsNoExtend() {
+        InMemoryLeaseStore leases = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(leases, CLOCK);
+        CountingWire wire = new CountingWire(false);
+        CreditLeaseManager manager = manager(wire, leases, holds);
+        leases.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, LIVE));
+        leases.tryReserve("co_1", "ct_1", 900);
+
+        // The client would give up at once, but the server could still grant the extend.
+        assertNull(manager.maybeExtend("co_1", "ct_1", null, Duration.ZERO));
+        assertEquals(0, wire.extends_.get());
+        manager.close();
+    }
+
+    @Test
+    void anExtendThatRegistersAfterStopSendsNothing() {
+        InMemoryLeaseStore backing = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(backing, CLOCK);
+        CountingWire wire = new CountingWire(false);
+        CreditLeaseManager[] manager = new CreditLeaseManager[1];
+        // Stops the manager after the check at the top of maybeExtend has passed, but before
+        // the flight registers.
+        LeaseStore stopsOnFirstRead = new CountingReads(backing) {
+            @Override
+            public LeaseState get(String companyId, String creditTypeId) {
+                if (reads.get() == 0) {
+                    manager[0].stop();
+                }
+                return super.get(companyId, creditTypeId);
+            }
+        };
+        manager[0] = manager(wire, stopsOnFirstRead, holds);
+        backing.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, LIVE));
+        backing.tryReserve("co_1", "ct_1", 900);
+
+        assertNull(manager[0].maybeExtend("co_1", "ct_1", null));
+        assertEquals(0, wire.extends_.get());
+        manager[0].close();
+    }
 }

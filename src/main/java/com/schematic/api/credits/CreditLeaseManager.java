@@ -275,11 +275,10 @@ public final class CreditLeaseManager implements AutoCloseable {
         // Fixed once, so every join and the extend this call may send share one budget rather
         // than each restarting the caller's timeout.
         long startedAt = System.nanoTime();
-        // Joins are budgeted, extends of this caller's own are not: it waits out flights that ask
-        // for too little, but once the budget is spent it sends one extend of its own rather than
-        // joining again. Without the budget a caller could queue behind an unbounded run of other
-        // callers' follow-ups; without the extend of its own it would hand back a balance it
-        // already knows is short and fail its retry with credits still sitting on the server.
+        // Joins of flights too small for this caller are budgeted: once the budget is spent it
+        // sends one extend of its own rather than queue behind an unbounded run of other callers'
+        // follow-ups. A flight that covers its ask is always joined, since sending alongside it
+        // would have the server grant both.
         for (int joinsLeft = MAX_EXTEND_JOINS; ; joinsLeft--) {
             LeaseState entry;
             try {
@@ -313,14 +312,14 @@ public final class CreditLeaseManager implements AutoCloseable {
             double additionalAmount = Math.max(resolved.getLeaseSize(), shortfall);
 
             Flight inFlight = extendFlights.get(key);
-            if (inFlight != null && joinsLeft > 0) {
+            if (inFlight != null && (joinsLeft > 0 || additionalAmount <= inFlight.requestedAdditional)) {
                 if (!joinInFlight) {
                     // The slot is already being topped up and nobody is waiting on this call's
                     // result, so parking on that flight would hold a pool thread for a wire call
                     // whose outcome this caller does not read.
                     return null;
                 }
-                LeaseState joined = inFlight.await(remaining(timeout, startedAt));
+                inFlight.await(remaining(timeout, startedAt));
                 if (!inFlight.isDone()) {
                     // The wait, not the flight, ran out of time. The extend runs on for everybody
                     // still on it, and reporting no lease sends this caller down the fail-open or
@@ -334,7 +333,9 @@ public final class CreditLeaseManager implements AutoCloseable {
                 // is the point of single-flight. A flight that sent nothing covers nobody, so its
                 // ask does not stand in for ours.
                 if (inFlight.sentExtend && additionalAmount <= inFlight.requestedAdditional) {
-                    return joined;
+                    // Read from the future rather than the wait: the flight can finish between a
+                    // timed-out wait and the isDone check above.
+                    return inFlight.result.getNow(null);
                 }
                 // It asked for less than we need. Go round to re-read the slot it just moved, so
                 // the next ask is sized against the balance it left rather than the one this call
@@ -344,8 +345,15 @@ public final class CreditLeaseManager implements AutoCloseable {
             // Registered atomically against the flight this call saw, never with a blind put. Two
             // callers that both found the slot empty would otherwise each register and each send
             // an extend under its own idempotency key, and the server would grant both. The
-            // re-read in startExtend cannot catch that, since neither extend has landed yet. A
-            // caller that has spent its joins takes over only the flight it waited on.
+            // re-read in startExtend cannot catch that, since neither extend has landed yet.
+            Duration budget = remaining(timeout, startedAt);
+            if (budget != null && budget.isZero()) {
+                // Sent now, the extend would time out on the client while the server may still
+                // grant it.
+                debug("Not extending a credit lease for " + companyId + "/" + creditTypeId
+                        + ": the caller's timeout has run out");
+                return null;
+            }
             Flight flight = new Flight(additionalAmount);
             boolean registered = inFlight == null
                     ? extendFlights.putIfAbsent(key, flight) == null
@@ -357,15 +365,7 @@ public final class CreditLeaseManager implements AutoCloseable {
                 continue;
             }
             return startExtend(
-                    key,
-                    flight,
-                    companyId,
-                    creditTypeId,
-                    entry,
-                    resolved,
-                    requiredCredits,
-                    additionalAmount,
-                    remaining(timeout, startedAt));
+                    key, flight, companyId, creditTypeId, entry, resolved, requiredCredits, additionalAmount, budget);
         }
     }
 
@@ -386,6 +386,17 @@ public final class CreditLeaseManager implements AutoCloseable {
             Duration timeout) {
         LeaseState result = null;
         try {
+            boolean stoppedInTheGap;
+            synchronized (stopLock) {
+                // Same guard as acquire: the check at the top of maybeExtend can go stale before
+                // the flight registers, and drain() may already have looked for it.
+                stoppedInTheGap = stopped;
+            }
+            if (stoppedInTheGap) {
+                debug("Not extending a credit lease for " + companyId + "/" + creditTypeId
+                        + ": the manager stopped while the flight was being registered");
+                return null;
+            }
             // Re-read now that the slot's flight is ours. The row above was read before the
             // flight check, so a previous extend can have landed and deregistered in between:
             // that read says "below the mark" about a lease that has since been topped up, and
