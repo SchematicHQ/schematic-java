@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import com.schematic.api.datastream.WasmRulesEngine;
-import com.schematic.api.types.ComparableOperator;
 import com.schematic.api.types.RulesengineCheckFlagResult;
 import com.schematic.api.types.RulesengineCompany;
+import com.schematic.api.types.RulesengineComparableOperator;
 import com.schematic.api.types.RulesengineCondition;
 import com.schematic.api.types.RulesengineConditionType;
 import com.schematic.api.types.RulesengineEntitlementValueType;
@@ -66,7 +66,7 @@ class WasmCreditGateTest {
                 .conditionType(RulesengineConditionType.CREDIT)
                 .environmentId("env")
                 .id("cond_credit")
-                .operator(ComparableOperator.LT)
+                .operator(RulesengineComparableOperator.LT)
                 .traitValue("")
                 .creditId(CREDIT_ID)
                 .consumptionRate(1.0)
@@ -81,7 +81,7 @@ class WasmCreditGateTest {
                 .conditionType(RulesengineConditionType.COMPANY)
                 .environmentId("env")
                 .id("cond_company")
-                .operator(ComparableOperator.EQ)
+                .operator(RulesengineComparableOperator.EQ)
                 .traitValue("")
                 .resourceIds(Collections.singletonList(companyId))
                 .build();

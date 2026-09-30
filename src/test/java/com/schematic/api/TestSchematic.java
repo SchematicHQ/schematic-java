@@ -431,7 +431,6 @@ class SchematicTest {
     @Test
     void trackWithReservation_FoldsTheSettleIntoTheCachedCompanyMetrics() throws Exception {
         DataStreamClient dataStream = mock(DataStreamClient.class);
-        when(dataStream.isConnected()).thenReturn(true);
         Schematic spySchematic = spy(schematic);
         setDataStreamClient(spySchematic, dataStream);
 
