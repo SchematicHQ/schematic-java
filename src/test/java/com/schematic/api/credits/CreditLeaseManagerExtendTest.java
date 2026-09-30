@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -239,6 +240,58 @@ class CreditLeaseManagerExtendTest {
         assertEquals(1, wire.extends_.get());
         assertEquals(0, threadsParkedOnAFlight());
         wire.release.countDown();
+        manager.close();
+    }
+
+    @Test
+    void concurrentCallersThatAllFindNoFlightSendOneExtend() throws Exception {
+        int callers = 8;
+        InMemoryLeaseStore backing = new InMemoryLeaseStore(CLOCK);
+        InMemoryReservationStore holds = new InMemoryReservationStore(backing, CLOCK);
+        CountingWire wire = new CountingWire(true);
+        // Every caller is held at its first read until all of them have made it, then released
+        // together. That lines them all up to find the slot with no flight registered, which is
+        // the race under test.
+        CyclicBarrier lineUp = new CyclicBarrier(callers);
+        ThreadLocal<Boolean> firstRead = ThreadLocal.withInitial(() -> true);
+        LeaseStore sequenced = new CountingReads(backing) {
+            @Override
+            public LeaseState get(String companyId, String creditTypeId) {
+                if (firstRead.get()) {
+                    firstRead.set(false);
+                    try {
+                        lineUp.await(10, TimeUnit.SECONDS);
+                    } catch (Exception e) {
+                        throw new IllegalStateException(e);
+                    }
+                }
+                return super.get(companyId, creditTypeId);
+            }
+        };
+        CreditLeaseManager manager = manager(wire, sequenced, holds);
+        backing.replace(new LeaseGrant("lse_1", "co_1", "ct_1", 1000, LIVE));
+        // Under the water mark, so every caller warrants a top-up.
+        backing.tryReserve("co_1", "ct_1", 900);
+
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < callers; i++) {
+            Thread thread = new Thread(() -> manager.maybeExtend("co_1", "ct_1", null));
+            threads.add(thread);
+            thread.start();
+        }
+        assertTrue(wire.started.await(5, TimeUnit.SECONDS));
+        for (Thread thread : threads) {
+            assertTrue(parked(thread), "a caller never reached the flight");
+        }
+
+        // One sender on the parked wire and everyone else joined to it. A blind registration
+        // would have had each caller send its own extend, and the server grant every one.
+        assertEquals(1, wire.extends_.get());
+        wire.release.countDown();
+        for (Thread thread : threads) {
+            thread.join(5000);
+        }
+        assertEquals(1, wire.extends_.get());
         manager.close();
     }
 

@@ -341,8 +341,24 @@ public final class CreditLeaseManager implements AutoCloseable {
                 // started from.
                 continue;
             }
+            // Registered atomically against the flight this call saw, never with a blind put. Two
+            // callers that both found the slot empty would otherwise each register and each send
+            // an extend under its own idempotency key, and the server would grant both. The
+            // re-read in startExtend cannot catch that, since neither extend has landed yet. A
+            // caller that has spent its joins takes over only the flight it waited on.
+            Flight flight = new Flight(additionalAmount);
+            boolean registered = inFlight == null
+                    ? extendFlights.putIfAbsent(key, flight) == null
+                    : extendFlights.replace(key, inFlight, flight);
+            if (!registered) {
+                // Somebody else claimed the slot first. Go round and join their flight; losing
+                // the registration race does not spend a join.
+                joinsLeft++;
+                continue;
+            }
             return startExtend(
                     key,
+                    flight,
                     companyId,
                     creditTypeId,
                     entry,
@@ -354,14 +370,13 @@ public final class CreditLeaseManager implements AutoCloseable {
     }
 
     /**
-     * Registers this call as the slot's flight and sends its extend. The registration overwrites
-     * rather than yields: a caller arriving here has spent its joins on the flight it would be
-     * overwriting, so yielding to that flight again is the one thing it must not do.
-     * Deregistration is identity-guarded, so the overwritten flight cannot evict this one on its
+     * Sends the extend for a flight the caller has already registered as the slot's own.
+     * Deregistration is identity-guarded, so a flight this one took over cannot evict it on its
      * way out.
      */
     private LeaseState startExtend(
             String key,
+            Flight flight,
             String companyId,
             String creditTypeId,
             LeaseState entry,
@@ -369,8 +384,6 @@ public final class CreditLeaseManager implements AutoCloseable {
             Double requiredCredits,
             double additionalAmount,
             Duration timeout) {
-        Flight flight = new Flight(additionalAmount);
-        extendFlights.put(key, flight);
         LeaseState result = null;
         try {
             // Re-read now that the slot's flight is ours. The row above was read before the
