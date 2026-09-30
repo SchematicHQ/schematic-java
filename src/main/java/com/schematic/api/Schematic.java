@@ -290,17 +290,33 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     /**
      * Returns whether the datastream connection is active and ready.
+     *
+     * <p>In replicator mode this reports replicator readiness, the same value
+     * {@link #isCacheReady()} returns. Use {@link #isCacheReady()} to ask whether flag checks
+     * are being served from the replicator cache.
      */
     public boolean isDatastreamConnected() {
         return this.dataStreamClient != null && this.dataStreamClient.isConnected();
     }
 
     /**
+     * Returns whether flag checks can be served from the datastream cache.
+     *
+     * <p>In replicator mode this is true only once the replicator reports its cache is ready.
+     * Until then, single and bulk flag checks skip the cache and use the Schematic API. In
+     * direct WebSocket mode it matches {@link #isDatastreamConnected()}. Returns false when
+     * datastream is not configured.
+     */
+    public boolean isCacheReady() {
+        return this.dataStreamClient != null && this.dataStreamClient.isCacheReady();
+    }
+
+    /**
      * Checks a feature flag, returning a boolean value.
      *
-     * <p>If datastream is configured and connected, evaluates the flag locally using cached
-     * data and the rules engine. Falls back to the API if datastream is unavailable or
-     * evaluation fails.
+     * <p>If datastream is configured and its cache is ready (see {@link #isCacheReady()}),
+     * evaluates the flag locally using cached data and the rules engine. Falls back to the API
+     * if the cache is not ready or evaluation fails.
      */
     public boolean checkFlag(String flagKey, Map<String, String> company, Map<String, String> user) {
         return checkFlagWithEntitlement(flagKey, company, user).getValue();
@@ -312,7 +328,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      *
      * <p>Priority order:
      * <ol>
-     *   <li>DataStream evaluation (if configured and connected)</li>
+     *   <li>DataStream evaluation (if configured and the cache is ready, see
+     *       {@link #isCacheReady()})</li>
      *   <li>API call with result caching (fallback)</li>
      *   <li>Flag default value (if all else fails)</li>
      * </ol>
@@ -343,13 +360,18 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
 
     /**
      * Attempts to evaluate a flag via the datastream client. Returns the result on
-     * success, or {@code null} if datastream is not configured/connected or evaluation
-     * failed. Callers are responsible for emitting a {@code flag_check} event when
-     * appropriate — single-flag checks do, bulk checks do not.
+     * success, or {@code null} if the datastream cache is not ready (see
+     * {@link #isCacheReady()}) or evaluation failed. Callers are responsible for emitting a
+     * {@code flag_check} event when appropriate. Single-flag checks do, bulk checks do not.
+     *
+     * <p>Single ({@link #checkFlagWithEntitlement}) and bulk ({@link #checkFlags}) checks
+     * both go through this method, and both gate on {@link #isCacheReady()}, so they serve
+     * from the cache under the same condition. In replicator mode that is once the
+     * replicator reports ready; before that, both take the API path.
      */
     private RulesengineCheckFlagResult tryDatastreamCheckFlag(
             String flagKey, Map<String, String> company, Map<String, String> user) {
-        if (dataStreamClient == null || !dataStreamClient.isConnected()) {
+        if (!isCacheReady()) {
             return null;
         }
         try {
@@ -415,8 +437,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      * <p>Evaluation order:
      * <ol>
      *   <li>Offline mode → return flag defaults for the requested keys</li>
-     *   <li>DataStream / replicator (if configured and connected) → evaluate each key
-     *       locally; falls back to the API if any key fails</li>
+     *   <li>DataStream / replicator (if configured and the cache is ready, see
+     *       {@link #isCacheReady()}) → evaluate each key locally; falls back to the API if
+     *       any key fails</li>
      *   <li>Otherwise → look up each requested key in the result cache; if any are
      *       missing, issue a single bulk {@code features.checkFlags} API call to fetch
      *       fresh values, refresh the cache, and merge the results</li>
@@ -440,7 +463,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         }
 
         // 2. DataStream/replicator path: evaluate each key; on any failure fall back to API.
-        if (dataStreamClient != null && dataStreamClient.isConnected() && flagKeys != null && !flagKeys.isEmpty()) {
+        if (isCacheReady() && flagKeys != null && !flagKeys.isEmpty()) {
             List<RulesengineCheckFlagResult> dsResults = new ArrayList<>(flagKeys.size());
             boolean dsOk = true;
             for (String key : flagKeys) {
