@@ -16,9 +16,7 @@ public final class IdentifyOptions {
 
     private IdentifyOptions(Builder builder) {
         this.idempotencyKey = builder.idempotencyKey;
-        // Copied, because the prewarm runs in the background and reads this list after identify
-        // has returned: a caller who reuses and mutates their own list would otherwise decide,
-        // after the fact, which credit types get warmed.
+        // Copied: the prewarm reads this list after identify returns.
         this.prewarm = builder.prewarm != null ? new ArrayList<>(builder.prewarm) : null;
     }
 
@@ -40,8 +38,6 @@ public final class IdentifyOptions {
      * configured on the client.
      */
     public List<String> getPrewarm() {
-        // Unmodifiable for the same reason the constructor copies: the prewarm this list drives
-        // runs after identify returns, and a caller editing it in between would move the work.
         return prewarm == null ? null : Collections.unmodifiableList(prewarm);
     }
 

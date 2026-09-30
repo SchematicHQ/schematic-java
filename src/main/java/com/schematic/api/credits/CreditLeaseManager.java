@@ -120,19 +120,13 @@ public final class CreditLeaseManager implements AutoCloseable {
             error("Failed to read lease store for " + companyId + "/" + creditTypeId + ": " + e);
             return null;
         }
-        // Liveness here is judged on this process's clock, while the Redis store re-reads expiry
-        // against the Redis server's clock inside tryReserve. The two can disagree, so a lease
-        // this call hands back can still be refused there, and the check routes that through its
-        // fail-open handling. The stores keep an expired row for a grace window precisely so
-        // clocks within it agree on what is live.
+        // Judged on this process's clock; the Redis store re-checks against Redis's clock in
+        // tryReserve, and the check handles a refusal there as a failure.
         if (existing != null && existing.isLiveAt(now())) {
             return existing;
         }
-        // An expired or absent slot is left for replace to overwrite: it guards on expiry and
-        // writes atomically. Dropping the stale row first would be a separate, non-atomic op that
-        // can interleave between a sibling's read and its replace, clobbering a lease that
-        // sibling just installed. Reading a stale entry in the gap is harmless, since every path
-        // that acts on a lease re-guards on expiry.
+        // A stale row is left for replace to overwrite atomically; dropping it first could
+        // clobber a lease a sibling just installed.
         if (stopped) {
             debug("Not acquiring a credit lease for " + companyId + "/" + creditTypeId + ": the manager is stopped");
             return null;
@@ -152,10 +146,7 @@ public final class CreditLeaseManager implements AutoCloseable {
         try {
             boolean stoppedInTheGap;
             synchronized (stopLock) {
-                // Under the lock stop() takes, so this either sees the stop or provably ran
-                // before it. The check at the top of the method can go stale between there and
-                // here, and a lease installed past that point is one close() has already finished
-                // looking for.
+                // The check at the top can go stale by now; under stop()'s lock this one can't.
                 stoppedInTheGap = stopped;
             }
             if (stoppedInTheGap) {
@@ -169,10 +160,8 @@ public final class CreditLeaseManager implements AutoCloseable {
             error("Failed to acquire credit lease for " + companyId + "/" + creditTypeId + ": " + e);
             return null;
         } finally {
-            // Completed here and not on the paths above: an Error unwinding past them would leave
-            // the future unfinished, and every joiner parks on it forever. Deregistered first,
-            // since drain() re-snapshots the flights until none is left, and a finished flight
-            // still registered would have it spin until this line ran.
+            // Deregistered before completing so drain() doesn't spin on a finished flight, and
+            // completed in finally so an Error can't leave joiners parked.
             acquireFlights.remove(key, flight);
             flight.result.complete(result);
         }
@@ -214,19 +203,12 @@ public final class CreditLeaseManager implements AutoCloseable {
             return current;
         }
 
-        // A sibling holds the slot with a live lease, or the slot's expired row was reconciled in
-        // place. The server is idempotent for an active slot, so a racing acquire is normally
-        // handed back the SAME lease the sibling installed, and releasing it would pull the
-        // shared lease out from under every process drawing on it. Only a different lease is a
-        // redundant hold nobody will draw on, so only that one is released. An empty slot
-        // (expired in the gap) releases nothing either: this lease is likely what the next
-        // acquire is handed.
+        // Lost the race to a sibling. The server usually hands a racing acquire the same lease,
+        // which must not be released; only a different lease is redundant.
         if (current != null && !current.getLeaseId().equals(grant.getLeaseId())) {
             debug("Lost acquire race for " + companyId + "/" + creditTypeId + "; releasing redundant lease "
                     + grant.getLeaseId());
-            // Tracked even once the manager is stopping: this lease is already granted and nobody
-            // will draw on it, so refusing the release would hold its credits until the server
-            // expires them. The drain waits it out within its own bound.
+            // Allowed after stop, or the redundant lease holds its credits until expiry.
             spawn(
                     () -> {
                         try {
@@ -266,14 +248,11 @@ public final class CreditLeaseManager implements AutoCloseable {
     private LeaseState maybeExtend(
             String companyId, String creditTypeId, Double requiredCredits, boolean joinInFlight, Duration timeout) {
         if (stopped) {
-            // Extending past stop re-holds credits on a lease the close is about to release, or
-            // has already released.
             debug("Not extending a credit lease for " + companyId + "/" + creditTypeId + ": the manager is stopped");
             return null;
         }
         String key = LeaseStore.leaseKey(companyId, creditTypeId);
-        // Fixed once, so every join and the extend this call may send share one budget rather
-        // than each restarting the caller's timeout.
+        // One budget for every join and the extend this call may send.
         long startedAt = System.nanoTime();
         // Joins of flights too small for this caller are budgeted: once the budget is spent it
         // sends one extend of its own rather than queue behind an unbounded run of other callers'
@@ -290,9 +269,7 @@ public final class CreditLeaseManager implements AutoCloseable {
             if (entry == null) {
                 return null;
             }
-            // Never extend an expired lease: the server treats it as released and has already
-            // refunded its remainder, so the only correct move is a fresh acquire on the next
-            // check.
+            // The server has already refunded an expired lease; the next check acquires afresh.
             if (!entry.isLiveAt(now())) {
                 return null;
             }
@@ -302,65 +279,48 @@ public final class CreditLeaseManager implements AutoCloseable {
             if (!belowWatermark && !belowRequired) {
                 return entry;
             }
-            // Size the extend to cover the request that triggered it: a single check needing more
-            // than remaining plus one tranche would otherwise fail its post-extend retry forever,
-            // however much balance the server has. The steady-state path keeps asking for the
-            // configured tranche. Sized here, one level above the wire call, so the flight
-            // registered below and the request body provably carry the same number for a joiner
-            // to compare against.
+            // Cover the triggering check, or one needing more than a tranche would never pass.
             double shortfall = requiredCredits != null ? requiredCredits - entry.getLocalRemainingCredits() : 0;
             double additionalAmount = Math.max(resolved.getLeaseSize(), shortfall);
 
             Flight inFlight = extendFlights.get(key);
             if (inFlight != null && (joinsLeft > 0 || additionalAmount <= inFlight.requestedAdditional)) {
                 if (!joinInFlight) {
-                    // The slot is already being topped up and nobody is waiting on this call's
-                    // result, so parking on that flight would hold a pool thread for a wire call
-                    // whose outcome this caller does not read.
+                    // A background caller doesn't read the result, so it doesn't park a thread.
                     return null;
                 }
                 inFlight.await(remaining(timeout, startedAt));
                 if (!inFlight.isDone()) {
-                    // The wait, not the flight, ran out of time. The extend runs on for everybody
-                    // still on it, and reporting no lease sends this caller down the fail-open or
-                    // fail-closed path its own timeout asked for.
+                    // The caller's wait timed out; the flight runs on for the others.
                     debug("An extend in flight for " + companyId + "/" + creditTypeId + " outlasted the caller's "
                             + "timeout; not waiting on it");
                     return null;
                 }
-                // The flight asked for at least what we need, which covers every watermark-driven
-                // joiner and any check the tranche fits. One wire call serves all of them, which
-                // is the point of single-flight. A flight that sent nothing covers nobody, so its
-                // ask does not stand in for ours.
+                // A flight that sent enough serves us too. One that sent nothing covers nobody.
                 if (inFlight.sentExtend && additionalAmount <= inFlight.requestedAdditional) {
                     // Read from the future rather than the wait: the flight can finish between a
                     // timed-out wait and the isDone check above.
                     return inFlight.result.getNow(null);
                 }
-                // It asked for less than we need. Go round to re-read the slot it just moved, so
-                // the next ask is sized against the balance it left rather than the one this call
-                // started from.
+                // Too small: re-read and size the next ask against the new balance.
                 continue;
             }
-            // Registered atomically against the flight this call saw, never with a blind put. Two
-            // callers that both found the slot empty would otherwise each register and each send
-            // an extend under its own idempotency key, and the server would grant both. The
-            // re-read in startExtend cannot catch that, since neither extend has landed yet.
             Duration budget = remaining(timeout, startedAt);
             if (budget != null && budget.isZero()) {
-                // Sent now, the extend would time out on the client while the server may still
-                // grant it.
+                // It would time out on the client while the server may still grant it.
                 debug("Not extending a credit lease for " + companyId + "/" + creditTypeId
                         + ": the caller's timeout has run out");
                 return null;
             }
+            // Registered atomically against the flight this call saw: with a blind put, two
+            // callers that both found the slot empty would each send an extend, and the server
+            // would grant both.
             Flight flight = new Flight(additionalAmount);
             boolean registered = inFlight == null
                     ? extendFlights.putIfAbsent(key, flight) == null
                     : extendFlights.replace(key, inFlight, flight);
             if (!registered) {
-                // Somebody else claimed the slot first. Go round and join their flight; losing
-                // the registration race does not spend a join.
+                // Lost the race: go round and join the winner, without spending a join.
                 joinsLeft++;
                 continue;
             }
@@ -397,10 +357,7 @@ public final class CreditLeaseManager implements AutoCloseable {
                         + ": the manager stopped while the flight was being registered");
                 return null;
             }
-            // Re-read now that the slot's flight is ours. The row above was read before the
-            // flight check, so a previous extend can have landed and deregistered in between:
-            // that read says "below the mark" about a lease that has since been topped up, and
-            // sending on it bills a second tranche nobody needs.
+            // Re-read now the flight is ours: an earlier extend may have landed since.
             LeaseState fresh = stillNeedsExtending(companyId, creditTypeId, requiredCredits, resolved);
             if (fresh == null) {
                 return leases.get(companyId, creditTypeId);
@@ -412,10 +369,8 @@ public final class CreditLeaseManager implements AutoCloseable {
             warn("Failed to extend credit lease " + entry.getLeaseId() + ": " + e);
             return null;
         } finally {
-            // Identity-guarded rather than an unconditional remove: a caller that spent its joins
-            // registers a flight of its own for the same key, and this one must not evict it.
-            // Deregistered before the future completes, so drain() never snapshots a finished
-            // flight and spins on it; completed here so an Error cannot leave joiners parked.
+            // Identity-guarded, so a flight that took this one over isn't evicted. Ordered as in
+            // acquireIfNeeded.
             extendFlights.remove(key, flight);
             flight.result.complete(result);
         }
@@ -426,15 +381,7 @@ public final class CreditLeaseManager implements AutoCloseable {
      * should not pay for the top-up.
      */
     public void extendInBackground(String companyId, String creditTypeId) {
-        // Tested here, on the caller's thread, rather than inside the spawned task: every allowed
-        // check calls this, and a lease sitting comfortably above its water mark is the common
-        // case. Spawning first would queue a task per check onto an unbounded pool only to
-        // discover there was nothing to do.
-        //
-        // The flight is tested first, and for the same reason. A slot stays below its water mark
-        // for as long as the top-up is on the wire, so every check allowed in that window would
-        // otherwise spawn a task that reads the store, finds the flight it must not join, and
-        // returns having done nothing.
+        // Tested on the caller's thread so the common case, nothing to do, spawns no task.
         if (extendFlights.containsKey(LeaseStore.leaseKey(companyId, creditTypeId))) {
             return;
         }
@@ -489,10 +436,8 @@ public final class CreditLeaseManager implements AutoCloseable {
             return null;
         }
         try {
-            // Reconcile to the server's authoritative TOTAL, with the store computing the delta
-            // against its own current total: per-process single-flight does not cover sibling
-            // processes. Pinned to the lease the server extended, so an expiry mid-call cannot
-            // mint the delta onto a successor.
+            // Reconcile to the server's total, since siblings may have extended too. Pinned to
+            // this lease so an expiry mid-call can't credit a successor.
             leases.extend(
                     entry.getCompanyId(),
                     entry.getCreditTypeId(),
@@ -706,8 +651,7 @@ public final class CreditLeaseManager implements AutoCloseable {
                 } catch (RuntimeException e) {
                     error("Background credit lease work failed: " + e);
                 } finally {
-                    // Removed before it completes, so drain() never snapshots finished work and
-                    // spins re-reading it.
+                    // Removed before completing, as with flights.
                     background.remove(landed);
                     landed.complete(null);
                 }
@@ -769,10 +713,7 @@ public final class CreditLeaseManager implements AutoCloseable {
 
         private final double requestedAdditional;
         private final CompletableFuture<LeaseState> result = new CompletableFuture<>();
-        // What the flight asked for only bounds a joiner's shortfall if the flight went out at
-        // all. A flight that re-read the slot and found the extend unnecessary sends nothing, and
-        // a joiner holding that as its answer would deny a check whose credits are still on the
-        // server.
+        // False when the flight re-read the slot and found no extend needed.
         private volatile boolean sentExtend;
 
         Flight(double requestedAdditional) {
@@ -784,12 +725,8 @@ public final class CreditLeaseManager implements AutoCloseable {
         }
 
         /**
-         * The flight's answer, waited for no longer than the joining caller's own deadline. The
-         * flight is shared, so a check that joins one someone else started would otherwise inherit
-         * a stranger's wire call and blow its timeout by however long that call runs. Abandoning
-         * the wait leaves the flight running for whoever else is on it, and the caller takes the
-         * failure path its mode chooses, the same as any other unresolved lease. Null timeout
-         * means the caller brought no deadline of its own.
+         * The flight's answer, waited for no longer than the joining caller's deadline (null for
+         * none). Giving up leaves the flight running for the other callers.
          */
         LeaseState await(Duration timeout) {
             try {
