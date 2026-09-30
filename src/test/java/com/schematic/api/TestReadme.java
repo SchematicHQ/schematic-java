@@ -11,6 +11,7 @@ import com.schematic.api.credits.CheckOptions;
 import com.schematic.api.credits.CheckResult;
 import com.schematic.api.credits.CreditLeaseConfig;
 import com.schematic.api.credits.OnAcquireFailure;
+import com.schematic.api.datastream.DatastreamOptions;
 import com.schematic.api.logger.SchematicLogger;
 import com.schematic.api.resources.companies.CompaniesClient;
 import com.schematic.api.resources.companies.types.UpsertCompanyResponse;
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import redis.clients.jedis.JedisPooled;
 
 // Testing code examples used in README
 @ExtendWith(MockitoExtension.class)
@@ -163,8 +165,13 @@ class SchematicReadmeTest {
         assertFalse(result.isAllowed());
         assertNull(result.getReservation());
 
-        // A check can allow without a hold, and that usage still has to be tracked.
-        schematic.track("inference_tokens", company, null, null, 42L);
+        long tokensUsed = 42L;
+        if (result.getReservation() != null) {
+            schematic.trackWithReservation(result.getReservation(), tokensUsed);
+        } else {
+            // A check can allow without a hold, and that usage still has to be tracked.
+            schematic.track("inference_tokens", company, null, null, tokensUsed);
+        }
         schematic.prewarm(company, Collections.singletonList("credit-type-id"));
 
         schematic.identify(
@@ -177,5 +184,21 @@ class SchematicReadmeTest {
                         .build());
 
         schematic.close();
+    }
+
+    @Test
+    void testCreditLeaseClientModeConfig() {
+        // Only the config is built: a client with DataStream would open a socket. JedisPooled
+        // connects lazily, so constructing it needs no Redis.
+        try (JedisPooled redisClient = new JedisPooled("localhost", 6379)) {
+            CreditLeaseConfig config = CreditLeaseConfig.builder()
+                    .defaultLeaseSize(10000)
+                    .defaultLeaseDuration(Duration.ofMinutes(5))
+                    .defaultReservationTtl(Duration.ofSeconds(60))
+                    .redisClient(redisClient)
+                    .build();
+            assertNotNull(config);
+            assertNotNull(DatastreamOptions.builder().build());
+        }
     }
 }

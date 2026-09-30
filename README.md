@@ -439,7 +439,7 @@ Set with `creditLeases(CreditLeaseConfig.builder()...build())`. Per-credit-type 
 | `prewarmResolveTimeout` | `Duration` | 5 seconds | (client mode) How long `prewarm` waits for a freshly identified company to surface; zero resolves from the DataStream cache only |
 | `redisClient` | `JedisPooled` | the DataStream cache's client | (client mode) Redis client for lease and reservation state |
 | `redisKeyPrefix` | `String` | the DataStream cache's prefix | (client mode) Key prefix for lease and reservation keys |
-| `overrides` | `Map<String, CreditLeaseOverride>` | none | (client mode) Per-credit-type overrides of the above, keyed by credit type id |
+| `overrides` | `Map<String, CreditLeaseOverride>` | none | (client mode) Per-credit-type overrides of `defaultLeaseDuration`, `defaultReservationTtl`, `defaultLeaseSize` and `lowWaterMark`, keyed by credit type id |
 
 ### Offline Mode
 
