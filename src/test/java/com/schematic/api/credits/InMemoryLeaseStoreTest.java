@@ -1,6 +1,7 @@
 package com.schematic.api.credits;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
@@ -71,6 +72,7 @@ class InMemoryLeaseStoreTest {
         }
         for (Thread thread : all) {
             thread.join(30_000);
+            assertFalse(thread.isAlive(), "a store thread did not finish");
         }
 
         assertEquals(Collections.emptyList(), failures);

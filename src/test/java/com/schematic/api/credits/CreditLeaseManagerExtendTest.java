@@ -1,5 +1,6 @@
 package com.schematic.api.credits;
 
+import static com.schematic.api.credits.TestThreads.finish;
 import static com.schematic.api.credits.TestThreads.parked;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -203,6 +205,13 @@ class CreditLeaseManagerExtendTest {
         return new CreditLeaseManager(wire, leases, holds, config, null, CLOCK);
     }
 
+    /** Tasks ever submitted to the manager's pool, finished ones included. */
+    private static long tasksSubmitted(CreditLeaseManager manager) throws Exception {
+        Field field = CreditLeaseManager.class.getDeclaredField("executor");
+        field.setAccessible(true);
+        return ((ThreadPoolExecutor) field.get(manager)).getTaskCount();
+    }
+
     /** How many threads are parked inside a lease flight right now, whichever pool they came from. */
     private static int threadsParkedOnAFlight() {
         int count = 0;
@@ -233,10 +242,9 @@ class CreditLeaseManagerExtendTest {
         for (int i = 0; i < 200; i++) {
             manager.extendInBackground("co_1", "ct_1");
         }
-        Thread.sleep(200);
 
-        // Each of those checks found a top-up already on the wire. Joining it would have parked a
-        // pool thread apiece for the length of one network call.
+        // Each of those checks found a top-up already on the wire and submitted nothing.
+        assertEquals(1, tasksSubmitted(manager));
         assertEquals(1, wire.extends_.get());
         assertEquals(0, threadsParkedOnAFlight());
         wire.release.countDown();
@@ -289,7 +297,7 @@ class CreditLeaseManagerExtendTest {
         assertEquals(1, wire.extends_.get());
         wire.release.countDown();
         for (Thread thread : threads) {
-            thread.join(5000);
+            finish(thread);
         }
         assertEquals(1, wire.extends_.get());
         manager.close();
@@ -371,7 +379,7 @@ class CreditLeaseManagerExtendTest {
         manager.stop();
         manager.releaseAllLocalLeases();
         swept.countDown();
-        caller.join(5000);
+        finish(caller);
 
         // A lease that lands this late is left to the drain or to server-side expiry. Releasing
         // it here would refund, on a shared backend, a lease sibling pods are still reserving
@@ -419,8 +427,8 @@ class CreditLeaseManagerExtendTest {
         // its thread state is the signal: Flight.await is the one place maybeExtend blocks.
         assertTrue(parked(joiner), "the joiner never parked on the owner's flight");
         joinerRegistered.countDown();
-        owner.join(5000);
-        joiner.join(5000);
+        finish(owner);
+        finish(joiner);
 
         // The owner asked for a tranche but never sent it, so its ask stands in for nobody. A
         // joiner that took it as covering its own shortfall would deny a check whose credits are
@@ -556,7 +564,7 @@ class CreditLeaseManagerExtendTest {
         assertEquals(1, wire.extends_.get());
 
         wire.release.countDown();
-        owner.join(5000);
+        finish(owner);
         manager.close();
     }
 
@@ -666,7 +674,7 @@ class CreditLeaseManagerExtendTest {
         hungry.start();
         assertTrue(parked(hungry), "the hungry caller never joined the first flight");
         releaseFirst.countDown();
-        small.join(5000);
+        finish(small);
 
         // A second caller claims the slot while the hungry one is re-reading, and asks for as
         // little as the tranche floor allows.
@@ -674,8 +682,8 @@ class CreditLeaseManagerExtendTest {
         second.start();
         assertTrue(secondOnTheWire.await(5, TimeUnit.SECONDS));
         releaseSecond.countDown();
-        second.join(5000);
-        hungry.join(10000);
+        finish(second);
+        finish(hungry);
 
         // Two joins, then an extend of its own, sized against the balance those two flights left
         // rather than the one it started from: 6000 held, 19000 wanted, so it asks for 13000.
@@ -747,8 +755,8 @@ class CreditLeaseManagerExtendTest {
         assertTrue(parked(hungry), "the hungry caller never joined the first flight");
         Thread.sleep(500);
         releaseFirst.countDown();
-        small.join(5000);
-        hungry.join(5000);
+        finish(small);
+        finish(hungry);
 
         // The joiner spent part of its budget waiting on the first flight, so the extend it sends
         // for itself carries what is left, not a fresh copy of the whole timeout.
@@ -835,13 +843,13 @@ class CreditLeaseManagerExtendTest {
         hungry.start();
         assertTrue(parked(hungry), "the hungry caller never joined the first flight");
         releases.get(0).countDown();
-        small.join(5000);
+        finish(small);
 
         Thread second = new Thread(() -> manager.maybeExtend("co_1", "ct_1", 5000.0), "second");
         second.start();
         assertTrue(onTheWire.get(1).await(5, TimeUnit.SECONDS));
         releases.get(1).countDown();
-        second.join(5000);
+        finish(second);
 
         // Two joins spent. The next flight asks for 19000 against the 13000 the hungry caller
         // still needs, so it joins rather than sending a 13000 extend alongside.
@@ -850,10 +858,9 @@ class CreditLeaseManagerExtendTest {
         assertTrue(onTheWire.get(2).await(5, TimeUnit.SECONDS));
         assertTrue(parked(hungry), "the hungry caller never joined the covering flight");
         releases.get(2).countDown();
-        big.join(5000);
-        hungry.join(5000);
+        finish(big);
+        finish(hungry);
 
-        assertFalse(hungry.isAlive());
         assertEquals(Arrays.asList(3000.0, 2000.0, 19000.0), asks);
         assertNotNull(hungryGot[0]);
         manager.close();

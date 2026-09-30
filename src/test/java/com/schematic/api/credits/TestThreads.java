@@ -26,4 +26,12 @@ final class TestThreads {
         }
         return false;
     }
+
+    /** Joins a thread, failing if it has not finished within ten seconds. */
+    static void finish(Thread thread) throws InterruptedException {
+        thread.join(10_000);
+        if (thread.isAlive()) {
+            throw new AssertionError(thread.getName() + " did not finish");
+        }
+    }
 }
