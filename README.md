@@ -506,7 +506,7 @@ The SDK serves flag checks from the replicator cache only once the replicator re
 
 If the health URL can't be reached, times out, or returns a body that isn't JSON, the SDK treats the cache as not ready and keeps the last cache version it saw.
 
-Call `isCacheReady()` to see whether flag checks are currently being served from the cache:
+`isCacheReady()` reports the same readiness the flag checks use:
 
 ```java
 if (schematic.isCacheReady()) {
@@ -514,7 +514,7 @@ if (schematic.isCacheReady()) {
 }
 ```
 
-`isDatastreamConnected()` returns the same value in replicator mode and is kept for backward compatibility.
+`isDatastreamConnected()` returns the same value in replicator mode and is kept for backward compatibility. Outside replicator mode `isCacheReady()` returns true whenever datastream is configured, since the SDK fills its own cache over the WebSocket.
 
 ## Contributing
 

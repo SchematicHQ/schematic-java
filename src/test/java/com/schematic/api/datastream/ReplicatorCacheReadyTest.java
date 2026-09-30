@@ -293,6 +293,58 @@ class ReplicatorCacheReadyTest {
         }
     }
 
+    @Test
+    void isCacheReady_trueOutsideReplicatorMode() {
+        DataStreamClient client = new DataStreamClient(
+                DatastreamOptions.builder().build(), "test-key", "https://api.schematichq.com", logger);
+        try {
+            // WebSocket mode keeps its connection gate; the cache itself has nothing to wait for.
+            assertTrue(client.isCacheReady());
+            assertFalse(client.isConnected());
+        } finally {
+            client.close();
+        }
+    }
+
+    @Test
+    void webSocketModeNotConnected_singleAndBulkStillUseApi() {
+        schematic = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .basePath("http://127.0.0.1:1")
+                .eventCaptureBaseUrl("http://127.0.0.1:1")
+                .cacheProviders(Collections.emptyList())
+                .datastreamOptions(
+                        DatastreamOptions.builder().flagCacheProvider(flagCache).build())
+                .build();
+        Schematic spySchematic = spy(schematic);
+        assertTrue(spySchematic.isCacheReady());
+        assertFalse(spySchematic.isDatastreamConnected());
+        // Cached under whatever version key the SDK uses in this mode, so an open gate would
+        // find it.
+        schematic
+                .getDataStreamClient()
+                .handleMessage(buildResp(EntityType.FLAG.getValue(), null, flagNode("flag-on", true)));
+        assertNotNull(schematic.getDataStreamClient().getCachedFlag("flag-on"));
+
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("flag-on"), any(CheckFlagRequestBody.class)))
+                .thenReturn(singleApiResponse("flag-on", false));
+        when(featuresClient.checkFlags(any(CheckFlagRequestBody.class)))
+                .thenReturn(bulkApiResponse(Collections.singletonList("flag-on"), Collections.singletonList(false)));
+
+        assertEquals(
+                "api",
+                spySchematic.checkFlagWithEntitlement("flag-on", null, null).getReason());
+        assertEquals(
+                "api",
+                spySchematic
+                        .checkFlags(Collections.singletonList("flag-on"), null, null)
+                        .get(0)
+                        .getReason());
+    }
+
     // --- Helpers ---
 
     private Schematic buildSchematic(Map<String, Boolean> flagDefaults) {
@@ -376,7 +428,7 @@ class ReplicatorCacheReadyTest {
                 .build();
     }
 
-    private RulesengineFlag flag(String key, boolean defaultValue) {
+    private ObjectNode flagNode(String key, boolean defaultValue) {
         ObjectNode node = objectMapper.createObjectNode();
         node.put("key", key);
         node.put("id", "flag_" + key);
@@ -384,8 +436,12 @@ class ReplicatorCacheReadyTest {
         node.put("environment_id", "env_1");
         node.put("default_value", defaultValue);
         node.set("rules", objectMapper.createArrayNode());
+        return node;
+    }
+
+    private RulesengineFlag flag(String key, boolean defaultValue) {
         try {
-            return objectMapper.treeToValue(node, RulesengineFlag.class);
+            return objectMapper.treeToValue(flagNode(key, defaultValue), RulesengineFlag.class);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }

@@ -163,21 +163,23 @@ public class DataStreamClient implements Closeable {
     }
 
     /**
-     * Returns whether the datastream cache is ready to serve flag checks.
+     * Returns whether flag checks may be evaluated from the cache.
      *
-     * <p>In replicator mode this is true only once the replicator's health endpoint reports
-     * {@code ready: true}, meaning its cache is complete for the reported cache version. Until
-     * then flag checks skip the cache and go to the Schematic API. A failed health poll
-     * (connection error, timeout, unparseable body) also reports not ready.
+     * <p>In replicator mode this is the replicator's readiness from its last health poll: true
+     * once the replicator reports {@code ready: true}, meaning its cache is complete for the
+     * current cache version, and false before that or after a failed poll (connection error,
+     * timeout, unparseable body). While it is false, flag checks do not read the cache and
+     * are answered by the Schematic API.
      *
-     * <p>In direct WebSocket mode the SDK fills its own cache over the WebSocket, and this
-     * returns the same value as {@link #isConnected()}.
+     * <p>Outside replicator mode the SDK fills its own cache over the WebSocket and fetches
+     * what it lacks on demand, so there is nothing to wait for and this returns true. Flag
+     * checks in that mode still require {@link #isConnected()}, as before.
      */
     public boolean isCacheReady() {
         if (options.isReplicatorMode()) {
             return replicatorReady.get();
         }
-        return isConnected();
+        return true;
     }
 
     /**
