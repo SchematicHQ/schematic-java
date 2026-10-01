@@ -35,4 +35,17 @@ public interface RulesEngine {
      */
     RulesengineCheckFlagResult checkFlag(RulesengineFlag flag, RulesengineCompany company, RulesengineUser user)
             throws Exception;
+
+    /**
+     * Evaluates a flag with a preflight: what the call being gated is about to cost, before it has
+     * been recorded. An engine that cannot answer a preflight evaluates without one, which is the
+     * same verdict every caller got before preflights existed.
+     *
+     * @param options the preflight, or null for none
+     */
+    default RulesengineCheckFlagResult checkFlag(
+            RulesengineFlag flag, RulesengineCompany company, RulesengineUser user, CheckFlagOptions options)
+            throws Exception {
+        return checkFlag(flag, company, user);
+    }
 }
