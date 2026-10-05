@@ -9,9 +9,15 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class CreditEventType {
     public static final CreditEventType ZERO_OUT = new CreditEventType(Value.ZERO_OUT, "zero_out");
 
+    public static final CreditEventType ADJUSTMENT = new CreditEventType(Value.ADJUSTMENT, "adjustment");
+
     public static final CreditEventType USAGE = new CreditEventType(Value.USAGE, "usage");
 
     public static final CreditEventType TRANSFER = new CreditEventType(Value.TRANSFER, "transfer");
+
+    public static final CreditEventType SETTLEMENT = new CreditEventType(Value.SETTLEMENT, "settlement");
+
+    public static final CreditEventType CHARGE = new CreditEventType(Value.CHARGE, "charge");
 
     public static final CreditEventType GRANT = new CreditEventType(Value.GRANT, "grant");
 
@@ -49,10 +55,16 @@ public final class CreditEventType {
         switch (value) {
             case ZERO_OUT:
                 return visitor.visitZeroOut();
+            case ADJUSTMENT:
+                return visitor.visitAdjustment();
             case USAGE:
                 return visitor.visitUsage();
             case TRANSFER:
                 return visitor.visitTransfer();
+            case SETTLEMENT:
+                return visitor.visitSettlement();
+            case CHARGE:
+                return visitor.visitCharge();
             case GRANT:
                 return visitor.visitGrant();
             case UNKNOWN:
@@ -66,10 +78,16 @@ public final class CreditEventType {
         switch (value) {
             case "zero_out":
                 return ZERO_OUT;
+            case "adjustment":
+                return ADJUSTMENT;
             case "usage":
                 return USAGE;
             case "transfer":
                 return TRANSFER;
+            case "settlement":
+                return SETTLEMENT;
+            case "charge":
+                return CHARGE;
             case "grant":
                 return GRANT;
             default:
@@ -78,7 +96,13 @@ public final class CreditEventType {
     }
 
     public enum Value {
+        ADJUSTMENT,
+
+        CHARGE,
+
         GRANT,
+
+        SETTLEMENT,
 
         TRANSFER,
 
@@ -90,7 +114,13 @@ public final class CreditEventType {
     }
 
     public interface Visitor<T> {
+        T visitAdjustment();
+
+        T visitCharge();
+
         T visitGrant();
+
+        T visitSettlement();
 
         T visitTransfer();
 

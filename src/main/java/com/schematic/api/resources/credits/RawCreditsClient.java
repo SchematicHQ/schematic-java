@@ -33,6 +33,7 @@ import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBod
 import com.schematic.api.resources.credits.requests.CreateCreditSpendPolicyRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
 import com.schematic.api.resources.credits.requests.ExtendCreditLeaseRequestBody;
+import com.schematic.api.resources.credits.requests.GetCreditSpendPolicyUsageRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCompanyCreditBalancesRequest;
@@ -64,6 +65,7 @@ import com.schematic.api.resources.credits.types.DeleteCreditSpendPolicyResponse
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyResponse;
+import com.schematic.api.resources.credits.types.GetCreditSpendPolicyUsageResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.GrantBillingCreditsToCompanyResponse;
@@ -3199,6 +3201,89 @@ public class RawCreditsClient {
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CountCreditSpendPoliciesResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<GetCreditSpendPolicyUsageResponse> getCreditSpendPolicyUsage(
+            GetCreditSpendPolicyUsageRequest request) {
+        return getCreditSpendPolicyUsage(request, null);
+    }
+
+    public BaseSchematicHttpResponse<GetCreditSpendPolicyUsageResponse> getCreditSpendPolicyUsage(
+            GetCreditSpendPolicyUsageRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("billing/credits/spend-policies/usage");
+        if (request.getBillingCreditId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "billing_credit_id", request.getBillingCreditId().get(), false);
+        }
+        QueryStringMapper.addQueryParameter(httpUrl, "company_id", request.getCompanyId(), false);
+        if (request.getUserIds().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "user_ids", request.getUserIds().get(), true);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, GetCreditSpendPolicyUsageResponse.class),
                         response);
             }
             try {

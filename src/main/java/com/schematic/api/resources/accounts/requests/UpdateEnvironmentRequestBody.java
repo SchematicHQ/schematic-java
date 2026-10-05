@@ -25,14 +25,18 @@ public final class UpdateEnvironmentRequestBody {
 
     private final Optional<String> name;
 
+    private final Optional<Boolean> requireContextSignature;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateEnvironmentRequestBody(
             Optional<EnvironmentType> environmentType,
             Optional<String> name,
+            Optional<Boolean> requireContextSignature,
             Map<String, Object> additionalProperties) {
         this.environmentType = environmentType;
         this.name = name;
+        this.requireContextSignature = requireContextSignature;
         this.additionalProperties = additionalProperties;
     }
 
@@ -44,6 +48,11 @@ public final class UpdateEnvironmentRequestBody {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    @JsonProperty("require_context_signature")
+    public Optional<Boolean> getRequireContextSignature() {
+        return requireContextSignature;
     }
 
     @java.lang.Override
@@ -58,12 +67,14 @@ public final class UpdateEnvironmentRequestBody {
     }
 
     private boolean equalTo(UpdateEnvironmentRequestBody other) {
-        return environmentType.equals(other.environmentType) && name.equals(other.name);
+        return environmentType.equals(other.environmentType)
+                && name.equals(other.name)
+                && requireContextSignature.equals(other.requireContextSignature);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.environmentType, this.name);
+        return Objects.hash(this.environmentType, this.name, this.requireContextSignature);
     }
 
     @java.lang.Override
@@ -81,6 +92,8 @@ public final class UpdateEnvironmentRequestBody {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<Boolean> requireContextSignature = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -89,6 +102,7 @@ public final class UpdateEnvironmentRequestBody {
         public Builder from(UpdateEnvironmentRequestBody other) {
             environmentType(other.getEnvironmentType());
             name(other.getName());
+            requireContextSignature(other.getRequireContextSignature());
             return this;
         }
 
@@ -114,8 +128,20 @@ public final class UpdateEnvironmentRequestBody {
             return this;
         }
 
+        @JsonSetter(value = "require_context_signature", nulls = Nulls.SKIP)
+        public Builder requireContextSignature(Optional<Boolean> requireContextSignature) {
+            this.requireContextSignature = requireContextSignature;
+            return this;
+        }
+
+        public Builder requireContextSignature(Boolean requireContextSignature) {
+            this.requireContextSignature = Optional.ofNullable(requireContextSignature);
+            return this;
+        }
+
         public UpdateEnvironmentRequestBody build() {
-            return new UpdateEnvironmentRequestBody(environmentType, name, additionalProperties);
+            return new UpdateEnvironmentRequestBody(
+                    environmentType, name, requireContextSignature, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

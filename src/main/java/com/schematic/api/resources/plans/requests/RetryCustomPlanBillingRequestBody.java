@@ -27,6 +27,8 @@ public final class RetryCustomPlanBillingRequestBody {
 
     private final Optional<OffsetDateTime> billingCycleAnchor;
 
+    private final Optional<OffsetDateTime> billingStartDate;
+
     private final String customerEmail;
 
     private final Optional<Long> daysUntilDue;
@@ -40,6 +42,7 @@ public final class RetryCustomPlanBillingRequestBody {
     private RetryCustomPlanBillingRequestBody(
             Optional<CustomPlanActivationStrategy> activationStrategy,
             Optional<OffsetDateTime> billingCycleAnchor,
+            Optional<OffsetDateTime> billingStartDate,
             String customerEmail,
             Optional<Long> daysUntilDue,
             Optional<Boolean> prorateFirstPeriod,
@@ -47,6 +50,7 @@ public final class RetryCustomPlanBillingRequestBody {
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.billingCycleAnchor = billingCycleAnchor;
+        this.billingStartDate = billingStartDate;
         this.customerEmail = customerEmail;
         this.daysUntilDue = daysUntilDue;
         this.prorateFirstPeriod = prorateFirstPeriod;
@@ -65,6 +69,14 @@ public final class RetryCustomPlanBillingRequestBody {
     @JsonProperty("billing_cycle_anchor")
     public Optional<OffsetDateTime> getBillingCycleAnchor() {
         return billingCycleAnchor;
+    }
+
+    /**
+     * @return The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. When both are omitted, the term pinned at finalize is reissued. Only honored when the retry creates a subscription.
+     */
+    @JsonProperty("billing_start_date")
+    public Optional<OffsetDateTime> getBillingStartDate() {
+        return billingStartDate;
     }
 
     @JsonProperty("customer_email")
@@ -107,6 +119,7 @@ public final class RetryCustomPlanBillingRequestBody {
     private boolean equalTo(RetryCustomPlanBillingRequestBody other) {
         return activationStrategy.equals(other.activationStrategy)
                 && billingCycleAnchor.equals(other.billingCycleAnchor)
+                && billingStartDate.equals(other.billingStartDate)
                 && customerEmail.equals(other.customerEmail)
                 && daysUntilDue.equals(other.daysUntilDue)
                 && prorateFirstPeriod.equals(other.prorateFirstPeriod)
@@ -118,6 +131,7 @@ public final class RetryCustomPlanBillingRequestBody {
         return Objects.hash(
                 this.activationStrategy,
                 this.billingCycleAnchor,
+                this.billingStartDate,
                 this.customerEmail,
                 this.daysUntilDue,
                 this.prorateFirstPeriod,
@@ -157,6 +171,13 @@ public final class RetryCustomPlanBillingRequestBody {
 
         _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
 
+        /**
+         * <p>The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. When both are omitted, the term pinned at finalize is reissued. Only honored when the retry creates a subscription.</p>
+         */
+        _FinalStage billingStartDate(Optional<OffsetDateTime> billingStartDate);
+
+        _FinalStage billingStartDate(OffsetDateTime billingStartDate);
+
         _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
 
         _FinalStage daysUntilDue(Long daysUntilDue);
@@ -186,6 +207,8 @@ public final class RetryCustomPlanBillingRequestBody {
 
         private Optional<Long> daysUntilDue = Optional.empty();
 
+        private Optional<OffsetDateTime> billingStartDate = Optional.empty();
+
         private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
 
         private Optional<CustomPlanActivationStrategy> activationStrategy = Optional.empty();
@@ -199,6 +222,7 @@ public final class RetryCustomPlanBillingRequestBody {
         public Builder from(RetryCustomPlanBillingRequestBody other) {
             activationStrategy(other.getActivationStrategy());
             billingCycleAnchor(other.getBillingCycleAnchor());
+            billingStartDate(other.getBillingStartDate());
             customerEmail(other.getCustomerEmail());
             daysUntilDue(other.getDaysUntilDue());
             prorateFirstPeriod(other.getProrateFirstPeriod());
@@ -267,6 +291,26 @@ public final class RetryCustomPlanBillingRequestBody {
         }
 
         /**
+         * <p>The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. When both are omitted, the term pinned at finalize is reissued. Only honored when the retry creates a subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingStartDate(OffsetDateTime billingStartDate) {
+            this.billingStartDate = Optional.ofNullable(billingStartDate);
+            return this;
+        }
+
+        /**
+         * <p>The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. When both are omitted, the term pinned at finalize is reissued. Only honored when the retry creates a subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_start_date", nulls = Nulls.SKIP)
+        public _FinalStage billingStartDate(Optional<OffsetDateTime> billingStartDate) {
+            this.billingStartDate = billingStartDate;
+            return this;
+        }
+
+        /**
          * <p>The date the subscription's billing period renews on. Only honored when the retry creates a subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -304,6 +348,7 @@ public final class RetryCustomPlanBillingRequestBody {
             return new RetryCustomPlanBillingRequestBody(
                     activationStrategy,
                     billingCycleAnchor,
+                    billingStartDate,
                     customerEmail,
                     daysUntilDue,
                     prorateFirstPeriod,

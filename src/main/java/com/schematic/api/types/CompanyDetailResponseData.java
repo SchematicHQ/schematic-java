@@ -29,6 +29,8 @@ public final class CompanyDetailResponseData {
 
     private final Optional<Map<String, Double>> billingCreditBalances;
 
+    private final Optional<String> billingEmail;
+
     private final Optional<CompanyBillingProfileResponseData> billingProfile;
 
     private final Optional<List<CompanyBillingProfileResponseData>> billingProfiles;
@@ -84,6 +86,7 @@ public final class CompanyDetailResponseData {
     private CompanyDetailResponseData(
             List<CompanyPlanWithBillingSubView> addOns,
             Optional<Map<String, Double>> billingCreditBalances,
+            Optional<String> billingEmail,
             Optional<CompanyBillingProfileResponseData> billingProfile,
             Optional<List<CompanyBillingProfileResponseData>> billingProfiles,
             Optional<BillingSubscriptionView> billingSubscription,
@@ -112,6 +115,7 @@ public final class CompanyDetailResponseData {
             Map<String, Object> additionalProperties) {
         this.addOns = addOns;
         this.billingCreditBalances = billingCreditBalances;
+        this.billingEmail = billingEmail;
         this.billingProfile = billingProfile;
         this.billingProfiles = billingProfiles;
         this.billingSubscription = billingSubscription;
@@ -148,6 +152,11 @@ public final class CompanyDetailResponseData {
     @JsonProperty("billing_credit_balances")
     public Optional<Map<String, Double>> getBillingCreditBalances() {
         return billingCreditBalances;
+    }
+
+    @JsonProperty("billing_email")
+    public Optional<String> getBillingEmail() {
+        return billingEmail;
     }
 
     @JsonProperty("billing_profile")
@@ -292,6 +301,7 @@ public final class CompanyDetailResponseData {
     private boolean equalTo(CompanyDetailResponseData other) {
         return addOns.equals(other.addOns)
                 && billingCreditBalances.equals(other.billingCreditBalances)
+                && billingEmail.equals(other.billingEmail)
                 && billingProfile.equals(other.billingProfile)
                 && billingProfiles.equals(other.billingProfiles)
                 && billingSubscription.equals(other.billingSubscription)
@@ -324,6 +334,7 @@ public final class CompanyDetailResponseData {
         return Objects.hash(
                 this.addOns,
                 this.billingCreditBalances,
+                this.billingEmail,
                 this.billingProfile,
                 this.billingProfiles,
                 this.billingSubscription,
@@ -402,6 +413,10 @@ public final class CompanyDetailResponseData {
         _FinalStage billingCreditBalances(Optional<Map<String, Double>> billingCreditBalances);
 
         _FinalStage billingCreditBalances(Map<String, Double> billingCreditBalances);
+
+        _FinalStage billingEmail(Optional<String> billingEmail);
+
+        _FinalStage billingEmail(String billingEmail);
 
         _FinalStage billingProfile(Optional<CompanyBillingProfileResponseData> billingProfile);
 
@@ -560,6 +575,8 @@ public final class CompanyDetailResponseData {
 
         private Optional<CompanyBillingProfileResponseData> billingProfile = Optional.empty();
 
+        private Optional<String> billingEmail = Optional.empty();
+
         private Optional<Map<String, Double>> billingCreditBalances = Optional.empty();
 
         private List<CompanyPlanWithBillingSubView> addOns = new ArrayList<>();
@@ -573,6 +590,7 @@ public final class CompanyDetailResponseData {
         public Builder from(CompanyDetailResponseData other) {
             addOns(other.getAddOns());
             billingCreditBalances(other.getBillingCreditBalances());
+            billingEmail(other.getBillingEmail());
             billingProfile(other.getBillingProfile());
             billingProfiles(other.getBillingProfiles());
             billingSubscription(other.getBillingSubscription());
@@ -997,6 +1015,19 @@ public final class CompanyDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage billingEmail(String billingEmail) {
+            this.billingEmail = Optional.ofNullable(billingEmail);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_email", nulls = Nulls.SKIP)
+        public _FinalStage billingEmail(Optional<String> billingEmail) {
+            this.billingEmail = billingEmail;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingCreditBalances(Map<String, Double> billingCreditBalances) {
             this.billingCreditBalances = Optional.ofNullable(billingCreditBalances);
             return this;
@@ -1038,6 +1069,7 @@ public final class CompanyDetailResponseData {
             return new CompanyDetailResponseData(
                     addOns,
                     billingCreditBalances,
+                    billingEmail,
                     billingProfile,
                     billingProfiles,
                     billingSubscription,

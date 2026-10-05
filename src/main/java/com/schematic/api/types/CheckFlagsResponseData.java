@@ -24,6 +24,8 @@ import java.util.Optional;
 public final class CheckFlagsResponseData {
     private final Optional<Map<String, CompanyCreditBalance>> creditBalances;
 
+    private final List<CreditSpendPolicy> creditSpendPolicies;
+
     private final List<CheckFlagResponseData> flags;
 
     private final Optional<DatastreamCompanyPlan> plan;
@@ -32,10 +34,12 @@ public final class CheckFlagsResponseData {
 
     private CheckFlagsResponseData(
             Optional<Map<String, CompanyCreditBalance>> creditBalances,
+            List<CreditSpendPolicy> creditSpendPolicies,
             List<CheckFlagResponseData> flags,
             Optional<DatastreamCompanyPlan> plan,
             Map<String, Object> additionalProperties) {
         this.creditBalances = creditBalances;
+        this.creditSpendPolicies = creditSpendPolicies;
         this.flags = flags;
         this.plan = plan;
         this.additionalProperties = additionalProperties;
@@ -47,6 +51,14 @@ public final class CheckFlagsResponseData {
     @JsonProperty("credit_balances")
     public Optional<Map<String, CompanyCreditBalance>> getCreditBalances() {
         return creditBalances;
+    }
+
+    /**
+     * @return Credit spend policies binding the evaluated company and user; empty when none bind. Each response carries the whole set, so replace any previously received set with it. Advisory: the flag values do not reflect them, since a check names no draw amount
+     */
+    @JsonProperty("credit_spend_policies")
+    public List<CreditSpendPolicy> getCreditSpendPolicies() {
+        return creditSpendPolicies;
     }
 
     @JsonProperty("flags")
@@ -71,12 +83,15 @@ public final class CheckFlagsResponseData {
     }
 
     private boolean equalTo(CheckFlagsResponseData other) {
-        return creditBalances.equals(other.creditBalances) && flags.equals(other.flags) && plan.equals(other.plan);
+        return creditBalances.equals(other.creditBalances)
+                && creditSpendPolicies.equals(other.creditSpendPolicies)
+                && flags.equals(other.flags)
+                && plan.equals(other.plan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.creditBalances, this.flags, this.plan);
+        return Objects.hash(this.creditBalances, this.creditSpendPolicies, this.flags, this.plan);
     }
 
     @java.lang.Override
@@ -92,6 +107,8 @@ public final class CheckFlagsResponseData {
     public static final class Builder {
         private Optional<Map<String, CompanyCreditBalance>> creditBalances = Optional.empty();
 
+        private List<CreditSpendPolicy> creditSpendPolicies = new ArrayList<>();
+
         private List<CheckFlagResponseData> flags = new ArrayList<>();
 
         private Optional<DatastreamCompanyPlan> plan = Optional.empty();
@@ -103,6 +120,7 @@ public final class CheckFlagsResponseData {
 
         public Builder from(CheckFlagsResponseData other) {
             creditBalances(other.getCreditBalances());
+            creditSpendPolicies(other.getCreditSpendPolicies());
             flags(other.getFlags());
             plan(other.getPlan());
             return this;
@@ -119,6 +137,30 @@ public final class CheckFlagsResponseData {
 
         public Builder creditBalances(Map<String, CompanyCreditBalance> creditBalances) {
             this.creditBalances = Optional.ofNullable(creditBalances);
+            return this;
+        }
+
+        /**
+         * <p>Credit spend policies binding the evaluated company and user; empty when none bind. Each response carries the whole set, so replace any previously received set with it. Advisory: the flag values do not reflect them, since a check names no draw amount</p>
+         */
+        @JsonSetter(value = "credit_spend_policies", nulls = Nulls.SKIP)
+        public Builder creditSpendPolicies(List<CreditSpendPolicy> creditSpendPolicies) {
+            this.creditSpendPolicies.clear();
+            if (creditSpendPolicies != null) {
+                this.creditSpendPolicies.addAll(creditSpendPolicies);
+            }
+            return this;
+        }
+
+        public Builder addCreditSpendPolicies(CreditSpendPolicy creditSpendPolicies) {
+            this.creditSpendPolicies.add(creditSpendPolicies);
+            return this;
+        }
+
+        public Builder addAllCreditSpendPolicies(List<CreditSpendPolicy> creditSpendPolicies) {
+            if (creditSpendPolicies != null) {
+                this.creditSpendPolicies.addAll(creditSpendPolicies);
+            }
             return this;
         }
 
@@ -155,7 +197,7 @@ public final class CheckFlagsResponseData {
         }
 
         public CheckFlagsResponseData build() {
-            return new CheckFlagsResponseData(creditBalances, flags, plan, additionalProperties);
+            return new CheckFlagsResponseData(creditBalances, creditSpendPolicies, flags, plan, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

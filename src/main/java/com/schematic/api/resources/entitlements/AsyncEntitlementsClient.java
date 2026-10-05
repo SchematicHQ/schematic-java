@@ -6,6 +6,7 @@ package com.schematic.api.resources.entitlements;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.entitlements.requests.CountCompanyOverridesRequest;
+import com.schematic.api.resources.entitlements.requests.CountCompanyUserUsageRequest;
 import com.schematic.api.resources.entitlements.requests.CountFeatureCompaniesRequest;
 import com.schematic.api.resources.entitlements.requests.CountFeatureUsageRequest;
 import com.schematic.api.resources.entitlements.requests.CountFeatureUsersRequest;
@@ -14,11 +15,13 @@ import com.schematic.api.resources.entitlements.requests.CreateBillingLinkedPlan
 import com.schematic.api.resources.entitlements.requests.CreateCompanyOverrideRequestBody;
 import com.schematic.api.resources.entitlements.requests.CreatePlanEntitlementRequestBody;
 import com.schematic.api.resources.entitlements.requests.DuplicatePlanEntitlementsRequestBody;
+import com.schematic.api.resources.entitlements.requests.GetCompanyUserUsageMetricsRequest;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageByCompanyRequest;
 import com.schematic.api.resources.entitlements.requests.GetFeatureUsageTimeSeriesRequest;
 import com.schematic.api.resources.entitlements.requests.GetUserUsageByCompanyRequest;
 import com.schematic.api.resources.entitlements.requests.GetUserUsageDetailRequest;
 import com.schematic.api.resources.entitlements.requests.ListCompanyOverridesRequest;
+import com.schematic.api.resources.entitlements.requests.ListCompanyUserUsageRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureCompaniesRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsageHistoryRequest;
 import com.schematic.api.resources.entitlements.requests.ListFeatureUsageRequest;
@@ -27,6 +30,7 @@ import com.schematic.api.resources.entitlements.requests.ListPlanEntitlementsReq
 import com.schematic.api.resources.entitlements.requests.UpdateCompanyOverrideRequestBody;
 import com.schematic.api.resources.entitlements.requests.UpdatePlanEntitlementRequestBody;
 import com.schematic.api.resources.entitlements.types.CountCompanyOverridesResponse;
+import com.schematic.api.resources.entitlements.types.CountCompanyUserUsageResponse;
 import com.schematic.api.resources.entitlements.types.CountFeatureCompaniesResponse;
 import com.schematic.api.resources.entitlements.types.CountFeatureUsageResponse;
 import com.schematic.api.resources.entitlements.types.CountFeatureUsersResponse;
@@ -37,12 +41,14 @@ import com.schematic.api.resources.entitlements.types.DeleteCompanyOverrideRespo
 import com.schematic.api.resources.entitlements.types.DeletePlanEntitlementResponse;
 import com.schematic.api.resources.entitlements.types.DuplicatePlanEntitlementsResponse;
 import com.schematic.api.resources.entitlements.types.GetCompanyOverrideResponse;
+import com.schematic.api.resources.entitlements.types.GetCompanyUserUsageMetricsResponse;
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageByCompanyResponse;
 import com.schematic.api.resources.entitlements.types.GetFeatureUsageTimeSeriesResponse;
 import com.schematic.api.resources.entitlements.types.GetPlanEntitlementResponse;
 import com.schematic.api.resources.entitlements.types.GetUserUsageByCompanyResponse;
 import com.schematic.api.resources.entitlements.types.GetUserUsageDetailResponse;
 import com.schematic.api.resources.entitlements.types.ListCompanyOverridesResponse;
+import com.schematic.api.resources.entitlements.types.ListCompanyUserUsageResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureCompaniesResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureUsageHistoryResponse;
 import com.schematic.api.resources.entitlements.types.ListFeatureUsageResponse;
@@ -359,6 +365,37 @@ public class AsyncEntitlementsClient {
     public CompletableFuture<GetUserUsageByCompanyResponse> getUserUsageByCompany(
             GetUserUsageByCompanyRequest request, RequestOptions requestOptions) {
         return this.rawClient.getUserUsageByCompany(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCompanyUserUsageMetricsResponse> getCompanyUserUsageMetrics(
+            GetCompanyUserUsageMetricsRequest request) {
+        return this.rawClient.getCompanyUserUsageMetrics(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCompanyUserUsageMetricsResponse> getCompanyUserUsageMetrics(
+            GetCompanyUserUsageMetricsRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .getCompanyUserUsageMetrics(request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCompanyUserUsageResponse> listCompanyUserUsage(ListCompanyUserUsageRequest request) {
+        return this.rawClient.listCompanyUserUsage(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ListCompanyUserUsageResponse> listCompanyUserUsage(
+            ListCompanyUserUsageRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listCompanyUserUsage(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountCompanyUserUsageResponse> countCompanyUserUsage(
+            CountCompanyUserUsageRequest request) {
+        return this.rawClient.countCompanyUserUsage(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CountCompanyUserUsageResponse> countCompanyUserUsage(
+            CountCompanyUserUsageRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countCompanyUserUsage(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<GetUserUsageDetailResponse> getUserUsageDetail(GetUserUsageDetailRequest request) {

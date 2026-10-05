@@ -15,6 +15,7 @@ import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.MigrationProrationBehavior;
 import com.schematic.api.types.PlanType;
 import com.schematic.api.types.PlanVersionMigrationStrategy;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,8 @@ public final class CreateMigrationInput {
 
     private final Optional<MigrationProrationBehavior> prorationBehavior;
 
+    private final Optional<OffsetDateTime> scheduledAt;
+
     private final PlanVersionMigrationStrategy strategy;
 
     private final PlanType targetPlanType;
@@ -50,6 +53,7 @@ public final class CreateMigrationInput {
             String planVersionIdTo,
             Optional<List<String>> planVersionIdsFrom,
             Optional<MigrationProrationBehavior> prorationBehavior,
+            Optional<OffsetDateTime> scheduledAt,
             PlanVersionMigrationStrategy strategy,
             PlanType targetPlanType,
             Map<String, Object> additionalProperties) {
@@ -59,6 +63,7 @@ public final class CreateMigrationInput {
         this.planVersionIdTo = planVersionIdTo;
         this.planVersionIdsFrom = planVersionIdsFrom;
         this.prorationBehavior = prorationBehavior;
+        this.scheduledAt = scheduledAt;
         this.strategy = strategy;
         this.targetPlanType = targetPlanType;
         this.additionalProperties = additionalProperties;
@@ -89,9 +94,20 @@ public final class CreateMigrationInput {
         return planVersionIdsFrom;
     }
 
+    /**
+     * @return How Stripe handles the price difference when companies are migrated. With strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none.
+     */
     @JsonProperty("proration_behavior")
     public Optional<MigrationProrationBehavior> getProrationBehavior() {
         return prorationBehavior;
+    }
+
+    /**
+     * @return When every company moves, for strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.
+     */
+    @JsonProperty("scheduled_at")
+    public Optional<OffsetDateTime> getScheduledAt() {
+        return scheduledAt;
     }
 
     @JsonProperty("strategy")
@@ -122,6 +138,7 @@ public final class CreateMigrationInput {
                 && planVersionIdTo.equals(other.planVersionIdTo)
                 && planVersionIdsFrom.equals(other.planVersionIdsFrom)
                 && prorationBehavior.equals(other.prorationBehavior)
+                && scheduledAt.equals(other.scheduledAt)
                 && strategy.equals(other.strategy)
                 && targetPlanType.equals(other.targetPlanType);
     }
@@ -135,6 +152,7 @@ public final class CreateMigrationInput {
                 this.planVersionIdTo,
                 this.planVersionIdsFrom,
                 this.prorationBehavior,
+                this.scheduledAt,
                 this.strategy,
                 this.targetPlanType);
     }
@@ -185,9 +203,19 @@ public final class CreateMigrationInput {
 
         _FinalStage planVersionIdsFrom(List<String> planVersionIdsFrom);
 
+        /**
+         * <p>How Stripe handles the price difference when companies are migrated. With strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none.</p>
+         */
         _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior);
 
         _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior);
+
+        /**
+         * <p>When every company moves, for strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.</p>
+         */
+        _FinalStage scheduledAt(Optional<OffsetDateTime> scheduledAt);
+
+        _FinalStage scheduledAt(OffsetDateTime scheduledAt);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -200,6 +228,8 @@ public final class CreateMigrationInput {
         private PlanVersionMigrationStrategy strategy;
 
         private PlanType targetPlanType;
+
+        private Optional<OffsetDateTime> scheduledAt = Optional.empty();
 
         private Optional<MigrationProrationBehavior> prorationBehavior = Optional.empty();
 
@@ -222,6 +252,7 @@ public final class CreateMigrationInput {
             planVersionIdTo(other.getPlanVersionIdTo());
             planVersionIdsFrom(other.getPlanVersionIdsFrom());
             prorationBehavior(other.getProrationBehavior());
+            scheduledAt(other.getScheduledAt());
             strategy(other.getStrategy());
             targetPlanType(other.getTargetPlanType());
             return this;
@@ -255,12 +286,39 @@ public final class CreateMigrationInput {
             return this;
         }
 
+        /**
+         * <p>When every company moves, for strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage scheduledAt(OffsetDateTime scheduledAt) {
+            this.scheduledAt = Optional.ofNullable(scheduledAt);
+            return this;
+        }
+
+        /**
+         * <p>When every company moves, for strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_at", nulls = Nulls.SKIP)
+        public _FinalStage scheduledAt(Optional<OffsetDateTime> scheduledAt) {
+            this.scheduledAt = scheduledAt;
+            return this;
+        }
+
+        /**
+         * <p>How Stripe handles the price difference when companies are migrated. With strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior) {
             this.prorationBehavior = Optional.ofNullable(prorationBehavior);
             return this;
         }
 
+        /**
+         * <p>How Stripe handles the price difference when companies are migrated. With strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "proration_behavior", nulls = Nulls.SKIP)
         public _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior) {
@@ -316,6 +374,7 @@ public final class CreateMigrationInput {
                     planVersionIdTo,
                     planVersionIdsFrom,
                     prorationBehavior,
+                    scheduledAt,
                     strategy,
                     targetPlanType,
                     additionalProperties);

@@ -13,6 +13,9 @@ public final class PlanVersionMigrationStrategy {
     public static final PlanVersionMigrationStrategy END_OF_BILLING_PERIOD =
             new PlanVersionMigrationStrategy(Value.END_OF_BILLING_PERIOD, "end_of_billing_period");
 
+    public static final PlanVersionMigrationStrategy SCHEDULED =
+            new PlanVersionMigrationStrategy(Value.SCHEDULED, "scheduled");
+
     public static final PlanVersionMigrationStrategy LEAVE = new PlanVersionMigrationStrategy(Value.LEAVE, "leave");
 
     private final Value value;
@@ -52,6 +55,8 @@ public final class PlanVersionMigrationStrategy {
                 return visitor.visitImmediate();
             case END_OF_BILLING_PERIOD:
                 return visitor.visitEndOfBillingPeriod();
+            case SCHEDULED:
+                return visitor.visitScheduled();
             case LEAVE:
                 return visitor.visitLeave();
             case UNKNOWN:
@@ -67,6 +72,8 @@ public final class PlanVersionMigrationStrategy {
                 return IMMEDIATE;
             case "end_of_billing_period":
                 return END_OF_BILLING_PERIOD;
+            case "scheduled":
+                return SCHEDULED;
             case "leave":
                 return LEAVE;
             default:
@@ -81,6 +88,8 @@ public final class PlanVersionMigrationStrategy {
 
         LEAVE,
 
+        SCHEDULED,
+
         UNKNOWN
     }
 
@@ -90,6 +99,8 @@ public final class PlanVersionMigrationStrategy {
         T visitImmediate();
 
         T visitLeave();
+
+        T visitScheduled();
 
         T visitUnknown(String unknownType);
     }

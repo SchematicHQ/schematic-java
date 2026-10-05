@@ -28,7 +28,7 @@ public final class CreditEventLedgerResponseData {
 
     private final Optional<String> billingCreditBundleId;
 
-    private final String billingCreditId;
+    private final Optional<String> billingCreditId;
 
     private final Optional<CompanyLedgerResponseData> company;
 
@@ -37,6 +37,8 @@ public final class CreditEventLedgerResponseData {
     private final Optional<BillingCreditLedgerResponseData> credit;
 
     private final String creditName;
+
+    private final Optional<String> currency;
 
     private final String environmentId;
 
@@ -70,6 +72,8 @@ public final class CreditEventLedgerResponseData {
 
     private final Optional<OffsetDateTime> grantValidFrom;
 
+    private final CreditLedgerEntryKind kind;
+
     private final Optional<String> planId;
 
     private final Optional<Double> quantityConsumed;
@@ -96,11 +100,12 @@ public final class CreditEventLedgerResponseData {
             double amount,
             Optional<String> autoTopupLogId,
             Optional<String> billingCreditBundleId,
-            String billingCreditId,
+            Optional<String> billingCreditId,
             Optional<CompanyLedgerResponseData> company,
             String companyId,
             Optional<BillingCreditLedgerResponseData> credit,
             String creditName,
+            Optional<String> currency,
             String environmentId,
             OffsetDateTime eventAt,
             String eventId,
@@ -117,6 +122,7 @@ public final class CreditEventLedgerResponseData {
             Optional<Double> grantQuantityRemaining,
             Optional<BillingCreditGrantReason> grantReason,
             Optional<OffsetDateTime> grantValidFrom,
+            CreditLedgerEntryKind kind,
             Optional<String> planId,
             Optional<Double> quantityConsumed,
             Optional<Double> quantityRemainingAtZeroOut,
@@ -136,6 +142,7 @@ public final class CreditEventLedgerResponseData {
         this.companyId = companyId;
         this.credit = credit;
         this.creditName = creditName;
+        this.currency = currency;
         this.environmentId = environmentId;
         this.eventAt = eventAt;
         this.eventId = eventId;
@@ -152,6 +159,7 @@ public final class CreditEventLedgerResponseData {
         this.grantQuantityRemaining = grantQuantityRemaining;
         this.grantReason = grantReason;
         this.grantValidFrom = grantValidFrom;
+        this.kind = kind;
         this.planId = planId;
         this.quantityConsumed = quantityConsumed;
         this.quantityRemainingAtZeroOut = quantityRemainingAtZeroOut;
@@ -181,7 +189,7 @@ public final class CreditEventLedgerResponseData {
     }
 
     @JsonProperty("billing_credit_id")
-    public String getBillingCreditId() {
+    public Optional<String> getBillingCreditId() {
         return billingCreditId;
     }
 
@@ -203,6 +211,11 @@ public final class CreditEventLedgerResponseData {
     @JsonProperty("credit_name")
     public String getCreditName() {
         return creditName;
+    }
+
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
     }
 
     @JsonProperty("environment_id")
@@ -285,6 +298,11 @@ public final class CreditEventLedgerResponseData {
         return grantValidFrom;
     }
 
+    @JsonProperty("kind")
+    public CreditLedgerEntryKind getKind() {
+        return kind;
+    }
+
     @JsonProperty("plan_id")
     public Optional<String> getPlanId() {
         return planId;
@@ -355,6 +373,7 @@ public final class CreditEventLedgerResponseData {
                 && companyId.equals(other.companyId)
                 && credit.equals(other.credit)
                 && creditName.equals(other.creditName)
+                && currency.equals(other.currency)
                 && environmentId.equals(other.environmentId)
                 && eventAt.equals(other.eventAt)
                 && eventId.equals(other.eventId)
@@ -371,6 +390,7 @@ public final class CreditEventLedgerResponseData {
                 && grantQuantityRemaining.equals(other.grantQuantityRemaining)
                 && grantReason.equals(other.grantReason)
                 && grantValidFrom.equals(other.grantValidFrom)
+                && kind.equals(other.kind)
                 && planId.equals(other.planId)
                 && quantityConsumed.equals(other.quantityConsumed)
                 && quantityRemainingAtZeroOut.equals(other.quantityRemainingAtZeroOut)
@@ -394,6 +414,7 @@ public final class CreditEventLedgerResponseData {
                 this.companyId,
                 this.credit,
                 this.creditName,
+                this.currency,
                 this.environmentId,
                 this.eventAt,
                 this.eventId,
@@ -410,6 +431,7 @@ public final class CreditEventLedgerResponseData {
                 this.grantQuantityRemaining,
                 this.grantReason,
                 this.grantValidFrom,
+                this.kind,
                 this.planId,
                 this.quantityConsumed,
                 this.quantityRemainingAtZeroOut,
@@ -432,13 +454,9 @@ public final class CreditEventLedgerResponseData {
     }
 
     public interface AmountStage {
-        BillingCreditIdStage amount(double amount);
+        CompanyIdStage amount(double amount);
 
         Builder from(CreditEventLedgerResponseData other);
-    }
-
-    public interface BillingCreditIdStage {
-        CompanyIdStage billingCreditId(@NotNull String billingCreditId);
     }
 
     public interface CompanyIdStage {
@@ -462,7 +480,11 @@ public final class CreditEventLedgerResponseData {
     }
 
     public interface EventTypeStage {
-        SourceIdStage eventType(@NotNull CreditEventType eventType);
+        KindStage eventType(@NotNull CreditEventType eventType);
+    }
+
+    public interface KindStage {
+        SourceIdStage kind(@NotNull CreditLedgerEntryKind kind);
     }
 
     public interface SourceIdStage {
@@ -484,6 +506,10 @@ public final class CreditEventLedgerResponseData {
 
         _FinalStage billingCreditBundleId(String billingCreditBundleId);
 
+        _FinalStage billingCreditId(Optional<String> billingCreditId);
+
+        _FinalStage billingCreditId(String billingCreditId);
+
         _FinalStage company(Optional<CompanyLedgerResponseData> company);
 
         _FinalStage company(CompanyLedgerResponseData company);
@@ -491,6 +517,10 @@ public final class CreditEventLedgerResponseData {
         _FinalStage credit(Optional<BillingCreditLedgerResponseData> credit);
 
         _FinalStage credit(BillingCreditLedgerResponseData credit);
+
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
 
         _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
 
@@ -580,18 +610,16 @@ public final class CreditEventLedgerResponseData {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements AmountStage,
-                    BillingCreditIdStage,
                     CompanyIdStage,
                     CreditNameStage,
                     EnvironmentIdStage,
                     EventAtStage,
                     EventIdStage,
                     EventTypeStage,
+                    KindStage,
                     SourceIdStage,
                     _FinalStage {
         private double amount;
-
-        private String billingCreditId;
 
         private String companyId;
 
@@ -604,6 +632,8 @@ public final class CreditEventLedgerResponseData {
         private String eventId;
 
         private CreditEventType eventType;
+
+        private CreditLedgerEntryKind kind;
 
         private long sourceId;
 
@@ -649,9 +679,13 @@ public final class CreditEventLedgerResponseData {
 
         private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
 
+        private Optional<String> currency = Optional.empty();
+
         private Optional<BillingCreditLedgerResponseData> credit = Optional.empty();
 
         private Optional<CompanyLedgerResponseData> company = Optional.empty();
+
+        private Optional<String> billingCreditId = Optional.empty();
 
         private Optional<String> billingCreditBundleId = Optional.empty();
 
@@ -672,6 +706,7 @@ public final class CreditEventLedgerResponseData {
             companyId(other.getCompanyId());
             credit(other.getCredit());
             creditName(other.getCreditName());
+            currency(other.getCurrency());
             environmentId(other.getEnvironmentId());
             eventAt(other.getEventAt());
             eventId(other.getEventId());
@@ -688,6 +723,7 @@ public final class CreditEventLedgerResponseData {
             grantQuantityRemaining(other.getGrantQuantityRemaining());
             grantReason(other.getGrantReason());
             grantValidFrom(other.getGrantValidFrom());
+            kind(other.getKind());
             planId(other.getPlanId());
             quantityConsumed(other.getQuantityConsumed());
             quantityRemainingAtZeroOut(other.getQuantityRemainingAtZeroOut());
@@ -703,15 +739,8 @@ public final class CreditEventLedgerResponseData {
 
         @java.lang.Override
         @JsonSetter("amount")
-        public BillingCreditIdStage amount(double amount) {
+        public CompanyIdStage amount(double amount) {
             this.amount = amount;
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("billing_credit_id")
-        public CompanyIdStage billingCreditId(@NotNull String billingCreditId) {
-            this.billingCreditId = Objects.requireNonNull(billingCreditId, "billingCreditId must not be null");
             return this;
         }
 
@@ -752,8 +781,15 @@ public final class CreditEventLedgerResponseData {
 
         @java.lang.Override
         @JsonSetter("event_type")
-        public SourceIdStage eventType(@NotNull CreditEventType eventType) {
+        public KindStage eventType(@NotNull CreditEventType eventType) {
             this.eventType = Objects.requireNonNull(eventType, "eventType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("kind")
+        public SourceIdStage kind(@NotNull CreditLedgerEntryKind kind) {
+            this.kind = Objects.requireNonNull(kind, "kind must not be null");
             return this;
         }
 
@@ -1038,6 +1074,19 @@ public final class CreditEventLedgerResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage credit(BillingCreditLedgerResponseData credit) {
             this.credit = Optional.ofNullable(credit);
             return this;
@@ -1060,6 +1109,19 @@ public final class CreditEventLedgerResponseData {
         @JsonSetter(value = "company", nulls = Nulls.SKIP)
         public _FinalStage company(Optional<CompanyLedgerResponseData> company) {
             this.company = company;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingCreditId(String billingCreditId) {
+            this.billingCreditId = Optional.ofNullable(billingCreditId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_credit_id", nulls = Nulls.SKIP)
+        public _FinalStage billingCreditId(Optional<String> billingCreditId) {
+            this.billingCreditId = billingCreditId;
             return this;
         }
 
@@ -1100,6 +1162,7 @@ public final class CreditEventLedgerResponseData {
                     companyId,
                     credit,
                     creditName,
+                    currency,
                     environmentId,
                     eventAt,
                     eventId,
@@ -1116,6 +1179,7 @@ public final class CreditEventLedgerResponseData {
                     grantQuantityRemaining,
                     grantReason,
                     grantValidFrom,
+                    kind,
                     planId,
                     quantityConsumed,
                     quantityRemainingAtZeroOut,

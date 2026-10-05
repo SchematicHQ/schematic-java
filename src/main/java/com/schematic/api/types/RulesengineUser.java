@@ -18,12 +18,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RulesengineUser.Builder.class)
 public final class RulesengineUser {
     private final String accountId;
+
+    private final Optional<List<RulesengineCreditSpendPolicy>> creditSpendPolicies;
 
     private final String environmentId;
 
@@ -39,6 +42,7 @@ public final class RulesengineUser {
 
     private RulesengineUser(
             String accountId,
+            Optional<List<RulesengineCreditSpendPolicy>> creditSpendPolicies,
             String environmentId,
             String id,
             Map<String, String> keys,
@@ -46,6 +50,7 @@ public final class RulesengineUser {
             List<RulesengineTrait> traits,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
+        this.creditSpendPolicies = creditSpendPolicies;
         this.environmentId = environmentId;
         this.id = id;
         this.keys = keys;
@@ -57,6 +62,11 @@ public final class RulesengineUser {
     @JsonProperty("account_id")
     public String getAccountId() {
         return accountId;
+    }
+
+    @JsonProperty("credit_spend_policies")
+    public Optional<List<RulesengineCreditSpendPolicy>> getCreditSpendPolicies() {
+        return creditSpendPolicies;
     }
 
     @JsonProperty("environment_id")
@@ -97,6 +107,7 @@ public final class RulesengineUser {
 
     private boolean equalTo(RulesengineUser other) {
         return accountId.equals(other.accountId)
+                && creditSpendPolicies.equals(other.creditSpendPolicies)
                 && environmentId.equals(other.environmentId)
                 && id.equals(other.id)
                 && keys.equals(other.keys)
@@ -106,7 +117,14 @@ public final class RulesengineUser {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.accountId, this.environmentId, this.id, this.keys, this.rules, this.traits);
+        return Objects.hash(
+                this.accountId,
+                this.creditSpendPolicies,
+                this.environmentId,
+                this.id,
+                this.keys,
+                this.rules,
+                this.traits);
     }
 
     @java.lang.Override
@@ -138,6 +156,10 @@ public final class RulesengineUser {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage creditSpendPolicies(Optional<List<RulesengineCreditSpendPolicy>> creditSpendPolicies);
+
+        _FinalStage creditSpendPolicies(List<RulesengineCreditSpendPolicy> creditSpendPolicies);
 
         _FinalStage keys(Map<String, String> keys);
 
@@ -172,6 +194,8 @@ public final class RulesengineUser {
 
         private Map<String, String> keys = new LinkedHashMap<>();
 
+        private Optional<List<RulesengineCreditSpendPolicy>> creditSpendPolicies = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -180,6 +204,7 @@ public final class RulesengineUser {
         @java.lang.Override
         public Builder from(RulesengineUser other) {
             accountId(other.getAccountId());
+            creditSpendPolicies(other.getCreditSpendPolicies());
             environmentId(other.getEnvironmentId());
             id(other.getId());
             keys(other.getKeys());
@@ -282,8 +307,22 @@ public final class RulesengineUser {
         }
 
         @java.lang.Override
+        public _FinalStage creditSpendPolicies(List<RulesengineCreditSpendPolicy> creditSpendPolicies) {
+            this.creditSpendPolicies = Optional.ofNullable(creditSpendPolicies);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_spend_policies", nulls = Nulls.SKIP)
+        public _FinalStage creditSpendPolicies(Optional<List<RulesengineCreditSpendPolicy>> creditSpendPolicies) {
+            this.creditSpendPolicies = creditSpendPolicies;
+            return this;
+        }
+
+        @java.lang.Override
         public RulesengineUser build() {
-            return new RulesengineUser(accountId, environmentId, id, keys, rules, traits, additionalProperties);
+            return new RulesengineUser(
+                    accountId, creditSpendPolicies, environmentId, id, keys, rules, traits, additionalProperties);
         }
 
         @java.lang.Override

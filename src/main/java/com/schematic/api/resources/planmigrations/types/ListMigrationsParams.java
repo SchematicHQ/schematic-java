@@ -23,6 +23,8 @@ import java.util.Optional;
 public final class ListMigrationsParams {
     private final Optional<String> featureId;
 
+    private final Optional<String> featurePlanRolloutId;
+
     private final Optional<Long> limit;
 
     private final Optional<Long> offset;
@@ -35,12 +37,14 @@ public final class ListMigrationsParams {
 
     private ListMigrationsParams(
             Optional<String> featureId,
+            Optional<String> featurePlanRolloutId,
             Optional<Long> limit,
             Optional<Long> offset,
             Optional<String> planVersionId,
             Optional<PlanVersionMigrationStatus> status,
             Map<String, Object> additionalProperties) {
         this.featureId = featureId;
+        this.featurePlanRolloutId = featurePlanRolloutId;
         this.limit = limit;
         this.offset = offset;
         this.planVersionId = planVersionId;
@@ -51,6 +55,11 @@ public final class ListMigrationsParams {
     @JsonProperty("feature_id")
     public Optional<String> getFeatureId() {
         return featureId;
+    }
+
+    @JsonProperty("feature_plan_rollout_id")
+    public Optional<String> getFeaturePlanRolloutId() {
+        return featurePlanRolloutId;
     }
 
     /**
@@ -92,6 +101,7 @@ public final class ListMigrationsParams {
 
     private boolean equalTo(ListMigrationsParams other) {
         return featureId.equals(other.featureId)
+                && featurePlanRolloutId.equals(other.featurePlanRolloutId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
                 && planVersionId.equals(other.planVersionId)
@@ -100,7 +110,8 @@ public final class ListMigrationsParams {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.featureId, this.limit, this.offset, this.planVersionId, this.status);
+        return Objects.hash(
+                this.featureId, this.featurePlanRolloutId, this.limit, this.offset, this.planVersionId, this.status);
     }
 
     @java.lang.Override
@@ -115,6 +126,8 @@ public final class ListMigrationsParams {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<String> featureId = Optional.empty();
+
+        private Optional<String> featurePlanRolloutId = Optional.empty();
 
         private Optional<Long> limit = Optional.empty();
 
@@ -131,6 +144,7 @@ public final class ListMigrationsParams {
 
         public Builder from(ListMigrationsParams other) {
             featureId(other.getFeatureId());
+            featurePlanRolloutId(other.getFeaturePlanRolloutId());
             limit(other.getLimit());
             offset(other.getOffset());
             planVersionId(other.getPlanVersionId());
@@ -146,6 +160,17 @@ public final class ListMigrationsParams {
 
         public Builder featureId(String featureId) {
             this.featureId = Optional.ofNullable(featureId);
+            return this;
+        }
+
+        @JsonSetter(value = "feature_plan_rollout_id", nulls = Nulls.SKIP)
+        public Builder featurePlanRolloutId(Optional<String> featurePlanRolloutId) {
+            this.featurePlanRolloutId = featurePlanRolloutId;
+            return this;
+        }
+
+        public Builder featurePlanRolloutId(String featurePlanRolloutId) {
+            this.featurePlanRolloutId = Optional.ofNullable(featurePlanRolloutId);
             return this;
         }
 
@@ -200,7 +225,8 @@ public final class ListMigrationsParams {
         }
 
         public ListMigrationsParams build() {
-            return new ListMigrationsParams(featureId, limit, offset, planVersionId, status, additionalProperties);
+            return new ListMigrationsParams(
+                    featureId, featurePlanRolloutId, limit, offset, planVersionId, status, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {
