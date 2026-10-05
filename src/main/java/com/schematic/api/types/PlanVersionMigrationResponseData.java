@@ -52,6 +52,8 @@ public final class PlanVersionMigrationResponseData {
 
     private final Optional<MigrationProrationBehavior> prorationBehavior;
 
+    private final Optional<OffsetDateTime> scheduledAt;
+
     private final long skippedCompanies;
 
     private final Optional<OffsetDateTime> startedAt;
@@ -81,6 +83,7 @@ public final class PlanVersionMigrationResponseData {
             String planVersionIdTo,
             List<String> planVersionIdsFrom,
             Optional<MigrationProrationBehavior> prorationBehavior,
+            Optional<OffsetDateTime> scheduledAt,
             long skippedCompanies,
             Optional<OffsetDateTime> startedAt,
             PlanVersionMigrationStatus status,
@@ -102,6 +105,7 @@ public final class PlanVersionMigrationResponseData {
         this.planVersionIdTo = planVersionIdTo;
         this.planVersionIdsFrom = planVersionIdsFrom;
         this.prorationBehavior = prorationBehavior;
+        this.scheduledAt = scheduledAt;
         this.skippedCompanies = skippedCompanies;
         this.startedAt = startedAt;
         this.status = status;
@@ -181,6 +185,11 @@ public final class PlanVersionMigrationResponseData {
         return prorationBehavior;
     }
 
+    @JsonProperty("scheduled_at")
+    public Optional<OffsetDateTime> getScheduledAt() {
+        return scheduledAt;
+    }
+
     @JsonProperty("skipped_companies")
     public long getSkippedCompanies() {
         return skippedCompanies;
@@ -237,6 +246,7 @@ public final class PlanVersionMigrationResponseData {
                 && planVersionIdTo.equals(other.planVersionIdTo)
                 && planVersionIdsFrom.equals(other.planVersionIdsFrom)
                 && prorationBehavior.equals(other.prorationBehavior)
+                && scheduledAt.equals(other.scheduledAt)
                 && skippedCompanies == other.skippedCompanies
                 && startedAt.equals(other.startedAt)
                 && status.equals(other.status)
@@ -262,6 +272,7 @@ public final class PlanVersionMigrationResponseData {
                 this.planVersionIdTo,
                 this.planVersionIdsFrom,
                 this.prorationBehavior,
+                this.scheduledAt,
                 this.skippedCompanies,
                 this.startedAt,
                 this.status,
@@ -366,6 +377,10 @@ public final class PlanVersionMigrationResponseData {
 
         _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior);
 
+        _FinalStage scheduledAt(Optional<OffsetDateTime> scheduledAt);
+
+        _FinalStage scheduledAt(OffsetDateTime scheduledAt);
+
         _FinalStage startedAt(Optional<OffsetDateTime> startedAt);
 
         _FinalStage startedAt(OffsetDateTime startedAt);
@@ -409,6 +424,8 @@ public final class PlanVersionMigrationResponseData {
 
         private Optional<OffsetDateTime> startedAt = Optional.empty();
 
+        private Optional<OffsetDateTime> scheduledAt = Optional.empty();
+
         private Optional<MigrationProrationBehavior> prorationBehavior = Optional.empty();
 
         private List<String> planVersionIdsFrom = new ArrayList<>();
@@ -446,6 +463,7 @@ public final class PlanVersionMigrationResponseData {
             planVersionIdTo(other.getPlanVersionIdTo());
             planVersionIdsFrom(other.getPlanVersionIdsFrom());
             prorationBehavior(other.getProrationBehavior());
+            scheduledAt(other.getScheduledAt());
             skippedCompanies(other.getSkippedCompanies());
             startedAt(other.getStartedAt());
             status(other.getStatus());
@@ -542,6 +560,19 @@ public final class PlanVersionMigrationResponseData {
         @JsonSetter(value = "started_at", nulls = Nulls.SKIP)
         public _FinalStage startedAt(Optional<OffsetDateTime> startedAt) {
             this.startedAt = startedAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage scheduledAt(OffsetDateTime scheduledAt) {
+            this.scheduledAt = Optional.ofNullable(scheduledAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_at", nulls = Nulls.SKIP)
+        public _FinalStage scheduledAt(Optional<OffsetDateTime> scheduledAt) {
+            this.scheduledAt = scheduledAt;
             return this;
         }
 
@@ -677,6 +708,7 @@ public final class PlanVersionMigrationResponseData {
                     planVersionIdTo,
                     planVersionIdsFrom,
                     prorationBehavior,
+                    scheduledAt,
                     skippedCompanies,
                     startedAt,
                     status,

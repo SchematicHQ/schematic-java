@@ -74,6 +74,8 @@ public final class CompanyPlanDetailResponseData {
 
     private final Optional<List<PlanEntitlementResponseData>> entitlements;
 
+    private final Optional<List<EstimatedPlanTotal>> estimatedTotals;
+
     private final List<FeatureInPlanResponseData> features;
 
     private final PlanIcon icon;
@@ -142,6 +144,7 @@ public final class CompanyPlanDetailResponseData {
             String description,
             Optional<PlanVersionResponseData> draftVersion,
             Optional<List<PlanEntitlementResponseData>> entitlements,
+            Optional<List<EstimatedPlanTotal>> estimatedTotals,
             List<FeatureInPlanResponseData> features,
             PlanIcon icon,
             String id,
@@ -188,6 +191,7 @@ public final class CompanyPlanDetailResponseData {
         this.description = description;
         this.draftVersion = draftVersion;
         this.entitlements = entitlements;
+        this.estimatedTotals = estimatedTotals;
         this.features = features;
         this.icon = icon;
         this.id = id;
@@ -336,6 +340,11 @@ public final class CompanyPlanDetailResponseData {
         return entitlements;
     }
 
+    @JsonProperty("estimated_totals")
+    public Optional<List<EstimatedPlanTotal>> getEstimatedTotals() {
+        return estimatedTotals;
+    }
+
     @JsonProperty("features")
     public List<FeatureInPlanResponseData> getFeatures() {
         return features;
@@ -476,6 +485,7 @@ public final class CompanyPlanDetailResponseData {
                 && description.equals(other.description)
                 && draftVersion.equals(other.draftVersion)
                 && entitlements.equals(other.entitlements)
+                && estimatedTotals.equals(other.estimatedTotals)
                 && features.equals(other.features)
                 && icon.equals(other.icon)
                 && id.equals(other.id)
@@ -526,6 +536,7 @@ public final class CompanyPlanDetailResponseData {
                 this.description,
                 this.draftVersion,
                 this.entitlements,
+                this.estimatedTotals,
                 this.features,
                 this.icon,
                 this.id,
@@ -710,6 +721,10 @@ public final class CompanyPlanDetailResponseData {
 
         _FinalStage entitlements(List<PlanEntitlementResponseData> entitlements);
 
+        _FinalStage estimatedTotals(Optional<List<EstimatedPlanTotal>> estimatedTotals);
+
+        _FinalStage estimatedTotals(List<EstimatedPlanTotal> estimatedTotals);
+
         _FinalStage features(List<FeatureInPlanResponseData> features);
 
         _FinalStage addFeatures(FeatureInPlanResponseData features);
@@ -845,6 +860,8 @@ public final class CompanyPlanDetailResponseData {
 
         private List<FeatureInPlanResponseData> features = new ArrayList<>();
 
+        private Optional<List<EstimatedPlanTotal>> estimatedTotals = Optional.empty();
+
         private Optional<List<PlanEntitlementResponseData>> entitlements = Optional.empty();
 
         private Optional<PlanVersionResponseData> draftVersion = Optional.empty();
@@ -909,6 +926,7 @@ public final class CompanyPlanDetailResponseData {
             description(other.getDescription());
             draftVersion(other.getDraftVersion());
             entitlements(other.getEntitlements());
+            estimatedTotals(other.getEstimatedTotals());
             features(other.getFeatures());
             icon(other.getIcon());
             id(other.getId());
@@ -1253,6 +1271,19 @@ public final class CompanyPlanDetailResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage estimatedTotals(List<EstimatedPlanTotal> estimatedTotals) {
+            this.estimatedTotals = Optional.ofNullable(estimatedTotals);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "estimated_totals", nulls = Nulls.SKIP)
+        public _FinalStage estimatedTotals(Optional<List<EstimatedPlanTotal>> estimatedTotals) {
+            this.estimatedTotals = estimatedTotals;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage entitlements(List<PlanEntitlementResponseData> entitlements) {
             this.entitlements = Optional.ofNullable(entitlements);
             return this;
@@ -1532,6 +1563,7 @@ public final class CompanyPlanDetailResponseData {
                     description,
                     draftVersion,
                     entitlements,
+                    estimatedTotals,
                     features,
                     icon,
                     id,

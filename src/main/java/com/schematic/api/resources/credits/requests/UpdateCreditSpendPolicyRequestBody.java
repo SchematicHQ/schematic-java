@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CreditSpendWindowUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,12 +25,22 @@ public final class UpdateCreditSpendPolicyRequestBody {
 
     private final Optional<Double> maxPerDraw;
 
+    private final Optional<Double> windowAmount;
+
+    private final Optional<CreditSpendWindowUnit> windowUnit;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateCreditSpendPolicyRequestBody(
-            Optional<String> label, Optional<Double> maxPerDraw, Map<String, Object> additionalProperties) {
+            Optional<String> label,
+            Optional<Double> maxPerDraw,
+            Optional<Double> windowAmount,
+            Optional<CreditSpendWindowUnit> windowUnit,
+            Map<String, Object> additionalProperties) {
         this.label = label;
         this.maxPerDraw = maxPerDraw;
+        this.windowAmount = windowAmount;
+        this.windowUnit = windowUnit;
         this.additionalProperties = additionalProperties;
     }
 
@@ -41,6 +52,16 @@ public final class UpdateCreditSpendPolicyRequestBody {
     @JsonProperty("max_per_draw")
     public Optional<Double> getMaxPerDraw() {
         return maxPerDraw;
+    }
+
+    @JsonProperty("window_amount")
+    public Optional<Double> getWindowAmount() {
+        return windowAmount;
+    }
+
+    @JsonProperty("window_unit")
+    public Optional<CreditSpendWindowUnit> getWindowUnit() {
+        return windowUnit;
     }
 
     @java.lang.Override
@@ -56,12 +77,15 @@ public final class UpdateCreditSpendPolicyRequestBody {
     }
 
     private boolean equalTo(UpdateCreditSpendPolicyRequestBody other) {
-        return label.equals(other.label) && maxPerDraw.equals(other.maxPerDraw);
+        return label.equals(other.label)
+                && maxPerDraw.equals(other.maxPerDraw)
+                && windowAmount.equals(other.windowAmount)
+                && windowUnit.equals(other.windowUnit);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.label, this.maxPerDraw);
+        return Objects.hash(this.label, this.maxPerDraw, this.windowAmount, this.windowUnit);
     }
 
     @java.lang.Override
@@ -79,6 +103,10 @@ public final class UpdateCreditSpendPolicyRequestBody {
 
         private Optional<Double> maxPerDraw = Optional.empty();
 
+        private Optional<Double> windowAmount = Optional.empty();
+
+        private Optional<CreditSpendWindowUnit> windowUnit = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -87,6 +115,8 @@ public final class UpdateCreditSpendPolicyRequestBody {
         public Builder from(UpdateCreditSpendPolicyRequestBody other) {
             label(other.getLabel());
             maxPerDraw(other.getMaxPerDraw());
+            windowAmount(other.getWindowAmount());
+            windowUnit(other.getWindowUnit());
             return this;
         }
 
@@ -112,8 +142,31 @@ public final class UpdateCreditSpendPolicyRequestBody {
             return this;
         }
 
+        @JsonSetter(value = "window_amount", nulls = Nulls.SKIP)
+        public Builder windowAmount(Optional<Double> windowAmount) {
+            this.windowAmount = windowAmount;
+            return this;
+        }
+
+        public Builder windowAmount(Double windowAmount) {
+            this.windowAmount = Optional.ofNullable(windowAmount);
+            return this;
+        }
+
+        @JsonSetter(value = "window_unit", nulls = Nulls.SKIP)
+        public Builder windowUnit(Optional<CreditSpendWindowUnit> windowUnit) {
+            this.windowUnit = windowUnit;
+            return this;
+        }
+
+        public Builder windowUnit(CreditSpendWindowUnit windowUnit) {
+            this.windowUnit = Optional.ofNullable(windowUnit);
+            return this;
+        }
+
         public UpdateCreditSpendPolicyRequestBody build() {
-            return new UpdateCreditSpendPolicyRequestBody(label, maxPerDraw, additionalProperties);
+            return new UpdateCreditSpendPolicyRequestBody(
+                    label, maxPerDraw, windowAmount, windowUnit, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

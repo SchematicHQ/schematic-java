@@ -33,6 +33,8 @@ public final class EnvironmentDetailResponseData {
 
     private final String name;
 
+    private final boolean requireContextSignature;
+
     private final OffsetDateTime updatedAt;
 
     private final Map<String, Object> additionalProperties;
@@ -43,6 +45,7 @@ public final class EnvironmentDetailResponseData {
             EnvironmentType environmentType,
             String id,
             String name,
+            boolean requireContextSignature,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.apiKeys = apiKeys;
@@ -50,6 +53,7 @@ public final class EnvironmentDetailResponseData {
         this.environmentType = environmentType;
         this.id = id;
         this.name = name;
+        this.requireContextSignature = requireContextSignature;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -79,6 +83,11 @@ public final class EnvironmentDetailResponseData {
         return name;
     }
 
+    @JsonProperty("require_context_signature")
+    public boolean getRequireContextSignature() {
+        return requireContextSignature;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -101,12 +110,20 @@ public final class EnvironmentDetailResponseData {
                 && environmentType.equals(other.environmentType)
                 && id.equals(other.id)
                 && name.equals(other.name)
+                && requireContextSignature == other.requireContextSignature
                 && updatedAt.equals(other.updatedAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKeys, this.createdAt, this.environmentType, this.id, this.name, this.updatedAt);
+        return Objects.hash(
+                this.apiKeys,
+                this.createdAt,
+                this.environmentType,
+                this.id,
+                this.name,
+                this.requireContextSignature,
+                this.updatedAt);
     }
 
     @java.lang.Override
@@ -133,7 +150,11 @@ public final class EnvironmentDetailResponseData {
     }
 
     public interface NameStage {
-        UpdatedAtStage name(@NotNull String name);
+        RequireContextSignatureStage name(@NotNull String name);
+    }
+
+    public interface RequireContextSignatureStage {
+        UpdatedAtStage requireContextSignature(boolean requireContextSignature);
     }
 
     public interface UpdatedAtStage {
@@ -156,7 +177,13 @@ public final class EnvironmentDetailResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CreatedAtStage, EnvironmentTypeStage, IdStage, NameStage, UpdatedAtStage, _FinalStage {
+            implements CreatedAtStage,
+                    EnvironmentTypeStage,
+                    IdStage,
+                    NameStage,
+                    RequireContextSignatureStage,
+                    UpdatedAtStage,
+                    _FinalStage {
         private OffsetDateTime createdAt;
 
         private EnvironmentType environmentType;
@@ -164,6 +191,8 @@ public final class EnvironmentDetailResponseData {
         private String id;
 
         private String name;
+
+        private boolean requireContextSignature;
 
         private OffsetDateTime updatedAt;
 
@@ -181,6 +210,7 @@ public final class EnvironmentDetailResponseData {
             environmentType(other.getEnvironmentType());
             id(other.getId());
             name(other.getName());
+            requireContextSignature(other.getRequireContextSignature());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -208,8 +238,15 @@ public final class EnvironmentDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("name")
-        public UpdatedAtStage name(@NotNull String name) {
+        public RequireContextSignatureStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("require_context_signature")
+        public UpdatedAtStage requireContextSignature(boolean requireContextSignature) {
+            this.requireContextSignature = requireContextSignature;
             return this;
         }
 
@@ -247,7 +284,14 @@ public final class EnvironmentDetailResponseData {
         @java.lang.Override
         public EnvironmentDetailResponseData build() {
             return new EnvironmentDetailResponseData(
-                    apiKeys, createdAt, environmentType, id, name, updatedAt, additionalProperties);
+                    apiKeys,
+                    createdAt,
+                    environmentType,
+                    id,
+                    name,
+                    requireContextSignature,
+                    updatedAt,
+                    additionalProperties);
         }
 
         @java.lang.Override

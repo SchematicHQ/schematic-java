@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.CreditSpendWindowUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,9 +28,13 @@ public final class CreateCreditSpendPolicyRequestBody {
 
     private final Optional<String> label;
 
-    private final double maxPerDraw;
+    private final Optional<Double> maxPerDraw;
 
     private final Optional<String> userId;
+
+    private final Optional<Double> windowAmount;
+
+    private final Optional<CreditSpendWindowUnit> windowUnit;
 
     private final Map<String, Object> additionalProperties;
 
@@ -37,14 +42,18 @@ public final class CreateCreditSpendPolicyRequestBody {
             String billingCreditId,
             Optional<String> companyId,
             Optional<String> label,
-            double maxPerDraw,
+            Optional<Double> maxPerDraw,
             Optional<String> userId,
+            Optional<Double> windowAmount,
+            Optional<CreditSpendWindowUnit> windowUnit,
             Map<String, Object> additionalProperties) {
         this.billingCreditId = billingCreditId;
         this.companyId = companyId;
         this.label = label;
         this.maxPerDraw = maxPerDraw;
         this.userId = userId;
+        this.windowAmount = windowAmount;
+        this.windowUnit = windowUnit;
         this.additionalProperties = additionalProperties;
     }
 
@@ -67,10 +76,10 @@ public final class CreateCreditSpendPolicyRequestBody {
     }
 
     /**
-     * @return The largest number of credits a single draw may spend.
+     * @return The largest number of credits a single draw may spend. Set either this or window_amount.
      */
     @JsonProperty("max_per_draw")
-    public double getMaxPerDraw() {
+    public Optional<Double> getMaxPerDraw() {
         return maxPerDraw;
     }
 
@@ -80,6 +89,22 @@ public final class CreateCreditSpendPolicyRequestBody {
     @JsonProperty("user_id")
     public Optional<String> getUserId() {
         return userId;
+    }
+
+    /**
+     * @return The number of credits the company or user may spend in one window. Set either this or max_per_draw.
+     */
+    @JsonProperty("window_amount")
+    public Optional<Double> getWindowAmount() {
+        return windowAmount;
+    }
+
+    /**
+     * @return The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.
+     */
+    @JsonProperty("window_unit")
+    public Optional<CreditSpendWindowUnit> getWindowUnit() {
+        return windowUnit;
     }
 
     @java.lang.Override
@@ -98,13 +123,22 @@ public final class CreateCreditSpendPolicyRequestBody {
         return billingCreditId.equals(other.billingCreditId)
                 && companyId.equals(other.companyId)
                 && label.equals(other.label)
-                && maxPerDraw == other.maxPerDraw
-                && userId.equals(other.userId);
+                && maxPerDraw.equals(other.maxPerDraw)
+                && userId.equals(other.userId)
+                && windowAmount.equals(other.windowAmount)
+                && windowUnit.equals(other.windowUnit);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.billingCreditId, this.companyId, this.label, this.maxPerDraw, this.userId);
+        return Objects.hash(
+                this.billingCreditId,
+                this.companyId,
+                this.label,
+                this.maxPerDraw,
+                this.userId,
+                this.windowAmount,
+                this.windowUnit);
     }
 
     @java.lang.Override
@@ -117,16 +151,9 @@ public final class CreateCreditSpendPolicyRequestBody {
     }
 
     public interface BillingCreditIdStage {
-        MaxPerDrawStage billingCreditId(@NotNull String billingCreditId);
+        _FinalStage billingCreditId(@NotNull String billingCreditId);
 
         Builder from(CreateCreditSpendPolicyRequestBody other);
-    }
-
-    public interface MaxPerDrawStage {
-        /**
-         * <p>The largest number of credits a single draw may spend.</p>
-         */
-        _FinalStage maxPerDraw(double maxPerDraw);
     }
 
     public interface _FinalStage {
@@ -148,20 +175,45 @@ public final class CreateCreditSpendPolicyRequestBody {
         _FinalStage label(String label);
 
         /**
+         * <p>The largest number of credits a single draw may spend. Set either this or window_amount.</p>
+         */
+        _FinalStage maxPerDraw(Optional<Double> maxPerDraw);
+
+        _FinalStage maxPerDraw(Double maxPerDraw);
+
+        /**
          * <p>The user the cap applies to. Set exactly one of company_id and user_id.</p>
          */
         _FinalStage userId(Optional<String> userId);
 
         _FinalStage userId(String userId);
+
+        /**
+         * <p>The number of credits the company or user may spend in one window. Set either this or max_per_draw.</p>
+         */
+        _FinalStage windowAmount(Optional<Double> windowAmount);
+
+        _FinalStage windowAmount(Double windowAmount);
+
+        /**
+         * <p>The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.</p>
+         */
+        _FinalStage windowUnit(Optional<CreditSpendWindowUnit> windowUnit);
+
+        _FinalStage windowUnit(CreditSpendWindowUnit windowUnit);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements BillingCreditIdStage, MaxPerDrawStage, _FinalStage {
+    public static final class Builder implements BillingCreditIdStage, _FinalStage {
         private String billingCreditId;
 
-        private double maxPerDraw;
+        private Optional<CreditSpendWindowUnit> windowUnit = Optional.empty();
+
+        private Optional<Double> windowAmount = Optional.empty();
 
         private Optional<String> userId = Optional.empty();
+
+        private Optional<Double> maxPerDraw = Optional.empty();
 
         private Optional<String> label = Optional.empty();
 
@@ -179,24 +231,55 @@ public final class CreateCreditSpendPolicyRequestBody {
             label(other.getLabel());
             maxPerDraw(other.getMaxPerDraw());
             userId(other.getUserId());
+            windowAmount(other.getWindowAmount());
+            windowUnit(other.getWindowUnit());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("billing_credit_id")
-        public MaxPerDrawStage billingCreditId(@NotNull String billingCreditId) {
+        public _FinalStage billingCreditId(@NotNull String billingCreditId) {
             this.billingCreditId = Objects.requireNonNull(billingCreditId, "billingCreditId must not be null");
             return this;
         }
 
         /**
-         * <p>The largest number of credits a single draw may spend.</p>
+         * <p>The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("max_per_draw")
-        public _FinalStage maxPerDraw(double maxPerDraw) {
-            this.maxPerDraw = maxPerDraw;
+        public _FinalStage windowUnit(CreditSpendWindowUnit windowUnit) {
+            this.windowUnit = Optional.ofNullable(windowUnit);
+            return this;
+        }
+
+        /**
+         * <p>The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "window_unit", nulls = Nulls.SKIP)
+        public _FinalStage windowUnit(Optional<CreditSpendWindowUnit> windowUnit) {
+            this.windowUnit = windowUnit;
+            return this;
+        }
+
+        /**
+         * <p>The number of credits the company or user may spend in one window. Set either this or max_per_draw.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage windowAmount(Double windowAmount) {
+            this.windowAmount = Optional.ofNullable(windowAmount);
+            return this;
+        }
+
+        /**
+         * <p>The number of credits the company or user may spend in one window. Set either this or max_per_draw.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "window_amount", nulls = Nulls.SKIP)
+        public _FinalStage windowAmount(Optional<Double> windowAmount) {
+            this.windowAmount = windowAmount;
             return this;
         }
 
@@ -217,6 +300,26 @@ public final class CreateCreditSpendPolicyRequestBody {
         @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
         public _FinalStage userId(Optional<String> userId) {
             this.userId = userId;
+            return this;
+        }
+
+        /**
+         * <p>The largest number of credits a single draw may spend. Set either this or window_amount.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage maxPerDraw(Double maxPerDraw) {
+            this.maxPerDraw = Optional.ofNullable(maxPerDraw);
+            return this;
+        }
+
+        /**
+         * <p>The largest number of credits a single draw may spend. Set either this or window_amount.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "max_per_draw", nulls = Nulls.SKIP)
+        public _FinalStage maxPerDraw(Optional<Double> maxPerDraw) {
+            this.maxPerDraw = maxPerDraw;
             return this;
         }
 
@@ -256,7 +359,14 @@ public final class CreateCreditSpendPolicyRequestBody {
         @java.lang.Override
         public CreateCreditSpendPolicyRequestBody build() {
             return new CreateCreditSpendPolicyRequestBody(
-                    billingCreditId, companyId, label, maxPerDraw, userId, additionalProperties);
+                    billingCreditId,
+                    companyId,
+                    label,
+                    maxPerDraw,
+                    userId,
+                    windowAmount,
+                    windowUnit,
+                    additionalProperties);
         }
 
         @java.lang.Override

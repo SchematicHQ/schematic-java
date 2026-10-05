@@ -36,6 +36,8 @@ public final class PublishPlanVersionRequestBody {
 
     private final Optional<OffsetDateTime> billingCycleAnchor;
 
+    private final Optional<OffsetDateTime> billingStartDate;
+
     private final Optional<String> couponExternalId;
 
     private final Optional<List<CheckoutFieldValue>> customFieldValues;
@@ -56,6 +58,8 @@ public final class PublishPlanVersionRequestBody {
 
     private final Optional<Boolean> requireNoMigration;
 
+    private final Optional<OffsetDateTime> scheduledAt;
+
     private final Optional<Boolean> sendInvoice;
 
     private final Optional<TaxIdInput> taxId;
@@ -66,6 +70,7 @@ public final class PublishPlanVersionRequestBody {
             Optional<CustomPlanActivationStrategy> activationStrategy,
             Optional<CustomerBillingAddress> address,
             Optional<OffsetDateTime> billingCycleAnchor,
+            Optional<OffsetDateTime> billingStartDate,
             Optional<String> couponExternalId,
             Optional<List<CheckoutFieldValue>> customFieldValues,
             Optional<String> customerEmail,
@@ -76,12 +81,14 @@ public final class PublishPlanVersionRequestBody {
             Optional<Boolean> prorateFirstPeriod,
             Optional<MigrationProrationBehavior> prorationBehavior,
             Optional<Boolean> requireNoMigration,
+            Optional<OffsetDateTime> scheduledAt,
             Optional<Boolean> sendInvoice,
             Optional<TaxIdInput> taxId,
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.address = address;
         this.billingCycleAnchor = billingCycleAnchor;
+        this.billingStartDate = billingStartDate;
         this.couponExternalId = couponExternalId;
         this.customFieldValues = customFieldValues;
         this.customerEmail = customerEmail;
@@ -92,6 +99,7 @@ public final class PublishPlanVersionRequestBody {
         this.prorateFirstPeriod = prorateFirstPeriod;
         this.prorationBehavior = prorationBehavior;
         this.requireNoMigration = requireNoMigration;
+        this.scheduledAt = scheduledAt;
         this.sendInvoice = sendInvoice;
         this.taxId = taxId;
         this.additionalProperties = additionalProperties;
@@ -113,6 +121,14 @@ public final class PublishPlanVersionRequestBody {
     @JsonProperty("billing_cycle_anchor")
     public Optional<OffsetDateTime> getBillingCycleAnchor() {
         return billingCycleAnchor;
+    }
+
+    /**
+     * @return The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. Only honored on a first publish that starts a subscription.
+     */
+    @JsonProperty("billing_start_date")
+    public Optional<OffsetDateTime> getBillingStartDate() {
+        return billingStartDate;
     }
 
     @JsonProperty("coupon_external_id")
@@ -158,6 +174,9 @@ public final class PublishPlanVersionRequestBody {
         return prorateFirstPeriod;
     }
 
+    /**
+     * @return How Stripe handles the price difference when companies are migrated. With migration_strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none. Not accepted with leave.
+     */
     @JsonProperty("proration_behavior")
     public Optional<MigrationProrationBehavior> getProrationBehavior() {
         return prorationBehavior;
@@ -169,6 +188,14 @@ public final class PublishPlanVersionRequestBody {
     @JsonProperty("require_no_migration")
     public Optional<Boolean> getRequireNoMigration() {
         return requireNoMigration;
+    }
+
+    /**
+     * @return When every company moves, for migration_strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.
+     */
+    @JsonProperty("scheduled_at")
+    public Optional<OffsetDateTime> getScheduledAt() {
+        return scheduledAt;
     }
 
     /**
@@ -199,6 +226,7 @@ public final class PublishPlanVersionRequestBody {
         return activationStrategy.equals(other.activationStrategy)
                 && address.equals(other.address)
                 && billingCycleAnchor.equals(other.billingCycleAnchor)
+                && billingStartDate.equals(other.billingStartDate)
                 && couponExternalId.equals(other.couponExternalId)
                 && customFieldValues.equals(other.customFieldValues)
                 && customerEmail.equals(other.customerEmail)
@@ -209,6 +237,7 @@ public final class PublishPlanVersionRequestBody {
                 && prorateFirstPeriod.equals(other.prorateFirstPeriod)
                 && prorationBehavior.equals(other.prorationBehavior)
                 && requireNoMigration.equals(other.requireNoMigration)
+                && scheduledAt.equals(other.scheduledAt)
                 && sendInvoice.equals(other.sendInvoice)
                 && taxId.equals(other.taxId);
     }
@@ -219,6 +248,7 @@ public final class PublishPlanVersionRequestBody {
                 this.activationStrategy,
                 this.address,
                 this.billingCycleAnchor,
+                this.billingStartDate,
                 this.couponExternalId,
                 this.customFieldValues,
                 this.customerEmail,
@@ -229,6 +259,7 @@ public final class PublishPlanVersionRequestBody {
                 this.prorateFirstPeriod,
                 this.prorationBehavior,
                 this.requireNoMigration,
+                this.scheduledAt,
                 this.sendInvoice,
                 this.taxId);
     }
@@ -270,6 +301,13 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
 
+        /**
+         * <p>The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. Only honored on a first publish that starts a subscription.</p>
+         */
+        _FinalStage billingStartDate(Optional<OffsetDateTime> billingStartDate);
+
+        _FinalStage billingStartDate(OffsetDateTime billingStartDate);
+
         _FinalStage couponExternalId(Optional<String> couponExternalId);
 
         _FinalStage couponExternalId(String couponExternalId);
@@ -303,6 +341,9 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage prorateFirstPeriod(Boolean prorateFirstPeriod);
 
+        /**
+         * <p>How Stripe handles the price difference when companies are migrated. With migration_strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none. Not accepted with leave.</p>
+         */
         _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior);
 
         _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior);
@@ -313,6 +354,13 @@ public final class PublishPlanVersionRequestBody {
         _FinalStage requireNoMigration(Optional<Boolean> requireNoMigration);
 
         _FinalStage requireNoMigration(Boolean requireNoMigration);
+
+        /**
+         * <p>When every company moves, for migration_strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.</p>
+         */
+        _FinalStage scheduledAt(Optional<OffsetDateTime> scheduledAt);
+
+        _FinalStage scheduledAt(OffsetDateTime scheduledAt);
 
         /**
          * <p>Whether Stripe emails the invoice when it is finalized. Defaults to true.</p>
@@ -334,6 +382,8 @@ public final class PublishPlanVersionRequestBody {
 
         private Optional<Boolean> sendInvoice = Optional.empty();
 
+        private Optional<OffsetDateTime> scheduledAt = Optional.empty();
+
         private Optional<Boolean> requireNoMigration = Optional.empty();
 
         private Optional<MigrationProrationBehavior> prorationBehavior = Optional.empty();
@@ -352,6 +402,8 @@ public final class PublishPlanVersionRequestBody {
 
         private Optional<String> couponExternalId = Optional.empty();
 
+        private Optional<OffsetDateTime> billingStartDate = Optional.empty();
+
         private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
 
         private Optional<CustomerBillingAddress> address = Optional.empty();
@@ -368,6 +420,7 @@ public final class PublishPlanVersionRequestBody {
             activationStrategy(other.getActivationStrategy());
             address(other.getAddress());
             billingCycleAnchor(other.getBillingCycleAnchor());
+            billingStartDate(other.getBillingStartDate());
             couponExternalId(other.getCouponExternalId());
             customFieldValues(other.getCustomFieldValues());
             customerEmail(other.getCustomerEmail());
@@ -378,6 +431,7 @@ public final class PublishPlanVersionRequestBody {
             prorateFirstPeriod(other.getProrateFirstPeriod());
             prorationBehavior(other.getProrationBehavior());
             requireNoMigration(other.getRequireNoMigration());
+            scheduledAt(other.getScheduledAt());
             sendInvoice(other.getSendInvoice());
             taxId(other.getTaxId());
             return this;
@@ -424,6 +478,26 @@ public final class PublishPlanVersionRequestBody {
         }
 
         /**
+         * <p>When every company moves, for migration_strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage scheduledAt(OffsetDateTime scheduledAt) {
+            this.scheduledAt = Optional.ofNullable(scheduledAt);
+            return this;
+        }
+
+        /**
+         * <p>When every company moves, for migration_strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_at", nulls = Nulls.SKIP)
+        public _FinalStage scheduledAt(Optional<OffsetDateTime> scheduledAt) {
+            this.scheduledAt = scheduledAt;
+            return this;
+        }
+
+        /**
          * <p>Refuse the publish if any company would be migrated onto the new version</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -443,12 +517,19 @@ public final class PublishPlanVersionRequestBody {
             return this;
         }
 
+        /**
+         * <p>How Stripe handles the price difference when companies are migrated. With migration_strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none. Not accepted with leave.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior) {
             this.prorationBehavior = Optional.ofNullable(prorationBehavior);
             return this;
         }
 
+        /**
+         * <p>How Stripe handles the price difference when companies are migrated. With migration_strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none. Not accepted with leave.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "proration_behavior", nulls = Nulls.SKIP)
         public _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior) {
@@ -566,6 +647,26 @@ public final class PublishPlanVersionRequestBody {
         }
 
         /**
+         * <p>The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. Only honored on a first publish that starts a subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingStartDate(OffsetDateTime billingStartDate) {
+            this.billingStartDate = Optional.ofNullable(billingStartDate);
+            return this;
+        }
+
+        /**
+         * <p>The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. Only honored on a first publish that starts a subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_start_date", nulls = Nulls.SKIP)
+        public _FinalStage billingStartDate(Optional<OffsetDateTime> billingStartDate) {
+            this.billingStartDate = billingStartDate;
+            return this;
+        }
+
+        /**
          * <p>The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -617,6 +718,7 @@ public final class PublishPlanVersionRequestBody {
                     activationStrategy,
                     address,
                     billingCycleAnchor,
+                    billingStartDate,
                     couponExternalId,
                     customFieldValues,
                     customerEmail,
@@ -627,6 +729,7 @@ public final class PublishPlanVersionRequestBody {
                     prorateFirstPeriod,
                     prorationBehavior,
                     requireNoMigration,
+                    scheduledAt,
                     sendInvoice,
                     taxId,
                     additionalProperties);

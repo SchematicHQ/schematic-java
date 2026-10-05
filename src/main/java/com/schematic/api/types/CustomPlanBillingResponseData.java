@@ -26,6 +26,8 @@ public final class CustomPlanBillingResponseData {
 
     private final Optional<OffsetDateTime> billingCycleAnchor;
 
+    private final Optional<OffsetDateTime> billingStartDate;
+
     private final String companyId;
 
     private final OffsetDateTime createdAt;
@@ -59,6 +61,7 @@ public final class CustomPlanBillingResponseData {
     private CustomPlanBillingResponseData(
             CustomPlanActivationStrategy activationStrategy,
             Optional<OffsetDateTime> billingCycleAnchor,
+            Optional<OffsetDateTime> billingStartDate,
             String companyId,
             OffsetDateTime createdAt,
             long daysUntilDue,
@@ -76,6 +79,7 @@ public final class CustomPlanBillingResponseData {
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.billingCycleAnchor = billingCycleAnchor;
+        this.billingStartDate = billingStartDate;
         this.companyId = companyId;
         this.createdAt = createdAt;
         this.daysUntilDue = daysUntilDue;
@@ -104,6 +108,14 @@ public final class CustomPlanBillingResponseData {
     @JsonProperty("billing_cycle_anchor")
     public Optional<OffsetDateTime> getBillingCycleAnchor() {
         return billingCycleAnchor;
+    }
+
+    /**
+     * @return The date the contract term starts, when the operator pinned one. A past date was backdated onto the subscription so the first period runs from the contract date rather than from finalization.
+     */
+    @JsonProperty("billing_start_date")
+    public Optional<OffsetDateTime> getBillingStartDate() {
+        return billingStartDate;
     }
 
     @JsonProperty("company_id")
@@ -196,6 +208,7 @@ public final class CustomPlanBillingResponseData {
     private boolean equalTo(CustomPlanBillingResponseData other) {
         return activationStrategy.equals(other.activationStrategy)
                 && billingCycleAnchor.equals(other.billingCycleAnchor)
+                && billingStartDate.equals(other.billingStartDate)
                 && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
                 && daysUntilDue == other.daysUntilDue
@@ -217,6 +230,7 @@ public final class CustomPlanBillingResponseData {
         return Objects.hash(
                 this.activationStrategy,
                 this.billingCycleAnchor,
+                this.billingStartDate,
                 this.companyId,
                 this.createdAt,
                 this.daysUntilDue,
@@ -301,6 +315,13 @@ public final class CustomPlanBillingResponseData {
 
         _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
 
+        /**
+         * <p>The date the contract term starts, when the operator pinned one. A past date was backdated onto the subscription so the first period runs from the contract date rather than from finalization.</p>
+         */
+        _FinalStage billingStartDate(Optional<OffsetDateTime> billingStartDate);
+
+        _FinalStage billingStartDate(OffsetDateTime billingStartDate);
+
         _FinalStage externalInvoiceId(Optional<String> externalInvoiceId);
 
         _FinalStage externalInvoiceId(String externalInvoiceId);
@@ -368,6 +389,8 @@ public final class CustomPlanBillingResponseData {
 
         private Optional<String> externalInvoiceId = Optional.empty();
 
+        private Optional<OffsetDateTime> billingStartDate = Optional.empty();
+
         private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
 
         @JsonAnySetter
@@ -379,6 +402,7 @@ public final class CustomPlanBillingResponseData {
         public Builder from(CustomPlanBillingResponseData other) {
             activationStrategy(other.getActivationStrategy());
             billingCycleAnchor(other.getBillingCycleAnchor());
+            billingStartDate(other.getBillingStartDate());
             companyId(other.getCompanyId());
             createdAt(other.getCreatedAt());
             daysUntilDue(other.getDaysUntilDue());
@@ -543,6 +567,26 @@ public final class CustomPlanBillingResponseData {
         }
 
         /**
+         * <p>The date the contract term starts, when the operator pinned one. A past date was backdated onto the subscription so the first period runs from the contract date rather than from finalization.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingStartDate(OffsetDateTime billingStartDate) {
+            this.billingStartDate = Optional.ofNullable(billingStartDate);
+            return this;
+        }
+
+        /**
+         * <p>The date the contract term starts, when the operator pinned one. A past date was backdated onto the subscription so the first period runs from the contract date rather than from finalization.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_start_date", nulls = Nulls.SKIP)
+        public _FinalStage billingStartDate(Optional<OffsetDateTime> billingStartDate) {
+            this.billingStartDate = billingStartDate;
+            return this;
+        }
+
+        /**
          * <p>The billing period renewal date pinned when the subscription started, when one was set. When no invoice exists yet, the first invoice is raised on this date.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -567,6 +611,7 @@ public final class CustomPlanBillingResponseData {
             return new CustomPlanBillingResponseData(
                     activationStrategy,
                     billingCycleAnchor,
+                    billingStartDate,
                     companyId,
                     createdAt,
                     daysUntilDue,

@@ -22,9 +22,15 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PendingMigrationResponseData.Builder.class)
 public final class PendingMigrationResponseData {
+    private final Optional<OffsetDateTime> effectiveAt;
+
     private final String migrationId;
 
+    private final Optional<MigrationProrationBehavior> prorationBehavior;
+
     private final Optional<OffsetDateTime> scheduledFor;
+
+    private final PlanVersionMigrationStrategy strategy;
 
     private final String toPlanId;
 
@@ -37,15 +43,21 @@ public final class PendingMigrationResponseData {
     private final Map<String, Object> additionalProperties;
 
     private PendingMigrationResponseData(
+            Optional<OffsetDateTime> effectiveAt,
             String migrationId,
+            Optional<MigrationProrationBehavior> prorationBehavior,
             Optional<OffsetDateTime> scheduledFor,
+            PlanVersionMigrationStrategy strategy,
             String toPlanId,
             String toPlanName,
             String toPlanVersionId,
             Optional<Long> toPlanVersionNumber,
             Map<String, Object> additionalProperties) {
+        this.effectiveAt = effectiveAt;
         this.migrationId = migrationId;
+        this.prorationBehavior = prorationBehavior;
         this.scheduledFor = scheduledFor;
+        this.strategy = strategy;
         this.toPlanId = toPlanId;
         this.toPlanName = toPlanName;
         this.toPlanVersionId = toPlanVersionId;
@@ -53,14 +65,41 @@ public final class PendingMigrationResponseData {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return When the company moves to the new version: the migration's date for a scheduled migration, or the end of the company's current billing period. Null when no date can be named yet, for example when the company's only subscription is past due or set to cancel; the company then moves at the next opportunity.
+     */
+    @JsonProperty("effective_at")
+    public Optional<OffsetDateTime> getEffectiveAt() {
+        return effectiveAt;
+    }
+
     @JsonProperty("migration_id")
     public String getMigrationId() {
         return migrationId;
     }
 
+    /**
+     * @return How the price difference is billed when the company moves. Always none for an end-of-billing-period migration.
+     */
+    @JsonProperty("proration_behavior")
+    public Optional<MigrationProrationBehavior> getProrationBehavior() {
+        return prorationBehavior;
+    }
+
+    /**
+     * @return Deprecated; use effective_at, which carries the same value.
+     */
     @JsonProperty("scheduled_for")
     public Optional<OffsetDateTime> getScheduledFor() {
         return scheduledFor;
+    }
+
+    /**
+     * @return Whether the company moves at the end of its billing period (end_of_billing_period) or on a specific date (scheduled). The type is shared with plan version migrations, but only those two values appear here: an immediate migration never pends.
+     */
+    @JsonProperty("strategy")
+    public PlanVersionMigrationStrategy getStrategy() {
+        return strategy;
     }
 
     @JsonProperty("to_plan_id")
@@ -95,8 +134,11 @@ public final class PendingMigrationResponseData {
     }
 
     private boolean equalTo(PendingMigrationResponseData other) {
-        return migrationId.equals(other.migrationId)
+        return effectiveAt.equals(other.effectiveAt)
+                && migrationId.equals(other.migrationId)
+                && prorationBehavior.equals(other.prorationBehavior)
                 && scheduledFor.equals(other.scheduledFor)
+                && strategy.equals(other.strategy)
                 && toPlanId.equals(other.toPlanId)
                 && toPlanName.equals(other.toPlanName)
                 && toPlanVersionId.equals(other.toPlanVersionId)
@@ -106,8 +148,11 @@ public final class PendingMigrationResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.effectiveAt,
                 this.migrationId,
+                this.prorationBehavior,
                 this.scheduledFor,
+                this.strategy,
                 this.toPlanId,
                 this.toPlanName,
                 this.toPlanVersionId,
@@ -124,9 +169,16 @@ public final class PendingMigrationResponseData {
     }
 
     public interface MigrationIdStage {
-        ToPlanIdStage migrationId(@NotNull String migrationId);
+        StrategyStage migrationId(@NotNull String migrationId);
 
         Builder from(PendingMigrationResponseData other);
+    }
+
+    public interface StrategyStage {
+        /**
+         * <p>Whether the company moves at the end of its billing period (end_of_billing_period) or on a specific date (scheduled). The type is shared with plan version migrations, but only those two values appear here: an immediate migration never pends.</p>
+         */
+        ToPlanIdStage strategy(@NotNull PlanVersionMigrationStrategy strategy);
     }
 
     public interface ToPlanIdStage {
@@ -148,6 +200,23 @@ public final class PendingMigrationResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>When the company moves to the new version: the migration's date for a scheduled migration, or the end of the company's current billing period. Null when no date can be named yet, for example when the company's only subscription is past due or set to cancel; the company then moves at the next opportunity.</p>
+         */
+        _FinalStage effectiveAt(Optional<OffsetDateTime> effectiveAt);
+
+        _FinalStage effectiveAt(OffsetDateTime effectiveAt);
+
+        /**
+         * <p>How the price difference is billed when the company moves. Always none for an end-of-billing-period migration.</p>
+         */
+        _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior);
+
+        _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior);
+
+        /**
+         * <p>Deprecated; use effective_at, which carries the same value.</p>
+         */
         _FinalStage scheduledFor(Optional<OffsetDateTime> scheduledFor);
 
         _FinalStage scheduledFor(OffsetDateTime scheduledFor);
@@ -159,8 +228,15 @@ public final class PendingMigrationResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements MigrationIdStage, ToPlanIdStage, ToPlanNameStage, ToPlanVersionIdStage, _FinalStage {
+            implements MigrationIdStage,
+                    StrategyStage,
+                    ToPlanIdStage,
+                    ToPlanNameStage,
+                    ToPlanVersionIdStage,
+                    _FinalStage {
         private String migrationId;
+
+        private PlanVersionMigrationStrategy strategy;
 
         private String toPlanId;
 
@@ -172,6 +248,10 @@ public final class PendingMigrationResponseData {
 
         private Optional<OffsetDateTime> scheduledFor = Optional.empty();
 
+        private Optional<MigrationProrationBehavior> prorationBehavior = Optional.empty();
+
+        private Optional<OffsetDateTime> effectiveAt = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -179,8 +259,11 @@ public final class PendingMigrationResponseData {
 
         @java.lang.Override
         public Builder from(PendingMigrationResponseData other) {
+            effectiveAt(other.getEffectiveAt());
             migrationId(other.getMigrationId());
+            prorationBehavior(other.getProrationBehavior());
             scheduledFor(other.getScheduledFor());
+            strategy(other.getStrategy());
             toPlanId(other.getToPlanId());
             toPlanName(other.getToPlanName());
             toPlanVersionId(other.getToPlanVersionId());
@@ -190,8 +273,19 @@ public final class PendingMigrationResponseData {
 
         @java.lang.Override
         @JsonSetter("migration_id")
-        public ToPlanIdStage migrationId(@NotNull String migrationId) {
+        public StrategyStage migrationId(@NotNull String migrationId) {
             this.migrationId = Objects.requireNonNull(migrationId, "migrationId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the company moves at the end of its billing period (end_of_billing_period) or on a specific date (scheduled). The type is shared with plan version migrations, but only those two values appear here: an immediate migration never pends.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("strategy")
+        public ToPlanIdStage strategy(@NotNull PlanVersionMigrationStrategy strategy) {
+            this.strategy = Objects.requireNonNull(strategy, "strategy must not be null");
             return this;
         }
 
@@ -229,12 +323,19 @@ public final class PendingMigrationResponseData {
             return this;
         }
 
+        /**
+         * <p>Deprecated; use effective_at, which carries the same value.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage scheduledFor(OffsetDateTime scheduledFor) {
             this.scheduledFor = Optional.ofNullable(scheduledFor);
             return this;
         }
 
+        /**
+         * <p>Deprecated; use effective_at, which carries the same value.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "scheduled_for", nulls = Nulls.SKIP)
         public _FinalStage scheduledFor(Optional<OffsetDateTime> scheduledFor) {
@@ -242,11 +343,54 @@ public final class PendingMigrationResponseData {
             return this;
         }
 
+        /**
+         * <p>How the price difference is billed when the company moves. Always none for an end-of-billing-period migration.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage prorationBehavior(MigrationProrationBehavior prorationBehavior) {
+            this.prorationBehavior = Optional.ofNullable(prorationBehavior);
+            return this;
+        }
+
+        /**
+         * <p>How the price difference is billed when the company moves. Always none for an end-of-billing-period migration.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "proration_behavior", nulls = Nulls.SKIP)
+        public _FinalStage prorationBehavior(Optional<MigrationProrationBehavior> prorationBehavior) {
+            this.prorationBehavior = prorationBehavior;
+            return this;
+        }
+
+        /**
+         * <p>When the company moves to the new version: the migration's date for a scheduled migration, or the end of the company's current billing period. Null when no date can be named yet, for example when the company's only subscription is past due or set to cancel; the company then moves at the next opportunity.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage effectiveAt(OffsetDateTime effectiveAt) {
+            this.effectiveAt = Optional.ofNullable(effectiveAt);
+            return this;
+        }
+
+        /**
+         * <p>When the company moves to the new version: the migration's date for a scheduled migration, or the end of the company's current billing period. Null when no date can be named yet, for example when the company's only subscription is past due or set to cancel; the company then moves at the next opportunity.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "effective_at", nulls = Nulls.SKIP)
+        public _FinalStage effectiveAt(Optional<OffsetDateTime> effectiveAt) {
+            this.effectiveAt = effectiveAt;
+            return this;
+        }
+
         @java.lang.Override
         public PendingMigrationResponseData build() {
             return new PendingMigrationResponseData(
+                    effectiveAt,
                     migrationId,
+                    prorationBehavior,
                     scheduledFor,
+                    strategy,
                     toPlanId,
                     toPlanName,
                     toPlanVersionId,

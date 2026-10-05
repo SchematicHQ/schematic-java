@@ -24,6 +24,10 @@ import org.jetbrains.annotations.NotNull;
 public final class CaptureRawEvent {
     private final OffsetDateTime capturedAt;
 
+    private final Optional<String> contextSignature;
+
+    private final Optional<Boolean> contextSignatureChecked;
+
     private final Optional<String> eventId;
 
     private final String rawBytes;
@@ -36,12 +40,16 @@ public final class CaptureRawEvent {
 
     private CaptureRawEvent(
             OffsetDateTime capturedAt,
+            Optional<String> contextSignature,
+            Optional<Boolean> contextSignatureChecked,
             Optional<String> eventId,
             String rawBytes,
             String remoteIp,
             String userAgent,
             Map<String, Object> additionalProperties) {
         this.capturedAt = capturedAt;
+        this.contextSignature = contextSignature;
+        this.contextSignatureChecked = contextSignatureChecked;
         this.eventId = eventId;
         this.rawBytes = rawBytes;
         this.remoteIp = remoteIp;
@@ -52,6 +60,16 @@ public final class CaptureRawEvent {
     @JsonProperty("captured_at")
     public OffsetDateTime getCapturedAt() {
         return capturedAt;
+    }
+
+    @JsonProperty("context_signature")
+    public Optional<String> getContextSignature() {
+        return contextSignature;
+    }
+
+    @JsonProperty("context_signature_checked")
+    public Optional<Boolean> getContextSignatureChecked() {
+        return contextSignatureChecked;
     }
 
     @JsonProperty("event_id")
@@ -87,6 +105,8 @@ public final class CaptureRawEvent {
 
     private boolean equalTo(CaptureRawEvent other) {
         return capturedAt.equals(other.capturedAt)
+                && contextSignature.equals(other.contextSignature)
+                && contextSignatureChecked.equals(other.contextSignatureChecked)
                 && eventId.equals(other.eventId)
                 && rawBytes.equals(other.rawBytes)
                 && remoteIp.equals(other.remoteIp)
@@ -95,7 +115,14 @@ public final class CaptureRawEvent {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.capturedAt, this.eventId, this.rawBytes, this.remoteIp, this.userAgent);
+        return Objects.hash(
+                this.capturedAt,
+                this.contextSignature,
+                this.contextSignatureChecked,
+                this.eventId,
+                this.rawBytes,
+                this.remoteIp,
+                this.userAgent);
     }
 
     @java.lang.Override
@@ -132,6 +159,14 @@ public final class CaptureRawEvent {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage contextSignature(Optional<String> contextSignature);
+
+        _FinalStage contextSignature(String contextSignature);
+
+        _FinalStage contextSignatureChecked(Optional<Boolean> contextSignatureChecked);
+
+        _FinalStage contextSignatureChecked(Boolean contextSignatureChecked);
+
         _FinalStage eventId(Optional<String> eventId);
 
         _FinalStage eventId(String eventId);
@@ -150,6 +185,10 @@ public final class CaptureRawEvent {
 
         private Optional<String> eventId = Optional.empty();
 
+        private Optional<Boolean> contextSignatureChecked = Optional.empty();
+
+        private Optional<String> contextSignature = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -158,6 +197,8 @@ public final class CaptureRawEvent {
         @java.lang.Override
         public Builder from(CaptureRawEvent other) {
             capturedAt(other.getCapturedAt());
+            contextSignature(other.getContextSignature());
+            contextSignatureChecked(other.getContextSignatureChecked());
             eventId(other.getEventId());
             rawBytes(other.getRawBytes());
             remoteIp(other.getRemoteIp());
@@ -207,8 +248,42 @@ public final class CaptureRawEvent {
         }
 
         @java.lang.Override
+        public _FinalStage contextSignatureChecked(Boolean contextSignatureChecked) {
+            this.contextSignatureChecked = Optional.ofNullable(contextSignatureChecked);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "context_signature_checked", nulls = Nulls.SKIP)
+        public _FinalStage contextSignatureChecked(Optional<Boolean> contextSignatureChecked) {
+            this.contextSignatureChecked = contextSignatureChecked;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage contextSignature(String contextSignature) {
+            this.contextSignature = Optional.ofNullable(contextSignature);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "context_signature", nulls = Nulls.SKIP)
+        public _FinalStage contextSignature(Optional<String> contextSignature) {
+            this.contextSignature = contextSignature;
+            return this;
+        }
+
+        @java.lang.Override
         public CaptureRawEvent build() {
-            return new CaptureRawEvent(capturedAt, eventId, rawBytes, remoteIp, userAgent, additionalProperties);
+            return new CaptureRawEvent(
+                    capturedAt,
+                    contextSignature,
+                    contextSignatureChecked,
+                    eventId,
+                    rawBytes,
+                    remoteIp,
+                    userAgent,
+                    additionalProperties);
         }
 
         @java.lang.Override

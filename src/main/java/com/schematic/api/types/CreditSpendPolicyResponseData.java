@@ -26,7 +26,11 @@ public final class CreditSpendPolicyResponseData {
 
     private final Optional<String> companyId;
 
+    private final Optional<Double> consumed;
+
     private final OffsetDateTime createdAt;
+
+    private final Optional<Double> headroom;
 
     private final String id;
 
@@ -34,34 +38,54 @@ public final class CreditSpendPolicyResponseData {
 
     private final Optional<Double> maxPerDraw;
 
+    private final Optional<OffsetDateTime> resetsAt;
+
     private final CreditSpendPolicyScope scopeType;
 
     private final OffsetDateTime updatedAt;
 
     private final Optional<String> userId;
 
+    private final Optional<Double> windowAmount;
+
+    private final long windowCount;
+
+    private final Optional<CreditSpendWindowUnit> windowUnit;
+
     private final Map<String, Object> additionalProperties;
 
     private CreditSpendPolicyResponseData(
             String billingCreditId,
             Optional<String> companyId,
+            Optional<Double> consumed,
             OffsetDateTime createdAt,
+            Optional<Double> headroom,
             String id,
             Optional<String> label,
             Optional<Double> maxPerDraw,
+            Optional<OffsetDateTime> resetsAt,
             CreditSpendPolicyScope scopeType,
             OffsetDateTime updatedAt,
             Optional<String> userId,
+            Optional<Double> windowAmount,
+            long windowCount,
+            Optional<CreditSpendWindowUnit> windowUnit,
             Map<String, Object> additionalProperties) {
         this.billingCreditId = billingCreditId;
         this.companyId = companyId;
+        this.consumed = consumed;
         this.createdAt = createdAt;
+        this.headroom = headroom;
         this.id = id;
         this.label = label;
         this.maxPerDraw = maxPerDraw;
+        this.resetsAt = resetsAt;
         this.scopeType = scopeType;
         this.updatedAt = updatedAt;
         this.userId = userId;
+        this.windowAmount = windowAmount;
+        this.windowCount = windowCount;
+        this.windowUnit = windowUnit;
         this.additionalProperties = additionalProperties;
     }
 
@@ -75,9 +99,25 @@ public final class CreditSpendPolicyResponseData {
         return companyId;
     }
 
+    /**
+     * @return Credits spent in the current window. Set only by the usage route, and only for a window cap.
+     */
+    @JsonProperty("consumed")
+    public Optional<Double> getConsumed() {
+        return consumed;
+    }
+
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    /**
+     * @return Credits left in the current window. Set only by the usage route, and only for a window cap.
+     */
+    @JsonProperty("headroom")
+    public Optional<Double> getHeadroom() {
+        return headroom;
     }
 
     @JsonProperty("id")
@@ -95,6 +135,14 @@ public final class CreditSpendPolicyResponseData {
         return maxPerDraw;
     }
 
+    /**
+     * @return When the current window ends. Set only by the usage route, and only for a window cap.
+     */
+    @JsonProperty("resets_at")
+    public Optional<OffsetDateTime> getResetsAt() {
+        return resetsAt;
+    }
+
     @JsonProperty("scope_type")
     public CreditSpendPolicyScope getScopeType() {
         return scopeType;
@@ -108,6 +156,21 @@ public final class CreditSpendPolicyResponseData {
     @JsonProperty("user_id")
     public Optional<String> getUserId() {
         return userId;
+    }
+
+    @JsonProperty("window_amount")
+    public Optional<Double> getWindowAmount() {
+        return windowAmount;
+    }
+
+    @JsonProperty("window_count")
+    public long getWindowCount() {
+        return windowCount;
+    }
+
+    @JsonProperty("window_unit")
+    public Optional<CreditSpendWindowUnit> getWindowUnit() {
+        return windowUnit;
     }
 
     @java.lang.Override
@@ -124,13 +187,19 @@ public final class CreditSpendPolicyResponseData {
     private boolean equalTo(CreditSpendPolicyResponseData other) {
         return billingCreditId.equals(other.billingCreditId)
                 && companyId.equals(other.companyId)
+                && consumed.equals(other.consumed)
                 && createdAt.equals(other.createdAt)
+                && headroom.equals(other.headroom)
                 && id.equals(other.id)
                 && label.equals(other.label)
                 && maxPerDraw.equals(other.maxPerDraw)
+                && resetsAt.equals(other.resetsAt)
                 && scopeType.equals(other.scopeType)
                 && updatedAt.equals(other.updatedAt)
-                && userId.equals(other.userId);
+                && userId.equals(other.userId)
+                && windowAmount.equals(other.windowAmount)
+                && windowCount == other.windowCount
+                && windowUnit.equals(other.windowUnit);
     }
 
     @java.lang.Override
@@ -138,13 +207,19 @@ public final class CreditSpendPolicyResponseData {
         return Objects.hash(
                 this.billingCreditId,
                 this.companyId,
+                this.consumed,
                 this.createdAt,
+                this.headroom,
                 this.id,
                 this.label,
                 this.maxPerDraw,
+                this.resetsAt,
                 this.scopeType,
                 this.updatedAt,
-                this.userId);
+                this.userId,
+                this.windowAmount,
+                this.windowCount,
+                this.windowUnit);
     }
 
     @java.lang.Override
@@ -175,7 +250,11 @@ public final class CreditSpendPolicyResponseData {
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
+        WindowCountStage updatedAt(@NotNull OffsetDateTime updatedAt);
+    }
+
+    public interface WindowCountStage {
+        _FinalStage windowCount(long windowCount);
     }
 
     public interface _FinalStage {
@@ -189,6 +268,20 @@ public final class CreditSpendPolicyResponseData {
 
         _FinalStage companyId(String companyId);
 
+        /**
+         * <p>Credits spent in the current window. Set only by the usage route, and only for a window cap.</p>
+         */
+        _FinalStage consumed(Optional<Double> consumed);
+
+        _FinalStage consumed(Double consumed);
+
+        /**
+         * <p>Credits left in the current window. Set only by the usage route, and only for a window cap.</p>
+         */
+        _FinalStage headroom(Optional<Double> headroom);
+
+        _FinalStage headroom(Double headroom);
+
         _FinalStage label(Optional<String> label);
 
         _FinalStage label(String label);
@@ -197,14 +290,35 @@ public final class CreditSpendPolicyResponseData {
 
         _FinalStage maxPerDraw(Double maxPerDraw);
 
+        /**
+         * <p>When the current window ends. Set only by the usage route, and only for a window cap.</p>
+         */
+        _FinalStage resetsAt(Optional<OffsetDateTime> resetsAt);
+
+        _FinalStage resetsAt(OffsetDateTime resetsAt);
+
         _FinalStage userId(Optional<String> userId);
 
         _FinalStage userId(String userId);
+
+        _FinalStage windowAmount(Optional<Double> windowAmount);
+
+        _FinalStage windowAmount(Double windowAmount);
+
+        _FinalStage windowUnit(Optional<CreditSpendWindowUnit> windowUnit);
+
+        _FinalStage windowUnit(CreditSpendWindowUnit windowUnit);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements BillingCreditIdStage, CreatedAtStage, IdStage, ScopeTypeStage, UpdatedAtStage, _FinalStage {
+            implements BillingCreditIdStage,
+                    CreatedAtStage,
+                    IdStage,
+                    ScopeTypeStage,
+                    UpdatedAtStage,
+                    WindowCountStage,
+                    _FinalStage {
         private String billingCreditId;
 
         private OffsetDateTime createdAt;
@@ -215,11 +329,23 @@ public final class CreditSpendPolicyResponseData {
 
         private OffsetDateTime updatedAt;
 
+        private long windowCount;
+
+        private Optional<CreditSpendWindowUnit> windowUnit = Optional.empty();
+
+        private Optional<Double> windowAmount = Optional.empty();
+
         private Optional<String> userId = Optional.empty();
+
+        private Optional<OffsetDateTime> resetsAt = Optional.empty();
 
         private Optional<Double> maxPerDraw = Optional.empty();
 
         private Optional<String> label = Optional.empty();
+
+        private Optional<Double> headroom = Optional.empty();
+
+        private Optional<Double> consumed = Optional.empty();
 
         private Optional<String> companyId = Optional.empty();
 
@@ -232,13 +358,19 @@ public final class CreditSpendPolicyResponseData {
         public Builder from(CreditSpendPolicyResponseData other) {
             billingCreditId(other.getBillingCreditId());
             companyId(other.getCompanyId());
+            consumed(other.getConsumed());
             createdAt(other.getCreatedAt());
+            headroom(other.getHeadroom());
             id(other.getId());
             label(other.getLabel());
             maxPerDraw(other.getMaxPerDraw());
+            resetsAt(other.getResetsAt());
             scopeType(other.getScopeType());
             updatedAt(other.getUpdatedAt());
             userId(other.getUserId());
+            windowAmount(other.getWindowAmount());
+            windowCount(other.getWindowCount());
+            windowUnit(other.getWindowUnit());
             return this;
         }
 
@@ -272,8 +404,41 @@ public final class CreditSpendPolicyResponseData {
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+        public WindowCountStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("window_count")
+        public _FinalStage windowCount(long windowCount) {
+            this.windowCount = windowCount;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage windowUnit(CreditSpendWindowUnit windowUnit) {
+            this.windowUnit = Optional.ofNullable(windowUnit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "window_unit", nulls = Nulls.SKIP)
+        public _FinalStage windowUnit(Optional<CreditSpendWindowUnit> windowUnit) {
+            this.windowUnit = windowUnit;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage windowAmount(Double windowAmount) {
+            this.windowAmount = Optional.ofNullable(windowAmount);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "window_amount", nulls = Nulls.SKIP)
+        public _FinalStage windowAmount(Optional<Double> windowAmount) {
+            this.windowAmount = windowAmount;
             return this;
         }
 
@@ -287,6 +452,26 @@ public final class CreditSpendPolicyResponseData {
         @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
         public _FinalStage userId(Optional<String> userId) {
             this.userId = userId;
+            return this;
+        }
+
+        /**
+         * <p>When the current window ends. Set only by the usage route, and only for a window cap.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage resetsAt(OffsetDateTime resetsAt) {
+            this.resetsAt = Optional.ofNullable(resetsAt);
+            return this;
+        }
+
+        /**
+         * <p>When the current window ends. Set only by the usage route, and only for a window cap.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "resets_at", nulls = Nulls.SKIP)
+        public _FinalStage resetsAt(Optional<OffsetDateTime> resetsAt) {
+            this.resetsAt = resetsAt;
             return this;
         }
 
@@ -316,6 +501,46 @@ public final class CreditSpendPolicyResponseData {
             return this;
         }
 
+        /**
+         * <p>Credits left in the current window. Set only by the usage route, and only for a window cap.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage headroom(Double headroom) {
+            this.headroom = Optional.ofNullable(headroom);
+            return this;
+        }
+
+        /**
+         * <p>Credits left in the current window. Set only by the usage route, and only for a window cap.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "headroom", nulls = Nulls.SKIP)
+        public _FinalStage headroom(Optional<Double> headroom) {
+            this.headroom = headroom;
+            return this;
+        }
+
+        /**
+         * <p>Credits spent in the current window. Set only by the usage route, and only for a window cap.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage consumed(Double consumed) {
+            this.consumed = Optional.ofNullable(consumed);
+            return this;
+        }
+
+        /**
+         * <p>Credits spent in the current window. Set only by the usage route, and only for a window cap.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "consumed", nulls = Nulls.SKIP)
+        public _FinalStage consumed(Optional<Double> consumed) {
+            this.consumed = consumed;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
@@ -334,13 +559,19 @@ public final class CreditSpendPolicyResponseData {
             return new CreditSpendPolicyResponseData(
                     billingCreditId,
                     companyId,
+                    consumed,
                     createdAt,
+                    headroom,
                     id,
                     label,
                     maxPerDraw,
+                    resetsAt,
                     scopeType,
                     updatedAt,
                     userId,
+                    windowAmount,
+                    windowCount,
+                    windowUnit,
                     additionalProperties);
         }
 

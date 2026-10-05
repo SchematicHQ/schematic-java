@@ -328,6 +328,13 @@ public class RawPlanmigrationsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "feature_id", request.getFeatureId().get(), false);
         }
+        if (request.getFeaturePlanRolloutId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "feature_plan_rollout_id",
+                    request.getFeaturePlanRolloutId().get(),
+                    false);
+        }
         if (request.getPlanVersionId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
@@ -830,6 +837,13 @@ public class RawPlanmigrationsClient {
         if (request.getFeatureId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "feature_id", request.getFeatureId().get(), false);
+        }
+        if (request.getFeaturePlanRolloutId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "feature_plan_rollout_id",
+                    request.getFeaturePlanRolloutId().get(),
+                    false);
         }
         if (request.getPlanVersionId().isPresent()) {
             QueryStringMapper.addQueryParameter(

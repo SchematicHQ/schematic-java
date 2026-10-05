@@ -30,6 +30,8 @@ public final class AcquireCreditLeaseRequestBody {
 
     private final double requestedAmount;
 
+    private final Optional<String> userId;
+
     private final Map<String, Object> additionalProperties;
 
     private AcquireCreditLeaseRequestBody(
@@ -37,11 +39,13 @@ public final class AcquireCreditLeaseRequestBody {
             String creditTypeId,
             Optional<OffsetDateTime> expiresAt,
             double requestedAmount,
+            Optional<String> userId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.creditTypeId = creditTypeId;
         this.expiresAt = expiresAt;
         this.requestedAmount = requestedAmount;
+        this.userId = userId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -68,6 +72,14 @@ public final class AcquireCreditLeaseRequestBody {
         return requestedAmount;
     }
 
+    /**
+     * @return The user drawing the hold, so a user-scope spend policy applies to it
+     */
+    @JsonProperty("user_id")
+    public Optional<String> getUserId() {
+        return userId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -83,12 +95,13 @@ public final class AcquireCreditLeaseRequestBody {
         return companyId.equals(other.companyId)
                 && creditTypeId.equals(other.creditTypeId)
                 && expiresAt.equals(other.expiresAt)
-                && requestedAmount == other.requestedAmount;
+                && requestedAmount == other.requestedAmount
+                && userId.equals(other.userId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.creditTypeId, this.expiresAt, this.requestedAmount);
+        return Objects.hash(this.companyId, this.creditTypeId, this.expiresAt, this.requestedAmount, this.userId);
     }
 
     @java.lang.Override
@@ -127,6 +140,13 @@ public final class AcquireCreditLeaseRequestBody {
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
         _FinalStage expiresAt(OffsetDateTime expiresAt);
+
+        /**
+         * <p>The user drawing the hold, so a user-scope spend policy applies to it</p>
+         */
+        _FinalStage userId(Optional<String> userId);
+
+        _FinalStage userId(String userId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -136,6 +156,8 @@ public final class AcquireCreditLeaseRequestBody {
         private String creditTypeId;
 
         private double requestedAmount;
+
+        private Optional<String> userId = Optional.empty();
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
@@ -150,6 +172,7 @@ public final class AcquireCreditLeaseRequestBody {
             creditTypeId(other.getCreditTypeId());
             expiresAt(other.getExpiresAt());
             requestedAmount(other.getRequestedAmount());
+            userId(other.getUserId());
             return this;
         }
 
@@ -171,6 +194,26 @@ public final class AcquireCreditLeaseRequestBody {
         @JsonSetter("requested_amount")
         public _FinalStage requestedAmount(double requestedAmount) {
             this.requestedAmount = requestedAmount;
+            return this;
+        }
+
+        /**
+         * <p>The user drawing the hold, so a user-scope spend policy applies to it</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage userId(String userId) {
+            this.userId = Optional.ofNullable(userId);
+            return this;
+        }
+
+        /**
+         * <p>The user drawing the hold, so a user-scope spend policy applies to it</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
+        public _FinalStage userId(Optional<String> userId) {
+            this.userId = userId;
             return this;
         }
 
@@ -197,7 +240,7 @@ public final class AcquireCreditLeaseRequestBody {
         @java.lang.Override
         public AcquireCreditLeaseRequestBody build() {
             return new AcquireCreditLeaseRequestBody(
-                    companyId, creditTypeId, expiresAt, requestedAmount, additionalProperties);
+                    companyId, creditTypeId, expiresAt, requestedAmount, userId, additionalProperties);
         }
 
         @java.lang.Override

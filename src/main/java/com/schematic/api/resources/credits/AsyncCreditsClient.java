@@ -19,6 +19,7 @@ import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBod
 import com.schematic.api.resources.credits.requests.CreateCreditSpendPolicyRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
 import com.schematic.api.resources.credits.requests.ExtendCreditLeaseRequestBody;
+import com.schematic.api.resources.credits.requests.GetCreditSpendPolicyUsageRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
 import com.schematic.api.resources.credits.requests.ListCompanyCreditBalancesRequest;
@@ -50,6 +51,7 @@ import com.schematic.api.resources.credits.types.DeleteCreditSpendPolicyResponse
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyResponse;
+import com.schematic.api.resources.credits.types.GetCreditSpendPolicyUsageResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingPlanCreditGrantResponse;
 import com.schematic.api.resources.credits.types.GrantBillingCreditsToCompanyResponse;
@@ -569,6 +571,16 @@ public class AsyncCreditsClient {
     public CompletableFuture<CountCreditSpendPoliciesResponse> countCreditSpendPolicies(
             CountCreditSpendPoliciesRequest request, RequestOptions requestOptions) {
         return this.rawClient.countCreditSpendPolicies(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCreditSpendPolicyUsageResponse> getCreditSpendPolicyUsage(
+            GetCreditSpendPolicyUsageRequest request) {
+        return this.rawClient.getCreditSpendPolicyUsage(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<GetCreditSpendPolicyUsageResponse> getCreditSpendPolicyUsage(
+            GetCreditSpendPolicyUsageRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getCreditSpendPolicyUsage(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ListCreditEventLedgerResponse> listCreditEventLedger(

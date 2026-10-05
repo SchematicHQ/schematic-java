@@ -1051,6 +1051,14 @@ client.accounts().updateEnvironment(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**requireContextSignature:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -5637,6 +5645,14 @@ client.credits().acquireCreditLease(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**userId:** `Optional<String>` — The user drawing the hold, so a user-scope spend policy applies to it
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -5704,6 +5720,14 @@ client.credits().extendCreditLease(
 <dd>
 
 **idempotencyKey:** `Optional<String>` — A caller-chosen key for safe retries: a second request with the same key returns the lease as it stands instead of growing it again. Keys are unique per environment across every extend
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userId:** `Optional<String>` — The user drawing the top-up, so a user-scope spend policy applies to it
     
 </dd>
 </dl>
@@ -6418,7 +6442,6 @@ client.credits().createCreditSpendPolicy(
     CreateCreditSpendPolicyRequestBody
         .builder()
         .billingCreditId("billing_credit_id")
-        .maxPerDraw(1.1)
         .build()
 );
 ```
@@ -6459,7 +6482,7 @@ client.credits().createCreditSpendPolicy(
 <dl>
 <dd>
 
-**maxPerDraw:** `Double` — The largest number of credits a single draw may spend.
+**maxPerDraw:** `Optional<Double>` — The largest number of credits a single draw may spend. Set either this or window_amount.
     
 </dd>
 </dl>
@@ -6468,6 +6491,22 @@ client.credits().createCreditSpendPolicy(
 <dd>
 
 **userId:** `Optional<String>` — The user the cap applies to. Set exactly one of company_id and user_id.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**windowAmount:** `Optional<Double>` — The number of credits the company or user may spend in one window. Set either this or max_per_draw.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**windowUnit:** `Optional<CreditSpendWindowUnit>` — The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.
     
 </dd>
 </dl>
@@ -6569,6 +6608,22 @@ client.credits().updateCreditSpendPolicy(
 <dd>
 
 **maxPerDraw:** `Optional<Double>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**windowAmount:** `Optional<Double>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**windowUnit:** `Optional<CreditSpendWindowUnit>` 
     
 </dd>
 </dl>
@@ -6721,6 +6776,71 @@ client.credits().countCreditSpendPolicies(
 </dl>
 </details>
 
+<details><summary><code>client.credits.getCreditSpendPolicyUsage() -> GetCreditSpendPolicyUsageResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().getCreditSpendPolicyUsage(
+    GetCreditSpendPolicyUsageRequest
+        .builder()
+        .companyId("company_id")
+        .userIds(
+            Arrays.asList("user_ids")
+        )
+        .billingCreditId("billing_credit_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingCreditId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userIds:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.credits.listCreditEventLedger() -> ListCreditEventLedgerResponse</code></summary>
 <dl>
 <dd>
@@ -6740,7 +6860,7 @@ client.credits().listCreditEventLedger(
         .companyId("company_id")
         .billingCreditId("billing_credit_id")
         .endTime("end_time")
-        .eventType(CreditEventType.GRANT)
+        .eventType(CreditEventType.ADJUSTMENT)
         .featureId("feature_id")
         .startTime("start_time")
         .limit(1000000L)
@@ -6848,7 +6968,7 @@ client.credits().countCreditEventLedger(
         .companyId("company_id")
         .billingCreditId("billing_credit_id")
         .endTime("end_time")
-        .eventType(CreditEventType.GRANT)
+        .eventType(CreditEventType.ADJUSTMENT)
         .featureId("feature_id")
         .startTime("start_time")
         .limit(1000000L)
@@ -14150,6 +14270,267 @@ client.entitlements().getUserUsageByCompany(
 </dl>
 </details>
 
+<details><summary><code>client.entitlements.getCompanyUserUsageMetrics() -> GetCompanyUserUsageMetricsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.entitlements().getCompanyUserUsageMetrics(
+    GetCompanyUserUsageMetricsRequest
+        .builder()
+        .companyId("company_id")
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — Company to list available metrics for
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `Optional<OffsetDateTime>` — End of the usage window (exclusive); defaults to now
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `Optional<OffsetDateTime>` — Start of the usage window; defaults to 30 days before the end
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entitlements.listCompanyUserUsage() -> ListCompanyUserUsageResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.entitlements().listCompanyUserUsage(
+    ListCompanyUserUsageRequest
+        .builder()
+        .companyId("company_id")
+        .metric(UserUsageMetric.CREDITS)
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .featureId("feature_id")
+        .limit(1000000L)
+        .offset(1000000L)
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — Company to break usage down for
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `Optional<OffsetDateTime>` — End of the usage window (exclusive); defaults to now
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureId:** `Optional<String>` — The event-based feature to break down; required when metric is feature
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metric:** `UserUsageMetric` — Which metric to break usage down by
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `Optional<OffsetDateTime>` — Start of the usage window; defaults to 30 days before the end
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entitlements.countCompanyUserUsage() -> CountCompanyUserUsageResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.entitlements().countCompanyUserUsage(
+    CountCompanyUserUsageRequest
+        .builder()
+        .companyId("company_id")
+        .metric(UserUsageMetric.CREDITS)
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .featureId("feature_id")
+        .limit(1000000L)
+        .offset(1000000L)
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — Company to break usage down for
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `Optional<OffsetDateTime>` — End of the usage window (exclusive); defaults to now
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featureId:** `Optional<String>` — The event-based feature to break down; required when metric is feature
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metric:** `UserUsageMetric` — Which metric to break usage down by
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `Optional<OffsetDateTime>` — Start of the usage window; defaults to 30 days before the end
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.entitlements.getUserUsageDetail() -> GetUserUsageDetailResponse</code></summary>
 <dl>
 <dd>
@@ -14492,6 +14873,14 @@ client.plans().retryCustomPlanBilling(
 <dd>
 
 **billingCycleAnchor:** `Optional<OffsetDateTime>` — The date the subscription's billing period renews on. Only honored when the retry creates a subscription.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**billingStartDate:** `Optional<OffsetDateTime>` — The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. When both are omitted, the term pinned at finalize is reissued. Only honored when the retry creates a subscription.
     
 </dd>
 </dl>
@@ -15723,6 +16112,14 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
+**billingStartDate:** `Optional<OffsetDateTime>` — The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. Only honored on a first publish that starts a subscription.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **couponExternalId:** `Optional<String>` 
     
 </dd>
@@ -15787,7 +16184,7 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
-**prorationBehavior:** `Optional<MigrationProrationBehavior>` 
+**prorationBehavior:** `Optional<MigrationProrationBehavior>` — How Stripe handles the price difference when companies are migrated. With migration_strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none. Not accepted with leave.
     
 </dd>
 </dl>
@@ -15796,6 +16193,14 @@ client.plans().publishPlanVersion(
 <dd>
 
 **requireNoMigration:** `Optional<Boolean>` — Refuse the publish if any company would be migrated onto the new version
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**scheduledAt:** `Optional<OffsetDateTime>` — When every company moves, for migration_strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.
     
 </dd>
 </dl>
@@ -19911,6 +20316,7 @@ client.plangroups().createPlanGroup(
         .prorationBehavior(ProrationBehavior.CREATE_PRORATIONS)
         .showAsMonthlyPrices(true)
         .showCredits(true)
+        .showEstimatedTotal(true)
         .showFeatureDescription(true)
         .showHardLimit(true)
         .showPeriodToggle(true)
@@ -20191,6 +20597,14 @@ client.plangroups().createPlanGroup(
 <dl>
 <dd>
 
+**showEstimatedTotal:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **showFeatureDescription:** `Boolean` 
     
 </dd>
@@ -20303,6 +20717,7 @@ client.plangroups().updatePlanGroup(
         .prorationBehavior(ProrationBehavior.CREATE_PRORATIONS)
         .showAsMonthlyPrices(true)
         .showCredits(true)
+        .showEstimatedTotal(true)
         .showFeatureDescription(true)
         .showHardLimit(true)
         .showPeriodToggle(true)
@@ -20584,6 +20999,14 @@ client.plangroups().updatePlanGroup(
 <dd>
 
 **showCredits:** `Boolean` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**showEstimatedTotal:** `Boolean` 
     
 </dd>
 </dl>
@@ -20895,6 +21318,7 @@ client.planmigrations().listMigrations(
     ListMigrationsRequest
         .builder()
         .featureId("feature_id")
+        .featurePlanRolloutId("feature_plan_rollout_id")
         .planVersionId("plan_version_id")
         .status(PlanVersionMigrationStatus.CANCELLED)
         .limit(1000000L)
@@ -20916,6 +21340,14 @@ client.planmigrations().listMigrations(
 <dd>
 
 **featureId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featurePlanRolloutId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -21035,7 +21467,15 @@ client.planmigrations().createMigration(
 <dl>
 <dd>
 
-**prorationBehavior:** `Optional<MigrationProrationBehavior>` 
+**prorationBehavior:** `Optional<MigrationProrationBehavior>` — How Stripe handles the price difference when companies are migrated. With strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**scheduledAt:** `Optional<OffsetDateTime>` — When every company moves, for strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.
     
 </dd>
 </dl>
@@ -21269,6 +21709,7 @@ client.planmigrations().countMigrations(
     CountMigrationsRequest
         .builder()
         .featureId("feature_id")
+        .featurePlanRolloutId("feature_plan_rollout_id")
         .planVersionId("plan_version_id")
         .status(PlanVersionMigrationStatus.CANCELLED)
         .limit(1000000L)
@@ -21290,6 +21731,14 @@ client.planmigrations().countMigrations(
 <dd>
 
 **featureId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**featurePlanRolloutId:** `Optional<String>` 
     
 </dd>
 </dl>

@@ -89,6 +89,8 @@ public final class CreatePlanGroupRequestBody {
 
     private final boolean showCredits;
 
+    private final boolean showEstimatedTotal;
+
     private final boolean showFeatureDescription;
 
     private final boolean showHardLimit;
@@ -141,6 +143,7 @@ public final class CreatePlanGroupRequestBody {
             Optional<Boolean> scheduledDowngradePreventWhenOverLimit,
             boolean showAsMonthlyPrices,
             boolean showCredits,
+            boolean showEstimatedTotal,
             boolean showFeatureDescription,
             boolean showHardLimit,
             boolean showPeriodToggle,
@@ -181,6 +184,7 @@ public final class CreatePlanGroupRequestBody {
         this.scheduledDowngradePreventWhenOverLimit = scheduledDowngradePreventWhenOverLimit;
         this.showAsMonthlyPrices = showAsMonthlyPrices;
         this.showCredits = showCredits;
+        this.showEstimatedTotal = showEstimatedTotal;
         this.showFeatureDescription = showFeatureDescription;
         this.showHardLimit = showHardLimit;
         this.showPeriodToggle = showPeriodToggle;
@@ -342,6 +346,11 @@ public final class CreatePlanGroupRequestBody {
         return showCredits;
     }
 
+    @JsonProperty("show_estimated_total")
+    public boolean getShowEstimatedTotal() {
+        return showEstimatedTotal;
+    }
+
     @JsonProperty("show_feature_description")
     public boolean getShowFeatureDescription() {
         return showFeatureDescription;
@@ -433,6 +442,7 @@ public final class CreatePlanGroupRequestBody {
                 && scheduledDowngradePreventWhenOverLimit.equals(other.scheduledDowngradePreventWhenOverLimit)
                 && showAsMonthlyPrices == other.showAsMonthlyPrices
                 && showCredits == other.showCredits
+                && showEstimatedTotal == other.showEstimatedTotal
                 && showFeatureDescription == other.showFeatureDescription
                 && showHardLimit == other.showHardLimit
                 && showPeriodToggle == other.showPeriodToggle
@@ -477,6 +487,7 @@ public final class CreatePlanGroupRequestBody {
                 this.scheduledDowngradePreventWhenOverLimit,
                 this.showAsMonthlyPrices,
                 this.showCredits,
+                this.showEstimatedTotal,
                 this.showFeatureDescription,
                 this.showHardLimit,
                 this.showPeriodToggle,
@@ -541,7 +552,11 @@ public final class CreatePlanGroupRequestBody {
     }
 
     public interface ShowCreditsStage {
-        ShowFeatureDescriptionStage showCredits(boolean showCredits);
+        ShowEstimatedTotalStage showCredits(boolean showCredits);
+    }
+
+    public interface ShowEstimatedTotalStage {
+        ShowFeatureDescriptionStage showEstimatedTotal(boolean showEstimatedTotal);
     }
 
     public interface ShowFeatureDescriptionStage {
@@ -689,6 +704,7 @@ public final class CreatePlanGroupRequestBody {
                     ProrationBehaviorStage,
                     ShowAsMonthlyPricesStage,
                     ShowCreditsStage,
+                    ShowEstimatedTotalStage,
                     ShowFeatureDescriptionStage,
                     ShowHardLimitStage,
                     ShowPeriodToggleStage,
@@ -716,6 +732,8 @@ public final class CreatePlanGroupRequestBody {
         private boolean showAsMonthlyPrices;
 
         private boolean showCredits;
+
+        private boolean showEstimatedTotal;
 
         private boolean showFeatureDescription;
 
@@ -809,6 +827,7 @@ public final class CreatePlanGroupRequestBody {
             scheduledDowngradePreventWhenOverLimit(other.getScheduledDowngradePreventWhenOverLimit());
             showAsMonthlyPrices(other.getShowAsMonthlyPrices());
             showCredits(other.getShowCredits());
+            showEstimatedTotal(other.getShowEstimatedTotal());
             showFeatureDescription(other.getShowFeatureDescription());
             showHardLimit(other.getShowHardLimit());
             showPeriodToggle(other.getShowPeriodToggle());
@@ -894,8 +913,15 @@ public final class CreatePlanGroupRequestBody {
 
         @java.lang.Override
         @JsonSetter("show_credits")
-        public ShowFeatureDescriptionStage showCredits(boolean showCredits) {
+        public ShowEstimatedTotalStage showCredits(boolean showCredits) {
             this.showCredits = showCredits;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("show_estimated_total")
+        public ShowFeatureDescriptionStage showEstimatedTotal(boolean showEstimatedTotal) {
+            this.showEstimatedTotal = showEstimatedTotal;
             return this;
         }
 
@@ -1325,6 +1351,7 @@ public final class CreatePlanGroupRequestBody {
                     scheduledDowngradePreventWhenOverLimit,
                     showAsMonthlyPrices,
                     showCredits,
+                    showEstimatedTotal,
                     showFeatureDescription,
                     showHardLimit,
                     showPeriodToggle,

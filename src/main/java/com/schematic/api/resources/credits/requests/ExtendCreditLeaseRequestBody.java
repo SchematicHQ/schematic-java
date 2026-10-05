@@ -27,16 +27,20 @@ public final class ExtendCreditLeaseRequestBody {
 
     private final Optional<String> idempotencyKey;
 
+    private final Optional<String> userId;
+
     private final Map<String, Object> additionalProperties;
 
     private ExtendCreditLeaseRequestBody(
             double additionalAmount,
             Optional<OffsetDateTime> expiresAt,
             Optional<String> idempotencyKey,
+            Optional<String> userId,
             Map<String, Object> additionalProperties) {
         this.additionalAmount = additionalAmount;
         this.expiresAt = expiresAt;
         this.idempotencyKey = idempotencyKey;
+        this.userId = userId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -61,6 +65,14 @@ public final class ExtendCreditLeaseRequestBody {
         return idempotencyKey;
     }
 
+    /**
+     * @return The user drawing the top-up, so a user-scope spend policy applies to it
+     */
+    @JsonProperty("user_id")
+    public Optional<String> getUserId() {
+        return userId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -75,12 +87,13 @@ public final class ExtendCreditLeaseRequestBody {
     private boolean equalTo(ExtendCreditLeaseRequestBody other) {
         return additionalAmount == other.additionalAmount
                 && expiresAt.equals(other.expiresAt)
-                && idempotencyKey.equals(other.idempotencyKey);
+                && idempotencyKey.equals(other.idempotencyKey)
+                && userId.equals(other.userId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.additionalAmount, this.expiresAt, this.idempotencyKey);
+        return Objects.hash(this.additionalAmount, this.expiresAt, this.idempotencyKey, this.userId);
     }
 
     @java.lang.Override
@@ -118,11 +131,20 @@ public final class ExtendCreditLeaseRequestBody {
         _FinalStage idempotencyKey(Optional<String> idempotencyKey);
 
         _FinalStage idempotencyKey(String idempotencyKey);
+
+        /**
+         * <p>The user drawing the top-up, so a user-scope spend policy applies to it</p>
+         */
+        _FinalStage userId(Optional<String> userId);
+
+        _FinalStage userId(String userId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements AdditionalAmountStage, _FinalStage {
         private double additionalAmount;
+
+        private Optional<String> userId = Optional.empty();
 
         private Optional<String> idempotencyKey = Optional.empty();
 
@@ -138,6 +160,7 @@ public final class ExtendCreditLeaseRequestBody {
             additionalAmount(other.getAdditionalAmount());
             expiresAt(other.getExpiresAt());
             idempotencyKey(other.getIdempotencyKey());
+            userId(other.getUserId());
             return this;
         }
 
@@ -145,6 +168,26 @@ public final class ExtendCreditLeaseRequestBody {
         @JsonSetter("additional_amount")
         public _FinalStage additionalAmount(double additionalAmount) {
             this.additionalAmount = additionalAmount;
+            return this;
+        }
+
+        /**
+         * <p>The user drawing the top-up, so a user-scope spend policy applies to it</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage userId(String userId) {
+            this.userId = Optional.ofNullable(userId);
+            return this;
+        }
+
+        /**
+         * <p>The user drawing the top-up, so a user-scope spend policy applies to it</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
+        public _FinalStage userId(Optional<String> userId) {
+            this.userId = userId;
             return this;
         }
 
@@ -190,7 +233,8 @@ public final class ExtendCreditLeaseRequestBody {
 
         @java.lang.Override
         public ExtendCreditLeaseRequestBody build() {
-            return new ExtendCreditLeaseRequestBody(additionalAmount, expiresAt, idempotencyKey, additionalProperties);
+            return new ExtendCreditLeaseRequestBody(
+                    additionalAmount, expiresAt, idempotencyKey, userId, additionalProperties);
         }
 
         @java.lang.Override
