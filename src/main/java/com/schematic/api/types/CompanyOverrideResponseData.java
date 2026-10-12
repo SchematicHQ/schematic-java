@@ -48,6 +48,8 @@ public final class CompanyOverrideResponseData {
 
     private final List<CompanyOverrideNoteResponseData> notes;
 
+    private final Optional<Map<String, Double>> quantityRates;
+
     private final Optional<String> ruleId;
 
     private final Optional<String> ruleIdUsageExceeded;
@@ -83,6 +85,7 @@ public final class CompanyOverrideResponseData {
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             List<CompanyOverrideNoteResponseData> notes,
+            Optional<Map<String, Double>> quantityRates,
             Optional<String> ruleId,
             Optional<String> ruleIdUsageExceeded,
             OffsetDateTime updatedAt,
@@ -106,6 +109,7 @@ public final class CompanyOverrideResponseData {
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.notes = notes;
+        this.quantityRates = quantityRates;
         this.ruleId = ruleId;
         this.ruleIdUsageExceeded = ruleIdUsageExceeded;
         this.updatedAt = updatedAt;
@@ -177,6 +181,14 @@ public final class CompanyOverrideResponseData {
     @JsonProperty("notes")
     public List<CompanyOverrideNoteResponseData> getNotes() {
         return notes;
+    }
+
+    /**
+     * @return Credits per unit of the quantity (per token for inference features), keyed by quantity key. Absent when the entitlement prices requests only.
+     */
+    @JsonProperty("quantity_rates")
+    public Optional<Map<String, Double>> getQuantityRates() {
+        return quantityRates;
     }
 
     @JsonProperty("rule_id")
@@ -253,6 +265,7 @@ public final class CompanyOverrideResponseData {
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && notes.equals(other.notes)
+                && quantityRates.equals(other.quantityRates)
                 && ruleId.equals(other.ruleId)
                 && ruleIdUsageExceeded.equals(other.ruleIdUsageExceeded)
                 && updatedAt.equals(other.updatedAt)
@@ -280,6 +293,7 @@ public final class CompanyOverrideResponseData {
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
                 this.notes,
+                this.quantityRates,
                 this.ruleId,
                 this.ruleIdUsageExceeded,
                 this.updatedAt,
@@ -368,6 +382,13 @@ public final class CompanyOverrideResponseData {
 
         _FinalStage addAllNotes(List<CompanyOverrideNoteResponseData> notes);
 
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Absent when the entitlement prices requests only.</p>
+         */
+        _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
+
+        _FinalStage quantityRates(Map<String, Double> quantityRates);
+
         _FinalStage ruleId(Optional<String> ruleId);
 
         _FinalStage ruleId(String ruleId);
@@ -441,6 +462,8 @@ public final class CompanyOverrideResponseData {
 
         private Optional<String> ruleId = Optional.empty();
 
+        private Optional<Map<String, Double>> quantityRates = Optional.empty();
+
         private List<CompanyOverrideNoteResponseData> notes = new ArrayList<>();
 
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
@@ -474,6 +497,7 @@ public final class CompanyOverrideResponseData {
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             notes(other.getNotes());
+            quantityRates(other.getQuantityRates());
             ruleId(other.getRuleId());
             ruleIdUsageExceeded(other.getRuleIdUsageExceeded());
             updatedAt(other.getUpdatedAt());
@@ -640,6 +664,26 @@ public final class CompanyOverrideResponseData {
             return this;
         }
 
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Absent when the entitlement prices requests only.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage quantityRates(Map<String, Double> quantityRates) {
+            this.quantityRates = Optional.ofNullable(quantityRates);
+            return this;
+        }
+
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Absent when the entitlement prices requests only.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "quantity_rates", nulls = Nulls.SKIP)
+        public _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates) {
+            this.quantityRates = quantityRates;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllNotes(List<CompanyOverrideNoteResponseData> notes) {
             if (notes != null) {
@@ -757,6 +801,7 @@ public final class CompanyOverrideResponseData {
                     metricPeriod,
                     metricPeriodMonthReset,
                     notes,
+                    quantityRates,
                     ruleId,
                     ruleIdUsageExceeded,
                     updatedAt,

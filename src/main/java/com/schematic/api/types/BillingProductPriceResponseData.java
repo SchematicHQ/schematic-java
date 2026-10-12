@@ -26,7 +26,7 @@ public final class BillingProductPriceResponseData {
 
     private final OffsetDateTime createdAt;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String id;
 
@@ -63,7 +63,7 @@ public final class BillingProductPriceResponseData {
     private BillingProductPriceResponseData(
             BillingPriceScheme billingScheme,
             OffsetDateTime createdAt,
-            String currency,
+            Currency currency,
             String id,
             BillingProductPriceInterval interval,
             long intervalCount,
@@ -112,7 +112,7 @@ public final class BillingProductPriceResponseData {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -266,7 +266,7 @@ public final class BillingProductPriceResponseData {
     }
 
     public interface CurrencyStage {
-        IdStage currency(@NotNull String currency);
+        IdStage currency(@NotNull Currency currency);
     }
 
     public interface IdStage {
@@ -358,7 +358,7 @@ public final class BillingProductPriceResponseData {
 
         private OffsetDateTime createdAt;
 
-        private String currency;
+        private Currency currency;
 
         private String id;
 
@@ -434,7 +434,7 @@ public final class BillingProductPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public IdStage currency(@NotNull String currency) {
+        public IdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

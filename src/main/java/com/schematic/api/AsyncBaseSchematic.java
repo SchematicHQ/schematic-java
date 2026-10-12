@@ -3,6 +3,7 @@
  */
 package com.schematic.api;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.Suppliers;
@@ -31,7 +32,7 @@ import com.schematic.api.resources.webhooks.AsyncWebhooksClient;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class AsyncBaseSchematic {
+public class AsyncBaseSchematic implements AutoCloseable {
     protected final ClientOptions clientOptions;
 
     private final AsyncRawBaseSchematic rawClient;
@@ -115,11 +116,25 @@ public class AsyncBaseSchematic {
     }
 
     public CompletableFuture<Void> getCreditLedger() {
-        return this.rawClient.getCreditLedger().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.getCreditLedger();
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<Void> getCreditLedger(RequestOptions requestOptions) {
-        return this.rawClient.getCreditLedger(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.getCreditLedger(requestOptions);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public AsyncAccountsClient accounts() {
@@ -208,6 +223,16 @@ public class AsyncBaseSchematic {
 
     public AsyncWebhooksClient webhooks() {
         return this.webhooksClient.get();
+    }
+
+    /**
+     * Releases resources owned by this client: any WebSocket clients still connected through
+     * it are disconnected first, then the SDK-owned HTTP client is shut down. See
+     * {@code ClientOptions.close()} for what is and is not released.
+     */
+    @Override
+    public void close() {
+        this.clientOptions.close();
     }
 
     public static AsyncBaseSchematicBuilder builder() {

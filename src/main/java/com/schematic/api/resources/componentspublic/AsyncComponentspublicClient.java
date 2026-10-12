@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.componentspublic;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.componentspublic.types.GetPublicPlansResponse;
@@ -26,10 +27,26 @@ public class AsyncComponentspublicClient {
     }
 
     public CompletableFuture<GetPublicPlansResponse> getPublicPlans() {
-        return this.rawClient.getPublicPlans().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPublicPlansResponse>> rawFuture =
+                this.rawClient.getPublicPlans();
+        CompletableFuture<GetPublicPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPublicPlansResponse> getPublicPlans(RequestOptions requestOptions) {
-        return this.rawClient.getPublicPlans(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPublicPlansResponse>> rawFuture =
+                this.rawClient.getPublicPlans(requestOptions);
+        CompletableFuture<GetPublicPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

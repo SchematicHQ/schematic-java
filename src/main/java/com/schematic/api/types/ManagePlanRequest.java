@@ -50,11 +50,13 @@ public final class ManagePlanRequest {
 
     private final List<UpdateCreditBundleRequestBody> creditBundles;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final List<CheckoutFieldValue> customFieldValues;
 
     private final Optional<Long> daysUntilDue;
+
+    private final Optional<Boolean> paidOutsideStripe;
 
     private final List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements;
 
@@ -86,9 +88,10 @@ public final class ManagePlanRequest {
             String companyId,
             Optional<String> couponExternalId,
             List<UpdateCreditBundleRequestBody> creditBundles,
-            Optional<String> currency,
+            Optional<Currency> currency,
             List<CheckoutFieldValue> customFieldValues,
             Optional<Long> daysUntilDue,
+            Optional<Boolean> paidOutsideStripe,
             List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements,
             Optional<String> paymentMethodExternalId,
             Optional<String> promoCode,
@@ -113,6 +116,7 @@ public final class ManagePlanRequest {
         this.currency = currency;
         this.customFieldValues = customFieldValues;
         this.daysUntilDue = daysUntilDue;
+        this.paidOutsideStripe = paidOutsideStripe;
         this.payInAdvanceEntitlements = payInAdvanceEntitlements;
         this.paymentMethodExternalId = paymentMethodExternalId;
         this.promoCode = promoCode;
@@ -210,7 +214,7 @@ public final class ManagePlanRequest {
      * @return ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.
      */
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -225,6 +229,14 @@ public final class ManagePlanRequest {
     @JsonProperty("days_until_due")
     public Optional<Long> getDaysUntilDue() {
         return daysUntilDue;
+    }
+
+    /**
+     * @return If true, the first invoice is recorded in Stripe as paid outside Stripe and the company gets the plan straight away. Requires collection_method to be send_invoice, and the invoice is not emailed. Defaults to false.
+     */
+    @JsonProperty("paid_outside_stripe")
+    public Optional<Boolean> getPaidOutsideStripe() {
+        return paidOutsideStripe;
     }
 
     @JsonProperty("pay_in_advance_entitlements")
@@ -299,6 +311,7 @@ public final class ManagePlanRequest {
                 && currency.equals(other.currency)
                 && customFieldValues.equals(other.customFieldValues)
                 && daysUntilDue.equals(other.daysUntilDue)
+                && paidOutsideStripe.equals(other.paidOutsideStripe)
                 && payInAdvanceEntitlements.equals(other.payInAdvanceEntitlements)
                 && paymentMethodExternalId.equals(other.paymentMethodExternalId)
                 && promoCode.equals(other.promoCode)
@@ -327,6 +340,7 @@ public final class ManagePlanRequest {
                 this.currency,
                 this.customFieldValues,
                 this.daysUntilDue,
+                this.paidOutsideStripe,
                 this.payInAdvanceEntitlements,
                 this.paymentMethodExternalId,
                 this.promoCode,
@@ -431,9 +445,9 @@ public final class ManagePlanRequest {
         /**
          * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.</p>
          */
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
 
         _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues);
 
@@ -447,6 +461,13 @@ public final class ManagePlanRequest {
         _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
 
         _FinalStage daysUntilDue(Long daysUntilDue);
+
+        /**
+         * <p>If true, the first invoice is recorded in Stripe as paid outside Stripe and the company gets the plan straight away. Requires collection_method to be send_invoice, and the invoice is not emailed. Defaults to false.</p>
+         */
+        _FinalStage paidOutsideStripe(Optional<Boolean> paidOutsideStripe);
+
+        _FinalStage paidOutsideStripe(Boolean paidOutsideStripe);
 
         _FinalStage payInAdvanceEntitlements(List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements);
 
@@ -506,11 +527,13 @@ public final class ManagePlanRequest {
 
         private List<UpdatePayInAdvanceRequestBody> payInAdvanceEntitlements = new ArrayList<>();
 
+        private Optional<Boolean> paidOutsideStripe = Optional.empty();
+
         private Optional<Long> daysUntilDue = Optional.empty();
 
         private List<CheckoutFieldValue> customFieldValues = new ArrayList<>();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
@@ -559,6 +582,7 @@ public final class ManagePlanRequest {
             currency(other.getCurrency());
             customFieldValues(other.getCustomFieldValues());
             daysUntilDue(other.getDaysUntilDue());
+            paidOutsideStripe(other.getPaidOutsideStripe());
             payInAdvanceEntitlements(other.getPayInAdvanceEntitlements());
             paymentMethodExternalId(other.getPaymentMethodExternalId());
             promoCode(other.getPromoCode());
@@ -701,6 +725,26 @@ public final class ManagePlanRequest {
         }
 
         /**
+         * <p>If true, the first invoice is recorded in Stripe as paid outside Stripe and the company gets the plan straight away. Requires collection_method to be send_invoice, and the invoice is not emailed. Defaults to false.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage paidOutsideStripe(Boolean paidOutsideStripe) {
+            this.paidOutsideStripe = Optional.ofNullable(paidOutsideStripe);
+            return this;
+        }
+
+        /**
+         * <p>If true, the first invoice is recorded in Stripe as paid outside Stripe and the company gets the plan straight away. Requires collection_method to be send_invoice, and the invoice is not emailed. Defaults to false.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "paid_outside_stripe", nulls = Nulls.SKIP)
+        public _FinalStage paidOutsideStripe(Optional<Boolean> paidOutsideStripe) {
+            this.paidOutsideStripe = paidOutsideStripe;
+            return this;
+        }
+
+        /**
          * <p>Payment terms in days for an invoiced subscription. Defaults to 30.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -749,7 +793,7 @@ public final class ManagePlanRequest {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
@@ -759,7 +803,7 @@ public final class ManagePlanRequest {
          */
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }
@@ -1003,6 +1047,7 @@ public final class ManagePlanRequest {
                     currency,
                     customFieldValues,
                     daysUntilDue,
+                    paidOutsideStripe,
                     payInAdvanceEntitlements,
                     paymentMethodExternalId,
                     promoCode,

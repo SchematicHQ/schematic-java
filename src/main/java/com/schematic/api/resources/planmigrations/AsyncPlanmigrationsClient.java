@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.planmigrations;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.planmigrations.requests.CompleteMigrationNowRequestBody;
@@ -45,146 +46,354 @@ public class AsyncPlanmigrationsClient {
 
     public CompletableFuture<ListCompanyMigrationsResponse> listCompanyMigrations(
             ListCompanyMigrationsRequest request) {
-        return this.rawClient.listCompanyMigrations(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCompanyMigrationsResponse>> rawFuture =
+                this.rawClient.listCompanyMigrations(request);
+        CompletableFuture<ListCompanyMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCompanyMigrationsResponse> listCompanyMigrations(
             ListCompanyMigrationsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listCompanyMigrations(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCompanyMigrationsResponse>> rawFuture =
+                this.rawClient.listCompanyMigrations(request, requestOptions);
+        CompletableFuture<ListCompanyMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<RetryCompanyMigrationResponse> retryCompanyMigration(
             String planVersionCompanyMigrationId) {
-        return this.rawClient
-                .retryCompanyMigration(planVersionCompanyMigrationId)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<RetryCompanyMigrationResponse>> rawFuture =
+                this.rawClient.retryCompanyMigration(planVersionCompanyMigrationId);
+        CompletableFuture<RetryCompanyMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<RetryCompanyMigrationResponse> retryCompanyMigration(
             String planVersionCompanyMigrationId, RequestOptions requestOptions) {
-        return this.rawClient
-                .retryCompanyMigration(planVersionCompanyMigrationId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<RetryCompanyMigrationResponse>> rawFuture =
+                this.rawClient.retryCompanyMigration(planVersionCompanyMigrationId, requestOptions);
+        CompletableFuture<RetryCompanyMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCompanyMigrationsResponse> countCompanyMigrations(
             CountCompanyMigrationsRequest request) {
-        return this.rawClient.countCompanyMigrations(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCompanyMigrationsResponse>> rawFuture =
+                this.rawClient.countCompanyMigrations(request);
+        CompletableFuture<CountCompanyMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCompanyMigrationsResponse> countCompanyMigrations(
             CountCompanyMigrationsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countCompanyMigrations(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCompanyMigrationsResponse>> rawFuture =
+                this.rawClient.countCompanyMigrations(request, requestOptions);
+        CompletableFuture<CountCompanyMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListMigrationsResponse> listMigrations() {
-        return this.rawClient.listMigrations().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListMigrationsResponse>> rawFuture =
+                this.rawClient.listMigrations();
+        CompletableFuture<ListMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListMigrationsResponse> listMigrations(RequestOptions requestOptions) {
-        return this.rawClient.listMigrations(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListMigrationsResponse>> rawFuture =
+                this.rawClient.listMigrations(requestOptions);
+        CompletableFuture<ListMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListMigrationsResponse> listMigrations(ListMigrationsRequest request) {
-        return this.rawClient.listMigrations(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListMigrationsResponse>> rawFuture =
+                this.rawClient.listMigrations(request);
+        CompletableFuture<ListMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListMigrationsResponse> listMigrations(
             ListMigrationsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listMigrations(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListMigrationsResponse>> rawFuture =
+                this.rawClient.listMigrations(request, requestOptions);
+        CompletableFuture<ListMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateMigrationResponse> createMigration(CreateMigrationInput request) {
-        return this.rawClient.createMigration(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateMigrationResponse>> rawFuture =
+                this.rawClient.createMigration(request);
+        CompletableFuture<CreateMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateMigrationResponse> createMigration(
             CreateMigrationInput request, RequestOptions requestOptions) {
-        return this.rawClient.createMigration(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateMigrationResponse>> rawFuture =
+                this.rawClient.createMigration(request, requestOptions);
+        CompletableFuture<CreateMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetMigrationResponse> getMigration(String planVersionMigrationId) {
-        return this.rawClient.getMigration(planVersionMigrationId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetMigrationResponse>> rawFuture =
+                this.rawClient.getMigration(planVersionMigrationId);
+        CompletableFuture<GetMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetMigrationResponse> getMigration(
             String planVersionMigrationId, RequestOptions requestOptions) {
-        return this.rawClient
-                .getMigration(planVersionMigrationId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetMigrationResponse>> rawFuture =
+                this.rawClient.getMigration(planVersionMigrationId, requestOptions);
+        CompletableFuture<GetMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CancelMigrationResponse> cancelMigration(String planVersionMigrationId) {
-        return this.rawClient.cancelMigration(planVersionMigrationId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CancelMigrationResponse>> rawFuture =
+                this.rawClient.cancelMigration(planVersionMigrationId);
+        CompletableFuture<CancelMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CancelMigrationResponse> cancelMigration(
             String planVersionMigrationId, RequestOptions requestOptions) {
-        return this.rawClient
-                .cancelMigration(planVersionMigrationId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CancelMigrationResponse>> rawFuture =
+                this.rawClient.cancelMigration(planVersionMigrationId, requestOptions);
+        CompletableFuture<CancelMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CompleteMigrationNowResponse> completeMigrationNow(String planVersionMigrationId) {
-        return this.rawClient.completeMigrationNow(planVersionMigrationId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CompleteMigrationNowResponse>> rawFuture =
+                this.rawClient.completeMigrationNow(planVersionMigrationId);
+        CompletableFuture<CompleteMigrationNowResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CompleteMigrationNowResponse> completeMigrationNow(
             String planVersionMigrationId, RequestOptions requestOptions) {
-        return this.rawClient
-                .completeMigrationNow(planVersionMigrationId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CompleteMigrationNowResponse>> rawFuture =
+                this.rawClient.completeMigrationNow(planVersionMigrationId, requestOptions);
+        CompletableFuture<CompleteMigrationNowResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CompleteMigrationNowResponse> completeMigrationNow(
             String planVersionMigrationId, CompleteMigrationNowRequestBody request) {
-        return this.rawClient
-                .completeMigrationNow(planVersionMigrationId, request)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CompleteMigrationNowResponse>> rawFuture =
+                this.rawClient.completeMigrationNow(planVersionMigrationId, request);
+        CompletableFuture<CompleteMigrationNowResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CompleteMigrationNowResponse> completeMigrationNow(
             String planVersionMigrationId, CompleteMigrationNowRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .completeMigrationNow(planVersionMigrationId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CompleteMigrationNowResponse>> rawFuture =
+                this.rawClient.completeMigrationNow(planVersionMigrationId, request, requestOptions);
+        CompletableFuture<CompleteMigrationNowResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<RetryMigrationResponse> retryMigration(
             String planVersionMigrationId, RetryMigrationRequestBody request) {
-        return this.rawClient.retryMigration(planVersionMigrationId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<RetryMigrationResponse>> rawFuture =
+                this.rawClient.retryMigration(planVersionMigrationId, request);
+        CompletableFuture<RetryMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<RetryMigrationResponse> retryMigration(
             String planVersionMigrationId, RetryMigrationRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .retryMigration(planVersionMigrationId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<RetryMigrationResponse>> rawFuture =
+                this.rawClient.retryMigration(planVersionMigrationId, request, requestOptions);
+        CompletableFuture<RetryMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountMigrationsResponse> countMigrations() {
-        return this.rawClient.countMigrations().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountMigrationsResponse>> rawFuture =
+                this.rawClient.countMigrations();
+        CompletableFuture<CountMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountMigrationsResponse> countMigrations(RequestOptions requestOptions) {
-        return this.rawClient.countMigrations(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountMigrationsResponse>> rawFuture =
+                this.rawClient.countMigrations(requestOptions);
+        CompletableFuture<CountMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountMigrationsResponse> countMigrations(CountMigrationsRequest request) {
-        return this.rawClient.countMigrations(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountMigrationsResponse>> rawFuture =
+                this.rawClient.countMigrations(request);
+        CompletableFuture<CountMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountMigrationsResponse> countMigrations(
             CountMigrationsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countMigrations(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountMigrationsResponse>> rawFuture =
+                this.rawClient.countMigrations(request, requestOptions);
+        CompletableFuture<CountMigrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<PreviewMigrationResponse> previewMigration(PreviewMigrationRequestBody request) {
-        return this.rawClient.previewMigration(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<PreviewMigrationResponse>> rawFuture =
+                this.rawClient.previewMigration(request);
+        CompletableFuture<PreviewMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<PreviewMigrationResponse> previewMigration(
             PreviewMigrationRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.previewMigration(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<PreviewMigrationResponse>> rawFuture =
+                this.rawClient.previewMigration(request, requestOptions);
+        CompletableFuture<PreviewMigrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

@@ -53,6 +53,8 @@ public final class FeatureEntitlement {
 
     private final Optional<MetricPeriodMonthReset> monthReset;
 
+    private final Optional<Map<String, Double>> quantityRates;
+
     private final Optional<Long> softLimit;
 
     private final Optional<Long> usage;
@@ -79,6 +81,7 @@ public final class FeatureEntitlement {
             Optional<MetricPeriod> metricPeriod,
             Optional<OffsetDateTime> metricResetAt,
             Optional<MetricPeriodMonthReset> monthReset,
+            Optional<Map<String, Double>> quantityRates,
             Optional<Long> softLimit,
             Optional<Long> usage,
             EntitlementValueType valueType,
@@ -99,6 +102,7 @@ public final class FeatureEntitlement {
         this.metricPeriod = metricPeriod;
         this.metricResetAt = metricResetAt;
         this.monthReset = monthReset;
+        this.quantityRates = quantityRates;
         this.softLimit = softLimit;
         this.usage = usage;
         this.valueType = valueType;
@@ -227,6 +231,14 @@ public final class FeatureEntitlement {
     }
 
     /**
+     * @return If the company has a credit-based entitlement for this feature, the credit cost per unit of each quantity an event carries, keyed by quantity key (per token for inference features). Absent when the entitlement prices requests only
+     */
+    @JsonProperty("quantity_rates")
+    public Optional<Map<String, Double>> getQuantityRates() {
+        return quantityRates;
+    }
+
+    /**
      * @return For usage-based pricing, the soft limit for overage charges or the next tier boundary
      */
     @JsonProperty("soft_limit")
@@ -285,6 +297,7 @@ public final class FeatureEntitlement {
                 && metricPeriod.equals(other.metricPeriod)
                 && metricResetAt.equals(other.metricResetAt)
                 && monthReset.equals(other.monthReset)
+                && quantityRates.equals(other.quantityRates)
                 && softLimit.equals(other.softLimit)
                 && usage.equals(other.usage)
                 && valueType.equals(other.valueType)
@@ -309,6 +322,7 @@ public final class FeatureEntitlement {
                 this.metricPeriod,
                 this.metricResetAt,
                 this.monthReset,
+                this.quantityRates,
                 this.softLimit,
                 this.usage,
                 this.valueType,
@@ -446,6 +460,13 @@ public final class FeatureEntitlement {
         _FinalStage monthReset(MetricPeriodMonthReset monthReset);
 
         /**
+         * <p>If the company has a credit-based entitlement for this feature, the credit cost per unit of each quantity an event carries, keyed by quantity key (per token for inference features). Absent when the entitlement prices requests only</p>
+         */
+        _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
+
+        _FinalStage quantityRates(Map<String, Double> quantityRates);
+
+        /**
          * <p>For usage-based pricing, the soft limit for overage charges or the next tier boundary</p>
          */
         _FinalStage softLimit(Optional<Long> softLimit);
@@ -480,6 +501,8 @@ public final class FeatureEntitlement {
         private Optional<Long> usage = Optional.empty();
 
         private Optional<Long> softLimit = Optional.empty();
+
+        private Optional<Map<String, Double>> quantityRates = Optional.empty();
 
         private Optional<MetricPeriodMonthReset> monthReset = Optional.empty();
 
@@ -529,6 +552,7 @@ public final class FeatureEntitlement {
             metricPeriod(other.getMetricPeriod());
             metricResetAt(other.getMetricResetAt());
             monthReset(other.getMonthReset());
+            quantityRates(other.getQuantityRates());
             softLimit(other.getSoftLimit());
             usage(other.getUsage());
             valueType(other.getValueType());
@@ -626,6 +650,26 @@ public final class FeatureEntitlement {
         @JsonSetter(value = "soft_limit", nulls = Nulls.SKIP)
         public _FinalStage softLimit(Optional<Long> softLimit) {
             this.softLimit = softLimit;
+            return this;
+        }
+
+        /**
+         * <p>If the company has a credit-based entitlement for this feature, the credit cost per unit of each quantity an event carries, keyed by quantity key (per token for inference features). Absent when the entitlement prices requests only</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage quantityRates(Map<String, Double> quantityRates) {
+            this.quantityRates = Optional.ofNullable(quantityRates);
+            return this;
+        }
+
+        /**
+         * <p>If the company has a credit-based entitlement for this feature, the credit cost per unit of each quantity an event carries, keyed by quantity key (per token for inference features). Absent when the entitlement prices requests only</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "quantity_rates", nulls = Nulls.SKIP)
+        public _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates) {
+            this.quantityRates = quantityRates;
             return this;
         }
 
@@ -907,6 +951,7 @@ public final class FeatureEntitlement {
                     metricPeriod,
                     metricResetAt,
                     monthReset,
+                    quantityRates,
                     softLimit,
                     usage,
                     valueType,

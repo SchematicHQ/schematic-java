@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,22 +22,42 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ManagePlanResponseResponseData.Builder.class)
 public final class ManagePlanResponseResponseData {
+    private final Optional<String> checkoutId;
+
     private final Optional<CompanyDetailResponseData> company;
+
+    private final List<CheckoutProblemResponseData> problems;
 
     private final boolean success;
 
     private final Map<String, Object> additionalProperties;
 
     private ManagePlanResponseResponseData(
-            Optional<CompanyDetailResponseData> company, boolean success, Map<String, Object> additionalProperties) {
+            Optional<String> checkoutId,
+            Optional<CompanyDetailResponseData> company,
+            List<CheckoutProblemResponseData> problems,
+            boolean success,
+            Map<String, Object> additionalProperties) {
+        this.checkoutId = checkoutId;
         this.company = company;
+        this.problems = problems;
         this.success = success;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("checkout_id")
+    public Optional<String> getCheckoutId() {
+        return checkoutId;
     }
 
     @JsonProperty("company")
     public Optional<CompanyDetailResponseData> getCompany() {
         return company;
+    }
+
+    @JsonProperty("problems")
+    public List<CheckoutProblemResponseData> getProblems() {
+        return problems;
     }
 
     @JsonProperty("success")
@@ -55,12 +77,15 @@ public final class ManagePlanResponseResponseData {
     }
 
     private boolean equalTo(ManagePlanResponseResponseData other) {
-        return company.equals(other.company) && success == other.success;
+        return checkoutId.equals(other.checkoutId)
+                && company.equals(other.company)
+                && problems.equals(other.problems)
+                && success == other.success;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.company, this.success);
+        return Objects.hash(this.checkoutId, this.company, this.problems, this.success);
     }
 
     @java.lang.Override
@@ -85,16 +110,30 @@ public final class ManagePlanResponseResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage checkoutId(Optional<String> checkoutId);
+
+        _FinalStage checkoutId(String checkoutId);
+
         _FinalStage company(Optional<CompanyDetailResponseData> company);
 
         _FinalStage company(CompanyDetailResponseData company);
+
+        _FinalStage problems(List<CheckoutProblemResponseData> problems);
+
+        _FinalStage addProblems(CheckoutProblemResponseData problems);
+
+        _FinalStage addAllProblems(List<CheckoutProblemResponseData> problems);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements SuccessStage, _FinalStage {
         private boolean success;
 
+        private List<CheckoutProblemResponseData> problems = new ArrayList<>();
+
         private Optional<CompanyDetailResponseData> company = Optional.empty();
+
+        private Optional<String> checkoutId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -103,7 +142,9 @@ public final class ManagePlanResponseResponseData {
 
         @java.lang.Override
         public Builder from(ManagePlanResponseResponseData other) {
+            checkoutId(other.getCheckoutId());
             company(other.getCompany());
+            problems(other.getProblems());
             success(other.getSuccess());
             return this;
         }
@@ -112,6 +153,30 @@ public final class ManagePlanResponseResponseData {
         @JsonSetter("success")
         public _FinalStage success(boolean success) {
             this.success = success;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllProblems(List<CheckoutProblemResponseData> problems) {
+            if (problems != null) {
+                this.problems.addAll(problems);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addProblems(CheckoutProblemResponseData problems) {
+            this.problems.add(problems);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "problems", nulls = Nulls.SKIP)
+        public _FinalStage problems(List<CheckoutProblemResponseData> problems) {
+            this.problems.clear();
+            if (problems != null) {
+                this.problems.addAll(problems);
+            }
             return this;
         }
 
@@ -129,8 +194,21 @@ public final class ManagePlanResponseResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage checkoutId(String checkoutId) {
+            this.checkoutId = Optional.ofNullable(checkoutId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "checkout_id", nulls = Nulls.SKIP)
+        public _FinalStage checkoutId(Optional<String> checkoutId) {
+            this.checkoutId = checkoutId;
+            return this;
+        }
+
+        @java.lang.Override
         public ManagePlanResponseResponseData build() {
-            return new ManagePlanResponseResponseData(company, success, additionalProperties);
+            return new ManagePlanResponseResponseData(checkoutId, company, problems, success, additionalProperties);
         }
 
         @java.lang.Override

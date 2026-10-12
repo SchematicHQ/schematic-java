@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingPriceResponseData.Builder.class)
 public final class BillingPriceResponseData {
-    private final String currency;
+    private final Currency currency;
 
     private final String externalPriceId;
 
@@ -44,7 +44,7 @@ public final class BillingPriceResponseData {
     private final Map<String, Object> additionalProperties;
 
     private BillingPriceResponseData(
-            String currency,
+            Currency currency,
             String externalPriceId,
             String id,
             BillingProductPriceInterval interval,
@@ -69,7 +69,7 @@ public final class BillingPriceResponseData {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -167,7 +167,7 @@ public final class BillingPriceResponseData {
     }
 
     public interface CurrencyStage {
-        ExternalPriceIdStage currency(@NotNull String currency);
+        ExternalPriceIdStage currency(@NotNull Currency currency);
 
         Builder from(BillingPriceResponseData other);
     }
@@ -227,7 +227,7 @@ public final class BillingPriceResponseData {
                     ProviderTypeStage,
                     SchemeStage,
                     _FinalStage {
-        private String currency;
+        private Currency currency;
 
         private String externalPriceId;
 
@@ -269,7 +269,7 @@ public final class BillingPriceResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public ExternalPriceIdStage currency(@NotNull String currency) {
+        public ExternalPriceIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

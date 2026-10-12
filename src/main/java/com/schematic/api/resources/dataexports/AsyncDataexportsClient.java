@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.dataexports;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.dataexports.requests.CreateDataExportRequestBody;
@@ -31,46 +32,124 @@ public class AsyncDataexportsClient {
     }
 
     public CompletableFuture<ListDataExportsResponse> listDataExports() {
-        return this.rawClient.listDataExports().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListDataExportsResponse>> rawFuture =
+                this.rawClient.listDataExports();
+        CompletableFuture<ListDataExportsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListDataExportsResponse> listDataExports(RequestOptions requestOptions) {
-        return this.rawClient.listDataExports(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListDataExportsResponse>> rawFuture =
+                this.rawClient.listDataExports(requestOptions);
+        CompletableFuture<ListDataExportsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListDataExportsResponse> listDataExports(ListDataExportsRequest request) {
-        return this.rawClient.listDataExports(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListDataExportsResponse>> rawFuture =
+                this.rawClient.listDataExports(request);
+        CompletableFuture<ListDataExportsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListDataExportsResponse> listDataExports(
             ListDataExportsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listDataExports(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListDataExportsResponse>> rawFuture =
+                this.rawClient.listDataExports(request, requestOptions);
+        CompletableFuture<ListDataExportsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateDataExportResponse> createDataExport(CreateDataExportRequestBody request) {
-        return this.rawClient.createDataExport(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateDataExportResponse>> rawFuture =
+                this.rawClient.createDataExport(request);
+        CompletableFuture<CreateDataExportResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateDataExportResponse> createDataExport(
             CreateDataExportRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createDataExport(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateDataExportResponse>> rawFuture =
+                this.rawClient.createDataExport(request, requestOptions);
+        CompletableFuture<CreateDataExportResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetDataExportResponse> getDataExport(String dataExportId) {
-        return this.rawClient.getDataExport(dataExportId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetDataExportResponse>> rawFuture =
+                this.rawClient.getDataExport(dataExportId);
+        CompletableFuture<GetDataExportResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetDataExportResponse> getDataExport(String dataExportId, RequestOptions requestOptions) {
-        return this.rawClient.getDataExport(dataExportId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetDataExportResponse>> rawFuture =
+                this.rawClient.getDataExport(dataExportId, requestOptions);
+        CompletableFuture<GetDataExportResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<InputStream> getDataExportArtifact(String dataExportId) {
-        return this.rawClient.getDataExportArtifact(dataExportId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<InputStream>> rawFuture =
+                this.rawClient.getDataExportArtifact(dataExportId);
+        CompletableFuture<InputStream> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<InputStream> getDataExportArtifact(String dataExportId, RequestOptions requestOptions) {
-        return this.rawClient
-                .getDataExportArtifact(dataExportId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<InputStream>> rawFuture =
+                this.rawClient.getDataExportArtifact(dataExportId, requestOptions);
+        CompletableFuture<InputStream> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

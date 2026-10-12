@@ -28,7 +28,7 @@ public final class UpsertBillingProductRequestBody {
 
     private final ChargeType chargeType;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices;
 
@@ -58,7 +58,7 @@ public final class UpsertBillingProductRequestBody {
             Optional<String> billingProductId,
             Optional<BillingStrategy> billingStrategy,
             ChargeType chargeType,
-            Optional<String> currency,
+            Optional<Currency> currency,
             Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices,
             boolean isTrialable,
             Optional<Long> monthlyPrice,
@@ -105,7 +105,7 @@ public final class UpsertBillingProductRequestBody {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -247,9 +247,9 @@ public final class UpsertBillingProductRequestBody {
 
         _FinalStage billingStrategy(BillingStrategy billingStrategy);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
 
         _FinalStage currencyPrices(Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices);
 
@@ -318,7 +318,7 @@ public final class UpsertBillingProductRequestBody {
 
         private Optional<List<PlanCurrencyPriceRequestBody>> currencyPrices = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private Optional<BillingStrategy> billingStrategy = Optional.empty();
 
@@ -494,14 +494,14 @@ public final class UpsertBillingProductRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }

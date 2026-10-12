@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public final class PreviewSubscriptionFinanceResponseData {
     private final long amountOff;
 
-    private final String currency;
+    private final Currency currency;
 
     private final long discountAmount;
 
@@ -64,7 +64,7 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private PreviewSubscriptionFinanceResponseData(
             long amountOff,
-            String currency,
+            Currency currency,
             long discountAmount,
             List<PreviewSubscriptionDiscountResponseData> discounts,
             long dueNow,
@@ -112,7 +112,7 @@ public final class PreviewSubscriptionFinanceResponseData {
      * @return ISO 4217 currency every amount in this block is denominated in.
      */
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -271,7 +271,7 @@ public final class PreviewSubscriptionFinanceResponseData {
         /**
          * <p>ISO 4217 currency every amount in this block is denominated in.</p>
          */
-        DiscountAmountStage currency(@NotNull String currency);
+        DiscountAmountStage currency(@NotNull Currency currency);
     }
 
     public interface DiscountAmountStage {
@@ -369,7 +369,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                     _FinalStage {
         private long amountOff;
 
-        private String currency;
+        private Currency currency;
 
         private long discountAmount;
 
@@ -444,7 +444,7 @@ public final class PreviewSubscriptionFinanceResponseData {
          */
         @java.lang.Override
         @JsonSetter("currency")
-        public DiscountAmountStage currency(@NotNull String currency) {
+        public DiscountAmountStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

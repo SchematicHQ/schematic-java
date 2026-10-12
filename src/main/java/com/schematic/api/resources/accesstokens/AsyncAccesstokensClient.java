@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.accesstokens;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.accesstokens.requests.IssueTemporaryAccessTokenRequestBody;
@@ -28,11 +29,27 @@ public class AsyncAccesstokensClient {
 
     public CompletableFuture<IssueTemporaryAccessTokenResponse> issueTemporaryAccessToken(
             IssueTemporaryAccessTokenRequestBody request) {
-        return this.rawClient.issueTemporaryAccessToken(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<IssueTemporaryAccessTokenResponse>> rawFuture =
+                this.rawClient.issueTemporaryAccessToken(request);
+        CompletableFuture<IssueTemporaryAccessTokenResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<IssueTemporaryAccessTokenResponse> issueTemporaryAccessToken(
             IssueTemporaryAccessTokenRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.issueTemporaryAccessToken(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<IssueTemporaryAccessTokenResponse>> rawFuture =
+                this.rawClient.issueTemporaryAccessToken(request, requestOptions);
+        CompletableFuture<IssueTemporaryAccessTokenResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

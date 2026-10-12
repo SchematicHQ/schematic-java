@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanCurrencyPriceRequestBody.Builder.class)
 public final class PlanCurrencyPriceRequestBody {
-    private final String currency;
+    private final Currency currency;
 
     private final Optional<Long> monthlyPrice;
 
@@ -34,7 +34,7 @@ public final class PlanCurrencyPriceRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private PlanCurrencyPriceRequestBody(
-            String currency,
+            Currency currency,
             Optional<Long> monthlyPrice,
             Optional<Long> oneTimePrice,
             Optional<Long> quarterlyPrice,
@@ -49,7 +49,7 @@ public final class PlanCurrencyPriceRequestBody {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -107,7 +107,7 @@ public final class PlanCurrencyPriceRequestBody {
     }
 
     public interface CurrencyStage {
-        _FinalStage currency(@NotNull String currency);
+        _FinalStage currency(@NotNull Currency currency);
 
         Builder from(PlanCurrencyPriceRequestBody other);
     }
@@ -138,7 +138,7 @@ public final class PlanCurrencyPriceRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements CurrencyStage, _FinalStage {
-        private String currency;
+        private Currency currency;
 
         private Optional<Long> yearlyPrice = Optional.empty();
 
@@ -165,7 +165,7 @@ public final class PlanCurrencyPriceRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public _FinalStage currency(@NotNull String currency) {
+        public _FinalStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

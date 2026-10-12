@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = OrderedPlansInGroup.Builder.class)
 public final class OrderedPlansInGroup {
+    private final Optional<List<CreditsInPlan>> credits;
+
     private final Optional<List<EntitlementsInPlan>> entitlements;
 
     private final String planId;
@@ -29,10 +31,19 @@ public final class OrderedPlansInGroup {
     private final Map<String, Object> additionalProperties;
 
     private OrderedPlansInGroup(
-            Optional<List<EntitlementsInPlan>> entitlements, String planId, Map<String, Object> additionalProperties) {
+            Optional<List<CreditsInPlan>> credits,
+            Optional<List<EntitlementsInPlan>> entitlements,
+            String planId,
+            Map<String, Object> additionalProperties) {
+        this.credits = credits;
         this.entitlements = entitlements;
         this.planId = planId;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("credits")
+    public Optional<List<CreditsInPlan>> getCredits() {
+        return credits;
     }
 
     @JsonProperty("entitlements")
@@ -57,12 +68,12 @@ public final class OrderedPlansInGroup {
     }
 
     private boolean equalTo(OrderedPlansInGroup other) {
-        return entitlements.equals(other.entitlements) && planId.equals(other.planId);
+        return credits.equals(other.credits) && entitlements.equals(other.entitlements) && planId.equals(other.planId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.entitlements, this.planId);
+        return Objects.hash(this.credits, this.entitlements, this.planId);
     }
 
     @java.lang.Override
@@ -87,6 +98,10 @@ public final class OrderedPlansInGroup {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage credits(Optional<List<CreditsInPlan>> credits);
+
+        _FinalStage credits(List<CreditsInPlan> credits);
+
         _FinalStage entitlements(Optional<List<EntitlementsInPlan>> entitlements);
 
         _FinalStage entitlements(List<EntitlementsInPlan> entitlements);
@@ -98,6 +113,8 @@ public final class OrderedPlansInGroup {
 
         private Optional<List<EntitlementsInPlan>> entitlements = Optional.empty();
 
+        private Optional<List<CreditsInPlan>> credits = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -105,6 +122,7 @@ public final class OrderedPlansInGroup {
 
         @java.lang.Override
         public Builder from(OrderedPlansInGroup other) {
+            credits(other.getCredits());
             entitlements(other.getEntitlements());
             planId(other.getPlanId());
             return this;
@@ -131,8 +149,21 @@ public final class OrderedPlansInGroup {
         }
 
         @java.lang.Override
+        public _FinalStage credits(List<CreditsInPlan> credits) {
+            this.credits = Optional.ofNullable(credits);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credits", nulls = Nulls.SKIP)
+        public _FinalStage credits(Optional<List<CreditsInPlan>> credits) {
+            this.credits = credits;
+            return this;
+        }
+
+        @java.lang.Override
         public OrderedPlansInGroup build() {
-            return new OrderedPlansInGroup(entitlements, planId, additionalProperties);
+            return new OrderedPlansInGroup(credits, entitlements, planId, additionalProperties);
         }
 
         @java.lang.Override

@@ -24,6 +24,7 @@ import com.schematic.api.resources.billing.requests.ListCustomersWithSubscriptio
 import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
+import com.schematic.api.resources.billing.requests.UpdateBillingSettingsRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateCompanyBillingProfileRequestBody;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
@@ -33,6 +34,7 @@ import com.schematic.api.resources.billing.types.DeleteBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
+import com.schematic.api.resources.billing.types.GetBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
@@ -42,6 +44,7 @@ import com.schematic.api.resources.billing.types.ListCustomersWithSubscriptionsR
 import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
+import com.schematic.api.resources.billing.types.UpdateBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.UpdateCompanyBillingProfileResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCustomerResponse;
@@ -366,6 +369,31 @@ public class BillingClient {
         return this.rawClient
                 .updateCompanyBillingProfile(billingProfileId, request, requestOptions)
                 .body();
+    }
+
+    public GetBillingSettingsResponse getBillingSettings() {
+        return this.rawClient.getBillingSettings().body();
+    }
+
+    public GetBillingSettingsResponse getBillingSettings(RequestOptions requestOptions) {
+        return this.rawClient.getBillingSettings(requestOptions).body();
+    }
+
+    public UpdateBillingSettingsResponse updateBillingSettings() {
+        return this.rawClient.updateBillingSettings().body();
+    }
+
+    public UpdateBillingSettingsResponse updateBillingSettings(RequestOptions requestOptions) {
+        return this.rawClient.updateBillingSettings(requestOptions).body();
+    }
+
+    public UpdateBillingSettingsResponse updateBillingSettings(UpdateBillingSettingsRequestBody request) {
+        return this.rawClient.updateBillingSettings(request).body();
+    }
+
+    public UpdateBillingSettingsResponse updateBillingSettings(
+            UpdateBillingSettingsRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient.updateBillingSettings(request, requestOptions).body();
     }
 
     public UpsertBillingSubscriptionResponse upsertBillingSubscription(CreateBillingSubscriptionRequestBody request) {

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.Currency;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateCouponRequestBody {
     private final long amountOff;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final String duration;
 
@@ -43,7 +44,7 @@ public final class CreateCouponRequestBody {
 
     private CreateCouponRequestBody(
             long amountOff,
-            Optional<String> currency,
+            Optional<Currency> currency,
             String duration,
             long durationInMonths,
             String externalId,
@@ -70,7 +71,7 @@ public final class CreateCouponRequestBody {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -196,9 +197,9 @@ public final class CreateCouponRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -228,7 +229,7 @@ public final class CreateCouponRequestBody {
 
         private long timesRedeemed;
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -306,14 +307,14 @@ public final class CreateCouponRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }

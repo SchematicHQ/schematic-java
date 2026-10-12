@@ -16,6 +16,7 @@ import com.schematic.api.types.BillingCreditExpiryType;
 import com.schematic.api.types.BillingCreditExpiryUnit;
 import com.schematic.api.types.BillingCreditGrantReason;
 import com.schematic.api.types.BillingPlanCreditGrantResetStart;
+import com.schematic.api.types.Currency;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public final class CreateCompanyCreditGrant {
 
     private final String creditId;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final Optional<OffsetDateTime> expiresAt;
 
@@ -59,7 +60,7 @@ public final class CreateCompanyCreditGrant {
             String companyId,
             Optional<String> creditBundleId,
             String creditId,
-            Optional<String> currency,
+            Optional<Currency> currency,
             Optional<OffsetDateTime> expiresAt,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
@@ -106,7 +107,7 @@ public final class CreateCompanyCreditGrant {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -237,9 +238,9 @@ public final class CreateCompanyCreditGrant {
 
         _FinalStage creditBundleId(String creditBundleId);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
 
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
@@ -289,7 +290,7 @@ public final class CreateCompanyCreditGrant {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private Optional<String> creditBundleId = Optional.empty();
 
@@ -425,14 +426,14 @@ public final class CreateCompanyCreditGrant {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }

@@ -1387,7 +1387,7 @@ client.billing().upsertBillingCoupon(
 <dl>
 <dd>
 
-**currency:** `Optional<String>` 
+**currency:** `Optional<Currency>` 
     
 </dd>
 </dl>
@@ -1920,7 +1920,7 @@ client.billing().upsertInvoice(
         .amountPaid(1000000L)
         .amountRemaining(1000000L)
         .collectionMethod("collection_method")
-        .currency("currency")
+        .currency(Currency.AED)
         .customerExternalId("customer_external_id")
         .subtotal(1000000L)
         .build()
@@ -1971,7 +1971,7 @@ client.billing().upsertInvoice(
 <dl>
 <dd>
 
-**currency:** `String` 
+**currency:** `Currency` 
     
 </dd>
 </dl>
@@ -2523,7 +2523,7 @@ client.billing().listBillingPrices(
         .productIds(
             Arrays.asList("product_ids")
         )
-        .currency("currency")
+        .currency(Currency.AED)
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
         .interval("interval")
@@ -2555,7 +2555,7 @@ client.billing().listBillingPrices(
 <dl>
 <dd>
 
-**currency:** `Optional<String>` — Filter for prices in a specific currency (e.g. usd, eur)
+**currency:** `Optional<Currency>` — Filter for prices in a specific currency (e.g. usd, eur)
     
 </dd>
 </dl>
@@ -2720,7 +2720,7 @@ client.billing().upsertBillingPrice(
     CreateBillingPriceRequestBody
         .builder()
         .billingScheme(BillingPriceScheme.PER_UNIT)
-        .currency("currency")
+        .currency(Currency.AED)
         .externalAccountId("external_account_id")
         .interval("interval")
         .isActive(true)
@@ -2760,7 +2760,7 @@ client.billing().upsertBillingPrice(
 <dl>
 <dd>
 
-**currency:** `String` 
+**currency:** `Currency` 
     
 </dd>
 </dl>
@@ -2954,7 +2954,7 @@ client.billing().listBillingProductPrices(
         .productIds(
             Arrays.asList("product_ids")
         )
-        .currency("currency")
+        .currency(Currency.AED)
         .forInitialPlan(true)
         .forTrialExpiryPlan(true)
         .interval("interval")
@@ -2986,7 +2986,7 @@ client.billing().listBillingProductPrices(
 <dl>
 <dd>
 
-**currency:** `Optional<String>` — Filter for prices in a specific currency (e.g. usd, eur)
+**currency:** `Optional<Currency>` — Filter for prices in a specific currency (e.g. usd, eur)
     
 </dd>
 </dl>
@@ -3737,6 +3737,75 @@ client.billing().updateCompanyBillingProfile(
 </dl>
 </details>
 
+<details><summary><code>client.billing.getBillingSettings() -> GetBillingSettingsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().getBillingSettings();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.updateBillingSettings(request) -> UpdateBillingSettingsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().updateBillingSettings(
+    UpdateBillingSettingsRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**defaultProviderType:** `Optional<BillingProviderType>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.billing.upsertBillingSubscription(request) -> UpsertBillingSubscriptionResponse</code></summary>
 <dl>
 <dd>
@@ -3754,7 +3823,7 @@ client.billing().upsertBillingSubscription(
     CreateBillingSubscriptionRequestBody
         .builder()
         .cancelAtPeriodEnd(true)
-        .currency("currency")
+        .currency(Currency.AED)
         .customerExternalId("customer_external_id")
         .expiredAt(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
         .subscriptionExternalId("subscription_external_id")
@@ -3774,7 +3843,7 @@ client.billing().upsertBillingSubscription(
             Arrays.asList(
                 BillingProductPricing
                     .builder()
-                    .currency("currency")
+                    .currency(Currency.AED)
                     .interval("interval")
                     .price(1000000L)
                     .priceExternalId("price_external_id")
@@ -3832,7 +3901,7 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
-**currency:** `String` 
+**currency:** `Currency` 
     
 </dd>
 </dl>
@@ -4071,7 +4140,7 @@ client.credits().listBillingCredits(
 client.credits().createBillingCredit(
     CreateBillingCreditRequestBody
         .builder()
-        .currency("currency")
+        .currency(Currency.AED)
         .description("description")
         .name("name")
         .build()
@@ -4098,7 +4167,7 @@ client.credits().createBillingCredit(
 <dl>
 <dd>
 
-**currency:** `String` 
+**currency:** `Currency` 
     
 </dd>
 </dl>
@@ -4466,6 +4535,78 @@ client.credits().listCompanyCreditBalances(
 </dl>
 </details>
 
+<details><summary><code>client.credits.getCreditBalanceTimeSeries() -> GetCreditBalanceTimeSeriesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().getCreditBalanceTimeSeries(
+    GetCreditBalanceTimeSeriesRequest
+        .builder()
+        .billingCreditId("billing_credit_id")
+        .companyId("company_id")
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingCreditId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `OffsetDateTime` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `OffsetDateTime` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.credits.listCreditBundles() -> ListCreditBundlesResponse</code></summary>
 <dl>
 <dd>
@@ -4576,7 +4717,7 @@ client.credits().createCreditBundle(
         .builder()
         .bundleName("bundle_name")
         .creditId("credit_id")
-        .currency("currency")
+        .currency(Currency.AED)
         .pricePerUnit(1000000L)
         .build()
 );
@@ -4626,7 +4767,7 @@ client.credits().createCreditBundle(
 <dl>
 <dd>
 
-**currency:** `String` 
+**currency:** `Currency` 
     
 </dd>
 </dl>
@@ -5196,7 +5337,7 @@ client.credits().grantBillingCreditsToCompany(
 <dl>
 <dd>
 
-**currency:** `Optional<String>` 
+**currency:** `Optional<Currency>` 
     
 </dd>
 </dl>
@@ -7935,7 +8076,7 @@ client.checkout().getCheckoutData(
 <dl>
 <dd>
 
-**currency:** `Optional<String>` 
+**currency:** `Optional<Currency>` 
     
 </dd>
 </dl>
@@ -10529,7 +10670,7 @@ client.companies().listPlanChanges(
         .companyIds(
             Arrays.asList("company_ids")
         )
-        .action(PlanChangeAction.CHECKOUT)
+        .action(PlanChangeAction.AMENDMENT)
         .basePlanAction(PlanChangeBasePlanAction.FALLBACK)
         .companyId("company_id")
         .limit(1000000L)
@@ -11666,6 +11807,14 @@ client.entitlements().createCompanyOverride(
 <dl>
 <dd>
 
+**quantityRates:** `Optional<Map<String, Double>>` — Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **valueBool:** `Optional<Boolean>` 
     
 </dd>
@@ -11825,6 +11974,14 @@ client.entitlements().updateCompanyOverride(
 <dd>
 
 **note:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quantityRates:** `Optional<Map<String, Double>>` — Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.
     
 </dd>
 </dl>
@@ -12949,7 +13106,7 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
-**currency:** `Optional<String>` 
+**currency:** `Optional<Currency>` 
     
 </dd>
 </dl>
@@ -13070,6 +13227,14 @@ client.entitlements().createPlanEntitlement(
 <dd>
 
 **priceTiers:** `Optional<List<CreatePriceTierRequestBody>>` — Use MonthlyPriceTiers or YearlyPriceTiers instead
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quantityRates:** `Optional<Map<String, Double>>` — Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.
     
 </dd>
 </dl>
@@ -13323,7 +13488,7 @@ client.entitlements().updatePlanEntitlement(
 <dl>
 <dd>
 
-**currency:** `Optional<String>` 
+**currency:** `Optional<Currency>` 
     
 </dd>
 </dl>
@@ -13420,6 +13585,14 @@ client.entitlements().updatePlanEntitlement(
 <dd>
 
 **priceTiers:** `Optional<List<CreatePriceTierRequestBody>>` — Use MonthlyPriceTiers or YearlyPriceTiers instead
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quantityRates:** `Optional<Map<String, Double>>` — Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.
     
 </dd>
 </dl>
@@ -13676,7 +13849,7 @@ client.entitlements().upsertPlanEntitlementForBillingProduct(
 <dl>
 <dd>
 
-**currency:** `Optional<String>` 
+**currency:** `Optional<Currency>` 
     
 </dd>
 </dl>
@@ -13805,6 +13978,14 @@ client.entitlements().upsertPlanEntitlementForBillingProduct(
 <dd>
 
 **priceTiers:** `Optional<List<CreatePriceTierRequestBody>>` — Use MonthlyPriceTiers or YearlyPriceTiers instead
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**quantityRates:** `Optional<Map<String, Double>>` — Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.
     
 </dd>
 </dl>
@@ -14689,7 +14870,7 @@ client.plans().listCustomPlanBillings(
         )
         .companyId("company_id")
         .planId("plan_id")
-        .planBillingSource(PlanBillingSource.CUSTOM_PLAN)
+        .planBillingSource(PlanBillingSource.AMENDMENT)
         .status(CustomPlanBillingStatus.ACTIVE)
         .limit(1000000L)
         .offset(1000000L)
@@ -14725,7 +14906,7 @@ client.plans().listCustomPlanBillings(
 <dl>
 <dd>
 
-**planBillingSource:** `Optional<PlanBillingSource>` — Filter by the flow that created the billing record. Defaults to custom_plan.
+**planBillingSource:** `Optional<PlanBillingSource>` — Filter by the flow that created the billing record: custom_plan for a first publish, amendment for a republish, manage_plan for a standard plan assigned by invoice. Defaults to custom_plan.
     
 </dd>
 </dl>
@@ -16043,6 +16224,60 @@ client.plans().deletePlanVersion(
 </dl>
 </details>
 
+<details><summary><code>client.plans.getPlanVersionDiff(planVersionId) -> GetPlanVersionDiffResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.plans().getPlanVersionDiff(
+    "plan_version_id",
+    GetPlanVersionDiffRequest
+        .builder()
+        .against("against")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planVersionId:** `String` — plan_version_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**against:** `Optional<String>` — The version to compare against. Defaults to the plan's published version.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.plans.publishPlanVersion(planVersionId, request) -> PublishPlanVersionResponse</code></summary>
 <dl>
 <dd>
@@ -16088,7 +16323,7 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
-**activationStrategy:** `Optional<CustomPlanActivationStrategy>` 
+**activationStrategy:** `Optional<CustomPlanActivationStrategy>` — When the company gets the plan. On a custom-plan republish, on_payment is only accepted when the amendment is invoiced today (migration_strategy immediate, proration_behavior always_invoice, collection_method send_invoice): the company stays on its current version until that invoice is paid.
     
 </dd>
 </dl>
@@ -16120,7 +16355,15 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
-**couponExternalId:** `Optional<String>` 
+**collectionMethod:** `Optional<BillingCollectionMethod>` — How the invoice a custom-plan republish raises today is collected. send_invoice (the default) issues it for the company to pay; charge_automatically charges the default payment method straight away. Only accepted on a custom-plan republish with migration_strategy immediate and proration_behavior always_invoice.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**couponExternalId:** `Optional<String>` — A Stripe coupon to apply. On a custom-plan republish it discounts the amendment invoice and is only used when that invoice is raised today; it must exist in Stripe. It is attached to the subscription, so a repeating or forever coupon also discounts the renewals that follow.
     
 </dd>
 </dl>
@@ -16144,7 +16387,7 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
-**daysUntilDue:** `Optional<Long>` 
+**daysUntilDue:** `Optional<Long>` — Payment terms in days. On a custom-plan republish they apply to the amendment invoice only, leave the subscription's renewal terms unchanged, and are only used when that invoice is raised today and sent rather than charged. Defaults to the subscription's terms.
     
 </dd>
 </dl>
@@ -17817,6 +18060,14 @@ client.features().createFeature(
 <dl>
 <dd>
 
+**eventSource:** `Optional<FeatureEventSource>` — Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **eventSubtype:** `Optional<String>` 
     
 </dd>
@@ -17983,6 +18234,14 @@ client.features().updateFeature(
 <dd>
 
 **description:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**eventSource:** `Optional<FeatureEventSource>` — Which event stream meters this feature. It is fixed at creation: an update that changes it is rejected.
     
 </dd>
 </dl>
@@ -18160,6 +18419,14 @@ client.features().upsertFeatureForBillingProduct(
 <dd>
 
 **description:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**eventSource:** `Optional<FeatureEventSource>` — Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.
     
 </dd>
 </dl>

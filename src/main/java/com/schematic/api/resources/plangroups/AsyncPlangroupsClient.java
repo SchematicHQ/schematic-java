@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.plangroups;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.plangroups.requests.CreatePlanGroupRequestBody;
@@ -31,40 +32,101 @@ public class AsyncPlangroupsClient {
     }
 
     public CompletableFuture<GetPlanGroupResponse> getPlanGroup() {
-        return this.rawClient.getPlanGroup().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanGroupResponse>> rawFuture = this.rawClient.getPlanGroup();
+        CompletableFuture<GetPlanGroupResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanGroupResponse> getPlanGroup(RequestOptions requestOptions) {
-        return this.rawClient.getPlanGroup(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanGroupResponse>> rawFuture =
+                this.rawClient.getPlanGroup(requestOptions);
+        CompletableFuture<GetPlanGroupResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanGroupResponse> getPlanGroup(GetPlanGroupRequest request) {
-        return this.rawClient.getPlanGroup(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanGroupResponse>> rawFuture =
+                this.rawClient.getPlanGroup(request);
+        CompletableFuture<GetPlanGroupResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanGroupResponse> getPlanGroup(
             GetPlanGroupRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getPlanGroup(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanGroupResponse>> rawFuture =
+                this.rawClient.getPlanGroup(request, requestOptions);
+        CompletableFuture<GetPlanGroupResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreatePlanGroupResponse> createPlanGroup(CreatePlanGroupRequestBody request) {
-        return this.rawClient.createPlanGroup(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreatePlanGroupResponse>> rawFuture =
+                this.rawClient.createPlanGroup(request);
+        CompletableFuture<CreatePlanGroupResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreatePlanGroupResponse> createPlanGroup(
             CreatePlanGroupRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createPlanGroup(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreatePlanGroupResponse>> rawFuture =
+                this.rawClient.createPlanGroup(request, requestOptions);
+        CompletableFuture<CreatePlanGroupResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdatePlanGroupResponse> updatePlanGroup(
             String planGroupId, UpdatePlanGroupRequestBody request) {
-        return this.rawClient.updatePlanGroup(planGroupId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdatePlanGroupResponse>> rawFuture =
+                this.rawClient.updatePlanGroup(planGroupId, request);
+        CompletableFuture<UpdatePlanGroupResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdatePlanGroupResponse> updatePlanGroup(
             String planGroupId, UpdatePlanGroupRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updatePlanGroup(planGroupId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdatePlanGroupResponse>> rawFuture =
+                this.rawClient.updatePlanGroup(planGroupId, request, requestOptions);
+        CompletableFuture<UpdatePlanGroupResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

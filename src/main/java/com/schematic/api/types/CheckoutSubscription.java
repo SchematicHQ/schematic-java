@@ -37,7 +37,7 @@ public final class CheckoutSubscription {
 
     private final OffsetDateTime createdAt;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String customerExternalId;
 
@@ -81,7 +81,7 @@ public final class CheckoutSubscription {
             Optional<String> confirmPaymentIntentClientSecret,
             Optional<String> confirmPaymentIntentId,
             OffsetDateTime createdAt,
-            String currency,
+            Currency currency,
             String customerExternalId,
             Optional<String> defaultPaymentMethodId,
             Optional<OffsetDateTime> expiredAt,
@@ -162,7 +162,7 @@ public final class CheckoutSubscription {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -333,7 +333,7 @@ public final class CheckoutSubscription {
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(@NotNull String currency);
+        CustomerExternalIdStage currency(@NotNull Currency currency);
     }
 
     public interface CustomerExternalIdStage {
@@ -447,7 +447,7 @@ public final class CheckoutSubscription {
 
         private OffsetDateTime createdAt;
 
-        private String currency;
+        private Currency currency;
 
         private String customerExternalId;
 
@@ -541,7 +541,7 @@ public final class CheckoutSubscription {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(@NotNull String currency) {
+        public CustomerExternalIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

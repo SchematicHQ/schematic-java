@@ -64,6 +64,8 @@ public final class ConditionView {
 
     private final List<GenericPreviewObject> plans;
 
+    private final Optional<Map<String, Double>> quantityRates;
+
     private final List<String> resourceUnspecifiedIds;
 
     private final String ruleId;
@@ -109,6 +111,7 @@ public final class ConditionView {
             ComparableOperator operator,
             List<GenericPreviewObject> planVersions,
             List<GenericPreviewObject> plans,
+            Optional<Map<String, Double>> quantityRates,
             List<String> resourceUnspecifiedIds,
             String ruleId,
             Optional<EntityTraitDefinitionResponseData> trait,
@@ -141,6 +144,7 @@ public final class ConditionView {
         this.operator = operator;
         this.planVersions = planVersions;
         this.plans = plans;
+        this.quantityRates = quantityRates;
         this.resourceUnspecifiedIds = resourceUnspecifiedIds;
         this.ruleId = ruleId;
         this.trait = trait;
@@ -255,6 +259,11 @@ public final class ConditionView {
         return plans;
     }
 
+    @JsonProperty("quantity_rates")
+    public Optional<Map<String, Double>> getQuantityRates() {
+        return quantityRates;
+    }
+
     @JsonProperty("resource_unspecified_ids")
     public List<String> getResourceUnspecifiedIds() {
         return resourceUnspecifiedIds;
@@ -342,6 +351,7 @@ public final class ConditionView {
                 && operator.equals(other.operator)
                 && planVersions.equals(other.planVersions)
                 && plans.equals(other.plans)
+                && quantityRates.equals(other.quantityRates)
                 && resourceUnspecifiedIds.equals(other.resourceUnspecifiedIds)
                 && ruleId.equals(other.ruleId)
                 && trait.equals(other.trait)
@@ -378,6 +388,7 @@ public final class ConditionView {
                 this.operator,
                 this.planVersions,
                 this.plans,
+                this.quantityRates,
                 this.resourceUnspecifiedIds,
                 this.ruleId,
                 this.trait,
@@ -517,6 +528,10 @@ public final class ConditionView {
 
         _FinalStage addAllPlans(List<GenericPreviewObject> plans);
 
+        _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
+
+        _FinalStage quantityRates(Map<String, Double> quantityRates);
+
         _FinalStage resourceUnspecifiedIds(List<String> resourceUnspecifiedIds);
 
         _FinalStage addResourceUnspecifiedIds(String resourceUnspecifiedIds);
@@ -594,6 +609,8 @@ public final class ConditionView {
 
         private List<String> resourceUnspecifiedIds = new ArrayList<>();
 
+        private Optional<Map<String, Double>> quantityRates = Optional.empty();
+
         private List<GenericPreviewObject> plans = new ArrayList<>();
 
         private List<GenericPreviewObject> planVersions = new ArrayList<>();
@@ -649,6 +666,7 @@ public final class ConditionView {
             operator(other.getOperator());
             planVersions(other.getPlanVersions());
             plans(other.getPlans());
+            quantityRates(other.getQuantityRates());
             resourceUnspecifiedIds(other.getResourceUnspecifiedIds());
             ruleId(other.getRuleId());
             trait(other.getTrait());
@@ -837,6 +855,19 @@ public final class ConditionView {
             if (resourceUnspecifiedIds != null) {
                 this.resourceUnspecifiedIds.addAll(resourceUnspecifiedIds);
             }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quantityRates(Map<String, Double> quantityRates) {
+            this.quantityRates = Optional.ofNullable(quantityRates);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quantity_rates", nulls = Nulls.SKIP)
+        public _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates) {
+            this.quantityRates = quantityRates;
             return this;
         }
 
@@ -1089,6 +1120,7 @@ public final class ConditionView {
                     operator,
                     planVersions,
                     plans,
+                    quantityRates,
                     resourceUnspecifiedIds,
                     ruleId,
                     trait,

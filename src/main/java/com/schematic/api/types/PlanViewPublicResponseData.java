@@ -56,6 +56,8 @@ public final class PlanViewPublicResponseData {
 
     private final OffsetDateTime createdAt;
 
+    private final Optional<List<PlanCreditVisibility>> creditVisibility;
+
     private final List<BillingCreditResponseData> credits;
 
     private final List<PlanCurrencyPricesResponseData> currencyPrices;
@@ -123,6 +125,7 @@ public final class PlanViewPublicResponseData {
             BillingProviderType controlledBy,
             Optional<String> copiedFromPlanId,
             OffsetDateTime createdAt,
+            Optional<List<PlanCreditVisibility>> creditVisibility,
             List<BillingCreditResponseData> credits,
             List<PlanCurrencyPricesResponseData> currencyPrices,
             boolean custom,
@@ -164,6 +167,7 @@ public final class PlanViewPublicResponseData {
         this.controlledBy = controlledBy;
         this.copiedFromPlanId = copiedFromPlanId;
         this.createdAt = createdAt;
+        this.creditVisibility = creditVisibility;
         this.credits = credits;
         this.currencyPrices = currencyPrices;
         this.custom = custom;
@@ -269,6 +273,11 @@ public final class PlanViewPublicResponseData {
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("credit_visibility")
+    public Optional<List<PlanCreditVisibility>> getCreditVisibility() {
+        return creditVisibility;
     }
 
     @JsonProperty("credits")
@@ -422,6 +431,7 @@ public final class PlanViewPublicResponseData {
                 && controlledBy.equals(other.controlledBy)
                 && copiedFromPlanId.equals(other.copiedFromPlanId)
                 && createdAt.equals(other.createdAt)
+                && creditVisibility.equals(other.creditVisibility)
                 && credits.equals(other.credits)
                 && currencyPrices.equals(other.currencyPrices)
                 && custom == other.custom
@@ -467,6 +477,7 @@ public final class PlanViewPublicResponseData {
                 this.controlledBy,
                 this.copiedFromPlanId,
                 this.createdAt,
+                this.creditVisibility,
                 this.credits,
                 this.currencyPrices,
                 this.custom,
@@ -619,6 +630,10 @@ public final class PlanViewPublicResponseData {
 
         _FinalStage copiedFromPlanId(String copiedFromPlanId);
 
+        _FinalStage creditVisibility(Optional<List<PlanCreditVisibility>> creditVisibility);
+
+        _FinalStage creditVisibility(List<PlanCreditVisibility> creditVisibility);
+
         _FinalStage credits(List<BillingCreditResponseData> credits);
 
         _FinalStage addCredits(BillingCreditResponseData credits);
@@ -765,6 +780,8 @@ public final class PlanViewPublicResponseData {
 
         private List<BillingCreditResponseData> credits = new ArrayList<>();
 
+        private Optional<List<PlanCreditVisibility>> creditVisibility = Optional.empty();
+
         private Optional<String> copiedFromPlanId = Optional.empty();
 
         private List<String> compatiblePlanIds = new ArrayList<>();
@@ -810,6 +827,7 @@ public final class PlanViewPublicResponseData {
             controlledBy(other.getControlledBy());
             copiedFromPlanId(other.getCopiedFromPlanId());
             createdAt(other.getCreatedAt());
+            creditVisibility(other.getCreditVisibility());
             credits(other.getCredits());
             currencyPrices(other.getCurrencyPrices());
             custom(other.getCustom());
@@ -1187,6 +1205,19 @@ public final class PlanViewPublicResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage creditVisibility(List<PlanCreditVisibility> creditVisibility) {
+            this.creditVisibility = Optional.ofNullable(creditVisibility);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credit_visibility", nulls = Nulls.SKIP)
+        public _FinalStage creditVisibility(Optional<List<PlanCreditVisibility>> creditVisibility) {
+            this.creditVisibility = creditVisibility;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage copiedFromPlanId(String copiedFromPlanId) {
             this.copiedFromPlanId = Optional.ofNullable(copiedFromPlanId);
             return this;
@@ -1370,6 +1401,7 @@ public final class PlanViewPublicResponseData {
                     controlledBy,
                     copiedFromPlanId,
                     createdAt,
+                    creditVisibility,
                     credits,
                     currencyPrices,
                     custom,

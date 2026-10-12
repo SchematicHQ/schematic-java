@@ -84,7 +84,7 @@ public final class ListCustomPlanBillingsRequest {
     }
 
     /**
-     * @return Filter by the flow that created the billing record. Defaults to custom_plan.
+     * @return Filter by the flow that created the billing record: custom_plan for a first publish, amendment for a republish, manage_plan for a standard plan assigned by invoice. Defaults to custom_plan.
      */
     @JsonProperty("plan_billing_source")
     public Optional<PlanBillingSource> getPlanBillingSource() {
@@ -237,7 +237,7 @@ public final class ListCustomPlanBillingsRequest {
         }
 
         /**
-         * <p>Filter by the flow that created the billing record. Defaults to custom_plan.</p>
+         * <p>Filter by the flow that created the billing record: custom_plan for a first publish, amendment for a republish, manage_plan for a standard plan assigned by invoice. Defaults to custom_plan.</p>
          */
         @JsonSetter(value = "plan_billing_source", nulls = Nulls.SKIP)
         public Builder planBillingSource(Optional<PlanBillingSource> planBillingSource) {

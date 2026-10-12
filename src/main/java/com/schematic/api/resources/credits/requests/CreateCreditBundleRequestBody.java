@@ -16,6 +16,7 @@ import com.schematic.api.types.BillingCreditBundleStatus;
 import com.schematic.api.types.BillingCreditExpiryType;
 import com.schematic.api.types.BillingCreditExpiryUnit;
 import com.schematic.api.types.CreditBundleCurrencyPriceRequestBody;
+import com.schematic.api.types.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public final class CreateCreditBundleRequestBody {
 
     private final String creditId;
 
-    private final String currency;
+    private final Currency currency;
 
     private final Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices;
 
@@ -59,7 +60,7 @@ public final class CreateCreditBundleRequestBody {
             Optional<String> bundleType,
             Optional<List<String>> compatiblePlanIds,
             String creditId,
-            String currency,
+            Currency currency,
             Optional<List<CreditBundleCurrencyPriceRequestBody>> currencyPrices,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
@@ -109,7 +110,7 @@ public final class CreateCreditBundleRequestBody {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -218,7 +219,7 @@ public final class CreateCreditBundleRequestBody {
     }
 
     public interface CurrencyStage {
-        PricePerUnitStage currency(@NotNull String currency);
+        PricePerUnitStage currency(@NotNull Currency currency);
     }
 
     public interface PricePerUnitStage {
@@ -279,7 +280,7 @@ public final class CreateCreditBundleRequestBody {
 
         private String creditId;
 
-        private String currency;
+        private Currency currency;
 
         private long pricePerUnit;
 
@@ -340,7 +341,7 @@ public final class CreateCreditBundleRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public PricePerUnitStage currency(@NotNull String currency) {
+        public PricePerUnitStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

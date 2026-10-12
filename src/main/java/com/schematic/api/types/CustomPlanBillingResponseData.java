@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,6 +30,8 @@ public final class CustomPlanBillingResponseData {
 
     private final Optional<OffsetDateTime> billingStartDate;
 
+    private final Optional<String> checkoutId;
+
     private final String companyId;
 
     private final OffsetDateTime createdAt;
@@ -38,11 +42,15 @@ public final class CustomPlanBillingResponseData {
 
     private final String id;
 
+    private final Optional<String> migrationId;
+
     private final Optional<OffsetDateTime> paidAt;
 
     private final PlanBillingSource planBillingSource;
 
     private final String planId;
+
+    private final List<CheckoutProblemResponseData> problems;
 
     private final Optional<Boolean> prorateFirstPeriod;
 
@@ -62,14 +70,17 @@ public final class CustomPlanBillingResponseData {
             CustomPlanActivationStrategy activationStrategy,
             Optional<OffsetDateTime> billingCycleAnchor,
             Optional<OffsetDateTime> billingStartDate,
+            Optional<String> checkoutId,
             String companyId,
             OffsetDateTime createdAt,
             long daysUntilDue,
             Optional<String> externalInvoiceId,
             String id,
+            Optional<String> migrationId,
             Optional<OffsetDateTime> paidAt,
             PlanBillingSource planBillingSource,
             String planId,
+            List<CheckoutProblemResponseData> problems,
             Optional<Boolean> prorateFirstPeriod,
             Optional<OffsetDateTime> publishedAt,
             boolean sendInvoice,
@@ -80,14 +91,17 @@ public final class CustomPlanBillingResponseData {
         this.activationStrategy = activationStrategy;
         this.billingCycleAnchor = billingCycleAnchor;
         this.billingStartDate = billingStartDate;
+        this.checkoutId = checkoutId;
         this.companyId = companyId;
         this.createdAt = createdAt;
         this.daysUntilDue = daysUntilDue;
         this.externalInvoiceId = externalInvoiceId;
         this.id = id;
+        this.migrationId = migrationId;
         this.paidAt = paidAt;
         this.planBillingSource = planBillingSource;
         this.planId = planId;
+        this.problems = problems;
         this.prorateFirstPeriod = prorateFirstPeriod;
         this.publishedAt = publishedAt;
         this.sendInvoice = sendInvoice;
@@ -118,6 +132,14 @@ public final class CustomPlanBillingResponseData {
         return billingStartDate;
     }
 
+    /**
+     * @return The checkout this billing record was created from, when it was created from one.
+     */
+    @JsonProperty("checkout_id")
+    public Optional<String> getCheckoutId() {
+        return checkoutId;
+    }
+
     @JsonProperty("company_id")
     public String getCompanyId() {
         return companyId;
@@ -143,13 +165,21 @@ public final class CustomPlanBillingResponseData {
         return id;
     }
 
+    /**
+     * @return The plan version migration this amendment invoice belongs to. Null for a first publish or a plan assigned through Manage Plan.
+     */
+    @JsonProperty("migration_id")
+    public Optional<String> getMigrationId() {
+        return migrationId;
+    }
+
     @JsonProperty("paid_at")
     public Optional<OffsetDateTime> getPaidAt() {
         return paidAt;
     }
 
     /**
-     * @return The flow that created this billing record: a custom plan, or a standard plan assigned by invoice through Manage Plan.
+     * @return The flow that created this billing record: a custom plan's first publish, an amendment of a live custom plan, or a standard plan assigned by invoice through Manage Plan.
      */
     @JsonProperty("plan_billing_source")
     public PlanBillingSource getPlanBillingSource() {
@@ -159,6 +189,14 @@ public final class CustomPlanBillingResponseData {
     @JsonProperty("plan_id")
     public String getPlanId() {
         return planId;
+    }
+
+    /**
+     * @return What the linked checkout still reports wrong, in the order found. Empty when there is no linked checkout or it completed cleanly.
+     */
+    @JsonProperty("problems")
+    public List<CheckoutProblemResponseData> getProblems() {
+        return problems;
     }
 
     /**
@@ -209,14 +247,17 @@ public final class CustomPlanBillingResponseData {
         return activationStrategy.equals(other.activationStrategy)
                 && billingCycleAnchor.equals(other.billingCycleAnchor)
                 && billingStartDate.equals(other.billingStartDate)
+                && checkoutId.equals(other.checkoutId)
                 && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
                 && daysUntilDue == other.daysUntilDue
                 && externalInvoiceId.equals(other.externalInvoiceId)
                 && id.equals(other.id)
+                && migrationId.equals(other.migrationId)
                 && paidAt.equals(other.paidAt)
                 && planBillingSource.equals(other.planBillingSource)
                 && planId.equals(other.planId)
+                && problems.equals(other.problems)
                 && prorateFirstPeriod.equals(other.prorateFirstPeriod)
                 && publishedAt.equals(other.publishedAt)
                 && sendInvoice == other.sendInvoice
@@ -231,14 +272,17 @@ public final class CustomPlanBillingResponseData {
                 this.activationStrategy,
                 this.billingCycleAnchor,
                 this.billingStartDate,
+                this.checkoutId,
                 this.companyId,
                 this.createdAt,
                 this.daysUntilDue,
                 this.externalInvoiceId,
                 this.id,
+                this.migrationId,
                 this.paidAt,
                 this.planBillingSource,
                 this.planId,
+                this.problems,
                 this.prorateFirstPeriod,
                 this.publishedAt,
                 this.sendInvoice,
@@ -280,7 +324,7 @@ public final class CustomPlanBillingResponseData {
 
     public interface PlanBillingSourceStage {
         /**
-         * <p>The flow that created this billing record: a custom plan, or a standard plan assigned by invoice through Manage Plan.</p>
+         * <p>The flow that created this billing record: a custom plan's first publish, an amendment of a live custom plan, or a standard plan assigned by invoice through Manage Plan.</p>
          */
         PlanIdStage planBillingSource(@NotNull PlanBillingSource planBillingSource);
     }
@@ -322,13 +366,36 @@ public final class CustomPlanBillingResponseData {
 
         _FinalStage billingStartDate(OffsetDateTime billingStartDate);
 
+        /**
+         * <p>The checkout this billing record was created from, when it was created from one.</p>
+         */
+        _FinalStage checkoutId(Optional<String> checkoutId);
+
+        _FinalStage checkoutId(String checkoutId);
+
         _FinalStage externalInvoiceId(Optional<String> externalInvoiceId);
 
         _FinalStage externalInvoiceId(String externalInvoiceId);
 
+        /**
+         * <p>The plan version migration this amendment invoice belongs to. Null for a first publish or a plan assigned through Manage Plan.</p>
+         */
+        _FinalStage migrationId(Optional<String> migrationId);
+
+        _FinalStage migrationId(String migrationId);
+
         _FinalStage paidAt(Optional<OffsetDateTime> paidAt);
 
         _FinalStage paidAt(OffsetDateTime paidAt);
+
+        /**
+         * <p>What the linked checkout still reports wrong, in the order found. Empty when there is no linked checkout or it completed cleanly.</p>
+         */
+        _FinalStage problems(List<CheckoutProblemResponseData> problems);
+
+        _FinalStage addProblems(CheckoutProblemResponseData problems);
+
+        _FinalStage addAllProblems(List<CheckoutProblemResponseData> problems);
 
         /**
          * <p>Whether the shortened period the renewal date created was billed pro rata when the subscription started. False means that period is free and the first invoice is the one raised on the renewal date.</p>
@@ -385,9 +452,15 @@ public final class CustomPlanBillingResponseData {
 
         private Optional<Boolean> prorateFirstPeriod = Optional.empty();
 
+        private List<CheckoutProblemResponseData> problems = new ArrayList<>();
+
         private Optional<OffsetDateTime> paidAt = Optional.empty();
 
+        private Optional<String> migrationId = Optional.empty();
+
         private Optional<String> externalInvoiceId = Optional.empty();
+
+        private Optional<String> checkoutId = Optional.empty();
 
         private Optional<OffsetDateTime> billingStartDate = Optional.empty();
 
@@ -403,14 +476,17 @@ public final class CustomPlanBillingResponseData {
             activationStrategy(other.getActivationStrategy());
             billingCycleAnchor(other.getBillingCycleAnchor());
             billingStartDate(other.getBillingStartDate());
+            checkoutId(other.getCheckoutId());
             companyId(other.getCompanyId());
             createdAt(other.getCreatedAt());
             daysUntilDue(other.getDaysUntilDue());
             externalInvoiceId(other.getExternalInvoiceId());
             id(other.getId());
+            migrationId(other.getMigrationId());
             paidAt(other.getPaidAt());
             planBillingSource(other.getPlanBillingSource());
             planId(other.getPlanId());
+            problems(other.getProblems());
             prorateFirstPeriod(other.getProrateFirstPeriod());
             publishedAt(other.getPublishedAt());
             sendInvoice(other.getSendInvoice());
@@ -456,7 +532,7 @@ public final class CustomPlanBillingResponseData {
         }
 
         /**
-         * <p>The flow that created this billing record: a custom plan, or a standard plan assigned by invoice through Manage Plan.</p>
+         * <p>The flow that created this billing record: a custom plan's first publish, an amendment of a live custom plan, or a standard plan assigned by invoice through Manage Plan.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -540,6 +616,41 @@ public final class CustomPlanBillingResponseData {
             return this;
         }
 
+        /**
+         * <p>What the linked checkout still reports wrong, in the order found. Empty when there is no linked checkout or it completed cleanly.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllProblems(List<CheckoutProblemResponseData> problems) {
+            if (problems != null) {
+                this.problems.addAll(problems);
+            }
+            return this;
+        }
+
+        /**
+         * <p>What the linked checkout still reports wrong, in the order found. Empty when there is no linked checkout or it completed cleanly.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addProblems(CheckoutProblemResponseData problems) {
+            this.problems.add(problems);
+            return this;
+        }
+
+        /**
+         * <p>What the linked checkout still reports wrong, in the order found. Empty when there is no linked checkout or it completed cleanly.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "problems", nulls = Nulls.SKIP)
+        public _FinalStage problems(List<CheckoutProblemResponseData> problems) {
+            this.problems.clear();
+            if (problems != null) {
+                this.problems.addAll(problems);
+            }
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage paidAt(OffsetDateTime paidAt) {
             this.paidAt = Optional.ofNullable(paidAt);
@@ -553,6 +664,26 @@ public final class CustomPlanBillingResponseData {
             return this;
         }
 
+        /**
+         * <p>The plan version migration this amendment invoice belongs to. Null for a first publish or a plan assigned through Manage Plan.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage migrationId(String migrationId) {
+            this.migrationId = Optional.ofNullable(migrationId);
+            return this;
+        }
+
+        /**
+         * <p>The plan version migration this amendment invoice belongs to. Null for a first publish or a plan assigned through Manage Plan.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "migration_id", nulls = Nulls.SKIP)
+        public _FinalStage migrationId(Optional<String> migrationId) {
+            this.migrationId = migrationId;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage externalInvoiceId(String externalInvoiceId) {
             this.externalInvoiceId = Optional.ofNullable(externalInvoiceId);
@@ -563,6 +694,26 @@ public final class CustomPlanBillingResponseData {
         @JsonSetter(value = "external_invoice_id", nulls = Nulls.SKIP)
         public _FinalStage externalInvoiceId(Optional<String> externalInvoiceId) {
             this.externalInvoiceId = externalInvoiceId;
+            return this;
+        }
+
+        /**
+         * <p>The checkout this billing record was created from, when it was created from one.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage checkoutId(String checkoutId) {
+            this.checkoutId = Optional.ofNullable(checkoutId);
+            return this;
+        }
+
+        /**
+         * <p>The checkout this billing record was created from, when it was created from one.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "checkout_id", nulls = Nulls.SKIP)
+        public _FinalStage checkoutId(Optional<String> checkoutId) {
+            this.checkoutId = checkoutId;
             return this;
         }
 
@@ -612,14 +763,17 @@ public final class CustomPlanBillingResponseData {
                     activationStrategy,
                     billingCycleAnchor,
                     billingStartDate,
+                    checkoutId,
                     companyId,
                     createdAt,
                     daysUntilDue,
                     externalInvoiceId,
                     id,
+                    migrationId,
                     paidAt,
                     planBillingSource,
                     planId,
+                    problems,
                     prorateFirstPeriod,
                     publishedAt,
                     sendInvoice,

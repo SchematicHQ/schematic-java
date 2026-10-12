@@ -28,7 +28,7 @@ public final class CompanySubscriptionResponseData {
 
     private final boolean cancelAtPeriodEnd;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String customerExternalId;
 
@@ -61,7 +61,7 @@ public final class CompanySubscriptionResponseData {
     private CompanySubscriptionResponseData(
             Optional<OffsetDateTime> cancelAt,
             boolean cancelAtPeriodEnd,
-            String currency,
+            Currency currency,
             String customerExternalId,
             List<BillingSubscriptionDiscountView> discounts,
             Optional<OffsetDateTime> expiredAt,
@@ -106,7 +106,7 @@ public final class CompanySubscriptionResponseData {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -242,7 +242,7 @@ public final class CompanySubscriptionResponseData {
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(@NotNull String currency);
+        CustomerExternalIdStage currency(@NotNull Currency currency);
     }
 
     public interface CustomerExternalIdStage {
@@ -327,7 +327,7 @@ public final class CompanySubscriptionResponseData {
                     _FinalStage {
         private boolean cancelAtPeriodEnd;
 
-        private String currency;
+        private Currency currency;
 
         private String customerExternalId;
 
@@ -392,7 +392,7 @@ public final class CompanySubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(@NotNull String currency) {
+        public CustomerExternalIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

@@ -39,6 +39,8 @@ public final class CreateCompanyOverrideRequestBody {
 
     private final Optional<String> note;
 
+    private final Optional<Map<String, Double>> quantityRates;
+
     private final Optional<Boolean> valueBool;
 
     private final Optional<String> valueCreditId;
@@ -59,6 +61,7 @@ public final class CreateCompanyOverrideRequestBody {
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<String> note,
+            Optional<Map<String, Double>> quantityRates,
             Optional<Boolean> valueBool,
             Optional<String> valueCreditId,
             Optional<Long> valueNumeric,
@@ -72,6 +75,7 @@ public final class CreateCompanyOverrideRequestBody {
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.note = note;
+        this.quantityRates = quantityRates;
         this.valueBool = valueBool;
         this.valueCreditId = valueCreditId;
         this.valueNumeric = valueNumeric;
@@ -113,6 +117,14 @@ public final class CreateCompanyOverrideRequestBody {
     @JsonProperty("note")
     public Optional<String> getNote() {
         return note;
+    }
+
+    /**
+     * @return Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.
+     */
+    @JsonProperty("quantity_rates")
+    public Optional<Map<String, Double>> getQuantityRates() {
+        return quantityRates;
     }
 
     @JsonProperty("value_bool")
@@ -159,6 +171,7 @@ public final class CreateCompanyOverrideRequestBody {
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && note.equals(other.note)
+                && quantityRates.equals(other.quantityRates)
                 && valueBool.equals(other.valueBool)
                 && valueCreditId.equals(other.valueCreditId)
                 && valueNumeric.equals(other.valueNumeric)
@@ -176,6 +189,7 @@ public final class CreateCompanyOverrideRequestBody {
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
                 this.note,
+                this.quantityRates,
                 this.valueBool,
                 this.valueCreditId,
                 this.valueNumeric,
@@ -233,6 +247,13 @@ public final class CreateCompanyOverrideRequestBody {
 
         _FinalStage note(String note);
 
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
+         */
+        _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
+
+        _FinalStage quantityRates(Map<String, Double> quantityRates);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -266,6 +287,8 @@ public final class CreateCompanyOverrideRequestBody {
 
         private Optional<Boolean> valueBool = Optional.empty();
 
+        private Optional<Map<String, Double>> quantityRates = Optional.empty();
+
         private Optional<String> note = Optional.empty();
 
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
@@ -290,6 +313,7 @@ public final class CreateCompanyOverrideRequestBody {
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             note(other.getNote());
+            quantityRates(other.getQuantityRates());
             valueBool(other.getValueBool());
             valueCreditId(other.getValueCreditId());
             valueNumeric(other.getValueNumeric());
@@ -371,6 +395,26 @@ public final class CreateCompanyOverrideRequestBody {
             return this;
         }
 
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage quantityRates(Map<String, Double> quantityRates) {
+            this.quantityRates = Optional.ofNullable(quantityRates);
+            return this;
+        }
+
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "quantity_rates", nulls = Nulls.SKIP)
+        public _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates) {
+            this.quantityRates = quantityRates;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage note(String note) {
             this.note = Optional.ofNullable(note);
@@ -446,6 +490,7 @@ public final class CreateCompanyOverrideRequestBody {
                     metricPeriod,
                     metricPeriodMonthReset,
                     note,
+                    quantityRates,
                     valueBool,
                     valueCreditId,
                     valueNumeric,

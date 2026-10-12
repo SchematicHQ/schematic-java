@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CouponRequestBody {
     private final long amountOff;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final String duration;
 
@@ -41,7 +41,7 @@ public final class CouponRequestBody {
 
     private CouponRequestBody(
             long amountOff,
-            Optional<String> currency,
+            Optional<Currency> currency,
             String duration,
             long durationInMonths,
             long maxRedemptions,
@@ -66,7 +66,7 @@ public final class CouponRequestBody {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -181,9 +181,9 @@ public final class CouponRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -210,7 +210,7 @@ public final class CouponRequestBody {
 
         private long timesRedeemed;
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -280,14 +280,14 @@ public final class CouponRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }

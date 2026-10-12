@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CatalogConfigOrderedPlanResponseData.Builder.class)
 public final class CatalogConfigOrderedPlanResponseData {
+    private final List<CatalogConfigPlanCreditResponseData> credits;
+
     private final List<CatalogConfigOrderedEntitlementResponseData> entitlements;
 
     private final String planId;
@@ -29,12 +31,19 @@ public final class CatalogConfigOrderedPlanResponseData {
     private final Map<String, Object> additionalProperties;
 
     private CatalogConfigOrderedPlanResponseData(
+            List<CatalogConfigPlanCreditResponseData> credits,
             List<CatalogConfigOrderedEntitlementResponseData> entitlements,
             String planId,
             Map<String, Object> additionalProperties) {
+        this.credits = credits;
         this.entitlements = entitlements;
         this.planId = planId;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("credits")
+    public List<CatalogConfigPlanCreditResponseData> getCredits() {
+        return credits;
     }
 
     @JsonProperty("entitlements")
@@ -60,12 +69,12 @@ public final class CatalogConfigOrderedPlanResponseData {
     }
 
     private boolean equalTo(CatalogConfigOrderedPlanResponseData other) {
-        return entitlements.equals(other.entitlements) && planId.equals(other.planId);
+        return credits.equals(other.credits) && entitlements.equals(other.entitlements) && planId.equals(other.planId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.entitlements, this.planId);
+        return Objects.hash(this.credits, this.entitlements, this.planId);
     }
 
     @java.lang.Override
@@ -90,6 +99,12 @@ public final class CatalogConfigOrderedPlanResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage credits(List<CatalogConfigPlanCreditResponseData> credits);
+
+        _FinalStage addCredits(CatalogConfigPlanCreditResponseData credits);
+
+        _FinalStage addAllCredits(List<CatalogConfigPlanCreditResponseData> credits);
+
         _FinalStage entitlements(List<CatalogConfigOrderedEntitlementResponseData> entitlements);
 
         _FinalStage addEntitlements(CatalogConfigOrderedEntitlementResponseData entitlements);
@@ -103,6 +118,8 @@ public final class CatalogConfigOrderedPlanResponseData {
 
         private List<CatalogConfigOrderedEntitlementResponseData> entitlements = new ArrayList<>();
 
+        private List<CatalogConfigPlanCreditResponseData> credits = new ArrayList<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -110,6 +127,7 @@ public final class CatalogConfigOrderedPlanResponseData {
 
         @java.lang.Override
         public Builder from(CatalogConfigOrderedPlanResponseData other) {
+            credits(other.getCredits());
             entitlements(other.getEntitlements());
             planId(other.getPlanId());
             return this;
@@ -147,8 +165,32 @@ public final class CatalogConfigOrderedPlanResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCredits(List<CatalogConfigPlanCreditResponseData> credits) {
+            if (credits != null) {
+                this.credits.addAll(credits);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCredits(CatalogConfigPlanCreditResponseData credits) {
+            this.credits.add(credits);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credits", nulls = Nulls.SKIP)
+        public _FinalStage credits(List<CatalogConfigPlanCreditResponseData> credits) {
+            this.credits.clear();
+            if (credits != null) {
+                this.credits.addAll(credits);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public CatalogConfigOrderedPlanResponseData build() {
-            return new CatalogConfigOrderedPlanResponseData(entitlements, planId, additionalProperties);
+            return new CatalogConfigOrderedPlanResponseData(credits, entitlements, planId, additionalProperties);
         }
 
         @java.lang.Override

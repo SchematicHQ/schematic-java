@@ -95,7 +95,7 @@ public final class PendingMigrationResponseData {
     }
 
     /**
-     * @return Whether the company moves at the end of its billing period (end_of_billing_period) or on a specific date (scheduled). The type is shared with plan version migrations, but only those two values appear here: an immediate migration never pends.
+     * @return Whether the company moves at the end of its billing period (end_of_billing_period) or on a specific date (scheduled). The type is shared with plan version migrations, but only those two values appear here: this view lists deferred migrations only, so an immediate migration is never shown, even while it is pending.
      */
     @JsonProperty("strategy")
     public PlanVersionMigrationStrategy getStrategy() {
@@ -176,7 +176,7 @@ public final class PendingMigrationResponseData {
 
     public interface StrategyStage {
         /**
-         * <p>Whether the company moves at the end of its billing period (end_of_billing_period) or on a specific date (scheduled). The type is shared with plan version migrations, but only those two values appear here: an immediate migration never pends.</p>
+         * <p>Whether the company moves at the end of its billing period (end_of_billing_period) or on a specific date (scheduled). The type is shared with plan version migrations, but only those two values appear here: this view lists deferred migrations only, so an immediate migration is never shown, even while it is pending.</p>
          */
         ToPlanIdStage strategy(@NotNull PlanVersionMigrationStrategy strategy);
     }
@@ -279,7 +279,7 @@ public final class PendingMigrationResponseData {
         }
 
         /**
-         * <p>Whether the company moves at the end of its billing period (end_of_billing_period) or on a specific date (scheduled). The type is shared with plan version migrations, but only those two values appear here: an immediate migration never pends.</p>
+         * <p>Whether the company moves at the end of its billing period (end_of_billing_period) or on a specific date (scheduled). The type is shared with plan version migrations, but only those two values appear here: this view lists deferred migrations only, so an immediate migration is never shown, even while it is pending.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

@@ -16,6 +16,7 @@ import com.schematic.api.types.BillingCreditBurnStrategy;
 import com.schematic.api.types.BillingCreditExpiryUnit;
 import com.schematic.api.types.BillingCreditRolloverPolicy;
 import com.schematic.api.types.CreditCurrencyPriceRequestBody;
+import com.schematic.api.types.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateBillingCreditRequestBody {
     private final Optional<BillingCreditBurnStrategy> burnStrategy;
 
-    private final String currency;
+    private final Currency currency;
 
     private final Optional<List<CreditCurrencyPriceRequestBody>> currencyPrices;
 
@@ -56,7 +57,7 @@ public final class CreateBillingCreditRequestBody {
 
     private CreateBillingCreditRequestBody(
             Optional<BillingCreditBurnStrategy> burnStrategy,
-            String currency,
+            Currency currency,
             Optional<List<CreditCurrencyPriceRequestBody>> currencyPrices,
             Optional<BillingCreditExpiryUnit> defaultExpiryUnit,
             Optional<Long> defaultExpiryUnitCount,
@@ -91,7 +92,7 @@ public final class CreateBillingCreditRequestBody {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -205,7 +206,7 @@ public final class CreateBillingCreditRequestBody {
     }
 
     public interface CurrencyStage {
-        DescriptionStage currency(@NotNull String currency);
+        DescriptionStage currency(@NotNull Currency currency);
 
         Builder from(CreateBillingCreditRequestBody other);
     }
@@ -268,7 +269,7 @@ public final class CreateBillingCreditRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements CurrencyStage, DescriptionStage, NameStage, _FinalStage {
-        private String currency;
+        private Currency currency;
 
         private String description;
 
@@ -319,7 +320,7 @@ public final class CreateBillingCreditRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public DescriptionStage currency(@NotNull String currency) {
+        public DescriptionStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

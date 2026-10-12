@@ -33,7 +33,7 @@ public final class ChangeSubscriptionRequestBody {
 
     private final List<UpdateCreditBundleRequestBody> creditBundles;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final List<CheckoutFieldValue> customFieldValues;
 
@@ -59,7 +59,7 @@ public final class ChangeSubscriptionRequestBody {
             Optional<String> billingEntityId,
             Optional<String> couponExternalId,
             List<UpdateCreditBundleRequestBody> creditBundles,
-            Optional<String> currency,
+            Optional<Currency> currency,
             List<CheckoutFieldValue> customFieldValues,
             String newPlanId,
             String newPriceId,
@@ -115,7 +115,7 @@ public final class ChangeSubscriptionRequestBody {
      * @return ISO 4217 currency this cart is being built in. Prices are still selected by id; this records the intent, and a cart that prices in another currency is reported as a problem.
      */
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -265,9 +265,9 @@ public final class ChangeSubscriptionRequestBody {
         /**
          * <p>ISO 4217 currency this cart is being built in. Prices are still selected by id; this records the intent, and a cart that prices in another currency is reported as a problem.</p>
          */
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
 
         _FinalStage customFieldValues(List<CheckoutFieldValue> customFieldValues);
 
@@ -312,7 +312,7 @@ public final class ChangeSubscriptionRequestBody {
 
         private List<CheckoutFieldValue> customFieldValues = new ArrayList<>();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private List<UpdateCreditBundleRequestBody> creditBundles = new ArrayList<>();
 
@@ -461,7 +461,7 @@ public final class ChangeSubscriptionRequestBody {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
@@ -471,7 +471,7 @@ public final class ChangeSubscriptionRequestBody {
          */
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }

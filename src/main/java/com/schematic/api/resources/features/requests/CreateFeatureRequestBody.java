@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CreateOrUpdateFlagRequestBody;
+import com.schematic.api.types.FeatureEventSource;
 import com.schematic.api.types.FeatureLifecyclePhase;
 import com.schematic.api.types.FeatureType;
 import java.util.HashMap;
@@ -25,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonDeserialize(builder = CreateFeatureRequestBody.Builder.class)
 public final class CreateFeatureRequestBody {
     private final String description;
+
+    private final Optional<FeatureEventSource> eventSource;
 
     private final Optional<String> eventSubtype;
 
@@ -50,6 +53,7 @@ public final class CreateFeatureRequestBody {
 
     private CreateFeatureRequestBody(
             String description,
+            Optional<FeatureEventSource> eventSource,
             Optional<String> eventSubtype,
             FeatureType featureType,
             Optional<CreateOrUpdateFlagRequestBody> flag,
@@ -62,6 +66,7 @@ public final class CreateFeatureRequestBody {
             Optional<String> traitId,
             Map<String, Object> additionalProperties) {
         this.description = description;
+        this.eventSource = eventSource;
         this.eventSubtype = eventSubtype;
         this.featureType = featureType;
         this.flag = flag;
@@ -78,6 +83,14 @@ public final class CreateFeatureRequestBody {
     @JsonProperty("description")
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * @return Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.
+     */
+    @JsonProperty("event_source")
+    public Optional<FeatureEventSource> getEventSource() {
+        return eventSource;
     }
 
     @JsonProperty("event_subtype")
@@ -143,6 +156,7 @@ public final class CreateFeatureRequestBody {
 
     private boolean equalTo(CreateFeatureRequestBody other) {
         return description.equals(other.description)
+                && eventSource.equals(other.eventSource)
                 && eventSubtype.equals(other.eventSubtype)
                 && featureType.equals(other.featureType)
                 && flag.equals(other.flag)
@@ -159,6 +173,7 @@ public final class CreateFeatureRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.description,
+                this.eventSource,
                 this.eventSubtype,
                 this.featureType,
                 this.flag,
@@ -200,6 +215,13 @@ public final class CreateFeatureRequestBody {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        /**
+         * <p>Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.</p>
+         */
+        _FinalStage eventSource(Optional<FeatureEventSource> eventSource);
+
+        _FinalStage eventSource(FeatureEventSource eventSource);
 
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
@@ -258,6 +280,8 @@ public final class CreateFeatureRequestBody {
 
         private Optional<String> eventSubtype = Optional.empty();
 
+        private Optional<FeatureEventSource> eventSource = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -266,6 +290,7 @@ public final class CreateFeatureRequestBody {
         @java.lang.Override
         public Builder from(CreateFeatureRequestBody other) {
             description(other.getDescription());
+            eventSource(other.getEventSource());
             eventSubtype(other.getEventSubtype());
             featureType(other.getFeatureType());
             flag(other.getFlag());
@@ -404,10 +429,31 @@ public final class CreateFeatureRequestBody {
             return this;
         }
 
+        /**
+         * <p>Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage eventSource(FeatureEventSource eventSource) {
+            this.eventSource = Optional.ofNullable(eventSource);
+            return this;
+        }
+
+        /**
+         * <p>Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "event_source", nulls = Nulls.SKIP)
+        public _FinalStage eventSource(Optional<FeatureEventSource> eventSource) {
+            this.eventSource = eventSource;
+            return this;
+        }
+
         @java.lang.Override
         public CreateFeatureRequestBody build() {
             return new CreateFeatureRequestBody(
                     description,
+                    eventSource,
                     eventSubtype,
                     featureType,
                     flag,

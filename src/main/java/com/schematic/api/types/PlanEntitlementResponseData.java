@@ -62,6 +62,8 @@ public final class PlanEntitlementResponseData {
 
     private final Optional<EntitlementPriceBehavior> priceBehavior;
 
+    private final Optional<Map<String, Double>> quantityRates;
+
     private final String ruleId;
 
     private final Optional<String> ruleIdUsageExceeded;
@@ -110,6 +112,7 @@ public final class PlanEntitlementResponseData {
             Optional<PlanResponseData> plan,
             String planId,
             Optional<EntitlementPriceBehavior> priceBehavior,
+            Optional<Map<String, Double>> quantityRates,
             String ruleId,
             Optional<String> ruleIdUsageExceeded,
             Optional<Long> softLimit,
@@ -143,6 +146,7 @@ public final class PlanEntitlementResponseData {
         this.plan = plan;
         this.planId = planId;
         this.priceBehavior = priceBehavior;
+        this.quantityRates = quantityRates;
         this.ruleId = ruleId;
         this.ruleIdUsageExceeded = ruleIdUsageExceeded;
         this.softLimit = softLimit;
@@ -260,6 +264,14 @@ public final class PlanEntitlementResponseData {
         return priceBehavior;
     }
 
+    /**
+     * @return Credits per unit of the quantity (per token for inference features), keyed by quantity key. Absent when the entitlement prices requests only.
+     */
+    @JsonProperty("quantity_rates")
+    public Optional<Map<String, Double>> getQuantityRates() {
+        return quantityRates;
+    }
+
     @JsonProperty("rule_id")
     public String getRuleId() {
         return ruleId;
@@ -359,6 +371,7 @@ public final class PlanEntitlementResponseData {
                 && plan.equals(other.plan)
                 && planId.equals(other.planId)
                 && priceBehavior.equals(other.priceBehavior)
+                && quantityRates.equals(other.quantityRates)
                 && ruleId.equals(other.ruleId)
                 && ruleIdUsageExceeded.equals(other.ruleIdUsageExceeded)
                 && softLimit.equals(other.softLimit)
@@ -396,6 +409,7 @@ public final class PlanEntitlementResponseData {
                 this.plan,
                 this.planId,
                 this.priceBehavior,
+                this.quantityRates,
                 this.ruleId,
                 this.ruleIdUsageExceeded,
                 this.softLimit,
@@ -525,6 +539,13 @@ public final class PlanEntitlementResponseData {
 
         _FinalStage priceBehavior(EntitlementPriceBehavior priceBehavior);
 
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Absent when the entitlement prices requests only.</p>
+         */
+        _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
+
+        _FinalStage quantityRates(Map<String, Double> quantityRates);
+
         _FinalStage ruleIdUsageExceeded(Optional<String> ruleIdUsageExceeded);
 
         _FinalStage ruleIdUsageExceeded(String ruleIdUsageExceeded);
@@ -618,6 +639,8 @@ public final class PlanEntitlementResponseData {
 
         private Optional<String> ruleIdUsageExceeded = Optional.empty();
 
+        private Optional<Map<String, Double>> quantityRates = Optional.empty();
+
         private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
 
         private Optional<PlanResponseData> plan = Optional.empty();
@@ -672,6 +695,7 @@ public final class PlanEntitlementResponseData {
             plan(other.getPlan());
             planId(other.getPlanId());
             priceBehavior(other.getPriceBehavior());
+            quantityRates(other.getQuantityRates());
             ruleId(other.getRuleId());
             ruleIdUsageExceeded(other.getRuleIdUsageExceeded());
             softLimit(other.getSoftLimit());
@@ -889,6 +913,26 @@ public final class PlanEntitlementResponseData {
         @JsonSetter(value = "rule_id_usage_exceeded", nulls = Nulls.SKIP)
         public _FinalStage ruleIdUsageExceeded(Optional<String> ruleIdUsageExceeded) {
             this.ruleIdUsageExceeded = ruleIdUsageExceeded;
+            return this;
+        }
+
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Absent when the entitlement prices requests only.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage quantityRates(Map<String, Double> quantityRates) {
+            this.quantityRates = Optional.ofNullable(quantityRates);
+            return this;
+        }
+
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Absent when the entitlement prices requests only.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "quantity_rates", nulls = Nulls.SKIP)
+        public _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates) {
+            this.quantityRates = quantityRates;
             return this;
         }
 
@@ -1121,6 +1165,7 @@ public final class PlanEntitlementResponseData {
                     plan,
                     planId,
                     priceBehavior,
+                    quantityRates,
                     ruleId,
                     ruleIdUsageExceeded,
                     softLimit,

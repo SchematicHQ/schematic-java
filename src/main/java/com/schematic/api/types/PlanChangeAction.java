@@ -28,6 +28,8 @@ public final class PlanChangeAction {
 
     public static final PlanChangeAction FALLBACK_PLAN = new PlanChangeAction(Value.FALLBACK_PLAN, "fallback_plan");
 
+    public static final PlanChangeAction AMENDMENT = new PlanChangeAction(Value.AMENDMENT, "amendment");
+
     public static final PlanChangeAction PLAN_TRAIT_CHANGE =
             new PlanChangeAction(Value.PLAN_TRAIT_CHANGE, "plan_trait_change");
 
@@ -83,6 +85,8 @@ public final class PlanChangeAction {
                 return visitor.visitPlanBillingProductChanged();
             case FALLBACK_PLAN:
                 return visitor.visitFallbackPlan();
+            case AMENDMENT:
+                return visitor.visitAmendment();
             case PLAN_TRAIT_CHANGE:
                 return visitor.visitPlanTraitChange();
             case MANAGE_PLAN:
@@ -114,6 +118,8 @@ public final class PlanChangeAction {
                 return PLAN_BILLING_PRODUCT_CHANGED;
             case "fallback_plan":
                 return FALLBACK_PLAN;
+            case "amendment":
+                return AMENDMENT;
             case "plan_trait_change":
                 return PLAN_TRAIT_CHANGE;
             case "manage_plan":
@@ -124,6 +130,8 @@ public final class PlanChangeAction {
     }
 
     public enum Value {
+        AMENDMENT,
+
         CHECKOUT,
 
         COMPANY_UPSERT,
@@ -150,6 +158,8 @@ public final class PlanChangeAction {
     }
 
     public interface Visitor<T> {
+        T visitAmendment();
+
         T visitCheckout();
 
         T visitCompanyUpsert();

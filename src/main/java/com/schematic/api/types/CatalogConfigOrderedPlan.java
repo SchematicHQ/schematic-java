@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CatalogConfigOrderedPlan.Builder.class)
 public final class CatalogConfigOrderedPlan {
+    private final Optional<List<CatalogConfigPlanCredit>> credits;
+
     private final Optional<List<CatalogConfigOrderedEntitlement>> entitlements;
 
     private final String planId;
@@ -29,12 +31,19 @@ public final class CatalogConfigOrderedPlan {
     private final Map<String, Object> additionalProperties;
 
     private CatalogConfigOrderedPlan(
+            Optional<List<CatalogConfigPlanCredit>> credits,
             Optional<List<CatalogConfigOrderedEntitlement>> entitlements,
             String planId,
             Map<String, Object> additionalProperties) {
+        this.credits = credits;
         this.entitlements = entitlements;
         this.planId = planId;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("credits")
+    public Optional<List<CatalogConfigPlanCredit>> getCredits() {
+        return credits;
     }
 
     @JsonProperty("entitlements")
@@ -59,12 +68,12 @@ public final class CatalogConfigOrderedPlan {
     }
 
     private boolean equalTo(CatalogConfigOrderedPlan other) {
-        return entitlements.equals(other.entitlements) && planId.equals(other.planId);
+        return credits.equals(other.credits) && entitlements.equals(other.entitlements) && planId.equals(other.planId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.entitlements, this.planId);
+        return Objects.hash(this.credits, this.entitlements, this.planId);
     }
 
     @java.lang.Override
@@ -89,6 +98,10 @@ public final class CatalogConfigOrderedPlan {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage credits(Optional<List<CatalogConfigPlanCredit>> credits);
+
+        _FinalStage credits(List<CatalogConfigPlanCredit> credits);
+
         _FinalStage entitlements(Optional<List<CatalogConfigOrderedEntitlement>> entitlements);
 
         _FinalStage entitlements(List<CatalogConfigOrderedEntitlement> entitlements);
@@ -100,6 +113,8 @@ public final class CatalogConfigOrderedPlan {
 
         private Optional<List<CatalogConfigOrderedEntitlement>> entitlements = Optional.empty();
 
+        private Optional<List<CatalogConfigPlanCredit>> credits = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -107,6 +122,7 @@ public final class CatalogConfigOrderedPlan {
 
         @java.lang.Override
         public Builder from(CatalogConfigOrderedPlan other) {
+            credits(other.getCredits());
             entitlements(other.getEntitlements());
             planId(other.getPlanId());
             return this;
@@ -133,8 +149,21 @@ public final class CatalogConfigOrderedPlan {
         }
 
         @java.lang.Override
+        public _FinalStage credits(List<CatalogConfigPlanCredit> credits) {
+            this.credits = Optional.ofNullable(credits);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credits", nulls = Nulls.SKIP)
+        public _FinalStage credits(Optional<List<CatalogConfigPlanCredit>> credits) {
+            this.credits = credits;
+            return this;
+        }
+
+        @java.lang.Override
         public CatalogConfigOrderedPlan build() {
-            return new CatalogConfigOrderedPlan(entitlements, planId, additionalProperties);
+            return new CatalogConfigOrderedPlan(credits, entitlements, planId, additionalProperties);
         }
 
         @java.lang.Override

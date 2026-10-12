@@ -17,6 +17,7 @@ import com.schematic.api.types.BillingArrearsCadence;
 import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.BillingTiersMode;
 import com.schematic.api.types.CreatePriceTierRequestBody;
+import com.schematic.api.types.Currency;
 import com.schematic.api.types.CurrencyPriceRequestBody;
 import com.schematic.api.types.EntitlementPriceBehavior;
 import com.schematic.api.types.EntitlementValueType;
@@ -41,7 +42,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
 
     private final Optional<Double> creditConsumptionRate;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final Optional<List<CurrencyPriceRequestBody>> currencyPrices;
 
@@ -74,6 +75,8 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
     private final Optional<EntitlementPriceBehavior> priceBehavior;
 
     private final Optional<List<CreatePriceTierRequestBody>> priceTiers;
+
+    private final Optional<Map<String, Double>> quantityRates;
 
     private final Optional<String> quarterlyMeteredPriceId;
 
@@ -116,7 +119,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
             BillingProviderType billingProvider,
             Optional<Long> billingThreshold,
             Optional<Double> creditConsumptionRate,
-            Optional<String> currency,
+            Optional<Currency> currency,
             Optional<List<CurrencyPriceRequestBody>> currencyPrices,
             String externalResourceId,
             String featureId,
@@ -133,6 +136,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
             Optional<String> planVersionId,
             Optional<EntitlementPriceBehavior> priceBehavior,
             Optional<List<CreatePriceTierRequestBody>> priceTiers,
+            Optional<Map<String, Double>> quantityRates,
             Optional<String> quarterlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> quarterlyPriceTiers,
             Optional<Long> quarterlyUnitPrice,
@@ -172,6 +176,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
         this.planVersionId = planVersionId;
         this.priceBehavior = priceBehavior;
         this.priceTiers = priceTiers;
+        this.quantityRates = quantityRates;
         this.quarterlyMeteredPriceId = quarterlyMeteredPriceId;
         this.quarterlyPriceTiers = quarterlyPriceTiers;
         this.quarterlyUnitPrice = quarterlyUnitPrice;
@@ -213,7 +218,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -304,6 +309,14 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
     @JsonProperty("price_tiers")
     public Optional<List<CreatePriceTierRequestBody>> getPriceTiers() {
         return priceTiers;
+    }
+
+    /**
+     * @return Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.
+     */
+    @JsonProperty("quantity_rates")
+    public Optional<Map<String, Double>> getQuantityRates() {
+        return quantityRates;
     }
 
     @JsonProperty("quarterly_metered_price_id")
@@ -428,6 +441,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
                 && planVersionId.equals(other.planVersionId)
                 && priceBehavior.equals(other.priceBehavior)
                 && priceTiers.equals(other.priceTiers)
+                && quantityRates.equals(other.quantityRates)
                 && quarterlyMeteredPriceId.equals(other.quarterlyMeteredPriceId)
                 && quarterlyPriceTiers.equals(other.quarterlyPriceTiers)
                 && quarterlyUnitPrice.equals(other.quarterlyUnitPrice)
@@ -471,6 +485,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
                 this.planVersionId,
                 this.priceBehavior,
                 this.priceTiers,
+                this.quantityRates,
                 this.quarterlyMeteredPriceId,
                 this.quarterlyPriceTiers,
                 this.quarterlyUnitPrice,
@@ -540,9 +555,9 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
 
         _FinalStage creditConsumptionRate(Double creditConsumptionRate);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
 
         _FinalStage currencyPrices(Optional<List<CurrencyPriceRequestBody>> currencyPrices);
 
@@ -604,6 +619,13 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
         _FinalStage priceTiers(Optional<List<CreatePriceTierRequestBody>> priceTiers);
 
         _FinalStage priceTiers(List<CreatePriceTierRequestBody> priceTiers);
+
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
+         */
+        _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
+
+        _FinalStage quantityRates(Map<String, Double> quantityRates);
 
         _FinalStage quarterlyMeteredPriceId(Optional<String> quarterlyMeteredPriceId);
 
@@ -723,6 +745,8 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
 
         private Optional<String> quarterlyMeteredPriceId = Optional.empty();
 
+        private Optional<Map<String, Double>> quantityRates = Optional.empty();
+
         private Optional<List<CreatePriceTierRequestBody>> priceTiers = Optional.empty();
 
         private Optional<EntitlementPriceBehavior> priceBehavior = Optional.empty();
@@ -749,7 +773,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
 
         private Optional<List<CurrencyPriceRequestBody>> currencyPrices = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private Optional<Double> creditConsumptionRate = Optional.empty();
 
@@ -785,6 +809,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
             planVersionId(other.getPlanVersionId());
             priceBehavior(other.getPriceBehavior());
             priceTiers(other.getPriceTiers());
+            quantityRates(other.getQuantityRates());
             quarterlyMeteredPriceId(other.getQuarterlyMeteredPriceId());
             quarterlyPriceTiers(other.getQuarterlyPriceTiers());
             quarterlyUnitPrice(other.getQuarterlyUnitPrice());
@@ -1056,6 +1081,26 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
         }
 
         /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage quantityRates(Map<String, Double> quantityRates) {
+            this.quantityRates = Optional.ofNullable(quantityRates);
+            return this;
+        }
+
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "quantity_rates", nulls = Nulls.SKIP)
+        public _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates) {
+            this.quantityRates = quantityRates;
+            return this;
+        }
+
+        /**
          * <p>Use MonthlyPriceTiers or YearlyPriceTiers instead</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -1246,14 +1291,14 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }
@@ -1321,6 +1366,7 @@ public final class CreateBillingLinkedPlanEntitlementRequestBody {
                     planVersionId,
                     priceBehavior,
                     priceTiers,
+                    quantityRates,
                     quarterlyMeteredPriceId,
                     quarterlyPriceTiers,
                     quarterlyUnitPrice,

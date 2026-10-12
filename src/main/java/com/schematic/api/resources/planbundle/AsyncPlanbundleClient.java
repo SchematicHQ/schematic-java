@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.planbundle;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.planbundle.requests.CreateCustomPlanBundleRequestBody;
@@ -32,30 +33,78 @@ public class AsyncPlanbundleClient {
 
     public CompletableFuture<CreateCustomPlanBundleResponse> createCustomPlanBundle(
             CreateCustomPlanBundleRequestBody request) {
-        return this.rawClient.createCustomPlanBundle(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateCustomPlanBundleResponse>> rawFuture =
+                this.rawClient.createCustomPlanBundle(request);
+        CompletableFuture<CreateCustomPlanBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateCustomPlanBundleResponse> createCustomPlanBundle(
             CreateCustomPlanBundleRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createCustomPlanBundle(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateCustomPlanBundleResponse>> rawFuture =
+                this.rawClient.createCustomPlanBundle(request, requestOptions);
+        CompletableFuture<CreateCustomPlanBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreatePlanBundleResponse> createPlanBundle(CreatePlanBundleRequestBody request) {
-        return this.rawClient.createPlanBundle(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreatePlanBundleResponse>> rawFuture =
+                this.rawClient.createPlanBundle(request);
+        CompletableFuture<CreatePlanBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreatePlanBundleResponse> createPlanBundle(
             CreatePlanBundleRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createPlanBundle(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreatePlanBundleResponse>> rawFuture =
+                this.rawClient.createPlanBundle(request, requestOptions);
+        CompletableFuture<CreatePlanBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdatePlanBundleResponse> updatePlanBundle(
             String planId, UpdatePlanBundleRequestBody request) {
-        return this.rawClient.updatePlanBundle(planId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdatePlanBundleResponse>> rawFuture =
+                this.rawClient.updatePlanBundle(planId, request);
+        CompletableFuture<UpdatePlanBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdatePlanBundleResponse> updatePlanBundle(
             String planId, UpdatePlanBundleRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.updatePlanBundle(planId, request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdatePlanBundleResponse>> rawFuture =
+                this.rawClient.updatePlanBundle(planId, request, requestOptions);
+        CompletableFuture<UpdatePlanBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

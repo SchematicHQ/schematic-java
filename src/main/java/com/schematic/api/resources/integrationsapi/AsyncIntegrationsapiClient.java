@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.integrationsapi;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.integrationsapi.requests.ClaimStripeSandboxKeysRequestBody;
@@ -44,141 +45,379 @@ public class AsyncIntegrationsapiClient {
     }
 
     public CompletableFuture<RunIntegrationResponse> runIntegration(String integrationId) {
-        return this.rawClient.runIntegration(integrationId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<RunIntegrationResponse>> rawFuture =
+                this.rawClient.runIntegration(integrationId);
+        CompletableFuture<RunIntegrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<RunIntegrationResponse> runIntegration(
             String integrationId, RequestOptions requestOptions) {
-        return this.rawClient.runIntegration(integrationId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<RunIntegrationResponse>> rawFuture =
+                this.rawClient.runIntegration(integrationId, requestOptions);
+        CompletableFuture<RunIntegrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListIntegrationsResponse> listIntegrations() {
-        return this.rawClient.listIntegrations().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListIntegrationsResponse>> rawFuture =
+                this.rawClient.listIntegrations();
+        CompletableFuture<ListIntegrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListIntegrationsResponse> listIntegrations(RequestOptions requestOptions) {
-        return this.rawClient.listIntegrations(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListIntegrationsResponse>> rawFuture =
+                this.rawClient.listIntegrations(requestOptions);
+        CompletableFuture<ListIntegrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListIntegrationsResponse> listIntegrations(ListIntegrationsRequest request) {
-        return this.rawClient.listIntegrations(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListIntegrationsResponse>> rawFuture =
+                this.rawClient.listIntegrations(request);
+        CompletableFuture<ListIntegrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListIntegrationsResponse> listIntegrations(
             ListIntegrationsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listIntegrations(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListIntegrationsResponse>> rawFuture =
+                this.rawClient.listIntegrations(request, requestOptions);
+        CompletableFuture<ListIntegrationsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetIntegrationWebhookUrlResponse> getIntegrationWebhookUrl(String type) {
-        return this.rawClient.getIntegrationWebhookUrl(type).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetIntegrationWebhookUrlResponse>> rawFuture =
+                this.rawClient.getIntegrationWebhookUrl(type);
+        CompletableFuture<GetIntegrationWebhookUrlResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetIntegrationWebhookUrlResponse> getIntegrationWebhookUrl(
             String type, RequestOptions requestOptions) {
-        return this.rawClient.getIntegrationWebhookUrl(type, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetIntegrationWebhookUrlResponse>> rawFuture =
+                this.rawClient.getIntegrationWebhookUrl(type, requestOptions);
+        CompletableFuture<GetIntegrationWebhookUrlResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<InstallIntegrationResponse> installIntegration(InstallIntegrationRequestBody request) {
-        return this.rawClient.installIntegration(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<InstallIntegrationResponse>> rawFuture =
+                this.rawClient.installIntegration(request);
+        CompletableFuture<InstallIntegrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<InstallIntegrationResponse> installIntegration(
             InstallIntegrationRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.installIntegration(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<InstallIntegrationResponse>> rawFuture =
+                this.rawClient.installIntegration(request, requestOptions);
+        CompletableFuture<InstallIntegrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<StartDataImportResponse> startDataImport(StartDataImportRequestBody request) {
-        return this.rawClient.startDataImport(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<StartDataImportResponse>> rawFuture =
+                this.rawClient.startDataImport(request);
+        CompletableFuture<StartDataImportResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<StartDataImportResponse> startDataImport(
             StartDataImportRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.startDataImport(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<StartDataImportResponse>> rawFuture =
+                this.rawClient.startDataImport(request, requestOptions);
+        CompletableFuture<StartDataImportResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<LoadSampleDataSetResponse> loadSampleDataSet() {
-        return this.rawClient.loadSampleDataSet().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<LoadSampleDataSetResponse>> rawFuture =
+                this.rawClient.loadSampleDataSet();
+        CompletableFuture<LoadSampleDataSetResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<LoadSampleDataSetResponse> loadSampleDataSet(RequestOptions requestOptions) {
-        return this.rawClient.loadSampleDataSet(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<LoadSampleDataSetResponse>> rawFuture =
+                this.rawClient.loadSampleDataSet(requestOptions);
+        CompletableFuture<LoadSampleDataSetResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetStripeSandboxClaimLinkResponse> getStripeSandboxClaimLink() {
-        return this.rawClient.getStripeSandboxClaimLink().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetStripeSandboxClaimLinkResponse>> rawFuture =
+                this.rawClient.getStripeSandboxClaimLink();
+        CompletableFuture<GetStripeSandboxClaimLinkResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetStripeSandboxClaimLinkResponse> getStripeSandboxClaimLink(
             RequestOptions requestOptions) {
-        return this.rawClient.getStripeSandboxClaimLink(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetStripeSandboxClaimLinkResponse>> rawFuture =
+                this.rawClient.getStripeSandboxClaimLink(requestOptions);
+        CompletableFuture<GetStripeSandboxClaimLinkResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetStripeSandboxKeysResponse> getStripeSandboxKeys() {
-        return this.rawClient.getStripeSandboxKeys().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetStripeSandboxKeysResponse>> rawFuture =
+                this.rawClient.getStripeSandboxKeys();
+        CompletableFuture<GetStripeSandboxKeysResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetStripeSandboxKeysResponse> getStripeSandboxKeys(RequestOptions requestOptions) {
-        return this.rawClient.getStripeSandboxKeys(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetStripeSandboxKeysResponse>> rawFuture =
+                this.rawClient.getStripeSandboxKeys(requestOptions);
+        CompletableFuture<GetStripeSandboxKeysResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ClaimStripeSandboxKeysResponse> claimStripeSandboxKeys(
             ClaimStripeSandboxKeysRequestBody request) {
-        return this.rawClient.claimStripeSandboxKeys(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ClaimStripeSandboxKeysResponse>> rawFuture =
+                this.rawClient.claimStripeSandboxKeys(request);
+        CompletableFuture<ClaimStripeSandboxKeysResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ClaimStripeSandboxKeysResponse> claimStripeSandboxKeys(
             ClaimStripeSandboxKeysRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.claimStripeSandboxKeys(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ClaimStripeSandboxKeysResponse>> rawFuture =
+                this.rawClient.claimStripeSandboxKeys(request, requestOptions);
+        CompletableFuture<ClaimStripeSandboxKeysResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<AssumeStripeInstalledResponse> assumeStripeInstalled(
             InstallIntegrationRequestBody request) {
-        return this.rawClient.assumeStripeInstalled(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<AssumeStripeInstalledResponse>> rawFuture =
+                this.rawClient.assumeStripeInstalled(request);
+        CompletableFuture<AssumeStripeInstalledResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<AssumeStripeInstalledResponse> assumeStripeInstalled(
             InstallIntegrationRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.assumeStripeInstalled(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<AssumeStripeInstalledResponse>> rawFuture =
+                this.rawClient.assumeStripeInstalled(request, requestOptions);
+        CompletableFuture<AssumeStripeInstalledResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<InstallStripeResponse> installStripe(InstallIntegrationRequestBody request) {
-        return this.rawClient.installStripe(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<InstallStripeResponse>> rawFuture =
+                this.rawClient.installStripe(request);
+        CompletableFuture<InstallStripeResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<InstallStripeResponse> installStripe(
             InstallIntegrationRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.installStripe(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<InstallStripeResponse>> rawFuture =
+                this.rawClient.installStripe(request, requestOptions);
+        CompletableFuture<InstallStripeResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<InstallStripeClaimableSandboxResponse> installStripeClaimableSandbox(
             InstallStripeSandboxRequestBody request) {
-        return this.rawClient.installStripeClaimableSandbox(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<InstallStripeClaimableSandboxResponse>> rawFuture =
+                this.rawClient.installStripeClaimableSandbox(request);
+        CompletableFuture<InstallStripeClaimableSandboxResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<InstallStripeClaimableSandboxResponse> installStripeClaimableSandbox(
             InstallStripeSandboxRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .installStripeClaimableSandbox(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<InstallStripeClaimableSandboxResponse>> rawFuture =
+                this.rawClient.installStripeClaimableSandbox(request, requestOptions);
+        CompletableFuture<InstallStripeClaimableSandboxResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListStripeSandboxCountriesResponse> listStripeSandboxCountries() {
-        return this.rawClient.listStripeSandboxCountries().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListStripeSandboxCountriesResponse>> rawFuture =
+                this.rawClient.listStripeSandboxCountries();
+        CompletableFuture<ListStripeSandboxCountriesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListStripeSandboxCountriesResponse> listStripeSandboxCountries(
             RequestOptions requestOptions) {
-        return this.rawClient.listStripeSandboxCountries(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListStripeSandboxCountriesResponse>> rawFuture =
+                this.rawClient.listStripeSandboxCountries(requestOptions);
+        CompletableFuture<ListStripeSandboxCountriesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UninstallIntegrationResponse> uninstallIntegration(String integrationId) {
-        return this.rawClient.uninstallIntegration(integrationId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UninstallIntegrationResponse>> rawFuture =
+                this.rawClient.uninstallIntegration(integrationId);
+        CompletableFuture<UninstallIntegrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UninstallIntegrationResponse> uninstallIntegration(
             String integrationId, RequestOptions requestOptions) {
-        return this.rawClient
-                .uninstallIntegration(integrationId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UninstallIntegrationResponse>> rawFuture =
+                this.rawClient.uninstallIntegration(integrationId, requestOptions);
+        CompletableFuture<UninstallIntegrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

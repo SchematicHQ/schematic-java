@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanCurrencyPricesResponseData.Builder.class)
 public final class PlanCurrencyPricesResponseData {
-    private final String currency;
+    private final Currency currency;
 
     private final Optional<BillingPriceResponseData> monthlyPrice;
 
@@ -34,7 +34,7 @@ public final class PlanCurrencyPricesResponseData {
     private final Map<String, Object> additionalProperties;
 
     private PlanCurrencyPricesResponseData(
-            String currency,
+            Currency currency,
             Optional<BillingPriceResponseData> monthlyPrice,
             Optional<BillingPriceResponseData> oneTimePrice,
             Optional<BillingPriceResponseData> quarterlyPrice,
@@ -49,7 +49,7 @@ public final class PlanCurrencyPricesResponseData {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -107,7 +107,7 @@ public final class PlanCurrencyPricesResponseData {
     }
 
     public interface CurrencyStage {
-        _FinalStage currency(@NotNull String currency);
+        _FinalStage currency(@NotNull Currency currency);
 
         Builder from(PlanCurrencyPricesResponseData other);
     }
@@ -138,7 +138,7 @@ public final class PlanCurrencyPricesResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements CurrencyStage, _FinalStage {
-        private String currency;
+        private Currency currency;
 
         private Optional<BillingPriceResponseData> yearlyPrice = Optional.empty();
 
@@ -165,7 +165,7 @@ public final class PlanCurrencyPricesResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public _FinalStage currency(@NotNull String currency) {
+        public _FinalStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

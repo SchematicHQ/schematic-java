@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.Currency;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CheckoutDataRequestBody {
     private final String companyId;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final Optional<String> selectedPlanId;
 
@@ -31,7 +32,7 @@ public final class CheckoutDataRequestBody {
 
     private CheckoutDataRequestBody(
             String companyId,
-            Optional<String> currency,
+            Optional<Currency> currency,
             Optional<String> selectedPlanId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
@@ -46,7 +47,7 @@ public final class CheckoutDataRequestBody {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -99,9 +100,9 @@ public final class CheckoutDataRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
 
         _FinalStage selectedPlanId(Optional<String> selectedPlanId);
 
@@ -114,7 +115,7 @@ public final class CheckoutDataRequestBody {
 
         private Optional<String> selectedPlanId = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -150,14 +151,14 @@ public final class CheckoutDataRequestBody {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }

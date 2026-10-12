@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +32,8 @@ public final class CreditEventLedgerResponseData {
 
     private final Optional<String> billingCreditId;
 
+    private final Optional<List<CreditBurnBreakdownLine>> burnBreakdown;
+
     private final Optional<CompanyLedgerResponseData> company;
 
     private final String companyId;
@@ -38,13 +42,15 @@ public final class CreditEventLedgerResponseData {
 
     private final String creditName;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final String environmentId;
 
     private final OffsetDateTime eventAt;
 
     private final String eventId;
+
+    private final List<String> eventIds;
 
     private final CreditEventType eventType;
 
@@ -101,14 +107,16 @@ public final class CreditEventLedgerResponseData {
             Optional<String> autoTopupLogId,
             Optional<String> billingCreditBundleId,
             Optional<String> billingCreditId,
+            Optional<List<CreditBurnBreakdownLine>> burnBreakdown,
             Optional<CompanyLedgerResponseData> company,
             String companyId,
             Optional<BillingCreditLedgerResponseData> credit,
             String creditName,
-            Optional<String> currency,
+            Optional<Currency> currency,
             String environmentId,
             OffsetDateTime eventAt,
             String eventId,
+            List<String> eventIds,
             CreditEventType eventType,
             Optional<BillingCreditExpiryType> expiryType,
             Optional<BillingCreditExpiryUnit> expiryUnit,
@@ -138,6 +146,7 @@ public final class CreditEventLedgerResponseData {
         this.autoTopupLogId = autoTopupLogId;
         this.billingCreditBundleId = billingCreditBundleId;
         this.billingCreditId = billingCreditId;
+        this.burnBreakdown = burnBreakdown;
         this.company = company;
         this.companyId = companyId;
         this.credit = credit;
@@ -146,6 +155,7 @@ public final class CreditEventLedgerResponseData {
         this.environmentId = environmentId;
         this.eventAt = eventAt;
         this.eventId = eventId;
+        this.eventIds = eventIds;
         this.eventType = eventType;
         this.expiryType = expiryType;
         this.expiryUnit = expiryUnit;
@@ -193,6 +203,14 @@ public final class CreditEventLedgerResponseData {
         return billingCreditId;
     }
 
+    /**
+     * @return The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. Set on inference-driven draws only.
+     */
+    @JsonProperty("burn_breakdown")
+    public Optional<List<CreditBurnBreakdownLine>> getBurnBreakdown() {
+        return burnBreakdown;
+    }
+
     @JsonProperty("company")
     public Optional<CompanyLedgerResponseData> getCompany() {
         return company;
@@ -214,7 +232,7 @@ public final class CreditEventLedgerResponseData {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -231,6 +249,11 @@ public final class CreditEventLedgerResponseData {
     @JsonProperty("event_id")
     public String getEventId() {
         return eventId;
+    }
+
+    @JsonProperty("event_ids")
+    public List<String> getEventIds() {
+        return eventIds;
     }
 
     @JsonProperty("event_type")
@@ -369,6 +392,7 @@ public final class CreditEventLedgerResponseData {
                 && autoTopupLogId.equals(other.autoTopupLogId)
                 && billingCreditBundleId.equals(other.billingCreditBundleId)
                 && billingCreditId.equals(other.billingCreditId)
+                && burnBreakdown.equals(other.burnBreakdown)
                 && company.equals(other.company)
                 && companyId.equals(other.companyId)
                 && credit.equals(other.credit)
@@ -377,6 +401,7 @@ public final class CreditEventLedgerResponseData {
                 && environmentId.equals(other.environmentId)
                 && eventAt.equals(other.eventAt)
                 && eventId.equals(other.eventId)
+                && eventIds.equals(other.eventIds)
                 && eventType.equals(other.eventType)
                 && expiryType.equals(other.expiryType)
                 && expiryUnit.equals(other.expiryUnit)
@@ -410,6 +435,7 @@ public final class CreditEventLedgerResponseData {
                 this.autoTopupLogId,
                 this.billingCreditBundleId,
                 this.billingCreditId,
+                this.burnBreakdown,
                 this.company,
                 this.companyId,
                 this.credit,
@@ -418,6 +444,7 @@ public final class CreditEventLedgerResponseData {
                 this.environmentId,
                 this.eventAt,
                 this.eventId,
+                this.eventIds,
                 this.eventType,
                 this.expiryType,
                 this.expiryUnit,
@@ -510,6 +537,13 @@ public final class CreditEventLedgerResponseData {
 
         _FinalStage billingCreditId(String billingCreditId);
 
+        /**
+         * <p>The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. Set on inference-driven draws only.</p>
+         */
+        _FinalStage burnBreakdown(Optional<List<CreditBurnBreakdownLine>> burnBreakdown);
+
+        _FinalStage burnBreakdown(List<CreditBurnBreakdownLine> burnBreakdown);
+
         _FinalStage company(Optional<CompanyLedgerResponseData> company);
 
         _FinalStage company(CompanyLedgerResponseData company);
@@ -518,9 +552,15 @@ public final class CreditEventLedgerResponseData {
 
         _FinalStage credit(BillingCreditLedgerResponseData credit);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
+
+        _FinalStage eventIds(List<String> eventIds);
+
+        _FinalStage addEventIds(String eventIds);
+
+        _FinalStage addAllEventIds(List<String> eventIds);
 
         _FinalStage expiryType(Optional<BillingCreditExpiryType> expiryType);
 
@@ -679,11 +719,15 @@ public final class CreditEventLedgerResponseData {
 
         private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private List<String> eventIds = new ArrayList<>();
+
+        private Optional<Currency> currency = Optional.empty();
 
         private Optional<BillingCreditLedgerResponseData> credit = Optional.empty();
 
         private Optional<CompanyLedgerResponseData> company = Optional.empty();
+
+        private Optional<List<CreditBurnBreakdownLine>> burnBreakdown = Optional.empty();
 
         private Optional<String> billingCreditId = Optional.empty();
 
@@ -702,6 +746,7 @@ public final class CreditEventLedgerResponseData {
             autoTopupLogId(other.getAutoTopupLogId());
             billingCreditBundleId(other.getBillingCreditBundleId());
             billingCreditId(other.getBillingCreditId());
+            burnBreakdown(other.getBurnBreakdown());
             company(other.getCompany());
             companyId(other.getCompanyId());
             credit(other.getCredit());
@@ -710,6 +755,7 @@ public final class CreditEventLedgerResponseData {
             environmentId(other.getEnvironmentId());
             eventAt(other.getEventAt());
             eventId(other.getEventId());
+            eventIds(other.getEventIds());
             eventType(other.getEventType());
             expiryType(other.getExpiryType());
             expiryUnit(other.getExpiryUnit());
@@ -1074,14 +1120,38 @@ public final class CreditEventLedgerResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage addAllEventIds(List<String> eventIds) {
+            if (eventIds != null) {
+                this.eventIds.addAll(eventIds);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addEventIds(String eventIds) {
+            this.eventIds.add(eventIds);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "event_ids", nulls = Nulls.SKIP)
+        public _FinalStage eventIds(List<String> eventIds) {
+            this.eventIds.clear();
+            if (eventIds != null) {
+                this.eventIds.addAll(eventIds);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }
@@ -1109,6 +1179,26 @@ public final class CreditEventLedgerResponseData {
         @JsonSetter(value = "company", nulls = Nulls.SKIP)
         public _FinalStage company(Optional<CompanyLedgerResponseData> company) {
             this.company = company;
+            return this;
+        }
+
+        /**
+         * <p>The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. Set on inference-driven draws only.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage burnBreakdown(List<CreditBurnBreakdownLine> burnBreakdown) {
+            this.burnBreakdown = Optional.ofNullable(burnBreakdown);
+            return this;
+        }
+
+        /**
+         * <p>The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. Set on inference-driven draws only.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "burn_breakdown", nulls = Nulls.SKIP)
+        public _FinalStage burnBreakdown(Optional<List<CreditBurnBreakdownLine>> burnBreakdown) {
+            this.burnBreakdown = burnBreakdown;
             return this;
         }
 
@@ -1158,6 +1248,7 @@ public final class CreditEventLedgerResponseData {
                     autoTopupLogId,
                     billingCreditBundleId,
                     billingCreditId,
+                    burnBreakdown,
                     company,
                     companyId,
                     credit,
@@ -1166,6 +1257,7 @@ public final class CreditEventLedgerResponseData {
                     environmentId,
                     eventAt,
                     eventId,
+                    eventIds,
                     eventType,
                     expiryType,
                     expiryUnit,

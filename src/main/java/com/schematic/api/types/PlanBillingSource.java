@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class PlanBillingSource {
     public static final PlanBillingSource CUSTOM_PLAN = new PlanBillingSource(Value.CUSTOM_PLAN, "custom_plan");
 
+    public static final PlanBillingSource AMENDMENT = new PlanBillingSource(Value.AMENDMENT, "amendment");
+
     public static final PlanBillingSource MANAGE_PLAN = new PlanBillingSource(Value.MANAGE_PLAN, "manage_plan");
 
     private final Value value;
@@ -45,6 +47,8 @@ public final class PlanBillingSource {
         switch (value) {
             case CUSTOM_PLAN:
                 return visitor.visitCustomPlan();
+            case AMENDMENT:
+                return visitor.visitAmendment();
             case MANAGE_PLAN:
                 return visitor.visitManagePlan();
             case UNKNOWN:
@@ -58,6 +62,8 @@ public final class PlanBillingSource {
         switch (value) {
             case "custom_plan":
                 return CUSTOM_PLAN;
+            case "amendment":
+                return AMENDMENT;
             case "manage_plan":
                 return MANAGE_PLAN;
             default:
@@ -66,6 +72,8 @@ public final class PlanBillingSource {
     }
 
     public enum Value {
+        AMENDMENT,
+
         CUSTOM_PLAN,
 
         MANAGE_PLAN,
@@ -74,6 +82,8 @@ public final class PlanBillingSource {
     }
 
     public interface Visitor<T> {
+        T visitAmendment();
+
         T visitCustomPlan();
 
         T visitManagePlan();

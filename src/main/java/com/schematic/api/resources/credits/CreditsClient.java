@@ -19,6 +19,7 @@ import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBod
 import com.schematic.api.resources.credits.requests.CreateCreditSpendPolicyRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
 import com.schematic.api.resources.credits.requests.ExtendCreditLeaseRequestBody;
+import com.schematic.api.resources.credits.requests.GetCreditBalanceTimeSeriesRequest;
 import com.schematic.api.resources.credits.requests.GetCreditSpendPolicyUsageRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
@@ -49,6 +50,7 @@ import com.schematic.api.resources.credits.types.DeleteBillingPlanCreditGrantRes
 import com.schematic.api.resources.credits.types.DeleteCreditBundleResponse;
 import com.schematic.api.resources.credits.types.DeleteCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
+import com.schematic.api.resources.credits.types.GetCreditBalanceTimeSeriesResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyUsageResponse;
@@ -152,6 +154,17 @@ public class CreditsClient {
     public ListCompanyCreditBalancesResponse listCompanyCreditBalances(
             ListCompanyCreditBalancesRequest request, RequestOptions requestOptions) {
         return this.rawClient.listCompanyCreditBalances(request, requestOptions).body();
+    }
+
+    public GetCreditBalanceTimeSeriesResponse getCreditBalanceTimeSeries(GetCreditBalanceTimeSeriesRequest request) {
+        return this.rawClient.getCreditBalanceTimeSeries(request).body();
+    }
+
+    public GetCreditBalanceTimeSeriesResponse getCreditBalanceTimeSeries(
+            GetCreditBalanceTimeSeriesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .getCreditBalanceTimeSeries(request, requestOptions)
+                .body();
     }
 
     public ListCreditBundlesResponse listCreditBundles() {

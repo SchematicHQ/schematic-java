@@ -17,6 +17,7 @@ import com.schematic.api.types.BillingPriceUsageType;
 import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.BillingTiersMode;
 import com.schematic.api.types.CreateBillingPriceTierRequestBody;
+import com.schematic.api.types.Currency;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateBillingPriceRequestBody {
     private final BillingPriceScheme billingScheme;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String externalAccountId;
 
@@ -66,7 +67,7 @@ public final class CreateBillingPriceRequestBody {
 
     private CreateBillingPriceRequestBody(
             BillingPriceScheme billingScheme,
-            String currency,
+            Currency currency,
             String externalAccountId,
             String interval,
             Optional<Long> intervalCount,
@@ -109,7 +110,7 @@ public final class CreateBillingPriceRequestBody {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -257,7 +258,7 @@ public final class CreateBillingPriceRequestBody {
     }
 
     public interface CurrencyStage {
-        ExternalAccountIdStage currency(@NotNull String currency);
+        ExternalAccountIdStage currency(@NotNull Currency currency);
     }
 
     public interface ExternalAccountIdStage {
@@ -344,7 +345,7 @@ public final class CreateBillingPriceRequestBody {
                     _FinalStage {
         private BillingPriceScheme billingScheme;
 
-        private String currency;
+        private Currency currency;
 
         private String externalAccountId;
 
@@ -412,7 +413,7 @@ public final class CreateBillingPriceRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public ExternalAccountIdStage currency(@NotNull String currency) {
+        public ExternalAccountIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

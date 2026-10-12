@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class CreditUsageReason {
+    public static final CreditUsageReason INFERENCE = new CreditUsageReason(Value.INFERENCE, "inference");
+
     public static final CreditUsageReason LEASE_HOLD = new CreditUsageReason(Value.LEASE_HOLD, "lease_hold");
 
     public static final CreditUsageReason TRACK = new CreditUsageReason(Value.TRACK, "track");
@@ -57,6 +59,8 @@ public final class CreditUsageReason {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case INFERENCE:
+                return visitor.visitInference();
             case LEASE_HOLD:
                 return visitor.visitLeaseHold();
             case TRACK:
@@ -80,6 +84,8 @@ public final class CreditUsageReason {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static CreditUsageReason valueOf(String value) {
         switch (value) {
+            case "inference":
+                return INFERENCE;
             case "lease_hold":
                 return LEASE_HOLD;
             case "track":
@@ -100,6 +106,8 @@ public final class CreditUsageReason {
     }
 
     public enum Value {
+        INFERENCE,
+
         LEASE_HOLD,
 
         LEASE_RELEASE,
@@ -118,6 +126,8 @@ public final class CreditUsageReason {
     }
 
     public interface Visitor<T> {
+        T visitInference();
+
         T visitLeaseHold();
 
         T visitLeaseRelease();

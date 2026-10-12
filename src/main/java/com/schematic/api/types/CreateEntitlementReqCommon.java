@@ -29,6 +29,8 @@ public final class CreateEntitlementReqCommon {
 
     private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
+    private final Optional<Map<String, Double>> quantityRates;
+
     private final Optional<Boolean> valueBool;
 
     private final Optional<String> valueCreditId;
@@ -46,6 +48,7 @@ public final class CreateEntitlementReqCommon {
             String featureId,
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<Map<String, Double>> quantityRates,
             Optional<Boolean> valueBool,
             Optional<String> valueCreditId,
             Optional<Long> valueNumeric,
@@ -56,6 +59,7 @@ public final class CreateEntitlementReqCommon {
         this.featureId = featureId;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.quantityRates = quantityRates;
         this.valueBool = valueBool;
         this.valueCreditId = valueCreditId;
         this.valueNumeric = valueNumeric;
@@ -82,6 +86,14 @@ public final class CreateEntitlementReqCommon {
     @JsonProperty("metric_period_month_reset")
     public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
+    }
+
+    /**
+     * @return Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.
+     */
+    @JsonProperty("quantity_rates")
+    public Optional<Map<String, Double>> getQuantityRates() {
+        return quantityRates;
     }
 
     @JsonProperty("value_bool")
@@ -125,6 +137,7 @@ public final class CreateEntitlementReqCommon {
                 && featureId.equals(other.featureId)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && quantityRates.equals(other.quantityRates)
                 && valueBool.equals(other.valueBool)
                 && valueCreditId.equals(other.valueCreditId)
                 && valueNumeric.equals(other.valueNumeric)
@@ -139,6 +152,7 @@ public final class CreateEntitlementReqCommon {
                 this.featureId,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.quantityRates,
                 this.valueBool,
                 this.valueCreditId,
                 this.valueNumeric,
@@ -184,6 +198,13 @@ public final class CreateEntitlementReqCommon {
 
         _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
+         */
+        _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
+
+        _FinalStage quantityRates(Map<String, Double> quantityRates);
+
         _FinalStage valueBool(Optional<Boolean> valueBool);
 
         _FinalStage valueBool(Boolean valueBool);
@@ -215,6 +236,8 @@ public final class CreateEntitlementReqCommon {
 
         private Optional<Boolean> valueBool = Optional.empty();
 
+        private Optional<Map<String, Double>> quantityRates = Optional.empty();
+
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
         private Optional<MetricPeriod> metricPeriod = Optional.empty();
@@ -232,6 +255,7 @@ public final class CreateEntitlementReqCommon {
             featureId(other.getFeatureId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            quantityRates(other.getQuantityRates());
             valueBool(other.getValueBool());
             valueCreditId(other.getValueCreditId());
             valueNumeric(other.getValueNumeric());
@@ -306,6 +330,26 @@ public final class CreateEntitlementReqCommon {
             return this;
         }
 
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage quantityRates(Map<String, Double> quantityRates) {
+            this.quantityRates = Optional.ofNullable(quantityRates);
+            return this;
+        }
+
+        /**
+         * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "quantity_rates", nulls = Nulls.SKIP)
+        public _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates) {
+            this.quantityRates = quantityRates;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
@@ -352,6 +396,7 @@ public final class CreateEntitlementReqCommon {
                     featureId,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    quantityRates,
                     valueBool,
                     valueCreditId,
                     valueNumeric,

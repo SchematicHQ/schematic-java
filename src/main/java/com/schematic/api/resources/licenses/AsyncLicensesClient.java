@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.licenses;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.licenses.requests.CountLicensesRequest;
@@ -30,45 +31,123 @@ public class AsyncLicensesClient {
     }
 
     public CompletableFuture<ListLicensesResponse> listLicenses() {
-        return this.rawClient.listLicenses().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListLicensesResponse>> rawFuture = this.rawClient.listLicenses();
+        CompletableFuture<ListLicensesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListLicensesResponse> listLicenses(RequestOptions requestOptions) {
-        return this.rawClient.listLicenses(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListLicensesResponse>> rawFuture =
+                this.rawClient.listLicenses(requestOptions);
+        CompletableFuture<ListLicensesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListLicensesResponse> listLicenses(ListLicensesRequest request) {
-        return this.rawClient.listLicenses(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListLicensesResponse>> rawFuture =
+                this.rawClient.listLicenses(request);
+        CompletableFuture<ListLicensesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListLicensesResponse> listLicenses(
             ListLicensesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listLicenses(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListLicensesResponse>> rawFuture =
+                this.rawClient.listLicenses(request, requestOptions);
+        CompletableFuture<ListLicensesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetSingleLicenseResponse> getSingleLicense(String licenseId) {
-        return this.rawClient.getSingleLicense(licenseId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetSingleLicenseResponse>> rawFuture =
+                this.rawClient.getSingleLicense(licenseId);
+        CompletableFuture<GetSingleLicenseResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetSingleLicenseResponse> getSingleLicense(
             String licenseId, RequestOptions requestOptions) {
-        return this.rawClient.getSingleLicense(licenseId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetSingleLicenseResponse>> rawFuture =
+                this.rawClient.getSingleLicense(licenseId, requestOptions);
+        CompletableFuture<GetSingleLicenseResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountLicensesResponse> countLicenses() {
-        return this.rawClient.countLicenses().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountLicensesResponse>> rawFuture = this.rawClient.countLicenses();
+        CompletableFuture<CountLicensesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountLicensesResponse> countLicenses(RequestOptions requestOptions) {
-        return this.rawClient.countLicenses(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountLicensesResponse>> rawFuture =
+                this.rawClient.countLicenses(requestOptions);
+        CompletableFuture<CountLicensesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountLicensesResponse> countLicenses(CountLicensesRequest request) {
-        return this.rawClient.countLicenses(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountLicensesResponse>> rawFuture =
+                this.rawClient.countLicenses(request);
+        CompletableFuture<CountLicensesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountLicensesResponse> countLicenses(
             CountLicensesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countLicenses(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountLicensesResponse>> rawFuture =
+                this.rawClient.countLicenses(request, requestOptions);
+        CompletableFuture<CountLicensesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }
