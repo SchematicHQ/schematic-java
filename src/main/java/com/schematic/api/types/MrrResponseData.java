@@ -21,11 +21,11 @@ import org.jetbrains.annotations.NotNull;
 public final class MrrResponseData {
     private final long amount;
 
-    private final String currency;
+    private final Currency currency;
 
     private final Map<String, Object> additionalProperties;
 
-    private MrrResponseData(long amount, String currency, Map<String, Object> additionalProperties) {
+    private MrrResponseData(long amount, Currency currency, Map<String, Object> additionalProperties) {
         this.amount = amount;
         this.currency = currency;
         this.additionalProperties = additionalProperties;
@@ -37,7 +37,7 @@ public final class MrrResponseData {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -77,7 +77,7 @@ public final class MrrResponseData {
     }
 
     public interface CurrencyStage {
-        _FinalStage currency(@NotNull String currency);
+        _FinalStage currency(@NotNull Currency currency);
     }
 
     public interface _FinalStage {
@@ -92,7 +92,7 @@ public final class MrrResponseData {
     public static final class Builder implements AmountStage, CurrencyStage, _FinalStage {
         private long amount;
 
-        private String currency;
+        private Currency currency;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -115,7 +115,7 @@ public final class MrrResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public _FinalStage currency(@NotNull String currency) {
+        public _FinalStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

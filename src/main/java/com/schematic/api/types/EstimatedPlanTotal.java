@@ -21,14 +21,14 @@ import org.jetbrains.annotations.NotNull;
 public final class EstimatedPlanTotal {
     private final long amount;
 
-    private final String currency;
+    private final Currency currency;
 
     private final PlanPriceCadence period;
 
     private final Map<String, Object> additionalProperties;
 
     private EstimatedPlanTotal(
-            long amount, String currency, PlanPriceCadence period, Map<String, Object> additionalProperties) {
+            long amount, Currency currency, PlanPriceCadence period, Map<String, Object> additionalProperties) {
         this.amount = amount;
         this.currency = currency;
         this.period = period;
@@ -41,7 +41,7 @@ public final class EstimatedPlanTotal {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -86,7 +86,7 @@ public final class EstimatedPlanTotal {
     }
 
     public interface CurrencyStage {
-        PeriodStage currency(@NotNull String currency);
+        PeriodStage currency(@NotNull Currency currency);
     }
 
     public interface PeriodStage {
@@ -105,7 +105,7 @@ public final class EstimatedPlanTotal {
     public static final class Builder implements AmountStage, CurrencyStage, PeriodStage, _FinalStage {
         private long amount;
 
-        private String currency;
+        private Currency currency;
 
         private PlanPriceCadence period;
 
@@ -131,7 +131,7 @@ public final class EstimatedPlanTotal {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public PeriodStage currency(@NotNull String currency) {
+        public PeriodStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

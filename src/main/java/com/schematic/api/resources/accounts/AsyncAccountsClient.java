@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.accounts;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.accounts.requests.CountAccountMembersRequest;
@@ -58,254 +59,712 @@ public class AsyncAccountsClient {
     }
 
     public CompletableFuture<ListAccountMembersResponse> listAccountMembers() {
-        return this.rawClient.listAccountMembers().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListAccountMembersResponse>> rawFuture =
+                this.rawClient.listAccountMembers();
+        CompletableFuture<ListAccountMembersResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListAccountMembersResponse> listAccountMembers(RequestOptions requestOptions) {
-        return this.rawClient.listAccountMembers(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListAccountMembersResponse>> rawFuture =
+                this.rawClient.listAccountMembers(requestOptions);
+        CompletableFuture<ListAccountMembersResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListAccountMembersResponse> listAccountMembers(ListAccountMembersRequest request) {
-        return this.rawClient.listAccountMembers(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListAccountMembersResponse>> rawFuture =
+                this.rawClient.listAccountMembers(request);
+        CompletableFuture<ListAccountMembersResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListAccountMembersResponse> listAccountMembers(
             ListAccountMembersRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listAccountMembers(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListAccountMembersResponse>> rawFuture =
+                this.rawClient.listAccountMembers(request, requestOptions);
+        CompletableFuture<ListAccountMembersResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetAccountMemberResponse> getAccountMember(String accountMemberId) {
-        return this.rawClient.getAccountMember(accountMemberId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetAccountMemberResponse>> rawFuture =
+                this.rawClient.getAccountMember(accountMemberId);
+        CompletableFuture<GetAccountMemberResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetAccountMemberResponse> getAccountMember(
             String accountMemberId, RequestOptions requestOptions) {
-        return this.rawClient.getAccountMember(accountMemberId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetAccountMemberResponse>> rawFuture =
+                this.rawClient.getAccountMember(accountMemberId, requestOptions);
+        CompletableFuture<GetAccountMemberResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountAccountMembersResponse> countAccountMembers() {
-        return this.rawClient.countAccountMembers().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountAccountMembersResponse>> rawFuture =
+                this.rawClient.countAccountMembers();
+        CompletableFuture<CountAccountMembersResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountAccountMembersResponse> countAccountMembers(RequestOptions requestOptions) {
-        return this.rawClient.countAccountMembers(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountAccountMembersResponse>> rawFuture =
+                this.rawClient.countAccountMembers(requestOptions);
+        CompletableFuture<CountAccountMembersResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountAccountMembersResponse> countAccountMembers(CountAccountMembersRequest request) {
-        return this.rawClient.countAccountMembers(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountAccountMembersResponse>> rawFuture =
+                this.rawClient.countAccountMembers(request);
+        CompletableFuture<CountAccountMembersResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountAccountMembersResponse> countAccountMembers(
             CountAccountMembersRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countAccountMembers(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountAccountMembersResponse>> rawFuture =
+                this.rawClient.countAccountMembers(request, requestOptions);
+        CompletableFuture<CountAccountMembersResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListApiKeysResponse> listApiKeys(ListApiKeysRequest request) {
-        return this.rawClient.listApiKeys(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListApiKeysResponse>> rawFuture =
+                this.rawClient.listApiKeys(request);
+        CompletableFuture<ListApiKeysResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListApiKeysResponse> listApiKeys(
             ListApiKeysRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listApiKeys(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListApiKeysResponse>> rawFuture =
+                this.rawClient.listApiKeys(request, requestOptions);
+        CompletableFuture<ListApiKeysResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateApiKeyResponse> createApiKey(CreateApiKeyRequestBody request) {
-        return this.rawClient.createApiKey(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateApiKeyResponse>> rawFuture =
+                this.rawClient.createApiKey(request);
+        CompletableFuture<CreateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateApiKeyResponse> createApiKey(
             CreateApiKeyRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createApiKey(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateApiKeyResponse>> rawFuture =
+                this.rawClient.createApiKey(request, requestOptions);
+        CompletableFuture<CreateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetApiKeyResponse> getApiKey(String apiKeyId) {
-        return this.rawClient.getApiKey(apiKeyId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetApiKeyResponse>> rawFuture = this.rawClient.getApiKey(apiKeyId);
+        CompletableFuture<GetApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetApiKeyResponse> getApiKey(String apiKeyId, RequestOptions requestOptions) {
-        return this.rawClient.getApiKey(apiKeyId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetApiKeyResponse>> rawFuture =
+                this.rawClient.getApiKey(apiKeyId, requestOptions);
+        CompletableFuture<GetApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateApiKeyResponse> updateApiKey(String apiKeyId) {
-        return this.rawClient.updateApiKey(apiKeyId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> rawFuture =
+                this.rawClient.updateApiKey(apiKeyId);
+        CompletableFuture<UpdateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateApiKeyResponse> updateApiKey(String apiKeyId, RequestOptions requestOptions) {
-        return this.rawClient.updateApiKey(apiKeyId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> rawFuture =
+                this.rawClient.updateApiKey(apiKeyId, requestOptions);
+        CompletableFuture<UpdateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateApiKeyResponse> updateApiKey(String apiKeyId, UpdateApiKeyRequestBody request) {
-        return this.rawClient.updateApiKey(apiKeyId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> rawFuture =
+                this.rawClient.updateApiKey(apiKeyId, request);
+        CompletableFuture<UpdateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateApiKeyResponse> updateApiKey(
             String apiKeyId, UpdateApiKeyRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.updateApiKey(apiKeyId, request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> rawFuture =
+                this.rawClient.updateApiKey(apiKeyId, request, requestOptions);
+        CompletableFuture<UpdateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteApiKeyResponse> deleteApiKey(String apiKeyId) {
-        return this.rawClient.deleteApiKey(apiKeyId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteApiKeyResponse>> rawFuture =
+                this.rawClient.deleteApiKey(apiKeyId);
+        CompletableFuture<DeleteApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteApiKeyResponse> deleteApiKey(String apiKeyId, RequestOptions requestOptions) {
-        return this.rawClient.deleteApiKey(apiKeyId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteApiKeyResponse>> rawFuture =
+                this.rawClient.deleteApiKey(apiKeyId, requestOptions);
+        CompletableFuture<DeleteApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountApiKeysResponse> countApiKeys(CountApiKeysRequest request) {
-        return this.rawClient.countApiKeys(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountApiKeysResponse>> rawFuture =
+                this.rawClient.countApiKeys(request);
+        CompletableFuture<CountApiKeysResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountApiKeysResponse> countApiKeys(
             CountApiKeysRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countApiKeys(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountApiKeysResponse>> rawFuture =
+                this.rawClient.countApiKeys(request, requestOptions);
+        CompletableFuture<CountApiKeysResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListAuditLogsResponse> listAuditLogs() {
-        return this.rawClient.listAuditLogs().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListAuditLogsResponse>> rawFuture = this.rawClient.listAuditLogs();
+        CompletableFuture<ListAuditLogsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListAuditLogsResponse> listAuditLogs(RequestOptions requestOptions) {
-        return this.rawClient.listAuditLogs(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListAuditLogsResponse>> rawFuture =
+                this.rawClient.listAuditLogs(requestOptions);
+        CompletableFuture<ListAuditLogsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListAuditLogsResponse> listAuditLogs(ListAuditLogsRequest request) {
-        return this.rawClient.listAuditLogs(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListAuditLogsResponse>> rawFuture =
+                this.rawClient.listAuditLogs(request);
+        CompletableFuture<ListAuditLogsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListAuditLogsResponse> listAuditLogs(
             ListAuditLogsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listAuditLogs(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListAuditLogsResponse>> rawFuture =
+                this.rawClient.listAuditLogs(request, requestOptions);
+        CompletableFuture<ListAuditLogsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetAuditLogResponse> getAuditLog(String auditLogId) {
-        return this.rawClient.getAuditLog(auditLogId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetAuditLogResponse>> rawFuture =
+                this.rawClient.getAuditLog(auditLogId);
+        CompletableFuture<GetAuditLogResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetAuditLogResponse> getAuditLog(String auditLogId, RequestOptions requestOptions) {
-        return this.rawClient.getAuditLog(auditLogId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetAuditLogResponse>> rawFuture =
+                this.rawClient.getAuditLog(auditLogId, requestOptions);
+        CompletableFuture<GetAuditLogResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountAuditLogsResponse> countAuditLogs() {
-        return this.rawClient.countAuditLogs().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountAuditLogsResponse>> rawFuture =
+                this.rawClient.countAuditLogs();
+        CompletableFuture<CountAuditLogsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountAuditLogsResponse> countAuditLogs(RequestOptions requestOptions) {
-        return this.rawClient.countAuditLogs(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountAuditLogsResponse>> rawFuture =
+                this.rawClient.countAuditLogs(requestOptions);
+        CompletableFuture<CountAuditLogsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountAuditLogsResponse> countAuditLogs(CountAuditLogsRequest request) {
-        return this.rawClient.countAuditLogs(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountAuditLogsResponse>> rawFuture =
+                this.rawClient.countAuditLogs(request);
+        CompletableFuture<CountAuditLogsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountAuditLogsResponse> countAuditLogs(
             CountAuditLogsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countAuditLogs(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountAuditLogsResponse>> rawFuture =
+                this.rawClient.countAuditLogs(request, requestOptions);
+        CompletableFuture<CountAuditLogsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListEnvironmentsResponse> listEnvironments() {
-        return this.rawClient.listEnvironments().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListEnvironmentsResponse>> rawFuture =
+                this.rawClient.listEnvironments();
+        CompletableFuture<ListEnvironmentsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListEnvironmentsResponse> listEnvironments(RequestOptions requestOptions) {
-        return this.rawClient.listEnvironments(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListEnvironmentsResponse>> rawFuture =
+                this.rawClient.listEnvironments(requestOptions);
+        CompletableFuture<ListEnvironmentsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListEnvironmentsResponse> listEnvironments(ListEnvironmentsRequest request) {
-        return this.rawClient.listEnvironments(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListEnvironmentsResponse>> rawFuture =
+                this.rawClient.listEnvironments(request);
+        CompletableFuture<ListEnvironmentsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListEnvironmentsResponse> listEnvironments(
             ListEnvironmentsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listEnvironments(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListEnvironmentsResponse>> rawFuture =
+                this.rawClient.listEnvironments(request, requestOptions);
+        CompletableFuture<ListEnvironmentsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateEnvironmentResponse> createEnvironment(CreateEnvironmentRequestBody request) {
-        return this.rawClient.createEnvironment(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateEnvironmentResponse>> rawFuture =
+                this.rawClient.createEnvironment(request);
+        CompletableFuture<CreateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateEnvironmentResponse> createEnvironment(
             CreateEnvironmentRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createEnvironment(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateEnvironmentResponse>> rawFuture =
+                this.rawClient.createEnvironment(request, requestOptions);
+        CompletableFuture<CreateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetEnvironmentResponse> getEnvironment(String environmentId) {
-        return this.rawClient.getEnvironment(environmentId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetEnvironmentResponse>> rawFuture =
+                this.rawClient.getEnvironment(environmentId);
+        CompletableFuture<GetEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetEnvironmentResponse> getEnvironment(
             String environmentId, RequestOptions requestOptions) {
-        return this.rawClient.getEnvironment(environmentId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetEnvironmentResponse>> rawFuture =
+                this.rawClient.getEnvironment(environmentId, requestOptions);
+        CompletableFuture<GetEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateEnvironmentResponse> updateEnvironment(String environmentId) {
-        return this.rawClient.updateEnvironment(environmentId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> rawFuture =
+                this.rawClient.updateEnvironment(environmentId);
+        CompletableFuture<UpdateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateEnvironmentResponse> updateEnvironment(
             String environmentId, RequestOptions requestOptions) {
-        return this.rawClient.updateEnvironment(environmentId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> rawFuture =
+                this.rawClient.updateEnvironment(environmentId, requestOptions);
+        CompletableFuture<UpdateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateEnvironmentResponse> updateEnvironment(
             String environmentId, UpdateEnvironmentRequestBody request) {
-        return this.rawClient.updateEnvironment(environmentId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> rawFuture =
+                this.rawClient.updateEnvironment(environmentId, request);
+        CompletableFuture<UpdateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateEnvironmentResponse> updateEnvironment(
             String environmentId, UpdateEnvironmentRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateEnvironment(environmentId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> rawFuture =
+                this.rawClient.updateEnvironment(environmentId, request, requestOptions);
+        CompletableFuture<UpdateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteEnvironmentResponse> deleteEnvironment(String environmentId) {
-        return this.rawClient.deleteEnvironment(environmentId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteEnvironmentResponse>> rawFuture =
+                this.rawClient.deleteEnvironment(environmentId);
+        CompletableFuture<DeleteEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteEnvironmentResponse> deleteEnvironment(
             String environmentId, RequestOptions requestOptions) {
-        return this.rawClient.deleteEnvironment(environmentId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteEnvironmentResponse>> rawFuture =
+                this.rawClient.deleteEnvironment(environmentId, requestOptions);
+        CompletableFuture<DeleteEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetOnboardingStateResponse> getOnboardingState() {
-        return this.rawClient.getOnboardingState().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetOnboardingStateResponse>> rawFuture =
+                this.rawClient.getOnboardingState();
+        CompletableFuture<GetOnboardingStateResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetOnboardingStateResponse> getOnboardingState(RequestOptions requestOptions) {
-        return this.rawClient.getOnboardingState(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetOnboardingStateResponse>> rawFuture =
+                this.rawClient.getOnboardingState(requestOptions);
+        CompletableFuture<GetOnboardingStateResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateOnboardingStateResponse> updateOnboardingState() {
-        return this.rawClient.updateOnboardingState().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateOnboardingStateResponse>> rawFuture =
+                this.rawClient.updateOnboardingState();
+        CompletableFuture<UpdateOnboardingStateResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateOnboardingStateResponse> updateOnboardingState(RequestOptions requestOptions) {
-        return this.rawClient.updateOnboardingState(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateOnboardingStateResponse>> rawFuture =
+                this.rawClient.updateOnboardingState(requestOptions);
+        CompletableFuture<UpdateOnboardingStateResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateOnboardingStateResponse> updateOnboardingState(
             UpdateOnboardingStateRequestBody request) {
-        return this.rawClient.updateOnboardingState(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateOnboardingStateResponse>> rawFuture =
+                this.rawClient.updateOnboardingState(request);
+        CompletableFuture<UpdateOnboardingStateResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateOnboardingStateResponse> updateOnboardingState(
             UpdateOnboardingStateRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.updateOnboardingState(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateOnboardingStateResponse>> rawFuture =
+                this.rawClient.updateOnboardingState(request, requestOptions);
+        CompletableFuture<UpdateOnboardingStateResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<QuickstartResponse> quickstart() {
-        return this.rawClient.quickstart().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<QuickstartResponse>> rawFuture = this.rawClient.quickstart();
+        CompletableFuture<QuickstartResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<QuickstartResponse> quickstart(RequestOptions requestOptions) {
-        return this.rawClient.quickstart(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<QuickstartResponse>> rawFuture =
+                this.rawClient.quickstart(requestOptions);
+        CompletableFuture<QuickstartResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetWhoAmIResponse> getWhoAmI() {
-        return this.rawClient.getWhoAmI().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetWhoAmIResponse>> rawFuture = this.rawClient.getWhoAmI();
+        CompletableFuture<GetWhoAmIResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetWhoAmIResponse> getWhoAmI(RequestOptions requestOptions) {
-        return this.rawClient.getWhoAmI(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetWhoAmIResponse>> rawFuture =
+                this.rawClient.getWhoAmI(requestOptions);
+        CompletableFuture<GetWhoAmIResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

@@ -35,7 +35,7 @@ public final class BillingSubscriptionView {
 
     private final OffsetDateTime createdAt;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String customerExternalId;
 
@@ -81,7 +81,7 @@ public final class BillingSubscriptionView {
             boolean cancelAtPeriodEnd,
             Optional<String> companyId,
             OffsetDateTime createdAt,
-            String currency,
+            Currency currency,
             String customerExternalId,
             Optional<String> defaultPaymentMethodId,
             List<BillingSubscriptionDiscountView> discounts,
@@ -154,7 +154,7 @@ public final class BillingSubscriptionView {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -335,7 +335,7 @@ public final class BillingSubscriptionView {
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(@NotNull String currency);
+        CustomerExternalIdStage currency(@NotNull Currency currency);
     }
 
     public interface CustomerExternalIdStage {
@@ -453,7 +453,7 @@ public final class BillingSubscriptionView {
 
         private OffsetDateTime createdAt;
 
-        private String currency;
+        private Currency currency;
 
         private String customerExternalId;
 
@@ -547,7 +547,7 @@ public final class BillingSubscriptionView {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(@NotNull String currency) {
+        public CustomerExternalIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

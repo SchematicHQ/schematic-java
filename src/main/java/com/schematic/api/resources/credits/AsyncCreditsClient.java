@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.credits;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.credits.requests.AcquireCreditLeaseRequestBody;
@@ -19,6 +20,7 @@ import com.schematic.api.resources.credits.requests.CreateCreditBundleRequestBod
 import com.schematic.api.resources.credits.requests.CreateCreditSpendPolicyRequestBody;
 import com.schematic.api.resources.credits.requests.DeleteBillingPlanCreditGrantRequest;
 import com.schematic.api.resources.credits.requests.ExtendCreditLeaseRequestBody;
+import com.schematic.api.resources.credits.requests.GetCreditBalanceTimeSeriesRequest;
 import com.schematic.api.resources.credits.requests.GetCreditSpendPolicyUsageRequest;
 import com.schematic.api.resources.credits.requests.ListBillingCreditsRequest;
 import com.schematic.api.resources.credits.requests.ListBillingPlanCreditGrantsRequest;
@@ -49,6 +51,7 @@ import com.schematic.api.resources.credits.types.DeleteBillingPlanCreditGrantRes
 import com.schematic.api.resources.credits.types.DeleteCreditBundleResponse;
 import com.schematic.api.resources.credits.types.DeleteCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
+import com.schematic.api.resources.credits.types.GetCreditBalanceTimeSeriesResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyUsageResponse;
@@ -94,512 +97,1358 @@ public class AsyncCreditsClient {
     }
 
     public CompletableFuture<ListBillingCreditsResponse> listBillingCredits() {
-        return this.rawClient.listBillingCredits().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingCreditsResponse>> rawFuture =
+                this.rawClient.listBillingCredits();
+        CompletableFuture<ListBillingCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListBillingCreditsResponse> listBillingCredits(RequestOptions requestOptions) {
-        return this.rawClient.listBillingCredits(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingCreditsResponse>> rawFuture =
+                this.rawClient.listBillingCredits(requestOptions);
+        CompletableFuture<ListBillingCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListBillingCreditsResponse> listBillingCredits(ListBillingCreditsRequest request) {
-        return this.rawClient.listBillingCredits(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingCreditsResponse>> rawFuture =
+                this.rawClient.listBillingCredits(request);
+        CompletableFuture<ListBillingCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListBillingCreditsResponse> listBillingCredits(
             ListBillingCreditsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listBillingCredits(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingCreditsResponse>> rawFuture =
+                this.rawClient.listBillingCredits(request, requestOptions);
+        CompletableFuture<ListBillingCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateBillingCreditResponse> createBillingCredit(CreateBillingCreditRequestBody request) {
-        return this.rawClient.createBillingCredit(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateBillingCreditResponse>> rawFuture =
+                this.rawClient.createBillingCredit(request);
+        CompletableFuture<CreateBillingCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateBillingCreditResponse> createBillingCredit(
             CreateBillingCreditRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createBillingCredit(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateBillingCreditResponse>> rawFuture =
+                this.rawClient.createBillingCredit(request, requestOptions);
+        CompletableFuture<CreateBillingCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetSingleBillingCreditResponse> getSingleBillingCredit(String creditId) {
-        return this.rawClient.getSingleBillingCredit(creditId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetSingleBillingCreditResponse>> rawFuture =
+                this.rawClient.getSingleBillingCredit(creditId);
+        CompletableFuture<GetSingleBillingCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetSingleBillingCreditResponse> getSingleBillingCredit(
             String creditId, RequestOptions requestOptions) {
-        return this.rawClient.getSingleBillingCredit(creditId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetSingleBillingCreditResponse>> rawFuture =
+                this.rawClient.getSingleBillingCredit(creditId, requestOptions);
+        CompletableFuture<GetSingleBillingCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateBillingCreditResponse> updateBillingCredit(
             String creditId, UpdateBillingCreditRequestBody request) {
-        return this.rawClient.updateBillingCredit(creditId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateBillingCreditResponse>> rawFuture =
+                this.rawClient.updateBillingCredit(creditId, request);
+        CompletableFuture<UpdateBillingCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateBillingCreditResponse> updateBillingCredit(
             String creditId, UpdateBillingCreditRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateBillingCredit(creditId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateBillingCreditResponse>> rawFuture =
+                this.rawClient.updateBillingCredit(creditId, request, requestOptions);
+        CompletableFuture<UpdateBillingCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<SoftDeleteBillingCreditResponse> softDeleteBillingCredit(String creditId) {
-        return this.rawClient.softDeleteBillingCredit(creditId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<SoftDeleteBillingCreditResponse>> rawFuture =
+                this.rawClient.softDeleteBillingCredit(creditId);
+        CompletableFuture<SoftDeleteBillingCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<SoftDeleteBillingCreditResponse> softDeleteBillingCredit(
             String creditId, RequestOptions requestOptions) {
-        return this.rawClient.softDeleteBillingCredit(creditId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<SoftDeleteBillingCreditResponse>> rawFuture =
+                this.rawClient.softDeleteBillingCredit(creditId, requestOptions);
+        CompletableFuture<SoftDeleteBillingCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCompanyCreditBalancesResponse> listCompanyCreditBalances(
             ListCompanyCreditBalancesRequest request) {
-        return this.rawClient.listCompanyCreditBalances(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCompanyCreditBalancesResponse>> rawFuture =
+                this.rawClient.listCompanyCreditBalances(request);
+        CompletableFuture<ListCompanyCreditBalancesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCompanyCreditBalancesResponse> listCompanyCreditBalances(
             ListCompanyCreditBalancesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listCompanyCreditBalances(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCompanyCreditBalancesResponse>> rawFuture =
+                this.rawClient.listCompanyCreditBalances(request, requestOptions);
+        CompletableFuture<ListCompanyCreditBalancesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCreditBalanceTimeSeriesResponse> getCreditBalanceTimeSeries(
+            GetCreditBalanceTimeSeriesRequest request) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditBalanceTimeSeriesResponse>> rawFuture =
+                this.rawClient.getCreditBalanceTimeSeries(request);
+        CompletableFuture<GetCreditBalanceTimeSeriesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCreditBalanceTimeSeriesResponse> getCreditBalanceTimeSeries(
+            GetCreditBalanceTimeSeriesRequest request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditBalanceTimeSeriesResponse>> rawFuture =
+                this.rawClient.getCreditBalanceTimeSeries(request, requestOptions);
+        CompletableFuture<GetCreditBalanceTimeSeriesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditBundlesResponse> listCreditBundles() {
-        return this.rawClient.listCreditBundles().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditBundlesResponse>> rawFuture =
+                this.rawClient.listCreditBundles();
+        CompletableFuture<ListCreditBundlesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditBundlesResponse> listCreditBundles(RequestOptions requestOptions) {
-        return this.rawClient.listCreditBundles(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditBundlesResponse>> rawFuture =
+                this.rawClient.listCreditBundles(requestOptions);
+        CompletableFuture<ListCreditBundlesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditBundlesResponse> listCreditBundles(ListCreditBundlesRequest request) {
-        return this.rawClient.listCreditBundles(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditBundlesResponse>> rawFuture =
+                this.rawClient.listCreditBundles(request);
+        CompletableFuture<ListCreditBundlesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditBundlesResponse> listCreditBundles(
             ListCreditBundlesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listCreditBundles(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditBundlesResponse>> rawFuture =
+                this.rawClient.listCreditBundles(request, requestOptions);
+        CompletableFuture<ListCreditBundlesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateCreditBundleResponse> createCreditBundle(CreateCreditBundleRequestBody request) {
-        return this.rawClient.createCreditBundle(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateCreditBundleResponse>> rawFuture =
+                this.rawClient.createCreditBundle(request);
+        CompletableFuture<CreateCreditBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateCreditBundleResponse> createCreditBundle(
             CreateCreditBundleRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createCreditBundle(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateCreditBundleResponse>> rawFuture =
+                this.rawClient.createCreditBundle(request, requestOptions);
+        CompletableFuture<CreateCreditBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetCreditBundleResponse> getCreditBundle(String bundleId) {
-        return this.rawClient.getCreditBundle(bundleId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditBundleResponse>> rawFuture =
+                this.rawClient.getCreditBundle(bundleId);
+        CompletableFuture<GetCreditBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetCreditBundleResponse> getCreditBundle(String bundleId, RequestOptions requestOptions) {
-        return this.rawClient.getCreditBundle(bundleId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditBundleResponse>> rawFuture =
+                this.rawClient.getCreditBundle(bundleId, requestOptions);
+        CompletableFuture<GetCreditBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateCreditBundleDetailsResponse> updateCreditBundleDetails(
             String bundleId, UpdateCreditBundleDetailsRequestBody request) {
-        return this.rawClient.updateCreditBundleDetails(bundleId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCreditBundleDetailsResponse>> rawFuture =
+                this.rawClient.updateCreditBundleDetails(bundleId, request);
+        CompletableFuture<UpdateCreditBundleDetailsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateCreditBundleDetailsResponse> updateCreditBundleDetails(
             String bundleId, UpdateCreditBundleDetailsRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateCreditBundleDetails(bundleId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCreditBundleDetailsResponse>> rawFuture =
+                this.rawClient.updateCreditBundleDetails(bundleId, request, requestOptions);
+        CompletableFuture<UpdateCreditBundleDetailsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteCreditBundleResponse> deleteCreditBundle(String bundleId) {
-        return this.rawClient.deleteCreditBundle(bundleId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteCreditBundleResponse>> rawFuture =
+                this.rawClient.deleteCreditBundle(bundleId);
+        CompletableFuture<DeleteCreditBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteCreditBundleResponse> deleteCreditBundle(
             String bundleId, RequestOptions requestOptions) {
-        return this.rawClient.deleteCreditBundle(bundleId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteCreditBundleResponse>> rawFuture =
+                this.rawClient.deleteCreditBundle(bundleId, requestOptions);
+        CompletableFuture<DeleteCreditBundleResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditBundlesResponse> countCreditBundles() {
-        return this.rawClient.countCreditBundles().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditBundlesResponse>> rawFuture =
+                this.rawClient.countCreditBundles();
+        CompletableFuture<CountCreditBundlesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditBundlesResponse> countCreditBundles(RequestOptions requestOptions) {
-        return this.rawClient.countCreditBundles(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditBundlesResponse>> rawFuture =
+                this.rawClient.countCreditBundles(requestOptions);
+        CompletableFuture<CountCreditBundlesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditBundlesResponse> countCreditBundles(CountCreditBundlesRequest request) {
-        return this.rawClient.countCreditBundles(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditBundlesResponse>> rawFuture =
+                this.rawClient.countCreditBundles(request);
+        CompletableFuture<CountCreditBundlesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditBundlesResponse> countCreditBundles(
             CountCreditBundlesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countCreditBundles(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditBundlesResponse>> rawFuture =
+                this.rawClient.countCreditBundles(request, requestOptions);
+        CompletableFuture<CountCreditBundlesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingCreditsResponse> countBillingCredits() {
-        return this.rawClient.countBillingCredits().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingCreditsResponse>> rawFuture =
+                this.rawClient.countBillingCredits();
+        CompletableFuture<CountBillingCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingCreditsResponse> countBillingCredits(RequestOptions requestOptions) {
-        return this.rawClient.countBillingCredits(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingCreditsResponse>> rawFuture =
+                this.rawClient.countBillingCredits(requestOptions);
+        CompletableFuture<CountBillingCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingCreditsResponse> countBillingCredits(CountBillingCreditsRequest request) {
-        return this.rawClient.countBillingCredits(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingCreditsResponse>> rawFuture =
+                this.rawClient.countBillingCredits(request);
+        CompletableFuture<CountBillingCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingCreditsResponse> countBillingCredits(
             CountBillingCreditsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countBillingCredits(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingCreditsResponse>> rawFuture =
+                this.rawClient.countBillingCredits(request, requestOptions);
+        CompletableFuture<CountBillingCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ZeroOutGrantResponse> zeroOutGrant(String grantId) {
-        return this.rawClient.zeroOutGrant(grantId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ZeroOutGrantResponse>> rawFuture =
+                this.rawClient.zeroOutGrant(grantId);
+        CompletableFuture<ZeroOutGrantResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ZeroOutGrantResponse> zeroOutGrant(String grantId, RequestOptions requestOptions) {
-        return this.rawClient.zeroOutGrant(grantId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ZeroOutGrantResponse>> rawFuture =
+                this.rawClient.zeroOutGrant(grantId, requestOptions);
+        CompletableFuture<ZeroOutGrantResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ZeroOutGrantResponse> zeroOutGrant(String grantId, ZeroOutGrantRequestBody request) {
-        return this.rawClient.zeroOutGrant(grantId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ZeroOutGrantResponse>> rawFuture =
+                this.rawClient.zeroOutGrant(grantId, request);
+        CompletableFuture<ZeroOutGrantResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ZeroOutGrantResponse> zeroOutGrant(
             String grantId, ZeroOutGrantRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.zeroOutGrant(grantId, request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ZeroOutGrantResponse>> rawFuture =
+                this.rawClient.zeroOutGrant(grantId, request, requestOptions);
+        CompletableFuture<ZeroOutGrantResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GrantBillingCreditsToCompanyResponse> grantBillingCreditsToCompany(
             CreateCompanyCreditGrant request) {
-        return this.rawClient.grantBillingCreditsToCompany(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GrantBillingCreditsToCompanyResponse>> rawFuture =
+                this.rawClient.grantBillingCreditsToCompany(request);
+        CompletableFuture<GrantBillingCreditsToCompanyResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GrantBillingCreditsToCompanyResponse> grantBillingCreditsToCompany(
             CreateCompanyCreditGrant request, RequestOptions requestOptions) {
-        return this.rawClient
-                .grantBillingCreditsToCompany(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GrantBillingCreditsToCompanyResponse>> rawFuture =
+                this.rawClient.grantBillingCreditsToCompany(request, requestOptions);
+        CompletableFuture<GrantBillingCreditsToCompanyResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCompanyGrantsResponse> countCompanyGrants(CountCompanyGrantsRequest request) {
-        return this.rawClient.countCompanyGrants(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCompanyGrantsResponse>> rawFuture =
+                this.rawClient.countCompanyGrants(request);
+        CompletableFuture<CountCompanyGrantsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCompanyGrantsResponse> countCompanyGrants(
             CountCompanyGrantsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countCompanyGrants(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCompanyGrantsResponse>> rawFuture =
+                this.rawClient.countCompanyGrants(request, requestOptions);
+        CompletableFuture<CountCompanyGrantsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCompanyGrantsResponse> listCompanyGrants(ListCompanyGrantsRequest request) {
-        return this.rawClient.listCompanyGrants(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCompanyGrantsResponse>> rawFuture =
+                this.rawClient.listCompanyGrants(request);
+        CompletableFuture<ListCompanyGrantsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCompanyGrantsResponse> listCompanyGrants(
             ListCompanyGrantsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listCompanyGrants(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCompanyGrantsResponse>> rawFuture =
+                this.rawClient.listCompanyGrants(request, requestOptions);
+        CompletableFuture<ListCompanyGrantsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingCreditsGrantsResponse> countBillingCreditsGrants() {
-        return this.rawClient.countBillingCreditsGrants().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingCreditsGrantsResponse>> rawFuture =
+                this.rawClient.countBillingCreditsGrants();
+        CompletableFuture<CountBillingCreditsGrantsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingCreditsGrantsResponse> countBillingCreditsGrants(
             RequestOptions requestOptions) {
-        return this.rawClient.countBillingCreditsGrants(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingCreditsGrantsResponse>> rawFuture =
+                this.rawClient.countBillingCreditsGrants(requestOptions);
+        CompletableFuture<CountBillingCreditsGrantsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingCreditsGrantsResponse> countBillingCreditsGrants(
             CountBillingCreditsGrantsRequest request) {
-        return this.rawClient.countBillingCreditsGrants(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingCreditsGrantsResponse>> rawFuture =
+                this.rawClient.countBillingCreditsGrants(request);
+        CompletableFuture<CountBillingCreditsGrantsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingCreditsGrantsResponse> countBillingCreditsGrants(
             CountBillingCreditsGrantsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countBillingCreditsGrants(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingCreditsGrantsResponse>> rawFuture =
+                this.rawClient.countBillingCreditsGrants(request, requestOptions);
+        CompletableFuture<CountBillingCreditsGrantsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListGrantsForCreditResponse> listGrantsForCredit() {
-        return this.rawClient.listGrantsForCredit().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListGrantsForCreditResponse>> rawFuture =
+                this.rawClient.listGrantsForCredit();
+        CompletableFuture<ListGrantsForCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListGrantsForCreditResponse> listGrantsForCredit(RequestOptions requestOptions) {
-        return this.rawClient.listGrantsForCredit(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListGrantsForCreditResponse>> rawFuture =
+                this.rawClient.listGrantsForCredit(requestOptions);
+        CompletableFuture<ListGrantsForCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListGrantsForCreditResponse> listGrantsForCredit(ListGrantsForCreditRequest request) {
-        return this.rawClient.listGrantsForCredit(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListGrantsForCreditResponse>> rawFuture =
+                this.rawClient.listGrantsForCredit(request);
+        CompletableFuture<ListGrantsForCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListGrantsForCreditResponse> listGrantsForCredit(
             ListGrantsForCreditRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listGrantsForCredit(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListGrantsForCreditResponse>> rawFuture =
+                this.rawClient.listGrantsForCredit(request, requestOptions);
+        CompletableFuture<ListGrantsForCreditResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<AcquireCreditLeaseResponse> acquireCreditLease(AcquireCreditLeaseRequestBody request) {
-        return this.rawClient.acquireCreditLease(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<AcquireCreditLeaseResponse>> rawFuture =
+                this.rawClient.acquireCreditLease(request);
+        CompletableFuture<AcquireCreditLeaseResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<AcquireCreditLeaseResponse> acquireCreditLease(
             AcquireCreditLeaseRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.acquireCreditLease(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<AcquireCreditLeaseResponse>> rawFuture =
+                this.rawClient.acquireCreditLease(request, requestOptions);
+        CompletableFuture<AcquireCreditLeaseResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ExtendCreditLeaseResponse> extendCreditLease(
             String leaseId, ExtendCreditLeaseRequestBody request) {
-        return this.rawClient.extendCreditLease(leaseId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ExtendCreditLeaseResponse>> rawFuture =
+                this.rawClient.extendCreditLease(leaseId, request);
+        CompletableFuture<ExtendCreditLeaseResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ExtendCreditLeaseResponse> extendCreditLease(
             String leaseId, ExtendCreditLeaseRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .extendCreditLease(leaseId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ExtendCreditLeaseResponse>> rawFuture =
+                this.rawClient.extendCreditLease(leaseId, request, requestOptions);
+        CompletableFuture<ExtendCreditLeaseResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ReleaseCreditLeaseResponse> releaseCreditLease(String leaseId) {
-        return this.rawClient.releaseCreditLease(leaseId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ReleaseCreditLeaseResponse>> rawFuture =
+                this.rawClient.releaseCreditLease(leaseId);
+        CompletableFuture<ReleaseCreditLeaseResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ReleaseCreditLeaseResponse> releaseCreditLease(
             String leaseId, RequestOptions requestOptions) {
-        return this.rawClient.releaseCreditLease(leaseId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ReleaseCreditLeaseResponse>> rawFuture =
+                this.rawClient.releaseCreditLease(leaseId, requestOptions);
+        CompletableFuture<ReleaseCreditLeaseResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListBillingPlanCreditGrantsResponse> listBillingPlanCreditGrants() {
-        return this.rawClient.listBillingPlanCreditGrants().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingPlanCreditGrantsResponse>> rawFuture =
+                this.rawClient.listBillingPlanCreditGrants();
+        CompletableFuture<ListBillingPlanCreditGrantsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListBillingPlanCreditGrantsResponse> listBillingPlanCreditGrants(
             RequestOptions requestOptions) {
-        return this.rawClient.listBillingPlanCreditGrants(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingPlanCreditGrantsResponse>> rawFuture =
+                this.rawClient.listBillingPlanCreditGrants(requestOptions);
+        CompletableFuture<ListBillingPlanCreditGrantsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListBillingPlanCreditGrantsResponse> listBillingPlanCreditGrants(
             ListBillingPlanCreditGrantsRequest request) {
-        return this.rawClient.listBillingPlanCreditGrants(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingPlanCreditGrantsResponse>> rawFuture =
+                this.rawClient.listBillingPlanCreditGrants(request);
+        CompletableFuture<ListBillingPlanCreditGrantsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListBillingPlanCreditGrantsResponse> listBillingPlanCreditGrants(
             ListBillingPlanCreditGrantsRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .listBillingPlanCreditGrants(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingPlanCreditGrantsResponse>> rawFuture =
+                this.rawClient.listBillingPlanCreditGrants(request, requestOptions);
+        CompletableFuture<ListBillingPlanCreditGrantsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateBillingPlanCreditGrantResponse> createBillingPlanCreditGrant(
             CreateBillingPlanCreditGrantRequestBody request) {
-        return this.rawClient.createBillingPlanCreditGrant(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.createBillingPlanCreditGrant(request);
+        CompletableFuture<CreateBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateBillingPlanCreditGrantResponse> createBillingPlanCreditGrant(
             CreateBillingPlanCreditGrantRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .createBillingPlanCreditGrant(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.createBillingPlanCreditGrant(request, requestOptions);
+        CompletableFuture<CreateBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetSingleBillingPlanCreditGrantResponse> getSingleBillingPlanCreditGrant(
             String planGrantId) {
-        return this.rawClient.getSingleBillingPlanCreditGrant(planGrantId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetSingleBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.getSingleBillingPlanCreditGrant(planGrantId);
+        CompletableFuture<GetSingleBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetSingleBillingPlanCreditGrantResponse> getSingleBillingPlanCreditGrant(
             String planGrantId, RequestOptions requestOptions) {
-        return this.rawClient
-                .getSingleBillingPlanCreditGrant(planGrantId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetSingleBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.getSingleBillingPlanCreditGrant(planGrantId, requestOptions);
+        CompletableFuture<GetSingleBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateBillingPlanCreditGrantResponse> updateBillingPlanCreditGrant(
             String planGrantId, UpdateBillingPlanCreditGrantRequestBody request) {
-        return this.rawClient.updateBillingPlanCreditGrant(planGrantId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.updateBillingPlanCreditGrant(planGrantId, request);
+        CompletableFuture<UpdateBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateBillingPlanCreditGrantResponse> updateBillingPlanCreditGrant(
             String planGrantId, UpdateBillingPlanCreditGrantRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateBillingPlanCreditGrant(planGrantId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.updateBillingPlanCreditGrant(planGrantId, request, requestOptions);
+        CompletableFuture<UpdateBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(String planGrantId) {
-        return this.rawClient.deleteBillingPlanCreditGrant(planGrantId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.deleteBillingPlanCreditGrant(planGrantId);
+        CompletableFuture<DeleteBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
             String planGrantId, RequestOptions requestOptions) {
-        return this.rawClient
-                .deleteBillingPlanCreditGrant(planGrantId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.deleteBillingPlanCreditGrant(planGrantId, requestOptions);
+        CompletableFuture<DeleteBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
             String planGrantId, DeleteBillingPlanCreditGrantRequest request) {
-        return this.rawClient.deleteBillingPlanCreditGrant(planGrantId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.deleteBillingPlanCreditGrant(planGrantId, request);
+        CompletableFuture<DeleteBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteBillingPlanCreditGrantResponse> deleteBillingPlanCreditGrant(
             String planGrantId, DeleteBillingPlanCreditGrantRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .deleteBillingPlanCreditGrant(planGrantId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteBillingPlanCreditGrantResponse>> rawFuture =
+                this.rawClient.deleteBillingPlanCreditGrant(planGrantId, request, requestOptions);
+        CompletableFuture<DeleteBillingPlanCreditGrantResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingPlanCreditGrantsResponse> countBillingPlanCreditGrants() {
-        return this.rawClient.countBillingPlanCreditGrants().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingPlanCreditGrantsResponse>> rawFuture =
+                this.rawClient.countBillingPlanCreditGrants();
+        CompletableFuture<CountBillingPlanCreditGrantsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingPlanCreditGrantsResponse> countBillingPlanCreditGrants(
             RequestOptions requestOptions) {
-        return this.rawClient.countBillingPlanCreditGrants(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingPlanCreditGrantsResponse>> rawFuture =
+                this.rawClient.countBillingPlanCreditGrants(requestOptions);
+        CompletableFuture<CountBillingPlanCreditGrantsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingPlanCreditGrantsResponse> countBillingPlanCreditGrants(
             CountBillingPlanCreditGrantsRequest request) {
-        return this.rawClient.countBillingPlanCreditGrants(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingPlanCreditGrantsResponse>> rawFuture =
+                this.rawClient.countBillingPlanCreditGrants(request);
+        CompletableFuture<CountBillingPlanCreditGrantsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingPlanCreditGrantsResponse> countBillingPlanCreditGrants(
             CountBillingPlanCreditGrantsRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .countBillingPlanCreditGrants(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingPlanCreditGrantsResponse>> rawFuture =
+                this.rawClient.countBillingPlanCreditGrants(request, requestOptions);
+        CompletableFuture<CountBillingPlanCreditGrantsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ReserveCreditsResponse> reserveCredits(ReserveCreditsRequestBody request) {
-        return this.rawClient.reserveCredits(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ReserveCreditsResponse>> rawFuture =
+                this.rawClient.reserveCredits(request);
+        CompletableFuture<ReserveCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ReserveCreditsResponse> reserveCredits(
             ReserveCreditsRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.reserveCredits(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ReserveCreditsResponse>> rawFuture =
+                this.rawClient.reserveCredits(request, requestOptions);
+        CompletableFuture<ReserveCreditsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ReleaseCreditReservationResponse> releaseCreditReservation(String reservationId) {
-        return this.rawClient.releaseCreditReservation(reservationId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ReleaseCreditReservationResponse>> rawFuture =
+                this.rawClient.releaseCreditReservation(reservationId);
+        CompletableFuture<ReleaseCreditReservationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ReleaseCreditReservationResponse> releaseCreditReservation(
             String reservationId, RequestOptions requestOptions) {
-        return this.rawClient
-                .releaseCreditReservation(reservationId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ReleaseCreditReservationResponse>> rawFuture =
+                this.rawClient.releaseCreditReservation(reservationId, requestOptions);
+        CompletableFuture<ReleaseCreditReservationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditSpendPoliciesResponse> listCreditSpendPolicies() {
-        return this.rawClient.listCreditSpendPolicies().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditSpendPoliciesResponse>> rawFuture =
+                this.rawClient.listCreditSpendPolicies();
+        CompletableFuture<ListCreditSpendPoliciesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditSpendPoliciesResponse> listCreditSpendPolicies(RequestOptions requestOptions) {
-        return this.rawClient.listCreditSpendPolicies(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditSpendPoliciesResponse>> rawFuture =
+                this.rawClient.listCreditSpendPolicies(requestOptions);
+        CompletableFuture<ListCreditSpendPoliciesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditSpendPoliciesResponse> listCreditSpendPolicies(
             ListCreditSpendPoliciesRequest request) {
-        return this.rawClient.listCreditSpendPolicies(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditSpendPoliciesResponse>> rawFuture =
+                this.rawClient.listCreditSpendPolicies(request);
+        CompletableFuture<ListCreditSpendPoliciesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditSpendPoliciesResponse> listCreditSpendPolicies(
             ListCreditSpendPoliciesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listCreditSpendPolicies(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditSpendPoliciesResponse>> rawFuture =
+                this.rawClient.listCreditSpendPolicies(request, requestOptions);
+        CompletableFuture<ListCreditSpendPoliciesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateCreditSpendPolicyResponse> createCreditSpendPolicy(
             CreateCreditSpendPolicyRequestBody request) {
-        return this.rawClient.createCreditSpendPolicy(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.createCreditSpendPolicy(request);
+        CompletableFuture<CreateCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateCreditSpendPolicyResponse> createCreditSpendPolicy(
             CreateCreditSpendPolicyRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createCreditSpendPolicy(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.createCreditSpendPolicy(request, requestOptions);
+        CompletableFuture<CreateCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetCreditSpendPolicyResponse> getCreditSpendPolicy(String spendPolicyId) {
-        return this.rawClient.getCreditSpendPolicy(spendPolicyId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.getCreditSpendPolicy(spendPolicyId);
+        CompletableFuture<GetCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetCreditSpendPolicyResponse> getCreditSpendPolicy(
             String spendPolicyId, RequestOptions requestOptions) {
-        return this.rawClient
-                .getCreditSpendPolicy(spendPolicyId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.getCreditSpendPolicy(spendPolicyId, requestOptions);
+        CompletableFuture<GetCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateCreditSpendPolicyResponse> updateCreditSpendPolicy(String spendPolicyId) {
-        return this.rawClient.updateCreditSpendPolicy(spendPolicyId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.updateCreditSpendPolicy(spendPolicyId);
+        CompletableFuture<UpdateCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateCreditSpendPolicyResponse> updateCreditSpendPolicy(
             String spendPolicyId, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateCreditSpendPolicy(spendPolicyId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.updateCreditSpendPolicy(spendPolicyId, requestOptions);
+        CompletableFuture<UpdateCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateCreditSpendPolicyResponse> updateCreditSpendPolicy(
             String spendPolicyId, UpdateCreditSpendPolicyRequestBody request) {
-        return this.rawClient.updateCreditSpendPolicy(spendPolicyId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.updateCreditSpendPolicy(spendPolicyId, request);
+        CompletableFuture<UpdateCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateCreditSpendPolicyResponse> updateCreditSpendPolicy(
             String spendPolicyId, UpdateCreditSpendPolicyRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateCreditSpendPolicy(spendPolicyId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.updateCreditSpendPolicy(spendPolicyId, request, requestOptions);
+        CompletableFuture<UpdateCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteCreditSpendPolicyResponse> deleteCreditSpendPolicy(String spendPolicyId) {
-        return this.rawClient.deleteCreditSpendPolicy(spendPolicyId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.deleteCreditSpendPolicy(spendPolicyId);
+        CompletableFuture<DeleteCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteCreditSpendPolicyResponse> deleteCreditSpendPolicy(
             String spendPolicyId, RequestOptions requestOptions) {
-        return this.rawClient
-                .deleteCreditSpendPolicy(spendPolicyId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteCreditSpendPolicyResponse>> rawFuture =
+                this.rawClient.deleteCreditSpendPolicy(spendPolicyId, requestOptions);
+        CompletableFuture<DeleteCreditSpendPolicyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditSpendPoliciesResponse> countCreditSpendPolicies() {
-        return this.rawClient.countCreditSpendPolicies().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditSpendPoliciesResponse>> rawFuture =
+                this.rawClient.countCreditSpendPolicies();
+        CompletableFuture<CountCreditSpendPoliciesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditSpendPoliciesResponse> countCreditSpendPolicies(RequestOptions requestOptions) {
-        return this.rawClient.countCreditSpendPolicies(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditSpendPoliciesResponse>> rawFuture =
+                this.rawClient.countCreditSpendPolicies(requestOptions);
+        CompletableFuture<CountCreditSpendPoliciesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditSpendPoliciesResponse> countCreditSpendPolicies(
             CountCreditSpendPoliciesRequest request) {
-        return this.rawClient.countCreditSpendPolicies(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditSpendPoliciesResponse>> rawFuture =
+                this.rawClient.countCreditSpendPolicies(request);
+        CompletableFuture<CountCreditSpendPoliciesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditSpendPoliciesResponse> countCreditSpendPolicies(
             CountCreditSpendPoliciesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countCreditSpendPolicies(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditSpendPoliciesResponse>> rawFuture =
+                this.rawClient.countCreditSpendPolicies(request, requestOptions);
+        CompletableFuture<CountCreditSpendPoliciesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetCreditSpendPolicyUsageResponse> getCreditSpendPolicyUsage(
             GetCreditSpendPolicyUsageRequest request) {
-        return this.rawClient.getCreditSpendPolicyUsage(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditSpendPolicyUsageResponse>> rawFuture =
+                this.rawClient.getCreditSpendPolicyUsage(request);
+        CompletableFuture<GetCreditSpendPolicyUsageResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetCreditSpendPolicyUsageResponse> getCreditSpendPolicyUsage(
             GetCreditSpendPolicyUsageRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getCreditSpendPolicyUsage(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditSpendPolicyUsageResponse>> rawFuture =
+                this.rawClient.getCreditSpendPolicyUsage(request, requestOptions);
+        CompletableFuture<GetCreditSpendPolicyUsageResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditEventLedgerResponse> listCreditEventLedger(
             ListCreditEventLedgerRequest request) {
-        return this.rawClient.listCreditEventLedger(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditEventLedgerResponse>> rawFuture =
+                this.rawClient.listCreditEventLedger(request);
+        CompletableFuture<ListCreditEventLedgerResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCreditEventLedgerResponse> listCreditEventLedger(
             ListCreditEventLedgerRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listCreditEventLedger(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCreditEventLedgerResponse>> rawFuture =
+                this.rawClient.listCreditEventLedger(request, requestOptions);
+        CompletableFuture<ListCreditEventLedgerResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditEventLedgerResponse> countCreditEventLedger(
             CountCreditEventLedgerRequest request) {
-        return this.rawClient.countCreditEventLedger(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditEventLedgerResponse>> rawFuture =
+                this.rawClient.countCreditEventLedger(request);
+        CompletableFuture<CountCreditEventLedgerResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountCreditEventLedgerResponse> countCreditEventLedger(
             CountCreditEventLedgerRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countCreditEventLedger(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountCreditEventLedgerResponse>> rawFuture =
+                this.rawClient.countCreditEventLedger(request, requestOptions);
+        CompletableFuture<CountCreditEventLedgerResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

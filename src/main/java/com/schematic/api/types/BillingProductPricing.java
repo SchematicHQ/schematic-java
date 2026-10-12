@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public final class BillingProductPricing {
     private final Optional<Long> billingThreshold;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String interval;
 
@@ -49,7 +49,7 @@ public final class BillingProductPricing {
 
     private BillingProductPricing(
             Optional<Long> billingThreshold,
-            String currency,
+            Currency currency,
             String interval,
             Optional<String> meterId,
             Optional<Long> packageSize,
@@ -82,7 +82,7 @@ public final class BillingProductPricing {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -189,7 +189,7 @@ public final class BillingProductPricing {
     }
 
     public interface CurrencyStage {
-        IntervalStage currency(@NotNull String currency);
+        IntervalStage currency(@NotNull Currency currency);
 
         Builder from(BillingProductPricing other);
     }
@@ -256,7 +256,7 @@ public final class BillingProductPricing {
                     QuantityStage,
                     UsageTypeStage,
                     _FinalStage {
-        private String currency;
+        private Currency currency;
 
         private String interval;
 
@@ -304,7 +304,7 @@ public final class BillingProductPricing {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public IntervalStage currency(@NotNull String currency) {
+        public IntervalStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

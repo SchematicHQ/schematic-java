@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlanGroupPlanEntitlementsOrder.Builder.class)
 public final class PlanGroupPlanEntitlementsOrder {
+    private final List<PlanCreditOrder> credits;
+
     private final Optional<List<PlanEntitlementsOrder>> entitlements;
 
     private final String planId;
@@ -29,12 +32,19 @@ public final class PlanGroupPlanEntitlementsOrder {
     private final Map<String, Object> additionalProperties;
 
     private PlanGroupPlanEntitlementsOrder(
+            List<PlanCreditOrder> credits,
             Optional<List<PlanEntitlementsOrder>> entitlements,
             String planId,
             Map<String, Object> additionalProperties) {
+        this.credits = credits;
         this.entitlements = entitlements;
         this.planId = planId;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("credits")
+    public List<PlanCreditOrder> getCredits() {
+        return credits;
     }
 
     @JsonProperty("entitlements")
@@ -59,12 +69,12 @@ public final class PlanGroupPlanEntitlementsOrder {
     }
 
     private boolean equalTo(PlanGroupPlanEntitlementsOrder other) {
-        return entitlements.equals(other.entitlements) && planId.equals(other.planId);
+        return credits.equals(other.credits) && entitlements.equals(other.entitlements) && planId.equals(other.planId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.entitlements, this.planId);
+        return Objects.hash(this.credits, this.entitlements, this.planId);
     }
 
     @java.lang.Override
@@ -89,6 +99,12 @@ public final class PlanGroupPlanEntitlementsOrder {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage credits(List<PlanCreditOrder> credits);
+
+        _FinalStage addCredits(PlanCreditOrder credits);
+
+        _FinalStage addAllCredits(List<PlanCreditOrder> credits);
+
         _FinalStage entitlements(Optional<List<PlanEntitlementsOrder>> entitlements);
 
         _FinalStage entitlements(List<PlanEntitlementsOrder> entitlements);
@@ -100,6 +116,8 @@ public final class PlanGroupPlanEntitlementsOrder {
 
         private Optional<List<PlanEntitlementsOrder>> entitlements = Optional.empty();
 
+        private List<PlanCreditOrder> credits = new ArrayList<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -107,6 +125,7 @@ public final class PlanGroupPlanEntitlementsOrder {
 
         @java.lang.Override
         public Builder from(PlanGroupPlanEntitlementsOrder other) {
+            credits(other.getCredits());
             entitlements(other.getEntitlements());
             planId(other.getPlanId());
             return this;
@@ -133,8 +152,32 @@ public final class PlanGroupPlanEntitlementsOrder {
         }
 
         @java.lang.Override
+        public _FinalStage addAllCredits(List<PlanCreditOrder> credits) {
+            if (credits != null) {
+                this.credits.addAll(credits);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addCredits(PlanCreditOrder credits) {
+            this.credits.add(credits);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credits", nulls = Nulls.SKIP)
+        public _FinalStage credits(List<PlanCreditOrder> credits) {
+            this.credits.clear();
+            if (credits != null) {
+                this.credits.addAll(credits);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public PlanGroupPlanEntitlementsOrder build() {
-            return new PlanGroupPlanEntitlementsOrder(entitlements, planId, additionalProperties);
+            return new PlanGroupPlanEntitlementsOrder(credits, entitlements, planId, additionalProperties);
         }
 
         @java.lang.Override

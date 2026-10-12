@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingCollectionMethod;
 import com.schematic.api.types.CheckoutFieldValue;
 import com.schematic.api.types.CustomPlanActivationStrategy;
 import com.schematic.api.types.CustomerBillingAddress;
@@ -37,6 +38,8 @@ public final class PublishPlanVersionRequestBody {
     private final Optional<OffsetDateTime> billingCycleAnchor;
 
     private final Optional<OffsetDateTime> billingStartDate;
+
+    private final Optional<BillingCollectionMethod> collectionMethod;
 
     private final Optional<String> couponExternalId;
 
@@ -71,6 +74,7 @@ public final class PublishPlanVersionRequestBody {
             Optional<CustomerBillingAddress> address,
             Optional<OffsetDateTime> billingCycleAnchor,
             Optional<OffsetDateTime> billingStartDate,
+            Optional<BillingCollectionMethod> collectionMethod,
             Optional<String> couponExternalId,
             Optional<List<CheckoutFieldValue>> customFieldValues,
             Optional<String> customerEmail,
@@ -89,6 +93,7 @@ public final class PublishPlanVersionRequestBody {
         this.address = address;
         this.billingCycleAnchor = billingCycleAnchor;
         this.billingStartDate = billingStartDate;
+        this.collectionMethod = collectionMethod;
         this.couponExternalId = couponExternalId;
         this.customFieldValues = customFieldValues;
         this.customerEmail = customerEmail;
@@ -105,6 +110,9 @@ public final class PublishPlanVersionRequestBody {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return When the company gets the plan. On a custom-plan republish, on_payment is only accepted when the amendment is invoiced today (migration_strategy immediate, proration_behavior always_invoice, collection_method send_invoice): the company stays on its current version until that invoice is paid.
+     */
     @JsonProperty("activation_strategy")
     public Optional<CustomPlanActivationStrategy> getActivationStrategy() {
         return activationStrategy;
@@ -131,6 +139,17 @@ public final class PublishPlanVersionRequestBody {
         return billingStartDate;
     }
 
+    /**
+     * @return How the invoice a custom-plan republish raises today is collected. send_invoice (the default) issues it for the company to pay; charge_automatically charges the default payment method straight away. Only accepted on a custom-plan republish with migration_strategy immediate and proration_behavior always_invoice.
+     */
+    @JsonProperty("collection_method")
+    public Optional<BillingCollectionMethod> getCollectionMethod() {
+        return collectionMethod;
+    }
+
+    /**
+     * @return A Stripe coupon to apply. On a custom-plan republish it discounts the amendment invoice and is only used when that invoice is raised today; it must exist in Stripe. It is attached to the subscription, so a repeating or forever coupon also discounts the renewals that follow.
+     */
     @JsonProperty("coupon_external_id")
     public Optional<String> getCouponExternalId() {
         return couponExternalId;
@@ -146,6 +165,9 @@ public final class PublishPlanVersionRequestBody {
         return customerEmail;
     }
 
+    /**
+     * @return Payment terms in days. On a custom-plan republish they apply to the amendment invoice only, leave the subscription's renewal terms unchanged, and are only used when that invoice is raised today and sent rather than charged. Defaults to the subscription's terms.
+     */
     @JsonProperty("days_until_due")
     public Optional<Long> getDaysUntilDue() {
         return daysUntilDue;
@@ -227,6 +249,7 @@ public final class PublishPlanVersionRequestBody {
                 && address.equals(other.address)
                 && billingCycleAnchor.equals(other.billingCycleAnchor)
                 && billingStartDate.equals(other.billingStartDate)
+                && collectionMethod.equals(other.collectionMethod)
                 && couponExternalId.equals(other.couponExternalId)
                 && customFieldValues.equals(other.customFieldValues)
                 && customerEmail.equals(other.customerEmail)
@@ -249,6 +272,7 @@ public final class PublishPlanVersionRequestBody {
                 this.address,
                 this.billingCycleAnchor,
                 this.billingStartDate,
+                this.collectionMethod,
                 this.couponExternalId,
                 this.customFieldValues,
                 this.customerEmail,
@@ -286,6 +310,9 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>When the company gets the plan. On a custom-plan republish, on_payment is only accepted when the amendment is invoiced today (migration_strategy immediate, proration_behavior always_invoice, collection_method send_invoice): the company stays on its current version until that invoice is paid.</p>
+         */
         _FinalStage activationStrategy(Optional<CustomPlanActivationStrategy> activationStrategy);
 
         _FinalStage activationStrategy(CustomPlanActivationStrategy activationStrategy);
@@ -308,6 +335,16 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage billingStartDate(OffsetDateTime billingStartDate);
 
+        /**
+         * <p>How the invoice a custom-plan republish raises today is collected. send_invoice (the default) issues it for the company to pay; charge_automatically charges the default payment method straight away. Only accepted on a custom-plan republish with migration_strategy immediate and proration_behavior always_invoice.</p>
+         */
+        _FinalStage collectionMethod(Optional<BillingCollectionMethod> collectionMethod);
+
+        _FinalStage collectionMethod(BillingCollectionMethod collectionMethod);
+
+        /**
+         * <p>A Stripe coupon to apply. On a custom-plan republish it discounts the amendment invoice and is only used when that invoice is raised today; it must exist in Stripe. It is attached to the subscription, so a repeating or forever coupon also discounts the renewals that follow.</p>
+         */
         _FinalStage couponExternalId(Optional<String> couponExternalId);
 
         _FinalStage couponExternalId(String couponExternalId);
@@ -320,6 +357,9 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage customerEmail(String customerEmail);
 
+        /**
+         * <p>Payment terms in days. On a custom-plan republish they apply to the amendment invoice only, leave the subscription's renewal terms unchanged, and are only used when that invoice is raised today and sent rather than charged. Defaults to the subscription's terms.</p>
+         */
         _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
 
         _FinalStage daysUntilDue(Long daysUntilDue);
@@ -402,6 +442,8 @@ public final class PublishPlanVersionRequestBody {
 
         private Optional<String> couponExternalId = Optional.empty();
 
+        private Optional<BillingCollectionMethod> collectionMethod = Optional.empty();
+
         private Optional<OffsetDateTime> billingStartDate = Optional.empty();
 
         private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
@@ -421,6 +463,7 @@ public final class PublishPlanVersionRequestBody {
             address(other.getAddress());
             billingCycleAnchor(other.getBillingCycleAnchor());
             billingStartDate(other.getBillingStartDate());
+            collectionMethod(other.getCollectionMethod());
             couponExternalId(other.getCouponExternalId());
             customFieldValues(other.getCustomFieldValues());
             customerEmail(other.getCustomerEmail());
@@ -594,12 +637,19 @@ public final class PublishPlanVersionRequestBody {
             return this;
         }
 
+        /**
+         * <p>Payment terms in days. On a custom-plan republish they apply to the amendment invoice only, leave the subscription's renewal terms unchanged, and are only used when that invoice is raised today and sent rather than charged. Defaults to the subscription's terms.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage daysUntilDue(Long daysUntilDue) {
             this.daysUntilDue = Optional.ofNullable(daysUntilDue);
             return this;
         }
 
+        /**
+         * <p>Payment terms in days. On a custom-plan republish they apply to the amendment invoice only, leave the subscription's renewal terms unchanged, and are only used when that invoice is raised today and sent rather than charged. Defaults to the subscription's terms.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "days_until_due", nulls = Nulls.SKIP)
         public _FinalStage daysUntilDue(Optional<Long> daysUntilDue) {
@@ -633,16 +683,43 @@ public final class PublishPlanVersionRequestBody {
             return this;
         }
 
+        /**
+         * <p>A Stripe coupon to apply. On a custom-plan republish it discounts the amendment invoice and is only used when that invoice is raised today; it must exist in Stripe. It is attached to the subscription, so a repeating or forever coupon also discounts the renewals that follow.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage couponExternalId(String couponExternalId) {
             this.couponExternalId = Optional.ofNullable(couponExternalId);
             return this;
         }
 
+        /**
+         * <p>A Stripe coupon to apply. On a custom-plan republish it discounts the amendment invoice and is only used when that invoice is raised today; it must exist in Stripe. It is attached to the subscription, so a repeating or forever coupon also discounts the renewals that follow.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "coupon_external_id", nulls = Nulls.SKIP)
         public _FinalStage couponExternalId(Optional<String> couponExternalId) {
             this.couponExternalId = couponExternalId;
+            return this;
+        }
+
+        /**
+         * <p>How the invoice a custom-plan republish raises today is collected. send_invoice (the default) issues it for the company to pay; charge_automatically charges the default payment method straight away. Only accepted on a custom-plan republish with migration_strategy immediate and proration_behavior always_invoice.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage collectionMethod(BillingCollectionMethod collectionMethod) {
+            this.collectionMethod = Optional.ofNullable(collectionMethod);
+            return this;
+        }
+
+        /**
+         * <p>How the invoice a custom-plan republish raises today is collected. send_invoice (the default) issues it for the company to pay; charge_automatically charges the default payment method straight away. Only accepted on a custom-plan republish with migration_strategy immediate and proration_behavior always_invoice.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "collection_method", nulls = Nulls.SKIP)
+        public _FinalStage collectionMethod(Optional<BillingCollectionMethod> collectionMethod) {
+            this.collectionMethod = collectionMethod;
             return this;
         }
 
@@ -699,12 +776,19 @@ public final class PublishPlanVersionRequestBody {
             return this;
         }
 
+        /**
+         * <p>When the company gets the plan. On a custom-plan republish, on_payment is only accepted when the amendment is invoiced today (migration_strategy immediate, proration_behavior always_invoice, collection_method send_invoice): the company stays on its current version until that invoice is paid.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage activationStrategy(CustomPlanActivationStrategy activationStrategy) {
             this.activationStrategy = Optional.ofNullable(activationStrategy);
             return this;
         }
 
+        /**
+         * <p>When the company gets the plan. On a custom-plan republish, on_payment is only accepted when the amendment is invoiced today (migration_strategy immediate, proration_behavior always_invoice, collection_method send_invoice): the company stays on its current version until that invoice is paid.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "activation_strategy", nulls = Nulls.SKIP)
         public _FinalStage activationStrategy(Optional<CustomPlanActivationStrategy> activationStrategy) {
@@ -719,6 +803,7 @@ public final class PublishPlanVersionRequestBody {
                     address,
                     billingCycleAnchor,
                     billingStartDate,
+                    collectionMethod,
                     couponExternalId,
                     customFieldValues,
                     customerEmail,

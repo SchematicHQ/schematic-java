@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ScheduledDowngradeResponseData.Builder.class)
 public final class ScheduledDowngradeResponseData {
-    private final String currency;
+    private final Currency currency;
 
     private final OffsetDateTime effectiveAfter;
 
@@ -47,7 +47,7 @@ public final class ScheduledDowngradeResponseData {
     private final Map<String, Object> additionalProperties;
 
     private ScheduledDowngradeResponseData(
-            String currency,
+            Currency currency,
             OffsetDateTime effectiveAfter,
             String fromPlanId,
             String fromPlanName,
@@ -74,7 +74,7 @@ public final class ScheduledDowngradeResponseData {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -179,7 +179,7 @@ public final class ScheduledDowngradeResponseData {
     }
 
     public interface CurrencyStage {
-        EffectiveAfterStage currency(@NotNull String currency);
+        EffectiveAfterStage currency(@NotNull Currency currency);
 
         Builder from(ScheduledDowngradeResponseData other);
     }
@@ -244,7 +244,7 @@ public final class ScheduledDowngradeResponseData {
                     ToPlanIdStage,
                     ToPlanNameStage,
                     _FinalStage {
-        private String currency;
+        private Currency currency;
 
         private OffsetDateTime effectiveAfter;
 
@@ -289,7 +289,7 @@ public final class ScheduledDowngradeResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public EffectiveAfterStage currency(@NotNull String currency) {
+        public EffectiveAfterStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CreateOrUpdateFlagRequestBody;
+import com.schematic.api.types.FeatureEventSource;
 import com.schematic.api.types.FeatureLifecyclePhase;
 import com.schematic.api.types.FeatureType;
 import java.util.HashMap;
@@ -24,6 +25,8 @@ import java.util.Optional;
 @JsonDeserialize(builder = UpdateFeatureRequestBody.Builder.class)
 public final class UpdateFeatureRequestBody {
     private final Optional<String> description;
+
+    private final Optional<FeatureEventSource> eventSource;
 
     private final Optional<String> eventSubtype;
 
@@ -49,6 +52,7 @@ public final class UpdateFeatureRequestBody {
 
     private UpdateFeatureRequestBody(
             Optional<String> description,
+            Optional<FeatureEventSource> eventSource,
             Optional<String> eventSubtype,
             Optional<FeatureType> featureType,
             Optional<CreateOrUpdateFlagRequestBody> flag,
@@ -61,6 +65,7 @@ public final class UpdateFeatureRequestBody {
             Optional<String> traitId,
             Map<String, Object> additionalProperties) {
         this.description = description;
+        this.eventSource = eventSource;
         this.eventSubtype = eventSubtype;
         this.featureType = featureType;
         this.flag = flag;
@@ -77,6 +82,14 @@ public final class UpdateFeatureRequestBody {
     @JsonProperty("description")
     public Optional<String> getDescription() {
         return description;
+    }
+
+    /**
+     * @return Which event stream meters this feature. It is fixed at creation: an update that changes it is rejected.
+     */
+    @JsonProperty("event_source")
+    public Optional<FeatureEventSource> getEventSource() {
+        return eventSource;
     }
 
     @JsonProperty("event_subtype")
@@ -142,6 +155,7 @@ public final class UpdateFeatureRequestBody {
 
     private boolean equalTo(UpdateFeatureRequestBody other) {
         return description.equals(other.description)
+                && eventSource.equals(other.eventSource)
                 && eventSubtype.equals(other.eventSubtype)
                 && featureType.equals(other.featureType)
                 && flag.equals(other.flag)
@@ -158,6 +172,7 @@ public final class UpdateFeatureRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.description,
+                this.eventSource,
                 this.eventSubtype,
                 this.featureType,
                 this.flag,
@@ -182,6 +197,8 @@ public final class UpdateFeatureRequestBody {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<String> description = Optional.empty();
+
+        private Optional<FeatureEventSource> eventSource = Optional.empty();
 
         private Optional<String> eventSubtype = Optional.empty();
 
@@ -210,6 +227,7 @@ public final class UpdateFeatureRequestBody {
 
         public Builder from(UpdateFeatureRequestBody other) {
             description(other.getDescription());
+            eventSource(other.getEventSource());
             eventSubtype(other.getEventSubtype());
             featureType(other.getFeatureType());
             flag(other.getFlag());
@@ -231,6 +249,20 @@ public final class UpdateFeatureRequestBody {
 
         public Builder description(String description) {
             this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        /**
+         * <p>Which event stream meters this feature. It is fixed at creation: an update that changes it is rejected.</p>
+         */
+        @JsonSetter(value = "event_source", nulls = Nulls.SKIP)
+        public Builder eventSource(Optional<FeatureEventSource> eventSource) {
+            this.eventSource = eventSource;
+            return this;
+        }
+
+        public Builder eventSource(FeatureEventSource eventSource) {
+            this.eventSource = Optional.ofNullable(eventSource);
             return this;
         }
 
@@ -347,6 +379,7 @@ public final class UpdateFeatureRequestBody {
         public UpdateFeatureRequestBody build() {
             return new UpdateFeatureRequestBody(
                     description,
+                    eventSource,
                     eventSubtype,
                     featureType,
                     flag,

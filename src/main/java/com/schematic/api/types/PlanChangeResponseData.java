@@ -32,6 +32,8 @@ public final class PlanChangeResponseData {
 
     private final List<PlanSnapshotView> addOnsRemoved;
 
+    private final Optional<PlanChangeAmendmentStatus> amendmentStatus;
+
     private final Optional<ApiKeyResponseData> apiKey;
 
     private final Optional<AuditLogListResponseData> auditLog;
@@ -55,6 +57,8 @@ public final class PlanChangeResponseData {
     private final Optional<IntegrationResponseData> integration;
 
     private final boolean isVersionUpgrade;
+
+    private final Optional<String> migrationId;
 
     private final Optional<PlanSnapshotView> previousBasePlan;
 
@@ -85,6 +89,7 @@ public final class PlanChangeResponseData {
             ActorType actorType,
             List<PlanSnapshotView> addOnsAdded,
             List<PlanSnapshotView> addOnsRemoved,
+            Optional<PlanChangeAmendmentStatus> amendmentStatus,
             Optional<ApiKeyResponseData> apiKey,
             Optional<AuditLogListResponseData> auditLog,
             Optional<PlanSnapshotView> basePlan,
@@ -97,6 +102,7 @@ public final class PlanChangeResponseData {
             String id,
             Optional<IntegrationResponseData> integration,
             boolean isVersionUpgrade,
+            Optional<String> migrationId,
             Optional<PlanSnapshotView> previousBasePlan,
             Optional<PlanVersionSnapshotView> previousBasePlanVersion,
             Optional<String> requestId,
@@ -113,6 +119,7 @@ public final class PlanChangeResponseData {
         this.actorType = actorType;
         this.addOnsAdded = addOnsAdded;
         this.addOnsRemoved = addOnsRemoved;
+        this.amendmentStatus = amendmentStatus;
         this.apiKey = apiKey;
         this.auditLog = auditLog;
         this.basePlan = basePlan;
@@ -125,6 +132,7 @@ public final class PlanChangeResponseData {
         this.id = id;
         this.integration = integration;
         this.isVersionUpgrade = isVersionUpgrade;
+        this.migrationId = migrationId;
         this.previousBasePlan = previousBasePlan;
         this.previousBasePlanVersion = previousBasePlanVersion;
         this.requestId = requestId;
@@ -157,6 +165,14 @@ public final class PlanChangeResponseData {
     @JsonProperty("add_ons_removed")
     public List<PlanSnapshotView> getAddOnsRemoved() {
         return addOnsRemoved;
+    }
+
+    /**
+     * @return Set when the action is amendment. A custom plan amendment records one plan change per status: scheduled when it is finalized for a later date, then applied when the company moves to the new version, cancelled when the scheduled change is called off, or failed or skipped when its migration ends without moving the company (an error, or the company was no longer on the version the amendment started from). Only an applied amendment changed the company's plan version.
+     */
+    @JsonProperty("amendment_status")
+    public Optional<PlanChangeAmendmentStatus> getAmendmentStatus() {
+        return amendmentStatus;
     }
 
     @JsonProperty("api_key")
@@ -229,6 +245,14 @@ public final class PlanChangeResponseData {
     @JsonProperty("is_version_upgrade")
     public boolean getIsVersionUpgrade() {
         return isVersionUpgrade;
+    }
+
+    /**
+     * @return The plan version migration that carries this change. Set on amendment plan changes, where it ties the scheduled, applied and cancelled records of one amendment together.
+     */
+    @JsonProperty("migration_id")
+    public Optional<String> getMigrationId() {
+        return migrationId;
     }
 
     @JsonProperty("previous_base_plan")
@@ -320,6 +344,7 @@ public final class PlanChangeResponseData {
                 && actorType.equals(other.actorType)
                 && addOnsAdded.equals(other.addOnsAdded)
                 && addOnsRemoved.equals(other.addOnsRemoved)
+                && amendmentStatus.equals(other.amendmentStatus)
                 && apiKey.equals(other.apiKey)
                 && auditLog.equals(other.auditLog)
                 && basePlan.equals(other.basePlan)
@@ -332,6 +357,7 @@ public final class PlanChangeResponseData {
                 && id.equals(other.id)
                 && integration.equals(other.integration)
                 && isVersionUpgrade == other.isVersionUpgrade
+                && migrationId.equals(other.migrationId)
                 && previousBasePlan.equals(other.previousBasePlan)
                 && previousBasePlanVersion.equals(other.previousBasePlanVersion)
                 && requestId.equals(other.requestId)
@@ -352,6 +378,7 @@ public final class PlanChangeResponseData {
                 this.actorType,
                 this.addOnsAdded,
                 this.addOnsRemoved,
+                this.amendmentStatus,
                 this.apiKey,
                 this.auditLog,
                 this.basePlan,
@@ -364,6 +391,7 @@ public final class PlanChangeResponseData {
                 this.id,
                 this.integration,
                 this.isVersionUpgrade,
+                this.migrationId,
                 this.previousBasePlan,
                 this.previousBasePlanVersion,
                 this.requestId,
@@ -442,6 +470,13 @@ public final class PlanChangeResponseData {
 
         _FinalStage addAllAddOnsRemoved(List<PlanSnapshotView> addOnsRemoved);
 
+        /**
+         * <p>Set when the action is amendment. A custom plan amendment records one plan change per status: scheduled when it is finalized for a later date, then applied when the company moves to the new version, cancelled when the scheduled change is called off, or failed or skipped when its migration ends without moving the company (an error, or the company was no longer on the version the amendment started from). Only an applied amendment changed the company's plan version.</p>
+         */
+        _FinalStage amendmentStatus(Optional<PlanChangeAmendmentStatus> amendmentStatus);
+
+        _FinalStage amendmentStatus(PlanChangeAmendmentStatus amendmentStatus);
+
         _FinalStage apiKey(Optional<ApiKeyResponseData> apiKey);
 
         _FinalStage apiKey(ApiKeyResponseData apiKey);
@@ -478,6 +513,13 @@ public final class PlanChangeResponseData {
         _FinalStage integration(Optional<IntegrationResponseData> integration);
 
         _FinalStage integration(IntegrationResponseData integration);
+
+        /**
+         * <p>The plan version migration that carries this change. Set on amendment plan changes, where it ties the scheduled, applied and cancelled records of one amendment together.</p>
+         */
+        _FinalStage migrationId(Optional<String> migrationId);
+
+        _FinalStage migrationId(String migrationId);
 
         _FinalStage previousBasePlan(Optional<PlanSnapshotView> previousBasePlan);
 
@@ -587,6 +629,8 @@ public final class PlanChangeResponseData {
 
         private Optional<PlanSnapshotView> previousBasePlan = Optional.empty();
 
+        private Optional<String> migrationId = Optional.empty();
+
         private Optional<IntegrationResponseData> integration = Optional.empty();
 
         private Optional<CompanyResponseData> company = Optional.empty();
@@ -600,6 +644,8 @@ public final class PlanChangeResponseData {
         private Optional<AuditLogListResponseData> auditLog = Optional.empty();
 
         private Optional<ApiKeyResponseData> apiKey = Optional.empty();
+
+        private Optional<PlanChangeAmendmentStatus> amendmentStatus = Optional.empty();
 
         private List<PlanSnapshotView> addOnsRemoved = new ArrayList<>();
 
@@ -616,6 +662,7 @@ public final class PlanChangeResponseData {
             actorType(other.getActorType());
             addOnsAdded(other.getAddOnsAdded());
             addOnsRemoved(other.getAddOnsRemoved());
+            amendmentStatus(other.getAmendmentStatus());
             apiKey(other.getApiKey());
             auditLog(other.getAuditLog());
             basePlan(other.getBasePlan());
@@ -628,6 +675,7 @@ public final class PlanChangeResponseData {
             id(other.getId());
             integration(other.getIntegration());
             isVersionUpgrade(other.getIsVersionUpgrade());
+            migrationId(other.getMigrationId());
             previousBasePlan(other.getPreviousBasePlan());
             previousBasePlanVersion(other.getPreviousBasePlanVersion());
             requestId(other.getRequestId());
@@ -890,6 +938,26 @@ public final class PlanChangeResponseData {
         }
 
         /**
+         * <p>The plan version migration that carries this change. Set on amendment plan changes, where it ties the scheduled, applied and cancelled records of one amendment together.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage migrationId(String migrationId) {
+            this.migrationId = Optional.ofNullable(migrationId);
+            return this;
+        }
+
+        /**
+         * <p>The plan version migration that carries this change. Set on amendment plan changes, where it ties the scheduled, applied and cancelled records of one amendment together.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "migration_id", nulls = Nulls.SKIP)
+        public _FinalStage migrationId(Optional<String> migrationId) {
+            this.migrationId = migrationId;
+            return this;
+        }
+
+        /**
          * <p>The integration that performed this change, when the actor is an integration-owned API key (e.g. a billing-provider sync).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -1001,6 +1069,26 @@ public final class PlanChangeResponseData {
             return this;
         }
 
+        /**
+         * <p>Set when the action is amendment. A custom plan amendment records one plan change per status: scheduled when it is finalized for a later date, then applied when the company moves to the new version, cancelled when the scheduled change is called off, or failed or skipped when its migration ends without moving the company (an error, or the company was no longer on the version the amendment started from). Only an applied amendment changed the company's plan version.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage amendmentStatus(PlanChangeAmendmentStatus amendmentStatus) {
+            this.amendmentStatus = Optional.ofNullable(amendmentStatus);
+            return this;
+        }
+
+        /**
+         * <p>Set when the action is amendment. A custom plan amendment records one plan change per status: scheduled when it is finalized for a later date, then applied when the company moves to the new version, cancelled when the scheduled change is called off, or failed or skipped when its migration ends without moving the company (an error, or the company was no longer on the version the amendment started from). Only an applied amendment changed the company's plan version.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "amendment_status", nulls = Nulls.SKIP)
+        public _FinalStage amendmentStatus(Optional<PlanChangeAmendmentStatus> amendmentStatus) {
+            this.amendmentStatus = amendmentStatus;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllAddOnsRemoved(List<PlanSnapshotView> addOnsRemoved) {
             if (addOnsRemoved != null) {
@@ -1056,6 +1144,7 @@ public final class PlanChangeResponseData {
                     actorType,
                     addOnsAdded,
                     addOnsRemoved,
+                    amendmentStatus,
                     apiKey,
                     auditLog,
                     basePlan,
@@ -1068,6 +1157,7 @@ public final class PlanChangeResponseData {
                     id,
                     integration,
                     isVersionUpgrade,
+                    migrationId,
                     previousBasePlan,
                     previousBasePlanVersion,
                     requestId,

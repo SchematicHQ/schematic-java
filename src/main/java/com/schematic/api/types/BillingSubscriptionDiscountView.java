@@ -28,7 +28,7 @@ public final class BillingSubscriptionDiscountView {
 
     private final String couponName;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final Optional<String> customerFacingCode;
 
@@ -56,7 +56,7 @@ public final class BillingSubscriptionDiscountView {
             Optional<Long> amountOff,
             String couponId,
             String couponName,
-            Optional<String> currency,
+            Optional<Currency> currency,
             Optional<String> customerFacingCode,
             String discountExternalId,
             String duration,
@@ -101,7 +101,7 @@ public final class BillingSubscriptionDiscountView {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -252,9 +252,9 @@ public final class BillingSubscriptionDiscountView {
 
         _FinalStage amountOff(Long amountOff);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
 
         _FinalStage customerFacingCode(Optional<String> customerFacingCode);
 
@@ -311,7 +311,7 @@ public final class BillingSubscriptionDiscountView {
 
         private Optional<String> customerFacingCode = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private Optional<Long> amountOff = Optional.empty();
 
@@ -455,14 +455,14 @@ public final class BillingSubscriptionDiscountView {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }

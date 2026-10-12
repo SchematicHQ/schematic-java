@@ -17,6 +17,7 @@ import com.schematic.api.types.BillingProductPricing;
 import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.BillingSubscriptionDiscount;
 import com.schematic.api.types.BillingSubscriptionTrialEndSetting;
+import com.schematic.api.types.Currency;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private final Optional<String> companyId;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String customerExternalId;
 
@@ -80,7 +81,7 @@ public final class CreateBillingSubscriptionRequestBody {
             Optional<Long> cancelAt,
             boolean cancelAtPeriodEnd,
             Optional<String> companyId,
-            String currency,
+            Currency currency,
             String customerExternalId,
             Optional<String> defaultPaymentMethodExternalId,
             Optional<String> defaultPaymentMethodId,
@@ -145,7 +146,7 @@ public final class CreateBillingSubscriptionRequestBody {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -314,7 +315,7 @@ public final class CreateBillingSubscriptionRequestBody {
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(@NotNull String currency);
+        CustomerExternalIdStage currency(@NotNull Currency currency);
     }
 
     public interface CustomerExternalIdStage {
@@ -420,7 +421,7 @@ public final class CreateBillingSubscriptionRequestBody {
                     _FinalStage {
         private boolean cancelAtPeriodEnd;
 
-        private String currency;
+        private Currency currency;
 
         private String customerExternalId;
 
@@ -503,7 +504,7 @@ public final class CreateBillingSubscriptionRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(@NotNull String currency) {
+        public CustomerExternalIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

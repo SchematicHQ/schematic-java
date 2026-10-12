@@ -34,7 +34,7 @@ public final class InvoiceResponseData {
 
     private final OffsetDateTime createdAt;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String customerExternalId;
 
@@ -75,7 +75,7 @@ public final class InvoiceResponseData {
             String collectionMethod,
             Optional<String> companyId,
             OffsetDateTime createdAt,
-            String currency,
+            Currency currency,
             String customerExternalId,
             Optional<OffsetDateTime> dueDate,
             long endingBalance,
@@ -148,7 +148,7 @@ public final class InvoiceResponseData {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -325,7 +325,7 @@ public final class InvoiceResponseData {
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(@NotNull String currency);
+        CustomerExternalIdStage currency(@NotNull Currency currency);
     }
 
     public interface CustomerExternalIdStage {
@@ -430,7 +430,7 @@ public final class InvoiceResponseData {
 
         private OffsetDateTime createdAt;
 
-        private String currency;
+        private Currency currency;
 
         private String customerExternalId;
 
@@ -533,7 +533,7 @@ public final class InvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(@NotNull String currency) {
+        public CustomerExternalIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

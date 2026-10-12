@@ -54,6 +54,8 @@ public final class ConditionResponseData {
 
     private final ComparableOperator operator;
 
+    private final Optional<Map<String, Double>> quantityRates;
+
     private final List<String> resourceUnspecifiedIds;
 
     private final String ruleId;
@@ -90,6 +92,7 @@ public final class ConditionResponseData {
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Long> metricValue,
             ComparableOperator operator,
+            Optional<Map<String, Double>> quantityRates,
             List<String> resourceUnspecifiedIds,
             String ruleId,
             Optional<EntityType> traitEntityType,
@@ -115,6 +118,7 @@ public final class ConditionResponseData {
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.metricValue = metricValue;
         this.operator = operator;
+        this.quantityRates = quantityRates;
         this.resourceUnspecifiedIds = resourceUnspecifiedIds;
         this.ruleId = ruleId;
         this.traitEntityType = traitEntityType;
@@ -202,6 +206,11 @@ public final class ConditionResponseData {
         return operator;
     }
 
+    @JsonProperty("quantity_rates")
+    public Optional<Map<String, Double>> getQuantityRates() {
+        return quantityRates;
+    }
+
     @JsonProperty("resource_unspecified_ids")
     public List<String> getResourceUnspecifiedIds() {
         return resourceUnspecifiedIds;
@@ -274,6 +283,7 @@ public final class ConditionResponseData {
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && metricValue.equals(other.metricValue)
                 && operator.equals(other.operator)
+                && quantityRates.equals(other.quantityRates)
                 && resourceUnspecifiedIds.equals(other.resourceUnspecifiedIds)
                 && ruleId.equals(other.ruleId)
                 && traitEntityType.equals(other.traitEntityType)
@@ -303,6 +313,7 @@ public final class ConditionResponseData {
                 this.metricPeriodMonthReset,
                 this.metricValue,
                 this.operator,
+                this.quantityRates,
                 this.resourceUnspecifiedIds,
                 this.ruleId,
                 this.traitEntityType,
@@ -412,6 +423,10 @@ public final class ConditionResponseData {
 
         _FinalStage metricValue(Long metricValue);
 
+        _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
+
+        _FinalStage quantityRates(Map<String, Double> quantityRates);
+
         _FinalStage resourceUnspecifiedIds(List<String> resourceUnspecifiedIds);
 
         _FinalStage addResourceUnspecifiedIds(String resourceUnspecifiedIds);
@@ -475,6 +490,8 @@ public final class ConditionResponseData {
 
         private List<String> resourceUnspecifiedIds = new ArrayList<>();
 
+        private Optional<Map<String, Double>> quantityRates = Optional.empty();
+
         private Optional<Long> metricValue = Optional.empty();
 
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
@@ -515,6 +532,7 @@ public final class ConditionResponseData {
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             metricValue(other.getMetricValue());
             operator(other.getOperator());
+            quantityRates(other.getQuantityRates());
             resourceUnspecifiedIds(other.getResourceUnspecifiedIds());
             ruleId(other.getRuleId());
             traitEntityType(other.getTraitEntityType());
@@ -668,6 +686,19 @@ public final class ConditionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage quantityRates(Map<String, Double> quantityRates) {
+            this.quantityRates = Optional.ofNullable(quantityRates);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quantity_rates", nulls = Nulls.SKIP)
+        public _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates) {
+            this.quantityRates = quantityRates;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage metricValue(Long metricValue) {
             this.metricValue = Optional.ofNullable(metricValue);
             return this;
@@ -802,6 +833,7 @@ public final class ConditionResponseData {
                     metricPeriodMonthReset,
                     metricValue,
                     operator,
+                    quantityRates,
                     resourceUnspecifiedIds,
                     ruleId,
                     traitEntityType,

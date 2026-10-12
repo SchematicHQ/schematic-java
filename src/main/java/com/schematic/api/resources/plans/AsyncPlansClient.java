@@ -4,6 +4,7 @@
 package com.schematic.api.resources.plans;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.plans.requests.CountBillingProductMatchCompaniesRequest;
@@ -12,6 +13,7 @@ import com.schematic.api.resources.plans.requests.CreateBillingLinkedPlanRequest
 import com.schematic.api.resources.plans.requests.CreateCustomPlanRequestBody;
 import com.schematic.api.resources.plans.requests.DeletePlanVersionRequest;
 import com.schematic.api.resources.plans.requests.GetPlanRequest;
+import com.schematic.api.resources.plans.requests.GetPlanVersionDiffRequest;
 import com.schematic.api.resources.plans.requests.ListBillingProductMatchCompaniesRequest;
 import com.schematic.api.resources.plans.requests.ListCustomPlanBillingsRequest;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
@@ -26,6 +28,7 @@ import com.schematic.api.resources.plans.types.CreatePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanVersionResponse;
 import com.schematic.api.resources.plans.types.GetPlanResponse;
+import com.schematic.api.resources.plans.types.GetPlanVersionDiffResponse;
 import com.schematic.api.resources.plans.types.ListBillingProductMatchCompaniesResponse;
 import com.schematic.api.resources.plans.types.ListCustomPlanBillingsResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
@@ -62,233 +65,629 @@ public class AsyncPlansClient {
 
     public CompletableFuture<UpdateCompanyPlansResponse> updateCompanyPlans(
             String companyId, UpdateCompanyPlansRequestBody request) {
-        return this.rawClient.updateCompanyPlans(companyId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCompanyPlansResponse>> rawFuture =
+                this.rawClient.updateCompanyPlans(companyId, request);
+        CompletableFuture<UpdateCompanyPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateCompanyPlansResponse> updateCompanyPlans(
             String companyId, UpdateCompanyPlansRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateCompanyPlans(companyId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCompanyPlansResponse>> rawFuture =
+                this.rawClient.updateCompanyPlans(companyId, request, requestOptions);
+        CompletableFuture<UpdateCompanyPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCustomPlanBillingsResponse> listCustomPlanBillings() {
-        return this.rawClient.listCustomPlanBillings().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCustomPlanBillingsResponse>> rawFuture =
+                this.rawClient.listCustomPlanBillings();
+        CompletableFuture<ListCustomPlanBillingsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCustomPlanBillingsResponse> listCustomPlanBillings(RequestOptions requestOptions) {
-        return this.rawClient.listCustomPlanBillings(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCustomPlanBillingsResponse>> rawFuture =
+                this.rawClient.listCustomPlanBillings(requestOptions);
+        CompletableFuture<ListCustomPlanBillingsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCustomPlanBillingsResponse> listCustomPlanBillings(
             ListCustomPlanBillingsRequest request) {
-        return this.rawClient.listCustomPlanBillings(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCustomPlanBillingsResponse>> rawFuture =
+                this.rawClient.listCustomPlanBillings(request);
+        CompletableFuture<ListCustomPlanBillingsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListCustomPlanBillingsResponse> listCustomPlanBillings(
             ListCustomPlanBillingsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listCustomPlanBillings(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListCustomPlanBillingsResponse>> rawFuture =
+                this.rawClient.listCustomPlanBillings(request, requestOptions);
+        CompletableFuture<ListCustomPlanBillingsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<MarkCustomPlanBillingPaidResponse> markCustomPlanBillingPaid(
             String customPlanBillingId, Map<String, JsonNode> request) {
-        return this.rawClient
-                .markCustomPlanBillingPaid(customPlanBillingId, request)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<MarkCustomPlanBillingPaidResponse>> rawFuture =
+                this.rawClient.markCustomPlanBillingPaid(customPlanBillingId, request);
+        CompletableFuture<MarkCustomPlanBillingPaidResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<MarkCustomPlanBillingPaidResponse> markCustomPlanBillingPaid(
             String customPlanBillingId, Map<String, JsonNode> request, RequestOptions requestOptions) {
-        return this.rawClient
-                .markCustomPlanBillingPaid(customPlanBillingId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<MarkCustomPlanBillingPaidResponse>> rawFuture =
+                this.rawClient.markCustomPlanBillingPaid(customPlanBillingId, request, requestOptions);
+        CompletableFuture<MarkCustomPlanBillingPaidResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<RetryCustomPlanBillingResponse> retryCustomPlanBilling(
             String customPlanBillingId, RetryCustomPlanBillingRequestBody request) {
-        return this.rawClient
-                .retryCustomPlanBilling(customPlanBillingId, request)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<RetryCustomPlanBillingResponse>> rawFuture =
+                this.rawClient.retryCustomPlanBilling(customPlanBillingId, request);
+        CompletableFuture<RetryCustomPlanBillingResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<RetryCustomPlanBillingResponse> retryCustomPlanBilling(
             String customPlanBillingId, RetryCustomPlanBillingRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .retryCustomPlanBilling(customPlanBillingId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<RetryCustomPlanBillingResponse>> rawFuture =
+                this.rawClient.retryCustomPlanBilling(customPlanBillingId, request, requestOptions);
+        CompletableFuture<RetryCustomPlanBillingResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateCustomPlanResponse> createCustomPlan(CreateCustomPlanRequestBody request) {
-        return this.rawClient.createCustomPlan(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateCustomPlanResponse>> rawFuture =
+                this.rawClient.createCustomPlan(request);
+        CompletableFuture<CreateCustomPlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateCustomPlanResponse> createCustomPlan(
             CreateCustomPlanRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createCustomPlan(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateCustomPlanResponse>> rawFuture =
+                this.rawClient.createCustomPlan(request, requestOptions);
+        CompletableFuture<CreateCustomPlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListPlansResponse> listPlans() {
-        return this.rawClient.listPlans().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListPlansResponse>> rawFuture = this.rawClient.listPlans();
+        CompletableFuture<ListPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListPlansResponse> listPlans(RequestOptions requestOptions) {
-        return this.rawClient.listPlans(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListPlansResponse>> rawFuture =
+                this.rawClient.listPlans(requestOptions);
+        CompletableFuture<ListPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListPlansResponse> listPlans(ListPlansRequest request) {
-        return this.rawClient.listPlans(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListPlansResponse>> rawFuture = this.rawClient.listPlans(request);
+        CompletableFuture<ListPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListPlansResponse> listPlans(ListPlansRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listPlans(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListPlansResponse>> rawFuture =
+                this.rawClient.listPlans(request, requestOptions);
+        CompletableFuture<ListPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreatePlanResponse> createPlan(CreatePlanRequestBody request) {
-        return this.rawClient.createPlan(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreatePlanResponse>> rawFuture = this.rawClient.createPlan(request);
+        CompletableFuture<CreatePlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreatePlanResponse> createPlan(
             CreatePlanRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createPlan(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreatePlanResponse>> rawFuture =
+                this.rawClient.createPlan(request, requestOptions);
+        CompletableFuture<CreatePlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanResponse> getPlan(String planId) {
-        return this.rawClient.getPlan(planId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanResponse>> rawFuture = this.rawClient.getPlan(planId);
+        CompletableFuture<GetPlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanResponse> getPlan(String planId, RequestOptions requestOptions) {
-        return this.rawClient.getPlan(planId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanResponse>> rawFuture =
+                this.rawClient.getPlan(planId, requestOptions);
+        CompletableFuture<GetPlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanResponse> getPlan(String planId, GetPlanRequest request) {
-        return this.rawClient.getPlan(planId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanResponse>> rawFuture =
+                this.rawClient.getPlan(planId, request);
+        CompletableFuture<GetPlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanResponse> getPlan(
             String planId, GetPlanRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getPlan(planId, request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanResponse>> rawFuture =
+                this.rawClient.getPlan(planId, request, requestOptions);
+        CompletableFuture<GetPlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdatePlanResponse> updatePlan(String planId, UpdatePlanRequestBody request) {
-        return this.rawClient.updatePlan(planId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdatePlanResponse>> rawFuture =
+                this.rawClient.updatePlan(planId, request);
+        CompletableFuture<UpdatePlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdatePlanResponse> updatePlan(
             String planId, UpdatePlanRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.updatePlan(planId, request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdatePlanResponse>> rawFuture =
+                this.rawClient.updatePlan(planId, request, requestOptions);
+        CompletableFuture<UpdatePlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeletePlanResponse> deletePlan(String planId) {
-        return this.rawClient.deletePlan(planId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeletePlanResponse>> rawFuture = this.rawClient.deletePlan(planId);
+        CompletableFuture<DeletePlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeletePlanResponse> deletePlan(String planId, RequestOptions requestOptions) {
-        return this.rawClient.deletePlan(planId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeletePlanResponse>> rawFuture =
+                this.rawClient.deletePlan(planId, requestOptions);
+        CompletableFuture<DeletePlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpsertBillingProductPlanResponse> upsertBillingProductPlan(
             String planId, UpsertBillingProductRequestBody request) {
-        return this.rawClient.upsertBillingProductPlan(planId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpsertBillingProductPlanResponse>> rawFuture =
+                this.rawClient.upsertBillingProductPlan(planId, request);
+        CompletableFuture<UpsertBillingProductPlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpsertBillingProductPlanResponse> upsertBillingProductPlan(
             String planId, UpsertBillingProductRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .upsertBillingProductPlan(planId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpsertBillingProductPlanResponse>> rawFuture =
+                this.rawClient.upsertBillingProductPlan(planId, request, requestOptions);
+        CompletableFuture<UpsertBillingProductPlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpsertPlanForBillingProductResponse> upsertPlanForBillingProduct(
             CreateBillingLinkedPlanRequestBody request) {
-        return this.rawClient.upsertPlanForBillingProduct(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpsertPlanForBillingProductResponse>> rawFuture =
+                this.rawClient.upsertPlanForBillingProduct(request);
+        CompletableFuture<UpsertPlanForBillingProductResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpsertPlanForBillingProductResponse> upsertPlanForBillingProduct(
             CreateBillingLinkedPlanRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .upsertPlanForBillingProduct(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpsertPlanForBillingProductResponse>> rawFuture =
+                this.rawClient.upsertPlanForBillingProduct(request, requestOptions);
+        CompletableFuture<UpsertPlanForBillingProductResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListBillingProductMatchCompaniesResponse> listBillingProductMatchCompanies(
             ListBillingProductMatchCompaniesRequest request) {
-        return this.rawClient.listBillingProductMatchCompanies(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingProductMatchCompaniesResponse>> rawFuture =
+                this.rawClient.listBillingProductMatchCompanies(request);
+        CompletableFuture<ListBillingProductMatchCompaniesResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListBillingProductMatchCompaniesResponse> listBillingProductMatchCompanies(
             ListBillingProductMatchCompaniesRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .listBillingProductMatchCompanies(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingProductMatchCompaniesResponse>> rawFuture =
+                this.rawClient.listBillingProductMatchCompanies(request, requestOptions);
+        CompletableFuture<ListBillingProductMatchCompaniesResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingProductMatchCompaniesResponse> countBillingProductMatchCompanies(
             CountBillingProductMatchCompaniesRequest request) {
-        return this.rawClient.countBillingProductMatchCompanies(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingProductMatchCompaniesResponse>> rawFuture =
+                this.rawClient.countBillingProductMatchCompanies(request);
+        CompletableFuture<CountBillingProductMatchCompaniesResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountBillingProductMatchCompaniesResponse> countBillingProductMatchCompanies(
             CountBillingProductMatchCompaniesRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .countBillingProductMatchCompanies(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingProductMatchCompaniesResponse>> rawFuture =
+                this.rawClient.countBillingProductMatchCompanies(request, requestOptions);
+        CompletableFuture<CountBillingProductMatchCompaniesResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountPlansResponse> countPlans() {
-        return this.rawClient.countPlans().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountPlansResponse>> rawFuture = this.rawClient.countPlans();
+        CompletableFuture<CountPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountPlansResponse> countPlans(RequestOptions requestOptions) {
-        return this.rawClient.countPlans(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountPlansResponse>> rawFuture =
+                this.rawClient.countPlans(requestOptions);
+        CompletableFuture<CountPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountPlansResponse> countPlans(CountPlansRequest request) {
-        return this.rawClient.countPlans(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountPlansResponse>> rawFuture = this.rawClient.countPlans(request);
+        CompletableFuture<CountPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountPlansResponse> countPlans(CountPlansRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countPlans(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountPlansResponse>> rawFuture =
+                this.rawClient.countPlans(request, requestOptions);
+        CompletableFuture<CountPlansResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListPlanIssuesResponse> listPlanIssues(ListPlanIssuesRequest request) {
-        return this.rawClient.listPlanIssues(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListPlanIssuesResponse>> rawFuture =
+                this.rawClient.listPlanIssues(request);
+        CompletableFuture<ListPlanIssuesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListPlanIssuesResponse> listPlanIssues(
             ListPlanIssuesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listPlanIssues(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListPlanIssuesResponse>> rawFuture =
+                this.rawClient.listPlanIssues(request, requestOptions);
+        CompletableFuture<ListPlanIssuesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(String planVersionId) {
-        return this.rawClient.deletePlanVersion(planVersionId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeletePlanVersionResponse>> rawFuture =
+                this.rawClient.deletePlanVersion(planVersionId);
+        CompletableFuture<DeletePlanVersionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(
             String planVersionId, RequestOptions requestOptions) {
-        return this.rawClient.deletePlanVersion(planVersionId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeletePlanVersionResponse>> rawFuture =
+                this.rawClient.deletePlanVersion(planVersionId, requestOptions);
+        CompletableFuture<DeletePlanVersionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(
             String planVersionId, DeletePlanVersionRequest request) {
-        return this.rawClient.deletePlanVersion(planVersionId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeletePlanVersionResponse>> rawFuture =
+                this.rawClient.deletePlanVersion(planVersionId, request);
+        CompletableFuture<DeletePlanVersionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeletePlanVersionResponse> deletePlanVersion(
             String planVersionId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .deletePlanVersion(planVersionId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeletePlanVersionResponse>> rawFuture =
+                this.rawClient.deletePlanVersion(planVersionId, request, requestOptions);
+        CompletableFuture<DeletePlanVersionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetPlanVersionDiffResponse> getPlanVersionDiff(String planVersionId) {
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanVersionDiffResponse>> rawFuture =
+                this.rawClient.getPlanVersionDiff(planVersionId);
+        CompletableFuture<GetPlanVersionDiffResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetPlanVersionDiffResponse> getPlanVersionDiff(
+            String planVersionId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanVersionDiffResponse>> rawFuture =
+                this.rawClient.getPlanVersionDiff(planVersionId, requestOptions);
+        CompletableFuture<GetPlanVersionDiffResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetPlanVersionDiffResponse> getPlanVersionDiff(
+            String planVersionId, GetPlanVersionDiffRequest request) {
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanVersionDiffResponse>> rawFuture =
+                this.rawClient.getPlanVersionDiff(planVersionId, request);
+        CompletableFuture<GetPlanVersionDiffResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetPlanVersionDiffResponse> getPlanVersionDiff(
+            String planVersionId, GetPlanVersionDiffRequest request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanVersionDiffResponse>> rawFuture =
+                this.rawClient.getPlanVersionDiff(planVersionId, request, requestOptions);
+        CompletableFuture<GetPlanVersionDiffResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<PublishPlanVersionResponse> publishPlanVersion(
             String planVersionId, PublishPlanVersionRequestBody request) {
-        return this.rawClient.publishPlanVersion(planVersionId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<PublishPlanVersionResponse>> rawFuture =
+                this.rawClient.publishPlanVersion(planVersionId, request);
+        CompletableFuture<PublishPlanVersionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<PublishPlanVersionResponse> publishPlanVersion(
             String planVersionId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .publishPlanVersion(planVersionId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<PublishPlanVersionResponse>> rawFuture =
+                this.rawClient.publishPlanVersion(planVersionId, request, requestOptions);
+        CompletableFuture<PublishPlanVersionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

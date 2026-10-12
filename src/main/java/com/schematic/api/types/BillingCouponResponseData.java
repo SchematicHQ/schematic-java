@@ -28,7 +28,7 @@ public final class BillingCouponResponseData {
 
     private final Optional<Long> amountOff;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final Optional<String> duration;
 
@@ -63,7 +63,7 @@ public final class BillingCouponResponseData {
     private BillingCouponResponseData(
             String accountId,
             Optional<Long> amountOff,
-            Optional<String> currency,
+            Optional<Currency> currency,
             Optional<String> duration,
             Optional<Long> durationInMonths,
             String environmentId,
@@ -110,7 +110,7 @@ public final class BillingCouponResponseData {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -291,9 +291,9 @@ public final class BillingCouponResponseData {
 
         _FinalStage amountOff(Long amountOff);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
 
         _FinalStage duration(Optional<String> duration);
 
@@ -367,7 +367,7 @@ public final class BillingCouponResponseData {
 
         private Optional<String> duration = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private Optional<Long> amountOff = Optional.empty();
 
@@ -557,14 +557,14 @@ public final class BillingCouponResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }

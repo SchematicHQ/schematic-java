@@ -15,6 +15,7 @@ import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingPriceUsageType;
 import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.BillingTiersMode;
+import com.schematic.api.types.Currency;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public final class ListBillingProductPricesRequest {
 
     private final Optional<List<String>> productIds;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final Optional<Boolean> forInitialPlan;
 
@@ -66,7 +67,7 @@ public final class ListBillingProductPricesRequest {
     private ListBillingProductPricesRequest(
             Optional<List<String>> ids,
             Optional<List<String>> productIds,
-            Optional<String> currency,
+            Optional<Currency> currency,
             Optional<Boolean> forInitialPlan,
             Optional<Boolean> forTrialExpiryPlan,
             Optional<String> interval,
@@ -118,7 +119,7 @@ public final class ListBillingProductPricesRequest {
      * @return Filter for prices in a specific currency (e.g. usd, eur)
      */
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -291,7 +292,7 @@ public final class ListBillingProductPricesRequest {
 
         private Optional<List<String>> productIds = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private Optional<Boolean> forInitialPlan = Optional.empty();
 
@@ -386,12 +387,12 @@ public final class ListBillingProductPricesRequest {
          * <p>Filter for prices in a specific currency (e.g. usd, eur)</p>
          */
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public Builder currency(Optional<String> currency) {
+        public Builder currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }
 
-        public Builder currency(String currency) {
+        public Builder currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }

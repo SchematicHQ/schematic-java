@@ -30,7 +30,7 @@ public final class BillingProductForSubscriptionResponseData {
 
     private final OffsetDateTime createdAt;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String environmentId;
 
@@ -76,7 +76,7 @@ public final class BillingProductForSubscriptionResponseData {
             BillingPriceScheme billingScheme,
             Optional<Long> billingThreshold,
             OffsetDateTime createdAt,
-            String currency,
+            Currency currency,
             String environmentId,
             String externalId,
             String id,
@@ -139,7 +139,7 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -324,7 +324,7 @@ public final class BillingProductForSubscriptionResponseData {
     }
 
     public interface CurrencyStage {
-        EnvironmentIdStage currency(@NotNull String currency);
+        EnvironmentIdStage currency(@NotNull Currency currency);
     }
 
     public interface EnvironmentIdStage {
@@ -441,7 +441,7 @@ public final class BillingProductForSubscriptionResponseData {
 
         private OffsetDateTime createdAt;
 
-        private String currency;
+        private Currency currency;
 
         private String environmentId;
 
@@ -532,7 +532,7 @@ public final class BillingProductForSubscriptionResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public EnvironmentIdStage currency(@NotNull String currency) {
+        public EnvironmentIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

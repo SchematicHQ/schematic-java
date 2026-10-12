@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.insights;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.insights.requests.GetActivityRequest;
@@ -36,78 +37,203 @@ public class AsyncInsightsClient {
     }
 
     public CompletableFuture<GetActivityResponse> getActivity() {
-        return this.rawClient.getActivity().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetActivityResponse>> rawFuture = this.rawClient.getActivity();
+        CompletableFuture<GetActivityResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetActivityResponse> getActivity(RequestOptions requestOptions) {
-        return this.rawClient.getActivity(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetActivityResponse>> rawFuture =
+                this.rawClient.getActivity(requestOptions);
+        CompletableFuture<GetActivityResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetActivityResponse> getActivity(GetActivityRequest request) {
-        return this.rawClient.getActivity(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetActivityResponse>> rawFuture =
+                this.rawClient.getActivity(request);
+        CompletableFuture<GetActivityResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetActivityResponse> getActivity(
             GetActivityRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getActivity(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetActivityResponse>> rawFuture =
+                this.rawClient.getActivity(request, requestOptions);
+        CompletableFuture<GetActivityResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetEnvironmentFeatureUsageTimeSeriesResponse> getEnvironmentFeatureUsageTimeSeries(
             GetEnvironmentFeatureUsageTimeSeriesRequest request) {
-        return this.rawClient.getEnvironmentFeatureUsageTimeSeries(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetEnvironmentFeatureUsageTimeSeriesResponse>> rawFuture =
+                this.rawClient.getEnvironmentFeatureUsageTimeSeries(request);
+        CompletableFuture<GetEnvironmentFeatureUsageTimeSeriesResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetEnvironmentFeatureUsageTimeSeriesResponse> getEnvironmentFeatureUsageTimeSeries(
             GetEnvironmentFeatureUsageTimeSeriesRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .getEnvironmentFeatureUsageTimeSeries(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetEnvironmentFeatureUsageTimeSeriesResponse>> rawFuture =
+                this.rawClient.getEnvironmentFeatureUsageTimeSeries(request, requestOptions);
+        CompletableFuture<GetEnvironmentFeatureUsageTimeSeriesResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanGrowthResponse> getPlanGrowth() {
-        return this.rawClient.getPlanGrowth().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanGrowthResponse>> rawFuture = this.rawClient.getPlanGrowth();
+        CompletableFuture<GetPlanGrowthResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanGrowthResponse> getPlanGrowth(RequestOptions requestOptions) {
-        return this.rawClient.getPlanGrowth(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanGrowthResponse>> rawFuture =
+                this.rawClient.getPlanGrowth(requestOptions);
+        CompletableFuture<GetPlanGrowthResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanGrowthResponse> getPlanGrowth(GetPlanGrowthRequest request) {
-        return this.rawClient.getPlanGrowth(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanGrowthResponse>> rawFuture =
+                this.rawClient.getPlanGrowth(request);
+        CompletableFuture<GetPlanGrowthResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetPlanGrowthResponse> getPlanGrowth(
             GetPlanGrowthRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getPlanGrowth(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetPlanGrowthResponse>> rawFuture =
+                this.rawClient.getPlanGrowth(request, requestOptions);
+        CompletableFuture<GetPlanGrowthResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetSummaryResponse> getSummary() {
-        return this.rawClient.getSummary().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetSummaryResponse>> rawFuture = this.rawClient.getSummary();
+        CompletableFuture<GetSummaryResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetSummaryResponse> getSummary(RequestOptions requestOptions) {
-        return this.rawClient.getSummary(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetSummaryResponse>> rawFuture =
+                this.rawClient.getSummary(requestOptions);
+        CompletableFuture<GetSummaryResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetTopFeaturesByUsageResponse> getTopFeaturesByUsage(
             GetTopFeaturesByUsageRequest request) {
-        return this.rawClient.getTopFeaturesByUsage(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetTopFeaturesByUsageResponse>> rawFuture =
+                this.rawClient.getTopFeaturesByUsage(request);
+        CompletableFuture<GetTopFeaturesByUsageResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetTopFeaturesByUsageResponse> getTopFeaturesByUsage(
             GetTopFeaturesByUsageRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getTopFeaturesByUsage(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetTopFeaturesByUsageResponse>> rawFuture =
+                this.rawClient.getTopFeaturesByUsage(request, requestOptions);
+        CompletableFuture<GetTopFeaturesByUsageResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetEnvironmentTraitUsageTimeSeriesResponse> getEnvironmentTraitUsageTimeSeries(
             GetEnvironmentTraitUsageTimeSeriesRequest request) {
-        return this.rawClient.getEnvironmentTraitUsageTimeSeries(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetEnvironmentTraitUsageTimeSeriesResponse>> rawFuture =
+                this.rawClient.getEnvironmentTraitUsageTimeSeries(request);
+        CompletableFuture<GetEnvironmentTraitUsageTimeSeriesResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetEnvironmentTraitUsageTimeSeriesResponse> getEnvironmentTraitUsageTimeSeries(
             GetEnvironmentTraitUsageTimeSeriesRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .getEnvironmentTraitUsageTimeSeries(request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetEnvironmentTraitUsageTimeSeriesResponse>> rawFuture =
+                this.rawClient.getEnvironmentTraitUsageTimeSeries(request, requestOptions);
+        CompletableFuture<GetEnvironmentTraitUsageTimeSeriesResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

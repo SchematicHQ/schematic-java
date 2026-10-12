@@ -12,6 +12,7 @@ import com.schematic.api.resources.plans.requests.CreateBillingLinkedPlanRequest
 import com.schematic.api.resources.plans.requests.CreateCustomPlanRequestBody;
 import com.schematic.api.resources.plans.requests.DeletePlanVersionRequest;
 import com.schematic.api.resources.plans.requests.GetPlanRequest;
+import com.schematic.api.resources.plans.requests.GetPlanVersionDiffRequest;
 import com.schematic.api.resources.plans.requests.ListBillingProductMatchCompaniesRequest;
 import com.schematic.api.resources.plans.requests.ListCustomPlanBillingsRequest;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
@@ -26,6 +27,7 @@ import com.schematic.api.resources.plans.types.CreatePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanResponse;
 import com.schematic.api.resources.plans.types.DeletePlanVersionResponse;
 import com.schematic.api.resources.plans.types.GetPlanResponse;
+import com.schematic.api.resources.plans.types.GetPlanVersionDiffResponse;
 import com.schematic.api.resources.plans.types.ListBillingProductMatchCompaniesResponse;
 import com.schematic.api.resources.plans.types.ListCustomPlanBillingsResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
@@ -267,6 +269,25 @@ public class PlansClient {
             String planVersionId, DeletePlanVersionRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .deletePlanVersion(planVersionId, request, requestOptions)
+                .body();
+    }
+
+    public GetPlanVersionDiffResponse getPlanVersionDiff(String planVersionId) {
+        return this.rawClient.getPlanVersionDiff(planVersionId).body();
+    }
+
+    public GetPlanVersionDiffResponse getPlanVersionDiff(String planVersionId, RequestOptions requestOptions) {
+        return this.rawClient.getPlanVersionDiff(planVersionId, requestOptions).body();
+    }
+
+    public GetPlanVersionDiffResponse getPlanVersionDiff(String planVersionId, GetPlanVersionDiffRequest request) {
+        return this.rawClient.getPlanVersionDiff(planVersionId, request).body();
+    }
+
+    public GetPlanVersionDiffResponse getPlanVersionDiff(
+            String planVersionId, GetPlanVersionDiffRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .getPlanVersionDiff(planVersionId, request, requestOptions)
                 .body();
     }
 

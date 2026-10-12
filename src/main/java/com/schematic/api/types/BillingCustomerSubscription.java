@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingCustomerSubscription.Builder.class)
 public final class BillingCustomerSubscription {
-    private final String currency;
+    private final Currency currency;
 
     private final Optional<OffsetDateTime> expiredAt;
 
@@ -37,7 +37,7 @@ public final class BillingCustomerSubscription {
     private final Map<String, Object> additionalProperties;
 
     private BillingCustomerSubscription(
-            String currency,
+            Currency currency,
             Optional<OffsetDateTime> expiredAt,
             String interval,
             boolean meteredUsage,
@@ -54,7 +54,7 @@ public final class BillingCustomerSubscription {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -119,7 +119,7 @@ public final class BillingCustomerSubscription {
     }
 
     public interface CurrencyStage {
-        IntervalStage currency(@NotNull String currency);
+        IntervalStage currency(@NotNull Currency currency);
 
         Builder from(BillingCustomerSubscription other);
     }
@@ -160,7 +160,7 @@ public final class BillingCustomerSubscription {
                     PerUnitPriceStage,
                     TotalPriceStage,
                     _FinalStage {
-        private String currency;
+        private Currency currency;
 
         private String interval;
 
@@ -190,7 +190,7 @@ public final class BillingCustomerSubscription {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public IntervalStage currency(@NotNull String currency) {
+        public IntervalStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

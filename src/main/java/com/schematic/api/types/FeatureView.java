@@ -34,6 +34,8 @@ public final class FeatureView {
 
     private final String description;
 
+    private final FeatureEventSource eventSource;
+
     private final Optional<String> eventSubtype;
 
     private final Optional<EventSummaryResponseData> eventSummary;
@@ -74,6 +76,7 @@ public final class FeatureView {
             Optional<BillingProductRecordResponseData> billingProduct,
             OffsetDateTime createdAt,
             String description,
+            FeatureEventSource eventSource,
             Optional<String> eventSubtype,
             Optional<EventSummaryResponseData> eventSummary,
             FeatureType featureType,
@@ -96,6 +99,7 @@ public final class FeatureView {
         this.billingProduct = billingProduct;
         this.createdAt = createdAt;
         this.description = description;
+        this.eventSource = eventSource;
         this.eventSubtype = eventSubtype;
         this.eventSummary = eventSummary;
         this.featureType = featureType;
@@ -138,6 +142,11 @@ public final class FeatureView {
     @JsonProperty("description")
     public String getDescription() {
         return description;
+    }
+
+    @JsonProperty("event_source")
+    public FeatureEventSource getEventSource() {
+        return eventSource;
     }
 
     @JsonProperty("event_subtype")
@@ -237,6 +246,7 @@ public final class FeatureView {
                 && billingProduct.equals(other.billingProduct)
                 && createdAt.equals(other.createdAt)
                 && description.equals(other.description)
+                && eventSource.equals(other.eventSource)
                 && eventSubtype.equals(other.eventSubtype)
                 && eventSummary.equals(other.eventSummary)
                 && featureType.equals(other.featureType)
@@ -263,6 +273,7 @@ public final class FeatureView {
                 this.billingProduct,
                 this.createdAt,
                 this.description,
+                this.eventSource,
                 this.eventSubtype,
                 this.eventSummary,
                 this.featureType,
@@ -301,7 +312,11 @@ public final class FeatureView {
     }
 
     public interface DescriptionStage {
-        FeatureTypeStage description(@NotNull String description);
+        EventSourceStage description(@NotNull String description);
+    }
+
+    public interface EventSourceStage {
+        FeatureTypeStage eventSource(@NotNull FeatureEventSource eventSource);
     }
 
     public interface FeatureTypeStage {
@@ -393,6 +408,7 @@ public final class FeatureView {
             implements AccountIdStage,
                     CreatedAtStage,
                     DescriptionStage,
+                    EventSourceStage,
                     FeatureTypeStage,
                     IconStage,
                     IdStage,
@@ -404,6 +420,8 @@ public final class FeatureView {
         private OffsetDateTime createdAt;
 
         private String description;
+
+        private FeatureEventSource eventSource;
 
         private FeatureType featureType;
 
@@ -453,6 +471,7 @@ public final class FeatureView {
             billingProduct(other.getBillingProduct());
             createdAt(other.getCreatedAt());
             description(other.getDescription());
+            eventSource(other.getEventSource());
             eventSubtype(other.getEventSubtype());
             eventSummary(other.getEventSummary());
             featureType(other.getFeatureType());
@@ -488,8 +507,15 @@ public final class FeatureView {
 
         @java.lang.Override
         @JsonSetter("description")
-        public FeatureTypeStage description(@NotNull String description) {
+        public EventSourceStage description(@NotNull String description) {
             this.description = Objects.requireNonNull(description, "description must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("event_source")
+        public FeatureTypeStage eventSource(@NotNull FeatureEventSource eventSource) {
+            this.eventSource = Objects.requireNonNull(eventSource, "eventSource must not be null");
             return this;
         }
 
@@ -727,6 +753,7 @@ public final class FeatureView {
                     billingProduct,
                     createdAt,
                     description,
+                    eventSource,
                     eventSubtype,
                     eventSummary,
                     featureType,

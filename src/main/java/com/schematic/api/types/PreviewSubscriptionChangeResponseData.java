@@ -46,6 +46,8 @@ public final class PreviewSubscriptionChangeResponseData {
 
     private final OffsetDateTime periodStart;
 
+    private final List<CheckoutProblemResponseData> problems;
+
     private final boolean promoCodeApplied;
 
     private final long proration;
@@ -70,6 +72,7 @@ public final class PreviewSubscriptionChangeResponseData {
             boolean paymentMethodRequired,
             double percentOff,
             OffsetDateTime periodStart,
+            List<CheckoutProblemResponseData> problems,
             boolean promoCodeApplied,
             long proration,
             Optional<OffsetDateTime> scheduledChangeTime,
@@ -87,6 +90,7 @@ public final class PreviewSubscriptionChangeResponseData {
         this.paymentMethodRequired = paymentMethodRequired;
         this.percentOff = percentOff;
         this.periodStart = periodStart;
+        this.problems = problems;
         this.promoCodeApplied = promoCodeApplied;
         this.proration = proration;
         this.scheduledChangeTime = scheduledChangeTime;
@@ -150,6 +154,11 @@ public final class PreviewSubscriptionChangeResponseData {
         return periodStart;
     }
 
+    @JsonProperty("problems")
+    public List<CheckoutProblemResponseData> getProblems() {
+        return problems;
+    }
+
     @JsonProperty("promo_code_applied")
     public boolean getPromoCodeApplied() {
         return promoCodeApplied;
@@ -199,6 +208,7 @@ public final class PreviewSubscriptionChangeResponseData {
                 && paymentMethodRequired == other.paymentMethodRequired
                 && percentOff == other.percentOff
                 && periodStart.equals(other.periodStart)
+                && problems.equals(other.problems)
                 && promoCodeApplied == other.promoCodeApplied
                 && proration == other.proration
                 && scheduledChangeTime.equals(other.scheduledChangeTime)
@@ -220,6 +230,7 @@ public final class PreviewSubscriptionChangeResponseData {
                 this.paymentMethodRequired,
                 this.percentOff,
                 this.periodStart,
+                this.problems,
                 this.promoCodeApplied,
                 this.proration,
                 this.scheduledChangeTime,
@@ -297,6 +308,12 @@ public final class PreviewSubscriptionChangeResponseData {
 
         _FinalStage optInTitle(String optInTitle);
 
+        _FinalStage problems(List<CheckoutProblemResponseData> problems);
+
+        _FinalStage addProblems(CheckoutProblemResponseData problems);
+
+        _FinalStage addAllProblems(List<CheckoutProblemResponseData> problems);
+
         _FinalStage scheduledChangeTime(Optional<OffsetDateTime> scheduledChangeTime);
 
         _FinalStage scheduledChangeTime(OffsetDateTime scheduledChangeTime);
@@ -351,6 +368,8 @@ public final class PreviewSubscriptionChangeResponseData {
 
         private Optional<OffsetDateTime> scheduledChangeTime = Optional.empty();
 
+        private List<CheckoutProblemResponseData> problems = new ArrayList<>();
+
         private Optional<String> optInTitle = Optional.empty();
 
         private Optional<String> optInText = Optional.empty();
@@ -375,6 +394,7 @@ public final class PreviewSubscriptionChangeResponseData {
             paymentMethodRequired(other.getPaymentMethodRequired());
             percentOff(other.getPercentOff());
             periodStart(other.getPeriodStart());
+            problems(other.getProblems());
             promoCodeApplied(other.getPromoCodeApplied());
             proration(other.getProration());
             scheduledChangeTime(other.getScheduledChangeTime());
@@ -504,6 +524,30 @@ public final class PreviewSubscriptionChangeResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllProblems(List<CheckoutProblemResponseData> problems) {
+            if (problems != null) {
+                this.problems.addAll(problems);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addProblems(CheckoutProblemResponseData problems) {
+            this.problems.add(problems);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "problems", nulls = Nulls.SKIP)
+        public _FinalStage problems(List<CheckoutProblemResponseData> problems) {
+            this.problems.clear();
+            if (problems != null) {
+                this.problems.addAll(problems);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage optInTitle(String optInTitle) {
             this.optInTitle = Optional.ofNullable(optInTitle);
             return this;
@@ -556,6 +600,7 @@ public final class PreviewSubscriptionChangeResponseData {
                     paymentMethodRequired,
                     percentOff,
                     periodStart,
+                    problems,
                     promoCodeApplied,
                     proration,
                     scheduledChangeTime,

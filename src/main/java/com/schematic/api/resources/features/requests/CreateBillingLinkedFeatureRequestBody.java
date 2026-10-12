@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.CreateOrUpdateFlagRequestBody;
+import com.schematic.api.types.FeatureEventSource;
 import com.schematic.api.types.FeatureLifecyclePhase;
 import com.schematic.api.types.FeatureType;
 import java.util.HashMap;
@@ -28,6 +29,8 @@ public final class CreateBillingLinkedFeatureRequestBody {
     private final BillingProviderType billingProvider;
 
     private final String description;
+
+    private final Optional<FeatureEventSource> eventSource;
 
     private final Optional<String> eventSubtype;
 
@@ -56,6 +59,7 @@ public final class CreateBillingLinkedFeatureRequestBody {
     private CreateBillingLinkedFeatureRequestBody(
             BillingProviderType billingProvider,
             String description,
+            Optional<FeatureEventSource> eventSource,
             Optional<String> eventSubtype,
             String externalResourceId,
             FeatureType featureType,
@@ -70,6 +74,7 @@ public final class CreateBillingLinkedFeatureRequestBody {
             Map<String, Object> additionalProperties) {
         this.billingProvider = billingProvider;
         this.description = description;
+        this.eventSource = eventSource;
         this.eventSubtype = eventSubtype;
         this.externalResourceId = externalResourceId;
         this.featureType = featureType;
@@ -92,6 +97,14 @@ public final class CreateBillingLinkedFeatureRequestBody {
     @JsonProperty("description")
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * @return Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.
+     */
+    @JsonProperty("event_source")
+    public Optional<FeatureEventSource> getEventSource() {
+        return eventSource;
     }
 
     @JsonProperty("event_subtype")
@@ -164,6 +177,7 @@ public final class CreateBillingLinkedFeatureRequestBody {
     private boolean equalTo(CreateBillingLinkedFeatureRequestBody other) {
         return billingProvider.equals(other.billingProvider)
                 && description.equals(other.description)
+                && eventSource.equals(other.eventSource)
                 && eventSubtype.equals(other.eventSubtype)
                 && externalResourceId.equals(other.externalResourceId)
                 && featureType.equals(other.featureType)
@@ -182,6 +196,7 @@ public final class CreateBillingLinkedFeatureRequestBody {
         return Objects.hash(
                 this.billingProvider,
                 this.description,
+                this.eventSource,
                 this.eventSubtype,
                 this.externalResourceId,
                 this.featureType,
@@ -232,6 +247,13 @@ public final class CreateBillingLinkedFeatureRequestBody {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        /**
+         * <p>Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.</p>
+         */
+        _FinalStage eventSource(Optional<FeatureEventSource> eventSource);
+
+        _FinalStage eventSource(FeatureEventSource eventSource);
 
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
@@ -300,6 +322,8 @@ public final class CreateBillingLinkedFeatureRequestBody {
 
         private Optional<String> eventSubtype = Optional.empty();
 
+        private Optional<FeatureEventSource> eventSource = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -309,6 +333,7 @@ public final class CreateBillingLinkedFeatureRequestBody {
         public Builder from(CreateBillingLinkedFeatureRequestBody other) {
             billingProvider(other.getBillingProvider());
             description(other.getDescription());
+            eventSource(other.getEventSource());
             eventSubtype(other.getEventSubtype());
             externalResourceId(other.getExternalResourceId());
             featureType(other.getFeatureType());
@@ -462,11 +487,32 @@ public final class CreateBillingLinkedFeatureRequestBody {
             return this;
         }
 
+        /**
+         * <p>Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage eventSource(FeatureEventSource eventSource) {
+            this.eventSource = Optional.ofNullable(eventSource);
+            return this;
+        }
+
+        /**
+         * <p>Which event stream meters this feature; defaults to track, and cannot change after creation. Inference is only valid on event features: their event_subtype matches the event label on inference events, and they meter through credits only.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "event_source", nulls = Nulls.SKIP)
+        public _FinalStage eventSource(Optional<FeatureEventSource> eventSource) {
+            this.eventSource = eventSource;
+            return this;
+        }
+
         @java.lang.Override
         public CreateBillingLinkedFeatureRequestBody build() {
             return new CreateBillingLinkedFeatureRequestBody(
                     billingProvider,
                     description,
+                    eventSource,
                     eventSubtype,
                     externalResourceId,
                     featureType,

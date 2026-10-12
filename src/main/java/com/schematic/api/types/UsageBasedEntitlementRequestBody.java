@@ -25,7 +25,7 @@ public final class UsageBasedEntitlementRequestBody {
 
     private final Optional<Long> billingThreshold;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final Optional<List<CurrencyPriceRequestBody>> currencyPrices;
 
@@ -74,7 +74,7 @@ public final class UsageBasedEntitlementRequestBody {
     private UsageBasedEntitlementRequestBody(
             Optional<String> billingProductId,
             Optional<Long> billingThreshold,
-            Optional<String> currency,
+            Optional<Currency> currency,
             Optional<List<CurrencyPriceRequestBody>> currencyPrices,
             Optional<String> monthlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers,
@@ -135,7 +135,7 @@ public final class UsageBasedEntitlementRequestBody {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -338,7 +338,7 @@ public final class UsageBasedEntitlementRequestBody {
 
         private Optional<Long> billingThreshold = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private Optional<List<CurrencyPriceRequestBody>> currencyPrices = Optional.empty();
 
@@ -438,12 +438,12 @@ public final class UsageBasedEntitlementRequestBody {
         }
 
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public Builder currency(Optional<String> currency) {
+        public Builder currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }
 
-        public Builder currency(String currency) {
+        public Builder currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }

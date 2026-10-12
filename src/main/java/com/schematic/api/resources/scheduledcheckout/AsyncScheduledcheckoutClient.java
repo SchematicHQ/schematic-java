@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.scheduledcheckout;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.scheduledcheckout.requests.CreateScheduledCheckoutRequest;
@@ -32,66 +33,154 @@ public class AsyncScheduledcheckoutClient {
     }
 
     public CompletableFuture<ListScheduledCheckoutsResponse> listScheduledCheckouts() {
-        return this.rawClient.listScheduledCheckouts().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListScheduledCheckoutsResponse>> rawFuture =
+                this.rawClient.listScheduledCheckouts();
+        CompletableFuture<ListScheduledCheckoutsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListScheduledCheckoutsResponse> listScheduledCheckouts(RequestOptions requestOptions) {
-        return this.rawClient.listScheduledCheckouts(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListScheduledCheckoutsResponse>> rawFuture =
+                this.rawClient.listScheduledCheckouts(requestOptions);
+        CompletableFuture<ListScheduledCheckoutsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListScheduledCheckoutsResponse> listScheduledCheckouts(
             ListScheduledCheckoutsRequest request) {
-        return this.rawClient.listScheduledCheckouts(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListScheduledCheckoutsResponse>> rawFuture =
+                this.rawClient.listScheduledCheckouts(request);
+        CompletableFuture<ListScheduledCheckoutsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListScheduledCheckoutsResponse> listScheduledCheckouts(
             ListScheduledCheckoutsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listScheduledCheckouts(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListScheduledCheckoutsResponse>> rawFuture =
+                this.rawClient.listScheduledCheckouts(request, requestOptions);
+        CompletableFuture<ListScheduledCheckoutsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateScheduledCheckoutResponse> createScheduledCheckout(
             CreateScheduledCheckoutRequest request) {
-        return this.rawClient.createScheduledCheckout(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateScheduledCheckoutResponse>> rawFuture =
+                this.rawClient.createScheduledCheckout(request);
+        CompletableFuture<CreateScheduledCheckoutResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateScheduledCheckoutResponse> createScheduledCheckout(
             CreateScheduledCheckoutRequest request, RequestOptions requestOptions) {
-        return this.rawClient.createScheduledCheckout(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateScheduledCheckoutResponse>> rawFuture =
+                this.rawClient.createScheduledCheckout(request, requestOptions);
+        CompletableFuture<CreateScheduledCheckoutResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetScheduledCheckoutResponse> getScheduledCheckout(String scheduledCheckoutId) {
-        return this.rawClient.getScheduledCheckout(scheduledCheckoutId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetScheduledCheckoutResponse>> rawFuture =
+                this.rawClient.getScheduledCheckout(scheduledCheckoutId);
+        CompletableFuture<GetScheduledCheckoutResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetScheduledCheckoutResponse> getScheduledCheckout(
             String scheduledCheckoutId, RequestOptions requestOptions) {
-        return this.rawClient
-                .getScheduledCheckout(scheduledCheckoutId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetScheduledCheckoutResponse>> rawFuture =
+                this.rawClient.getScheduledCheckout(scheduledCheckoutId, requestOptions);
+        CompletableFuture<GetScheduledCheckoutResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateScheduledCheckoutResponse> updateScheduledCheckout(String scheduledCheckoutId) {
-        return this.rawClient.updateScheduledCheckout(scheduledCheckoutId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateScheduledCheckoutResponse>> rawFuture =
+                this.rawClient.updateScheduledCheckout(scheduledCheckoutId);
+        CompletableFuture<UpdateScheduledCheckoutResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateScheduledCheckoutResponse> updateScheduledCheckout(
             String scheduledCheckoutId, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateScheduledCheckout(scheduledCheckoutId, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateScheduledCheckoutResponse>> rawFuture =
+                this.rawClient.updateScheduledCheckout(scheduledCheckoutId, requestOptions);
+        CompletableFuture<UpdateScheduledCheckoutResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateScheduledCheckoutResponse> updateScheduledCheckout(
             String scheduledCheckoutId, UpdateScheduledCheckoutRequest request) {
-        return this.rawClient
-                .updateScheduledCheckout(scheduledCheckoutId, request)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateScheduledCheckoutResponse>> rawFuture =
+                this.rawClient.updateScheduledCheckout(scheduledCheckoutId, request);
+        CompletableFuture<UpdateScheduledCheckoutResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateScheduledCheckoutResponse> updateScheduledCheckout(
             String scheduledCheckoutId, UpdateScheduledCheckoutRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateScheduledCheckout(scheduledCheckoutId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateScheduledCheckoutResponse>> rawFuture =
+                this.rawClient.updateScheduledCheckout(scheduledCheckoutId, request, requestOptions);
+        CompletableFuture<UpdateScheduledCheckoutResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

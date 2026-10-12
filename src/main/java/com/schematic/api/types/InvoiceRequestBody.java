@@ -30,7 +30,7 @@ public final class InvoiceRequestBody {
 
     private final String collectionMethod;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String customerExternalId;
 
@@ -59,7 +59,7 @@ public final class InvoiceRequestBody {
             long amountPaid,
             long amountRemaining,
             String collectionMethod,
-            String currency,
+            Currency currency,
             String customerExternalId,
             Optional<OffsetDateTime> dueDate,
             Optional<Long> endingBalance,
@@ -110,7 +110,7 @@ public final class InvoiceRequestBody {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -241,7 +241,7 @@ public final class InvoiceRequestBody {
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(@NotNull String currency);
+        CustomerExternalIdStage currency(@NotNull Currency currency);
     }
 
     public interface CustomerExternalIdStage {
@@ -310,7 +310,7 @@ public final class InvoiceRequestBody {
 
         private String collectionMethod;
 
-        private String currency;
+        private Currency currency;
 
         private String customerExternalId;
 
@@ -387,7 +387,7 @@ public final class InvoiceRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(@NotNull String currency) {
+        public CustomerExternalIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

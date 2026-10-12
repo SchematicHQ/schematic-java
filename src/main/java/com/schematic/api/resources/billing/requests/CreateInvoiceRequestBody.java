@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.Currency;
 import com.schematic.api.types.InvoiceStatus;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public final class CreateInvoiceRequestBody {
 
     private final String collectionMethod;
 
-    private final String currency;
+    private final Currency currency;
 
     private final String customerExternalId;
 
@@ -62,7 +63,7 @@ public final class CreateInvoiceRequestBody {
             long amountPaid,
             long amountRemaining,
             String collectionMethod,
-            String currency,
+            Currency currency,
             String customerExternalId,
             Optional<OffsetDateTime> dueDate,
             Optional<Long> endingBalance,
@@ -115,7 +116,7 @@ public final class CreateInvoiceRequestBody {
     }
 
     @JsonProperty("currency")
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -253,7 +254,7 @@ public final class CreateInvoiceRequestBody {
     }
 
     public interface CurrencyStage {
-        CustomerExternalIdStage currency(@NotNull String currency);
+        CustomerExternalIdStage currency(@NotNull Currency currency);
     }
 
     public interface CustomerExternalIdStage {
@@ -326,7 +327,7 @@ public final class CreateInvoiceRequestBody {
 
         private String collectionMethod;
 
-        private String currency;
+        private Currency currency;
 
         private String customerExternalId;
 
@@ -406,7 +407,7 @@ public final class CreateInvoiceRequestBody {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public CustomerExternalIdStage currency(@NotNull String currency) {
+        public CustomerExternalIdStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }

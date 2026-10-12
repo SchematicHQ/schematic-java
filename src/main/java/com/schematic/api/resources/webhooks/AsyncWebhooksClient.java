@@ -3,6 +3,7 @@
  */
 package com.schematic.api.resources.webhooks;
 
+import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.webhooks.requests.CountWebhookEventsRequest;
@@ -42,133 +43,369 @@ public class AsyncWebhooksClient {
     }
 
     public CompletableFuture<ListWebhookEventsResponse> listWebhookEvents() {
-        return this.rawClient.listWebhookEvents().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListWebhookEventsResponse>> rawFuture =
+                this.rawClient.listWebhookEvents();
+        CompletableFuture<ListWebhookEventsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListWebhookEventsResponse> listWebhookEvents(RequestOptions requestOptions) {
-        return this.rawClient.listWebhookEvents(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListWebhookEventsResponse>> rawFuture =
+                this.rawClient.listWebhookEvents(requestOptions);
+        CompletableFuture<ListWebhookEventsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListWebhookEventsResponse> listWebhookEvents(ListWebhookEventsRequest request) {
-        return this.rawClient.listWebhookEvents(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListWebhookEventsResponse>> rawFuture =
+                this.rawClient.listWebhookEvents(request);
+        CompletableFuture<ListWebhookEventsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListWebhookEventsResponse> listWebhookEvents(
             ListWebhookEventsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listWebhookEvents(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListWebhookEventsResponse>> rawFuture =
+                this.rawClient.listWebhookEvents(request, requestOptions);
+        CompletableFuture<ListWebhookEventsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetWebhookEventResponse> getWebhookEvent(String webhookEventId) {
-        return this.rawClient.getWebhookEvent(webhookEventId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetWebhookEventResponse>> rawFuture =
+                this.rawClient.getWebhookEvent(webhookEventId);
+        CompletableFuture<GetWebhookEventResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetWebhookEventResponse> getWebhookEvent(
             String webhookEventId, RequestOptions requestOptions) {
-        return this.rawClient.getWebhookEvent(webhookEventId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetWebhookEventResponse>> rawFuture =
+                this.rawClient.getWebhookEvent(webhookEventId, requestOptions);
+        CompletableFuture<GetWebhookEventResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountWebhookEventsResponse> countWebhookEvents() {
-        return this.rawClient.countWebhookEvents().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountWebhookEventsResponse>> rawFuture =
+                this.rawClient.countWebhookEvents();
+        CompletableFuture<CountWebhookEventsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountWebhookEventsResponse> countWebhookEvents(RequestOptions requestOptions) {
-        return this.rawClient.countWebhookEvents(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountWebhookEventsResponse>> rawFuture =
+                this.rawClient.countWebhookEvents(requestOptions);
+        CompletableFuture<CountWebhookEventsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountWebhookEventsResponse> countWebhookEvents(CountWebhookEventsRequest request) {
-        return this.rawClient.countWebhookEvents(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountWebhookEventsResponse>> rawFuture =
+                this.rawClient.countWebhookEvents(request);
+        CompletableFuture<CountWebhookEventsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountWebhookEventsResponse> countWebhookEvents(
             CountWebhookEventsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countWebhookEvents(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountWebhookEventsResponse>> rawFuture =
+                this.rawClient.countWebhookEvents(request, requestOptions);
+        CompletableFuture<CountWebhookEventsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListWebhooksResponse> listWebhooks() {
-        return this.rawClient.listWebhooks().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListWebhooksResponse>> rawFuture = this.rawClient.listWebhooks();
+        CompletableFuture<ListWebhooksResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListWebhooksResponse> listWebhooks(RequestOptions requestOptions) {
-        return this.rawClient.listWebhooks(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListWebhooksResponse>> rawFuture =
+                this.rawClient.listWebhooks(requestOptions);
+        CompletableFuture<ListWebhooksResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListWebhooksResponse> listWebhooks(ListWebhooksRequest request) {
-        return this.rawClient.listWebhooks(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListWebhooksResponse>> rawFuture =
+                this.rawClient.listWebhooks(request);
+        CompletableFuture<ListWebhooksResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<ListWebhooksResponse> listWebhooks(
             ListWebhooksRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listWebhooks(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<ListWebhooksResponse>> rawFuture =
+                this.rawClient.listWebhooks(request, requestOptions);
+        CompletableFuture<ListWebhooksResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateWebhookResponse> createWebhook(CreateWebhookRequestBody request) {
-        return this.rawClient.createWebhook(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateWebhookResponse>> rawFuture =
+                this.rawClient.createWebhook(request);
+        CompletableFuture<CreateWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CreateWebhookResponse> createWebhook(
             CreateWebhookRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createWebhook(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CreateWebhookResponse>> rawFuture =
+                this.rawClient.createWebhook(request, requestOptions);
+        CompletableFuture<CreateWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetWebhookResponse> getWebhook(String webhookId) {
-        return this.rawClient.getWebhook(webhookId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetWebhookResponse>> rawFuture =
+                this.rawClient.getWebhook(webhookId);
+        CompletableFuture<GetWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<GetWebhookResponse> getWebhook(String webhookId, RequestOptions requestOptions) {
-        return this.rawClient.getWebhook(webhookId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetWebhookResponse>> rawFuture =
+                this.rawClient.getWebhook(webhookId, requestOptions);
+        CompletableFuture<GetWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateWebhookResponse> updateWebhook(String webhookId) {
-        return this.rawClient.updateWebhook(webhookId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateWebhookResponse>> rawFuture =
+                this.rawClient.updateWebhook(webhookId);
+        CompletableFuture<UpdateWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateWebhookResponse> updateWebhook(String webhookId, RequestOptions requestOptions) {
-        return this.rawClient.updateWebhook(webhookId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateWebhookResponse>> rawFuture =
+                this.rawClient.updateWebhook(webhookId, requestOptions);
+        CompletableFuture<UpdateWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateWebhookResponse> updateWebhook(String webhookId, UpdateWebhookRequestBody request) {
-        return this.rawClient.updateWebhook(webhookId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateWebhookResponse>> rawFuture =
+                this.rawClient.updateWebhook(webhookId, request);
+        CompletableFuture<UpdateWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<UpdateWebhookResponse> updateWebhook(
             String webhookId, UpdateWebhookRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.updateWebhook(webhookId, request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<UpdateWebhookResponse>> rawFuture =
+                this.rawClient.updateWebhook(webhookId, request, requestOptions);
+        CompletableFuture<UpdateWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteWebhookResponse> deleteWebhook(String webhookId) {
-        return this.rawClient.deleteWebhook(webhookId).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteWebhookResponse>> rawFuture =
+                this.rawClient.deleteWebhook(webhookId);
+        CompletableFuture<DeleteWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<DeleteWebhookResponse> deleteWebhook(String webhookId, RequestOptions requestOptions) {
-        return this.rawClient.deleteWebhook(webhookId, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<DeleteWebhookResponse>> rawFuture =
+                this.rawClient.deleteWebhook(webhookId, requestOptions);
+        CompletableFuture<DeleteWebhookResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<SendTestWebhookActionResponse> sendTestWebhookAction(
             String webhookId, TestWebhookRequestBody request) {
-        return this.rawClient.sendTestWebhookAction(webhookId, request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<SendTestWebhookActionResponse>> rawFuture =
+                this.rawClient.sendTestWebhookAction(webhookId, request);
+        CompletableFuture<SendTestWebhookActionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<SendTestWebhookActionResponse> sendTestWebhookAction(
             String webhookId, TestWebhookRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .sendTestWebhookAction(webhookId, request, requestOptions)
-                .thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<SendTestWebhookActionResponse>> rawFuture =
+                this.rawClient.sendTestWebhookAction(webhookId, request, requestOptions);
+        CompletableFuture<SendTestWebhookActionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountWebhooksResponse> countWebhooks() {
-        return this.rawClient.countWebhooks().thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountWebhooksResponse>> rawFuture = this.rawClient.countWebhooks();
+        CompletableFuture<CountWebhooksResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountWebhooksResponse> countWebhooks(RequestOptions requestOptions) {
-        return this.rawClient.countWebhooks(requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountWebhooksResponse>> rawFuture =
+                this.rawClient.countWebhooks(requestOptions);
+        CompletableFuture<CountWebhooksResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountWebhooksResponse> countWebhooks(CountWebhooksRequest request) {
-        return this.rawClient.countWebhooks(request).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountWebhooksResponse>> rawFuture =
+                this.rawClient.countWebhooks(request);
+        CompletableFuture<CountWebhooksResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 
     public CompletableFuture<CountWebhooksResponse> countWebhooks(
             CountWebhooksRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countWebhooks(request, requestOptions).thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<CountWebhooksResponse>> rawFuture =
+                this.rawClient.countWebhooks(request, requestOptions);
+        CompletableFuture<CountWebhooksResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
     }
 }

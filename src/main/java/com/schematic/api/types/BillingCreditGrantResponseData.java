@@ -39,7 +39,7 @@ public final class BillingCreditGrantResponseData {
 
     private final String creditName;
 
-    private final Optional<String> currency;
+    private final Optional<Currency> currency;
 
     private final Optional<OffsetDateTime> expiresAt;
 
@@ -55,7 +55,7 @@ public final class BillingCreditGrantResponseData {
 
     private final Optional<Long> postpaidChargeAmount;
 
-    private final Optional<String> postpaidChargeCurrency;
+    private final Optional<Currency> postpaidChargeCurrency;
 
     private final Optional<Double> postpaidChargedCredits;
 
@@ -100,7 +100,7 @@ public final class BillingCreditGrantResponseData {
             Optional<String> creditIcon,
             String creditId,
             String creditName,
-            Optional<String> currency,
+            Optional<Currency> currency,
             Optional<OffsetDateTime> expiresAt,
             BillingCreditGrantReason grantReason,
             String id,
@@ -108,7 +108,7 @@ public final class BillingCreditGrantResponseData {
             Optional<String> planId,
             Optional<String> planName,
             Optional<Long> postpaidChargeAmount,
-            Optional<String> postpaidChargeCurrency,
+            Optional<Currency> postpaidChargeCurrency,
             Optional<Double> postpaidChargedCredits,
             Optional<BillingPriceResponseData> price,
             double quantity,
@@ -209,7 +209,7 @@ public final class BillingCreditGrantResponseData {
     }
 
     @JsonProperty("currency")
-    public Optional<String> getCurrency() {
+    public Optional<Currency> getCurrency() {
         return currency;
     }
 
@@ -255,7 +255,7 @@ public final class BillingCreditGrantResponseData {
     }
 
     @JsonProperty("postpaid_charge_currency")
-    public Optional<String> getPostpaidChargeCurrency() {
+    public Optional<Currency> getPostpaidChargeCurrency() {
         return postpaidChargeCurrency;
     }
 
@@ -518,9 +518,9 @@ public final class BillingCreditGrantResponseData {
 
         _FinalStage creditIcon(String creditIcon);
 
-        _FinalStage currency(Optional<String> currency);
+        _FinalStage currency(Optional<Currency> currency);
 
-        _FinalStage currency(String currency);
+        _FinalStage currency(Currency currency);
 
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
@@ -548,9 +548,9 @@ public final class BillingCreditGrantResponseData {
 
         _FinalStage postpaidChargeAmount(Long postpaidChargeAmount);
 
-        _FinalStage postpaidChargeCurrency(Optional<String> postpaidChargeCurrency);
+        _FinalStage postpaidChargeCurrency(Optional<Currency> postpaidChargeCurrency);
 
-        _FinalStage postpaidChargeCurrency(String postpaidChargeCurrency);
+        _FinalStage postpaidChargeCurrency(Currency postpaidChargeCurrency);
 
         /**
          * <p>Credits consumed past a zero balance in the window still open.</p>
@@ -661,7 +661,7 @@ public final class BillingCreditGrantResponseData {
 
         private Optional<Double> postpaidChargedCredits = Optional.empty();
 
-        private Optional<String> postpaidChargeCurrency = Optional.empty();
+        private Optional<Currency> postpaidChargeCurrency = Optional.empty();
 
         private Optional<Long> postpaidChargeAmount = Optional.empty();
 
@@ -673,7 +673,7 @@ public final class BillingCreditGrantResponseData {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
-        private Optional<String> currency = Optional.empty();
+        private Optional<Currency> currency = Optional.empty();
 
         private Optional<String> creditIcon = Optional.empty();
 
@@ -960,14 +960,14 @@ public final class BillingCreditGrantResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage postpaidChargeCurrency(String postpaidChargeCurrency) {
+        public _FinalStage postpaidChargeCurrency(Currency postpaidChargeCurrency) {
             this.postpaidChargeCurrency = Optional.ofNullable(postpaidChargeCurrency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "postpaid_charge_currency", nulls = Nulls.SKIP)
-        public _FinalStage postpaidChargeCurrency(Optional<String> postpaidChargeCurrency) {
+        public _FinalStage postpaidChargeCurrency(Optional<Currency> postpaidChargeCurrency) {
             this.postpaidChargeCurrency = postpaidChargeCurrency;
             return this;
         }
@@ -1052,14 +1052,14 @@ public final class BillingCreditGrantResponseData {
         }
 
         @java.lang.Override
-        public _FinalStage currency(String currency) {
+        public _FinalStage currency(Currency currency) {
             this.currency = Optional.ofNullable(currency);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
-        public _FinalStage currency(Optional<String> currency) {
+        public _FinalStage currency(Optional<Currency> currency) {
             this.currency = currency;
             return this;
         }

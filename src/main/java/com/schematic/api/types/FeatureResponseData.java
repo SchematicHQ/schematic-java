@@ -26,6 +26,8 @@ public final class FeatureResponseData {
 
     private final String description;
 
+    private final FeatureEventSource eventSource;
+
     private final Optional<String> eventSubtype;
 
     private final FeatureType featureType;
@@ -57,6 +59,7 @@ public final class FeatureResponseData {
     private FeatureResponseData(
             OffsetDateTime createdAt,
             String description,
+            FeatureEventSource eventSource,
             Optional<String> eventSubtype,
             FeatureType featureType,
             String icon,
@@ -73,6 +76,7 @@ public final class FeatureResponseData {
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.description = description;
+        this.eventSource = eventSource;
         this.eventSubtype = eventSubtype;
         this.featureType = featureType;
         this.icon = icon;
@@ -97,6 +101,14 @@ public final class FeatureResponseData {
     @JsonProperty("description")
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * @return Which event stream meters this feature. Track features are metered by track events; inference features are metered by inference events whose event label matches event_subtype, and meter through credits only.
+     */
+    @JsonProperty("event_source")
+    public FeatureEventSource getEventSource() {
+        return eventSource;
     }
 
     @JsonProperty("event_subtype")
@@ -184,6 +196,7 @@ public final class FeatureResponseData {
     private boolean equalTo(FeatureResponseData other) {
         return createdAt.equals(other.createdAt)
                 && description.equals(other.description)
+                && eventSource.equals(other.eventSource)
                 && eventSubtype.equals(other.eventSubtype)
                 && featureType.equals(other.featureType)
                 && icon.equals(other.icon)
@@ -204,6 +217,7 @@ public final class FeatureResponseData {
         return Objects.hash(
                 this.createdAt,
                 this.description,
+                this.eventSource,
                 this.eventSubtype,
                 this.featureType,
                 this.icon,
@@ -235,7 +249,14 @@ public final class FeatureResponseData {
     }
 
     public interface DescriptionStage {
-        FeatureTypeStage description(@NotNull String description);
+        EventSourceStage description(@NotNull String description);
+    }
+
+    public interface EventSourceStage {
+        /**
+         * <p>Which event stream meters this feature. Track features are metered by track events; inference features are metered by inference events whose event label matches event_subtype, and meter through credits only.</p>
+         */
+        FeatureTypeStage eventSource(@NotNull FeatureEventSource eventSource);
     }
 
     public interface FeatureTypeStage {
@@ -308,6 +329,7 @@ public final class FeatureResponseData {
     public static final class Builder
             implements CreatedAtStage,
                     DescriptionStage,
+                    EventSourceStage,
                     FeatureTypeStage,
                     IconStage,
                     IdStage,
@@ -317,6 +339,8 @@ public final class FeatureResponseData {
         private OffsetDateTime createdAt;
 
         private String description;
+
+        private FeatureEventSource eventSource;
 
         private FeatureType featureType;
 
@@ -353,6 +377,7 @@ public final class FeatureResponseData {
         public Builder from(FeatureResponseData other) {
             createdAt(other.getCreatedAt());
             description(other.getDescription());
+            eventSource(other.getEventSource());
             eventSubtype(other.getEventSubtype());
             featureType(other.getFeatureType());
             icon(other.getIcon());
@@ -378,8 +403,19 @@ public final class FeatureResponseData {
 
         @java.lang.Override
         @JsonSetter("description")
-        public FeatureTypeStage description(@NotNull String description) {
+        public EventSourceStage description(@NotNull String description) {
             this.description = Objects.requireNonNull(description, "description must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Which event stream meters this feature. Track features are metered by track events; inference features are metered by inference events whose event label matches event_subtype, and meter through credits only.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("event_source")
+        public FeatureTypeStage eventSource(@NotNull FeatureEventSource eventSource) {
+            this.eventSource = Objects.requireNonNull(eventSource, "eventSource must not be null");
             return this;
         }
 
@@ -541,6 +577,7 @@ public final class FeatureResponseData {
             return new FeatureResponseData(
                     createdAt,
                     description,
+                    eventSource,
                     eventSubtype,
                     featureType,
                     icon,

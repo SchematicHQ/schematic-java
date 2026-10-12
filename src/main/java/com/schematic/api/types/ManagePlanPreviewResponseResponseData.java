@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,15 +22,24 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ManagePlanPreviewResponseResponseData.Builder.class)
 public final class ManagePlanPreviewResponseResponseData {
+    private final List<CheckoutProblemResponseData> problems;
+
     private final Optional<PreviewSubscriptionChangeResponseData> subscriptionChangePreview;
 
     private final Map<String, Object> additionalProperties;
 
     private ManagePlanPreviewResponseResponseData(
+            List<CheckoutProblemResponseData> problems,
             Optional<PreviewSubscriptionChangeResponseData> subscriptionChangePreview,
             Map<String, Object> additionalProperties) {
+        this.problems = problems;
         this.subscriptionChangePreview = subscriptionChangePreview;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("problems")
+    public List<CheckoutProblemResponseData> getProblems() {
+        return problems;
     }
 
     @JsonProperty("subscription_change_preview")
@@ -49,12 +60,12 @@ public final class ManagePlanPreviewResponseResponseData {
     }
 
     private boolean equalTo(ManagePlanPreviewResponseResponseData other) {
-        return subscriptionChangePreview.equals(other.subscriptionChangePreview);
+        return problems.equals(other.problems) && subscriptionChangePreview.equals(other.subscriptionChangePreview);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.subscriptionChangePreview);
+        return Objects.hash(this.problems, this.subscriptionChangePreview);
     }
 
     @java.lang.Override
@@ -68,6 +79,8 @@ public final class ManagePlanPreviewResponseResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private List<CheckoutProblemResponseData> problems = new ArrayList<>();
+
         private Optional<PreviewSubscriptionChangeResponseData> subscriptionChangePreview = Optional.empty();
 
         @JsonAnySetter
@@ -76,7 +89,29 @@ public final class ManagePlanPreviewResponseResponseData {
         private Builder() {}
 
         public Builder from(ManagePlanPreviewResponseResponseData other) {
+            problems(other.getProblems());
             subscriptionChangePreview(other.getSubscriptionChangePreview());
+            return this;
+        }
+
+        @JsonSetter(value = "problems", nulls = Nulls.SKIP)
+        public Builder problems(List<CheckoutProblemResponseData> problems) {
+            this.problems.clear();
+            if (problems != null) {
+                this.problems.addAll(problems);
+            }
+            return this;
+        }
+
+        public Builder addProblems(CheckoutProblemResponseData problems) {
+            this.problems.add(problems);
+            return this;
+        }
+
+        public Builder addAllProblems(List<CheckoutProblemResponseData> problems) {
+            if (problems != null) {
+                this.problems.addAll(problems);
+            }
             return this;
         }
 
@@ -93,7 +128,7 @@ public final class ManagePlanPreviewResponseResponseData {
         }
 
         public ManagePlanPreviewResponseResponseData build() {
-            return new ManagePlanPreviewResponseResponseData(subscriptionChangePreview, additionalProperties);
+            return new ManagePlanPreviewResponseResponseData(problems, subscriptionChangePreview, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

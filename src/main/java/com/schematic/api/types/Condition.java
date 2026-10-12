@@ -47,6 +47,8 @@ public final class Condition {
 
     private final ComparableOperator operator;
 
+    private final Optional<Map<String, Double>> quantityRates;
+
     private final List<String> resourceIds;
 
     private final Optional<TraitDefinition> traitDefinition;
@@ -68,6 +70,7 @@ public final class Condition {
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
             Optional<Long> metricValue,
             ComparableOperator operator,
+            Optional<Map<String, Double>> quantityRates,
             List<String> resourceIds,
             Optional<TraitDefinition> traitDefinition,
             String traitValue,
@@ -84,6 +87,7 @@ public final class Condition {
         this.metricPeriodMonthReset = metricPeriodMonthReset;
         this.metricValue = metricValue;
         this.operator = operator;
+        this.quantityRates = quantityRates;
         this.resourceIds = resourceIds;
         this.traitDefinition = traitDefinition;
         this.traitValue = traitValue;
@@ -150,6 +154,11 @@ public final class Condition {
         return operator;
     }
 
+    @JsonProperty("quantity_rates")
+    public Optional<Map<String, Double>> getQuantityRates() {
+        return quantityRates;
+    }
+
     @JsonProperty("resource_ids")
     public List<String> getResourceIds() {
         return resourceIds;
@@ -189,6 +198,7 @@ public final class Condition {
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
                 && metricValue.equals(other.metricValue)
                 && operator.equals(other.operator)
+                && quantityRates.equals(other.quantityRates)
                 && resourceIds.equals(other.resourceIds)
                 && traitDefinition.equals(other.traitDefinition)
                 && traitValue.equals(other.traitValue);
@@ -209,6 +219,7 @@ public final class Condition {
                 this.metricPeriodMonthReset,
                 this.metricValue,
                 this.operator,
+                this.quantityRates,
                 this.resourceIds,
                 this.traitDefinition,
                 this.traitValue);
@@ -284,6 +295,10 @@ public final class Condition {
 
         _FinalStage metricValue(Long metricValue);
 
+        _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
+
+        _FinalStage quantityRates(Map<String, Double> quantityRates);
+
         _FinalStage resourceIds(List<String> resourceIds);
 
         _FinalStage addResourceIds(String resourceIds);
@@ -320,6 +335,8 @@ public final class Condition {
 
         private List<String> resourceIds = new ArrayList<>();
 
+        private Optional<Map<String, Double>> quantityRates = Optional.empty();
+
         private Optional<Long> metricValue = Optional.empty();
 
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
@@ -353,6 +370,7 @@ public final class Condition {
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
             metricValue(other.getMetricValue());
             operator(other.getOperator());
+            quantityRates(other.getQuantityRates());
             resourceIds(other.getResourceIds());
             traitDefinition(other.getTraitDefinition());
             traitValue(other.getTraitValue());
@@ -435,6 +453,19 @@ public final class Condition {
             if (resourceIds != null) {
                 this.resourceIds.addAll(resourceIds);
             }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage quantityRates(Map<String, Double> quantityRates) {
+            this.quantityRates = Optional.ofNullable(quantityRates);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quantity_rates", nulls = Nulls.SKIP)
+        public _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates) {
+            this.quantityRates = quantityRates;
             return this;
         }
 
@@ -544,6 +575,7 @@ public final class Condition {
                     metricPeriodMonthReset,
                     metricValue,
                     operator,
+                    quantityRates,
                     resourceIds,
                     traitDefinition,
                     traitValue,
