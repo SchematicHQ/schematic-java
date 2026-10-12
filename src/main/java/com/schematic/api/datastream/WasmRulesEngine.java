@@ -235,6 +235,19 @@ public class WasmRulesEngine implements RulesEngine {
             putQuantity(eventUsage, "quantity", options.getEventQuantity());
             node.set("event_usage", eventUsage);
         }
+        CheckFlagOptions.EventQuantities eventQuantities = options.getEventQuantities();
+        if (eventQuantities != null) {
+            // Unlike event_usage, the engine reads these as decimals, so they go through unrounded.
+            ObjectNode event = mapper.createObjectNode();
+            event.put("event_subtype", eventQuantities.getEventSubtype());
+            if (eventQuantities.getQuantity() != null) {
+                event.put("quantity", eventQuantities.getQuantity());
+            }
+            if (eventQuantities.getQuantities() != null) {
+                event.set("quantities", mapper.valueToTree(eventQuantities.getQuantities()));
+            }
+            node.set("event_quantities", event);
+        }
         return node.size() == 0 ? null : node;
     }
 
