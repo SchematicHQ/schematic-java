@@ -220,10 +220,7 @@ class EventQuantitiesTest {
                 engine.checkFlag(inferenceFlag(0.5, null), MAPPER.treeToValue(company, RulesengineCompany.class), null);
 
         assertTrue(result.getEntitlement().isPresent());
-        assertEquals(
-                MAPPER.valueToTree(RATES),
-                MAPPER.valueToTree(
-                        result.getEntitlement().get().getAdditionalProperties().get("quantity_rates")));
+        assertEquals(Optional.of(RATES), result.getEntitlement().get().getQuantityRates());
     }
 
     /**
