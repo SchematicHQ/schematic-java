@@ -140,7 +140,6 @@ public final class CreatePlanBundleRequestBody {
 
         private Optional<UpsertBillingProductRequestBody> billingProduct = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -215,6 +214,17 @@ public final class CreatePlanBundleRequestBody {
         public CreatePlanBundleRequestBody build() {
             return new CreatePlanBundleRequestBody(
                     billingProduct, creditGrants, entitlements, plan, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_product")
+                    || key.equalsIgnoreCase("credit_grants")
+                    || key.equalsIgnoreCase("entitlements")
+                    || key.equalsIgnoreCase("plan")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

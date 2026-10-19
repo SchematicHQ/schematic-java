@@ -80,7 +80,6 @@ public final class ClaimStripeSandboxKeysRequestBody {
     public static final class Builder implements TokenStage, _FinalStage {
         private String token;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -101,6 +100,14 @@ public final class ClaimStripeSandboxKeysRequestBody {
         @java.lang.Override
         public ClaimStripeSandboxKeysRequestBody build() {
             return new ClaimStripeSandboxKeysRequestBody(token, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("token")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

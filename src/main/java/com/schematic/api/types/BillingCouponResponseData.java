@@ -371,7 +371,6 @@ public final class BillingCouponResponseData {
 
         private Optional<Long> amountOff = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -603,6 +602,30 @@ public final class BillingCouponResponseData {
                     validFrom,
                     validUntil,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("amount_off")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("duration")
+                    || key.equalsIgnoreCase("duration_in_months")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("is_active")
+                    || key.equalsIgnoreCase("max_redemptions")
+                    || key.equalsIgnoreCase("metadata")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("percent_off")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("times_redeemed")
+                    || key.equalsIgnoreCase("valid_from")
+                    || key.equalsIgnoreCase("valid_until")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

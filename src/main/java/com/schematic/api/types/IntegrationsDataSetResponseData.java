@@ -68,7 +68,6 @@ public final class IntegrationsDataSetResponseData {
     public static final class Builder {
         private List<String> keys = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -101,6 +100,14 @@ public final class IntegrationsDataSetResponseData {
 
         public IntegrationsDataSetResponseData build() {
             return new IntegrationsDataSetResponseData(keys, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("keys")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

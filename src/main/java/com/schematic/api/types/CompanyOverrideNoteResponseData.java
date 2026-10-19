@@ -171,7 +171,6 @@ public final class CompanyOverrideNoteResponseData {
 
         private OffsetDateTime updatedAt;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -233,6 +232,19 @@ public final class CompanyOverrideNoteResponseData {
         public CompanyOverrideNoteResponseData build() {
             return new CompanyOverrideNoteResponseData(
                     createdAt, externalUserId, externalUserName, id, note, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("external_user_id")
+                    || key.equalsIgnoreCase("external_user_name")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("note")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

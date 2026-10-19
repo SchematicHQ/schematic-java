@@ -131,7 +131,6 @@ public final class PlanGrowthPointResponseData {
 
         private long subscribers;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -176,6 +175,17 @@ public final class PlanGrowthPointResponseData {
         @java.lang.Override
         public PlanGrowthPointResponseData build() {
             return new PlanGrowthPointResponseData(month, planId, planName, subscribers, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("month")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_name")
+                    || key.equalsIgnoreCase("subscribers")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

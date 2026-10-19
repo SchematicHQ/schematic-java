@@ -452,7 +452,6 @@ public final class EventResponseData {
 
         private Optional<String> apiKey = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -782,6 +781,35 @@ public final class EventResponseData {
                     updatedAt,
                     userId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("api_key")
+                    || key.equalsIgnoreCase("body")
+                    || key.equalsIgnoreCase("body_preview")
+                    || key.equalsIgnoreCase("captured_at")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("enriched_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("error_message")
+                    || key.equalsIgnoreCase("feature_ids")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("idempotency_key")
+                    || key.equalsIgnoreCase("lease_id")
+                    || key.equalsIgnoreCase("loaded_at")
+                    || key.equalsIgnoreCase("processed_at")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("reservation_id")
+                    || key.equalsIgnoreCase("sent_at")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("subtype")
+                    || key.equalsIgnoreCase("type")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("user_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -171,7 +171,6 @@ public final class ActivityEntryResponseData {
 
         private String title;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -233,6 +232,19 @@ public final class ActivityEntryResponseData {
         public ActivityEntryResponseData build() {
             return new ActivityEntryResponseData(
                     actorName, method, resourceName, resourceType, timestamp, title, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("actor_name")
+                    || key.equalsIgnoreCase("method")
+                    || key.equalsIgnoreCase("resource_name")
+                    || key.equalsIgnoreCase("resource_type")
+                    || key.equalsIgnoreCase("timestamp")
+                    || key.equalsIgnoreCase("title")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -234,7 +234,6 @@ public final class ListPlanEntitlementsParams {
 
         private Optional<Boolean> withMeteredProducts = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -422,6 +421,24 @@ public final class ListPlanEntitlementsParams {
                     q,
                     withMeteredProducts,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("feature_ids")
+                    || key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_ids")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("plan_version_ids")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("with_metered_products")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

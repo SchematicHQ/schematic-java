@@ -112,7 +112,6 @@ public final class GetEventSummariesParams {
 
         private Optional<String> q = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -177,6 +176,17 @@ public final class GetEventSummariesParams {
 
         public GetEventSummariesParams build() {
             return new GetEventSummariesParams(eventSubtypes, limit, offset, q, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("event_subtypes")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("q")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

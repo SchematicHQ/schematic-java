@@ -173,7 +173,6 @@ public final class UpdateCompanyBillingProfileRequestBody {
 
         private Optional<Long> daysUntilDue = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -271,6 +270,19 @@ public final class UpdateCompanyBillingProfileRequestBody {
                     paymentMethodId,
                     prorationBehavior,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("collection_method")
+                    || key.equalsIgnoreCase("days_until_due")
+                    || key.equalsIgnoreCase("is_default")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("payment_method_id")
+                    || key.equalsIgnoreCase("proration_behavior")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -144,7 +144,6 @@ public final class ListFeatureUsersRequest {
 
         private Optional<String> q = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -221,6 +220,17 @@ public final class ListFeatureUsersRequest {
         @java.lang.Override
         public ListFeatureUsersRequest build() {
             return new ListFeatureUsersRequest(featureId, q, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

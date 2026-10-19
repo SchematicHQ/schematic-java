@@ -390,7 +390,6 @@ public final class BillingProductPriceResponseData {
 
         private Optional<String> meterId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -590,6 +589,31 @@ public final class BillingProductPriceResponseData {
                     updatedAt,
                     usageType,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_scheme")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("interval_count")
+                    || key.equalsIgnoreCase("is_active")
+                    || key.equalsIgnoreCase("meter_id")
+                    || key.equalsIgnoreCase("nickname")
+                    || key.equalsIgnoreCase("package_size")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("price_decimal")
+                    || key.equalsIgnoreCase("price_external_id")
+                    || key.equalsIgnoreCase("product_external_id")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("tiers_mode")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("usage_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

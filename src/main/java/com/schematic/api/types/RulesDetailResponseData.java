@@ -82,7 +82,6 @@ public final class RulesDetailResponseData {
 
         private List<RuleDetailResponseData> rules = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -127,6 +126,14 @@ public final class RulesDetailResponseData {
 
         public RulesDetailResponseData build() {
             return new RulesDetailResponseData(flag, rules, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("flag") || key.equalsIgnoreCase("rules")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

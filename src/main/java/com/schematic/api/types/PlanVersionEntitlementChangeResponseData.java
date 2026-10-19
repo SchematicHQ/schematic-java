@@ -159,7 +159,6 @@ public final class PlanVersionEntitlementChangeResponseData {
 
         private List<String> changedFields = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -253,6 +252,18 @@ public final class PlanVersionEntitlementChangeResponseData {
         public PlanVersionEntitlementChangeResponseData build() {
             return new PlanVersionEntitlementChangeResponseData(
                     changeType, changedFields, featureId, new_, old, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("change_type")
+                    || key.equalsIgnoreCase("changed_fields")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("new")
+                    || key.equalsIgnoreCase("old")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

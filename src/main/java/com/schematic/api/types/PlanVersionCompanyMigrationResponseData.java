@@ -305,7 +305,6 @@ public final class PlanVersionCompanyMigrationResponseData {
 
         private Optional<OffsetDateTime> completedAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -479,6 +478,26 @@ public final class PlanVersionCompanyMigrationResponseData {
                     status,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("company_name")
+                    || key.equalsIgnoreCase("completed_at")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("error")
+                    || key.equalsIgnoreCase("error_code")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("migration_id")
+                    || key.equalsIgnoreCase("plan_version_id_from")
+                    || key.equalsIgnoreCase("scheduled_for")
+                    || key.equalsIgnoreCase("started_at")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

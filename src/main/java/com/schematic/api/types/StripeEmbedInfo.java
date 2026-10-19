@@ -133,7 +133,6 @@ public final class StripeEmbedInfo {
 
         private Optional<String> accountId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -198,6 +197,17 @@ public final class StripeEmbedInfo {
         public StripeEmbedInfo build() {
             return new StripeEmbedInfo(
                     accountId, publishableKey, schematicPublishableKey, setupIntentClientSecret, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("publishable_key")
+                    || key.equalsIgnoreCase("schematic_publishable_key")
+                    || key.equalsIgnoreCase("setup_intent_client_secret")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

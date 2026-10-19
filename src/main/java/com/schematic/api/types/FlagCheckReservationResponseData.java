@@ -88,7 +88,7 @@ public final class FlagCheckReservationResponseData {
     }
 
     /**
-     * @return The event subtype the settling track event should carry
+     * @return The event subtype the settling track event should carry, or the event name of a settling inference event
      */
     @JsonProperty("event_subtype")
     public Optional<String> getEventSubtype() {
@@ -96,7 +96,7 @@ public final class FlagCheckReservationResponseData {
     }
 
     /**
-     * @return When the unspent hold is refunded if no track event settles it
+     * @return When the unspent hold is refunded if no track or inference event settles it
      */
     @JsonProperty("expires_at")
     public OffsetDateTime getExpiresAt() {
@@ -186,7 +186,7 @@ public final class FlagCheckReservationResponseData {
 
     public interface ExpiresAtStage {
         /**
-         * <p>When the unspent hold is refunded if no track event settles it</p>
+         * <p>When the unspent hold is refunded if no track or inference event settles it</p>
          */
         IdStage expiresAt(@NotNull OffsetDateTime expiresAt);
     }
@@ -210,7 +210,7 @@ public final class FlagCheckReservationResponseData {
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         /**
-         * <p>The event subtype the settling track event should carry</p>
+         * <p>The event subtype the settling track event should carry, or the event name of a settling inference event</p>
          */
         _FinalStage eventSubtype(Optional<String> eventSubtype);
 
@@ -243,7 +243,6 @@ public final class FlagCheckReservationResponseData {
 
         private Optional<String> eventSubtype = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -298,7 +297,7 @@ public final class FlagCheckReservationResponseData {
         }
 
         /**
-         * <p>When the unspent hold is refunded if no track event settles it</p>
+         * <p>When the unspent hold is refunded if no track or inference event settles it</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -327,7 +326,7 @@ public final class FlagCheckReservationResponseData {
         }
 
         /**
-         * <p>The event subtype the settling track event should carry</p>
+         * <p>The event subtype the settling track event should carry, or the event name of a settling inference event</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -337,7 +336,7 @@ public final class FlagCheckReservationResponseData {
         }
 
         /**
-         * <p>The event subtype the settling track event should carry</p>
+         * <p>The event subtype the settling track event should carry, or the event name of a settling inference event</p>
          */
         @java.lang.Override
         @JsonSetter(value = "event_subtype", nulls = Nulls.SKIP)
@@ -358,6 +357,21 @@ public final class FlagCheckReservationResponseData {
                     id,
                     quantityReserved,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("consumption_rate")
+                    || key.equalsIgnoreCase("credit_type_id")
+                    || key.equalsIgnoreCase("credits_reserved")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("quantity_reserved")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

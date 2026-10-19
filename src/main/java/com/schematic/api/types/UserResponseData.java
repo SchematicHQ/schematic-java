@@ -166,7 +166,6 @@ public final class UserResponseData {
 
         private Optional<OffsetDateTime> lastSeenAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -234,6 +233,19 @@ public final class UserResponseData {
         public UserResponseData build() {
             return new UserResponseData(
                     createdAt, environmentId, id, lastSeenAt, name, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("last_seen_at")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -132,7 +132,6 @@ public final class CreateScheduledCheckoutRequest {
 
         private String toPlanId;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -178,6 +177,17 @@ public final class CreateScheduledCheckoutRequest {
         public CreateScheduledCheckoutRequest build() {
             return new CreateScheduledCheckoutRequest(
                     companyId, executeAfter, fromPlanId, toPlanId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("execute_after")
+                    || key.equalsIgnoreCase("from_plan_id")
+                    || key.equalsIgnoreCase("to_plan_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

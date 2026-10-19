@@ -118,7 +118,6 @@ public final class PlanBundleResponseData {
 
         private Optional<PlanVersionResponseData> planVersion = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -190,6 +189,18 @@ public final class PlanBundleResponseData {
         public PlanBundleResponseData build() {
             return new PlanBundleResponseData(
                     billingProduct, creditGrants, entitlements, plan, planVersion, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_product")
+                    || key.equalsIgnoreCase("credit_grants")
+                    || key.equalsIgnoreCase("entitlements")
+                    || key.equalsIgnoreCase("plan")
+                    || key.equalsIgnoreCase("plan_version")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

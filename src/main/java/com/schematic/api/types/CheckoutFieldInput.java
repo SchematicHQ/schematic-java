@@ -165,7 +165,6 @@ public final class CheckoutFieldInput {
 
         private Optional<String> definitionId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -245,6 +244,19 @@ public final class CheckoutFieldInput {
         public CheckoutFieldInput build() {
             return new CheckoutFieldInput(
                     definitionId, helperText, id, name, required, stripeMetadataKey, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("definition_id")
+                    || key.equalsIgnoreCase("helper_text")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("required")
+                    || key.equalsIgnoreCase("stripe_metadata_key")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

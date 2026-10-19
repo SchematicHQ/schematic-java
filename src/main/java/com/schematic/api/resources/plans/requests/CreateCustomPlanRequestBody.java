@@ -166,7 +166,6 @@ public final class CreateCustomPlanRequestBody {
 
         private Optional<String> copiedFromPlanId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -252,6 +251,19 @@ public final class CreateCustomPlanRequestBody {
         public CreateCustomPlanRequestBody build() {
             return new CreateCustomPlanRequestBody(
                     companyId, copiedFromPlanId, copiedPriceId, description, icon, name, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("copied_from_plan_id")
+                    || key.equalsIgnoreCase("copied_price_id")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

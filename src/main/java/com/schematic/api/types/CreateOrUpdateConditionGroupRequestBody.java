@@ -94,7 +94,6 @@ public final class CreateOrUpdateConditionGroupRequestBody {
 
         private Optional<String> id = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -151,6 +150,14 @@ public final class CreateOrUpdateConditionGroupRequestBody {
 
         public CreateOrUpdateConditionGroupRequestBody build() {
             return new CreateOrUpdateConditionGroupRequestBody(conditions, flagId, id, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("conditions") || key.equalsIgnoreCase("flag_id") || key.equalsIgnoreCase("id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

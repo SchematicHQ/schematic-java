@@ -80,7 +80,6 @@ public final class UpdateCompanyPlansRequestBody {
 
         private Optional<String> basePlanId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -125,6 +124,14 @@ public final class UpdateCompanyPlansRequestBody {
 
         public UpdateCompanyPlansRequestBody build() {
             return new UpdateCompanyPlansRequestBody(addOnIds, basePlanId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("add_on_ids") || key.equalsIgnoreCase("base_plan_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

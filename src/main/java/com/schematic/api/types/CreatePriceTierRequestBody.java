@@ -105,7 +105,6 @@ public final class CreatePriceTierRequestBody {
 
         private Optional<Long> upTo = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -165,6 +164,17 @@ public final class CreatePriceTierRequestBody {
         public CreatePriceTierRequestBody build() {
             return new CreatePriceTierRequestBody(
                     flatAmount, perUnitPrice, perUnitPriceDecimal, upTo, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("flat_amount")
+                    || key.equalsIgnoreCase("per_unit_price")
+                    || key.equalsIgnoreCase("per_unit_price_decimal")
+                    || key.equalsIgnoreCase("up_to")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

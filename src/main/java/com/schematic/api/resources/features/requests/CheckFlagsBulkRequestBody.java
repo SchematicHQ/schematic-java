@@ -69,7 +69,6 @@ public final class CheckFlagsBulkRequestBody {
     public static final class Builder {
         private List<CheckFlagRequestBody> contexts = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -102,6 +101,14 @@ public final class CheckFlagsBulkRequestBody {
 
         public CheckFlagsBulkRequestBody build() {
             return new CheckFlagsBulkRequestBody(contexts, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("contexts")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

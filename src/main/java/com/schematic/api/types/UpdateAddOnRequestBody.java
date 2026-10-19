@@ -94,7 +94,6 @@ public final class UpdateAddOnRequestBody {
 
         private String priceId;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -123,6 +122,14 @@ public final class UpdateAddOnRequestBody {
         @java.lang.Override
         public UpdateAddOnRequestBody build() {
             return new UpdateAddOnRequestBody(addOnId, priceId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("add_on_id") || key.equalsIgnoreCase("price_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

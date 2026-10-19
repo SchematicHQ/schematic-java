@@ -116,7 +116,6 @@ public final class CreditCurrencyPriceRequestBody {
 
         private Optional<Long> pricePerUnit = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -166,6 +165,16 @@ public final class CreditCurrencyPriceRequestBody {
         public CreditCurrencyPriceRequestBody build() {
             return new CreditCurrencyPriceRequestBody(
                     currency, pricePerUnit, pricePerUnitDecimal, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("price_per_unit")
+                    || key.equalsIgnoreCase("price_per_unit_decimal")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

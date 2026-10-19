@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class FlagResponseData {
     private final OffsetDateTime createdAt;
 
-    private final boolean defaultValue;
+    private final Optional<Boolean> defaultValue;
 
     private final String description;
 
@@ -46,7 +46,7 @@ public final class FlagResponseData {
 
     private FlagResponseData(
             OffsetDateTime createdAt,
-            boolean defaultValue,
+            Optional<Boolean> defaultValue,
             String description,
             Optional<String> featureId,
             String flagType,
@@ -74,8 +74,11 @@ public final class FlagResponseData {
         return createdAt;
     }
 
+    /**
+     * @return Deprecated. The value a check returns in the requesting environment when no other rule matches: its default rule, or the flag's seed value while it has none. Read the default rule instead
+     */
     @JsonProperty("default_value")
-    public boolean getDefaultValue() {
+    public Optional<Boolean> getDefaultValue() {
         return defaultValue;
     }
 
@@ -132,7 +135,7 @@ public final class FlagResponseData {
 
     private boolean equalTo(FlagResponseData other) {
         return createdAt.equals(other.createdAt)
-                && defaultValue == other.defaultValue
+                && defaultValue.equals(other.defaultValue)
                 && description.equals(other.description)
                 && featureId.equals(other.featureId)
                 && flagType.equals(other.flagType)
@@ -168,13 +171,9 @@ public final class FlagResponseData {
     }
 
     public interface CreatedAtStage {
-        DefaultValueStage createdAt(@NotNull OffsetDateTime createdAt);
+        DescriptionStage createdAt(@NotNull OffsetDateTime createdAt);
 
         Builder from(FlagResponseData other);
-    }
-
-    public interface DefaultValueStage {
-        DescriptionStage defaultValue(boolean defaultValue);
     }
 
     public interface DescriptionStage {
@@ -208,6 +207,13 @@ public final class FlagResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Deprecated. The value a check returns in the requesting environment when no other rule matches: its default rule, or the flag's seed value while it has none. Read the default rule instead</p>
+         */
+        _FinalStage defaultValue(Optional<Boolean> defaultValue);
+
+        _FinalStage defaultValue(Boolean defaultValue);
+
         _FinalStage featureId(Optional<String> featureId);
 
         _FinalStage featureId(String featureId);
@@ -220,7 +226,6 @@ public final class FlagResponseData {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements CreatedAtStage,
-                    DefaultValueStage,
                     DescriptionStage,
                     FlagTypeStage,
                     IdStage,
@@ -229,8 +234,6 @@ public final class FlagResponseData {
                     UpdatedAtStage,
                     _FinalStage {
         private OffsetDateTime createdAt;
-
-        private boolean defaultValue;
 
         private String description;
 
@@ -248,7 +251,8 @@ public final class FlagResponseData {
 
         private Optional<String> featureId = Optional.empty();
 
-        @JsonAnySetter
+        private Optional<Boolean> defaultValue = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -270,15 +274,8 @@ public final class FlagResponseData {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public DefaultValueStage createdAt(@NotNull OffsetDateTime createdAt) {
+        public DescriptionStage createdAt(@NotNull OffsetDateTime createdAt) {
             this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("default_value")
-        public DescriptionStage defaultValue(boolean defaultValue) {
-            this.defaultValue = defaultValue;
             return this;
         }
 
@@ -350,6 +347,26 @@ public final class FlagResponseData {
             return this;
         }
 
+        /**
+         * <p>Deprecated. The value a check returns in the requesting environment when no other rule matches: its default rule, or the flag's seed value while it has none. Read the default rule instead</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage defaultValue(Boolean defaultValue) {
+            this.defaultValue = Optional.ofNullable(defaultValue);
+            return this;
+        }
+
+        /**
+         * <p>Deprecated. The value a check returns in the requesting environment when no other rule matches: its default rule, or the flag's seed value while it has none. Read the default rule instead</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "default_value", nulls = Nulls.SKIP)
+        public _FinalStage defaultValue(Optional<Boolean> defaultValue) {
+            this.defaultValue = defaultValue;
+            return this;
+        }
+
         @java.lang.Override
         public FlagResponseData build() {
             return new FlagResponseData(
@@ -364,6 +381,23 @@ public final class FlagResponseData {
                     name,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("default_value")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("flag_type")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("key")
+                    || key.equalsIgnoreCase("maintainer_account_member_id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

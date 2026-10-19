@@ -133,7 +133,6 @@ public final class CreateCustomPlanBundlePlanRequestBody {
 
         private Optional<String> description = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -190,6 +189,17 @@ public final class CreateCustomPlanBundlePlanRequestBody {
         @java.lang.Override
         public CreateCustomPlanBundlePlanRequestBody build() {
             return new CreateCustomPlanBundlePlanRequestBody(companyId, description, icon, name, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

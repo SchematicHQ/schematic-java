@@ -148,7 +148,6 @@ public final class PlanCurrencyPriceRequestBody {
 
         private Optional<Long> monthlyPrice = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -226,6 +225,18 @@ public final class PlanCurrencyPriceRequestBody {
         public PlanCurrencyPriceRequestBody build() {
             return new PlanCurrencyPriceRequestBody(
                     currency, monthlyPrice, oneTimePrice, quarterlyPrice, yearlyPrice, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("monthly_price")
+                    || key.equalsIgnoreCase("one_time_price")
+                    || key.equalsIgnoreCase("quarterly_price")
+                    || key.equalsIgnoreCase("yearly_price")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

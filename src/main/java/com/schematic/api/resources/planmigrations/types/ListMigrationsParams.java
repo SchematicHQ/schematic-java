@@ -137,7 +137,6 @@ public final class ListMigrationsParams {
 
         private Optional<PlanVersionMigrationStatus> status = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -227,6 +226,19 @@ public final class ListMigrationsParams {
         public ListMigrationsParams build() {
             return new ListMigrationsParams(
                     featureId, featurePlanRolloutId, limit, offset, planVersionId, status, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("feature_plan_rollout_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

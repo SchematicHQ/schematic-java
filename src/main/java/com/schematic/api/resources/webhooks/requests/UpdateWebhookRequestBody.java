@@ -140,7 +140,6 @@ public final class UpdateWebhookRequestBody {
 
         private Optional<String> url = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -230,6 +229,19 @@ public final class UpdateWebhookRequestBody {
                     status,
                     url,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_trigger_configs")
+                    || key.equalsIgnoreCase("entitlement_trigger_configs")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("request_types")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("url")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

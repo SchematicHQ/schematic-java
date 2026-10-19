@@ -114,7 +114,6 @@ public final class IntegrationInstallResponseData {
 
         private IntegrationResponseData integration;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -151,6 +150,16 @@ public final class IntegrationInstallResponseData {
         @java.lang.Override
         public IntegrationInstallResponseData build() {
             return new IntegrationInstallResponseData(capabilities, config, integration, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("capabilities")
+                    || key.equalsIgnoreCase("config")
+                    || key.equalsIgnoreCase("integration")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

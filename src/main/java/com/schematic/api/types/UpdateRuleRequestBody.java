@@ -153,7 +153,6 @@ public final class UpdateRuleRequestBody {
 
         private List<CreateOrUpdateConditionGroupRequestBody> conditionGroups = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -240,6 +239,18 @@ public final class UpdateRuleRequestBody {
         @java.lang.Override
         public UpdateRuleRequestBody build() {
             return new UpdateRuleRequestBody(conditionGroups, conditions, name, priority, value, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("condition_groups")
+                    || key.equalsIgnoreCase("conditions")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("priority")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

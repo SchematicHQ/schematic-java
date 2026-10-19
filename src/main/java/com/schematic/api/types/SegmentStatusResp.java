@@ -117,7 +117,6 @@ public final class SegmentStatusResp {
 
         private Optional<OffsetDateTime> lastEventAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -160,6 +159,16 @@ public final class SegmentStatusResp {
         @java.lang.Override
         public SegmentStatusResp build() {
             return new SegmentStatusResp(connected, environmentId, lastEventAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("connected")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("last_event_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

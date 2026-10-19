@@ -150,7 +150,6 @@ public final class OnboardingRequirementView {
 
         private Optional<List<OnboardingRequirement>> blockedBy = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -221,6 +220,18 @@ public final class OnboardingRequirementView {
         @java.lang.Override
         public OnboardingRequirementView build() {
             return new OnboardingRequirementView(blockedBy, id, reachedAt, satisfiedBy, status, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("blocked_by")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("reached_at")
+                    || key.equalsIgnoreCase("satisfied_by")
+                    || key.equalsIgnoreCase("status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

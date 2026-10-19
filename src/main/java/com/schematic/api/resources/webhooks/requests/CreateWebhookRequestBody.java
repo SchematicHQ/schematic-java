@@ -156,7 +156,6 @@ public final class CreateWebhookRequestBody {
 
         private Optional<List<CreditTriggerConfig>> creditTriggerConfigs = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -240,6 +239,18 @@ public final class CreateWebhookRequestBody {
         public CreateWebhookRequestBody build() {
             return new CreateWebhookRequestBody(
                     creditTriggerConfigs, entitlementTriggerConfigs, name, requestTypes, url, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_trigger_configs")
+                    || key.equalsIgnoreCase("entitlement_trigger_configs")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("request_types")
+                    || key.equalsIgnoreCase("url")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

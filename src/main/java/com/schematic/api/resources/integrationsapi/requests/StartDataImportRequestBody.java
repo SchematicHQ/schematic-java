@@ -117,7 +117,6 @@ public final class StartDataImportRequestBody {
 
         private Optional<CompanyMatchingCriteria> companyMatchingCriteria = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -167,6 +166,16 @@ public final class StartDataImportRequestBody {
         public StartDataImportRequestBody build() {
             return new StartDataImportRequestBody(
                     companyMatchingCriteria, companyMatchingField, integrationId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_matching_criteria")
+                    || key.equalsIgnoreCase("company_matching_field")
+                    || key.equalsIgnoreCase("integration_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

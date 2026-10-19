@@ -306,7 +306,6 @@ public final class CheckoutDataResponseData {
 
         private List<PlanDetailResponseData> activeAddOns = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -575,6 +574,26 @@ public final class CheckoutDataResponseData {
                     selectedUsageBasedEntitlements,
                     subscription,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("active_add_ons")
+                    || key.equalsIgnoreCase("active_plan")
+                    || key.equalsIgnoreCase("active_usage_based_entitlements")
+                    || key.equalsIgnoreCase("available_credit_bundles")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("company_can_trial_selected_plan")
+                    || key.equalsIgnoreCase("custom_checkout_fields")
+                    || key.equalsIgnoreCase("feature_usage")
+                    || key.equalsIgnoreCase("selected_credit_bundles")
+                    || key.equalsIgnoreCase("selected_plan")
+                    || key.equalsIgnoreCase("selected_plan_already_trialed")
+                    || key.equalsIgnoreCase("selected_usage_based_entitlements")
+                    || key.equalsIgnoreCase("subscription")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

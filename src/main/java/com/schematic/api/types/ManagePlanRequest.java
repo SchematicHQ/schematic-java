@@ -559,7 +559,6 @@ public final class ManagePlanRequest {
 
         private Optional<Boolean> activateOnPayment = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1056,6 +1055,37 @@ public final class ManagePlanRequest {
                     sendInvoice,
                     trialEnd,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("activate_on_payment")
+                    || key.equalsIgnoreCase("add_on_selections")
+                    || key.equalsIgnoreCase("base_plan_id")
+                    || key.equalsIgnoreCase("base_plan_price_id")
+                    || key.equalsIgnoreCase("base_plan_version_id")
+                    || key.equalsIgnoreCase("billing_cycle_anchor")
+                    || key.equalsIgnoreCase("billing_email")
+                    || key.equalsIgnoreCase("billing_entity_id")
+                    || key.equalsIgnoreCase("cancel_immediately")
+                    || key.equalsIgnoreCase("collection_method")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("coupon_external_id")
+                    || key.equalsIgnoreCase("credit_bundles")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("custom_field_values")
+                    || key.equalsIgnoreCase("days_until_due")
+                    || key.equalsIgnoreCase("paid_outside_stripe")
+                    || key.equalsIgnoreCase("pay_in_advance_entitlements")
+                    || key.equalsIgnoreCase("payment_method_external_id")
+                    || key.equalsIgnoreCase("promo_code")
+                    || key.equalsIgnoreCase("prorate")
+                    || key.equalsIgnoreCase("prorate_first_period")
+                    || key.equalsIgnoreCase("send_invoice")
+                    || key.equalsIgnoreCase("trial_end")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

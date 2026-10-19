@@ -228,7 +228,6 @@ public final class BillingCustomerWithSubscriptionsResponseData {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -352,6 +351,22 @@ public final class BillingCustomerWithSubscriptionsResponseData {
                     subscriptions,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("deleted_at")
+                    || key.equalsIgnoreCase("email")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("subscriptions")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

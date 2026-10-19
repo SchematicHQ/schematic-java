@@ -252,7 +252,6 @@ public final class PendingMigrationResponseData {
 
         private Optional<OffsetDateTime> effectiveAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -396,6 +395,22 @@ public final class PendingMigrationResponseData {
                     toPlanVersionId,
                     toPlanVersionNumber,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("effective_at")
+                    || key.equalsIgnoreCase("migration_id")
+                    || key.equalsIgnoreCase("proration_behavior")
+                    || key.equalsIgnoreCase("scheduled_for")
+                    || key.equalsIgnoreCase("strategy")
+                    || key.equalsIgnoreCase("to_plan_id")
+                    || key.equalsIgnoreCase("to_plan_name")
+                    || key.equalsIgnoreCase("to_plan_version_id")
+                    || key.equalsIgnoreCase("to_plan_version_number")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

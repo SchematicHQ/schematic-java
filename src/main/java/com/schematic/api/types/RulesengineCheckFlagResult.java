@@ -324,7 +324,6 @@ public final class RulesengineCheckFlagResult {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -545,6 +544,28 @@ public final class RulesengineCheckFlagResult {
                     userId,
                     value,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("entitlement")
+                    || key.equalsIgnoreCase("err")
+                    || key.equalsIgnoreCase("feature_allocation")
+                    || key.equalsIgnoreCase("feature_usage")
+                    || key.equalsIgnoreCase("feature_usage_event")
+                    || key.equalsIgnoreCase("feature_usage_period")
+                    || key.equalsIgnoreCase("feature_usage_reset_at")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("flag_key")
+                    || key.equalsIgnoreCase("reason")
+                    || key.equalsIgnoreCase("rule_id")
+                    || key.equalsIgnoreCase("rule_type")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -149,7 +149,6 @@ public final class RawEventResponseData {
 
         private Optional<String> eventId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -214,6 +213,18 @@ public final class RawEventResponseData {
         @java.lang.Override
         public RawEventResponseData build() {
             return new RawEventResponseData(capturedAt, eventId, remoteAddr, remoteIp, userAgent, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("captured_at")
+                    || key.equalsIgnoreCase("event_id")
+                    || key.equalsIgnoreCase("remote_addr")
+                    || key.equalsIgnoreCase("remote_ip")
+                    || key.equalsIgnoreCase("user_agent")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

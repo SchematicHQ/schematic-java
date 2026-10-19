@@ -148,7 +148,6 @@ public final class EntityKeyDefinitionResponseData {
 
         private OffsetDateTime updatedAt;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -201,6 +200,18 @@ public final class EntityKeyDefinitionResponseData {
         @java.lang.Override
         public EntityKeyDefinitionResponseData build() {
             return new EntityKeyDefinitionResponseData(createdAt, entityType, id, key, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("entity_type")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("key")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

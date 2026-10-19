@@ -108,7 +108,6 @@ public final class IntegrationCapabilities {
 
         private boolean editBilling;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -145,6 +144,16 @@ public final class IntegrationCapabilities {
         @java.lang.Override
         public IntegrationCapabilities build() {
             return new IntegrationCapabilities(authorPlans, checkout, editBilling, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("author_plans")
+                    || key.equalsIgnoreCase("checkout")
+                    || key.equalsIgnoreCase("edit_billing")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

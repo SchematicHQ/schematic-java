@@ -102,7 +102,6 @@ public final class CountMigrationsResponse {
 
         private CountMigrationsParams params;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -135,6 +134,14 @@ public final class CountMigrationsResponse {
         @java.lang.Override
         public CountMigrationsResponse build() {
             return new CountMigrationsResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

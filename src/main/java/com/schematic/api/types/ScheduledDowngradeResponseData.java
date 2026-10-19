@@ -266,7 +266,6 @@ public final class ScheduledDowngradeResponseData {
 
         private Optional<String> scheduledInterval = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -391,6 +390,24 @@ public final class ScheduledDowngradeResponseData {
                     toPlanId,
                     toPlanName,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("effective_after")
+                    || key.equalsIgnoreCase("from_plan_id")
+                    || key.equalsIgnoreCase("from_plan_name")
+                    || key.equalsIgnoreCase("from_subscription_price")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("scheduled_interval")
+                    || key.equalsIgnoreCase("scheduled_price")
+                    || key.equalsIgnoreCase("to_plan_id")
+                    || key.equalsIgnoreCase("to_plan_name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

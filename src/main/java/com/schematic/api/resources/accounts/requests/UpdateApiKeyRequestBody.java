@@ -93,7 +93,6 @@ public final class UpdateApiKeyRequestBody {
 
         private Optional<Long> rateLimitPercent = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -140,6 +139,16 @@ public final class UpdateApiKeyRequestBody {
 
         public UpdateApiKeyRequestBody build() {
             return new UpdateApiKeyRequestBody(description, name, rateLimitPercent, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("rate_limit_percent")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

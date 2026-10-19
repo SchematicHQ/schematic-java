@@ -324,7 +324,6 @@ public final class UpsertBillingProductRequestBody {
 
         private Optional<String> billingProductId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -551,6 +550,28 @@ public final class UpsertBillingProductRequestBody {
                     yearlyPrice,
                     yearlyPriceId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_product_id")
+                    || key.equalsIgnoreCase("billing_strategy")
+                    || key.equalsIgnoreCase("charge_type")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("is_trialable")
+                    || key.equalsIgnoreCase("monthly_price")
+                    || key.equalsIgnoreCase("monthly_price_id")
+                    || key.equalsIgnoreCase("one_time_price")
+                    || key.equalsIgnoreCase("one_time_price_id")
+                    || key.equalsIgnoreCase("quarterly_price")
+                    || key.equalsIgnoreCase("quarterly_price_id")
+                    || key.equalsIgnoreCase("trial_days")
+                    || key.equalsIgnoreCase("yearly_price")
+                    || key.equalsIgnoreCase("yearly_price_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

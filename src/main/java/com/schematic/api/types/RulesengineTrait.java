@@ -99,7 +99,6 @@ public final class RulesengineTrait {
 
         private Optional<RulesengineTraitDefinition> traitDefinition = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -134,6 +133,14 @@ public final class RulesengineTrait {
         @java.lang.Override
         public RulesengineTrait build() {
             return new RulesengineTrait(traitDefinition, value, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("trait_definition") || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -110,7 +110,6 @@ public final class GetOrCreateEntityTraitDefinitionResponse {
 
         private Map<String, JsonNode> params = new LinkedHashMap<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -167,6 +166,14 @@ public final class GetOrCreateEntityTraitDefinitionResponse {
         @java.lang.Override
         public GetOrCreateEntityTraitDefinitionResponse build() {
             return new GetOrCreateEntityTraitDefinitionResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

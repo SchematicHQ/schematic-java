@@ -321,7 +321,6 @@ public final class EventBodyFlagCheck {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -550,6 +549,24 @@ public final class EventBodyFlagCheck {
                     userId,
                     value,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("error")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("flag_key")
+                    || key.equalsIgnoreCase("preflight")
+                    || key.equalsIgnoreCase("reason")
+                    || key.equalsIgnoreCase("req_company")
+                    || key.equalsIgnoreCase("req_user")
+                    || key.equalsIgnoreCase("rule_id")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

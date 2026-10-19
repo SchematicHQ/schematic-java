@@ -97,7 +97,6 @@ public final class ListPlanIssuesRequest {
 
         private Optional<String> planVersionId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -132,6 +131,14 @@ public final class ListPlanIssuesRequest {
         @java.lang.Override
         public ListPlanIssuesRequest build() {
             return new ListPlanIssuesRequest(planId, planVersionId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("plan_id") || key.equalsIgnoreCase("plan_version_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -175,7 +175,6 @@ public final class CreditUsage {
 
         private Optional<CreditUsageAggregation> usageAggregation = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -304,6 +303,22 @@ public final class CreditUsage {
                     creditUsed,
                     usageAggregation,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_consumption_rate")
+                    || key.equalsIgnoreCase("credit_grant_counts")
+                    || key.equalsIgnoreCase("credit_grant_details")
+                    || key.equalsIgnoreCase("credit_remaining")
+                    || key.equalsIgnoreCase("credit_total")
+                    || key.equalsIgnoreCase("credit_type_icon")
+                    || key.equalsIgnoreCase("credit_type_name")
+                    || key.equalsIgnoreCase("credit_used")
+                    || key.equalsIgnoreCase("usage_aggregation")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

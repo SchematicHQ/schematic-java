@@ -192,7 +192,6 @@ public final class ComponentDisplaySettings {
 
         private boolean showZeroPriceAsFree;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -269,6 +268,20 @@ public final class ComponentDisplaySettings {
                     showPeriodToggle,
                     showZeroPriceAsFree,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("show_as_monthly_prices")
+                    || key.equalsIgnoreCase("show_credits")
+                    || key.equalsIgnoreCase("show_estimated_total")
+                    || key.equalsIgnoreCase("show_feature_description")
+                    || key.equalsIgnoreCase("show_hard_limit")
+                    || key.equalsIgnoreCase("show_period_toggle")
+                    || key.equalsIgnoreCase("show_zero_price_as_free")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

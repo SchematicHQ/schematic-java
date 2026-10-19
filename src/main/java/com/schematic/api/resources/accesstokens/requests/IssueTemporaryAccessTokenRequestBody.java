@@ -100,7 +100,6 @@ public final class IssueTemporaryAccessTokenRequestBody {
 
         private Map<String, String> lookup = new LinkedHashMap<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -146,6 +145,14 @@ public final class IssueTemporaryAccessTokenRequestBody {
         @java.lang.Override
         public IssueTemporaryAccessTokenRequestBody build() {
             return new IssueTemporaryAccessTokenRequestBody(lookup, resourceType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("lookup") || key.equalsIgnoreCase("resource_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

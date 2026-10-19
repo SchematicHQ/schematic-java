@@ -96,7 +96,6 @@ public final class CatalogConfigOrderedEntitlementResponseData {
 
         private boolean visible;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -125,6 +124,14 @@ public final class CatalogConfigOrderedEntitlementResponseData {
         @java.lang.Override
         public CatalogConfigOrderedEntitlementResponseData build() {
             return new CatalogConfigOrderedEntitlementResponseData(featureId, visible, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_id") || key.equalsIgnoreCase("visible")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

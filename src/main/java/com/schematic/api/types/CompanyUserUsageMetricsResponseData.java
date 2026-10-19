@@ -161,7 +161,6 @@ public final class CompanyUserUsageMetricsResponseData {
 
         private List<FeatureResponseData> features = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -247,6 +246,17 @@ public final class CompanyUserUsageMetricsResponseData {
         public CompanyUserUsageMetricsResponseData build() {
             return new CompanyUserUsageMetricsResponseData(
                     endTime, features, hasCredits, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("features")
+                    || key.equalsIgnoreCase("has_credits")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -97,7 +97,6 @@ public final class CreditCurrencyPriceResponseData {
 
         private Optional<BillingPriceResponseData> price = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -132,6 +131,14 @@ public final class CreditCurrencyPriceResponseData {
         @java.lang.Override
         public CreditCurrencyPriceResponseData build() {
             return new CreditCurrencyPriceResponseData(currency, price, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("currency") || key.equalsIgnoreCase("price")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

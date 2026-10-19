@@ -161,7 +161,6 @@ public final class AcquireCreditLeaseRequestBody {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -241,6 +240,18 @@ public final class AcquireCreditLeaseRequestBody {
         public AcquireCreditLeaseRequestBody build() {
             return new AcquireCreditLeaseRequestBody(
                     companyId, creditTypeId, expiresAt, requestedAmount, userId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("credit_type_id")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("requested_amount")
+                    || key.equalsIgnoreCase("user_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

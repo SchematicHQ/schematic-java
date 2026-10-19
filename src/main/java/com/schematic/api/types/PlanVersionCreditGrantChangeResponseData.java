@@ -159,7 +159,6 @@ public final class PlanVersionCreditGrantChangeResponseData {
 
         private List<String> changedFields = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -253,6 +252,18 @@ public final class PlanVersionCreditGrantChangeResponseData {
         public PlanVersionCreditGrantChangeResponseData build() {
             return new PlanVersionCreditGrantChangeResponseData(
                     changeType, changedFields, creditId, new_, old, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("change_type")
+                    || key.equalsIgnoreCase("changed_fields")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("new")
+                    || key.equalsIgnoreCase("old")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

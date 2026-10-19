@@ -427,7 +427,6 @@ public final class AuditLogResponseData {
 
         private Optional<String> accountMemberId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -726,6 +725,34 @@ public final class AuditLogResponseData {
                     userId,
                     userName,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_member_id")
+                    || key.equalsIgnoreCase("actor_type")
+                    || key.equalsIgnoreCase("api_key")
+                    || key.equalsIgnoreCase("api_key_id")
+                    || key.equalsIgnoreCase("ended_at")
+                    || key.equalsIgnoreCase("environment")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("method")
+                    || key.equalsIgnoreCase("req_body")
+                    || key.equalsIgnoreCase("resource_id")
+                    || key.equalsIgnoreCase("resource_id_string")
+                    || key.equalsIgnoreCase("resource_name")
+                    || key.equalsIgnoreCase("resource_type")
+                    || key.equalsIgnoreCase("resp_body")
+                    || key.equalsIgnoreCase("resp_code")
+                    || key.equalsIgnoreCase("secondary_resource")
+                    || key.equalsIgnoreCase("started_at")
+                    || key.equalsIgnoreCase("url")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("user_name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -108,7 +108,6 @@ public final class UserDailyCreditPointResponseData {
 
         private OffsetDateTime date;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -145,6 +144,14 @@ public final class UserDailyCreditPointResponseData {
         @java.lang.Override
         public UserDailyCreditPointResponseData build() {
             return new UserDailyCreditPointResponseData(creditsUsed, date, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credits_used") || key.equalsIgnoreCase("date")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

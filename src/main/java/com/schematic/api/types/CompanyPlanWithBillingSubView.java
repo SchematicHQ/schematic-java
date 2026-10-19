@@ -260,7 +260,6 @@ public final class CompanyPlanWithBillingSubView {
 
         private Optional<OffsetDateTime> addedOn = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -438,6 +437,24 @@ public final class CompanyPlanWithBillingSubView {
                     planPrice,
                     planVersionId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("added_on")
+                    || key.equalsIgnoreCase("billing_product_external_id")
+                    || key.equalsIgnoreCase("billing_product_id")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("image_url")
+                    || key.equalsIgnoreCase("included_credit_grants")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("plan_period")
+                    || key.equalsIgnoreCase("plan_price")
+                    || key.equalsIgnoreCase("plan_version_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

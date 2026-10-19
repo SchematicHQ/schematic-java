@@ -255,7 +255,6 @@ public final class CreditReservationResponseData {
 
         private Optional<OffsetDateTime> releasedAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -375,6 +374,22 @@ public final class CreditReservationResponseData {
                     settledAmount,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("credit_type_id")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("released_at")
+                    || key.equalsIgnoreCase("reserved_amount")
+                    || key.equalsIgnoreCase("settled_amount")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

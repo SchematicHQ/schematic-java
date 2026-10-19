@@ -96,7 +96,6 @@ public final class DuplicatePlanEntitlementsRequestBody {
 
         private String targetPlanId;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -125,6 +124,14 @@ public final class DuplicatePlanEntitlementsRequestBody {
         @java.lang.Override
         public DuplicatePlanEntitlementsRequestBody build() {
             return new DuplicatePlanEntitlementsRequestBody(sourcePlanId, targetPlanId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("source_plan_id") || key.equalsIgnoreCase("target_plan_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

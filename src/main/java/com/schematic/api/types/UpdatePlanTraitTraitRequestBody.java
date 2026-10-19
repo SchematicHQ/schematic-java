@@ -95,7 +95,6 @@ public final class UpdatePlanTraitTraitRequestBody {
 
         private String traitValue;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -124,6 +123,14 @@ public final class UpdatePlanTraitTraitRequestBody {
         @java.lang.Override
         public UpdatePlanTraitTraitRequestBody build() {
             return new UpdatePlanTraitTraitRequestBody(traitId, traitValue, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("trait_id") || key.equalsIgnoreCase("trait_value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

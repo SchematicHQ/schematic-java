@@ -137,7 +137,6 @@ public final class CountCustomersParams {
 
         private Optional<String> q = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -226,6 +225,19 @@ public final class CountCustomersParams {
 
         public CountCustomersParams build() {
             return new CountCustomersParams(companyIds, limit, name, offset, providerType, q, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("q")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

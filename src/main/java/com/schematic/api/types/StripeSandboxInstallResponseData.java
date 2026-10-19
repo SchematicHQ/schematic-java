@@ -189,7 +189,6 @@ public final class StripeSandboxInstallResponseData {
 
         private Optional<StripeSandboxKeysResponseData> apiKeys = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -284,6 +283,20 @@ public final class StripeSandboxInstallResponseData {
                     sandboxId,
                     stripeAccountId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("api_keys")
+                    || key.equalsIgnoreCase("claim_url")
+                    || key.equalsIgnoreCase("claim_url_expires_at")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("install")
+                    || key.equalsIgnoreCase("sandbox_id")
+                    || key.equalsIgnoreCase("stripe_account_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

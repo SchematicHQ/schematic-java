@@ -82,7 +82,6 @@ public final class UpdateScheduledCheckoutRequest {
 
         private Optional<ScheduledCheckoutStatus> status = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -117,6 +116,14 @@ public final class UpdateScheduledCheckoutRequest {
 
         public UpdateScheduledCheckoutRequest build() {
             return new UpdateScheduledCheckoutRequest(executeAfter, status, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("execute_after") || key.equalsIgnoreCase("status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

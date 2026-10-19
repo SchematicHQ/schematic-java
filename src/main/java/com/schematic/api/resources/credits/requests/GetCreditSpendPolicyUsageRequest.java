@@ -120,7 +120,6 @@ public final class GetCreditSpendPolicyUsageRequest {
 
         private Optional<List<String>> userIds = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -175,6 +174,16 @@ public final class GetCreditSpendPolicyUsageRequest {
         @java.lang.Override
         public GetCreditSpendPolicyUsageRequest build() {
             return new GetCreditSpendPolicyUsageRequest(userIds, billingCreditId, companyId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("user_ids")
+                    || key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("company_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -255,7 +255,6 @@ public final class PaymentMethodRequestBody {
 
         private Optional<String> accountLast4 = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -422,6 +421,24 @@ public final class PaymentMethodRequestBody {
                     customerExternalId,
                     paymentMethodType,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_last4")
+                    || key.equalsIgnoreCase("account_name")
+                    || key.equalsIgnoreCase("bank_name")
+                    || key.equalsIgnoreCase("billing_email")
+                    || key.equalsIgnoreCase("billing_name")
+                    || key.equalsIgnoreCase("card_brand")
+                    || key.equalsIgnoreCase("card_exp_month")
+                    || key.equalsIgnoreCase("card_exp_year")
+                    || key.equalsIgnoreCase("card_last4")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("payment_method_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

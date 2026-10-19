@@ -36,6 +36,8 @@ public final class EventBodyInference {
 
     private final long inputTokens;
 
+    private final Optional<String> leaseId;
+
     private final Optional<String> operation;
 
     private final long outputTokens;
@@ -47,6 +49,8 @@ public final class EventBodyInference {
     private final Optional<String> requestModel;
 
     private final Optional<Long> requests;
+
+    private final Optional<String> reservationId;
 
     private final String responseModel;
 
@@ -62,12 +66,14 @@ public final class EventBodyInference {
             Optional<String> currency,
             Optional<String> event,
             long inputTokens,
+            Optional<String> leaseId,
             Optional<String> operation,
             long outputTokens,
             String provider,
             Optional<Long> reasoningTokens,
             Optional<String> requestModel,
             Optional<Long> requests,
+            Optional<String> reservationId,
             String responseModel,
             Optional<Map<String, String>> user,
             Map<String, Object> additionalProperties) {
@@ -78,12 +84,14 @@ public final class EventBodyInference {
         this.currency = currency;
         this.event = event;
         this.inputTokens = inputTokens;
+        this.leaseId = leaseId;
         this.operation = operation;
         this.outputTokens = outputTokens;
         this.provider = provider;
         this.reasoningTokens = reasoningTokens;
         this.requestModel = requestModel;
         this.requests = requests;
+        this.reservationId = reservationId;
         this.responseModel = responseModel;
         this.user = user;
         this.additionalProperties = additionalProperties;
@@ -146,6 +154,14 @@ public final class EventBodyInference {
     }
 
     /**
+     * @return Credit lease ID this inference event's credit burn is redeeming against
+     */
+    @JsonProperty("lease_id")
+    public Optional<String> getLeaseId() {
+        return leaseId;
+    }
+
+    /**
      * @return The inference operation; defaults to 'chat'
      */
     @JsonProperty("operation")
@@ -194,6 +210,14 @@ public final class EventBodyInference {
     }
 
     /**
+     * @return Credit reservation ID this inference event's credit burn settles. lease_id takes precedence when both are set
+     */
+    @JsonProperty("reservation_id")
+    public Optional<String> getReservationId() {
+        return reservationId;
+    }
+
+    /**
      * @return The model that served the inference response
      */
     @JsonProperty("response_model")
@@ -228,12 +252,14 @@ public final class EventBodyInference {
                 && currency.equals(other.currency)
                 && event.equals(other.event)
                 && inputTokens == other.inputTokens
+                && leaseId.equals(other.leaseId)
                 && operation.equals(other.operation)
                 && outputTokens == other.outputTokens
                 && provider.equals(other.provider)
                 && reasoningTokens.equals(other.reasoningTokens)
                 && requestModel.equals(other.requestModel)
                 && requests.equals(other.requests)
+                && reservationId.equals(other.reservationId)
                 && responseModel.equals(other.responseModel)
                 && user.equals(other.user);
     }
@@ -248,12 +274,14 @@ public final class EventBodyInference {
                 this.currency,
                 this.event,
                 this.inputTokens,
+                this.leaseId,
                 this.operation,
                 this.outputTokens,
                 this.provider,
                 this.reasoningTokens,
                 this.requestModel,
                 this.requests,
+                this.reservationId,
                 this.responseModel,
                 this.user);
     }
@@ -349,6 +377,13 @@ public final class EventBodyInference {
         _FinalStage event(String event);
 
         /**
+         * <p>Credit lease ID this inference event's credit burn is redeeming against</p>
+         */
+        _FinalStage leaseId(Optional<String> leaseId);
+
+        _FinalStage leaseId(String leaseId);
+
+        /**
          * <p>The inference operation; defaults to 'chat'</p>
          */
         _FinalStage operation(Optional<String> operation);
@@ -377,6 +412,13 @@ public final class EventBodyInference {
         _FinalStage requests(Long requests);
 
         /**
+         * <p>Credit reservation ID this inference event's credit burn settles. lease_id takes precedence when both are set</p>
+         */
+        _FinalStage reservationId(Optional<String> reservationId);
+
+        _FinalStage reservationId(String reservationId);
+
+        /**
          * <p>Key-value pairs to identify the user associated with the inference event</p>
          */
         _FinalStage user(Optional<Map<String, String>> user);
@@ -397,6 +439,8 @@ public final class EventBodyInference {
 
         private Optional<Map<String, String>> user = Optional.empty();
 
+        private Optional<String> reservationId = Optional.empty();
+
         private Optional<Long> requests = Optional.empty();
 
         private Optional<String> requestModel = Optional.empty();
@@ -404,6 +448,8 @@ public final class EventBodyInference {
         private Optional<Long> reasoningTokens = Optional.empty();
 
         private Optional<String> operation = Optional.empty();
+
+        private Optional<String> leaseId = Optional.empty();
 
         private Optional<String> event = Optional.empty();
 
@@ -417,7 +463,6 @@ public final class EventBodyInference {
 
         private Optional<Long> cacheCreationInputTokens = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -431,12 +476,14 @@ public final class EventBodyInference {
             currency(other.getCurrency());
             event(other.getEvent());
             inputTokens(other.getInputTokens());
+            leaseId(other.getLeaseId());
             operation(other.getOperation());
             outputTokens(other.getOutputTokens());
             provider(other.getProvider());
             reasoningTokens(other.getReasoningTokens());
             requestModel(other.getRequestModel());
             requests(other.getRequests());
+            reservationId(other.getReservationId());
             responseModel(other.getResponseModel());
             user(other.getUser());
             return this;
@@ -503,6 +550,26 @@ public final class EventBodyInference {
         @JsonSetter(value = "user", nulls = Nulls.SKIP)
         public _FinalStage user(Optional<Map<String, String>> user) {
             this.user = user;
+            return this;
+        }
+
+        /**
+         * <p>Credit reservation ID this inference event's credit burn settles. lease_id takes precedence when both are set</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage reservationId(String reservationId) {
+            this.reservationId = Optional.ofNullable(reservationId);
+            return this;
+        }
+
+        /**
+         * <p>Credit reservation ID this inference event's credit burn settles. lease_id takes precedence when both are set</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "reservation_id", nulls = Nulls.SKIP)
+        public _FinalStage reservationId(Optional<String> reservationId) {
+            this.reservationId = reservationId;
             return this;
         }
 
@@ -583,6 +650,26 @@ public final class EventBodyInference {
         @JsonSetter(value = "operation", nulls = Nulls.SKIP)
         public _FinalStage operation(Optional<String> operation) {
             this.operation = operation;
+            return this;
+        }
+
+        /**
+         * <p>Credit lease ID this inference event's credit burn is redeeming against</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage leaseId(String leaseId) {
+            this.leaseId = Optional.ofNullable(leaseId);
+            return this;
+        }
+
+        /**
+         * <p>Credit lease ID this inference event's credit burn is redeeming against</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "lease_id", nulls = Nulls.SKIP)
+        public _FinalStage leaseId(Optional<String> leaseId) {
+            this.leaseId = leaseId;
             return this;
         }
 
@@ -731,15 +818,41 @@ public final class EventBodyInference {
                     currency,
                     event,
                     inputTokens,
+                    leaseId,
                     operation,
                     outputTokens,
                     provider,
                     reasoningTokens,
                     requestModel,
                     requests,
+                    reservationId,
                     responseModel,
                     user,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("cache_creation_input_tokens")
+                    || key.equalsIgnoreCase("cached_input_tokens")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("cost")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("event")
+                    || key.equalsIgnoreCase("input_tokens")
+                    || key.equalsIgnoreCase("lease_id")
+                    || key.equalsIgnoreCase("operation")
+                    || key.equalsIgnoreCase("output_tokens")
+                    || key.equalsIgnoreCase("provider")
+                    || key.equalsIgnoreCase("reasoning_tokens")
+                    || key.equalsIgnoreCase("request_model")
+                    || key.equalsIgnoreCase("requests")
+                    || key.equalsIgnoreCase("reservation_id")
+                    || key.equalsIgnoreCase("response_model")
+                    || key.equalsIgnoreCase("user")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

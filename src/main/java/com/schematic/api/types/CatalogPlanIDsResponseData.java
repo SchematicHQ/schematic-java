@@ -68,7 +68,6 @@ public final class CatalogPlanIDsResponseData {
     public static final class Builder {
         private List<String> planIds = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -101,6 +100,14 @@ public final class CatalogPlanIDsResponseData {
 
         public CatalogPlanIDsResponseData build() {
             return new CatalogPlanIDsResponseData(planIds, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("plan_ids")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

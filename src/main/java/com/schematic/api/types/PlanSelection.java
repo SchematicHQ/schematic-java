@@ -114,7 +114,6 @@ public final class PlanSelection {
 
         private Optional<String> priceId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -163,6 +162,16 @@ public final class PlanSelection {
         @java.lang.Override
         public PlanSelection build() {
             return new PlanSelection(planId, priceId, versionId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("price_id")
+                    || key.equalsIgnoreCase("version_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

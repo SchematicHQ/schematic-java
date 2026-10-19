@@ -109,7 +109,6 @@ public final class ListBillingProductPricesResponse {
 
         private List<BillingPriceView> data = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -159,6 +158,14 @@ public final class ListBillingProductPricesResponse {
         @java.lang.Override
         public ListBillingProductPricesResponse build() {
             return new ListBillingProductPricesResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

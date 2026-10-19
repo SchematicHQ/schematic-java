@@ -244,7 +244,6 @@ public final class CreateEntitlementReqCommon {
 
         private Optional<Double> creditConsumptionRate = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -403,6 +402,23 @@ public final class CreateEntitlementReqCommon {
                     valueTraitId,
                     valueType,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_consumption_rate")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("metric_period")
+                    || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("quantity_rates")
+                    || key.equalsIgnoreCase("value_bool")
+                    || key.equalsIgnoreCase("value_credit_id")
+                    || key.equalsIgnoreCase("value_numeric")
+                    || key.equalsIgnoreCase("value_trait_id")
+                    || key.equalsIgnoreCase("value_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

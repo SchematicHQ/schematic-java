@@ -530,7 +530,6 @@ public final class FeatureEntitlement {
 
         private Optional<Long> allocation = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -957,6 +956,33 @@ public final class FeatureEntitlement {
                     valueType,
                     warningTiers,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("allocation")
+                    || key.equalsIgnoreCase("consumption_rate")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("credit_remaining")
+                    || key.equalsIgnoreCase("credit_reserved")
+                    || key.equalsIgnoreCase("credit_settled")
+                    || key.equalsIgnoreCase("credit_total")
+                    || key.equalsIgnoreCase("credit_used")
+                    || key.equalsIgnoreCase("event_name")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("feature_key")
+                    || key.equalsIgnoreCase("metric_period")
+                    || key.equalsIgnoreCase("metric_reset_at")
+                    || key.equalsIgnoreCase("month_reset")
+                    || key.equalsIgnoreCase("quantity_rates")
+                    || key.equalsIgnoreCase("soft_limit")
+                    || key.equalsIgnoreCase("usage")
+                    || key.equalsIgnoreCase("value_type")
+                    || key.equalsIgnoreCase("warning_tiers")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

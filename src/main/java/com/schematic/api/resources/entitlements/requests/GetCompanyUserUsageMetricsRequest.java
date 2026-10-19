@@ -133,7 +133,6 @@ public final class GetCompanyUserUsageMetricsRequest {
 
         private Optional<OffsetDateTime> endTime = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -200,6 +199,16 @@ public final class GetCompanyUserUsageMetricsRequest {
         @java.lang.Override
         public GetCompanyUserUsageMetricsRequest build() {
             return new GetCompanyUserUsageMetricsRequest(companyId, endTime, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

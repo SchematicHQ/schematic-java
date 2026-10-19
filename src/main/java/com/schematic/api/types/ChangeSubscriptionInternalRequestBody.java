@@ -343,7 +343,6 @@ public final class ChangeSubscriptionInternalRequestBody {
 
         private List<UpdateAddOnRequestBody> addOnIds = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -620,6 +619,28 @@ public final class ChangeSubscriptionInternalRequestBody {
                     promoCode,
                     skipTrial,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("add_on_ids")
+                    || key.equalsIgnoreCase("auto_topup_overrides")
+                    || key.equalsIgnoreCase("billing_entity_id")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("coupon_external_id")
+                    || key.equalsIgnoreCase("credit_bundles")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("custom_field_values")
+                    || key.equalsIgnoreCase("new_plan_id")
+                    || key.equalsIgnoreCase("new_price_id")
+                    || key.equalsIgnoreCase("opt_in_accepted")
+                    || key.equalsIgnoreCase("pay_in_advance")
+                    || key.equalsIgnoreCase("payment_method_id")
+                    || key.equalsIgnoreCase("promo_code")
+                    || key.equalsIgnoreCase("skip_trial")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

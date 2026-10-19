@@ -63,7 +63,7 @@ public final class CreateCreditSpendPolicyRequestBody {
     }
 
     /**
-     * @return The company the cap applies to. Set exactly one of company_id and user_id.
+     * @return The company the cap applies in. Alone, it caps the whole company. With user_id, it caps that user's spend in this company. Required with user_id when the user belongs to more than one company.
      */
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
@@ -84,7 +84,7 @@ public final class CreateCreditSpendPolicyRequestBody {
     }
 
     /**
-     * @return The user the cap applies to. Set exactly one of company_id and user_id.
+     * @return The user the cap applies to. The user must belong to company_id, and with no company_id, to exactly one company.
      */
     @JsonProperty("user_id")
     public Optional<String> getUserId() {
@@ -164,7 +164,7 @@ public final class CreateCreditSpendPolicyRequestBody {
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         /**
-         * <p>The company the cap applies to. Set exactly one of company_id and user_id.</p>
+         * <p>The company the cap applies in. Alone, it caps the whole company. With user_id, it caps that user's spend in this company. Required with user_id when the user belongs to more than one company.</p>
          */
         _FinalStage companyId(Optional<String> companyId);
 
@@ -182,7 +182,7 @@ public final class CreateCreditSpendPolicyRequestBody {
         _FinalStage maxPerDraw(Double maxPerDraw);
 
         /**
-         * <p>The user the cap applies to. Set exactly one of company_id and user_id.</p>
+         * <p>The user the cap applies to. The user must belong to company_id, and with no company_id, to exactly one company.</p>
          */
         _FinalStage userId(Optional<String> userId);
 
@@ -219,7 +219,6 @@ public final class CreateCreditSpendPolicyRequestBody {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -284,7 +283,7 @@ public final class CreateCreditSpendPolicyRequestBody {
         }
 
         /**
-         * <p>The user the cap applies to. Set exactly one of company_id and user_id.</p>
+         * <p>The user the cap applies to. The user must belong to company_id, and with no company_id, to exactly one company.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -294,7 +293,7 @@ public final class CreateCreditSpendPolicyRequestBody {
         }
 
         /**
-         * <p>The user the cap applies to. Set exactly one of company_id and user_id.</p>
+         * <p>The user the cap applies to. The user must belong to company_id, and with no company_id, to exactly one company.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
@@ -337,7 +336,7 @@ public final class CreateCreditSpendPolicyRequestBody {
         }
 
         /**
-         * <p>The company the cap applies to. Set exactly one of company_id and user_id.</p>
+         * <p>The company the cap applies in. Alone, it caps the whole company. With user_id, it caps that user's spend in this company. Required with user_id when the user belongs to more than one company.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -347,7 +346,7 @@ public final class CreateCreditSpendPolicyRequestBody {
         }
 
         /**
-         * <p>The company the cap applies to. Set exactly one of company_id and user_id.</p>
+         * <p>The company the cap applies in. Alone, it caps the whole company. With user_id, it caps that user's spend in this company. Required with user_id when the user belongs to more than one company.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
@@ -367,6 +366,20 @@ public final class CreateCreditSpendPolicyRequestBody {
                     windowAmount,
                     windowUnit,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("label")
+                    || key.equalsIgnoreCase("max_per_draw")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("window_amount")
+                    || key.equalsIgnoreCase("window_unit")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

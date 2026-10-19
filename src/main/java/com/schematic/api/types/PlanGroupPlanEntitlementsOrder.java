@@ -118,7 +118,6 @@ public final class PlanGroupPlanEntitlementsOrder {
 
         private List<PlanCreditOrder> credits = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -178,6 +177,16 @@ public final class PlanGroupPlanEntitlementsOrder {
         @java.lang.Override
         public PlanGroupPlanEntitlementsOrder build() {
             return new PlanGroupPlanEntitlementsOrder(credits, entitlements, planId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credits")
+                    || key.equalsIgnoreCase("entitlements")
+                    || key.equalsIgnoreCase("plan_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

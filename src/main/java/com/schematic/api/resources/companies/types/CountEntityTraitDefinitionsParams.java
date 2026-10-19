@@ -151,7 +151,6 @@ public final class CountEntityTraitDefinitionsParams {
 
         private Optional<List<TraitType>> traitTypes = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -253,6 +252,20 @@ public final class CountEntityTraitDefinitionsParams {
         public CountEntityTraitDefinitionsParams build() {
             return new CountEntityTraitDefinitionsParams(
                     entityType, ids, limit, offset, q, traitType, traitTypes, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("entity_type")
+                    || key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("trait_type")
+                    || key.equalsIgnoreCase("trait_types")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

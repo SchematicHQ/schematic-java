@@ -191,7 +191,6 @@ public final class CreateBillingCustomerRequestBody {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -303,6 +302,20 @@ public final class CreateBillingCustomerRequestBody {
                     name,
                     providerType,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("default_payment_method_id")
+                    || key.equalsIgnoreCase("email")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("meta")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("provider_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

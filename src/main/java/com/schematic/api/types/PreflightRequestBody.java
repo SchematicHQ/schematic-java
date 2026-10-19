@@ -22,6 +22,8 @@ import java.util.Optional;
 public final class PreflightRequestBody {
     private final Optional<Map<String, Double>> creditCost;
 
+    private final Optional<PreflightEventQuantitiesRequestBody> eventQuantities;
+
     private final Optional<PreflightEventUsageRequestBody> eventUsage;
 
     private final Optional<Long> usage;
@@ -30,21 +32,31 @@ public final class PreflightRequestBody {
 
     private PreflightRequestBody(
             Optional<Map<String, Double>> creditCost,
+            Optional<PreflightEventQuantitiesRequestBody> eventQuantities,
             Optional<PreflightEventUsageRequestBody> eventUsage,
             Optional<Long> usage,
             Map<String, Object> additionalProperties) {
         this.creditCost = creditCost;
+        this.eventQuantities = eventQuantities;
         this.eventUsage = eventUsage;
         this.usage = usage;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return Cost in credits of the action, keyed by credit ID, for callers that have already computed it. Takes precedence over usage and event_usage on credit balance conditions for the same credit. A cost of zero means the action is free, not that the input is absent
+     * @return Cost in credits of the action, keyed by credit ID, for callers that have already computed it. Takes precedence over event_quantities, event_usage and usage on credit balance conditions for the same credit. A cost of zero means the action is free, not that the input is absent
      */
     @JsonProperty("credit_cost")
     public Optional<Map<String, Double>> getCreditCost() {
         return creditCost;
+    }
+
+    /**
+     * @return An event of a specific subtype, priced the way it would burn credits: quantity at the entitlement's consumption rate, plus each of quantities at its rate in the entitlement's quantity rates. Use it to preflight an inference call by its request and token counts. Applies only to credit balance conditions whose event subtype matches, where it takes precedence over event_usage and usage; credit_cost for the same credit still wins
+     */
+    @JsonProperty("event_quantities")
+    public Optional<PreflightEventQuantitiesRequestBody> getEventQuantities() {
+        return eventQuantities;
     }
 
     /**
@@ -75,12 +87,15 @@ public final class PreflightRequestBody {
     }
 
     private boolean equalTo(PreflightRequestBody other) {
-        return creditCost.equals(other.creditCost) && eventUsage.equals(other.eventUsage) && usage.equals(other.usage);
+        return creditCost.equals(other.creditCost)
+                && eventQuantities.equals(other.eventQuantities)
+                && eventUsage.equals(other.eventUsage)
+                && usage.equals(other.usage);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.creditCost, this.eventUsage, this.usage);
+        return Objects.hash(this.creditCost, this.eventQuantities, this.eventUsage, this.usage);
     }
 
     @java.lang.Override
@@ -96,24 +111,26 @@ public final class PreflightRequestBody {
     public static final class Builder {
         private Optional<Map<String, Double>> creditCost = Optional.empty();
 
+        private Optional<PreflightEventQuantitiesRequestBody> eventQuantities = Optional.empty();
+
         private Optional<PreflightEventUsageRequestBody> eventUsage = Optional.empty();
 
         private Optional<Long> usage = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         public Builder from(PreflightRequestBody other) {
             creditCost(other.getCreditCost());
+            eventQuantities(other.getEventQuantities());
             eventUsage(other.getEventUsage());
             usage(other.getUsage());
             return this;
         }
 
         /**
-         * <p>Cost in credits of the action, keyed by credit ID, for callers that have already computed it. Takes precedence over usage and event_usage on credit balance conditions for the same credit. A cost of zero means the action is free, not that the input is absent</p>
+         * <p>Cost in credits of the action, keyed by credit ID, for callers that have already computed it. Takes precedence over event_quantities, event_usage and usage on credit balance conditions for the same credit. A cost of zero means the action is free, not that the input is absent</p>
          */
         @JsonSetter(value = "credit_cost", nulls = Nulls.SKIP)
         public Builder creditCost(Optional<Map<String, Double>> creditCost) {
@@ -123,6 +140,20 @@ public final class PreflightRequestBody {
 
         public Builder creditCost(Map<String, Double> creditCost) {
             this.creditCost = Optional.ofNullable(creditCost);
+            return this;
+        }
+
+        /**
+         * <p>An event of a specific subtype, priced the way it would burn credits: quantity at the entitlement's consumption rate, plus each of quantities at its rate in the entitlement's quantity rates. Use it to preflight an inference call by its request and token counts. Applies only to credit balance conditions whose event subtype matches, where it takes precedence over event_usage and usage; credit_cost for the same credit still wins</p>
+         */
+        @JsonSetter(value = "event_quantities", nulls = Nulls.SKIP)
+        public Builder eventQuantities(Optional<PreflightEventQuantitiesRequestBody> eventQuantities) {
+            this.eventQuantities = eventQuantities;
+            return this;
+        }
+
+        public Builder eventQuantities(PreflightEventQuantitiesRequestBody eventQuantities) {
+            this.eventQuantities = Optional.ofNullable(eventQuantities);
             return this;
         }
 
@@ -155,7 +186,18 @@ public final class PreflightRequestBody {
         }
 
         public PreflightRequestBody build() {
-            return new PreflightRequestBody(creditCost, eventUsage, usage, additionalProperties);
+            return new PreflightRequestBody(creditCost, eventQuantities, eventUsage, usage, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_cost")
+                    || key.equalsIgnoreCase("event_quantities")
+                    || key.equalsIgnoreCase("event_usage")
+                    || key.equalsIgnoreCase("usage")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

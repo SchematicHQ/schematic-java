@@ -161,7 +161,6 @@ public final class ListCompanyMigrationsRequest {
 
         private Optional<String> q = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -252,6 +251,18 @@ public final class ListCompanyMigrationsRequest {
         @java.lang.Override
         public ListCompanyMigrationsRequest build() {
             return new ListCompanyMigrationsRequest(migrationId, q, status, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("migration_id")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

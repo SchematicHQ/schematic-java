@@ -80,7 +80,6 @@ public final class CatalogConfigOrderedBundle {
     public static final class Builder implements BundleIdStage, _FinalStage {
         private String bundleId;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -101,6 +100,14 @@ public final class CatalogConfigOrderedBundle {
         @java.lang.Override
         public CatalogConfigOrderedBundle build() {
             return new CatalogConfigOrderedBundle(bundleId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("bundle_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

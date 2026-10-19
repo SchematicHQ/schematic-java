@@ -258,7 +258,6 @@ public final class PreviewSubscriptionDiscountResponseData {
 
         private Optional<Long> amountOff = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -413,6 +412,24 @@ public final class PreviewSubscriptionDiscountResponseData {
                     promoCodeExternalId,
                     startedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount_off")
+                    || key.equalsIgnoreCase("coupon_name")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("customer_facing_code")
+                    || key.equalsIgnoreCase("duration")
+                    || key.equalsIgnoreCase("duration_in_months")
+                    || key.equalsIgnoreCase("ended_at")
+                    || key.equalsIgnoreCase("is_active")
+                    || key.equalsIgnoreCase("percent_off")
+                    || key.equalsIgnoreCase("promo_code_external_id")
+                    || key.equalsIgnoreCase("started_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

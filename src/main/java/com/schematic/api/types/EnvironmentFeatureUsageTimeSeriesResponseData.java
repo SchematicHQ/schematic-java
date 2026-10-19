@@ -120,7 +120,6 @@ public final class EnvironmentFeatureUsageTimeSeriesResponseData {
 
         private List<EnvironmentUsagePointResponseData> points = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -175,6 +174,16 @@ public final class EnvironmentFeatureUsageTimeSeriesResponseData {
         public EnvironmentFeatureUsageTimeSeriesResponseData build() {
             return new EnvironmentFeatureUsageTimeSeriesResponseData(
                     eventSubtype, featureId, points, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("points")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

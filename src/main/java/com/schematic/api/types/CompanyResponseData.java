@@ -183,7 +183,6 @@ public final class CompanyResponseData {
 
         private Optional<OffsetDateTime> lastSeenAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -265,6 +264,20 @@ public final class CompanyResponseData {
         public CompanyResponseData build() {
             return new CompanyResponseData(
                     createdAt, environmentId, id, lastSeenAt, logoUrl, name, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("last_seen_at")
+                    || key.equalsIgnoreCase("logo_url")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

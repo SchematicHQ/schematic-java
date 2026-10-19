@@ -104,7 +104,6 @@ public final class GetTopFeaturesByUsageResponse {
 
         private GetTopFeaturesByUsageParams params;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -137,6 +136,14 @@ public final class GetTopFeaturesByUsageResponse {
         @java.lang.Override
         public GetTopFeaturesByUsageResponse build() {
             return new GetTopFeaturesByUsageResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

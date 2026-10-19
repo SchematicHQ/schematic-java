@@ -148,7 +148,6 @@ public final class CreateApiKeyRequestBody {
 
         private Optional<String> description = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -226,6 +225,18 @@ public final class CreateApiKeyRequestBody {
         public CreateApiKeyRequestBody build() {
             return new CreateApiKeyRequestBody(
                     description, environmentId, name, rateLimitPercent, readonly, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("rate_limit_percent")
+                    || key.equalsIgnoreCase("readonly")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

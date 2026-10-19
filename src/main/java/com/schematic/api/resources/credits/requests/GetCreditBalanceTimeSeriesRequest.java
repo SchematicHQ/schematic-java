@@ -132,7 +132,6 @@ public final class GetCreditBalanceTimeSeriesRequest {
 
         private OffsetDateTime startTime;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -178,6 +177,17 @@ public final class GetCreditBalanceTimeSeriesRequest {
         public GetCreditBalanceTimeSeriesRequest build() {
             return new GetCreditBalanceTimeSeriesRequest(
                     billingCreditId, companyId, endTime, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

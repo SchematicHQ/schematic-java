@@ -194,7 +194,6 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
 
         private Optional<String> note = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -283,6 +282,20 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
                     willUpdateSubscription,
                     wouldFail,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("has_billing_changes")
+                    || key.equalsIgnoreCase("has_custom_pricing")
+                    || key.equalsIgnoreCase("note")
+                    || key.equalsIgnoreCase("plan_version_id_from")
+                    || key.equalsIgnoreCase("will_update_subscription")
+                    || key.equalsIgnoreCase("would_fail")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

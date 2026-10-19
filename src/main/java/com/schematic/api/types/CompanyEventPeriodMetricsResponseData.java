@@ -268,7 +268,6 @@ public final class CompanyEventPeriodMetricsResponseData {
 
         private Optional<OffsetDateTime> validUntil = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -387,6 +386,24 @@ public final class CompanyEventPeriodMetricsResponseData {
                     validUntil,
                     value,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("captured_at_max")
+                    || key.equalsIgnoreCase("captured_at_min")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("month_reset")
+                    || key.equalsIgnoreCase("period")
+                    || key.equalsIgnoreCase("valid_until")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

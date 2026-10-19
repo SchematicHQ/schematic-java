@@ -182,7 +182,7 @@ public final class CheckAndReserveFlagResponseData {
     }
 
     /**
-     * @return The hold taken on the company's credit balance for this operation, when the flag allowed it and the feature is credit-metered. Settle it by sending a track event carrying its ID as reservation_id; the unspent hold is refunded at expires_at otherwise
+     * @return The hold taken on the company's credit balance for this operation, when the flag allowed it and the feature is credit-metered. Settle it by sending a track or inference event carrying its ID as reservation_id; the unspent hold is refunded at expires_at otherwise
      */
     @JsonProperty("reservation")
     public Optional<FlagCheckReservationResponseData> getReservation() {
@@ -375,7 +375,7 @@ public final class CheckAndReserveFlagResponseData {
         _FinalStage flagId(String flagId);
 
         /**
-         * <p>The hold taken on the company's credit balance for this operation, when the flag allowed it and the feature is credit-metered. Settle it by sending a track event carrying its ID as reservation_id; the unspent hold is refunded at expires_at otherwise</p>
+         * <p>The hold taken on the company's credit balance for this operation, when the flag allowed it and the feature is credit-metered. Settle it by sending a track or inference event carrying its ID as reservation_id; the unspent hold is refunded at expires_at otherwise</p>
          */
         _FinalStage reservation(Optional<FlagCheckReservationResponseData> reservation);
 
@@ -437,7 +437,6 @@ public final class CheckAndReserveFlagResponseData {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -557,7 +556,7 @@ public final class CheckAndReserveFlagResponseData {
         }
 
         /**
-         * <p>The hold taken on the company's credit balance for this operation, when the flag allowed it and the feature is credit-metered. Settle it by sending a track event carrying its ID as reservation_id; the unspent hold is refunded at expires_at otherwise</p>
+         * <p>The hold taken on the company's credit balance for this operation, when the flag allowed it and the feature is credit-metered. Settle it by sending a track or inference event carrying its ID as reservation_id; the unspent hold is refunded at expires_at otherwise</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -567,7 +566,7 @@ public final class CheckAndReserveFlagResponseData {
         }
 
         /**
-         * <p>The hold taken on the company's credit balance for this operation, when the flag allowed it and the feature is credit-metered. Settle it by sending a track event carrying its ID as reservation_id; the unspent hold is refunded at expires_at otherwise</p>
+         * <p>The hold taken on the company's credit balance for this operation, when the flag allowed it and the feature is credit-metered. Settle it by sending a track or inference event carrying its ID as reservation_id; the unspent hold is refunded at expires_at otherwise</p>
          */
         @java.lang.Override
         @JsonSetter(value = "reservation", nulls = Nulls.SKIP)
@@ -776,6 +775,29 @@ public final class CheckAndReserveFlagResponseData {
                     userId,
                     value,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("entitlement")
+                    || key.equalsIgnoreCase("error")
+                    || key.equalsIgnoreCase("feature_allocation")
+                    || key.equalsIgnoreCase("feature_usage")
+                    || key.equalsIgnoreCase("feature_usage_event")
+                    || key.equalsIgnoreCase("feature_usage_period")
+                    || key.equalsIgnoreCase("feature_usage_reset_at")
+                    || key.equalsIgnoreCase("flag")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("reason")
+                    || key.equalsIgnoreCase("reservation")
+                    || key.equalsIgnoreCase("rule_id")
+                    || key.equalsIgnoreCase("rule_type")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

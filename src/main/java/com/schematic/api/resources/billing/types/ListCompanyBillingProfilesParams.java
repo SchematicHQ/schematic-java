@@ -124,7 +124,6 @@ public final class ListCompanyBillingProfilesParams {
 
         private Optional<BillingProviderType> providerType = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -202,6 +201,18 @@ public final class ListCompanyBillingProfilesParams {
         public ListCompanyBillingProfilesParams build() {
             return new ListCompanyBillingProfilesParams(
                     companyId, isDefault, limit, offset, providerType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("is_default")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("provider_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

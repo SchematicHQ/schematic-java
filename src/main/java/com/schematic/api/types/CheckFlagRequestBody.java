@@ -94,7 +94,6 @@ public final class CheckFlagRequestBody {
 
         private Optional<Map<String, String>> user = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -144,6 +143,14 @@ public final class CheckFlagRequestBody {
 
         public CheckFlagRequestBody build() {
             return new CheckFlagRequestBody(company, preflight, user, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company") || key.equalsIgnoreCase("preflight") || key.equalsIgnoreCase("user")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

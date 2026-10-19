@@ -119,7 +119,6 @@ public final class EventBodyIdentify {
 
         private Optional<Map<String, JsonNode>> traits = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -200,6 +199,17 @@ public final class EventBodyIdentify {
 
         public EventBodyIdentify build() {
             return new EventBodyIdentify(company, keys, name, traits, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("keys")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("traits")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

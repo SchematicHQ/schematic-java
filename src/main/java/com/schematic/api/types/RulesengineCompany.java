@@ -359,7 +359,6 @@ public final class RulesengineCompany {
 
         private Optional<String> basePlanId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -683,6 +682,29 @@ public final class RulesengineCompany {
                     subscription,
                     traits,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("base_plan_id")
+                    || key.equalsIgnoreCase("billing_product_ids")
+                    || key.equalsIgnoreCase("credit_balances")
+                    || key.equalsIgnoreCase("credit_postpaid")
+                    || key.equalsIgnoreCase("credit_spend_policies")
+                    || key.equalsIgnoreCase("entitlements")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("keys")
+                    || key.equalsIgnoreCase("metrics")
+                    || key.equalsIgnoreCase("plan_ids")
+                    || key.equalsIgnoreCase("plan_version_ids")
+                    || key.equalsIgnoreCase("rules")
+                    || key.equalsIgnoreCase("subscription")
+                    || key.equalsIgnoreCase("traits")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

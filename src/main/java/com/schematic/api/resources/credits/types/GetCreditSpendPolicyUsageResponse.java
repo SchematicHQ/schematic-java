@@ -109,7 +109,6 @@ public final class GetCreditSpendPolicyUsageResponse {
 
         private List<CreditSpendPolicyResponseData> data = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -159,6 +158,14 @@ public final class GetCreditSpendPolicyUsageResponse {
         @java.lang.Override
         public GetCreditSpendPolicyUsageResponse build() {
             return new GetCreditSpendPolicyUsageResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -124,7 +124,6 @@ public final class ListCompanyBillingProfilesRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -202,6 +201,18 @@ public final class ListCompanyBillingProfilesRequest {
         public ListCompanyBillingProfilesRequest build() {
             return new ListCompanyBillingProfilesRequest(
                     companyId, isDefault, providerType, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("is_default")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

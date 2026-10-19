@@ -137,7 +137,6 @@ public final class OnboardingMilestoneView {
 
         private List<OnboardingRequirement> missing = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -205,6 +204,17 @@ public final class OnboardingMilestoneView {
         @java.lang.Override
         public OnboardingMilestoneView build() {
             return new OnboardingMilestoneView(id, missing, progress, reachedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("missing")
+                    || key.equalsIgnoreCase("progress")
+                    || key.equalsIgnoreCase("reached_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

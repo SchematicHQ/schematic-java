@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateFlagRequestBody.Builder.class)
 public final class CreateFlagRequestBody {
-    private final boolean defaultValue;
+    private final Optional<Boolean> defaultValue;
 
     private final String description;
 
@@ -38,7 +38,7 @@ public final class CreateFlagRequestBody {
     private final Map<String, Object> additionalProperties;
 
     private CreateFlagRequestBody(
-            boolean defaultValue,
+            Optional<Boolean> defaultValue,
             String description,
             Optional<String> featureId,
             String flagType,
@@ -56,8 +56,11 @@ public final class CreateFlagRequestBody {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return Deprecated. On create, the value a check returns in every environment until that environment has a default rule. Ignored on update: flags are account-wide and rules are per environment, so set an environment's default through its default rule via the flag rules endpoint
+     */
     @JsonProperty("default_value")
-    public boolean getDefaultValue() {
+    public Optional<Boolean> getDefaultValue() {
         return defaultValue;
     }
 
@@ -103,7 +106,7 @@ public final class CreateFlagRequestBody {
     }
 
     private boolean equalTo(CreateFlagRequestBody other) {
-        return defaultValue == other.defaultValue
+        return defaultValue.equals(other.defaultValue)
                 && description.equals(other.description)
                 && featureId.equals(other.featureId)
                 && flagType.equals(other.flagType)
@@ -129,18 +132,14 @@ public final class CreateFlagRequestBody {
         return ObjectMappers.stringify(this);
     }
 
-    public static DefaultValueStage builder() {
+    public static DescriptionStage builder() {
         return new Builder();
-    }
-
-    public interface DefaultValueStage {
-        DescriptionStage defaultValue(boolean defaultValue);
-
-        Builder from(CreateFlagRequestBody other);
     }
 
     public interface DescriptionStage {
         FlagTypeStage description(@NotNull String description);
+
+        Builder from(CreateFlagRequestBody other);
     }
 
     public interface FlagTypeStage {
@@ -162,6 +161,13 @@ public final class CreateFlagRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Deprecated. On create, the value a check returns in every environment until that environment has a default rule. Ignored on update: flags are account-wide and rules are per environment, so set an environment's default through its default rule via the flag rules endpoint</p>
+         */
+        _FinalStage defaultValue(Optional<Boolean> defaultValue);
+
+        _FinalStage defaultValue(Boolean defaultValue);
+
         _FinalStage featureId(Optional<String> featureId);
 
         _FinalStage featureId(String featureId);
@@ -172,10 +178,7 @@ public final class CreateFlagRequestBody {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements DefaultValueStage, DescriptionStage, FlagTypeStage, KeyStage, NameStage, _FinalStage {
-        private boolean defaultValue;
-
+    public static final class Builder implements DescriptionStage, FlagTypeStage, KeyStage, NameStage, _FinalStage {
         private String description;
 
         private String flagType;
@@ -188,7 +191,8 @@ public final class CreateFlagRequestBody {
 
         private Optional<String> featureId = Optional.empty();
 
-        @JsonAnySetter
+        private Optional<Boolean> defaultValue = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -202,13 +206,6 @@ public final class CreateFlagRequestBody {
             key(other.getKey());
             maintainerAccountMemberId(other.getMaintainerAccountMemberId());
             name(other.getName());
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("default_value")
-        public DescriptionStage defaultValue(boolean defaultValue) {
-            this.defaultValue = defaultValue;
             return this;
         }
 
@@ -266,6 +263,26 @@ public final class CreateFlagRequestBody {
             return this;
         }
 
+        /**
+         * <p>Deprecated. On create, the value a check returns in every environment until that environment has a default rule. Ignored on update: flags are account-wide and rules are per environment, so set an environment's default through its default rule via the flag rules endpoint</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage defaultValue(Boolean defaultValue) {
+            this.defaultValue = Optional.ofNullable(defaultValue);
+            return this;
+        }
+
+        /**
+         * <p>Deprecated. On create, the value a check returns in every environment until that environment has a default rule. Ignored on update: flags are account-wide and rules are per environment, so set an environment's default through its default rule via the flag rules endpoint</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "default_value", nulls = Nulls.SKIP)
+        public _FinalStage defaultValue(Optional<Boolean> defaultValue) {
+            this.defaultValue = defaultValue;
+            return this;
+        }
+
         @java.lang.Override
         public CreateFlagRequestBody build() {
             return new CreateFlagRequestBody(
@@ -277,6 +294,20 @@ public final class CreateFlagRequestBody {
                     maintainerAccountMemberId,
                     name,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("default_value")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("flag_type")
+                    || key.equalsIgnoreCase("key")
+                    || key.equalsIgnoreCase("maintainer_account_member_id")
+                    || key.equalsIgnoreCase("name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

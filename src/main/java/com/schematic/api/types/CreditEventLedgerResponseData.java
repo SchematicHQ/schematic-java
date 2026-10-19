@@ -735,7 +735,6 @@ public final class CreditEventLedgerResponseData {
 
         private Optional<String> autoTopupLogId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1283,6 +1282,51 @@ public final class CreditEventLedgerResponseData {
                     userId,
                     zeroedOutReason,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount")
+                    || key.equalsIgnoreCase("auto_topup_log_id")
+                    || key.equalsIgnoreCase("billing_credit_bundle_id")
+                    || key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("burn_breakdown")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("credit")
+                    || key.equalsIgnoreCase("credit_name")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("event_at")
+                    || key.equalsIgnoreCase("event_id")
+                    || key.equalsIgnoreCase("event_ids")
+                    || key.equalsIgnoreCase("event_type")
+                    || key.equalsIgnoreCase("expiry_type")
+                    || key.equalsIgnoreCase("expiry_unit")
+                    || key.equalsIgnoreCase("expiry_unit_count")
+                    || key.equalsIgnoreCase("feature")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("from_grant_id")
+                    || key.equalsIgnoreCase("grant_expires_at")
+                    || key.equalsIgnoreCase("grant_id")
+                    || key.equalsIgnoreCase("grant_quantity")
+                    || key.equalsIgnoreCase("grant_quantity_remaining")
+                    || key.equalsIgnoreCase("grant_reason")
+                    || key.equalsIgnoreCase("grant_valid_from")
+                    || key.equalsIgnoreCase("kind")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("quantity_consumed")
+                    || key.equalsIgnoreCase("quantity_remaining_at_zero_out")
+                    || key.equalsIgnoreCase("source_id")
+                    || key.equalsIgnoreCase("to_grant_id")
+                    || key.equalsIgnoreCase("transfer_reason")
+                    || key.equalsIgnoreCase("usage_event_id")
+                    || key.equalsIgnoreCase("usage_reason")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("zeroed_out_reason")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

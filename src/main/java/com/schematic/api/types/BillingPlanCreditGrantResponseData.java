@@ -1012,7 +1012,6 @@ public final class BillingPlanCreditGrantResponseData {
 
         private Optional<BillingArrearsAnchor> arrearsAnchor = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1762,6 +1761,59 @@ public final class BillingPlanCreditGrantResponseData {
                     unitPriceDecimal,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("arrears_anchor")
+                    || key.equalsIgnoreCase("arrears_cadence")
+                    || key.equalsIgnoreCase("auto_topup_amount")
+                    || key.equalsIgnoreCase("auto_topup_amount_type")
+                    || key.equalsIgnoreCase("auto_topup_availability")
+                    || key.equalsIgnoreCase("auto_topup_enabled")
+                    || key.equalsIgnoreCase("auto_topup_expiry_type")
+                    || key.equalsIgnoreCase("auto_topup_expiry_unit")
+                    || key.equalsIgnoreCase("auto_topup_expiry_unit_count")
+                    || key.equalsIgnoreCase("auto_topup_self_service")
+                    || key.equalsIgnoreCase("auto_topup_threshold_credits")
+                    || key.equalsIgnoreCase("auto_topup_threshold_percent")
+                    || key.equalsIgnoreCase("billing_mode")
+                    || key.equalsIgnoreCase("can_buy_bundles")
+                    || key.equalsIgnoreCase("company_credit_amount")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("credit")
+                    || key.equalsIgnoreCase("credit_amount")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("credit_name")
+                    || key.equalsIgnoreCase("credit_plural_name")
+                    || key.equalsIgnoreCase("credit_singular_name")
+                    || key.equalsIgnoreCase("expiry_type")
+                    || key.equalsIgnoreCase("expiry_unit")
+                    || key.equalsIgnoreCase("expiry_unit_count")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("license_id")
+                    || key.equalsIgnoreCase("overdraft_limit")
+                    || key.equalsIgnoreCase("plan")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_name")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("postpaid_enabled")
+                    || key.equalsIgnoreCase("postpaid_rate_per_unit")
+                    || key.equalsIgnoreCase("postpaid_rate_per_unit_decimal")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("price_tiers")
+                    || key.equalsIgnoreCase("reset_cadence")
+                    || key.equalsIgnoreCase("reset_start")
+                    || key.equalsIgnoreCase("reset_type")
+                    || key.equalsIgnoreCase("rollover_percentage")
+                    || key.equalsIgnoreCase("scaling")
+                    || key.equalsIgnoreCase("tier_mode")
+                    || key.equalsIgnoreCase("unit_price")
+                    || key.equalsIgnoreCase("unit_price_decimal")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

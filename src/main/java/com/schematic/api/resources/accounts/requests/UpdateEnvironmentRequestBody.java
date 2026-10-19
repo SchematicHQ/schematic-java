@@ -94,7 +94,6 @@ public final class UpdateEnvironmentRequestBody {
 
         private Optional<Boolean> requireContextSignature = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -142,6 +141,16 @@ public final class UpdateEnvironmentRequestBody {
         public UpdateEnvironmentRequestBody build() {
             return new UpdateEnvironmentRequestBody(
                     environmentType, name, requireContextSignature, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("environment_type")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("require_context_signature")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -102,7 +102,7 @@ public final class PlanVersionDiffResponseData {
     }
 
     /**
-     * @return Plan-level fields that changed: name, description, icon, and charge_type.
+     * @return Plan-level fields that changed: name, description, icon, charge_type, billing_strategy, is_trialable, and trial_days.
      */
     @JsonProperty("plan_fields")
     public List<PlanVersionFieldChangeResponseData> getPlanFields() {
@@ -218,7 +218,7 @@ public final class PlanVersionDiffResponseData {
         _FinalStage from(PlanVersionResponseData from);
 
         /**
-         * <p>Plan-level fields that changed: name, description, icon, and charge_type.</p>
+         * <p>Plan-level fields that changed: name, description, icon, charge_type, billing_strategy, is_trialable, and trial_days.</p>
          */
         _FinalStage planFields(List<PlanVersionFieldChangeResponseData> planFields);
 
@@ -261,7 +261,6 @@ public final class PlanVersionDiffResponseData {
 
         private Optional<PlanVersionBillingProductChangeResponseData> billingProduct = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -346,7 +345,7 @@ public final class PlanVersionDiffResponseData {
         }
 
         /**
-         * <p>Plan-level fields that changed: name, description, icon, and charge_type.</p>
+         * <p>Plan-level fields that changed: name, description, icon, charge_type, billing_strategy, is_trialable, and trial_days.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -358,7 +357,7 @@ public final class PlanVersionDiffResponseData {
         }
 
         /**
-         * <p>Plan-level fields that changed: name, description, icon, and charge_type.</p>
+         * <p>Plan-level fields that changed: name, description, icon, charge_type, billing_strategy, is_trialable, and trial_days.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -368,7 +367,7 @@ public final class PlanVersionDiffResponseData {
         }
 
         /**
-         * <p>Plan-level fields that changed: name, description, icon, and charge_type.</p>
+         * <p>Plan-level fields that changed: name, description, icon, charge_type, billing_strategy, is_trialable, and trial_days.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "plan_fields", nulls = Nulls.SKIP)
@@ -502,6 +501,21 @@ public final class PlanVersionDiffResponseData {
                     prices,
                     to,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_product")
+                    || key.equalsIgnoreCase("credit_grants")
+                    || key.equalsIgnoreCase("entitlements")
+                    || key.equalsIgnoreCase("from")
+                    || key.equalsIgnoreCase("has_billing_changes")
+                    || key.equalsIgnoreCase("plan_fields")
+                    || key.equalsIgnoreCase("prices")
+                    || key.equalsIgnoreCase("to")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

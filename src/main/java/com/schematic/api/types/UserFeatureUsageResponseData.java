@@ -195,7 +195,6 @@ public final class UserFeatureUsageResponseData {
 
         private Optional<FeatureResponseData> feature = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -301,6 +300,19 @@ public final class UserFeatureUsageResponseData {
         public UserFeatureUsageResponseData build() {
             return new UserFeatureUsageResponseData(
                     feature, lastSeen, share, user, userId, value, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature")
+                    || key.equalsIgnoreCase("last_seen")
+                    || key.equalsIgnoreCase("share")
+                    || key.equalsIgnoreCase("user")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

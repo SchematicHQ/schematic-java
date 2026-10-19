@@ -109,7 +109,6 @@ public final class UpsertBillingProductPlanResponse {
 
         private Map<String, JsonNode> params = new LinkedHashMap<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -166,6 +165,14 @@ public final class UpsertBillingProductPlanResponse {
         @java.lang.Override
         public UpsertBillingProductPlanResponse build() {
             return new UpsertBillingProductPlanResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

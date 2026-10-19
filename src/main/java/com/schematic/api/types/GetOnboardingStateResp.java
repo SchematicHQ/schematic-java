@@ -242,7 +242,6 @@ public final class GetOnboardingStateResp {
 
         private Optional<String> websiteUrl = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -466,6 +465,27 @@ public final class GetOnboardingStateResp {
                     track,
                     websiteUrl,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("agent_connected_at")
+                    || key.equalsIgnoreCase("country")
+                    || key.equalsIgnoreCase("dismissed_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("milestones")
+                    || key.equalsIgnoreCase("path")
+                    || key.equalsIgnoreCase("pricing_page_url")
+                    || key.equalsIgnoreCase("requirements")
+                    || key.equalsIgnoreCase("roadmap")
+                    || key.equalsIgnoreCase("slack_connect")
+                    || key.equalsIgnoreCase("stripe_import")
+                    || key.equalsIgnoreCase("suggested_next")
+                    || key.equalsIgnoreCase("track")
+                    || key.equalsIgnoreCase("website_url")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

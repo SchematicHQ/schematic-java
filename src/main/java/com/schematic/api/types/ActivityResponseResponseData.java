@@ -69,7 +69,6 @@ public final class ActivityResponseResponseData {
     public static final class Builder {
         private List<ActivityEntryResponseData> entries = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -102,6 +101,14 @@ public final class ActivityResponseResponseData {
 
         public ActivityResponseResponseData build() {
             return new ActivityResponseResponseData(entries, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("entries")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -739,7 +739,6 @@ public final class CreatePlanEntitlementRequestBody {
 
         private Optional<String> billingProductId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1325,6 +1324,50 @@ public final class CreatePlanEntitlementRequestBody {
                     yearlyUnitPrice,
                     yearlyUnitPriceDecimal,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_product_id")
+                    || key.equalsIgnoreCase("billing_threshold")
+                    || key.equalsIgnoreCase("credit_consumption_rate")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("metric_period")
+                    || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("monthly_metered_price_id")
+                    || key.equalsIgnoreCase("monthly_price_tiers")
+                    || key.equalsIgnoreCase("monthly_unit_price")
+                    || key.equalsIgnoreCase("monthly_unit_price_decimal")
+                    || key.equalsIgnoreCase("overage_billing_cadence")
+                    || key.equalsIgnoreCase("overage_billing_product_id")
+                    || key.equalsIgnoreCase("overage_invoice_anchor")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("price_behavior")
+                    || key.equalsIgnoreCase("price_tiers")
+                    || key.equalsIgnoreCase("quantity_rates")
+                    || key.equalsIgnoreCase("quarterly_metered_price_id")
+                    || key.equalsIgnoreCase("quarterly_price_tiers")
+                    || key.equalsIgnoreCase("quarterly_unit_price")
+                    || key.equalsIgnoreCase("quarterly_unit_price_decimal")
+                    || key.equalsIgnoreCase("soft_limit")
+                    || key.equalsIgnoreCase("tier_mode")
+                    || key.equalsIgnoreCase("usage_quantity")
+                    || key.equalsIgnoreCase("value_bool")
+                    || key.equalsIgnoreCase("value_credit_id")
+                    || key.equalsIgnoreCase("value_numeric")
+                    || key.equalsIgnoreCase("value_trait_id")
+                    || key.equalsIgnoreCase("value_type")
+                    || key.equalsIgnoreCase("warning_tiers")
+                    || key.equalsIgnoreCase("yearly_metered_price_id")
+                    || key.equalsIgnoreCase("yearly_price_tiers")
+                    || key.equalsIgnoreCase("yearly_unit_price")
+                    || key.equalsIgnoreCase("yearly_unit_price_decimal")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -170,7 +170,6 @@ public final class CreditTransferView {
 
         private String relatedGrantId;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -232,6 +231,19 @@ public final class CreditTransferView {
         public CreditTransferView build() {
             return new CreditTransferView(
                     amount, createdAt, direction, id, reason, relatedGrantId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("direction")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("reason")
+                    || key.equalsIgnoreCase("related_grant_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

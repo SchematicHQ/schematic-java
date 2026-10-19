@@ -111,7 +111,6 @@ public final class MeterRequestBody {
 
         private String eventPayloadKey;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -148,6 +147,16 @@ public final class MeterRequestBody {
         @java.lang.Override
         public MeterRequestBody build() {
             return new MeterRequestBody(displayName, eventName, eventPayloadKey, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("display_name")
+                    || key.equalsIgnoreCase("event_name")
+                    || key.equalsIgnoreCase("event_payload_key")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

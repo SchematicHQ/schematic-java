@@ -188,7 +188,6 @@ public final class ListFeatureUsageParams {
 
         private Optional<Boolean> withoutNegativeEntitlements = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -329,6 +328,22 @@ public final class ListFeatureUsageParams {
                     q,
                     withoutNegativeEntitlements,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("company_keys")
+                    || key.equalsIgnoreCase("feature_ids")
+                    || key.equalsIgnoreCase("include_usage_aggregation")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("managed_by")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("without_negative_entitlements")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

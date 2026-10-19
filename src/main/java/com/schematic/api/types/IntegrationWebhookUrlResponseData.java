@@ -95,7 +95,6 @@ public final class IntegrationWebhookUrlResponseData {
 
         private String url;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -124,6 +123,14 @@ public final class IntegrationWebhookUrlResponseData {
         @java.lang.Override
         public IntegrationWebhookUrlResponseData build() {
             return new IntegrationWebhookUrlResponseData(type, url, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("type") || key.equalsIgnoreCase("url")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

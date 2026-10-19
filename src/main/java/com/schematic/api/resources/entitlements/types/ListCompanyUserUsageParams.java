@@ -165,7 +165,6 @@ public final class ListCompanyUserUsageParams {
 
         private Optional<OffsetDateTime> startTime = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -282,6 +281,20 @@ public final class ListCompanyUserUsageParams {
         public ListCompanyUserUsageParams build() {
             return new ListCompanyUserUsageParams(
                     companyId, endTime, featureId, limit, metric, offset, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("metric")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

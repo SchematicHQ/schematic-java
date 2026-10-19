@@ -109,7 +109,6 @@ public final class StripeSandboxKeysResponseData {
 
         private String secret;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -146,6 +145,14 @@ public final class StripeSandboxKeysResponseData {
         @java.lang.Override
         public StripeSandboxKeysResponseData build() {
             return new StripeSandboxKeysResponseData(mcp, publishable, secret, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("mcp") || key.equalsIgnoreCase("publishable") || key.equalsIgnoreCase("secret")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

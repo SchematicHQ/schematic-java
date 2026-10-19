@@ -164,7 +164,6 @@ public final class BillingCreditLedgerResponseData {
 
         private Optional<String> description = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -250,6 +249,19 @@ public final class BillingCreditLedgerResponseData {
         public BillingCreditLedgerResponseData build() {
             return new BillingCreditLedgerResponseData(
                     description, icon, id, name, pluralName, singularName, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("plural_name")
+                    || key.equalsIgnoreCase("singular_name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

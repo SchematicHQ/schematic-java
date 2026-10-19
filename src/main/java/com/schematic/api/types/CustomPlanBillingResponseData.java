@@ -466,7 +466,6 @@ public final class CustomPlanBillingResponseData {
 
         private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -781,6 +780,33 @@ public final class CustomPlanBillingResponseData {
                     stripeInvoiceUrl,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("activation_strategy")
+                    || key.equalsIgnoreCase("billing_cycle_anchor")
+                    || key.equalsIgnoreCase("billing_start_date")
+                    || key.equalsIgnoreCase("checkout_id")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("days_until_due")
+                    || key.equalsIgnoreCase("external_invoice_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("migration_id")
+                    || key.equalsIgnoreCase("paid_at")
+                    || key.equalsIgnoreCase("plan_billing_source")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("problems")
+                    || key.equalsIgnoreCase("prorate_first_period")
+                    || key.equalsIgnoreCase("published_at")
+                    || key.equalsIgnoreCase("send_invoice")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("stripe_invoice_url")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

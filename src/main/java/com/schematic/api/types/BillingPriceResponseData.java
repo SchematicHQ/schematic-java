@@ -247,7 +247,6 @@ public final class BillingPriceResponseData {
 
         private Optional<String> nickname = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -363,6 +362,23 @@ public final class BillingPriceResponseData {
                     providerType,
                     scheme,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("external_price_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("interval_count")
+                    || key.equalsIgnoreCase("nickname")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("price_decimal")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("scheme")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

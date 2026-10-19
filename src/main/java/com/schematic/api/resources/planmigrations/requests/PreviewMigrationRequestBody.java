@@ -151,7 +151,6 @@ public final class PreviewMigrationRequestBody {
 
         private Optional<List<String>> companyIds = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -217,6 +216,18 @@ public final class PreviewMigrationRequestBody {
         public PreviewMigrationRequestBody build() {
             return new PreviewMigrationRequestBody(
                     companyIds, planId, planVersionIdTo, planVersionIdsFrom, targetPlanType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_ids")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_version_id_to")
+                    || key.equalsIgnoreCase("plan_version_ids_from")
+                    || key.equalsIgnoreCase("target_plan_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

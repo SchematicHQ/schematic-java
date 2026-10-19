@@ -189,7 +189,6 @@ public final class WebScheduledDowngradeWebhookOutput {
 
         private Optional<CompanyResponseData> company = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -296,6 +295,20 @@ public final class WebScheduledDowngradeWebhookOutput {
                     scheduledPrice,
                     toPlan,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("execute_after")
+                    || key.equalsIgnoreCase("from_plan")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("scheduled_interval")
+                    || key.equalsIgnoreCase("scheduled_price")
+                    || key.equalsIgnoreCase("to_plan")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -17,7 +17,6 @@ import com.schematic.api.resources.plans.requests.ListBillingProductMatchCompani
 import com.schematic.api.resources.plans.requests.ListCustomPlanBillingsRequest;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
 import com.schematic.api.resources.plans.requests.ListPlansRequest;
-import com.schematic.api.resources.plans.requests.PublishPlanVersionRequestBody;
 import com.schematic.api.resources.plans.requests.RetryCustomPlanBillingRequestBody;
 import com.schematic.api.resources.plans.requests.UpdateCompanyPlansRequestBody;
 import com.schematic.api.resources.plans.types.CountBillingProductMatchCompaniesResponse;
@@ -33,6 +32,7 @@ import com.schematic.api.resources.plans.types.ListCustomPlanBillingsResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
 import com.schematic.api.resources.plans.types.ListPlansResponse;
 import com.schematic.api.resources.plans.types.MarkCustomPlanBillingPaidResponse;
+import com.schematic.api.resources.plans.types.PreviewPublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.PublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.RetryCustomPlanBillingResponse;
 import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
@@ -40,6 +40,7 @@ import com.schematic.api.resources.plans.types.UpdatePlanResponse;
 import com.schematic.api.resources.plans.types.UpsertBillingProductPlanResponse;
 import com.schematic.api.resources.plans.types.UpsertPlanForBillingProductResponse;
 import com.schematic.api.types.CreatePlanRequestBody;
+import com.schematic.api.types.PublishPlanVersionRequestBody;
 import com.schematic.api.types.UpdatePlanRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
 import java.util.Map;
@@ -299,6 +300,18 @@ public class PlansClient {
             String planVersionId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
         return this.rawClient
                 .publishPlanVersion(planVersionId, request, requestOptions)
+                .body();
+    }
+
+    public PreviewPublishPlanVersionResponse previewPublishPlanVersion(
+            String planVersionId, PublishPlanVersionRequestBody request) {
+        return this.rawClient.previewPublishPlanVersion(planVersionId, request).body();
+    }
+
+    public PreviewPublishPlanVersionResponse previewPublishPlanVersion(
+            String planVersionId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .previewPublishPlanVersion(planVersionId, request, requestOptions)
                 .body();
     }
 }

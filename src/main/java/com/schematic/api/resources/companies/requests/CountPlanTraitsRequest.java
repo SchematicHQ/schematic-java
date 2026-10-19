@@ -137,7 +137,6 @@ public final class CountPlanTraitsRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -236,6 +235,19 @@ public final class CountPlanTraitsRequest {
 
         public CountPlanTraitsRequest build() {
             return new CountPlanTraitsRequest(ids, traitIds, planId, traitId, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("trait_ids")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("trait_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

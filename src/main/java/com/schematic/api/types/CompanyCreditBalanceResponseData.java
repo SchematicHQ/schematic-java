@@ -165,7 +165,6 @@ public final class CompanyCreditBalanceResponseData {
 
         private Optional<Double> total = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -233,6 +232,19 @@ public final class CompanyCreditBalanceResponseData {
         public CompanyCreditBalanceResponseData build() {
             return new CompanyCreditBalanceResponseData(
                     creditId, remaining, reserved, settled, source, total, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("remaining")
+                    || key.equalsIgnoreCase("reserved")
+                    || key.equalsIgnoreCase("settled")
+                    || key.equalsIgnoreCase("source")
+                    || key.equalsIgnoreCase("total")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

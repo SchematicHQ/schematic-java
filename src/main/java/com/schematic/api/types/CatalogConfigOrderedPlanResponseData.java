@@ -120,7 +120,6 @@ public final class CatalogConfigOrderedPlanResponseData {
 
         private List<CatalogConfigPlanCreditResponseData> credits = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -191,6 +190,16 @@ public final class CatalogConfigOrderedPlanResponseData {
         @java.lang.Override
         public CatalogConfigOrderedPlanResponseData build() {
             return new CatalogConfigOrderedPlanResponseData(credits, entitlements, planId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credits")
+                    || key.equalsIgnoreCase("entitlements")
+                    || key.equalsIgnoreCase("plan_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

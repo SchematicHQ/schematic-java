@@ -100,7 +100,6 @@ public final class CompatiblePlans {
 
         private List<String> compatiblePlanIds = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -146,6 +145,14 @@ public final class CompatiblePlans {
         @java.lang.Override
         public CompatiblePlans build() {
             return new CompatiblePlans(compatiblePlanIds, sourcePlanId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("compatible_plan_ids") || key.equalsIgnoreCase("source_plan_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

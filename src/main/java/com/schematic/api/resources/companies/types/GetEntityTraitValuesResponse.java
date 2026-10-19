@@ -107,7 +107,6 @@ public final class GetEntityTraitValuesResponse {
 
         private List<EntityTraitValue> data = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -157,6 +156,14 @@ public final class GetEntityTraitValuesResponse {
         @java.lang.Override
         public GetEntityTraitValuesResponse build() {
             return new GetEntityTraitValuesResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

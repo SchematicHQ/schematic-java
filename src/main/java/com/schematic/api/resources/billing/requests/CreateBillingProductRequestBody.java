@@ -149,7 +149,6 @@ public final class CreateBillingProductRequestBody {
 
         private Optional<Boolean> isActive = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -221,6 +220,18 @@ public final class CreateBillingProductRequestBody {
         public CreateBillingProductRequestBody build() {
             return new CreateBillingProductRequestBody(
                     externalId, isActive, name, price, providerType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("is_active")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("provider_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

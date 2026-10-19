@@ -459,7 +459,6 @@ public final class FeatureInPlanResponseData {
 
         private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -780,6 +779,34 @@ public final class FeatureInPlanResponseData {
                     updatedAt,
                     usageLimitTraitId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_linked_resource")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("event_source")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("event_summary")
+                    || key.equalsIgnoreCase("feature_type")
+                    || key.equalsIgnoreCase("flags")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("license_id")
+                    || key.equalsIgnoreCase("lifecycle_phase")
+                    || key.equalsIgnoreCase("maintainer_account_member_id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("plans")
+                    || key.equalsIgnoreCase("plural_name")
+                    || key.equalsIgnoreCase("singular_name")
+                    || key.equalsIgnoreCase("trait")
+                    || key.equalsIgnoreCase("trait_id")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("usage_limit_trait_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

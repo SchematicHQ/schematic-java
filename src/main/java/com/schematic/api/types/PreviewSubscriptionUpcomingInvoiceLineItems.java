@@ -148,7 +148,6 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
 
         private long quantity;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -202,6 +201,18 @@ public final class PreviewSubscriptionUpcomingInvoiceLineItems {
         public PreviewSubscriptionUpcomingInvoiceLineItems build() {
             return new PreviewSubscriptionUpcomingInvoiceLineItems(
                     amount, description, priceId, proration, quantity, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("price_id")
+                    || key.equalsIgnoreCase("proration")
+                    || key.equalsIgnoreCase("quantity")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

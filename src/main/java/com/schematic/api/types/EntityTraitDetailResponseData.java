@@ -195,7 +195,6 @@ public final class EntityTraitDetailResponseData {
 
         private Optional<EntityTraitDefinitionResponseData> definition = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -271,6 +270,20 @@ public final class EntityTraitDetailResponseData {
         public EntityTraitDetailResponseData build() {
             return new EntityTraitDetailResponseData(
                     createdAt, definition, definitionId, environmentId, id, updatedAt, value, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("definition")
+                    || key.equalsIgnoreCase("definition_id")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

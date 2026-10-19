@@ -168,7 +168,6 @@ public final class CreditsCreditPurchaseSuccess {
 
         private Optional<CreditsWebhookCompanySummary> company = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -259,6 +258,19 @@ public final class CreditsCreditPurchaseSuccess {
         public CreditsCreditPurchaseSuccess build() {
             return new CreditsCreditPurchaseSuccess(
                     bundleId, bundleName, company, credit, grantIds, quantity, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("bundle_id")
+                    || key.equalsIgnoreCase("bundle_name")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("credit")
+                    || key.equalsIgnoreCase("grant_ids")
+                    || key.equalsIgnoreCase("quantity")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

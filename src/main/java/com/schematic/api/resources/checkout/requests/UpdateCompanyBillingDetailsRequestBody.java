@@ -123,7 +123,6 @@ public final class UpdateCompanyBillingDetailsRequestBody {
 
         private List<CheckoutFieldValue> values = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -205,6 +204,18 @@ public final class UpdateCompanyBillingDetailsRequestBody {
         public UpdateCompanyBillingDetailsRequestBody build() {
             return new UpdateCompanyBillingDetailsRequestBody(
                     address, email, phone, taxId, values, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("address")
+                    || key.equalsIgnoreCase("email")
+                    || key.equalsIgnoreCase("phone")
+                    || key.equalsIgnoreCase("tax_id")
+                    || key.equalsIgnoreCase("values")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

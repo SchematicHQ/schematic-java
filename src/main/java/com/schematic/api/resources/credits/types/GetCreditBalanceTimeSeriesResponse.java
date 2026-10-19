@@ -105,7 +105,6 @@ public final class GetCreditBalanceTimeSeriesResponse {
 
         private GetCreditBalanceTimeSeriesParams params;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -138,6 +137,14 @@ public final class GetCreditBalanceTimeSeriesResponse {
         @java.lang.Override
         public GetCreditBalanceTimeSeriesResponse build() {
             return new GetCreditBalanceTimeSeriesResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -149,7 +149,6 @@ public final class UpsertOtlpEnvironmentSettingsRequestBody {
 
         private Optional<String> companyAttribute = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -227,6 +226,18 @@ public final class UpsertOtlpEnvironmentSettingsRequestBody {
         public UpsertOtlpEnvironmentSettingsRequestBody build() {
             return new UpsertOtlpEnvironmentSettingsRequestBody(
                     companyAttribute, companyKey, toolEventsEnabled, userAttribute, userKey, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_attribute")
+                    || key.equalsIgnoreCase("company_key")
+                    || key.equalsIgnoreCase("tool_events_enabled")
+                    || key.equalsIgnoreCase("user_attribute")
+                    || key.equalsIgnoreCase("user_key")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

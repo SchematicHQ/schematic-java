@@ -382,7 +382,6 @@ public final class UsageBasedEntitlementRequestBody {
 
         private Optional<String> yearlyUnitPriceDecimal = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -718,6 +717,37 @@ public final class UsageBasedEntitlementRequestBody {
                     yearlyUnitPrice,
                     yearlyUnitPriceDecimal,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_product_id")
+                    || key.equalsIgnoreCase("billing_threshold")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("monthly_metered_price_id")
+                    || key.equalsIgnoreCase("monthly_price_tiers")
+                    || key.equalsIgnoreCase("monthly_unit_price")
+                    || key.equalsIgnoreCase("monthly_unit_price_decimal")
+                    || key.equalsIgnoreCase("overage_billing_cadence")
+                    || key.equalsIgnoreCase("overage_billing_product_id")
+                    || key.equalsIgnoreCase("overage_invoice_anchor")
+                    || key.equalsIgnoreCase("price_behavior")
+                    || key.equalsIgnoreCase("price_tiers")
+                    || key.equalsIgnoreCase("quarterly_metered_price_id")
+                    || key.equalsIgnoreCase("quarterly_price_tiers")
+                    || key.equalsIgnoreCase("quarterly_unit_price")
+                    || key.equalsIgnoreCase("quarterly_unit_price_decimal")
+                    || key.equalsIgnoreCase("soft_limit")
+                    || key.equalsIgnoreCase("tier_mode")
+                    || key.equalsIgnoreCase("usage_quantity")
+                    || key.equalsIgnoreCase("yearly_metered_price_id")
+                    || key.equalsIgnoreCase("yearly_price_tiers")
+                    || key.equalsIgnoreCase("yearly_unit_price")
+                    || key.equalsIgnoreCase("yearly_unit_price_decimal")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

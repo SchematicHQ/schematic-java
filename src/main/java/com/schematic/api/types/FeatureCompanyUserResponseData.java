@@ -333,7 +333,6 @@ public final class FeatureCompanyUserResponseData {
 
         private Optional<Long> allocation = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -561,6 +560,26 @@ public final class FeatureCompanyUserResponseData {
                     usage,
                     user,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("access")
+                    || key.equalsIgnoreCase("allocation")
+                    || key.equalsIgnoreCase("allocation_type")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("entitlement_id")
+                    || key.equalsIgnoreCase("entitlement_type")
+                    || key.equalsIgnoreCase("feature")
+                    || key.equalsIgnoreCase("metric_reset_at")
+                    || key.equalsIgnoreCase("month_reset")
+                    || key.equalsIgnoreCase("period")
+                    || key.equalsIgnoreCase("plan")
+                    || key.equalsIgnoreCase("usage")
+                    || key.equalsIgnoreCase("user")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

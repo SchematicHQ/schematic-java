@@ -169,7 +169,6 @@ public final class CountBillingPlanCreditGrantsParams {
 
         private Optional<List<String>> planVersionIds = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -283,6 +282,21 @@ public final class CountBillingPlanCreditGrantsParams {
         public CountBillingPlanCreditGrantsParams build() {
             return new CountBillingPlanCreditGrantsParams(
                     creditId, ids, limit, offset, planId, planIds, planVersionId, planVersionIds, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_ids")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("plan_version_ids")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

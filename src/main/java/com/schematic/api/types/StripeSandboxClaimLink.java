@@ -133,7 +133,6 @@ public final class StripeSandboxClaimLink {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -184,6 +183,17 @@ public final class StripeSandboxClaimLink {
         @java.lang.Override
         public StripeSandboxClaimLink build() {
             return new StripeSandboxClaimLink(claimUrl, expiresAt, sandboxId, status, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("claim_url")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("sandbox_id")
+                    || key.equalsIgnoreCase("status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

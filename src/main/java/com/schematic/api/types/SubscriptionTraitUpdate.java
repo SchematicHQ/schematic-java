@@ -191,7 +191,6 @@ public final class SubscriptionTraitUpdate {
 
         private List<String> hierarchy = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -278,6 +277,20 @@ public final class SubscriptionTraitUpdate {
         public SubscriptionTraitUpdate build() {
             return new SubscriptionTraitUpdate(
                     featureId, hierarchy, reason, traitId, traitName, traitType, value, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("hierarchy")
+                    || key.equalsIgnoreCase("reason")
+                    || key.equalsIgnoreCase("trait_id")
+                    || key.equalsIgnoreCase("trait_name")
+                    || key.equalsIgnoreCase("trait_type")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

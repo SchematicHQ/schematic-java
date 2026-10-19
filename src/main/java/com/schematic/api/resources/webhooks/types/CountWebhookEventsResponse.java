@@ -102,7 +102,6 @@ public final class CountWebhookEventsResponse {
 
         private CountWebhookEventsParams params;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -135,6 +134,14 @@ public final class CountWebhookEventsResponse {
         @java.lang.Override
         public CountWebhookEventsResponse build() {
             return new CountWebhookEventsResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

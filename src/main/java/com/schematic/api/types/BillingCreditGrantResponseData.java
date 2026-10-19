@@ -681,7 +681,6 @@ public final class BillingCreditGrantResponseData {
 
         private Optional<String> companyLicenseId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1154,6 +1153,46 @@ public final class BillingCreditGrantResponseData {
                     zeroedOutDate,
                     zeroedOutReason,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("company_license_id")
+                    || key.equalsIgnoreCase("company_name")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("credit_bundle_id")
+                    || key.equalsIgnoreCase("credit_icon")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("credit_name")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("grant_reason")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("license_name")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_name")
+                    || key.equalsIgnoreCase("postpaid_charge_amount")
+                    || key.equalsIgnoreCase("postpaid_charge_currency")
+                    || key.equalsIgnoreCase("postpaid_charged_credits")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("quantity_remaining")
+                    || key.equalsIgnoreCase("quantity_used")
+                    || key.equalsIgnoreCase("renewal_enabled")
+                    || key.equalsIgnoreCase("renewal_period")
+                    || key.equalsIgnoreCase("reserved")
+                    || key.equalsIgnoreCase("settled")
+                    || key.equalsIgnoreCase("source_grant_id")
+                    || key.equalsIgnoreCase("source_label")
+                    || key.equalsIgnoreCase("transfers")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("valid_from")
+                    || key.equalsIgnoreCase("zeroed_out_date")
+                    || key.equalsIgnoreCase("zeroed_out_reason")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

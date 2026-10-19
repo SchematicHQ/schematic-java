@@ -156,7 +156,6 @@ public final class CountCreditSpendPoliciesParams {
 
         private Optional<List<String>> userIds = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -258,6 +257,20 @@ public final class CountCreditSpendPoliciesParams {
         public CountCreditSpendPoliciesParams build() {
             return new CountCreditSpendPoliciesParams(
                     billingCreditId, companyId, limit, offset, scopeType, userId, userIds, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("scope_type")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("user_ids")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

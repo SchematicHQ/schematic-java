@@ -446,7 +446,6 @@ public final class UpcomingInvoiceResponseData {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -704,6 +703,34 @@ public final class UpcomingInvoiceResponseData {
                     updatedAt,
                     url,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount_due")
+                    || key.equalsIgnoreCase("amount_paid")
+                    || key.equalsIgnoreCase("amount_remaining")
+                    || key.equalsIgnoreCase("collection_method")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("due_date")
+                    || key.equalsIgnoreCase("ending_balance")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("payment_method_external_id")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("starting_balance")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("subscription_external_id")
+                    || key.equalsIgnoreCase("subtotal")
+                    || key.equalsIgnoreCase("total")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("url")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

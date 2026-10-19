@@ -133,7 +133,6 @@ public final class EntitlementCurrencyPricesResponseData {
 
         private Optional<BillingPriceView> monthlyPrice = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -197,6 +196,17 @@ public final class EntitlementCurrencyPricesResponseData {
         public EntitlementCurrencyPricesResponseData build() {
             return new EntitlementCurrencyPricesResponseData(
                     currency, monthlyPrice, quarterlyPrice, yearlyPrice, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("monthly_price")
+                    || key.equalsIgnoreCase("quarterly_price")
+                    || key.equalsIgnoreCase("yearly_price")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -171,7 +171,6 @@ public final class CompanyBillingDetailsView {
 
         private Optional<CompanyBillingAddressView> address = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -285,6 +284,19 @@ public final class CompanyBillingDetailsView {
         public CompanyBillingDetailsView build() {
             return new CompanyBillingDetailsView(
                     address, checkoutSettings, customFields, email, phone, taxIds, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("address")
+                    || key.equalsIgnoreCase("checkout_settings")
+                    || key.equalsIgnoreCase("custom_fields")
+                    || key.equalsIgnoreCase("email")
+                    || key.equalsIgnoreCase("phone")
+                    || key.equalsIgnoreCase("tax_ids")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

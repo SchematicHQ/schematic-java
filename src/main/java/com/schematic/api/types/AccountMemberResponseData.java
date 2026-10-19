@@ -243,7 +243,6 @@ public final class AccountMemberResponseData {
 
         private Optional<String> email = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -400,6 +399,23 @@ public final class AccountMemberResponseData {
                     role,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("email")
+                    || key.equalsIgnoreCase("first_name")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("image_url")
+                    || key.equalsIgnoreCase("last_name")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("permissions")
+                    || key.equalsIgnoreCase("role")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

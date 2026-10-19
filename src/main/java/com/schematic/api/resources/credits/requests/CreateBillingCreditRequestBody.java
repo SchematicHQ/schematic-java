@@ -295,7 +295,6 @@ public final class CreateBillingCreditRequestBody {
 
         private Optional<BillingCreditBurnStrategy> burnStrategy = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -486,6 +485,26 @@ public final class CreateBillingCreditRequestBody {
                     pluralName,
                     singularName,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("burn_strategy")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("default_expiry_unit")
+                    || key.equalsIgnoreCase("default_expiry_unit_count")
+                    || key.equalsIgnoreCase("default_rollover_policy")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("per_unit_price")
+                    || key.equalsIgnoreCase("per_unit_price_decimal")
+                    || key.equalsIgnoreCase("plural_name")
+                    || key.equalsIgnoreCase("singular_name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

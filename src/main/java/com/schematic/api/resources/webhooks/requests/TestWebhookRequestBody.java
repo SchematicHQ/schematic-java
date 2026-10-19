@@ -81,7 +81,6 @@ public final class TestWebhookRequestBody {
     public static final class Builder implements RequestTypeStage, _FinalStage {
         private WebhookRequestType requestType;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -102,6 +101,14 @@ public final class TestWebhookRequestBody {
         @java.lang.Override
         public TestWebhookRequestBody build() {
             return new TestWebhookRequestBody(requestType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("request_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -426,7 +426,6 @@ public final class CompanyFeatureUsageExportMetadata {
 
         private Optional<Boolean> withoutSubscription = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -810,6 +809,36 @@ public final class CompanyFeatureUsageExportMetadata {
                     withoutPlan,
                     withoutSubscription,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_ids")
+                    || key.equalsIgnoreCase("credit_type_ids")
+                    || key.equalsIgnoreCase("entity_key_definition_ids")
+                    || key.equalsIgnoreCase("entity_trait_definition_ids")
+                    || key.equalsIgnoreCase("feature_ids")
+                    || key.equalsIgnoreCase("has_scheduled_downgrade")
+                    || key.equalsIgnoreCase("monetized_subscriptions")
+                    || key.equalsIgnoreCase("notification_email_recipient_email_addresses")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_ids")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("plan_version_unpublished")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("sort_order_column")
+                    || key.equalsIgnoreCase("sort_order_direction")
+                    || key.equalsIgnoreCase("subscription_statuses")
+                    || key.equalsIgnoreCase("subscription_types")
+                    || key.equalsIgnoreCase("visible_columns")
+                    || key.equalsIgnoreCase("with_entitlement_for")
+                    || key.equalsIgnoreCase("with_subscription")
+                    || key.equalsIgnoreCase("without_feature_override_for")
+                    || key.equalsIgnoreCase("without_plan")
+                    || key.equalsIgnoreCase("without_subscription")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

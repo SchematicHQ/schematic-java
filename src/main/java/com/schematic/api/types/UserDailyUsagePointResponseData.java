@@ -127,7 +127,6 @@ public final class UserDailyUsagePointResponseData {
 
         private Optional<FeatureResponseData> feature = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -178,6 +177,14 @@ public final class UserDailyUsagePointResponseData {
         @java.lang.Override
         public UserDailyUsagePointResponseData build() {
             return new UserDailyUsagePointResponseData(date, feature, value, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("date") || key.equalsIgnoreCase("feature") || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

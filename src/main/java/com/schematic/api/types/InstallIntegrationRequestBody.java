@@ -171,7 +171,6 @@ public final class InstallIntegrationRequestBody {
 
         private Optional<CompanyMatchingCriteria> companyMatchingCriteria = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -269,6 +268,19 @@ public final class InstallIntegrationRequestBody {
                     liveMode,
                     type,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_matching_criteria")
+                    || key.equalsIgnoreCase("company_matching_field")
+                    || key.equalsIgnoreCase("config")
+                    || key.equalsIgnoreCase("is_sandbox")
+                    || key.equalsIgnoreCase("live_mode")
+                    || key.equalsIgnoreCase("type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -133,7 +133,6 @@ public final class SlackConnectInviteView {
 
         private Optional<OffsetDateTime> canResendAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -184,6 +183,17 @@ public final class SlackConnectInviteView {
         @java.lang.Override
         public SlackConnectInviteView build() {
             return new SlackConnectInviteView(canResendAt, email, sentAt, status, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("can_resend_at")
+                    || key.equalsIgnoreCase("email")
+                    || key.equalsIgnoreCase("sent_at")
+                    || key.equalsIgnoreCase("status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

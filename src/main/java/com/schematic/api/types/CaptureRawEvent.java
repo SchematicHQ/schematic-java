@@ -189,7 +189,6 @@ public final class CaptureRawEvent {
 
         private Optional<String> contextSignature = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -284,6 +283,20 @@ public final class CaptureRawEvent {
                     remoteIp,
                     userAgent,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("captured_at")
+                    || key.equalsIgnoreCase("context_signature")
+                    || key.equalsIgnoreCase("context_signature_checked")
+                    || key.equalsIgnoreCase("event_id")
+                    || key.equalsIgnoreCase("raw_bytes")
+                    || key.equalsIgnoreCase("remote_ip")
+                    || key.equalsIgnoreCase("user_agent")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -280,7 +280,6 @@ public final class BillingProductPricing {
 
         private Optional<Long> billingThreshold = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -432,6 +431,25 @@ public final class BillingProductPricing {
                     subscriptionItemExternalId,
                     usageType,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_threshold")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("meter_id")
+                    || key.equalsIgnoreCase("package_size")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("price_decimal")
+                    || key.equalsIgnoreCase("price_external_id")
+                    || key.equalsIgnoreCase("product_external_id")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("subscription_item_external_id")
+                    || key.equalsIgnoreCase("usage_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

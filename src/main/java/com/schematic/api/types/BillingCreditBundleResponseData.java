@@ -467,7 +467,6 @@ public final class BillingCreditBundleResponseData {
 
         private Optional<String> billingInvoiceId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -778,6 +777,35 @@ public final class BillingCreditBundleResponseData {
                     unitPrice,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_invoice_id")
+                    || key.equalsIgnoreCase("bundle_type")
+                    || key.equalsIgnoreCase("compatible_plan_ids")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("credit_description")
+                    || key.equalsIgnoreCase("credit_icon")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("credit_name")
+                    || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("expiry_type")
+                    || key.equalsIgnoreCase("expiry_unit")
+                    || key.equalsIgnoreCase("expiry_unit_count")
+                    || key.equalsIgnoreCase("has_grants")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("plural_name")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("singular_name")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("unit_price")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

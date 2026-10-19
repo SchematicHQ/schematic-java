@@ -213,7 +213,6 @@ public final class TemporaryAccessTokenResponseData {
 
         private Optional<String> apiKeyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -305,6 +304,21 @@ public final class TemporaryAccessTokenResponseData {
                     resourceType,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("api_key_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("expired_at")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("issuer_type")
+                    || key.equalsIgnoreCase("resource_type")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

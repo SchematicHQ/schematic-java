@@ -78,7 +78,6 @@ public final class DeleteCompanyRequest {
 
         private Optional<Boolean> prorate = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -113,6 +112,14 @@ public final class DeleteCompanyRequest {
 
         public DeleteCompanyRequest build() {
             return new DeleteCompanyRequest(cancelSubscription, prorate, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("cancel_subscription") || key.equalsIgnoreCase("prorate")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

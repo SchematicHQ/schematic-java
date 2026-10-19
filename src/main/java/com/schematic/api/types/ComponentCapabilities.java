@@ -93,7 +93,6 @@ public final class ComponentCapabilities {
 
         private boolean checkout;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -122,6 +121,14 @@ public final class ComponentCapabilities {
         @java.lang.Override
         public ComponentCapabilities build() {
             return new ComponentCapabilities(badgeVisibility, checkout, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("badge_visibility") || key.equalsIgnoreCase("checkout")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

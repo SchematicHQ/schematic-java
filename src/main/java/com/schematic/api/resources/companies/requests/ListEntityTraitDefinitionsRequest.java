@@ -152,7 +152,6 @@ public final class ListEntityTraitDefinitionsRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -264,6 +263,20 @@ public final class ListEntityTraitDefinitionsRequest {
         public ListEntityTraitDefinitionsRequest build() {
             return new ListEntityTraitDefinitionsRequest(
                     ids, traitTypes, entityType, q, traitType, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("trait_types")
+                    || key.equalsIgnoreCase("entity_type")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("trait_type")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

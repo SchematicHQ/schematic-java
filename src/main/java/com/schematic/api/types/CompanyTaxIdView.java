@@ -148,7 +148,6 @@ public final class CompanyTaxIdView {
 
         private Optional<String> verificationStatus = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -207,6 +206,18 @@ public final class CompanyTaxIdView {
         @java.lang.Override
         public CompanyTaxIdView build() {
             return new CompanyTaxIdView(country, id, type, value, verificationStatus, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("country")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("type")
+                    || key.equalsIgnoreCase("value")
+                    || key.equalsIgnoreCase("verification_status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

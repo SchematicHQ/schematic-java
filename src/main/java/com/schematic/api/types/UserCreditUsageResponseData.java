@@ -196,7 +196,6 @@ public final class UserCreditUsageResponseData {
 
         private Optional<UserResponseData> user = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -296,6 +295,19 @@ public final class UserCreditUsageResponseData {
         public UserCreditUsageResponseData build() {
             return new UserCreditUsageResponseData(
                     billingCreditId, creditName, creditsUsed, share, user, userId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("credit_name")
+                    || key.equalsIgnoreCase("credits_used")
+                    || key.equalsIgnoreCase("share")
+                    || key.equalsIgnoreCase("user")
+                    || key.equalsIgnoreCase("user_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

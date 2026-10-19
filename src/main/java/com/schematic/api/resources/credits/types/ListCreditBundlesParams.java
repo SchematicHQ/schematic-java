@@ -137,7 +137,6 @@ public final class ListCreditBundlesParams {
 
         private Optional<BillingCreditBundleStatus> status = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -226,6 +225,19 @@ public final class ListCreditBundlesParams {
 
         public ListCreditBundlesParams build() {
             return new ListCreditBundlesParams(bundleType, creditId, ids, limit, offset, status, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("bundle_type")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

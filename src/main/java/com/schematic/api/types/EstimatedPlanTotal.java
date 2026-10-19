@@ -109,7 +109,6 @@ public final class EstimatedPlanTotal {
 
         private PlanPriceCadence period;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -146,6 +145,14 @@ public final class EstimatedPlanTotal {
         @java.lang.Override
         public EstimatedPlanTotal build() {
             return new EstimatedPlanTotal(amount, currency, period, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount") || key.equalsIgnoreCase("currency") || key.equalsIgnoreCase("period")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

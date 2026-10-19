@@ -156,7 +156,6 @@ public final class BillingPlanCreditGrantPriceTierResponseData {
 
         private Optional<Long> perUnitPrice = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -245,6 +244,17 @@ public final class BillingPlanCreditGrantPriceTierResponseData {
         public BillingPlanCreditGrantPriceTierResponseData build() {
             return new BillingPlanCreditGrantPriceTierResponseData(
                     from, perUnitPrice, perUnitPriceDecimal, to, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("from")
+                    || key.equalsIgnoreCase("per_unit_price")
+                    || key.equalsIgnoreCase("per_unit_price_decimal")
+                    || key.equalsIgnoreCase("to")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

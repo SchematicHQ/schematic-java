@@ -786,7 +786,6 @@ public final class FeatureUsageResponseData {
 
         private Optional<Long> allocation = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1435,6 +1434,48 @@ public final class FeatureUsageResponseData {
                     usage,
                     yearlyUsageBasedPrice,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("access")
+                    || key.equalsIgnoreCase("allocation")
+                    || key.equalsIgnoreCase("allocation_type")
+                    || key.equalsIgnoreCase("company_override")
+                    || key.equalsIgnoreCase("credit_consumption_rate")
+                    || key.equalsIgnoreCase("credit_grant_counts")
+                    || key.equalsIgnoreCase("credit_grant_details")
+                    || key.equalsIgnoreCase("credit_grant_reason")
+                    || key.equalsIgnoreCase("credit_remaining")
+                    || key.equalsIgnoreCase("credit_total")
+                    || key.equalsIgnoreCase("credit_type_icon")
+                    || key.equalsIgnoreCase("credit_usage_aggregation")
+                    || key.equalsIgnoreCase("credit_used")
+                    || key.equalsIgnoreCase("effective_limit")
+                    || key.equalsIgnoreCase("effective_price")
+                    || key.equalsIgnoreCase("entitlement_expiration_date")
+                    || key.equalsIgnoreCase("entitlement_id")
+                    || key.equalsIgnoreCase("entitlement_source")
+                    || key.equalsIgnoreCase("entitlement_type")
+                    || key.equalsIgnoreCase("feature")
+                    || key.equalsIgnoreCase("has_valid_allocation")
+                    || key.equalsIgnoreCase("is_unlimited")
+                    || key.equalsIgnoreCase("metric_reset_at")
+                    || key.equalsIgnoreCase("month_reset")
+                    || key.equalsIgnoreCase("monthly_usage_based_price")
+                    || key.equalsIgnoreCase("overuse")
+                    || key.equalsIgnoreCase("percent_used")
+                    || key.equalsIgnoreCase("period")
+                    || key.equalsIgnoreCase("plan")
+                    || key.equalsIgnoreCase("plan_entitlement")
+                    || key.equalsIgnoreCase("price_behavior")
+                    || key.equalsIgnoreCase("quarterly_usage_based_price")
+                    || key.equalsIgnoreCase("soft_limit")
+                    || key.equalsIgnoreCase("usage")
+                    || key.equalsIgnoreCase("yearly_usage_based_price")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

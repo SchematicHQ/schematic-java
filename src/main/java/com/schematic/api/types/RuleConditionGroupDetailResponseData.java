@@ -188,7 +188,6 @@ public final class RuleConditionGroupDetailResponseData {
 
         private List<RuleConditionDetailResponseData> conditions = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -281,6 +280,20 @@ public final class RuleConditionGroupDetailResponseData {
         public RuleConditionGroupDetailResponseData build() {
             return new RuleConditionGroupDetailResponseData(
                     conditions, createdAt, environmentId, flagId, id, ruleId, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("conditions")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("rule_id")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -347,7 +347,6 @@ public final class BillingProductDetailResponseData {
 
         private Optional<String> currency = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -532,6 +531,28 @@ public final class BillingProductDetailResponseData {
                     subscriptionCount,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("is_active")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("price_decimal")
+                    || key.equalsIgnoreCase("prices")
+                    || key.equalsIgnoreCase("product_id")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("subscription_count")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

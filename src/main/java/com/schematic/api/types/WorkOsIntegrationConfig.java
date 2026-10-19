@@ -86,7 +86,6 @@ public final class WorkOsIntegrationConfig {
 
         private Optional<String> webhookUrl = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -127,6 +126,14 @@ public final class WorkOsIntegrationConfig {
 
         public WorkOsIntegrationConfig build() {
             return new WorkOsIntegrationConfig(firstEventsReceived, webhookUrl, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("first_events_received") || key.equalsIgnoreCase("webhook_url")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

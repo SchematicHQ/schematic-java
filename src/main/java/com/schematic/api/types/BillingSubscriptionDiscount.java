@@ -189,7 +189,6 @@ public final class BillingSubscriptionDiscount {
 
         private Optional<String> customerFacingCode = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -284,6 +283,20 @@ public final class BillingSubscriptionDiscount {
                     promoCodeExternalId,
                     startedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("coupon_external_id")
+                    || key.equalsIgnoreCase("customer_facing_code")
+                    || key.equalsIgnoreCase("ended_at")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("is_active")
+                    || key.equalsIgnoreCase("promo_code_external_id")
+                    || key.equalsIgnoreCase("started_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

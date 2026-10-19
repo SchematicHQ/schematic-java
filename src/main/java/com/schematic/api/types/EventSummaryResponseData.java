@@ -177,7 +177,6 @@ public final class EventSummaryResponseData {
 
         private Optional<OffsetDateTime> lastSeenAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -245,6 +244,19 @@ public final class EventSummaryResponseData {
         public EventSummaryResponseData build() {
             return new EventSummaryResponseData(
                     companyCount, environmentId, eventCount, eventSubtype, lastSeenAt, userCount, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_count")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("event_count")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("last_seen_at")
+                    || key.equalsIgnoreCase("user_count")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

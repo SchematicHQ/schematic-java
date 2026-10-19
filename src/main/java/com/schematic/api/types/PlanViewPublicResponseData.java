@@ -804,7 +804,6 @@ public final class PlanViewPublicResponseData {
 
         private Optional<PlanVersionResponseData> activeVersion = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1427,6 +1426,54 @@ public final class PlanViewPublicResponseData {
                     versions,
                     yearlyPrice,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("active_version")
+                    || key.equalsIgnoreCase("audience_type")
+                    || key.equalsIgnoreCase("available_periods")
+                    || key.equalsIgnoreCase("billing_linked_resource")
+                    || key.equalsIgnoreCase("billing_product")
+                    || key.equalsIgnoreCase("billing_strategy")
+                    || key.equalsIgnoreCase("catalogs")
+                    || key.equalsIgnoreCase("charge_type")
+                    || key.equalsIgnoreCase("company_count")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("company_logo_url")
+                    || key.equalsIgnoreCase("company_name")
+                    || key.equalsIgnoreCase("compatible_plan_ids")
+                    || key.equalsIgnoreCase("controlled_by")
+                    || key.equalsIgnoreCase("copied_from_plan_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("credit_visibility")
+                    || key.equalsIgnoreCase("credits")
+                    || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("custom")
+                    || key.equalsIgnoreCase("custom_plan_config")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("draft_version")
+                    || key.equalsIgnoreCase("entitlements")
+                    || key.equalsIgnoreCase("features")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("included_credit_grants")
+                    || key.equalsIgnoreCase("is_custom")
+                    || key.equalsIgnoreCase("is_default")
+                    || key.equalsIgnoreCase("is_free")
+                    || key.equalsIgnoreCase("is_trialable")
+                    || key.equalsIgnoreCase("monthly_price")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("one_time_price")
+                    || key.equalsIgnoreCase("plan_type")
+                    || key.equalsIgnoreCase("quarterly_price")
+                    || key.equalsIgnoreCase("trial_days")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("versions")
+                    || key.equalsIgnoreCase("yearly_price")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -102,7 +102,6 @@ public final class PlanVersionMigrationPreviewResponseData {
 
         private List<PlanVersionMigrationPreviewCompanyResponseData> companies = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -148,6 +147,14 @@ public final class PlanVersionMigrationPreviewResponseData {
         @java.lang.Override
         public PlanVersionMigrationPreviewResponseData build() {
             return new PlanVersionMigrationPreviewResponseData(companies, hasBillingChanges, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("companies") || key.equalsIgnoreCase("has_billing_changes")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

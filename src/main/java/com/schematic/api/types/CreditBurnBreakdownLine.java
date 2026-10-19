@@ -123,7 +123,6 @@ public final class CreditBurnBreakdownLine {
 
         private double rate;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -168,6 +167,17 @@ public final class CreditBurnBreakdownLine {
         @java.lang.Override
         public CreditBurnBreakdownLine build() {
             return new CreditBurnBreakdownLine(credits, key, quantity, rate, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credits")
+                    || key.equalsIgnoreCase("key")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("rate")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

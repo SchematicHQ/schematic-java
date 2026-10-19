@@ -69,7 +69,6 @@ public final class CreateEventBatchRequestBody {
     public static final class Builder {
         private List<CreateEventRequestBody> events = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -102,6 +101,14 @@ public final class CreateEventBatchRequestBody {
 
         public CreateEventBatchRequestBody build() {
             return new CreateEventBatchRequestBody(events, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("events")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

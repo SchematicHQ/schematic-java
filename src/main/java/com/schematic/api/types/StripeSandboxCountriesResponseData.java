@@ -69,7 +69,6 @@ public final class StripeSandboxCountriesResponseData {
     public static final class Builder {
         private List<String> countries = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -102,6 +101,14 @@ public final class StripeSandboxCountriesResponseData {
 
         public StripeSandboxCountriesResponseData build() {
             return new StripeSandboxCountriesResponseData(countries, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("countries")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {
