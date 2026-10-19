@@ -107,7 +107,6 @@ public final class DeleteEnvironmentResponse {
 
         private Map<String, JsonNode> params = new LinkedHashMap<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -164,6 +163,14 @@ public final class DeleteEnvironmentResponse {
         @java.lang.Override
         public DeleteEnvironmentResponse build() {
             return new DeleteEnvironmentResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

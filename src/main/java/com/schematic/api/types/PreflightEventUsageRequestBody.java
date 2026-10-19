@@ -107,7 +107,6 @@ public final class PreflightEventUsageRequestBody {
 
         private long quantity;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -144,6 +143,14 @@ public final class PreflightEventUsageRequestBody {
         @java.lang.Override
         public PreflightEventUsageRequestBody build() {
             return new PreflightEventUsageRequestBody(eventSubtype, quantity, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("event_subtype") || key.equalsIgnoreCase("quantity")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

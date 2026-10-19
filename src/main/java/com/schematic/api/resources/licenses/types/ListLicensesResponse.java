@@ -107,7 +107,6 @@ public final class ListLicensesResponse {
 
         private List<LicenseResponseData> data = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -157,6 +156,14 @@ public final class ListLicensesResponse {
         @java.lang.Override
         public ListLicensesResponse build() {
             return new ListLicensesResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

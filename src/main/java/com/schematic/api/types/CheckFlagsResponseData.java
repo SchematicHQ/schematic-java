@@ -113,7 +113,6 @@ public final class CheckFlagsResponseData {
 
         private Optional<DatastreamCompanyPlan> plan = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -198,6 +197,17 @@ public final class CheckFlagsResponseData {
 
         public CheckFlagsResponseData build() {
             return new CheckFlagsResponseData(creditBalances, creditSpendPolicies, flags, plan, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_balances")
+                    || key.equalsIgnoreCase("credit_spend_policies")
+                    || key.equalsIgnoreCase("flags")
+                    || key.equalsIgnoreCase("plan")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

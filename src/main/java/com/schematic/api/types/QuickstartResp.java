@@ -79,7 +79,6 @@ public final class QuickstartResp {
     public static final class Builder implements OkStage, _FinalStage {
         private boolean ok;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -100,6 +99,14 @@ public final class QuickstartResp {
         @java.lang.Override
         public QuickstartResp build() {
             return new QuickstartResp(ok, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ok")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

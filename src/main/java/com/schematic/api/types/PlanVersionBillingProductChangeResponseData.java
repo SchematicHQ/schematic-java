@@ -81,7 +81,6 @@ public final class PlanVersionBillingProductChangeResponseData {
 
         private Optional<BillingProductDetailResponseData> old = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -116,6 +115,14 @@ public final class PlanVersionBillingProductChangeResponseData {
 
         public PlanVersionBillingProductChangeResponseData build() {
             return new PlanVersionBillingProductChangeResponseData(new_, old, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("new") || key.equalsIgnoreCase("old")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

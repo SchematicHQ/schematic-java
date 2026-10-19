@@ -106,7 +106,6 @@ public final class RulesengineWarningTier {
 
         private long value;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -143,6 +142,14 @@ public final class RulesengineWarningTier {
         @java.lang.Override
         public RulesengineWarningTier build() {
             return new RulesengineWarningTier(key, value, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("key") || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

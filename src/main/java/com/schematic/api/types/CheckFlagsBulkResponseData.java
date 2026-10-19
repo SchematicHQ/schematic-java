@@ -68,7 +68,6 @@ public final class CheckFlagsBulkResponseData {
     public static final class Builder {
         private List<CheckFlagsResponseData> data = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -101,6 +100,14 @@ public final class CheckFlagsBulkResponseData {
 
         public CheckFlagsBulkResponseData build() {
             return new CheckFlagsBulkResponseData(data, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -97,7 +97,6 @@ public final class EntitlementsInPlan {
 
         private Optional<Boolean> visible = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -132,6 +131,14 @@ public final class EntitlementsInPlan {
         @java.lang.Override
         public EntitlementsInPlan build() {
             return new EntitlementsInPlan(entitlementId, visible, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("entitlement_id") || key.equalsIgnoreCase("visible")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

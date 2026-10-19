@@ -125,7 +125,6 @@ public final class CountLicensesRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -212,6 +211,18 @@ public final class CountLicensesRequest {
 
         public CountLicensesRequest build() {
             return new CountLicensesRequest(featureIds, ids, name, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_ids")
+                    || key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -103,7 +103,6 @@ public final class CountEntityTraitDefinitionsResponse {
 
         private CountEntityTraitDefinitionsParams params;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -136,6 +135,14 @@ public final class CountEntityTraitDefinitionsResponse {
         @java.lang.Override
         public CountEntityTraitDefinitionsResponse build() {
             return new CountEntityTraitDefinitionsResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

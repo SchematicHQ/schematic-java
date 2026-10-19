@@ -188,7 +188,6 @@ public final class WebFeatureUsageWebhookOutput {
 
         private Optional<Long> allocation = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -294,6 +293,20 @@ public final class WebFeatureUsageWebhookOutput {
         public WebFeatureUsageWebhookOutput build() {
             return new WebFeatureUsageWebhookOutput(
                     allocation, creditUsage, entitlement, feature, metricResetAt, usage, company, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("Allocation")
+                    || key.equalsIgnoreCase("CreditUsage")
+                    || key.equalsIgnoreCase("Entitlement")
+                    || key.equalsIgnoreCase("Feature")
+                    || key.equalsIgnoreCase("MetricResetAt")
+                    || key.equalsIgnoreCase("Usage")
+                    || key.equalsIgnoreCase("company")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

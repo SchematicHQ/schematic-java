@@ -115,7 +115,6 @@ public final class CreateComponentRequestBody {
 
         private Optional<Map<String, Double>> ast = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -158,6 +157,14 @@ public final class CreateComponentRequestBody {
         @java.lang.Override
         public CreateComponentRequestBody build() {
             return new CreateComponentRequestBody(ast, entityType, name, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ast") || key.equalsIgnoreCase("entity_type") || key.equalsIgnoreCase("name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

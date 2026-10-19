@@ -4049,6 +4049,486 @@ client.billing().upsertBillingSubscription(
 </dl>
 </details>
 
+<details><summary><code>client.billing.getCompanyNativeSubscription(companyId) -> GetCompanyNativeSubscriptionResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().getCompanyNativeSubscription("company_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.listNativeInvoices() -> ListNativeInvoicesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().listNativeInvoices(
+    ListNativeInvoicesRequest
+        .builder()
+        .companyId("company_id")
+        .contractId("contract_id")
+        .documentState(InvoiceDocumentState.CREDITED)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**contractId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentState:** `Optional<InvoiceDocumentState>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.getNativeInvoice(invoiceId) -> GetNativeInvoiceResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().getNativeInvoice("invoice_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoiceId:** `String` — invoice_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.exportNativeInvoice(invoiceId) -> InputStream</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().exportNativeInvoice("invoice_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoiceId:** `String` — invoice_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.finalizeNativeInvoice(invoiceId) -> FinalizeNativeInvoiceResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().finalizeNativeInvoice("invoice_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoiceId:** `String` — invoice_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.markNativeInvoicePaid(invoiceId, request) -> MarkNativeInvoicePaidResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().markNativeInvoicePaid(
+    "invoice_id",
+    MarkInvoicePaidRequestBody
+        .builder()
+        .idempotencyKey("idempotency_key")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoiceId:** `String` — invoice_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**amount:** `Optional<Long>` — Amount paid, in minor units of the invoice's currency. Leave empty to mark the whole remaining amount as paid.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `String` — A retry with the same key records the payment once.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**reference:** `Optional<String>` — A note that identifies the payment, such as a bank transfer reference.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**settledAt:** `Optional<OffsetDateTime>` — When the payment arrived. Defaults to now, and cannot be in the future.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.downloadNativeInvoicePdf(invoiceId) -> InputStream</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().downloadNativeInvoicePdf("invoice_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoiceId:** `String` — invoice_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.voidNativeInvoice(invoiceId) -> VoidNativeInvoiceResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().voidNativeInvoice("invoice_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoiceId:** `String` — invoice_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.countNativeInvoices() -> CountNativeInvoicesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().countNativeInvoices(
+    CountNativeInvoicesRequest
+        .builder()
+        .companyId("company_id")
+        .contractId("contract_id")
+        .documentState(InvoiceDocumentState.CREDITED)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**contractId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentState:** `Optional<InvoiceDocumentState>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## credits
 <details><summary><code>client.credits.listBillingCredits() -> ListBillingCreditsResponse</code></summary>
 <dl>
@@ -6607,7 +7087,7 @@ client.credits().createCreditSpendPolicy(
 <dl>
 <dd>
 
-**companyId:** `Optional<String>` — The company the cap applies to. Set exactly one of company_id and user_id.
+**companyId:** `Optional<String>` — The company the cap applies in. Alone, it caps the whole company. With user_id, it caps that user's spend in this company. Required with user_id when the user belongs to more than one company.
     
 </dd>
 </dl>
@@ -6631,7 +7111,7 @@ client.credits().createCreditSpendPolicy(
 <dl>
 <dd>
 
-**userId:** `Optional<String>` — The user the cap applies to. Set exactly one of company_id and user_id.
+**userId:** `Optional<String>` — The user the cap applies to. The user must belong to company_id, and with no company_id, to exactly one company.
     
 </dd>
 </dl>
@@ -8782,7 +9262,7 @@ client.companies().listCompanies(
 <dl>
 <dd>
 
-**withoutFeatureOverrideFor:** `Optional<String>` — Filter out companies that already have a company override for the specified feature ID
+**withoutFeatureOverrideFor:** `Optional<String>` — Filter out companies that have an unexpired company override for the specified feature ID
     
 </dd>
 </dl>
@@ -9171,7 +9651,7 @@ client.companies().countCompanies(
 <dl>
 <dd>
 
-**withoutFeatureOverrideFor:** `Optional<String>` — Filter out companies that already have a company override for the specified feature ID
+**withoutFeatureOverrideFor:** `Optional<String>` — Filter out companies that have an unexpired company override for the specified feature ID
     
 </dd>
 </dl>
@@ -14865,11 +15345,15 @@ client.plans().updateCompanyPlans(
 client.plans().listCustomPlanBillings(
     ListCustomPlanBillingsRequest
         .builder()
+        .planBillingSources(
+            Arrays.asList(PlanBillingSource.AMENDMENT)
+        )
         .statuses(
             Arrays.asList(CustomPlanBillingStatus.ACTIVE)
         )
         .companyId("company_id")
         .planId("plan_id")
+        .planVersionId("plan_version_id")
         .planBillingSource(PlanBillingSource.AMENDMENT)
         .status(CustomPlanBillingStatus.ACTIVE)
         .limit(1000000L)
@@ -14906,7 +15390,23 @@ client.plans().listCustomPlanBillings(
 <dl>
 <dd>
 
-**planBillingSource:** `Optional<PlanBillingSource>` — Filter by the flow that created the billing record: custom_plan for a first publish, amendment for a republish, manage_plan for a standard plan assigned by invoice. Defaults to custom_plan.
+**planVersionId:** `Optional<String>` — Filter by the plan version the billing record was created for
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planBillingSource:** `Optional<PlanBillingSource>` — Filter by the flow that created the billing record: custom_plan for a first publish, amendment for a republish, manage_plan for a standard plan assigned by invoice. Defaults to custom_plan unless plan_billing_sources is set.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planBillingSources:** `Optional<PlanBillingSource>` — Filter by multiple billing sources. Takes precedence over plan_billing_source.
     
 </dd>
 </dl>
@@ -16323,7 +16823,56 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
-**activationStrategy:** `Optional<CustomPlanActivationStrategy>` — When the company gets the plan. On a custom-plan republish, on_payment is only accepted when the amendment is invoiced today (migration_strategy immediate, proration_behavior always_invoice, collection_method send_invoice): the company stays on its current version until that invoice is paid.
+**request:** `PublishPlanVersionRequestBody` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.plans.previewPublishPlanVersion(planVersionId, request) -> PreviewPublishPlanVersionResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.plans().previewPublishPlanVersion(
+    "plan_version_id",
+    PublishPlanVersionRequestBody
+        .builder()
+        .migrationStrategy(PlanVersionMigrationStrategy.END_OF_BILLING_PERIOD)
+        .excludedCompanyIds(
+            Arrays.asList("excluded_company_ids")
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planVersionId:** `String` — plan_version_id
     
 </dd>
 </dl>
@@ -16331,135 +16880,7 @@ client.plans().publishPlanVersion(
 <dl>
 <dd>
 
-**address:** `Optional<CustomerBillingAddress>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**billingCycleAnchor:** `Optional<OffsetDateTime>` — The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**billingStartDate:** `Optional<OffsetDateTime>` — The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. Only honored on a first publish that starts a subscription.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**collectionMethod:** `Optional<BillingCollectionMethod>` — How the invoice a custom-plan republish raises today is collected. send_invoice (the default) issues it for the company to pay; charge_automatically charges the default payment method straight away. Only accepted on a custom-plan republish with migration_strategy immediate and proration_behavior always_invoice.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**couponExternalId:** `Optional<String>` — A Stripe coupon to apply. On a custom-plan republish it discounts the amendment invoice and is only used when that invoice is raised today; it must exist in Stripe. It is attached to the subscription, so a repeating or forever coupon also discounts the renewals that follow.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**customFieldValues:** `Optional<List<CheckoutFieldValue>>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**customerEmail:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**daysUntilDue:** `Optional<Long>` — Payment terms in days. On a custom-plan republish they apply to the amendment invoice only, leave the subscription's renewal terms unchanged, and are only used when that invoice is raised today and sent rather than charged. Defaults to the subscription's terms.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**excludedCompanyIds:** `List<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**migrationStrategy:** `PlanVersionMigrationStrategy` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**phone:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**prorateFirstPeriod:** `Optional<Boolean>` — When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**prorationBehavior:** `Optional<MigrationProrationBehavior>` — How Stripe handles the price difference when companies are migrated. With migration_strategy immediate, omitted means create_prorations. With end_of_billing_period only none is accepted and means the same as omitting it: the change lands on the renewal boundary, so there is nothing to prorate. With scheduled any value is accepted and omitted means none. Not accepted with leave.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requireNoMigration:** `Optional<Boolean>` — Refuse the publish if any company would be migrated onto the new version
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**scheduledAt:** `Optional<OffsetDateTime>` — When every company moves, for migration_strategy scheduled. Must be in the future; the migration runs within about a minute of this time. Not accepted with other strategies.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sendInvoice:** `Optional<Boolean>` — Whether Stripe emails the invoice when it is finalized. Defaults to true.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**taxId:** `Optional<TaxIdInput>` 
+**request:** `PublishPlanVersionRequestBody` 
     
 </dd>
 </dl>
@@ -17981,7 +18402,7 @@ client.features().listFeatures(
 <dl>
 <dd>
 
-**withoutCompanyOverrideFor:** `Optional<String>` — Filter out features that already have a company override for the specified company ID
+**withoutCompanyOverrideFor:** `Optional<String>` — Filter out features that have an unexpired company override for the specified company ID
     
 </dd>
 </dl>
@@ -18620,7 +19041,7 @@ client.features().countFeatures(
 <dl>
 <dd>
 
-**withoutCompanyOverrideFor:** `Optional<String>` — Filter out features that already have a company override for the specified company ID
+**withoutCompanyOverrideFor:** `Optional<String>` — Filter out features that have an unexpired company override for the specified company ID
     
 </dd>
 </dl>
@@ -18755,7 +19176,6 @@ client.features().listFlags(
 client.features().createFlag(
     CreateFlagRequestBody
         .builder()
-        .defaultValue(true)
         .description("description")
         .flagType("boolean")
         .key("key")
@@ -18845,7 +19265,6 @@ client.features().updateFlag(
     "flag_id",
     CreateFlagRequestBody
         .builder()
-        .defaultValue(true)
         .description("description")
         .flagType("boolean")
         .key("key")
@@ -19122,7 +19541,7 @@ client.features().checkAndReserveFlag(
 <dl>
 <dd>
 
-**expiresAt:** `Optional<OffsetDateTime>` — When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
+**expiresAt:** `Optional<OffsetDateTime>` — When the hold lapses if no track or inference event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
     
 </dd>
 </dl>
@@ -19138,7 +19557,7 @@ client.features().checkAndReserveFlag(
 <dl>
 <dd>
 
-**preflight:** `Optional<PreflightRequestBody>` — Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is the entitlement's consumption rate times quantity, or, when quantity is omitted, times the usage stated here
+**preflight:** `Optional<PreflightRequestBody>` — Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise, when event_quantities names the entitlement's event subtype, the hold is that event priced at the entitlement's consumption rate and quantity rates, and quantity is ignored; otherwise the hold is the entitlement's consumption rate times quantity, or, when quantity is omitted, times the usage stated here
     
 </dd>
 </dl>
@@ -19146,7 +19565,7 @@ client.features().checkAndReserveFlag(
 <dl>
 <dd>
 
-**quantity:** `Optional<Double>` — Units of the feature the operation will consume. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event. When it is omitted the units come from preflight.event_usage.quantity, if that event subtype is the entitlement's, else from preflight.usage, else 1
+**quantity:** `Optional<Double>` — Units of the feature the operation will consume. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event. When it is omitted the units come from preflight.event_usage.quantity, if that event subtype is the entitlement's, else from preflight.usage, else 1. Ignored when preflight.event_quantities names the entitlement's event subtype, whose quantity is used instead
     
 </dd>
 </dl>

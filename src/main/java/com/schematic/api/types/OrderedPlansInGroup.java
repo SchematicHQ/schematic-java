@@ -115,7 +115,6 @@ public final class OrderedPlansInGroup {
 
         private Optional<List<CreditsInPlan>> credits = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -164,6 +163,16 @@ public final class OrderedPlansInGroup {
         @java.lang.Override
         public OrderedPlansInGroup build() {
             return new OrderedPlansInGroup(credits, entitlements, planId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credits")
+                    || key.equalsIgnoreCase("entitlements")
+                    || key.equalsIgnoreCase("plan_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -478,7 +478,6 @@ public final class CompanyOverrideResponseData {
 
         private Optional<CompanyDetailResponseData> company = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -813,6 +812,36 @@ public final class CompanyOverrideResponseData {
                     valueTraitId,
                     valueType,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("consumption_rate")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("expiration_date")
+                    || key.equalsIgnoreCase("feature")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("metric_period")
+                    || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("notes")
+                    || key.equalsIgnoreCase("quantity_rates")
+                    || key.equalsIgnoreCase("rule_id")
+                    || key.equalsIgnoreCase("rule_id_usage_exceeded")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("value_bool")
+                    || key.equalsIgnoreCase("value_credit")
+                    || key.equalsIgnoreCase("value_credit_id")
+                    || key.equalsIgnoreCase("value_numeric")
+                    || key.equalsIgnoreCase("value_trait")
+                    || key.equalsIgnoreCase("value_trait_id")
+                    || key.equalsIgnoreCase("value_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -110,7 +110,6 @@ public final class RulesengineSubscription {
 
         private OffsetDateTime periodStart;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -147,6 +146,16 @@ public final class RulesengineSubscription {
         @java.lang.Override
         public RulesengineSubscription build() {
             return new RulesengineSubscription(id, periodEnd, periodStart, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("period_end")
+                    || key.equalsIgnoreCase("period_start")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

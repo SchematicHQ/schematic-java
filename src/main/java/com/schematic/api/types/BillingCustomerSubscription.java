@@ -172,7 +172,6 @@ public final class BillingCustomerSubscription {
 
         private Optional<OffsetDateTime> expiredAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -240,6 +239,19 @@ public final class BillingCustomerSubscription {
         public BillingCustomerSubscription build() {
             return new BillingCustomerSubscription(
                     currency, expiredAt, interval, meteredUsage, perUnitPrice, totalPrice, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("expired_at")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("metered_usage")
+                    || key.equalsIgnoreCase("per_unit_price")
+                    || key.equalsIgnoreCase("total_price")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

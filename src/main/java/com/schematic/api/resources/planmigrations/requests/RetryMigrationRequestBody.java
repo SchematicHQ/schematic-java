@@ -69,7 +69,6 @@ public final class RetryMigrationRequestBody {
     public static final class Builder {
         private List<MigrationErrorCode> errorCodes = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -102,6 +101,14 @@ public final class RetryMigrationRequestBody {
 
         public RetryMigrationRequestBody build() {
             return new RetryMigrationRequestBody(errorCodes, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("error_codes")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

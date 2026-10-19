@@ -170,7 +170,6 @@ public final class CreateBillingPriceTierRequestBody {
 
         private Optional<Long> flatAmount = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -268,6 +267,19 @@ public final class CreateBillingPriceTierRequestBody {
                     providerType,
                     upTo,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("flat_amount")
+                    || key.equalsIgnoreCase("per_unit_decimal")
+                    || key.equalsIgnoreCase("per_unit_price")
+                    || key.equalsIgnoreCase("price_external_id")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("up_to")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

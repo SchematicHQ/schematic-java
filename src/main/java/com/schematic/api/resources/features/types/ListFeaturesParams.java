@@ -132,7 +132,7 @@ public final class ListFeaturesParams {
     }
 
     /**
-     * @return Filter out features that already have a company override for the specified company ID
+     * @return Filter out features that have an unexpired company override for the specified company ID
      */
     @JsonProperty("without_company_override_for")
     public Optional<String> getWithoutCompanyOverrideFor() {
@@ -217,7 +217,6 @@ public final class ListFeaturesParams {
 
         private Optional<String> withoutPlanEntitlementFor = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -346,7 +345,7 @@ public final class ListFeaturesParams {
         }
 
         /**
-         * <p>Filter out features that already have a company override for the specified company ID</p>
+         * <p>Filter out features that have an unexpired company override for the specified company ID</p>
          */
         @JsonSetter(value = "without_company_override_for", nulls = Nulls.SKIP)
         public Builder withoutCompanyOverrideFor(Optional<String> withoutCompanyOverrideFor) {
@@ -386,6 +385,23 @@ public final class ListFeaturesParams {
                     withoutCompanyOverrideFor,
                     withoutPlanEntitlementFor,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("boolean_require_event")
+                    || key.equalsIgnoreCase("feature_type")
+                    || key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("managed_by")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("without_company_override_for")
+                    || key.equalsIgnoreCase("without_plan_entitlement_for")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

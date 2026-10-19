@@ -108,7 +108,6 @@ public final class PlanVersionSnapshotView {
 
         private long version;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -145,6 +144,14 @@ public final class PlanVersionSnapshotView {
         @java.lang.Override
         public PlanVersionSnapshotView build() {
             return new PlanVersionSnapshotView(id, name, version, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("id") || key.equalsIgnoreCase("name") || key.equalsIgnoreCase("version")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

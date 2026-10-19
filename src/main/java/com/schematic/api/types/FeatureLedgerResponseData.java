@@ -132,7 +132,6 @@ public final class FeatureLedgerResponseData {
 
         private Optional<String> description = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -189,6 +188,17 @@ public final class FeatureLedgerResponseData {
         @java.lang.Override
         public FeatureLedgerResponseData build() {
             return new FeatureLedgerResponseData(description, icon, id, name, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

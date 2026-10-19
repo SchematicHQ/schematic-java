@@ -212,7 +212,6 @@ public final class IntegrationsListResponseData {
 
         private Optional<IntegrationConfig> config = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -310,6 +309,21 @@ public final class IntegrationsListResponseData {
                     state,
                     type,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("capabilities")
+                    || key.equalsIgnoreCase("config")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("is_app_install")
+                    || key.equalsIgnoreCase("is_connect_install")
+                    || key.equalsIgnoreCase("last_webhook_received_at")
+                    || key.equalsIgnoreCase("state")
+                    || key.equalsIgnoreCase("type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

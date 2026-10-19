@@ -247,7 +247,6 @@ public final class WebhookEventResponseData {
 
         private Optional<String> payload = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -369,6 +368,23 @@ public final class WebhookEventResponseData {
                     updatedAt,
                     webhookId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("attempt_count")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("payload")
+                    || key.equalsIgnoreCase("request_type")
+                    || key.equalsIgnoreCase("response_code")
+                    || key.equalsIgnoreCase("sent_at")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("webhook_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

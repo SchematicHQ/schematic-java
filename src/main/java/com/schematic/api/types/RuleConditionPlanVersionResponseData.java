@@ -127,7 +127,6 @@ public final class RuleConditionPlanVersionResponseData {
 
         private long version;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -172,6 +171,17 @@ public final class RuleConditionPlanVersionResponseData {
         @java.lang.Override
         public RuleConditionPlanVersionResponseData build() {
             return new RuleConditionPlanVersionResponseData(id, name, status, version, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("version")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

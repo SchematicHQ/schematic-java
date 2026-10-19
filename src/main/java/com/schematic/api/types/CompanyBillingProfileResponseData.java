@@ -28,13 +28,19 @@ public final class CompanyBillingProfileResponseData {
 
     private final BillingCollectionMethod collectionMethod;
 
+    private final Optional<Collector> collector;
+
     private final String companyId;
 
     private final OffsetDateTime createdAt;
 
+    private final Optional<Currency> currency;
+
     private final Optional<Long> daysUntilDue;
 
     private final String environmentId;
+
+    private final long gatingDays;
 
     private final String id;
 
@@ -42,11 +48,17 @@ public final class CompanyBillingProfileResponseData {
 
     private final Optional<String> name;
 
+    private final Optional<Long> overdraftLimit;
+
+    private final PaymentGating paymentGating;
+
     private final Optional<String> paymentMethodId;
 
     private final Optional<ProrationBehavior> prorationBehavior;
 
     private final BillingProviderType providerType;
+
+    private final Optional<String> purchaseOrder;
 
     private final OffsetDateTime updatedAt;
 
@@ -56,31 +68,43 @@ public final class CompanyBillingProfileResponseData {
             String accountId,
             Optional<String> billingCustomerId,
             BillingCollectionMethod collectionMethod,
+            Optional<Collector> collector,
             String companyId,
             OffsetDateTime createdAt,
+            Optional<Currency> currency,
             Optional<Long> daysUntilDue,
             String environmentId,
+            long gatingDays,
             String id,
             boolean isDefault,
             Optional<String> name,
+            Optional<Long> overdraftLimit,
+            PaymentGating paymentGating,
             Optional<String> paymentMethodId,
             Optional<ProrationBehavior> prorationBehavior,
             BillingProviderType providerType,
+            Optional<String> purchaseOrder,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.billingCustomerId = billingCustomerId;
         this.collectionMethod = collectionMethod;
+        this.collector = collector;
         this.companyId = companyId;
         this.createdAt = createdAt;
+        this.currency = currency;
         this.daysUntilDue = daysUntilDue;
         this.environmentId = environmentId;
+        this.gatingDays = gatingDays;
         this.id = id;
         this.isDefault = isDefault;
         this.name = name;
+        this.overdraftLimit = overdraftLimit;
+        this.paymentGating = paymentGating;
         this.paymentMethodId = paymentMethodId;
         this.prorationBehavior = prorationBehavior;
         this.providerType = providerType;
+        this.purchaseOrder = purchaseOrder;
         this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
@@ -100,6 +124,11 @@ public final class CompanyBillingProfileResponseData {
         return collectionMethod;
     }
 
+    @JsonProperty("collector")
+    public Optional<Collector> getCollector() {
+        return collector;
+    }
+
     @JsonProperty("company_id")
     public String getCompanyId() {
         return companyId;
@@ -110,6 +139,11 @@ public final class CompanyBillingProfileResponseData {
         return createdAt;
     }
 
+    @JsonProperty("currency")
+    public Optional<Currency> getCurrency() {
+        return currency;
+    }
+
     @JsonProperty("days_until_due")
     public Optional<Long> getDaysUntilDue() {
         return daysUntilDue;
@@ -118,6 +152,11 @@ public final class CompanyBillingProfileResponseData {
     @JsonProperty("environment_id")
     public String getEnvironmentId() {
         return environmentId;
+    }
+
+    @JsonProperty("gating_days")
+    public long getGatingDays() {
+        return gatingDays;
     }
 
     @JsonProperty("id")
@@ -135,6 +174,16 @@ public final class CompanyBillingProfileResponseData {
         return name;
     }
 
+    @JsonProperty("overdraft_limit")
+    public Optional<Long> getOverdraftLimit() {
+        return overdraftLimit;
+    }
+
+    @JsonProperty("payment_gating")
+    public PaymentGating getPaymentGating() {
+        return paymentGating;
+    }
+
     @JsonProperty("payment_method_id")
     public Optional<String> getPaymentMethodId() {
         return paymentMethodId;
@@ -148,6 +197,11 @@ public final class CompanyBillingProfileResponseData {
     @JsonProperty("provider_type")
     public BillingProviderType getProviderType() {
         return providerType;
+    }
+
+    @JsonProperty("purchase_order")
+    public Optional<String> getPurchaseOrder() {
+        return purchaseOrder;
     }
 
     @JsonProperty("updated_at")
@@ -170,16 +224,22 @@ public final class CompanyBillingProfileResponseData {
         return accountId.equals(other.accountId)
                 && billingCustomerId.equals(other.billingCustomerId)
                 && collectionMethod.equals(other.collectionMethod)
+                && collector.equals(other.collector)
                 && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
+                && currency.equals(other.currency)
                 && daysUntilDue.equals(other.daysUntilDue)
                 && environmentId.equals(other.environmentId)
+                && gatingDays == other.gatingDays
                 && id.equals(other.id)
                 && isDefault == other.isDefault
                 && name.equals(other.name)
+                && overdraftLimit.equals(other.overdraftLimit)
+                && paymentGating.equals(other.paymentGating)
                 && paymentMethodId.equals(other.paymentMethodId)
                 && prorationBehavior.equals(other.prorationBehavior)
                 && providerType.equals(other.providerType)
+                && purchaseOrder.equals(other.purchaseOrder)
                 && updatedAt.equals(other.updatedAt);
     }
 
@@ -189,16 +249,22 @@ public final class CompanyBillingProfileResponseData {
                 this.accountId,
                 this.billingCustomerId,
                 this.collectionMethod,
+                this.collector,
                 this.companyId,
                 this.createdAt,
+                this.currency,
                 this.daysUntilDue,
                 this.environmentId,
+                this.gatingDays,
                 this.id,
                 this.isDefault,
                 this.name,
+                this.overdraftLimit,
+                this.paymentGating,
                 this.paymentMethodId,
                 this.prorationBehavior,
                 this.providerType,
+                this.purchaseOrder,
                 this.updatedAt);
     }
 
@@ -230,7 +296,11 @@ public final class CompanyBillingProfileResponseData {
     }
 
     public interface EnvironmentIdStage {
-        IdStage environmentId(@NotNull String environmentId);
+        GatingDaysStage environmentId(@NotNull String environmentId);
+    }
+
+    public interface GatingDaysStage {
+        IdStage gatingDays(long gatingDays);
     }
 
     public interface IdStage {
@@ -238,7 +308,11 @@ public final class CompanyBillingProfileResponseData {
     }
 
     public interface IsDefaultStage {
-        ProviderTypeStage isDefault(boolean isDefault);
+        PaymentGatingStage isDefault(boolean isDefault);
+    }
+
+    public interface PaymentGatingStage {
+        ProviderTypeStage paymentGating(@NotNull PaymentGating paymentGating);
     }
 
     public interface ProviderTypeStage {
@@ -260,6 +334,14 @@ public final class CompanyBillingProfileResponseData {
 
         _FinalStage billingCustomerId(String billingCustomerId);
 
+        _FinalStage collector(Optional<Collector> collector);
+
+        _FinalStage collector(Collector collector);
+
+        _FinalStage currency(Optional<Currency> currency);
+
+        _FinalStage currency(Currency currency);
+
         _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
 
         _FinalStage daysUntilDue(Long daysUntilDue);
@@ -268,6 +350,10 @@ public final class CompanyBillingProfileResponseData {
 
         _FinalStage name(String name);
 
+        _FinalStage overdraftLimit(Optional<Long> overdraftLimit);
+
+        _FinalStage overdraftLimit(Long overdraftLimit);
+
         _FinalStage paymentMethodId(Optional<String> paymentMethodId);
 
         _FinalStage paymentMethodId(String paymentMethodId);
@@ -275,6 +361,10 @@ public final class CompanyBillingProfileResponseData {
         _FinalStage prorationBehavior(Optional<ProrationBehavior> prorationBehavior);
 
         _FinalStage prorationBehavior(ProrationBehavior prorationBehavior);
+
+        _FinalStage purchaseOrder(Optional<String> purchaseOrder);
+
+        _FinalStage purchaseOrder(String purchaseOrder);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -284,8 +374,10 @@ public final class CompanyBillingProfileResponseData {
                     CompanyIdStage,
                     CreatedAtStage,
                     EnvironmentIdStage,
+                    GatingDaysStage,
                     IdStage,
                     IsDefaultStage,
+                    PaymentGatingStage,
                     ProviderTypeStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -299,25 +391,36 @@ public final class CompanyBillingProfileResponseData {
 
         private String environmentId;
 
+        private long gatingDays;
+
         private String id;
 
         private boolean isDefault;
+
+        private PaymentGating paymentGating;
 
         private BillingProviderType providerType;
 
         private OffsetDateTime updatedAt;
 
+        private Optional<String> purchaseOrder = Optional.empty();
+
         private Optional<ProrationBehavior> prorationBehavior = Optional.empty();
 
         private Optional<String> paymentMethodId = Optional.empty();
+
+        private Optional<Long> overdraftLimit = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
         private Optional<Long> daysUntilDue = Optional.empty();
 
+        private Optional<Currency> currency = Optional.empty();
+
+        private Optional<Collector> collector = Optional.empty();
+
         private Optional<String> billingCustomerId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -327,16 +430,22 @@ public final class CompanyBillingProfileResponseData {
             accountId(other.getAccountId());
             billingCustomerId(other.getBillingCustomerId());
             collectionMethod(other.getCollectionMethod());
+            collector(other.getCollector());
             companyId(other.getCompanyId());
             createdAt(other.getCreatedAt());
+            currency(other.getCurrency());
             daysUntilDue(other.getDaysUntilDue());
             environmentId(other.getEnvironmentId());
+            gatingDays(other.getGatingDays());
             id(other.getId());
             isDefault(other.getIsDefault());
             name(other.getName());
+            overdraftLimit(other.getOverdraftLimit());
+            paymentGating(other.getPaymentGating());
             paymentMethodId(other.getPaymentMethodId());
             prorationBehavior(other.getProrationBehavior());
             providerType(other.getProviderType());
+            purchaseOrder(other.getPurchaseOrder());
             updatedAt(other.getUpdatedAt());
             return this;
         }
@@ -371,8 +480,15 @@ public final class CompanyBillingProfileResponseData {
 
         @java.lang.Override
         @JsonSetter("environment_id")
-        public IdStage environmentId(@NotNull String environmentId) {
+        public GatingDaysStage environmentId(@NotNull String environmentId) {
             this.environmentId = Objects.requireNonNull(environmentId, "environmentId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("gating_days")
+        public IdStage gatingDays(long gatingDays) {
+            this.gatingDays = gatingDays;
             return this;
         }
 
@@ -385,8 +501,15 @@ public final class CompanyBillingProfileResponseData {
 
         @java.lang.Override
         @JsonSetter("is_default")
-        public ProviderTypeStage isDefault(boolean isDefault) {
+        public PaymentGatingStage isDefault(boolean isDefault) {
             this.isDefault = isDefault;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("payment_gating")
+        public ProviderTypeStage paymentGating(@NotNull PaymentGating paymentGating) {
+            this.paymentGating = Objects.requireNonNull(paymentGating, "paymentGating must not be null");
             return this;
         }
 
@@ -401,6 +524,19 @@ public final class CompanyBillingProfileResponseData {
         @JsonSetter("updated_at")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage purchaseOrder(String purchaseOrder) {
+            this.purchaseOrder = Optional.ofNullable(purchaseOrder);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "purchase_order", nulls = Nulls.SKIP)
+        public _FinalStage purchaseOrder(Optional<String> purchaseOrder) {
+            this.purchaseOrder = purchaseOrder;
             return this;
         }
 
@@ -431,6 +567,19 @@ public final class CompanyBillingProfileResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage overdraftLimit(Long overdraftLimit) {
+            this.overdraftLimit = Optional.ofNullable(overdraftLimit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "overdraft_limit", nulls = Nulls.SKIP)
+        public _FinalStage overdraftLimit(Optional<Long> overdraftLimit) {
+            this.overdraftLimit = overdraftLimit;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage name(String name) {
             this.name = Optional.ofNullable(name);
             return this;
@@ -457,6 +606,32 @@ public final class CompanyBillingProfileResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage currency(Currency currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<Currency> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage collector(Collector collector) {
+            this.collector = Optional.ofNullable(collector);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "collector", nulls = Nulls.SKIP)
+        public _FinalStage collector(Optional<Collector> collector) {
+            this.collector = collector;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage billingCustomerId(String billingCustomerId) {
             this.billingCustomerId = Optional.ofNullable(billingCustomerId);
             return this;
@@ -475,18 +650,51 @@ public final class CompanyBillingProfileResponseData {
                     accountId,
                     billingCustomerId,
                     collectionMethod,
+                    collector,
                     companyId,
                     createdAt,
+                    currency,
                     daysUntilDue,
                     environmentId,
+                    gatingDays,
                     id,
                     isDefault,
                     name,
+                    overdraftLimit,
+                    paymentGating,
                     paymentMethodId,
                     prorationBehavior,
                     providerType,
+                    purchaseOrder,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("billing_customer_id")
+                    || key.equalsIgnoreCase("collection_method")
+                    || key.equalsIgnoreCase("collector")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("days_until_due")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("gating_days")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("is_default")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("overdraft_limit")
+                    || key.equalsIgnoreCase("payment_gating")
+                    || key.equalsIgnoreCase("payment_method_id")
+                    || key.equalsIgnoreCase("proration_behavior")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("purchase_order")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

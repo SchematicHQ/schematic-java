@@ -483,7 +483,6 @@ public final class BillingProductForSubscriptionResponseData {
 
         private Optional<Long> billingThreshold = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -751,6 +750,36 @@ public final class BillingProductForSubscriptionResponseData {
                     updatedAt,
                     usageType,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_scheme")
+                    || key.equalsIgnoreCase("billing_threshold")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("interval_count")
+                    || key.equalsIgnoreCase("meter_id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("package_size")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("price_decimal")
+                    || key.equalsIgnoreCase("price_external_id")
+                    || key.equalsIgnoreCase("price_id")
+                    || key.equalsIgnoreCase("price_tier")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("subscription_id")
+                    || key.equalsIgnoreCase("subscription_item_external_id")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("usage_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

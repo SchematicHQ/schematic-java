@@ -304,7 +304,6 @@ public final class FlagView {
 
         private Optional<FeatureResponseData> feature = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -470,6 +469,26 @@ public final class FlagView {
                     rules,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("default_value")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("feature")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("flag_type")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("key")
+                    || key.equalsIgnoreCase("last_checked_at")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("rules")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

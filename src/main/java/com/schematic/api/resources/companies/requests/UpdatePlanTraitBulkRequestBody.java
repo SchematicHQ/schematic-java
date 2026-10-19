@@ -120,7 +120,6 @@ public final class UpdatePlanTraitBulkRequestBody {
 
         private List<UpdatePlanTraitTraitRequestBody> traits = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -174,6 +173,16 @@ public final class UpdatePlanTraitBulkRequestBody {
         @java.lang.Override
         public UpdatePlanTraitBulkRequestBody build() {
             return new UpdatePlanTraitBulkRequestBody(applyToExistingCompanies, planId, traits, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("apply_to_existing_companies")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("traits")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

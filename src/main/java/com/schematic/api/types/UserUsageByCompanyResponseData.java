@@ -162,7 +162,6 @@ public final class UserUsageByCompanyResponseData {
 
         private List<UserCreditUsageResponseData> credits = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -271,6 +270,17 @@ public final class UserUsageByCompanyResponseData {
         @java.lang.Override
         public UserUsageByCompanyResponseData build() {
             return new UserUsageByCompanyResponseData(credits, endTime, rows, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credits")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("rows")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -144,7 +144,6 @@ public final class ListPaymentMethodsRequest {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -221,6 +220,17 @@ public final class ListPaymentMethodsRequest {
         @java.lang.Override
         public ListPaymentMethodsRequest build() {
             return new ListPaymentMethodsRequest(companyId, customerExternalId, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

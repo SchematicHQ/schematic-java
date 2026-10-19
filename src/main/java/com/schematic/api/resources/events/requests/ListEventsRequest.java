@@ -170,7 +170,6 @@ public final class ListEventsRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -297,6 +296,21 @@ public final class ListEventsRequest {
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("event_types")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("idempotency_key")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

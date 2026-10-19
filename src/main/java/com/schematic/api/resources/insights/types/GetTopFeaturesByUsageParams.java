@@ -92,7 +92,6 @@ public final class GetTopFeaturesByUsageParams {
 
         private Optional<OffsetDateTime> startTime = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -139,6 +138,16 @@ public final class GetTopFeaturesByUsageParams {
 
         public GetTopFeaturesByUsageParams build() {
             return new GetTopFeaturesByUsageParams(endTime, limit, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

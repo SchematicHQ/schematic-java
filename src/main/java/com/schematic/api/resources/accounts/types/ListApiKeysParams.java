@@ -111,7 +111,6 @@ public final class ListApiKeysParams {
 
         private Optional<Boolean> requireEnvironment = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -176,6 +175,17 @@ public final class ListApiKeysParams {
 
         public ListApiKeysParams build() {
             return new ListApiKeysParams(environmentId, limit, offset, requireEnvironment, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("require_environment")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

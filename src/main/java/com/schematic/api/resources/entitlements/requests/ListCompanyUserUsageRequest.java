@@ -225,7 +225,6 @@ public final class ListCompanyUserUsageRequest {
 
         private Optional<OffsetDateTime> endTime = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -368,6 +367,20 @@ public final class ListCompanyUserUsageRequest {
         public ListCompanyUserUsageRequest build() {
             return new ListCompanyUserUsageRequest(
                     companyId, endTime, featureId, metric, limit, offset, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("metric")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

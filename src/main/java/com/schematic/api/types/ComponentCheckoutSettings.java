@@ -193,7 +193,6 @@ public final class ComponentCheckoutSettings {
 
         private boolean taxCollectionEnabled;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -272,6 +271,20 @@ public final class ComponentCheckoutSettings {
                     prorationBehavior,
                     taxCollectionEnabled,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("bundle_purchase_behavior")
+                    || key.equalsIgnoreCase("collect_address")
+                    || key.equalsIgnoreCase("collect_email")
+                    || key.equalsIgnoreCase("collect_phone")
+                    || key.equalsIgnoreCase("collect_tax_id")
+                    || key.equalsIgnoreCase("proration_behavior")
+                    || key.equalsIgnoreCase("tax_collection_enabled")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

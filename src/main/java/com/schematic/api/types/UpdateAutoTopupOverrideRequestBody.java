@@ -134,7 +134,6 @@ public final class UpdateAutoTopupOverrideRequestBody {
 
         private Optional<Long> autoTopupAmount = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -202,6 +201,17 @@ public final class UpdateAutoTopupOverrideRequestBody {
                     autoTopupThresholdCredits,
                     planCreditGrantId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("auto_topup_amount")
+                    || key.equalsIgnoreCase("auto_topup_enabled")
+                    || key.equalsIgnoreCase("auto_topup_threshold_credits")
+                    || key.equalsIgnoreCase("plan_credit_grant_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

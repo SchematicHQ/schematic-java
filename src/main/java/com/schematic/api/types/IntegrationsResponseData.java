@@ -148,7 +148,6 @@ public final class IntegrationsResponseData {
 
         private OffsetDateTime updatedAt;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -201,6 +200,18 @@ public final class IntegrationsResponseData {
         @java.lang.Override
         public IntegrationsResponseData build() {
             return new IntegrationsResponseData(createdAt, id, state, type, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("state")
+                    || key.equalsIgnoreCase("type")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

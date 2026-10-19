@@ -324,7 +324,6 @@ public final class ListBillingPricesRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -607,6 +606,31 @@ public final class ListBillingPricesRequest {
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("product_ids")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("for_initial_plan")
+                    || key.equalsIgnoreCase("for_trial_expiry_plan")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("interval_count")
+                    || key.equalsIgnoreCase("is_active")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("product_id")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("tiers_mode")
+                    || key.equalsIgnoreCase("usage_type")
+                    || key.equalsIgnoreCase("with_meter")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

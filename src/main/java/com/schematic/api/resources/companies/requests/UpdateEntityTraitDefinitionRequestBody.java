@@ -99,7 +99,6 @@ public final class UpdateEntityTraitDefinitionRequestBody {
 
         private Optional<String> displayName = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -134,6 +133,14 @@ public final class UpdateEntityTraitDefinitionRequestBody {
         @java.lang.Override
         public UpdateEntityTraitDefinitionRequestBody build() {
             return new UpdateEntityTraitDefinitionRequestBody(displayName, traitType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("display_name") || key.equalsIgnoreCase("trait_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

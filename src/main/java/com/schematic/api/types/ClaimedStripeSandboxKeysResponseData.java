@@ -112,7 +112,6 @@ public final class ClaimedStripeSandboxKeysResponseData {
 
         private String secret;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -149,6 +148,16 @@ public final class ClaimedStripeSandboxKeysResponseData {
         @java.lang.Override
         public ClaimedStripeSandboxKeysResponseData build() {
             return new ClaimedStripeSandboxKeysResponseData(publishable, sandboxId, secret, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("publishable")
+                    || key.equalsIgnoreCase("sandbox_id")
+                    || key.equalsIgnoreCase("secret")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

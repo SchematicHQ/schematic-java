@@ -113,7 +113,6 @@ public final class ListDataExportsParams {
 
         private Optional<DataExportStatus> status = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -178,6 +177,17 @@ public final class ListDataExportsParams {
 
         public ListDataExportsParams build() {
             return new ListDataExportsParams(exportType, limit, offset, status, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("export_type")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

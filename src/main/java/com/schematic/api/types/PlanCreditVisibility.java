@@ -94,7 +94,6 @@ public final class PlanCreditVisibility {
 
         private boolean visible;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -123,6 +122,14 @@ public final class PlanCreditVisibility {
         @java.lang.Override
         public PlanCreditVisibility build() {
             return new PlanCreditVisibility(creditId, visible, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_id") || key.equalsIgnoreCase("visible")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

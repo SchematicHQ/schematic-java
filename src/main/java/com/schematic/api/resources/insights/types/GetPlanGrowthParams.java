@@ -67,7 +67,6 @@ public final class GetPlanGrowthParams {
     public static final class Builder {
         private Optional<Long> months = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -90,6 +89,14 @@ public final class GetPlanGrowthParams {
 
         public GetPlanGrowthParams build() {
             return new GetPlanGrowthParams(months, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("months")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

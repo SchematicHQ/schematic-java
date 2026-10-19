@@ -443,7 +443,6 @@ public final class BillingCreditView {
 
         private List<CreditCurrencyPrice> currencyPrices = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -712,6 +711,34 @@ public final class BillingCreditView {
                     singularName,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("burn_strategy")
+                    || key.equalsIgnoreCase("cost_editable")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("default_expiry_unit")
+                    || key.equalsIgnoreCase("default_expiry_unit_count")
+                    || key.equalsIgnoreCase("default_rollover_policy")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("ledger_authority")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("plural_name")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("price_per_unit")
+                    || key.equalsIgnoreCase("price_per_unit_decimal")
+                    || key.equalsIgnoreCase("product")
+                    || key.equalsIgnoreCase("singular_name")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

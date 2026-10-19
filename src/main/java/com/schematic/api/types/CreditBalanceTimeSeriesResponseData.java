@@ -144,7 +144,6 @@ public final class CreditBalanceTimeSeriesResponseData {
 
         private List<CreditBalancePointResponseData> balancePoints = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -228,6 +227,17 @@ public final class CreditBalanceTimeSeriesResponseData {
         public CreditBalanceTimeSeriesResponseData build() {
             return new CreditBalanceTimeSeriesResponseData(
                     balancePoints, billingCreditId, events, external, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("balance_points")
+                    || key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("events")
+                    || key.equalsIgnoreCase("external")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

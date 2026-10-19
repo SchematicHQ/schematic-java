@@ -351,7 +351,6 @@ public final class RulesengineCondition {
 
         private Optional<RulesengineTraitDefinition> comparisonTraitDefinition = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -580,6 +579,29 @@ public final class RulesengineCondition {
                     traitDefinition,
                     traitValue,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("comparison_trait_definition")
+                    || key.equalsIgnoreCase("condition_type")
+                    || key.equalsIgnoreCase("consumption_rate")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("metric_period")
+                    || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("metric_value")
+                    || key.equalsIgnoreCase("operator")
+                    || key.equalsIgnoreCase("quantity_rates")
+                    || key.equalsIgnoreCase("resource_ids")
+                    || key.equalsIgnoreCase("trait_definition")
+                    || key.equalsIgnoreCase("trait_value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

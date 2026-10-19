@@ -70,7 +70,6 @@ public final class GetPlanRequest {
     public static final class Builder {
         private Optional<String> planVersionId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -96,6 +95,14 @@ public final class GetPlanRequest {
 
         public GetPlanRequest build() {
             return new GetPlanRequest(planVersionId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("plan_version_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

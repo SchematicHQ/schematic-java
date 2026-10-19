@@ -148,7 +148,6 @@ public final class CreditsAutoTopupRetryFailure {
 
         private Optional<CreditsAutoTopupCompanySummary> company = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -226,6 +225,18 @@ public final class CreditsAutoTopupRetryFailure {
         public CreditsAutoTopupRetryFailure build() {
             return new CreditsAutoTopupRetryFailure(
                     company, consecutiveFailures, credit, lastErrorMessage, stripeErrorCode, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("consecutive_failures")
+                    || key.equalsIgnoreCase("credit")
+                    || key.equalsIgnoreCase("last_error_message")
+                    || key.equalsIgnoreCase("stripe_error_code")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

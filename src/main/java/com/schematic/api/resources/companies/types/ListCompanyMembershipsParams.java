@@ -111,7 +111,6 @@ public final class ListCompanyMembershipsParams {
 
         private Optional<String> userId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -176,6 +175,17 @@ public final class ListCompanyMembershipsParams {
 
         public ListCompanyMembershipsParams build() {
             return new ListCompanyMembershipsParams(companyId, limit, offset, userId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("user_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

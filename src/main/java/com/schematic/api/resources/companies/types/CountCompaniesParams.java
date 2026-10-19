@@ -260,7 +260,7 @@ public final class CountCompaniesParams {
     }
 
     /**
-     * @return Filter out companies that already have a company override for the specified feature ID
+     * @return Filter out companies that have an unexpired company override for the specified feature ID
      */
     @JsonProperty("without_feature_override_for")
     public Optional<String> getWithoutFeatureOverrideFor() {
@@ -397,7 +397,6 @@ public final class CountCompaniesParams {
 
         private Optional<Boolean> withoutSubscription = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -680,7 +679,7 @@ public final class CountCompaniesParams {
         }
 
         /**
-         * <p>Filter out companies that already have a company override for the specified feature ID</p>
+         * <p>Filter out companies that have an unexpired company override for the specified feature ID</p>
          */
         @JsonSetter(value = "without_feature_override_for", nulls = Nulls.SKIP)
         public Builder withoutFeatureOverrideFor(Optional<String> withoutFeatureOverrideFor) {
@@ -745,6 +744,34 @@ public final class CountCompaniesParams {
                     withoutPlan,
                     withoutSubscription,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_type_ids")
+                    || key.equalsIgnoreCase("has_scheduled_downgrade")
+                    || key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("monetized_subscriptions")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_ids")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("plan_version_ids")
+                    || key.equalsIgnoreCase("plan_version_unpublished")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("sort_order_column")
+                    || key.equalsIgnoreCase("sort_order_direction")
+                    || key.equalsIgnoreCase("subscription_statuses")
+                    || key.equalsIgnoreCase("subscription_types")
+                    || key.equalsIgnoreCase("with_entitlement_for")
+                    || key.equalsIgnoreCase("with_subscription")
+                    || key.equalsIgnoreCase("without_feature_override_for")
+                    || key.equalsIgnoreCase("without_plan")
+                    || key.equalsIgnoreCase("without_subscription")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

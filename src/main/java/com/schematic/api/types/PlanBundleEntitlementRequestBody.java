@@ -114,7 +114,6 @@ public final class PlanBundleEntitlementRequestBody {
 
         private Optional<String> entitlementId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -163,6 +162,16 @@ public final class PlanBundleEntitlementRequestBody {
         @java.lang.Override
         public PlanBundleEntitlementRequestBody build() {
             return new PlanBundleEntitlementRequestBody(action, entitlementId, req, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("action")
+                    || key.equalsIgnoreCase("entitlement_id")
+                    || key.equalsIgnoreCase("req")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

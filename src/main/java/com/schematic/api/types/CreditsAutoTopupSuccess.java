@@ -132,7 +132,6 @@ public final class CreditsAutoTopupSuccess {
 
         private Optional<CreditsAutoTopupCompanySummary> company = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -189,6 +188,17 @@ public final class CreditsAutoTopupSuccess {
         @java.lang.Override
         public CreditsAutoTopupSuccess build() {
             return new CreditsAutoTopupSuccess(company, credit, grantId, quantity, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("credit")
+                    || key.equalsIgnoreCase("grant_id")
+                    || key.equalsIgnoreCase("quantity")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

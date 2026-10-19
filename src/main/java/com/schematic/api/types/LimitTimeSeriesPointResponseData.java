@@ -166,7 +166,6 @@ public final class LimitTimeSeriesPointResponseData {
 
         private Optional<Long> limitValue = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -246,6 +245,19 @@ public final class LimitTimeSeriesPointResponseData {
         public LimitTimeSeriesPointResponseData build() {
             return new LimitTimeSeriesPointResponseData(
                     effectiveAt, isSoftLimit, limitSource, limitValue, planId, priceBehavior, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("effective_at")
+                    || key.equalsIgnoreCase("is_soft_limit")
+                    || key.equalsIgnoreCase("limit_source")
+                    || key.equalsIgnoreCase("limit_value")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("price_behavior")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

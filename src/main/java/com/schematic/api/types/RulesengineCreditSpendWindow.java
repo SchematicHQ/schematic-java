@@ -106,7 +106,6 @@ public final class RulesengineCreditSpendWindow {
 
         private String unit;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -143,6 +142,14 @@ public final class RulesengineCreditSpendWindow {
         @java.lang.Override
         public RulesengineCreditSpendWindow build() {
             return new RulesengineCreditSpendWindow(count, unit, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("count") || key.equalsIgnoreCase("unit")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -211,7 +211,6 @@ public final class CheckoutSettingsResponseData {
 
         private Optional<String> optInText = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -311,6 +310,21 @@ public final class CheckoutSettingsResponseData {
                     optInText,
                     optInTitle,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("bundle_purchase_behavior")
+                    || key.equalsIgnoreCase("collect_address")
+                    || key.equalsIgnoreCase("collect_email")
+                    || key.equalsIgnoreCase("collect_phone")
+                    || key.equalsIgnoreCase("collect_tax_id")
+                    || key.equalsIgnoreCase("opt_in_enabled")
+                    || key.equalsIgnoreCase("opt_in_text")
+                    || key.equalsIgnoreCase("opt_in_title")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -371,7 +371,6 @@ public final class ListPlansRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -699,6 +698,33 @@ public final class ListPlansRequest {
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("company_scoped_only")
+                    || key.equalsIgnoreCase("exclude_company_scoped")
+                    || key.equalsIgnoreCase("exclude_unused")
+                    || key.equalsIgnoreCase("for_fallback_plan")
+                    || key.equalsIgnoreCase("for_initial_plan")
+                    || key.equalsIgnoreCase("for_trial_expiry_plan")
+                    || key.equalsIgnoreCase("has_product_id")
+                    || key.equalsIgnoreCase("include_draft_versions")
+                    || key.equalsIgnoreCase("plan_type")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("scoped_to_company_id")
+                    || key.equalsIgnoreCase("with_entitlements")
+                    || key.equalsIgnoreCase("with_published_version")
+                    || key.equalsIgnoreCase("without_entitlement_for_include_drafts")
+                    || key.equalsIgnoreCase("without_entitlement_for")
+                    || key.equalsIgnoreCase("without_paid_product_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

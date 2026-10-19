@@ -107,7 +107,6 @@ public final class UpdateCreditSpendPolicyRequestBody {
 
         private Optional<CreditSpendWindowUnit> windowUnit = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -167,6 +166,17 @@ public final class UpdateCreditSpendPolicyRequestBody {
         public UpdateCreditSpendPolicyRequestBody build() {
             return new UpdateCreditSpendPolicyRequestBody(
                     label, maxPerDraw, windowAmount, windowUnit, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("label")
+                    || key.equalsIgnoreCase("max_per_draw")
+                    || key.equalsIgnoreCase("window_amount")
+                    || key.equalsIgnoreCase("window_unit")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

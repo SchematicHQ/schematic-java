@@ -178,7 +178,6 @@ public final class CompanyUserUsageRowResponseData {
 
         private Optional<OffsetDateTime> lastSeen = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -278,6 +277,18 @@ public final class CompanyUserUsageRowResponseData {
         @java.lang.Override
         public CompanyUserUsageRowResponseData build() {
             return new CompanyUserUsageRowResponseData(lastSeen, share, user, userId, value, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("last_seen")
+                    || key.equalsIgnoreCase("share")
+                    || key.equalsIgnoreCase("user")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -117,7 +117,6 @@ public final class CheckoutDataRequestBody {
 
         private Optional<Currency> currency = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -166,6 +165,16 @@ public final class CheckoutDataRequestBody {
         @java.lang.Override
         public CheckoutDataRequestBody build() {
             return new CheckoutDataRequestBody(companyId, currency, selectedPlanId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("selected_plan_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

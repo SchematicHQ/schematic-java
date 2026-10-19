@@ -581,7 +581,6 @@ public final class CompanyDetailResponseData {
 
         private List<CompanyPlanWithBillingSubView> addOns = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1096,6 +1095,41 @@ public final class CompanyDetailResponseData {
                     updatedAt,
                     userCount,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("add_ons")
+                    || key.equalsIgnoreCase("billing_credit_balances")
+                    || key.equalsIgnoreCase("billing_email")
+                    || key.equalsIgnoreCase("billing_profile")
+                    || key.equalsIgnoreCase("billing_profiles")
+                    || key.equalsIgnoreCase("billing_subscription")
+                    || key.equalsIgnoreCase("billing_subscriptions")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("custom_plan_billings")
+                    || key.equalsIgnoreCase("default_payment_method")
+                    || key.equalsIgnoreCase("entitlements")
+                    || key.equalsIgnoreCase("entity_traits")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("keys")
+                    || key.equalsIgnoreCase("last_seen_at")
+                    || key.equalsIgnoreCase("logo_url")
+                    || key.equalsIgnoreCase("metrics")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("payment_methods")
+                    || key.equalsIgnoreCase("pending_migration")
+                    || key.equalsIgnoreCase("plan")
+                    || key.equalsIgnoreCase("plans")
+                    || key.equalsIgnoreCase("rules")
+                    || key.equalsIgnoreCase("scheduled_downgrade")
+                    || key.equalsIgnoreCase("traits")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("user_count")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

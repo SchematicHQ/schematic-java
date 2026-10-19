@@ -31,7 +31,6 @@ import com.schematic.api.resources.plans.requests.ListBillingProductMatchCompani
 import com.schematic.api.resources.plans.requests.ListCustomPlanBillingsRequest;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
 import com.schematic.api.resources.plans.requests.ListPlansRequest;
-import com.schematic.api.resources.plans.requests.PublishPlanVersionRequestBody;
 import com.schematic.api.resources.plans.requests.RetryCustomPlanBillingRequestBody;
 import com.schematic.api.resources.plans.requests.UpdateCompanyPlansRequestBody;
 import com.schematic.api.resources.plans.types.CountBillingProductMatchCompaniesResponse;
@@ -47,6 +46,7 @@ import com.schematic.api.resources.plans.types.ListCustomPlanBillingsResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
 import com.schematic.api.resources.plans.types.ListPlansResponse;
 import com.schematic.api.resources.plans.types.MarkCustomPlanBillingPaidResponse;
+import com.schematic.api.resources.plans.types.PreviewPublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.PublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.RetryCustomPlanBillingResponse;
 import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
@@ -55,6 +55,7 @@ import com.schematic.api.resources.plans.types.UpsertBillingProductPlanResponse;
 import com.schematic.api.resources.plans.types.UpsertPlanForBillingProductResponse;
 import com.schematic.api.types.ApiError;
 import com.schematic.api.types.CreatePlanRequestBody;
+import com.schematic.api.types.PublishPlanVersionRequestBody;
 import com.schematic.api.types.UpdatePlanRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
 import java.io.IOException;
@@ -220,6 +221,10 @@ public class AsyncRawPlansClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_id", request.getPlanId().get(), false);
         }
+        if (request.getPlanVersionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
+        }
         if (request.getPlanBillingSource().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -238,6 +243,13 @@ public class AsyncRawPlansClient {
         if (request.getOffset().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
+        }
+        if (request.getPlanBillingSources().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "plan_billing_sources",
+                    request.getPlanBillingSources().get(),
+                    true);
         }
         if (request.getStatuses().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -2434,6 +2446,123 @@ public class AsyncRawPlansClient {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBodyString, PublishPlanVersionResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 401:
+                                future.completeExceptionally(new UnauthorizedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new InternalServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new BaseSchematicApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new BaseSchematicException("Network error executing HTTP request", e));
+            }
+        });
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                okhttpCall.cancel();
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<PreviewPublishPlanVersionResponse>> previewPublishPlanVersion(
+            String planVersionId, PublishPlanVersionRequestBody request) {
+        return previewPublishPlanVersion(planVersionId, request, null);
+    }
+
+    public CompletableFuture<BaseSchematicHttpResponse<PreviewPublishPlanVersionResponse>> previewPublishPlanVersion(
+            String planVersionId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("plans/version")
+                .addPathSegment(planVersionId)
+                .addPathSegments("publish-preview");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(BodyProperties.merge(
+                            request, requestOptions != null ? requestOptions.getBodyProperties() : null)),
+                    MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<BaseSchematicHttpResponse<PreviewPublishPlanVersionResponse>> future =
+                new CompletableFuture<>();
+        RetryInterceptor.AsyncCall okhttpCall = RetryInterceptor.newAsyncCall(client, okhttpRequest);
+        okhttpCall.enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new BaseSchematicHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, PreviewPublishPlanVersionResponse.class),
                                 response));
                         return;
                     }

@@ -137,7 +137,6 @@ public final class ListMigrationsRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -227,6 +226,19 @@ public final class ListMigrationsRequest {
         public ListMigrationsRequest build() {
             return new ListMigrationsRequest(
                     featureId, featurePlanRolloutId, planVersionId, status, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("feature_plan_rollout_id")
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

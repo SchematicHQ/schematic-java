@@ -124,7 +124,6 @@ public final class CountWebhookEventsParams {
 
         private Optional<String> webhookId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -201,6 +200,18 @@ public final class CountWebhookEventsParams {
 
         public CountWebhookEventsParams build() {
             return new CountWebhookEventsParams(ids, limit, offset, q, webhookId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("webhook_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

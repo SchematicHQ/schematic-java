@@ -68,7 +68,6 @@ public final class RawEventBatchResponseData {
     public static final class Builder {
         private List<RawEventResponseData> events = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -101,6 +100,14 @@ public final class RawEventBatchResponseData {
 
         public RawEventBatchResponseData build() {
             return new RawEventBatchResponseData(events, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("events")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

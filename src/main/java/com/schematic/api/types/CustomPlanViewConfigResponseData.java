@@ -111,7 +111,6 @@ public final class CustomPlanViewConfigResponseData {
 
         private String priceText;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -148,6 +147,16 @@ public final class CustomPlanViewConfigResponseData {
         @java.lang.Override
         public CustomPlanViewConfigResponseData build() {
             return new CustomPlanViewConfigResponseData(ctaText, ctaWebSite, priceText, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("cta_text")
+                    || key.equalsIgnoreCase("cta_web_site")
+                    || key.equalsIgnoreCase("price_text")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

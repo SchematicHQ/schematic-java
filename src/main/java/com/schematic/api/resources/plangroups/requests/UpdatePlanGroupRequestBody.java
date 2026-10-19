@@ -791,7 +791,6 @@ public final class UpdatePlanGroupRequestBody {
 
         private Optional<List<CompatiblePlans>> addOnCompatibilities = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1363,6 +1362,53 @@ public final class UpdatePlanGroupRequestBody {
                     trialExpiryPlanPriceId,
                     trialPaymentMethodRequired,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("add_on_compatibilities")
+                    || key.equalsIgnoreCase("add_on_ids")
+                    || key.equalsIgnoreCase("checkout_bundle_purchase_behavior")
+                    || key.equalsIgnoreCase("checkout_collect_address")
+                    || key.equalsIgnoreCase("checkout_collect_email")
+                    || key.equalsIgnoreCase("checkout_collect_phone")
+                    || key.equalsIgnoreCase("checkout_collect_tax_id")
+                    || key.equalsIgnoreCase("custom_checkout_fields")
+                    || key.equalsIgnoreCase("custom_plan_config")
+                    || key.equalsIgnoreCase("custom_plan_id")
+                    || key.equalsIgnoreCase("enable_tax_collection")
+                    || key.equalsIgnoreCase("fallback_plan_id")
+                    || key.equalsIgnoreCase("initial_plan_id")
+                    || key.equalsIgnoreCase("initial_plan_price_id")
+                    || key.equalsIgnoreCase("opt_in_enabled")
+                    || key.equalsIgnoreCase("opt_in_text")
+                    || key.equalsIgnoreCase("opt_in_title")
+                    || key.equalsIgnoreCase("ordered_add_ons")
+                    || key.equalsIgnoreCase("ordered_bundle_list")
+                    || key.equalsIgnoreCase("ordered_plans")
+                    || key.equalsIgnoreCase("prevent_downgrades_when_over_limit")
+                    || key.equalsIgnoreCase("prevent_self_service_downgrade")
+                    || key.equalsIgnoreCase("prevent_self_service_downgrade_button_text")
+                    || key.equalsIgnoreCase("prevent_self_service_downgrade_url")
+                    || key.equalsIgnoreCase("proration_behavior")
+                    || key.equalsIgnoreCase("scheduled_downgrade_behavior")
+                    || key.equalsIgnoreCase("scheduled_downgrade_prevent_when_over_limit")
+                    || key.equalsIgnoreCase("show_as_monthly_prices")
+                    || key.equalsIgnoreCase("show_credits")
+                    || key.equalsIgnoreCase("show_estimated_total")
+                    || key.equalsIgnoreCase("show_feature_description")
+                    || key.equalsIgnoreCase("show_hard_limit")
+                    || key.equalsIgnoreCase("show_period_toggle")
+                    || key.equalsIgnoreCase("show_zero_price_as_free")
+                    || key.equalsIgnoreCase("sync_customer_billing_details")
+                    || key.equalsIgnoreCase("trial_days")
+                    || key.equalsIgnoreCase("trial_eligibility_per_plan")
+                    || key.equalsIgnoreCase("trial_expiry_plan_id")
+                    || key.equalsIgnoreCase("trial_expiry_plan_price_id")
+                    || key.equalsIgnoreCase("trial_payment_method_required")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

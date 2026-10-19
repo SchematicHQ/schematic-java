@@ -131,7 +131,6 @@ public final class ListAccountMembersParams {
 
         private Optional<AccountMemberRole> role = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -214,6 +213,18 @@ public final class ListAccountMembersParams {
 
         public ListAccountMembersParams build() {
             return new ListAccountMembersParams(ids, limit, offset, q, role, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("role")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

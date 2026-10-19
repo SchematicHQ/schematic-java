@@ -669,7 +669,6 @@ public final class PlanEntitlementResponseData {
 
         private Optional<BillingLinkedResourceResponseData> billingLinkedResource = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1180,6 +1179,46 @@ public final class PlanEntitlementResponseData {
                     valueType,
                     warningTiers,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_linked_resource")
+                    || key.equalsIgnoreCase("billing_threshold")
+                    || key.equalsIgnoreCase("consumption_rate")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("feature")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("metered_monthly_price")
+                    || key.equalsIgnoreCase("metered_quarterly_price")
+                    || key.equalsIgnoreCase("metered_yearly_price")
+                    || key.equalsIgnoreCase("metric_period")
+                    || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("overage_billing_cadence")
+                    || key.equalsIgnoreCase("overage_invoice_anchor")
+                    || key.equalsIgnoreCase("plan")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("price_behavior")
+                    || key.equalsIgnoreCase("quantity_rates")
+                    || key.equalsIgnoreCase("rule_id")
+                    || key.equalsIgnoreCase("rule_id_usage_exceeded")
+                    || key.equalsIgnoreCase("soft_limit")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("usage_based_product")
+                    || key.equalsIgnoreCase("usage_quantity")
+                    || key.equalsIgnoreCase("value_bool")
+                    || key.equalsIgnoreCase("value_credit")
+                    || key.equalsIgnoreCase("value_numeric")
+                    || key.equalsIgnoreCase("value_trait")
+                    || key.equalsIgnoreCase("value_trait_id")
+                    || key.equalsIgnoreCase("value_type")
+                    || key.equalsIgnoreCase("warning_tiers")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

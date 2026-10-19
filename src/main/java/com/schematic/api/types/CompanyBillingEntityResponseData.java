@@ -98,7 +98,6 @@ public final class CompanyBillingEntityResponseData {
 
         private Optional<CompanyResponseData> billingEntity = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -133,6 +132,14 @@ public final class CompanyBillingEntityResponseData {
         @java.lang.Override
         public CompanyBillingEntityResponseData build() {
             return new CompanyBillingEntityResponseData(billingEntity, hasOwnStripeCustomer, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_entity") || key.equalsIgnoreCase("has_own_stripe_customer")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

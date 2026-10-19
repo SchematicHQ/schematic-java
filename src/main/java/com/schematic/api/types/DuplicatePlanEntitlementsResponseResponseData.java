@@ -93,7 +93,6 @@ public final class DuplicatePlanEntitlementsResponseResponseData {
 
         private List<SkippedEntitlementResponseData> skipped = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -170,6 +169,14 @@ public final class DuplicatePlanEntitlementsResponseResponseData {
 
         public DuplicatePlanEntitlementsResponseResponseData build() {
             return new DuplicatePlanEntitlementsResponseResponseData(data, issues, skipped, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("issues") || key.equalsIgnoreCase("skipped")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

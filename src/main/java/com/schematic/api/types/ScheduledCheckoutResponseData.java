@@ -317,7 +317,6 @@ public final class ScheduledCheckoutResponseData {
 
         private Optional<OffsetDateTime> completedAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -487,6 +486,27 @@ public final class ScheduledCheckoutResponseData {
                     toPlanId,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("actor_type")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("completed_at")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("error_message")
+                    || key.equalsIgnoreCase("execute_after")
+                    || key.equalsIgnoreCase("from_plan_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("scheduled_interval")
+                    || key.equalsIgnoreCase("scheduled_price")
+                    || key.equalsIgnoreCase("started_at")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("to_plan_id")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

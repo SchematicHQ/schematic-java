@@ -192,7 +192,6 @@ public final class CreateBillingLinkedPlanRequestBody {
 
         private Optional<String> description = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -287,6 +286,20 @@ public final class CreateBillingLinkedPlanRequestBody {
                     name,
                     planType,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_provider")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("external_resource_id")
+                    || key.equalsIgnoreCase("external_resource_version")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("plan_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

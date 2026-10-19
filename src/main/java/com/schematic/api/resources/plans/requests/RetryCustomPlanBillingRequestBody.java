@@ -213,7 +213,6 @@ public final class RetryCustomPlanBillingRequestBody {
 
         private Optional<CustomPlanActivationStrategy> activationStrategy = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -354,6 +353,20 @@ public final class RetryCustomPlanBillingRequestBody {
                     prorateFirstPeriod,
                     sendInvoice,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("activation_strategy")
+                    || key.equalsIgnoreCase("billing_cycle_anchor")
+                    || key.equalsIgnoreCase("billing_start_date")
+                    || key.equalsIgnoreCase("customer_email")
+                    || key.equalsIgnoreCase("days_until_due")
+                    || key.equalsIgnoreCase("prorate_first_period")
+                    || key.equalsIgnoreCase("send_invoice")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

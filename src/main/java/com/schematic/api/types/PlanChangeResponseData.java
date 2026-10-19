@@ -651,7 +651,6 @@ public final class PlanChangeResponseData {
 
         private List<PlanSnapshotView> addOnsAdded = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1170,6 +1169,42 @@ public final class PlanChangeResponseData {
                     userId,
                     userName,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("action")
+                    || key.equalsIgnoreCase("actor_type")
+                    || key.equalsIgnoreCase("add_ons_added")
+                    || key.equalsIgnoreCase("add_ons_removed")
+                    || key.equalsIgnoreCase("amendment_status")
+                    || key.equalsIgnoreCase("api_key")
+                    || key.equalsIgnoreCase("audit_log")
+                    || key.equalsIgnoreCase("base_plan")
+                    || key.equalsIgnoreCase("base_plan_action")
+                    || key.equalsIgnoreCase("base_plan_version")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("integration")
+                    || key.equalsIgnoreCase("is_version_upgrade")
+                    || key.equalsIgnoreCase("migration_id")
+                    || key.equalsIgnoreCase("previous_base_plan")
+                    || key.equalsIgnoreCase("previous_base_plan_version")
+                    || key.equalsIgnoreCase("request_id")
+                    || key.equalsIgnoreCase("subscription_change_action")
+                    || key.equalsIgnoreCase("traits_updated")
+                    || key.equalsIgnoreCase("trial_converted_at")
+                    || key.equalsIgnoreCase("trial_expires_at")
+                    || key.equalsIgnoreCase("trial_status")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("user_name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

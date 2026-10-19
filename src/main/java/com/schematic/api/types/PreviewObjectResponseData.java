@@ -132,7 +132,6 @@ public final class PreviewObjectResponseData {
 
         private Optional<String> description = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -189,6 +188,17 @@ public final class PreviewObjectResponseData {
         @java.lang.Override
         public PreviewObjectResponseData build() {
             return new PreviewObjectResponseData(description, id, imageUrl, name, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("image_url")
+                    || key.equalsIgnoreCase("name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

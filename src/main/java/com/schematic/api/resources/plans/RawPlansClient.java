@@ -31,7 +31,6 @@ import com.schematic.api.resources.plans.requests.ListBillingProductMatchCompani
 import com.schematic.api.resources.plans.requests.ListCustomPlanBillingsRequest;
 import com.schematic.api.resources.plans.requests.ListPlanIssuesRequest;
 import com.schematic.api.resources.plans.requests.ListPlansRequest;
-import com.schematic.api.resources.plans.requests.PublishPlanVersionRequestBody;
 import com.schematic.api.resources.plans.requests.RetryCustomPlanBillingRequestBody;
 import com.schematic.api.resources.plans.requests.UpdateCompanyPlansRequestBody;
 import com.schematic.api.resources.plans.types.CountBillingProductMatchCompaniesResponse;
@@ -47,6 +46,7 @@ import com.schematic.api.resources.plans.types.ListCustomPlanBillingsResponse;
 import com.schematic.api.resources.plans.types.ListPlanIssuesResponse;
 import com.schematic.api.resources.plans.types.ListPlansResponse;
 import com.schematic.api.resources.plans.types.MarkCustomPlanBillingPaidResponse;
+import com.schematic.api.resources.plans.types.PreviewPublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.PublishPlanVersionResponse;
 import com.schematic.api.resources.plans.types.RetryCustomPlanBillingResponse;
 import com.schematic.api.resources.plans.types.UpdateCompanyPlansResponse;
@@ -55,6 +55,7 @@ import com.schematic.api.resources.plans.types.UpsertBillingProductPlanResponse;
 import com.schematic.api.resources.plans.types.UpsertPlanForBillingProductResponse;
 import com.schematic.api.types.ApiError;
 import com.schematic.api.types.CreatePlanRequestBody;
+import com.schematic.api.types.PublishPlanVersionRequestBody;
 import com.schematic.api.types.UpdatePlanRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
 import java.io.IOException;
@@ -185,6 +186,10 @@ public class RawPlansClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_id", request.getPlanId().get(), false);
         }
+        if (request.getPlanVersionId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
+        }
         if (request.getPlanBillingSource().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -203,6 +208,13 @@ public class RawPlansClient {
         if (request.getOffset().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "offset", request.getOffset().get(), false);
+        }
+        if (request.getPlanBillingSources().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "plan_billing_sources",
+                    request.getPlanBillingSources().get(),
+                    true);
         }
         if (request.getStatuses().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -1862,6 +1874,92 @@ public class RawPlansClient {
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, PublishPlanVersionResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<PreviewPublishPlanVersionResponse> previewPublishPlanVersion(
+            String planVersionId, PublishPlanVersionRequestBody request) {
+        return previewPublishPlanVersion(planVersionId, request, null);
+    }
+
+    public BaseSchematicHttpResponse<PreviewPublishPlanVersionResponse> previewPublishPlanVersion(
+            String planVersionId, PublishPlanVersionRequestBody request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("plans/version")
+                .addPathSegment(planVersionId)
+                .addPathSegments("publish-preview");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(BodyProperties.merge(
+                            request, requestOptions != null ? requestOptions.getBodyProperties() : null)),
+                    MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, PreviewPublishPlanVersionResponse.class),
                         response);
             }
             try {

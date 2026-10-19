@@ -115,7 +115,6 @@ public final class BillingLinkedResourceResponseData {
 
         private BillingProviderType originator;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -153,6 +152,16 @@ public final class BillingLinkedResourceResponseData {
         public BillingLinkedResourceResponseData build() {
             return new BillingLinkedResourceResponseData(
                     billingProvider, externalResourceId, originator, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_provider")
+                    || key.equalsIgnoreCase("external_resource_id")
+                    || key.equalsIgnoreCase("originator")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

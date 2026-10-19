@@ -135,7 +135,6 @@ public final class SkippedEntitlementResponseData {
 
         private List<SkippedEntitlementErrorResponseData> errors = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -198,6 +197,17 @@ public final class SkippedEntitlementResponseData {
         public SkippedEntitlementResponseData build() {
             return new SkippedEntitlementResponseData(
                     entitlementId, errors, featureId, featureName, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("entitlement_id")
+                    || key.equalsIgnoreCase("errors")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("feature_name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

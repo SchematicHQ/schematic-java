@@ -157,7 +157,6 @@ public final class ListBillingProductMatchCompaniesRequest {
 
         private Optional<String> q = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -245,6 +244,17 @@ public final class ListBillingProductMatchCompaniesRequest {
         @java.lang.Override
         public ListBillingProductMatchCompaniesRequest build() {
             return new ListBillingProductMatchCompaniesRequest(planId, q, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

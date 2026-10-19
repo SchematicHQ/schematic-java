@@ -128,7 +128,6 @@ public final class CancelSubscriptionRequest {
 
         private Optional<Boolean> cancelImmediately = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -191,6 +190,16 @@ public final class CancelSubscriptionRequest {
         @java.lang.Override
         public CancelSubscriptionRequest build() {
             return new CancelSubscriptionRequest(cancelImmediately, companyId, prorate, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("cancel_immediately")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("prorate")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

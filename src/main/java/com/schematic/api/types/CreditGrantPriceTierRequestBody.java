@@ -102,7 +102,6 @@ public final class CreditGrantPriceTierRequestBody {
 
         private Optional<Long> upTo = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -158,6 +157,16 @@ public final class CreditGrantPriceTierRequestBody {
 
         public CreditGrantPriceTierRequestBody build() {
             return new CreditGrantPriceTierRequestBody(perUnitPrice, perUnitPriceDecimal, upTo, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("per_unit_price")
+                    || key.equalsIgnoreCase("per_unit_price_decimal")
+                    || key.equalsIgnoreCase("up_to")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -133,7 +133,6 @@ public final class PlanVersionPriceChangeResponseData {
 
         private Optional<BillingPriceResponseData> new_ = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -190,6 +189,17 @@ public final class PlanVersionPriceChangeResponseData {
         @java.lang.Override
         public PlanVersionPriceChangeResponseData build() {
             return new PlanVersionPriceChangeResponseData(cadence, currency, new_, old, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("cadence")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("new")
+                    || key.equalsIgnoreCase("old")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -103,7 +103,6 @@ public final class DeleteBillingPlanCreditGrantResponse {
 
         private DeleteBillingPlanCreditGrantParams params;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -136,6 +135,14 @@ public final class DeleteBillingPlanCreditGrantResponse {
         @java.lang.Override
         public DeleteBillingPlanCreditGrantResponse build() {
             return new DeleteBillingPlanCreditGrantResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -110,7 +110,6 @@ public final class CreditBalanceFeatureConsumptionResponseData {
 
         private String featureName;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -148,6 +147,16 @@ public final class CreditBalanceFeatureConsumptionResponseData {
         public CreditBalanceFeatureConsumptionResponseData build() {
             return new CreditBalanceFeatureConsumptionResponseData(
                     amount, featureId, featureName, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("feature_name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

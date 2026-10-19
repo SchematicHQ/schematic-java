@@ -111,7 +111,6 @@ public final class GetEntityTraitValuesParams {
 
         private Optional<String> q = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -176,6 +175,17 @@ public final class GetEntityTraitValuesParams {
 
         public GetEntityTraitValuesParams build() {
             return new GetEntityTraitValuesParams(definitionId, limit, offset, q, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("definition_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("q")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

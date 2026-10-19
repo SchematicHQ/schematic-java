@@ -115,7 +115,6 @@ public final class GetTopFeaturesByUsageRequest {
 
         private Optional<Long> limit = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -158,6 +157,16 @@ public final class GetTopFeaturesByUsageRequest {
         @java.lang.Override
         public GetTopFeaturesByUsageRequest build() {
             return new GetTopFeaturesByUsageRequest(endTime, limit, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

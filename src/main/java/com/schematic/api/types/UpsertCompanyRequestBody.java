@@ -209,7 +209,6 @@ public final class UpsertCompanyRequestBody {
 
         private Optional<Boolean> updateOnly = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -379,6 +378,23 @@ public final class UpsertCompanyRequestBody {
                     traits,
                     updateOnly,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("base_plan_id")
+                    || key.equalsIgnoreCase("base_plan_price_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("keys")
+                    || key.equalsIgnoreCase("last_seen_at")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("prevent_key_remap")
+                    || key.equalsIgnoreCase("remove_keys")
+                    || key.equalsIgnoreCase("traits")
+                    || key.equalsIgnoreCase("update_only")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -302,7 +302,6 @@ public final class CreateCreditBundleRequestBody {
 
         private Optional<String> bundleType = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -494,6 +493,26 @@ public final class CreateCreditBundleRequestBody {
                     quantity,
                     status,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("bundle_name")
+                    || key.equalsIgnoreCase("bundle_type")
+                    || key.equalsIgnoreCase("compatible_plan_ids")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("expiry_type")
+                    || key.equalsIgnoreCase("expiry_unit")
+                    || key.equalsIgnoreCase("expiry_unit_count")
+                    || key.equalsIgnoreCase("price_per_unit")
+                    || key.equalsIgnoreCase("price_per_unit_decimal")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

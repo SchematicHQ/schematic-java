@@ -198,7 +198,6 @@ public final class EntityTraitDefinitionResponseData {
 
         private List<String> hierarchy = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -285,6 +284,20 @@ public final class EntityTraitDefinitionResponseData {
         public EntityTraitDefinitionResponseData build() {
             return new EntityTraitDefinitionResponseData(
                     createdAt, displayName, entityType, hierarchy, id, traitType, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("display_name")
+                    || key.equalsIgnoreCase("entity_type")
+                    || key.equalsIgnoreCase("hierarchy")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("trait_type")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

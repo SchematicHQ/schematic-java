@@ -157,7 +157,6 @@ public final class GetUserUsageDetailRequest {
 
         private Optional<OffsetDateTime> endTime = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -236,6 +235,17 @@ public final class GetUserUsageDetailRequest {
         @java.lang.Override
         public GetUserUsageDetailRequest build() {
             return new GetUserUsageDetailRequest(companyId, endTime, startTime, userId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("start_time")
+                    || key.equalsIgnoreCase("user_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -130,7 +130,6 @@ public final class CompanyBillingCheckoutSettings {
 
         private boolean collectTaxId;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -176,6 +175,17 @@ public final class CompanyBillingCheckoutSettings {
         public CompanyBillingCheckoutSettings build() {
             return new CompanyBillingCheckoutSettings(
                     collectAddress, collectEmail, collectPhone, collectTaxId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("collect_address")
+                    || key.equalsIgnoreCase("collect_email")
+                    || key.equalsIgnoreCase("collect_phone")
+                    || key.equalsIgnoreCase("collect_tax_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

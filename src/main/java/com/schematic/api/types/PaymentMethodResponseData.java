@@ -384,7 +384,6 @@ public final class PaymentMethodResponseData {
 
         private Optional<String> accountLast4 = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -620,6 +619,31 @@ public final class PaymentMethodResponseData {
                     providerType,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_last4")
+                    || key.equalsIgnoreCase("account_name")
+                    || key.equalsIgnoreCase("bank_name")
+                    || key.equalsIgnoreCase("billing_email")
+                    || key.equalsIgnoreCase("billing_name")
+                    || key.equalsIgnoreCase("card_brand")
+                    || key.equalsIgnoreCase("card_exp_month")
+                    || key.equalsIgnoreCase("card_exp_year")
+                    || key.equalsIgnoreCase("card_last4")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("payment_method_type")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

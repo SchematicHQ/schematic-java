@@ -393,7 +393,6 @@ public final class CompanyBillingEntitySubscriptionResponseData {
 
         private Optional<OffsetDateTime> cancelAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -640,6 +639,31 @@ public final class CompanyBillingEntitySubscriptionResponseData {
                     totalPrice,
                     trialEnd,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("cancel_at")
+                    || key.equalsIgnoreCase("cancel_at_period_end")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("discounts")
+                    || key.equalsIgnoreCase("expired_at")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("is_initial")
+                    || key.equalsIgnoreCase("latest_invoice")
+                    || key.equalsIgnoreCase("payment_method")
+                    || key.equalsIgnoreCase("plan_name")
+                    || key.equalsIgnoreCase("products")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("subscription_external_id")
+                    || key.equalsIgnoreCase("total_price")
+                    || key.equalsIgnoreCase("trial_end")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

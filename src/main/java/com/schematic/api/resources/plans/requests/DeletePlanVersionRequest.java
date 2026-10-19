@@ -68,7 +68,6 @@ public final class DeletePlanVersionRequest {
     public static final class Builder {
         private Optional<Boolean> promoteArchivedVersion = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -91,6 +90,14 @@ public final class DeletePlanVersionRequest {
 
         public DeletePlanVersionRequest build() {
             return new DeletePlanVersionRequest(promoteArchivedVersion, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("promote_archived_version")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -312,7 +312,6 @@ public final class UsageBasedEntitlementResponseData {
 
         private Optional<Long> billingThreshold = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -531,6 +530,27 @@ public final class UsageBasedEntitlementResponseData {
                     valueType,
                     yearlyUsageBasedPrice,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_threshold")
+                    || key.equalsIgnoreCase("consumption_rate")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("metered_price")
+                    || key.equalsIgnoreCase("metric_period")
+                    || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("monthly_usage_based_price")
+                    || key.equalsIgnoreCase("price_behavior")
+                    || key.equalsIgnoreCase("quarterly_usage_based_price")
+                    || key.equalsIgnoreCase("usage_quantity")
+                    || key.equalsIgnoreCase("value_bool")
+                    || key.equalsIgnoreCase("value_numeric")
+                    || key.equalsIgnoreCase("value_type")
+                    || key.equalsIgnoreCase("yearly_usage_based_price")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

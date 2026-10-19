@@ -298,7 +298,6 @@ public final class StripeIntegrationConfig {
 
         private Optional<String> accountId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -514,6 +513,23 @@ public final class StripeIntegrationConfig {
                     onboardUrl,
                     returnTo,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("account_name")
+                    || key.equalsIgnoreCase("claimable_sandbox_expires_at")
+                    || key.equalsIgnoreCase("claimable_sandbox_id")
+                    || key.equalsIgnoreCase("claimable_sandbox_status")
+                    || key.equalsIgnoreCase("company_update_only")
+                    || key.equalsIgnoreCase("is_sandbox")
+                    || key.equalsIgnoreCase("live_mode")
+                    || key.equalsIgnoreCase("onboard_url")
+                    || key.equalsIgnoreCase("return_to")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

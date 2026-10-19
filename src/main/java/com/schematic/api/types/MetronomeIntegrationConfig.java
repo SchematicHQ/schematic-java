@@ -71,7 +71,6 @@ public final class MetronomeIntegrationConfig {
     public static final class Builder {
         private Optional<String> externalCustomerIdKey = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -97,6 +96,14 @@ public final class MetronomeIntegrationConfig {
 
         public MetronomeIntegrationConfig build() {
             return new MetronomeIntegrationConfig(externalCustomerIdKey, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("external_customer_id_key")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

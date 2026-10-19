@@ -101,7 +101,6 @@ public final class CountPlansResponse {
 
         private CountPlansParams params;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -134,6 +133,14 @@ public final class CountPlansResponse {
         @java.lang.Override
         public CountPlansResponse build() {
             return new CountPlansResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

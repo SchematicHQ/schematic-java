@@ -69,7 +69,6 @@ public final class FeatureUsageDetailResponseData {
     public static final class Builder {
         private List<FeatureUsageResponseData> features = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -102,6 +101,14 @@ public final class FeatureUsageDetailResponseData {
 
         public FeatureUsageDetailResponseData build() {
             return new FeatureUsageDetailResponseData(features, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("features")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

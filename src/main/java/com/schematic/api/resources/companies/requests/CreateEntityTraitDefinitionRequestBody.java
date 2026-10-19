@@ -139,7 +139,6 @@ public final class CreateEntityTraitDefinitionRequestBody {
 
         private Optional<String> displayName = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -208,6 +207,17 @@ public final class CreateEntityTraitDefinitionRequestBody {
         public CreateEntityTraitDefinitionRequestBody build() {
             return new CreateEntityTraitDefinitionRequestBody(
                     displayName, entityType, hierarchy, traitType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("display_name")
+                    || key.equalsIgnoreCase("entity_type")
+                    || key.equalsIgnoreCase("hierarchy")
+                    || key.equalsIgnoreCase("trait_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

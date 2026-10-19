@@ -150,7 +150,6 @@ public final class CreateMeterRequestBody {
 
         private Optional<BillingProviderType> providerType = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -210,6 +209,18 @@ public final class CreateMeterRequestBody {
         public CreateMeterRequestBody build() {
             return new CreateMeterRequestBody(
                     displayName, eventName, eventPayloadKey, externalId, providerType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("display_name")
+                    || key.equalsIgnoreCase("event_name")
+                    || key.equalsIgnoreCase("event_payload_key")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("provider_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

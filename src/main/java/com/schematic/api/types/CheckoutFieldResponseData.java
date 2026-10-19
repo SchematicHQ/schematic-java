@@ -252,7 +252,6 @@ public final class CheckoutFieldResponseData {
 
         private Optional<String> helperText = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -379,6 +378,23 @@ public final class CheckoutFieldResponseData {
                     traitHierarchy,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("definition_id")
+                    || key.equalsIgnoreCase("helper_text")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("position")
+                    || key.equalsIgnoreCase("required")
+                    || key.equalsIgnoreCase("stripe_metadata_key")
+                    || key.equalsIgnoreCase("trait_hierarchy")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

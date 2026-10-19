@@ -199,7 +199,6 @@ public final class ComponentResponseData {
 
         private Optional<Map<String, Double>> ast = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -289,6 +288,21 @@ public final class ComponentResponseData {
         public ComponentResponseData build() {
             return new ComponentResponseData(
                     ast, catalogId, createdAt, id, name, state, type, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ast")
+                    || key.equalsIgnoreCase("catalog_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("state")
+                    || key.equalsIgnoreCase("type")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

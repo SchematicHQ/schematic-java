@@ -171,7 +171,6 @@ public final class EnvironmentResponseData {
 
         private OffsetDateTime updatedAt;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -233,6 +232,19 @@ public final class EnvironmentResponseData {
         public EnvironmentResponseData build() {
             return new EnvironmentResponseData(
                     createdAt, environmentType, id, name, requireContextSignature, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_type")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("require_context_signature")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

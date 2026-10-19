@@ -217,7 +217,6 @@ public final class CountCreditEventLedgerRequest {
 
         private Optional<String> billingCreditId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -359,6 +358,21 @@ public final class CountCreditEventLedgerRequest {
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("event_type")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("start_time")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

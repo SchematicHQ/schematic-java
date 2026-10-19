@@ -113,7 +113,6 @@ public final class GetEventSummariesRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -183,6 +182,17 @@ public final class GetEventSummariesRequest {
 
         public GetEventSummariesRequest build() {
             return new GetEventSummariesRequest(eventSubtypes, q, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("event_subtypes")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

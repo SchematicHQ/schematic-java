@@ -166,7 +166,6 @@ public final class TopFeatureByUsageResponseData {
 
         private Optional<Double> changePct = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -240,6 +239,19 @@ public final class TopFeatureByUsageResponseData {
         public TopFeatureByUsageResponseData build() {
             return new TopFeatureByUsageResponseData(
                     changePct, featureId, featureName, pluralName, priorUsage, usage, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("change_pct")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("feature_name")
+                    || key.equalsIgnoreCase("plural_name")
+                    || key.equalsIgnoreCase("prior_usage")
+                    || key.equalsIgnoreCase("usage")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

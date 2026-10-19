@@ -224,7 +224,6 @@ public final class EventBodyTrack {
 
         private Optional<Map<String, String>> company = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -376,6 +375,20 @@ public final class EventBodyTrack {
         public EventBodyTrack build() {
             return new EventBodyTrack(
                     company, event, leaseId, quantity, reservationId, traits, user, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("event")
+                    || key.equalsIgnoreCase("lease_id")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("reservation_id")
+                    || key.equalsIgnoreCase("traits")
+                    || key.equalsIgnoreCase("user")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

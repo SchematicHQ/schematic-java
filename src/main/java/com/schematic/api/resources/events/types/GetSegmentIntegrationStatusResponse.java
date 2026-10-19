@@ -108,7 +108,6 @@ public final class GetSegmentIntegrationStatusResponse {
 
         private Map<String, JsonNode> params = new LinkedHashMap<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -165,6 +164,14 @@ public final class GetSegmentIntegrationStatusResponse {
         @java.lang.Override
         public GetSegmentIntegrationStatusResponse build() {
             return new GetSegmentIntegrationStatusResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -252,7 +252,6 @@ public final class RulesengineRule {
 
         private List<RulesengineConditionGroup> conditionGroups = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -396,6 +395,23 @@ public final class RulesengineRule {
                     ruleType,
                     value,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("condition_groups")
+                    || key.equalsIgnoreCase("conditions")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("priority")
+                    || key.equalsIgnoreCase("rule_type")
+                    || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

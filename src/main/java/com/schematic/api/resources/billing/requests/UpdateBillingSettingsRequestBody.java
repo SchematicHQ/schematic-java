@@ -69,7 +69,6 @@ public final class UpdateBillingSettingsRequestBody {
     public static final class Builder {
         private Optional<BillingProviderType> defaultProviderType = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -92,6 +91,14 @@ public final class UpdateBillingSettingsRequestBody {
 
         public UpdateBillingSettingsRequestBody build() {
             return new UpdateBillingSettingsRequestBody(defaultProviderType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("default_provider_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

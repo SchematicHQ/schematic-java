@@ -113,7 +113,6 @@ public final class CreditBundlePurchaseResponseData {
 
         private Optional<BillingCreditBundleResponseData> bundle = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -156,6 +155,14 @@ public final class CreditBundlePurchaseResponseData {
         @java.lang.Override
         public CreditBundlePurchaseResponseData build() {
             return new CreditBundlePurchaseResponseData(bundle, quantity, total, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("bundle") || key.equalsIgnoreCase("quantity") || key.equalsIgnoreCase("total")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

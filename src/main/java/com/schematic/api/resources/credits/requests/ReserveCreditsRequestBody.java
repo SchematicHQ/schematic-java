@@ -167,7 +167,6 @@ public final class ReserveCreditsRequestBody {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -251,6 +250,18 @@ public final class ReserveCreditsRequestBody {
         public ReserveCreditsRequestBody build() {
             return new ReserveCreditsRequestBody(
                     amount, companyId, creditTypeId, expiresAt, idempotencyKey, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("credit_type_id")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("idempotency_key")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

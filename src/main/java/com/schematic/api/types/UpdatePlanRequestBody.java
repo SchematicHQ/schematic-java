@@ -114,7 +114,6 @@ public final class UpdatePlanRequestBody {
 
         private Optional<String> description = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -163,6 +162,14 @@ public final class UpdatePlanRequestBody {
         @java.lang.Override
         public UpdatePlanRequestBody build() {
             return new UpdatePlanRequestBody(description, icon, name, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("description") || key.equalsIgnoreCase("icon") || key.equalsIgnoreCase("name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

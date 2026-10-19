@@ -68,7 +68,6 @@ public final class GetFeatureUsageByCompanyParams {
     public static final class Builder {
         private Optional<Map<String, String>> keys = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -91,6 +90,14 @@ public final class GetFeatureUsageByCompanyParams {
 
         public GetFeatureUsageByCompanyParams build() {
             return new GetFeatureUsageByCompanyParams(keys, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("keys")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

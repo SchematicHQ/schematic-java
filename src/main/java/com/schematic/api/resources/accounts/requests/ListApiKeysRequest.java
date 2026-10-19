@@ -143,7 +143,6 @@ public final class ListApiKeysRequest {
 
         private Optional<String> environmentId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -220,6 +219,17 @@ public final class ListApiKeysRequest {
         @java.lang.Override
         public ListApiKeysRequest build() {
             return new ListApiKeysRequest(environmentId, requireEnvironment, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("require_environment")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

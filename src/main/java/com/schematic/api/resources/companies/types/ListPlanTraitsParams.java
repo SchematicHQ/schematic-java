@@ -136,7 +136,6 @@ public final class ListPlanTraitsParams {
 
         private Optional<List<String>> traitIds = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -225,6 +224,19 @@ public final class ListPlanTraitsParams {
 
         public ListPlanTraitsParams build() {
             return new ListPlanTraitsParams(ids, limit, offset, planId, traitId, traitIds, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("ids")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("trait_id")
+                    || key.equalsIgnoreCase("trait_ids")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

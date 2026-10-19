@@ -243,7 +243,6 @@ public final class WhoAmIResponseData {
 
         private Optional<String> apiKeyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -394,6 +393,23 @@ public final class WhoAmIResponseData {
                     userId,
                     userName,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("account_name")
+                    || key.equalsIgnoreCase("actor_type")
+                    || key.equalsIgnoreCase("api_key_id")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("environments")
+                    || key.equalsIgnoreCase("onboarding_complete")
+                    || key.equalsIgnoreCase("stripe_user_id")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("user_name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

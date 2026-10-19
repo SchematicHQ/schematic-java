@@ -132,7 +132,6 @@ public final class InstallStripeSandboxRequestBody {
 
         private Optional<String> country = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -195,6 +194,17 @@ public final class InstallStripeSandboxRequestBody {
         @java.lang.Override
         public InstallStripeSandboxRequestBody build() {
             return new InstallStripeSandboxRequestBody(country, email, name, seedSampleData, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("country")
+                    || key.equalsIgnoreCase("email")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("seed_sample_data")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

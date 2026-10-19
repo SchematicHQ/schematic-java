@@ -67,7 +67,6 @@ public final class RulesengineCreditPostpaidConfig {
     public static final class Builder {
         private Optional<Double> overdraftLimit = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -90,6 +89,14 @@ public final class RulesengineCreditPostpaidConfig {
 
         public RulesengineCreditPostpaidConfig build() {
             return new RulesengineCreditPostpaidConfig(overdraftLimit, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("overdraft_limit")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

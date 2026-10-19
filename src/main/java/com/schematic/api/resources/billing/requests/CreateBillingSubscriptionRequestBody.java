@@ -463,7 +463,6 @@ public final class CreateBillingSubscriptionRequestBody {
 
         private Optional<String> applicationId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -794,6 +793,35 @@ public final class CreateBillingSubscriptionRequestBody {
                     trialEnd,
                     trialEndSetting,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("application_id")
+                    || key.equalsIgnoreCase("cancel_at")
+                    || key.equalsIgnoreCase("cancel_at_period_end")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("default_payment_method_external_id")
+                    || key.equalsIgnoreCase("default_payment_method_id")
+                    || key.equalsIgnoreCase("discounts")
+                    || key.equalsIgnoreCase("expired_at")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("metadata")
+                    || key.equalsIgnoreCase("period_end")
+                    || key.equalsIgnoreCase("period_start")
+                    || key.equalsIgnoreCase("product_external_ids")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("started_at")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("subscription_external_id")
+                    || key.equalsIgnoreCase("total_price")
+                    || key.equalsIgnoreCase("trial_end")
+                    || key.equalsIgnoreCase("trial_end_setting")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

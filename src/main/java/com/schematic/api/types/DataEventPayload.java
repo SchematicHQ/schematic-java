@@ -189,7 +189,6 @@ public final class DataEventPayload {
 
         private Optional<Boolean> backfill = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -289,6 +288,20 @@ public final class DataEventPayload {
         public DataEventPayload build() {
             return new DataEventPayload(
                     apiKey, backfill, body, idempotencyKey, sentAt, trustedClientClock, type, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("api_key")
+                    || key.equalsIgnoreCase("backfill")
+                    || key.equalsIgnoreCase("body")
+                    || key.equalsIgnoreCase("idempotency_key")
+                    || key.equalsIgnoreCase("sent_at")
+                    || key.equalsIgnoreCase("trusted_client_clock")
+                    || key.equalsIgnoreCase("type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

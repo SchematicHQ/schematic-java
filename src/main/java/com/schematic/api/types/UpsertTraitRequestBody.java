@@ -181,7 +181,6 @@ public final class UpsertTraitRequestBody {
 
         private Optional<Long> incr = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -305,6 +304,18 @@ public final class UpsertTraitRequestBody {
         @java.lang.Override
         public UpsertTraitRequestBody build() {
             return new UpsertTraitRequestBody(incr, keys, set, trait, updateOnly, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("incr")
+                    || key.equalsIgnoreCase("keys")
+                    || key.equalsIgnoreCase("set")
+                    || key.equalsIgnoreCase("trait")
+                    || key.equalsIgnoreCase("update_only")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

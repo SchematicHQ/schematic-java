@@ -80,7 +80,6 @@ public final class ListCompanyCreditBalancesRequest {
     public static final class Builder implements CompanyIdStage, _FinalStage {
         private String companyId;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -101,6 +100,14 @@ public final class ListCompanyCreditBalancesRequest {
         @java.lang.Override
         public ListCompanyCreditBalancesRequest build() {
             return new ListCompanyCreditBalancesRequest(companyId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

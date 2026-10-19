@@ -639,7 +639,6 @@ public final class ConditionView {
 
         private List<GenericPreviewObject> billingProducts = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1133,6 +1132,45 @@ public final class ConditionView {
                     updatedAt,
                     users,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("billing_products")
+                    || key.equalsIgnoreCase("companies")
+                    || key.equalsIgnoreCase("comparison_trait")
+                    || key.equalsIgnoreCase("comparison_trait_id")
+                    || key.equalsIgnoreCase("condition_group_id")
+                    || key.equalsIgnoreCase("condition_type")
+                    || key.equalsIgnoreCase("consumption_rate")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("metric_period")
+                    || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("metric_value")
+                    || key.equalsIgnoreCase("operator")
+                    || key.equalsIgnoreCase("plan_versions")
+                    || key.equalsIgnoreCase("plans")
+                    || key.equalsIgnoreCase("quantity_rates")
+                    || key.equalsIgnoreCase("resource_unspecified_ids")
+                    || key.equalsIgnoreCase("rule_id")
+                    || key.equalsIgnoreCase("trait")
+                    || key.equalsIgnoreCase("trait_entity_type")
+                    || key.equalsIgnoreCase("trait_id")
+                    || key.equalsIgnoreCase("trait_value")
+                    || key.equalsIgnoreCase("trait_value_bool")
+                    || key.equalsIgnoreCase("trait_value_date")
+                    || key.equalsIgnoreCase("trait_value_int")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("users")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

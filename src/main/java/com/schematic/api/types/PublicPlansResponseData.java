@@ -235,7 +235,6 @@ public final class PublicPlansResponseData {
 
         private List<PlanViewPublicResponseData> activeAddOns = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -387,6 +386,22 @@ public final class PublicPlansResponseData {
                     showPeriodToggle,
                     showZeroPriceAsFree,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("active_add_ons")
+                    || key.equalsIgnoreCase("active_plans")
+                    || key.equalsIgnoreCase("add_on_compatibilities")
+                    || key.equalsIgnoreCase("capabilities")
+                    || key.equalsIgnoreCase("display_settings")
+                    || key.equalsIgnoreCase("show_as_monthly_prices")
+                    || key.equalsIgnoreCase("show_credits")
+                    || key.equalsIgnoreCase("show_period_toggle")
+                    || key.equalsIgnoreCase("show_zero_price_as_free")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

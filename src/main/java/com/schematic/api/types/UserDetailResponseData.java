@@ -255,7 +255,6 @@ public final class UserDetailResponseData {
 
         private List<CompanyMembershipDetailResponseData> companyMemberships = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -429,6 +428,23 @@ public final class UserDetailResponseData {
                     traits,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_memberships")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("entity_traits")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("keys")
+                    || key.equalsIgnoreCase("last_seen_at")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("traits")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

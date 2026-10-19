@@ -97,7 +97,6 @@ public final class CreditBundleCurrencyPrice {
 
         private Optional<BillingPriceView> price = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -132,6 +131,14 @@ public final class CreditBundleCurrencyPrice {
         @java.lang.Override
         public CreditBundleCurrencyPrice build() {
             return new CreditBundleCurrencyPrice(currency, price, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("currency") || key.equalsIgnoreCase("price")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

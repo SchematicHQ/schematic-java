@@ -296,7 +296,6 @@ public final class CreateCompanyCreditGrant {
 
         private Optional<Long> billingPeriodsCount = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -481,6 +480,26 @@ public final class CreateCompanyCreditGrant {
                     renewalEnabled,
                     renewalPeriod,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_periods_count")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("credit_bundle_id")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("expiry_type")
+                    || key.equalsIgnoreCase("expiry_unit")
+                    || key.equalsIgnoreCase("expiry_unit_count")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("reason")
+                    || key.equalsIgnoreCase("renewal_enabled")
+                    || key.equalsIgnoreCase("renewal_period")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

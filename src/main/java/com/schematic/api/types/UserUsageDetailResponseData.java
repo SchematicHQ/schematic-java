@@ -234,7 +234,6 @@ public final class UserUsageDetailResponseData {
 
         private List<UserCreditUsageResponseData> credits = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -437,6 +436,20 @@ public final class UserUsageDetailResponseData {
                     startTime,
                     user,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credits")
+                    || key.equalsIgnoreCase("daily_credit_points")
+                    || key.equalsIgnoreCase("daily_points")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("feature_totals")
+                    || key.equalsIgnoreCase("start_time")
+                    || key.equalsIgnoreCase("user")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

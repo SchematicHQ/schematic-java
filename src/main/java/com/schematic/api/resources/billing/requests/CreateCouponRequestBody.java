@@ -231,7 +231,6 @@ public final class CreateCouponRequestBody {
 
         private Optional<Currency> currency = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -332,6 +331,22 @@ public final class CreateCouponRequestBody {
                     percentOff,
                     timesRedeemed,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount_off")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("duration")
+                    || key.equalsIgnoreCase("duration_in_months")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("max_redemptions")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("percent_off")
+                    || key.equalsIgnoreCase("times_redeemed")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

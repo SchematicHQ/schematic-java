@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreditSpendPolicy.Builder.class)
 public final class CreditSpendPolicy {
+    private final Optional<String> companyId;
+
     private final Optional<Double> consumed;
 
     private final String creditId;
@@ -43,6 +45,7 @@ public final class CreditSpendPolicy {
     private final Map<String, Object> additionalProperties;
 
     private CreditSpendPolicy(
+            Optional<String> companyId,
             Optional<Double> consumed,
             String creditId,
             String id,
@@ -53,6 +56,7 @@ public final class CreditSpendPolicy {
             CreditSpendPolicyScope scope,
             Optional<CreditSpendWindow> window,
             Map<String, Object> additionalProperties) {
+        this.companyId = companyId;
         this.consumed = consumed;
         this.creditId = creditId;
         this.id = id;
@@ -63,6 +67,14 @@ public final class CreditSpendPolicy {
         this.scope = scope;
         this.window = window;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return For a user policy, the company it applies in
+     */
+    @JsonProperty("company_id")
+    public Optional<String> getCompanyId() {
+        return companyId;
     }
 
     /**
@@ -149,7 +161,8 @@ public final class CreditSpendPolicy {
     }
 
     private boolean equalTo(CreditSpendPolicy other) {
-        return consumed.equals(other.consumed)
+        return companyId.equals(other.companyId)
+                && consumed.equals(other.consumed)
                 && creditId.equals(other.creditId)
                 && id.equals(other.id)
                 && kind.equals(other.kind)
@@ -163,6 +176,7 @@ public final class CreditSpendPolicy {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.companyId,
                 this.consumed,
                 this.creditId,
                 this.id,
@@ -228,6 +242,13 @@ public final class CreditSpendPolicy {
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         /**
+         * <p>For a user policy, the company it applies in</p>
+         */
+        _FinalStage companyId(Optional<String> companyId);
+
+        _FinalStage companyId(String companyId);
+
+        /**
          * <p>How much of the limit is already spent in the current period</p>
          */
         _FinalStage consumed(Optional<Double> consumed);
@@ -277,13 +298,15 @@ public final class CreditSpendPolicy {
 
         private Optional<Double> consumed = Optional.empty();
 
-        @JsonAnySetter
+        private Optional<String> companyId = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         @java.lang.Override
         public Builder from(CreditSpendPolicy other) {
+            companyId(other.getCompanyId());
             consumed(other.getConsumed());
             creditId(other.getCreditId());
             id(other.getId());
@@ -431,10 +454,57 @@ public final class CreditSpendPolicy {
             return this;
         }
 
+        /**
+         * <p>For a user policy, the company it applies in</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage companyId(String companyId) {
+            this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        /**
+         * <p>For a user policy, the company it applies in</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
+        public _FinalStage companyId(Optional<String> companyId) {
+            this.companyId = companyId;
+            return this;
+        }
+
         @java.lang.Override
         public CreditSpendPolicy build() {
             return new CreditSpendPolicy(
-                    consumed, creditId, id, kind, label, limit, resetsAt, scope, window, additionalProperties);
+                    companyId,
+                    consumed,
+                    creditId,
+                    id,
+                    kind,
+                    label,
+                    limit,
+                    resetsAt,
+                    scope,
+                    window,
+                    additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("consumed")
+                    || key.equalsIgnoreCase("credit_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("kind")
+                    || key.equalsIgnoreCase("label")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("resets_at")
+                    || key.equalsIgnoreCase("scope")
+                    || key.equalsIgnoreCase("window")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

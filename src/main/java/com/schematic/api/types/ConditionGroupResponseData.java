@@ -189,7 +189,6 @@ public final class ConditionGroupResponseData {
 
         private Optional<String> flagId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -265,6 +264,20 @@ public final class ConditionGroupResponseData {
         public ConditionGroupResponseData build() {
             return new ConditionGroupResponseData(
                     accountId, createdAt, environmentId, flagId, id, ruleId, updatedAt, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("rule_id")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

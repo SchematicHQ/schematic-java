@@ -98,7 +98,6 @@ public final class OnboardingRoadmapView {
 
         private Optional<OffsetDateTime> publishedAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -133,6 +132,14 @@ public final class OnboardingRoadmapView {
         @java.lang.Override
         public OnboardingRoadmapView build() {
             return new OnboardingRoadmapView(publishedAt, slug, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("published_at") || key.equalsIgnoreCase("slug")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

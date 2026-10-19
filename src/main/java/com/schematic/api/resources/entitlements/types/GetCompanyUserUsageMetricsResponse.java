@@ -105,7 +105,6 @@ public final class GetCompanyUserUsageMetricsResponse {
 
         private GetCompanyUserUsageMetricsParams params;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -138,6 +137,14 @@ public final class GetCompanyUserUsageMetricsResponse {
         @java.lang.Override
         public GetCompanyUserUsageMetricsResponse build() {
             return new GetCompanyUserUsageMetricsResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

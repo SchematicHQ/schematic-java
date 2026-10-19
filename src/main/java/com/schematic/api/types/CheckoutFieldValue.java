@@ -94,7 +94,6 @@ public final class CheckoutFieldValue {
 
         private String value;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -123,6 +122,14 @@ public final class CheckoutFieldValue {
         @java.lang.Override
         public CheckoutFieldValue build() {
             return new CheckoutFieldValue(id, value, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("id") || key.equalsIgnoreCase("value")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

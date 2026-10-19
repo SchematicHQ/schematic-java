@@ -295,7 +295,6 @@ public final class ApiKeyCreateResponseData {
 
         private Optional<String> description = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -479,6 +478,26 @@ public final class ApiKeyCreateResponseData {
                     secret,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("environment")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("integration")
+                    || key.equalsIgnoreCase("last_used_at")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("rate_limit_percent")
+                    || key.equalsIgnoreCase("readonly")
+                    || key.equalsIgnoreCase("scopes")
+                    || key.equalsIgnoreCase("secret")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

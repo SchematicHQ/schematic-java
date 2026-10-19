@@ -196,7 +196,6 @@ public final class RulesengineUser {
 
         private Optional<List<RulesengineCreditSpendPolicy>> creditSpendPolicies = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -323,6 +322,20 @@ public final class RulesengineUser {
         public RulesengineUser build() {
             return new RulesengineUser(
                     accountId, creditSpendPolicies, environmentId, id, keys, rules, traits, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("credit_spend_policies")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("keys")
+                    || key.equalsIgnoreCase("rules")
+                    || key.equalsIgnoreCase("traits")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

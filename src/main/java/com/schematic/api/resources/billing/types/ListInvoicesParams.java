@@ -124,7 +124,6 @@ public final class ListInvoicesParams {
 
         private Optional<String> subscriptionExternalId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -202,6 +201,18 @@ public final class ListInvoicesParams {
         public ListInvoicesParams build() {
             return new ListInvoicesParams(
                     companyId, customerExternalId, limit, offset, subscriptionExternalId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("subscription_external_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

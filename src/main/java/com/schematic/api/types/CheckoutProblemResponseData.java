@@ -296,7 +296,6 @@ public final class CheckoutProblemResponseData {
 
         private Optional<String> bundleId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -488,6 +487,25 @@ public final class CheckoutProblemResponseData {
                     priceId,
                     source,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("blocking")
+                    || key.equalsIgnoreCase("bundle_id")
+                    || key.equalsIgnoreCase("code")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("detail")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("field_id")
+                    || key.equalsIgnoreCase("message")
+                    || key.equalsIgnoreCase("payment_method_id")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("price_id")
+                    || key.equalsIgnoreCase("source")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

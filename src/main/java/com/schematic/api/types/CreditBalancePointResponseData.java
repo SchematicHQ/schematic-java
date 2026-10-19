@@ -148,7 +148,6 @@ public final class CreditBalancePointResponseData {
 
         private List<CreditBalanceFeatureConsumptionResponseData> consumedByFeature = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -220,6 +219,17 @@ public final class CreditBalancePointResponseData {
         public CreditBalancePointResponseData build() {
             return new CreditBalancePointResponseData(
                     balance, consumed, consumedByFeature, timestamp, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("balance")
+                    || key.equalsIgnoreCase("consumed")
+                    || key.equalsIgnoreCase("consumed_by_feature")
+                    || key.equalsIgnoreCase("timestamp")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

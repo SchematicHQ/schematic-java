@@ -376,7 +376,6 @@ public final class PreviewSubscriptionChangeResponseData {
 
         private Optional<PreviewSubscriptionFinanceResponseData> finance = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -607,6 +606,30 @@ public final class PreviewSubscriptionChangeResponseData {
                     trialEnd,
                     usageViolations,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount_off")
+                    || key.equalsIgnoreCase("due_now")
+                    || key.equalsIgnoreCase("finance")
+                    || key.equalsIgnoreCase("is_scheduled_downgrade")
+                    || key.equalsIgnoreCase("new_charges")
+                    || key.equalsIgnoreCase("opt_in_required")
+                    || key.equalsIgnoreCase("opt_in_text")
+                    || key.equalsIgnoreCase("opt_in_title")
+                    || key.equalsIgnoreCase("payment_method_required")
+                    || key.equalsIgnoreCase("percent_off")
+                    || key.equalsIgnoreCase("period_start")
+                    || key.equalsIgnoreCase("problems")
+                    || key.equalsIgnoreCase("promo_code_applied")
+                    || key.equalsIgnoreCase("proration")
+                    || key.equalsIgnoreCase("scheduled_change_time")
+                    || key.equalsIgnoreCase("trial_end")
+                    || key.equalsIgnoreCase("usage_violations")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

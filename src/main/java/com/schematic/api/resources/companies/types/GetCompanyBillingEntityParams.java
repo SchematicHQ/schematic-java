@@ -67,7 +67,6 @@ public final class GetCompanyBillingEntityParams {
     public static final class Builder {
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -90,6 +89,14 @@ public final class GetCompanyBillingEntityParams {
 
         public GetCompanyBillingEntityParams build() {
             return new GetCompanyBillingEntityParams(companyId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

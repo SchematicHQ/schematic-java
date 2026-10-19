@@ -162,7 +162,6 @@ public final class CountCompanyGrantsRequest {
 
         private Optional<CreditGrantSortOrder> order = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -253,6 +252,18 @@ public final class CountCompanyGrantsRequest {
         @java.lang.Override
         public CountCompanyGrantsRequest build() {
             return new CountCompanyGrantsRequest(companyId, order, dir, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("order")
+                    || key.equalsIgnoreCase("dir")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

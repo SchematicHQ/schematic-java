@@ -155,7 +155,6 @@ public final class FeatureUsageTimeSeriesResponseData {
 
         private List<LimitTimeSeriesPointResponseData> limits = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -249,6 +248,18 @@ public final class FeatureUsageTimeSeriesResponseData {
         public FeatureUsageTimeSeriesResponseData build() {
             return new FeatureUsageTimeSeriesResponseData(
                     featureId, featureType, limits, periodType, usagePoints, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("feature_type")
+                    || key.equalsIgnoreCase("limits")
+                    || key.equalsIgnoreCase("period_type")
+                    || key.equalsIgnoreCase("usage_points")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

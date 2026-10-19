@@ -67,7 +67,6 @@ public final class BindCatalogRequestBody {
     public static final class Builder {
         private Optional<String> catalogId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -90,6 +89,14 @@ public final class BindCatalogRequestBody {
 
         public BindCatalogRequestBody build() {
             return new BindCatalogRequestBody(catalogId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("catalog_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

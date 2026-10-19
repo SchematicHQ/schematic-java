@@ -157,7 +157,6 @@ public final class ListCreditSpendPoliciesRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -264,6 +263,20 @@ public final class ListCreditSpendPoliciesRequest {
         public ListCreditSpendPoliciesRequest build() {
             return new ListCreditSpendPoliciesRequest(
                     userIds, billingCreditId, companyId, scopeType, userId, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("user_ids")
+                    || key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("scope_type")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -119,7 +119,6 @@ public final class CreateDataExportRequestBody {
 
         private Optional<DataExportMetadata> metadata = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -162,6 +161,16 @@ public final class CreateDataExportRequestBody {
         @java.lang.Override
         public CreateDataExportRequestBody build() {
             return new CreateDataExportRequestBody(exportType, metadata, outputFileType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("export_type")
+                    || key.equalsIgnoreCase("metadata")
+                    || key.equalsIgnoreCase("output_file_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

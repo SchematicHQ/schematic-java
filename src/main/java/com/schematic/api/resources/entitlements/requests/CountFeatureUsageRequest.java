@@ -189,7 +189,6 @@ public final class CountFeatureUsageRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -335,6 +334,22 @@ public final class CountFeatureUsageRequest {
                     limit,
                     offset,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_ids")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("company_keys")
+                    || key.equalsIgnoreCase("include_usage_aggregation")
+                    || key.equalsIgnoreCase("managed_by")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("without_negative_entitlements")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

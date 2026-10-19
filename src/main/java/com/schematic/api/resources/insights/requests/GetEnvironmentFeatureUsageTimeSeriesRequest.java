@@ -135,7 +135,6 @@ public final class GetEnvironmentFeatureUsageTimeSeriesRequest {
 
         private Optional<TimeSeriesGranularity> granularity = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -187,6 +186,17 @@ public final class GetEnvironmentFeatureUsageTimeSeriesRequest {
         public GetEnvironmentFeatureUsageTimeSeriesRequest build() {
             return new GetEnvironmentFeatureUsageTimeSeriesRequest(
                     endTime, featureId, granularity, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("granularity")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

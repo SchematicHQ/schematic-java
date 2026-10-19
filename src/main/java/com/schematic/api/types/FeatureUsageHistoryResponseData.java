@@ -195,7 +195,6 @@ public final class FeatureUsageHistoryResponseData {
 
         private long usage;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -273,6 +272,19 @@ public final class FeatureUsageHistoryResponseData {
         public FeatureUsageHistoryResponseData build() {
             return new FeatureUsageHistoryResponseData(
                     companyId, eventSubtype, featureId, periodEnd, periodStart, usage, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("period_end")
+                    || key.equalsIgnoreCase("period_start")
+                    || key.equalsIgnoreCase("usage")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

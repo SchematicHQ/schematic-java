@@ -118,7 +118,6 @@ public final class CreditUsageAggregation {
 
         private Optional<Double> usageToday = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -190,6 +189,17 @@ public final class CreditUsageAggregation {
         public CreditUsageAggregation build() {
             return new CreditUsageAggregation(
                     usageThisBillingPeriod, usageThisCalendarMonth, usageThisWeek, usageToday, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("usage_this_billing_period")
+                    || key.equalsIgnoreCase("usage_this_calendar_month")
+                    || key.equalsIgnoreCase("usage_this_week")
+                    || key.equalsIgnoreCase("usage_today")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

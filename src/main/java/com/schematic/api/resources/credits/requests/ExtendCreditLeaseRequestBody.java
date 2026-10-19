@@ -150,7 +150,6 @@ public final class ExtendCreditLeaseRequestBody {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -235,6 +234,17 @@ public final class ExtendCreditLeaseRequestBody {
         public ExtendCreditLeaseRequestBody build() {
             return new ExtendCreditLeaseRequestBody(
                     additionalAmount, expiresAt, idempotencyKey, userId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("additional_amount")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("idempotency_key")
+                    || key.equalsIgnoreCase("user_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -107,7 +107,6 @@ public final class ListDataExportsResponse {
 
         private List<DataExportResponseData> data = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -157,6 +156,14 @@ public final class ListDataExportsResponse {
         @java.lang.Override
         public ListDataExportsResponse build() {
             return new ListDataExportsResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -332,7 +332,6 @@ public final class InvoiceRequestBody {
 
         private Optional<OffsetDateTime> dueDate = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -529,6 +528,28 @@ public final class InvoiceRequestBody {
                     total,
                     url,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount_due")
+                    || key.equalsIgnoreCase("amount_paid")
+                    || key.equalsIgnoreCase("amount_remaining")
+                    || key.equalsIgnoreCase("collection_method")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("due_date")
+                    || key.equalsIgnoreCase("ending_balance")
+                    || key.equalsIgnoreCase("payment_method_external_id")
+                    || key.equalsIgnoreCase("starting_balance")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("subscription_external_id")
+                    || key.equalsIgnoreCase("subtotal")
+                    || key.equalsIgnoreCase("total")
+                    || key.equalsIgnoreCase("url")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

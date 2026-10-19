@@ -151,7 +151,6 @@ public final class ListIntegrationsRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -258,6 +257,20 @@ public final class ListIntegrationsRequest {
         public ListIntegrationsRequest build() {
             return new ListIntegrationsRequest(
                     excludeIds, billingOnly, id, state, type, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("exclude_ids")
+                    || key.equalsIgnoreCase("billing_only")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("state")
+                    || key.equalsIgnoreCase("type")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -281,7 +281,6 @@ public final class BillingProductPlanResponseData {
 
         private Optional<String> monthlyPriceId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -427,6 +426,25 @@ public final class BillingProductPlanResponseData {
                     trialDays,
                     yearlyPriceId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("billing_product_id")
+                    || key.equalsIgnoreCase("billing_strategy")
+                    || key.equalsIgnoreCase("charge_type")
+                    || key.equalsIgnoreCase("controlled_by")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("is_trialable")
+                    || key.equalsIgnoreCase("monthly_price_id")
+                    || key.equalsIgnoreCase("one_time_price_id")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("trial_days")
+                    || key.equalsIgnoreCase("yearly_price_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

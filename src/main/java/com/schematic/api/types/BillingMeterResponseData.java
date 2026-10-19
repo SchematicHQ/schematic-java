@@ -175,7 +175,6 @@ public final class BillingMeterResponseData {
 
         private BillingProviderType providerType;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -237,6 +236,19 @@ public final class BillingMeterResponseData {
         public BillingMeterResponseData build() {
             return new BillingMeterResponseData(
                     dispalyName, eventName, eventPayloadKey, externalPriceId, id, providerType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("dispaly_name")
+                    || key.equalsIgnoreCase("event_name")
+                    || key.equalsIgnoreCase("event_payload_key")
+                    || key.equalsIgnoreCase("external_price_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("provider_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

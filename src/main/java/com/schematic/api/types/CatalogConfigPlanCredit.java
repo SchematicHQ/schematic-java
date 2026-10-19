@@ -97,7 +97,6 @@ public final class CatalogConfigPlanCredit {
 
         private Optional<Boolean> visible = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -132,6 +131,14 @@ public final class CatalogConfigPlanCredit {
         @java.lang.Override
         public CatalogConfigPlanCredit build() {
             return new CatalogConfigPlanCredit(creditId, visible, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_id") || key.equalsIgnoreCase("visible")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

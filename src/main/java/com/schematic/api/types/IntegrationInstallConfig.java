@@ -247,7 +247,6 @@ public final class IntegrationInstallConfig {
 
         private Optional<CompanyMatchingCriteria> companyMatchingCriteria = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -369,6 +368,23 @@ public final class IntegrationInstallConfig {
                     liveMode,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_matching_criteria")
+                    || key.equalsIgnoreCase("company_matching_field")
+                    || key.equalsIgnoreCase("config")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("integration_id")
+                    || key.equalsIgnoreCase("is_app_install")
+                    || key.equalsIgnoreCase("is_connect_install")
+                    || key.equalsIgnoreCase("live_mode")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

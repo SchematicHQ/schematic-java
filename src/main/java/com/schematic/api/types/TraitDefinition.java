@@ -114,7 +114,6 @@ public final class TraitDefinition {
 
         private String id;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -151,6 +150,16 @@ public final class TraitDefinition {
         @java.lang.Override
         public TraitDefinition build() {
             return new TraitDefinition(comparableType, entityType, id, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("comparable_type")
+                    || key.equalsIgnoreCase("entity_type")
+                    || key.equalsIgnoreCase("id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

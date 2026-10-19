@@ -96,7 +96,6 @@ public final class GetOrCreateCompanyMembershipRequestBody {
 
         private String userId;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -125,6 +124,14 @@ public final class GetOrCreateCompanyMembershipRequestBody {
         @java.lang.Override
         public GetOrCreateCompanyMembershipRequestBody build() {
             return new GetOrCreateCompanyMembershipRequestBody(companyId, userId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id") || key.equalsIgnoreCase("user_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

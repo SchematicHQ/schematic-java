@@ -168,7 +168,6 @@ public final class RulesengineFlag {
 
         private List<RulesengineRule> rules = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -246,6 +245,19 @@ public final class RulesengineFlag {
         @java.lang.Override
         public RulesengineFlag build() {
             return new RulesengineFlag(accountId, defaultValue, environmentId, id, key, rules, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("default_value")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("key")
+                    || key.equalsIgnoreCase("rules")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

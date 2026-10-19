@@ -161,7 +161,6 @@ public final class ListInvoicesRequest {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -248,6 +247,18 @@ public final class ListInvoicesRequest {
         public ListInvoicesRequest build() {
             return new ListInvoicesRequest(
                     companyId, customerExternalId, subscriptionExternalId, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("subscription_external_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

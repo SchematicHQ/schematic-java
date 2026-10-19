@@ -109,7 +109,6 @@ public final class ApiKeyIntegrationResponseData {
 
         private IntegrationType type;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -146,6 +145,14 @@ public final class ApiKeyIntegrationResponseData {
         @java.lang.Override
         public ApiKeyIntegrationResponseData build() {
             return new ApiKeyIntegrationResponseData(id, state, type, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("id") || key.equalsIgnoreCase("state") || key.equalsIgnoreCase("type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

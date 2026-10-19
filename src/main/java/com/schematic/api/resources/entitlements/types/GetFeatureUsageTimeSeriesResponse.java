@@ -104,7 +104,6 @@ public final class GetFeatureUsageTimeSeriesResponse {
 
         private GetFeatureUsageTimeSeriesParams params;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -137,6 +136,14 @@ public final class GetFeatureUsageTimeSeriesResponse {
         @java.lang.Override
         public GetFeatureUsageTimeSeriesResponse build() {
             return new GetFeatureUsageTimeSeriesResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

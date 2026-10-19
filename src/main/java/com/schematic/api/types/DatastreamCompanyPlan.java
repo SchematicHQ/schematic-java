@@ -133,7 +133,6 @@ public final class DatastreamCompanyPlan {
 
         private Optional<OffsetDateTime> trialEndDate = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -190,6 +189,17 @@ public final class DatastreamCompanyPlan {
         @java.lang.Override
         public DatastreamCompanyPlan build() {
             return new DatastreamCompanyPlan(id, name, trialEndDate, trialStatus, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("trial_end_date")
+                    || key.equalsIgnoreCase("trial_status")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

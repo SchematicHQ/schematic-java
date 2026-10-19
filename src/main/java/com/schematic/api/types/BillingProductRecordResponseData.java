@@ -230,7 +230,6 @@ public final class BillingProductRecordResponseData {
 
         private OffsetDateTime updatedAt;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -325,6 +324,22 @@ public final class BillingProductRecordResponseData {
                     providerType,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("external_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("is_active")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

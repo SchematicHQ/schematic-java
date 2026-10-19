@@ -170,7 +170,6 @@ public final class CreditGrantExpiryRequestBody {
 
         private Optional<BillingCreditExpiryType> expiryType = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -256,6 +255,19 @@ public final class CreditGrantExpiryRequestBody {
         public CreditGrantExpiryRequestBody build() {
             return new CreditGrantExpiryRequestBody(
                     expiryType, expiryUnit, expiryUnitCount, resetCadence, resetStart, resetType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("expiry_type")
+                    || key.equalsIgnoreCase("expiry_unit")
+                    || key.equalsIgnoreCase("expiry_unit_count")
+                    || key.equalsIgnoreCase("reset_cadence")
+                    || key.equalsIgnoreCase("reset_start")
+                    || key.equalsIgnoreCase("reset_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

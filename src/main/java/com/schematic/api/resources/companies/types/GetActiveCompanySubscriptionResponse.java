@@ -110,7 +110,6 @@ public final class GetActiveCompanySubscriptionResponse {
 
         private List<CompanySubscriptionResponseData> data = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -160,6 +159,14 @@ public final class GetActiveCompanySubscriptionResponse {
         @java.lang.Override
         public GetActiveCompanySubscriptionResponse build() {
             return new GetActiveCompanySubscriptionResponse(data, params, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("params")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -105,7 +105,6 @@ public final class CreditsAutoTopupHardFailure {
 
         private Optional<String> stripeErrorCode = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -165,6 +164,17 @@ public final class CreditsAutoTopupHardFailure {
         public CreditsAutoTopupHardFailure build() {
             return new CreditsAutoTopupHardFailure(
                     company, credit, errorMessage, stripeErrorCode, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("credit")
+                    || key.equalsIgnoreCase("error_message")
+                    || key.equalsIgnoreCase("stripe_error_code")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

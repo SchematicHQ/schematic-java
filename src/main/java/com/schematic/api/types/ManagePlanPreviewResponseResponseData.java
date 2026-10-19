@@ -83,7 +83,6 @@ public final class ManagePlanPreviewResponseResponseData {
 
         private Optional<PreviewSubscriptionChangeResponseData> subscriptionChangePreview = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -129,6 +128,14 @@ public final class ManagePlanPreviewResponseResponseData {
 
         public ManagePlanPreviewResponseResponseData build() {
             return new ManagePlanPreviewResponseResponseData(problems, subscriptionChangePreview, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("problems") || key.equalsIgnoreCase("subscription_change_preview")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

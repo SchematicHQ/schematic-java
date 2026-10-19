@@ -78,7 +78,6 @@ public final class PreviewComponentDataParams {
 
         private Optional<String> componentId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -113,6 +112,14 @@ public final class PreviewComponentDataParams {
 
         public PreviewComponentDataParams build() {
             return new PreviewComponentDataParams(companyId, componentId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id") || key.equalsIgnoreCase("component_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

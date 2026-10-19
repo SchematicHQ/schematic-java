@@ -9,15 +9,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyCreditBalance.Builder.class)
 public final class CompanyCreditBalance {
+    private final Optional<Double> overdraftLimit;
+
+    private final boolean postpaid;
+
     private final double remaining;
 
     private final double reserved;
@@ -27,11 +33,34 @@ public final class CompanyCreditBalance {
     private final Map<String, Object> additionalProperties;
 
     private CompanyCreditBalance(
-            double remaining, double reserved, double settled, Map<String, Object> additionalProperties) {
+            Optional<Double> overdraftLimit,
+            boolean postpaid,
+            double remaining,
+            double reserved,
+            double settled,
+            Map<String, Object> additionalProperties) {
+        this.overdraftLimit = overdraftLimit;
+        this.postpaid = postpaid;
         this.remaining = remaining;
         this.reserved = reserved;
         this.settled = settled;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return For a postpaid credit, how far below zero the balance may run. Absent when the credit is not postpaid or postpaid has no limit
+     */
+    @JsonProperty("overdraft_limit")
+    public Optional<Double> getOverdraftLimit() {
+        return overdraftLimit;
+    }
+
+    /**
+     * @return Whether consumption may continue past a zero balance. When true and overdraft_limit is absent, the balance has no floor
+     */
+    @JsonProperty("postpaid")
+    public boolean getPostpaid() {
+        return postpaid;
     }
 
     /**
@@ -70,12 +99,16 @@ public final class CompanyCreditBalance {
     }
 
     private boolean equalTo(CompanyCreditBalance other) {
-        return remaining == other.remaining && reserved == other.reserved && settled == other.settled;
+        return overdraftLimit.equals(other.overdraftLimit)
+                && postpaid == other.postpaid
+                && remaining == other.remaining
+                && reserved == other.reserved
+                && settled == other.settled;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.remaining, this.reserved, this.settled);
+        return Objects.hash(this.overdraftLimit, this.postpaid, this.remaining, this.reserved, this.settled);
     }
 
     @java.lang.Override
@@ -83,8 +116,17 @@ public final class CompanyCreditBalance {
         return ObjectMappers.stringify(this);
     }
 
-    public static RemainingStage builder() {
+    public static PostpaidStage builder() {
         return new Builder();
+    }
+
+    public interface PostpaidStage {
+        /**
+         * <p>Whether consumption may continue past a zero balance. When true and overdraft_limit is absent, the balance has no floor</p>
+         */
+        RemainingStage postpaid(boolean postpaid);
+
+        Builder from(CompanyCreditBalance other);
     }
 
     public interface RemainingStage {
@@ -92,8 +134,6 @@ public final class CompanyCreditBalance {
          * <p>Remaining credit, excluding any open lease hold (the value SDKs gate on)</p>
          */
         ReservedStage remaining(double remaining);
-
-        Builder from(CompanyCreditBalance other);
     }
 
     public interface ReservedStage {
@@ -116,26 +156,50 @@ public final class CompanyCreditBalance {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        /**
+         * <p>For a postpaid credit, how far below zero the balance may run. Absent when the credit is not postpaid or postpaid has no limit</p>
+         */
+        _FinalStage overdraftLimit(Optional<Double> overdraftLimit);
+
+        _FinalStage overdraftLimit(Double overdraftLimit);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements RemainingStage, ReservedStage, SettledStage, _FinalStage {
+    public static final class Builder
+            implements PostpaidStage, RemainingStage, ReservedStage, SettledStage, _FinalStage {
+        private boolean postpaid;
+
         private double remaining;
 
         private double reserved;
 
         private double settled;
 
-        @JsonAnySetter
+        private Optional<Double> overdraftLimit = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         @java.lang.Override
         public Builder from(CompanyCreditBalance other) {
+            overdraftLimit(other.getOverdraftLimit());
+            postpaid(other.getPostpaid());
             remaining(other.getRemaining());
             reserved(other.getReserved());
             settled(other.getSettled());
+            return this;
+        }
+
+        /**
+         * <p>Whether consumption may continue past a zero balance. When true and overdraft_limit is absent, the balance has no floor</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("postpaid")
+        public RemainingStage postpaid(boolean postpaid) {
+            this.postpaid = postpaid;
             return this;
         }
 
@@ -172,9 +236,42 @@ public final class CompanyCreditBalance {
             return this;
         }
 
+        /**
+         * <p>For a postpaid credit, how far below zero the balance may run. Absent when the credit is not postpaid or postpaid has no limit</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage overdraftLimit(Double overdraftLimit) {
+            this.overdraftLimit = Optional.ofNullable(overdraftLimit);
+            return this;
+        }
+
+        /**
+         * <p>For a postpaid credit, how far below zero the balance may run. Absent when the credit is not postpaid or postpaid has no limit</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "overdraft_limit", nulls = Nulls.SKIP)
+        public _FinalStage overdraftLimit(Optional<Double> overdraftLimit) {
+            this.overdraftLimit = overdraftLimit;
+            return this;
+        }
+
         @java.lang.Override
         public CompanyCreditBalance build() {
-            return new CompanyCreditBalance(remaining, reserved, settled, additionalProperties);
+            return new CompanyCreditBalance(
+                    overdraftLimit, postpaid, remaining, reserved, settled, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("overdraft_limit")
+                    || key.equalsIgnoreCase("postpaid")
+                    || key.equalsIgnoreCase("remaining")
+                    || key.equalsIgnoreCase("reserved")
+                    || key.equalsIgnoreCase("settled")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

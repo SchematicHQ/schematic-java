@@ -111,7 +111,6 @@ public final class CompanyLedgerResponseData {
 
         private Optional<String> logoUrl = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -154,6 +153,14 @@ public final class CompanyLedgerResponseData {
         @java.lang.Override
         public CompanyLedgerResponseData build() {
             return new CompanyLedgerResponseData(id, logoUrl, name, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("id") || key.equalsIgnoreCase("logo_url") || key.equalsIgnoreCase("name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -150,7 +150,6 @@ public final class CountAuditLogsRequest {
 
         private Optional<Long> offset = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -252,6 +251,20 @@ public final class CountAuditLogsRequest {
         public CountAuditLogsRequest build() {
             return new CountAuditLogsRequest(
                     actorType, endTime, environmentId, q, startTime, limit, offset, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("actor_type")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("start_time")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

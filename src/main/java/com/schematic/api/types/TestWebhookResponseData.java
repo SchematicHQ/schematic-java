@@ -115,7 +115,6 @@ public final class TestWebhookResponseData {
 
         private Optional<String> failureReason = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -158,6 +157,16 @@ public final class TestWebhookResponseData {
         @java.lang.Override
         public TestWebhookResponseData build() {
             return new TestWebhookResponseData(failureReason, responseCode, success, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("failure_reason")
+                    || key.equalsIgnoreCase("response_code")
+                    || key.equalsIgnoreCase("success")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

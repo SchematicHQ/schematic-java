@@ -187,7 +187,6 @@ public final class EventExportMetadata {
 
         private Optional<String> userId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -329,6 +328,21 @@ public final class EventExportMetadata {
                     startTime,
                     userId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("event_types")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("notification_email_recipient_email_addresses")
+                    || key.equalsIgnoreCase("start_time")
+                    || key.equalsIgnoreCase("user_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -196,7 +196,6 @@ public final class CreateEventRequestBody {
 
         private Optional<Boolean> backfill = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -320,6 +319,19 @@ public final class CreateEventRequestBody {
         public CreateEventRequestBody build() {
             return new CreateEventRequestBody(
                     backfill, body, eventType, idempotencyKey, sentAt, trustedClientClock, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("backfill")
+                    || key.equalsIgnoreCase("body")
+                    || key.equalsIgnoreCase("event_type")
+                    || key.equalsIgnoreCase("idempotency_key")
+                    || key.equalsIgnoreCase("sent_at")
+                    || key.equalsIgnoreCase("trusted_client_clock")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

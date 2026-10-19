@@ -125,7 +125,6 @@ public final class CountCompanyGrantsParams {
 
         private Optional<CreditGrantSortOrder> order = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -202,6 +201,18 @@ public final class CountCompanyGrantsParams {
 
         public CountCompanyGrantsParams build() {
             return new CountCompanyGrantsParams(companyId, dir, limit, offset, order, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("dir")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("order")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -67,7 +67,6 @@ public final class KeysRequestBody {
     public static final class Builder {
         private Map<String, String> keys = new LinkedHashMap<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -100,6 +99,14 @@ public final class KeysRequestBody {
 
         public KeysRequestBody build() {
             return new KeysRequestBody(keys, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("keys")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

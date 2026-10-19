@@ -109,7 +109,6 @@ public final class CatalogDerivedFeatureResponseData {
 
         private String name;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -146,6 +145,14 @@ public final class CatalogDerivedFeatureResponseData {
         @java.lang.Override
         public CatalogDerivedFeatureResponseData build() {
             return new CatalogDerivedFeatureResponseData(icon, id, name, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("icon") || key.equalsIgnoreCase("id") || key.equalsIgnoreCase("name")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

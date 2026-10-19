@@ -150,7 +150,6 @@ public final class ListAuditLogsParams {
 
         private Optional<OffsetDateTime> startTime = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -252,6 +251,20 @@ public final class ListAuditLogsParams {
         public ListAuditLogsParams build() {
             return new ListAuditLogsParams(
                     actorType, endTime, environmentId, limit, offset, q, startTime, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("actor_type")
+                    || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("limit")
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("start_time")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -403,7 +403,6 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         private List<PreviewSubscriptionDiscountResponseData> discounts = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -644,6 +643,31 @@ public final class PreviewSubscriptionFinanceResponseData {
                     trialEnd,
                     upcomingInvoiceLineItems,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount_off")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("discount_amount")
+                    || key.equalsIgnoreCase("discounts")
+                    || key.equalsIgnoreCase("due_now")
+                    || key.equalsIgnoreCase("new_charges")
+                    || key.equalsIgnoreCase("percent_off")
+                    || key.equalsIgnoreCase("period_end")
+                    || key.equalsIgnoreCase("period_start")
+                    || key.equalsIgnoreCase("promo_code_applied")
+                    || key.equalsIgnoreCase("proration")
+                    || key.equalsIgnoreCase("proration_billed_at")
+                    || key.equalsIgnoreCase("tax_amount")
+                    || key.equalsIgnoreCase("tax_display_name")
+                    || key.equalsIgnoreCase("tax_require_billing_details")
+                    || key.equalsIgnoreCase("total_per_billing_period")
+                    || key.equalsIgnoreCase("trial_end")
+                    || key.equalsIgnoreCase("upcoming_invoice_line_items")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

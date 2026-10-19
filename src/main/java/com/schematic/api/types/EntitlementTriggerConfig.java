@@ -80,7 +80,6 @@ public final class EntitlementTriggerConfig {
     public static final class Builder implements FeatureIdStage, _FinalStage {
         private String featureId;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -101,6 +100,14 @@ public final class EntitlementTriggerConfig {
         @java.lang.Override
         public EntitlementTriggerConfig build() {
             return new EntitlementTriggerConfig(featureId, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("feature_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

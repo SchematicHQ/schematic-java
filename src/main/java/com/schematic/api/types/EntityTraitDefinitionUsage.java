@@ -174,7 +174,6 @@ public final class EntityTraitDefinitionUsage {
 
         private long ruleConditionCount;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -242,6 +241,19 @@ public final class EntityTraitDefinitionUsage {
                     planTraitCount,
                     ruleConditionCount,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("checkout_field_config_count")
+                    || key.equalsIgnoreCase("company_override_count")
+                    || key.equalsIgnoreCase("feature_count")
+                    || key.equalsIgnoreCase("plan_entitlement_count")
+                    || key.equalsIgnoreCase("plan_trait_count")
+                    || key.equalsIgnoreCase("rule_condition_count")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

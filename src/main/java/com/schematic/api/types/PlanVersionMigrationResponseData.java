@@ -442,7 +442,6 @@ public final class PlanVersionMigrationResponseData {
 
         private Optional<OffsetDateTime> completedAt = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -716,6 +715,34 @@ public final class PlanVersionMigrationResponseData {
                     totalCompanies,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("completed_at")
+                    || key.equalsIgnoreCase("completed_companies")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("error")
+                    || key.equalsIgnoreCase("failed_companies")
+                    || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("feature_plan_rollout_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("next_due_at")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_version_id_from")
+                    || key.equalsIgnoreCase("plan_version_id_to")
+                    || key.equalsIgnoreCase("plan_version_ids_from")
+                    || key.equalsIgnoreCase("proration_behavior")
+                    || key.equalsIgnoreCase("scheduled_at")
+                    || key.equalsIgnoreCase("skipped_companies")
+                    || key.equalsIgnoreCase("started_at")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("strategy")
+                    || key.equalsIgnoreCase("total_companies")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

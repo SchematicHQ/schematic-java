@@ -135,7 +135,6 @@ public final class ManagePlanResponseResponseData {
 
         private Optional<String> checkoutId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -209,6 +208,17 @@ public final class ManagePlanResponseResponseData {
         @java.lang.Override
         public ManagePlanResponseResponseData build() {
             return new ManagePlanResponseResponseData(checkoutId, company, problems, success, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("checkout_id")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("problems")
+                    || key.equalsIgnoreCase("success")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

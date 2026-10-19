@@ -552,7 +552,6 @@ public final class ComponentHydrateResponseData {
 
         private List<CompanyPlanDetailResponseData> activeAddOns = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1010,6 +1009,40 @@ public final class ComponentHydrateResponseData {
                     trialPaymentMethodRequired,
                     upcomingInvoice,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("active_add_ons")
+                    || key.equalsIgnoreCase("active_plans")
+                    || key.equalsIgnoreCase("active_usage_based_entitlements")
+                    || key.equalsIgnoreCase("add_on_compatibilities")
+                    || key.equalsIgnoreCase("capabilities")
+                    || key.equalsIgnoreCase("checkout_settings")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("component")
+                    || key.equalsIgnoreCase("credit_bundles")
+                    || key.equalsIgnoreCase("credit_grants")
+                    || key.equalsIgnoreCase("custom_checkout_fields")
+                    || key.equalsIgnoreCase("default_plan")
+                    || key.equalsIgnoreCase("display_settings")
+                    || key.equalsIgnoreCase("feature_usage")
+                    || key.equalsIgnoreCase("post_trial_plan")
+                    || key.equalsIgnoreCase("prevent_self_service_downgrade")
+                    || key.equalsIgnoreCase("prevent_self_service_downgrade_button_text")
+                    || key.equalsIgnoreCase("prevent_self_service_downgrade_url")
+                    || key.equalsIgnoreCase("scheduled_downgrade")
+                    || key.equalsIgnoreCase("show_as_monthly_prices")
+                    || key.equalsIgnoreCase("show_credits")
+                    || key.equalsIgnoreCase("show_period_toggle")
+                    || key.equalsIgnoreCase("show_zero_price_as_free")
+                    || key.equalsIgnoreCase("stripe_embed")
+                    || key.equalsIgnoreCase("subscription")
+                    || key.equalsIgnoreCase("trial_payment_method_required")
+                    || key.equalsIgnoreCase("upcoming_invoice")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

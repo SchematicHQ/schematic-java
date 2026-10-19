@@ -324,7 +324,6 @@ public final class CreateBillingLinkedFeatureRequestBody {
 
         private Optional<FeatureEventSource> eventSource = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -525,6 +524,27 @@ public final class CreateBillingLinkedFeatureRequestBody {
                     singularName,
                     traitId,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_provider")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("event_source")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("external_resource_id")
+                    || key.equalsIgnoreCase("feature_type")
+                    || key.equalsIgnoreCase("flag")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("lifecycle_phase")
+                    || key.equalsIgnoreCase("maintainer_account_member_id")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("plural_name")
+                    || key.equalsIgnoreCase("singular_name")
+                    || key.equalsIgnoreCase("trait_id")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

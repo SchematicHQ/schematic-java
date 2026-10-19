@@ -133,7 +133,6 @@ public final class CreditGrantDetail {
 
         private Optional<String> creditTypeIcon = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -190,6 +189,17 @@ public final class CreditGrantDetail {
         @java.lang.Override
         public CreditGrantDetail build() {
             return new CreditGrantDetail(creditTypeIcon, expiresAt, grantReason, quantity, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("credit_type_icon")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("grant_reason")
+                    || key.equalsIgnoreCase("quantity")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

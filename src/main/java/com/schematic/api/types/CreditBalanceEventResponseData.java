@@ -188,7 +188,6 @@ public final class CreditBalanceEventResponseData {
 
         private Optional<String> grantId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -282,6 +281,20 @@ public final class CreditBalanceEventResponseData {
         public CreditBalanceEventResponseData build() {
             return new CreditBalanceEventResponseData(
                     amount, eventType, grantId, grantReason, planId, timestamp, zeroedOutReason, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("amount")
+                    || key.equalsIgnoreCase("event_type")
+                    || key.equalsIgnoreCase("grant_id")
+                    || key.equalsIgnoreCase("grant_reason")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("timestamp")
+                    || key.equalsIgnoreCase("zeroed_out_reason")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

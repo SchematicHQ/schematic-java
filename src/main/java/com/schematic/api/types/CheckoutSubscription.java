@@ -491,7 +491,6 @@ public final class CheckoutSubscription {
 
         private Optional<String> applicationId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -794,6 +793,37 @@ public final class CheckoutSubscription {
                     trialEnd,
                     trialEndSetting,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("application_id")
+                    || key.equalsIgnoreCase("cancel_at")
+                    || key.equalsIgnoreCase("cancel_at_period_end")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("confirm_payment_intent_client_secret")
+                    || key.equalsIgnoreCase("confirm_payment_intent_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("customer_external_id")
+                    || key.equalsIgnoreCase("default_payment_method_id")
+                    || key.equalsIgnoreCase("expired_at")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("invoice_id")
+                    || key.equalsIgnoreCase("invoice_url")
+                    || key.equalsIgnoreCase("metadata")
+                    || key.equalsIgnoreCase("period_end")
+                    || key.equalsIgnoreCase("period_start")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("subscription_external_id")
+                    || key.equalsIgnoreCase("total_price")
+                    || key.equalsIgnoreCase("trial_end")
+                    || key.equalsIgnoreCase("trial_end_setting")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -96,7 +96,6 @@ public final class EnvironmentUsagePointResponseData {
 
         private long usage;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -125,6 +124,14 @@ public final class EnvironmentUsagePointResponseData {
         @java.lang.Override
         public EnvironmentUsagePointResponseData build() {
             return new EnvironmentUsagePointResponseData(timestamp, usage, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("timestamp") || key.equalsIgnoreCase("usage")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -298,7 +298,6 @@ public final class CatalogResponseData {
 
         private Optional<String> customPlanCtaText = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -465,6 +464,26 @@ public final class CatalogResponseData {
                     pricingUrl,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("account_id")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("custom_plan_cta_text")
+                    || key.equalsIgnoreCase("custom_plan_cta_url")
+                    || key.equalsIgnoreCase("custom_plan_price_text")
+                    || key.equalsIgnoreCase("custom_plans_visible")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("is_default")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("pricing_model")
+                    || key.equalsIgnoreCase("pricing_url")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

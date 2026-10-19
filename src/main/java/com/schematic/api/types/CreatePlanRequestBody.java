@@ -132,7 +132,6 @@ public final class CreatePlanRequestBody {
 
         private Optional<String> description = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -189,6 +188,17 @@ public final class CreatePlanRequestBody {
         @java.lang.Override
         public CreatePlanRequestBody build() {
             return new CreatePlanRequestBody(description, icon, name, planType, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("icon")
+                    || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("plan_type")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

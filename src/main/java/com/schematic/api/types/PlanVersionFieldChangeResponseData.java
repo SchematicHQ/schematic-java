@@ -110,7 +110,6 @@ public final class PlanVersionFieldChangeResponseData {
 
         private String old;
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -147,6 +146,14 @@ public final class PlanVersionFieldChangeResponseData {
         @java.lang.Override
         public PlanVersionFieldChangeResponseData build() {
             return new PlanVersionFieldChangeResponseData(field, new_, old, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("field") || key.equalsIgnoreCase("new") || key.equalsIgnoreCase("old")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

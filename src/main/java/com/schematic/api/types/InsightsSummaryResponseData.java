@@ -178,7 +178,6 @@ public final class InsightsSummaryResponseData {
 
         private List<MrrResponseData> mrr = new ArrayList<>();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -257,6 +256,19 @@ public final class InsightsSummaryResponseData {
         public InsightsSummaryResponseData build() {
             return new InsightsSummaryResponseData(
                     activeCredits, mrr, paidCompanies, totalCompanies, totalFeatures, totalPlans, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("active_credits")
+                    || key.equalsIgnoreCase("mrr")
+                    || key.equalsIgnoreCase("paid_companies")
+                    || key.equalsIgnoreCase("total_companies")
+                    || key.equalsIgnoreCase("total_features")
+                    || key.equalsIgnoreCase("total_plans")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

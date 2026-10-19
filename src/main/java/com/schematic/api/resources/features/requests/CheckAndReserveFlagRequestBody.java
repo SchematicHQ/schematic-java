@@ -59,7 +59,7 @@ public final class CheckAndReserveFlagRequestBody {
     }
 
     /**
-     * @return When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
+     * @return When the hold lapses if no track or inference event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
      */
     @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
@@ -75,7 +75,7 @@ public final class CheckAndReserveFlagRequestBody {
     }
 
     /**
-     * @return Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is the entitlement's consumption rate times quantity, or, when quantity is omitted, times the usage stated here
+     * @return Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise, when event_quantities names the entitlement's event subtype, the hold is that event priced at the entitlement's consumption rate and quantity rates, and quantity is ignored; otherwise the hold is the entitlement's consumption rate times quantity, or, when quantity is omitted, times the usage stated here
      */
     @JsonProperty("preflight")
     public Optional<PreflightRequestBody> getPreflight() {
@@ -83,7 +83,7 @@ public final class CheckAndReserveFlagRequestBody {
     }
 
     /**
-     * @return Units of the feature the operation will consume. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event. When it is omitted the units come from preflight.event_usage.quantity, if that event subtype is the entitlement's, else from preflight.usage, else 1
+     * @return Units of the feature the operation will consume. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event. When it is omitted the units come from preflight.event_usage.quantity, if that event subtype is the entitlement's, else from preflight.usage, else 1. Ignored when preflight.event_quantities names the entitlement's event subtype, whose quantity is used instead
      */
     @JsonProperty("quantity")
     public Optional<Double> getQuantity() {
@@ -144,7 +144,6 @@ public final class CheckAndReserveFlagRequestBody {
 
         private Optional<Map<String, String>> user = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -171,7 +170,7 @@ public final class CheckAndReserveFlagRequestBody {
         }
 
         /**
-         * <p>When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry</p>
+         * <p>When the hold lapses if no track or inference event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry</p>
          */
         @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
@@ -199,7 +198,7 @@ public final class CheckAndReserveFlagRequestBody {
         }
 
         /**
-         * <p>Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise the hold is the entitlement's consumption rate times quantity, or, when quantity is omitted, times the usage stated here</p>
+         * <p>Hypothetical usage to evaluate the flag against. When credit_cost names the entitlement's credit, that cost is what gets held; otherwise, when event_quantities names the entitlement's event subtype, the hold is that event priced at the entitlement's consumption rate and quantity rates, and quantity is ignored; otherwise the hold is the entitlement's consumption rate times quantity, or, when quantity is omitted, times the usage stated here</p>
          */
         @JsonSetter(value = "preflight", nulls = Nulls.SKIP)
         public Builder preflight(Optional<PreflightRequestBody> preflight) {
@@ -213,7 +212,7 @@ public final class CheckAndReserveFlagRequestBody {
         }
 
         /**
-         * <p>Units of the feature the operation will consume. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event. When it is omitted the units come from preflight.event_usage.quantity, if that event subtype is the entitlement's, else from preflight.usage, else 1</p>
+         * <p>Units of the feature the operation will consume. Sets the hold size together with the entitlement's consumption rate, and is echoed back on the reservation for the settling track event. When it is omitted the units come from preflight.event_usage.quantity, if that event subtype is the entitlement's, else from preflight.usage, else 1. Ignored when preflight.event_quantities names the entitlement's event subtype, whose quantity is used instead</p>
          */
         @JsonSetter(value = "quantity", nulls = Nulls.SKIP)
         public Builder quantity(Optional<Double> quantity) {
@@ -240,6 +239,19 @@ public final class CheckAndReserveFlagRequestBody {
         public CheckAndReserveFlagRequestBody build() {
             return new CheckAndReserveFlagRequestBody(
                     company, expiresAt, idempotencyKey, preflight, quantity, user, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("idempotency_key")
+                    || key.equalsIgnoreCase("preflight")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("user")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         public Builder additionalProperty(String key, Object value) {

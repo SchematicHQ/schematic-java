@@ -833,7 +833,6 @@ public final class CreditCompanyGrantView {
 
         private Optional<BillingArrearsCadence> arrearsCadence = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -1423,6 +1422,57 @@ public final class CreditCompanyGrantView {
                     zeroedOutDate,
                     zeroedOutReason,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("arrears_cadence")
+                    || key.equalsIgnoreCase("billing_credit_bundle_id")
+                    || key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("company_license_id")
+                    || key.equalsIgnoreCase("company_name")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("credit_description")
+                    || key.equalsIgnoreCase("credit_icon")
+                    || key.equalsIgnoreCase("credit_name")
+                    || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("exhausted_at")
+                    || key.equalsIgnoreCase("expires_at")
+                    || key.equalsIgnoreCase("expiry_type")
+                    || key.equalsIgnoreCase("expiry_unit")
+                    || key.equalsIgnoreCase("expiry_unit_count")
+                    || key.equalsIgnoreCase("grant_reason")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("license_name")
+                    || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("plan_name")
+                    || key.equalsIgnoreCase("plural_name")
+                    || key.equalsIgnoreCase("postpaid_charge_amount")
+                    || key.equalsIgnoreCase("postpaid_charge_currency")
+                    || key.equalsIgnoreCase("postpaid_charged_credits")
+                    || key.equalsIgnoreCase("postpaid_period_end")
+                    || key.equalsIgnoreCase("postpaid_rate")
+                    || key.equalsIgnoreCase("postpaid_rate_decimal")
+                    || key.equalsIgnoreCase("price")
+                    || key.equalsIgnoreCase("quantity")
+                    || key.equalsIgnoreCase("quantity_remaining")
+                    || key.equalsIgnoreCase("quantity_used")
+                    || key.equalsIgnoreCase("renewal_enabled")
+                    || key.equalsIgnoreCase("renewal_period")
+                    || key.equalsIgnoreCase("reserved")
+                    || key.equalsIgnoreCase("settled")
+                    || key.equalsIgnoreCase("singular_name")
+                    || key.equalsIgnoreCase("source_grant_id")
+                    || key.equalsIgnoreCase("source_label")
+                    || key.equalsIgnoreCase("transfers")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("valid_from")
+                    || key.equalsIgnoreCase("zeroed_out_date")
+                    || key.equalsIgnoreCase("zeroed_out_reason")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -458,7 +458,6 @@ public final class RuleConditionDetailResponseData {
 
         private Optional<EntityTraitDefinitionResponseData> comparisonTrait = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -776,6 +775,35 @@ public final class RuleConditionDetailResponseData {
                     traitValue,
                     updatedAt,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("comparison_trait")
+                    || key.equalsIgnoreCase("comparison_trait_id")
+                    || key.equalsIgnoreCase("condition_group_id")
+                    || key.equalsIgnoreCase("condition_type")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("environment_id")
+                    || key.equalsIgnoreCase("event_subtype")
+                    || key.equalsIgnoreCase("flag_id")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("metric_period")
+                    || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("metric_value")
+                    || key.equalsIgnoreCase("operator")
+                    || key.equalsIgnoreCase("plan_versions")
+                    || key.equalsIgnoreCase("resource_ids")
+                    || key.equalsIgnoreCase("resources")
+                    || key.equalsIgnoreCase("rule_id")
+                    || key.equalsIgnoreCase("trait")
+                    || key.equalsIgnoreCase("trait_entity_type")
+                    || key.equalsIgnoreCase("trait_id")
+                    || key.equalsIgnoreCase("trait_value")
+                    || key.equalsIgnoreCase("updated_at")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

@@ -94,6 +94,9 @@ public final class CreditSpendPolicyResponseData {
         return billingCreditId;
     }
 
+    /**
+     * @return The company the policy applies in
+     */
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
@@ -153,6 +156,9 @@ public final class CreditSpendPolicyResponseData {
         return updatedAt;
     }
 
+    /**
+     * @return For a user policy, the user whose spend in the company it limits
+     */
     @JsonProperty("user_id")
     public Optional<String> getUserId() {
         return userId;
@@ -264,6 +270,9 @@ public final class CreditSpendPolicyResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>The company the policy applies in</p>
+         */
         _FinalStage companyId(Optional<String> companyId);
 
         _FinalStage companyId(String companyId);
@@ -297,6 +306,9 @@ public final class CreditSpendPolicyResponseData {
 
         _FinalStage resetsAt(OffsetDateTime resetsAt);
 
+        /**
+         * <p>For a user policy, the user whose spend in the company it limits</p>
+         */
         _FinalStage userId(Optional<String> userId);
 
         _FinalStage userId(String userId);
@@ -349,7 +361,6 @@ public final class CreditSpendPolicyResponseData {
 
         private Optional<String> companyId = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -442,12 +453,19 @@ public final class CreditSpendPolicyResponseData {
             return this;
         }
 
+        /**
+         * <p>For a user policy, the user whose spend in the company it limits</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage userId(String userId) {
             this.userId = Optional.ofNullable(userId);
             return this;
         }
 
+        /**
+         * <p>For a user policy, the user whose spend in the company it limits</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
         public _FinalStage userId(Optional<String> userId) {
@@ -541,12 +559,19 @@ public final class CreditSpendPolicyResponseData {
             return this;
         }
 
+        /**
+         * <p>The company the policy applies in</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
+        /**
+         * <p>The company the policy applies in</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
         public _FinalStage companyId(Optional<String> companyId) {
@@ -573,6 +598,28 @@ public final class CreditSpendPolicyResponseData {
                     windowCount,
                     windowUnit,
                     additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("billing_credit_id")
+                    || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("consumed")
+                    || key.equalsIgnoreCase("created_at")
+                    || key.equalsIgnoreCase("headroom")
+                    || key.equalsIgnoreCase("id")
+                    || key.equalsIgnoreCase("label")
+                    || key.equalsIgnoreCase("max_per_draw")
+                    || key.equalsIgnoreCase("resets_at")
+                    || key.equalsIgnoreCase("scope_type")
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("user_id")
+                    || key.equalsIgnoreCase("window_amount")
+                    || key.equalsIgnoreCase("window_count")
+                    || key.equalsIgnoreCase("window_unit")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override

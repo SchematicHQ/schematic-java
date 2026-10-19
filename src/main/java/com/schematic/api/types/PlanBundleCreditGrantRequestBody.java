@@ -148,7 +148,6 @@ public final class PlanBundleCreditGrantRequestBody {
 
         private Optional<CreateBillingPlanCreditGrantRequestBody> createReq = Optional.empty();
 
-        @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -226,6 +225,18 @@ public final class PlanBundleCreditGrantRequestBody {
         public PlanBundleCreditGrantRequestBody build() {
             return new PlanBundleCreditGrantRequestBody(
                     action, createReq, creditGrantId, deleteReq, updateReq, additionalProperties);
+        }
+
+        @JsonAnySetter
+        private void putAdditionalPropertyFromJson(String key, Object value) {
+            if (key.equalsIgnoreCase("action")
+                    || key.equalsIgnoreCase("create_req")
+                    || key.equalsIgnoreCase("credit_grant_id")
+                    || key.equalsIgnoreCase("delete_req")
+                    || key.equalsIgnoreCase("update_req")) {
+                return;
+            }
+            this.additionalProperties.put(key, value);
         }
 
         @java.lang.Override
