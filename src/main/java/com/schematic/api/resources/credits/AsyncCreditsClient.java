@@ -53,6 +53,7 @@ import com.schematic.api.resources.credits.types.DeleteCreditSpendPolicyResponse
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.GetCreditBalanceTimeSeriesResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
+import com.schematic.api.resources.credits.types.GetCreditEventLedgerEntryResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyUsageResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
@@ -1418,6 +1419,31 @@ public class AsyncCreditsClient {
         CompletableFuture<BaseSchematicHttpResponse<ListCreditEventLedgerResponse>> rawFuture =
                 this.rawClient.listCreditEventLedger(request, requestOptions);
         CompletableFuture<ListCreditEventLedgerResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCreditEventLedgerEntryResponse> getCreditEventLedgerEntry(String ledgerEntryId) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditEventLedgerEntryResponse>> rawFuture =
+                this.rawClient.getCreditEventLedgerEntry(ledgerEntryId);
+        CompletableFuture<GetCreditEventLedgerEntryResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCreditEventLedgerEntryResponse> getCreditEventLedgerEntry(
+            String ledgerEntryId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCreditEventLedgerEntryResponse>> rawFuture =
+                this.rawClient.getCreditEventLedgerEntry(ledgerEntryId, requestOptions);
+        CompletableFuture<GetCreditEventLedgerEntryResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);

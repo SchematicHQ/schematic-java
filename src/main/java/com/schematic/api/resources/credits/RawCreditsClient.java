@@ -11,6 +11,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.RetryInterceptor;
@@ -67,6 +68,7 @@ import com.schematic.api.resources.credits.types.DeleteCreditSpendPolicyResponse
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.GetCreditBalanceTimeSeriesResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
+import com.schematic.api.resources.credits.types.GetCreditEventLedgerEntryResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyUsageResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
@@ -295,7 +297,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits")
-                .addPathSegment(creditId);
+                .addPathSegment(PathSegments.validate(creditId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -366,7 +368,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits")
-                .addPathSegment(creditId);
+                .addPathSegment(PathSegments.validate(creditId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -449,7 +451,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits")
-                .addPathSegment(creditId);
+                .addPathSegment(PathSegments.validate(creditId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -861,7 +863,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/bundles")
-                .addPathSegment(bundleId);
+                .addPathSegment(PathSegments.validate(bundleId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -932,7 +934,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/bundles")
-                .addPathSegment(bundleId);
+                .addPathSegment(PathSegments.validate(bundleId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1016,7 +1018,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/bundles")
-                .addPathSegment(bundleId);
+                .addPathSegment(PathSegments.validate(bundleId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1300,7 +1302,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/grants")
-                .addPathSegment(grantId)
+                .addPathSegment(PathSegments.validate(grantId))
                 .addPathSegments("zero-out");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -1926,7 +1928,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/lease")
-                .addPathSegment(leaseId)
+                .addPathSegment(PathSegments.validate(leaseId))
                 .addPathSegments("extend");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -2013,7 +2015,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/lease")
-                .addPathSegment(leaseId)
+                .addPathSegment(PathSegments.validate(leaseId))
                 .addPathSegments("release");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -2292,7 +2294,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/plan-grants")
-                .addPathSegment(planGrantId);
+                .addPathSegment(PathSegments.validate(planGrantId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -2364,7 +2366,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/plan-grants")
-                .addPathSegment(planGrantId);
+                .addPathSegment(PathSegments.validate(planGrantId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -2461,7 +2463,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/plan-grants")
-                .addPathSegment(planGrantId);
+                .addPathSegment(PathSegments.validate(planGrantId));
         if (request.getApplyToExisting().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "apply_to_existing", request.getApplyToExisting().get(), false);
@@ -2743,7 +2745,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/reservations")
-                .addPathSegment(reservationId)
+                .addPathSegment(PathSegments.validate(reservationId))
                 .addPathSegments("release");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -3014,7 +3016,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/spend-policies")
-                .addPathSegment(spendPolicyId);
+                .addPathSegment(PathSegments.validate(spendPolicyId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -3096,7 +3098,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/spend-policies")
-                .addPathSegment(spendPolicyId);
+                .addPathSegment(PathSegments.validate(spendPolicyId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -3179,7 +3181,7 @@ public class RawCreditsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/credits/spend-policies")
-                .addPathSegment(spendPolicyId);
+                .addPathSegment(PathSegments.validate(spendPolicyId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -3468,6 +3470,10 @@ public class RawCreditsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "feature_id", request.getFeatureId().get(), false);
         }
+        if (request.getSourceEventId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "source_event_id", request.getSourceEventId().get(), false);
+        }
         if (request.getStartTime().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "start_time", request.getStartTime().get(), false);
@@ -3543,6 +3549,78 @@ public class RawCreditsClient {
         }
     }
 
+    public BaseSchematicHttpResponse<GetCreditEventLedgerEntryResponse> getCreditEventLedgerEntry(
+            String ledgerEntryId) {
+        return getCreditEventLedgerEntry(ledgerEntryId, null);
+    }
+
+    public BaseSchematicHttpResponse<GetCreditEventLedgerEntryResponse> getCreditEventLedgerEntry(
+            String ledgerEntryId, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v2/billing/credits/ledger")
+                .addPathSegment(PathSegments.validate(ledgerEntryId));
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, GetCreditEventLedgerEntryResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
     public BaseSchematicHttpResponse<CountCreditEventLedgerResponse> countCreditEventLedger(
             CountCreditEventLedgerRequest request) {
         return countCreditEventLedger(request, null);
@@ -3569,6 +3647,10 @@ public class RawCreditsClient {
         if (request.getFeatureId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "feature_id", request.getFeatureId().get(), false);
+        }
+        if (request.getSourceEventId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "source_event_id", request.getSourceEventId().get(), false);
         }
         if (request.getStartTime().isPresent()) {
             QueryStringMapper.addQueryParameter(

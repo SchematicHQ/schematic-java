@@ -28,6 +28,9 @@ public final class WebhookRequestType {
 
     public static final WebhookRequestType USER_UPDATED = new WebhookRequestType(Value.USER_UPDATED, "user.updated");
 
+    public static final WebhookRequestType CREDIT_USAGE_WARNING_REACHED =
+            new WebhookRequestType(Value.CREDIT_USAGE_WARNING_REACHED, "credit.usage_warning_reached");
+
     public static final WebhookRequestType AUTO_TOPUP_HARD_FAILURE =
             new WebhookRequestType(Value.AUTO_TOPUP_HARD_FAILURE, "auto.topup.hard.failure");
 
@@ -167,6 +170,8 @@ public final class WebhookRequestType {
                 return visitor.visitPlanEntitlementCreated();
             case USER_UPDATED:
                 return visitor.visitUserUpdated();
+            case CREDIT_USAGE_WARNING_REACHED:
+                return visitor.visitCreditUsageWarningReached();
             case AUTO_TOPUP_HARD_FAILURE:
                 return visitor.visitAutoTopupHardFailure();
             case COMPANY_OVERRIDE_DELETED:
@@ -258,6 +263,8 @@ public final class WebhookRequestType {
                 return PLAN_ENTITLEMENT_CREATED;
             case "user.updated":
                 return USER_UPDATED;
+            case "credit.usage_warning_reached":
+                return CREDIT_USAGE_WARNING_REACHED;
             case "auto.topup.hard.failure":
                 return AUTO_TOPUP_HARD_FAILURE;
             case "company.override.deleted":
@@ -356,6 +363,8 @@ public final class WebhookRequestType {
 
         CREDIT_PURCHASE_SUCCESS,
 
+        CREDIT_USAGE_WARNING_REACHED,
+
         ENTITLEMENT_LIMIT_REACHED,
 
         ENTITLEMENT_LIMIT_WARNING,
@@ -441,6 +450,8 @@ public final class WebhookRequestType {
         T visitCreditLimitWarning();
 
         T visitCreditPurchaseSuccess();
+
+        T visitCreditUsageWarningReached();
 
         T visitEntitlementLimitReached();
 

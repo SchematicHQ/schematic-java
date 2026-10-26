@@ -11,6 +11,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.ResponseBodyInputStream;
@@ -297,7 +298,7 @@ public class AsyncRawDataexportsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("data-exports")
-                .addPathSegment(dataExportId);
+                .addPathSegment(PathSegments.validate(dataExportId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -395,7 +396,7 @@ public class AsyncRawDataexportsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("data-exports")
-                .addPathSegment(dataExportId)
+                .addPathSegment(PathSegments.validate(dataExportId))
                 .addPathSegments("artifact");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {

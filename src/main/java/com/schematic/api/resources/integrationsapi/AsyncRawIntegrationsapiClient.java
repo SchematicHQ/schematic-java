@@ -11,6 +11,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.RetryInterceptor;
@@ -68,7 +69,7 @@ public class AsyncRawIntegrationsapiClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("integration/start")
-                .addPathSegment(integrationId);
+                .addPathSegment(PathSegments.validate(integrationId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -306,7 +307,7 @@ public class AsyncRawIntegrationsapiClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("integrations")
-                .addPathSegment(type)
+                .addPathSegment(PathSegments.validate(type))
                 .addPathSegments("webhook-url");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -1486,7 +1487,7 @@ public class AsyncRawIntegrationsapiClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("integrations/uninstall")
-                .addPathSegment(integrationId);
+                .addPathSegment(PathSegments.validate(integrationId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);

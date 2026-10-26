@@ -11,6 +11,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.ResponseBodyInputStream;
@@ -20,9 +21,9 @@ import com.schematic.api.errors.ForbiddenError;
 import com.schematic.api.errors.InternalServerError;
 import com.schematic.api.errors.NotFoundError;
 import com.schematic.api.errors.UnauthorizedError;
+import com.schematic.api.resources.billing.requests.CountBillingInvoicesRequest;
 import com.schematic.api.resources.billing.requests.CountBillingProductsRequest;
 import com.schematic.api.resources.billing.requests.CountCustomersRequest;
-import com.schematic.api.resources.billing.requests.CountNativeInvoicesRequest;
 import com.schematic.api.resources.billing.requests.CreateBillingCustomerRequestBody;
 import com.schematic.api.resources.billing.requests.CreateBillingPriceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateBillingProductRequestBody;
@@ -31,6 +32,7 @@ import com.schematic.api.resources.billing.requests.CreateCouponRequestBody;
 import com.schematic.api.resources.billing.requests.CreateInvoiceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateMeterRequestBody;
 import com.schematic.api.resources.billing.requests.CreatePaymentMethodRequestBody;
+import com.schematic.api.resources.billing.requests.ListBillingInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductsRequest;
@@ -39,14 +41,13 @@ import com.schematic.api.resources.billing.requests.ListCouponsRequest;
 import com.schematic.api.resources.billing.requests.ListCustomersWithSubscriptionsRequest;
 import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
-import com.schematic.api.resources.billing.requests.ListNativeInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.requests.MarkInvoicePaidRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateBillingSettingsRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateCompanyBillingProfileRequestBody;
+import com.schematic.api.resources.billing.types.CountBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
-import com.schematic.api.resources.billing.types.CountNativeInvoicesResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingCouponResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingInvoiceResponse;
@@ -54,9 +55,10 @@ import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
 import com.schematic.api.resources.billing.types.FinalizeNativeInvoiceResponse;
+import com.schematic.api.resources.billing.types.GetBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.GetBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.GetCompanyNativeSubscriptionResponse;
-import com.schematic.api.resources.billing.types.GetNativeInvoiceResponse;
+import com.schematic.api.resources.billing.types.ListBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
@@ -65,9 +67,8 @@ import com.schematic.api.resources.billing.types.ListCouponsResponse;
 import com.schematic.api.resources.billing.types.ListCustomersWithSubscriptionsResponse;
 import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
-import com.schematic.api.resources.billing.types.ListNativeInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
-import com.schematic.api.resources.billing.types.MarkNativeInvoicePaidResponse;
+import com.schematic.api.resources.billing.types.MarkBillingInvoicePaidResponse;
 import com.schematic.api.resources.billing.types.UpdateBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.UpdateCompanyBillingProfileResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
@@ -351,7 +352,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/coupons")
-                .addPathSegment(billingId);
+                .addPathSegment(PathSegments.validate(billingId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -459,7 +460,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/customer")
-                .addPathSegment(billingId);
+                .addPathSegment(PathSegments.validate(billingId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1188,7 +1189,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/invoices")
-                .addPathSegment(billingId);
+                .addPathSegment(PathSegments.validate(billingId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1763,7 +1764,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/payment-methods")
-                .addPathSegment(billingId);
+                .addPathSegment(PathSegments.validate(billingId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -2172,7 +2173,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/product")
-                .addPathSegment(billingId);
+                .addPathSegment(PathSegments.validate(billingId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -2469,7 +2470,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/product/prices")
-                .addPathSegment(billingId);
+                .addPathSegment(PathSegments.validate(billingId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -3175,7 +3176,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("billing/profiles")
-                .addPathSegment(billingProfileId);
+                .addPathSegment(PathSegments.validate(billingProfileId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -3627,7 +3628,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("companies")
-                .addPathSegment(companyId)
+                .addPathSegment(PathSegments.validate(companyId))
                 .addPathSegments("native-subscription");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -3719,22 +3720,22 @@ public class AsyncRawBillingClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<ListNativeInvoicesResponse>> listNativeInvoices() {
-        return listNativeInvoices(ListNativeInvoicesRequest.builder().build());
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingInvoicesResponse>> listBillingInvoices() {
+        return listBillingInvoices(ListBillingInvoicesRequest.builder().build());
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<ListNativeInvoicesResponse>> listNativeInvoices(
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingInvoicesResponse>> listBillingInvoices(
             RequestOptions requestOptions) {
-        return listNativeInvoices(ListNativeInvoicesRequest.builder().build(), requestOptions);
+        return listBillingInvoices(ListBillingInvoicesRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<ListNativeInvoicesResponse>> listNativeInvoices(
-            ListNativeInvoicesRequest request) {
-        return listNativeInvoices(request, null);
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingInvoicesResponse>> listBillingInvoices(
+            ListBillingInvoicesRequest request) {
+        return listBillingInvoices(request, null);
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<ListNativeInvoicesResponse>> listNativeInvoices(
-            ListNativeInvoicesRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<BaseSchematicHttpResponse<ListBillingInvoicesResponse>> listBillingInvoices(
+            ListBillingInvoicesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("invoices");
@@ -3749,6 +3750,21 @@ public class AsyncRawBillingClient {
         if (request.getDocumentState().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "document_state", request.getDocumentState().get(), false);
+        }
+        if (request.getPastDue().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "past_due", request.getPastDue().get(), false);
+        }
+        if (request.getProviderType().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "provider_type", request.getProviderType().get(), false);
+        }
+        if (request.getQ().isPresent()) {
+            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
+        }
+        if (request.getStatus().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "status", request.getStatus().get(), false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -3782,7 +3798,7 @@ public class AsyncRawBillingClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<BaseSchematicHttpResponse<ListNativeInvoicesResponse>> future = new CompletableFuture<>();
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingInvoicesResponse>> future = new CompletableFuture<>();
         RetryInterceptor.AsyncCall okhttpCall = RetryInterceptor.newAsyncCall(client, okhttpRequest);
         okhttpCall.enqueue(new Callback() {
             @Override
@@ -3792,7 +3808,7 @@ public class AsyncRawBillingClient {
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, ListNativeInvoicesResponse.class),
+                                        responseBodyString, ListBillingInvoicesResponse.class),
                                 response));
                         return;
                     }
@@ -3852,16 +3868,16 @@ public class AsyncRawBillingClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<GetNativeInvoiceResponse>> getNativeInvoice(String invoiceId) {
-        return getNativeInvoice(invoiceId, null);
+    public CompletableFuture<BaseSchematicHttpResponse<GetBillingInvoiceResponse>> getBillingInvoice(String invoiceId) {
+        return getBillingInvoice(invoiceId, null);
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<GetNativeInvoiceResponse>> getNativeInvoice(
+    public CompletableFuture<BaseSchematicHttpResponse<GetBillingInvoiceResponse>> getBillingInvoice(
             String invoiceId, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("invoices")
-                .addPathSegment(invoiceId);
+                .addPathSegment(PathSegments.validate(invoiceId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -3886,7 +3902,7 @@ public class AsyncRawBillingClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<BaseSchematicHttpResponse<GetNativeInvoiceResponse>> future = new CompletableFuture<>();
+        CompletableFuture<BaseSchematicHttpResponse<GetBillingInvoiceResponse>> future = new CompletableFuture<>();
         RetryInterceptor.AsyncCall okhttpCall = RetryInterceptor.newAsyncCall(client, okhttpRequest);
         okhttpCall.enqueue(new Callback() {
             @Override
@@ -3895,7 +3911,8 @@ public class AsyncRawBillingClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetNativeInvoiceResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, GetBillingInvoiceResponse.class),
                                 response));
                         return;
                     }
@@ -3959,7 +3976,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("invoices")
-                .addPathSegment(invoiceId)
+                .addPathSegment(PathSegments.validate(invoiceId))
                 .addPathSegments("export");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -4059,7 +4076,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("invoices")
-                .addPathSegment(invoiceId)
+                .addPathSegment(PathSegments.validate(invoiceId))
                 .addPathSegments("finalize");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -4159,17 +4176,17 @@ public class AsyncRawBillingClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<MarkNativeInvoicePaidResponse>> markNativeInvoicePaid(
+    public CompletableFuture<BaseSchematicHttpResponse<MarkBillingInvoicePaidResponse>> markBillingInvoicePaid(
             String invoiceId, MarkInvoicePaidRequestBody request) {
-        return markNativeInvoicePaid(invoiceId, request, null);
+        return markBillingInvoicePaid(invoiceId, request, null);
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<MarkNativeInvoicePaidResponse>> markNativeInvoicePaid(
+    public CompletableFuture<BaseSchematicHttpResponse<MarkBillingInvoicePaidResponse>> markBillingInvoicePaid(
             String invoiceId, MarkInvoicePaidRequestBody request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("invoices")
-                .addPathSegment(invoiceId)
+                .addPathSegment(PathSegments.validate(invoiceId))
                 .addPathSegments("mark-paid");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -4205,7 +4222,7 @@ public class AsyncRawBillingClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<BaseSchematicHttpResponse<MarkNativeInvoicePaidResponse>> future = new CompletableFuture<>();
+        CompletableFuture<BaseSchematicHttpResponse<MarkBillingInvoicePaidResponse>> future = new CompletableFuture<>();
         RetryInterceptor.AsyncCall okhttpCall = RetryInterceptor.newAsyncCall(client, okhttpRequest);
         okhttpCall.enqueue(new Callback() {
             @Override
@@ -4215,7 +4232,7 @@ public class AsyncRawBillingClient {
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, MarkNativeInvoicePaidResponse.class),
+                                        responseBodyString, MarkBillingInvoicePaidResponse.class),
                                 response));
                         return;
                     }
@@ -4284,7 +4301,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("invoices")
-                .addPathSegment(invoiceId)
+                .addPathSegment(PathSegments.validate(invoiceId))
                 .addPathSegments("pdf");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -4383,7 +4400,7 @@ public class AsyncRawBillingClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("invoices")
-                .addPathSegment(invoiceId)
+                .addPathSegment(PathSegments.validate(invoiceId))
                 .addPathSegments("void");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -4483,22 +4500,22 @@ public class AsyncRawBillingClient {
         return future;
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<CountNativeInvoicesResponse>> countNativeInvoices() {
-        return countNativeInvoices(CountNativeInvoicesRequest.builder().build());
+    public CompletableFuture<BaseSchematicHttpResponse<CountBillingInvoicesResponse>> countBillingInvoices() {
+        return countBillingInvoices(CountBillingInvoicesRequest.builder().build());
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<CountNativeInvoicesResponse>> countNativeInvoices(
+    public CompletableFuture<BaseSchematicHttpResponse<CountBillingInvoicesResponse>> countBillingInvoices(
             RequestOptions requestOptions) {
-        return countNativeInvoices(CountNativeInvoicesRequest.builder().build(), requestOptions);
+        return countBillingInvoices(CountBillingInvoicesRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<CountNativeInvoicesResponse>> countNativeInvoices(
-            CountNativeInvoicesRequest request) {
-        return countNativeInvoices(request, null);
+    public CompletableFuture<BaseSchematicHttpResponse<CountBillingInvoicesResponse>> countBillingInvoices(
+            CountBillingInvoicesRequest request) {
+        return countBillingInvoices(request, null);
     }
 
-    public CompletableFuture<BaseSchematicHttpResponse<CountNativeInvoicesResponse>> countNativeInvoices(
-            CountNativeInvoicesRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<BaseSchematicHttpResponse<CountBillingInvoicesResponse>> countBillingInvoices(
+            CountBillingInvoicesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("invoices/count");
@@ -4513,6 +4530,21 @@ public class AsyncRawBillingClient {
         if (request.getDocumentState().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "document_state", request.getDocumentState().get(), false);
+        }
+        if (request.getPastDue().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "past_due", request.getPastDue().get(), false);
+        }
+        if (request.getProviderType().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "provider_type", request.getProviderType().get(), false);
+        }
+        if (request.getQ().isPresent()) {
+            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
+        }
+        if (request.getStatus().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "status", request.getStatus().get(), false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -4546,7 +4578,7 @@ public class AsyncRawBillingClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<BaseSchematicHttpResponse<CountNativeInvoicesResponse>> future = new CompletableFuture<>();
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingInvoicesResponse>> future = new CompletableFuture<>();
         RetryInterceptor.AsyncCall okhttpCall = RetryInterceptor.newAsyncCall(client, okhttpRequest);
         okhttpCall.enqueue(new Callback() {
             @Override
@@ -4556,7 +4588,7 @@ public class AsyncRawBillingClient {
                     if (response.isSuccessful()) {
                         future.complete(new BaseSchematicHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, CountNativeInvoicesResponse.class),
+                                        responseBodyString, CountBillingInvoicesResponse.class),
                                 response));
                         return;
                     }

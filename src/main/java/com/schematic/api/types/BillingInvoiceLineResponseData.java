@@ -28,7 +28,11 @@ public final class BillingInvoiceLineResponseData {
 
     private final List<String> chargeIds;
 
-    private final String id;
+    private final Optional<String> description;
+
+    private final Optional<String> externalId;
+
+    private final Optional<String> id;
 
     private final InvoiceLineKind kind;
 
@@ -49,7 +53,9 @@ public final class BillingInvoiceLineResponseData {
     private BillingInvoiceLineResponseData(
             long amount,
             List<String> chargeIds,
-            String id,
+            Optional<String> description,
+            Optional<String> externalId,
+            Optional<String> id,
             InvoiceLineKind kind,
             Optional<OffsetDateTime> periodEnd,
             Optional<OffsetDateTime> periodStart,
@@ -60,6 +66,8 @@ public final class BillingInvoiceLineResponseData {
             Map<String, Object> additionalProperties) {
         this.amount = amount;
         this.chargeIds = chargeIds;
+        this.description = description;
+        this.externalId = externalId;
         this.id = id;
         this.kind = kind;
         this.periodEnd = periodEnd;
@@ -87,8 +95,27 @@ public final class BillingInvoiceLineResponseData {
         return chargeIds;
     }
 
+    /**
+     * @return What the line bills for: the product, plan, add-on or credit. Null when the line has no subscription line behind it.
+     */
+    @JsonProperty("description")
+    public Optional<String> getDescription() {
+        return description;
+    }
+
+    /**
+     * @return The billing provider's line ID. Null on an invoice Schematic issued.
+     */
+    @JsonProperty("external_id")
+    public Optional<String> getExternalId() {
+        return externalId;
+    }
+
+    /**
+     * @return Null on a Stripe invoice line.
+     */
     @JsonProperty("id")
-    public String getId() {
+    public Optional<String> getId() {
         return id;
     }
 
@@ -141,6 +168,8 @@ public final class BillingInvoiceLineResponseData {
     private boolean equalTo(BillingInvoiceLineResponseData other) {
         return amount == other.amount
                 && chargeIds.equals(other.chargeIds)
+                && description.equals(other.description)
+                && externalId.equals(other.externalId)
                 && id.equals(other.id)
                 && kind.equals(other.kind)
                 && periodEnd.equals(other.periodEnd)
@@ -156,6 +185,8 @@ public final class BillingInvoiceLineResponseData {
         return Objects.hash(
                 this.amount,
                 this.chargeIds,
+                this.description,
+                this.externalId,
                 this.id,
                 this.kind,
                 this.periodEnd,
@@ -179,13 +210,9 @@ public final class BillingInvoiceLineResponseData {
         /**
          * <p>In minor units of the invoice's currency.</p>
          */
-        IdStage amount(long amount);
+        KindStage amount(long amount);
 
         Builder from(BillingInvoiceLineResponseData other);
-    }
-
-    public interface IdStage {
-        KindStage id(@NotNull String id);
     }
 
     public interface KindStage {
@@ -212,6 +239,27 @@ public final class BillingInvoiceLineResponseData {
 
         _FinalStage addAllChargeIds(List<String> chargeIds);
 
+        /**
+         * <p>What the line bills for: the product, plan, add-on or credit. Null when the line has no subscription line behind it.</p>
+         */
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
+
+        /**
+         * <p>The billing provider's line ID. Null on an invoice Schematic issued.</p>
+         */
+        _FinalStage externalId(Optional<String> externalId);
+
+        _FinalStage externalId(String externalId);
+
+        /**
+         * <p>Null on a Stripe invoice line.</p>
+         */
+        _FinalStage id(Optional<String> id);
+
+        _FinalStage id(String id);
+
         _FinalStage periodEnd(Optional<OffsetDateTime> periodEnd);
 
         _FinalStage periodEnd(OffsetDateTime periodEnd);
@@ -234,10 +282,8 @@ public final class BillingInvoiceLineResponseData {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements AmountStage, IdStage, KindStage, TaxableStage, _FinalStage {
+    public static final class Builder implements AmountStage, KindStage, TaxableStage, _FinalStage {
         private long amount;
-
-        private String id;
 
         private InvoiceLineKind kind;
 
@@ -253,6 +299,12 @@ public final class BillingInvoiceLineResponseData {
 
         private Optional<OffsetDateTime> periodEnd = Optional.empty();
 
+        private Optional<String> id = Optional.empty();
+
+        private Optional<String> externalId = Optional.empty();
+
+        private Optional<String> description = Optional.empty();
+
         private List<String> chargeIds = new ArrayList<>();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -263,6 +315,8 @@ public final class BillingInvoiceLineResponseData {
         public Builder from(BillingInvoiceLineResponseData other) {
             amount(other.getAmount());
             chargeIds(other.getChargeIds());
+            description(other.getDescription());
+            externalId(other.getExternalId());
             id(other.getId());
             kind(other.getKind());
             periodEnd(other.getPeriodEnd());
@@ -280,15 +334,8 @@ public final class BillingInvoiceLineResponseData {
          */
         @java.lang.Override
         @JsonSetter("amount")
-        public IdStage amount(long amount) {
+        public KindStage amount(long amount) {
             this.amount = amount;
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("id")
-        public KindStage id(@NotNull String id) {
-            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
@@ -372,6 +419,66 @@ public final class BillingInvoiceLineResponseData {
         }
 
         /**
+         * <p>Null on a Stripe invoice line.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage id(String id) {
+            this.id = Optional.ofNullable(id);
+            return this;
+        }
+
+        /**
+         * <p>Null on a Stripe invoice line.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "id", nulls = Nulls.SKIP)
+        public _FinalStage id(Optional<String> id) {
+            this.id = id;
+            return this;
+        }
+
+        /**
+         * <p>The billing provider's line ID. Null on an invoice Schematic issued.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage externalId(String externalId) {
+            this.externalId = Optional.ofNullable(externalId);
+            return this;
+        }
+
+        /**
+         * <p>The billing provider's line ID. Null on an invoice Schematic issued.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "external_id", nulls = Nulls.SKIP)
+        public _FinalStage externalId(Optional<String> externalId) {
+            this.externalId = externalId;
+            return this;
+        }
+
+        /**
+         * <p>What the line bills for: the product, plan, add-on or credit. Null when the line has no subscription line behind it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        /**
+         * <p>What the line bills for: the product, plan, add-on or credit. Null when the line has no subscription line behind it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
+            return this;
+        }
+
+        /**
          * <p>The charges this line sums.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -411,6 +518,8 @@ public final class BillingInvoiceLineResponseData {
             return new BillingInvoiceLineResponseData(
                     amount,
                     chargeIds,
+                    description,
+                    externalId,
                     id,
                     kind,
                     periodEnd,
@@ -426,6 +535,8 @@ public final class BillingInvoiceLineResponseData {
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("amount")
                     || key.equalsIgnoreCase("charge_ids")
+                    || key.equalsIgnoreCase("description")
+                    || key.equalsIgnoreCase("external_id")
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("kind")
                     || key.equalsIgnoreCase("period_end")

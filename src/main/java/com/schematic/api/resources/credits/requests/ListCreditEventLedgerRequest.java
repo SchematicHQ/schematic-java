@@ -32,6 +32,8 @@ public final class ListCreditEventLedgerRequest {
 
     private final Optional<String> featureId;
 
+    private final Optional<String> sourceEventId;
+
     private final Optional<String> startTime;
 
     private final Optional<Long> limit;
@@ -46,6 +48,7 @@ public final class ListCreditEventLedgerRequest {
             Optional<String> endTime,
             Optional<CreditEventType> eventType,
             Optional<String> featureId,
+            Optional<String> sourceEventId,
             Optional<String> startTime,
             Optional<Long> limit,
             Optional<Long> offset,
@@ -55,6 +58,7 @@ public final class ListCreditEventLedgerRequest {
         this.endTime = endTime;
         this.eventType = eventType;
         this.featureId = featureId;
+        this.sourceEventId = sourceEventId;
         this.startTime = startTime;
         this.limit = limit;
         this.offset = offset;
@@ -84,6 +88,14 @@ public final class ListCreditEventLedgerRequest {
     @JsonProperty("feature_id")
     public Optional<String> getFeatureId() {
         return featureId;
+    }
+
+    /**
+     * @return Return only entries drawn by this track or inference event. Pass the event ID that POST /events returned for it.
+     */
+    @JsonProperty("source_event_id")
+    public Optional<String> getSourceEventId() {
+        return sourceEventId;
     }
 
     @JsonProperty("start_time")
@@ -124,6 +136,7 @@ public final class ListCreditEventLedgerRequest {
                 && endTime.equals(other.endTime)
                 && eventType.equals(other.eventType)
                 && featureId.equals(other.featureId)
+                && sourceEventId.equals(other.sourceEventId)
                 && startTime.equals(other.startTime)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset);
@@ -137,6 +150,7 @@ public final class ListCreditEventLedgerRequest {
                 this.endTime,
                 this.eventType,
                 this.featureId,
+                this.sourceEventId,
                 this.startTime,
                 this.limit,
                 this.offset);
@@ -180,6 +194,13 @@ public final class ListCreditEventLedgerRequest {
 
         _FinalStage featureId(String featureId);
 
+        /**
+         * <p>Return only entries drawn by this track or inference event. Pass the event ID that POST /events returned for it.</p>
+         */
+        _FinalStage sourceEventId(Optional<String> sourceEventId);
+
+        _FinalStage sourceEventId(String sourceEventId);
+
         _FinalStage startTime(Optional<String> startTime);
 
         _FinalStage startTime(String startTime);
@@ -209,6 +230,8 @@ public final class ListCreditEventLedgerRequest {
 
         private Optional<String> startTime = Optional.empty();
 
+        private Optional<String> sourceEventId = Optional.empty();
+
         private Optional<String> featureId = Optional.empty();
 
         private Optional<CreditEventType> eventType = Optional.empty();
@@ -228,6 +251,7 @@ public final class ListCreditEventLedgerRequest {
             endTime(other.getEndTime());
             eventType(other.getEventType());
             featureId(other.getFeatureId());
+            sourceEventId(other.getSourceEventId());
             startTime(other.getStartTime());
             limit(other.getLimit());
             offset(other.getOffset());
@@ -294,6 +318,26 @@ public final class ListCreditEventLedgerRequest {
             return this;
         }
 
+        /**
+         * <p>Return only entries drawn by this track or inference event. Pass the event ID that POST /events returned for it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage sourceEventId(String sourceEventId) {
+            this.sourceEventId = Optional.ofNullable(sourceEventId);
+            return this;
+        }
+
+        /**
+         * <p>Return only entries drawn by this track or inference event. Pass the event ID that POST /events returned for it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "source_event_id", nulls = Nulls.SKIP)
+        public _FinalStage sourceEventId(Optional<String> sourceEventId) {
+            this.sourceEventId = sourceEventId;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage featureId(String featureId) {
             this.featureId = Optional.ofNullable(featureId);
@@ -354,6 +398,7 @@ public final class ListCreditEventLedgerRequest {
                     endTime,
                     eventType,
                     featureId,
+                    sourceEventId,
                     startTime,
                     limit,
                     offset,
@@ -367,6 +412,7 @@ public final class ListCreditEventLedgerRequest {
                     || key.equalsIgnoreCase("end_time")
                     || key.equalsIgnoreCase("event_type")
                     || key.equalsIgnoreCase("feature_id")
+                    || key.equalsIgnoreCase("source_event_id")
                     || key.equalsIgnoreCase("start_time")
                     || key.equalsIgnoreCase("limit")
                     || key.equalsIgnoreCase("offset")) {

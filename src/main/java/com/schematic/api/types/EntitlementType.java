@@ -12,6 +12,9 @@ public final class EntitlementType {
 
     public static final EntitlementType UNKNOWN = new EntitlementType(Value.UNKNOWN, "unknown");
 
+    public static final EntitlementType PLAN_CREDIT_GRANT =
+            new EntitlementType(Value.PLAN_CREDIT_GRANT, "plan_credit_grant");
+
     public static final EntitlementType PLAN_ENTITLEMENT =
             new EntitlementType(Value.PLAN_ENTITLEMENT, "plan_entitlement");
 
@@ -51,6 +54,8 @@ public final class EntitlementType {
                 return visitor.visitCompanyOverride();
             case UNKNOWN:
                 return visitor.visitUnknown();
+            case PLAN_CREDIT_GRANT:
+                return visitor.visitPlanCreditGrant();
             case PLAN_ENTITLEMENT:
                 return visitor.visitPlanEntitlement();
             case _UNKNOWN:
@@ -66,6 +71,8 @@ public final class EntitlementType {
                 return COMPANY_OVERRIDE;
             case "unknown":
                 return UNKNOWN;
+            case "plan_credit_grant":
+                return PLAN_CREDIT_GRANT;
             case "plan_entitlement":
                 return PLAN_ENTITLEMENT;
             default:
@@ -76,6 +83,8 @@ public final class EntitlementType {
     public enum Value {
         COMPANY_OVERRIDE,
 
+        PLAN_CREDIT_GRANT,
+
         PLAN_ENTITLEMENT,
 
         UNKNOWN,
@@ -85,6 +94,8 @@ public final class EntitlementType {
 
     public interface Visitor<T> {
         T visitCompanyOverride();
+
+        T visitPlanCreditGrant();
 
         T visitPlanEntitlement();
 

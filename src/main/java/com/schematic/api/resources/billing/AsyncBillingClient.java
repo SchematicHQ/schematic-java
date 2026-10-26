@@ -6,9 +6,9 @@ package com.schematic.api.resources.billing;
 import com.schematic.api.core.BaseSchematicHttpResponse;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.billing.requests.CountBillingInvoicesRequest;
 import com.schematic.api.resources.billing.requests.CountBillingProductsRequest;
 import com.schematic.api.resources.billing.requests.CountCustomersRequest;
-import com.schematic.api.resources.billing.requests.CountNativeInvoicesRequest;
 import com.schematic.api.resources.billing.requests.CreateBillingCustomerRequestBody;
 import com.schematic.api.resources.billing.requests.CreateBillingPriceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateBillingProductRequestBody;
@@ -17,6 +17,7 @@ import com.schematic.api.resources.billing.requests.CreateCouponRequestBody;
 import com.schematic.api.resources.billing.requests.CreateInvoiceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateMeterRequestBody;
 import com.schematic.api.resources.billing.requests.CreatePaymentMethodRequestBody;
+import com.schematic.api.resources.billing.requests.ListBillingInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductsRequest;
@@ -25,14 +26,13 @@ import com.schematic.api.resources.billing.requests.ListCouponsRequest;
 import com.schematic.api.resources.billing.requests.ListCustomersWithSubscriptionsRequest;
 import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
-import com.schematic.api.resources.billing.requests.ListNativeInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.requests.MarkInvoicePaidRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateBillingSettingsRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateCompanyBillingProfileRequestBody;
+import com.schematic.api.resources.billing.types.CountBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
-import com.schematic.api.resources.billing.types.CountNativeInvoicesResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingCouponResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingInvoiceResponse;
@@ -40,9 +40,10 @@ import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
 import com.schematic.api.resources.billing.types.FinalizeNativeInvoiceResponse;
+import com.schematic.api.resources.billing.types.GetBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.GetBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.GetCompanyNativeSubscriptionResponse;
-import com.schematic.api.resources.billing.types.GetNativeInvoiceResponse;
+import com.schematic.api.resources.billing.types.ListBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
@@ -51,9 +52,8 @@ import com.schematic.api.resources.billing.types.ListCouponsResponse;
 import com.schematic.api.resources.billing.types.ListCustomersWithSubscriptionsResponse;
 import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
-import com.schematic.api.resources.billing.types.ListNativeInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
-import com.schematic.api.resources.billing.types.MarkNativeInvoicePaidResponse;
+import com.schematic.api.resources.billing.types.MarkBillingInvoicePaidResponse;
 import com.schematic.api.resources.billing.types.UpdateBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.UpdateCompanyBillingProfileResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
@@ -1066,10 +1066,10 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<ListNativeInvoicesResponse> listNativeInvoices() {
-        CompletableFuture<BaseSchematicHttpResponse<ListNativeInvoicesResponse>> rawFuture =
-                this.rawClient.listNativeInvoices();
-        CompletableFuture<ListNativeInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
+    public CompletableFuture<ListBillingInvoicesResponse> listBillingInvoices() {
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingInvoicesResponse>> rawFuture =
+                this.rawClient.listBillingInvoices();
+        CompletableFuture<ListBillingInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1078,10 +1078,10 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<ListNativeInvoicesResponse> listNativeInvoices(RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<ListNativeInvoicesResponse>> rawFuture =
-                this.rawClient.listNativeInvoices(requestOptions);
-        CompletableFuture<ListNativeInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
+    public CompletableFuture<ListBillingInvoicesResponse> listBillingInvoices(RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingInvoicesResponse>> rawFuture =
+                this.rawClient.listBillingInvoices(requestOptions);
+        CompletableFuture<ListBillingInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1090,10 +1090,10 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<ListNativeInvoicesResponse> listNativeInvoices(ListNativeInvoicesRequest request) {
-        CompletableFuture<BaseSchematicHttpResponse<ListNativeInvoicesResponse>> rawFuture =
-                this.rawClient.listNativeInvoices(request);
-        CompletableFuture<ListNativeInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
+    public CompletableFuture<ListBillingInvoicesResponse> listBillingInvoices(ListBillingInvoicesRequest request) {
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingInvoicesResponse>> rawFuture =
+                this.rawClient.listBillingInvoices(request);
+        CompletableFuture<ListBillingInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1102,11 +1102,11 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<ListNativeInvoicesResponse> listNativeInvoices(
-            ListNativeInvoicesRequest request, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<ListNativeInvoicesResponse>> rawFuture =
-                this.rawClient.listNativeInvoices(request, requestOptions);
-        CompletableFuture<ListNativeInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
+    public CompletableFuture<ListBillingInvoicesResponse> listBillingInvoices(
+            ListBillingInvoicesRequest request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<ListBillingInvoicesResponse>> rawFuture =
+                this.rawClient.listBillingInvoices(request, requestOptions);
+        CompletableFuture<ListBillingInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1115,10 +1115,10 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<GetNativeInvoiceResponse> getNativeInvoice(String invoiceId) {
-        CompletableFuture<BaseSchematicHttpResponse<GetNativeInvoiceResponse>> rawFuture =
-                this.rawClient.getNativeInvoice(invoiceId);
-        CompletableFuture<GetNativeInvoiceResponse> future = rawFuture.thenApply(response -> response.body());
+    public CompletableFuture<GetBillingInvoiceResponse> getBillingInvoice(String invoiceId) {
+        CompletableFuture<BaseSchematicHttpResponse<GetBillingInvoiceResponse>> rawFuture =
+                this.rawClient.getBillingInvoice(invoiceId);
+        CompletableFuture<GetBillingInvoiceResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1127,11 +1127,11 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<GetNativeInvoiceResponse> getNativeInvoice(
+    public CompletableFuture<GetBillingInvoiceResponse> getBillingInvoice(
             String invoiceId, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<GetNativeInvoiceResponse>> rawFuture =
-                this.rawClient.getNativeInvoice(invoiceId, requestOptions);
-        CompletableFuture<GetNativeInvoiceResponse> future = rawFuture.thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<GetBillingInvoiceResponse>> rawFuture =
+                this.rawClient.getBillingInvoice(invoiceId, requestOptions);
+        CompletableFuture<GetBillingInvoiceResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1189,11 +1189,11 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<MarkNativeInvoicePaidResponse> markNativeInvoicePaid(
+    public CompletableFuture<MarkBillingInvoicePaidResponse> markBillingInvoicePaid(
             String invoiceId, MarkInvoicePaidRequestBody request) {
-        CompletableFuture<BaseSchematicHttpResponse<MarkNativeInvoicePaidResponse>> rawFuture =
-                this.rawClient.markNativeInvoicePaid(invoiceId, request);
-        CompletableFuture<MarkNativeInvoicePaidResponse> future = rawFuture.thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<MarkBillingInvoicePaidResponse>> rawFuture =
+                this.rawClient.markBillingInvoicePaid(invoiceId, request);
+        CompletableFuture<MarkBillingInvoicePaidResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1202,11 +1202,11 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<MarkNativeInvoicePaidResponse> markNativeInvoicePaid(
+    public CompletableFuture<MarkBillingInvoicePaidResponse> markBillingInvoicePaid(
             String invoiceId, MarkInvoicePaidRequestBody request, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<MarkNativeInvoicePaidResponse>> rawFuture =
-                this.rawClient.markNativeInvoicePaid(invoiceId, request, requestOptions);
-        CompletableFuture<MarkNativeInvoicePaidResponse> future = rawFuture.thenApply(response -> response.body());
+        CompletableFuture<BaseSchematicHttpResponse<MarkBillingInvoicePaidResponse>> rawFuture =
+                this.rawClient.markBillingInvoicePaid(invoiceId, request, requestOptions);
+        CompletableFuture<MarkBillingInvoicePaidResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1264,10 +1264,10 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<CountNativeInvoicesResponse> countNativeInvoices() {
-        CompletableFuture<BaseSchematicHttpResponse<CountNativeInvoicesResponse>> rawFuture =
-                this.rawClient.countNativeInvoices();
-        CompletableFuture<CountNativeInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
+    public CompletableFuture<CountBillingInvoicesResponse> countBillingInvoices() {
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingInvoicesResponse>> rawFuture =
+                this.rawClient.countBillingInvoices();
+        CompletableFuture<CountBillingInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1276,10 +1276,10 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<CountNativeInvoicesResponse> countNativeInvoices(RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<CountNativeInvoicesResponse>> rawFuture =
-                this.rawClient.countNativeInvoices(requestOptions);
-        CompletableFuture<CountNativeInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
+    public CompletableFuture<CountBillingInvoicesResponse> countBillingInvoices(RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingInvoicesResponse>> rawFuture =
+                this.rawClient.countBillingInvoices(requestOptions);
+        CompletableFuture<CountBillingInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1288,10 +1288,10 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<CountNativeInvoicesResponse> countNativeInvoices(CountNativeInvoicesRequest request) {
-        CompletableFuture<BaseSchematicHttpResponse<CountNativeInvoicesResponse>> rawFuture =
-                this.rawClient.countNativeInvoices(request);
-        CompletableFuture<CountNativeInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
+    public CompletableFuture<CountBillingInvoicesResponse> countBillingInvoices(CountBillingInvoicesRequest request) {
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingInvoicesResponse>> rawFuture =
+                this.rawClient.countBillingInvoices(request);
+        CompletableFuture<CountBillingInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -1300,11 +1300,11 @@ public class AsyncBillingClient {
         return future;
     }
 
-    public CompletableFuture<CountNativeInvoicesResponse> countNativeInvoices(
-            CountNativeInvoicesRequest request, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<CountNativeInvoicesResponse>> rawFuture =
-                this.rawClient.countNativeInvoices(request, requestOptions);
-        CompletableFuture<CountNativeInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
+    public CompletableFuture<CountBillingInvoicesResponse> countBillingInvoices(
+            CountBillingInvoicesRequest request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<CountBillingInvoicesResponse>> rawFuture =
+                this.rawClient.countBillingInvoices(request, requestOptions);
+        CompletableFuture<CountBillingInvoicesResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);

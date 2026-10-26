@@ -116,6 +116,8 @@ public final class BillingPlanCreditGrantResponseData {
 
     private final OffsetDateTime updatedAt;
 
+    private final List<BillingPlanCreditGrantWarningTierResponseData> warningTiers;
+
     private final Map<String, Object> additionalProperties;
 
     private BillingPlanCreditGrantResponseData(
@@ -165,6 +167,7 @@ public final class BillingPlanCreditGrantResponseData {
             Optional<Long> unitPrice,
             Optional<String> unitPriceDecimal,
             OffsetDateTime updatedAt,
+            List<BillingPlanCreditGrantWarningTierResponseData> warningTiers,
             Map<String, Object> additionalProperties) {
         this.arrearsAnchor = arrearsAnchor;
         this.arrearsCadence = arrearsCadence;
@@ -212,6 +215,7 @@ public final class BillingPlanCreditGrantResponseData {
         this.unitPrice = unitPrice;
         this.unitPriceDecimal = unitPriceDecimal;
         this.updatedAt = updatedAt;
+        this.warningTiers = warningTiers;
         this.additionalProperties = additionalProperties;
     }
 
@@ -514,6 +518,14 @@ public final class BillingPlanCreditGrantResponseData {
         return updatedAt;
     }
 
+    /**
+     * @return Usage-warning thresholds, in credits remaining in the company's balance, highest first. Schematic sends a credit.usage_warning_reached webhook when the balance drops to each one. Empty when none are set.
+     */
+    @JsonProperty("warning_tiers")
+    public List<BillingPlanCreditGrantWarningTierResponseData> getWarningTiers() {
+        return warningTiers;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -572,7 +584,8 @@ public final class BillingPlanCreditGrantResponseData {
                 && tierMode.equals(other.tierMode)
                 && unitPrice.equals(other.unitPrice)
                 && unitPriceDecimal.equals(other.unitPriceDecimal)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && warningTiers.equals(other.warningTiers);
     }
 
     @java.lang.Override
@@ -623,7 +636,8 @@ public final class BillingPlanCreditGrantResponseData {
                 this.tierMode,
                 this.unitPrice,
                 this.unitPriceDecimal,
-                this.updatedAt);
+                this.updatedAt,
+                this.warningTiers);
     }
 
     @java.lang.Override
@@ -898,6 +912,15 @@ public final class BillingPlanCreditGrantResponseData {
         _FinalStage unitPriceDecimal(Optional<String> unitPriceDecimal);
 
         _FinalStage unitPriceDecimal(String unitPriceDecimal);
+
+        /**
+         * <p>Usage-warning thresholds, in credits remaining in the company's balance, highest first. Schematic sends a credit.usage_warning_reached webhook when the balance drops to each one. Empty when none are set.</p>
+         */
+        _FinalStage warningTiers(List<BillingPlanCreditGrantWarningTierResponseData> warningTiers);
+
+        _FinalStage addWarningTiers(BillingPlanCreditGrantWarningTierResponseData warningTiers);
+
+        _FinalStage addAllWarningTiers(List<BillingPlanCreditGrantWarningTierResponseData> warningTiers);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -953,6 +976,8 @@ public final class BillingPlanCreditGrantResponseData {
         private PlanCreditGrantScaling scaling;
 
         private OffsetDateTime updatedAt;
+
+        private List<BillingPlanCreditGrantWarningTierResponseData> warningTiers = new ArrayList<>();
 
         private Optional<String> unitPriceDecimal = Optional.empty();
 
@@ -1064,6 +1089,7 @@ public final class BillingPlanCreditGrantResponseData {
             unitPrice(other.getUnitPrice());
             unitPriceDecimal(other.getUnitPriceDecimal());
             updatedAt(other.getUpdatedAt());
+            warningTiers(other.getWarningTiers());
             return this;
         }
 
@@ -1225,6 +1251,41 @@ public final class BillingPlanCreditGrantResponseData {
         @JsonSetter("updated_at")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Usage-warning thresholds, in credits remaining in the company's balance, highest first. Schematic sends a credit.usage_warning_reached webhook when the balance drops to each one. Empty when none are set.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllWarningTiers(List<BillingPlanCreditGrantWarningTierResponseData> warningTiers) {
+            if (warningTiers != null) {
+                this.warningTiers.addAll(warningTiers);
+            }
+            return this;
+        }
+
+        /**
+         * <p>Usage-warning thresholds, in credits remaining in the company's balance, highest first. Schematic sends a credit.usage_warning_reached webhook when the balance drops to each one. Empty when none are set.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addWarningTiers(BillingPlanCreditGrantWarningTierResponseData warningTiers) {
+            this.warningTiers.add(warningTiers);
+            return this;
+        }
+
+        /**
+         * <p>Usage-warning thresholds, in credits remaining in the company's balance, highest first. Schematic sends a credit.usage_warning_reached webhook when the balance drops to each one. Empty when none are set.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "warning_tiers", nulls = Nulls.SKIP)
+        public _FinalStage warningTiers(List<BillingPlanCreditGrantWarningTierResponseData> warningTiers) {
+            this.warningTiers.clear();
+            if (warningTiers != null) {
+                this.warningTiers.addAll(warningTiers);
+            }
             return this;
         }
 
@@ -1760,6 +1821,7 @@ public final class BillingPlanCreditGrantResponseData {
                     unitPrice,
                     unitPriceDecimal,
                     updatedAt,
+                    warningTiers,
                     additionalProperties);
         }
 
@@ -1810,7 +1872,8 @@ public final class BillingPlanCreditGrantResponseData {
                     || key.equalsIgnoreCase("tier_mode")
                     || key.equalsIgnoreCase("unit_price")
                     || key.equalsIgnoreCase("unit_price_decimal")
-                    || key.equalsIgnoreCase("updated_at")) {
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("warning_tiers")) {
                 return;
             }
             this.additionalProperties.put(key, value);

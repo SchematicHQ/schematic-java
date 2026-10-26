@@ -11,6 +11,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.RetryInterceptor;
@@ -189,7 +190,7 @@ public class AsyncRawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-company-migrations")
-                .addPathSegment(planVersionCompanyMigrationId)
+                .addPathSegment(PathSegments.validate(planVersionCompanyMigrationId))
                 .addPathSegments("retry");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -671,7 +672,7 @@ public class AsyncRawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations")
-                .addPathSegment(planVersionMigrationId);
+                .addPathSegment(PathSegments.validate(planVersionMigrationId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -770,7 +771,7 @@ public class AsyncRawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations")
-                .addPathSegment(planVersionMigrationId)
+                .addPathSegment(PathSegments.validate(planVersionMigrationId))
                 .addPathSegments("cancel");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -894,7 +895,7 @@ public class AsyncRawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations")
-                .addPathSegment(planVersionMigrationId)
+                .addPathSegment(PathSegments.validate(planVersionMigrationId))
                 .addPathSegments("complete-now");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -1010,7 +1011,7 @@ public class AsyncRawPlanmigrationsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plan-version-migrations")
-                .addPathSegment(planVersionMigrationId)
+                .addPathSegment(PathSegments.validate(planVersionMigrationId))
                 .addPathSegments("retry");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {

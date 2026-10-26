@@ -100,7 +100,7 @@ public final class CreateCreditSpendPolicyRequestBody {
     }
 
     /**
-     * @return The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.
+     * @return The window that window_amount applies to: one UTC hour, one UTC day, one week from Monday 00:00 UTC, one calendar month from the 1st 00:00 UTC, or the company's current billing period. billing_period applies to company policies only, and a company without an active subscription falls back to the calendar month. Required with window_amount.
      */
     @JsonProperty("window_unit")
     public Optional<CreditSpendWindowUnit> getWindowUnit() {
@@ -196,7 +196,7 @@ public final class CreateCreditSpendPolicyRequestBody {
         _FinalStage windowAmount(Double windowAmount);
 
         /**
-         * <p>The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.</p>
+         * <p>The window that window_amount applies to: one UTC hour, one UTC day, one week from Monday 00:00 UTC, one calendar month from the 1st 00:00 UTC, or the company's current billing period. billing_period applies to company policies only, and a company without an active subscription falls back to the calendar month. Required with window_amount.</p>
          */
         _FinalStage windowUnit(Optional<CreditSpendWindowUnit> windowUnit);
 
@@ -243,7 +243,7 @@ public final class CreateCreditSpendPolicyRequestBody {
         }
 
         /**
-         * <p>The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.</p>
+         * <p>The window that window_amount applies to: one UTC hour, one UTC day, one week from Monday 00:00 UTC, one calendar month from the 1st 00:00 UTC, or the company's current billing period. billing_period applies to company policies only, and a company without an active subscription falls back to the calendar month. Required with window_amount.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -253,7 +253,7 @@ public final class CreateCreditSpendPolicyRequestBody {
         }
 
         /**
-         * <p>The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.</p>
+         * <p>The window that window_amount applies to: one UTC hour, one UTC day, one week from Monday 00:00 UTC, one calendar month from the 1st 00:00 UTC, or the company's current billing period. billing_period applies to company policies only, and a company without an active subscription falls back to the calendar month. Required with window_amount.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "window_unit", nulls = Nulls.SKIP)

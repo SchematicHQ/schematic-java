@@ -90,6 +90,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
 
     private final Optional<String> unitPriceDecimal;
 
+    private final Optional<List<PlanCreditGrantWarningTierRequestBody>> warningTiers;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateBillingPlanCreditGrantRequestBody(
@@ -127,6 +129,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             Optional<BillingTiersMode> tierMode,
             Optional<Long> unitPrice,
             Optional<String> unitPriceDecimal,
+            Optional<List<PlanCreditGrantWarningTierRequestBody>> warningTiers,
             Map<String, Object> additionalProperties) {
         this.applyToExisting = applyToExisting;
         this.arrearsAnchor = arrearsAnchor;
@@ -162,6 +165,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         this.tierMode = tierMode;
         this.unitPrice = unitPrice;
         this.unitPriceDecimal = unitPriceDecimal;
+        this.warningTiers = warningTiers;
         this.additionalProperties = additionalProperties;
     }
 
@@ -383,6 +387,14 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         return unitPriceDecimal;
     }
 
+    /**
+     * @return Usage-warning thresholds, in credits remaining in the company's balance (grant, rollover, top-ups and bundles together). Each value must be below the grant amount, and values must be unique. Schematic sends a credit.usage_warning_reached webhook once when the balance drops to each threshold, and again after the balance rises back above it. Omit to leave the thresholds as they are; send an empty list to remove them. At most 5.
+     */
+    @JsonProperty("warning_tiers")
+    public Optional<List<PlanCreditGrantWarningTierRequestBody>> getWarningTiers() {
+        return warningTiers;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -429,7 +441,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 && scaling.equals(other.scaling)
                 && tierMode.equals(other.tierMode)
                 && unitPrice.equals(other.unitPrice)
-                && unitPriceDecimal.equals(other.unitPriceDecimal);
+                && unitPriceDecimal.equals(other.unitPriceDecimal)
+                && warningTiers.equals(other.warningTiers);
     }
 
     @java.lang.Override
@@ -468,7 +481,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                 this.scaling,
                 this.tierMode,
                 this.unitPrice,
-                this.unitPriceDecimal);
+                this.unitPriceDecimal,
+                this.warningTiers);
     }
 
     @java.lang.Override
@@ -672,6 +686,13 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         _FinalStage unitPriceDecimal(Optional<String> unitPriceDecimal);
 
         _FinalStage unitPriceDecimal(String unitPriceDecimal);
+
+        /**
+         * <p>Usage-warning thresholds, in credits remaining in the company's balance (grant, rollover, top-ups and bundles together). Each value must be below the grant amount, and values must be unique. Schematic sends a credit.usage_warning_reached webhook once when the balance drops to each threshold, and again after the balance rises back above it. Omit to leave the thresholds as they are; send an empty list to remove them. At most 5.</p>
+         */
+        _FinalStage warningTiers(Optional<List<PlanCreditGrantWarningTierRequestBody>> warningTiers);
+
+        _FinalStage warningTiers(List<PlanCreditGrantWarningTierRequestBody> warningTiers);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -679,6 +700,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         private BillingPlanCreditGrantResetCadence resetCadence;
 
         private BillingPlanCreditGrantResetStart resetStart;
+
+        private Optional<List<PlanCreditGrantWarningTierRequestBody>> warningTiers = Optional.empty();
 
         private Optional<String> unitPriceDecimal = Optional.empty();
 
@@ -784,6 +807,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
             tierMode(other.getTierMode());
             unitPrice(other.getUnitPrice());
             unitPriceDecimal(other.getUnitPriceDecimal());
+            warningTiers(other.getWarningTiers());
             return this;
         }
 
@@ -798,6 +822,26 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
         @JsonSetter("reset_start")
         public _FinalStage resetStart(@NotNull BillingPlanCreditGrantResetStart resetStart) {
             this.resetStart = Objects.requireNonNull(resetStart, "resetStart must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Usage-warning thresholds, in credits remaining in the company's balance (grant, rollover, top-ups and bundles together). Each value must be below the grant amount, and values must be unique. Schematic sends a credit.usage_warning_reached webhook once when the balance drops to each threshold, and again after the balance rises back above it. Omit to leave the thresholds as they are; send an empty list to remove them. At most 5.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage warningTiers(List<PlanCreditGrantWarningTierRequestBody> warningTiers) {
+            this.warningTiers = Optional.ofNullable(warningTiers);
+            return this;
+        }
+
+        /**
+         * <p>Usage-warning thresholds, in credits remaining in the company's balance (grant, rollover, top-ups and bundles together). Each value must be below the grant amount, and values must be unique. Schematic sends a credit.usage_warning_reached webhook once when the balance drops to each threshold, and again after the balance rises back above it. Omit to leave the thresholds as they are; send an empty list to remove them. At most 5.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "warning_tiers", nulls = Nulls.SKIP)
+        public _FinalStage warningTiers(Optional<List<PlanCreditGrantWarningTierRequestBody>> warningTiers) {
+            this.warningTiers = warningTiers;
             return this;
         }
 
@@ -1366,6 +1410,7 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                     tierMode,
                     unitPrice,
                     unitPriceDecimal,
+                    warningTiers,
                     additionalProperties);
         }
 
@@ -1404,7 +1449,8 @@ public final class UpdateBillingPlanCreditGrantRequestBody {
                     || key.equalsIgnoreCase("scaling")
                     || key.equalsIgnoreCase("tier_mode")
                     || key.equalsIgnoreCase("unit_price")
-                    || key.equalsIgnoreCase("unit_price_decimal")) {
+                    || key.equalsIgnoreCase("unit_price_decimal")
+                    || key.equalsIgnoreCase("warning_tiers")) {
                 return;
             }
             this.additionalProperties.put(key, value);

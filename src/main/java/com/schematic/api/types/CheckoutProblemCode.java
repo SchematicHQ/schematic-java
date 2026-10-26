@@ -19,6 +19,9 @@ public final class CheckoutProblemCode {
     public static final CheckoutProblemCode INVOICED_SUBSCRIPTION_NEEDS_NEW_SUBSCRIPTION = new CheckoutProblemCode(
             Value.INVOICED_SUBSCRIPTION_NEEDS_NEW_SUBSCRIPTION, "invoiced_subscription_needs_new_subscription");
 
+    public static final CheckoutProblemCode CHECKOUT_SUPERSEDED =
+            new CheckoutProblemCode(Value.CHECKOUT_SUPERSEDED, "checkout_superseded");
+
     public static final CheckoutProblemCode USAGE_OVER_LIMIT =
             new CheckoutProblemCode(Value.USAGE_OVER_LIMIT, "usage_over_limit");
 
@@ -40,6 +43,9 @@ public final class CheckoutProblemCode {
     public static final CheckoutProblemCode TRIAL_END_TOO_FAR =
             new CheckoutProblemCode(Value.TRIAL_END_TOO_FAR, "trial_end_too_far");
 
+    public static final CheckoutProblemCode END_DATE_NOT_AFTER_RENEWAL_DATE =
+            new CheckoutProblemCode(Value.END_DATE_NOT_AFTER_RENEWAL_DATE, "end_date_not_after_renewal_date");
+
     public static final CheckoutProblemCode BILLING_START_DATE_NOT_BEFORE_RENEWAL_DATE = new CheckoutProblemCode(
             Value.BILLING_START_DATE_NOT_BEFORE_RENEWAL_DATE, "billing_start_date_not_before_renewal_date");
 
@@ -60,6 +66,9 @@ public final class CheckoutProblemCode {
 
     public static final CheckoutProblemCode BILLING_CYCLE_ANCHOR_WITHOUT_PLAN =
             new CheckoutProblemCode(Value.BILLING_CYCLE_ANCHOR_WITHOUT_PLAN, "billing_cycle_anchor_without_plan");
+
+    public static final CheckoutProblemCode END_DATE_MUST_BE_FUTURE =
+            new CheckoutProblemCode(Value.END_DATE_MUST_BE_FUTURE, "end_date_must_be_future");
 
     public static final CheckoutProblemCode PAYMENT_METHOD_REQUIRED =
             new CheckoutProblemCode(Value.PAYMENT_METHOD_REQUIRED, "payment_method_required");
@@ -121,6 +130,9 @@ public final class CheckoutProblemCode {
     public static final CheckoutProblemCode BILLING_CYCLE_ANCHOR_MUST_BE_FUTURE =
             new CheckoutProblemCode(Value.BILLING_CYCLE_ANCHOR_MUST_BE_FUTURE, "billing_cycle_anchor_must_be_future");
 
+    public static final CheckoutProblemCode END_DATE_NEEDS_NEW_SUBSCRIPTION =
+            new CheckoutProblemCode(Value.END_DATE_NEEDS_NEW_SUBSCRIPTION, "end_date_needs_new_subscription");
+
     public static final CheckoutProblemCode ADD_ON_INTERVAL_MISMATCH =
             new CheckoutProblemCode(Value.ADD_ON_INTERVAL_MISMATCH, "add_on_interval_mismatch");
 
@@ -179,6 +191,8 @@ public final class CheckoutProblemCode {
                 return visitor.visitPayInAdvanceRequired();
             case INVOICED_SUBSCRIPTION_NEEDS_NEW_SUBSCRIPTION:
                 return visitor.visitInvoicedSubscriptionNeedsNewSubscription();
+            case CHECKOUT_SUPERSEDED:
+                return visitor.visitCheckoutSuperseded();
             case USAGE_OVER_LIMIT:
                 return visitor.visitUsageOverLimit();
             case SELECTION_INVALID:
@@ -193,6 +207,8 @@ public final class CheckoutProblemCode {
                 return visitor.visitInvoiceEmailRequired();
             case TRIAL_END_TOO_FAR:
                 return visitor.visitTrialEndTooFar();
+            case END_DATE_NOT_AFTER_RENEWAL_DATE:
+                return visitor.visitEndDateNotAfterRenewalDate();
             case BILLING_START_DATE_NOT_BEFORE_RENEWAL_DATE:
                 return visitor.visitBillingStartDateNotBeforeRenewalDate();
             case PAY_IN_ADVANCE_PRICE_INVALID:
@@ -207,6 +223,8 @@ public final class CheckoutProblemCode {
                 return visitor.visitUsagePriceMissingForInterval();
             case BILLING_CYCLE_ANCHOR_WITHOUT_PLAN:
                 return visitor.visitBillingCycleAnchorWithoutPlan();
+            case END_DATE_MUST_BE_FUTURE:
+                return visitor.visitEndDateMustBeFuture();
             case PAYMENT_METHOD_REQUIRED:
                 return visitor.visitPaymentMethodRequired();
             case CUSTOM_FIELD_REQUIRED:
@@ -247,6 +265,8 @@ public final class CheckoutProblemCode {
                 return visitor.visitDiscountIneligible();
             case BILLING_CYCLE_ANCHOR_MUST_BE_FUTURE:
                 return visitor.visitBillingCycleAnchorMustBeFuture();
+            case END_DATE_NEEDS_NEW_SUBSCRIPTION:
+                return visitor.visitEndDateNeedsNewSubscription();
             case ADD_ON_INTERVAL_MISMATCH:
                 return visitor.visitAddOnIntervalMismatch();
             case PRICE_UNAVAILABLE:
@@ -276,6 +296,8 @@ public final class CheckoutProblemCode {
                 return PAY_IN_ADVANCE_REQUIRED;
             case "invoiced_subscription_needs_new_subscription":
                 return INVOICED_SUBSCRIPTION_NEEDS_NEW_SUBSCRIPTION;
+            case "checkout_superseded":
+                return CHECKOUT_SUPERSEDED;
             case "usage_over_limit":
                 return USAGE_OVER_LIMIT;
             case "selection_invalid":
@@ -290,6 +312,8 @@ public final class CheckoutProblemCode {
                 return INVOICE_EMAIL_REQUIRED;
             case "trial_end_too_far":
                 return TRIAL_END_TOO_FAR;
+            case "end_date_not_after_renewal_date":
+                return END_DATE_NOT_AFTER_RENEWAL_DATE;
             case "billing_start_date_not_before_renewal_date":
                 return BILLING_START_DATE_NOT_BEFORE_RENEWAL_DATE;
             case "pay_in_advance_price_invalid":
@@ -304,6 +328,8 @@ public final class CheckoutProblemCode {
                 return USAGE_PRICE_MISSING_FOR_INTERVAL;
             case "billing_cycle_anchor_without_plan":
                 return BILLING_CYCLE_ANCHOR_WITHOUT_PLAN;
+            case "end_date_must_be_future":
+                return END_DATE_MUST_BE_FUTURE;
             case "payment_method_required":
                 return PAYMENT_METHOD_REQUIRED;
             case "custom_field_required":
@@ -344,6 +370,8 @@ public final class CheckoutProblemCode {
                 return DISCOUNT_INELIGIBLE;
             case "billing_cycle_anchor_must_be_future":
                 return BILLING_CYCLE_ANCHOR_MUST_BE_FUTURE;
+            case "end_date_needs_new_subscription":
+                return END_DATE_NEEDS_NEW_SUBSCRIPTION;
             case "add_on_interval_mismatch":
                 return ADD_ON_INTERVAL_MISMATCH;
             case "price_unavailable":
@@ -388,6 +416,8 @@ public final class CheckoutProblemCode {
 
         BILLING_START_DATE_TOO_FAR_IN_PAST,
 
+        CHECKOUT_SUPERSEDED,
+
         CREDIT_BUNDLE_INCOMPATIBLE,
 
         CREDIT_BUNDLE_UNAVAILABLE,
@@ -401,6 +431,12 @@ public final class CheckoutProblemCode {
         DISCOUNT_INELIGIBLE,
 
         DOWNGRADE_NOT_PERMITTED,
+
+        END_DATE_MUST_BE_FUTURE,
+
+        END_DATE_NEEDS_NEW_SUBSCRIPTION,
+
+        END_DATE_NOT_AFTER_RENEWAL_DATE,
 
         FREE_FIRST_PERIOD_ACTIVATES_ON_PAYMENT,
 
@@ -480,6 +516,8 @@ public final class CheckoutProblemCode {
 
         T visitBillingStartDateTooFarInPast();
 
+        T visitCheckoutSuperseded();
+
         T visitCreditBundleIncompatible();
 
         T visitCreditBundleUnavailable();
@@ -493,6 +531,12 @@ public final class CheckoutProblemCode {
         T visitDiscountIneligible();
 
         T visitDowngradeNotPermitted();
+
+        T visitEndDateMustBeFuture();
+
+        T visitEndDateNeedsNewSubscription();
+
+        T visitEndDateNotAfterRenewalDate();
 
         T visitFreeFirstPeriodActivatesOnPayment();
 

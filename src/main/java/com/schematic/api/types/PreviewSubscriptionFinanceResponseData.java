@@ -28,6 +28,10 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private final Currency currency;
 
+    private final long customerBalanceApplied;
+
+    private final long customerBalanceRemaining;
+
     private final long discountAmount;
 
     private final List<PreviewSubscriptionDiscountResponseData> discounts;
@@ -48,6 +52,8 @@ public final class PreviewSubscriptionFinanceResponseData {
 
     private final Optional<OffsetDateTime> prorationBilledAt;
 
+    private final Optional<PreviewSubscriptionProrationResponseData> prorationDetail;
+
     private final Optional<Long> taxAmount;
 
     private final Optional<String> taxDisplayName;
@@ -65,6 +71,8 @@ public final class PreviewSubscriptionFinanceResponseData {
     private PreviewSubscriptionFinanceResponseData(
             long amountOff,
             Currency currency,
+            long customerBalanceApplied,
+            long customerBalanceRemaining,
             long discountAmount,
             List<PreviewSubscriptionDiscountResponseData> discounts,
             long dueNow,
@@ -75,6 +83,7 @@ public final class PreviewSubscriptionFinanceResponseData {
             boolean promoCodeApplied,
             long proration,
             Optional<OffsetDateTime> prorationBilledAt,
+            Optional<PreviewSubscriptionProrationResponseData> prorationDetail,
             Optional<Long> taxAmount,
             Optional<String> taxDisplayName,
             boolean taxRequireBillingDetails,
@@ -84,6 +93,8 @@ public final class PreviewSubscriptionFinanceResponseData {
             Map<String, Object> additionalProperties) {
         this.amountOff = amountOff;
         this.currency = currency;
+        this.customerBalanceApplied = customerBalanceApplied;
+        this.customerBalanceRemaining = customerBalanceRemaining;
         this.discountAmount = discountAmount;
         this.discounts = discounts;
         this.dueNow = dueNow;
@@ -94,6 +105,7 @@ public final class PreviewSubscriptionFinanceResponseData {
         this.promoCodeApplied = promoCodeApplied;
         this.proration = proration;
         this.prorationBilledAt = prorationBilledAt;
+        this.prorationDetail = prorationDetail;
         this.taxAmount = taxAmount;
         this.taxDisplayName = taxDisplayName;
         this.taxRequireBillingDetails = taxRequireBillingDetails;
@@ -114,6 +126,22 @@ public final class PreviewSubscriptionFinanceResponseData {
     @JsonProperty("currency")
     public Currency getCurrency() {
         return currency;
+    }
+
+    /**
+     * @return What the company's stored credit covers of this invoice, in minor units.
+     */
+    @JsonProperty("customer_balance_applied")
+    public long getCustomerBalanceApplied() {
+        return customerBalanceApplied;
+    }
+
+    /**
+     * @return Credit left on the company's balance after this invoice, in minor units: what it did not consume, plus what a total below zero adds, which the provider applies to later invoices.
+     */
+    @JsonProperty("customer_balance_remaining")
+    public long getCustomerBalanceRemaining() {
+        return customerBalanceRemaining;
     }
 
     @JsonProperty("discount_amount")
@@ -166,6 +194,14 @@ public final class PreviewSubscriptionFinanceResponseData {
         return prorationBilledAt;
     }
 
+    /**
+     * @return The proration itemized in the cart's terms, by plan and price. Null when the change prorates nothing. upcoming_invoice_line_items stays as the billing provider reported it.
+     */
+    @JsonProperty("proration_detail")
+    public Optional<PreviewSubscriptionProrationResponseData> getProrationDetail() {
+        return prorationDetail;
+    }
+
     @JsonProperty("tax_amount")
     public Optional<Long> getTaxAmount() {
         return taxAmount;
@@ -211,6 +247,8 @@ public final class PreviewSubscriptionFinanceResponseData {
     private boolean equalTo(PreviewSubscriptionFinanceResponseData other) {
         return amountOff == other.amountOff
                 && currency.equals(other.currency)
+                && customerBalanceApplied == other.customerBalanceApplied
+                && customerBalanceRemaining == other.customerBalanceRemaining
                 && discountAmount == other.discountAmount
                 && discounts.equals(other.discounts)
                 && dueNow == other.dueNow
@@ -221,6 +259,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                 && promoCodeApplied == other.promoCodeApplied
                 && proration == other.proration
                 && prorationBilledAt.equals(other.prorationBilledAt)
+                && prorationDetail.equals(other.prorationDetail)
                 && taxAmount.equals(other.taxAmount)
                 && taxDisplayName.equals(other.taxDisplayName)
                 && taxRequireBillingDetails == other.taxRequireBillingDetails
@@ -234,6 +273,8 @@ public final class PreviewSubscriptionFinanceResponseData {
         return Objects.hash(
                 this.amountOff,
                 this.currency,
+                this.customerBalanceApplied,
+                this.customerBalanceRemaining,
                 this.discountAmount,
                 this.discounts,
                 this.dueNow,
@@ -244,6 +285,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                 this.promoCodeApplied,
                 this.proration,
                 this.prorationBilledAt,
+                this.prorationDetail,
                 this.taxAmount,
                 this.taxDisplayName,
                 this.taxRequireBillingDetails,
@@ -271,7 +313,21 @@ public final class PreviewSubscriptionFinanceResponseData {
         /**
          * <p>ISO 4217 currency every amount in this block is denominated in.</p>
          */
-        DiscountAmountStage currency(@NotNull Currency currency);
+        CustomerBalanceAppliedStage currency(@NotNull Currency currency);
+    }
+
+    public interface CustomerBalanceAppliedStage {
+        /**
+         * <p>What the company's stored credit covers of this invoice, in minor units.</p>
+         */
+        CustomerBalanceRemainingStage customerBalanceApplied(long customerBalanceApplied);
+    }
+
+    public interface CustomerBalanceRemainingStage {
+        /**
+         * <p>Credit left on the company's balance after this invoice, in minor units: what it did not consume, plus what a total below zero adds, which the provider applies to later invoices.</p>
+         */
+        DiscountAmountStage customerBalanceRemaining(long customerBalanceRemaining);
     }
 
     public interface DiscountAmountStage {
@@ -331,6 +387,13 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         _FinalStage prorationBilledAt(OffsetDateTime prorationBilledAt);
 
+        /**
+         * <p>The proration itemized in the cart's terms, by plan and price. Null when the change prorates nothing. upcoming_invoice_line_items stays as the billing provider reported it.</p>
+         */
+        _FinalStage prorationDetail(Optional<PreviewSubscriptionProrationResponseData> prorationDetail);
+
+        _FinalStage prorationDetail(PreviewSubscriptionProrationResponseData prorationDetail);
+
         _FinalStage taxAmount(Optional<Long> taxAmount);
 
         _FinalStage taxAmount(Long taxAmount);
@@ -356,6 +419,8 @@ public final class PreviewSubscriptionFinanceResponseData {
     public static final class Builder
             implements AmountOffStage,
                     CurrencyStage,
+                    CustomerBalanceAppliedStage,
+                    CustomerBalanceRemainingStage,
                     DiscountAmountStage,
                     DueNowStage,
                     NewChargesStage,
@@ -370,6 +435,10 @@ public final class PreviewSubscriptionFinanceResponseData {
         private long amountOff;
 
         private Currency currency;
+
+        private long customerBalanceApplied;
+
+        private long customerBalanceRemaining;
 
         private long discountAmount;
 
@@ -399,6 +468,8 @@ public final class PreviewSubscriptionFinanceResponseData {
 
         private Optional<Long> taxAmount = Optional.empty();
 
+        private Optional<PreviewSubscriptionProrationResponseData> prorationDetail = Optional.empty();
+
         private Optional<OffsetDateTime> prorationBilledAt = Optional.empty();
 
         private List<PreviewSubscriptionDiscountResponseData> discounts = new ArrayList<>();
@@ -411,6 +482,8 @@ public final class PreviewSubscriptionFinanceResponseData {
         public Builder from(PreviewSubscriptionFinanceResponseData other) {
             amountOff(other.getAmountOff());
             currency(other.getCurrency());
+            customerBalanceApplied(other.getCustomerBalanceApplied());
+            customerBalanceRemaining(other.getCustomerBalanceRemaining());
             discountAmount(other.getDiscountAmount());
             discounts(other.getDiscounts());
             dueNow(other.getDueNow());
@@ -421,6 +494,7 @@ public final class PreviewSubscriptionFinanceResponseData {
             promoCodeApplied(other.getPromoCodeApplied());
             proration(other.getProration());
             prorationBilledAt(other.getProrationBilledAt());
+            prorationDetail(other.getProrationDetail());
             taxAmount(other.getTaxAmount());
             taxDisplayName(other.getTaxDisplayName());
             taxRequireBillingDetails(other.getTaxRequireBillingDetails());
@@ -443,8 +517,30 @@ public final class PreviewSubscriptionFinanceResponseData {
          */
         @java.lang.Override
         @JsonSetter("currency")
-        public DiscountAmountStage currency(@NotNull Currency currency) {
+        public CustomerBalanceAppliedStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
+            return this;
+        }
+
+        /**
+         * <p>What the company's stored credit covers of this invoice, in minor units.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("customer_balance_applied")
+        public CustomerBalanceRemainingStage customerBalanceApplied(long customerBalanceApplied) {
+            this.customerBalanceApplied = customerBalanceApplied;
+            return this;
+        }
+
+        /**
+         * <p>Credit left on the company's balance after this invoice, in minor units: what it did not consume, plus what a total below zero adds, which the provider applies to later invoices.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("customer_balance_remaining")
+        public DiscountAmountStage customerBalanceRemaining(long customerBalanceRemaining) {
+            this.customerBalanceRemaining = customerBalanceRemaining;
             return this;
         }
 
@@ -584,6 +680,26 @@ public final class PreviewSubscriptionFinanceResponseData {
             return this;
         }
 
+        /**
+         * <p>The proration itemized in the cart's terms, by plan and price. Null when the change prorates nothing. upcoming_invoice_line_items stays as the billing provider reported it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage prorationDetail(PreviewSubscriptionProrationResponseData prorationDetail) {
+            this.prorationDetail = Optional.ofNullable(prorationDetail);
+            return this;
+        }
+
+        /**
+         * <p>The proration itemized in the cart's terms, by plan and price. Null when the change prorates nothing. upcoming_invoice_line_items stays as the billing provider reported it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "proration_detail", nulls = Nulls.SKIP)
+        public _FinalStage prorationDetail(Optional<PreviewSubscriptionProrationResponseData> prorationDetail) {
+            this.prorationDetail = prorationDetail;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage prorationBilledAt(OffsetDateTime prorationBilledAt) {
             this.prorationBilledAt = Optional.ofNullable(prorationBilledAt);
@@ -626,6 +742,8 @@ public final class PreviewSubscriptionFinanceResponseData {
             return new PreviewSubscriptionFinanceResponseData(
                     amountOff,
                     currency,
+                    customerBalanceApplied,
+                    customerBalanceRemaining,
                     discountAmount,
                     discounts,
                     dueNow,
@@ -636,6 +754,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                     promoCodeApplied,
                     proration,
                     prorationBilledAt,
+                    prorationDetail,
                     taxAmount,
                     taxDisplayName,
                     taxRequireBillingDetails,
@@ -649,6 +768,8 @@ public final class PreviewSubscriptionFinanceResponseData {
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("amount_off")
                     || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("customer_balance_applied")
+                    || key.equalsIgnoreCase("customer_balance_remaining")
                     || key.equalsIgnoreCase("discount_amount")
                     || key.equalsIgnoreCase("discounts")
                     || key.equalsIgnoreCase("due_now")
@@ -659,6 +780,7 @@ public final class PreviewSubscriptionFinanceResponseData {
                     || key.equalsIgnoreCase("promo_code_applied")
                     || key.equalsIgnoreCase("proration")
                     || key.equalsIgnoreCase("proration_billed_at")
+                    || key.equalsIgnoreCase("proration_detail")
                     || key.equalsIgnoreCase("tax_amount")
                     || key.equalsIgnoreCase("tax_display_name")
                     || key.equalsIgnoreCase("tax_require_billing_details")

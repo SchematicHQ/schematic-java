@@ -42,6 +42,8 @@ public final class PublishPlanVersionRequestBody {
 
     private final Optional<Long> daysUntilDue;
 
+    private final Optional<OffsetDateTime> endDate;
+
     private final List<String> excludedCompanyIds;
 
     private final PlanVersionMigrationStrategy migrationStrategy;
@@ -72,6 +74,7 @@ public final class PublishPlanVersionRequestBody {
             Optional<List<CheckoutFieldValue>> customFieldValues,
             Optional<String> customerEmail,
             Optional<Long> daysUntilDue,
+            Optional<OffsetDateTime> endDate,
             List<String> excludedCompanyIds,
             PlanVersionMigrationStrategy migrationStrategy,
             Optional<String> phone,
@@ -91,6 +94,7 @@ public final class PublishPlanVersionRequestBody {
         this.customFieldValues = customFieldValues;
         this.customerEmail = customerEmail;
         this.daysUntilDue = daysUntilDue;
+        this.endDate = endDate;
         this.excludedCompanyIds = excludedCompanyIds;
         this.migrationStrategy = migrationStrategy;
         this.phone = phone;
@@ -164,6 +168,14 @@ public final class PublishPlanVersionRequestBody {
     @JsonProperty("days_until_due")
     public Optional<Long> getDaysUntilDue() {
         return daysUntilDue;
+    }
+
+    /**
+     * @return When a custom plan that doesn't renew ends: the company moves to the default plan then, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.
+     */
+    @JsonProperty("end_date")
+    public Optional<OffsetDateTime> getEndDate() {
+        return endDate;
     }
 
     @JsonProperty("excluded_company_ids")
@@ -247,6 +259,7 @@ public final class PublishPlanVersionRequestBody {
                 && customFieldValues.equals(other.customFieldValues)
                 && customerEmail.equals(other.customerEmail)
                 && daysUntilDue.equals(other.daysUntilDue)
+                && endDate.equals(other.endDate)
                 && excludedCompanyIds.equals(other.excludedCompanyIds)
                 && migrationStrategy.equals(other.migrationStrategy)
                 && phone.equals(other.phone)
@@ -270,6 +283,7 @@ public final class PublishPlanVersionRequestBody {
                 this.customFieldValues,
                 this.customerEmail,
                 this.daysUntilDue,
+                this.endDate,
                 this.excludedCompanyIds,
                 this.migrationStrategy,
                 this.phone,
@@ -357,6 +371,13 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage daysUntilDue(Long daysUntilDue);
 
+        /**
+         * <p>When a custom plan that doesn't renew ends: the company moves to the default plan then, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.</p>
+         */
+        _FinalStage endDate(Optional<OffsetDateTime> endDate);
+
+        _FinalStage endDate(OffsetDateTime endDate);
+
         _FinalStage excludedCompanyIds(List<String> excludedCompanyIds);
 
         _FinalStage addExcludedCompanyIds(String excludedCompanyIds);
@@ -427,6 +448,8 @@ public final class PublishPlanVersionRequestBody {
 
         private List<String> excludedCompanyIds = new ArrayList<>();
 
+        private Optional<OffsetDateTime> endDate = Optional.empty();
+
         private Optional<Long> daysUntilDue = Optional.empty();
 
         private Optional<String> customerEmail = Optional.empty();
@@ -460,6 +483,7 @@ public final class PublishPlanVersionRequestBody {
             customFieldValues(other.getCustomFieldValues());
             customerEmail(other.getCustomerEmail());
             daysUntilDue(other.getDaysUntilDue());
+            endDate(other.getEndDate());
             excludedCompanyIds(other.getExcludedCompanyIds());
             migrationStrategy(other.getMigrationStrategy());
             phone(other.getPhone());
@@ -626,6 +650,26 @@ public final class PublishPlanVersionRequestBody {
             if (excludedCompanyIds != null) {
                 this.excludedCompanyIds.addAll(excludedCompanyIds);
             }
+            return this;
+        }
+
+        /**
+         * <p>When a custom plan that doesn't renew ends: the company moves to the default plan then, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage endDate(OffsetDateTime endDate) {
+            this.endDate = Optional.ofNullable(endDate);
+            return this;
+        }
+
+        /**
+         * <p>When a custom plan that doesn't renew ends: the company moves to the default plan then, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "end_date", nulls = Nulls.SKIP)
+        public _FinalStage endDate(Optional<OffsetDateTime> endDate) {
+            this.endDate = endDate;
             return this;
         }
 
@@ -800,6 +844,7 @@ public final class PublishPlanVersionRequestBody {
                     customFieldValues,
                     customerEmail,
                     daysUntilDue,
+                    endDate,
                     excludedCompanyIds,
                     migrationStrategy,
                     phone,
@@ -823,6 +868,7 @@ public final class PublishPlanVersionRequestBody {
                     || key.equalsIgnoreCase("custom_field_values")
                     || key.equalsIgnoreCase("customer_email")
                     || key.equalsIgnoreCase("days_until_due")
+                    || key.equalsIgnoreCase("end_date")
                     || key.equalsIgnoreCase("excluded_company_ids")
                     || key.equalsIgnoreCase("migration_strategy")
                     || key.equalsIgnoreCase("phone")

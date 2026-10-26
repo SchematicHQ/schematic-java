@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.PaymentMethodBillingDetailsRequestBody;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -39,6 +40,8 @@ public final class CreatePaymentMethodRequestBody {
 
     private final Optional<String> cardLast4;
 
+    private final Optional<PaymentMethodBillingDetailsRequestBody> customerBillingDetails;
+
     private final String customerExternalId;
 
     private final String externalId;
@@ -57,6 +60,7 @@ public final class CreatePaymentMethodRequestBody {
             Optional<Long> cardExpMonth,
             Optional<Long> cardExpYear,
             Optional<String> cardLast4,
+            Optional<PaymentMethodBillingDetailsRequestBody> customerBillingDetails,
             String customerExternalId,
             String externalId,
             String paymentMethodType,
@@ -70,6 +74,7 @@ public final class CreatePaymentMethodRequestBody {
         this.cardExpMonth = cardExpMonth;
         this.cardExpYear = cardExpYear;
         this.cardLast4 = cardLast4;
+        this.customerBillingDetails = customerBillingDetails;
         this.customerExternalId = customerExternalId;
         this.externalId = externalId;
         this.paymentMethodType = paymentMethodType;
@@ -121,6 +126,11 @@ public final class CreatePaymentMethodRequestBody {
         return cardLast4;
     }
 
+    @JsonProperty("customer_billing_details")
+    public Optional<PaymentMethodBillingDetailsRequestBody> getCustomerBillingDetails() {
+        return customerBillingDetails;
+    }
+
     @JsonProperty("customer_external_id")
     public String getCustomerExternalId() {
         return customerExternalId;
@@ -157,6 +167,7 @@ public final class CreatePaymentMethodRequestBody {
                 && cardExpMonth.equals(other.cardExpMonth)
                 && cardExpYear.equals(other.cardExpYear)
                 && cardLast4.equals(other.cardLast4)
+                && customerBillingDetails.equals(other.customerBillingDetails)
                 && customerExternalId.equals(other.customerExternalId)
                 && externalId.equals(other.externalId)
                 && paymentMethodType.equals(other.paymentMethodType);
@@ -174,6 +185,7 @@ public final class CreatePaymentMethodRequestBody {
                 this.cardExpMonth,
                 this.cardExpYear,
                 this.cardLast4,
+                this.customerBillingDetails,
                 this.customerExternalId,
                 this.externalId,
                 this.paymentMethodType);
@@ -244,6 +256,10 @@ public final class CreatePaymentMethodRequestBody {
         _FinalStage cardLast4(Optional<String> cardLast4);
 
         _FinalStage cardLast4(String cardLast4);
+
+        _FinalStage customerBillingDetails(Optional<PaymentMethodBillingDetailsRequestBody> customerBillingDetails);
+
+        _FinalStage customerBillingDetails(PaymentMethodBillingDetailsRequestBody customerBillingDetails);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -254,6 +270,8 @@ public final class CreatePaymentMethodRequestBody {
         private String externalId;
 
         private String paymentMethodType;
+
+        private Optional<PaymentMethodBillingDetailsRequestBody> customerBillingDetails = Optional.empty();
 
         private Optional<String> cardLast4 = Optional.empty();
 
@@ -288,6 +306,7 @@ public final class CreatePaymentMethodRequestBody {
             cardExpMonth(other.getCardExpMonth());
             cardExpYear(other.getCardExpYear());
             cardLast4(other.getCardLast4());
+            customerBillingDetails(other.getCustomerBillingDetails());
             customerExternalId(other.getCustomerExternalId());
             externalId(other.getExternalId());
             paymentMethodType(other.getPaymentMethodType());
@@ -312,6 +331,20 @@ public final class CreatePaymentMethodRequestBody {
         @JsonSetter("payment_method_type")
         public _FinalStage paymentMethodType(@NotNull String paymentMethodType) {
             this.paymentMethodType = Objects.requireNonNull(paymentMethodType, "paymentMethodType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage customerBillingDetails(PaymentMethodBillingDetailsRequestBody customerBillingDetails) {
+            this.customerBillingDetails = Optional.ofNullable(customerBillingDetails);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "customer_billing_details", nulls = Nulls.SKIP)
+        public _FinalStage customerBillingDetails(
+                Optional<PaymentMethodBillingDetailsRequestBody> customerBillingDetails) {
+            this.customerBillingDetails = customerBillingDetails;
             return this;
         }
 
@@ -444,6 +477,7 @@ public final class CreatePaymentMethodRequestBody {
                     cardExpMonth,
                     cardExpYear,
                     cardLast4,
+                    customerBillingDetails,
                     customerExternalId,
                     externalId,
                     paymentMethodType,
@@ -461,6 +495,7 @@ public final class CreatePaymentMethodRequestBody {
                     || key.equalsIgnoreCase("card_exp_month")
                     || key.equalsIgnoreCase("card_exp_year")
                     || key.equalsIgnoreCase("card_last4")
+                    || key.equalsIgnoreCase("customer_billing_details")
                     || key.equalsIgnoreCase("customer_external_id")
                     || key.equalsIgnoreCase("external_id")
                     || key.equalsIgnoreCase("payment_method_type")) {

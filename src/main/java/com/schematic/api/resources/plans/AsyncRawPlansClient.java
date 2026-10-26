@@ -12,6 +12,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.RetryInterceptor;
@@ -89,7 +90,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("company-plans")
-                .addPathSegment(companyId);
+                .addPathSegment(PathSegments.validate(companyId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -359,7 +360,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("custom-plan-billings")
-                .addPathSegment(customPlanBillingId)
+                .addPathSegment(PathSegments.validate(customPlanBillingId))
                 .addPathSegments("mark-paid");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -476,7 +477,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("custom-plan-billings")
-                .addPathSegment(customPlanBillingId)
+                .addPathSegment(PathSegments.validate(customPlanBillingId))
                 .addPathSegments("retry");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -1041,7 +1042,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans")
-                .addPathSegment(planId);
+                .addPathSegment(PathSegments.validate(planId));
         if (request.getPlanVersionId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "plan_version_id", request.getPlanVersionId().get(), false);
@@ -1144,7 +1145,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans")
-                .addPathSegment(planId);
+                .addPathSegment(PathSegments.validate(planId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1257,7 +1258,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans")
-                .addPathSegment(planId);
+                .addPathSegment(PathSegments.validate(planId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1364,7 +1365,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans")
-                .addPathSegment(planId)
+                .addPathSegment(PathSegments.validate(planId))
                 .addPathSegments("billing_products");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -2167,7 +2168,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans/version")
-                .addPathSegment(planVersionId);
+                .addPathSegment(PathSegments.validate(planVersionId));
         if (request.getPromoteArchivedVersion().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -2294,7 +2295,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans/version")
-                .addPathSegment(planVersionId)
+                .addPathSegment(PathSegments.validate(planVersionId))
                 .addPathSegments("diff");
         if (request.getAgainst().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -2399,7 +2400,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans/version")
-                .addPathSegment(planVersionId)
+                .addPathSegment(PathSegments.validate(planVersionId))
                 .addPathSegments("publish");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -2515,7 +2516,7 @@ public class AsyncRawPlansClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("plans/version")
-                .addPathSegment(planVersionId)
+                .addPathSegment(PathSegments.validate(planVersionId))
                 .addPathSegments("publish-preview");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {

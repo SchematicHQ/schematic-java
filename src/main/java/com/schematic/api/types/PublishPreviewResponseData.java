@@ -40,6 +40,8 @@ public final class PublishPreviewResponseData {
 
     private final Optional<OffsetDateTime> effectiveAt;
 
+    private final Optional<OffsetDateTime> endsAt;
+
     private final boolean hasBillingChanges;
 
     private final Optional<Long> immediateInvoiceAmount;
@@ -81,6 +83,7 @@ public final class PublishPreviewResponseData {
             long defaultDaysUntilDue,
             boolean defaultSendInvoice,
             Optional<OffsetDateTime> effectiveAt,
+            Optional<OffsetDateTime> endsAt,
             boolean hasBillingChanges,
             Optional<Long> immediateInvoiceAmount,
             AmendmentProrationLandsOn landsOn,
@@ -105,6 +108,7 @@ public final class PublishPreviewResponseData {
         this.defaultDaysUntilDue = defaultDaysUntilDue;
         this.defaultSendInvoice = defaultSendInvoice;
         this.effectiveAt = effectiveAt;
+        this.endsAt = endsAt;
         this.hasBillingChanges = hasBillingChanges;
         this.immediateInvoiceAmount = immediateInvoiceAmount;
         this.landsOn = landsOn;
@@ -173,6 +177,14 @@ public final class PublishPreviewResponseData {
     @JsonProperty("effective_at")
     public Optional<OffsetDateTime> getEffectiveAt() {
         return effectiveAt;
+    }
+
+    /**
+     * @return When the subscription ends instead of renewing once the amendment is finalized: the end date moved back to a renewal, or the end it already has. Null when it renews.
+     */
+    @JsonProperty("ends_at")
+    public Optional<OffsetDateTime> getEndsAt() {
+        return endsAt;
     }
 
     @JsonProperty("has_billing_changes")
@@ -288,6 +300,7 @@ public final class PublishPreviewResponseData {
                 && defaultDaysUntilDue == other.defaultDaysUntilDue
                 && defaultSendInvoice == other.defaultSendInvoice
                 && effectiveAt.equals(other.effectiveAt)
+                && endsAt.equals(other.endsAt)
                 && hasBillingChanges == other.hasBillingChanges
                 && immediateInvoiceAmount.equals(other.immediateInvoiceAmount)
                 && landsOn.equals(other.landsOn)
@@ -316,6 +329,7 @@ public final class PublishPreviewResponseData {
                 this.defaultDaysUntilDue,
                 this.defaultSendInvoice,
                 this.effectiveAt,
+                this.endsAt,
                 this.hasBillingChanges,
                 this.immediateInvoiceAmount,
                 this.landsOn,
@@ -437,6 +451,13 @@ public final class PublishPreviewResponseData {
         _FinalStage effectiveAt(OffsetDateTime effectiveAt);
 
         /**
+         * <p>When the subscription ends instead of renewing once the amendment is finalized: the end date moved back to a renewal, or the end it already has. Null when it renews.</p>
+         */
+        _FinalStage endsAt(Optional<OffsetDateTime> endsAt);
+
+        _FinalStage endsAt(OffsetDateTime endsAt);
+
+        /**
          * <p>What the amendment's own invoice bills, in cents, when lands_on is immediate_invoice, after discounts and tax. Includes pending invoice items Stripe adds to the same invoice. Negative for a downgrade: Stripe raises a credit invoice with nothing due, and the credit goes to the customer's balance against later invoices.</p>
          */
         _FinalStage immediateInvoiceAmount(Optional<Long> immediateInvoiceAmount);
@@ -528,6 +549,8 @@ public final class PublishPreviewResponseData {
 
         private Optional<Long> immediateInvoiceAmount = Optional.empty();
 
+        private Optional<OffsetDateTime> endsAt = Optional.empty();
+
         private Optional<OffsetDateTime> effectiveAt = Optional.empty();
 
         private Optional<OffsetDateTime> currentPeriodStart = Optional.empty();
@@ -552,6 +575,7 @@ public final class PublishPreviewResponseData {
             defaultDaysUntilDue(other.getDefaultDaysUntilDue());
             defaultSendInvoice(other.getDefaultSendInvoice());
             effectiveAt(other.getEffectiveAt());
+            endsAt(other.getEndsAt());
             hasBillingChanges(other.getHasBillingChanges());
             immediateInvoiceAmount(other.getImmediateInvoiceAmount());
             landsOn(other.getLandsOn());
@@ -808,6 +832,26 @@ public final class PublishPreviewResponseData {
         }
 
         /**
+         * <p>When the subscription ends instead of renewing once the amendment is finalized: the end date moved back to a renewal, or the end it already has. Null when it renews.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage endsAt(OffsetDateTime endsAt) {
+            this.endsAt = Optional.ofNullable(endsAt);
+            return this;
+        }
+
+        /**
+         * <p>When the subscription ends instead of renewing once the amendment is finalized: the end date moved back to a renewal, or the end it already has. Null when it renews.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "ends_at", nulls = Nulls.SKIP)
+        public _FinalStage endsAt(Optional<OffsetDateTime> endsAt) {
+            this.endsAt = endsAt;
+            return this;
+        }
+
+        /**
          * <p>When the company moves to the new version. Null when no date can be named yet: the company's only subscription is in dunning or scheduled to cancel.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -890,6 +934,7 @@ public final class PublishPreviewResponseData {
                     defaultDaysUntilDue,
                     defaultSendInvoice,
                     effectiveAt,
+                    endsAt,
                     hasBillingChanges,
                     immediateInvoiceAmount,
                     landsOn,
@@ -918,6 +963,7 @@ public final class PublishPreviewResponseData {
                     || key.equalsIgnoreCase("default_days_until_due")
                     || key.equalsIgnoreCase("default_send_invoice")
                     || key.equalsIgnoreCase("effective_at")
+                    || key.equalsIgnoreCase("ends_at")
                     || key.equalsIgnoreCase("has_billing_changes")
                     || key.equalsIgnoreCase("immediate_invoice_amount")
                     || key.equalsIgnoreCase("lands_on")

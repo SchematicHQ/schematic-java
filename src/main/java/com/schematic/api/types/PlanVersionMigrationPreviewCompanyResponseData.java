@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,6 +31,8 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
 
     private final Optional<String> note;
 
+    private final List<PlanVersionMigrationPreviewNoteResponseData> notes;
+
     private final Optional<String> planVersionIdFrom;
 
     private final boolean willUpdateSubscription;
@@ -42,6 +46,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
             boolean hasBillingChanges,
             boolean hasCustomPricing,
             Optional<String> note,
+            List<PlanVersionMigrationPreviewNoteResponseData> notes,
             Optional<String> planVersionIdFrom,
             boolean willUpdateSubscription,
             boolean wouldFail,
@@ -50,6 +55,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
         this.hasBillingChanges = hasBillingChanges;
         this.hasCustomPricing = hasCustomPricing;
         this.note = note;
+        this.notes = notes;
         this.planVersionIdFrom = planVersionIdFrom;
         this.willUpdateSubscription = willUpdateSubscription;
         this.wouldFail = wouldFail;
@@ -71,9 +77,17 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
         return hasCustomPricing;
     }
 
+    /**
+     * @return The message of the first blocking note, or of the first note when none is blocking. Kept for clients that read a single note; prefer notes.
+     */
     @JsonProperty("note")
     public Optional<String> getNote() {
         return note;
+    }
+
+    @JsonProperty("notes")
+    public List<PlanVersionMigrationPreviewNoteResponseData> getNotes() {
+        return notes;
     }
 
     @JsonProperty("plan_version_id_from")
@@ -108,6 +122,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
                 && hasBillingChanges == other.hasBillingChanges
                 && hasCustomPricing == other.hasCustomPricing
                 && note.equals(other.note)
+                && notes.equals(other.notes)
                 && planVersionIdFrom.equals(other.planVersionIdFrom)
                 && willUpdateSubscription == other.willUpdateSubscription
                 && wouldFail == other.wouldFail;
@@ -120,6 +135,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
                 this.hasBillingChanges,
                 this.hasCustomPricing,
                 this.note,
+                this.notes,
                 this.planVersionIdFrom,
                 this.willUpdateSubscription,
                 this.wouldFail);
@@ -163,9 +179,18 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>The message of the first blocking note, or of the first note when none is blocking. Kept for clients that read a single note; prefer notes.</p>
+         */
         _FinalStage note(Optional<String> note);
 
         _FinalStage note(String note);
+
+        _FinalStage notes(List<PlanVersionMigrationPreviewNoteResponseData> notes);
+
+        _FinalStage addNotes(PlanVersionMigrationPreviewNoteResponseData notes);
+
+        _FinalStage addAllNotes(List<PlanVersionMigrationPreviewNoteResponseData> notes);
 
         _FinalStage planVersionIdFrom(Optional<String> planVersionIdFrom);
 
@@ -192,6 +217,8 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
 
         private Optional<String> planVersionIdFrom = Optional.empty();
 
+        private List<PlanVersionMigrationPreviewNoteResponseData> notes = new ArrayList<>();
+
         private Optional<String> note = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -204,6 +231,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
             hasBillingChanges(other.getHasBillingChanges());
             hasCustomPricing(other.getHasCustomPricing());
             note(other.getNote());
+            notes(other.getNotes());
             planVersionIdFrom(other.getPlanVersionIdFrom());
             willUpdateSubscription(other.getWillUpdateSubscription());
             wouldFail(other.getWouldFail());
@@ -259,11 +287,42 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage addAllNotes(List<PlanVersionMigrationPreviewNoteResponseData> notes) {
+            if (notes != null) {
+                this.notes.addAll(notes);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addNotes(PlanVersionMigrationPreviewNoteResponseData notes) {
+            this.notes.add(notes);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "notes", nulls = Nulls.SKIP)
+        public _FinalStage notes(List<PlanVersionMigrationPreviewNoteResponseData> notes) {
+            this.notes.clear();
+            if (notes != null) {
+                this.notes.addAll(notes);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The message of the first blocking note, or of the first note when none is blocking. Kept for clients that read a single note; prefer notes.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
         public _FinalStage note(String note) {
             this.note = Optional.ofNullable(note);
             return this;
         }
 
+        /**
+         * <p>The message of the first blocking note, or of the first note when none is blocking. Kept for clients that read a single note; prefer notes.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "note", nulls = Nulls.SKIP)
         public _FinalStage note(Optional<String> note) {
@@ -278,6 +337,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
                     hasBillingChanges,
                     hasCustomPricing,
                     note,
+                    notes,
                     planVersionIdFrom,
                     willUpdateSubscription,
                     wouldFail,
@@ -290,6 +350,7 @@ public final class PlanVersionMigrationPreviewCompanyResponseData {
                     || key.equalsIgnoreCase("has_billing_changes")
                     || key.equalsIgnoreCase("has_custom_pricing")
                     || key.equalsIgnoreCase("note")
+                    || key.equalsIgnoreCase("notes")
                     || key.equalsIgnoreCase("plan_version_id_from")
                     || key.equalsIgnoreCase("will_update_subscription")
                     || key.equalsIgnoreCase("would_fail")) {

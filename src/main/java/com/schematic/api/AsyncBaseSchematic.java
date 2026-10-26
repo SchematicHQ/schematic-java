@@ -115,6 +115,145 @@ public class AsyncBaseSchematic implements AutoCloseable {
         return this.rawClient;
     }
 
+    public CompletableFuture<Void> postApiKeys() {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.postApiKeys();
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> postApiKeys(RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.postApiKeys(requestOptions);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> putApiKeysApiKeyId(String apiKeyId) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.putApiKeysApiKeyId(apiKeyId);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> putApiKeysApiKeyId(String apiKeyId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
+                this.rawClient.putApiKeysApiKeyId(apiKeyId, requestOptions);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> deleteApiKeysApiKeyId(String apiKeyId) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.deleteApiKeysApiKeyId(apiKeyId);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> deleteApiKeysApiKeyId(String apiKeyId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
+                this.rawClient.deleteApiKeysApiKeyId(apiKeyId, requestOptions);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> postEnvironments() {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.postEnvironments();
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> postEnvironments(RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.postEnvironments(requestOptions);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> putEnvironmentsEnvironmentId(String environmentId) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
+                this.rawClient.putEnvironmentsEnvironmentId(environmentId);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> putEnvironmentsEnvironmentId(String environmentId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
+                this.rawClient.putEnvironmentsEnvironmentId(environmentId, requestOptions);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> deleteEnvironmentsEnvironmentId(String environmentId) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
+                this.rawClient.deleteEnvironmentsEnvironmentId(environmentId);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<Void> deleteEnvironmentsEnvironmentId(
+            String environmentId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
+                this.rawClient.deleteEnvironmentsEnvironmentId(environmentId, requestOptions);
+        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
     public CompletableFuture<Void> getCreditLedger() {
         CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.getCreditLedger();
         CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());

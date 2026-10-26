@@ -33,6 +33,8 @@ public final class RetryCustomPlanBillingRequestBody {
 
     private final Optional<Long> daysUntilDue;
 
+    private final Optional<OffsetDateTime> endDate;
+
     private final Optional<Boolean> prorateFirstPeriod;
 
     private final Optional<Boolean> sendInvoice;
@@ -45,6 +47,7 @@ public final class RetryCustomPlanBillingRequestBody {
             Optional<OffsetDateTime> billingStartDate,
             String customerEmail,
             Optional<Long> daysUntilDue,
+            Optional<OffsetDateTime> endDate,
             Optional<Boolean> prorateFirstPeriod,
             Optional<Boolean> sendInvoice,
             Map<String, Object> additionalProperties) {
@@ -53,6 +56,7 @@ public final class RetryCustomPlanBillingRequestBody {
         this.billingStartDate = billingStartDate;
         this.customerEmail = customerEmail;
         this.daysUntilDue = daysUntilDue;
+        this.endDate = endDate;
         this.prorateFirstPeriod = prorateFirstPeriod;
         this.sendInvoice = sendInvoice;
         this.additionalProperties = additionalProperties;
@@ -90,6 +94,14 @@ public final class RetryCustomPlanBillingRequestBody {
     }
 
     /**
+     * @return When a plan that doesn't renew ends. Moved back to the last renewal on or before it. When omitted, the end date set at finalize is reissued. Only honored when the retry creates a subscription.
+     */
+    @JsonProperty("end_date")
+    public Optional<OffsetDateTime> getEndDate() {
+        return endDate;
+    }
+
+    /**
      * @return When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.
      */
     @JsonProperty("prorate_first_period")
@@ -122,6 +134,7 @@ public final class RetryCustomPlanBillingRequestBody {
                 && billingStartDate.equals(other.billingStartDate)
                 && customerEmail.equals(other.customerEmail)
                 && daysUntilDue.equals(other.daysUntilDue)
+                && endDate.equals(other.endDate)
                 && prorateFirstPeriod.equals(other.prorateFirstPeriod)
                 && sendInvoice.equals(other.sendInvoice);
     }
@@ -134,6 +147,7 @@ public final class RetryCustomPlanBillingRequestBody {
                 this.billingStartDate,
                 this.customerEmail,
                 this.daysUntilDue,
+                this.endDate,
                 this.prorateFirstPeriod,
                 this.sendInvoice);
     }
@@ -183,6 +197,13 @@ public final class RetryCustomPlanBillingRequestBody {
         _FinalStage daysUntilDue(Long daysUntilDue);
 
         /**
+         * <p>When a plan that doesn't renew ends. Moved back to the last renewal on or before it. When omitted, the end date set at finalize is reissued. Only honored when the retry creates a subscription.</p>
+         */
+        _FinalStage endDate(Optional<OffsetDateTime> endDate);
+
+        _FinalStage endDate(OffsetDateTime endDate);
+
+        /**
          * <p>When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.</p>
          */
         _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod);
@@ -205,6 +226,8 @@ public final class RetryCustomPlanBillingRequestBody {
 
         private Optional<Boolean> prorateFirstPeriod = Optional.empty();
 
+        private Optional<OffsetDateTime> endDate = Optional.empty();
+
         private Optional<Long> daysUntilDue = Optional.empty();
 
         private Optional<OffsetDateTime> billingStartDate = Optional.empty();
@@ -224,6 +247,7 @@ public final class RetryCustomPlanBillingRequestBody {
             billingStartDate(other.getBillingStartDate());
             customerEmail(other.getCustomerEmail());
             daysUntilDue(other.getDaysUntilDue());
+            endDate(other.getEndDate());
             prorateFirstPeriod(other.getProrateFirstPeriod());
             sendInvoice(other.getSendInvoice());
             return this;
@@ -273,6 +297,26 @@ public final class RetryCustomPlanBillingRequestBody {
         @JsonSetter(value = "prorate_first_period", nulls = Nulls.SKIP)
         public _FinalStage prorateFirstPeriod(Optional<Boolean> prorateFirstPeriod) {
             this.prorateFirstPeriod = prorateFirstPeriod;
+            return this;
+        }
+
+        /**
+         * <p>When a plan that doesn't renew ends. Moved back to the last renewal on or before it. When omitted, the end date set at finalize is reissued. Only honored when the retry creates a subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage endDate(OffsetDateTime endDate) {
+            this.endDate = Optional.ofNullable(endDate);
+            return this;
+        }
+
+        /**
+         * <p>When a plan that doesn't renew ends. Moved back to the last renewal on or before it. When omitted, the end date set at finalize is reissued. Only honored when the retry creates a subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "end_date", nulls = Nulls.SKIP)
+        public _FinalStage endDate(Optional<OffsetDateTime> endDate) {
+            this.endDate = endDate;
             return this;
         }
 
@@ -350,6 +394,7 @@ public final class RetryCustomPlanBillingRequestBody {
                     billingStartDate,
                     customerEmail,
                     daysUntilDue,
+                    endDate,
                     prorateFirstPeriod,
                     sendInvoice,
                     additionalProperties);
@@ -362,6 +407,7 @@ public final class RetryCustomPlanBillingRequestBody {
                     || key.equalsIgnoreCase("billing_start_date")
                     || key.equalsIgnoreCase("customer_email")
                     || key.equalsIgnoreCase("days_until_due")
+                    || key.equalsIgnoreCase("end_date")
                     || key.equalsIgnoreCase("prorate_first_period")
                     || key.equalsIgnoreCase("send_invoice")) {
                 return;

@@ -38,6 +38,8 @@ public final class CustomPlanBillingResponseData {
 
     private final long daysUntilDue;
 
+    private final Optional<OffsetDateTime> endDate;
+
     private final Optional<String> externalInvoiceId;
 
     private final String id;
@@ -74,6 +76,7 @@ public final class CustomPlanBillingResponseData {
             String companyId,
             OffsetDateTime createdAt,
             long daysUntilDue,
+            Optional<OffsetDateTime> endDate,
             Optional<String> externalInvoiceId,
             String id,
             Optional<String> migrationId,
@@ -95,6 +98,7 @@ public final class CustomPlanBillingResponseData {
         this.companyId = companyId;
         this.createdAt = createdAt;
         this.daysUntilDue = daysUntilDue;
+        this.endDate = endDate;
         this.externalInvoiceId = externalInvoiceId;
         this.id = id;
         this.migrationId = migrationId;
@@ -153,6 +157,14 @@ public final class CustomPlanBillingResponseData {
     @JsonProperty("days_until_due")
     public long getDaysUntilDue() {
         return daysUntilDue;
+    }
+
+    /**
+     * @return When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the default plan. Null for a plan that renews.
+     */
+    @JsonProperty("end_date")
+    public Optional<OffsetDateTime> getEndDate() {
+        return endDate;
     }
 
     @JsonProperty("external_invoice_id")
@@ -251,6 +263,7 @@ public final class CustomPlanBillingResponseData {
                 && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
                 && daysUntilDue == other.daysUntilDue
+                && endDate.equals(other.endDate)
                 && externalInvoiceId.equals(other.externalInvoiceId)
                 && id.equals(other.id)
                 && migrationId.equals(other.migrationId)
@@ -276,6 +289,7 @@ public final class CustomPlanBillingResponseData {
                 this.companyId,
                 this.createdAt,
                 this.daysUntilDue,
+                this.endDate,
                 this.externalInvoiceId,
                 this.id,
                 this.migrationId,
@@ -373,6 +387,13 @@ public final class CustomPlanBillingResponseData {
 
         _FinalStage checkoutId(String checkoutId);
 
+        /**
+         * <p>When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the default plan. Null for a plan that renews.</p>
+         */
+        _FinalStage endDate(Optional<OffsetDateTime> endDate);
+
+        _FinalStage endDate(OffsetDateTime endDate);
+
         _FinalStage externalInvoiceId(Optional<String> externalInvoiceId);
 
         _FinalStage externalInvoiceId(String externalInvoiceId);
@@ -460,6 +481,8 @@ public final class CustomPlanBillingResponseData {
 
         private Optional<String> externalInvoiceId = Optional.empty();
 
+        private Optional<OffsetDateTime> endDate = Optional.empty();
+
         private Optional<String> checkoutId = Optional.empty();
 
         private Optional<OffsetDateTime> billingStartDate = Optional.empty();
@@ -479,6 +502,7 @@ public final class CustomPlanBillingResponseData {
             companyId(other.getCompanyId());
             createdAt(other.getCreatedAt());
             daysUntilDue(other.getDaysUntilDue());
+            endDate(other.getEndDate());
             externalInvoiceId(other.getExternalInvoiceId());
             id(other.getId());
             migrationId(other.getMigrationId());
@@ -697,6 +721,26 @@ public final class CustomPlanBillingResponseData {
         }
 
         /**
+         * <p>When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the default plan. Null for a plan that renews.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage endDate(OffsetDateTime endDate) {
+            this.endDate = Optional.ofNullable(endDate);
+            return this;
+        }
+
+        /**
+         * <p>When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the default plan. Null for a plan that renews.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "end_date", nulls = Nulls.SKIP)
+        public _FinalStage endDate(Optional<OffsetDateTime> endDate) {
+            this.endDate = endDate;
+            return this;
+        }
+
+        /**
          * <p>The checkout this billing record was created from, when it was created from one.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -766,6 +810,7 @@ public final class CustomPlanBillingResponseData {
                     companyId,
                     createdAt,
                     daysUntilDue,
+                    endDate,
                     externalInvoiceId,
                     id,
                     migrationId,
@@ -791,6 +836,7 @@ public final class CustomPlanBillingResponseData {
                     || key.equalsIgnoreCase("company_id")
                     || key.equalsIgnoreCase("created_at")
                     || key.equalsIgnoreCase("days_until_due")
+                    || key.equalsIgnoreCase("end_date")
                     || key.equalsIgnoreCase("external_invoice_id")
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("migration_id")

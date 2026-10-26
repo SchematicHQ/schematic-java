@@ -9,22 +9,14 @@ import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.accounts.requests.CountAccountMembersRequest;
 import com.schematic.api.resources.accounts.requests.CountApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.CountAuditLogsRequest;
-import com.schematic.api.resources.accounts.requests.CreateApiKeyRequestBody;
-import com.schematic.api.resources.accounts.requests.CreateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.requests.ListAccountMembersRequest;
 import com.schematic.api.resources.accounts.requests.ListApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.ListAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.ListEnvironmentsRequest;
-import com.schematic.api.resources.accounts.requests.UpdateApiKeyRequestBody;
-import com.schematic.api.resources.accounts.requests.UpdateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.requests.UpdateOnboardingStateRequestBody;
 import com.schematic.api.resources.accounts.types.CountAccountMembersResponse;
 import com.schematic.api.resources.accounts.types.CountApiKeysResponse;
 import com.schematic.api.resources.accounts.types.CountAuditLogsResponse;
-import com.schematic.api.resources.accounts.types.CreateApiKeyResponse;
-import com.schematic.api.resources.accounts.types.CreateEnvironmentResponse;
-import com.schematic.api.resources.accounts.types.DeleteApiKeyResponse;
-import com.schematic.api.resources.accounts.types.DeleteEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.GetAccountMemberResponse;
 import com.schematic.api.resources.accounts.types.GetApiKeyResponse;
 import com.schematic.api.resources.accounts.types.GetAuditLogResponse;
@@ -36,8 +28,6 @@ import com.schematic.api.resources.accounts.types.ListApiKeysResponse;
 import com.schematic.api.resources.accounts.types.ListAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.ListEnvironmentsResponse;
 import com.schematic.api.resources.accounts.types.QuickstartResponse;
-import com.schematic.api.resources.accounts.types.UpdateApiKeyResponse;
-import com.schematic.api.resources.accounts.types.UpdateEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.UpdateOnboardingStateResponse;
 import java.util.concurrent.CompletableFuture;
 
@@ -206,31 +196,6 @@ public class AsyncAccountsClient {
         return future;
     }
 
-    public CompletableFuture<CreateApiKeyResponse> createApiKey(CreateApiKeyRequestBody request) {
-        CompletableFuture<BaseSchematicHttpResponse<CreateApiKeyResponse>> rawFuture =
-                this.rawClient.createApiKey(request);
-        CompletableFuture<CreateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<CreateApiKeyResponse> createApiKey(
-            CreateApiKeyRequestBody request, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<CreateApiKeyResponse>> rawFuture =
-                this.rawClient.createApiKey(request, requestOptions);
-        CompletableFuture<CreateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
     public CompletableFuture<GetApiKeyResponse> getApiKey(String apiKeyId) {
         CompletableFuture<BaseSchematicHttpResponse<GetApiKeyResponse>> rawFuture = this.rawClient.getApiKey(apiKeyId);
         CompletableFuture<GetApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
@@ -246,79 +211,6 @@ public class AsyncAccountsClient {
         CompletableFuture<BaseSchematicHttpResponse<GetApiKeyResponse>> rawFuture =
                 this.rawClient.getApiKey(apiKeyId, requestOptions);
         CompletableFuture<GetApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<UpdateApiKeyResponse> updateApiKey(String apiKeyId) {
-        CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> rawFuture =
-                this.rawClient.updateApiKey(apiKeyId);
-        CompletableFuture<UpdateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<UpdateApiKeyResponse> updateApiKey(String apiKeyId, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> rawFuture =
-                this.rawClient.updateApiKey(apiKeyId, requestOptions);
-        CompletableFuture<UpdateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<UpdateApiKeyResponse> updateApiKey(String apiKeyId, UpdateApiKeyRequestBody request) {
-        CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> rawFuture =
-                this.rawClient.updateApiKey(apiKeyId, request);
-        CompletableFuture<UpdateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<UpdateApiKeyResponse> updateApiKey(
-            String apiKeyId, UpdateApiKeyRequestBody request, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<UpdateApiKeyResponse>> rawFuture =
-                this.rawClient.updateApiKey(apiKeyId, request, requestOptions);
-        CompletableFuture<UpdateApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<DeleteApiKeyResponse> deleteApiKey(String apiKeyId) {
-        CompletableFuture<BaseSchematicHttpResponse<DeleteApiKeyResponse>> rawFuture =
-                this.rawClient.deleteApiKey(apiKeyId);
-        CompletableFuture<DeleteApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<DeleteApiKeyResponse> deleteApiKey(String apiKeyId, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<DeleteApiKeyResponse>> rawFuture =
-                this.rawClient.deleteApiKey(apiKeyId, requestOptions);
-        CompletableFuture<DeleteApiKeyResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
@@ -522,31 +414,6 @@ public class AsyncAccountsClient {
         return future;
     }
 
-    public CompletableFuture<CreateEnvironmentResponse> createEnvironment(CreateEnvironmentRequestBody request) {
-        CompletableFuture<BaseSchematicHttpResponse<CreateEnvironmentResponse>> rawFuture =
-                this.rawClient.createEnvironment(request);
-        CompletableFuture<CreateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<CreateEnvironmentResponse> createEnvironment(
-            CreateEnvironmentRequestBody request, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<CreateEnvironmentResponse>> rawFuture =
-                this.rawClient.createEnvironment(request, requestOptions);
-        CompletableFuture<CreateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
     public CompletableFuture<GetEnvironmentResponse> getEnvironment(String environmentId) {
         CompletableFuture<BaseSchematicHttpResponse<GetEnvironmentResponse>> rawFuture =
                 this.rawClient.getEnvironment(environmentId);
@@ -564,82 +431,6 @@ public class AsyncAccountsClient {
         CompletableFuture<BaseSchematicHttpResponse<GetEnvironmentResponse>> rawFuture =
                 this.rawClient.getEnvironment(environmentId, requestOptions);
         CompletableFuture<GetEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<UpdateEnvironmentResponse> updateEnvironment(String environmentId) {
-        CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> rawFuture =
-                this.rawClient.updateEnvironment(environmentId);
-        CompletableFuture<UpdateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<UpdateEnvironmentResponse> updateEnvironment(
-            String environmentId, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> rawFuture =
-                this.rawClient.updateEnvironment(environmentId, requestOptions);
-        CompletableFuture<UpdateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<UpdateEnvironmentResponse> updateEnvironment(
-            String environmentId, UpdateEnvironmentRequestBody request) {
-        CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> rawFuture =
-                this.rawClient.updateEnvironment(environmentId, request);
-        CompletableFuture<UpdateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<UpdateEnvironmentResponse> updateEnvironment(
-            String environmentId, UpdateEnvironmentRequestBody request, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<UpdateEnvironmentResponse>> rawFuture =
-                this.rawClient.updateEnvironment(environmentId, request, requestOptions);
-        CompletableFuture<UpdateEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<DeleteEnvironmentResponse> deleteEnvironment(String environmentId) {
-        CompletableFuture<BaseSchematicHttpResponse<DeleteEnvironmentResponse>> rawFuture =
-                this.rawClient.deleteEnvironment(environmentId);
-        CompletableFuture<DeleteEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<DeleteEnvironmentResponse> deleteEnvironment(
-            String environmentId, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<DeleteEnvironmentResponse>> rawFuture =
-                this.rawClient.deleteEnvironment(environmentId, requestOptions);
-        CompletableFuture<DeleteEnvironmentResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);

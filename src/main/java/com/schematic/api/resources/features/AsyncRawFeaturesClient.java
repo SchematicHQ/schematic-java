@@ -11,6 +11,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.RetryInterceptor;
@@ -351,7 +352,7 @@ public class AsyncRawFeaturesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("features")
-                .addPathSegment(featureId);
+                .addPathSegment(PathSegments.validate(featureId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -459,7 +460,7 @@ public class AsyncRawFeaturesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("features")
-                .addPathSegment(featureId);
+                .addPathSegment(PathSegments.validate(featureId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -572,7 +573,7 @@ public class AsyncRawFeaturesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("features")
-                .addPathSegment(featureId);
+                .addPathSegment(PathSegments.validate(featureId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1193,7 +1194,7 @@ public class AsyncRawFeaturesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("flags")
-                .addPathSegment(flagId);
+                .addPathSegment(PathSegments.validate(flagId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1292,7 +1293,7 @@ public class AsyncRawFeaturesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("flags")
-                .addPathSegment(flagId);
+                .addPathSegment(PathSegments.validate(flagId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1405,7 +1406,7 @@ public class AsyncRawFeaturesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("flags")
-                .addPathSegment(flagId);
+                .addPathSegment(PathSegments.validate(flagId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -1512,7 +1513,7 @@ public class AsyncRawFeaturesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("flags")
-                .addPathSegment(flagId)
+                .addPathSegment(PathSegments.validate(flagId))
                 .addPathSegments("rules");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -1636,7 +1637,7 @@ public class AsyncRawFeaturesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("flags")
-                .addPathSegment(key)
+                .addPathSegment(PathSegments.validate(key))
                 .addPathSegments("check");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -1760,7 +1761,7 @@ public class AsyncRawFeaturesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("flags")
-                .addPathSegment(key)
+                .addPathSegment(PathSegments.validate(key))
                 .addPathSegments("check-and-reserve");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
