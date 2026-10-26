@@ -26,7 +26,7 @@ public final class BillingInvoiceSettlementResponseData {
 
     private final Collector collector;
 
-    private final String id;
+    private final Optional<String> id;
 
     private final Optional<String> reference;
 
@@ -37,7 +37,7 @@ public final class BillingInvoiceSettlementResponseData {
     private BillingInvoiceSettlementResponseData(
             long amount,
             Collector collector,
-            String id,
+            Optional<String> id,
             Optional<String> reference,
             OffsetDateTime settledAt,
             Map<String, Object> additionalProperties) {
@@ -59,8 +59,11 @@ public final class BillingInvoiceSettlementResponseData {
         return collector;
     }
 
+    /**
+     * @return Null on a payment Stripe recorded.
+     */
     @JsonProperty("id")
-    public String getId() {
+    public Optional<String> getId() {
         return id;
     }
 
@@ -115,11 +118,7 @@ public final class BillingInvoiceSettlementResponseData {
     }
 
     public interface CollectorStage {
-        IdStage collector(@NotNull Collector collector);
-    }
-
-    public interface IdStage {
-        SettledAtStage id(@NotNull String id);
+        SettledAtStage collector(@NotNull Collector collector);
     }
 
     public interface SettledAtStage {
@@ -133,22 +132,29 @@ public final class BillingInvoiceSettlementResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Null on a payment Stripe recorded.</p>
+         */
+        _FinalStage id(Optional<String> id);
+
+        _FinalStage id(String id);
+
         _FinalStage reference(Optional<String> reference);
 
         _FinalStage reference(String reference);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements AmountStage, CollectorStage, IdStage, SettledAtStage, _FinalStage {
+    public static final class Builder implements AmountStage, CollectorStage, SettledAtStage, _FinalStage {
         private long amount;
 
         private Collector collector;
 
-        private String id;
-
         private OffsetDateTime settledAt;
 
         private Optional<String> reference = Optional.empty();
+
+        private Optional<String> id = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -173,15 +179,8 @@ public final class BillingInvoiceSettlementResponseData {
 
         @java.lang.Override
         @JsonSetter("collector")
-        public IdStage collector(@NotNull Collector collector) {
+        public SettledAtStage collector(@NotNull Collector collector) {
             this.collector = Objects.requireNonNull(collector, "collector must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("id")
-        public SettledAtStage id(@NotNull String id) {
-            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
@@ -202,6 +201,26 @@ public final class BillingInvoiceSettlementResponseData {
         @JsonSetter(value = "reference", nulls = Nulls.SKIP)
         public _FinalStage reference(Optional<String> reference) {
             this.reference = reference;
+            return this;
+        }
+
+        /**
+         * <p>Null on a payment Stripe recorded.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage id(String id) {
+            this.id = Optional.ofNullable(id);
+            return this;
+        }
+
+        /**
+         * <p>Null on a payment Stripe recorded.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "id", nulls = Nulls.SKIP)
+        public _FinalStage id(Optional<String> id) {
+            this.id = id;
             return this;
         }
 

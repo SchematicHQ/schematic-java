@@ -38,6 +38,8 @@ public final class PlanVersionResponseData {
 
     private final PlanType planType;
 
+    private final RenewalPolicy renewalPolicy;
+
     private final PlanVersionStatus status;
 
     private final OffsetDateTime updatedAt;
@@ -55,6 +57,7 @@ public final class PlanVersionResponseData {
             String name,
             Optional<String> originalPlanId,
             PlanType planType,
+            RenewalPolicy renewalPolicy,
             PlanVersionStatus status,
             OffsetDateTime updatedAt,
             long version,
@@ -67,6 +70,7 @@ public final class PlanVersionResponseData {
         this.name = name;
         this.originalPlanId = originalPlanId;
         this.planType = planType;
+        this.renewalPolicy = renewalPolicy;
         this.status = status;
         this.updatedAt = updatedAt;
         this.version = version;
@@ -113,6 +117,11 @@ public final class PlanVersionResponseData {
         return planType;
     }
 
+    @JsonProperty("renewal_policy")
+    public RenewalPolicy getRenewalPolicy() {
+        return renewalPolicy;
+    }
+
     @JsonProperty("status")
     public PlanVersionStatus getStatus() {
         return status;
@@ -148,6 +157,7 @@ public final class PlanVersionResponseData {
                 && name.equals(other.name)
                 && originalPlanId.equals(other.originalPlanId)
                 && planType.equals(other.planType)
+                && renewalPolicy.equals(other.renewalPolicy)
                 && status.equals(other.status)
                 && updatedAt.equals(other.updatedAt)
                 && version == other.version;
@@ -164,6 +174,7 @@ public final class PlanVersionResponseData {
                 this.name,
                 this.originalPlanId,
                 this.planType,
+                this.renewalPolicy,
                 this.status,
                 this.updatedAt,
                 this.version);
@@ -205,7 +216,11 @@ public final class PlanVersionResponseData {
     }
 
     public interface PlanTypeStage {
-        StatusStage planType(@NotNull PlanType planType);
+        RenewalPolicyStage planType(@NotNull PlanType planType);
+    }
+
+    public interface RenewalPolicyStage {
+        StatusStage renewalPolicy(@NotNull RenewalPolicy renewalPolicy);
     }
 
     public interface StatusStage {
@@ -241,6 +256,7 @@ public final class PlanVersionResponseData {
                     IdStage,
                     NameStage,
                     PlanTypeStage,
+                    RenewalPolicyStage,
                     StatusStage,
                     UpdatedAtStage,
                     VersionStage,
@@ -258,6 +274,8 @@ public final class PlanVersionResponseData {
         private String name;
 
         private PlanType planType;
+
+        private RenewalPolicy renewalPolicy;
 
         private PlanVersionStatus status;
 
@@ -281,6 +299,7 @@ public final class PlanVersionResponseData {
             name(other.getName());
             originalPlanId(other.getOriginalPlanId());
             planType(other.getPlanType());
+            renewalPolicy(other.getRenewalPolicy());
             status(other.getStatus());
             updatedAt(other.getUpdatedAt());
             version(other.getVersion());
@@ -331,8 +350,15 @@ public final class PlanVersionResponseData {
 
         @java.lang.Override
         @JsonSetter("plan_type")
-        public StatusStage planType(@NotNull PlanType planType) {
+        public RenewalPolicyStage planType(@NotNull PlanType planType) {
             this.planType = Objects.requireNonNull(planType, "planType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("renewal_policy")
+        public StatusStage renewalPolicy(@NotNull RenewalPolicy renewalPolicy) {
+            this.renewalPolicy = Objects.requireNonNull(renewalPolicy, "renewalPolicy must not be null");
             return this;
         }
 
@@ -381,6 +407,7 @@ public final class PlanVersionResponseData {
                     name,
                     originalPlanId,
                     planType,
+                    renewalPolicy,
                     status,
                     updatedAt,
                     version,
@@ -397,6 +424,7 @@ public final class PlanVersionResponseData {
                     || key.equalsIgnoreCase("name")
                     || key.equalsIgnoreCase("original_plan_id")
                     || key.equalsIgnoreCase("plan_type")
+                    || key.equalsIgnoreCase("renewal_policy")
                     || key.equalsIgnoreCase("status")
                     || key.equalsIgnoreCase("updated_at")
                     || key.equalsIgnoreCase("version")) {

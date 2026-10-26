@@ -8,22 +8,14 @@ import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.accounts.requests.CountAccountMembersRequest;
 import com.schematic.api.resources.accounts.requests.CountApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.CountAuditLogsRequest;
-import com.schematic.api.resources.accounts.requests.CreateApiKeyRequestBody;
-import com.schematic.api.resources.accounts.requests.CreateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.requests.ListAccountMembersRequest;
 import com.schematic.api.resources.accounts.requests.ListApiKeysRequest;
 import com.schematic.api.resources.accounts.requests.ListAuditLogsRequest;
 import com.schematic.api.resources.accounts.requests.ListEnvironmentsRequest;
-import com.schematic.api.resources.accounts.requests.UpdateApiKeyRequestBody;
-import com.schematic.api.resources.accounts.requests.UpdateEnvironmentRequestBody;
 import com.schematic.api.resources.accounts.requests.UpdateOnboardingStateRequestBody;
 import com.schematic.api.resources.accounts.types.CountAccountMembersResponse;
 import com.schematic.api.resources.accounts.types.CountApiKeysResponse;
 import com.schematic.api.resources.accounts.types.CountAuditLogsResponse;
-import com.schematic.api.resources.accounts.types.CreateApiKeyResponse;
-import com.schematic.api.resources.accounts.types.CreateEnvironmentResponse;
-import com.schematic.api.resources.accounts.types.DeleteApiKeyResponse;
-import com.schematic.api.resources.accounts.types.DeleteEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.GetAccountMemberResponse;
 import com.schematic.api.resources.accounts.types.GetApiKeyResponse;
 import com.schematic.api.resources.accounts.types.GetAuditLogResponse;
@@ -35,8 +27,6 @@ import com.schematic.api.resources.accounts.types.ListApiKeysResponse;
 import com.schematic.api.resources.accounts.types.ListAuditLogsResponse;
 import com.schematic.api.resources.accounts.types.ListEnvironmentsResponse;
 import com.schematic.api.resources.accounts.types.QuickstartResponse;
-import com.schematic.api.resources.accounts.types.UpdateApiKeyResponse;
-import com.schematic.api.resources.accounts.types.UpdateEnvironmentResponse;
 import com.schematic.api.resources.accounts.types.UpdateOnboardingStateResponse;
 
 public class AccountsClient {
@@ -106,45 +96,12 @@ public class AccountsClient {
         return this.rawClient.listApiKeys(request, requestOptions).body();
     }
 
-    public CreateApiKeyResponse createApiKey(CreateApiKeyRequestBody request) {
-        return this.rawClient.createApiKey(request).body();
-    }
-
-    public CreateApiKeyResponse createApiKey(CreateApiKeyRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createApiKey(request, requestOptions).body();
-    }
-
     public GetApiKeyResponse getApiKey(String apiKeyId) {
         return this.rawClient.getApiKey(apiKeyId).body();
     }
 
     public GetApiKeyResponse getApiKey(String apiKeyId, RequestOptions requestOptions) {
         return this.rawClient.getApiKey(apiKeyId, requestOptions).body();
-    }
-
-    public UpdateApiKeyResponse updateApiKey(String apiKeyId) {
-        return this.rawClient.updateApiKey(apiKeyId).body();
-    }
-
-    public UpdateApiKeyResponse updateApiKey(String apiKeyId, RequestOptions requestOptions) {
-        return this.rawClient.updateApiKey(apiKeyId, requestOptions).body();
-    }
-
-    public UpdateApiKeyResponse updateApiKey(String apiKeyId, UpdateApiKeyRequestBody request) {
-        return this.rawClient.updateApiKey(apiKeyId, request).body();
-    }
-
-    public UpdateApiKeyResponse updateApiKey(
-            String apiKeyId, UpdateApiKeyRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.updateApiKey(apiKeyId, request, requestOptions).body();
-    }
-
-    public DeleteApiKeyResponse deleteApiKey(String apiKeyId) {
-        return this.rawClient.deleteApiKey(apiKeyId).body();
-    }
-
-    public DeleteApiKeyResponse deleteApiKey(String apiKeyId, RequestOptions requestOptions) {
-        return this.rawClient.deleteApiKey(apiKeyId, requestOptions).body();
     }
 
     public CountApiKeysResponse countApiKeys(CountApiKeysRequest request) {
@@ -211,48 +168,12 @@ public class AccountsClient {
         return this.rawClient.listEnvironments(request, requestOptions).body();
     }
 
-    public CreateEnvironmentResponse createEnvironment(CreateEnvironmentRequestBody request) {
-        return this.rawClient.createEnvironment(request).body();
-    }
-
-    public CreateEnvironmentResponse createEnvironment(
-            CreateEnvironmentRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient.createEnvironment(request, requestOptions).body();
-    }
-
     public GetEnvironmentResponse getEnvironment(String environmentId) {
         return this.rawClient.getEnvironment(environmentId).body();
     }
 
     public GetEnvironmentResponse getEnvironment(String environmentId, RequestOptions requestOptions) {
         return this.rawClient.getEnvironment(environmentId, requestOptions).body();
-    }
-
-    public UpdateEnvironmentResponse updateEnvironment(String environmentId) {
-        return this.rawClient.updateEnvironment(environmentId).body();
-    }
-
-    public UpdateEnvironmentResponse updateEnvironment(String environmentId, RequestOptions requestOptions) {
-        return this.rawClient.updateEnvironment(environmentId, requestOptions).body();
-    }
-
-    public UpdateEnvironmentResponse updateEnvironment(String environmentId, UpdateEnvironmentRequestBody request) {
-        return this.rawClient.updateEnvironment(environmentId, request).body();
-    }
-
-    public UpdateEnvironmentResponse updateEnvironment(
-            String environmentId, UpdateEnvironmentRequestBody request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateEnvironment(environmentId, request, requestOptions)
-                .body();
-    }
-
-    public DeleteEnvironmentResponse deleteEnvironment(String environmentId) {
-        return this.rawClient.deleteEnvironment(environmentId).body();
-    }
-
-    public DeleteEnvironmentResponse deleteEnvironment(String environmentId, RequestOptions requestOptions) {
-        return this.rawClient.deleteEnvironment(environmentId, requestOptions).body();
     }
 
     public GetOnboardingStateResponse getOnboardingState() {

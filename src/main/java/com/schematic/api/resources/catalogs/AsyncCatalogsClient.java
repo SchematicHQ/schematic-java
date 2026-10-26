@@ -17,6 +17,8 @@ import com.schematic.api.resources.catalogs.types.GetConfigurationResponse;
 import com.schematic.api.resources.catalogs.types.GetCreditBundlesInCatalogResponse;
 import com.schematic.api.resources.catalogs.types.GetDerivedFeaturesResponse;
 import com.schematic.api.resources.catalogs.types.GetPlansInCatalogResponse;
+import com.schematic.api.resources.catalogs.types.GetPublicCatalogByIdResponse;
+import com.schematic.api.resources.catalogs.types.GetPublicCatalogResponse;
 import com.schematic.api.resources.catalogs.types.ListCatalogsResponse;
 import com.schematic.api.resources.catalogs.types.UpdateCatalogResponse;
 import com.schematic.api.resources.catalogs.types.UpdateConfigurationResponse;
@@ -448,6 +450,55 @@ public class AsyncCatalogsClient {
         CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
                 this.rawClient.removePlan(catalogId, planId, requestOptions);
         CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetPublicCatalogResponse> getPublicCatalog() {
+        CompletableFuture<BaseSchematicHttpResponse<GetPublicCatalogResponse>> rawFuture =
+                this.rawClient.getPublicCatalog();
+        CompletableFuture<GetPublicCatalogResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetPublicCatalogResponse> getPublicCatalog(RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetPublicCatalogResponse>> rawFuture =
+                this.rawClient.getPublicCatalog(requestOptions);
+        CompletableFuture<GetPublicCatalogResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetPublicCatalogByIdResponse> getPublicCatalogById(String catalogId) {
+        CompletableFuture<BaseSchematicHttpResponse<GetPublicCatalogByIdResponse>> rawFuture =
+                this.rawClient.getPublicCatalogById(catalogId);
+        CompletableFuture<GetPublicCatalogByIdResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetPublicCatalogByIdResponse> getPublicCatalogById(
+            String catalogId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetPublicCatalogByIdResponse>> rawFuture =
+                this.rawClient.getPublicCatalogById(catalogId, requestOptions);
+        CompletableFuture<GetPublicCatalogByIdResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);

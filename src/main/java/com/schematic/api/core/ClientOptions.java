@@ -60,10 +60,10 @@ public final class ClientOptions {
         this.headers.putAll(headers);
         this.headers.putAll(new HashMap<String, String>() {
             {
-                put("User-Agent", "com.schematichq.schematic-java/1.6.5");
+                put("User-Agent", "com.schematichq.schematic-java/1.6.6");
                 put("X-Fern-Language", "JAVA");
                 put("X-Fern-SDK-Name", "com.schematichq:schematic-java");
-                put("X-Fern-SDK-Version", "1.6.5");
+                put("X-Fern-SDK-Version", "1.6.6");
             }
         });
         this.headerSuppliers = headerSuppliers;

@@ -52,6 +52,7 @@ import com.schematic.api.resources.credits.types.DeleteCreditSpendPolicyResponse
 import com.schematic.api.resources.credits.types.ExtendCreditLeaseResponse;
 import com.schematic.api.resources.credits.types.GetCreditBalanceTimeSeriesResponse;
 import com.schematic.api.resources.credits.types.GetCreditBundleResponse;
+import com.schematic.api.resources.credits.types.GetCreditEventLedgerEntryResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyResponse;
 import com.schematic.api.resources.credits.types.GetCreditSpendPolicyUsageResponse;
 import com.schematic.api.resources.credits.types.GetSingleBillingCreditResponse;
@@ -582,6 +583,17 @@ public class CreditsClient {
     public ListCreditEventLedgerResponse listCreditEventLedger(
             ListCreditEventLedgerRequest request, RequestOptions requestOptions) {
         return this.rawClient.listCreditEventLedger(request, requestOptions).body();
+    }
+
+    public GetCreditEventLedgerEntryResponse getCreditEventLedgerEntry(String ledgerEntryId) {
+        return this.rawClient.getCreditEventLedgerEntry(ledgerEntryId).body();
+    }
+
+    public GetCreditEventLedgerEntryResponse getCreditEventLedgerEntry(
+            String ledgerEntryId, RequestOptions requestOptions) {
+        return this.rawClient
+                .getCreditEventLedgerEntry(ledgerEntryId, requestOptions)
+                .body();
     }
 
     public CountCreditEventLedgerResponse countCreditEventLedger(CountCreditEventLedgerRequest request) {

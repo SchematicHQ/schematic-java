@@ -5,9 +5,9 @@ package com.schematic.api.resources.billing;
 
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
+import com.schematic.api.resources.billing.requests.CountBillingInvoicesRequest;
 import com.schematic.api.resources.billing.requests.CountBillingProductsRequest;
 import com.schematic.api.resources.billing.requests.CountCustomersRequest;
-import com.schematic.api.resources.billing.requests.CountNativeInvoicesRequest;
 import com.schematic.api.resources.billing.requests.CreateBillingCustomerRequestBody;
 import com.schematic.api.resources.billing.requests.CreateBillingPriceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateBillingProductRequestBody;
@@ -16,6 +16,7 @@ import com.schematic.api.resources.billing.requests.CreateCouponRequestBody;
 import com.schematic.api.resources.billing.requests.CreateInvoiceRequestBody;
 import com.schematic.api.resources.billing.requests.CreateMeterRequestBody;
 import com.schematic.api.resources.billing.requests.CreatePaymentMethodRequestBody;
+import com.schematic.api.resources.billing.requests.ListBillingInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductPricesRequest;
 import com.schematic.api.resources.billing.requests.ListBillingProductsRequest;
@@ -24,14 +25,13 @@ import com.schematic.api.resources.billing.requests.ListCouponsRequest;
 import com.schematic.api.resources.billing.requests.ListCustomersWithSubscriptionsRequest;
 import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
-import com.schematic.api.resources.billing.requests.ListNativeInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.requests.MarkInvoicePaidRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateBillingSettingsRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateCompanyBillingProfileRequestBody;
+import com.schematic.api.resources.billing.types.CountBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
-import com.schematic.api.resources.billing.types.CountNativeInvoicesResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingCouponResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingInvoiceResponse;
@@ -39,9 +39,10 @@ import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
 import com.schematic.api.resources.billing.types.FinalizeNativeInvoiceResponse;
+import com.schematic.api.resources.billing.types.GetBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.GetBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.GetCompanyNativeSubscriptionResponse;
-import com.schematic.api.resources.billing.types.GetNativeInvoiceResponse;
+import com.schematic.api.resources.billing.types.ListBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductsResponse;
@@ -50,9 +51,8 @@ import com.schematic.api.resources.billing.types.ListCouponsResponse;
 import com.schematic.api.resources.billing.types.ListCustomersWithSubscriptionsResponse;
 import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
-import com.schematic.api.resources.billing.types.ListNativeInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
-import com.schematic.api.resources.billing.types.MarkNativeInvoicePaidResponse;
+import com.schematic.api.resources.billing.types.MarkBillingInvoicePaidResponse;
 import com.schematic.api.resources.billing.types.UpdateBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.UpdateCompanyBillingProfileResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
@@ -427,29 +427,29 @@ public class BillingClient {
                 .body();
     }
 
-    public ListNativeInvoicesResponse listNativeInvoices() {
-        return this.rawClient.listNativeInvoices().body();
+    public ListBillingInvoicesResponse listBillingInvoices() {
+        return this.rawClient.listBillingInvoices().body();
     }
 
-    public ListNativeInvoicesResponse listNativeInvoices(RequestOptions requestOptions) {
-        return this.rawClient.listNativeInvoices(requestOptions).body();
+    public ListBillingInvoicesResponse listBillingInvoices(RequestOptions requestOptions) {
+        return this.rawClient.listBillingInvoices(requestOptions).body();
     }
 
-    public ListNativeInvoicesResponse listNativeInvoices(ListNativeInvoicesRequest request) {
-        return this.rawClient.listNativeInvoices(request).body();
+    public ListBillingInvoicesResponse listBillingInvoices(ListBillingInvoicesRequest request) {
+        return this.rawClient.listBillingInvoices(request).body();
     }
 
-    public ListNativeInvoicesResponse listNativeInvoices(
-            ListNativeInvoicesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.listNativeInvoices(request, requestOptions).body();
+    public ListBillingInvoicesResponse listBillingInvoices(
+            ListBillingInvoicesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listBillingInvoices(request, requestOptions).body();
     }
 
-    public GetNativeInvoiceResponse getNativeInvoice(String invoiceId) {
-        return this.rawClient.getNativeInvoice(invoiceId).body();
+    public GetBillingInvoiceResponse getBillingInvoice(String invoiceId) {
+        return this.rawClient.getBillingInvoice(invoiceId).body();
     }
 
-    public GetNativeInvoiceResponse getNativeInvoice(String invoiceId, RequestOptions requestOptions) {
-        return this.rawClient.getNativeInvoice(invoiceId, requestOptions).body();
+    public GetBillingInvoiceResponse getBillingInvoice(String invoiceId, RequestOptions requestOptions) {
+        return this.rawClient.getBillingInvoice(invoiceId, requestOptions).body();
     }
 
     public InputStream exportNativeInvoice(String invoiceId) {
@@ -468,14 +468,14 @@ public class BillingClient {
         return this.rawClient.finalizeNativeInvoice(invoiceId, requestOptions).body();
     }
 
-    public MarkNativeInvoicePaidResponse markNativeInvoicePaid(String invoiceId, MarkInvoicePaidRequestBody request) {
-        return this.rawClient.markNativeInvoicePaid(invoiceId, request).body();
+    public MarkBillingInvoicePaidResponse markBillingInvoicePaid(String invoiceId, MarkInvoicePaidRequestBody request) {
+        return this.rawClient.markBillingInvoicePaid(invoiceId, request).body();
     }
 
-    public MarkNativeInvoicePaidResponse markNativeInvoicePaid(
+    public MarkBillingInvoicePaidResponse markBillingInvoicePaid(
             String invoiceId, MarkInvoicePaidRequestBody request, RequestOptions requestOptions) {
         return this.rawClient
-                .markNativeInvoicePaid(invoiceId, request, requestOptions)
+                .markBillingInvoicePaid(invoiceId, request, requestOptions)
                 .body();
     }
 
@@ -497,20 +497,20 @@ public class BillingClient {
         return this.rawClient.voidNativeInvoice(invoiceId, requestOptions).body();
     }
 
-    public CountNativeInvoicesResponse countNativeInvoices() {
-        return this.rawClient.countNativeInvoices().body();
+    public CountBillingInvoicesResponse countBillingInvoices() {
+        return this.rawClient.countBillingInvoices().body();
     }
 
-    public CountNativeInvoicesResponse countNativeInvoices(RequestOptions requestOptions) {
-        return this.rawClient.countNativeInvoices(requestOptions).body();
+    public CountBillingInvoicesResponse countBillingInvoices(RequestOptions requestOptions) {
+        return this.rawClient.countBillingInvoices(requestOptions).body();
     }
 
-    public CountNativeInvoicesResponse countNativeInvoices(CountNativeInvoicesRequest request) {
-        return this.rawClient.countNativeInvoices(request).body();
+    public CountBillingInvoicesResponse countBillingInvoices(CountBillingInvoicesRequest request) {
+        return this.rawClient.countBillingInvoices(request).body();
     }
 
-    public CountNativeInvoicesResponse countNativeInvoices(
-            CountNativeInvoicesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.countNativeInvoices(request, requestOptions).body();
+    public CountBillingInvoicesResponse countBillingInvoices(
+            CountBillingInvoicesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.countBillingInvoices(request, requestOptions).body();
     }
 }

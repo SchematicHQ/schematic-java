@@ -7,12 +7,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class CreditSpendWindowUnit {
+    public static final CreditSpendWindowUnit MONTH = new CreditSpendWindowUnit(Value.MONTH, "month");
+
     public static final CreditSpendWindowUnit HOUR = new CreditSpendWindowUnit(Value.HOUR, "hour");
 
     public static final CreditSpendWindowUnit DAY = new CreditSpendWindowUnit(Value.DAY, "day");
 
     public static final CreditSpendWindowUnit BILLING_PERIOD =
             new CreditSpendWindowUnit(Value.BILLING_PERIOD, "billing_period");
+
+    public static final CreditSpendWindowUnit WEEK = new CreditSpendWindowUnit(Value.WEEK, "week");
 
     private final Value value;
 
@@ -47,12 +51,16 @@ public final class CreditSpendWindowUnit {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case MONTH:
+                return visitor.visitMonth();
             case HOUR:
                 return visitor.visitHour();
             case DAY:
                 return visitor.visitDay();
             case BILLING_PERIOD:
                 return visitor.visitBillingPeriod();
+            case WEEK:
+                return visitor.visitWeek();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -62,12 +70,16 @@ public final class CreditSpendWindowUnit {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static CreditSpendWindowUnit valueOf(String value) {
         switch (value) {
+            case "month":
+                return MONTH;
             case "hour":
                 return HOUR;
             case "day":
                 return DAY;
             case "billing_period":
                 return BILLING_PERIOD;
+            case "week":
+                return WEEK;
             default:
                 return new CreditSpendWindowUnit(Value.UNKNOWN, value);
         }
@@ -78,6 +90,10 @@ public final class CreditSpendWindowUnit {
 
         DAY,
 
+        WEEK,
+
+        MONTH,
+
         BILLING_PERIOD,
 
         UNKNOWN
@@ -87,6 +103,10 @@ public final class CreditSpendWindowUnit {
         T visitHour();
 
         T visitDay();
+
+        T visitWeek();
+
+        T visitMonth();
 
         T visitBillingPeriod();
 

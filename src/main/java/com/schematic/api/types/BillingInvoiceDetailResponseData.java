@@ -34,15 +34,19 @@ public final class BillingInvoiceDetailResponseData {
 
     private final String companyId;
 
-    private final String contractId;
+    private final Optional<String> contractId;
 
     private final OffsetDateTime createdAt;
 
     private final Currency currency;
 
-    private final InvoiceDocumentState documentState;
+    private final long discount;
+
+    private final Optional<InvoiceDocumentState> documentState;
 
     private final Optional<OffsetDateTime> dueAt;
+
+    private final Optional<String> externalId;
 
     private final Optional<OffsetDateTime> finalizedAt;
 
@@ -52,19 +56,31 @@ public final class BillingInvoiceDetailResponseData {
 
     private final Optional<String> number;
 
-    private final OffsetDateTime periodEnd;
+    private final Optional<String> pdfUrl;
 
-    private final OffsetDateTime periodStart;
+    private final Optional<OffsetDateTime> periodEnd;
+
+    private final Optional<OffsetDateTime> periodStart;
+
+    private final BillingProviderType providerType;
 
     private final List<BillingInvoiceSettlementResponseData> settlements;
 
     private final InvoiceStatus status;
 
+    private final Optional<String> subscriptionExternalId;
+
+    private final Optional<String> subscriptionId;
+
     private final long subtotal;
+
+    private final long tax;
 
     private final Optional<BillingInvoiceTermsResponseData> terms;
 
     private final long total;
+
+    private final Optional<String> url;
 
     private final Map<String, Object> additionalProperties;
 
@@ -74,22 +90,30 @@ public final class BillingInvoiceDetailResponseData {
             Optional<InvoiceCollectionState> collectionState,
             Optional<Collector> collector,
             String companyId,
-            String contractId,
+            Optional<String> contractId,
             OffsetDateTime createdAt,
             Currency currency,
-            InvoiceDocumentState documentState,
+            long discount,
+            Optional<InvoiceDocumentState> documentState,
             Optional<OffsetDateTime> dueAt,
+            Optional<String> externalId,
             Optional<OffsetDateTime> finalizedAt,
             String id,
             List<BillingInvoiceLineResponseData> lines,
             Optional<String> number,
-            OffsetDateTime periodEnd,
-            OffsetDateTime periodStart,
+            Optional<String> pdfUrl,
+            Optional<OffsetDateTime> periodEnd,
+            Optional<OffsetDateTime> periodStart,
+            BillingProviderType providerType,
             List<BillingInvoiceSettlementResponseData> settlements,
             InvoiceStatus status,
+            Optional<String> subscriptionExternalId,
+            Optional<String> subscriptionId,
             long subtotal,
+            long tax,
             Optional<BillingInvoiceTermsResponseData> terms,
             long total,
+            Optional<String> url,
             Map<String, Object> additionalProperties) {
         this.amountPaid = amountPaid;
         this.amountRemaining = amountRemaining;
@@ -99,19 +123,27 @@ public final class BillingInvoiceDetailResponseData {
         this.contractId = contractId;
         this.createdAt = createdAt;
         this.currency = currency;
+        this.discount = discount;
         this.documentState = documentState;
         this.dueAt = dueAt;
+        this.externalId = externalId;
         this.finalizedAt = finalizedAt;
         this.id = id;
         this.lines = lines;
         this.number = number;
+        this.pdfUrl = pdfUrl;
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
+        this.providerType = providerType;
         this.settlements = settlements;
         this.status = status;
+        this.subscriptionExternalId = subscriptionExternalId;
+        this.subscriptionId = subscriptionId;
         this.subtotal = subtotal;
+        this.tax = tax;
         this.terms = terms;
         this.total = total;
+        this.url = url;
         this.additionalProperties = additionalProperties;
     }
 
@@ -126,7 +158,7 @@ public final class BillingInvoiceDetailResponseData {
     }
 
     /**
-     * @return The collector's report on payment. Null on a draft.
+     * @return The collector's report on payment. Null on a draft and on a Stripe invoice.
      */
     @JsonProperty("collection_state")
     public Optional<InvoiceCollectionState> getCollectionState() {
@@ -143,8 +175,11 @@ public final class BillingInvoiceDetailResponseData {
         return companyId;
     }
 
+    /**
+     * @return Null on a Stripe invoice.
+     */
     @JsonProperty("contract_id")
-    public String getContractId() {
+    public Optional<String> getContractId() {
         return contractId;
     }
 
@@ -158,14 +193,33 @@ public final class BillingInvoiceDetailResponseData {
         return currency;
     }
 
+    /**
+     * @return What discounts took off the subtotal, in minor units of the invoice's currency. Zero on an invoice Schematic issued.
+     */
+    @JsonProperty("discount")
+    public long getDiscount() {
+        return discount;
+    }
+
+    /**
+     * @return Null on a Stripe invoice.
+     */
     @JsonProperty("document_state")
-    public InvoiceDocumentState getDocumentState() {
+    public Optional<InvoiceDocumentState> getDocumentState() {
         return documentState;
     }
 
     @JsonProperty("due_at")
     public Optional<OffsetDateTime> getDueAt() {
         return dueAt;
+    }
+
+    /**
+     * @return The billing provider's invoice ID. Null on an invoice Schematic issued.
+     */
+    @JsonProperty("external_id")
+    public Optional<String> getExternalId() {
+        return externalId;
     }
 
     @JsonProperty("finalized_at")
@@ -188,14 +242,33 @@ public final class BillingInvoiceDetailResponseData {
         return number;
     }
 
+    /**
+     * @return The billing provider's PDF of the invoice. Null on an invoice Schematic issued, which downloads its PDF from this API.
+     */
+    @JsonProperty("pdf_url")
+    public Optional<String> getPdfUrl() {
+        return pdfUrl;
+    }
+
+    /**
+     * @return Null on a Stripe invoice.
+     */
     @JsonProperty("period_end")
-    public OffsetDateTime getPeriodEnd() {
+    public Optional<OffsetDateTime> getPeriodEnd() {
         return periodEnd;
     }
 
+    /**
+     * @return Null on a Stripe invoice.
+     */
     @JsonProperty("period_start")
-    public OffsetDateTime getPeriodStart() {
+    public Optional<OffsetDateTime> getPeriodStart() {
         return periodStart;
+    }
+
+    @JsonProperty("provider_type")
+    public BillingProviderType getProviderType() {
+        return providerType;
     }
 
     @JsonProperty("settlements")
@@ -208,13 +281,37 @@ public final class BillingInvoiceDetailResponseData {
         return status;
     }
 
+    /**
+     * @return The billing provider's subscription ID. Null on an invoice Schematic issued.
+     */
+    @JsonProperty("subscription_external_id")
+    public Optional<String> getSubscriptionExternalId() {
+        return subscriptionExternalId;
+    }
+
+    /**
+     * @return The Schematic subscription the invoice's lines bill for. Null on a Stripe invoice, which links its subscription through subscription_external_id.
+     */
+    @JsonProperty("subscription_id")
+    public Optional<String> getSubscriptionId() {
+        return subscriptionId;
+    }
+
     @JsonProperty("subtotal")
     public long getSubtotal() {
         return subtotal;
     }
 
     /**
-     * @return The contract's terms, copied when the invoice was finalized. Null on a draft.
+     * @return In minor units of the invoice's currency.
+     */
+    @JsonProperty("tax")
+    public long getTax() {
+        return tax;
+    }
+
+    /**
+     * @return The contract's terms, copied when the invoice was finalized. Null on a draft and on a Stripe invoice.
      */
     @JsonProperty("terms")
     public Optional<BillingInvoiceTermsResponseData> getTerms() {
@@ -224,6 +321,14 @@ public final class BillingInvoiceDetailResponseData {
     @JsonProperty("total")
     public long getTotal() {
         return total;
+    }
+
+    /**
+     * @return The billing provider's hosted invoice page. Null on an invoice Schematic issued.
+     */
+    @JsonProperty("url")
+    public Optional<String> getUrl() {
+        return url;
     }
 
     @java.lang.Override
@@ -246,19 +351,27 @@ public final class BillingInvoiceDetailResponseData {
                 && contractId.equals(other.contractId)
                 && createdAt.equals(other.createdAt)
                 && currency.equals(other.currency)
+                && discount == other.discount
                 && documentState.equals(other.documentState)
                 && dueAt.equals(other.dueAt)
+                && externalId.equals(other.externalId)
                 && finalizedAt.equals(other.finalizedAt)
                 && id.equals(other.id)
                 && lines.equals(other.lines)
                 && number.equals(other.number)
+                && pdfUrl.equals(other.pdfUrl)
                 && periodEnd.equals(other.periodEnd)
                 && periodStart.equals(other.periodStart)
+                && providerType.equals(other.providerType)
                 && settlements.equals(other.settlements)
                 && status.equals(other.status)
+                && subscriptionExternalId.equals(other.subscriptionExternalId)
+                && subscriptionId.equals(other.subscriptionId)
                 && subtotal == other.subtotal
+                && tax == other.tax
                 && terms.equals(other.terms)
-                && total == other.total;
+                && total == other.total
+                && url.equals(other.url);
     }
 
     @java.lang.Override
@@ -272,19 +385,27 @@ public final class BillingInvoiceDetailResponseData {
                 this.contractId,
                 this.createdAt,
                 this.currency,
+                this.discount,
                 this.documentState,
                 this.dueAt,
+                this.externalId,
                 this.finalizedAt,
                 this.id,
                 this.lines,
                 this.number,
+                this.pdfUrl,
                 this.periodEnd,
                 this.periodStart,
+                this.providerType,
                 this.settlements,
                 this.status,
+                this.subscriptionExternalId,
+                this.subscriptionId,
                 this.subtotal,
+                this.tax,
                 this.terms,
-                this.total);
+                this.total,
+                this.url);
     }
 
     @java.lang.Override
@@ -307,11 +428,7 @@ public final class BillingInvoiceDetailResponseData {
     }
 
     public interface CompanyIdStage {
-        ContractIdStage companyId(@NotNull String companyId);
-    }
-
-    public interface ContractIdStage {
-        CreatedAtStage contractId(@NotNull String contractId);
+        CreatedAtStage companyId(@NotNull String companyId);
     }
 
     public interface CreatedAtStage {
@@ -319,23 +436,22 @@ public final class BillingInvoiceDetailResponseData {
     }
 
     public interface CurrencyStage {
-        DocumentStateStage currency(@NotNull Currency currency);
+        DiscountStage currency(@NotNull Currency currency);
     }
 
-    public interface DocumentStateStage {
-        IdStage documentState(@NotNull InvoiceDocumentState documentState);
+    public interface DiscountStage {
+        /**
+         * <p>What discounts took off the subtotal, in minor units of the invoice's currency. Zero on an invoice Schematic issued.</p>
+         */
+        IdStage discount(long discount);
     }
 
     public interface IdStage {
-        PeriodEndStage id(@NotNull String id);
+        ProviderTypeStage id(@NotNull String id);
     }
 
-    public interface PeriodEndStage {
-        PeriodStartStage periodEnd(@NotNull OffsetDateTime periodEnd);
-    }
-
-    public interface PeriodStartStage {
-        StatusStage periodStart(@NotNull OffsetDateTime periodStart);
+    public interface ProviderTypeStage {
+        StatusStage providerType(@NotNull BillingProviderType providerType);
     }
 
     public interface StatusStage {
@@ -343,7 +459,14 @@ public final class BillingInvoiceDetailResponseData {
     }
 
     public interface SubtotalStage {
-        TotalStage subtotal(long subtotal);
+        TaxStage subtotal(long subtotal);
+    }
+
+    public interface TaxStage {
+        /**
+         * <p>In minor units of the invoice's currency.</p>
+         */
+        TotalStage tax(long tax);
     }
 
     public interface TotalStage {
@@ -358,7 +481,7 @@ public final class BillingInvoiceDetailResponseData {
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         /**
-         * <p>The collector's report on payment. Null on a draft.</p>
+         * <p>The collector's report on payment. Null on a draft and on a Stripe invoice.</p>
          */
         _FinalStage collectionState(Optional<InvoiceCollectionState> collectionState);
 
@@ -368,9 +491,30 @@ public final class BillingInvoiceDetailResponseData {
 
         _FinalStage collector(Collector collector);
 
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         */
+        _FinalStage contractId(Optional<String> contractId);
+
+        _FinalStage contractId(String contractId);
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         */
+        _FinalStage documentState(Optional<InvoiceDocumentState> documentState);
+
+        _FinalStage documentState(InvoiceDocumentState documentState);
+
         _FinalStage dueAt(Optional<OffsetDateTime> dueAt);
 
         _FinalStage dueAt(OffsetDateTime dueAt);
+
+        /**
+         * <p>The billing provider's invoice ID. Null on an invoice Schematic issued.</p>
+         */
+        _FinalStage externalId(Optional<String> externalId);
+
+        _FinalStage externalId(String externalId);
 
         _FinalStage finalizedAt(Optional<OffsetDateTime> finalizedAt);
 
@@ -386,6 +530,27 @@ public final class BillingInvoiceDetailResponseData {
 
         _FinalStage number(String number);
 
+        /**
+         * <p>The billing provider's PDF of the invoice. Null on an invoice Schematic issued, which downloads its PDF from this API.</p>
+         */
+        _FinalStage pdfUrl(Optional<String> pdfUrl);
+
+        _FinalStage pdfUrl(String pdfUrl);
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         */
+        _FinalStage periodEnd(Optional<OffsetDateTime> periodEnd);
+
+        _FinalStage periodEnd(OffsetDateTime periodEnd);
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         */
+        _FinalStage periodStart(Optional<OffsetDateTime> periodStart);
+
+        _FinalStage periodStart(OffsetDateTime periodStart);
+
         _FinalStage settlements(List<BillingInvoiceSettlementResponseData> settlements);
 
         _FinalStage addSettlements(BillingInvoiceSettlementResponseData settlements);
@@ -393,11 +558,32 @@ public final class BillingInvoiceDetailResponseData {
         _FinalStage addAllSettlements(List<BillingInvoiceSettlementResponseData> settlements);
 
         /**
-         * <p>The contract's terms, copied when the invoice was finalized. Null on a draft.</p>
+         * <p>The billing provider's subscription ID. Null on an invoice Schematic issued.</p>
+         */
+        _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId);
+
+        _FinalStage subscriptionExternalId(String subscriptionExternalId);
+
+        /**
+         * <p>The Schematic subscription the invoice's lines bill for. Null on a Stripe invoice, which links its subscription through subscription_external_id.</p>
+         */
+        _FinalStage subscriptionId(Optional<String> subscriptionId);
+
+        _FinalStage subscriptionId(String subscriptionId);
+
+        /**
+         * <p>The contract's terms, copied when the invoice was finalized. Null on a draft and on a Stripe invoice.</p>
          */
         _FinalStage terms(Optional<BillingInvoiceTermsResponseData> terms);
 
         _FinalStage terms(BillingInvoiceTermsResponseData terms);
+
+        /**
+         * <p>The billing provider's hosted invoice page. Null on an invoice Schematic issued.</p>
+         */
+        _FinalStage url(Optional<String> url);
+
+        _FinalStage url(String url);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -405,15 +591,14 @@ public final class BillingInvoiceDetailResponseData {
             implements AmountPaidStage,
                     AmountRemainingStage,
                     CompanyIdStage,
-                    ContractIdStage,
                     CreatedAtStage,
                     CurrencyStage,
-                    DocumentStateStage,
+                    DiscountStage,
                     IdStage,
-                    PeriodEndStage,
-                    PeriodStartStage,
+                    ProviderTypeStage,
                     StatusStage,
                     SubtotalStage,
+                    TaxStage,
                     TotalStage,
                     _FinalStage {
         private long amountPaid;
@@ -422,29 +607,39 @@ public final class BillingInvoiceDetailResponseData {
 
         private String companyId;
 
-        private String contractId;
-
         private OffsetDateTime createdAt;
 
         private Currency currency;
 
-        private InvoiceDocumentState documentState;
+        private long discount;
 
         private String id;
 
-        private OffsetDateTime periodEnd;
-
-        private OffsetDateTime periodStart;
+        private BillingProviderType providerType;
 
         private InvoiceStatus status;
 
         private long subtotal;
 
+        private long tax;
+
         private long total;
+
+        private Optional<String> url = Optional.empty();
 
         private Optional<BillingInvoiceTermsResponseData> terms = Optional.empty();
 
+        private Optional<String> subscriptionId = Optional.empty();
+
+        private Optional<String> subscriptionExternalId = Optional.empty();
+
         private List<BillingInvoiceSettlementResponseData> settlements = new ArrayList<>();
+
+        private Optional<OffsetDateTime> periodStart = Optional.empty();
+
+        private Optional<OffsetDateTime> periodEnd = Optional.empty();
+
+        private Optional<String> pdfUrl = Optional.empty();
 
         private Optional<String> number = Optional.empty();
 
@@ -452,7 +647,13 @@ public final class BillingInvoiceDetailResponseData {
 
         private Optional<OffsetDateTime> finalizedAt = Optional.empty();
 
+        private Optional<String> externalId = Optional.empty();
+
         private Optional<OffsetDateTime> dueAt = Optional.empty();
+
+        private Optional<InvoiceDocumentState> documentState = Optional.empty();
+
+        private Optional<String> contractId = Optional.empty();
 
         private Optional<Collector> collector = Optional.empty();
 
@@ -472,19 +673,27 @@ public final class BillingInvoiceDetailResponseData {
             contractId(other.getContractId());
             createdAt(other.getCreatedAt());
             currency(other.getCurrency());
+            discount(other.getDiscount());
             documentState(other.getDocumentState());
             dueAt(other.getDueAt());
+            externalId(other.getExternalId());
             finalizedAt(other.getFinalizedAt());
             id(other.getId());
             lines(other.getLines());
             number(other.getNumber());
+            pdfUrl(other.getPdfUrl());
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
+            providerType(other.getProviderType());
             settlements(other.getSettlements());
             status(other.getStatus());
+            subscriptionExternalId(other.getSubscriptionExternalId());
+            subscriptionId(other.getSubscriptionId());
             subtotal(other.getSubtotal());
+            tax(other.getTax());
             terms(other.getTerms());
             total(other.getTotal());
+            url(other.getUrl());
             return this;
         }
 
@@ -504,15 +713,8 @@ public final class BillingInvoiceDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("company_id")
-        public ContractIdStage companyId(@NotNull String companyId) {
+        public CreatedAtStage companyId(@NotNull String companyId) {
             this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("contract_id")
-        public CreatedAtStage contractId(@NotNull String contractId) {
-            this.contractId = Objects.requireNonNull(contractId, "contractId must not be null");
             return this;
         }
 
@@ -525,36 +727,33 @@ public final class BillingInvoiceDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public DocumentStateStage currency(@NotNull Currency currency) {
+        public DiscountStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
             return this;
         }
 
+        /**
+         * <p>What discounts took off the subtotal, in minor units of the invoice's currency. Zero on an invoice Schematic issued.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        @JsonSetter("document_state")
-        public IdStage documentState(@NotNull InvoiceDocumentState documentState) {
-            this.documentState = Objects.requireNonNull(documentState, "documentState must not be null");
+        @JsonSetter("discount")
+        public IdStage discount(long discount) {
+            this.discount = discount;
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("id")
-        public PeriodEndStage id(@NotNull String id) {
+        public ProviderTypeStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("period_end")
-        public PeriodStartStage periodEnd(@NotNull OffsetDateTime periodEnd) {
-            this.periodEnd = Objects.requireNonNull(periodEnd, "periodEnd must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("period_start")
-        public StatusStage periodStart(@NotNull OffsetDateTime periodStart) {
-            this.periodStart = Objects.requireNonNull(periodStart, "periodStart must not be null");
+        @JsonSetter("provider_type")
+        public StatusStage providerType(@NotNull BillingProviderType providerType) {
+            this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
             return this;
         }
 
@@ -567,8 +766,19 @@ public final class BillingInvoiceDetailResponseData {
 
         @java.lang.Override
         @JsonSetter("subtotal")
-        public TotalStage subtotal(long subtotal) {
+        public TaxStage subtotal(long subtotal) {
             this.subtotal = subtotal;
+            return this;
+        }
+
+        /**
+         * <p>In minor units of the invoice's currency.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("tax")
+        public TotalStage tax(long tax) {
+            this.tax = tax;
             return this;
         }
 
@@ -580,7 +790,27 @@ public final class BillingInvoiceDetailResponseData {
         }
 
         /**
-         * <p>The contract's terms, copied when the invoice was finalized. Null on a draft.</p>
+         * <p>The billing provider's hosted invoice page. Null on an invoice Schematic issued.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage url(String url) {
+            this.url = Optional.ofNullable(url);
+            return this;
+        }
+
+        /**
+         * <p>The billing provider's hosted invoice page. Null on an invoice Schematic issued.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "url", nulls = Nulls.SKIP)
+        public _FinalStage url(Optional<String> url) {
+            this.url = url;
+            return this;
+        }
+
+        /**
+         * <p>The contract's terms, copied when the invoice was finalized. Null on a draft and on a Stripe invoice.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -590,12 +820,52 @@ public final class BillingInvoiceDetailResponseData {
         }
 
         /**
-         * <p>The contract's terms, copied when the invoice was finalized. Null on a draft.</p>
+         * <p>The contract's terms, copied when the invoice was finalized. Null on a draft and on a Stripe invoice.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "terms", nulls = Nulls.SKIP)
         public _FinalStage terms(Optional<BillingInvoiceTermsResponseData> terms) {
             this.terms = terms;
+            return this;
+        }
+
+        /**
+         * <p>The Schematic subscription the invoice's lines bill for. Null on a Stripe invoice, which links its subscription through subscription_external_id.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage subscriptionId(String subscriptionId) {
+            this.subscriptionId = Optional.ofNullable(subscriptionId);
+            return this;
+        }
+
+        /**
+         * <p>The Schematic subscription the invoice's lines bill for. Null on a Stripe invoice, which links its subscription through subscription_external_id.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "subscription_id", nulls = Nulls.SKIP)
+        public _FinalStage subscriptionId(Optional<String> subscriptionId) {
+            this.subscriptionId = subscriptionId;
+            return this;
+        }
+
+        /**
+         * <p>The billing provider's subscription ID. Null on an invoice Schematic issued.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage subscriptionExternalId(String subscriptionExternalId) {
+            this.subscriptionExternalId = Optional.ofNullable(subscriptionExternalId);
+            return this;
+        }
+
+        /**
+         * <p>The billing provider's subscription ID. Null on an invoice Schematic issued.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "subscription_external_id", nulls = Nulls.SKIP)
+        public _FinalStage subscriptionExternalId(Optional<String> subscriptionExternalId) {
+            this.subscriptionExternalId = subscriptionExternalId;
             return this;
         }
 
@@ -620,6 +890,66 @@ public final class BillingInvoiceDetailResponseData {
             if (settlements != null) {
                 this.settlements.addAll(settlements);
             }
+            return this;
+        }
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage periodStart(OffsetDateTime periodStart) {
+            this.periodStart = Optional.ofNullable(periodStart);
+            return this;
+        }
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "period_start", nulls = Nulls.SKIP)
+        public _FinalStage periodStart(Optional<OffsetDateTime> periodStart) {
+            this.periodStart = periodStart;
+            return this;
+        }
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage periodEnd(OffsetDateTime periodEnd) {
+            this.periodEnd = Optional.ofNullable(periodEnd);
+            return this;
+        }
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "period_end", nulls = Nulls.SKIP)
+        public _FinalStage periodEnd(Optional<OffsetDateTime> periodEnd) {
+            this.periodEnd = periodEnd;
+            return this;
+        }
+
+        /**
+         * <p>The billing provider's PDF of the invoice. Null on an invoice Schematic issued, which downloads its PDF from this API.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage pdfUrl(String pdfUrl) {
+            this.pdfUrl = Optional.ofNullable(pdfUrl);
+            return this;
+        }
+
+        /**
+         * <p>The billing provider's PDF of the invoice. Null on an invoice Schematic issued, which downloads its PDF from this API.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "pdf_url", nulls = Nulls.SKIP)
+        public _FinalStage pdfUrl(Optional<String> pdfUrl) {
+            this.pdfUrl = pdfUrl;
             return this;
         }
 
@@ -673,6 +1003,26 @@ public final class BillingInvoiceDetailResponseData {
             return this;
         }
 
+        /**
+         * <p>The billing provider's invoice ID. Null on an invoice Schematic issued.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage externalId(String externalId) {
+            this.externalId = Optional.ofNullable(externalId);
+            return this;
+        }
+
+        /**
+         * <p>The billing provider's invoice ID. Null on an invoice Schematic issued.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "external_id", nulls = Nulls.SKIP)
+        public _FinalStage externalId(Optional<String> externalId) {
+            this.externalId = externalId;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage dueAt(OffsetDateTime dueAt) {
             this.dueAt = Optional.ofNullable(dueAt);
@@ -683,6 +1033,46 @@ public final class BillingInvoiceDetailResponseData {
         @JsonSetter(value = "due_at", nulls = Nulls.SKIP)
         public _FinalStage dueAt(Optional<OffsetDateTime> dueAt) {
             this.dueAt = dueAt;
+            return this;
+        }
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage documentState(InvoiceDocumentState documentState) {
+            this.documentState = Optional.ofNullable(documentState);
+            return this;
+        }
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "document_state", nulls = Nulls.SKIP)
+        public _FinalStage documentState(Optional<InvoiceDocumentState> documentState) {
+            this.documentState = documentState;
+            return this;
+        }
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage contractId(String contractId) {
+            this.contractId = Optional.ofNullable(contractId);
+            return this;
+        }
+
+        /**
+         * <p>Null on a Stripe invoice.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "contract_id", nulls = Nulls.SKIP)
+        public _FinalStage contractId(Optional<String> contractId) {
+            this.contractId = contractId;
             return this;
         }
 
@@ -700,7 +1090,7 @@ public final class BillingInvoiceDetailResponseData {
         }
 
         /**
-         * <p>The collector's report on payment. Null on a draft.</p>
+         * <p>The collector's report on payment. Null on a draft and on a Stripe invoice.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -710,7 +1100,7 @@ public final class BillingInvoiceDetailResponseData {
         }
 
         /**
-         * <p>The collector's report on payment. Null on a draft.</p>
+         * <p>The collector's report on payment. Null on a draft and on a Stripe invoice.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "collection_state", nulls = Nulls.SKIP)
@@ -730,19 +1120,27 @@ public final class BillingInvoiceDetailResponseData {
                     contractId,
                     createdAt,
                     currency,
+                    discount,
                     documentState,
                     dueAt,
+                    externalId,
                     finalizedAt,
                     id,
                     lines,
                     number,
+                    pdfUrl,
                     periodEnd,
                     periodStart,
+                    providerType,
                     settlements,
                     status,
+                    subscriptionExternalId,
+                    subscriptionId,
                     subtotal,
+                    tax,
                     terms,
                     total,
+                    url,
                     additionalProperties);
         }
 
@@ -756,19 +1154,27 @@ public final class BillingInvoiceDetailResponseData {
                     || key.equalsIgnoreCase("contract_id")
                     || key.equalsIgnoreCase("created_at")
                     || key.equalsIgnoreCase("currency")
+                    || key.equalsIgnoreCase("discount")
                     || key.equalsIgnoreCase("document_state")
                     || key.equalsIgnoreCase("due_at")
+                    || key.equalsIgnoreCase("external_id")
                     || key.equalsIgnoreCase("finalized_at")
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("lines")
                     || key.equalsIgnoreCase("number")
+                    || key.equalsIgnoreCase("pdf_url")
                     || key.equalsIgnoreCase("period_end")
                     || key.equalsIgnoreCase("period_start")
+                    || key.equalsIgnoreCase("provider_type")
                     || key.equalsIgnoreCase("settlements")
                     || key.equalsIgnoreCase("status")
+                    || key.equalsIgnoreCase("subscription_external_id")
+                    || key.equalsIgnoreCase("subscription_id")
                     || key.equalsIgnoreCase("subtotal")
+                    || key.equalsIgnoreCase("tax")
                     || key.equalsIgnoreCase("terms")
-                    || key.equalsIgnoreCase("total")) {
+                    || key.equalsIgnoreCase("total")
+                    || key.equalsIgnoreCase("url")) {
                 return;
             }
             this.additionalProperties.put(key, value);

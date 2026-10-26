@@ -12,15 +12,17 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.InvoiceDocumentState;
+import com.schematic.api.types.InvoiceStatus;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ListNativeInvoicesParams.Builder.class)
-public final class ListNativeInvoicesParams {
+@JsonDeserialize(builder = ListBillingInvoicesParams.Builder.class)
+public final class ListBillingInvoicesParams {
     private final Optional<String> companyId;
 
     private final Optional<String> contractId;
@@ -31,20 +33,36 @@ public final class ListNativeInvoicesParams {
 
     private final Optional<Long> offset;
 
+    private final Optional<Boolean> pastDue;
+
+    private final Optional<BillingProviderType> providerType;
+
+    private final Optional<String> q;
+
+    private final Optional<InvoiceStatus> status;
+
     private final Map<String, Object> additionalProperties;
 
-    private ListNativeInvoicesParams(
+    private ListBillingInvoicesParams(
             Optional<String> companyId,
             Optional<String> contractId,
             Optional<InvoiceDocumentState> documentState,
             Optional<Long> limit,
             Optional<Long> offset,
+            Optional<Boolean> pastDue,
+            Optional<BillingProviderType> providerType,
+            Optional<String> q,
+            Optional<InvoiceStatus> status,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.contractId = contractId;
         this.documentState = documentState;
         this.limit = limit;
         this.offset = offset;
+        this.pastDue = pastDue;
+        this.providerType = providerType;
+        this.q = q;
+        this.status = status;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,10 +97,39 @@ public final class ListNativeInvoicesParams {
         return offset;
     }
 
+    /**
+     * @return Only open invoices with an amount left to pay whose due date has passed.
+     */
+    @JsonProperty("past_due")
+    public Optional<Boolean> getPastDue() {
+        return pastDue;
+    }
+
+    /**
+     * @return Only invoices from this billing provider. Leave empty for invoices from Schematic and Stripe.
+     */
+    @JsonProperty("provider_type")
+    public Optional<BillingProviderType> getProviderType() {
+        return providerType;
+    }
+
+    /**
+     * @return Search by invoice number, provider invoice ID or company name.
+     */
+    @JsonProperty("q")
+    public Optional<String> getQ() {
+        return q;
+    }
+
+    @JsonProperty("status")
+    public Optional<InvoiceStatus> getStatus() {
+        return status;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ListNativeInvoicesParams && equalTo((ListNativeInvoicesParams) other);
+        return other instanceof ListBillingInvoicesParams && equalTo((ListBillingInvoicesParams) other);
     }
 
     @JsonAnyGetter
@@ -90,17 +137,30 @@ public final class ListNativeInvoicesParams {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ListNativeInvoicesParams other) {
+    private boolean equalTo(ListBillingInvoicesParams other) {
         return companyId.equals(other.companyId)
                 && contractId.equals(other.contractId)
                 && documentState.equals(other.documentState)
                 && limit.equals(other.limit)
-                && offset.equals(other.offset);
+                && offset.equals(other.offset)
+                && pastDue.equals(other.pastDue)
+                && providerType.equals(other.providerType)
+                && q.equals(other.q)
+                && status.equals(other.status);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.contractId, this.documentState, this.limit, this.offset);
+        return Objects.hash(
+                this.companyId,
+                this.contractId,
+                this.documentState,
+                this.limit,
+                this.offset,
+                this.pastDue,
+                this.providerType,
+                this.q,
+                this.status);
     }
 
     @java.lang.Override
@@ -124,16 +184,28 @@ public final class ListNativeInvoicesParams {
 
         private Optional<Long> offset = Optional.empty();
 
+        private Optional<Boolean> pastDue = Optional.empty();
+
+        private Optional<BillingProviderType> providerType = Optional.empty();
+
+        private Optional<String> q = Optional.empty();
+
+        private Optional<InvoiceStatus> status = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(ListNativeInvoicesParams other) {
+        public Builder from(ListBillingInvoicesParams other) {
             companyId(other.getCompanyId());
             contractId(other.getContractId());
             documentState(other.getDocumentState());
             limit(other.getLimit());
             offset(other.getOffset());
+            pastDue(other.getPastDue());
+            providerType(other.getProviderType());
+            q(other.getQ());
+            status(other.getStatus());
             return this;
         }
 
@@ -198,9 +270,71 @@ public final class ListNativeInvoicesParams {
             return this;
         }
 
-        public ListNativeInvoicesParams build() {
-            return new ListNativeInvoicesParams(
-                    companyId, contractId, documentState, limit, offset, additionalProperties);
+        /**
+         * <p>Only open invoices with an amount left to pay whose due date has passed.</p>
+         */
+        @JsonSetter(value = "past_due", nulls = Nulls.SKIP)
+        public Builder pastDue(Optional<Boolean> pastDue) {
+            this.pastDue = pastDue;
+            return this;
+        }
+
+        public Builder pastDue(Boolean pastDue) {
+            this.pastDue = Optional.ofNullable(pastDue);
+            return this;
+        }
+
+        /**
+         * <p>Only invoices from this billing provider. Leave empty for invoices from Schematic and Stripe.</p>
+         */
+        @JsonSetter(value = "provider_type", nulls = Nulls.SKIP)
+        public Builder providerType(Optional<BillingProviderType> providerType) {
+            this.providerType = providerType;
+            return this;
+        }
+
+        public Builder providerType(BillingProviderType providerType) {
+            this.providerType = Optional.ofNullable(providerType);
+            return this;
+        }
+
+        /**
+         * <p>Search by invoice number, provider invoice ID or company name.</p>
+         */
+        @JsonSetter(value = "q", nulls = Nulls.SKIP)
+        public Builder q(Optional<String> q) {
+            this.q = q;
+            return this;
+        }
+
+        public Builder q(String q) {
+            this.q = Optional.ofNullable(q);
+            return this;
+        }
+
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public Builder status(Optional<InvoiceStatus> status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder status(InvoiceStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        public ListBillingInvoicesParams build() {
+            return new ListBillingInvoicesParams(
+                    companyId,
+                    contractId,
+                    documentState,
+                    limit,
+                    offset,
+                    pastDue,
+                    providerType,
+                    q,
+                    status,
+                    additionalProperties);
         }
 
         @JsonAnySetter
@@ -209,7 +343,11 @@ public final class ListNativeInvoicesParams {
                     || key.equalsIgnoreCase("contract_id")
                     || key.equalsIgnoreCase("document_state")
                     || key.equalsIgnoreCase("limit")
-                    || key.equalsIgnoreCase("offset")) {
+                    || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("past_due")
+                    || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("status")) {
                 return;
             }
             this.additionalProperties.put(key, value);

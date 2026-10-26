@@ -11,6 +11,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.RetryInterceptor;
 import com.schematic.api.errors.BadRequestError;
@@ -405,7 +406,7 @@ public class AsyncRawCheckoutClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("companies")
-                .addPathSegment(companyId)
+                .addPathSegment(PathSegments.validate(companyId))
                 .addPathSegments("billing-details");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -508,7 +509,7 @@ public class AsyncRawCheckoutClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("companies")
-                .addPathSegment(companyId)
+                .addPathSegment(PathSegments.validate(companyId))
                 .addPathSegments("billing-details");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -978,7 +979,7 @@ public class AsyncRawCheckoutClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("subscription")
-                .addPathSegment(subscriptionId)
+                .addPathSegment(PathSegments.validate(subscriptionId))
                 .addPathSegments("edit-trial-end");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {

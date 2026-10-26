@@ -33,13 +33,13 @@ public final class EventBody {
     @SuppressWarnings("unchecked")
     public <T> T visit(Visitor<T> visitor) {
         if (this.type == 0) {
-            return visitor.visit((EventBodyTrack) this.value);
+            return visitor.visit((EventBodyInference) this.value);
         } else if (this.type == 1) {
             return visitor.visit((EventBodyFlagCheck) this.value);
         } else if (this.type == 2) {
-            return visitor.visit((EventBodyIdentify) this.value);
+            return visitor.visit((EventBodyTrack) this.value);
         } else if (this.type == 3) {
-            return visitor.visit((EventBodyInference) this.value);
+            return visitor.visit((EventBodyIdentify) this.value);
         }
         throw new IllegalStateException("Failed to visit value. This should never happen.");
     }
@@ -64,7 +64,7 @@ public final class EventBody {
         return this.value.toString();
     }
 
-    public static EventBody of(EventBodyTrack value) {
+    public static EventBody of(EventBodyInference value) {
         return new EventBody(value, 0);
     }
 
@@ -72,22 +72,22 @@ public final class EventBody {
         return new EventBody(value, 1);
     }
 
-    public static EventBody of(EventBodyIdentify value) {
+    public static EventBody of(EventBodyTrack value) {
         return new EventBody(value, 2);
     }
 
-    public static EventBody of(EventBodyInference value) {
+    public static EventBody of(EventBodyIdentify value) {
         return new EventBody(value, 3);
     }
 
     public interface Visitor<T> {
-        T visit(EventBodyTrack value);
+        T visit(EventBodyInference value);
 
         T visit(EventBodyFlagCheck value);
 
-        T visit(EventBodyIdentify value);
+        T visit(EventBodyTrack value);
 
-        T visit(EventBodyInference value);
+        T visit(EventBodyIdentify value);
     }
 
     static final class Deserializer extends StdDeserializer<EventBody> {
@@ -98,9 +98,14 @@ public final class EventBody {
         @java.lang.Override
         public EventBody deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
-            if (value instanceof Map<?, ?> && ((Map<?, ?>) value).containsKey("event")) {
+            if (value instanceof Map<?, ?>
+                    && ((Map<?, ?>) value).containsKey("company")
+                    && ((Map<?, ?>) value).containsKey("input_tokens")
+                    && ((Map<?, ?>) value).containsKey("output_tokens")
+                    && ((Map<?, ?>) value).containsKey("provider")
+                    && ((Map<?, ?>) value).containsKey("response_model")) {
                 try {
-                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyTrack.class));
+                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyInference.class));
                 } catch (RuntimeException e) {
                 }
             }
@@ -113,20 +118,15 @@ public final class EventBody {
                 } catch (RuntimeException e) {
                 }
             }
-            if (value instanceof Map<?, ?> && ((Map<?, ?>) value).containsKey("keys")) {
+            if (value instanceof Map<?, ?> && ((Map<?, ?>) value).containsKey("event")) {
                 try {
-                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyIdentify.class));
+                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyTrack.class));
                 } catch (RuntimeException e) {
                 }
             }
-            if (value instanceof Map<?, ?>
-                    && ((Map<?, ?>) value).containsKey("company")
-                    && ((Map<?, ?>) value).containsKey("input_tokens")
-                    && ((Map<?, ?>) value).containsKey("output_tokens")
-                    && ((Map<?, ?>) value).containsKey("provider")
-                    && ((Map<?, ?>) value).containsKey("response_model")) {
+            if (value instanceof Map<?, ?> && ((Map<?, ?>) value).containsKey("keys")) {
                 try {
-                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyInference.class));
+                    return of(ObjectMappers.JSON_MAPPER.convertValue(value, EventBodyIdentify.class));
                 } catch (RuntimeException e) {
                 }
             }

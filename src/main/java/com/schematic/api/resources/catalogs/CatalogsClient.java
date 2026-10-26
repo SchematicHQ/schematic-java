@@ -16,6 +16,8 @@ import com.schematic.api.resources.catalogs.types.GetConfigurationResponse;
 import com.schematic.api.resources.catalogs.types.GetCreditBundlesInCatalogResponse;
 import com.schematic.api.resources.catalogs.types.GetDerivedFeaturesResponse;
 import com.schematic.api.resources.catalogs.types.GetPlansInCatalogResponse;
+import com.schematic.api.resources.catalogs.types.GetPublicCatalogByIdResponse;
+import com.schematic.api.resources.catalogs.types.GetPublicCatalogResponse;
 import com.schematic.api.resources.catalogs.types.ListCatalogsResponse;
 import com.schematic.api.resources.catalogs.types.UpdateCatalogResponse;
 import com.schematic.api.resources.catalogs.types.UpdateConfigurationResponse;
@@ -183,5 +185,21 @@ public class CatalogsClient {
 
     public void removePlan(String catalogId, String planId, RequestOptions requestOptions) {
         this.rawClient.removePlan(catalogId, planId, requestOptions).body();
+    }
+
+    public GetPublicCatalogResponse getPublicCatalog() {
+        return this.rawClient.getPublicCatalog().body();
+    }
+
+    public GetPublicCatalogResponse getPublicCatalog(RequestOptions requestOptions) {
+        return this.rawClient.getPublicCatalog(requestOptions).body();
+    }
+
+    public GetPublicCatalogByIdResponse getPublicCatalogById(String catalogId) {
+        return this.rawClient.getPublicCatalogById(catalogId).body();
+    }
+
+    public GetPublicCatalogByIdResponse getPublicCatalogById(String catalogId, RequestOptions requestOptions) {
+        return this.rawClient.getPublicCatalogById(catalogId, requestOptions).body();
     }
 }

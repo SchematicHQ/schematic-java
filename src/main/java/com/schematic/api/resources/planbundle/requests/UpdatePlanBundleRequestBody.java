@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.PlanBundleCreditGrantRequestBody;
 import com.schematic.api.types.PlanBundleEntitlementRequestBody;
+import com.schematic.api.types.RenewalPolicy;
 import com.schematic.api.types.UpdatePlanRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public final class UpdatePlanBundleRequestBody {
 
     private final Optional<String> planVersionId;
 
+    private final Optional<RenewalPolicy> renewalPolicy;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdatePlanBundleRequestBody(
@@ -45,12 +48,14 @@ public final class UpdatePlanBundleRequestBody {
             List<PlanBundleEntitlementRequestBody> entitlements,
             UpdatePlanRequestBody plan,
             Optional<String> planVersionId,
+            Optional<RenewalPolicy> renewalPolicy,
             Map<String, Object> additionalProperties) {
         this.billingProduct = billingProduct;
         this.creditGrants = creditGrants;
         this.entitlements = entitlements;
         this.plan = plan;
         this.planVersionId = planVersionId;
+        this.renewalPolicy = renewalPolicy;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,6 +84,11 @@ public final class UpdatePlanBundleRequestBody {
         return planVersionId;
     }
 
+    @JsonProperty("renewal_policy")
+    public Optional<RenewalPolicy> getRenewalPolicy() {
+        return renewalPolicy;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -95,12 +105,19 @@ public final class UpdatePlanBundleRequestBody {
                 && creditGrants.equals(other.creditGrants)
                 && entitlements.equals(other.entitlements)
                 && plan.equals(other.plan)
-                && planVersionId.equals(other.planVersionId);
+                && planVersionId.equals(other.planVersionId)
+                && renewalPolicy.equals(other.renewalPolicy);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.billingProduct, this.creditGrants, this.entitlements, this.plan, this.planVersionId);
+        return Objects.hash(
+                this.billingProduct,
+                this.creditGrants,
+                this.entitlements,
+                this.plan,
+                this.planVersionId,
+                this.renewalPolicy);
     }
 
     @java.lang.Override
@@ -142,11 +159,17 @@ public final class UpdatePlanBundleRequestBody {
         _FinalStage planVersionId(Optional<String> planVersionId);
 
         _FinalStage planVersionId(String planVersionId);
+
+        _FinalStage renewalPolicy(Optional<RenewalPolicy> renewalPolicy);
+
+        _FinalStage renewalPolicy(RenewalPolicy renewalPolicy);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements PlanStage, _FinalStage {
         private UpdatePlanRequestBody plan;
+
+        private Optional<RenewalPolicy> renewalPolicy = Optional.empty();
 
         private Optional<String> planVersionId = Optional.empty();
 
@@ -167,6 +190,7 @@ public final class UpdatePlanBundleRequestBody {
             entitlements(other.getEntitlements());
             plan(other.getPlan());
             planVersionId(other.getPlanVersionId());
+            renewalPolicy(other.getRenewalPolicy());
             return this;
         }
 
@@ -174,6 +198,19 @@ public final class UpdatePlanBundleRequestBody {
         @JsonSetter("plan")
         public _FinalStage plan(@NotNull UpdatePlanRequestBody plan) {
             this.plan = Objects.requireNonNull(plan, "plan must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage renewalPolicy(RenewalPolicy renewalPolicy) {
+            this.renewalPolicy = Optional.ofNullable(renewalPolicy);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "renewal_policy", nulls = Nulls.SKIP)
+        public _FinalStage renewalPolicy(Optional<RenewalPolicy> renewalPolicy) {
+            this.renewalPolicy = renewalPolicy;
             return this;
         }
 
@@ -243,7 +280,13 @@ public final class UpdatePlanBundleRequestBody {
         @java.lang.Override
         public UpdatePlanBundleRequestBody build() {
             return new UpdatePlanBundleRequestBody(
-                    billingProduct, creditGrants, entitlements, plan, planVersionId, additionalProperties);
+                    billingProduct,
+                    creditGrants,
+                    entitlements,
+                    plan,
+                    planVersionId,
+                    renewalPolicy,
+                    additionalProperties);
         }
 
         @JsonAnySetter
@@ -252,7 +295,8 @@ public final class UpdatePlanBundleRequestBody {
                     || key.equalsIgnoreCase("credit_grants")
                     || key.equalsIgnoreCase("entitlements")
                     || key.equalsIgnoreCase("plan")
-                    || key.equalsIgnoreCase("plan_version_id")) {
+                    || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("renewal_policy")) {
                 return;
             }
             this.additionalProperties.put(key, value);

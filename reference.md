@@ -1,4 +1,214 @@
 # Reference
+<details><summary><code>client.postApiKeys()</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.postApiKeys();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.putApiKeysApiKeyId(apiKeyId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.putApiKeysApiKeyId("api_key_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**apiKeyId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.deleteApiKeysApiKeyId(apiKeyId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.deleteApiKeysApiKeyId("api_key_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**apiKeyId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.postEnvironments()</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.postEnvironments();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.putEnvironmentsEnvironmentId(environmentId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.putEnvironmentsEnvironmentId("environment_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**environmentId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.deleteEnvironmentsEnvironmentId(environmentId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.deleteEnvironmentsEnvironmentId("environment_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**environmentId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.getCreditLedger()</code></summary>
 <dl>
 <dd>
@@ -303,83 +513,6 @@ client.accounts().listApiKeys(
 </dl>
 </details>
 
-<details><summary><code>client.accounts.createApiKey(request) -> CreateApiKeyResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.accounts().createApiKey(
-    CreateApiKeyRequestBody
-        .builder()
-        .name("name")
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**description:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**environmentId:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**name:** `String` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**rateLimitPercent:** `Optional<Long>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**readonly:** `Optional<Boolean>` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.accounts.getApiKey(apiKeyId) -> GetApiKeyResponse</code></summary>
 <dl>
 <dd>
@@ -394,115 +527,6 @@ client.accounts().createApiKey(
 
 ```java
 client.accounts().getApiKey("api_key_id");
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**apiKeyId:** `String` — api_key_id
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.accounts.updateApiKey(apiKeyId, request) -> UpdateApiKeyResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.accounts().updateApiKey(
-    "api_key_id",
-    UpdateApiKeyRequestBody
-        .builder()
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**apiKeyId:** `String` — api_key_id
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**description:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**name:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**rateLimitPercent:** `Optional<Long>` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.accounts.deleteApiKey(apiKeyId) -> DeleteApiKeyResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.accounts().deleteApiKey("api_key_id");
 ```
 </dd>
 </dl>
@@ -904,60 +928,6 @@ client.accounts().listEnvironments(
 </dl>
 </details>
 
-<details><summary><code>client.accounts.createEnvironment(request) -> CreateEnvironmentResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.accounts().createEnvironment(
-    CreateEnvironmentRequestBody
-        .builder()
-        .environmentType(EnvironmentType.DEVELOPMENT)
-        .name("name")
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**environmentType:** `EnvironmentType` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**name:** `String` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.accounts.getEnvironment(environmentId) -> GetEnvironmentResponse</code></summary>
 <dl>
 <dd>
@@ -972,115 +942,6 @@ client.accounts().createEnvironment(
 
 ```java
 client.accounts().getEnvironment("environment_id");
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**environmentId:** `String` — environment_id
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.accounts.updateEnvironment(environmentId, request) -> UpdateEnvironmentResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.accounts().updateEnvironment(
-    "environment_id",
-    UpdateEnvironmentRequestBody
-        .builder()
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**environmentId:** `String` — environment_id
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**environmentType:** `Optional<EnvironmentType>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**name:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requireContextSignature:** `Optional<Boolean>` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.accounts.deleteEnvironment(environmentId) -> DeleteEnvironmentResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.accounts().deleteEnvironment("environment_id");
 ```
 </dd>
 </dl>
@@ -2426,6 +2287,14 @@ client.billing().upsertPaymentMethod(
 <dd>
 
 **cardLast4:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customerBillingDetails:** `Optional<PaymentMethodBillingDetailsRequestBody>` 
     
 </dd>
 </dl>
@@ -4089,7 +3958,7 @@ client.billing().getCompanyNativeSubscription("company_id");
 </dl>
 </details>
 
-<details><summary><code>client.billing.listNativeInvoices() -> ListNativeInvoicesResponse</code></summary>
+<details><summary><code>client.billing.listBillingInvoices() -> ListBillingInvoicesResponse</code></summary>
 <dl>
 <dd>
 
@@ -4102,12 +3971,16 @@ client.billing().getCompanyNativeSubscription("company_id");
 <dd>
 
 ```java
-client.billing().listNativeInvoices(
-    ListNativeInvoicesRequest
+client.billing().listBillingInvoices(
+    ListBillingInvoicesRequest
         .builder()
         .companyId("company_id")
         .contractId("contract_id")
         .documentState(InvoiceDocumentState.CREDITED)
+        .pastDue(true)
+        .providerType(BillingProviderType.METRONOME)
+        .q("q")
+        .status(InvoiceStatus.DRAFT)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -4150,6 +4023,38 @@ client.billing().listNativeInvoices(
 <dl>
 <dd>
 
+**pastDue:** `Optional<Boolean>` — Only open invoices with an amount left to pay whose due date has passed.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**providerType:** `Optional<BillingProviderType>` — Only invoices from this billing provider. Leave empty for invoices from Schematic and Stripe.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` — Search by invoice number, provider invoice ID or company name.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `Optional<InvoiceStatus>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **limit:** `Optional<Long>` — Page limit (default 100)
     
 </dd>
@@ -4170,7 +4075,7 @@ client.billing().listNativeInvoices(
 </dl>
 </details>
 
-<details><summary><code>client.billing.getNativeInvoice(invoiceId) -> GetNativeInvoiceResponse</code></summary>
+<details><summary><code>client.billing.getBillingInvoice(invoiceId) -> GetBillingInvoiceResponse</code></summary>
 <dl>
 <dd>
 
@@ -4183,7 +4088,7 @@ client.billing().listNativeInvoices(
 <dd>
 
 ```java
-client.billing().getNativeInvoice("invoice_id");
+client.billing().getBillingInvoice("invoice_id");
 ```
 </dd>
 </dl>
@@ -4290,7 +4195,7 @@ client.billing().finalizeNativeInvoice("invoice_id");
 </dl>
 </details>
 
-<details><summary><code>client.billing.markNativeInvoicePaid(invoiceId, request) -> MarkNativeInvoicePaidResponse</code></summary>
+<details><summary><code>client.billing.markBillingInvoicePaid(invoiceId, request) -> MarkBillingInvoicePaidResponse</code></summary>
 <dl>
 <dd>
 
@@ -4303,7 +4208,7 @@ client.billing().finalizeNativeInvoice("invoice_id");
 <dd>
 
 ```java
-client.billing().markNativeInvoicePaid(
+client.billing().markBillingInvoicePaid(
     "invoice_id",
     MarkInvoicePaidRequestBody
         .builder()
@@ -4448,7 +4353,7 @@ client.billing().voidNativeInvoice("invoice_id");
 </dl>
 </details>
 
-<details><summary><code>client.billing.countNativeInvoices() -> CountNativeInvoicesResponse</code></summary>
+<details><summary><code>client.billing.countBillingInvoices() -> CountBillingInvoicesResponse</code></summary>
 <dl>
 <dd>
 
@@ -4461,12 +4366,16 @@ client.billing().voidNativeInvoice("invoice_id");
 <dd>
 
 ```java
-client.billing().countNativeInvoices(
-    CountNativeInvoicesRequest
+client.billing().countBillingInvoices(
+    CountBillingInvoicesRequest
         .builder()
         .companyId("company_id")
         .contractId("contract_id")
         .documentState(InvoiceDocumentState.CREDITED)
+        .pastDue(true)
+        .providerType(BillingProviderType.METRONOME)
+        .q("q")
+        .status(InvoiceStatus.DRAFT)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -4502,6 +4411,38 @@ client.billing().countNativeInvoices(
 <dd>
 
 **documentState:** `Optional<InvoiceDocumentState>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pastDue:** `Optional<Boolean>` — Only open invoices with an amount left to pay whose due date has passed.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**providerType:** `Optional<BillingProviderType>` — Only invoices from this billing provider. Leave empty for invoices from Schematic and Stripe.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` — Search by invoice number, provider invoice ID or company name.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `Optional<InvoiceStatus>` 
     
 </dd>
 </dl>
@@ -7127,7 +7068,7 @@ client.credits().createCreditSpendPolicy(
 <dl>
 <dd>
 
-**windowUnit:** `Optional<CreditSpendWindowUnit>` — The window that window_amount applies to: one UTC hour or one UTC day. Required with window_amount.
+**windowUnit:** `Optional<CreditSpendWindowUnit>` — The window that window_amount applies to: one UTC hour, one UTC day, one week from Monday 00:00 UTC, one calendar month from the 1st 00:00 UTC, or the company's current billing period. billing_period applies to company policies only, and a company without an active subscription falls back to the calendar month. Required with window_amount.
     
 </dd>
 </dl>
@@ -7483,6 +7424,7 @@ client.credits().listCreditEventLedger(
         .endTime("end_time")
         .eventType(CreditEventType.ADJUSTMENT)
         .featureId("feature_id")
+        .sourceEventId("source_event_id")
         .startTime("start_time")
         .limit(1000000L)
         .offset(1000000L)
@@ -7535,6 +7477,14 @@ client.credits().listCreditEventLedger(
 <dd>
 
 **featureId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sourceEventId:** `Optional<String>` — Return only entries drawn by this track or inference event. Pass the event ID that POST /events returned for it.
     
 </dd>
 </dl>
@@ -7570,6 +7520,46 @@ client.credits().listCreditEventLedger(
 </dl>
 </details>
 
+<details><summary><code>client.credits.getCreditEventLedgerEntry(ledgerEntryId) -> GetCreditEventLedgerEntryResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.credits().getCreditEventLedgerEntry("ledger_entry_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ledgerEntryId:** `String` — ledger_entry_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.credits.countCreditEventLedger() -> CountCreditEventLedgerResponse</code></summary>
 <dl>
 <dd>
@@ -7591,6 +7581,7 @@ client.credits().countCreditEventLedger(
         .endTime("end_time")
         .eventType(CreditEventType.ADJUSTMENT)
         .featureId("feature_id")
+        .sourceEventId("source_event_id")
         .startTime("start_time")
         .limit(1000000L)
         .offset(1000000L)
@@ -7643,6 +7634,14 @@ client.credits().countCreditEventLedger(
 <dd>
 
 **featureId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sourceEventId:** `Optional<String>` — Return only entries drawn by this track or inference event. Pass the event ID that POST /events returned for it.
     
 </dd>
 </dl>
@@ -8411,6 +8410,71 @@ client.catalogs().removePlan("catalog_id", "plan_id");
 <dd>
 
 **planId:** `String` — plan_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.getPublicCatalog() -> GetPublicCatalogResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().getPublicCatalog();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.catalogs.getPublicCatalogById(catalogId) -> GetPublicCatalogByIdResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.catalogs().getPublicCatalogById("catalog_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**catalogId:** `String` — catalog_id
     
 </dd>
 </dl>
@@ -15585,6 +15649,14 @@ client.plans().retryCustomPlanBilling(
 <dl>
 <dd>
 
+**endDate:** `Optional<OffsetDateTime>` — When a plan that doesn't renew ends. Moved back to the last renewal on or before it. When omitted, the end date set at finalize is reissued. Only honored when the retry creates a subscription.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **prorateFirstPeriod:** `Optional<Boolean>` — When true, the partial period between the subscription starting and its renewal date is billed pro rata straight away. When false that period is free and no invoice is raised until the renewal date. Only applies alongside billing_cycle_anchor. Defaults to true.
     
 </dd>
@@ -17428,6 +17500,14 @@ client.planbundle().createCustomPlanBundle(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**renewalPolicy:** `Optional<RenewalPolicy>` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -17508,6 +17588,14 @@ client.planbundle().createPlanBundle(
 <dd>
 
 **plan:** `CreatePlanRequestBody` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**renewalPolicy:** `Optional<RenewalPolicy>` 
     
 </dd>
 </dl>
@@ -17607,6 +17695,14 @@ client.planbundle().updatePlanBundle(
 <dd>
 
 **planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**renewalPolicy:** `Optional<RenewalPolicy>` 
     
 </dd>
 </dl>

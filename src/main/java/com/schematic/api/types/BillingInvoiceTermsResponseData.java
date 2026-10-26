@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingInvoiceTermsResponseData.Builder.class)
 public final class BillingInvoiceTermsResponseData {
+    private final Optional<BillingInvoiceBillingDetailsResponseData> billingDetails;
+
     private final BillingCollectionMethod collectionMethod;
 
     private final Collector collector;
@@ -36,6 +38,7 @@ public final class BillingInvoiceTermsResponseData {
     private final Map<String, Object> additionalProperties;
 
     private BillingInvoiceTermsResponseData(
+            Optional<BillingInvoiceBillingDetailsResponseData> billingDetails,
             BillingCollectionMethod collectionMethod,
             Collector collector,
             Optional<Currency> currency,
@@ -43,6 +46,7 @@ public final class BillingInvoiceTermsResponseData {
             PaymentGating paymentGating,
             Optional<String> purchaseOrder,
             Map<String, Object> additionalProperties) {
+        this.billingDetails = billingDetails;
         this.collectionMethod = collectionMethod;
         this.collector = collector;
         this.currency = currency;
@@ -50,6 +54,14 @@ public final class BillingInvoiceTermsResponseData {
         this.paymentGating = paymentGating;
         this.purchaseOrder = purchaseOrder;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Who invoices are addressed to. On an invoice, these are the details copied when it was finalized. Null when the contract holds none.
+     */
+    @JsonProperty("billing_details")
+    public Optional<BillingInvoiceBillingDetailsResponseData> getBillingDetails() {
+        return billingDetails;
     }
 
     @JsonProperty("collection_method")
@@ -94,7 +106,8 @@ public final class BillingInvoiceTermsResponseData {
     }
 
     private boolean equalTo(BillingInvoiceTermsResponseData other) {
-        return collectionMethod.equals(other.collectionMethod)
+        return billingDetails.equals(other.billingDetails)
+                && collectionMethod.equals(other.collectionMethod)
                 && collector.equals(other.collector)
                 && currency.equals(other.currency)
                 && daysUntilDue.equals(other.daysUntilDue)
@@ -105,6 +118,7 @@ public final class BillingInvoiceTermsResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingDetails,
                 this.collectionMethod,
                 this.collector,
                 this.currency,
@@ -143,6 +157,13 @@ public final class BillingInvoiceTermsResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Who invoices are addressed to. On an invoice, these are the details copied when it was finalized. Null when the contract holds none.</p>
+         */
+        _FinalStage billingDetails(Optional<BillingInvoiceBillingDetailsResponseData> billingDetails);
+
+        _FinalStage billingDetails(BillingInvoiceBillingDetailsResponseData billingDetails);
+
         _FinalStage currency(Optional<Currency> currency);
 
         _FinalStage currency(Currency currency);
@@ -171,12 +192,15 @@ public final class BillingInvoiceTermsResponseData {
 
         private Optional<Currency> currency = Optional.empty();
 
+        private Optional<BillingInvoiceBillingDetailsResponseData> billingDetails = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         @java.lang.Override
         public Builder from(BillingInvoiceTermsResponseData other) {
+            billingDetails(other.getBillingDetails());
             collectionMethod(other.getCollectionMethod());
             collector(other.getCollector());
             currency(other.getCurrency());
@@ -246,9 +270,30 @@ public final class BillingInvoiceTermsResponseData {
             return this;
         }
 
+        /**
+         * <p>Who invoices are addressed to. On an invoice, these are the details copied when it was finalized. Null when the contract holds none.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingDetails(BillingInvoiceBillingDetailsResponseData billingDetails) {
+            this.billingDetails = Optional.ofNullable(billingDetails);
+            return this;
+        }
+
+        /**
+         * <p>Who invoices are addressed to. On an invoice, these are the details copied when it was finalized. Null when the contract holds none.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_details", nulls = Nulls.SKIP)
+        public _FinalStage billingDetails(Optional<BillingInvoiceBillingDetailsResponseData> billingDetails) {
+            this.billingDetails = billingDetails;
+            return this;
+        }
+
         @java.lang.Override
         public BillingInvoiceTermsResponseData build() {
             return new BillingInvoiceTermsResponseData(
+                    billingDetails,
                     collectionMethod,
                     collector,
                     currency,
@@ -260,7 +305,8 @@ public final class BillingInvoiceTermsResponseData {
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("collection_method")
+            if (key.equalsIgnoreCase("billing_details")
+                    || key.equalsIgnoreCase("collection_method")
                     || key.equalsIgnoreCase("collector")
                     || key.equalsIgnoreCase("currency")
                     || key.equalsIgnoreCase("days_until_due")

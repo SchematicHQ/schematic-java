@@ -21,17 +21,17 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ListNativeInvoicesResponse.Builder.class)
-public final class ListNativeInvoicesResponse {
+@JsonDeserialize(builder = ListBillingInvoicesResponse.Builder.class)
+public final class ListBillingInvoicesResponse {
     private final List<BillingInvoiceResponseData> data;
 
-    private final ListNativeInvoicesParams params;
+    private final ListBillingInvoicesParams params;
 
     private final Map<String, Object> additionalProperties;
 
-    private ListNativeInvoicesResponse(
+    private ListBillingInvoicesResponse(
             List<BillingInvoiceResponseData> data,
-            ListNativeInvoicesParams params,
+            ListBillingInvoicesParams params,
             Map<String, Object> additionalProperties) {
         this.data = data;
         this.params = params;
@@ -47,14 +47,14 @@ public final class ListNativeInvoicesResponse {
      * @return Input parameters
      */
     @JsonProperty("params")
-    public ListNativeInvoicesParams getParams() {
+    public ListBillingInvoicesParams getParams() {
         return params;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ListNativeInvoicesResponse && equalTo((ListNativeInvoicesResponse) other);
+        return other instanceof ListBillingInvoicesResponse && equalTo((ListBillingInvoicesResponse) other);
     }
 
     @JsonAnyGetter
@@ -62,7 +62,7 @@ public final class ListNativeInvoicesResponse {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ListNativeInvoicesResponse other) {
+    private boolean equalTo(ListBillingInvoicesResponse other) {
         return data.equals(other.data) && params.equals(other.params);
     }
 
@@ -84,13 +84,13 @@ public final class ListNativeInvoicesResponse {
         /**
          * <p>Input parameters</p>
          */
-        _FinalStage params(@NotNull ListNativeInvoicesParams params);
+        _FinalStage params(@NotNull ListBillingInvoicesParams params);
 
-        Builder from(ListNativeInvoicesResponse other);
+        Builder from(ListBillingInvoicesResponse other);
     }
 
     public interface _FinalStage {
-        ListNativeInvoicesResponse build();
+        ListBillingInvoicesResponse build();
 
         _FinalStage additionalProperty(String key, Object value);
 
@@ -105,7 +105,7 @@ public final class ListNativeInvoicesResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ParamsStage, _FinalStage {
-        private ListNativeInvoicesParams params;
+        private ListBillingInvoicesParams params;
 
         private List<BillingInvoiceResponseData> data = new ArrayList<>();
 
@@ -114,7 +114,7 @@ public final class ListNativeInvoicesResponse {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(ListNativeInvoicesResponse other) {
+        public Builder from(ListBillingInvoicesResponse other) {
             data(other.getData());
             params(other.getParams());
             return this;
@@ -126,7 +126,7 @@ public final class ListNativeInvoicesResponse {
          */
         @java.lang.Override
         @JsonSetter("params")
-        public _FinalStage params(@NotNull ListNativeInvoicesParams params) {
+        public _FinalStage params(@NotNull ListBillingInvoicesParams params) {
             this.params = Objects.requireNonNull(params, "params must not be null");
             return this;
         }
@@ -156,8 +156,8 @@ public final class ListNativeInvoicesResponse {
         }
 
         @java.lang.Override
-        public ListNativeInvoicesResponse build() {
-            return new ListNativeInvoicesResponse(data, params, additionalProperties);
+        public ListBillingInvoicesResponse build() {
+            return new ListBillingInvoicesResponse(data, params, additionalProperties);
         }
 
         @JsonAnySetter

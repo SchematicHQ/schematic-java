@@ -11,6 +11,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.RetryInterceptor;
@@ -233,7 +234,7 @@ public class RawScheduledcheckoutClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("scheduled-checkout")
-                .addPathSegment(scheduledCheckoutId);
+                .addPathSegment(PathSegments.validate(scheduledCheckoutId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -316,7 +317,7 @@ public class RawScheduledcheckoutClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("scheduled-checkout")
-                .addPathSegment(scheduledCheckoutId);
+                .addPathSegment(PathSegments.validate(scheduledCheckoutId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);

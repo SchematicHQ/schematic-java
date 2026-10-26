@@ -15,10 +15,11 @@ import org.junit.jupiter.api.Test;
 
 public final class UndiscriminatedUnionTest {
     @Test
-    public void testEventBody_EventBodyTrack() throws Exception {
-        String json = "{\"event\":\"test\"}";
+    public void testEventBody_EventBodyInference() throws Exception {
+        String json =
+                "{\"company\":{},\"input_tokens\":1,\"output_tokens\":1,\"provider\":\"test\",\"response_model\":\"test\"}";
         EventBody union = ObjectMappers.JSON_MAPPER.readValue(json, EventBody.class);
-        assertTrue(union.get() instanceof EventBodyTrack, "Expected EventBodyTrack but got different variant");
+        assertTrue(union.get() instanceof EventBodyInference, "Expected EventBodyInference but got different variant");
     }
 
     @Test
@@ -29,17 +30,16 @@ public final class UndiscriminatedUnionTest {
     }
 
     @Test
+    public void testEventBody_EventBodyTrack() throws Exception {
+        String json = "{\"event\":\"test\"}";
+        EventBody union = ObjectMappers.JSON_MAPPER.readValue(json, EventBody.class);
+        assertTrue(union.get() instanceof EventBodyTrack, "Expected EventBodyTrack but got different variant");
+    }
+
+    @Test
     public void testEventBody_EventBodyIdentify() throws Exception {
         String json = "{\"keys\":{}}";
         EventBody union = ObjectMappers.JSON_MAPPER.readValue(json, EventBody.class);
         assertTrue(union.get() instanceof EventBodyIdentify, "Expected EventBodyIdentify but got different variant");
-    }
-
-    @Test
-    public void testEventBody_EventBodyInference() throws Exception {
-        String json =
-                "{\"company\":{},\"input_tokens\":1,\"output_tokens\":1,\"provider\":\"test\",\"response_model\":\"test\"}";
-        EventBody union = ObjectMappers.JSON_MAPPER.readValue(json, EventBody.class);
-        assertTrue(union.get() instanceof EventBodyInference, "Expected EventBodyInference but got different variant");
     }
 }

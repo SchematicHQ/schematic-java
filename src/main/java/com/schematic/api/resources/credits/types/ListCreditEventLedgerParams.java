@@ -35,6 +35,8 @@ public final class ListCreditEventLedgerParams {
 
     private final Optional<Long> offset;
 
+    private final Optional<String> sourceEventId;
+
     private final Optional<String> startTime;
 
     private final Map<String, Object> additionalProperties;
@@ -47,6 +49,7 @@ public final class ListCreditEventLedgerParams {
             Optional<String> featureId,
             Optional<Long> limit,
             Optional<Long> offset,
+            Optional<String> sourceEventId,
             Optional<String> startTime,
             Map<String, Object> additionalProperties) {
         this.billingCreditId = billingCreditId;
@@ -56,6 +59,7 @@ public final class ListCreditEventLedgerParams {
         this.featureId = featureId;
         this.limit = limit;
         this.offset = offset;
+        this.sourceEventId = sourceEventId;
         this.startTime = startTime;
         this.additionalProperties = additionalProperties;
     }
@@ -101,6 +105,14 @@ public final class ListCreditEventLedgerParams {
         return offset;
     }
 
+    /**
+     * @return Return only entries drawn by this track or inference event. Pass the event ID that POST /events returned for it.
+     */
+    @JsonProperty("source_event_id")
+    public Optional<String> getSourceEventId() {
+        return sourceEventId;
+    }
+
     @JsonProperty("start_time")
     public Optional<String> getStartTime() {
         return startTime;
@@ -125,6 +137,7 @@ public final class ListCreditEventLedgerParams {
                 && featureId.equals(other.featureId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
+                && sourceEventId.equals(other.sourceEventId)
                 && startTime.equals(other.startTime);
     }
 
@@ -138,6 +151,7 @@ public final class ListCreditEventLedgerParams {
                 this.featureId,
                 this.limit,
                 this.offset,
+                this.sourceEventId,
                 this.startTime);
     }
 
@@ -166,6 +180,8 @@ public final class ListCreditEventLedgerParams {
 
         private Optional<Long> offset = Optional.empty();
 
+        private Optional<String> sourceEventId = Optional.empty();
+
         private Optional<String> startTime = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -180,6 +196,7 @@ public final class ListCreditEventLedgerParams {
             featureId(other.getFeatureId());
             limit(other.getLimit());
             offset(other.getOffset());
+            sourceEventId(other.getSourceEventId());
             startTime(other.getStartTime());
             return this;
         }
@@ -267,6 +284,20 @@ public final class ListCreditEventLedgerParams {
             return this;
         }
 
+        /**
+         * <p>Return only entries drawn by this track or inference event. Pass the event ID that POST /events returned for it.</p>
+         */
+        @JsonSetter(value = "source_event_id", nulls = Nulls.SKIP)
+        public Builder sourceEventId(Optional<String> sourceEventId) {
+            this.sourceEventId = sourceEventId;
+            return this;
+        }
+
+        public Builder sourceEventId(String sourceEventId) {
+            this.sourceEventId = Optional.ofNullable(sourceEventId);
+            return this;
+        }
+
         @JsonSetter(value = "start_time", nulls = Nulls.SKIP)
         public Builder startTime(Optional<String> startTime) {
             this.startTime = startTime;
@@ -287,6 +318,7 @@ public final class ListCreditEventLedgerParams {
                     featureId,
                     limit,
                     offset,
+                    sourceEventId,
                     startTime,
                     additionalProperties);
         }
@@ -300,6 +332,7 @@ public final class ListCreditEventLedgerParams {
                     || key.equalsIgnoreCase("feature_id")
                     || key.equalsIgnoreCase("limit")
                     || key.equalsIgnoreCase("offset")
+                    || key.equalsIgnoreCase("source_event_id")
                     || key.equalsIgnoreCase("start_time")) {
                 return;
             }

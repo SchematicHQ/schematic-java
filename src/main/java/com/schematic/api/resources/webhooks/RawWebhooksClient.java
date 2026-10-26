@@ -11,6 +11,7 @@ import com.schematic.api.core.BodyProperties;
 import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.MediaTypes;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.core.PathSegments;
 import com.schematic.api.core.QueryStringMapper;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.core.RetryInterceptor;
@@ -160,7 +161,7 @@ public class RawWebhooksClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhook-events")
-                .addPathSegment(webhookEventId);
+                .addPathSegment(PathSegments.validate(webhookEventId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -498,7 +499,7 @@ public class RawWebhooksClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
-                .addPathSegment(webhookId);
+                .addPathSegment(PathSegments.validate(webhookId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -577,7 +578,7 @@ public class RawWebhooksClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
-                .addPathSegment(webhookId);
+                .addPathSegment(PathSegments.validate(webhookId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -659,7 +660,7 @@ public class RawWebhooksClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
-                .addPathSegment(webhookId);
+                .addPathSegment(PathSegments.validate(webhookId));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -735,7 +736,7 @@ public class RawWebhooksClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
-                .addPathSegment(webhookId)
+                .addPathSegment(PathSegments.validate(webhookId))
                 .addPathSegments("test");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
