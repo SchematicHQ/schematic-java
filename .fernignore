@@ -29,6 +29,7 @@ src/main/java/com/schematic/api/logger/LogLevel.java
 src/main/java/com/schematic/api/datastream/
 src/main/java/com/schematic/api/logger/SchematicLogger.java
 src/main/java/com/schematic/webhook/
+src/main/java/com/schematic/contextsig/
 src/test/java/com/schematic/api/HttpEventSenderTest.java
 src/test/java/com/schematic/api/TestCache.java
 src/test/java/com/schematic/api/TestEventBuffer.java
@@ -41,6 +42,8 @@ src/test/java/com/schematic/api/credits/
 src/test/java/com/schematic/api/datastream/
 src/test/resources/quantity_cost.json
 src/test/java/com/schematic/webhook/
+src/test/java/com/schematic/contextsig/
+src/test/resources/contextsig/
 .fern/replay.lock
 .fern/replay.yml
 .gitattributes
