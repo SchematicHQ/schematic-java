@@ -24,10 +24,10 @@ public final class CreditLeaseDefaults {
      * The furthest out the API will hold credits, so a larger server-mode reservation TTL would
      * fail every check.
      */
-    public static final Duration MAX_RESERVATION_TTL = Duration.ofHours(1);
+    public static final Duration MAX_RESERVATION_TTL = Duration.ofHours(24);
 
     /**
-     * Held back from {@link #MAX_RESERVATION_TTL} because the API measures that hour against its
+     * Held back from {@link #MAX_RESERVATION_TTL} because the API measures that span against its
      * own clock while the SDK computes {@code expiresAt} against the caller's: a client running
      * ahead would otherwise be rejected at exactly the cap.
      */

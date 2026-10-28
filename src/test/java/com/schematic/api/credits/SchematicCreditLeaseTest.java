@@ -162,7 +162,7 @@ class SchematicCreditLeaseTest {
                 .logger(logger)
                 .creditLeases(CreditLeaseConfig.builder()
                         .mode(CreditLeaseMode.SERVER)
-                        .defaultReservationTtl(Duration.ofHours(2))
+                        .defaultReservationTtl(Duration.ofHours(25))
                         .build())
                 .build()) {
             verify(logger).warn(contains("longer than the API will hold"));

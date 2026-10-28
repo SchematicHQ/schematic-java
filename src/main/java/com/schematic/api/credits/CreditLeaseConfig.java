@@ -137,8 +137,8 @@ public final class CreditLeaseConfig {
         }
 
         /**
-         * Reservation lifetime. Defaults to 60 seconds. In server mode it is capped at an hour
-         * less a minute of room for clock skew, since an hour out is the furthest the API will
+         * Reservation lifetime. Defaults to 60 seconds. In server mode it is capped at 24 hours
+         * less a minute of room for clock skew, since 24 hours out is the furthest the API will
          * hold credits and it measures that against its own clock. Size it above the longest
          * expected gap between a check and its settle: a settle arriving after the TTL still
          * bills the server but no longer re-debits the local lease, so the local balance reads

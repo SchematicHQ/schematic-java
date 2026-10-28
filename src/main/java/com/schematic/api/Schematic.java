@@ -195,7 +195,7 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             Duration configuredTtl = creditLeases.getDefaultReservationTtl() != null
                     ? creditLeases.getDefaultReservationTtl()
                     : CreditLeaseDefaults.RESERVATION_TTL;
-            // The API refuses a hold expiring more than an hour after its own clock, and this TTL
+            // The API refuses a hold expiring more than 24 hours after its own clock, and this TTL
             // is applied to the caller's, so clamp a step below the cap to leave room for skew.
             // Only server mode sends the value to the API: in client mode it sizes the local
             // sweep, so clamping it there would shorten holds for no reason.

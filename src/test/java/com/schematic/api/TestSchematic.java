@@ -510,18 +510,18 @@ class SchematicTest {
 
     @Test
     void serverReservationTtl_IsClampedBelowTheApiCapButOnlyForServerMode() throws Exception {
-        Duration twoHours = Duration.ofHours(2);
+        Duration overCap = Duration.ofHours(25);
         Duration clamped =
                 CreditLeaseDefaults.MAX_RESERVATION_TTL.minus(CreditLeaseDefaults.RESERVATION_TTL_SKEW_ALLOWANCE);
 
-        try (Schematic server = leasedClient(CreditLeaseMode.SERVER, twoHours);
-                Schematic client = leasedClient(CreditLeaseMode.CLIENT, twoHours)) {
+        try (Schematic server = leasedClient(CreditLeaseMode.SERVER, overCap);
+                Schematic client = leasedClient(CreditLeaseMode.CLIENT, overCap)) {
             // The API refuses a hold expiring more than its cap ahead of its own clock, and this
             // TTL is measured on ours, so the clamp leaves a step for the difference.
             assertEquals(clamped, serverReservationTtl(server));
             assertTrue(clamped.compareTo(CreditLeaseDefaults.MAX_RESERVATION_TTL) < 0);
             // Client mode never sends it, so clamping there would shorten holds for nothing.
-            assertEquals(twoHours, serverReservationTtl(client));
+            assertEquals(overCap, serverReservationTtl(client));
         }
     }
 

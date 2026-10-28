@@ -211,7 +211,7 @@ import java.time.Duration;
 Schematic schematic = Schematic.builder()
     .apiKey("YOUR_API_KEY")
     .creditLeases(CreditLeaseConfig.builder()
-        .defaultReservationTtl(Duration.ofSeconds(60))      // just under an hour at most, which is as far out as the API will reserve credits
+        .defaultReservationTtl(Duration.ofSeconds(60))      // just under 24 hours at most, which is as far out as the API will reserve credits
         .build())
     .build();
 ```
