@@ -252,11 +252,19 @@ public class DataStreamClient implements Closeable {
             throw new DataStreamException("Datastream not connected and required entities not in cache");
         }
 
+        // Evaluating without an entity the caller named would skip its targeted rules and report
+        // the result as authoritative, so a failed fetch throws and the caller falls back to the API.
         if (needsCompany && cachedCompany == null) {
             cachedCompany = getCompany(company);
+            if (cachedCompany == null) {
+                throw new DataStreamException("Company could not be fetched from datastream");
+            }
         }
         if (needsUser && cachedUser == null) {
             cachedUser = getUser(user);
+            if (cachedUser == null) {
+                throw new DataStreamException("User could not be fetched from datastream");
+            }
         }
 
         return evaluateFlag(flag, cachedCompany, cachedUser, preflight);

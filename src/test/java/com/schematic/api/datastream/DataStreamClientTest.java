@@ -16,6 +16,7 @@ import com.schematic.api.types.RulesengineCheckFlagResult;
 import com.schematic.api.types.RulesengineCompany;
 import com.schematic.api.types.RulesengineFlag;
 import com.schematic.api.types.RulesengineUser;
+import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
@@ -325,6 +326,27 @@ class DataStreamClientTest {
         assertEquals("RULES_ENGINE_UNAVAILABLE", result.getReason());
         assertEquals("comp-1", result.getCompanyId().orElse(null));
         assertEquals("user-1", result.getUserId().orElse(null));
+    }
+
+    @Test
+    void checkFlag_throwsWhenCompanyFetchTimesOut() throws Exception {
+        DataStreamClient connected = new DataStreamClient(
+                DatastreamOptions.builder().build(), "test-key", "https://api.schematichq.com", logger);
+        DataStreamWebSocketClient ws = mock(DataStreamWebSocketClient.class);
+        when(ws.isReady()).thenReturn(true);
+        Field wsField = DataStreamClient.class.getDeclaredField("wsClient");
+        wsField.setAccessible(true);
+        wsField.set(connected, ws);
+
+        connected.handleMessage(buildResp(
+                EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("company-flag", true)));
+
+        Map<String, String> companyKeys = Collections.singletonMap("customer_id", "never-arrives");
+        assertThrows(DataStreamException.class, () -> connected.checkFlag("company-flag", companyKeys, null));
+        verify(logger, times(1)).warn(anyString());
+
+        wsField.set(connected, null);
+        connected.close();
     }
 
     @Test
