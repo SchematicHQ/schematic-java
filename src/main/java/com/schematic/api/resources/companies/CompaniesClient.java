@@ -17,6 +17,7 @@ import com.schematic.api.resources.companies.requests.DeleteCompanyRequest;
 import com.schematic.api.resources.companies.requests.GetActiveCompanySubscriptionRequest;
 import com.schematic.api.resources.companies.requests.GetBillingEntityChildSubscriptionsRequest;
 import com.schematic.api.resources.companies.requests.GetCompanyBillingEntityRequest;
+import com.schematic.api.resources.companies.requests.GetCompanyInferenceCostRequest;
 import com.schematic.api.resources.companies.requests.GetEntityTraitValuesRequest;
 import com.schematic.api.resources.companies.requests.GetOrCreateCompanyMembershipRequestBody;
 import com.schematic.api.resources.companies.requests.ListCompaniesRequest;
@@ -49,6 +50,7 @@ import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
 import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscriptionsResponse;
 import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
+import com.schematic.api.resources.companies.types.GetCompanyInferenceCostResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionUsageResponse;
@@ -142,6 +144,26 @@ public class CompaniesClient {
     public DeleteCompanyResponse deleteCompany(
             String companyId, DeleteCompanyRequest request, RequestOptions requestOptions) {
         return this.rawClient.deleteCompany(companyId, request, requestOptions).body();
+    }
+
+    public GetCompanyInferenceCostResponse getCompanyInferenceCost(String companyId) {
+        return this.rawClient.getCompanyInferenceCost(companyId).body();
+    }
+
+    public GetCompanyInferenceCostResponse getCompanyInferenceCost(String companyId, RequestOptions requestOptions) {
+        return this.rawClient.getCompanyInferenceCost(companyId, requestOptions).body();
+    }
+
+    public GetCompanyInferenceCostResponse getCompanyInferenceCost(
+            String companyId, GetCompanyInferenceCostRequest request) {
+        return this.rawClient.getCompanyInferenceCost(companyId, request).body();
+    }
+
+    public GetCompanyInferenceCostResponse getCompanyInferenceCost(
+            String companyId, GetCompanyInferenceCostRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .getCompanyInferenceCost(companyId, request, requestOptions)
+                .body();
     }
 
     public CountCompaniesResponse countCompanies() {

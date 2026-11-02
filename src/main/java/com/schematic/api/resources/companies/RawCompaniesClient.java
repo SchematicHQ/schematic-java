@@ -32,6 +32,7 @@ import com.schematic.api.resources.companies.requests.DeleteCompanyRequest;
 import com.schematic.api.resources.companies.requests.GetActiveCompanySubscriptionRequest;
 import com.schematic.api.resources.companies.requests.GetBillingEntityChildSubscriptionsRequest;
 import com.schematic.api.resources.companies.requests.GetCompanyBillingEntityRequest;
+import com.schematic.api.resources.companies.requests.GetCompanyInferenceCostRequest;
 import com.schematic.api.resources.companies.requests.GetEntityTraitValuesRequest;
 import com.schematic.api.resources.companies.requests.GetOrCreateCompanyMembershipRequestBody;
 import com.schematic.api.resources.companies.requests.ListCompaniesRequest;
@@ -64,6 +65,7 @@ import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
 import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscriptionsResponse;
 import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
+import com.schematic.api.resources.companies.types.GetCompanyInferenceCostResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionUsageResponse;
@@ -126,6 +128,13 @@ public class RawCompaniesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("companies");
+        if (request.getCancelAtPeriodEnd().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "cancel_at_period_end",
+                    request.getCancelAtPeriodEnd().get(),
+                    false);
+        }
         if (request.getHasScheduledDowngrade().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,
@@ -542,6 +551,97 @@ public class RawCompaniesClient {
         }
     }
 
+    public BaseSchematicHttpResponse<GetCompanyInferenceCostResponse> getCompanyInferenceCost(String companyId) {
+        return getCompanyInferenceCost(
+                companyId, GetCompanyInferenceCostRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<GetCompanyInferenceCostResponse> getCompanyInferenceCost(
+            String companyId, RequestOptions requestOptions) {
+        return getCompanyInferenceCost(
+                companyId, GetCompanyInferenceCostRequest.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<GetCompanyInferenceCostResponse> getCompanyInferenceCost(
+            String companyId, GetCompanyInferenceCostRequest request) {
+        return getCompanyInferenceCost(companyId, request, null);
+    }
+
+    public BaseSchematicHttpResponse<GetCompanyInferenceCostResponse> getCompanyInferenceCost(
+            String companyId, GetCompanyInferenceCostRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("companies")
+                .addPathSegment(PathSegments.validate(companyId))
+                .addPathSegments("inference-cost");
+        if (request.getEndTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_time", request.getEndTime().get(), false);
+        }
+        if (request.getStartTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start_time", request.getStartTime().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetCompanyInferenceCostResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
     public BaseSchematicHttpResponse<CountCompaniesResponse> countCompanies() {
         return countCompanies(CountCompaniesRequest.builder().build());
     }
@@ -559,6 +659,13 @@ public class RawCompaniesClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("companies/count");
+        if (request.getCancelAtPeriodEnd().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "cancel_at_period_end",
+                    request.getCancelAtPeriodEnd().get(),
+                    false);
+        }
         if (request.getHasScheduledDowngrade().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl,

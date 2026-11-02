@@ -642,6 +642,7 @@ client.accounts().listAuditLogs(
     ListAuditLogsRequest
         .builder()
         .actorType(ActorType.API_KEY)
+        .companyId("company_id")
         .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
         .environmentId("environment_id")
         .q("q")
@@ -665,6 +666,14 @@ client.accounts().listAuditLogs(
 <dd>
 
 **actorType:** `Optional<ActorType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -781,6 +790,7 @@ client.accounts().countAuditLogs(
     CountAuditLogsRequest
         .builder()
         .actorType(ActorType.API_KEY)
+        .companyId("company_id")
         .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
         .environmentId("environment_id")
         .q("q")
@@ -804,6 +814,14 @@ client.accounts().countAuditLogs(
 <dd>
 
 **actorType:** `Optional<ActorType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -3562,7 +3580,23 @@ client.billing().updateCompanyBillingProfile(
 <dl>
 <dd>
 
+**currency:** `Optional<Currency>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **daysUntilDue:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**gatingDays:** `Optional<Long>` 
     
 </dd>
 </dl>
@@ -3579,6 +3613,22 @@ client.billing().updateCompanyBillingProfile(
 <dd>
 
 **name:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**overdraftLimit:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**paymentGating:** `Optional<PaymentGating>` 
     
 </dd>
 </dl>
@@ -6826,7 +6876,7 @@ client.credits().reserveCredits(
 <dl>
 <dd>
 
-**expiresAt:** `Optional<OffsetDateTime>` — When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
+**expiresAt:** `Optional<OffsetDateTime>` — When the hold lapses if no track event settles it; defaults to one minute from now and may be at most 24 hours out. The unspent hold is refunded on expiry
     
 </dd>
 </dl>
@@ -9175,6 +9225,7 @@ client.companies().listCompanies(
         .subscriptionTypes(
             Arrays.asList(SubscriptionType.FREE)
         )
+        .cancelAtPeriodEnd(true)
         .hasScheduledDowngrade(true)
         .monetizedSubscriptions(true)
         .planId("plan_id")
@@ -9206,6 +9257,14 @@ client.companies().listCompanies(
 <dl>
 <dd>
 
+**cancelAtPeriodEnd:** `Optional<Boolean>` — If true, filter companies with an active subscription that is set to cancel at the end of the current period; if false, filter companies without one
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **creditTypeIds:** `Optional<String>` — Filter companies by one or more credit type IDs (each ID starts with bcrd_)
     
 </dd>
@@ -9214,7 +9273,7 @@ client.companies().listCompanies(
 <dl>
 <dd>
 
-**hasScheduledDowngrade:** `Optional<Boolean>` — Filter companies that have a pending scheduled downgrade
+**hasScheduledDowngrade:** `Optional<Boolean>` — If true, filter companies that have a pending scheduled downgrade; if false, filter companies that do not
     
 </dd>
 </dl>
@@ -9530,6 +9589,69 @@ client.companies().deleteCompany(
 </dl>
 </details>
 
+<details><summary><code>client.companies.getCompanyInferenceCost(companyId) -> GetCompanyInferenceCostResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().getCompanyInferenceCost(
+    "company_id",
+    GetCompanyInferenceCostRequest
+        .builder()
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endTime:** `Optional<OffsetDateTime>` — End of the window (exclusive). Pass together with start_time; when both are omitted, the company's current billing period is used
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `Optional<OffsetDateTime>` — Start of the window (inclusive). Pass together with end_time; when both are omitted, the company's current billing period is used
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.companies.countCompanies() -> CountCompaniesResponse</code></summary>
 <dl>
 <dd>
@@ -9564,6 +9686,7 @@ client.companies().countCompanies(
         .subscriptionTypes(
             Arrays.asList(SubscriptionType.FREE)
         )
+        .cancelAtPeriodEnd(true)
         .hasScheduledDowngrade(true)
         .monetizedSubscriptions(true)
         .planId("plan_id")
@@ -9595,6 +9718,14 @@ client.companies().countCompanies(
 <dl>
 <dd>
 
+**cancelAtPeriodEnd:** `Optional<Boolean>` — If true, filter companies with an active subscription that is set to cancel at the end of the current period; if false, filter companies without one
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **creditTypeIds:** `Optional<String>` — Filter companies by one or more credit type IDs (each ID starts with bcrd_)
     
 </dd>
@@ -9603,7 +9734,7 @@ client.companies().countCompanies(
 <dl>
 <dd>
 
-**hasScheduledDowngrade:** `Optional<Boolean>` — Filter companies that have a pending scheduled downgrade
+**hasScheduledDowngrade:** `Optional<Boolean>` — If true, filter companies that have a pending scheduled downgrade; if false, filter companies that do not
     
 </dd>
 </dl>
@@ -11214,7 +11345,7 @@ client.companies().listPlanChanges(
         .companyIds(
             Arrays.asList("company_ids")
         )
-        .action(PlanChangeAction.AMENDMENT)
+        .action(PlanChangeAction.ACCESS_REINSTATED)
         .basePlanAction(PlanChangeBasePlanAction.FALLBACK)
         .companyId("company_id")
         .limit(1000000L)
@@ -19637,7 +19768,7 @@ client.features().checkAndReserveFlag(
 <dl>
 <dd>
 
-**expiresAt:** `Optional<OffsetDateTime>` — When the hold lapses if no track or inference event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
+**expiresAt:** `Optional<OffsetDateTime>` — When the hold lapses if no track or inference event settles it; defaults to one minute from now and may be at most 24 hours out. The unspent hold is refunded on expiry
     
 </dd>
 </dl>

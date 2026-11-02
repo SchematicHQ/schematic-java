@@ -7,18 +7,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class PlanChangeAction {
-    public static final PlanChangeAction CHECKOUT = new PlanChangeAction(Value.CHECKOUT, "checkout");
-
-    public static final PlanChangeAction MIGRATION = new PlanChangeAction(Value.MIGRATION, "migration");
-
-    public static final PlanChangeAction PLAN_VERSION_MIGRATION =
-            new PlanChangeAction(Value.PLAN_VERSION_MIGRATION, "plan_version_migration");
-
-    public static final PlanChangeAction SUBSCRIPTION_CHANGE =
-            new PlanChangeAction(Value.SUBSCRIPTION_CHANGE, "subscription_change");
-
-    public static final PlanChangeAction PLAN_DELETED = new PlanChangeAction(Value.PLAN_DELETED, "plan_deleted");
-
     public static final PlanChangeAction QUICKSTART = new PlanChangeAction(Value.QUICKSTART, "quickstart");
 
     public static final PlanChangeAction COMPANY_UPSERT = new PlanChangeAction(Value.COMPANY_UPSERT, "company_upsert");
@@ -26,9 +14,29 @@ public final class PlanChangeAction {
     public static final PlanChangeAction PLAN_BILLING_PRODUCT_CHANGED =
             new PlanChangeAction(Value.PLAN_BILLING_PRODUCT_CHANGED, "plan_billing_product_changed");
 
+    public static final PlanChangeAction AMENDMENT = new PlanChangeAction(Value.AMENDMENT, "amendment");
+
+    public static final PlanChangeAction CHECKOUT = new PlanChangeAction(Value.CHECKOUT, "checkout");
+
+    public static final PlanChangeAction MIGRATION = new PlanChangeAction(Value.MIGRATION, "migration");
+
+    public static final PlanChangeAction PLAN_VERSION_MIGRATION =
+            new PlanChangeAction(Value.PLAN_VERSION_MIGRATION, "plan_version_migration");
+
+    public static final PlanChangeAction ACCESS_REINSTATED =
+            new PlanChangeAction(Value.ACCESS_REINSTATED, "access_reinstated");
+
+    public static final PlanChangeAction SUBSCRIPTION_CHANGE =
+            new PlanChangeAction(Value.SUBSCRIPTION_CHANGE, "subscription_change");
+
+    public static final PlanChangeAction PLAN_DELETED = new PlanChangeAction(Value.PLAN_DELETED, "plan_deleted");
+
     public static final PlanChangeAction FALLBACK_PLAN = new PlanChangeAction(Value.FALLBACK_PLAN, "fallback_plan");
 
-    public static final PlanChangeAction AMENDMENT = new PlanChangeAction(Value.AMENDMENT, "amendment");
+    public static final PlanChangeAction INVOICE_PAST_DUE =
+            new PlanChangeAction(Value.INVOICE_PAST_DUE, "invoice_past_due");
+
+    public static final PlanChangeAction ACCESS_REVOKED = new PlanChangeAction(Value.ACCESS_REVOKED, "access_revoked");
 
     public static final PlanChangeAction PLAN_TRAIT_CHANGE =
             new PlanChangeAction(Value.PLAN_TRAIT_CHANGE, "plan_trait_change");
@@ -67,26 +75,32 @@ public final class PlanChangeAction {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case CHECKOUT:
-                return visitor.visitCheckout();
-            case MIGRATION:
-                return visitor.visitMigration();
-            case PLAN_VERSION_MIGRATION:
-                return visitor.visitPlanVersionMigration();
-            case SUBSCRIPTION_CHANGE:
-                return visitor.visitSubscriptionChange();
-            case PLAN_DELETED:
-                return visitor.visitPlanDeleted();
             case QUICKSTART:
                 return visitor.visitQuickstart();
             case COMPANY_UPSERT:
                 return visitor.visitCompanyUpsert();
             case PLAN_BILLING_PRODUCT_CHANGED:
                 return visitor.visitPlanBillingProductChanged();
-            case FALLBACK_PLAN:
-                return visitor.visitFallbackPlan();
             case AMENDMENT:
                 return visitor.visitAmendment();
+            case CHECKOUT:
+                return visitor.visitCheckout();
+            case MIGRATION:
+                return visitor.visitMigration();
+            case PLAN_VERSION_MIGRATION:
+                return visitor.visitPlanVersionMigration();
+            case ACCESS_REINSTATED:
+                return visitor.visitAccessReinstated();
+            case SUBSCRIPTION_CHANGE:
+                return visitor.visitSubscriptionChange();
+            case PLAN_DELETED:
+                return visitor.visitPlanDeleted();
+            case FALLBACK_PLAN:
+                return visitor.visitFallbackPlan();
+            case INVOICE_PAST_DUE:
+                return visitor.visitInvoicePastDue();
+            case ACCESS_REVOKED:
+                return visitor.visitAccessRevoked();
             case PLAN_TRAIT_CHANGE:
                 return visitor.visitPlanTraitChange();
             case MANAGE_PLAN:
@@ -100,26 +114,32 @@ public final class PlanChangeAction {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static PlanChangeAction valueOf(String value) {
         switch (value) {
-            case "checkout":
-                return CHECKOUT;
-            case "migration":
-                return MIGRATION;
-            case "plan_version_migration":
-                return PLAN_VERSION_MIGRATION;
-            case "subscription_change":
-                return SUBSCRIPTION_CHANGE;
-            case "plan_deleted":
-                return PLAN_DELETED;
             case "quickstart":
                 return QUICKSTART;
             case "company_upsert":
                 return COMPANY_UPSERT;
             case "plan_billing_product_changed":
                 return PLAN_BILLING_PRODUCT_CHANGED;
-            case "fallback_plan":
-                return FALLBACK_PLAN;
             case "amendment":
                 return AMENDMENT;
+            case "checkout":
+                return CHECKOUT;
+            case "migration":
+                return MIGRATION;
+            case "plan_version_migration":
+                return PLAN_VERSION_MIGRATION;
+            case "access_reinstated":
+                return ACCESS_REINSTATED;
+            case "subscription_change":
+                return SUBSCRIPTION_CHANGE;
+            case "plan_deleted":
+                return PLAN_DELETED;
+            case "fallback_plan":
+                return FALLBACK_PLAN;
+            case "invoice_past_due":
+                return INVOICE_PAST_DUE;
+            case "access_revoked":
+                return ACCESS_REVOKED;
             case "plan_trait_change":
                 return PLAN_TRAIT_CHANGE;
             case "manage_plan":
@@ -130,6 +150,10 @@ public final class PlanChangeAction {
     }
 
     public enum Value {
+        ACCESS_REINSTATED,
+
+        ACCESS_REVOKED,
+
         AMENDMENT,
 
         CHECKOUT,
@@ -137,6 +161,8 @@ public final class PlanChangeAction {
         COMPANY_UPSERT,
 
         FALLBACK_PLAN,
+
+        INVOICE_PAST_DUE,
 
         MANAGE_PLAN,
 
@@ -158,6 +184,10 @@ public final class PlanChangeAction {
     }
 
     public interface Visitor<T> {
+        T visitAccessReinstated();
+
+        T visitAccessRevoked();
+
         T visitAmendment();
 
         T visitCheckout();
@@ -165,6 +195,8 @@ public final class PlanChangeAction {
         T visitCompanyUpsert();
 
         T visitFallbackPlan();
+
+        T visitInvoicePastDue();
 
         T visitManagePlan();
 

@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingNativeSubscriptionResponseData.Builder.class)
 public final class BillingNativeSubscriptionResponseData {
+    private final long balance;
+
     private final Optional<OffsetDateTime> cancelAt;
 
     private final String companyId;
@@ -51,6 +53,7 @@ public final class BillingNativeSubscriptionResponseData {
     private final Map<String, Object> additionalProperties;
 
     private BillingNativeSubscriptionResponseData(
+            long balance,
             Optional<OffsetDateTime> cancelAt,
             String companyId,
             Currency currency,
@@ -64,6 +67,7 @@ public final class BillingNativeSubscriptionResponseData {
             SubscriptionStatus status,
             Optional<BillingInvoiceTermsResponseData> terms,
             Map<String, Object> additionalProperties) {
+        this.balance = balance;
         this.cancelAt = cancelAt;
         this.companyId = companyId;
         this.currency = currency;
@@ -77,6 +81,14 @@ public final class BillingNativeSubscriptionResponseData {
         this.status = status;
         this.terms = terms;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The company's balance on its contract, in minor units of the currency. Below zero is credit the next invoice takes off what is due. Zero when the company has no billing profile.
+     */
+    @JsonProperty("balance")
+    public long getBalance() {
+        return balance;
     }
 
     @JsonProperty("cancel_at")
@@ -164,7 +176,8 @@ public final class BillingNativeSubscriptionResponseData {
     }
 
     private boolean equalTo(BillingNativeSubscriptionResponseData other) {
-        return cancelAt.equals(other.cancelAt)
+        return balance == other.balance
+                && cancelAt.equals(other.cancelAt)
                 && companyId.equals(other.companyId)
                 && currency.equals(other.currency)
                 && id.equals(other.id)
@@ -181,6 +194,7 @@ public final class BillingNativeSubscriptionResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.balance,
                 this.cancelAt,
                 this.companyId,
                 this.currency,
@@ -200,14 +214,21 @@ public final class BillingNativeSubscriptionResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static CompanyIdStage builder() {
+    public static BalanceStage builder() {
         return new Builder();
+    }
+
+    public interface BalanceStage {
+        /**
+         * <p>The company's balance on its contract, in minor units of the currency. Below zero is credit the next invoice takes off what is due. Zero when the company has no billing profile.</p>
+         */
+        CompanyIdStage balance(long balance);
+
+        Builder from(BillingNativeSubscriptionResponseData other);
     }
 
     public interface CompanyIdStage {
         CurrencyStage companyId(@NotNull String companyId);
-
-        Builder from(BillingNativeSubscriptionResponseData other);
     }
 
     public interface CurrencyStage {
@@ -280,13 +301,16 @@ public final class BillingNativeSubscriptionResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CompanyIdStage,
+            implements BalanceStage,
+                    CompanyIdStage,
                     CurrencyStage,
                     IdStage,
                     PeriodEndStage,
                     PeriodStartStage,
                     StatusStage,
                     _FinalStage {
+        private long balance;
+
         private String companyId;
 
         private Currency currency;
@@ -317,6 +341,7 @@ public final class BillingNativeSubscriptionResponseData {
 
         @java.lang.Override
         public Builder from(BillingNativeSubscriptionResponseData other) {
+            balance(other.getBalance());
             cancelAt(other.getCancelAt());
             companyId(other.getCompanyId());
             currency(other.getCurrency());
@@ -329,6 +354,17 @@ public final class BillingNativeSubscriptionResponseData {
             statement(other.getStatement());
             status(other.getStatus());
             terms(other.getTerms());
+            return this;
+        }
+
+        /**
+         * <p>The company's balance on its contract, in minor units of the currency. Below zero is credit the next invoice takes off what is due. Zero when the company has no billing profile.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("balance")
+        public CompanyIdStage balance(long balance) {
+            this.balance = balance;
             return this;
         }
 
@@ -513,6 +549,7 @@ public final class BillingNativeSubscriptionResponseData {
         @java.lang.Override
         public BillingNativeSubscriptionResponseData build() {
             return new BillingNativeSubscriptionResponseData(
+                    balance,
                     cancelAt,
                     companyId,
                     currency,
@@ -530,7 +567,8 @@ public final class BillingNativeSubscriptionResponseData {
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("cancel_at")
+            if (key.equalsIgnoreCase("balance")
+                    || key.equalsIgnoreCase("cancel_at")
                     || key.equalsIgnoreCase("company_id")
                     || key.equalsIgnoreCase("currency")
                     || key.equalsIgnoreCase("id")

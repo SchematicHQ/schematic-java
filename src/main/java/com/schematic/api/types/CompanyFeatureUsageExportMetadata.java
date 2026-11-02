@@ -21,6 +21,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CompanyFeatureUsageExportMetadata.Builder.class)
 public final class CompanyFeatureUsageExportMetadata {
+    private final Optional<Boolean> cancelAtPeriodEnd;
+
     private final Optional<List<String>> companyIds;
 
     private final Optional<List<String>> creditTypeIds;
@@ -70,6 +72,7 @@ public final class CompanyFeatureUsageExportMetadata {
     private final Map<String, Object> additionalProperties;
 
     private CompanyFeatureUsageExportMetadata(
+            Optional<Boolean> cancelAtPeriodEnd,
             Optional<List<String>> companyIds,
             Optional<List<String>> creditTypeIds,
             Optional<List<String>> entityKeyDefinitionIds,
@@ -94,6 +97,7 @@ public final class CompanyFeatureUsageExportMetadata {
             Optional<Boolean> withoutPlan,
             Optional<Boolean> withoutSubscription,
             Map<String, Object> additionalProperties) {
+        this.cancelAtPeriodEnd = cancelAtPeriodEnd;
         this.companyIds = companyIds;
         this.creditTypeIds = creditTypeIds;
         this.entityKeyDefinitionIds = entityKeyDefinitionIds;
@@ -118,6 +122,14 @@ public final class CompanyFeatureUsageExportMetadata {
         this.withoutPlan = withoutPlan;
         this.withoutSubscription = withoutSubscription;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return If true, restrict the export to companies with an active subscription that is set to cancel at the end of the current period; if false, restrict it to companies without one
+     */
+    @JsonProperty("cancel_at_period_end")
+    public Optional<Boolean> getCancelAtPeriodEnd() {
+        return cancelAtPeriodEnd;
     }
 
     /**
@@ -316,7 +328,8 @@ public final class CompanyFeatureUsageExportMetadata {
     }
 
     private boolean equalTo(CompanyFeatureUsageExportMetadata other) {
-        return companyIds.equals(other.companyIds)
+        return cancelAtPeriodEnd.equals(other.cancelAtPeriodEnd)
+                && companyIds.equals(other.companyIds)
                 && creditTypeIds.equals(other.creditTypeIds)
                 && entityKeyDefinitionIds.equals(other.entityKeyDefinitionIds)
                 && entityTraitDefinitionIds.equals(other.entityTraitDefinitionIds)
@@ -344,6 +357,7 @@ public final class CompanyFeatureUsageExportMetadata {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cancelAtPeriodEnd,
                 this.companyIds,
                 this.creditTypeIds,
                 this.entityKeyDefinitionIds,
@@ -380,6 +394,8 @@ public final class CompanyFeatureUsageExportMetadata {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Boolean> cancelAtPeriodEnd = Optional.empty();
+
         private Optional<List<String>> companyIds = Optional.empty();
 
         private Optional<List<String>> creditTypeIds = Optional.empty();
@@ -431,6 +447,7 @@ public final class CompanyFeatureUsageExportMetadata {
         private Builder() {}
 
         public Builder from(CompanyFeatureUsageExportMetadata other) {
+            cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
             companyIds(other.getCompanyIds());
             creditTypeIds(other.getCreditTypeIds());
             entityKeyDefinitionIds(other.getEntityKeyDefinitionIds());
@@ -454,6 +471,20 @@ public final class CompanyFeatureUsageExportMetadata {
             withoutFeatureOverrideFor(other.getWithoutFeatureOverrideFor());
             withoutPlan(other.getWithoutPlan());
             withoutSubscription(other.getWithoutSubscription());
+            return this;
+        }
+
+        /**
+         * <p>If true, restrict the export to companies with an active subscription that is set to cancel at the end of the current period; if false, restrict it to companies without one</p>
+         */
+        @JsonSetter(value = "cancel_at_period_end", nulls = Nulls.SKIP)
+        public Builder cancelAtPeriodEnd(Optional<Boolean> cancelAtPeriodEnd) {
+            this.cancelAtPeriodEnd = cancelAtPeriodEnd;
+            return this;
+        }
+
+        public Builder cancelAtPeriodEnd(Boolean cancelAtPeriodEnd) {
+            this.cancelAtPeriodEnd = Optional.ofNullable(cancelAtPeriodEnd);
             return this;
         }
 
@@ -785,6 +816,7 @@ public final class CompanyFeatureUsageExportMetadata {
 
         public CompanyFeatureUsageExportMetadata build() {
             return new CompanyFeatureUsageExportMetadata(
+                    cancelAtPeriodEnd,
                     companyIds,
                     creditTypeIds,
                     entityKeyDefinitionIds,
@@ -813,7 +845,8 @@ public final class CompanyFeatureUsageExportMetadata {
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("company_ids")
+            if (key.equalsIgnoreCase("cancel_at_period_end")
+                    || key.equalsIgnoreCase("company_ids")
                     || key.equalsIgnoreCase("credit_type_ids")
                     || key.equalsIgnoreCase("entity_key_definition_ids")
                     || key.equalsIgnoreCase("entity_trait_definition_ids")

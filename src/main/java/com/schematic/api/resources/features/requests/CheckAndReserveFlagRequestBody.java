@@ -59,7 +59,7 @@ public final class CheckAndReserveFlagRequestBody {
     }
 
     /**
-     * @return When the hold lapses if no track or inference event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
+     * @return When the hold lapses if no track or inference event settles it; defaults to one minute from now and may be at most 24 hours out. The unspent hold is refunded on expiry
      */
     @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
@@ -170,7 +170,7 @@ public final class CheckAndReserveFlagRequestBody {
         }
 
         /**
-         * <p>When the hold lapses if no track or inference event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry</p>
+         * <p>When the hold lapses if no track or inference event settles it; defaults to one minute from now and may be at most 24 hours out. The unspent hold is refunded on expiry</p>
          */
         @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {

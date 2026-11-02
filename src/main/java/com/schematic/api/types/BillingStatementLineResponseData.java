@@ -24,11 +24,15 @@ import org.jetbrains.annotations.NotNull;
 public final class BillingStatementLineResponseData {
     private final long amount;
 
+    private final Optional<String> description;
+
     private final InvoiceLineKind kind;
 
     private final Optional<OffsetDateTime> periodEnd;
 
     private final Optional<OffsetDateTime> periodStart;
+
+    private final Optional<String> prorationFraction;
 
     private final Optional<Long> quantity;
 
@@ -40,17 +44,21 @@ public final class BillingStatementLineResponseData {
 
     private BillingStatementLineResponseData(
             long amount,
+            Optional<String> description,
             InvoiceLineKind kind,
             Optional<OffsetDateTime> periodEnd,
             Optional<OffsetDateTime> periodStart,
+            Optional<String> prorationFraction,
             Optional<Long> quantity,
             Optional<String> subscriptionLineId,
             Optional<Long> unitAmount,
             Map<String, Object> additionalProperties) {
         this.amount = amount;
+        this.description = description;
         this.kind = kind;
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
+        this.prorationFraction = prorationFraction;
         this.quantity = quantity;
         this.subscriptionLineId = subscriptionLineId;
         this.unitAmount = unitAmount;
@@ -63,6 +71,14 @@ public final class BillingStatementLineResponseData {
     @JsonProperty("amount")
     public long getAmount() {
         return amount;
+    }
+
+    /**
+     * @return What the line bills for, and for part of a period, which part. Null when the line has no subscription line behind it.
+     */
+    @JsonProperty("description")
+    public Optional<String> getDescription() {
+        return description;
     }
 
     @JsonProperty("kind")
@@ -78,6 +94,14 @@ public final class BillingStatementLineResponseData {
     @JsonProperty("period_start")
     public Optional<OffsetDateTime> getPeriodStart() {
         return periodStart;
+    }
+
+    /**
+     * @return The share of a full billing period the line bills, as a decimal from 0 to 1. Null when the line bills a whole period.
+     */
+    @JsonProperty("proration_fraction")
+    public Optional<String> getProrationFraction() {
+        return prorationFraction;
     }
 
     @JsonProperty("quantity")
@@ -108,9 +132,11 @@ public final class BillingStatementLineResponseData {
 
     private boolean equalTo(BillingStatementLineResponseData other) {
         return amount == other.amount
+                && description.equals(other.description)
                 && kind.equals(other.kind)
                 && periodEnd.equals(other.periodEnd)
                 && periodStart.equals(other.periodStart)
+                && prorationFraction.equals(other.prorationFraction)
                 && quantity.equals(other.quantity)
                 && subscriptionLineId.equals(other.subscriptionLineId)
                 && unitAmount.equals(other.unitAmount);
@@ -120,9 +146,11 @@ public final class BillingStatementLineResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.amount,
+                this.description,
                 this.kind,
                 this.periodEnd,
                 this.periodStart,
+                this.prorationFraction,
                 this.quantity,
                 this.subscriptionLineId,
                 this.unitAmount);
@@ -157,6 +185,13 @@ public final class BillingStatementLineResponseData {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>What the line bills for, and for part of a period, which part. Null when the line has no subscription line behind it.</p>
+         */
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
+
         _FinalStage periodEnd(Optional<OffsetDateTime> periodEnd);
 
         _FinalStage periodEnd(OffsetDateTime periodEnd);
@@ -164,6 +199,13 @@ public final class BillingStatementLineResponseData {
         _FinalStage periodStart(Optional<OffsetDateTime> periodStart);
 
         _FinalStage periodStart(OffsetDateTime periodStart);
+
+        /**
+         * <p>The share of a full billing period the line bills, as a decimal from 0 to 1. Null when the line bills a whole period.</p>
+         */
+        _FinalStage prorationFraction(Optional<String> prorationFraction);
+
+        _FinalStage prorationFraction(String prorationFraction);
 
         _FinalStage quantity(Optional<Long> quantity);
 
@@ -190,9 +232,13 @@ public final class BillingStatementLineResponseData {
 
         private Optional<Long> quantity = Optional.empty();
 
+        private Optional<String> prorationFraction = Optional.empty();
+
         private Optional<OffsetDateTime> periodStart = Optional.empty();
 
         private Optional<OffsetDateTime> periodEnd = Optional.empty();
+
+        private Optional<String> description = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -201,9 +247,11 @@ public final class BillingStatementLineResponseData {
         @java.lang.Override
         public Builder from(BillingStatementLineResponseData other) {
             amount(other.getAmount());
+            description(other.getDescription());
             kind(other.getKind());
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
+            prorationFraction(other.getProrationFraction());
             quantity(other.getQuantity());
             subscriptionLineId(other.getSubscriptionLineId());
             unitAmount(other.getUnitAmount());
@@ -267,6 +315,26 @@ public final class BillingStatementLineResponseData {
             return this;
         }
 
+        /**
+         * <p>The share of a full billing period the line bills, as a decimal from 0 to 1. Null when the line bills a whole period.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage prorationFraction(String prorationFraction) {
+            this.prorationFraction = Optional.ofNullable(prorationFraction);
+            return this;
+        }
+
+        /**
+         * <p>The share of a full billing period the line bills, as a decimal from 0 to 1. Null when the line bills a whole period.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "proration_fraction", nulls = Nulls.SKIP)
+        public _FinalStage prorationFraction(Optional<String> prorationFraction) {
+            this.prorationFraction = prorationFraction;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage periodStart(OffsetDateTime periodStart) {
             this.periodStart = Optional.ofNullable(periodStart);
@@ -293,13 +361,35 @@ public final class BillingStatementLineResponseData {
             return this;
         }
 
+        /**
+         * <p>What the line bills for, and for part of a period, which part. Null when the line has no subscription line behind it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        /**
+         * <p>What the line bills for, and for part of a period, which part. Null when the line has no subscription line behind it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
+            return this;
+        }
+
         @java.lang.Override
         public BillingStatementLineResponseData build() {
             return new BillingStatementLineResponseData(
                     amount,
+                    description,
                     kind,
                     periodEnd,
                     periodStart,
+                    prorationFraction,
                     quantity,
                     subscriptionLineId,
                     unitAmount,
@@ -309,9 +399,11 @@ public final class BillingStatementLineResponseData {
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("amount")
+                    || key.equalsIgnoreCase("description")
                     || key.equalsIgnoreCase("kind")
                     || key.equalsIgnoreCase("period_end")
                     || key.equalsIgnoreCase("period_start")
+                    || key.equalsIgnoreCase("proration_fraction")
                     || key.equalsIgnoreCase("quantity")
                     || key.equalsIgnoreCase("subscription_line_id")
                     || key.equalsIgnoreCase("unit_amount")) {

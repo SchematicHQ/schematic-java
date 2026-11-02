@@ -777,6 +777,10 @@ public class AsyncRawAccountsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "actor_type", request.getActorType().get(), false);
         }
+        if (request.getCompanyId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "company_id", request.getCompanyId().get(), false);
+        }
         if (request.getEndTime().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "end_time", request.getEndTime().get(), false);
@@ -1013,6 +1017,10 @@ public class AsyncRawAccountsClient {
         if (request.getActorType().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "actor_type", request.getActorType().get(), false);
+        }
+        if (request.getCompanyId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "company_id", request.getCompanyId().get(), false);
         }
         if (request.getEndTime().isPresent()) {
             QueryStringMapper.addQueryParameter(

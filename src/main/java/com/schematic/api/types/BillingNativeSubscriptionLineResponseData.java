@@ -42,6 +42,8 @@ public final class BillingNativeSubscriptionLineResponseData {
 
     private final Optional<OffsetDateTime> effectiveTo;
 
+    private final Optional<String> featureName;
+
     private final String id;
 
     private final LineKind kind;
@@ -75,6 +77,7 @@ public final class BillingNativeSubscriptionLineResponseData {
             Optional<OffsetDateTime> currentPeriodStart,
             OffsetDateTime effectiveFrom,
             Optional<OffsetDateTime> effectiveTo,
+            Optional<String> featureName,
             String id,
             LineKind kind,
             long quantity,
@@ -96,6 +99,7 @@ public final class BillingNativeSubscriptionLineResponseData {
         this.currentPeriodStart = currentPeriodStart;
         this.effectiveFrom = effectiveFrom;
         this.effectiveTo = effectiveTo;
+        this.featureName = featureName;
         this.id = id;
         this.kind = kind;
         this.quantity = quantity;
@@ -169,6 +173,14 @@ public final class BillingNativeSubscriptionLineResponseData {
     @JsonProperty("effective_to")
     public Optional<OffsetDateTime> getEffectiveTo() {
         return effectiveTo;
+    }
+
+    /**
+     * @return The feature the line bills for when its price belongs to a plan entitlement, such as seats. Null on a plan's own price, an add-on's and a credit's.
+     */
+    @JsonProperty("feature_name")
+    public Optional<String> getFeatureName() {
+        return featureName;
     }
 
     @JsonProperty("id")
@@ -256,6 +268,7 @@ public final class BillingNativeSubscriptionLineResponseData {
                 && currentPeriodStart.equals(other.currentPeriodStart)
                 && effectiveFrom.equals(other.effectiveFrom)
                 && effectiveTo.equals(other.effectiveTo)
+                && featureName.equals(other.featureName)
                 && id.equals(other.id)
                 && kind.equals(other.kind)
                 && quantity == other.quantity
@@ -281,6 +294,7 @@ public final class BillingNativeSubscriptionLineResponseData {
                 this.currentPeriodStart,
                 this.effectiveFrom,
                 this.effectiveTo,
+                this.featureName,
                 this.id,
                 this.kind,
                 this.quantity,
@@ -391,6 +405,13 @@ public final class BillingNativeSubscriptionLineResponseData {
         _FinalStage effectiveTo(OffsetDateTime effectiveTo);
 
         /**
+         * <p>The feature the line bills for when its price belongs to a plan entitlement, such as seats. Null on a plan's own price, an add-on's and a credit's.</p>
+         */
+        _FinalStage featureName(Optional<String> featureName);
+
+        _FinalStage featureName(String featureName);
+
+        /**
          * <p>The name of the plan, add-on or credit the line compiles from.</p>
          */
         _FinalStage sourceName(Optional<String> sourceName);
@@ -466,6 +487,8 @@ public final class BillingNativeSubscriptionLineResponseData {
 
         private Optional<String> sourceName = Optional.empty();
 
+        private Optional<String> featureName = Optional.empty();
+
         private Optional<OffsetDateTime> effectiveTo = Optional.empty();
 
         private Optional<OffsetDateTime> currentPeriodStart = Optional.empty();
@@ -488,6 +511,7 @@ public final class BillingNativeSubscriptionLineResponseData {
             currentPeriodStart(other.getCurrentPeriodStart());
             effectiveFrom(other.getEffectiveFrom());
             effectiveTo(other.getEffectiveTo());
+            featureName(other.getFeatureName());
             id(other.getId());
             kind(other.getKind());
             quantity(other.getQuantity());
@@ -677,6 +701,26 @@ public final class BillingNativeSubscriptionLineResponseData {
             return this;
         }
 
+        /**
+         * <p>The feature the line bills for when its price belongs to a plan entitlement, such as seats. Null on a plan's own price, an add-on's and a credit's.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage featureName(String featureName) {
+            this.featureName = Optional.ofNullable(featureName);
+            return this;
+        }
+
+        /**
+         * <p>The feature the line bills for when its price belongs to a plan entitlement, such as seats. Null on a plan's own price, an add-on's and a credit's.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "feature_name", nulls = Nulls.SKIP)
+        public _FinalStage featureName(Optional<String> featureName) {
+            this.featureName = featureName;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage effectiveTo(OffsetDateTime effectiveTo) {
             this.effectiveTo = Optional.ofNullable(effectiveTo);
@@ -743,6 +787,7 @@ public final class BillingNativeSubscriptionLineResponseData {
                     currentPeriodStart,
                     effectiveFrom,
                     effectiveTo,
+                    featureName,
                     id,
                     kind,
                     quantity,
@@ -768,6 +813,7 @@ public final class BillingNativeSubscriptionLineResponseData {
                     || key.equalsIgnoreCase("current_period_start")
                     || key.equalsIgnoreCase("effective_from")
                     || key.equalsIgnoreCase("effective_to")
+                    || key.equalsIgnoreCase("feature_name")
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("kind")
                     || key.equalsIgnoreCase("quantity")

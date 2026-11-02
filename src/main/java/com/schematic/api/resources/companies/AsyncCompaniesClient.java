@@ -18,6 +18,7 @@ import com.schematic.api.resources.companies.requests.DeleteCompanyRequest;
 import com.schematic.api.resources.companies.requests.GetActiveCompanySubscriptionRequest;
 import com.schematic.api.resources.companies.requests.GetBillingEntityChildSubscriptionsRequest;
 import com.schematic.api.resources.companies.requests.GetCompanyBillingEntityRequest;
+import com.schematic.api.resources.companies.requests.GetCompanyInferenceCostRequest;
 import com.schematic.api.resources.companies.requests.GetEntityTraitValuesRequest;
 import com.schematic.api.resources.companies.requests.GetOrCreateCompanyMembershipRequestBody;
 import com.schematic.api.resources.companies.requests.ListCompaniesRequest;
@@ -50,6 +51,7 @@ import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
 import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscriptionsResponse;
 import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
+import com.schematic.api.resources.companies.types.GetCompanyInferenceCostResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.GetEntityTraitDefinitionUsageResponse;
@@ -235,6 +237,57 @@ public class AsyncCompaniesClient {
         CompletableFuture<BaseSchematicHttpResponse<DeleteCompanyResponse>> rawFuture =
                 this.rawClient.deleteCompany(companyId, request, requestOptions);
         CompletableFuture<DeleteCompanyResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCompanyInferenceCostResponse> getCompanyInferenceCost(String companyId) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCompanyInferenceCostResponse>> rawFuture =
+                this.rawClient.getCompanyInferenceCost(companyId);
+        CompletableFuture<GetCompanyInferenceCostResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCompanyInferenceCostResponse> getCompanyInferenceCost(
+            String companyId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCompanyInferenceCostResponse>> rawFuture =
+                this.rawClient.getCompanyInferenceCost(companyId, requestOptions);
+        CompletableFuture<GetCompanyInferenceCostResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCompanyInferenceCostResponse> getCompanyInferenceCost(
+            String companyId, GetCompanyInferenceCostRequest request) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCompanyInferenceCostResponse>> rawFuture =
+                this.rawClient.getCompanyInferenceCost(companyId, request);
+        CompletableFuture<GetCompanyInferenceCostResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCompanyInferenceCostResponse> getCompanyInferenceCost(
+            String companyId, GetCompanyInferenceCostRequest request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCompanyInferenceCostResponse>> rawFuture =
+                this.rawClient.getCompanyInferenceCost(companyId, request, requestOptions);
+        CompletableFuture<GetCompanyInferenceCostResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);
