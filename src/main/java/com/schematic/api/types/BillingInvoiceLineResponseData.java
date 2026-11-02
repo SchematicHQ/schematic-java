@@ -40,6 +40,8 @@ public final class BillingInvoiceLineResponseData {
 
     private final Optional<OffsetDateTime> periodStart;
 
+    private final Optional<String> prorationFraction;
+
     private final Optional<Long> quantity;
 
     private final Optional<String> subscriptionLineId;
@@ -59,6 +61,7 @@ public final class BillingInvoiceLineResponseData {
             InvoiceLineKind kind,
             Optional<OffsetDateTime> periodEnd,
             Optional<OffsetDateTime> periodStart,
+            Optional<String> prorationFraction,
             Optional<Long> quantity,
             Optional<String> subscriptionLineId,
             boolean taxable,
@@ -72,6 +75,7 @@ public final class BillingInvoiceLineResponseData {
         this.kind = kind;
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
+        this.prorationFraction = prorationFraction;
         this.quantity = quantity;
         this.subscriptionLineId = subscriptionLineId;
         this.taxable = taxable;
@@ -96,7 +100,7 @@ public final class BillingInvoiceLineResponseData {
     }
 
     /**
-     * @return What the line bills for: the product, plan, add-on or credit. Null when the line has no subscription line behind it.
+     * @return What the line bills for: the product, plan, add-on or credit, and for part of a period, which part. Null when the line has no subscription line behind it.
      */
     @JsonProperty("description")
     public Optional<String> getDescription() {
@@ -132,6 +136,14 @@ public final class BillingInvoiceLineResponseData {
     @JsonProperty("period_start")
     public Optional<OffsetDateTime> getPeriodStart() {
         return periodStart;
+    }
+
+    /**
+     * @return The share of a full billing period the line bills, as a decimal from 0 to 1. Null when the line bills a whole period.
+     */
+    @JsonProperty("proration_fraction")
+    public Optional<String> getProrationFraction() {
+        return prorationFraction;
     }
 
     @JsonProperty("quantity")
@@ -174,6 +186,7 @@ public final class BillingInvoiceLineResponseData {
                 && kind.equals(other.kind)
                 && periodEnd.equals(other.periodEnd)
                 && periodStart.equals(other.periodStart)
+                && prorationFraction.equals(other.prorationFraction)
                 && quantity.equals(other.quantity)
                 && subscriptionLineId.equals(other.subscriptionLineId)
                 && taxable == other.taxable
@@ -191,6 +204,7 @@ public final class BillingInvoiceLineResponseData {
                 this.kind,
                 this.periodEnd,
                 this.periodStart,
+                this.prorationFraction,
                 this.quantity,
                 this.subscriptionLineId,
                 this.taxable,
@@ -240,7 +254,7 @@ public final class BillingInvoiceLineResponseData {
         _FinalStage addAllChargeIds(List<String> chargeIds);
 
         /**
-         * <p>What the line bills for: the product, plan, add-on or credit. Null when the line has no subscription line behind it.</p>
+         * <p>What the line bills for: the product, plan, add-on or credit, and for part of a period, which part. Null when the line has no subscription line behind it.</p>
          */
         _FinalStage description(Optional<String> description);
 
@@ -267,6 +281,13 @@ public final class BillingInvoiceLineResponseData {
         _FinalStage periodStart(Optional<OffsetDateTime> periodStart);
 
         _FinalStage periodStart(OffsetDateTime periodStart);
+
+        /**
+         * <p>The share of a full billing period the line bills, as a decimal from 0 to 1. Null when the line bills a whole period.</p>
+         */
+        _FinalStage prorationFraction(Optional<String> prorationFraction);
+
+        _FinalStage prorationFraction(String prorationFraction);
 
         _FinalStage quantity(Optional<Long> quantity);
 
@@ -295,6 +316,8 @@ public final class BillingInvoiceLineResponseData {
 
         private Optional<Long> quantity = Optional.empty();
 
+        private Optional<String> prorationFraction = Optional.empty();
+
         private Optional<OffsetDateTime> periodStart = Optional.empty();
 
         private Optional<OffsetDateTime> periodEnd = Optional.empty();
@@ -321,6 +344,7 @@ public final class BillingInvoiceLineResponseData {
             kind(other.getKind());
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
+            prorationFraction(other.getProrationFraction());
             quantity(other.getQuantity());
             subscriptionLineId(other.getSubscriptionLineId());
             taxable(other.getTaxable());
@@ -392,6 +416,26 @@ public final class BillingInvoiceLineResponseData {
             return this;
         }
 
+        /**
+         * <p>The share of a full billing period the line bills, as a decimal from 0 to 1. Null when the line bills a whole period.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage prorationFraction(String prorationFraction) {
+            this.prorationFraction = Optional.ofNullable(prorationFraction);
+            return this;
+        }
+
+        /**
+         * <p>The share of a full billing period the line bills, as a decimal from 0 to 1. Null when the line bills a whole period.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "proration_fraction", nulls = Nulls.SKIP)
+        public _FinalStage prorationFraction(Optional<String> prorationFraction) {
+            this.prorationFraction = prorationFraction;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage periodStart(OffsetDateTime periodStart) {
             this.periodStart = Optional.ofNullable(periodStart);
@@ -459,7 +503,7 @@ public final class BillingInvoiceLineResponseData {
         }
 
         /**
-         * <p>What the line bills for: the product, plan, add-on or credit. Null when the line has no subscription line behind it.</p>
+         * <p>What the line bills for: the product, plan, add-on or credit, and for part of a period, which part. Null when the line has no subscription line behind it.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -469,7 +513,7 @@ public final class BillingInvoiceLineResponseData {
         }
 
         /**
-         * <p>What the line bills for: the product, plan, add-on or credit. Null when the line has no subscription line behind it.</p>
+         * <p>What the line bills for: the product, plan, add-on or credit, and for part of a period, which part. Null when the line has no subscription line behind it.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
@@ -524,6 +568,7 @@ public final class BillingInvoiceLineResponseData {
                     kind,
                     periodEnd,
                     periodStart,
+                    prorationFraction,
                     quantity,
                     subscriptionLineId,
                     taxable,
@@ -541,6 +586,7 @@ public final class BillingInvoiceLineResponseData {
                     || key.equalsIgnoreCase("kind")
                     || key.equalsIgnoreCase("period_end")
                     || key.equalsIgnoreCase("period_start")
+                    || key.equalsIgnoreCase("proration_fraction")
                     || key.equalsIgnoreCase("quantity")
                     || key.equalsIgnoreCase("subscription_line_id")
                     || key.equalsIgnoreCase("taxable")

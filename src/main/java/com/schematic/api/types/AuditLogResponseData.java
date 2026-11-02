@@ -30,6 +30,10 @@ public final class AuditLogResponseData {
 
     private final Optional<String> apiKeyId;
 
+    private final Optional<AuditLogCompanyResponseData> company;
+
+    private final Optional<String> companyId;
+
     private final Optional<OffsetDateTime> endedAt;
 
     private final Optional<EnvironmentResponseData> environment;
@@ -71,6 +75,8 @@ public final class AuditLogResponseData {
             ActorType actorType,
             Optional<ApiKeyResponseData> apiKey,
             Optional<String> apiKeyId,
+            Optional<AuditLogCompanyResponseData> company,
+            Optional<String> companyId,
             Optional<OffsetDateTime> endedAt,
             Optional<EnvironmentResponseData> environment,
             Optional<String> environmentId,
@@ -93,6 +99,8 @@ public final class AuditLogResponseData {
         this.actorType = actorType;
         this.apiKey = apiKey;
         this.apiKeyId = apiKeyId;
+        this.company = company;
+        this.companyId = companyId;
         this.endedAt = endedAt;
         this.environment = environment;
         this.environmentId = environmentId;
@@ -133,6 +141,16 @@ public final class AuditLogResponseData {
         return apiKeyId;
     }
 
+    @JsonProperty("company")
+    public Optional<AuditLogCompanyResponseData> getCompany() {
+        return company;
+    }
+
+    @JsonProperty("company_id")
+    public Optional<String> getCompanyId() {
+        return companyId;
+    }
+
     @JsonProperty("ended_at")
     public Optional<OffsetDateTime> getEndedAt() {
         return endedAt;
@@ -163,6 +181,9 @@ public final class AuditLogResponseData {
         return reqBody;
     }
 
+    /**
+     * @return Always null. Use resource_id_string.
+     */
     @JsonProperty("resource_id")
     public Optional<Long> getResourceId() {
         return resourceId;
@@ -234,6 +255,8 @@ public final class AuditLogResponseData {
                 && actorType.equals(other.actorType)
                 && apiKey.equals(other.apiKey)
                 && apiKeyId.equals(other.apiKeyId)
+                && company.equals(other.company)
+                && companyId.equals(other.companyId)
                 && endedAt.equals(other.endedAt)
                 && environment.equals(other.environment)
                 && environmentId.equals(other.environmentId)
@@ -260,6 +283,8 @@ public final class AuditLogResponseData {
                 this.actorType,
                 this.apiKey,
                 this.apiKeyId,
+                this.company,
+                this.companyId,
                 this.endedAt,
                 this.environment,
                 this.environmentId,
@@ -329,6 +354,14 @@ public final class AuditLogResponseData {
 
         _FinalStage apiKeyId(String apiKeyId);
 
+        _FinalStage company(Optional<AuditLogCompanyResponseData> company);
+
+        _FinalStage company(AuditLogCompanyResponseData company);
+
+        _FinalStage companyId(Optional<String> companyId);
+
+        _FinalStage companyId(String companyId);
+
         _FinalStage endedAt(Optional<OffsetDateTime> endedAt);
 
         _FinalStage endedAt(OffsetDateTime endedAt);
@@ -345,6 +378,9 @@ public final class AuditLogResponseData {
 
         _FinalStage reqBody(String reqBody);
 
+        /**
+         * <p>Always null. Use resource_id_string.</p>
+         */
         _FinalStage resourceId(Optional<Long> resourceId);
 
         _FinalStage resourceId(Long resourceId);
@@ -421,6 +457,10 @@ public final class AuditLogResponseData {
 
         private Optional<OffsetDateTime> endedAt = Optional.empty();
 
+        private Optional<String> companyId = Optional.empty();
+
+        private Optional<AuditLogCompanyResponseData> company = Optional.empty();
+
         private Optional<String> apiKeyId = Optional.empty();
 
         private Optional<ApiKeyResponseData> apiKey = Optional.empty();
@@ -437,6 +477,8 @@ public final class AuditLogResponseData {
             actorType(other.getActorType());
             apiKey(other.getApiKey());
             apiKeyId(other.getApiKeyId());
+            company(other.getCompany());
+            companyId(other.getCompanyId());
             endedAt(other.getEndedAt());
             environment(other.getEnvironment());
             environmentId(other.getEnvironmentId());
@@ -596,12 +638,19 @@ public final class AuditLogResponseData {
             return this;
         }
 
+        /**
+         * <p>Always null. Use resource_id_string.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage resourceId(Long resourceId) {
             this.resourceId = Optional.ofNullable(resourceId);
             return this;
         }
 
+        /**
+         * <p>Always null. Use resource_id_string.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "resource_id", nulls = Nulls.SKIP)
         public _FinalStage resourceId(Optional<Long> resourceId) {
@@ -662,6 +711,32 @@ public final class AuditLogResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage companyId(String companyId) {
+            this.companyId = Optional.ofNullable(companyId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
+        public _FinalStage companyId(Optional<String> companyId) {
+            this.companyId = companyId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage company(AuditLogCompanyResponseData company) {
+            this.company = Optional.ofNullable(company);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "company", nulls = Nulls.SKIP)
+        public _FinalStage company(Optional<AuditLogCompanyResponseData> company) {
+            this.company = company;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage apiKeyId(String apiKeyId) {
             this.apiKeyId = Optional.ofNullable(apiKeyId);
             return this;
@@ -707,6 +782,8 @@ public final class AuditLogResponseData {
                     actorType,
                     apiKey,
                     apiKeyId,
+                    company,
+                    companyId,
                     endedAt,
                     environment,
                     environmentId,
@@ -733,6 +810,8 @@ public final class AuditLogResponseData {
                     || key.equalsIgnoreCase("actor_type")
                     || key.equalsIgnoreCase("api_key")
                     || key.equalsIgnoreCase("api_key_id")
+                    || key.equalsIgnoreCase("company")
+                    || key.equalsIgnoreCase("company_id")
                     || key.equalsIgnoreCase("ended_at")
                     || key.equalsIgnoreCase("environment")
                     || key.equalsIgnoreCase("environment_id")

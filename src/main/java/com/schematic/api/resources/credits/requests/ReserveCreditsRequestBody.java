@@ -68,7 +68,7 @@ public final class ReserveCreditsRequestBody {
     }
 
     /**
-     * @return When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry
+     * @return When the hold lapses if no track event settles it; defaults to one minute from now and may be at most 24 hours out. The unspent hold is refunded on expiry
      */
     @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
@@ -141,7 +141,7 @@ public final class ReserveCreditsRequestBody {
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         /**
-         * <p>When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry</p>
+         * <p>When the hold lapses if no track event settles it; defaults to one minute from now and may be at most 24 hours out. The unspent hold is refunded on expiry</p>
          */
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
@@ -227,7 +227,7 @@ public final class ReserveCreditsRequestBody {
         }
 
         /**
-         * <p>When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry</p>
+         * <p>When the hold lapses if no track event settles it; defaults to one minute from now and may be at most 24 hours out. The unspent hold is refunded on expiry</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -237,7 +237,7 @@ public final class ReserveCreditsRequestBody {
         }
 
         /**
-         * <p>When the hold lapses if no track event settles it; defaults to one minute from now and may be at most one hour out. The unspent hold is refunded on expiry</p>
+         * <p>When the hold lapses if no track event settles it; defaults to one minute from now and may be at most 24 hours out. The unspent hold is refunded on expiry</p>
          */
         @java.lang.Override
         @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)

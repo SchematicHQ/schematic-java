@@ -37,6 +37,8 @@ public final class ListCompaniesRequest {
 
     private final Optional<List<SubscriptionType>> subscriptionTypes;
 
+    private final Optional<Boolean> cancelAtPeriodEnd;
+
     private final Optional<Boolean> hasScheduledDowngrade;
 
     private final Optional<Boolean> monetizedSubscriptions;
@@ -76,6 +78,7 @@ public final class ListCompaniesRequest {
             Optional<List<String>> planVersionIds,
             Optional<List<SubscriptionStatus>> subscriptionStatuses,
             Optional<List<SubscriptionType>> subscriptionTypes,
+            Optional<Boolean> cancelAtPeriodEnd,
             Optional<Boolean> hasScheduledDowngrade,
             Optional<Boolean> monetizedSubscriptions,
             Optional<String> planId,
@@ -98,6 +101,7 @@ public final class ListCompaniesRequest {
         this.planVersionIds = planVersionIds;
         this.subscriptionStatuses = subscriptionStatuses;
         this.subscriptionTypes = subscriptionTypes;
+        this.cancelAtPeriodEnd = cancelAtPeriodEnd;
         this.hasScheduledDowngrade = hasScheduledDowngrade;
         this.monetizedSubscriptions = monetizedSubscriptions;
         this.planId = planId;
@@ -165,7 +169,15 @@ public final class ListCompaniesRequest {
     }
 
     /**
-     * @return Filter companies that have a pending scheduled downgrade
+     * @return If true, filter companies with an active subscription that is set to cancel at the end of the current period; if false, filter companies without one
+     */
+    @JsonProperty("cancel_at_period_end")
+    public Optional<Boolean> getCancelAtPeriodEnd() {
+        return cancelAtPeriodEnd;
+    }
+
+    /**
+     * @return If true, filter companies that have a pending scheduled downgrade; if false, filter companies that do not
      */
     @JsonProperty("has_scheduled_downgrade")
     public Optional<Boolean> getHasScheduledDowngrade() {
@@ -302,6 +314,7 @@ public final class ListCompaniesRequest {
                 && planVersionIds.equals(other.planVersionIds)
                 && subscriptionStatuses.equals(other.subscriptionStatuses)
                 && subscriptionTypes.equals(other.subscriptionTypes)
+                && cancelAtPeriodEnd.equals(other.cancelAtPeriodEnd)
                 && hasScheduledDowngrade.equals(other.hasScheduledDowngrade)
                 && monetizedSubscriptions.equals(other.monetizedSubscriptions)
                 && planId.equals(other.planId)
@@ -328,6 +341,7 @@ public final class ListCompaniesRequest {
                 this.planVersionIds,
                 this.subscriptionStatuses,
                 this.subscriptionTypes,
+                this.cancelAtPeriodEnd,
                 this.hasScheduledDowngrade,
                 this.monetizedSubscriptions,
                 this.planId,
@@ -367,6 +381,8 @@ public final class ListCompaniesRequest {
         private Optional<List<SubscriptionStatus>> subscriptionStatuses = Optional.empty();
 
         private Optional<List<SubscriptionType>> subscriptionTypes = Optional.empty();
+
+        private Optional<Boolean> cancelAtPeriodEnd = Optional.empty();
 
         private Optional<Boolean> hasScheduledDowngrade = Optional.empty();
 
@@ -409,6 +425,7 @@ public final class ListCompaniesRequest {
             planVersionIds(other.getPlanVersionIds());
             subscriptionStatuses(other.getSubscriptionStatuses());
             subscriptionTypes(other.getSubscriptionTypes());
+            cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
             hasScheduledDowngrade(other.getHasScheduledDowngrade());
             monetizedSubscriptions(other.getMonetizedSubscriptions());
             planId(other.getPlanId());
@@ -542,7 +559,21 @@ public final class ListCompaniesRequest {
         }
 
         /**
-         * <p>Filter companies that have a pending scheduled downgrade</p>
+         * <p>If true, filter companies with an active subscription that is set to cancel at the end of the current period; if false, filter companies without one</p>
+         */
+        @JsonSetter(value = "cancel_at_period_end", nulls = Nulls.SKIP)
+        public Builder cancelAtPeriodEnd(Optional<Boolean> cancelAtPeriodEnd) {
+            this.cancelAtPeriodEnd = cancelAtPeriodEnd;
+            return this;
+        }
+
+        public Builder cancelAtPeriodEnd(Boolean cancelAtPeriodEnd) {
+            this.cancelAtPeriodEnd = Optional.ofNullable(cancelAtPeriodEnd);
+            return this;
+        }
+
+        /**
+         * <p>If true, filter companies that have a pending scheduled downgrade; if false, filter companies that do not</p>
          */
         @JsonSetter(value = "has_scheduled_downgrade", nulls = Nulls.SKIP)
         public Builder hasScheduledDowngrade(Optional<Boolean> hasScheduledDowngrade) {
@@ -759,6 +790,7 @@ public final class ListCompaniesRequest {
                     planVersionIds,
                     subscriptionStatuses,
                     subscriptionTypes,
+                    cancelAtPeriodEnd,
                     hasScheduledDowngrade,
                     monetizedSubscriptions,
                     planId,
@@ -785,6 +817,7 @@ public final class ListCompaniesRequest {
                     || key.equalsIgnoreCase("plan_version_ids")
                     || key.equalsIgnoreCase("subscription_statuses")
                     || key.equalsIgnoreCase("subscription_types")
+                    || key.equalsIgnoreCase("cancel_at_period_end")
                     || key.equalsIgnoreCase("has_scheduled_downgrade")
                     || key.equalsIgnoreCase("monetized_subscriptions")
                     || key.equalsIgnoreCase("plan_id")

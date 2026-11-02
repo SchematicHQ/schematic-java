@@ -88,6 +88,10 @@ public final class CreditEventLedgerResponseData {
 
     private final long sourceId;
 
+    private final Optional<String> sourceIdString;
+
+    private final Optional<CreditLedgerSourceType> sourceType;
+
     private final Optional<String> toGrantId;
 
     private final Optional<CreditTransferReason> transferReason;
@@ -135,6 +139,8 @@ public final class CreditEventLedgerResponseData {
             Optional<Double> quantityConsumed,
             Optional<Double> quantityRemainingAtZeroOut,
             long sourceId,
+            Optional<String> sourceIdString,
+            Optional<CreditLedgerSourceType> sourceType,
             Optional<String> toGrantId,
             Optional<CreditTransferReason> transferReason,
             Optional<String> usageEventId,
@@ -174,6 +180,8 @@ public final class CreditEventLedgerResponseData {
         this.quantityConsumed = quantityConsumed;
         this.quantityRemainingAtZeroOut = quantityRemainingAtZeroOut;
         this.sourceId = sourceId;
+        this.sourceIdString = sourceIdString;
+        this.sourceType = sourceType;
         this.toGrantId = toGrantId;
         this.transferReason = transferReason;
         this.usageEventId = usageEventId;
@@ -341,9 +349,22 @@ public final class CreditEventLedgerResponseData {
         return quantityRemainingAtZeroOut;
     }
 
+    /**
+     * @return Always 0. Use source_id_string.
+     */
     @JsonProperty("source_id")
     public long getSourceId() {
         return sourceId;
+    }
+
+    @JsonProperty("source_id_string")
+    public Optional<String> getSourceIdString() {
+        return sourceIdString;
+    }
+
+    @JsonProperty("source_type")
+    public Optional<CreditLedgerSourceType> getSourceType() {
+        return sourceType;
     }
 
     @JsonProperty("to_grant_id")
@@ -420,6 +441,8 @@ public final class CreditEventLedgerResponseData {
                 && quantityConsumed.equals(other.quantityConsumed)
                 && quantityRemainingAtZeroOut.equals(other.quantityRemainingAtZeroOut)
                 && sourceId == other.sourceId
+                && sourceIdString.equals(other.sourceIdString)
+                && sourceType.equals(other.sourceType)
                 && toGrantId.equals(other.toGrantId)
                 && transferReason.equals(other.transferReason)
                 && usageEventId.equals(other.usageEventId)
@@ -463,6 +486,8 @@ public final class CreditEventLedgerResponseData {
                 this.quantityConsumed,
                 this.quantityRemainingAtZeroOut,
                 this.sourceId,
+                this.sourceIdString,
+                this.sourceType,
                 this.toGrantId,
                 this.transferReason,
                 this.usageEventId,
@@ -515,6 +540,9 @@ public final class CreditEventLedgerResponseData {
     }
 
     public interface SourceIdStage {
+        /**
+         * <p>Always 0. Use source_id_string.</p>
+         */
         _FinalStage sourceId(long sourceId);
     }
 
@@ -622,6 +650,14 @@ public final class CreditEventLedgerResponseData {
 
         _FinalStage quantityRemainingAtZeroOut(Double quantityRemainingAtZeroOut);
 
+        _FinalStage sourceIdString(Optional<String> sourceIdString);
+
+        _FinalStage sourceIdString(String sourceIdString);
+
+        _FinalStage sourceType(Optional<CreditLedgerSourceType> sourceType);
+
+        _FinalStage sourceType(CreditLedgerSourceType sourceType);
+
         _FinalStage toGrantId(Optional<String> toGrantId);
 
         _FinalStage toGrantId(String toGrantId);
@@ -688,6 +724,10 @@ public final class CreditEventLedgerResponseData {
         private Optional<CreditTransferReason> transferReason = Optional.empty();
 
         private Optional<String> toGrantId = Optional.empty();
+
+        private Optional<CreditLedgerSourceType> sourceType = Optional.empty();
+
+        private Optional<String> sourceIdString = Optional.empty();
 
         private Optional<Double> quantityRemainingAtZeroOut = Optional.empty();
 
@@ -773,6 +813,8 @@ public final class CreditEventLedgerResponseData {
             quantityConsumed(other.getQuantityConsumed());
             quantityRemainingAtZeroOut(other.getQuantityRemainingAtZeroOut());
             sourceId(other.getSourceId());
+            sourceIdString(other.getSourceIdString());
+            sourceType(other.getSourceType());
             toGrantId(other.getToGrantId());
             transferReason(other.getTransferReason());
             usageEventId(other.getUsageEventId());
@@ -838,6 +880,10 @@ public final class CreditEventLedgerResponseData {
             return this;
         }
 
+        /**
+         * <p>Always 0. Use source_id_string.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("source_id")
         public _FinalStage sourceId(long sourceId) {
@@ -920,6 +966,32 @@ public final class CreditEventLedgerResponseData {
         @JsonSetter(value = "to_grant_id", nulls = Nulls.SKIP)
         public _FinalStage toGrantId(Optional<String> toGrantId) {
             this.toGrantId = toGrantId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage sourceType(CreditLedgerSourceType sourceType) {
+            this.sourceType = Optional.ofNullable(sourceType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "source_type", nulls = Nulls.SKIP)
+        public _FinalStage sourceType(Optional<CreditLedgerSourceType> sourceType) {
+            this.sourceType = sourceType;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage sourceIdString(String sourceIdString) {
+            this.sourceIdString = Optional.ofNullable(sourceIdString);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "source_id_string", nulls = Nulls.SKIP)
+        public _FinalStage sourceIdString(Optional<String> sourceIdString) {
+            this.sourceIdString = sourceIdString;
             return this;
         }
 
@@ -1275,6 +1347,8 @@ public final class CreditEventLedgerResponseData {
                     quantityConsumed,
                     quantityRemainingAtZeroOut,
                     sourceId,
+                    sourceIdString,
+                    sourceType,
                     toGrantId,
                     transferReason,
                     usageEventId,
@@ -1318,6 +1392,8 @@ public final class CreditEventLedgerResponseData {
                     || key.equalsIgnoreCase("quantity_consumed")
                     || key.equalsIgnoreCase("quantity_remaining_at_zero_out")
                     || key.equalsIgnoreCase("source_id")
+                    || key.equalsIgnoreCase("source_id_string")
+                    || key.equalsIgnoreCase("source_type")
                     || key.equalsIgnoreCase("to_grant_id")
                     || key.equalsIgnoreCase("transfer_reason")
                     || key.equalsIgnoreCase("usage_event_id")

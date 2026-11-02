@@ -24,6 +24,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CountCompaniesParams.Builder.class)
 public final class CountCompaniesParams {
+    private final Optional<Boolean> cancelAtPeriodEnd;
+
     private final Optional<List<String>> creditTypeIds;
 
     private final Optional<Boolean> hasScheduledDowngrade;
@@ -69,6 +71,7 @@ public final class CountCompaniesParams {
     private final Map<String, Object> additionalProperties;
 
     private CountCompaniesParams(
+            Optional<Boolean> cancelAtPeriodEnd,
             Optional<List<String>> creditTypeIds,
             Optional<Boolean> hasScheduledDowngrade,
             Optional<List<String>> ids,
@@ -91,6 +94,7 @@ public final class CountCompaniesParams {
             Optional<Boolean> withoutPlan,
             Optional<Boolean> withoutSubscription,
             Map<String, Object> additionalProperties) {
+        this.cancelAtPeriodEnd = cancelAtPeriodEnd;
         this.creditTypeIds = creditTypeIds;
         this.hasScheduledDowngrade = hasScheduledDowngrade;
         this.ids = ids;
@@ -116,6 +120,14 @@ public final class CountCompaniesParams {
     }
 
     /**
+     * @return If true, filter companies with an active subscription that is set to cancel at the end of the current period; if false, filter companies without one
+     */
+    @JsonProperty("cancel_at_period_end")
+    public Optional<Boolean> getCancelAtPeriodEnd() {
+        return cancelAtPeriodEnd;
+    }
+
+    /**
      * @return Filter companies by one or more credit type IDs (each ID starts with bcrd_)
      */
     @JsonProperty("credit_type_ids")
@@ -124,7 +136,7 @@ public final class CountCompaniesParams {
     }
 
     /**
-     * @return Filter companies that have a pending scheduled downgrade
+     * @return If true, filter companies that have a pending scheduled downgrade; if false, filter companies that do not
      */
     @JsonProperty("has_scheduled_downgrade")
     public Optional<Boolean> getHasScheduledDowngrade() {
@@ -295,7 +307,8 @@ public final class CountCompaniesParams {
     }
 
     private boolean equalTo(CountCompaniesParams other) {
-        return creditTypeIds.equals(other.creditTypeIds)
+        return cancelAtPeriodEnd.equals(other.cancelAtPeriodEnd)
+                && creditTypeIds.equals(other.creditTypeIds)
                 && hasScheduledDowngrade.equals(other.hasScheduledDowngrade)
                 && ids.equals(other.ids)
                 && limit.equals(other.limit)
@@ -321,6 +334,7 @@ public final class CountCompaniesParams {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cancelAtPeriodEnd,
                 this.creditTypeIds,
                 this.hasScheduledDowngrade,
                 this.ids,
@@ -355,6 +369,8 @@ public final class CountCompaniesParams {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Boolean> cancelAtPeriodEnd = Optional.empty();
+
         private Optional<List<String>> creditTypeIds = Optional.empty();
 
         private Optional<Boolean> hasScheduledDowngrade = Optional.empty();
@@ -402,6 +418,7 @@ public final class CountCompaniesParams {
         private Builder() {}
 
         public Builder from(CountCompaniesParams other) {
+            cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
             creditTypeIds(other.getCreditTypeIds());
             hasScheduledDowngrade(other.getHasScheduledDowngrade());
             ids(other.getIds());
@@ -427,6 +444,20 @@ public final class CountCompaniesParams {
         }
 
         /**
+         * <p>If true, filter companies with an active subscription that is set to cancel at the end of the current period; if false, filter companies without one</p>
+         */
+        @JsonSetter(value = "cancel_at_period_end", nulls = Nulls.SKIP)
+        public Builder cancelAtPeriodEnd(Optional<Boolean> cancelAtPeriodEnd) {
+            this.cancelAtPeriodEnd = cancelAtPeriodEnd;
+            return this;
+        }
+
+        public Builder cancelAtPeriodEnd(Boolean cancelAtPeriodEnd) {
+            this.cancelAtPeriodEnd = Optional.ofNullable(cancelAtPeriodEnd);
+            return this;
+        }
+
+        /**
          * <p>Filter companies by one or more credit type IDs (each ID starts with bcrd_)</p>
          */
         @JsonSetter(value = "credit_type_ids", nulls = Nulls.SKIP)
@@ -441,7 +472,7 @@ public final class CountCompaniesParams {
         }
 
         /**
-         * <p>Filter companies that have a pending scheduled downgrade</p>
+         * <p>If true, filter companies that have a pending scheduled downgrade; if false, filter companies that do not</p>
          */
         @JsonSetter(value = "has_scheduled_downgrade", nulls = Nulls.SKIP)
         public Builder hasScheduledDowngrade(Optional<Boolean> hasScheduledDowngrade) {
@@ -722,6 +753,7 @@ public final class CountCompaniesParams {
 
         public CountCompaniesParams build() {
             return new CountCompaniesParams(
+                    cancelAtPeriodEnd,
                     creditTypeIds,
                     hasScheduledDowngrade,
                     ids,
@@ -748,7 +780,8 @@ public final class CountCompaniesParams {
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("credit_type_ids")
+            if (key.equalsIgnoreCase("cancel_at_period_end")
+                    || key.equalsIgnoreCase("credit_type_ids")
                     || key.equalsIgnoreCase("has_scheduled_downgrade")
                     || key.equalsIgnoreCase("ids")
                     || key.equalsIgnoreCase("limit")

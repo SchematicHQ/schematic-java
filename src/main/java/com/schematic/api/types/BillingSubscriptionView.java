@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingSubscriptionView.Builder.class)
 public final class BillingSubscriptionView {
+    private final Optional<OffsetDateTime> accessRevokedAt;
+
     private final Optional<String> applicationId;
 
     private final Optional<Long> cancelAt;
@@ -76,6 +78,7 @@ public final class BillingSubscriptionView {
     private final Map<String, Object> additionalProperties;
 
     private BillingSubscriptionView(
+            Optional<OffsetDateTime> accessRevokedAt,
             Optional<String> applicationId,
             Optional<Long> cancelAt,
             boolean cancelAtPeriodEnd,
@@ -101,6 +104,7 @@ public final class BillingSubscriptionView {
             Optional<Long> trialEnd,
             Optional<BillingSubscriptionTrialEndSetting> trialEndSetting,
             Map<String, Object> additionalProperties) {
+        this.accessRevokedAt = accessRevokedAt;
         this.applicationId = applicationId;
         this.cancelAt = cancelAt;
         this.cancelAtPeriodEnd = cancelAtPeriodEnd;
@@ -126,6 +130,11 @@ public final class BillingSubscriptionView {
         this.trialEnd = trialEnd;
         this.trialEndSetting = trialEndSetting;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("access_revoked_at")
+    public Optional<OffsetDateTime> getAccessRevokedAt() {
+        return accessRevokedAt;
     }
 
     @JsonProperty("application_id")
@@ -260,7 +269,8 @@ public final class BillingSubscriptionView {
     }
 
     private boolean equalTo(BillingSubscriptionView other) {
-        return applicationId.equals(other.applicationId)
+        return accessRevokedAt.equals(other.accessRevokedAt)
+                && applicationId.equals(other.applicationId)
                 && cancelAt.equals(other.cancelAt)
                 && cancelAtPeriodEnd == other.cancelAtPeriodEnd
                 && companyId.equals(other.companyId)
@@ -289,6 +299,7 @@ public final class BillingSubscriptionView {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.accessRevokedAt,
                 this.applicationId,
                 this.cancelAt,
                 this.cancelAtPeriodEnd,
@@ -380,6 +391,10 @@ public final class BillingSubscriptionView {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage accessRevokedAt(Optional<OffsetDateTime> accessRevokedAt);
+
+        _FinalStage accessRevokedAt(OffsetDateTime accessRevokedAt);
 
         _FinalStage applicationId(Optional<String> applicationId);
 
@@ -497,12 +512,15 @@ public final class BillingSubscriptionView {
 
         private Optional<String> applicationId = Optional.empty();
 
+        private Optional<OffsetDateTime> accessRevokedAt = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         @java.lang.Override
         public Builder from(BillingSubscriptionView other) {
+            accessRevokedAt(other.getAccessRevokedAt());
             applicationId(other.getApplicationId());
             cancelAt(other.getCancelAt());
             cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
@@ -794,8 +812,22 @@ public final class BillingSubscriptionView {
         }
 
         @java.lang.Override
+        public _FinalStage accessRevokedAt(OffsetDateTime accessRevokedAt) {
+            this.accessRevokedAt = Optional.ofNullable(accessRevokedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "access_revoked_at", nulls = Nulls.SKIP)
+        public _FinalStage accessRevokedAt(Optional<OffsetDateTime> accessRevokedAt) {
+            this.accessRevokedAt = accessRevokedAt;
+            return this;
+        }
+
+        @java.lang.Override
         public BillingSubscriptionView build() {
             return new BillingSubscriptionView(
+                    accessRevokedAt,
                     applicationId,
                     cancelAt,
                     cancelAtPeriodEnd,
@@ -825,7 +857,8 @@ public final class BillingSubscriptionView {
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("application_id")
+            if (key.equalsIgnoreCase("access_revoked_at")
+                    || key.equalsIgnoreCase("application_id")
                     || key.equalsIgnoreCase("cancel_at")
                     || key.equalsIgnoreCase("cancel_at_period_end")
                     || key.equalsIgnoreCase("company_id")

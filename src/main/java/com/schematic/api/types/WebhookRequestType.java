@@ -86,6 +86,9 @@ public final class WebhookRequestType {
     public static final WebhookRequestType COMPANY_PLAN_CHANGED =
             new WebhookRequestType(Value.COMPANY_PLAN_CHANGED, "company.plan_changed");
 
+    public static final WebhookRequestType INVOICE_FINALIZED =
+            new WebhookRequestType(Value.INVOICE_FINALIZED, "invoice.finalized");
+
     public static final WebhookRequestType ENTITLEMENT_TIER_LIMIT_REACHED =
             new WebhookRequestType(Value.ENTITLEMENT_TIER_LIMIT_REACHED, "entitlement.tier_limit.reached");
 
@@ -104,6 +107,12 @@ public final class WebhookRequestType {
     public static final WebhookRequestType COMPANY_CREATED =
             new WebhookRequestType(Value.COMPANY_CREATED, "company.created");
 
+    public static final WebhookRequestType SUBSCRIPTION_PERIOD_STARTED =
+            new WebhookRequestType(Value.SUBSCRIPTION_PERIOD_STARTED, "subscription.period.started");
+
+    public static final WebhookRequestType INVOICE_PAST_DUE =
+            new WebhookRequestType(Value.INVOICE_PAST_DUE, "invoice.past_due");
+
     public static final WebhookRequestType AUTO_TOPUP_SUCCESS =
             new WebhookRequestType(Value.AUTO_TOPUP_SUCCESS, "auto.topup.success");
 
@@ -111,6 +120,8 @@ public final class WebhookRequestType {
             new WebhookRequestType(Value.ENTITLEMENT_TIER_LIMIT_WARNING, "entitlement.tier_limit.warning");
 
     public static final WebhookRequestType FLAG_DELETED = new WebhookRequestType(Value.FLAG_DELETED, "flag.deleted");
+
+    public static final WebhookRequestType INVOICE_PAID = new WebhookRequestType(Value.INVOICE_PAID, "invoice.paid");
 
     public static final WebhookRequestType PLAN_CREATED = new WebhookRequestType(Value.PLAN_CREATED, "plan.created");
 
@@ -121,6 +132,9 @@ public final class WebhookRequestType {
 
     public static final WebhookRequestType FEATURE_UPDATED =
             new WebhookRequestType(Value.FEATURE_UPDATED, "feature.updated");
+
+    public static final WebhookRequestType INVOICE_VOIDED =
+            new WebhookRequestType(Value.INVOICE_VOIDED, "invoice.voided");
 
     private final Value value;
 
@@ -212,6 +226,8 @@ public final class WebhookRequestType {
                 return visitor.visitEntitlementSoftLimitWarning();
             case COMPANY_PLAN_CHANGED:
                 return visitor.visitCompanyPlanChanged();
+            case INVOICE_FINALIZED:
+                return visitor.visitInvoiceFinalized();
             case ENTITLEMENT_TIER_LIMIT_REACHED:
                 return visitor.visitEntitlementTierLimitReached();
             case PLAN_VERSION_DELETED:
@@ -224,12 +240,18 @@ public final class WebhookRequestType {
                 return visitor.visitCompanyUpdated();
             case COMPANY_CREATED:
                 return visitor.visitCompanyCreated();
+            case SUBSCRIPTION_PERIOD_STARTED:
+                return visitor.visitSubscriptionPeriodStarted();
+            case INVOICE_PAST_DUE:
+                return visitor.visitInvoicePastDue();
             case AUTO_TOPUP_SUCCESS:
                 return visitor.visitAutoTopupSuccess();
             case ENTITLEMENT_TIER_LIMIT_WARNING:
                 return visitor.visitEntitlementTierLimitWarning();
             case FLAG_DELETED:
                 return visitor.visitFlagDeleted();
+            case INVOICE_PAID:
+                return visitor.visitInvoicePaid();
             case PLAN_CREATED:
                 return visitor.visitPlanCreated();
             case CREDIT_PURCHASE_SUCCESS:
@@ -238,6 +260,8 @@ public final class WebhookRequestType {
                 return visitor.visitTestSend();
             case FEATURE_UPDATED:
                 return visitor.visitFeatureUpdated();
+            case INVOICE_VOIDED:
+                return visitor.visitInvoiceVoided();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -305,6 +329,8 @@ public final class WebhookRequestType {
                 return ENTITLEMENT_SOFT_LIMIT_WARNING;
             case "company.plan_changed":
                 return COMPANY_PLAN_CHANGED;
+            case "invoice.finalized":
+                return INVOICE_FINALIZED;
             case "entitlement.tier_limit.reached":
                 return ENTITLEMENT_TIER_LIMIT_REACHED;
             case "plan_version.deleted":
@@ -317,12 +343,18 @@ public final class WebhookRequestType {
                 return COMPANY_UPDATED;
             case "company.created":
                 return COMPANY_CREATED;
+            case "subscription.period.started":
+                return SUBSCRIPTION_PERIOD_STARTED;
+            case "invoice.past_due":
+                return INVOICE_PAST_DUE;
             case "auto.topup.success":
                 return AUTO_TOPUP_SUCCESS;
             case "entitlement.tier_limit.warning":
                 return ENTITLEMENT_TIER_LIMIT_WARNING;
             case "flag.deleted":
                 return FLAG_DELETED;
+            case "invoice.paid":
+                return INVOICE_PAID;
             case "plan.created":
                 return PLAN_CREATED;
             case "credit.purchase.success":
@@ -331,6 +363,8 @@ public final class WebhookRequestType {
                 return TEST_SEND;
             case "feature.updated":
                 return FEATURE_UPDATED;
+            case "invoice.voided":
+                return INVOICE_VOIDED;
             default:
                 return new WebhookRequestType(Value.UNKNOWN, value);
         }
@@ -391,6 +425,14 @@ public final class WebhookRequestType {
 
         FLAG_UPDATED,
 
+        INVOICE_FINALIZED,
+
+        INVOICE_PAID,
+
+        INVOICE_PAST_DUE,
+
+        INVOICE_VOIDED,
+
         PLAN_CREATED,
 
         PLAN_DELETED,
@@ -406,6 +448,8 @@ public final class WebhookRequestType {
         PLAN_VERSION_DELETED,
 
         RULE_DELETED,
+
+        SUBSCRIPTION_PERIOD_STARTED,
 
         TEST_SEND,
 
@@ -479,6 +523,14 @@ public final class WebhookRequestType {
 
         T visitFlagUpdated();
 
+        T visitInvoiceFinalized();
+
+        T visitInvoicePaid();
+
+        T visitInvoicePastDue();
+
+        T visitInvoiceVoided();
+
         T visitPlanCreated();
 
         T visitPlanDeleted();
@@ -494,6 +546,8 @@ public final class WebhookRequestType {
         T visitPlanVersionDeleted();
 
         T visitRuleDeleted();
+
+        T visitSubscriptionPeriodStarted();
 
         T visitTestSend();
 

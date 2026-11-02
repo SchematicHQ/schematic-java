@@ -40,6 +40,12 @@ public final class EventDetailResponseData {
 
     private final Optional<String> companyId;
 
+    private final Optional<String> cost;
+
+    private final Optional<InferenceCostSource> costSource;
+
+    private final Optional<String> currency;
+
     private final Optional<OffsetDateTime> enrichedAt;
 
     private final Optional<String> environmentId;
@@ -88,6 +94,9 @@ public final class EventDetailResponseData {
             OffsetDateTime capturedAt,
             Optional<PreviewObject> company,
             Optional<String> companyId,
+            Optional<String> cost,
+            Optional<InferenceCostSource> costSource,
+            Optional<String> currency,
             Optional<OffsetDateTime> enrichedAt,
             Optional<String> environmentId,
             Optional<String> errorMessage,
@@ -115,6 +124,9 @@ public final class EventDetailResponseData {
         this.capturedAt = capturedAt;
         this.company = company;
         this.companyId = companyId;
+        this.cost = cost;
+        this.costSource = costSource;
+        this.currency = currency;
         this.enrichedAt = enrichedAt;
         this.environmentId = environmentId;
         this.errorMessage = errorMessage;
@@ -170,6 +182,30 @@ public final class EventDetailResponseData {
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
+    }
+
+    /**
+     * @return What the inference call cost, as a decimal amount in currency (dollars, not cents, for usd). Absent when the call has no price, for other event types, and when listing events.
+     */
+    @JsonProperty("cost")
+    public Optional<String> getCost() {
+        return cost;
+    }
+
+    /**
+     * @return Where the inference call's cost came from: provided when the request reported it, list_price when Schematic priced it from the model's list price, unpriced when neither applied. Absent for other event types and when listing events.
+     */
+    @JsonProperty("cost_source")
+    public Optional<InferenceCostSource> getCostSource() {
+        return costSource;
+    }
+
+    /**
+     * @return Lowercase ISO currency code for cost. Absent for other event types and when listing events.
+     */
+    @JsonProperty("currency")
+    public Optional<String> getCurrency() {
+        return currency;
     }
 
     @JsonProperty("enriched_at")
@@ -286,6 +322,9 @@ public final class EventDetailResponseData {
                 && capturedAt.equals(other.capturedAt)
                 && company.equals(other.company)
                 && companyId.equals(other.companyId)
+                && cost.equals(other.cost)
+                && costSource.equals(other.costSource)
+                && currency.equals(other.currency)
                 && enrichedAt.equals(other.enrichedAt)
                 && environmentId.equals(other.environmentId)
                 && errorMessage.equals(other.errorMessage)
@@ -317,6 +356,9 @@ public final class EventDetailResponseData {
                 this.capturedAt,
                 this.company,
                 this.companyId,
+                this.cost,
+                this.costSource,
+                this.currency,
                 this.enrichedAt,
                 this.environmentId,
                 this.errorMessage,
@@ -401,6 +443,27 @@ public final class EventDetailResponseData {
         _FinalStage companyId(Optional<String> companyId);
 
         _FinalStage companyId(String companyId);
+
+        /**
+         * <p>What the inference call cost, as a decimal amount in currency (dollars, not cents, for usd). Absent when the call has no price, for other event types, and when listing events.</p>
+         */
+        _FinalStage cost(Optional<String> cost);
+
+        _FinalStage cost(String cost);
+
+        /**
+         * <p>Where the inference call's cost came from: provided when the request reported it, list_price when Schematic priced it from the model's list price, unpriced when neither applied. Absent for other event types and when listing events.</p>
+         */
+        _FinalStage costSource(Optional<InferenceCostSource> costSource);
+
+        _FinalStage costSource(InferenceCostSource costSource);
+
+        /**
+         * <p>Lowercase ISO currency code for cost. Absent for other event types and when listing events.</p>
+         */
+        _FinalStage currency(Optional<String> currency);
+
+        _FinalStage currency(String currency);
 
         _FinalStage enrichedAt(Optional<OffsetDateTime> enrichedAt);
 
@@ -512,6 +575,12 @@ public final class EventDetailResponseData {
 
         private Optional<OffsetDateTime> enrichedAt = Optional.empty();
 
+        private Optional<String> currency = Optional.empty();
+
+        private Optional<InferenceCostSource> costSource = Optional.empty();
+
+        private Optional<String> cost = Optional.empty();
+
         private Optional<String> companyId = Optional.empty();
 
         private Optional<PreviewObject> company = Optional.empty();
@@ -535,6 +604,9 @@ public final class EventDetailResponseData {
             capturedAt(other.getCapturedAt());
             company(other.getCompany());
             companyId(other.getCompanyId());
+            cost(other.getCost());
+            costSource(other.getCostSource());
+            currency(other.getCurrency());
             enrichedAt(other.getEnrichedAt());
             environmentId(other.getEnvironmentId());
             errorMessage(other.getErrorMessage());
@@ -816,6 +888,66 @@ public final class EventDetailResponseData {
             return this;
         }
 
+        /**
+         * <p>Lowercase ISO currency code for cost. Absent for other event types and when listing events.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage currency(String currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        /**
+         * <p>Lowercase ISO currency code for cost. Absent for other event types and when listing events.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<String> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        /**
+         * <p>Where the inference call's cost came from: provided when the request reported it, list_price when Schematic priced it from the model's list price, unpriced when neither applied. Absent for other event types and when listing events.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage costSource(InferenceCostSource costSource) {
+            this.costSource = Optional.ofNullable(costSource);
+            return this;
+        }
+
+        /**
+         * <p>Where the inference call's cost came from: provided when the request reported it, list_price when Schematic priced it from the model's list price, unpriced when neither applied. Absent for other event types and when listing events.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "cost_source", nulls = Nulls.SKIP)
+        public _FinalStage costSource(Optional<InferenceCostSource> costSource) {
+            this.costSource = costSource;
+            return this;
+        }
+
+        /**
+         * <p>What the inference call cost, as a decimal amount in currency (dollars, not cents, for usd). Absent when the call has no price, for other event types, and when listing events.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cost(String cost) {
+            this.cost = Optional.ofNullable(cost);
+            return this;
+        }
+
+        /**
+         * <p>What the inference call cost, as a decimal amount in currency (dollars, not cents, for usd). Absent when the call has no price, for other event types, and when listing events.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "cost", nulls = Nulls.SKIP)
+        public _FinalStage cost(Optional<String> cost) {
+            this.cost = cost;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
@@ -902,6 +1034,9 @@ public final class EventDetailResponseData {
                     capturedAt,
                     company,
                     companyId,
+                    cost,
+                    costSource,
+                    currency,
                     enrichedAt,
                     environmentId,
                     errorMessage,
@@ -933,6 +1068,9 @@ public final class EventDetailResponseData {
                     || key.equalsIgnoreCase("captured_at")
                     || key.equalsIgnoreCase("company")
                     || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("cost")
+                    || key.equalsIgnoreCase("cost_source")
+                    || key.equalsIgnoreCase("currency")
                     || key.equalsIgnoreCase("enriched_at")
                     || key.equalsIgnoreCase("environment_id")
                     || key.equalsIgnoreCase("error_message")

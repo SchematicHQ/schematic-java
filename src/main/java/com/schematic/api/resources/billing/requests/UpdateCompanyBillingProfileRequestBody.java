@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingCollectionMethod;
+import com.schematic.api.types.Currency;
+import com.schematic.api.types.PaymentGating;
 import com.schematic.api.types.ProrationBehavior;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,11 +27,19 @@ import org.jetbrains.annotations.NotNull;
 public final class UpdateCompanyBillingProfileRequestBody {
     private final BillingCollectionMethod collectionMethod;
 
+    private final Optional<Currency> currency;
+
     private final Optional<Long> daysUntilDue;
+
+    private final Optional<Long> gatingDays;
 
     private final Optional<Boolean> isDefault;
 
     private final Optional<String> name;
+
+    private final Optional<Long> overdraftLimit;
+
+    private final Optional<PaymentGating> paymentGating;
 
     private final Optional<String> paymentMethodId;
 
@@ -39,16 +49,24 @@ public final class UpdateCompanyBillingProfileRequestBody {
 
     private UpdateCompanyBillingProfileRequestBody(
             BillingCollectionMethod collectionMethod,
+            Optional<Currency> currency,
             Optional<Long> daysUntilDue,
+            Optional<Long> gatingDays,
             Optional<Boolean> isDefault,
             Optional<String> name,
+            Optional<Long> overdraftLimit,
+            Optional<PaymentGating> paymentGating,
             Optional<String> paymentMethodId,
             Optional<ProrationBehavior> prorationBehavior,
             Map<String, Object> additionalProperties) {
         this.collectionMethod = collectionMethod;
+        this.currency = currency;
         this.daysUntilDue = daysUntilDue;
+        this.gatingDays = gatingDays;
         this.isDefault = isDefault;
         this.name = name;
+        this.overdraftLimit = overdraftLimit;
+        this.paymentGating = paymentGating;
         this.paymentMethodId = paymentMethodId;
         this.prorationBehavior = prorationBehavior;
         this.additionalProperties = additionalProperties;
@@ -59,9 +77,19 @@ public final class UpdateCompanyBillingProfileRequestBody {
         return collectionMethod;
     }
 
+    @JsonProperty("currency")
+    public Optional<Currency> getCurrency() {
+        return currency;
+    }
+
     @JsonProperty("days_until_due")
     public Optional<Long> getDaysUntilDue() {
         return daysUntilDue;
+    }
+
+    @JsonProperty("gating_days")
+    public Optional<Long> getGatingDays() {
+        return gatingDays;
     }
 
     @JsonProperty("is_default")
@@ -72,6 +100,16 @@ public final class UpdateCompanyBillingProfileRequestBody {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    @JsonProperty("overdraft_limit")
+    public Optional<Long> getOverdraftLimit() {
+        return overdraftLimit;
+    }
+
+    @JsonProperty("payment_gating")
+    public Optional<PaymentGating> getPaymentGating() {
+        return paymentGating;
     }
 
     @JsonProperty("payment_method_id")
@@ -98,9 +136,13 @@ public final class UpdateCompanyBillingProfileRequestBody {
 
     private boolean equalTo(UpdateCompanyBillingProfileRequestBody other) {
         return collectionMethod.equals(other.collectionMethod)
+                && currency.equals(other.currency)
                 && daysUntilDue.equals(other.daysUntilDue)
+                && gatingDays.equals(other.gatingDays)
                 && isDefault.equals(other.isDefault)
                 && name.equals(other.name)
+                && overdraftLimit.equals(other.overdraftLimit)
+                && paymentGating.equals(other.paymentGating)
                 && paymentMethodId.equals(other.paymentMethodId)
                 && prorationBehavior.equals(other.prorationBehavior);
     }
@@ -109,9 +151,13 @@ public final class UpdateCompanyBillingProfileRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.collectionMethod,
+                this.currency,
                 this.daysUntilDue,
+                this.gatingDays,
                 this.isDefault,
                 this.name,
+                this.overdraftLimit,
+                this.paymentGating,
                 this.paymentMethodId,
                 this.prorationBehavior);
     }
@@ -138,9 +184,17 @@ public final class UpdateCompanyBillingProfileRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage currency(Optional<Currency> currency);
+
+        _FinalStage currency(Currency currency);
+
         _FinalStage daysUntilDue(Optional<Long> daysUntilDue);
 
         _FinalStage daysUntilDue(Long daysUntilDue);
+
+        _FinalStage gatingDays(Optional<Long> gatingDays);
+
+        _FinalStage gatingDays(Long gatingDays);
 
         _FinalStage isDefault(Optional<Boolean> isDefault);
 
@@ -149,6 +203,14 @@ public final class UpdateCompanyBillingProfileRequestBody {
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
+
+        _FinalStage overdraftLimit(Optional<Long> overdraftLimit);
+
+        _FinalStage overdraftLimit(Long overdraftLimit);
+
+        _FinalStage paymentGating(Optional<PaymentGating> paymentGating);
+
+        _FinalStage paymentGating(PaymentGating paymentGating);
 
         _FinalStage paymentMethodId(Optional<String> paymentMethodId);
 
@@ -167,11 +229,19 @@ public final class UpdateCompanyBillingProfileRequestBody {
 
         private Optional<String> paymentMethodId = Optional.empty();
 
+        private Optional<PaymentGating> paymentGating = Optional.empty();
+
+        private Optional<Long> overdraftLimit = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<Boolean> isDefault = Optional.empty();
 
+        private Optional<Long> gatingDays = Optional.empty();
+
         private Optional<Long> daysUntilDue = Optional.empty();
+
+        private Optional<Currency> currency = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -180,9 +250,13 @@ public final class UpdateCompanyBillingProfileRequestBody {
         @java.lang.Override
         public Builder from(UpdateCompanyBillingProfileRequestBody other) {
             collectionMethod(other.getCollectionMethod());
+            currency(other.getCurrency());
             daysUntilDue(other.getDaysUntilDue());
+            gatingDays(other.getGatingDays());
             isDefault(other.getIsDefault());
             name(other.getName());
+            overdraftLimit(other.getOverdraftLimit());
+            paymentGating(other.getPaymentGating());
             paymentMethodId(other.getPaymentMethodId());
             prorationBehavior(other.getProrationBehavior());
             return this;
@@ -222,6 +296,32 @@ public final class UpdateCompanyBillingProfileRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage paymentGating(PaymentGating paymentGating) {
+            this.paymentGating = Optional.ofNullable(paymentGating);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "payment_gating", nulls = Nulls.SKIP)
+        public _FinalStage paymentGating(Optional<PaymentGating> paymentGating) {
+            this.paymentGating = paymentGating;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage overdraftLimit(Long overdraftLimit) {
+            this.overdraftLimit = Optional.ofNullable(overdraftLimit);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "overdraft_limit", nulls = Nulls.SKIP)
+        public _FinalStage overdraftLimit(Optional<Long> overdraftLimit) {
+            this.overdraftLimit = overdraftLimit;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage name(String name) {
             this.name = Optional.ofNullable(name);
             return this;
@@ -248,6 +348,19 @@ public final class UpdateCompanyBillingProfileRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage gatingDays(Long gatingDays) {
+            this.gatingDays = Optional.ofNullable(gatingDays);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "gating_days", nulls = Nulls.SKIP)
+        public _FinalStage gatingDays(Optional<Long> gatingDays) {
+            this.gatingDays = gatingDays;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage daysUntilDue(Long daysUntilDue) {
             this.daysUntilDue = Optional.ofNullable(daysUntilDue);
             return this;
@@ -261,12 +374,29 @@ public final class UpdateCompanyBillingProfileRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage currency(Currency currency) {
+            this.currency = Optional.ofNullable(currency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "currency", nulls = Nulls.SKIP)
+        public _FinalStage currency(Optional<Currency> currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        @java.lang.Override
         public UpdateCompanyBillingProfileRequestBody build() {
             return new UpdateCompanyBillingProfileRequestBody(
                     collectionMethod,
+                    currency,
                     daysUntilDue,
+                    gatingDays,
                     isDefault,
                     name,
+                    overdraftLimit,
+                    paymentGating,
                     paymentMethodId,
                     prorationBehavior,
                     additionalProperties);
@@ -275,9 +405,13 @@ public final class UpdateCompanyBillingProfileRequestBody {
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("collection_method")
+                    || key.equalsIgnoreCase("currency")
                     || key.equalsIgnoreCase("days_until_due")
+                    || key.equalsIgnoreCase("gating_days")
                     || key.equalsIgnoreCase("is_default")
                     || key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("overdraft_limit")
+                    || key.equalsIgnoreCase("payment_gating")
                     || key.equalsIgnoreCase("payment_method_id")
                     || key.equalsIgnoreCase("proration_behavior")) {
                 return;

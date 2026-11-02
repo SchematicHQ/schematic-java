@@ -46,7 +46,11 @@ public final class PublishPlanVersionRequestBody {
 
     private final List<String> excludedCompanyIds;
 
+    private final Optional<Long> gatingDays;
+
     private final PlanVersionMigrationStrategy migrationStrategy;
+
+    private final Optional<PaymentGating> paymentGating;
 
     private final Optional<String> phone;
 
@@ -76,7 +80,9 @@ public final class PublishPlanVersionRequestBody {
             Optional<Long> daysUntilDue,
             Optional<OffsetDateTime> endDate,
             List<String> excludedCompanyIds,
+            Optional<Long> gatingDays,
             PlanVersionMigrationStrategy migrationStrategy,
+            Optional<PaymentGating> paymentGating,
             Optional<String> phone,
             Optional<Boolean> prorateFirstPeriod,
             Optional<MigrationProrationBehavior> prorationBehavior,
@@ -96,7 +102,9 @@ public final class PublishPlanVersionRequestBody {
         this.daysUntilDue = daysUntilDue;
         this.endDate = endDate;
         this.excludedCompanyIds = excludedCompanyIds;
+        this.gatingDays = gatingDays;
         this.migrationStrategy = migrationStrategy;
+        this.paymentGating = paymentGating;
         this.phone = phone;
         this.prorateFirstPeriod = prorateFirstPeriod;
         this.prorationBehavior = prorationBehavior;
@@ -183,9 +191,25 @@ public final class PublishPlanVersionRequestBody {
         return excludedCompanyIds;
     }
 
+    /**
+     * @return With payment_gating revoke_after, how many days past due an invoice may go before the company loses the plan. 0 revokes at once. Only applies when Schematic bills the company. Applies to the company's contract and never creates a plan version. Omitted keeps the contract's setting.
+     */
+    @JsonProperty("gating_days")
+    public Optional<Long> getGatingDays() {
+        return gatingDays;
+    }
+
     @JsonProperty("migration_strategy")
     public PlanVersionMigrationStrategy getMigrationStrategy() {
         return migrationStrategy;
+    }
+
+    /**
+     * @return What happens to the company's access when an invoice passes its due date: keep_serving keeps the plan and marks the subscription past due; revoke_after takes the plan away after gating_days. Only applies when Schematic bills the company, to every invoice on its contract, and never creates a plan version. Omitted keeps the contract's setting, which is keep_serving unless changed.
+     */
+    @JsonProperty("payment_gating")
+    public Optional<PaymentGating> getPaymentGating() {
+        return paymentGating;
     }
 
     @JsonProperty("phone")
@@ -261,7 +285,9 @@ public final class PublishPlanVersionRequestBody {
                 && daysUntilDue.equals(other.daysUntilDue)
                 && endDate.equals(other.endDate)
                 && excludedCompanyIds.equals(other.excludedCompanyIds)
+                && gatingDays.equals(other.gatingDays)
                 && migrationStrategy.equals(other.migrationStrategy)
+                && paymentGating.equals(other.paymentGating)
                 && phone.equals(other.phone)
                 && prorateFirstPeriod.equals(other.prorateFirstPeriod)
                 && prorationBehavior.equals(other.prorationBehavior)
@@ -285,7 +311,9 @@ public final class PublishPlanVersionRequestBody {
                 this.daysUntilDue,
                 this.endDate,
                 this.excludedCompanyIds,
+                this.gatingDays,
                 this.migrationStrategy,
+                this.paymentGating,
                 this.phone,
                 this.prorateFirstPeriod,
                 this.prorationBehavior,
@@ -384,6 +412,20 @@ public final class PublishPlanVersionRequestBody {
 
         _FinalStage addAllExcludedCompanyIds(List<String> excludedCompanyIds);
 
+        /**
+         * <p>With payment_gating revoke_after, how many days past due an invoice may go before the company loses the plan. 0 revokes at once. Only applies when Schematic bills the company. Applies to the company's contract and never creates a plan version. Omitted keeps the contract's setting.</p>
+         */
+        _FinalStage gatingDays(Optional<Long> gatingDays);
+
+        _FinalStage gatingDays(Long gatingDays);
+
+        /**
+         * <p>What happens to the company's access when an invoice passes its due date: keep_serving keeps the plan and marks the subscription past due; revoke_after takes the plan away after gating_days. Only applies when Schematic bills the company, to every invoice on its contract, and never creates a plan version. Omitted keeps the contract's setting, which is keep_serving unless changed.</p>
+         */
+        _FinalStage paymentGating(Optional<PaymentGating> paymentGating);
+
+        _FinalStage paymentGating(PaymentGating paymentGating);
+
         _FinalStage phone(Optional<String> phone);
 
         _FinalStage phone(String phone);
@@ -446,6 +488,10 @@ public final class PublishPlanVersionRequestBody {
 
         private Optional<String> phone = Optional.empty();
 
+        private Optional<PaymentGating> paymentGating = Optional.empty();
+
+        private Optional<Long> gatingDays = Optional.empty();
+
         private List<String> excludedCompanyIds = new ArrayList<>();
 
         private Optional<OffsetDateTime> endDate = Optional.empty();
@@ -485,7 +531,9 @@ public final class PublishPlanVersionRequestBody {
             daysUntilDue(other.getDaysUntilDue());
             endDate(other.getEndDate());
             excludedCompanyIds(other.getExcludedCompanyIds());
+            gatingDays(other.getGatingDays());
             migrationStrategy(other.getMigrationStrategy());
+            paymentGating(other.getPaymentGating());
             phone(other.getPhone());
             prorateFirstPeriod(other.getProrateFirstPeriod());
             prorationBehavior(other.getProrationBehavior());
@@ -626,6 +674,46 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter(value = "phone", nulls = Nulls.SKIP)
         public _FinalStage phone(Optional<String> phone) {
             this.phone = phone;
+            return this;
+        }
+
+        /**
+         * <p>What happens to the company's access when an invoice passes its due date: keep_serving keeps the plan and marks the subscription past due; revoke_after takes the plan away after gating_days. Only applies when Schematic bills the company, to every invoice on its contract, and never creates a plan version. Omitted keeps the contract's setting, which is keep_serving unless changed.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage paymentGating(PaymentGating paymentGating) {
+            this.paymentGating = Optional.ofNullable(paymentGating);
+            return this;
+        }
+
+        /**
+         * <p>What happens to the company's access when an invoice passes its due date: keep_serving keeps the plan and marks the subscription past due; revoke_after takes the plan away after gating_days. Only applies when Schematic bills the company, to every invoice on its contract, and never creates a plan version. Omitted keeps the contract's setting, which is keep_serving unless changed.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "payment_gating", nulls = Nulls.SKIP)
+        public _FinalStage paymentGating(Optional<PaymentGating> paymentGating) {
+            this.paymentGating = paymentGating;
+            return this;
+        }
+
+        /**
+         * <p>With payment_gating revoke_after, how many days past due an invoice may go before the company loses the plan. 0 revokes at once. Only applies when Schematic bills the company. Applies to the company's contract and never creates a plan version. Omitted keeps the contract's setting.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage gatingDays(Long gatingDays) {
+            this.gatingDays = Optional.ofNullable(gatingDays);
+            return this;
+        }
+
+        /**
+         * <p>With payment_gating revoke_after, how many days past due an invoice may go before the company loses the plan. 0 revokes at once. Only applies when Schematic bills the company. Applies to the company's contract and never creates a plan version. Omitted keeps the contract's setting.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "gating_days", nulls = Nulls.SKIP)
+        public _FinalStage gatingDays(Optional<Long> gatingDays) {
+            this.gatingDays = gatingDays;
             return this;
         }
 
@@ -846,7 +934,9 @@ public final class PublishPlanVersionRequestBody {
                     daysUntilDue,
                     endDate,
                     excludedCompanyIds,
+                    gatingDays,
                     migrationStrategy,
+                    paymentGating,
                     phone,
                     prorateFirstPeriod,
                     prorationBehavior,
@@ -870,7 +960,9 @@ public final class PublishPlanVersionRequestBody {
                     || key.equalsIgnoreCase("days_until_due")
                     || key.equalsIgnoreCase("end_date")
                     || key.equalsIgnoreCase("excluded_company_ids")
+                    || key.equalsIgnoreCase("gating_days")
                     || key.equalsIgnoreCase("migration_strategy")
+                    || key.equalsIgnoreCase("payment_gating")
                     || key.equalsIgnoreCase("phone")
                     || key.equalsIgnoreCase("prorate_first_period")
                     || key.equalsIgnoreCase("proration_behavior")

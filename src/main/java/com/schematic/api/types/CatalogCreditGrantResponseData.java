@@ -43,6 +43,8 @@ public final class CatalogCreditGrantResponseData {
 
     private final PlanCreditGrantScaling scaling;
 
+    private final boolean visible;
+
     private final Map<String, Object> additionalProperties;
 
     private CatalogCreditGrantResponseData(
@@ -57,6 +59,7 @@ public final class CatalogCreditGrantResponseData {
             Optional<String> licenseId,
             Optional<BillingPlanCreditGrantResetCadence> resetCadence,
             PlanCreditGrantScaling scaling,
+            boolean visible,
             Map<String, Object> additionalProperties) {
         this.companyCreditAmount = companyCreditAmount;
         this.creditAmount = creditAmount;
@@ -69,6 +72,7 @@ public final class CatalogCreditGrantResponseData {
         this.licenseId = licenseId;
         this.resetCadence = resetCadence;
         this.scaling = scaling;
+        this.visible = visible;
         this.additionalProperties = additionalProperties;
     }
 
@@ -133,6 +137,14 @@ public final class CatalogCreditGrantResponseData {
         return scaling;
     }
 
+    /**
+     * @return Whether the catalog shows this credit on the plan. Display-only: a hidden grant is still granted and priced at checkout.
+     */
+    @JsonProperty("visible")
+    public boolean getVisible() {
+        return visible;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -155,7 +167,8 @@ public final class CatalogCreditGrantResponseData {
                 && id.equals(other.id)
                 && licenseId.equals(other.licenseId)
                 && resetCadence.equals(other.resetCadence)
-                && scaling.equals(other.scaling);
+                && scaling.equals(other.scaling)
+                && visible == other.visible;
     }
 
     @java.lang.Override
@@ -171,7 +184,8 @@ public final class CatalogCreditGrantResponseData {
                 this.id,
                 this.licenseId,
                 this.resetCadence,
-                this.scaling);
+                this.scaling,
+                this.visible);
     }
 
     @java.lang.Override
@@ -212,7 +226,14 @@ public final class CatalogCreditGrantResponseData {
     }
 
     public interface ScalingStage {
-        _FinalStage scaling(@NotNull PlanCreditGrantScaling scaling);
+        VisibleStage scaling(@NotNull PlanCreditGrantScaling scaling);
+    }
+
+    public interface VisibleStage {
+        /**
+         * <p>Whether the catalog shows this credit on the plan. Display-only: a hidden grant is still granted and priced at checkout.</p>
+         */
+        _FinalStage visible(boolean visible);
     }
 
     public interface _FinalStage {
@@ -251,6 +272,7 @@ public final class CatalogCreditGrantResponseData {
                     CreditNameStage,
                     IdStage,
                     ScalingStage,
+                    VisibleStage,
                     _FinalStage {
         private long companyCreditAmount;
 
@@ -263,6 +285,8 @@ public final class CatalogCreditGrantResponseData {
         private String id;
 
         private PlanCreditGrantScaling scaling;
+
+        private boolean visible;
 
         private Optional<BillingPlanCreditGrantResetCadence> resetCadence = Optional.empty();
 
@@ -291,6 +315,7 @@ public final class CatalogCreditGrantResponseData {
             licenseId(other.getLicenseId());
             resetCadence(other.getResetCadence());
             scaling(other.getScaling());
+            visible(other.getVisible());
             return this;
         }
 
@@ -339,8 +364,19 @@ public final class CatalogCreditGrantResponseData {
 
         @java.lang.Override
         @JsonSetter("scaling")
-        public _FinalStage scaling(@NotNull PlanCreditGrantScaling scaling) {
+        public VisibleStage scaling(@NotNull PlanCreditGrantScaling scaling) {
             this.scaling = Objects.requireNonNull(scaling, "scaling must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the catalog shows this credit on the plan. Display-only: a hidden grant is still granted and priced at checkout.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("visible")
+        public _FinalStage visible(boolean visible) {
+            this.visible = visible;
             return this;
         }
 
@@ -423,6 +459,7 @@ public final class CatalogCreditGrantResponseData {
                     licenseId,
                     resetCadence,
                     scaling,
+                    visible,
                     additionalProperties);
         }
 
@@ -438,7 +475,8 @@ public final class CatalogCreditGrantResponseData {
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("license_id")
                     || key.equalsIgnoreCase("reset_cadence")
-                    || key.equalsIgnoreCase("scaling")) {
+                    || key.equalsIgnoreCase("scaling")
+                    || key.equalsIgnoreCase("visible")) {
                 return;
             }
             this.additionalProperties.put(key, value);

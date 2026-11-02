@@ -24,6 +24,8 @@ import java.util.Optional;
 public final class CountAuditLogsParams {
     private final Optional<ActorType> actorType;
 
+    private final Optional<String> companyId;
+
     private final Optional<OffsetDateTime> endTime;
 
     private final Optional<String> environmentId;
@@ -40,6 +42,7 @@ public final class CountAuditLogsParams {
 
     private CountAuditLogsParams(
             Optional<ActorType> actorType,
+            Optional<String> companyId,
             Optional<OffsetDateTime> endTime,
             Optional<String> environmentId,
             Optional<Long> limit,
@@ -48,6 +51,7 @@ public final class CountAuditLogsParams {
             Optional<OffsetDateTime> startTime,
             Map<String, Object> additionalProperties) {
         this.actorType = actorType;
+        this.companyId = companyId;
         this.endTime = endTime;
         this.environmentId = environmentId;
         this.limit = limit;
@@ -60,6 +64,11 @@ public final class CountAuditLogsParams {
     @JsonProperty("actor_type")
     public Optional<ActorType> getActorType() {
         return actorType;
+    }
+
+    @JsonProperty("company_id")
+    public Optional<String> getCompanyId() {
+        return companyId;
     }
 
     @JsonProperty("end_time")
@@ -111,6 +120,7 @@ public final class CountAuditLogsParams {
 
     private boolean equalTo(CountAuditLogsParams other) {
         return actorType.equals(other.actorType)
+                && companyId.equals(other.companyId)
                 && endTime.equals(other.endTime)
                 && environmentId.equals(other.environmentId)
                 && limit.equals(other.limit)
@@ -122,7 +132,14 @@ public final class CountAuditLogsParams {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.actorType, this.endTime, this.environmentId, this.limit, this.offset, this.q, this.startTime);
+                this.actorType,
+                this.companyId,
+                this.endTime,
+                this.environmentId,
+                this.limit,
+                this.offset,
+                this.q,
+                this.startTime);
     }
 
     @java.lang.Override
@@ -137,6 +154,8 @@ public final class CountAuditLogsParams {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<ActorType> actorType = Optional.empty();
+
+        private Optional<String> companyId = Optional.empty();
 
         private Optional<OffsetDateTime> endTime = Optional.empty();
 
@@ -156,6 +175,7 @@ public final class CountAuditLogsParams {
 
         public Builder from(CountAuditLogsParams other) {
             actorType(other.getActorType());
+            companyId(other.getCompanyId());
             endTime(other.getEndTime());
             environmentId(other.getEnvironmentId());
             limit(other.getLimit());
@@ -173,6 +193,17 @@ public final class CountAuditLogsParams {
 
         public Builder actorType(ActorType actorType) {
             this.actorType = Optional.ofNullable(actorType);
+            return this;
+        }
+
+        @JsonSetter(value = "company_id", nulls = Nulls.SKIP)
+        public Builder companyId(Optional<String> companyId) {
+            this.companyId = companyId;
+            return this;
+        }
+
+        public Builder companyId(String companyId) {
+            this.companyId = Optional.ofNullable(companyId);
             return this;
         }
 
@@ -250,12 +281,13 @@ public final class CountAuditLogsParams {
 
         public CountAuditLogsParams build() {
             return new CountAuditLogsParams(
-                    actorType, endTime, environmentId, limit, offset, q, startTime, additionalProperties);
+                    actorType, companyId, endTime, environmentId, limit, offset, q, startTime, additionalProperties);
         }
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("actor_type")
+                    || key.equalsIgnoreCase("company_id")
                     || key.equalsIgnoreCase("end_time")
                     || key.equalsIgnoreCase("environment_id")
                     || key.equalsIgnoreCase("limit")

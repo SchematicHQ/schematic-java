@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingInvoiceResponseData.Builder.class)
 public final class BillingInvoiceResponseData {
+    private final long amountDue;
+
     private final long amountPaid;
 
     private final long amountRemaining;
@@ -42,6 +44,8 @@ public final class BillingInvoiceResponseData {
 
     private final Optional<OffsetDateTime> dueAt;
 
+    private final long endingBalance;
+
     private final Optional<String> externalId;
 
     private final Optional<OffsetDateTime> finalizedAt;
@@ -56,6 +60,8 @@ public final class BillingInvoiceResponseData {
 
     private final BillingProviderType providerType;
 
+    private final long startingBalance;
+
     private final InvoiceStatus status;
 
     private final Optional<String> subscriptionExternalId;
@@ -69,6 +75,7 @@ public final class BillingInvoiceResponseData {
     private final Map<String, Object> additionalProperties;
 
     private BillingInvoiceResponseData(
+            long amountDue,
             long amountPaid,
             long amountRemaining,
             Optional<InvoiceCollectionState> collectionState,
@@ -79,6 +86,7 @@ public final class BillingInvoiceResponseData {
             Currency currency,
             Optional<InvoiceDocumentState> documentState,
             Optional<OffsetDateTime> dueAt,
+            long endingBalance,
             Optional<String> externalId,
             Optional<OffsetDateTime> finalizedAt,
             String id,
@@ -86,12 +94,14 @@ public final class BillingInvoiceResponseData {
             Optional<OffsetDateTime> periodEnd,
             Optional<OffsetDateTime> periodStart,
             BillingProviderType providerType,
+            long startingBalance,
             InvoiceStatus status,
             Optional<String> subscriptionExternalId,
             long subtotal,
             long total,
             Optional<String> url,
             Map<String, Object> additionalProperties) {
+        this.amountDue = amountDue;
         this.amountPaid = amountPaid;
         this.amountRemaining = amountRemaining;
         this.collectionState = collectionState;
@@ -102,6 +112,7 @@ public final class BillingInvoiceResponseData {
         this.currency = currency;
         this.documentState = documentState;
         this.dueAt = dueAt;
+        this.endingBalance = endingBalance;
         this.externalId = externalId;
         this.finalizedAt = finalizedAt;
         this.id = id;
@@ -109,12 +120,21 @@ public final class BillingInvoiceResponseData {
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
         this.providerType = providerType;
+        this.startingBalance = startingBalance;
         this.status = status;
         this.subscriptionExternalId = subscriptionExternalId;
         this.subtotal = subtotal;
         this.total = total;
         this.url = url;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return What the company is asked to pay: the total less any balance applied to it, never below zero. Zero on a draft.
+     */
+    @JsonProperty("amount_due")
+    public long getAmountDue() {
+        return amountDue;
     }
 
     @JsonProperty("amount_paid")
@@ -177,6 +197,14 @@ public final class BillingInvoiceResponseData {
     }
 
     /**
+     * @return The company's balance after this invoice, in minor units. Below zero is credit the next invoice takes off what is due.
+     */
+    @JsonProperty("ending_balance")
+    public long getEndingBalance() {
+        return endingBalance;
+    }
+
+    /**
      * @return The billing provider's invoice ID. Null on an invoice Schematic issued.
      */
     @JsonProperty("external_id")
@@ -218,6 +246,14 @@ public final class BillingInvoiceResponseData {
     @JsonProperty("provider_type")
     public BillingProviderType getProviderType() {
         return providerType;
+    }
+
+    /**
+     * @return The company's balance before this invoice, in minor units. Below zero is credit applied to this invoice.
+     */
+    @JsonProperty("starting_balance")
+    public long getStartingBalance() {
+        return startingBalance;
     }
 
     @JsonProperty("status")
@@ -263,7 +299,8 @@ public final class BillingInvoiceResponseData {
     }
 
     private boolean equalTo(BillingInvoiceResponseData other) {
-        return amountPaid == other.amountPaid
+        return amountDue == other.amountDue
+                && amountPaid == other.amountPaid
                 && amountRemaining == other.amountRemaining
                 && collectionState.equals(other.collectionState)
                 && collector.equals(other.collector)
@@ -273,6 +310,7 @@ public final class BillingInvoiceResponseData {
                 && currency.equals(other.currency)
                 && documentState.equals(other.documentState)
                 && dueAt.equals(other.dueAt)
+                && endingBalance == other.endingBalance
                 && externalId.equals(other.externalId)
                 && finalizedAt.equals(other.finalizedAt)
                 && id.equals(other.id)
@@ -280,6 +318,7 @@ public final class BillingInvoiceResponseData {
                 && periodEnd.equals(other.periodEnd)
                 && periodStart.equals(other.periodStart)
                 && providerType.equals(other.providerType)
+                && startingBalance == other.startingBalance
                 && status.equals(other.status)
                 && subscriptionExternalId.equals(other.subscriptionExternalId)
                 && subtotal == other.subtotal
@@ -290,6 +329,7 @@ public final class BillingInvoiceResponseData {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.amountDue,
                 this.amountPaid,
                 this.amountRemaining,
                 this.collectionState,
@@ -300,6 +340,7 @@ public final class BillingInvoiceResponseData {
                 this.currency,
                 this.documentState,
                 this.dueAt,
+                this.endingBalance,
                 this.externalId,
                 this.finalizedAt,
                 this.id,
@@ -307,6 +348,7 @@ public final class BillingInvoiceResponseData {
                 this.periodEnd,
                 this.periodStart,
                 this.providerType,
+                this.startingBalance,
                 this.status,
                 this.subscriptionExternalId,
                 this.subtotal,
@@ -319,14 +361,21 @@ public final class BillingInvoiceResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static AmountPaidStage builder() {
+    public static AmountDueStage builder() {
         return new Builder();
+    }
+
+    public interface AmountDueStage {
+        /**
+         * <p>What the company is asked to pay: the total less any balance applied to it, never below zero. Zero on a draft.</p>
+         */
+        AmountPaidStage amountDue(long amountDue);
+
+        Builder from(BillingInvoiceResponseData other);
     }
 
     public interface AmountPaidStage {
         AmountRemainingStage amountPaid(long amountPaid);
-
-        Builder from(BillingInvoiceResponseData other);
     }
 
     public interface AmountRemainingStage {
@@ -342,7 +391,14 @@ public final class BillingInvoiceResponseData {
     }
 
     public interface CurrencyStage {
-        IdStage currency(@NotNull Currency currency);
+        EndingBalanceStage currency(@NotNull Currency currency);
+    }
+
+    public interface EndingBalanceStage {
+        /**
+         * <p>The company's balance after this invoice, in minor units. Below zero is credit the next invoice takes off what is due.</p>
+         */
+        IdStage endingBalance(long endingBalance);
     }
 
     public interface IdStage {
@@ -350,7 +406,14 @@ public final class BillingInvoiceResponseData {
     }
 
     public interface ProviderTypeStage {
-        StatusStage providerType(@NotNull BillingProviderType providerType);
+        StartingBalanceStage providerType(@NotNull BillingProviderType providerType);
+    }
+
+    public interface StartingBalanceStage {
+        /**
+         * <p>The company's balance before this invoice, in minor units. Below zero is credit applied to this invoice.</p>
+         */
+        StatusStage startingBalance(long startingBalance);
     }
 
     public interface StatusStage {
@@ -447,17 +510,22 @@ public final class BillingInvoiceResponseData {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements AmountPaidStage,
+            implements AmountDueStage,
+                    AmountPaidStage,
                     AmountRemainingStage,
                     CompanyIdStage,
                     CreatedAtStage,
                     CurrencyStage,
+                    EndingBalanceStage,
                     IdStage,
                     ProviderTypeStage,
+                    StartingBalanceStage,
                     StatusStage,
                     SubtotalStage,
                     TotalStage,
                     _FinalStage {
+        private long amountDue;
+
         private long amountPaid;
 
         private long amountRemaining;
@@ -468,9 +536,13 @@ public final class BillingInvoiceResponseData {
 
         private Currency currency;
 
+        private long endingBalance;
+
         private String id;
 
         private BillingProviderType providerType;
+
+        private long startingBalance;
 
         private InvoiceStatus status;
 
@@ -508,6 +580,7 @@ public final class BillingInvoiceResponseData {
 
         @java.lang.Override
         public Builder from(BillingInvoiceResponseData other) {
+            amountDue(other.getAmountDue());
             amountPaid(other.getAmountPaid());
             amountRemaining(other.getAmountRemaining());
             collectionState(other.getCollectionState());
@@ -518,6 +591,7 @@ public final class BillingInvoiceResponseData {
             currency(other.getCurrency());
             documentState(other.getDocumentState());
             dueAt(other.getDueAt());
+            endingBalance(other.getEndingBalance());
             externalId(other.getExternalId());
             finalizedAt(other.getFinalizedAt());
             id(other.getId());
@@ -525,11 +599,23 @@ public final class BillingInvoiceResponseData {
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
             providerType(other.getProviderType());
+            startingBalance(other.getStartingBalance());
             status(other.getStatus());
             subscriptionExternalId(other.getSubscriptionExternalId());
             subtotal(other.getSubtotal());
             total(other.getTotal());
             url(other.getUrl());
+            return this;
+        }
+
+        /**
+         * <p>What the company is asked to pay: the total less any balance applied to it, never below zero. Zero on a draft.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("amount_due")
+        public AmountPaidStage amountDue(long amountDue) {
+            this.amountDue = amountDue;
             return this;
         }
 
@@ -563,8 +649,19 @@ public final class BillingInvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("currency")
-        public IdStage currency(@NotNull Currency currency) {
+        public EndingBalanceStage currency(@NotNull Currency currency) {
             this.currency = Objects.requireNonNull(currency, "currency must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The company's balance after this invoice, in minor units. Below zero is credit the next invoice takes off what is due.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("ending_balance")
+        public IdStage endingBalance(long endingBalance) {
+            this.endingBalance = endingBalance;
             return this;
         }
 
@@ -577,8 +674,19 @@ public final class BillingInvoiceResponseData {
 
         @java.lang.Override
         @JsonSetter("provider_type")
-        public StatusStage providerType(@NotNull BillingProviderType providerType) {
+        public StartingBalanceStage providerType(@NotNull BillingProviderType providerType) {
             this.providerType = Objects.requireNonNull(providerType, "providerType must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The company's balance before this invoice, in minor units. Below zero is credit applied to this invoice.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("starting_balance")
+        public StatusStage startingBalance(long startingBalance) {
+            this.startingBalance = startingBalance;
             return this;
         }
 
@@ -818,6 +926,7 @@ public final class BillingInvoiceResponseData {
         @java.lang.Override
         public BillingInvoiceResponseData build() {
             return new BillingInvoiceResponseData(
+                    amountDue,
                     amountPaid,
                     amountRemaining,
                     collectionState,
@@ -828,6 +937,7 @@ public final class BillingInvoiceResponseData {
                     currency,
                     documentState,
                     dueAt,
+                    endingBalance,
                     externalId,
                     finalizedAt,
                     id,
@@ -835,6 +945,7 @@ public final class BillingInvoiceResponseData {
                     periodEnd,
                     periodStart,
                     providerType,
+                    startingBalance,
                     status,
                     subscriptionExternalId,
                     subtotal,
@@ -845,7 +956,8 @@ public final class BillingInvoiceResponseData {
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("amount_paid")
+            if (key.equalsIgnoreCase("amount_due")
+                    || key.equalsIgnoreCase("amount_paid")
                     || key.equalsIgnoreCase("amount_remaining")
                     || key.equalsIgnoreCase("collection_state")
                     || key.equalsIgnoreCase("collector")
@@ -855,6 +967,7 @@ public final class BillingInvoiceResponseData {
                     || key.equalsIgnoreCase("currency")
                     || key.equalsIgnoreCase("document_state")
                     || key.equalsIgnoreCase("due_at")
+                    || key.equalsIgnoreCase("ending_balance")
                     || key.equalsIgnoreCase("external_id")
                     || key.equalsIgnoreCase("finalized_at")
                     || key.equalsIgnoreCase("id")
@@ -862,6 +975,7 @@ public final class BillingInvoiceResponseData {
                     || key.equalsIgnoreCase("period_end")
                     || key.equalsIgnoreCase("period_start")
                     || key.equalsIgnoreCase("provider_type")
+                    || key.equalsIgnoreCase("starting_balance")
                     || key.equalsIgnoreCase("status")
                     || key.equalsIgnoreCase("subscription_external_id")
                     || key.equalsIgnoreCase("subtotal")
