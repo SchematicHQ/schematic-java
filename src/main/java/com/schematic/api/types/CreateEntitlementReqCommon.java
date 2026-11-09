@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,6 +29,8 @@ public final class CreateEntitlementReqCommon {
     private final Optional<MetricPeriod> metricPeriod;
 
     private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
+
+    private final Optional<List<CreditModelRate>> modelRates;
 
     private final Optional<Map<String, Double>> quantityRates;
 
@@ -48,6 +51,7 @@ public final class CreateEntitlementReqCommon {
             String featureId,
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<List<CreditModelRate>> modelRates,
             Optional<Map<String, Double>> quantityRates,
             Optional<Boolean> valueBool,
             Optional<String> valueCreditId,
@@ -59,6 +63,7 @@ public final class CreateEntitlementReqCommon {
         this.featureId = featureId;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.modelRates = modelRates;
         this.quantityRates = quantityRates;
         this.valueBool = valueBool;
         this.valueCreditId = valueCreditId;
@@ -86,6 +91,14 @@ public final class CreateEntitlementReqCommon {
     @JsonProperty("metric_period_month_reset")
     public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
+    }
+
+    /**
+     * @return Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.
+     */
+    @JsonProperty("model_rates")
+    public Optional<List<CreditModelRate>> getModelRates() {
+        return modelRates;
     }
 
     /**
@@ -137,6 +150,7 @@ public final class CreateEntitlementReqCommon {
                 && featureId.equals(other.featureId)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && modelRates.equals(other.modelRates)
                 && quantityRates.equals(other.quantityRates)
                 && valueBool.equals(other.valueBool)
                 && valueCreditId.equals(other.valueCreditId)
@@ -152,6 +166,7 @@ public final class CreateEntitlementReqCommon {
                 this.featureId,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.modelRates,
                 this.quantityRates,
                 this.valueBool,
                 this.valueCreditId,
@@ -199,6 +214,13 @@ public final class CreateEntitlementReqCommon {
         _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
 
         /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.</p>
+         */
+        _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates);
+
+        _FinalStage modelRates(List<CreditModelRate> modelRates);
+
+        /**
          * <p>Credits per unit of the quantity (per token for inference features), keyed by quantity key. Inference features may price input_tokens, output_tokens, cached_input_tokens, cache_creation_input_tokens and reasoning_tokens; reasoning_tokens is priced on top of output_tokens, so leave its rate at zero for providers that count reasoning inside output. Omit to leave the schedule as it is; send null to clear it.</p>
          */
         _FinalStage quantityRates(Optional<Map<String, Double>> quantityRates);
@@ -238,6 +260,8 @@ public final class CreateEntitlementReqCommon {
 
         private Optional<Map<String, Double>> quantityRates = Optional.empty();
 
+        private Optional<List<CreditModelRate>> modelRates = Optional.empty();
+
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
         private Optional<MetricPeriod> metricPeriod = Optional.empty();
@@ -254,6 +278,7 @@ public final class CreateEntitlementReqCommon {
             featureId(other.getFeatureId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            modelRates(other.getModelRates());
             quantityRates(other.getQuantityRates());
             valueBool(other.getValueBool());
             valueCreditId(other.getValueCreditId());
@@ -349,6 +374,26 @@ public final class CreateEntitlementReqCommon {
             return this;
         }
 
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage modelRates(List<CreditModelRate> modelRates) {
+            this.modelRates = Optional.ofNullable(modelRates);
+            return this;
+        }
+
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "model_rates", nulls = Nulls.SKIP)
+        public _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates) {
+            this.modelRates = modelRates;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
@@ -395,6 +440,7 @@ public final class CreateEntitlementReqCommon {
                     featureId,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    modelRates,
                     quantityRates,
                     valueBool,
                     valueCreditId,
@@ -410,6 +456,7 @@ public final class CreateEntitlementReqCommon {
                     || key.equalsIgnoreCase("feature_id")
                     || key.equalsIgnoreCase("metric_period")
                     || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("model_rates")
                     || key.equalsIgnoreCase("quantity_rates")
                     || key.equalsIgnoreCase("value_bool")
                     || key.equalsIgnoreCase("value_credit_id")

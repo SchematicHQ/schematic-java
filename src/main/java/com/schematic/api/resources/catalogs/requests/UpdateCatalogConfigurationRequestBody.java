@@ -27,6 +27,8 @@ public final class UpdateCatalogConfigurationRequestBody {
 
     private final Optional<String> customPlanCtaUrl;
 
+    private final Optional<String> customPlanId;
+
     private final Optional<String> customPlanPriceText;
 
     private final Optional<Boolean> customPlansVisible;
@@ -46,6 +48,7 @@ public final class UpdateCatalogConfigurationRequestBody {
     private UpdateCatalogConfigurationRequestBody(
             Optional<String> customPlanCtaText,
             Optional<String> customPlanCtaUrl,
+            Optional<String> customPlanId,
             Optional<String> customPlanPriceText,
             Optional<Boolean> customPlansVisible,
             Optional<List<CatalogConfigOrderedPlan>> orderedAddOns,
@@ -56,6 +59,7 @@ public final class UpdateCatalogConfigurationRequestBody {
             Map<String, Object> additionalProperties) {
         this.customPlanCtaText = customPlanCtaText;
         this.customPlanCtaUrl = customPlanCtaUrl;
+        this.customPlanId = customPlanId;
         this.customPlanPriceText = customPlanPriceText;
         this.customPlansVisible = customPlansVisible;
         this.orderedAddOns = orderedAddOns;
@@ -74,6 +78,11 @@ public final class UpdateCatalogConfigurationRequestBody {
     @JsonProperty("custom_plan_cta_url")
     public Optional<String> getCustomPlanCtaUrl() {
         return customPlanCtaUrl;
+    }
+
+    @JsonProperty("custom_plan_id")
+    public Optional<String> getCustomPlanId() {
+        return customPlanId;
     }
 
     @JsonProperty("custom_plan_price_text")
@@ -126,6 +135,7 @@ public final class UpdateCatalogConfigurationRequestBody {
     private boolean equalTo(UpdateCatalogConfigurationRequestBody other) {
         return customPlanCtaText.equals(other.customPlanCtaText)
                 && customPlanCtaUrl.equals(other.customPlanCtaUrl)
+                && customPlanId.equals(other.customPlanId)
                 && customPlanPriceText.equals(other.customPlanPriceText)
                 && customPlansVisible.equals(other.customPlansVisible)
                 && orderedAddOns.equals(other.orderedAddOns)
@@ -140,6 +150,7 @@ public final class UpdateCatalogConfigurationRequestBody {
         return Objects.hash(
                 this.customPlanCtaText,
                 this.customPlanCtaUrl,
+                this.customPlanId,
                 this.customPlanPriceText,
                 this.customPlansVisible,
                 this.orderedAddOns,
@@ -164,6 +175,8 @@ public final class UpdateCatalogConfigurationRequestBody {
 
         private Optional<String> customPlanCtaUrl = Optional.empty();
 
+        private Optional<String> customPlanId = Optional.empty();
+
         private Optional<String> customPlanPriceText = Optional.empty();
 
         private Optional<Boolean> customPlansVisible = Optional.empty();
@@ -185,6 +198,7 @@ public final class UpdateCatalogConfigurationRequestBody {
         public Builder from(UpdateCatalogConfigurationRequestBody other) {
             customPlanCtaText(other.getCustomPlanCtaText());
             customPlanCtaUrl(other.getCustomPlanCtaUrl());
+            customPlanId(other.getCustomPlanId());
             customPlanPriceText(other.getCustomPlanPriceText());
             customPlansVisible(other.getCustomPlansVisible());
             orderedAddOns(other.getOrderedAddOns());
@@ -214,6 +228,17 @@ public final class UpdateCatalogConfigurationRequestBody {
 
         public Builder customPlanCtaUrl(String customPlanCtaUrl) {
             this.customPlanCtaUrl = Optional.ofNullable(customPlanCtaUrl);
+            return this;
+        }
+
+        @JsonSetter(value = "custom_plan_id", nulls = Nulls.SKIP)
+        public Builder customPlanId(Optional<String> customPlanId) {
+            this.customPlanId = customPlanId;
+            return this;
+        }
+
+        public Builder customPlanId(String customPlanId) {
+            this.customPlanId = Optional.ofNullable(customPlanId);
             return this;
         }
 
@@ -298,6 +323,7 @@ public final class UpdateCatalogConfigurationRequestBody {
             return new UpdateCatalogConfigurationRequestBody(
                     customPlanCtaText,
                     customPlanCtaUrl,
+                    customPlanId,
                     customPlanPriceText,
                     customPlansVisible,
                     orderedAddOns,
@@ -312,6 +338,7 @@ public final class UpdateCatalogConfigurationRequestBody {
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("custom_plan_cta_text")
                     || key.equalsIgnoreCase("custom_plan_cta_url")
+                    || key.equalsIgnoreCase("custom_plan_id")
                     || key.equalsIgnoreCase("custom_plan_price_text")
                     || key.equalsIgnoreCase("custom_plans_visible")
                     || key.equalsIgnoreCase("ordered_add_ons")

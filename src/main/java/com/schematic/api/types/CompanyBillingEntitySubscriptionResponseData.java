@@ -44,7 +44,17 @@ public final class CompanyBillingEntitySubscriptionResponseData {
 
     private final Optional<InvoiceResponseData> latestInvoice;
 
+    private final Optional<BillingSubscriptionPauseBehavior> pauseBehavior;
+
+    private final Optional<OffsetDateTime> pauseResumesAt;
+
+    private final Optional<OffsetDateTime> pausedAt;
+
     private final Optional<PaymentMethodResponseData> paymentMethod;
+
+    private final Optional<OffsetDateTime> periodEnd;
+
+    private final Optional<OffsetDateTime> periodStart;
 
     private final String planName;
 
@@ -73,7 +83,12 @@ public final class CompanyBillingEntitySubscriptionResponseData {
             String interval,
             boolean isInitial,
             Optional<InvoiceResponseData> latestInvoice,
+            Optional<BillingSubscriptionPauseBehavior> pauseBehavior,
+            Optional<OffsetDateTime> pauseResumesAt,
+            Optional<OffsetDateTime> pausedAt,
             Optional<PaymentMethodResponseData> paymentMethod,
+            Optional<OffsetDateTime> periodEnd,
+            Optional<OffsetDateTime> periodStart,
             String planName,
             List<BillingProductForSubscriptionResponseData> products,
             BillingProviderType providerType,
@@ -92,7 +107,12 @@ public final class CompanyBillingEntitySubscriptionResponseData {
         this.interval = interval;
         this.isInitial = isInitial;
         this.latestInvoice = latestInvoice;
+        this.pauseBehavior = pauseBehavior;
+        this.pauseResumesAt = pauseResumesAt;
+        this.pausedAt = pausedAt;
         this.paymentMethod = paymentMethod;
+        this.periodEnd = periodEnd;
+        this.periodStart = periodStart;
         this.planName = planName;
         this.products = products;
         this.providerType = providerType;
@@ -153,9 +173,34 @@ public final class CompanyBillingEntitySubscriptionResponseData {
         return latestInvoice;
     }
 
+    @JsonProperty("pause_behavior")
+    public Optional<BillingSubscriptionPauseBehavior> getPauseBehavior() {
+        return pauseBehavior;
+    }
+
+    @JsonProperty("pause_resumes_at")
+    public Optional<OffsetDateTime> getPauseResumesAt() {
+        return pauseResumesAt;
+    }
+
+    @JsonProperty("paused_at")
+    public Optional<OffsetDateTime> getPausedAt() {
+        return pausedAt;
+    }
+
     @JsonProperty("payment_method")
     public Optional<PaymentMethodResponseData> getPaymentMethod() {
         return paymentMethod;
+    }
+
+    @JsonProperty("period_end")
+    public Optional<OffsetDateTime> getPeriodEnd() {
+        return periodEnd;
+    }
+
+    @JsonProperty("period_start")
+    public Optional<OffsetDateTime> getPeriodStart() {
+        return periodStart;
     }
 
     @JsonProperty("plan_name")
@@ -216,7 +261,12 @@ public final class CompanyBillingEntitySubscriptionResponseData {
                 && interval.equals(other.interval)
                 && isInitial == other.isInitial
                 && latestInvoice.equals(other.latestInvoice)
+                && pauseBehavior.equals(other.pauseBehavior)
+                && pauseResumesAt.equals(other.pauseResumesAt)
+                && pausedAt.equals(other.pausedAt)
                 && paymentMethod.equals(other.paymentMethod)
+                && periodEnd.equals(other.periodEnd)
+                && periodStart.equals(other.periodStart)
                 && planName.equals(other.planName)
                 && products.equals(other.products)
                 && providerType.equals(other.providerType)
@@ -239,7 +289,12 @@ public final class CompanyBillingEntitySubscriptionResponseData {
                 this.interval,
                 this.isInitial,
                 this.latestInvoice,
+                this.pauseBehavior,
+                this.pauseResumesAt,
+                this.pausedAt,
                 this.paymentMethod,
+                this.periodEnd,
+                this.periodStart,
                 this.planName,
                 this.products,
                 this.providerType,
@@ -329,9 +384,29 @@ public final class CompanyBillingEntitySubscriptionResponseData {
 
         _FinalStage latestInvoice(InvoiceResponseData latestInvoice);
 
+        _FinalStage pauseBehavior(Optional<BillingSubscriptionPauseBehavior> pauseBehavior);
+
+        _FinalStage pauseBehavior(BillingSubscriptionPauseBehavior pauseBehavior);
+
+        _FinalStage pauseResumesAt(Optional<OffsetDateTime> pauseResumesAt);
+
+        _FinalStage pauseResumesAt(OffsetDateTime pauseResumesAt);
+
+        _FinalStage pausedAt(Optional<OffsetDateTime> pausedAt);
+
+        _FinalStage pausedAt(OffsetDateTime pausedAt);
+
         _FinalStage paymentMethod(Optional<PaymentMethodResponseData> paymentMethod);
 
         _FinalStage paymentMethod(PaymentMethodResponseData paymentMethod);
+
+        _FinalStage periodEnd(Optional<OffsetDateTime> periodEnd);
+
+        _FinalStage periodEnd(OffsetDateTime periodEnd);
+
+        _FinalStage periodStart(Optional<OffsetDateTime> periodStart);
+
+        _FinalStage periodStart(OffsetDateTime periodStart);
 
         _FinalStage products(List<BillingProductForSubscriptionResponseData> products);
 
@@ -381,7 +456,17 @@ public final class CompanyBillingEntitySubscriptionResponseData {
 
         private List<BillingProductForSubscriptionResponseData> products = new ArrayList<>();
 
+        private Optional<OffsetDateTime> periodStart = Optional.empty();
+
+        private Optional<OffsetDateTime> periodEnd = Optional.empty();
+
         private Optional<PaymentMethodResponseData> paymentMethod = Optional.empty();
+
+        private Optional<OffsetDateTime> pausedAt = Optional.empty();
+
+        private Optional<OffsetDateTime> pauseResumesAt = Optional.empty();
+
+        private Optional<BillingSubscriptionPauseBehavior> pauseBehavior = Optional.empty();
 
         private Optional<InvoiceResponseData> latestInvoice = Optional.empty();
 
@@ -409,7 +494,12 @@ public final class CompanyBillingEntitySubscriptionResponseData {
             interval(other.getInterval());
             isInitial(other.getIsInitial());
             latestInvoice(other.getLatestInvoice());
+            pauseBehavior(other.getPauseBehavior());
+            pauseResumesAt(other.getPauseResumesAt());
+            pausedAt(other.getPausedAt());
             paymentMethod(other.getPaymentMethod());
+            periodEnd(other.getPeriodEnd());
+            periodStart(other.getPeriodStart());
             planName(other.getPlanName());
             products(other.getProducts());
             providerType(other.getProviderType());
@@ -529,6 +619,32 @@ public final class CompanyBillingEntitySubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage periodStart(OffsetDateTime periodStart) {
+            this.periodStart = Optional.ofNullable(periodStart);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "period_start", nulls = Nulls.SKIP)
+        public _FinalStage periodStart(Optional<OffsetDateTime> periodStart) {
+            this.periodStart = periodStart;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage periodEnd(OffsetDateTime periodEnd) {
+            this.periodEnd = Optional.ofNullable(periodEnd);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "period_end", nulls = Nulls.SKIP)
+        public _FinalStage periodEnd(Optional<OffsetDateTime> periodEnd) {
+            this.periodEnd = periodEnd;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage paymentMethod(PaymentMethodResponseData paymentMethod) {
             this.paymentMethod = Optional.ofNullable(paymentMethod);
             return this;
@@ -538,6 +654,45 @@ public final class CompanyBillingEntitySubscriptionResponseData {
         @JsonSetter(value = "payment_method", nulls = Nulls.SKIP)
         public _FinalStage paymentMethod(Optional<PaymentMethodResponseData> paymentMethod) {
             this.paymentMethod = paymentMethod;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage pausedAt(OffsetDateTime pausedAt) {
+            this.pausedAt = Optional.ofNullable(pausedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "paused_at", nulls = Nulls.SKIP)
+        public _FinalStage pausedAt(Optional<OffsetDateTime> pausedAt) {
+            this.pausedAt = pausedAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage pauseResumesAt(OffsetDateTime pauseResumesAt) {
+            this.pauseResumesAt = Optional.ofNullable(pauseResumesAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pause_resumes_at", nulls = Nulls.SKIP)
+        public _FinalStage pauseResumesAt(Optional<OffsetDateTime> pauseResumesAt) {
+            this.pauseResumesAt = pauseResumesAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage pauseBehavior(BillingSubscriptionPauseBehavior pauseBehavior) {
+            this.pauseBehavior = Optional.ofNullable(pauseBehavior);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pause_behavior", nulls = Nulls.SKIP)
+        public _FinalStage pauseBehavior(Optional<BillingSubscriptionPauseBehavior> pauseBehavior) {
+            this.pauseBehavior = pauseBehavior;
             return this;
         }
 
@@ -630,7 +785,12 @@ public final class CompanyBillingEntitySubscriptionResponseData {
                     interval,
                     isInitial,
                     latestInvoice,
+                    pauseBehavior,
+                    pauseResumesAt,
+                    pausedAt,
                     paymentMethod,
+                    periodEnd,
+                    periodStart,
                     planName,
                     products,
                     providerType,
@@ -653,7 +813,12 @@ public final class CompanyBillingEntitySubscriptionResponseData {
                     || key.equalsIgnoreCase("interval")
                     || key.equalsIgnoreCase("is_initial")
                     || key.equalsIgnoreCase("latest_invoice")
+                    || key.equalsIgnoreCase("pause_behavior")
+                    || key.equalsIgnoreCase("pause_resumes_at")
+                    || key.equalsIgnoreCase("paused_at")
                     || key.equalsIgnoreCase("payment_method")
+                    || key.equalsIgnoreCase("period_end")
+                    || key.equalsIgnoreCase("period_start")
                     || key.equalsIgnoreCase("plan_name")
                     || key.equalsIgnoreCase("products")
                     || key.equalsIgnoreCase("provider_type")

@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingCollectionMethod;
+import com.schematic.api.types.Collector;
+import com.schematic.api.types.ContractBillingDetailsRequestBody;
 import com.schematic.api.types.Currency;
 import com.schematic.api.types.PaymentGating;
 import com.schematic.api.types.ProrationBehavior;
@@ -25,7 +27,11 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateCompanyBillingProfileRequestBody.Builder.class)
 public final class UpdateCompanyBillingProfileRequestBody {
+    private final Optional<ContractBillingDetailsRequestBody> billingDetails;
+
     private final BillingCollectionMethod collectionMethod;
+
+    private final Optional<Collector> collector;
 
     private final Optional<Currency> currency;
 
@@ -45,10 +51,14 @@ public final class UpdateCompanyBillingProfileRequestBody {
 
     private final Optional<ProrationBehavior> prorationBehavior;
 
+    private final Optional<String> purchaseOrder;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateCompanyBillingProfileRequestBody(
+            Optional<ContractBillingDetailsRequestBody> billingDetails,
             BillingCollectionMethod collectionMethod,
+            Optional<Collector> collector,
             Optional<Currency> currency,
             Optional<Long> daysUntilDue,
             Optional<Long> gatingDays,
@@ -58,8 +68,11 @@ public final class UpdateCompanyBillingProfileRequestBody {
             Optional<PaymentGating> paymentGating,
             Optional<String> paymentMethodId,
             Optional<ProrationBehavior> prorationBehavior,
+            Optional<String> purchaseOrder,
             Map<String, Object> additionalProperties) {
+        this.billingDetails = billingDetails;
         this.collectionMethod = collectionMethod;
+        this.collector = collector;
         this.currency = currency;
         this.daysUntilDue = daysUntilDue;
         this.gatingDays = gatingDays;
@@ -69,12 +82,23 @@ public final class UpdateCompanyBillingProfileRequestBody {
         this.paymentGating = paymentGating;
         this.paymentMethodId = paymentMethodId;
         this.prorationBehavior = prorationBehavior;
+        this.purchaseOrder = purchaseOrder;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("billing_details")
+    public Optional<ContractBillingDetailsRequestBody> getBillingDetails() {
+        return billingDetails;
     }
 
     @JsonProperty("collection_method")
     public BillingCollectionMethod getCollectionMethod() {
         return collectionMethod;
+    }
+
+    @JsonProperty("collector")
+    public Optional<Collector> getCollector() {
+        return collector;
     }
 
     @JsonProperty("currency")
@@ -122,6 +146,11 @@ public final class UpdateCompanyBillingProfileRequestBody {
         return prorationBehavior;
     }
 
+    @JsonProperty("purchase_order")
+    public Optional<String> getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -135,7 +164,9 @@ public final class UpdateCompanyBillingProfileRequestBody {
     }
 
     private boolean equalTo(UpdateCompanyBillingProfileRequestBody other) {
-        return collectionMethod.equals(other.collectionMethod)
+        return billingDetails.equals(other.billingDetails)
+                && collectionMethod.equals(other.collectionMethod)
+                && collector.equals(other.collector)
                 && currency.equals(other.currency)
                 && daysUntilDue.equals(other.daysUntilDue)
                 && gatingDays.equals(other.gatingDays)
@@ -144,13 +175,16 @@ public final class UpdateCompanyBillingProfileRequestBody {
                 && overdraftLimit.equals(other.overdraftLimit)
                 && paymentGating.equals(other.paymentGating)
                 && paymentMethodId.equals(other.paymentMethodId)
-                && prorationBehavior.equals(other.prorationBehavior);
+                && prorationBehavior.equals(other.prorationBehavior)
+                && purchaseOrder.equals(other.purchaseOrder);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.billingDetails,
                 this.collectionMethod,
+                this.collector,
                 this.currency,
                 this.daysUntilDue,
                 this.gatingDays,
@@ -159,7 +193,8 @@ public final class UpdateCompanyBillingProfileRequestBody {
                 this.overdraftLimit,
                 this.paymentGating,
                 this.paymentMethodId,
-                this.prorationBehavior);
+                this.prorationBehavior,
+                this.purchaseOrder);
     }
 
     @java.lang.Override
@@ -183,6 +218,14 @@ public final class UpdateCompanyBillingProfileRequestBody {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage billingDetails(Optional<ContractBillingDetailsRequestBody> billingDetails);
+
+        _FinalStage billingDetails(ContractBillingDetailsRequestBody billingDetails);
+
+        _FinalStage collector(Optional<Collector> collector);
+
+        _FinalStage collector(Collector collector);
 
         _FinalStage currency(Optional<Currency> currency);
 
@@ -219,11 +262,17 @@ public final class UpdateCompanyBillingProfileRequestBody {
         _FinalStage prorationBehavior(Optional<ProrationBehavior> prorationBehavior);
 
         _FinalStage prorationBehavior(ProrationBehavior prorationBehavior);
+
+        _FinalStage purchaseOrder(Optional<String> purchaseOrder);
+
+        _FinalStage purchaseOrder(String purchaseOrder);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements CollectionMethodStage, _FinalStage {
         private BillingCollectionMethod collectionMethod;
+
+        private Optional<String> purchaseOrder = Optional.empty();
 
         private Optional<ProrationBehavior> prorationBehavior = Optional.empty();
 
@@ -243,13 +292,19 @@ public final class UpdateCompanyBillingProfileRequestBody {
 
         private Optional<Currency> currency = Optional.empty();
 
+        private Optional<Collector> collector = Optional.empty();
+
+        private Optional<ContractBillingDetailsRequestBody> billingDetails = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         @java.lang.Override
         public Builder from(UpdateCompanyBillingProfileRequestBody other) {
+            billingDetails(other.getBillingDetails());
             collectionMethod(other.getCollectionMethod());
+            collector(other.getCollector());
             currency(other.getCurrency());
             daysUntilDue(other.getDaysUntilDue());
             gatingDays(other.getGatingDays());
@@ -259,6 +314,7 @@ public final class UpdateCompanyBillingProfileRequestBody {
             paymentGating(other.getPaymentGating());
             paymentMethodId(other.getPaymentMethodId());
             prorationBehavior(other.getProrationBehavior());
+            purchaseOrder(other.getPurchaseOrder());
             return this;
         }
 
@@ -266,6 +322,19 @@ public final class UpdateCompanyBillingProfileRequestBody {
         @JsonSetter("collection_method")
         public _FinalStage collectionMethod(@NotNull BillingCollectionMethod collectionMethod) {
             this.collectionMethod = Objects.requireNonNull(collectionMethod, "collectionMethod must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage purchaseOrder(String purchaseOrder) {
+            this.purchaseOrder = Optional.ofNullable(purchaseOrder);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "purchase_order", nulls = Nulls.SKIP)
+        public _FinalStage purchaseOrder(Optional<String> purchaseOrder) {
+            this.purchaseOrder = purchaseOrder;
             return this;
         }
 
@@ -387,9 +456,37 @@ public final class UpdateCompanyBillingProfileRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage collector(Collector collector) {
+            this.collector = Optional.ofNullable(collector);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "collector", nulls = Nulls.SKIP)
+        public _FinalStage collector(Optional<Collector> collector) {
+            this.collector = collector;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage billingDetails(ContractBillingDetailsRequestBody billingDetails) {
+            this.billingDetails = Optional.ofNullable(billingDetails);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_details", nulls = Nulls.SKIP)
+        public _FinalStage billingDetails(Optional<ContractBillingDetailsRequestBody> billingDetails) {
+            this.billingDetails = billingDetails;
+            return this;
+        }
+
+        @java.lang.Override
         public UpdateCompanyBillingProfileRequestBody build() {
             return new UpdateCompanyBillingProfileRequestBody(
+                    billingDetails,
                     collectionMethod,
+                    collector,
                     currency,
                     daysUntilDue,
                     gatingDays,
@@ -399,12 +496,15 @@ public final class UpdateCompanyBillingProfileRequestBody {
                     paymentGating,
                     paymentMethodId,
                     prorationBehavior,
+                    purchaseOrder,
                     additionalProperties);
         }
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("collection_method")
+            if (key.equalsIgnoreCase("billing_details")
+                    || key.equalsIgnoreCase("collection_method")
+                    || key.equalsIgnoreCase("collector")
                     || key.equalsIgnoreCase("currency")
                     || key.equalsIgnoreCase("days_until_due")
                     || key.equalsIgnoreCase("gating_days")
@@ -413,7 +513,8 @@ public final class UpdateCompanyBillingProfileRequestBody {
                     || key.equalsIgnoreCase("overdraft_limit")
                     || key.equalsIgnoreCase("payment_gating")
                     || key.equalsIgnoreCase("payment_method_id")
-                    || key.equalsIgnoreCase("proration_behavior")) {
+                    || key.equalsIgnoreCase("proration_behavior")
+                    || key.equalsIgnoreCase("purchase_order")) {
                 return;
             }
             this.additionalProperties.put(key, value);

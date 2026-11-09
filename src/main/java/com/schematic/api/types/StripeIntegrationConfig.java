@@ -39,6 +39,8 @@ public final class StripeIntegrationConfig {
 
     private final Optional<String> onboardUrl;
 
+    private final Optional<Boolean> paymentsOnly;
+
     private final Optional<String> returnTo;
 
     private final Map<String, Object> additionalProperties;
@@ -53,6 +55,7 @@ public final class StripeIntegrationConfig {
             boolean isSandbox,
             boolean liveMode,
             Optional<String> onboardUrl,
+            Optional<Boolean> paymentsOnly,
             Optional<String> returnTo,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
@@ -64,6 +67,7 @@ public final class StripeIntegrationConfig {
         this.isSandbox = isSandbox;
         this.liveMode = liveMode;
         this.onboardUrl = onboardUrl;
+        this.paymentsOnly = paymentsOnly;
         this.returnTo = returnTo;
         this.additionalProperties = additionalProperties;
     }
@@ -141,6 +145,14 @@ public final class StripeIntegrationConfig {
     }
 
     /**
+     * @return Whether Stripe is connected only to collect payments on the invoices Schematic issues. Customers and their cards sync; subscriptions, invoices, products, prices and coupons do not, and plans are not created in Stripe.
+     */
+    @JsonProperty("payments_only")
+    public Optional<Boolean> getPaymentsOnly() {
+        return paymentsOnly;
+    }
+
+    /**
      * @return App location that started the connect flow; the OAuth callback redirects back there on success
      */
     @JsonProperty("return_to")
@@ -169,6 +181,7 @@ public final class StripeIntegrationConfig {
                 && isSandbox == other.isSandbox
                 && liveMode == other.liveMode
                 && onboardUrl.equals(other.onboardUrl)
+                && paymentsOnly.equals(other.paymentsOnly)
                 && returnTo.equals(other.returnTo);
     }
 
@@ -184,6 +197,7 @@ public final class StripeIntegrationConfig {
                 this.isSandbox,
                 this.liveMode,
                 this.onboardUrl,
+                this.paymentsOnly,
                 this.returnTo);
     }
 
@@ -269,6 +283,13 @@ public final class StripeIntegrationConfig {
         _FinalStage onboardUrl(String onboardUrl);
 
         /**
+         * <p>Whether Stripe is connected only to collect payments on the invoices Schematic issues. Customers and their cards sync; subscriptions, invoices, products, prices and coupons do not, and plans are not created in Stripe.</p>
+         */
+        _FinalStage paymentsOnly(Optional<Boolean> paymentsOnly);
+
+        _FinalStage paymentsOnly(Boolean paymentsOnly);
+
+        /**
          * <p>App location that started the connect flow; the OAuth callback redirects back there on success</p>
          */
         _FinalStage returnTo(Optional<String> returnTo);
@@ -283,6 +304,8 @@ public final class StripeIntegrationConfig {
         private boolean liveMode;
 
         private Optional<String> returnTo = Optional.empty();
+
+        private Optional<Boolean> paymentsOnly = Optional.empty();
 
         private Optional<String> onboardUrl = Optional.empty();
 
@@ -313,6 +336,7 @@ public final class StripeIntegrationConfig {
             isSandbox(other.getIsSandbox());
             liveMode(other.getLiveMode());
             onboardUrl(other.getOnboardUrl());
+            paymentsOnly(other.getPaymentsOnly());
             returnTo(other.getReturnTo());
             return this;
         }
@@ -356,6 +380,26 @@ public final class StripeIntegrationConfig {
         @JsonSetter(value = "return_to", nulls = Nulls.SKIP)
         public _FinalStage returnTo(Optional<String> returnTo) {
             this.returnTo = returnTo;
+            return this;
+        }
+
+        /**
+         * <p>Whether Stripe is connected only to collect payments on the invoices Schematic issues. Customers and their cards sync; subscriptions, invoices, products, prices and coupons do not, and plans are not created in Stripe.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage paymentsOnly(Boolean paymentsOnly) {
+            this.paymentsOnly = Optional.ofNullable(paymentsOnly);
+            return this;
+        }
+
+        /**
+         * <p>Whether Stripe is connected only to collect payments on the invoices Schematic issues. Customers and their cards sync; subscriptions, invoices, products, prices and coupons do not, and plans are not created in Stripe.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "payments_only", nulls = Nulls.SKIP)
+        public _FinalStage paymentsOnly(Optional<Boolean> paymentsOnly) {
+            this.paymentsOnly = paymentsOnly;
             return this;
         }
 
@@ -511,6 +555,7 @@ public final class StripeIntegrationConfig {
                     isSandbox,
                     liveMode,
                     onboardUrl,
+                    paymentsOnly,
                     returnTo,
                     additionalProperties);
         }
@@ -526,6 +571,7 @@ public final class StripeIntegrationConfig {
                     || key.equalsIgnoreCase("is_sandbox")
                     || key.equalsIgnoreCase("live_mode")
                     || key.equalsIgnoreCase("onboard_url")
+                    || key.equalsIgnoreCase("payments_only")
                     || key.equalsIgnoreCase("return_to")) {
                 return;
             }

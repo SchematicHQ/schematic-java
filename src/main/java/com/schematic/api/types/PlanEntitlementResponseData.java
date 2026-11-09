@@ -52,6 +52,8 @@ public final class PlanEntitlementResponseData {
 
     private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
+    private final Optional<List<CreditModelRate>> modelRates;
+
     private final Optional<BillingArrearsCadence> overageBillingCadence;
 
     private final Optional<BillingArrearsAnchor> overageInvoiceAnchor;
@@ -107,6 +109,7 @@ public final class PlanEntitlementResponseData {
             Optional<BillingPriceView> meteredYearlyPrice,
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<List<CreditModelRate>> modelRates,
             Optional<BillingArrearsCadence> overageBillingCadence,
             Optional<BillingArrearsAnchor> overageInvoiceAnchor,
             Optional<PlanResponseData> plan,
@@ -141,6 +144,7 @@ public final class PlanEntitlementResponseData {
         this.meteredYearlyPrice = meteredYearlyPrice;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.modelRates = modelRates;
         this.overageBillingCadence = overageBillingCadence;
         this.overageInvoiceAnchor = overageInvoiceAnchor;
         this.plan = plan;
@@ -231,6 +235,14 @@ public final class PlanEntitlementResponseData {
     @JsonProperty("metric_period_month_reset")
     public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
+    }
+
+    /**
+     * @return Per-model rate overrides for inference features, keyed by provider and model. Each entry replaces consumption_rate and quantity_rates for events from that model. Absent when every model burns at the entitlement's own rates.
+     */
+    @JsonProperty("model_rates")
+    public Optional<List<CreditModelRate>> getModelRates() {
+        return modelRates;
     }
 
     /**
@@ -366,6 +378,7 @@ public final class PlanEntitlementResponseData {
                 && meteredYearlyPrice.equals(other.meteredYearlyPrice)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && modelRates.equals(other.modelRates)
                 && overageBillingCadence.equals(other.overageBillingCadence)
                 && overageInvoiceAnchor.equals(other.overageInvoiceAnchor)
                 && plan.equals(other.plan)
@@ -404,6 +417,7 @@ public final class PlanEntitlementResponseData {
                 this.meteredYearlyPrice,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.modelRates,
                 this.overageBillingCadence,
                 this.overageInvoiceAnchor,
                 this.plan,
@@ -516,6 +530,13 @@ public final class PlanEntitlementResponseData {
         _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
         _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
+
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry replaces consumption_rate and quantity_rates for events from that model. Absent when every model burns at the entitlement's own rates.</p>
+         */
+        _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates);
+
+        _FinalStage modelRates(List<CreditModelRate> modelRates);
 
         /**
          * <p>How often overage charges are assessed and invoiced. Null or end_of_billing_period means the billing provider aggregates usage over the subscription's own period and bills it at period end. Monthly and quarterly mean Schematic assesses the overage each month or quarter and bills it on its own invoice. Only applies to overage price behavior.</p>
@@ -649,6 +670,8 @@ public final class PlanEntitlementResponseData {
 
         private Optional<BillingArrearsCadence> overageBillingCadence = Optional.empty();
 
+        private Optional<List<CreditModelRate>> modelRates = Optional.empty();
+
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
         private Optional<MetricPeriod> metricPeriod = Optional.empty();
@@ -689,6 +712,7 @@ public final class PlanEntitlementResponseData {
             meteredYearlyPrice(other.getMeteredYearlyPrice());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            modelRates(other.getModelRates());
             overageBillingCadence(other.getOverageBillingCadence());
             overageInvoiceAnchor(other.getOverageInvoiceAnchor());
             plan(other.getPlan());
@@ -1001,6 +1025,26 @@ public final class PlanEntitlementResponseData {
             return this;
         }
 
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry replaces consumption_rate and quantity_rates for events from that model. Absent when every model burns at the entitlement's own rates.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage modelRates(List<CreditModelRate> modelRates) {
+            this.modelRates = Optional.ofNullable(modelRates);
+            return this;
+        }
+
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry replaces consumption_rate and quantity_rates for events from that model. Absent when every model burns at the entitlement's own rates.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "model_rates", nulls = Nulls.SKIP)
+        public _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates) {
+            this.modelRates = modelRates;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
@@ -1159,6 +1203,7 @@ public final class PlanEntitlementResponseData {
                     meteredYearlyPrice,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    modelRates,
                     overageBillingCadence,
                     overageInvoiceAnchor,
                     plan,
@@ -1197,6 +1242,7 @@ public final class PlanEntitlementResponseData {
                     || key.equalsIgnoreCase("metered_yearly_price")
                     || key.equalsIgnoreCase("metric_period")
                     || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("model_rates")
                     || key.equalsIgnoreCase("overage_billing_cadence")
                     || key.equalsIgnoreCase("overage_invoice_anchor")
                     || key.equalsIgnoreCase("plan")

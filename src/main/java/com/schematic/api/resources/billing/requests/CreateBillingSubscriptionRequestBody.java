@@ -16,6 +16,7 @@ import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingProductPricing;
 import com.schematic.api.types.BillingProviderType;
 import com.schematic.api.types.BillingSubscriptionDiscount;
+import com.schematic.api.types.BillingSubscriptionPauseBehavior;
 import com.schematic.api.types.BillingSubscriptionTrialEndSetting;
 import com.schematic.api.types.Currency;
 import java.time.OffsetDateTime;
@@ -54,6 +55,10 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private final Optional<Map<String, JsonNode>> metadata;
 
+    private final Optional<BillingSubscriptionPauseBehavior> pauseBehavior;
+
+    private final Optional<Long> pauseResumesAt;
+
     private final Optional<Long> periodEnd;
 
     private final Optional<Long> periodStart;
@@ -89,6 +94,8 @@ public final class CreateBillingSubscriptionRequestBody {
             OffsetDateTime expiredAt,
             Optional<String> interval,
             Optional<Map<String, JsonNode>> metadata,
+            Optional<BillingSubscriptionPauseBehavior> pauseBehavior,
+            Optional<Long> pauseResumesAt,
             Optional<Long> periodEnd,
             Optional<Long> periodStart,
             List<BillingProductPricing> productExternalIds,
@@ -112,6 +119,8 @@ public final class CreateBillingSubscriptionRequestBody {
         this.expiredAt = expiredAt;
         this.interval = interval;
         this.metadata = metadata;
+        this.pauseBehavior = pauseBehavior;
+        this.pauseResumesAt = pauseResumesAt;
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
         this.productExternalIds = productExternalIds;
@@ -183,6 +192,19 @@ public final class CreateBillingSubscriptionRequestBody {
     @JsonProperty("metadata")
     public Optional<Map<String, JsonNode>> getMetadata() {
         return metadata;
+    }
+
+    /**
+     * @return How the provider treats invoices while payment collection is paused. Omit it to keep the current pause, send null to clear it, or send a behavior to set one.
+     */
+    @JsonProperty("pause_behavior")
+    public Optional<BillingSubscriptionPauseBehavior> getPauseBehavior() {
+        return pauseBehavior;
+    }
+
+    @JsonProperty("pause_resumes_at")
+    public Optional<Long> getPauseResumesAt() {
+        return pauseResumesAt;
     }
 
     @JsonProperty("period_end")
@@ -260,6 +282,8 @@ public final class CreateBillingSubscriptionRequestBody {
                 && expiredAt.equals(other.expiredAt)
                 && interval.equals(other.interval)
                 && metadata.equals(other.metadata)
+                && pauseBehavior.equals(other.pauseBehavior)
+                && pauseResumesAt.equals(other.pauseResumesAt)
                 && periodEnd.equals(other.periodEnd)
                 && periodStart.equals(other.periodStart)
                 && productExternalIds.equals(other.productExternalIds)
@@ -287,6 +311,8 @@ public final class CreateBillingSubscriptionRequestBody {
                 this.expiredAt,
                 this.interval,
                 this.metadata,
+                this.pauseBehavior,
+                this.pauseResumesAt,
                 this.periodEnd,
                 this.periodStart,
                 this.productExternalIds,
@@ -375,6 +401,17 @@ public final class CreateBillingSubscriptionRequestBody {
 
         _FinalStage metadata(Map<String, JsonNode> metadata);
 
+        /**
+         * <p>How the provider treats invoices while payment collection is paused. Omit it to keep the current pause, send null to clear it, or send a behavior to set one.</p>
+         */
+        _FinalStage pauseBehavior(Optional<BillingSubscriptionPauseBehavior> pauseBehavior);
+
+        _FinalStage pauseBehavior(BillingSubscriptionPauseBehavior pauseBehavior);
+
+        _FinalStage pauseResumesAt(Optional<Long> pauseResumesAt);
+
+        _FinalStage pauseResumesAt(Long pauseResumesAt);
+
         _FinalStage periodEnd(Optional<Long> periodEnd);
 
         _FinalStage periodEnd(Long periodEnd);
@@ -447,6 +484,10 @@ public final class CreateBillingSubscriptionRequestBody {
 
         private Optional<Long> periodEnd = Optional.empty();
 
+        private Optional<Long> pauseResumesAt = Optional.empty();
+
+        private Optional<BillingSubscriptionPauseBehavior> pauseBehavior = Optional.empty();
+
         private Optional<Map<String, JsonNode>> metadata = Optional.empty();
 
         private Optional<String> interval = Optional.empty();
@@ -481,6 +522,8 @@ public final class CreateBillingSubscriptionRequestBody {
             expiredAt(other.getExpiredAt());
             interval(other.getInterval());
             metadata(other.getMetadata());
+            pauseBehavior(other.getPauseBehavior());
+            pauseResumesAt(other.getPauseResumesAt());
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
             productExternalIds(other.getProductExternalIds());
@@ -653,6 +696,39 @@ public final class CreateBillingSubscriptionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage pauseResumesAt(Long pauseResumesAt) {
+            this.pauseResumesAt = Optional.ofNullable(pauseResumesAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pause_resumes_at", nulls = Nulls.SKIP)
+        public _FinalStage pauseResumesAt(Optional<Long> pauseResumesAt) {
+            this.pauseResumesAt = pauseResumesAt;
+            return this;
+        }
+
+        /**
+         * <p>How the provider treats invoices while payment collection is paused. Omit it to keep the current pause, send null to clear it, or send a behavior to set one.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage pauseBehavior(BillingSubscriptionPauseBehavior pauseBehavior) {
+            this.pauseBehavior = Optional.ofNullable(pauseBehavior);
+            return this;
+        }
+
+        /**
+         * <p>How the provider treats invoices while payment collection is paused. Omit it to keep the current pause, send null to clear it, or send a behavior to set one.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "pause_behavior", nulls = Nulls.SKIP)
+        public _FinalStage pauseBehavior(Optional<BillingSubscriptionPauseBehavior> pauseBehavior) {
+            this.pauseBehavior = pauseBehavior;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage metadata(Map<String, JsonNode> metadata) {
             this.metadata = Optional.ofNullable(metadata);
             return this;
@@ -782,6 +858,8 @@ public final class CreateBillingSubscriptionRequestBody {
                     expiredAt,
                     interval,
                     metadata,
+                    pauseBehavior,
+                    pauseResumesAt,
                     periodEnd,
                     periodStart,
                     productExternalIds,
@@ -809,6 +887,8 @@ public final class CreateBillingSubscriptionRequestBody {
                     || key.equalsIgnoreCase("expired_at")
                     || key.equalsIgnoreCase("interval")
                     || key.equalsIgnoreCase("metadata")
+                    || key.equalsIgnoreCase("pause_behavior")
+                    || key.equalsIgnoreCase("pause_resumes_at")
                     || key.equalsIgnoreCase("period_end")
                     || key.equalsIgnoreCase("period_start")
                     || key.equalsIgnoreCase("product_external_ids")

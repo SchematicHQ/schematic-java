@@ -280,7 +280,7 @@ public final class BillingInvoiceResponseData {
     }
 
     /**
-     * @return The billing provider's hosted invoice page. Null on an invoice Schematic issued.
+     * @return The hosted invoice page, which opens with no login. On an invoice Schematic issued, null while it is a draft or after its link is revoked.
      */
     @JsonProperty("url")
     public Optional<String> getUrl() {
@@ -501,7 +501,7 @@ public final class BillingInvoiceResponseData {
         _FinalStage subscriptionExternalId(String subscriptionExternalId);
 
         /**
-         * <p>The billing provider's hosted invoice page. Null on an invoice Schematic issued.</p>
+         * <p>The hosted invoice page, which opens with no login. On an invoice Schematic issued, null while it is a draft or after its link is revoked.</p>
          */
         _FinalStage url(Optional<String> url);
 
@@ -712,7 +712,7 @@ public final class BillingInvoiceResponseData {
         }
 
         /**
-         * <p>The billing provider's hosted invoice page. Null on an invoice Schematic issued.</p>
+         * <p>The hosted invoice page, which opens with no login. On an invoice Schematic issued, null while it is a draft or after its link is revoked.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -722,7 +722,7 @@ public final class BillingInvoiceResponseData {
         }
 
         /**
-         * <p>The billing provider's hosted invoice page. Null on an invoice Schematic issued.</p>
+         * <p>The hosted invoice page, which opens with no login. On an invoice Schematic issued, null while it is a draft or after its link is revoked.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "url", nulls = Nulls.SKIP)

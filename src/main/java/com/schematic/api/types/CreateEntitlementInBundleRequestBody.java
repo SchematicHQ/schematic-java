@@ -38,6 +38,8 @@ public final class CreateEntitlementInBundleRequestBody {
 
     private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
+    private final Optional<List<CreditModelRate>> modelRates;
+
     private final Optional<String> monthlyMeteredPriceId;
 
     private final Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers;
@@ -107,6 +109,7 @@ public final class CreateEntitlementInBundleRequestBody {
             String featureId,
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<List<CreditModelRate>> modelRates,
             Optional<String> monthlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers,
             Optional<Long> monthlyUnitPrice,
@@ -145,6 +148,7 @@ public final class CreateEntitlementInBundleRequestBody {
         this.featureId = featureId;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.modelRates = modelRates;
         this.monthlyMeteredPriceId = monthlyMeteredPriceId;
         this.monthlyPriceTiers = monthlyPriceTiers;
         this.monthlyUnitPrice = monthlyUnitPrice;
@@ -215,6 +219,14 @@ public final class CreateEntitlementInBundleRequestBody {
     @JsonProperty("metric_period_month_reset")
     public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
+    }
+
+    /**
+     * @return Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.
+     */
+    @JsonProperty("model_rates")
+    public Optional<List<CreditModelRate>> getModelRates() {
+        return modelRates;
     }
 
     @JsonProperty("monthly_metered_price_id")
@@ -398,6 +410,7 @@ public final class CreateEntitlementInBundleRequestBody {
                 && featureId.equals(other.featureId)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && modelRates.equals(other.modelRates)
                 && monthlyMeteredPriceId.equals(other.monthlyMeteredPriceId)
                 && monthlyPriceTiers.equals(other.monthlyPriceTiers)
                 && monthlyUnitPrice.equals(other.monthlyUnitPrice)
@@ -440,6 +453,7 @@ public final class CreateEntitlementInBundleRequestBody {
                 this.featureId,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.modelRates,
                 this.monthlyMeteredPriceId,
                 this.monthlyPriceTiers,
                 this.monthlyUnitPrice,
@@ -528,6 +542,13 @@ public final class CreateEntitlementInBundleRequestBody {
         _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
         _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
+
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.</p>
+         */
+        _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates);
+
+        _FinalStage modelRates(List<CreditModelRate> modelRates);
 
         _FinalStage monthlyMeteredPriceId(Optional<String> monthlyMeteredPriceId);
 
@@ -715,6 +736,8 @@ public final class CreateEntitlementInBundleRequestBody {
 
         private Optional<String> monthlyMeteredPriceId = Optional.empty();
 
+        private Optional<List<CreditModelRate>> modelRates = Optional.empty();
+
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
         private Optional<MetricPeriod> metricPeriod = Optional.empty();
@@ -743,6 +766,7 @@ public final class CreateEntitlementInBundleRequestBody {
             featureId(other.getFeatureId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            modelRates(other.getModelRates());
             monthlyMeteredPriceId(other.getMonthlyMeteredPriceId());
             monthlyPriceTiers(other.getMonthlyPriceTiers());
             monthlyUnitPrice(other.getMonthlyUnitPrice());
@@ -1182,6 +1206,26 @@ public final class CreateEntitlementInBundleRequestBody {
             return this;
         }
 
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage modelRates(List<CreditModelRate> modelRates) {
+            this.modelRates = Optional.ofNullable(modelRates);
+            return this;
+        }
+
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "model_rates", nulls = Nulls.SKIP)
+        public _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates) {
+            this.modelRates = modelRates;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
@@ -1284,6 +1328,7 @@ public final class CreateEntitlementInBundleRequestBody {
                     featureId,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    modelRates,
                     monthlyMeteredPriceId,
                     monthlyPriceTiers,
                     monthlyUnitPrice,
@@ -1326,6 +1371,7 @@ public final class CreateEntitlementInBundleRequestBody {
                     || key.equalsIgnoreCase("feature_id")
                     || key.equalsIgnoreCase("metric_period")
                     || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("model_rates")
                     || key.equalsIgnoreCase("monthly_metered_price_id")
                     || key.equalsIgnoreCase("monthly_price_tiers")
                     || key.equalsIgnoreCase("monthly_unit_price")

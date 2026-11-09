@@ -29,6 +29,8 @@ import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.requests.MarkInvoicePaidRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateBillingSettingsRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateCompanyBillingProfileRequestBody;
+import com.schematic.api.resources.billing.requests.UploadContractDocumentRequest;
+import com.schematic.api.resources.billing.types.ChargeNativeInvoiceResponse;
 import com.schematic.api.resources.billing.types.CountBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
@@ -36,12 +38,15 @@ import com.schematic.api.resources.billing.types.DeleteBillingCouponResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
+import com.schematic.api.resources.billing.types.DeleteContractDocumentResponse;
 import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
 import com.schematic.api.resources.billing.types.FinalizeNativeInvoiceResponse;
 import com.schematic.api.resources.billing.types.GetBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.GetBillingSettingsResponse;
+import com.schematic.api.resources.billing.types.GetCompanyContractResponse;
 import com.schematic.api.resources.billing.types.GetCompanyNativeSubscriptionResponse;
+import com.schematic.api.resources.billing.types.GetCompanyUpcomingInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
 import com.schematic.api.resources.billing.types.ListBillingProductPricesResponse;
@@ -53,8 +58,12 @@ import com.schematic.api.resources.billing.types.ListInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListMetersResponse;
 import com.schematic.api.resources.billing.types.ListPaymentMethodsResponse;
 import com.schematic.api.resources.billing.types.MarkBillingInvoicePaidResponse;
+import com.schematic.api.resources.billing.types.MoveToDefaultPlanResponse;
+import com.schematic.api.resources.billing.types.ReissueNativeInvoiceLinkResponse;
+import com.schematic.api.resources.billing.types.RevokeNativeInvoiceLinkResponse;
 import com.schematic.api.resources.billing.types.UpdateBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.UpdateCompanyBillingProfileResponse;
+import com.schematic.api.resources.billing.types.UploadContractDocumentResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCustomerResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingMeterResponse;
@@ -64,7 +73,9 @@ import com.schematic.api.resources.billing.types.UpsertBillingSubscriptionRespon
 import com.schematic.api.resources.billing.types.UpsertInvoiceResponse;
 import com.schematic.api.resources.billing.types.UpsertPaymentMethodResponse;
 import com.schematic.api.resources.billing.types.VoidNativeInvoiceResponse;
+import java.io.File;
 import java.io.InputStream;
+import okhttp3.MediaType;
 
 public class BillingClient {
     protected final ClientOptions clientOptions;
@@ -382,6 +393,83 @@ public class BillingClient {
                 .body();
     }
 
+    public GetCompanyContractResponse getCompanyContract(String billingProfileId) {
+        return this.rawClient.getCompanyContract(billingProfileId).body();
+    }
+
+    public GetCompanyContractResponse getCompanyContract(String billingProfileId, RequestOptions requestOptions) {
+        return this.rawClient
+                .getCompanyContract(billingProfileId, requestOptions)
+                .body();
+    }
+
+    public InputStream downloadContractDocument(String billingProfileId) {
+        return this.rawClient.downloadContractDocument(billingProfileId).body();
+    }
+
+    public InputStream downloadContractDocument(String billingProfileId, RequestOptions requestOptions) {
+        return this.rawClient
+                .downloadContractDocument(billingProfileId, requestOptions)
+                .body();
+    }
+
+    public UploadContractDocumentResponse uploadContractDocument(
+            String billingProfileId, File file, UploadContractDocumentRequest request) {
+        return this.rawClient
+                .uploadContractDocument(billingProfileId, file, request)
+                .body();
+    }
+
+    public UploadContractDocumentResponse uploadContractDocument(
+            String billingProfileId, File file, UploadContractDocumentRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .uploadContractDocument(billingProfileId, file, request, requestOptions)
+                .body();
+    }
+
+    public UploadContractDocumentResponse uploadContractDocument(
+            String billingProfileId, InputStream stream, String filename) {
+        return this.rawClient
+                .uploadContractDocument(billingProfileId, stream, filename)
+                .body();
+    }
+
+    public UploadContractDocumentResponse uploadContractDocument(
+            String billingProfileId, InputStream stream, String filename, MediaType mediaType) {
+        return this.rawClient
+                .uploadContractDocument(billingProfileId, stream, filename, mediaType)
+                .body();
+    }
+
+    public UploadContractDocumentResponse uploadContractDocument(
+            String billingProfileId, InputStream stream, String filename, RequestOptions requestOptions) {
+        return this.rawClient
+                .uploadContractDocument(billingProfileId, stream, filename, requestOptions)
+                .body();
+    }
+
+    public UploadContractDocumentResponse uploadContractDocument(
+            String billingProfileId,
+            InputStream stream,
+            String filename,
+            MediaType mediaType,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .uploadContractDocument(billingProfileId, stream, filename, mediaType, requestOptions)
+                .body();
+    }
+
+    public DeleteContractDocumentResponse deleteContractDocument(String billingProfileId) {
+        return this.rawClient.deleteContractDocument(billingProfileId).body();
+    }
+
+    public DeleteContractDocumentResponse deleteContractDocument(
+            String billingProfileId, RequestOptions requestOptions) {
+        return this.rawClient
+                .deleteContractDocument(billingProfileId, requestOptions)
+                .body();
+    }
+
     public GetBillingSettingsResponse getBillingSettings() {
         return this.rawClient.getBillingSettings().body();
     }
@@ -427,6 +515,25 @@ public class BillingClient {
                 .body();
     }
 
+    public MoveToDefaultPlanResponse moveToDefaultPlan(String companyId) {
+        return this.rawClient.moveToDefaultPlan(companyId).body();
+    }
+
+    public MoveToDefaultPlanResponse moveToDefaultPlan(String companyId, RequestOptions requestOptions) {
+        return this.rawClient.moveToDefaultPlan(companyId, requestOptions).body();
+    }
+
+    public GetCompanyUpcomingInvoicesResponse getCompanyUpcomingInvoices(String companyId) {
+        return this.rawClient.getCompanyUpcomingInvoices(companyId).body();
+    }
+
+    public GetCompanyUpcomingInvoicesResponse getCompanyUpcomingInvoices(
+            String companyId, RequestOptions requestOptions) {
+        return this.rawClient
+                .getCompanyUpcomingInvoices(companyId, requestOptions)
+                .body();
+    }
+
     public ListBillingInvoicesResponse listBillingInvoices() {
         return this.rawClient.listBillingInvoices().body();
     }
@@ -452,6 +559,14 @@ public class BillingClient {
         return this.rawClient.getBillingInvoice(invoiceId, requestOptions).body();
     }
 
+    public ChargeNativeInvoiceResponse chargeNativeInvoice(String invoiceId) {
+        return this.rawClient.chargeNativeInvoice(invoiceId).body();
+    }
+
+    public ChargeNativeInvoiceResponse chargeNativeInvoice(String invoiceId, RequestOptions requestOptions) {
+        return this.rawClient.chargeNativeInvoice(invoiceId, requestOptions).body();
+    }
+
     public InputStream exportNativeInvoice(String invoiceId) {
         return this.rawClient.exportNativeInvoice(invoiceId).body();
     }
@@ -466,6 +581,24 @@ public class BillingClient {
 
     public FinalizeNativeInvoiceResponse finalizeNativeInvoice(String invoiceId, RequestOptions requestOptions) {
         return this.rawClient.finalizeNativeInvoice(invoiceId, requestOptions).body();
+    }
+
+    public ReissueNativeInvoiceLinkResponse reissueNativeInvoiceLink(String invoiceId) {
+        return this.rawClient.reissueNativeInvoiceLink(invoiceId).body();
+    }
+
+    public ReissueNativeInvoiceLinkResponse reissueNativeInvoiceLink(String invoiceId, RequestOptions requestOptions) {
+        return this.rawClient
+                .reissueNativeInvoiceLink(invoiceId, requestOptions)
+                .body();
+    }
+
+    public RevokeNativeInvoiceLinkResponse revokeNativeInvoiceLink(String invoiceId) {
+        return this.rawClient.revokeNativeInvoiceLink(invoiceId).body();
+    }
+
+    public RevokeNativeInvoiceLinkResponse revokeNativeInvoiceLink(String invoiceId, RequestOptions requestOptions) {
+        return this.rawClient.revokeNativeInvoiceLink(invoiceId, requestOptions).body();
     }
 
     public MarkBillingInvoicePaidResponse markBillingInvoicePaid(String invoiceId, MarkInvoicePaidRequestBody request) {
