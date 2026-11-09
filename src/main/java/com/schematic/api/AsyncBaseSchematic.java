@@ -16,6 +16,7 @@ import com.schematic.api.resources.companies.AsyncCompaniesClient;
 import com.schematic.api.resources.components.AsyncComponentsClient;
 import com.schematic.api.resources.componentspublic.AsyncComponentspublicClient;
 import com.schematic.api.resources.credits.AsyncCreditsClient;
+import com.schematic.api.resources.customplangrouprollouts.AsyncCustomplangrouprolloutsClient;
 import com.schematic.api.resources.dataexports.AsyncDataexportsClient;
 import com.schematic.api.resources.entitlements.AsyncEntitlementsClient;
 import com.schematic.api.resources.events.AsyncEventsClient;
@@ -57,6 +58,8 @@ public class AsyncBaseSchematic implements AutoCloseable {
 
     protected final Supplier<AsyncPlanbundleClient> planbundleClient;
 
+    protected final Supplier<AsyncCustomplangrouprolloutsClient> customplangrouprolloutsClient;
+
     protected final Supplier<AsyncDataexportsClient> dataexportsClient;
 
     protected final Supplier<AsyncEventsClient> eventsClient;
@@ -94,6 +97,8 @@ public class AsyncBaseSchematic implements AutoCloseable {
         this.plansClient = Suppliers.memoize(() -> new AsyncPlansClient(clientOptions));
         this.componentsClient = Suppliers.memoize(() -> new AsyncComponentsClient(clientOptions));
         this.planbundleClient = Suppliers.memoize(() -> new AsyncPlanbundleClient(clientOptions));
+        this.customplangrouprolloutsClient =
+                Suppliers.memoize(() -> new AsyncCustomplangrouprolloutsClient(clientOptions));
         this.dataexportsClient = Suppliers.memoize(() -> new AsyncDataexportsClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new AsyncEventsClient(clientOptions));
         this.featuresClient = Suppliers.memoize(() -> new AsyncFeaturesClient(clientOptions));
@@ -113,145 +118,6 @@ public class AsyncBaseSchematic implements AutoCloseable {
      */
     public AsyncRawBaseSchematic withRawResponse() {
         return this.rawClient;
-    }
-
-    public CompletableFuture<Void> postApiKeys() {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.postApiKeys();
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> postApiKeys(RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.postApiKeys(requestOptions);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> putApiKeysApiKeyId(String apiKeyId) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.putApiKeysApiKeyId(apiKeyId);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> putApiKeysApiKeyId(String apiKeyId, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
-                this.rawClient.putApiKeysApiKeyId(apiKeyId, requestOptions);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> deleteApiKeysApiKeyId(String apiKeyId) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.deleteApiKeysApiKeyId(apiKeyId);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> deleteApiKeysApiKeyId(String apiKeyId, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
-                this.rawClient.deleteApiKeysApiKeyId(apiKeyId, requestOptions);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> postEnvironments() {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.postEnvironments();
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> postEnvironments(RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture = this.rawClient.postEnvironments(requestOptions);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> putEnvironmentsEnvironmentId(String environmentId) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
-                this.rawClient.putEnvironmentsEnvironmentId(environmentId);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> putEnvironmentsEnvironmentId(String environmentId, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
-                this.rawClient.putEnvironmentsEnvironmentId(environmentId, requestOptions);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> deleteEnvironmentsEnvironmentId(String environmentId) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
-                this.rawClient.deleteEnvironmentsEnvironmentId(environmentId);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
-    }
-
-    public CompletableFuture<Void> deleteEnvironmentsEnvironmentId(
-            String environmentId, RequestOptions requestOptions) {
-        CompletableFuture<BaseSchematicHttpResponse<Void>> rawFuture =
-                this.rawClient.deleteEnvironmentsEnvironmentId(environmentId, requestOptions);
-        CompletableFuture<Void> future = rawFuture.thenApply(response -> response.body());
-        future.whenComplete((result_, throwable_) -> {
-            if (future.isCancelled()) {
-                rawFuture.cancel(true);
-            }
-        });
-        return future;
     }
 
     public CompletableFuture<Void> getCreditLedger() {
@@ -314,6 +180,10 @@ public class AsyncBaseSchematic implements AutoCloseable {
 
     public AsyncPlanbundleClient planbundle() {
         return this.planbundleClient.get();
+    }
+
+    public AsyncCustomplangrouprolloutsClient customplangrouprollouts() {
+        return this.customplangrouprolloutsClient.get();
     }
 
     public AsyncDataexportsClient dataexports() {

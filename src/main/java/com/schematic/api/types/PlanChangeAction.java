@@ -16,6 +16,9 @@ public final class PlanChangeAction {
 
     public static final PlanChangeAction AMENDMENT = new PlanChangeAction(Value.AMENDMENT, "amendment");
 
+    public static final PlanChangeAction PAST_DUE_DEFAULT_PLAN =
+            new PlanChangeAction(Value.PAST_DUE_DEFAULT_PLAN, "past_due_default_plan");
+
     public static final PlanChangeAction CHECKOUT = new PlanChangeAction(Value.CHECKOUT, "checkout");
 
     public static final PlanChangeAction MIGRATION = new PlanChangeAction(Value.MIGRATION, "migration");
@@ -83,6 +86,8 @@ public final class PlanChangeAction {
                 return visitor.visitPlanBillingProductChanged();
             case AMENDMENT:
                 return visitor.visitAmendment();
+            case PAST_DUE_DEFAULT_PLAN:
+                return visitor.visitPastDueDefaultPlan();
             case CHECKOUT:
                 return visitor.visitCheckout();
             case MIGRATION:
@@ -122,6 +127,8 @@ public final class PlanChangeAction {
                 return PLAN_BILLING_PRODUCT_CHANGED;
             case "amendment":
                 return AMENDMENT;
+            case "past_due_default_plan":
+                return PAST_DUE_DEFAULT_PLAN;
             case "checkout":
                 return CHECKOUT;
             case "migration":
@@ -168,6 +175,8 @@ public final class PlanChangeAction {
 
         MIGRATION,
 
+        PAST_DUE_DEFAULT_PLAN,
+
         PLAN_BILLING_PRODUCT_CHANGED,
 
         PLAN_DELETED,
@@ -201,6 +210,8 @@ public final class PlanChangeAction {
         T visitManagePlan();
 
         T visitMigration();
+
+        T visitPastDueDefaultPlan();
 
         T visitPlanBillingProductChanged();
 

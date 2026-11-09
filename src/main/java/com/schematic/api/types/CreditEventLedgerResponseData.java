@@ -212,7 +212,7 @@ public final class CreditEventLedgerResponseData {
     }
 
     /**
-     * @return The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. Set on inference-driven draws only.
+     * @return The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. When one of the entitlement's per-model rates priced the draw, every line carries that rate's provider and model; both are absent when the default rates priced it. Set on inference-driven draws only.
      */
     @JsonProperty("burn_breakdown")
     public Optional<List<CreditBurnBreakdownLine>> getBurnBreakdown() {
@@ -566,7 +566,7 @@ public final class CreditEventLedgerResponseData {
         _FinalStage billingCreditId(String billingCreditId);
 
         /**
-         * <p>The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. Set on inference-driven draws only.</p>
+         * <p>The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. When one of the entitlement's per-model rates priced the draw, every line carries that rate's provider and model; both are absent when the default rates priced it. Set on inference-driven draws only.</p>
          */
         _FinalStage burnBreakdown(Optional<List<CreditBurnBreakdownLine>> burnBreakdown);
 
@@ -1254,7 +1254,7 @@ public final class CreditEventLedgerResponseData {
         }
 
         /**
-         * <p>The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. Set on inference-driven draws only.</p>
+         * <p>The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. When one of the entitlement's per-model rates priced the draw, every line carries that rate's provider and model; both are absent when the default rates priced it. Set on inference-driven draws only.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1264,7 +1264,7 @@ public final class CreditEventLedgerResponseData {
         }
 
         /**
-         * <p>The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. Set on inference-driven draws only.</p>
+         * <p>The part of the draw this row covers: one line per priced quantity, including the request line, summing to the row amount. When one of the entitlement's per-model rates priced the draw, every line carries that rate's provider and model; both are absent when the default rates priced it. Set on inference-driven draws only.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "burn_breakdown", nulls = Nulls.SKIP)

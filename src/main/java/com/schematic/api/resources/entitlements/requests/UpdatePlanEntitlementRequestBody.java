@@ -16,6 +16,7 @@ import com.schematic.api.types.BillingArrearsAnchor;
 import com.schematic.api.types.BillingArrearsCadence;
 import com.schematic.api.types.BillingTiersMode;
 import com.schematic.api.types.CreatePriceTierRequestBody;
+import com.schematic.api.types.CreditModelRate;
 import com.schematic.api.types.Currency;
 import com.schematic.api.types.CurrencyPriceRequestBody;
 import com.schematic.api.types.EntitlementPriceBehavior;
@@ -46,6 +47,8 @@ public final class UpdatePlanEntitlementRequestBody {
     private final Optional<MetricPeriod> metricPeriod;
 
     private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
+
+    private final Optional<List<CreditModelRate>> modelRates;
 
     private final Optional<String> monthlyMeteredPriceId;
 
@@ -111,6 +114,7 @@ public final class UpdatePlanEntitlementRequestBody {
             Optional<List<CurrencyPriceRequestBody>> currencyPrices,
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<List<CreditModelRate>> modelRates,
             Optional<String> monthlyMeteredPriceId,
             Optional<List<CreatePriceTierRequestBody>> monthlyPriceTiers,
             Optional<Long> monthlyUnitPrice,
@@ -146,6 +150,7 @@ public final class UpdatePlanEntitlementRequestBody {
         this.currencyPrices = currencyPrices;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.modelRates = modelRates;
         this.monthlyMeteredPriceId = monthlyMeteredPriceId;
         this.monthlyPriceTiers = monthlyPriceTiers;
         this.monthlyUnitPrice = monthlyUnitPrice;
@@ -209,6 +214,14 @@ public final class UpdatePlanEntitlementRequestBody {
     @JsonProperty("metric_period_month_reset")
     public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
+    }
+
+    /**
+     * @return Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.
+     */
+    @JsonProperty("model_rates")
+    public Optional<List<CreditModelRate>> getModelRates() {
+        return modelRates;
     }
 
     @JsonProperty("monthly_metered_price_id")
@@ -380,6 +393,7 @@ public final class UpdatePlanEntitlementRequestBody {
                 && currencyPrices.equals(other.currencyPrices)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && modelRates.equals(other.modelRates)
                 && monthlyMeteredPriceId.equals(other.monthlyMeteredPriceId)
                 && monthlyPriceTiers.equals(other.monthlyPriceTiers)
                 && monthlyUnitPrice.equals(other.monthlyUnitPrice)
@@ -419,6 +433,7 @@ public final class UpdatePlanEntitlementRequestBody {
                 this.currencyPrices,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.modelRates,
                 this.monthlyMeteredPriceId,
                 this.monthlyPriceTiers,
                 this.monthlyUnitPrice,
@@ -497,6 +512,13 @@ public final class UpdatePlanEntitlementRequestBody {
         _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
         _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
+
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.</p>
+         */
+        _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates);
+
+        _FinalStage modelRates(List<CreditModelRate> modelRates);
 
         _FinalStage monthlyMeteredPriceId(Optional<String> monthlyMeteredPriceId);
 
@@ -674,6 +696,8 @@ public final class UpdatePlanEntitlementRequestBody {
 
         private Optional<String> monthlyMeteredPriceId = Optional.empty();
 
+        private Optional<List<CreditModelRate>> modelRates = Optional.empty();
+
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
         private Optional<MetricPeriod> metricPeriod = Optional.empty();
@@ -701,6 +725,7 @@ public final class UpdatePlanEntitlementRequestBody {
             currencyPrices(other.getCurrencyPrices());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            modelRates(other.getModelRates());
             monthlyMeteredPriceId(other.getMonthlyMeteredPriceId());
             monthlyPriceTiers(other.getMonthlyPriceTiers());
             monthlyUnitPrice(other.getMonthlyUnitPrice());
@@ -1111,6 +1136,26 @@ public final class UpdatePlanEntitlementRequestBody {
             return this;
         }
 
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage modelRates(List<CreditModelRate> modelRates) {
+            this.modelRates = Optional.ofNullable(modelRates);
+            return this;
+        }
+
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "model_rates", nulls = Nulls.SKIP)
+        public _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates) {
+            this.modelRates = modelRates;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
@@ -1212,6 +1257,7 @@ public final class UpdatePlanEntitlementRequestBody {
                     currencyPrices,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    modelRates,
                     monthlyMeteredPriceId,
                     monthlyPriceTiers,
                     monthlyUnitPrice,
@@ -1251,6 +1297,7 @@ public final class UpdatePlanEntitlementRequestBody {
                     || key.equalsIgnoreCase("currency_prices")
                     || key.equalsIgnoreCase("metric_period")
                     || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("model_rates")
                     || key.equalsIgnoreCase("monthly_metered_price_id")
                     || key.equalsIgnoreCase("monthly_price_tiers")
                     || key.equalsIgnoreCase("monthly_unit_price")

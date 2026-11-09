@@ -29,6 +29,7 @@ import com.schematic.api.resources.companies.requests.ListPlanTraitsRequest;
 import com.schematic.api.resources.companies.requests.ListUsersRequest;
 import com.schematic.api.resources.companies.requests.LookupCompanyRequest;
 import com.schematic.api.resources.companies.requests.LookupUserRequest;
+import com.schematic.api.resources.companies.requests.UpdateBillingEntitySettingsRequestBody;
 import com.schematic.api.resources.companies.requests.UpdateEntityTraitDefinitionRequestBody;
 import com.schematic.api.resources.companies.requests.UpdatePlanTraitBulkRequestBody;
 import com.schematic.api.resources.companies.types.CountCompaniesResponse;
@@ -49,6 +50,7 @@ import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
 import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscriptionsResponse;
+import com.schematic.api.resources.companies.types.GetBillingEntitySettingsResponse;
 import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
 import com.schematic.api.resources.companies.types.GetCompanyInferenceCostResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
@@ -69,6 +71,7 @@ import com.schematic.api.resources.companies.types.ListPlanTraitsResponse;
 import com.schematic.api.resources.companies.types.ListUsersResponse;
 import com.schematic.api.resources.companies.types.LookupCompanyResponse;
 import com.schematic.api.resources.companies.types.LookupUserResponse;
+import com.schematic.api.resources.companies.types.UpdateBillingEntitySettingsResponse;
 import com.schematic.api.resources.companies.types.UpdateEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.UpdatePlanTraitsBulkResponse;
 import com.schematic.api.resources.companies.types.UpsertCompanyResponse;
@@ -231,6 +234,39 @@ public class CompaniesClient {
     public GetCompanyBillingEntityResponse getCompanyBillingEntity(
             GetCompanyBillingEntityRequest request, RequestOptions requestOptions) {
         return this.rawClient.getCompanyBillingEntity(request, requestOptions).body();
+    }
+
+    public GetBillingEntitySettingsResponse getBillingEntitySettings(String companyId) {
+        return this.rawClient.getBillingEntitySettings(companyId).body();
+    }
+
+    public GetBillingEntitySettingsResponse getBillingEntitySettings(String companyId, RequestOptions requestOptions) {
+        return this.rawClient
+                .getBillingEntitySettings(companyId, requestOptions)
+                .body();
+    }
+
+    public UpdateBillingEntitySettingsResponse updateBillingEntitySettings(String companyId) {
+        return this.rawClient.updateBillingEntitySettings(companyId).body();
+    }
+
+    public UpdateBillingEntitySettingsResponse updateBillingEntitySettings(
+            String companyId, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateBillingEntitySettings(companyId, requestOptions)
+                .body();
+    }
+
+    public UpdateBillingEntitySettingsResponse updateBillingEntitySettings(
+            String companyId, UpdateBillingEntitySettingsRequestBody request) {
+        return this.rawClient.updateBillingEntitySettings(companyId, request).body();
+    }
+
+    public UpdateBillingEntitySettingsResponse updateBillingEntitySettings(
+            String companyId, UpdateBillingEntitySettingsRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateBillingEntitySettings(companyId, request, requestOptions)
+                .body();
     }
 
     public GetBillingEntityChildSubscriptionsResponse getBillingEntityChildSubscriptions(

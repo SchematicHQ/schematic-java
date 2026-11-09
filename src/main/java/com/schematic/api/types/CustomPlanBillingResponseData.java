@@ -28,6 +28,8 @@ public final class CustomPlanBillingResponseData {
 
     private final Optional<OffsetDateTime> billingCycleAnchor;
 
+    private final Optional<String> billingEntityId;
+
     private final Optional<OffsetDateTime> billingStartDate;
 
     private final Optional<String> checkoutId;
@@ -71,6 +73,7 @@ public final class CustomPlanBillingResponseData {
     private CustomPlanBillingResponseData(
             CustomPlanActivationStrategy activationStrategy,
             Optional<OffsetDateTime> billingCycleAnchor,
+            Optional<String> billingEntityId,
             Optional<OffsetDateTime> billingStartDate,
             Optional<String> checkoutId,
             String companyId,
@@ -93,6 +96,7 @@ public final class CustomPlanBillingResponseData {
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.billingCycleAnchor = billingCycleAnchor;
+        this.billingEntityId = billingEntityId;
         this.billingStartDate = billingStartDate;
         this.checkoutId = checkoutId;
         this.companyId = companyId;
@@ -126,6 +130,14 @@ public final class CustomPlanBillingResponseData {
     @JsonProperty("billing_cycle_anchor")
     public Optional<OffsetDateTime> getBillingCycleAnchor() {
         return billingCycleAnchor;
+    }
+
+    /**
+     * @return The company that pays for the subscription, when it isn't the plan's company. Null when the company pays for itself.
+     */
+    @JsonProperty("billing_entity_id")
+    public Optional<String> getBillingEntityId() {
+        return billingEntityId;
     }
 
     /**
@@ -258,6 +270,7 @@ public final class CustomPlanBillingResponseData {
     private boolean equalTo(CustomPlanBillingResponseData other) {
         return activationStrategy.equals(other.activationStrategy)
                 && billingCycleAnchor.equals(other.billingCycleAnchor)
+                && billingEntityId.equals(other.billingEntityId)
                 && billingStartDate.equals(other.billingStartDate)
                 && checkoutId.equals(other.checkoutId)
                 && companyId.equals(other.companyId)
@@ -284,6 +297,7 @@ public final class CustomPlanBillingResponseData {
         return Objects.hash(
                 this.activationStrategy,
                 this.billingCycleAnchor,
+                this.billingEntityId,
                 this.billingStartDate,
                 this.checkoutId,
                 this.companyId,
@@ -372,6 +386,13 @@ public final class CustomPlanBillingResponseData {
         _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor);
 
         _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
+
+        /**
+         * <p>The company that pays for the subscription, when it isn't the plan's company. Null when the company pays for itself.</p>
+         */
+        _FinalStage billingEntityId(Optional<String> billingEntityId);
+
+        _FinalStage billingEntityId(String billingEntityId);
 
         /**
          * <p>The date the contract term starts, when the operator pinned one. A past date was backdated onto the subscription so the first period runs from the contract date rather than from finalization.</p>
@@ -487,6 +508,8 @@ public final class CustomPlanBillingResponseData {
 
         private Optional<OffsetDateTime> billingStartDate = Optional.empty();
 
+        private Optional<String> billingEntityId = Optional.empty();
+
         private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -497,6 +520,7 @@ public final class CustomPlanBillingResponseData {
         public Builder from(CustomPlanBillingResponseData other) {
             activationStrategy(other.getActivationStrategy());
             billingCycleAnchor(other.getBillingCycleAnchor());
+            billingEntityId(other.getBillingEntityId());
             billingStartDate(other.getBillingStartDate());
             checkoutId(other.getCheckoutId());
             companyId(other.getCompanyId());
@@ -781,6 +805,26 @@ public final class CustomPlanBillingResponseData {
         }
 
         /**
+         * <p>The company that pays for the subscription, when it isn't the plan's company. Null when the company pays for itself.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingEntityId(String billingEntityId) {
+            this.billingEntityId = Optional.ofNullable(billingEntityId);
+            return this;
+        }
+
+        /**
+         * <p>The company that pays for the subscription, when it isn't the plan's company. Null when the company pays for itself.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_entity_id", nulls = Nulls.SKIP)
+        public _FinalStage billingEntityId(Optional<String> billingEntityId) {
+            this.billingEntityId = billingEntityId;
+            return this;
+        }
+
+        /**
          * <p>The billing period renewal date pinned when the subscription started, when one was set. When no invoice exists yet, the first invoice is raised on this date.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -805,6 +849,7 @@ public final class CustomPlanBillingResponseData {
             return new CustomPlanBillingResponseData(
                     activationStrategy,
                     billingCycleAnchor,
+                    billingEntityId,
                     billingStartDate,
                     checkoutId,
                     companyId,
@@ -831,6 +876,7 @@ public final class CustomPlanBillingResponseData {
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("activation_strategy")
                     || key.equalsIgnoreCase("billing_cycle_anchor")
+                    || key.equalsIgnoreCase("billing_entity_id")
                     || key.equalsIgnoreCase("billing_start_date")
                     || key.equalsIgnoreCase("checkout_id")
                     || key.equalsIgnoreCase("company_id")

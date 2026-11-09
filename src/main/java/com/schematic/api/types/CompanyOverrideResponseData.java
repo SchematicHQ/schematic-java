@@ -46,6 +46,8 @@ public final class CompanyOverrideResponseData {
 
     private final Optional<MetricPeriodMonthReset> metricPeriodMonthReset;
 
+    private final Optional<List<CreditModelRate>> modelRates;
+
     private final List<CompanyOverrideNoteResponseData> notes;
 
     private final Optional<Map<String, Double>> quantityRates;
@@ -84,6 +86,7 @@ public final class CompanyOverrideResponseData {
             String id,
             Optional<MetricPeriod> metricPeriod,
             Optional<MetricPeriodMonthReset> metricPeriodMonthReset,
+            Optional<List<CreditModelRate>> modelRates,
             List<CompanyOverrideNoteResponseData> notes,
             Optional<Map<String, Double>> quantityRates,
             Optional<String> ruleId,
@@ -108,6 +111,7 @@ public final class CompanyOverrideResponseData {
         this.id = id;
         this.metricPeriod = metricPeriod;
         this.metricPeriodMonthReset = metricPeriodMonthReset;
+        this.modelRates = modelRates;
         this.notes = notes;
         this.quantityRates = quantityRates;
         this.ruleId = ruleId;
@@ -176,6 +180,14 @@ public final class CompanyOverrideResponseData {
     @JsonProperty("metric_period_month_reset")
     public Optional<MetricPeriodMonthReset> getMetricPeriodMonthReset() {
         return metricPeriodMonthReset;
+    }
+
+    /**
+     * @return Per-model rate overrides for inference features, keyed by provider and model. Each entry replaces consumption_rate and quantity_rates for events from that model. Absent when every model burns at the entitlement's own rates.
+     */
+    @JsonProperty("model_rates")
+    public Optional<List<CreditModelRate>> getModelRates() {
+        return modelRates;
     }
 
     @JsonProperty("notes")
@@ -264,6 +276,7 @@ public final class CompanyOverrideResponseData {
                 && id.equals(other.id)
                 && metricPeriod.equals(other.metricPeriod)
                 && metricPeriodMonthReset.equals(other.metricPeriodMonthReset)
+                && modelRates.equals(other.modelRates)
                 && notes.equals(other.notes)
                 && quantityRates.equals(other.quantityRates)
                 && ruleId.equals(other.ruleId)
@@ -292,6 +305,7 @@ public final class CompanyOverrideResponseData {
                 this.id,
                 this.metricPeriod,
                 this.metricPeriodMonthReset,
+                this.modelRates,
                 this.notes,
                 this.quantityRates,
                 this.ruleId,
@@ -375,6 +389,13 @@ public final class CompanyOverrideResponseData {
         _FinalStage metricPeriodMonthReset(Optional<MetricPeriodMonthReset> metricPeriodMonthReset);
 
         _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset);
+
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry replaces consumption_rate and quantity_rates for events from that model. Absent when every model burns at the entitlement's own rates.</p>
+         */
+        _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates);
+
+        _FinalStage modelRates(List<CreditModelRate> modelRates);
 
         _FinalStage notes(List<CompanyOverrideNoteResponseData> notes);
 
@@ -466,6 +487,8 @@ public final class CompanyOverrideResponseData {
 
         private List<CompanyOverrideNoteResponseData> notes = new ArrayList<>();
 
+        private Optional<List<CreditModelRate>> modelRates = Optional.empty();
+
         private Optional<MetricPeriodMonthReset> metricPeriodMonthReset = Optional.empty();
 
         private Optional<MetricPeriod> metricPeriod = Optional.empty();
@@ -495,6 +518,7 @@ public final class CompanyOverrideResponseData {
             id(other.getId());
             metricPeriod(other.getMetricPeriod());
             metricPeriodMonthReset(other.getMetricPeriodMonthReset());
+            modelRates(other.getModelRates());
             notes(other.getNotes());
             quantityRates(other.getQuantityRates());
             ruleId(other.getRuleId());
@@ -707,6 +731,26 @@ public final class CompanyOverrideResponseData {
             return this;
         }
 
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry replaces consumption_rate and quantity_rates for events from that model. Absent when every model burns at the entitlement's own rates.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage modelRates(List<CreditModelRate> modelRates) {
+            this.modelRates = Optional.ofNullable(modelRates);
+            return this;
+        }
+
+        /**
+         * <p>Per-model rate overrides for inference features, keyed by provider and model. Each entry replaces consumption_rate and quantity_rates for events from that model. Absent when every model burns at the entitlement's own rates.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "model_rates", nulls = Nulls.SKIP)
+        public _FinalStage modelRates(Optional<List<CreditModelRate>> modelRates) {
+            this.modelRates = modelRates;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage metricPeriodMonthReset(MetricPeriodMonthReset metricPeriodMonthReset) {
             this.metricPeriodMonthReset = Optional.ofNullable(metricPeriodMonthReset);
@@ -799,6 +843,7 @@ public final class CompanyOverrideResponseData {
                     id,
                     metricPeriod,
                     metricPeriodMonthReset,
+                    modelRates,
                     notes,
                     quantityRates,
                     ruleId,
@@ -827,6 +872,7 @@ public final class CompanyOverrideResponseData {
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("metric_period")
                     || key.equalsIgnoreCase("metric_period_month_reset")
+                    || key.equalsIgnoreCase("model_rates")
                     || key.equalsIgnoreCase("notes")
                     || key.equalsIgnoreCase("quantity_rates")
                     || key.equalsIgnoreCase("rule_id")

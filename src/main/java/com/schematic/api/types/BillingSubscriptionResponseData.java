@@ -49,6 +49,12 @@ public final class BillingSubscriptionResponseData {
 
     private final Optional<Map<String, JsonNode>> metadata;
 
+    private final Optional<BillingSubscriptionPauseBehavior> pauseBehavior;
+
+    private final Optional<Long> pauseResumesAt;
+
+    private final Optional<OffsetDateTime> pausedAt;
+
     private final long periodEnd;
 
     private final long periodStart;
@@ -81,6 +87,9 @@ public final class BillingSubscriptionResponseData {
             String id,
             String interval,
             Optional<Map<String, JsonNode>> metadata,
+            Optional<BillingSubscriptionPauseBehavior> pauseBehavior,
+            Optional<Long> pauseResumesAt,
+            Optional<OffsetDateTime> pausedAt,
             long periodEnd,
             long periodStart,
             BillingProviderType providerType,
@@ -103,6 +112,9 @@ public final class BillingSubscriptionResponseData {
         this.id = id;
         this.interval = interval;
         this.metadata = metadata;
+        this.pauseBehavior = pauseBehavior;
+        this.pauseResumesAt = pauseResumesAt;
+        this.pausedAt = pausedAt;
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
         this.providerType = providerType;
@@ -179,6 +191,21 @@ public final class BillingSubscriptionResponseData {
         return metadata;
     }
 
+    @JsonProperty("pause_behavior")
+    public Optional<BillingSubscriptionPauseBehavior> getPauseBehavior() {
+        return pauseBehavior;
+    }
+
+    @JsonProperty("pause_resumes_at")
+    public Optional<Long> getPauseResumesAt() {
+        return pauseResumesAt;
+    }
+
+    @JsonProperty("paused_at")
+    public Optional<OffsetDateTime> getPausedAt() {
+        return pausedAt;
+    }
+
     @JsonProperty("period_end")
     public long getPeriodEnd() {
         return periodEnd;
@@ -244,6 +271,9 @@ public final class BillingSubscriptionResponseData {
                 && id.equals(other.id)
                 && interval.equals(other.interval)
                 && metadata.equals(other.metadata)
+                && pauseBehavior.equals(other.pauseBehavior)
+                && pauseResumesAt.equals(other.pauseResumesAt)
+                && pausedAt.equals(other.pausedAt)
                 && periodEnd == other.periodEnd
                 && periodStart == other.periodStart
                 && providerType.equals(other.providerType)
@@ -270,6 +300,9 @@ public final class BillingSubscriptionResponseData {
                 this.id,
                 this.interval,
                 this.metadata,
+                this.pauseBehavior,
+                this.pauseResumesAt,
+                this.pausedAt,
                 this.periodEnd,
                 this.periodStart,
                 this.providerType,
@@ -374,6 +407,18 @@ public final class BillingSubscriptionResponseData {
 
         _FinalStage metadata(Map<String, JsonNode> metadata);
 
+        _FinalStage pauseBehavior(Optional<BillingSubscriptionPauseBehavior> pauseBehavior);
+
+        _FinalStage pauseBehavior(BillingSubscriptionPauseBehavior pauseBehavior);
+
+        _FinalStage pauseResumesAt(Optional<Long> pauseResumesAt);
+
+        _FinalStage pauseResumesAt(Long pauseResumesAt);
+
+        _FinalStage pausedAt(Optional<OffsetDateTime> pausedAt);
+
+        _FinalStage pausedAt(OffsetDateTime pausedAt);
+
         _FinalStage trialEnd(Optional<Long> trialEnd);
 
         _FinalStage trialEnd(Long trialEnd);
@@ -426,6 +471,12 @@ public final class BillingSubscriptionResponseData {
 
         private Optional<Long> trialEnd = Optional.empty();
 
+        private Optional<OffsetDateTime> pausedAt = Optional.empty();
+
+        private Optional<Long> pauseResumesAt = Optional.empty();
+
+        private Optional<BillingSubscriptionPauseBehavior> pauseBehavior = Optional.empty();
+
         private Optional<Map<String, JsonNode>> metadata = Optional.empty();
 
         private Optional<OffsetDateTime> expiredAt = Optional.empty();
@@ -459,6 +510,9 @@ public final class BillingSubscriptionResponseData {
             id(other.getId());
             interval(other.getInterval());
             metadata(other.getMetadata());
+            pauseBehavior(other.getPauseBehavior());
+            pauseResumesAt(other.getPauseResumesAt());
+            pausedAt(other.getPausedAt());
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
             providerType(other.getProviderType());
@@ -582,6 +636,45 @@ public final class BillingSubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage pausedAt(OffsetDateTime pausedAt) {
+            this.pausedAt = Optional.ofNullable(pausedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "paused_at", nulls = Nulls.SKIP)
+        public _FinalStage pausedAt(Optional<OffsetDateTime> pausedAt) {
+            this.pausedAt = pausedAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage pauseResumesAt(Long pauseResumesAt) {
+            this.pauseResumesAt = Optional.ofNullable(pauseResumesAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pause_resumes_at", nulls = Nulls.SKIP)
+        public _FinalStage pauseResumesAt(Optional<Long> pauseResumesAt) {
+            this.pauseResumesAt = pauseResumesAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage pauseBehavior(BillingSubscriptionPauseBehavior pauseBehavior) {
+            this.pauseBehavior = Optional.ofNullable(pauseBehavior);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pause_behavior", nulls = Nulls.SKIP)
+        public _FinalStage pauseBehavior(Optional<BillingSubscriptionPauseBehavior> pauseBehavior) {
+            this.pauseBehavior = pauseBehavior;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage metadata(Map<String, JsonNode> metadata) {
             this.metadata = Optional.ofNullable(metadata);
             return this;
@@ -688,6 +781,9 @@ public final class BillingSubscriptionResponseData {
                     id,
                     interval,
                     metadata,
+                    pauseBehavior,
+                    pauseResumesAt,
+                    pausedAt,
                     periodEnd,
                     periodStart,
                     providerType,
@@ -714,6 +810,9 @@ public final class BillingSubscriptionResponseData {
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("interval")
                     || key.equalsIgnoreCase("metadata")
+                    || key.equalsIgnoreCase("pause_behavior")
+                    || key.equalsIgnoreCase("pause_resumes_at")
+                    || key.equalsIgnoreCase("paused_at")
                     || key.equalsIgnoreCase("period_end")
                     || key.equalsIgnoreCase("period_start")
                     || key.equalsIgnoreCase("provider_type")

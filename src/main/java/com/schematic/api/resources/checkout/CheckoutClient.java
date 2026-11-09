@@ -7,6 +7,8 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.checkout.requests.CancelSubscriptionRequest;
 import com.schematic.api.resources.checkout.requests.CheckoutDataRequestBody;
+import com.schematic.api.resources.checkout.requests.PauseSubscriptionRequest;
+import com.schematic.api.resources.checkout.requests.ResumeSubscriptionRequest;
 import com.schematic.api.resources.checkout.requests.UpdateCompanyBillingDetailsRequestBody;
 import com.schematic.api.resources.checkout.requests.UpdateTrialEndRequestBody;
 import com.schematic.api.resources.checkout.types.CancelSubscriptionResponse;
@@ -14,8 +16,10 @@ import com.schematic.api.resources.checkout.types.CheckoutInternalResponse;
 import com.schematic.api.resources.checkout.types.GetCheckoutDataResponse;
 import com.schematic.api.resources.checkout.types.GetCompanyBillingDetailsResponse;
 import com.schematic.api.resources.checkout.types.ManagePlanResponse;
+import com.schematic.api.resources.checkout.types.PauseSubscriptionResponse;
 import com.schematic.api.resources.checkout.types.PreviewCheckoutInternalResponse;
 import com.schematic.api.resources.checkout.types.PreviewManagePlanResponse;
+import com.schematic.api.resources.checkout.types.ResumeSubscriptionResponse;
 import com.schematic.api.resources.checkout.types.UpdateCompanyBillingDetailsResponse;
 import com.schematic.api.resources.checkout.types.UpdateCustomerSubscriptionTrialEndResponse;
 import com.schematic.api.types.ChangeSubscriptionInternalRequestBody;
@@ -109,6 +113,24 @@ public class CheckoutClient {
     public CancelSubscriptionResponse cancelSubscription(
             CancelSubscriptionRequest request, RequestOptions requestOptions) {
         return this.rawClient.cancelSubscription(request, requestOptions).body();
+    }
+
+    public PauseSubscriptionResponse pauseSubscription(PauseSubscriptionRequest request) {
+        return this.rawClient.pauseSubscription(request).body();
+    }
+
+    public PauseSubscriptionResponse pauseSubscription(
+            PauseSubscriptionRequest request, RequestOptions requestOptions) {
+        return this.rawClient.pauseSubscription(request, requestOptions).body();
+    }
+
+    public ResumeSubscriptionResponse resumeSubscription(ResumeSubscriptionRequest request) {
+        return this.rawClient.resumeSubscription(request).body();
+    }
+
+    public ResumeSubscriptionResponse resumeSubscription(
+            ResumeSubscriptionRequest request, RequestOptions requestOptions) {
+        return this.rawClient.resumeSubscription(request, requestOptions).body();
     }
 
     public UpdateCustomerSubscriptionTrialEndResponse updateCustomerSubscriptionTrialEnd(String subscriptionId) {

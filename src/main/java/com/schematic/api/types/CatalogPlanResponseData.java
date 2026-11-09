@@ -33,6 +33,10 @@ public final class CatalogPlanResponseData {
 
     private final List<CatalogCurrencyPricesResponseData> currencyPrices;
 
+    private final boolean custom;
+
+    private final Optional<CatalogCustomPlanCtaResponseData> customPlanCta;
+
     private final String description;
 
     private final List<CatalogPlanEntitlementResponseData> entitlements;
@@ -65,6 +69,8 @@ public final class CatalogPlanResponseData {
             ChargeType chargeType,
             Optional<List<String>> compatiblePlanIds,
             List<CatalogCurrencyPricesResponseData> currencyPrices,
+            boolean custom,
+            Optional<CatalogCustomPlanCtaResponseData> customPlanCta,
             String description,
             List<CatalogPlanEntitlementResponseData> entitlements,
             String icon,
@@ -83,6 +89,8 @@ public final class CatalogPlanResponseData {
         this.chargeType = chargeType;
         this.compatiblePlanIds = compatiblePlanIds;
         this.currencyPrices = currencyPrices;
+        this.custom = custom;
+        this.customPlanCta = customPlanCta;
         this.description = description;
         this.entitlements = entitlements;
         this.icon = icon;
@@ -124,6 +132,22 @@ public final class CatalogPlanResponseData {
     @JsonProperty("currency_prices")
     public List<CatalogCurrencyPricesResponseData> getCurrencyPrices() {
         return currencyPrices;
+    }
+
+    /**
+     * @return True for the catalog's custom plan, the one sold by quote: show custom_plan_cta in place of its price and action.
+     */
+    @JsonProperty("custom")
+    public boolean getCustom() {
+        return custom;
+    }
+
+    /**
+     * @return The custom plan's price text and call to action; set only where custom is true.
+     */
+    @JsonProperty("custom_plan_cta")
+    public Optional<CatalogCustomPlanCtaResponseData> getCustomPlanCta() {
+        return customPlanCta;
     }
 
     @JsonProperty("description")
@@ -203,6 +227,8 @@ public final class CatalogPlanResponseData {
                 && chargeType.equals(other.chargeType)
                 && compatiblePlanIds.equals(other.compatiblePlanIds)
                 && currencyPrices.equals(other.currencyPrices)
+                && custom == other.custom
+                && customPlanCta.equals(other.customPlanCta)
                 && description.equals(other.description)
                 && entitlements.equals(other.entitlements)
                 && icon.equals(other.icon)
@@ -225,6 +251,8 @@ public final class CatalogPlanResponseData {
                 this.chargeType,
                 this.compatiblePlanIds,
                 this.currencyPrices,
+                this.custom,
+                this.customPlanCta,
                 this.description,
                 this.entitlements,
                 this.icon,
@@ -255,7 +283,14 @@ public final class CatalogPlanResponseData {
     }
 
     public interface ChargeTypeStage {
-        DescriptionStage chargeType(@NotNull ChargeType chargeType);
+        CustomStage chargeType(@NotNull ChargeType chargeType);
+    }
+
+    public interface CustomStage {
+        /**
+         * <p>True for the catalog's custom plan, the one sold by quote: show custom_plan_cta in place of its price and action.</p>
+         */
+        DescriptionStage custom(boolean custom);
     }
 
     public interface DescriptionStage {
@@ -304,6 +339,13 @@ public final class CatalogPlanResponseData {
 
         _FinalStage addAllCurrencyPrices(List<CatalogCurrencyPricesResponseData> currencyPrices);
 
+        /**
+         * <p>The custom plan's price text and call to action; set only where custom is true.</p>
+         */
+        _FinalStage customPlanCta(Optional<CatalogCustomPlanCtaResponseData> customPlanCta);
+
+        _FinalStage customPlanCta(CatalogCustomPlanCtaResponseData customPlanCta);
+
         _FinalStage entitlements(List<CatalogPlanEntitlementResponseData> entitlements);
 
         _FinalStage addEntitlements(CatalogPlanEntitlementResponseData entitlements);
@@ -341,6 +383,7 @@ public final class CatalogPlanResponseData {
     public static final class Builder
             implements BillingStrategyStage,
                     ChargeTypeStage,
+                    CustomStage,
                     DescriptionStage,
                     IconStage,
                     IdStage,
@@ -350,6 +393,8 @@ public final class CatalogPlanResponseData {
         private BillingStrategy billingStrategy;
 
         private ChargeType chargeType;
+
+        private boolean custom;
 
         private String description;
 
@@ -375,6 +420,8 @@ public final class CatalogPlanResponseData {
 
         private List<CatalogPlanEntitlementResponseData> entitlements = new ArrayList<>();
 
+        private Optional<CatalogCustomPlanCtaResponseData> customPlanCta = Optional.empty();
+
         private List<CatalogCurrencyPricesResponseData> currencyPrices = new ArrayList<>();
 
         private Optional<List<String>> compatiblePlanIds = Optional.empty();
@@ -392,6 +439,8 @@ public final class CatalogPlanResponseData {
             chargeType(other.getChargeType());
             compatiblePlanIds(other.getCompatiblePlanIds());
             currencyPrices(other.getCurrencyPrices());
+            custom(other.getCustom());
+            customPlanCta(other.getCustomPlanCta());
             description(other.getDescription());
             entitlements(other.getEntitlements());
             icon(other.getIcon());
@@ -416,8 +465,19 @@ public final class CatalogPlanResponseData {
 
         @java.lang.Override
         @JsonSetter("charge_type")
-        public DescriptionStage chargeType(@NotNull ChargeType chargeType) {
+        public CustomStage chargeType(@NotNull ChargeType chargeType) {
             this.chargeType = Objects.requireNonNull(chargeType, "chargeType must not be null");
+            return this;
+        }
+
+        /**
+         * <p>True for the catalog's custom plan, the one sold by quote: show custom_plan_cta in place of its price and action.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("custom")
+        public DescriptionStage custom(boolean custom) {
+            this.custom = custom;
             return this;
         }
 
@@ -569,6 +629,26 @@ public final class CatalogPlanResponseData {
             return this;
         }
 
+        /**
+         * <p>The custom plan's price text and call to action; set only where custom is true.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage customPlanCta(CatalogCustomPlanCtaResponseData customPlanCta) {
+            this.customPlanCta = Optional.ofNullable(customPlanCta);
+            return this;
+        }
+
+        /**
+         * <p>The custom plan's price text and call to action; set only where custom is true.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "custom_plan_cta", nulls = Nulls.SKIP)
+        public _FinalStage customPlanCta(Optional<CatalogCustomPlanCtaResponseData> customPlanCta) {
+            this.customPlanCta = customPlanCta;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllCurrencyPrices(List<CatalogCurrencyPricesResponseData> currencyPrices) {
             if (currencyPrices != null) {
@@ -645,6 +725,8 @@ public final class CatalogPlanResponseData {
                     chargeType,
                     compatiblePlanIds,
                     currencyPrices,
+                    custom,
+                    customPlanCta,
                     description,
                     entitlements,
                     icon,
@@ -667,6 +749,8 @@ public final class CatalogPlanResponseData {
                     || key.equalsIgnoreCase("charge_type")
                     || key.equalsIgnoreCase("compatible_plan_ids")
                     || key.equalsIgnoreCase("currency_prices")
+                    || key.equalsIgnoreCase("custom")
+                    || key.equalsIgnoreCase("custom_plan_cta")
                     || key.equalsIgnoreCase("description")
                     || key.equalsIgnoreCase("entitlements")
                     || key.equalsIgnoreCase("icon")

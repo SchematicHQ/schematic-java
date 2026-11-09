@@ -44,6 +44,7 @@ import com.schematic.api.resources.companies.requests.ListPlanTraitsRequest;
 import com.schematic.api.resources.companies.requests.ListUsersRequest;
 import com.schematic.api.resources.companies.requests.LookupCompanyRequest;
 import com.schematic.api.resources.companies.requests.LookupUserRequest;
+import com.schematic.api.resources.companies.requests.UpdateBillingEntitySettingsRequestBody;
 import com.schematic.api.resources.companies.requests.UpdateEntityTraitDefinitionRequestBody;
 import com.schematic.api.resources.companies.requests.UpdatePlanTraitBulkRequestBody;
 import com.schematic.api.resources.companies.types.CountCompaniesResponse;
@@ -64,6 +65,7 @@ import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
 import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscriptionsResponse;
+import com.schematic.api.resources.companies.types.GetBillingEntitySettingsResponse;
 import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
 import com.schematic.api.resources.companies.types.GetCompanyInferenceCostResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
@@ -84,6 +86,7 @@ import com.schematic.api.resources.companies.types.ListPlanTraitsResponse;
 import com.schematic.api.resources.companies.types.ListUsersResponse;
 import com.schematic.api.resources.companies.types.LookupCompanyResponse;
 import com.schematic.api.resources.companies.types.LookupUserResponse;
+import com.schematic.api.resources.companies.types.UpdateBillingEntitySettingsResponse;
 import com.schematic.api.resources.companies.types.UpdateEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.UpdatePlanTraitsBulkResponse;
 import com.schematic.api.resources.companies.types.UpsertCompanyResponse;
@@ -1129,6 +1132,173 @@ public class RawCompaniesClient {
             if (response.isSuccessful()) {
                 return new BaseSchematicHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetCompanyBillingEntityResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<GetBillingEntitySettingsResponse> getBillingEntitySettings(String companyId) {
+        return getBillingEntitySettings(companyId, null);
+    }
+
+    public BaseSchematicHttpResponse<GetBillingEntitySettingsResponse> getBillingEntitySettings(
+            String companyId, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("company-billing-entity-settings")
+                .addPathSegment(PathSegments.validate(companyId));
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetBillingEntitySettingsResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<UpdateBillingEntitySettingsResponse> updateBillingEntitySettings(
+            String companyId) {
+        return updateBillingEntitySettings(
+                companyId, UpdateBillingEntitySettingsRequestBody.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<UpdateBillingEntitySettingsResponse> updateBillingEntitySettings(
+            String companyId, RequestOptions requestOptions) {
+        return updateBillingEntitySettings(
+                companyId, UpdateBillingEntitySettingsRequestBody.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<UpdateBillingEntitySettingsResponse> updateBillingEntitySettings(
+            String companyId, UpdateBillingEntitySettingsRequestBody request) {
+        return updateBillingEntitySettings(companyId, request, null);
+    }
+
+    public BaseSchematicHttpResponse<UpdateBillingEntitySettingsResponse> updateBillingEntitySettings(
+            String companyId, UpdateBillingEntitySettingsRequestBody request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("company-billing-entity-settings")
+                .addPathSegment(PathSegments.validate(companyId));
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(BodyProperties.merge(
+                            request, requestOptions != null ? requestOptions.getBodyProperties() : null)),
+                    MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("PUT", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, UpdateBillingEntitySettingsResponse.class),
                         response);
             }
             try {
@@ -3494,6 +3664,17 @@ public class RawCompaniesClient {
         }
         if (request.getQ().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
+        }
+        if (request.getSortOrderColumn().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "sort_order_column", request.getSortOrderColumn().get(), false);
+        }
+        if (request.getSortOrderDirection().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "sort_order_direction",
+                    request.getSortOrderDirection().get(),
+                    false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(

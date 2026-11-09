@@ -30,6 +30,7 @@ import com.schematic.api.resources.companies.requests.ListPlanTraitsRequest;
 import com.schematic.api.resources.companies.requests.ListUsersRequest;
 import com.schematic.api.resources.companies.requests.LookupCompanyRequest;
 import com.schematic.api.resources.companies.requests.LookupUserRequest;
+import com.schematic.api.resources.companies.requests.UpdateBillingEntitySettingsRequestBody;
 import com.schematic.api.resources.companies.requests.UpdateEntityTraitDefinitionRequestBody;
 import com.schematic.api.resources.companies.requests.UpdatePlanTraitBulkRequestBody;
 import com.schematic.api.resources.companies.types.CountCompaniesResponse;
@@ -50,6 +51,7 @@ import com.schematic.api.resources.companies.types.DeleteUserByKeysResponse;
 import com.schematic.api.resources.companies.types.DeleteUserResponse;
 import com.schematic.api.resources.companies.types.GetActiveCompanySubscriptionResponse;
 import com.schematic.api.resources.companies.types.GetBillingEntityChildSubscriptionsResponse;
+import com.schematic.api.resources.companies.types.GetBillingEntitySettingsResponse;
 import com.schematic.api.resources.companies.types.GetCompanyBillingEntityResponse;
 import com.schematic.api.resources.companies.types.GetCompanyInferenceCostResponse;
 import com.schematic.api.resources.companies.types.GetCompanyResponse;
@@ -70,6 +72,7 @@ import com.schematic.api.resources.companies.types.ListPlanTraitsResponse;
 import com.schematic.api.resources.companies.types.ListUsersResponse;
 import com.schematic.api.resources.companies.types.LookupCompanyResponse;
 import com.schematic.api.resources.companies.types.LookupUserResponse;
+import com.schematic.api.resources.companies.types.UpdateBillingEntitySettingsResponse;
 import com.schematic.api.resources.companies.types.UpdateEntityTraitDefinitionResponse;
 import com.schematic.api.resources.companies.types.UpdatePlanTraitsBulkResponse;
 import com.schematic.api.resources.companies.types.UpsertCompanyResponse;
@@ -456,6 +459,86 @@ public class AsyncCompaniesClient {
         CompletableFuture<BaseSchematicHttpResponse<GetCompanyBillingEntityResponse>> rawFuture =
                 this.rawClient.getCompanyBillingEntity(request, requestOptions);
         CompletableFuture<GetCompanyBillingEntityResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetBillingEntitySettingsResponse> getBillingEntitySettings(String companyId) {
+        CompletableFuture<BaseSchematicHttpResponse<GetBillingEntitySettingsResponse>> rawFuture =
+                this.rawClient.getBillingEntitySettings(companyId);
+        CompletableFuture<GetBillingEntitySettingsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetBillingEntitySettingsResponse> getBillingEntitySettings(
+            String companyId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetBillingEntitySettingsResponse>> rawFuture =
+                this.rawClient.getBillingEntitySettings(companyId, requestOptions);
+        CompletableFuture<GetBillingEntitySettingsResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<UpdateBillingEntitySettingsResponse> updateBillingEntitySettings(String companyId) {
+        CompletableFuture<BaseSchematicHttpResponse<UpdateBillingEntitySettingsResponse>> rawFuture =
+                this.rawClient.updateBillingEntitySettings(companyId);
+        CompletableFuture<UpdateBillingEntitySettingsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<UpdateBillingEntitySettingsResponse> updateBillingEntitySettings(
+            String companyId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<UpdateBillingEntitySettingsResponse>> rawFuture =
+                this.rawClient.updateBillingEntitySettings(companyId, requestOptions);
+        CompletableFuture<UpdateBillingEntitySettingsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<UpdateBillingEntitySettingsResponse> updateBillingEntitySettings(
+            String companyId, UpdateBillingEntitySettingsRequestBody request) {
+        CompletableFuture<BaseSchematicHttpResponse<UpdateBillingEntitySettingsResponse>> rawFuture =
+                this.rawClient.updateBillingEntitySettings(companyId, request);
+        CompletableFuture<UpdateBillingEntitySettingsResponse> future =
+                rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<UpdateBillingEntitySettingsResponse> updateBillingEntitySettings(
+            String companyId, UpdateBillingEntitySettingsRequestBody request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<UpdateBillingEntitySettingsResponse>> rawFuture =
+                this.rawClient.updateBillingEntitySettings(companyId, request, requestOptions);
+        CompletableFuture<UpdateBillingEntitySettingsResponse> future =
+                rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);

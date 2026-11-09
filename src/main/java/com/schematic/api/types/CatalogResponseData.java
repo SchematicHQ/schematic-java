@@ -30,6 +30,8 @@ public final class CatalogResponseData {
 
     private final Optional<String> customPlanCtaUrl;
 
+    private final Optional<String> customPlanId;
+
     private final Optional<String> customPlanPriceText;
 
     private final boolean customPlansVisible;
@@ -55,6 +57,7 @@ public final class CatalogResponseData {
             OffsetDateTime createdAt,
             Optional<String> customPlanCtaText,
             Optional<String> customPlanCtaUrl,
+            Optional<String> customPlanId,
             Optional<String> customPlanPriceText,
             boolean customPlansVisible,
             Optional<String> description,
@@ -69,6 +72,7 @@ public final class CatalogResponseData {
         this.createdAt = createdAt;
         this.customPlanCtaText = customPlanCtaText;
         this.customPlanCtaUrl = customPlanCtaUrl;
+        this.customPlanId = customPlanId;
         this.customPlanPriceText = customPlanPriceText;
         this.customPlansVisible = customPlansVisible;
         this.description = description;
@@ -99,6 +103,11 @@ public final class CatalogResponseData {
     @JsonProperty("custom_plan_cta_url")
     public Optional<String> getCustomPlanCtaUrl() {
         return customPlanCtaUrl;
+    }
+
+    @JsonProperty("custom_plan_id")
+    public Optional<String> getCustomPlanId() {
+        return customPlanId;
     }
 
     @JsonProperty("custom_plan_price_text")
@@ -162,6 +171,7 @@ public final class CatalogResponseData {
                 && createdAt.equals(other.createdAt)
                 && customPlanCtaText.equals(other.customPlanCtaText)
                 && customPlanCtaUrl.equals(other.customPlanCtaUrl)
+                && customPlanId.equals(other.customPlanId)
                 && customPlanPriceText.equals(other.customPlanPriceText)
                 && customPlansVisible == other.customPlansVisible
                 && description.equals(other.description)
@@ -180,6 +190,7 @@ public final class CatalogResponseData {
                 this.createdAt,
                 this.customPlanCtaText,
                 this.customPlanCtaUrl,
+                this.customPlanId,
                 this.customPlanPriceText,
                 this.customPlansVisible,
                 this.description,
@@ -245,6 +256,10 @@ public final class CatalogResponseData {
 
         _FinalStage customPlanCtaUrl(String customPlanCtaUrl);
 
+        _FinalStage customPlanId(Optional<String> customPlanId);
+
+        _FinalStage customPlanId(String customPlanId);
+
         _FinalStage customPlanPriceText(Optional<String> customPlanPriceText);
 
         _FinalStage customPlanPriceText(String customPlanPriceText);
@@ -294,6 +309,8 @@ public final class CatalogResponseData {
 
         private Optional<String> customPlanPriceText = Optional.empty();
 
+        private Optional<String> customPlanId = Optional.empty();
+
         private Optional<String> customPlanCtaUrl = Optional.empty();
 
         private Optional<String> customPlanCtaText = Optional.empty();
@@ -308,6 +325,7 @@ public final class CatalogResponseData {
             createdAt(other.getCreatedAt());
             customPlanCtaText(other.getCustomPlanCtaText());
             customPlanCtaUrl(other.getCustomPlanCtaUrl());
+            customPlanId(other.getCustomPlanId());
             customPlanPriceText(other.getCustomPlanPriceText());
             customPlansVisible(other.getCustomPlansVisible());
             description(other.getDescription());
@@ -422,6 +440,19 @@ public final class CatalogResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage customPlanId(String customPlanId) {
+            this.customPlanId = Optional.ofNullable(customPlanId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "custom_plan_id", nulls = Nulls.SKIP)
+        public _FinalStage customPlanId(Optional<String> customPlanId) {
+            this.customPlanId = customPlanId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage customPlanCtaUrl(String customPlanCtaUrl) {
             this.customPlanCtaUrl = Optional.ofNullable(customPlanCtaUrl);
             return this;
@@ -454,6 +485,7 @@ public final class CatalogResponseData {
                     createdAt,
                     customPlanCtaText,
                     customPlanCtaUrl,
+                    customPlanId,
                     customPlanPriceText,
                     customPlansVisible,
                     description,
@@ -472,6 +504,7 @@ public final class CatalogResponseData {
                     || key.equalsIgnoreCase("created_at")
                     || key.equalsIgnoreCase("custom_plan_cta_text")
                     || key.equalsIgnoreCase("custom_plan_cta_url")
+                    || key.equalsIgnoreCase("custom_plan_id")
                     || key.equalsIgnoreCase("custom_plan_price_text")
                     || key.equalsIgnoreCase("custom_plans_visible")
                     || key.equalsIgnoreCase("description")

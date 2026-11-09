@@ -26,6 +26,10 @@ import org.jetbrains.annotations.NotNull;
 public final class PublishPreviewResponseData {
     private final Optional<String> billingEmail;
 
+    private final Optional<String> billingEntityId;
+
+    private final Optional<String> billingEntityName;
+
     private final Optional<Currency> currency;
 
     private final Optional<OffsetDateTime> currentPeriodEnd;
@@ -76,6 +80,8 @@ public final class PublishPreviewResponseData {
 
     private PublishPreviewResponseData(
             Optional<String> billingEmail,
+            Optional<String> billingEntityId,
+            Optional<String> billingEntityName,
             Optional<Currency> currency,
             Optional<OffsetDateTime> currentPeriodEnd,
             Optional<OffsetDateTime> currentPeriodStart,
@@ -101,6 +107,8 @@ public final class PublishPreviewResponseData {
             boolean wouldFail,
             Map<String, Object> additionalProperties) {
         this.billingEmail = billingEmail;
+        this.billingEntityId = billingEntityId;
+        this.billingEntityName = billingEntityName;
         this.currency = currency;
         this.currentPeriodEnd = currentPeriodEnd;
         this.currentPeriodStart = currentPeriodStart;
@@ -130,6 +138,22 @@ public final class PublishPreviewResponseData {
     @JsonProperty("billing_email")
     public Optional<String> getBillingEmail() {
         return billingEmail;
+    }
+
+    /**
+     * @return The company that pays for the subscription, when it isn't the plan's company. The amendment invoice is raised on its customer, so payment_method and billing_email are its.
+     */
+    @JsonProperty("billing_entity_id")
+    public Optional<String> getBillingEntityId() {
+        return billingEntityId;
+    }
+
+    /**
+     * @return The name of the company in billing_entity_id.
+     */
+    @JsonProperty("billing_entity_name")
+    public Optional<String> getBillingEntityName() {
+        return billingEntityName;
     }
 
     @JsonProperty("currency")
@@ -293,6 +317,8 @@ public final class PublishPreviewResponseData {
 
     private boolean equalTo(PublishPreviewResponseData other) {
         return billingEmail.equals(other.billingEmail)
+                && billingEntityId.equals(other.billingEntityId)
+                && billingEntityName.equals(other.billingEntityName)
                 && currency.equals(other.currency)
                 && currentPeriodEnd.equals(other.currentPeriodEnd)
                 && currentPeriodStart.equals(other.currentPeriodStart)
@@ -322,6 +348,8 @@ public final class PublishPreviewResponseData {
     public int hashCode() {
         return Objects.hash(
                 this.billingEmail,
+                this.billingEntityId,
+                this.billingEntityName,
                 this.currency,
                 this.currentPeriodEnd,
                 this.currentPeriodStart,
@@ -430,6 +458,20 @@ public final class PublishPreviewResponseData {
         _FinalStage billingEmail(Optional<String> billingEmail);
 
         _FinalStage billingEmail(String billingEmail);
+
+        /**
+         * <p>The company that pays for the subscription, when it isn't the plan's company. The amendment invoice is raised on its customer, so payment_method and billing_email are its.</p>
+         */
+        _FinalStage billingEntityId(Optional<String> billingEntityId);
+
+        _FinalStage billingEntityId(String billingEntityId);
+
+        /**
+         * <p>The name of the company in billing_entity_id.</p>
+         */
+        _FinalStage billingEntityName(Optional<String> billingEntityName);
+
+        _FinalStage billingEntityName(String billingEntityName);
 
         _FinalStage currency(Optional<Currency> currency);
 
@@ -559,6 +601,10 @@ public final class PublishPreviewResponseData {
 
         private Optional<Currency> currency = Optional.empty();
 
+        private Optional<String> billingEntityName = Optional.empty();
+
+        private Optional<String> billingEntityId = Optional.empty();
+
         private Optional<String> billingEmail = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -568,6 +614,8 @@ public final class PublishPreviewResponseData {
         @java.lang.Override
         public Builder from(PublishPreviewResponseData other) {
             billingEmail(other.getBillingEmail());
+            billingEntityId(other.getBillingEntityId());
+            billingEntityName(other.getBillingEntityName());
             currency(other.getCurrency());
             currentPeriodEnd(other.getCurrentPeriodEnd());
             currentPeriodStart(other.getCurrentPeriodStart());
@@ -910,6 +958,46 @@ public final class PublishPreviewResponseData {
             return this;
         }
 
+        /**
+         * <p>The name of the company in billing_entity_id.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingEntityName(String billingEntityName) {
+            this.billingEntityName = Optional.ofNullable(billingEntityName);
+            return this;
+        }
+
+        /**
+         * <p>The name of the company in billing_entity_id.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_entity_name", nulls = Nulls.SKIP)
+        public _FinalStage billingEntityName(Optional<String> billingEntityName) {
+            this.billingEntityName = billingEntityName;
+            return this;
+        }
+
+        /**
+         * <p>The company that pays for the subscription, when it isn't the plan's company. The amendment invoice is raised on its customer, so payment_method and billing_email are its.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingEntityId(String billingEntityId) {
+            this.billingEntityId = Optional.ofNullable(billingEntityId);
+            return this;
+        }
+
+        /**
+         * <p>The company that pays for the subscription, when it isn't the plan's company. The amendment invoice is raised on its customer, so payment_method and billing_email are its.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_entity_id", nulls = Nulls.SKIP)
+        public _FinalStage billingEntityId(Optional<String> billingEntityId) {
+            this.billingEntityId = billingEntityId;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage billingEmail(String billingEmail) {
             this.billingEmail = Optional.ofNullable(billingEmail);
@@ -927,6 +1015,8 @@ public final class PublishPreviewResponseData {
         public PublishPreviewResponseData build() {
             return new PublishPreviewResponseData(
                     billingEmail,
+                    billingEntityId,
+                    billingEntityName,
                     currency,
                     currentPeriodEnd,
                     currentPeriodStart,
@@ -956,6 +1046,8 @@ public final class PublishPreviewResponseData {
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("billing_email")
+                    || key.equalsIgnoreCase("billing_entity_id")
+                    || key.equalsIgnoreCase("billing_entity_name")
                     || key.equalsIgnoreCase("currency")
                     || key.equalsIgnoreCase("current_period_end")
                     || key.equalsIgnoreCase("current_period_start")

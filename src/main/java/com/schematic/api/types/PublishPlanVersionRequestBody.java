@@ -28,7 +28,11 @@ public final class PublishPlanVersionRequestBody {
 
     private final Optional<CustomerBillingAddress> address;
 
+    private final Optional<Boolean> alignWithBillingEntity;
+
     private final Optional<OffsetDateTime> billingCycleAnchor;
+
+    private final Optional<String> billingEntityId;
 
     private final Optional<OffsetDateTime> billingStartDate;
 
@@ -71,7 +75,9 @@ public final class PublishPlanVersionRequestBody {
     private PublishPlanVersionRequestBody(
             Optional<CustomPlanActivationStrategy> activationStrategy,
             Optional<CustomerBillingAddress> address,
+            Optional<Boolean> alignWithBillingEntity,
             Optional<OffsetDateTime> billingCycleAnchor,
+            Optional<String> billingEntityId,
             Optional<OffsetDateTime> billingStartDate,
             Optional<BillingCollectionMethod> collectionMethod,
             Optional<String> couponExternalId,
@@ -93,7 +99,9 @@ public final class PublishPlanVersionRequestBody {
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.address = address;
+        this.alignWithBillingEntity = alignWithBillingEntity;
         this.billingCycleAnchor = billingCycleAnchor;
+        this.billingEntityId = billingEntityId;
         this.billingStartDate = billingStartDate;
         this.collectionMethod = collectionMethod;
         this.couponExternalId = couponExternalId;
@@ -129,11 +137,27 @@ public final class PublishPlanVersionRequestBody {
     }
 
     /**
+     * @return When true, the subscription renews on the same date as the subscriptions billing_entity_id pays for, and the partial first period is billed pro rata unless prorate_first_period is false. Requires billing_entity_id, and can't be combined with billing_cycle_anchor. Only honored on a first publish that starts a subscription.
+     */
+    @JsonProperty("align_with_billing_entity")
+    public Optional<Boolean> getAlignWithBillingEntity() {
+        return alignWithBillingEntity;
+    }
+
+    /**
      * @return The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.
      */
     @JsonProperty("billing_cycle_anchor")
     public Optional<OffsetDateTime> getBillingCycleAnchor() {
         return billingCycleAnchor;
+    }
+
+    /**
+     * @return The company that pays for the subscription a custom plan's first publish starts. Must already have a Stripe customer. Only honored on a first publish that starts a subscription, and not when Schematic bills the company.
+     */
+    @JsonProperty("billing_entity_id")
+    public Optional<String> getBillingEntityId() {
+        return billingEntityId;
     }
 
     /**
@@ -276,7 +300,9 @@ public final class PublishPlanVersionRequestBody {
     private boolean equalTo(PublishPlanVersionRequestBody other) {
         return activationStrategy.equals(other.activationStrategy)
                 && address.equals(other.address)
+                && alignWithBillingEntity.equals(other.alignWithBillingEntity)
                 && billingCycleAnchor.equals(other.billingCycleAnchor)
+                && billingEntityId.equals(other.billingEntityId)
                 && billingStartDate.equals(other.billingStartDate)
                 && collectionMethod.equals(other.collectionMethod)
                 && couponExternalId.equals(other.couponExternalId)
@@ -302,7 +328,9 @@ public final class PublishPlanVersionRequestBody {
         return Objects.hash(
                 this.activationStrategy,
                 this.address,
+                this.alignWithBillingEntity,
                 this.billingCycleAnchor,
+                this.billingEntityId,
                 this.billingStartDate,
                 this.collectionMethod,
                 this.couponExternalId,
@@ -357,11 +385,25 @@ public final class PublishPlanVersionRequestBody {
         _FinalStage address(CustomerBillingAddress address);
 
         /**
+         * <p>When true, the subscription renews on the same date as the subscriptions billing_entity_id pays for, and the partial first period is billed pro rata unless prorate_first_period is false. Requires billing_entity_id, and can't be combined with billing_cycle_anchor. Only honored on a first publish that starts a subscription.</p>
+         */
+        _FinalStage alignWithBillingEntity(Optional<Boolean> alignWithBillingEntity);
+
+        _FinalStage alignWithBillingEntity(Boolean alignWithBillingEntity);
+
+        /**
          * <p>The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.</p>
          */
         _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor);
 
         _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
+
+        /**
+         * <p>The company that pays for the subscription a custom plan's first publish starts. Must already have a Stripe customer. Only honored on a first publish that starts a subscription, and not when Schematic bills the company.</p>
+         */
+        _FinalStage billingEntityId(Optional<String> billingEntityId);
+
+        _FinalStage billingEntityId(String billingEntityId);
 
         /**
          * <p>The date the contract term starts. A past date backdates the subscription so the first invoice covers the term from this date to the renewal date. Requires billing_cycle_anchor. Only honored on a first publish that starts a subscription.</p>
@@ -508,7 +550,11 @@ public final class PublishPlanVersionRequestBody {
 
         private Optional<OffsetDateTime> billingStartDate = Optional.empty();
 
+        private Optional<String> billingEntityId = Optional.empty();
+
         private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
+
+        private Optional<Boolean> alignWithBillingEntity = Optional.empty();
 
         private Optional<CustomerBillingAddress> address = Optional.empty();
 
@@ -522,7 +568,9 @@ public final class PublishPlanVersionRequestBody {
         public Builder from(PublishPlanVersionRequestBody other) {
             activationStrategy(other.getActivationStrategy());
             address(other.getAddress());
+            alignWithBillingEntity(other.getAlignWithBillingEntity());
             billingCycleAnchor(other.getBillingCycleAnchor());
+            billingEntityId(other.getBillingEntityId());
             billingStartDate(other.getBillingStartDate());
             collectionMethod(other.getCollectionMethod());
             couponExternalId(other.getCouponExternalId());
@@ -868,6 +916,26 @@ public final class PublishPlanVersionRequestBody {
         }
 
         /**
+         * <p>The company that pays for the subscription a custom plan's first publish starts. Must already have a Stripe customer. Only honored on a first publish that starts a subscription, and not when Schematic bills the company.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingEntityId(String billingEntityId) {
+            this.billingEntityId = Optional.ofNullable(billingEntityId);
+            return this;
+        }
+
+        /**
+         * <p>The company that pays for the subscription a custom plan's first publish starts. Must already have a Stripe customer. Only honored on a first publish that starts a subscription, and not when Schematic bills the company.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_entity_id", nulls = Nulls.SKIP)
+        public _FinalStage billingEntityId(Optional<String> billingEntityId) {
+            this.billingEntityId = billingEntityId;
+            return this;
+        }
+
+        /**
          * <p>The date the subscription's billing period renews on. Only honored on a first publish that starts a subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -884,6 +952,26 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter(value = "billing_cycle_anchor", nulls = Nulls.SKIP)
         public _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor) {
             this.billingCycleAnchor = billingCycleAnchor;
+            return this;
+        }
+
+        /**
+         * <p>When true, the subscription renews on the same date as the subscriptions billing_entity_id pays for, and the partial first period is billed pro rata unless prorate_first_period is false. Requires billing_entity_id, and can't be combined with billing_cycle_anchor. Only honored on a first publish that starts a subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage alignWithBillingEntity(Boolean alignWithBillingEntity) {
+            this.alignWithBillingEntity = Optional.ofNullable(alignWithBillingEntity);
+            return this;
+        }
+
+        /**
+         * <p>When true, the subscription renews on the same date as the subscriptions billing_entity_id pays for, and the partial first period is billed pro rata unless prorate_first_period is false. Requires billing_entity_id, and can't be combined with billing_cycle_anchor. Only honored on a first publish that starts a subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "align_with_billing_entity", nulls = Nulls.SKIP)
+        public _FinalStage alignWithBillingEntity(Optional<Boolean> alignWithBillingEntity) {
+            this.alignWithBillingEntity = alignWithBillingEntity;
             return this;
         }
 
@@ -925,7 +1013,9 @@ public final class PublishPlanVersionRequestBody {
             return new PublishPlanVersionRequestBody(
                     activationStrategy,
                     address,
+                    alignWithBillingEntity,
                     billingCycleAnchor,
+                    billingEntityId,
                     billingStartDate,
                     collectionMethod,
                     couponExternalId,
@@ -951,7 +1041,9 @@ public final class PublishPlanVersionRequestBody {
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("activation_strategy")
                     || key.equalsIgnoreCase("address")
+                    || key.equalsIgnoreCase("align_with_billing_entity")
                     || key.equalsIgnoreCase("billing_cycle_anchor")
+                    || key.equalsIgnoreCase("billing_entity_id")
                     || key.equalsIgnoreCase("billing_start_date")
                     || key.equalsIgnoreCase("collection_method")
                     || key.equalsIgnoreCase("coupon_external_id")

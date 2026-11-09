@@ -16,23 +16,46 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BillingSettingsResponseData.Builder.class)
 public final class BillingSettingsResponseData {
+    private final Collector defaultCollector;
+
     private final Optional<BillingProviderType> defaultProviderType;
+
+    private final Optional<String> invoiceReplyToEmail;
 
     private final Map<String, Object> additionalProperties;
 
     private BillingSettingsResponseData(
-            Optional<BillingProviderType> defaultProviderType, Map<String, Object> additionalProperties) {
+            Collector defaultCollector,
+            Optional<BillingProviderType> defaultProviderType,
+            Optional<String> invoiceReplyToEmail,
+            Map<String, Object> additionalProperties) {
+        this.defaultCollector = defaultCollector;
         this.defaultProviderType = defaultProviderType;
+        this.invoiceReplyToEmail = invoiceReplyToEmail;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("default_collector")
+    public Collector getDefaultCollector() {
+        return defaultCollector;
     }
 
     @JsonProperty("default_provider_type")
     public Optional<BillingProviderType> getDefaultProviderType() {
         return defaultProviderType;
+    }
+
+    /**
+     * @return Where a payer's reply to an invoice email goes. Null until set, and Schematic sends no invoice email while it is null.
+     */
+    @JsonProperty("invoice_reply_to_email")
+    public Optional<String> getInvoiceReplyToEmail() {
+        return invoiceReplyToEmail;
     }
 
     @java.lang.Override
@@ -47,12 +70,14 @@ public final class BillingSettingsResponseData {
     }
 
     private boolean equalTo(BillingSettingsResponseData other) {
-        return defaultProviderType.equals(other.defaultProviderType);
+        return defaultCollector.equals(other.defaultCollector)
+                && defaultProviderType.equals(other.defaultProviderType)
+                && invoiceReplyToEmail.equals(other.invoiceReplyToEmail);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.defaultProviderType);
+        return Objects.hash(this.defaultCollector, this.defaultProviderType, this.invoiceReplyToEmail);
     }
 
     @java.lang.Override
@@ -60,51 +85,118 @@ public final class BillingSettingsResponseData {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static DefaultCollectorStage builder() {
         return new Builder();
     }
 
+    public interface DefaultCollectorStage {
+        _FinalStage defaultCollector(@NotNull Collector defaultCollector);
+
+        Builder from(BillingSettingsResponseData other);
+    }
+
+    public interface _FinalStage {
+        BillingSettingsResponseData build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage defaultProviderType(Optional<BillingProviderType> defaultProviderType);
+
+        _FinalStage defaultProviderType(BillingProviderType defaultProviderType);
+
+        /**
+         * <p>Where a payer's reply to an invoice email goes. Null until set, and Schematic sends no invoice email while it is null.</p>
+         */
+        _FinalStage invoiceReplyToEmail(Optional<String> invoiceReplyToEmail);
+
+        _FinalStage invoiceReplyToEmail(String invoiceReplyToEmail);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
+    public static final class Builder implements DefaultCollectorStage, _FinalStage {
+        private Collector defaultCollector;
+
+        private Optional<String> invoiceReplyToEmail = Optional.empty();
+
         private Optional<BillingProviderType> defaultProviderType = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(BillingSettingsResponseData other) {
+            defaultCollector(other.getDefaultCollector());
             defaultProviderType(other.getDefaultProviderType());
+            invoiceReplyToEmail(other.getInvoiceReplyToEmail());
             return this;
         }
 
-        @JsonSetter(value = "default_provider_type", nulls = Nulls.SKIP)
-        public Builder defaultProviderType(Optional<BillingProviderType> defaultProviderType) {
-            this.defaultProviderType = defaultProviderType;
+        @java.lang.Override
+        @JsonSetter("default_collector")
+        public _FinalStage defaultCollector(@NotNull Collector defaultCollector) {
+            this.defaultCollector = Objects.requireNonNull(defaultCollector, "defaultCollector must not be null");
             return this;
         }
 
-        public Builder defaultProviderType(BillingProviderType defaultProviderType) {
+        /**
+         * <p>Where a payer's reply to an invoice email goes. Null until set, and Schematic sends no invoice email while it is null.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage invoiceReplyToEmail(String invoiceReplyToEmail) {
+            this.invoiceReplyToEmail = Optional.ofNullable(invoiceReplyToEmail);
+            return this;
+        }
+
+        /**
+         * <p>Where a payer's reply to an invoice email goes. Null until set, and Schematic sends no invoice email while it is null.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "invoice_reply_to_email", nulls = Nulls.SKIP)
+        public _FinalStage invoiceReplyToEmail(Optional<String> invoiceReplyToEmail) {
+            this.invoiceReplyToEmail = invoiceReplyToEmail;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage defaultProviderType(BillingProviderType defaultProviderType) {
             this.defaultProviderType = Optional.ofNullable(defaultProviderType);
             return this;
         }
 
+        @java.lang.Override
+        @JsonSetter(value = "default_provider_type", nulls = Nulls.SKIP)
+        public _FinalStage defaultProviderType(Optional<BillingProviderType> defaultProviderType) {
+            this.defaultProviderType = defaultProviderType;
+            return this;
+        }
+
+        @java.lang.Override
         public BillingSettingsResponseData build() {
-            return new BillingSettingsResponseData(defaultProviderType, additionalProperties);
+            return new BillingSettingsResponseData(
+                    defaultCollector, defaultProviderType, invoiceReplyToEmail, additionalProperties);
         }
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("default_provider_type")) {
+            if (key.equalsIgnoreCase("default_collector")
+                    || key.equalsIgnoreCase("default_provider_type")
+                    || key.equalsIgnoreCase("invoice_reply_to_email")) {
                 return;
             }
             this.additionalProperties.put(key, value);
         }
 
+        @java.lang.Override
         public Builder additionalProperty(String key, Object value) {
             this.additionalProperties.put(key, value);
             return this;
         }
 
+        @java.lang.Override
         public Builder additionalProperties(Map<String, Object> additionalProperties) {
             this.additionalProperties.putAll(additionalProperties);
             return this;

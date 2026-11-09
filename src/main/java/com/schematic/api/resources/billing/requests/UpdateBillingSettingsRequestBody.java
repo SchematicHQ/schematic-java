@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.BillingProviderType;
+import com.schematic.api.types.Collector;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,19 +22,41 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateBillingSettingsRequestBody.Builder.class)
 public final class UpdateBillingSettingsRequestBody {
+    private final Optional<Collector> defaultCollector;
+
     private final Optional<BillingProviderType> defaultProviderType;
+
+    private final Optional<String> invoiceReplyToEmail;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateBillingSettingsRequestBody(
-            Optional<BillingProviderType> defaultProviderType, Map<String, Object> additionalProperties) {
+            Optional<Collector> defaultCollector,
+            Optional<BillingProviderType> defaultProviderType,
+            Optional<String> invoiceReplyToEmail,
+            Map<String, Object> additionalProperties) {
+        this.defaultCollector = defaultCollector;
         this.defaultProviderType = defaultProviderType;
+        this.invoiceReplyToEmail = invoiceReplyToEmail;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("default_collector")
+    public Optional<Collector> getDefaultCollector() {
+        return defaultCollector;
     }
 
     @JsonProperty("default_provider_type")
     public Optional<BillingProviderType> getDefaultProviderType() {
         return defaultProviderType;
+    }
+
+    /**
+     * @return Where a payer's reply to an invoice email goes. Schematic sends no invoice email until it is set. Send null to clear it.
+     */
+    @JsonProperty("invoice_reply_to_email")
+    public Optional<String> getInvoiceReplyToEmail() {
+        return invoiceReplyToEmail;
     }
 
     @java.lang.Override
@@ -48,12 +71,14 @@ public final class UpdateBillingSettingsRequestBody {
     }
 
     private boolean equalTo(UpdateBillingSettingsRequestBody other) {
-        return defaultProviderType.equals(other.defaultProviderType);
+        return defaultCollector.equals(other.defaultCollector)
+                && defaultProviderType.equals(other.defaultProviderType)
+                && invoiceReplyToEmail.equals(other.invoiceReplyToEmail);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.defaultProviderType);
+        return Objects.hash(this.defaultCollector, this.defaultProviderType, this.invoiceReplyToEmail);
     }
 
     @java.lang.Override
@@ -67,14 +92,31 @@ public final class UpdateBillingSettingsRequestBody {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Collector> defaultCollector = Optional.empty();
+
         private Optional<BillingProviderType> defaultProviderType = Optional.empty();
+
+        private Optional<String> invoiceReplyToEmail = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         public Builder from(UpdateBillingSettingsRequestBody other) {
+            defaultCollector(other.getDefaultCollector());
             defaultProviderType(other.getDefaultProviderType());
+            invoiceReplyToEmail(other.getInvoiceReplyToEmail());
+            return this;
+        }
+
+        @JsonSetter(value = "default_collector", nulls = Nulls.SKIP)
+        public Builder defaultCollector(Optional<Collector> defaultCollector) {
+            this.defaultCollector = defaultCollector;
+            return this;
+        }
+
+        public Builder defaultCollector(Collector defaultCollector) {
+            this.defaultCollector = Optional.ofNullable(defaultCollector);
             return this;
         }
 
@@ -89,13 +131,30 @@ public final class UpdateBillingSettingsRequestBody {
             return this;
         }
 
+        /**
+         * <p>Where a payer's reply to an invoice email goes. Schematic sends no invoice email until it is set. Send null to clear it.</p>
+         */
+        @JsonSetter(value = "invoice_reply_to_email", nulls = Nulls.SKIP)
+        public Builder invoiceReplyToEmail(Optional<String> invoiceReplyToEmail) {
+            this.invoiceReplyToEmail = invoiceReplyToEmail;
+            return this;
+        }
+
+        public Builder invoiceReplyToEmail(String invoiceReplyToEmail) {
+            this.invoiceReplyToEmail = Optional.ofNullable(invoiceReplyToEmail);
+            return this;
+        }
+
         public UpdateBillingSettingsRequestBody build() {
-            return new UpdateBillingSettingsRequestBody(defaultProviderType, additionalProperties);
+            return new UpdateBillingSettingsRequestBody(
+                    defaultCollector, defaultProviderType, invoiceReplyToEmail, additionalProperties);
         }
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("default_provider_type")) {
+            if (key.equalsIgnoreCase("default_collector")
+                    || key.equalsIgnoreCase("default_provider_type")
+                    || key.equalsIgnoreCase("invoice_reply_to_email")) {
                 return;
             }
             this.additionalProperties.put(key, value);

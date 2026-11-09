@@ -28,6 +28,8 @@ public final class ManagePlanRequest {
 
     private final List<PlanSelection> addOnSelections;
 
+    private final Optional<Boolean> alignWithBillingEntity;
+
     private final Optional<String> basePlanId;
 
     private final Optional<String> basePlanPriceId;
@@ -77,6 +79,7 @@ public final class ManagePlanRequest {
     private ManagePlanRequest(
             Optional<Boolean> activateOnPayment,
             List<PlanSelection> addOnSelections,
+            Optional<Boolean> alignWithBillingEntity,
             Optional<String> basePlanId,
             Optional<String> basePlanPriceId,
             Optional<String> basePlanVersionId,
@@ -102,6 +105,7 @@ public final class ManagePlanRequest {
             Map<String, Object> additionalProperties) {
         this.activateOnPayment = activateOnPayment;
         this.addOnSelections = addOnSelections;
+        this.alignWithBillingEntity = alignWithBillingEntity;
         this.basePlanId = basePlanId;
         this.basePlanPriceId = basePlanPriceId;
         this.basePlanVersionId = basePlanVersionId;
@@ -138,6 +142,14 @@ public final class ManagePlanRequest {
     @JsonProperty("add_on_selections")
     public List<PlanSelection> getAddOnSelections() {
         return addOnSelections;
+    }
+
+    /**
+     * @return When true, the new subscription renews on the same date as the subscriptions billing_entity_id pays for, and the partial first period is billed pro rata. Requires billing_entity_id, and can't be combined with billing_cycle_anchor. Only honored when starting a new subscription.
+     */
+    @JsonProperty("align_with_billing_entity")
+    public Optional<Boolean> getAlignWithBillingEntity() {
+        return alignWithBillingEntity;
     }
 
     @JsonProperty("base_plan_id")
@@ -297,6 +309,7 @@ public final class ManagePlanRequest {
     private boolean equalTo(ManagePlanRequest other) {
         return activateOnPayment.equals(other.activateOnPayment)
                 && addOnSelections.equals(other.addOnSelections)
+                && alignWithBillingEntity.equals(other.alignWithBillingEntity)
                 && basePlanId.equals(other.basePlanId)
                 && basePlanPriceId.equals(other.basePlanPriceId)
                 && basePlanVersionId.equals(other.basePlanVersionId)
@@ -326,6 +339,7 @@ public final class ManagePlanRequest {
         return Objects.hash(
                 this.activateOnPayment,
                 this.addOnSelections,
+                this.alignWithBillingEntity,
                 this.basePlanId,
                 this.basePlanPriceId,
                 this.basePlanVersionId,
@@ -384,6 +398,13 @@ public final class ManagePlanRequest {
         _FinalStage addAddOnSelections(PlanSelection addOnSelections);
 
         _FinalStage addAllAddOnSelections(List<PlanSelection> addOnSelections);
+
+        /**
+         * <p>When true, the new subscription renews on the same date as the subscriptions billing_entity_id pays for, and the partial first period is billed pro rata. Requires billing_entity_id, and can't be combined with billing_cycle_anchor. Only honored when starting a new subscription.</p>
+         */
+        _FinalStage alignWithBillingEntity(Optional<Boolean> alignWithBillingEntity);
+
+        _FinalStage alignWithBillingEntity(Boolean alignWithBillingEntity);
 
         _FinalStage basePlanId(Optional<String> basePlanId);
 
@@ -555,6 +576,8 @@ public final class ManagePlanRequest {
 
         private Optional<String> basePlanId = Optional.empty();
 
+        private Optional<Boolean> alignWithBillingEntity = Optional.empty();
+
         private List<PlanSelection> addOnSelections = new ArrayList<>();
 
         private Optional<Boolean> activateOnPayment = Optional.empty();
@@ -567,6 +590,7 @@ public final class ManagePlanRequest {
         public Builder from(ManagePlanRequest other) {
             activateOnPayment(other.getActivateOnPayment());
             addOnSelections(other.getAddOnSelections());
+            alignWithBillingEntity(other.getAlignWithBillingEntity());
             basePlanId(other.getBasePlanId());
             basePlanPriceId(other.getBasePlanPriceId());
             basePlanVersionId(other.getBasePlanVersionId());
@@ -983,6 +1007,26 @@ public final class ManagePlanRequest {
             return this;
         }
 
+        /**
+         * <p>When true, the new subscription renews on the same date as the subscriptions billing_entity_id pays for, and the partial first period is billed pro rata. Requires billing_entity_id, and can't be combined with billing_cycle_anchor. Only honored when starting a new subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage alignWithBillingEntity(Boolean alignWithBillingEntity) {
+            this.alignWithBillingEntity = Optional.ofNullable(alignWithBillingEntity);
+            return this;
+        }
+
+        /**
+         * <p>When true, the new subscription renews on the same date as the subscriptions billing_entity_id pays for, and the partial first period is billed pro rata. Requires billing_entity_id, and can't be combined with billing_cycle_anchor. Only honored when starting a new subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "align_with_billing_entity", nulls = Nulls.SKIP)
+        public _FinalStage alignWithBillingEntity(Optional<Boolean> alignWithBillingEntity) {
+            this.alignWithBillingEntity = alignWithBillingEntity;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllAddOnSelections(List<PlanSelection> addOnSelections) {
             if (addOnSelections != null) {
@@ -1032,6 +1076,7 @@ public final class ManagePlanRequest {
             return new ManagePlanRequest(
                     activateOnPayment,
                     addOnSelections,
+                    alignWithBillingEntity,
                     basePlanId,
                     basePlanPriceId,
                     basePlanVersionId,
@@ -1061,6 +1106,7 @@ public final class ManagePlanRequest {
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("activate_on_payment")
                     || key.equalsIgnoreCase("add_on_selections")
+                    || key.equalsIgnoreCase("align_with_billing_entity")
                     || key.equalsIgnoreCase("base_plan_id")
                     || key.equalsIgnoreCase("base_plan_price_id")
                     || key.equalsIgnoreCase("base_plan_version_id")

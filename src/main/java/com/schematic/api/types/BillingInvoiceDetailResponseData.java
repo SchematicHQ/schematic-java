@@ -60,6 +60,8 @@ public final class BillingInvoiceDetailResponseData {
 
     private final Optional<String> number;
 
+    private final Optional<String> paymentMethodId;
+
     private final Optional<String> pdfUrl;
 
     private final Optional<OffsetDateTime> periodEnd;
@@ -109,6 +111,7 @@ public final class BillingInvoiceDetailResponseData {
             String id,
             List<BillingInvoiceLineResponseData> lines,
             Optional<String> number,
+            Optional<String> paymentMethodId,
             Optional<String> pdfUrl,
             Optional<OffsetDateTime> periodEnd,
             Optional<OffsetDateTime> periodStart,
@@ -142,6 +145,7 @@ public final class BillingInvoiceDetailResponseData {
         this.id = id;
         this.lines = lines;
         this.number = number;
+        this.paymentMethodId = paymentMethodId;
         this.pdfUrl = pdfUrl;
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
@@ -271,6 +275,14 @@ public final class BillingInvoiceDetailResponseData {
     }
 
     /**
+     * @return The card a charge takes the amount left to pay from: the card on the invoice's contract. Null unless Stripe Payments collects the invoice and the contract has a card.
+     */
+    @JsonProperty("payment_method_id")
+    public Optional<String> getPaymentMethodId() {
+        return paymentMethodId;
+    }
+
+    /**
      * @return The billing provider's PDF of the invoice. Null on an invoice Schematic issued, which downloads its PDF from this API.
      */
     @JsonProperty("pdf_url")
@@ -360,7 +372,7 @@ public final class BillingInvoiceDetailResponseData {
     }
 
     /**
-     * @return The billing provider's hosted invoice page. Null on an invoice Schematic issued.
+     * @return The hosted invoice page, which opens with no login. On an invoice Schematic issued, null while it is a draft or after its link is revoked.
      */
     @JsonProperty("url")
     public Optional<String> getUrl() {
@@ -397,6 +409,7 @@ public final class BillingInvoiceDetailResponseData {
                 && id.equals(other.id)
                 && lines.equals(other.lines)
                 && number.equals(other.number)
+                && paymentMethodId.equals(other.paymentMethodId)
                 && pdfUrl.equals(other.pdfUrl)
                 && periodEnd.equals(other.periodEnd)
                 && periodStart.equals(other.periodStart)
@@ -434,6 +447,7 @@ public final class BillingInvoiceDetailResponseData {
                 this.id,
                 this.lines,
                 this.number,
+                this.paymentMethodId,
                 this.pdfUrl,
                 this.periodEnd,
                 this.periodStart,
@@ -594,6 +608,13 @@ public final class BillingInvoiceDetailResponseData {
         _FinalStage number(String number);
 
         /**
+         * <p>The card a charge takes the amount left to pay from: the card on the invoice's contract. Null unless Stripe Payments collects the invoice and the contract has a card.</p>
+         */
+        _FinalStage paymentMethodId(Optional<String> paymentMethodId);
+
+        _FinalStage paymentMethodId(String paymentMethodId);
+
+        /**
          * <p>The billing provider's PDF of the invoice. Null on an invoice Schematic issued, which downloads its PDF from this API.</p>
          */
         _FinalStage pdfUrl(Optional<String> pdfUrl);
@@ -642,7 +663,7 @@ public final class BillingInvoiceDetailResponseData {
         _FinalStage terms(BillingInvoiceTermsResponseData terms);
 
         /**
-         * <p>The billing provider's hosted invoice page. Null on an invoice Schematic issued.</p>
+         * <p>The hosted invoice page, which opens with no login. On an invoice Schematic issued, null while it is a draft or after its link is revoked.</p>
          */
         _FinalStage url(Optional<String> url);
 
@@ -713,6 +734,8 @@ public final class BillingInvoiceDetailResponseData {
 
         private Optional<String> pdfUrl = Optional.empty();
 
+        private Optional<String> paymentMethodId = Optional.empty();
+
         private Optional<String> number = Optional.empty();
 
         private List<BillingInvoiceLineResponseData> lines = new ArrayList<>();
@@ -755,6 +778,7 @@ public final class BillingInvoiceDetailResponseData {
             id(other.getId());
             lines(other.getLines());
             number(other.getNumber());
+            paymentMethodId(other.getPaymentMethodId());
             pdfUrl(other.getPdfUrl());
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
@@ -898,7 +922,7 @@ public final class BillingInvoiceDetailResponseData {
         }
 
         /**
-         * <p>The billing provider's hosted invoice page. Null on an invoice Schematic issued.</p>
+         * <p>The hosted invoice page, which opens with no login. On an invoice Schematic issued, null while it is a draft or after its link is revoked.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -908,7 +932,7 @@ public final class BillingInvoiceDetailResponseData {
         }
 
         /**
-         * <p>The billing provider's hosted invoice page. Null on an invoice Schematic issued.</p>
+         * <p>The hosted invoice page, which opens with no login. On an invoice Schematic issued, null while it is a draft or after its link is revoked.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "url", nulls = Nulls.SKIP)
@@ -1058,6 +1082,26 @@ public final class BillingInvoiceDetailResponseData {
         @JsonSetter(value = "pdf_url", nulls = Nulls.SKIP)
         public _FinalStage pdfUrl(Optional<String> pdfUrl) {
             this.pdfUrl = pdfUrl;
+            return this;
+        }
+
+        /**
+         * <p>The card a charge takes the amount left to pay from: the card on the invoice's contract. Null unless Stripe Payments collects the invoice and the contract has a card.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage paymentMethodId(String paymentMethodId) {
+            this.paymentMethodId = Optional.ofNullable(paymentMethodId);
+            return this;
+        }
+
+        /**
+         * <p>The card a charge takes the amount left to pay from: the card on the invoice's contract. Null unless Stripe Payments collects the invoice and the contract has a card.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "payment_method_id", nulls = Nulls.SKIP)
+        public _FinalStage paymentMethodId(Optional<String> paymentMethodId) {
+            this.paymentMethodId = paymentMethodId;
             return this;
         }
 
@@ -1238,6 +1282,7 @@ public final class BillingInvoiceDetailResponseData {
                     id,
                     lines,
                     number,
+                    paymentMethodId,
                     pdfUrl,
                     periodEnd,
                     periodStart,
@@ -1275,6 +1320,7 @@ public final class BillingInvoiceDetailResponseData {
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("lines")
                     || key.equalsIgnoreCase("number")
+                    || key.equalsIgnoreCase("payment_method_id")
                     || key.equalsIgnoreCase("pdf_url")
                     || key.equalsIgnoreCase("period_end")
                     || key.equalsIgnoreCase("period_start")

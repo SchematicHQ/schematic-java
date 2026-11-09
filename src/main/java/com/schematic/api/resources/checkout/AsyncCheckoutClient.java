@@ -8,6 +8,8 @@ import com.schematic.api.core.ClientOptions;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.checkout.requests.CancelSubscriptionRequest;
 import com.schematic.api.resources.checkout.requests.CheckoutDataRequestBody;
+import com.schematic.api.resources.checkout.requests.PauseSubscriptionRequest;
+import com.schematic.api.resources.checkout.requests.ResumeSubscriptionRequest;
 import com.schematic.api.resources.checkout.requests.UpdateCompanyBillingDetailsRequestBody;
 import com.schematic.api.resources.checkout.requests.UpdateTrialEndRequestBody;
 import com.schematic.api.resources.checkout.types.CancelSubscriptionResponse;
@@ -15,8 +17,10 @@ import com.schematic.api.resources.checkout.types.CheckoutInternalResponse;
 import com.schematic.api.resources.checkout.types.GetCheckoutDataResponse;
 import com.schematic.api.resources.checkout.types.GetCompanyBillingDetailsResponse;
 import com.schematic.api.resources.checkout.types.ManagePlanResponse;
+import com.schematic.api.resources.checkout.types.PauseSubscriptionResponse;
 import com.schematic.api.resources.checkout.types.PreviewCheckoutInternalResponse;
 import com.schematic.api.resources.checkout.types.PreviewManagePlanResponse;
+import com.schematic.api.resources.checkout.types.ResumeSubscriptionResponse;
 import com.schematic.api.resources.checkout.types.UpdateCompanyBillingDetailsResponse;
 import com.schematic.api.resources.checkout.types.UpdateCustomerSubscriptionTrialEndResponse;
 import com.schematic.api.types.ChangeSubscriptionInternalRequestBody;
@@ -234,6 +238,56 @@ public class AsyncCheckoutClient {
         CompletableFuture<BaseSchematicHttpResponse<CancelSubscriptionResponse>> rawFuture =
                 this.rawClient.cancelSubscription(request, requestOptions);
         CompletableFuture<CancelSubscriptionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<PauseSubscriptionResponse> pauseSubscription(PauseSubscriptionRequest request) {
+        CompletableFuture<BaseSchematicHttpResponse<PauseSubscriptionResponse>> rawFuture =
+                this.rawClient.pauseSubscription(request);
+        CompletableFuture<PauseSubscriptionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<PauseSubscriptionResponse> pauseSubscription(
+            PauseSubscriptionRequest request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<PauseSubscriptionResponse>> rawFuture =
+                this.rawClient.pauseSubscription(request, requestOptions);
+        CompletableFuture<PauseSubscriptionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<ResumeSubscriptionResponse> resumeSubscription(ResumeSubscriptionRequest request) {
+        CompletableFuture<BaseSchematicHttpResponse<ResumeSubscriptionResponse>> rawFuture =
+                this.rawClient.resumeSubscription(request);
+        CompletableFuture<ResumeSubscriptionResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<ResumeSubscriptionResponse> resumeSubscription(
+            ResumeSubscriptionRequest request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<ResumeSubscriptionResponse>> rawFuture =
+                this.rawClient.resumeSubscription(request, requestOptions);
+        CompletableFuture<ResumeSubscriptionResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);

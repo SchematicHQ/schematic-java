@@ -1,214 +1,4 @@
 # Reference
-<details><summary><code>client.postApiKeys()</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.postApiKeys();
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.putApiKeysApiKeyId(apiKeyId)</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.putApiKeysApiKeyId("api_key_id");
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**apiKeyId:** `String` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.deleteApiKeysApiKeyId(apiKeyId)</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.deleteApiKeysApiKeyId("api_key_id");
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**apiKeyId:** `String` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.postEnvironments()</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.postEnvironments();
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.putEnvironmentsEnvironmentId(environmentId)</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.putEnvironmentsEnvironmentId("environment_id");
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**environmentId:** `String` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.deleteEnvironmentsEnvironmentId(environmentId)</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.deleteEnvironmentsEnvironmentId("environment_id");
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**environmentId:** `String` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.getCreditLedger()</code></summary>
 <dl>
 <dd>
@@ -3572,7 +3362,23 @@ client.billing().updateCompanyBillingProfile(
 <dl>
 <dd>
 
+**billingDetails:** `Optional<ContractBillingDetailsRequestBody>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **collectionMethod:** `BillingCollectionMethod` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**collector:** `Optional<Collector>` 
     
 </dd>
 </dl>
@@ -3648,6 +3454,180 @@ client.billing().updateCompanyBillingProfile(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**purchaseOrder:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.getCompanyContract(billingProfileId) -> GetCompanyContractResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().getCompanyContract("billing_profile_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProfileId:** `String` — billing_profile_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.downloadContractDocument(billingProfileId) -> InputStream</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().downloadContractDocument("billing_profile_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProfileId:** `String` — billing_profile_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.uploadContractDocument(billingProfileId, request) -> UploadContractDocumentResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().uploadContractDocument(
+    "billing_profile_id",
+    null,
+    UploadContractDocumentRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProfileId:** `String` — billing_profile_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.deleteContractDocument(billingProfileId) -> DeleteContractDocumentResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().deleteContractDocument("billing_profile_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**billingProfileId:** `String` — billing_profile_id
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -3713,7 +3693,23 @@ client.billing().updateBillingSettings(
 <dl>
 <dd>
 
+**defaultCollector:** `Optional<Collector>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **defaultProviderType:** `Optional<BillingProviderType>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**invoiceReplyToEmail:** `Optional<String>` — Where a payer's reply to an invoice email goes. Schematic sends no invoice email until it is set. Send null to clear it.
     
 </dd>
 </dl>
@@ -3884,6 +3880,22 @@ client.billing().upsertBillingSubscription(
 <dl>
 <dd>
 
+**pauseBehavior:** `Optional<BillingSubscriptionPauseBehavior>` — How the provider treats invoices while payment collection is paused. Omit it to keep the current pause, send null to clear it, or send a behavior to set one.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pauseResumesAt:** `Optional<Long>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **periodEnd:** `Optional<Long>` 
     
 </dd>
@@ -3982,6 +3994,86 @@ client.billing().upsertBillingSubscription(
 
 ```java
 client.billing().getCompanyNativeSubscription("company_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.moveToDefaultPlan(companyId) -> MoveToDefaultPlanResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().moveToDefaultPlan("company_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.getCompanyUpcomingInvoices(companyId) -> GetCompanyUpcomingInvoicesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().getCompanyUpcomingInvoices("company_id");
 ```
 </dd>
 </dl>
@@ -4165,6 +4257,46 @@ client.billing().getBillingInvoice("invoice_id");
 </dl>
 </details>
 
+<details><summary><code>client.billing.chargeNativeInvoice(invoiceId) -> ChargeNativeInvoiceResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().chargeNativeInvoice("invoice_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoiceId:** `String` — invoice_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.billing.exportNativeInvoice(invoiceId) -> InputStream</code></summary>
 <dl>
 <dd>
@@ -4219,6 +4351,86 @@ client.billing().exportNativeInvoice("invoice_id");
 
 ```java
 client.billing().finalizeNativeInvoice("invoice_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoiceId:** `String` — invoice_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.reissueNativeInvoiceLink(invoiceId) -> ReissueNativeInvoiceLinkResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().reissueNativeInvoiceLink("invoice_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoiceId:** `String` — invoice_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.revokeNativeInvoiceLink(invoiceId) -> RevokeNativeInvoiceLinkResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().revokeNativeInvoiceLink("invoice_id");
 ```
 </dd>
 </dl>
@@ -8099,6 +8311,14 @@ client.catalogs().updateConfiguration(
 <dl>
 <dd>
 
+**customPlanId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **customPlanPriceText:** `Optional<String>` 
     
 </dd>
@@ -9137,6 +9357,121 @@ client.checkout().cancelSubscription(
 </dl>
 </details>
 
+<details><summary><code>client.checkout.pauseSubscription(request) -> PauseSubscriptionResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.checkout().pauseSubscription(
+    PauseSubscriptionRequest
+        .builder()
+        .companyId("company_id")
+        .months(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**months:** `Long` — How many months to pause for, counted from the end of the current billing period. Between 1 and 6.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**subscriptionExternalId:** `Optional<String>` — The payment provider's ID for the subscription to pause. Required when the company has more than one subscription; otherwise defaults to its only one.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.checkout.resumeSubscription(request) -> ResumeSubscriptionResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.checkout().resumeSubscription(
+    ResumeSubscriptionRequest
+        .builder()
+        .companyId("company_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**subscriptionExternalId:** `Optional<String>` — The payment provider's ID for the subscription to resume. Required when the company has more than one subscription; otherwise defaults to its only one.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.checkout.updateCustomerSubscriptionTrialEnd(subscriptionId, request) -> UpdateCustomerSubscriptionTrialEndResponse</code></summary>
 <dl>
 <dd>
@@ -10097,6 +10432,99 @@ client.companies().getCompanyBillingEntity(
 <dd>
 
 **companyId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.companies.getBillingEntitySettings(companyId) -> GetBillingEntitySettingsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().getBillingEntitySettings("company_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.companies.updateBillingEntitySettings(companyId, request) -> UpdateBillingEntitySettingsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.companies().updateBillingEntitySettings(
+    "company_id",
+    UpdateBillingEntitySettingsRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**childrenMayChangePlan:** `Optional<Boolean>` — Whether the companies this company pays for may change their own plan and add-ons in components. The change is billed to this company. When false, they may only cancel.
     
 </dd>
 </dl>
@@ -11829,6 +12257,8 @@ client.companies().listUsers(
         .companyId("company_id")
         .planId("plan_id")
         .q("q")
+        .sortOrderColumn("sort_order_column")
+        .sortOrderDirection(SortDirection.ASC)
         .limit(1000000L)
         .offset(1000000L)
         .build()
@@ -11872,6 +12302,22 @@ client.companies().listUsers(
 <dd>
 
 **q:** `Optional<String>` — Search for users by name, keys or string traits
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sortOrderColumn:** `Optional<String>` — Column to sort by (e.g. name, created_at, last_seen_at)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sortOrderDirection:** `Optional<SortDirection>` — Direction to sort by (asc or desc)
     
 </dd>
 </dl>
@@ -12474,6 +12920,14 @@ client.entitlements().createCompanyOverride(
 <dl>
 <dd>
 
+**modelRates:** `Optional<List<CreditModelRate>>` — Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **note:** `Optional<String>` 
     
 </dd>
@@ -12641,6 +13095,14 @@ client.entitlements().updateCompanyOverride(
 <dd>
 
 **metricPeriodMonthReset:** `Optional<MetricPeriodMonthReset>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**modelRates:** `Optional<List<CreditModelRate>>` — Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.
     
 </dd>
 </dl>
@@ -13821,6 +14283,14 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
+**modelRates:** `Optional<List<CreditModelRate>>` — Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **monthlyMeteredPriceId:** `Optional<String>` 
     
 </dd>
@@ -14188,6 +14658,14 @@ client.entitlements().updatePlanEntitlement(
 <dd>
 
 **metricPeriodMonthReset:** `Optional<MetricPeriodMonthReset>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**modelRates:** `Optional<List<CreditModelRate>>` — Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.
     
 </dd>
 </dl>
@@ -14565,6 +15043,14 @@ client.entitlements().upsertPlanEntitlementForBillingProduct(
 <dd>
 
 **metricPeriodMonthReset:** `Optional<MetricPeriodMonthReset>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**modelRates:** `Optional<List<CreditModelRate>>` — Per-model rate overrides for inference features, keyed by provider and model. Each entry is a complete rate card: its consumption_rate and quantity_rates replace the entitlement's credit_consumption_rate and quantity_rates for events from that provider and model. An event matches an entry by exact model name first, then by its model name without a trailing snapshot date (claude-sonnet-4-5-20250929 matches claude-sonnet-4-5). Models with no entry burn at the entitlement's own rates. Omit to leave the overrides as they are; send null to clear them.
     
 </dd>
 </dl>
@@ -17845,6 +18331,289 @@ client.planbundle().updatePlanBundle(
 </dl>
 </details>
 
+## customplangrouprollouts
+<details><summary><code>client.customplangrouprollouts.listGroupRollouts() -> ListGroupRolloutsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.customplangrouprollouts().listGroupRollouts(
+    ListGroupRolloutsRequest
+        .builder()
+        .planId("plan_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customplangrouprollouts.getGroupRollout(customPlanGroupRolloutId) -> GetGroupRolloutResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.customplangrouprollouts().getGroupRollout("custom_plan_group_rollout_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**customPlanGroupRolloutId:** `String` — custom_plan_group_rollout_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customplangrouprollouts.copyCustomPlan(planId, request) -> CopyCustomPlanResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.customplangrouprollouts().copyCustomPlan(
+    "plan_id",
+    CopyCustomPlanRequestBody
+        .builder()
+        .companyId("company_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planId:** `String` — plan_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**companyId:** `String` — The company the copy is for, such as a location the plan's company pays for.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `Optional<String>` — The copy's name. Defaults to the source plan's.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customplangrouprollouts.previewGroupRollout(planId) -> PreviewGroupRolloutResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.customplangrouprollouts().previewGroupRollout(
+    "plan_id",
+    PreviewGroupRolloutRequest
+        .builder()
+        .fromPlanVersionId("from_plan_version_id")
+        .toPlanVersionId("to_plan_version_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planId:** `String` — plan_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**fromPlanVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**toPlanVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customplangrouprollouts.startGroupRollout(planId, request) -> StartGroupRolloutResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.customplangrouprollouts().startGroupRollout(
+    "plan_id",
+    StartGroupRolloutRequestBody
+        .builder()
+        .excludedCompanyIds(
+            Arrays.asList("excluded_company_ids")
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**planId:** `String` — plan_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**excludedCompanyIds:** `List<String>` — Companies the payer pays for whose custom plans keep their current version.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**fromPlanVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**toPlanVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## dataexports
 <details><summary><code>client.dataexports.listDataExports() -> ListDataExportsResponse</code></summary>
 <dl>
@@ -18371,6 +19140,260 @@ client.events().getEvent("event_id");
 <dd>
 
 **eventId:** `String` — event_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.listAccountInferenceCostRates() -> ListAccountInferenceCostRatesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().listAccountInferenceCostRates(
+    ListAccountInferenceCostRatesRequest
+        .builder()
+        .provider("provider")
+        .responseModel("response_model")
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**provider:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**responseModel:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.createAccountInferenceCostRate(request) -> CreateAccountInferenceCostRateResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().createAccountInferenceCostRate(
+    CreateAccountInferenceCostRateRequestBody
+        .builder()
+        .provider("provider")
+        .responseModel("response_model")
+        .startingAt(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .rates(
+            new HashMap<String, Double>() {{
+                put("key", 1.1);
+            }}
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**currency:** `Optional<String>` — Three-letter currency code the rates are in, matched against the event's currency. Defaults to usd.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**provider:** `String` — Provider the event reports, such as anthropic or openai. Matched case-insensitively.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rates:** `Map<String, Double>` — Cost of a single token in the row's currency, keyed by input_tokens, cached_input_tokens, cache_creation_input_tokens and output_tokens. input_tokens prices only the input left after the cached and cache-creation subsets, and output_tokens includes reasoning.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**responseModel:** `String` — Model the response reports. A dated snapshot such as claude-sonnet-4-5-20250929 falls back to the undated name when the sheet has no row for the dated one.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startingAt:** `OffsetDateTime` — When the rate takes effect. It applies to events captured from then until the next row for the same provider, model and currency.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.updateAccountInferenceCostRate(inferenceRateSheetId, request) -> UpdateAccountInferenceCostRateResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().updateAccountInferenceCostRate(
+    "inference_rate_sheet_id",
+    UpdateAccountInferenceCostRateRequestBody
+        .builder()
+        .rates(
+            new HashMap<String, Double>() {{
+                put("key", 1.1);
+            }}
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**inferenceRateSheetId:** `String` — inference_rate_sheet_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rates:** `Map<String, Double>` — Cost of a single token in the row's currency, keyed by input_tokens, cached_input_tokens, cache_creation_input_tokens and output_tokens. input_tokens prices only the input left after the cached and cache-creation subsets, and output_tokens includes reasoning.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.deleteAccountInferenceCostRate(inferenceRateSheetId) -> DeleteAccountInferenceCostRateResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().deleteAccountInferenceCostRate("inference_rate_sheet_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**inferenceRateSheetId:** `String` — inference_rate_sheet_id
     
 </dd>
 </dl>

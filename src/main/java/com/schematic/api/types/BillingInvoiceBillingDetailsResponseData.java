@@ -26,6 +26,8 @@ public final class BillingInvoiceBillingDetailsResponseData {
 
     private final Optional<String> email;
 
+    private final Optional<String> legalName;
+
     private final Optional<String> phone;
 
     private final List<BillingInvoiceTaxIdResponseData> taxIds;
@@ -35,11 +37,13 @@ public final class BillingInvoiceBillingDetailsResponseData {
     private BillingInvoiceBillingDetailsResponseData(
             Optional<BillingInvoiceAddressResponseData> address,
             Optional<String> email,
+            Optional<String> legalName,
             Optional<String> phone,
             List<BillingInvoiceTaxIdResponseData> taxIds,
             Map<String, Object> additionalProperties) {
         this.address = address;
         this.email = email;
+        this.legalName = legalName;
         this.phone = phone;
         this.taxIds = taxIds;
         this.additionalProperties = additionalProperties;
@@ -53,6 +57,14 @@ public final class BillingInvoiceBillingDetailsResponseData {
     @JsonProperty("email")
     public Optional<String> getEmail() {
         return email;
+    }
+
+    /**
+     * @return Who invoices are addressed to. Null to address them to the company by name.
+     */
+    @JsonProperty("legal_name")
+    public Optional<String> getLegalName() {
+        return legalName;
     }
 
     @JsonProperty("phone")
@@ -80,13 +92,14 @@ public final class BillingInvoiceBillingDetailsResponseData {
     private boolean equalTo(BillingInvoiceBillingDetailsResponseData other) {
         return address.equals(other.address)
                 && email.equals(other.email)
+                && legalName.equals(other.legalName)
                 && phone.equals(other.phone)
                 && taxIds.equals(other.taxIds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.address, this.email, this.phone, this.taxIds);
+        return Objects.hash(this.address, this.email, this.legalName, this.phone, this.taxIds);
     }
 
     @java.lang.Override
@@ -104,6 +117,8 @@ public final class BillingInvoiceBillingDetailsResponseData {
 
         private Optional<String> email = Optional.empty();
 
+        private Optional<String> legalName = Optional.empty();
+
         private Optional<String> phone = Optional.empty();
 
         private List<BillingInvoiceTaxIdResponseData> taxIds = new ArrayList<>();
@@ -115,6 +130,7 @@ public final class BillingInvoiceBillingDetailsResponseData {
         public Builder from(BillingInvoiceBillingDetailsResponseData other) {
             address(other.getAddress());
             email(other.getEmail());
+            legalName(other.getLegalName());
             phone(other.getPhone());
             taxIds(other.getTaxIds());
             return this;
@@ -139,6 +155,20 @@ public final class BillingInvoiceBillingDetailsResponseData {
 
         public Builder email(String email) {
             this.email = Optional.ofNullable(email);
+            return this;
+        }
+
+        /**
+         * <p>Who invoices are addressed to. Null to address them to the company by name.</p>
+         */
+        @JsonSetter(value = "legal_name", nulls = Nulls.SKIP)
+        public Builder legalName(Optional<String> legalName) {
+            this.legalName = legalName;
+            return this;
+        }
+
+        public Builder legalName(String legalName) {
+            this.legalName = Optional.ofNullable(legalName);
             return this;
         }
 
@@ -175,13 +205,15 @@ public final class BillingInvoiceBillingDetailsResponseData {
         }
 
         public BillingInvoiceBillingDetailsResponseData build() {
-            return new BillingInvoiceBillingDetailsResponseData(address, email, phone, taxIds, additionalProperties);
+            return new BillingInvoiceBillingDetailsResponseData(
+                    address, email, legalName, phone, taxIds, additionalProperties);
         }
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("address")
                     || key.equalsIgnoreCase("email")
+                    || key.equalsIgnoreCase("legal_name")
                     || key.equalsIgnoreCase("phone")
                     || key.equalsIgnoreCase("tax_ids")) {
                 return;

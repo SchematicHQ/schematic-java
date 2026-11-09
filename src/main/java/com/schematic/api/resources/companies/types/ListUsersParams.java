@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import com.schematic.api.types.SortDirection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,10 @@ public final class ListUsersParams {
 
     private final Optional<String> q;
 
+    private final Optional<String> sortOrderColumn;
+
+    private final Optional<SortDirection> sortOrderDirection;
+
     private final Map<String, Object> additionalProperties;
 
     private ListUsersParams(
@@ -42,6 +47,8 @@ public final class ListUsersParams {
             Optional<Long> offset,
             Optional<String> planId,
             Optional<String> q,
+            Optional<String> sortOrderColumn,
+            Optional<SortDirection> sortOrderDirection,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.ids = ids;
@@ -49,6 +56,8 @@ public final class ListUsersParams {
         this.offset = offset;
         this.planId = planId;
         this.q = q;
+        this.sortOrderColumn = sortOrderColumn;
+        this.sortOrderDirection = sortOrderDirection;
         this.additionalProperties = additionalProperties;
     }
 
@@ -100,6 +109,22 @@ public final class ListUsersParams {
         return q;
     }
 
+    /**
+     * @return Column to sort by (e.g. name, created_at, last_seen_at)
+     */
+    @JsonProperty("sort_order_column")
+    public Optional<String> getSortOrderColumn() {
+        return sortOrderColumn;
+    }
+
+    /**
+     * @return Direction to sort by (asc or desc)
+     */
+    @JsonProperty("sort_order_direction")
+    public Optional<SortDirection> getSortOrderDirection() {
+        return sortOrderDirection;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -117,12 +142,22 @@ public final class ListUsersParams {
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
                 && planId.equals(other.planId)
-                && q.equals(other.q);
+                && q.equals(other.q)
+                && sortOrderColumn.equals(other.sortOrderColumn)
+                && sortOrderDirection.equals(other.sortOrderDirection);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.ids, this.limit, this.offset, this.planId, this.q);
+        return Objects.hash(
+                this.companyId,
+                this.ids,
+                this.limit,
+                this.offset,
+                this.planId,
+                this.q,
+                this.sortOrderColumn,
+                this.sortOrderDirection);
     }
 
     @java.lang.Override
@@ -148,6 +183,10 @@ public final class ListUsersParams {
 
         private Optional<String> q = Optional.empty();
 
+        private Optional<String> sortOrderColumn = Optional.empty();
+
+        private Optional<SortDirection> sortOrderDirection = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -159,6 +198,8 @@ public final class ListUsersParams {
             offset(other.getOffset());
             planId(other.getPlanId());
             q(other.getQ());
+            sortOrderColumn(other.getSortOrderColumn());
+            sortOrderDirection(other.getSortOrderDirection());
             return this;
         }
 
@@ -246,8 +287,45 @@ public final class ListUsersParams {
             return this;
         }
 
+        /**
+         * <p>Column to sort by (e.g. name, created_at, last_seen_at)</p>
+         */
+        @JsonSetter(value = "sort_order_column", nulls = Nulls.SKIP)
+        public Builder sortOrderColumn(Optional<String> sortOrderColumn) {
+            this.sortOrderColumn = sortOrderColumn;
+            return this;
+        }
+
+        public Builder sortOrderColumn(String sortOrderColumn) {
+            this.sortOrderColumn = Optional.ofNullable(sortOrderColumn);
+            return this;
+        }
+
+        /**
+         * <p>Direction to sort by (asc or desc)</p>
+         */
+        @JsonSetter(value = "sort_order_direction", nulls = Nulls.SKIP)
+        public Builder sortOrderDirection(Optional<SortDirection> sortOrderDirection) {
+            this.sortOrderDirection = sortOrderDirection;
+            return this;
+        }
+
+        public Builder sortOrderDirection(SortDirection sortOrderDirection) {
+            this.sortOrderDirection = Optional.ofNullable(sortOrderDirection);
+            return this;
+        }
+
         public ListUsersParams build() {
-            return new ListUsersParams(companyId, ids, limit, offset, planId, q, additionalProperties);
+            return new ListUsersParams(
+                    companyId,
+                    ids,
+                    limit,
+                    offset,
+                    planId,
+                    q,
+                    sortOrderColumn,
+                    sortOrderDirection,
+                    additionalProperties);
         }
 
         @JsonAnySetter
@@ -257,7 +335,9 @@ public final class ListUsersParams {
                     || key.equalsIgnoreCase("limit")
                     || key.equalsIgnoreCase("offset")
                     || key.equalsIgnoreCase("plan_id")
-                    || key.equalsIgnoreCase("q")) {
+                    || key.equalsIgnoreCase("q")
+                    || key.equalsIgnoreCase("sort_order_column")
+                    || key.equalsIgnoreCase("sort_order_direction")) {
                 return;
             }
             this.additionalProperties.put(key, value);

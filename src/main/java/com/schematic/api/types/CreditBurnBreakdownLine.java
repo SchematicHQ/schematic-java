@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -23,6 +25,10 @@ public final class CreditBurnBreakdownLine {
 
     private final String key;
 
+    private final Optional<String> model;
+
+    private final Optional<String> provider;
+
     private final double quantity;
 
     private final double rate;
@@ -30,9 +36,17 @@ public final class CreditBurnBreakdownLine {
     private final Map<String, Object> additionalProperties;
 
     private CreditBurnBreakdownLine(
-            double credits, String key, double quantity, double rate, Map<String, Object> additionalProperties) {
+            double credits,
+            String key,
+            Optional<String> model,
+            Optional<String> provider,
+            double quantity,
+            double rate,
+            Map<String, Object> additionalProperties) {
         this.credits = credits;
         this.key = key;
+        this.model = model;
+        this.provider = provider;
         this.quantity = quantity;
         this.rate = rate;
         this.additionalProperties = additionalProperties;
@@ -46,6 +60,16 @@ public final class CreditBurnBreakdownLine {
     @JsonProperty("key")
     public String getKey() {
         return key;
+    }
+
+    @JsonProperty("model")
+    public Optional<String> getModel() {
+        return model;
+    }
+
+    @JsonProperty("provider")
+    public Optional<String> getProvider() {
+        return provider;
     }
 
     @JsonProperty("quantity")
@@ -70,12 +94,17 @@ public final class CreditBurnBreakdownLine {
     }
 
     private boolean equalTo(CreditBurnBreakdownLine other) {
-        return credits == other.credits && key.equals(other.key) && quantity == other.quantity && rate == other.rate;
+        return credits == other.credits
+                && key.equals(other.key)
+                && model.equals(other.model)
+                && provider.equals(other.provider)
+                && quantity == other.quantity
+                && rate == other.rate;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.credits, this.key, this.quantity, this.rate);
+        return Objects.hash(this.credits, this.key, this.model, this.provider, this.quantity, this.rate);
     }
 
     @java.lang.Override
@@ -111,6 +140,14 @@ public final class CreditBurnBreakdownLine {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage model(Optional<String> model);
+
+        _FinalStage model(String model);
+
+        _FinalStage provider(Optional<String> provider);
+
+        _FinalStage provider(String provider);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -123,6 +160,10 @@ public final class CreditBurnBreakdownLine {
 
         private double rate;
 
+        private Optional<String> provider = Optional.empty();
+
+        private Optional<String> model = Optional.empty();
+
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
@@ -131,6 +172,8 @@ public final class CreditBurnBreakdownLine {
         public Builder from(CreditBurnBreakdownLine other) {
             credits(other.getCredits());
             key(other.getKey());
+            model(other.getModel());
+            provider(other.getProvider());
             quantity(other.getQuantity());
             rate(other.getRate());
             return this;
@@ -165,14 +208,42 @@ public final class CreditBurnBreakdownLine {
         }
 
         @java.lang.Override
+        public _FinalStage provider(String provider) {
+            this.provider = Optional.ofNullable(provider);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "provider", nulls = Nulls.SKIP)
+        public _FinalStage provider(Optional<String> provider) {
+            this.provider = provider;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage model(String model) {
+            this.model = Optional.ofNullable(model);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "model", nulls = Nulls.SKIP)
+        public _FinalStage model(Optional<String> model) {
+            this.model = model;
+            return this;
+        }
+
+        @java.lang.Override
         public CreditBurnBreakdownLine build() {
-            return new CreditBurnBreakdownLine(credits, key, quantity, rate, additionalProperties);
+            return new CreditBurnBreakdownLine(credits, key, model, provider, quantity, rate, additionalProperties);
         }
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("credits")
                     || key.equalsIgnoreCase("key")
+                    || key.equalsIgnoreCase("model")
+                    || key.equalsIgnoreCase("provider")
                     || key.equalsIgnoreCase("quantity")
                     || key.equalsIgnoreCase("rate")) {
                 return;

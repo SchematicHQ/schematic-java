@@ -55,6 +55,12 @@ public final class BillingSubscriptionView {
 
     private final Optional<Map<String, JsonNode>> metadata;
 
+    private final Optional<BillingSubscriptionPauseBehavior> pauseBehavior;
+
+    private final Optional<Long> pauseResumesAt;
+
+    private final Optional<OffsetDateTime> pausedAt;
+
     private final Optional<PaymentMethodResponseData> paymentMethod;
 
     private final long periodEnd;
@@ -93,6 +99,9 @@ public final class BillingSubscriptionView {
             String interval,
             Optional<InvoiceResponseData> latestInvoice,
             Optional<Map<String, JsonNode>> metadata,
+            Optional<BillingSubscriptionPauseBehavior> pauseBehavior,
+            Optional<Long> pauseResumesAt,
+            Optional<OffsetDateTime> pausedAt,
             Optional<PaymentMethodResponseData> paymentMethod,
             long periodEnd,
             long periodStart,
@@ -119,6 +128,9 @@ public final class BillingSubscriptionView {
         this.interval = interval;
         this.latestInvoice = latestInvoice;
         this.metadata = metadata;
+        this.pauseBehavior = pauseBehavior;
+        this.pauseResumesAt = pauseResumesAt;
+        this.pausedAt = pausedAt;
         this.paymentMethod = paymentMethod;
         this.periodEnd = periodEnd;
         this.periodStart = periodStart;
@@ -207,6 +219,21 @@ public final class BillingSubscriptionView {
         return metadata;
     }
 
+    @JsonProperty("pause_behavior")
+    public Optional<BillingSubscriptionPauseBehavior> getPauseBehavior() {
+        return pauseBehavior;
+    }
+
+    @JsonProperty("pause_resumes_at")
+    public Optional<Long> getPauseResumesAt() {
+        return pauseResumesAt;
+    }
+
+    @JsonProperty("paused_at")
+    public Optional<OffsetDateTime> getPausedAt() {
+        return pausedAt;
+    }
+
     @JsonProperty("payment_method")
     public Optional<PaymentMethodResponseData> getPaymentMethod() {
         return paymentMethod;
@@ -284,6 +311,9 @@ public final class BillingSubscriptionView {
                 && interval.equals(other.interval)
                 && latestInvoice.equals(other.latestInvoice)
                 && metadata.equals(other.metadata)
+                && pauseBehavior.equals(other.pauseBehavior)
+                && pauseResumesAt.equals(other.pauseResumesAt)
+                && pausedAt.equals(other.pausedAt)
                 && paymentMethod.equals(other.paymentMethod)
                 && periodEnd == other.periodEnd
                 && periodStart == other.periodStart
@@ -314,6 +344,9 @@ public final class BillingSubscriptionView {
                 this.interval,
                 this.latestInvoice,
                 this.metadata,
+                this.pauseBehavior,
+                this.pauseResumesAt,
+                this.pausedAt,
                 this.paymentMethod,
                 this.periodEnd,
                 this.periodStart,
@@ -430,6 +463,18 @@ public final class BillingSubscriptionView {
 
         _FinalStage metadata(Map<String, JsonNode> metadata);
 
+        _FinalStage pauseBehavior(Optional<BillingSubscriptionPauseBehavior> pauseBehavior);
+
+        _FinalStage pauseBehavior(BillingSubscriptionPauseBehavior pauseBehavior);
+
+        _FinalStage pauseResumesAt(Optional<Long> pauseResumesAt);
+
+        _FinalStage pauseResumesAt(Long pauseResumesAt);
+
+        _FinalStage pausedAt(Optional<OffsetDateTime> pausedAt);
+
+        _FinalStage pausedAt(OffsetDateTime pausedAt);
+
         _FinalStage paymentMethod(Optional<PaymentMethodResponseData> paymentMethod);
 
         _FinalStage paymentMethod(PaymentMethodResponseData paymentMethod);
@@ -496,6 +541,12 @@ public final class BillingSubscriptionView {
 
         private Optional<PaymentMethodResponseData> paymentMethod = Optional.empty();
 
+        private Optional<OffsetDateTime> pausedAt = Optional.empty();
+
+        private Optional<Long> pauseResumesAt = Optional.empty();
+
+        private Optional<BillingSubscriptionPauseBehavior> pauseBehavior = Optional.empty();
+
         private Optional<Map<String, JsonNode>> metadata = Optional.empty();
 
         private Optional<InvoiceResponseData> latestInvoice = Optional.empty();
@@ -535,6 +586,9 @@ public final class BillingSubscriptionView {
             interval(other.getInterval());
             latestInvoice(other.getLatestInvoice());
             metadata(other.getMetadata());
+            pauseBehavior(other.getPauseBehavior());
+            pauseResumesAt(other.getPauseResumesAt());
+            pausedAt(other.getPausedAt());
             paymentMethod(other.getPaymentMethod());
             periodEnd(other.getPeriodEnd());
             periodStart(other.getPeriodStart());
@@ -697,6 +751,45 @@ public final class BillingSubscriptionView {
         }
 
         @java.lang.Override
+        public _FinalStage pausedAt(OffsetDateTime pausedAt) {
+            this.pausedAt = Optional.ofNullable(pausedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "paused_at", nulls = Nulls.SKIP)
+        public _FinalStage pausedAt(Optional<OffsetDateTime> pausedAt) {
+            this.pausedAt = pausedAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage pauseResumesAt(Long pauseResumesAt) {
+            this.pauseResumesAt = Optional.ofNullable(pauseResumesAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pause_resumes_at", nulls = Nulls.SKIP)
+        public _FinalStage pauseResumesAt(Optional<Long> pauseResumesAt) {
+            this.pauseResumesAt = pauseResumesAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage pauseBehavior(BillingSubscriptionPauseBehavior pauseBehavior) {
+            this.pauseBehavior = Optional.ofNullable(pauseBehavior);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pause_behavior", nulls = Nulls.SKIP)
+        public _FinalStage pauseBehavior(Optional<BillingSubscriptionPauseBehavior> pauseBehavior) {
+            this.pauseBehavior = pauseBehavior;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage metadata(Map<String, JsonNode> metadata) {
             this.metadata = Optional.ofNullable(metadata);
             return this;
@@ -842,6 +935,9 @@ public final class BillingSubscriptionView {
                     interval,
                     latestInvoice,
                     metadata,
+                    pauseBehavior,
+                    pauseResumesAt,
+                    pausedAt,
                     paymentMethod,
                     periodEnd,
                     periodStart,
@@ -872,6 +968,9 @@ public final class BillingSubscriptionView {
                     || key.equalsIgnoreCase("interval")
                     || key.equalsIgnoreCase("latest_invoice")
                     || key.equalsIgnoreCase("metadata")
+                    || key.equalsIgnoreCase("pause_behavior")
+                    || key.equalsIgnoreCase("pause_resumes_at")
+                    || key.equalsIgnoreCase("paused_at")
                     || key.equalsIgnoreCase("payment_method")
                     || key.equalsIgnoreCase("period_end")
                     || key.equalsIgnoreCase("period_start")
