@@ -55,17 +55,27 @@ class EventBufferTest {
 
     @Test
     void pushEvents_ExceedingMaxSize_ShouldTriggerFlush() throws IOException {
-        CreateEventRequestBody event = mock(CreateEventRequestBody.class);
+        // Use a long flush interval so the periodic flush can't race with the size-triggered
+        // flush and add an extra sendBatch call on a slow runner.
+        EventBuffer sizeOnlyBuffer = new EventBuffer(eventSender, logger, 5, Duration.ofHours(1));
+        try {
+            CreateEventRequestBody event = mock(CreateEventRequestBody.class);
 
-        // Push events up to max size
-        for (int i = 0; i < 5; i++) {
-            eventBuffer.push(event);
+            // Pushing up to max size triggers a flush on the 5th push
+            for (int i = 0; i < 5; i++) {
+                sizeOnlyBuffer.push(event);
+            }
+
+            // One more stays buffered until the next flush
+            sizeOnlyBuffer.push(event);
+
+            ArgumentCaptor<List<CreateEventRequestBody>> captor = ArgumentCaptor.forClass(List.class);
+            verify(eventSender).sendBatch(captor.capture());
+            assertEquals(5, captor.getValue().size());
+            assertEquals(1, sizeOnlyBuffer.getQueueSize());
+        } finally {
+            sizeOnlyBuffer.close();
         }
-
-        // Push one more to trigger flush
-        eventBuffer.push(event);
-
-        verify(eventSender).sendBatch(any());
     }
 
     @Test
