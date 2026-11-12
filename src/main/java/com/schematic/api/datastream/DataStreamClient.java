@@ -84,6 +84,9 @@ public class DataStreamClient implements Closeable {
 
     // Replicator mode state
     private final AtomicBoolean replicatorReady = new AtomicBoolean(false);
+    // Whether the last health poll failed, so a run of failed polls warns once rather than every
+    // interval.
+    private volatile boolean replicatorHealthFailing;
     private volatile String replicatorCacheVersion;
     private volatile ScheduledExecutorService healthCheckScheduler;
     private volatile ScheduledFuture<?> healthCheckTask;
@@ -190,11 +193,12 @@ public class DataStreamClient implements Closeable {
     /**
      * Returns whether flag checks may be evaluated from the cache.
      *
-     * <p>In replicator mode this is the replicator's readiness from its last health poll: true
-     * once the replicator reports {@code ready: true}, meaning its cache is complete for the
-     * current cache version, and false before that or after a failed poll (connection error,
-     * timeout, unparseable body). While it is false, flag checks do not read the cache and
-     * are answered by the Schematic API.
+     * <p>In replicator mode this is the readiness from the replicator's last answer to a health
+     * poll: true once it reports {@code ready: true}, meaning its cache is complete for the
+     * current cache version, and false before its first answer or once it reports
+     * {@code ready: false}. A failed poll (connection error, timeout, unparseable body) changes
+     * nothing. While it is false, flag checks do not read the cache and are answered by the
+     * Schematic API.
      *
      * <p>Outside replicator mode the SDK fills its own cache over the WebSocket and fetches
      * what it lacks on demand, so there is nothing to wait for and this returns true. Flag
@@ -747,8 +751,13 @@ public class DataStreamClient implements Closeable {
      * <p>The JSON body is read whatever the HTTP status: while its cache is still loading the
      * replicator answers 503 with {@code ready: false} and a {@code cache_version}. Readiness
      * comes from the {@code ready} field, and the cache version is recorded from any response
-     * that carries a non-empty one. A failed poll (connection error, timeout, unparseable
-     * body) sets not ready and keeps the last known cache version.
+     * that carries a non-empty one.
+     *
+     * <p>Only an explicit answer changes readiness. A failed poll (connection error, timeout,
+     * a body that is missing, unparseable, or has no boolean {@code ready}) keeps the readiness
+     * and cache version from the last answer: a replicator blip says nothing about whether the
+     * cache is complete, and flipping every check to the API on one would send a burst of API
+     * checks from every SDK instance. Before the first answer the cache is not ready.
      */
     void checkReplicatorHealth() {
         try {
@@ -759,15 +768,19 @@ public class DataStreamClient implements Closeable {
 
             try (Response response = httpClient.newCall(request).execute()) {
                 JsonNode body = readHealthBody(response);
-                if (body == null) {
-                    setReplicatorNotReady("unparseable health response (status " + response.code() + ")");
+                JsonNode readyNode = body == null ? null : body.get("ready");
+                if (readyNode == null || !readyNode.isBoolean()) {
+                    logFailedHealthPoll("unparseable health response (status " + response.code() + ")");
                     return;
                 }
 
+                if (replicatorHealthFailing) {
+                    replicatorHealthFailing = false;
+                    log("info", "Replicator health check recovered");
+                }
                 updateReplicatorCacheVersion(body);
 
-                JsonNode readyNode = body.path("ready");
-                boolean ready = readyNode.isBoolean() && readyNode.booleanValue();
+                boolean ready = readyNode.booleanValue();
                 boolean wasReady = replicatorReady.getAndSet(ready);
 
                 if (ready && !wasReady) {
@@ -778,8 +791,8 @@ public class DataStreamClient implements Closeable {
             }
         } catch (Exception e) {
             // Catch everything, not just IOException: an exception escaping this method would
-            // cancel the scheduled health check and leave readiness stuck at its last value.
-            setReplicatorNotReady(e.getMessage());
+            // cancel the scheduled health check for good.
+            logFailedHealthPoll(e.getMessage());
         }
     }
 
@@ -822,10 +835,14 @@ public class DataStreamClient implements Closeable {
         }
     }
 
-    private void setReplicatorNotReady(String reason) {
-        boolean wasReady = replicatorReady.getAndSet(false);
-        if (wasReady) {
-            log("warn", "Replicator health check failed: " + reason);
+    /** Logs a failed health poll. Readiness and the cache version are left as they were. */
+    private void logFailedHealthPoll(String reason) {
+        if (!replicatorHealthFailing) {
+            replicatorHealthFailing = true;
+            log(
+                    "warn",
+                    "Replicator health check failed, keeping the last readiness ("
+                            + (replicatorReady.get() ? "ready" : "not ready") + "): " + reason);
         }
         log("debug", "Replicator health check error: " + reason);
     }

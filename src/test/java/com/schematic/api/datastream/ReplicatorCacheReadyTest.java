@@ -237,39 +237,63 @@ class ReplicatorCacheReadyTest {
     }
 
     @Test
-    void healthUnreachable_setsNotReadyAndKeepsCacheVersion() {
+    void ready_thenFailedPolls_staysReady() {
         DataStreamClient client = newReplicatorClient();
         try {
             setHealth(200, true, CACHE_VERSION);
             client.checkReplicatorHealth();
             assertTrue(client.isCacheReady());
-            assertEquals(CACHE_VERSION, client.getReplicatorCacheVersion());
 
-            server.stop(0);
-            server = null;
-            client.checkReplicatorHealth();
-
-            assertFalse(client.isCacheReady());
-            assertEquals(CACHE_VERSION, client.getReplicatorCacheVersion());
+            failEveryWay(client, () -> {
+                assertTrue(client.isCacheReady());
+                assertEquals(CACHE_VERSION, client.getReplicatorCacheVersion());
+            });
         } finally {
             client.close();
         }
     }
 
     @Test
-    void healthUnparseableBody_setsNotReadyAndKeepsCacheVersion() {
+    void notReady_thenFailedPolls_staysNotReady() {
+        DataStreamClient client = newReplicatorClient();
+        try {
+            setHealth(503, false, CACHE_VERSION);
+            client.checkReplicatorHealth();
+            assertFalse(client.isCacheReady());
+
+            failEveryWay(client, () -> {
+                assertFalse(client.isCacheReady());
+                assertEquals(CACHE_VERSION, client.getReplicatorCacheVersion());
+            });
+        } finally {
+            client.close();
+        }
+    }
+
+    @Test
+    void neverAnswered_thenFailedPolls_staysNotReady() {
+        DataStreamClient client = newReplicatorClient();
+        try {
+            failEveryWay(client, () -> {
+                assertFalse(client.isCacheReady());
+                assertNull(client.getReplicatorCacheVersion());
+            });
+        } finally {
+            client.close();
+        }
+    }
+
+    @Test
+    void ready_thenExplicitNotReady_becomesNotReady() {
         DataStreamClient client = newReplicatorClient();
         try {
             setHealth(200, true, CACHE_VERSION);
             client.checkReplicatorHealth();
             assertTrue(client.isCacheReady());
 
-            healthStatus.set(200);
-            healthBody.set("not json");
+            setHealth(200, false, CACHE_VERSION);
             client.checkReplicatorHealth();
-
             assertFalse(client.isCacheReady());
-            assertEquals(CACHE_VERSION, client.getReplicatorCacheVersion());
         } finally {
             client.close();
         }
@@ -374,6 +398,33 @@ class ReplicatorCacheReadyTest {
                 .flagCacheProvider(flagCache)
                 .build();
         return new DataStreamClient(options, "test-key", "https://api.schematichq.com", logger);
+    }
+
+    /**
+     * Runs one failed health poll of each kind, checking the state after each: a body that is
+     * not JSON, a JSON body with no {@code ready}, a 500 with no body, and finally an
+     * unreachable health URL (which stops the server, so it goes last).
+     */
+    private void failEveryWay(DataStreamClient client, Runnable check) {
+        healthStatus.set(200);
+        healthBody.set("not json");
+        client.checkReplicatorHealth();
+        check.run();
+
+        healthStatus.set(200);
+        healthBody.set("{\"cache_version\":\"vOther\"}");
+        client.checkReplicatorHealth();
+        check.run();
+
+        healthStatus.set(500);
+        healthBody.set("");
+        client.checkReplicatorHealth();
+        check.run();
+
+        server.stop(0);
+        server = null;
+        client.checkReplicatorHealth();
+        check.run();
     }
 
     private void setHealth(int status, boolean ready, String cacheVersion) {
