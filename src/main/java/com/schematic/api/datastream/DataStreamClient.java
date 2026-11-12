@@ -84,6 +84,9 @@ public class DataStreamClient implements Closeable {
 
     // Replicator mode state
     private final AtomicBoolean replicatorReady = new AtomicBoolean(false);
+    // Whether the last health poll failed, so a run of failed polls warns once rather than every
+    // interval.
+    private volatile boolean replicatorHealthFailing;
     private volatile String replicatorCacheVersion;
     private volatile ScheduledExecutorService healthCheckScheduler;
     private volatile ScheduledFuture<?> healthCheckTask;
@@ -165,6 +168,12 @@ public class DataStreamClient implements Closeable {
 
     /**
      * Returns whether the datastream is connected and ready for flag checks.
+     *
+     * <p>In direct WebSocket mode this reports whether the WebSocket is connected and
+     * initialized. In replicator mode it reports replicator readiness (the {@code ready}
+     * field of the replicator's health response), which is the same value
+     * {@link #isCacheReady()} returns. Prefer {@link #isCacheReady()} when the question is
+     * whether flag checks can be served from the replicator cache.
      */
     public boolean isConnected() {
         if (options.isReplicatorMode()) {
@@ -179,6 +188,27 @@ public class DataStreamClient implements Closeable {
      */
     public boolean hasRulesEngine() {
         return rulesEngine != null && rulesEngine.isInitialized();
+    }
+
+    /**
+     * Returns whether flag checks may be evaluated from the cache.
+     *
+     * <p>In replicator mode this is the readiness from the replicator's last answer to a health
+     * poll: true once it reports {@code ready: true}, meaning its cache is complete for the
+     * current cache version, and false before its first answer or once it reports
+     * {@code ready: false}. A failed poll (connection error, timeout, unparseable body) changes
+     * nothing. While it is false, flag checks do not read the cache and are answered by the
+     * Schematic API.
+     *
+     * <p>Outside replicator mode the SDK fills its own cache over the WebSocket and fetches
+     * what it lacks on demand, so there is nothing to wait for and this returns true. Flag
+     * checks in that mode still require {@link #isConnected()}, as before.
+     */
+    public boolean isCacheReady() {
+        if (options.isReplicatorMode()) {
+            return replicatorReady.get();
+        }
+        return true;
     }
 
     /**
@@ -715,6 +745,20 @@ public class DataStreamClient implements Closeable {
                 this::checkReplicatorHealth, 0, intervalMs, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Polls the replicator health endpoint once.
+     *
+     * <p>The JSON body is read whatever the HTTP status: while its cache is still loading the
+     * replicator answers 503 with {@code ready: false} and a {@code cache_version}. Readiness
+     * comes from the {@code ready} field, and the cache version is recorded from any response
+     * that carries a non-empty one.
+     *
+     * <p>Only an explicit answer changes readiness. A failed poll (connection error, timeout,
+     * a body that is missing, unparseable, or has no boolean {@code ready}) keeps the readiness
+     * and cache version from the last answer: a replicator blip says nothing about whether the
+     * cache is complete, and flipping every check to the API on one would send a burst of API
+     * checks from every SDK instance. Before the first answer the cache is not ready.
+     */
     void checkReplicatorHealth() {
         try {
             Request request = new Request.Builder()
@@ -723,46 +767,92 @@ public class DataStreamClient implements Closeable {
                     .build();
 
             try (Response response = httpClient.newCall(request).execute()) {
-                if (response.isSuccessful() && response.body() != null) {
-                    JsonNode body = objectMapper.readTree(response.body().string());
-                    boolean ready = body.has("ready") && body.get("ready").asBoolean(false);
-                    boolean wasReady = replicatorReady.getAndSet(ready);
+                JsonNode body = readHealthBody(response);
+                JsonNode readyNode = body == null ? null : body.get("ready");
+                if (readyNode == null || !readyNode.isBoolean()) {
+                    logFailedHealthPoll("unparseable health response (status " + response.code() + ")");
+                    return;
+                }
 
-                    String newCacheVersion = null;
-                    if (body.has("cache_version")) {
-                        newCacheVersion = body.get("cache_version").asText();
-                    } else if (body.has("cacheVersion")) {
-                        newCacheVersion = body.get("cacheVersion").asText();
-                    }
-                    if (newCacheVersion != null && !newCacheVersion.equals(replicatorCacheVersion)) {
-                        String oldVersion = replicatorCacheVersion;
-                        replicatorCacheVersion = newCacheVersion;
-                        log(
-                                "info",
-                                "Replicator cache version changed from "
-                                        + (oldVersion == null ? "(null)" : oldVersion) + " to "
-                                        + newCacheVersion);
-                    }
+                if (replicatorHealthFailing) {
+                    replicatorHealthFailing = false;
+                    log("info", "Replicator health check recovered");
+                }
+                updateReplicatorCacheVersion(body);
 
-                    if (ready && !wasReady) {
-                        log("info", "Replicator is now ready");
-                    } else if (!ready && wasReady) {
-                        log("warn", "Replicator is no longer ready");
-                    }
-                } else {
-                    boolean wasReady = replicatorReady.getAndSet(false);
-                    if (wasReady) {
-                        log("warn", "Replicator health check failed with status: " + response.code());
-                    }
+                boolean ready = readyNode.booleanValue();
+                boolean wasReady = replicatorReady.getAndSet(ready);
+
+                if (ready && !wasReady) {
+                    log("info", "Replicator is now ready (cache_version: " + replicatorCacheVersion + ")");
+                } else if (!ready && wasReady) {
+                    log("warn", "Replicator is no longer ready (status: " + response.code() + ")");
                 }
             }
-        } catch (IOException e) {
-            boolean wasReady = replicatorReady.getAndSet(false);
-            if (wasReady) {
-                log("warn", "Replicator health check failed: " + e.getMessage());
-            }
-            log("debug", "Replicator health check error: " + e.getMessage());
+        } catch (Exception e) {
+            // Catch everything, not just IOException: an exception escaping this method would
+            // cancel the scheduled health check for good.
+            logFailedHealthPoll(e.getMessage());
         }
+    }
+
+    /**
+     * Reads the health response body as a JSON object, or returns null if there is no body
+     * or it is not a JSON object.
+     */
+    private JsonNode readHealthBody(Response response) {
+        if (response.body() == null) {
+            return null;
+        }
+        try {
+            JsonNode body = objectMapper.readTree(response.body().string());
+            return body != null && body.isObject() ? body : null;
+        } catch (IOException e) {
+            log("debug", "Failed to parse replicator health response: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Records the cache version from a health response body. Keeps the last known version
+     * when the body reports none.
+     */
+    private void updateReplicatorCacheVersion(JsonNode body) {
+        String newCacheVersion = null;
+        if (body.hasNonNull("cache_version")) {
+            newCacheVersion = body.get("cache_version").asText();
+        } else if (body.hasNonNull("cacheVersion")) {
+            newCacheVersion = body.get("cacheVersion").asText();
+        }
+        if (newCacheVersion != null && !newCacheVersion.isEmpty() && !newCacheVersion.equals(replicatorCacheVersion)) {
+            String oldVersion = replicatorCacheVersion;
+            replicatorCacheVersion = newCacheVersion;
+            log(
+                    "info",
+                    "Replicator cache version changed from "
+                            + (oldVersion == null ? "(null)" : oldVersion) + " to "
+                            + newCacheVersion);
+        }
+    }
+
+    /** Logs a failed health poll. Readiness and the cache version are left as they were. */
+    private void logFailedHealthPoll(String reason) {
+        if (!replicatorHealthFailing) {
+            replicatorHealthFailing = true;
+            log(
+                    "warn",
+                    "Replicator health check failed, keeping the last readiness ("
+                            + (replicatorReady.get() ? "ready" : "not ready") + "): " + reason);
+        }
+        log("debug", "Replicator health check error: " + reason);
+    }
+
+    /**
+     * Returns the last cache version reported by the replicator, or null if none has been
+     * reported. Package-private for tests.
+     */
+    String getReplicatorCacheVersion() {
+        return replicatorCacheVersion;
     }
 
     // --- Message handling ---
