@@ -451,6 +451,7 @@ class SchematicTest {
     void check_ResolvesTheCallersDefaultWhenTheEngineDeclinesOnTheDataStreamBranch() throws Exception {
         DataStreamClient dataStream = mock(DataStreamClient.class);
         when(dataStream.isConnected()).thenReturn(true);
+        when(dataStream.isCacheReady()).thenReturn(true);
         // What the DataStream client hands back when the engine cannot answer: the flag's own
         // default standing in for a verdict.
         when(dataStream.checkFlag(eq("test_flag"), any(), any(), any()))
