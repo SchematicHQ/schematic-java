@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.schematic.api.Schematic;
 import com.schematic.api.cache.LocalCache;
+import com.schematic.api.credits.CheckResult;
 import com.schematic.api.datastream.DataStreamMessages.DataStreamResp;
 import com.schematic.api.datastream.DataStreamMessages.EntityType;
 import com.schematic.api.datastream.DataStreamMessages.MessageType;
@@ -154,6 +155,32 @@ class ReplicatorCacheReadyTest {
         assertEquals(2, bulk.size());
         assertFalse(bulk.get(0).getValue());
         assertTrue(bulk.get(1).getValue());
+    }
+
+    @Test
+    void notReady_checkWithoutUsageUsesApi_readyUsesCache() {
+        setHealth(503, false, CACHE_VERSION);
+        Schematic spySchematic = spy(buildSchematic(Collections.emptyMap()));
+        seedReplicatorCache(schematic.getDataStreamClient());
+
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("flag-on"), any(CheckFlagRequestBody.class)))
+                .thenReturn(singleApiResponse("flag-on", false));
+
+        CheckResult notReady = spySchematic.check("flag-on", COMPANY, null, null);
+        assertFalse(notReady.getValue());
+        assertEquals("api", notReady.getReason());
+        assertNull(notReady.getReservation());
+        verify(featuresClient).checkFlag(eq("flag-on"), any(CheckFlagRequestBody.class));
+
+        setHealth(200, true, CACHE_VERSION);
+        schematic.getDataStreamClient().checkReplicatorHealth();
+
+        CheckResult ready = spySchematic.check("flag-on", COMPANY, null, null);
+        assertTrue(ready.getValue());
+        assertEquals("flag_flag-on", ready.getFlagId());
+        verifyNoMoreInteractions(featuresClient);
     }
 
     // --- Flag checks, cache ready ---
