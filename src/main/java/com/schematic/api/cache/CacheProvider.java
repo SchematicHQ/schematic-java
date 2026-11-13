@@ -11,6 +11,17 @@ public interface CacheProvider<T> {
     void set(String key, T val);
 
     /**
+     * Writes a value but keeps the key's current expiry instead of applying this cache's TTL.
+     *
+     * <p>Used when the SDK rewrites an entry that another writer (the replicator) owns, so the
+     * rewrite does not change how long the entry lives. A key with no expiry keeps none. Providers
+     * that cannot read an entry's expiry fall back to {@link #set(String, Object)}.
+     */
+    default void setKeepTTL(String key, T val) {
+        set(key, val);
+    }
+
+    /**
      * Removes a cached entry by key.
      */
     default void delete(String key) {

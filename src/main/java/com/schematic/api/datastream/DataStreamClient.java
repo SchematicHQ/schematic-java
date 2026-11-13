@@ -599,7 +599,9 @@ public class DataStreamClient implements Closeable {
                 .metrics(updatedMetrics)
                 .build();
 
-        cacheCompanyObject(updated);
+        // The replicator owns these keys and sets their lifetime (no expiry by default), so the
+        // rewrite keeps each key's TTL rather than applying ours.
+        cacheCompanyObject(updated, options.isReplicatorMode());
     }
 
     /**
@@ -1037,9 +1039,22 @@ public class DataStreamClient implements Closeable {
     }
 
     private void cacheCompanyObject(RulesengineCompany company) {
-        companyCache.set(companyIdCacheKey(company.getId()), company);
+        cacheCompanyObject(company, false);
+    }
+
+    private void cacheCompanyObject(RulesengineCompany company, boolean keepTTL) {
+        if (keepTTL) {
+            companyCache.setKeepTTL(companyIdCacheKey(company.getId()), company);
+        } else {
+            companyCache.set(companyIdCacheKey(company.getId()), company);
+        }
         for (Map.Entry<String, String> entry : company.getKeys().entrySet()) {
-            companyKeyCache.set(companyCacheKey(entry.getKey(), entry.getValue()), company.getId());
+            String lookupKey = companyCacheKey(entry.getKey(), entry.getValue());
+            if (keepTTL) {
+                companyKeyCache.setKeepTTL(lookupKey, company.getId());
+            } else {
+                companyKeyCache.set(lookupKey, company.getId());
+            }
         }
         // Notify any pending requests waiting for this company
         notifyPendingCompanyRequests(company.getKeys(), company);
