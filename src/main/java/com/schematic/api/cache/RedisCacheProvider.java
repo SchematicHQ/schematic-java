@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import redis.clients.jedis.JedisPooled;
 import redis.clients.jedis.params.ScanParams;
+import redis.clients.jedis.params.SetParams;
 import redis.clients.jedis.resps.ScanResult;
 
 /**
@@ -86,6 +87,25 @@ public class RedisCacheProvider<T> implements CacheProvider<T> {
     @Override
     public void set(String key, T val) {
         set(key, val, null);
+    }
+
+    /** Writes with {@code SET ... KEEPTTL} (Redis 6.0+). A new key is written with no expiry. */
+    @Override
+    public void setKeepTTL(String key, T val) {
+        String fullKey = getFullKey(key);
+        if (val == null) {
+            jedis.del(fullKey);
+            return;
+        }
+
+        String json;
+        try {
+            json = objectMapper.writeValueAsString(val);
+        } catch (JsonProcessingException e) {
+            return;
+        }
+
+        jedis.set(fullKey, json, SetParams.setParams().keepTtl());
     }
 
     @Override

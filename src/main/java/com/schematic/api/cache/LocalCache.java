@@ -115,6 +115,28 @@ public class LocalCache<T> implements CacheProvider<T>, AutoCloseable {
         set(key, val, null);
     }
 
+    /** Keeps a live entry's expiry; a missing or expired entry gets this cache's TTL. */
+    @Override
+    public void setKeepTTL(String key, T val) {
+        if (maxItems == 0) {
+            return;
+        }
+
+        lock.lock();
+        try {
+            CachedItem<T> existingItem = cache.get(key);
+            if (existingItem != null && !Instant.now().isAfter(existingItem.getExpiration())) {
+                existingItem.setValue(val);
+                lruList.remove(existingItem.getKey());
+                lruList.addFirst(existingItem.getKey());
+                return;
+            }
+        } finally {
+            lock.unlock();
+        }
+        set(key, val, null);
+    }
+
     @Override
     public void deleteMissing(List<String> keysToKeep) {
         if (maxItems == 0) {
