@@ -3565,7 +3565,7 @@ client.billing().downloadContractDocument("billing_profile_id");
 ```java
 client.billing().uploadContractDocument(
     "billing_profile_id",
-    null,
+    new File("path/to/file"),
     UploadContractDocumentRequest
         .builder()
         .build()
@@ -3785,6 +3785,14 @@ client.billing().upsertBillingSubscription(
 <dd>
 
 **applicationId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**billingCycleAnchor:** `Optional<OffsetDateTime>` 
     
 </dd>
 </dl>
@@ -4034,6 +4042,274 @@ client.billing().getCompanyNativeSubscription("company_id");
 
 ```java
 client.billing().moveToDefaultPlan("company_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.getCompanyTrial(companyId) -> GetCompanyTrialResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().getCompanyTrial("company_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.startCompanyTrial(companyId, request) -> StartCompanyTrialResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().startCompanyTrial(
+    "company_id",
+    StartCompanyTrialRequestBody
+        .builder()
+        .cadence(BillingProductPriceInterval.DAY)
+        .planId("plan_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cadence:** `BillingProductPriceInterval` — The unit of how often the plan bills once the trial converts: month or year.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cadenceIntervalCount:** `Optional<Long>` — How many cadence units one billing period spans. Defaults to 1; use 3 with month for quarterly.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endBehavior:** `Optional<BillingSubscriptionTrialEndSetting>` — What happens when the trial reaches its end date: subscribe starts billing, cancel moves the company off the plan. Defaults to the plan group's trial setting.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**planId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**trialEnd:** `Optional<OffsetDateTime>` — When the trial ends. Defaults to the plan's trial length, then the plan group's, then 14 days. Setting it grants the trial even when the company has used its trial before.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.updateCompanyTrial(companyId, request) -> UpdateCompanyTrialResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().updateCompanyTrial(
+    "company_id",
+    UpdateCompanyTrialRequestBody
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endBehavior:** `Optional<BillingSubscriptionTrialEndSetting>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**trialEnd:** `Optional<OffsetDateTime>` — Moves the end of the trial, and the first billing date with it.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.convertCompanyTrial(companyId) -> ConvertCompanyTrialResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().convertCompanyTrial("company_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**companyId:** `String` — company_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.endCompanyTrial(companyId) -> EndCompanyTrialResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.billing().endCompanyTrial("company_id");
 ```
 </dd>
 </dl>
@@ -8899,6 +9175,14 @@ client.checkout().getCheckoutData(
 <dd>
 
 **selectedPlanId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**selectedPlanVersionId:** `Optional<String>` 
     
 </dd>
 </dl>

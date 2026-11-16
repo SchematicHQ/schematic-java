@@ -103,7 +103,7 @@ public final class CreditSpendPolicyResponseData {
     }
 
     /**
-     * @return Credits spent in the current window. Set only by the usage route, and only for a window cap.
+     * @return Credits spent in the current window. Set only by the routes that read usage, and only for a window cap.
      */
     @JsonProperty("consumed")
     public Optional<Double> getConsumed() {
@@ -116,7 +116,7 @@ public final class CreditSpendPolicyResponseData {
     }
 
     /**
-     * @return Credits left in the current window. Set only by the usage route, and only for a window cap.
+     * @return Credits left in the current window. Set only by the routes that read usage, and only for a window cap.
      */
     @JsonProperty("headroom")
     public Optional<Double> getHeadroom() {
@@ -139,7 +139,7 @@ public final class CreditSpendPolicyResponseData {
     }
 
     /**
-     * @return When the current window ends. Set only by the usage route, and only for a window cap.
+     * @return When the current window ends. Set only by the routes that read usage, and only for a window cap.
      */
     @JsonProperty("resets_at")
     public Optional<OffsetDateTime> getResetsAt() {
@@ -278,14 +278,14 @@ public final class CreditSpendPolicyResponseData {
         _FinalStage companyId(String companyId);
 
         /**
-         * <p>Credits spent in the current window. Set only by the usage route, and only for a window cap.</p>
+         * <p>Credits spent in the current window. Set only by the routes that read usage, and only for a window cap.</p>
          */
         _FinalStage consumed(Optional<Double> consumed);
 
         _FinalStage consumed(Double consumed);
 
         /**
-         * <p>Credits left in the current window. Set only by the usage route, and only for a window cap.</p>
+         * <p>Credits left in the current window. Set only by the routes that read usage, and only for a window cap.</p>
          */
         _FinalStage headroom(Optional<Double> headroom);
 
@@ -300,7 +300,7 @@ public final class CreditSpendPolicyResponseData {
         _FinalStage maxPerDraw(Double maxPerDraw);
 
         /**
-         * <p>When the current window ends. Set only by the usage route, and only for a window cap.</p>
+         * <p>When the current window ends. Set only by the routes that read usage, and only for a window cap.</p>
          */
         _FinalStage resetsAt(Optional<OffsetDateTime> resetsAt);
 
@@ -474,7 +474,7 @@ public final class CreditSpendPolicyResponseData {
         }
 
         /**
-         * <p>When the current window ends. Set only by the usage route, and only for a window cap.</p>
+         * <p>When the current window ends. Set only by the routes that read usage, and only for a window cap.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -484,7 +484,7 @@ public final class CreditSpendPolicyResponseData {
         }
 
         /**
-         * <p>When the current window ends. Set only by the usage route, and only for a window cap.</p>
+         * <p>When the current window ends. Set only by the routes that read usage, and only for a window cap.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "resets_at", nulls = Nulls.SKIP)
@@ -520,7 +520,7 @@ public final class CreditSpendPolicyResponseData {
         }
 
         /**
-         * <p>Credits left in the current window. Set only by the usage route, and only for a window cap.</p>
+         * <p>Credits left in the current window. Set only by the routes that read usage, and only for a window cap.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -530,7 +530,7 @@ public final class CreditSpendPolicyResponseData {
         }
 
         /**
-         * <p>Credits left in the current window. Set only by the usage route, and only for a window cap.</p>
+         * <p>Credits left in the current window. Set only by the routes that read usage, and only for a window cap.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "headroom", nulls = Nulls.SKIP)
@@ -540,7 +540,7 @@ public final class CreditSpendPolicyResponseData {
         }
 
         /**
-         * <p>Credits spent in the current window. Set only by the usage route, and only for a window cap.</p>
+         * <p>Credits spent in the current window. Set only by the routes that read usage, and only for a window cap.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -550,7 +550,7 @@ public final class CreditSpendPolicyResponseData {
         }
 
         /**
-         * <p>Credits spent in the current window. Set only by the usage route, and only for a window cap.</p>
+         * <p>Credits spent in the current window. Set only by the routes that read usage, and only for a window cap.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "consumed", nulls = Nulls.SKIP)

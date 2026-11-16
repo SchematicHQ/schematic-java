@@ -41,6 +41,8 @@ public final class BillingProductPlanResponseData {
 
     private final String planId;
 
+    private final Optional<String> quarterlyPriceId;
+
     private final Optional<Long> trialDays;
 
     private final Optional<String> yearlyPriceId;
@@ -58,6 +60,7 @@ public final class BillingProductPlanResponseData {
             Optional<String> monthlyPriceId,
             Optional<String> oneTimePriceId,
             String planId,
+            Optional<String> quarterlyPriceId,
             Optional<Long> trialDays,
             Optional<String> yearlyPriceId,
             Map<String, Object> additionalProperties) {
@@ -71,6 +74,7 @@ public final class BillingProductPlanResponseData {
         this.monthlyPriceId = monthlyPriceId;
         this.oneTimePriceId = oneTimePriceId;
         this.planId = planId;
+        this.quarterlyPriceId = quarterlyPriceId;
         this.trialDays = trialDays;
         this.yearlyPriceId = yearlyPriceId;
         this.additionalProperties = additionalProperties;
@@ -126,6 +130,11 @@ public final class BillingProductPlanResponseData {
         return planId;
     }
 
+    @JsonProperty("quarterly_price_id")
+    public Optional<String> getQuarterlyPriceId() {
+        return quarterlyPriceId;
+    }
+
     @JsonProperty("trial_days")
     public Optional<Long> getTrialDays() {
         return trialDays;
@@ -158,6 +167,7 @@ public final class BillingProductPlanResponseData {
                 && monthlyPriceId.equals(other.monthlyPriceId)
                 && oneTimePriceId.equals(other.oneTimePriceId)
                 && planId.equals(other.planId)
+                && quarterlyPriceId.equals(other.quarterlyPriceId)
                 && trialDays.equals(other.trialDays)
                 && yearlyPriceId.equals(other.yearlyPriceId);
     }
@@ -175,6 +185,7 @@ public final class BillingProductPlanResponseData {
                 this.monthlyPriceId,
                 this.oneTimePriceId,
                 this.planId,
+                this.quarterlyPriceId,
                 this.trialDays,
                 this.yearlyPriceId);
     }
@@ -237,6 +248,10 @@ public final class BillingProductPlanResponseData {
 
         _FinalStage oneTimePriceId(String oneTimePriceId);
 
+        _FinalStage quarterlyPriceId(Optional<String> quarterlyPriceId);
+
+        _FinalStage quarterlyPriceId(String quarterlyPriceId);
+
         _FinalStage trialDays(Optional<Long> trialDays);
 
         _FinalStage trialDays(Long trialDays);
@@ -277,6 +292,8 @@ public final class BillingProductPlanResponseData {
 
         private Optional<Long> trialDays = Optional.empty();
 
+        private Optional<String> quarterlyPriceId = Optional.empty();
+
         private Optional<String> oneTimePriceId = Optional.empty();
 
         private Optional<String> monthlyPriceId = Optional.empty();
@@ -297,6 +314,7 @@ public final class BillingProductPlanResponseData {
             monthlyPriceId(other.getMonthlyPriceId());
             oneTimePriceId(other.getOneTimePriceId());
             planId(other.getPlanId());
+            quarterlyPriceId(other.getQuarterlyPriceId());
             trialDays(other.getTrialDays());
             yearlyPriceId(other.getYearlyPriceId());
             return this;
@@ -385,6 +403,19 @@ public final class BillingProductPlanResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage quarterlyPriceId(String quarterlyPriceId) {
+            this.quarterlyPriceId = Optional.ofNullable(quarterlyPriceId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "quarterly_price_id", nulls = Nulls.SKIP)
+        public _FinalStage quarterlyPriceId(Optional<String> quarterlyPriceId) {
+            this.quarterlyPriceId = quarterlyPriceId;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage oneTimePriceId(String oneTimePriceId) {
             this.oneTimePriceId = Optional.ofNullable(oneTimePriceId);
             return this;
@@ -423,6 +454,7 @@ public final class BillingProductPlanResponseData {
                     monthlyPriceId,
                     oneTimePriceId,
                     planId,
+                    quarterlyPriceId,
                     trialDays,
                     yearlyPriceId,
                     additionalProperties);
@@ -440,6 +472,7 @@ public final class BillingProductPlanResponseData {
                     || key.equalsIgnoreCase("monthly_price_id")
                     || key.equalsIgnoreCase("one_time_price_id")
                     || key.equalsIgnoreCase("plan_id")
+                    || key.equalsIgnoreCase("quarterly_price_id")
                     || key.equalsIgnoreCase("trial_days")
                     || key.equalsIgnoreCase("yearly_price_id")) {
                 return;

@@ -70,6 +70,10 @@ public final class PublishPlanVersionRequestBody {
 
     private final Optional<TaxIdInput> taxId;
 
+    private final Optional<OffsetDateTime> trialEnd;
+
+    private final Optional<BillingSubscriptionTrialEndSetting> trialEndBehavior;
+
     private final Map<String, Object> additionalProperties;
 
     private PublishPlanVersionRequestBody(
@@ -96,6 +100,8 @@ public final class PublishPlanVersionRequestBody {
             Optional<OffsetDateTime> scheduledAt,
             Optional<Boolean> sendInvoice,
             Optional<TaxIdInput> taxId,
+            Optional<OffsetDateTime> trialEnd,
+            Optional<BillingSubscriptionTrialEndSetting> trialEndBehavior,
             Map<String, Object> additionalProperties) {
         this.activationStrategy = activationStrategy;
         this.address = address;
@@ -120,6 +126,8 @@ public final class PublishPlanVersionRequestBody {
         this.scheduledAt = scheduledAt;
         this.sendInvoice = sendInvoice;
         this.taxId = taxId;
+        this.trialEnd = trialEnd;
+        this.trialEndBehavior = trialEndBehavior;
         this.additionalProperties = additionalProperties;
     }
 
@@ -286,6 +294,22 @@ public final class PublishPlanVersionRequestBody {
         return taxId;
     }
 
+    /**
+     * @return Starts the custom plan with a trial that ends at this time. Nothing is invoiced until the trial ends, and the billing period renews from then. Only for a company Schematic bills itself, on a first publish that starts a subscription.
+     */
+    @JsonProperty("trial_end")
+    public Optional<OffsetDateTime> getTrialEnd() {
+        return trialEnd;
+    }
+
+    /**
+     * @return What happens when the trial reaches its end date: subscribe starts billing, cancel moves the company off the plan. Defaults to subscribe. Requires trial_end.
+     */
+    @JsonProperty("trial_end_behavior")
+    public Optional<BillingSubscriptionTrialEndSetting> getTrialEndBehavior() {
+        return trialEndBehavior;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -320,7 +344,9 @@ public final class PublishPlanVersionRequestBody {
                 && requireNoMigration.equals(other.requireNoMigration)
                 && scheduledAt.equals(other.scheduledAt)
                 && sendInvoice.equals(other.sendInvoice)
-                && taxId.equals(other.taxId);
+                && taxId.equals(other.taxId)
+                && trialEnd.equals(other.trialEnd)
+                && trialEndBehavior.equals(other.trialEndBehavior);
     }
 
     @java.lang.Override
@@ -348,7 +374,9 @@ public final class PublishPlanVersionRequestBody {
                 this.requireNoMigration,
                 this.scheduledAt,
                 this.sendInvoice,
-                this.taxId);
+                this.taxId,
+                this.trialEnd,
+                this.trialEndBehavior);
     }
 
     @java.lang.Override
@@ -510,11 +538,29 @@ public final class PublishPlanVersionRequestBody {
         _FinalStage taxId(Optional<TaxIdInput> taxId);
 
         _FinalStage taxId(TaxIdInput taxId);
+
+        /**
+         * <p>Starts the custom plan with a trial that ends at this time. Nothing is invoiced until the trial ends, and the billing period renews from then. Only for a company Schematic bills itself, on a first publish that starts a subscription.</p>
+         */
+        _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd);
+
+        _FinalStage trialEnd(OffsetDateTime trialEnd);
+
+        /**
+         * <p>What happens when the trial reaches its end date: subscribe starts billing, cancel moves the company off the plan. Defaults to subscribe. Requires trial_end.</p>
+         */
+        _FinalStage trialEndBehavior(Optional<BillingSubscriptionTrialEndSetting> trialEndBehavior);
+
+        _FinalStage trialEndBehavior(BillingSubscriptionTrialEndSetting trialEndBehavior);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MigrationStrategyStage, _FinalStage {
         private PlanVersionMigrationStrategy migrationStrategy;
+
+        private Optional<BillingSubscriptionTrialEndSetting> trialEndBehavior = Optional.empty();
+
+        private Optional<OffsetDateTime> trialEnd = Optional.empty();
 
         private Optional<TaxIdInput> taxId = Optional.empty();
 
@@ -589,6 +635,8 @@ public final class PublishPlanVersionRequestBody {
             scheduledAt(other.getScheduledAt());
             sendInvoice(other.getSendInvoice());
             taxId(other.getTaxId());
+            trialEnd(other.getTrialEnd());
+            trialEndBehavior(other.getTrialEndBehavior());
             return this;
         }
 
@@ -596,6 +644,46 @@ public final class PublishPlanVersionRequestBody {
         @JsonSetter("migration_strategy")
         public _FinalStage migrationStrategy(@NotNull PlanVersionMigrationStrategy migrationStrategy) {
             this.migrationStrategy = Objects.requireNonNull(migrationStrategy, "migrationStrategy must not be null");
+            return this;
+        }
+
+        /**
+         * <p>What happens when the trial reaches its end date: subscribe starts billing, cancel moves the company off the plan. Defaults to subscribe. Requires trial_end.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage trialEndBehavior(BillingSubscriptionTrialEndSetting trialEndBehavior) {
+            this.trialEndBehavior = Optional.ofNullable(trialEndBehavior);
+            return this;
+        }
+
+        /**
+         * <p>What happens when the trial reaches its end date: subscribe starts billing, cancel moves the company off the plan. Defaults to subscribe. Requires trial_end.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "trial_end_behavior", nulls = Nulls.SKIP)
+        public _FinalStage trialEndBehavior(Optional<BillingSubscriptionTrialEndSetting> trialEndBehavior) {
+            this.trialEndBehavior = trialEndBehavior;
+            return this;
+        }
+
+        /**
+         * <p>Starts the custom plan with a trial that ends at this time. Nothing is invoiced until the trial ends, and the billing period renews from then. Only for a company Schematic bills itself, on a first publish that starts a subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage trialEnd(OffsetDateTime trialEnd) {
+            this.trialEnd = Optional.ofNullable(trialEnd);
+            return this;
+        }
+
+        /**
+         * <p>Starts the custom plan with a trial that ends at this time. Nothing is invoiced until the trial ends, and the billing period renews from then. Only for a company Schematic bills itself, on a first publish that starts a subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "trial_end", nulls = Nulls.SKIP)
+        public _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd) {
+            this.trialEnd = trialEnd;
             return this;
         }
 
@@ -1034,6 +1122,8 @@ public final class PublishPlanVersionRequestBody {
                     scheduledAt,
                     sendInvoice,
                     taxId,
+                    trialEnd,
+                    trialEndBehavior,
                     additionalProperties);
         }
 
@@ -1061,7 +1151,9 @@ public final class PublishPlanVersionRequestBody {
                     || key.equalsIgnoreCase("require_no_migration")
                     || key.equalsIgnoreCase("scheduled_at")
                     || key.equalsIgnoreCase("send_invoice")
-                    || key.equalsIgnoreCase("tax_id")) {
+                    || key.equalsIgnoreCase("tax_id")
+                    || key.equalsIgnoreCase("trial_end")
+                    || key.equalsIgnoreCase("trial_end_behavior")) {
                 return;
             }
             this.additionalProperties.put(key, value);

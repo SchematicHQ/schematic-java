@@ -42,6 +42,8 @@ public final class ManagePlanRequest {
 
     private final Optional<String> billingEntityId;
 
+    private final Optional<PlanPriceCadence> billingPeriod;
+
     private final Optional<Boolean> cancelImmediately;
 
     private final Optional<BillingCollectionMethod> collectionMethod;
@@ -86,6 +88,7 @@ public final class ManagePlanRequest {
             Optional<OffsetDateTime> billingCycleAnchor,
             Optional<String> billingEmail,
             Optional<String> billingEntityId,
+            Optional<PlanPriceCadence> billingPeriod,
             Optional<Boolean> cancelImmediately,
             Optional<BillingCollectionMethod> collectionMethod,
             String companyId,
@@ -112,6 +115,7 @@ public final class ManagePlanRequest {
         this.billingCycleAnchor = billingCycleAnchor;
         this.billingEmail = billingEmail;
         this.billingEntityId = billingEntityId;
+        this.billingPeriod = billingPeriod;
         this.cancelImmediately = cancelImmediately;
         this.collectionMethod = collectionMethod;
         this.companyId = companyId;
@@ -192,6 +196,14 @@ public final class ManagePlanRequest {
     }
 
     /**
+     * @return How often the plan renews. Only used when Schematic bills the company: the plan's published price for this billing period and the currency is charged, and base_plan_price_id must be left empty. A new billing period starts where the current one ends. Defaults to the subscription's current billing period.
+     */
+    @JsonProperty("billing_period")
+    public Optional<PlanPriceCadence> getBillingPeriod() {
+        return billingPeriod;
+    }
+
+    /**
      * @return If false, subscription cancels at period end. Only applies when removing all plans. Defaults to true.
      */
     @JsonProperty("cancel_immediately")
@@ -223,7 +235,7 @@ public final class ManagePlanRequest {
     }
 
     /**
-     * @return ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.
+     * @return ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent. When Schematic bills the company, the plan is charged in this currency from the next billing period, and the company's contract moves to it; defaults to the subscription's current currency.
      */
     @JsonProperty("currency")
     public Optional<Currency> getCurrency() {
@@ -316,6 +328,7 @@ public final class ManagePlanRequest {
                 && billingCycleAnchor.equals(other.billingCycleAnchor)
                 && billingEmail.equals(other.billingEmail)
                 && billingEntityId.equals(other.billingEntityId)
+                && billingPeriod.equals(other.billingPeriod)
                 && cancelImmediately.equals(other.cancelImmediately)
                 && collectionMethod.equals(other.collectionMethod)
                 && companyId.equals(other.companyId)
@@ -346,6 +359,7 @@ public final class ManagePlanRequest {
                 this.billingCycleAnchor,
                 this.billingEmail,
                 this.billingEntityId,
+                this.billingPeriod,
                 this.cancelImmediately,
                 this.collectionMethod,
                 this.companyId,
@@ -440,6 +454,13 @@ public final class ManagePlanRequest {
         _FinalStage billingEntityId(String billingEntityId);
 
         /**
+         * <p>How often the plan renews. Only used when Schematic bills the company: the plan's published price for this billing period and the currency is charged, and base_plan_price_id must be left empty. A new billing period starts where the current one ends. Defaults to the subscription's current billing period.</p>
+         */
+        _FinalStage billingPeriod(Optional<PlanPriceCadence> billingPeriod);
+
+        _FinalStage billingPeriod(PlanPriceCadence billingPeriod);
+
+        /**
          * <p>If false, subscription cancels at period end. Only applies when removing all plans. Defaults to true.</p>
          */
         _FinalStage cancelImmediately(Optional<Boolean> cancelImmediately);
@@ -464,7 +485,7 @@ public final class ManagePlanRequest {
         _FinalStage addAllCreditBundles(List<UpdateCreditBundleRequestBody> creditBundles);
 
         /**
-         * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.</p>
+         * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent. When Schematic bills the company, the plan is charged in this currency from the next billing period, and the company's contract moves to it; defaults to the subscription's current currency.</p>
          */
         _FinalStage currency(Optional<Currency> currency);
 
@@ -564,6 +585,8 @@ public final class ManagePlanRequest {
 
         private Optional<Boolean> cancelImmediately = Optional.empty();
 
+        private Optional<PlanPriceCadence> billingPeriod = Optional.empty();
+
         private Optional<String> billingEntityId = Optional.empty();
 
         private Optional<String> billingEmail = Optional.empty();
@@ -597,6 +620,7 @@ public final class ManagePlanRequest {
             billingCycleAnchor(other.getBillingCycleAnchor());
             billingEmail(other.getBillingEmail());
             billingEntityId(other.getBillingEntityId());
+            billingPeriod(other.getBillingPeriod());
             cancelImmediately(other.getCancelImmediately());
             collectionMethod(other.getCollectionMethod());
             companyId(other.getCompanyId());
@@ -812,7 +836,7 @@ public final class ManagePlanRequest {
         }
 
         /**
-         * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.</p>
+         * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent. When Schematic bills the company, the plan is charged in this currency from the next billing period, and the company's contract moves to it; defaults to the subscription's current currency.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -822,7 +846,7 @@ public final class ManagePlanRequest {
         }
 
         /**
-         * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent.</p>
+         * <p>ISO 4217 currency this change is being built in. Prices are still selected by id; this records the intent. When Schematic bills the company, the plan is charged in this currency from the next billing period, and the company's contract moves to it; defaults to the subscription's current currency.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "currency", nulls = Nulls.SKIP)
@@ -905,6 +929,26 @@ public final class ManagePlanRequest {
         @JsonSetter(value = "cancel_immediately", nulls = Nulls.SKIP)
         public _FinalStage cancelImmediately(Optional<Boolean> cancelImmediately) {
             this.cancelImmediately = cancelImmediately;
+            return this;
+        }
+
+        /**
+         * <p>How often the plan renews. Only used when Schematic bills the company: the plan's published price for this billing period and the currency is charged, and base_plan_price_id must be left empty. A new billing period starts where the current one ends. Defaults to the subscription's current billing period.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingPeriod(PlanPriceCadence billingPeriod) {
+            this.billingPeriod = Optional.ofNullable(billingPeriod);
+            return this;
+        }
+
+        /**
+         * <p>How often the plan renews. Only used when Schematic bills the company: the plan's published price for this billing period and the currency is charged, and base_plan_price_id must be left empty. A new billing period starts where the current one ends. Defaults to the subscription's current billing period.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_period", nulls = Nulls.SKIP)
+        public _FinalStage billingPeriod(Optional<PlanPriceCadence> billingPeriod) {
+            this.billingPeriod = billingPeriod;
             return this;
         }
 
@@ -1083,6 +1127,7 @@ public final class ManagePlanRequest {
                     billingCycleAnchor,
                     billingEmail,
                     billingEntityId,
+                    billingPeriod,
                     cancelImmediately,
                     collectionMethod,
                     companyId,
@@ -1113,6 +1158,7 @@ public final class ManagePlanRequest {
                     || key.equalsIgnoreCase("billing_cycle_anchor")
                     || key.equalsIgnoreCase("billing_email")
                     || key.equalsIgnoreCase("billing_entity_id")
+                    || key.equalsIgnoreCase("billing_period")
                     || key.equalsIgnoreCase("cancel_immediately")
                     || key.equalsIgnoreCase("collection_method")
                     || key.equalsIgnoreCase("company_id")

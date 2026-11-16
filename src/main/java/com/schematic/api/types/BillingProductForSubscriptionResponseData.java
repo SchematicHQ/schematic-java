@@ -66,6 +66,8 @@ public final class BillingProductForSubscriptionResponseData {
 
     private final Optional<String> subscriptionItemExternalId;
 
+    private final Optional<BillingTiersMode> tiersMode;
+
     private final OffsetDateTime updatedAt;
 
     private final BillingPriceUsageType usageType;
@@ -94,6 +96,7 @@ public final class BillingProductForSubscriptionResponseData {
             double quantity,
             String subscriptionId,
             Optional<String> subscriptionItemExternalId,
+            Optional<BillingTiersMode> tiersMode,
             OffsetDateTime updatedAt,
             BillingPriceUsageType usageType,
             Map<String, Object> additionalProperties) {
@@ -118,6 +121,7 @@ public final class BillingProductForSubscriptionResponseData {
         this.quantity = quantity;
         this.subscriptionId = subscriptionId;
         this.subscriptionItemExternalId = subscriptionItemExternalId;
+        this.tiersMode = tiersMode;
         this.updatedAt = updatedAt;
         this.usageType = usageType;
         this.additionalProperties = additionalProperties;
@@ -228,6 +232,11 @@ public final class BillingProductForSubscriptionResponseData {
         return subscriptionItemExternalId;
     }
 
+    @JsonProperty("tiers_mode")
+    public Optional<BillingTiersMode> getTiersMode() {
+        return tiersMode;
+    }
+
     @JsonProperty("updated_at")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
@@ -272,6 +281,7 @@ public final class BillingProductForSubscriptionResponseData {
                 && quantity == other.quantity
                 && subscriptionId.equals(other.subscriptionId)
                 && subscriptionItemExternalId.equals(other.subscriptionItemExternalId)
+                && tiersMode.equals(other.tiersMode)
                 && updatedAt.equals(other.updatedAt)
                 && usageType.equals(other.usageType);
     }
@@ -300,6 +310,7 @@ public final class BillingProductForSubscriptionResponseData {
                 this.quantity,
                 this.subscriptionId,
                 this.subscriptionItemExternalId,
+                this.tiersMode,
                 this.updatedAt,
                 this.usageType);
     }
@@ -415,6 +426,10 @@ public final class BillingProductForSubscriptionResponseData {
         _FinalStage subscriptionItemExternalId(Optional<String> subscriptionItemExternalId);
 
         _FinalStage subscriptionItemExternalId(String subscriptionItemExternalId);
+
+        _FinalStage tiersMode(Optional<BillingTiersMode> tiersMode);
+
+        _FinalStage tiersMode(BillingTiersMode tiersMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -471,6 +486,8 @@ public final class BillingProductForSubscriptionResponseData {
 
         private BillingPriceUsageType usageType;
 
+        private Optional<BillingTiersMode> tiersMode = Optional.empty();
+
         private Optional<String> subscriptionItemExternalId = Optional.empty();
 
         private List<BillingProductPriceTierResponseData> priceTier = new ArrayList<>();
@@ -510,6 +527,7 @@ public final class BillingProductForSubscriptionResponseData {
             quantity(other.getQuantity());
             subscriptionId(other.getSubscriptionId());
             subscriptionItemExternalId(other.getSubscriptionItemExternalId());
+            tiersMode(other.getTiersMode());
             updatedAt(other.getUpdatedAt());
             usageType(other.getUsageType());
             return this;
@@ -635,6 +653,19 @@ public final class BillingProductForSubscriptionResponseData {
         }
 
         @java.lang.Override
+        public _FinalStage tiersMode(BillingTiersMode tiersMode) {
+            this.tiersMode = Optional.ofNullable(tiersMode);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "tiers_mode", nulls = Nulls.SKIP)
+        public _FinalStage tiersMode(Optional<BillingTiersMode> tiersMode) {
+            this.tiersMode = tiersMode;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage subscriptionItemExternalId(String subscriptionItemExternalId) {
             this.subscriptionItemExternalId = Optional.ofNullable(subscriptionItemExternalId);
             return this;
@@ -747,6 +778,7 @@ public final class BillingProductForSubscriptionResponseData {
                     quantity,
                     subscriptionId,
                     subscriptionItemExternalId,
+                    tiersMode,
                     updatedAt,
                     usageType,
                     additionalProperties);
@@ -775,6 +807,7 @@ public final class BillingProductForSubscriptionResponseData {
                     || key.equalsIgnoreCase("quantity")
                     || key.equalsIgnoreCase("subscription_id")
                     || key.equalsIgnoreCase("subscription_item_external_id")
+                    || key.equalsIgnoreCase("tiers_mode")
                     || key.equalsIgnoreCase("updated_at")
                     || key.equalsIgnoreCase("usage_type")) {
                 return;

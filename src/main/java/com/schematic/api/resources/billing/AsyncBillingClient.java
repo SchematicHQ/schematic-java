@@ -28,10 +28,13 @@ import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.requests.MarkInvoicePaidRequestBody;
+import com.schematic.api.resources.billing.requests.StartCompanyTrialRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateBillingSettingsRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateCompanyBillingProfileRequestBody;
+import com.schematic.api.resources.billing.requests.UpdateCompanyTrialRequestBody;
 import com.schematic.api.resources.billing.requests.UploadContractDocumentRequest;
 import com.schematic.api.resources.billing.types.ChargeNativeInvoiceResponse;
+import com.schematic.api.resources.billing.types.ConvertCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.CountBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
@@ -42,11 +45,13 @@ import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeleteContractDocumentResponse;
 import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
+import com.schematic.api.resources.billing.types.EndCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.FinalizeNativeInvoiceResponse;
 import com.schematic.api.resources.billing.types.GetBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.GetBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.GetCompanyContractResponse;
 import com.schematic.api.resources.billing.types.GetCompanyNativeSubscriptionResponse;
+import com.schematic.api.resources.billing.types.GetCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.GetCompanyUpcomingInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
@@ -62,8 +67,10 @@ import com.schematic.api.resources.billing.types.MarkBillingInvoicePaidResponse;
 import com.schematic.api.resources.billing.types.MoveToDefaultPlanResponse;
 import com.schematic.api.resources.billing.types.ReissueNativeInvoiceLinkResponse;
 import com.schematic.api.resources.billing.types.RevokeNativeInvoiceLinkResponse;
+import com.schematic.api.resources.billing.types.StartCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.UpdateBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.UpdateCompanyBillingProfileResponse;
+import com.schematic.api.resources.billing.types.UpdateCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.UploadContractDocumentResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCustomerResponse;
@@ -1251,6 +1258,156 @@ public class AsyncBillingClient {
         CompletableFuture<BaseSchematicHttpResponse<MoveToDefaultPlanResponse>> rawFuture =
                 this.rawClient.moveToDefaultPlan(companyId, requestOptions);
         CompletableFuture<MoveToDefaultPlanResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCompanyTrialResponse> getCompanyTrial(String companyId) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCompanyTrialResponse>> rawFuture =
+                this.rawClient.getCompanyTrial(companyId);
+        CompletableFuture<GetCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetCompanyTrialResponse> getCompanyTrial(String companyId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetCompanyTrialResponse>> rawFuture =
+                this.rawClient.getCompanyTrial(companyId, requestOptions);
+        CompletableFuture<GetCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<StartCompanyTrialResponse> startCompanyTrial(
+            String companyId, StartCompanyTrialRequestBody request) {
+        CompletableFuture<BaseSchematicHttpResponse<StartCompanyTrialResponse>> rawFuture =
+                this.rawClient.startCompanyTrial(companyId, request);
+        CompletableFuture<StartCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<StartCompanyTrialResponse> startCompanyTrial(
+            String companyId, StartCompanyTrialRequestBody request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<StartCompanyTrialResponse>> rawFuture =
+                this.rawClient.startCompanyTrial(companyId, request, requestOptions);
+        CompletableFuture<StartCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<UpdateCompanyTrialResponse> updateCompanyTrial(String companyId) {
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCompanyTrialResponse>> rawFuture =
+                this.rawClient.updateCompanyTrial(companyId);
+        CompletableFuture<UpdateCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<UpdateCompanyTrialResponse> updateCompanyTrial(
+            String companyId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCompanyTrialResponse>> rawFuture =
+                this.rawClient.updateCompanyTrial(companyId, requestOptions);
+        CompletableFuture<UpdateCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<UpdateCompanyTrialResponse> updateCompanyTrial(
+            String companyId, UpdateCompanyTrialRequestBody request) {
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCompanyTrialResponse>> rawFuture =
+                this.rawClient.updateCompanyTrial(companyId, request);
+        CompletableFuture<UpdateCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<UpdateCompanyTrialResponse> updateCompanyTrial(
+            String companyId, UpdateCompanyTrialRequestBody request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<UpdateCompanyTrialResponse>> rawFuture =
+                this.rawClient.updateCompanyTrial(companyId, request, requestOptions);
+        CompletableFuture<UpdateCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<ConvertCompanyTrialResponse> convertCompanyTrial(String companyId) {
+        CompletableFuture<BaseSchematicHttpResponse<ConvertCompanyTrialResponse>> rawFuture =
+                this.rawClient.convertCompanyTrial(companyId);
+        CompletableFuture<ConvertCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<ConvertCompanyTrialResponse> convertCompanyTrial(
+            String companyId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<ConvertCompanyTrialResponse>> rawFuture =
+                this.rawClient.convertCompanyTrial(companyId, requestOptions);
+        CompletableFuture<ConvertCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<EndCompanyTrialResponse> endCompanyTrial(String companyId) {
+        CompletableFuture<BaseSchematicHttpResponse<EndCompanyTrialResponse>> rawFuture =
+                this.rawClient.endCompanyTrial(companyId);
+        CompletableFuture<EndCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<EndCompanyTrialResponse> endCompanyTrial(String companyId, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<EndCompanyTrialResponse>> rawFuture =
+                this.rawClient.endCompanyTrial(companyId, requestOptions);
+        CompletableFuture<EndCompanyTrialResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);

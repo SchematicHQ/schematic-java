@@ -28,6 +28,8 @@ public final class BillingCustomerSubscription {
 
     private final String interval;
 
+    private final long intervalCount;
+
     private final boolean meteredUsage;
 
     private final long perUnitPrice;
@@ -40,6 +42,7 @@ public final class BillingCustomerSubscription {
             Currency currency,
             Optional<OffsetDateTime> expiredAt,
             String interval,
+            long intervalCount,
             boolean meteredUsage,
             long perUnitPrice,
             long totalPrice,
@@ -47,6 +50,7 @@ public final class BillingCustomerSubscription {
         this.currency = currency;
         this.expiredAt = expiredAt;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.meteredUsage = meteredUsage;
         this.perUnitPrice = perUnitPrice;
         this.totalPrice = totalPrice;
@@ -66,6 +70,11 @@ public final class BillingCustomerSubscription {
     @JsonProperty("interval")
     public String getInterval() {
         return interval;
+    }
+
+    @JsonProperty("interval_count")
+    public long getIntervalCount() {
+        return intervalCount;
     }
 
     @JsonProperty("metered_usage")
@@ -98,6 +107,7 @@ public final class BillingCustomerSubscription {
         return currency.equals(other.currency)
                 && expiredAt.equals(other.expiredAt)
                 && interval.equals(other.interval)
+                && intervalCount == other.intervalCount
                 && meteredUsage == other.meteredUsage
                 && perUnitPrice == other.perUnitPrice
                 && totalPrice == other.totalPrice;
@@ -106,7 +116,13 @@ public final class BillingCustomerSubscription {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.currency, this.expiredAt, this.interval, this.meteredUsage, this.perUnitPrice, this.totalPrice);
+                this.currency,
+                this.expiredAt,
+                this.interval,
+                this.intervalCount,
+                this.meteredUsage,
+                this.perUnitPrice,
+                this.totalPrice);
     }
 
     @java.lang.Override
@@ -125,7 +141,11 @@ public final class BillingCustomerSubscription {
     }
 
     public interface IntervalStage {
-        MeteredUsageStage interval(@NotNull String interval);
+        IntervalCountStage interval(@NotNull String interval);
+    }
+
+    public interface IntervalCountStage {
+        MeteredUsageStage intervalCount(long intervalCount);
     }
 
     public interface MeteredUsageStage {
@@ -156,6 +176,7 @@ public final class BillingCustomerSubscription {
     public static final class Builder
             implements CurrencyStage,
                     IntervalStage,
+                    IntervalCountStage,
                     MeteredUsageStage,
                     PerUnitPriceStage,
                     TotalPriceStage,
@@ -163,6 +184,8 @@ public final class BillingCustomerSubscription {
         private Currency currency;
 
         private String interval;
+
+        private long intervalCount;
 
         private boolean meteredUsage;
 
@@ -181,6 +204,7 @@ public final class BillingCustomerSubscription {
             currency(other.getCurrency());
             expiredAt(other.getExpiredAt());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             meteredUsage(other.getMeteredUsage());
             perUnitPrice(other.getPerUnitPrice());
             totalPrice(other.getTotalPrice());
@@ -196,8 +220,15 @@ public final class BillingCustomerSubscription {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public MeteredUsageStage interval(@NotNull String interval) {
+        public IntervalCountStage interval(@NotNull String interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("interval_count")
+        public MeteredUsageStage intervalCount(long intervalCount) {
+            this.intervalCount = intervalCount;
             return this;
         }
 
@@ -238,7 +269,14 @@ public final class BillingCustomerSubscription {
         @java.lang.Override
         public BillingCustomerSubscription build() {
             return new BillingCustomerSubscription(
-                    currency, expiredAt, interval, meteredUsage, perUnitPrice, totalPrice, additionalProperties);
+                    currency,
+                    expiredAt,
+                    interval,
+                    intervalCount,
+                    meteredUsage,
+                    perUnitPrice,
+                    totalPrice,
+                    additionalProperties);
         }
 
         @JsonAnySetter
@@ -246,6 +284,7 @@ public final class BillingCustomerSubscription {
             if (key.equalsIgnoreCase("currency")
                     || key.equalsIgnoreCase("expired_at")
                     || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("interval_count")
                     || key.equalsIgnoreCase("metered_usage")
                     || key.equalsIgnoreCase("per_unit_price")
                     || key.equalsIgnoreCase("total_price")) {

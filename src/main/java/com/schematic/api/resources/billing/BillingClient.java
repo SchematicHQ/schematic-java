@@ -27,10 +27,13 @@ import com.schematic.api.resources.billing.requests.ListInvoicesRequest;
 import com.schematic.api.resources.billing.requests.ListMetersRequest;
 import com.schematic.api.resources.billing.requests.ListPaymentMethodsRequest;
 import com.schematic.api.resources.billing.requests.MarkInvoicePaidRequestBody;
+import com.schematic.api.resources.billing.requests.StartCompanyTrialRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateBillingSettingsRequestBody;
 import com.schematic.api.resources.billing.requests.UpdateCompanyBillingProfileRequestBody;
+import com.schematic.api.resources.billing.requests.UpdateCompanyTrialRequestBody;
 import com.schematic.api.resources.billing.requests.UploadContractDocumentRequest;
 import com.schematic.api.resources.billing.types.ChargeNativeInvoiceResponse;
+import com.schematic.api.resources.billing.types.ConvertCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.CountBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.CountBillingProductsResponse;
 import com.schematic.api.resources.billing.types.CountCustomersResponse;
@@ -41,11 +44,13 @@ import com.schematic.api.resources.billing.types.DeleteBillingProductResponse;
 import com.schematic.api.resources.billing.types.DeleteContractDocumentResponse;
 import com.schematic.api.resources.billing.types.DeletePaymentMethodByExternalIdResponse;
 import com.schematic.api.resources.billing.types.DeleteProductPriceResponse;
+import com.schematic.api.resources.billing.types.EndCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.FinalizeNativeInvoiceResponse;
 import com.schematic.api.resources.billing.types.GetBillingInvoiceResponse;
 import com.schematic.api.resources.billing.types.GetBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.GetCompanyContractResponse;
 import com.schematic.api.resources.billing.types.GetCompanyNativeSubscriptionResponse;
+import com.schematic.api.resources.billing.types.GetCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.GetCompanyUpcomingInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListBillingInvoicesResponse;
 import com.schematic.api.resources.billing.types.ListBillingPricesResponse;
@@ -61,8 +66,10 @@ import com.schematic.api.resources.billing.types.MarkBillingInvoicePaidResponse;
 import com.schematic.api.resources.billing.types.MoveToDefaultPlanResponse;
 import com.schematic.api.resources.billing.types.ReissueNativeInvoiceLinkResponse;
 import com.schematic.api.resources.billing.types.RevokeNativeInvoiceLinkResponse;
+import com.schematic.api.resources.billing.types.StartCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.UpdateBillingSettingsResponse;
 import com.schematic.api.resources.billing.types.UpdateCompanyBillingProfileResponse;
+import com.schematic.api.resources.billing.types.UpdateCompanyTrialResponse;
 import com.schematic.api.resources.billing.types.UploadContractDocumentResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCouponResponse;
 import com.schematic.api.resources.billing.types.UpsertBillingCustomerResponse;
@@ -521,6 +528,60 @@ public class BillingClient {
 
     public MoveToDefaultPlanResponse moveToDefaultPlan(String companyId, RequestOptions requestOptions) {
         return this.rawClient.moveToDefaultPlan(companyId, requestOptions).body();
+    }
+
+    public GetCompanyTrialResponse getCompanyTrial(String companyId) {
+        return this.rawClient.getCompanyTrial(companyId).body();
+    }
+
+    public GetCompanyTrialResponse getCompanyTrial(String companyId, RequestOptions requestOptions) {
+        return this.rawClient.getCompanyTrial(companyId, requestOptions).body();
+    }
+
+    public StartCompanyTrialResponse startCompanyTrial(String companyId, StartCompanyTrialRequestBody request) {
+        return this.rawClient.startCompanyTrial(companyId, request).body();
+    }
+
+    public StartCompanyTrialResponse startCompanyTrial(
+            String companyId, StartCompanyTrialRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .startCompanyTrial(companyId, request, requestOptions)
+                .body();
+    }
+
+    public UpdateCompanyTrialResponse updateCompanyTrial(String companyId) {
+        return this.rawClient.updateCompanyTrial(companyId).body();
+    }
+
+    public UpdateCompanyTrialResponse updateCompanyTrial(String companyId, RequestOptions requestOptions) {
+        return this.rawClient.updateCompanyTrial(companyId, requestOptions).body();
+    }
+
+    public UpdateCompanyTrialResponse updateCompanyTrial(String companyId, UpdateCompanyTrialRequestBody request) {
+        return this.rawClient.updateCompanyTrial(companyId, request).body();
+    }
+
+    public UpdateCompanyTrialResponse updateCompanyTrial(
+            String companyId, UpdateCompanyTrialRequestBody request, RequestOptions requestOptions) {
+        return this.rawClient
+                .updateCompanyTrial(companyId, request, requestOptions)
+                .body();
+    }
+
+    public ConvertCompanyTrialResponse convertCompanyTrial(String companyId) {
+        return this.rawClient.convertCompanyTrial(companyId).body();
+    }
+
+    public ConvertCompanyTrialResponse convertCompanyTrial(String companyId, RequestOptions requestOptions) {
+        return this.rawClient.convertCompanyTrial(companyId, requestOptions).body();
+    }
+
+    public EndCompanyTrialResponse endCompanyTrial(String companyId) {
+        return this.rawClient.endCompanyTrial(companyId).body();
+    }
+
+    public EndCompanyTrialResponse endCompanyTrial(String companyId, RequestOptions requestOptions) {
+        return this.rawClient.endCompanyTrial(companyId, requestOptions).body();
     }
 
     public GetCompanyUpcomingInvoicesResponse getCompanyUpcomingInvoices(String companyId) {

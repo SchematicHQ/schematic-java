@@ -50,6 +50,8 @@ public final class PublishPreviewResponseData {
 
     private final Optional<Long> immediateInvoiceAmount;
 
+    private final Optional<PublishPreviewIntervalChangeResponseData> intervalChange;
+
     private final AmendmentProrationLandsOn landsOn;
 
     private final Optional<Long> newRecurringAmount;
@@ -92,6 +94,7 @@ public final class PublishPreviewResponseData {
             Optional<OffsetDateTime> endsAt,
             boolean hasBillingChanges,
             Optional<Long> immediateInvoiceAmount,
+            Optional<PublishPreviewIntervalChangeResponseData> intervalChange,
             AmendmentProrationLandsOn landsOn,
             Optional<Long> newRecurringAmount,
             Optional<Long> nextInvoiceAmount,
@@ -119,6 +122,7 @@ public final class PublishPreviewResponseData {
         this.endsAt = endsAt;
         this.hasBillingChanges = hasBillingChanges;
         this.immediateInvoiceAmount = immediateInvoiceAmount;
+        this.intervalChange = intervalChange;
         this.landsOn = landsOn;
         this.newRecurringAmount = newRecurringAmount;
         this.nextInvoiceAmount = nextInvoiceAmount;
@@ -222,6 +226,14 @@ public final class PublishPreviewResponseData {
     @JsonProperty("immediate_invoice_amount")
     public Optional<Long> getImmediateInvoiceAmount() {
         return immediateInvoiceAmount;
+    }
+
+    /**
+     * @return Set when finalizing moves the subscription to another billing interval. Stripe starts a period on the new interval when the change lands and invoices it there, so an immediate change bills the new period now and next_invoice_at is a full new period later.
+     */
+    @JsonProperty("interval_change")
+    public Optional<PublishPreviewIntervalChangeResponseData> getIntervalChange() {
+        return intervalChange;
     }
 
     @JsonProperty("lands_on")
@@ -329,6 +341,7 @@ public final class PublishPreviewResponseData {
                 && endsAt.equals(other.endsAt)
                 && hasBillingChanges == other.hasBillingChanges
                 && immediateInvoiceAmount.equals(other.immediateInvoiceAmount)
+                && intervalChange.equals(other.intervalChange)
                 && landsOn.equals(other.landsOn)
                 && newRecurringAmount.equals(other.newRecurringAmount)
                 && nextInvoiceAmount.equals(other.nextInvoiceAmount)
@@ -360,6 +373,7 @@ public final class PublishPreviewResponseData {
                 this.endsAt,
                 this.hasBillingChanges,
                 this.immediateInvoiceAmount,
+                this.intervalChange,
                 this.landsOn,
                 this.newRecurringAmount,
                 this.nextInvoiceAmount,
@@ -507,6 +521,13 @@ public final class PublishPreviewResponseData {
         _FinalStage immediateInvoiceAmount(Long immediateInvoiceAmount);
 
         /**
+         * <p>Set when finalizing moves the subscription to another billing interval. Stripe starts a period on the new interval when the change lands and invoices it there, so an immediate change bills the new period now and next_invoice_at is a full new period later.</p>
+         */
+        _FinalStage intervalChange(Optional<PublishPreviewIntervalChangeResponseData> intervalChange);
+
+        _FinalStage intervalChange(PublishPreviewIntervalChangeResponseData intervalChange);
+
+        /**
          * <p>What the subscription's items bill per period once the new version is in place, in cents: unit price times quantity over its licensed recurring items, before discounts and tax, the way the subscription's total_price counts its items today. Null when the change is not priced, including a change with no billing impact.</p>
          */
         _FinalStage newRecurringAmount(Optional<Long> newRecurringAmount);
@@ -589,6 +610,8 @@ public final class PublishPreviewResponseData {
 
         private Optional<Long> newRecurringAmount = Optional.empty();
 
+        private Optional<PublishPreviewIntervalChangeResponseData> intervalChange = Optional.empty();
+
         private Optional<Long> immediateInvoiceAmount = Optional.empty();
 
         private Optional<OffsetDateTime> endsAt = Optional.empty();
@@ -626,6 +649,7 @@ public final class PublishPreviewResponseData {
             endsAt(other.getEndsAt());
             hasBillingChanges(other.getHasBillingChanges());
             immediateInvoiceAmount(other.getImmediateInvoiceAmount());
+            intervalChange(other.getIntervalChange());
             landsOn(other.getLandsOn());
             newRecurringAmount(other.getNewRecurringAmount());
             nextInvoiceAmount(other.getNextInvoiceAmount());
@@ -860,6 +884,26 @@ public final class PublishPreviewResponseData {
         }
 
         /**
+         * <p>Set when finalizing moves the subscription to another billing interval. Stripe starts a period on the new interval when the change lands and invoices it there, so an immediate change bills the new period now and next_invoice_at is a full new period later.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage intervalChange(PublishPreviewIntervalChangeResponseData intervalChange) {
+            this.intervalChange = Optional.ofNullable(intervalChange);
+            return this;
+        }
+
+        /**
+         * <p>Set when finalizing moves the subscription to another billing interval. Stripe starts a period on the new interval when the change lands and invoices it there, so an immediate change bills the new period now and next_invoice_at is a full new period later.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "interval_change", nulls = Nulls.SKIP)
+        public _FinalStage intervalChange(Optional<PublishPreviewIntervalChangeResponseData> intervalChange) {
+            this.intervalChange = intervalChange;
+            return this;
+        }
+
+        /**
          * <p>What the amendment's own invoice bills, in cents, when lands_on is immediate_invoice, after discounts and tax. Includes pending invoice items Stripe adds to the same invoice. Negative for a downgrade: Stripe raises a credit invoice with nothing due, and the credit goes to the customer's balance against later invoices.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -1027,6 +1071,7 @@ public final class PublishPreviewResponseData {
                     endsAt,
                     hasBillingChanges,
                     immediateInvoiceAmount,
+                    intervalChange,
                     landsOn,
                     newRecurringAmount,
                     nextInvoiceAmount,
@@ -1058,6 +1103,7 @@ public final class PublishPreviewResponseData {
                     || key.equalsIgnoreCase("ends_at")
                     || key.equalsIgnoreCase("has_billing_changes")
                     || key.equalsIgnoreCase("immediate_invoice_amount")
+                    || key.equalsIgnoreCase("interval_change")
                     || key.equalsIgnoreCase("lands_on")
                     || key.equalsIgnoreCase("new_recurring_amount")
                     || key.equalsIgnoreCase("next_invoice_amount")

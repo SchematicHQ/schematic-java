@@ -28,16 +28,20 @@ public final class CheckoutDataRequestBody {
 
     private final Optional<String> selectedPlanId;
 
+    private final Optional<String> selectedPlanVersionId;
+
     private final Map<String, Object> additionalProperties;
 
     private CheckoutDataRequestBody(
             String companyId,
             Optional<Currency> currency,
             Optional<String> selectedPlanId,
+            Optional<String> selectedPlanVersionId,
             Map<String, Object> additionalProperties) {
         this.companyId = companyId;
         this.currency = currency;
         this.selectedPlanId = selectedPlanId;
+        this.selectedPlanVersionId = selectedPlanVersionId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -56,6 +60,11 @@ public final class CheckoutDataRequestBody {
         return selectedPlanId;
     }
 
+    @JsonProperty("selected_plan_version_id")
+    public Optional<String> getSelectedPlanVersionId() {
+        return selectedPlanVersionId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -70,12 +79,13 @@ public final class CheckoutDataRequestBody {
     private boolean equalTo(CheckoutDataRequestBody other) {
         return companyId.equals(other.companyId)
                 && currency.equals(other.currency)
-                && selectedPlanId.equals(other.selectedPlanId);
+                && selectedPlanId.equals(other.selectedPlanId)
+                && selectedPlanVersionId.equals(other.selectedPlanVersionId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.companyId, this.currency, this.selectedPlanId);
+        return Objects.hash(this.companyId, this.currency, this.selectedPlanId, this.selectedPlanVersionId);
     }
 
     @java.lang.Override
@@ -107,11 +117,17 @@ public final class CheckoutDataRequestBody {
         _FinalStage selectedPlanId(Optional<String> selectedPlanId);
 
         _FinalStage selectedPlanId(String selectedPlanId);
+
+        _FinalStage selectedPlanVersionId(Optional<String> selectedPlanVersionId);
+
+        _FinalStage selectedPlanVersionId(String selectedPlanVersionId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements CompanyIdStage, _FinalStage {
         private String companyId;
+
+        private Optional<String> selectedPlanVersionId = Optional.empty();
 
         private Optional<String> selectedPlanId = Optional.empty();
 
@@ -126,6 +142,7 @@ public final class CheckoutDataRequestBody {
             companyId(other.getCompanyId());
             currency(other.getCurrency());
             selectedPlanId(other.getSelectedPlanId());
+            selectedPlanVersionId(other.getSelectedPlanVersionId());
             return this;
         }
 
@@ -133,6 +150,19 @@ public final class CheckoutDataRequestBody {
         @JsonSetter("company_id")
         public _FinalStage companyId(@NotNull String companyId) {
             this.companyId = Objects.requireNonNull(companyId, "companyId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage selectedPlanVersionId(String selectedPlanVersionId) {
+            this.selectedPlanVersionId = Optional.ofNullable(selectedPlanVersionId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "selected_plan_version_id", nulls = Nulls.SKIP)
+        public _FinalStage selectedPlanVersionId(Optional<String> selectedPlanVersionId) {
+            this.selectedPlanVersionId = selectedPlanVersionId;
             return this;
         }
 
@@ -164,14 +194,16 @@ public final class CheckoutDataRequestBody {
 
         @java.lang.Override
         public CheckoutDataRequestBody build() {
-            return new CheckoutDataRequestBody(companyId, currency, selectedPlanId, additionalProperties);
+            return new CheckoutDataRequestBody(
+                    companyId, currency, selectedPlanId, selectedPlanVersionId, additionalProperties);
         }
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("company_id")
                     || key.equalsIgnoreCase("currency")
-                    || key.equalsIgnoreCase("selected_plan_id")) {
+                    || key.equalsIgnoreCase("selected_plan_id")
+                    || key.equalsIgnoreCase("selected_plan_version_id")) {
                 return;
             }
             this.additionalProperties.put(key, value);

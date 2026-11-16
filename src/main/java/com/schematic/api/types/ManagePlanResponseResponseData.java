@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,8 @@ public final class ManagePlanResponseResponseData {
 
     private final List<CheckoutProblemResponseData> problems;
 
+    private final Optional<OffsetDateTime> scheduledChangeAt;
+
     private final boolean success;
 
     private final Map<String, Object> additionalProperties;
@@ -36,11 +39,13 @@ public final class ManagePlanResponseResponseData {
             Optional<String> checkoutId,
             Optional<CompanyDetailResponseData> company,
             List<CheckoutProblemResponseData> problems,
+            Optional<OffsetDateTime> scheduledChangeAt,
             boolean success,
             Map<String, Object> additionalProperties) {
         this.checkoutId = checkoutId;
         this.company = company;
         this.problems = problems;
+        this.scheduledChangeAt = scheduledChangeAt;
         this.success = success;
         this.additionalProperties = additionalProperties;
     }
@@ -58,6 +63,14 @@ public final class ManagePlanResponseResponseData {
     @JsonProperty("problems")
     public List<CheckoutProblemResponseData> getProblems() {
         return problems;
+    }
+
+    /**
+     * @return When a scheduled plan change takes effect. The company stays on its current plan until then. Empty when the change took effect straight away.
+     */
+    @JsonProperty("scheduled_change_at")
+    public Optional<OffsetDateTime> getScheduledChangeAt() {
+        return scheduledChangeAt;
     }
 
     @JsonProperty("success")
@@ -80,12 +93,13 @@ public final class ManagePlanResponseResponseData {
         return checkoutId.equals(other.checkoutId)
                 && company.equals(other.company)
                 && problems.equals(other.problems)
+                && scheduledChangeAt.equals(other.scheduledChangeAt)
                 && success == other.success;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.checkoutId, this.company, this.problems, this.success);
+        return Objects.hash(this.checkoutId, this.company, this.problems, this.scheduledChangeAt, this.success);
     }
 
     @java.lang.Override
@@ -123,11 +137,20 @@ public final class ManagePlanResponseResponseData {
         _FinalStage addProblems(CheckoutProblemResponseData problems);
 
         _FinalStage addAllProblems(List<CheckoutProblemResponseData> problems);
+
+        /**
+         * <p>When a scheduled plan change takes effect. The company stays on its current plan until then. Empty when the change took effect straight away.</p>
+         */
+        _FinalStage scheduledChangeAt(Optional<OffsetDateTime> scheduledChangeAt);
+
+        _FinalStage scheduledChangeAt(OffsetDateTime scheduledChangeAt);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements SuccessStage, _FinalStage {
         private boolean success;
+
+        private Optional<OffsetDateTime> scheduledChangeAt = Optional.empty();
 
         private List<CheckoutProblemResponseData> problems = new ArrayList<>();
 
@@ -144,6 +167,7 @@ public final class ManagePlanResponseResponseData {
             checkoutId(other.getCheckoutId());
             company(other.getCompany());
             problems(other.getProblems());
+            scheduledChangeAt(other.getScheduledChangeAt());
             success(other.getSuccess());
             return this;
         }
@@ -152,6 +176,26 @@ public final class ManagePlanResponseResponseData {
         @JsonSetter("success")
         public _FinalStage success(boolean success) {
             this.success = success;
+            return this;
+        }
+
+        /**
+         * <p>When a scheduled plan change takes effect. The company stays on its current plan until then. Empty when the change took effect straight away.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage scheduledChangeAt(OffsetDateTime scheduledChangeAt) {
+            this.scheduledChangeAt = Optional.ofNullable(scheduledChangeAt);
+            return this;
+        }
+
+        /**
+         * <p>When a scheduled plan change takes effect. The company stays on its current plan until then. Empty when the change took effect straight away.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_change_at", nulls = Nulls.SKIP)
+        public _FinalStage scheduledChangeAt(Optional<OffsetDateTime> scheduledChangeAt) {
+            this.scheduledChangeAt = scheduledChangeAt;
             return this;
         }
 
@@ -207,7 +251,8 @@ public final class ManagePlanResponseResponseData {
 
         @java.lang.Override
         public ManagePlanResponseResponseData build() {
-            return new ManagePlanResponseResponseData(checkoutId, company, problems, success, additionalProperties);
+            return new ManagePlanResponseResponseData(
+                    checkoutId, company, problems, scheduledChangeAt, success, additionalProperties);
         }
 
         @JsonAnySetter
@@ -215,6 +260,7 @@ public final class ManagePlanResponseResponseData {
             if (key.equalsIgnoreCase("checkout_id")
                     || key.equalsIgnoreCase("company")
                     || key.equalsIgnoreCase("problems")
+                    || key.equalsIgnoreCase("scheduled_change_at")
                     || key.equalsIgnoreCase("success")) {
                 return;
             }

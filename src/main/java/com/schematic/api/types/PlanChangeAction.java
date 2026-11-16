@@ -39,6 +39,8 @@ public final class PlanChangeAction {
     public static final PlanChangeAction INVOICE_PAST_DUE =
             new PlanChangeAction(Value.INVOICE_PAST_DUE, "invoice_past_due");
 
+    public static final PlanChangeAction TRIAL = new PlanChangeAction(Value.TRIAL, "trial");
+
     public static final PlanChangeAction ACCESS_REVOKED = new PlanChangeAction(Value.ACCESS_REVOKED, "access_revoked");
 
     public static final PlanChangeAction PLAN_TRAIT_CHANGE =
@@ -104,6 +106,8 @@ public final class PlanChangeAction {
                 return visitor.visitFallbackPlan();
             case INVOICE_PAST_DUE:
                 return visitor.visitInvoicePastDue();
+            case TRIAL:
+                return visitor.visitTrial();
             case ACCESS_REVOKED:
                 return visitor.visitAccessRevoked();
             case PLAN_TRAIT_CHANGE:
@@ -145,6 +149,8 @@ public final class PlanChangeAction {
                 return FALLBACK_PLAN;
             case "invoice_past_due":
                 return INVOICE_PAST_DUE;
+            case "trial":
+                return TRIAL;
             case "access_revoked":
                 return ACCESS_REVOKED;
             case "plan_trait_change":
@@ -189,6 +195,8 @@ public final class PlanChangeAction {
 
         SUBSCRIPTION_CHANGE,
 
+        TRIAL,
+
         UNKNOWN
     }
 
@@ -224,6 +232,8 @@ public final class PlanChangeAction {
         T visitQuickstart();
 
         T visitSubscriptionChange();
+
+        T visitTrial();
 
         T visitUnknown(String unknownType);
     }
