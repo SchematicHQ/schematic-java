@@ -14,6 +14,8 @@ public final class DataExportType {
 
     public static final DataExportType EVENT = new DataExportType(Value.EVENT, "event");
 
+    public static final DataExportType CREDIT_LEDGER = new DataExportType(Value.CREDIT_LEDGER, "credit-ledger");
+
     private final Value value;
 
     private final String string;
@@ -52,6 +54,8 @@ public final class DataExportType {
                 return visitor.visitAuditLog();
             case EVENT:
                 return visitor.visitEvent();
+            case CREDIT_LEDGER:
+                return visitor.visitCreditLedger();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -67,6 +71,8 @@ public final class DataExportType {
                 return AUDIT_LOG;
             case "event":
                 return EVENT;
+            case "credit-ledger":
+                return CREDIT_LEDGER;
             default:
                 return new DataExportType(Value.UNKNOWN, value);
         }
@@ -77,6 +83,8 @@ public final class DataExportType {
 
         COMPANY_FEATURE_USAGE,
 
+        CREDIT_LEDGER,
+
         EVENT,
 
         UNKNOWN
@@ -86,6 +94,8 @@ public final class DataExportType {
         T visitAuditLog();
 
         T visitCompanyFeatureUsage();
+
+        T visitCreditLedger();
 
         T visitEvent();
 

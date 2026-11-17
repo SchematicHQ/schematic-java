@@ -7,9 +7,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class MigrationErrorCode {
-    public static final MigrationErrorCode NOT_ON_ORIGIN_VERSION =
-            new MigrationErrorCode(Value.NOT_ON_ORIGIN_VERSION, "not_on_origin_version");
-
     public static final MigrationErrorCode TRANSIENT_INFRA =
             new MigrationErrorCode(Value.TRANSIENT_INFRA, "transient_infra");
 
@@ -18,6 +15,14 @@ public final class MigrationErrorCode {
 
     public static final MigrationErrorCode TRANSIENT_DECLINE =
             new MigrationErrorCode(Value.TRANSIENT_DECLINE, "transient_decline");
+
+    public static final MigrationErrorCode UNKNOWN = new MigrationErrorCode(Value.UNKNOWN, "unknown");
+
+    public static final MigrationErrorCode MIXED_BILLING_INTERVALS =
+            new MigrationErrorCode(Value.MIXED_BILLING_INTERVALS, "mixed_billing_intervals");
+
+    public static final MigrationErrorCode NOT_ON_ORIGIN_VERSION =
+            new MigrationErrorCode(Value.NOT_ON_ORIGIN_VERSION, "not_on_origin_version");
 
     public static final MigrationErrorCode AMBIGUOUS_SUBSCRIPTION_ITEM =
             new MigrationErrorCode(Value.AMBIGUOUS_SUBSCRIPTION_ITEM, "ambiguous_subscription_item");
@@ -33,8 +38,6 @@ public final class MigrationErrorCode {
 
     public static final MigrationErrorCode PERMANENT_CONFIG =
             new MigrationErrorCode(Value.PERMANENT_CONFIG, "permanent_config");
-
-    public static final MigrationErrorCode UNKNOWN = new MigrationErrorCode(Value.UNKNOWN, "unknown");
 
     public static final MigrationErrorCode WOULD_LEAVE_EMPTY_SUBSCRIPTION =
             new MigrationErrorCode(Value.WOULD_LEAVE_EMPTY_SUBSCRIPTION, "would_leave_empty_subscription");
@@ -74,14 +77,18 @@ public final class MigrationErrorCode {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case NOT_ON_ORIGIN_VERSION:
-                return visitor.visitNotOnOriginVersion();
             case TRANSIENT_INFRA:
                 return visitor.visitTransientInfra();
             case PERMANENT_DECLINE:
                 return visitor.visitPermanentDecline();
             case TRANSIENT_DECLINE:
                 return visitor.visitTransientDecline();
+            case UNKNOWN:
+                return visitor.visitUnknown();
+            case MIXED_BILLING_INTERVALS:
+                return visitor.visitMixedBillingIntervals();
+            case NOT_ON_ORIGIN_VERSION:
+                return visitor.visitNotOnOriginVersion();
             case AMBIGUOUS_SUBSCRIPTION_ITEM:
                 return visitor.visitAmbiguousSubscriptionItem();
             case MULTIPLE_SUBSCRIPTIONS:
@@ -92,8 +99,6 @@ public final class MigrationErrorCode {
                 return visitor.visitOperationItemNotFound();
             case PERMANENT_CONFIG:
                 return visitor.visitPermanentConfig();
-            case UNKNOWN:
-                return visitor.visitUnknown();
             case WOULD_LEAVE_EMPTY_SUBSCRIPTION:
                 return visitor.visitWouldLeaveEmptySubscription();
             case TRANSIENT_STRIPE:
@@ -107,14 +112,18 @@ public final class MigrationErrorCode {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static MigrationErrorCode valueOf(String value) {
         switch (value) {
-            case "not_on_origin_version":
-                return NOT_ON_ORIGIN_VERSION;
             case "transient_infra":
                 return TRANSIENT_INFRA;
             case "permanent_decline":
                 return PERMANENT_DECLINE;
             case "transient_decline":
                 return TRANSIENT_DECLINE;
+            case "unknown":
+                return UNKNOWN;
+            case "mixed_billing_intervals":
+                return MIXED_BILLING_INTERVALS;
+            case "not_on_origin_version":
+                return NOT_ON_ORIGIN_VERSION;
             case "ambiguous_subscription_item":
                 return AMBIGUOUS_SUBSCRIPTION_ITEM;
             case "multiple_subscriptions":
@@ -125,8 +134,6 @@ public final class MigrationErrorCode {
                 return OPERATION_ITEM_NOT_FOUND;
             case "permanent_config":
                 return PERMANENT_CONFIG;
-            case "unknown":
-                return UNKNOWN;
             case "would_leave_empty_subscription":
                 return WOULD_LEAVE_EMPTY_SUBSCRIPTION;
             case "transient_stripe":
@@ -138,6 +145,8 @@ public final class MigrationErrorCode {
 
     public enum Value {
         AMBIGUOUS_SUBSCRIPTION_ITEM,
+
+        MIXED_BILLING_INTERVALS,
 
         MULTIPLE_SUBSCRIPTIONS,
 
@@ -166,6 +175,8 @@ public final class MigrationErrorCode {
 
     public interface Visitor<T> {
         T visitAmbiguousSubscriptionItem();
+
+        T visitMixedBillingIntervals();
 
         T visitMultipleSubscriptions();
 

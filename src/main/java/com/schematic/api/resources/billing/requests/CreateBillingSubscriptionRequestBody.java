@@ -33,6 +33,8 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateBillingSubscriptionRequestBody {
     private final Optional<String> applicationId;
 
+    private final Optional<OffsetDateTime> billingCycleAnchor;
+
     private final Optional<Long> cancelAt;
 
     private final boolean cancelAtPeriodEnd;
@@ -83,6 +85,7 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private CreateBillingSubscriptionRequestBody(
             Optional<String> applicationId,
+            Optional<OffsetDateTime> billingCycleAnchor,
             Optional<Long> cancelAt,
             boolean cancelAtPeriodEnd,
             Optional<String> companyId,
@@ -108,6 +111,7 @@ public final class CreateBillingSubscriptionRequestBody {
             Optional<BillingSubscriptionTrialEndSetting> trialEndSetting,
             Map<String, Object> additionalProperties) {
         this.applicationId = applicationId;
+        this.billingCycleAnchor = billingCycleAnchor;
         this.cancelAt = cancelAt;
         this.cancelAtPeriodEnd = cancelAtPeriodEnd;
         this.companyId = companyId;
@@ -137,6 +141,11 @@ public final class CreateBillingSubscriptionRequestBody {
     @JsonProperty("application_id")
     public Optional<String> getApplicationId() {
         return applicationId;
+    }
+
+    @JsonProperty("billing_cycle_anchor")
+    public Optional<OffsetDateTime> getBillingCycleAnchor() {
+        return billingCycleAnchor;
     }
 
     @JsonProperty("cancel_at")
@@ -271,6 +280,7 @@ public final class CreateBillingSubscriptionRequestBody {
 
     private boolean equalTo(CreateBillingSubscriptionRequestBody other) {
         return applicationId.equals(other.applicationId)
+                && billingCycleAnchor.equals(other.billingCycleAnchor)
                 && cancelAt.equals(other.cancelAt)
                 && cancelAtPeriodEnd == other.cancelAtPeriodEnd
                 && companyId.equals(other.companyId)
@@ -300,6 +310,7 @@ public final class CreateBillingSubscriptionRequestBody {
     public int hashCode() {
         return Objects.hash(
                 this.applicationId,
+                this.billingCycleAnchor,
                 this.cancelAt,
                 this.cancelAtPeriodEnd,
                 this.companyId,
@@ -370,6 +381,10 @@ public final class CreateBillingSubscriptionRequestBody {
         _FinalStage applicationId(Optional<String> applicationId);
 
         _FinalStage applicationId(String applicationId);
+
+        _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor);
+
+        _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor);
 
         _FinalStage cancelAt(Optional<Long> cancelAt);
 
@@ -502,6 +517,8 @@ public final class CreateBillingSubscriptionRequestBody {
 
         private Optional<Long> cancelAt = Optional.empty();
 
+        private Optional<OffsetDateTime> billingCycleAnchor = Optional.empty();
+
         private Optional<String> applicationId = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -511,6 +528,7 @@ public final class CreateBillingSubscriptionRequestBody {
         @java.lang.Override
         public Builder from(CreateBillingSubscriptionRequestBody other) {
             applicationId(other.getApplicationId());
+            billingCycleAnchor(other.getBillingCycleAnchor());
             cancelAt(other.getCancelAt());
             cancelAtPeriodEnd(other.getCancelAtPeriodEnd());
             companyId(other.getCompanyId());
@@ -831,6 +849,19 @@ public final class CreateBillingSubscriptionRequestBody {
         }
 
         @java.lang.Override
+        public _FinalStage billingCycleAnchor(OffsetDateTime billingCycleAnchor) {
+            this.billingCycleAnchor = Optional.ofNullable(billingCycleAnchor);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "billing_cycle_anchor", nulls = Nulls.SKIP)
+        public _FinalStage billingCycleAnchor(Optional<OffsetDateTime> billingCycleAnchor) {
+            this.billingCycleAnchor = billingCycleAnchor;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage applicationId(String applicationId) {
             this.applicationId = Optional.ofNullable(applicationId);
             return this;
@@ -847,6 +878,7 @@ public final class CreateBillingSubscriptionRequestBody {
         public CreateBillingSubscriptionRequestBody build() {
             return new CreateBillingSubscriptionRequestBody(
                     applicationId,
+                    billingCycleAnchor,
                     cancelAt,
                     cancelAtPeriodEnd,
                     companyId,
@@ -876,6 +908,7 @@ public final class CreateBillingSubscriptionRequestBody {
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
             if (key.equalsIgnoreCase("application_id")
+                    || key.equalsIgnoreCase("billing_cycle_anchor")
                     || key.equalsIgnoreCase("cancel_at")
                     || key.equalsIgnoreCase("cancel_at_period_end")
                     || key.equalsIgnoreCase("company_id")

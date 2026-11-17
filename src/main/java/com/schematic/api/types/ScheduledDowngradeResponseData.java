@@ -36,7 +36,11 @@ public final class ScheduledDowngradeResponseData {
 
     private final String interval;
 
+    private final long intervalCount;
+
     private final Optional<String> scheduledInterval;
+
+    private final Optional<Long> scheduledIntervalCount;
 
     private final Optional<Long> scheduledPrice;
 
@@ -54,7 +58,9 @@ public final class ScheduledDowngradeResponseData {
             long fromSubscriptionPrice,
             String id,
             String interval,
+            long intervalCount,
             Optional<String> scheduledInterval,
+            Optional<Long> scheduledIntervalCount,
             Optional<Long> scheduledPrice,
             String toPlanId,
             String toPlanName,
@@ -66,7 +72,9 @@ public final class ScheduledDowngradeResponseData {
         this.fromSubscriptionPrice = fromSubscriptionPrice;
         this.id = id;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.scheduledInterval = scheduledInterval;
+        this.scheduledIntervalCount = scheduledIntervalCount;
         this.scheduledPrice = scheduledPrice;
         this.toPlanId = toPlanId;
         this.toPlanName = toPlanName;
@@ -108,9 +116,25 @@ public final class ScheduledDowngradeResponseData {
         return interval;
     }
 
+    /**
+     * @return With interval, the current subscription's billing period: 3 with month is quarterly.
+     */
+    @JsonProperty("interval_count")
+    public long getIntervalCount() {
+        return intervalCount;
+    }
+
     @JsonProperty("scheduled_interval")
     public Optional<String> getScheduledInterval() {
         return scheduledInterval;
+    }
+
+    /**
+     * @return With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.
+     */
+    @JsonProperty("scheduled_interval_count")
+    public Optional<Long> getScheduledIntervalCount() {
+        return scheduledIntervalCount;
     }
 
     @JsonProperty("scheduled_price")
@@ -147,7 +171,9 @@ public final class ScheduledDowngradeResponseData {
                 && fromSubscriptionPrice == other.fromSubscriptionPrice
                 && id.equals(other.id)
                 && interval.equals(other.interval)
+                && intervalCount == other.intervalCount
                 && scheduledInterval.equals(other.scheduledInterval)
+                && scheduledIntervalCount.equals(other.scheduledIntervalCount)
                 && scheduledPrice.equals(other.scheduledPrice)
                 && toPlanId.equals(other.toPlanId)
                 && toPlanName.equals(other.toPlanName);
@@ -163,7 +189,9 @@ public final class ScheduledDowngradeResponseData {
                 this.fromSubscriptionPrice,
                 this.id,
                 this.interval,
+                this.intervalCount,
                 this.scheduledInterval,
+                this.scheduledIntervalCount,
                 this.scheduledPrice,
                 this.toPlanId,
                 this.toPlanName);
@@ -205,7 +233,14 @@ public final class ScheduledDowngradeResponseData {
     }
 
     public interface IntervalStage {
-        ToPlanIdStage interval(@NotNull String interval);
+        IntervalCountStage interval(@NotNull String interval);
+    }
+
+    public interface IntervalCountStage {
+        /**
+         * <p>With interval, the current subscription's billing period: 3 with month is quarterly.</p>
+         */
+        ToPlanIdStage intervalCount(long intervalCount);
     }
 
     public interface ToPlanIdStage {
@@ -227,6 +262,13 @@ public final class ScheduledDowngradeResponseData {
 
         _FinalStage scheduledInterval(String scheduledInterval);
 
+        /**
+         * <p>With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.</p>
+         */
+        _FinalStage scheduledIntervalCount(Optional<Long> scheduledIntervalCount);
+
+        _FinalStage scheduledIntervalCount(Long scheduledIntervalCount);
+
         _FinalStage scheduledPrice(Optional<Long> scheduledPrice);
 
         _FinalStage scheduledPrice(Long scheduledPrice);
@@ -241,6 +283,7 @@ public final class ScheduledDowngradeResponseData {
                     FromSubscriptionPriceStage,
                     IdStage,
                     IntervalStage,
+                    IntervalCountStage,
                     ToPlanIdStage,
                     ToPlanNameStage,
                     _FinalStage {
@@ -258,11 +301,15 @@ public final class ScheduledDowngradeResponseData {
 
         private String interval;
 
+        private long intervalCount;
+
         private String toPlanId;
 
         private String toPlanName;
 
         private Optional<Long> scheduledPrice = Optional.empty();
+
+        private Optional<Long> scheduledIntervalCount = Optional.empty();
 
         private Optional<String> scheduledInterval = Optional.empty();
 
@@ -279,7 +326,9 @@ public final class ScheduledDowngradeResponseData {
             fromSubscriptionPrice(other.getFromSubscriptionPrice());
             id(other.getId());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             scheduledInterval(other.getScheduledInterval());
+            scheduledIntervalCount(other.getScheduledIntervalCount());
             scheduledPrice(other.getScheduledPrice());
             toPlanId(other.getToPlanId());
             toPlanName(other.getToPlanName());
@@ -330,8 +379,19 @@ public final class ScheduledDowngradeResponseData {
 
         @java.lang.Override
         @JsonSetter("interval")
-        public ToPlanIdStage interval(@NotNull String interval) {
+        public IntervalCountStage interval(@NotNull String interval) {
             this.interval = Objects.requireNonNull(interval, "interval must not be null");
+            return this;
+        }
+
+        /**
+         * <p>With interval, the current subscription's billing period: 3 with month is quarterly.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("interval_count")
+        public ToPlanIdStage intervalCount(long intervalCount) {
+            this.intervalCount = intervalCount;
             return this;
         }
 
@@ -362,6 +422,26 @@ public final class ScheduledDowngradeResponseData {
             return this;
         }
 
+        /**
+         * <p>With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage scheduledIntervalCount(Long scheduledIntervalCount) {
+            this.scheduledIntervalCount = Optional.ofNullable(scheduledIntervalCount);
+            return this;
+        }
+
+        /**
+         * <p>With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_interval_count", nulls = Nulls.SKIP)
+        public _FinalStage scheduledIntervalCount(Optional<Long> scheduledIntervalCount) {
+            this.scheduledIntervalCount = scheduledIntervalCount;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage scheduledInterval(String scheduledInterval) {
             this.scheduledInterval = Optional.ofNullable(scheduledInterval);
@@ -385,7 +465,9 @@ public final class ScheduledDowngradeResponseData {
                     fromSubscriptionPrice,
                     id,
                     interval,
+                    intervalCount,
                     scheduledInterval,
+                    scheduledIntervalCount,
                     scheduledPrice,
                     toPlanId,
                     toPlanName,
@@ -401,7 +483,9 @@ public final class ScheduledDowngradeResponseData {
                     || key.equalsIgnoreCase("from_subscription_price")
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("interval_count")
                     || key.equalsIgnoreCase("scheduled_interval")
+                    || key.equalsIgnoreCase("scheduled_interval_count")
                     || key.equalsIgnoreCase("scheduled_price")
                     || key.equalsIgnoreCase("to_plan_id")
                     || key.equalsIgnoreCase("to_plan_name")) {

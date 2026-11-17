@@ -34,6 +34,10 @@ public final class DataExportMetadata {
         return new DataExportMetadata(new CompanyFeatureUsageValue(value));
     }
 
+    public static DataExportMetadata creditLedger(CreditLedgerExportMetadata value) {
+        return new DataExportMetadata(new CreditLedgerValue(value));
+    }
+
     public static DataExportMetadata event(EventExportMetadata value) {
         return new DataExportMetadata(new EventValue(value));
     }
@@ -44,6 +48,10 @@ public final class DataExportMetadata {
 
     public boolean isCompanyFeatureUsage() {
         return value instanceof CompanyFeatureUsageValue;
+    }
+
+    public boolean isCreditLedger() {
+        return value instanceof CreditLedgerValue;
     }
 
     public boolean isEvent() {
@@ -64,6 +72,13 @@ public final class DataExportMetadata {
     public Optional<CompanyFeatureUsageExportMetadata> getCompanyFeatureUsage() {
         if (isCompanyFeatureUsage()) {
             return Optional.of(((CompanyFeatureUsageValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreditLedgerExportMetadata> getCreditLedger() {
+        if (isCreditLedger()) {
+            return Optional.of(((CreditLedgerValue) value).value);
         }
         return Optional.empty();
     }
@@ -108,6 +123,8 @@ public final class DataExportMetadata {
 
         T visitCompanyFeatureUsage(CompanyFeatureUsageExportMetadata companyFeatureUsage);
 
+        T visitCreditLedger(CreditLedgerExportMetadata creditLedger);
+
         T visitEvent(EventExportMetadata event);
 
         T _visitUnknown(Object unknownType);
@@ -121,6 +138,7 @@ public final class DataExportMetadata {
     @JsonSubTypes({
         @JsonSubTypes.Type(AuditLogValue.class),
         @JsonSubTypes.Type(CompanyFeatureUsageValue.class),
+        @JsonSubTypes.Type(CreditLedgerValue.class),
         @JsonSubTypes.Type(EventValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -194,6 +212,46 @@ public final class DataExportMetadata {
         }
 
         private boolean equalTo(CompanyFeatureUsageValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "DataExportMetadata{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("credit-ledger")
+    @JsonIgnoreProperties("export_type")
+    private static final class CreditLedgerValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "export_type", allowSetters = true)
+        private CreditLedgerExportMetadata value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private CreditLedgerValue() {}
+
+        private CreditLedgerValue(CreditLedgerExportMetadata value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitCreditLedger(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof CreditLedgerValue && equalTo((CreditLedgerValue) other);
+        }
+
+        private boolean equalTo(CreditLedgerValue other) {
             return value.equals(other.value);
         }
 

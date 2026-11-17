@@ -50,6 +50,10 @@ public final class BillingNativeSubscriptionResponseData {
 
     private final Optional<BillingInvoiceTermsResponseData> terms;
 
+    private final Optional<OffsetDateTime> trialEnd;
+
+    private final Optional<BillingSubscriptionTrialEndSetting> trialEndSetting;
+
     private final Map<String, Object> additionalProperties;
 
     private BillingNativeSubscriptionResponseData(
@@ -66,6 +70,8 @@ public final class BillingNativeSubscriptionResponseData {
             Optional<BillingStatementResponseData> statement,
             SubscriptionStatus status,
             Optional<BillingInvoiceTermsResponseData> terms,
+            Optional<OffsetDateTime> trialEnd,
+            Optional<BillingSubscriptionTrialEndSetting> trialEndSetting,
             Map<String, Object> additionalProperties) {
         this.balance = balance;
         this.cancelAt = cancelAt;
@@ -80,6 +86,8 @@ public final class BillingNativeSubscriptionResponseData {
         this.statement = statement;
         this.status = status;
         this.terms = terms;
+        this.trialEnd = trialEnd;
+        this.trialEndSetting = trialEndSetting;
         this.additionalProperties = additionalProperties;
     }
 
@@ -163,6 +171,22 @@ public final class BillingNativeSubscriptionResponseData {
         return terms;
     }
 
+    /**
+     * @return When the subscription's trial ends, or ended. Null when it never had a trial.
+     */
+    @JsonProperty("trial_end")
+    public Optional<OffsetDateTime> getTrialEnd() {
+        return trialEnd;
+    }
+
+    /**
+     * @return What happens when the trial ends: subscribe starts billing, cancel ends the subscription.
+     */
+    @JsonProperty("trial_end_setting")
+    public Optional<BillingSubscriptionTrialEndSetting> getTrialEndSetting() {
+        return trialEndSetting;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -188,7 +212,9 @@ public final class BillingNativeSubscriptionResponseData {
                 && startedAt.equals(other.startedAt)
                 && statement.equals(other.statement)
                 && status.equals(other.status)
-                && terms.equals(other.terms);
+                && terms.equals(other.terms)
+                && trialEnd.equals(other.trialEnd)
+                && trialEndSetting.equals(other.trialEndSetting);
     }
 
     @java.lang.Override
@@ -206,7 +232,9 @@ public final class BillingNativeSubscriptionResponseData {
                 this.startedAt,
                 this.statement,
                 this.status,
-                this.terms);
+                this.terms,
+                this.trialEnd,
+                this.trialEndSetting);
     }
 
     @java.lang.Override
@@ -297,6 +325,20 @@ public final class BillingNativeSubscriptionResponseData {
         _FinalStage terms(Optional<BillingInvoiceTermsResponseData> terms);
 
         _FinalStage terms(BillingInvoiceTermsResponseData terms);
+
+        /**
+         * <p>When the subscription's trial ends, or ended. Null when it never had a trial.</p>
+         */
+        _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd);
+
+        _FinalStage trialEnd(OffsetDateTime trialEnd);
+
+        /**
+         * <p>What happens when the trial ends: subscribe starts billing, cancel ends the subscription.</p>
+         */
+        _FinalStage trialEndSetting(Optional<BillingSubscriptionTrialEndSetting> trialEndSetting);
+
+        _FinalStage trialEndSetting(BillingSubscriptionTrialEndSetting trialEndSetting);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -322,6 +364,10 @@ public final class BillingNativeSubscriptionResponseData {
         private OffsetDateTime periodStart;
 
         private SubscriptionStatus status;
+
+        private Optional<BillingSubscriptionTrialEndSetting> trialEndSetting = Optional.empty();
+
+        private Optional<OffsetDateTime> trialEnd = Optional.empty();
 
         private Optional<BillingInvoiceTermsResponseData> terms = Optional.empty();
 
@@ -354,6 +400,8 @@ public final class BillingNativeSubscriptionResponseData {
             statement(other.getStatement());
             status(other.getStatus());
             terms(other.getTerms());
+            trialEnd(other.getTrialEnd());
+            trialEndSetting(other.getTrialEndSetting());
             return this;
         }
 
@@ -407,6 +455,46 @@ public final class BillingNativeSubscriptionResponseData {
         @JsonSetter("status")
         public _FinalStage status(@NotNull SubscriptionStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>What happens when the trial ends: subscribe starts billing, cancel ends the subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage trialEndSetting(BillingSubscriptionTrialEndSetting trialEndSetting) {
+            this.trialEndSetting = Optional.ofNullable(trialEndSetting);
+            return this;
+        }
+
+        /**
+         * <p>What happens when the trial ends: subscribe starts billing, cancel ends the subscription.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "trial_end_setting", nulls = Nulls.SKIP)
+        public _FinalStage trialEndSetting(Optional<BillingSubscriptionTrialEndSetting> trialEndSetting) {
+            this.trialEndSetting = trialEndSetting;
+            return this;
+        }
+
+        /**
+         * <p>When the subscription's trial ends, or ended. Null when it never had a trial.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage trialEnd(OffsetDateTime trialEnd) {
+            this.trialEnd = Optional.ofNullable(trialEnd);
+            return this;
+        }
+
+        /**
+         * <p>When the subscription's trial ends, or ended. Null when it never had a trial.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "trial_end", nulls = Nulls.SKIP)
+        public _FinalStage trialEnd(Optional<OffsetDateTime> trialEnd) {
+            this.trialEnd = trialEnd;
             return this;
         }
 
@@ -562,6 +650,8 @@ public final class BillingNativeSubscriptionResponseData {
                     statement,
                     status,
                     terms,
+                    trialEnd,
+                    trialEndSetting,
                     additionalProperties);
         }
 
@@ -579,7 +669,9 @@ public final class BillingNativeSubscriptionResponseData {
                     || key.equalsIgnoreCase("started_at")
                     || key.equalsIgnoreCase("statement")
                     || key.equalsIgnoreCase("status")
-                    || key.equalsIgnoreCase("terms")) {
+                    || key.equalsIgnoreCase("terms")
+                    || key.equalsIgnoreCase("trial_end")
+                    || key.equalsIgnoreCase("trial_end_setting")) {
                 return;
             }
             this.additionalProperties.put(key, value);

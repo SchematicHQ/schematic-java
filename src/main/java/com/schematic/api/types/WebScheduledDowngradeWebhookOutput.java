@@ -32,6 +32,8 @@ public final class WebScheduledDowngradeWebhookOutput {
 
     private final Optional<String> scheduledInterval;
 
+    private final Optional<Long> scheduledIntervalCount;
+
     private final Optional<Long> scheduledPrice;
 
     private final Optional<PlanSnapshotView> toPlan;
@@ -44,6 +46,7 @@ public final class WebScheduledDowngradeWebhookOutput {
             Optional<PlanSnapshotView> fromPlan,
             String id,
             Optional<String> scheduledInterval,
+            Optional<Long> scheduledIntervalCount,
             Optional<Long> scheduledPrice,
             Optional<PlanSnapshotView> toPlan,
             Map<String, Object> additionalProperties) {
@@ -52,6 +55,7 @@ public final class WebScheduledDowngradeWebhookOutput {
         this.fromPlan = fromPlan;
         this.id = id;
         this.scheduledInterval = scheduledInterval;
+        this.scheduledIntervalCount = scheduledIntervalCount;
         this.scheduledPrice = scheduledPrice;
         this.toPlan = toPlan;
         this.additionalProperties = additionalProperties;
@@ -82,6 +86,14 @@ public final class WebScheduledDowngradeWebhookOutput {
         return scheduledInterval;
     }
 
+    /**
+     * @return With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.
+     */
+    @JsonProperty("scheduled_interval_count")
+    public Optional<Long> getScheduledIntervalCount() {
+        return scheduledIntervalCount;
+    }
+
     @JsonProperty("scheduled_price")
     public Optional<Long> getScheduledPrice() {
         return scheduledPrice;
@@ -110,6 +122,7 @@ public final class WebScheduledDowngradeWebhookOutput {
                 && fromPlan.equals(other.fromPlan)
                 && id.equals(other.id)
                 && scheduledInterval.equals(other.scheduledInterval)
+                && scheduledIntervalCount.equals(other.scheduledIntervalCount)
                 && scheduledPrice.equals(other.scheduledPrice)
                 && toPlan.equals(other.toPlan);
     }
@@ -122,6 +135,7 @@ public final class WebScheduledDowngradeWebhookOutput {
                 this.fromPlan,
                 this.id,
                 this.scheduledInterval,
+                this.scheduledIntervalCount,
                 this.scheduledPrice,
                 this.toPlan);
     }
@@ -164,6 +178,13 @@ public final class WebScheduledDowngradeWebhookOutput {
 
         _FinalStage scheduledInterval(String scheduledInterval);
 
+        /**
+         * <p>With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.</p>
+         */
+        _FinalStage scheduledIntervalCount(Optional<Long> scheduledIntervalCount);
+
+        _FinalStage scheduledIntervalCount(Long scheduledIntervalCount);
+
         _FinalStage scheduledPrice(Optional<Long> scheduledPrice);
 
         _FinalStage scheduledPrice(Long scheduledPrice);
@@ -183,6 +204,8 @@ public final class WebScheduledDowngradeWebhookOutput {
 
         private Optional<Long> scheduledPrice = Optional.empty();
 
+        private Optional<Long> scheduledIntervalCount = Optional.empty();
+
         private Optional<String> scheduledInterval = Optional.empty();
 
         private Optional<PlanSnapshotView> fromPlan = Optional.empty();
@@ -200,6 +223,7 @@ public final class WebScheduledDowngradeWebhookOutput {
             fromPlan(other.getFromPlan());
             id(other.getId());
             scheduledInterval(other.getScheduledInterval());
+            scheduledIntervalCount(other.getScheduledIntervalCount());
             scheduledPrice(other.getScheduledPrice());
             toPlan(other.getToPlan());
             return this;
@@ -242,6 +266,26 @@ public final class WebScheduledDowngradeWebhookOutput {
         @JsonSetter(value = "scheduled_price", nulls = Nulls.SKIP)
         public _FinalStage scheduledPrice(Optional<Long> scheduledPrice) {
             this.scheduledPrice = scheduledPrice;
+            return this;
+        }
+
+        /**
+         * <p>With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage scheduledIntervalCount(Long scheduledIntervalCount) {
+            this.scheduledIntervalCount = Optional.ofNullable(scheduledIntervalCount);
+            return this;
+        }
+
+        /**
+         * <p>With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_interval_count", nulls = Nulls.SKIP)
+        public _FinalStage scheduledIntervalCount(Optional<Long> scheduledIntervalCount) {
+            this.scheduledIntervalCount = scheduledIntervalCount;
             return this;
         }
 
@@ -292,6 +336,7 @@ public final class WebScheduledDowngradeWebhookOutput {
                     fromPlan,
                     id,
                     scheduledInterval,
+                    scheduledIntervalCount,
                     scheduledPrice,
                     toPlan,
                     additionalProperties);
@@ -304,6 +349,7 @@ public final class WebScheduledDowngradeWebhookOutput {
                     || key.equalsIgnoreCase("from_plan")
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("scheduled_interval")
+                    || key.equalsIgnoreCase("scheduled_interval_count")
                     || key.equalsIgnoreCase("scheduled_price")
                     || key.equalsIgnoreCase("to_plan")) {
                 return;

@@ -44,6 +44,8 @@ public final class PlanChangeResponseData {
 
     private final Optional<PlanVersionSnapshotView> basePlanVersion;
 
+    private final Optional<String> billingInterval;
+
     private final Optional<CompanyResponseData> company;
 
     private final String companyId;
@@ -63,6 +65,8 @@ public final class PlanChangeResponseData {
     private final Optional<PlanSnapshotView> previousBasePlan;
 
     private final Optional<PlanVersionSnapshotView> previousBasePlanVersion;
+
+    private final Optional<String> previousBillingInterval;
 
     private final Optional<String> requestId;
 
@@ -95,6 +99,7 @@ public final class PlanChangeResponseData {
             Optional<PlanSnapshotView> basePlan,
             Optional<PlanChangeBasePlanAction> basePlanAction,
             Optional<PlanVersionSnapshotView> basePlanVersion,
+            Optional<String> billingInterval,
             Optional<CompanyResponseData> company,
             String companyId,
             OffsetDateTime createdAt,
@@ -105,6 +110,7 @@ public final class PlanChangeResponseData {
             Optional<String> migrationId,
             Optional<PlanSnapshotView> previousBasePlan,
             Optional<PlanVersionSnapshotView> previousBasePlanVersion,
+            Optional<String> previousBillingInterval,
             Optional<String> requestId,
             Optional<PlanChangeSubscriptionAction> subscriptionChangeAction,
             List<SubscriptionTraitUpdate> traitsUpdated,
@@ -125,6 +131,7 @@ public final class PlanChangeResponseData {
         this.basePlan = basePlan;
         this.basePlanAction = basePlanAction;
         this.basePlanVersion = basePlanVersion;
+        this.billingInterval = billingInterval;
         this.company = company;
         this.companyId = companyId;
         this.createdAt = createdAt;
@@ -135,6 +142,7 @@ public final class PlanChangeResponseData {
         this.migrationId = migrationId;
         this.previousBasePlan = previousBasePlan;
         this.previousBasePlanVersion = previousBasePlanVersion;
+        this.previousBillingInterval = previousBillingInterval;
         this.requestId = requestId;
         this.subscriptionChangeAction = subscriptionChangeAction;
         this.traitsUpdated = traitsUpdated;
@@ -206,6 +214,14 @@ public final class PlanChangeResponseData {
         return basePlanVersion;
     }
 
+    /**
+     * @return The billing interval this change moved the subscription to: monthly, quarterly or yearly. Set only when the interval changed, as when a custom plan amendment's new version is priced on another interval.
+     */
+    @JsonProperty("billing_interval")
+    public Optional<String> getBillingInterval() {
+        return billingInterval;
+    }
+
     @JsonProperty("company")
     public Optional<CompanyResponseData> getCompany() {
         return company;
@@ -266,6 +282,14 @@ public final class PlanChangeResponseData {
     @JsonProperty("previous_base_plan_version")
     public Optional<PlanVersionSnapshotView> getPreviousBasePlanVersion() {
         return previousBasePlanVersion;
+    }
+
+    /**
+     * @return The billing interval the subscription was on before this change: monthly, quarterly or yearly. Set only alongside billing_interval.
+     */
+    @JsonProperty("previous_billing_interval")
+    public Optional<String> getPreviousBillingInterval() {
+        return previousBillingInterval;
     }
 
     @JsonProperty("request_id")
@@ -350,6 +374,7 @@ public final class PlanChangeResponseData {
                 && basePlan.equals(other.basePlan)
                 && basePlanAction.equals(other.basePlanAction)
                 && basePlanVersion.equals(other.basePlanVersion)
+                && billingInterval.equals(other.billingInterval)
                 && company.equals(other.company)
                 && companyId.equals(other.companyId)
                 && createdAt.equals(other.createdAt)
@@ -360,6 +385,7 @@ public final class PlanChangeResponseData {
                 && migrationId.equals(other.migrationId)
                 && previousBasePlan.equals(other.previousBasePlan)
                 && previousBasePlanVersion.equals(other.previousBasePlanVersion)
+                && previousBillingInterval.equals(other.previousBillingInterval)
                 && requestId.equals(other.requestId)
                 && subscriptionChangeAction.equals(other.subscriptionChangeAction)
                 && traitsUpdated.equals(other.traitsUpdated)
@@ -384,6 +410,7 @@ public final class PlanChangeResponseData {
                 this.basePlan,
                 this.basePlanAction,
                 this.basePlanVersion,
+                this.billingInterval,
                 this.company,
                 this.companyId,
                 this.createdAt,
@@ -394,6 +421,7 @@ public final class PlanChangeResponseData {
                 this.migrationId,
                 this.previousBasePlan,
                 this.previousBasePlanVersion,
+                this.previousBillingInterval,
                 this.requestId,
                 this.subscriptionChangeAction,
                 this.traitsUpdated,
@@ -503,6 +531,13 @@ public final class PlanChangeResponseData {
 
         _FinalStage basePlanVersion(PlanVersionSnapshotView basePlanVersion);
 
+        /**
+         * <p>The billing interval this change moved the subscription to: monthly, quarterly or yearly. Set only when the interval changed, as when a custom plan amendment's new version is priced on another interval.</p>
+         */
+        _FinalStage billingInterval(Optional<String> billingInterval);
+
+        _FinalStage billingInterval(String billingInterval);
+
         _FinalStage company(Optional<CompanyResponseData> company);
 
         _FinalStage company(CompanyResponseData company);
@@ -531,6 +566,13 @@ public final class PlanChangeResponseData {
         _FinalStage previousBasePlanVersion(Optional<PlanVersionSnapshotView> previousBasePlanVersion);
 
         _FinalStage previousBasePlanVersion(PlanVersionSnapshotView previousBasePlanVersion);
+
+        /**
+         * <p>The billing interval the subscription was on before this change: monthly, quarterly or yearly. Set only alongside billing_interval.</p>
+         */
+        _FinalStage previousBillingInterval(Optional<String> previousBillingInterval);
+
+        _FinalStage previousBillingInterval(String previousBillingInterval);
 
         _FinalStage requestId(Optional<String> requestId);
 
@@ -625,6 +667,8 @@ public final class PlanChangeResponseData {
 
         private Optional<String> requestId = Optional.empty();
 
+        private Optional<String> previousBillingInterval = Optional.empty();
+
         private Optional<PlanVersionSnapshotView> previousBasePlanVersion = Optional.empty();
 
         private Optional<PlanSnapshotView> previousBasePlan = Optional.empty();
@@ -634,6 +678,8 @@ public final class PlanChangeResponseData {
         private Optional<IntegrationResponseData> integration = Optional.empty();
 
         private Optional<CompanyResponseData> company = Optional.empty();
+
+        private Optional<String> billingInterval = Optional.empty();
 
         private Optional<PlanVersionSnapshotView> basePlanVersion = Optional.empty();
 
@@ -667,6 +713,7 @@ public final class PlanChangeResponseData {
             basePlan(other.getBasePlan());
             basePlanAction(other.getBasePlanAction());
             basePlanVersion(other.getBasePlanVersion());
+            billingInterval(other.getBillingInterval());
             company(other.getCompany());
             companyId(other.getCompanyId());
             createdAt(other.getCreatedAt());
@@ -677,6 +724,7 @@ public final class PlanChangeResponseData {
             migrationId(other.getMigrationId());
             previousBasePlan(other.getPreviousBasePlan());
             previousBasePlanVersion(other.getPreviousBasePlanVersion());
+            previousBillingInterval(other.getPreviousBillingInterval());
             requestId(other.getRequestId());
             subscriptionChangeAction(other.getSubscriptionChangeAction());
             traitsUpdated(other.getTraitsUpdated());
@@ -904,6 +952,26 @@ public final class PlanChangeResponseData {
         }
 
         /**
+         * <p>The billing interval the subscription was on before this change: monthly, quarterly or yearly. Set only alongside billing_interval.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage previousBillingInterval(String previousBillingInterval) {
+            this.previousBillingInterval = Optional.ofNullable(previousBillingInterval);
+            return this;
+        }
+
+        /**
+         * <p>The billing interval the subscription was on before this change: monthly, quarterly or yearly. Set only alongside billing_interval.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "previous_billing_interval", nulls = Nulls.SKIP)
+        public _FinalStage previousBillingInterval(Optional<String> previousBillingInterval) {
+            this.previousBillingInterval = previousBillingInterval;
+            return this;
+        }
+
+        /**
          * <p>The plan version of the previous base plan before this change.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -986,6 +1054,26 @@ public final class PlanChangeResponseData {
         @JsonSetter(value = "company", nulls = Nulls.SKIP)
         public _FinalStage company(Optional<CompanyResponseData> company) {
             this.company = company;
+            return this;
+        }
+
+        /**
+         * <p>The billing interval this change moved the subscription to: monthly, quarterly or yearly. Set only when the interval changed, as when a custom plan amendment's new version is priced on another interval.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage billingInterval(String billingInterval) {
+            this.billingInterval = Optional.ofNullable(billingInterval);
+            return this;
+        }
+
+        /**
+         * <p>The billing interval this change moved the subscription to: monthly, quarterly or yearly. Set only when the interval changed, as when a custom plan amendment's new version is priced on another interval.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "billing_interval", nulls = Nulls.SKIP)
+        public _FinalStage billingInterval(Optional<String> billingInterval) {
+            this.billingInterval = billingInterval;
             return this;
         }
 
@@ -1149,6 +1237,7 @@ public final class PlanChangeResponseData {
                     basePlan,
                     basePlanAction,
                     basePlanVersion,
+                    billingInterval,
                     company,
                     companyId,
                     createdAt,
@@ -1159,6 +1248,7 @@ public final class PlanChangeResponseData {
                     migrationId,
                     previousBasePlan,
                     previousBasePlanVersion,
+                    previousBillingInterval,
                     requestId,
                     subscriptionChangeAction,
                     traitsUpdated,
@@ -1183,6 +1273,7 @@ public final class PlanChangeResponseData {
                     || key.equalsIgnoreCase("base_plan")
                     || key.equalsIgnoreCase("base_plan_action")
                     || key.equalsIgnoreCase("base_plan_version")
+                    || key.equalsIgnoreCase("billing_interval")
                     || key.equalsIgnoreCase("company")
                     || key.equalsIgnoreCase("company_id")
                     || key.equalsIgnoreCase("created_at")
@@ -1193,6 +1284,7 @@ public final class PlanChangeResponseData {
                     || key.equalsIgnoreCase("migration_id")
                     || key.equalsIgnoreCase("previous_base_plan")
                     || key.equalsIgnoreCase("previous_base_plan_version")
+                    || key.equalsIgnoreCase("previous_billing_interval")
                     || key.equalsIgnoreCase("request_id")
                     || key.equalsIgnoreCase("subscription_change_action")
                     || key.equalsIgnoreCase("traits_updated")
