@@ -6,6 +6,7 @@ README.md
 .github/CODEOWNERS
 .github/workflows/ci.yml
 .github/workflows/sdk-e2e-status.yml
+jreleaser.yml
 WASM_VERSION
 .gitignore
 scripts/
