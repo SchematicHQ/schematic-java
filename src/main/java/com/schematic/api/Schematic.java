@@ -935,6 +935,12 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
         if (creditCheck == null) {
             return plainCheck(flagKey, company, user, opts);
         }
+        // The lease flow reads the flag, company and user from the DataStream cache. In replicator
+        // mode that cache is read only once the replicator reports it ready, so until then the
+        // check runs as the plain check the flow falls back to on a cache miss, and holds nothing.
+        if (dataStreamClient != null && !dataStreamClient.isCacheReady()) {
+            return plainCheck(flagKey, company, user, opts);
+        }
         return creditCheck.check(request, fallback);
     }
 

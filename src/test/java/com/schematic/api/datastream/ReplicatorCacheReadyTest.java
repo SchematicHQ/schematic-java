@@ -10,7 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.schematic.api.Schematic;
 import com.schematic.api.cache.LocalCache;
+import com.schematic.api.credits.CheckOptions;
 import com.schematic.api.credits.CheckResult;
+import com.schematic.api.credits.CreditCheck;
+import com.schematic.api.credits.CreditLeaseConfig;
+import com.schematic.api.credits.CreditLeaseMode;
 import com.schematic.api.datastream.DataStreamMessages.DataStreamResp;
 import com.schematic.api.datastream.DataStreamMessages.EntityType;
 import com.schematic.api.datastream.DataStreamMessages.MessageType;
@@ -25,6 +29,7 @@ import com.schematic.api.types.RulesengineCheckFlagResult;
 import com.schematic.api.types.RulesengineFlag;
 import com.sun.net.httpserver.HttpServer;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -181,6 +186,59 @@ class ReplicatorCacheReadyTest {
         assertTrue(ready.getValue());
         assertEquals("flag_flag-on", ready.getFlagId());
         verifyNoMoreInteractions(featuresClient);
+    }
+
+    @Test
+    void clientLeaseCheck_waitsForTheCacheToBeReady() throws Exception {
+        setHealth(503, false, CACHE_VERSION);
+        schematic = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .basePath("http://127.0.0.1:1")
+                .eventCaptureBaseUrl("http://127.0.0.1:1")
+                .cacheProviders(Collections.emptyList())
+                .datastreamOptions(DatastreamOptions.builder()
+                        .withReplicatorMode(healthUrl)
+                        .replicatorHealthCheckInterval(Duration.ofHours(1))
+                        .flagCacheProvider(flagCache)
+                        .build())
+                .creditLeases(
+                        CreditLeaseConfig.builder().mode(CreditLeaseMode.CLIENT).build())
+                .build();
+        schematic.getDataStreamClient().checkReplicatorHealth();
+        seedReplicatorCache(schematic.getDataStreamClient());
+        // Stands in for the lease flow, so the test sees whether a check reached it.
+        CreditCheck creditCheck = mock(CreditCheck.class);
+        Field field = Schematic.class.getDeclaredField("creditCheck");
+        field.setAccessible(true);
+        field.set(schematic, creditCheck);
+        Schematic spySchematic = spy(schematic);
+
+        FeaturesClient featuresClient = mock(FeaturesClient.class);
+        when(spySchematic.features()).thenReturn(featuresClient);
+        when(featuresClient.checkFlag(eq("flag-on"), any(CheckFlagRequestBody.class)))
+                .thenReturn(singleApiResponse("flag-on", false));
+        CheckOptions options = CheckOptions.builder().usage(50).build();
+
+        // Not ready: a plain check through the API, with no hold to settle.
+        CheckResult notReady = spySchematic.check("flag-on", COMPANY, null, options);
+        assertFalse(notReady.getValue());
+        assertEquals("api", notReady.getReason());
+        assertNull(notReady.getReservation());
+        verifyNoInteractions(creditCheck);
+        // The caller passes the missing reservation straight through; the settle logs and does
+        // nothing, as it does for any check that allowed without a hold.
+        spySchematic.trackWithReservation(notReady.getReservation(), 50);
+        verify(logger).error(contains("without a reservation"));
+
+        // Ready: the lease flow answers.
+        setHealth(200, true, CACHE_VERSION);
+        schematic.getDataStreamClient().checkReplicatorHealth();
+        CheckResult held = new CheckResult(true, true, "lease", "flag-on", "flag_flag-on", null, null, null);
+        when(creditCheck.check(any(), any())).thenReturn(held);
+
+        assertSame(held, spySchematic.check("flag-on", COMPANY, null, options));
+        verify(creditCheck).check(any(), any());
     }
 
     // --- Flag checks, cache ready ---
