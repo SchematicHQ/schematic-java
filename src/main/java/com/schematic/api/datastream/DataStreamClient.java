@@ -574,13 +574,17 @@ public class DataStreamClient implements Closeable {
             return;
         }
 
+        long quantity = event.getQuantity().orElse(1L);
+        if (quantity == 0) {
+            return;
+        }
+
         RulesengineCompany company = getCachedCompany(keys);
         if (company == null) {
             return;
         }
 
         String eventName = event.getEvent();
-        long quantity = event.getQuantity().orElse(1L);
 
         List<RulesengineCompanyMetric> updatedMetrics = new ArrayList<>();
         boolean matched = false;

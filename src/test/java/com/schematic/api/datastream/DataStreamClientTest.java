@@ -847,6 +847,34 @@ class DataStreamClientTest {
     }
 
     @Test
+    void updateCompanyMetrics_zeroQuantity_skipsCacheWrite() {
+        LocalCache<RulesengineCompany> companyCache = spy(new LocalCache<>());
+        DataStreamClient spyClient = clientWithCompanyCache(companyCache);
+        try {
+            spyClient.handleMessage(buildResp(
+                    EntityType.COMPANY.getValue(),
+                    MessageType.FULL.getValue(),
+                    "comp-metrics",
+                    companyWithMetric("comp-metrics", "cust-1", "api_calls", 10)));
+            clearInvocations(companyCache);
+
+            spyClient.updateCompanyMetrics(EventBodyTrack.builder()
+                    .event("api_calls")
+                    .company(Collections.singletonMap("customer_id", "cust-1"))
+                    .quantity(0L)
+                    .build());
+
+            verify(companyCache, never()).set(anyString(), any());
+            verify(companyCache, never()).set(anyString(), any(), any());
+            verify(companyCache, never()).setKeepTTL(anyString(), any());
+            RulesengineCompany cached = spyClient.getCachedCompany(Collections.singletonMap("customer_id", "cust-1"));
+            assertEquals(10, cached.getMetrics().get(0).getValue());
+        } finally {
+            spyClient.close();
+        }
+    }
+
+    @Test
     void updateCompanyMetrics_matchingMetric_writesCache() {
         LocalCache<RulesengineCompany> companyCache = spy(new LocalCache<>());
         DataStreamClient spyClient = clientWithCompanyCache(companyCache);
