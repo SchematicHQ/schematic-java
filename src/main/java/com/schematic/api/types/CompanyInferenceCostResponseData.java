@@ -59,7 +59,7 @@ public final class CompanyInferenceCostResponseData {
     }
 
     /**
-     * @return Cost and event counts per provider and response model, busiest model first
+     * @return Cost and event counts per provider and response model, busiest model first, for at most the 500 busiest models; the totals count every model
      */
     @JsonProperty("by_model")
     public List<InferenceModelCostResponseData> getByModel() {
@@ -201,7 +201,7 @@ public final class CompanyInferenceCostResponseData {
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         /**
-         * <p>Cost and event counts per provider and response model, busiest model first</p>
+         * <p>Cost and event counts per provider and response model, busiest model first, for at most the 500 busiest models; the totals count every model</p>
          */
         _FinalStage byModel(List<InferenceModelCostResponseData> byModel);
 
@@ -348,7 +348,7 @@ public final class CompanyInferenceCostResponseData {
         }
 
         /**
-         * <p>Cost and event counts per provider and response model, busiest model first</p>
+         * <p>Cost and event counts per provider and response model, busiest model first, for at most the 500 busiest models; the totals count every model</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -360,7 +360,7 @@ public final class CompanyInferenceCostResponseData {
         }
 
         /**
-         * <p>Cost and event counts per provider and response model, busiest model first</p>
+         * <p>Cost and event counts per provider and response model, busiest model first, for at most the 500 busiest models; the totals count every model</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -370,7 +370,7 @@ public final class CompanyInferenceCostResponseData {
         }
 
         /**
-         * <p>Cost and event counts per provider and response model, busiest model first</p>
+         * <p>Cost and event counts per provider and response model, busiest model first, for at most the 500 busiest models; the totals count every model</p>
          */
         @java.lang.Override
         @JsonSetter(value = "by_model", nulls = Nulls.SKIP)

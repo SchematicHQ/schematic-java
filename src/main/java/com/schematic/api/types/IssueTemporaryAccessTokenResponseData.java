@@ -40,6 +40,8 @@ public final class IssueTemporaryAccessTokenResponseData {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<String> userId;
+
     private final Map<String, Object> additionalProperties;
 
     private IssueTemporaryAccessTokenResponseData(
@@ -52,6 +54,7 @@ public final class IssueTemporaryAccessTokenResponseData {
             String resourceType,
             String token,
             OffsetDateTime updatedAt,
+            Optional<String> userId,
             Map<String, Object> additionalProperties) {
         this.apiKeyId = apiKeyId;
         this.createdAt = createdAt;
@@ -62,6 +65,7 @@ public final class IssueTemporaryAccessTokenResponseData {
         this.resourceType = resourceType;
         this.token = token;
         this.updatedAt = updatedAt;
+        this.userId = userId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -110,6 +114,14 @@ public final class IssueTemporaryAccessTokenResponseData {
         return updatedAt;
     }
 
+    /**
+     * @return The user the token was issued for, when the request named one in user_lookup.
+     */
+    @JsonProperty("user_id")
+    public Optional<String> getUserId() {
+        return userId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -131,7 +143,8 @@ public final class IssueTemporaryAccessTokenResponseData {
                 && issuerType.equals(other.issuerType)
                 && resourceType.equals(other.resourceType)
                 && token.equals(other.token)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && userId.equals(other.userId);
     }
 
     @java.lang.Override
@@ -145,7 +158,8 @@ public final class IssueTemporaryAccessTokenResponseData {
                 this.issuerType,
                 this.resourceType,
                 this.token,
-                this.updatedAt);
+                this.updatedAt,
+                this.userId);
     }
 
     @java.lang.Override
@@ -201,6 +215,13 @@ public final class IssueTemporaryAccessTokenResponseData {
         _FinalStage apiKeyId(Optional<String> apiKeyId);
 
         _FinalStage apiKeyId(String apiKeyId);
+
+        /**
+         * <p>The user the token was issued for, when the request named one in user_lookup.</p>
+         */
+        _FinalStage userId(Optional<String> userId);
+
+        _FinalStage userId(String userId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -230,6 +251,8 @@ public final class IssueTemporaryAccessTokenResponseData {
 
         private OffsetDateTime updatedAt;
 
+        private Optional<String> userId = Optional.empty();
+
         private Optional<String> apiKeyId = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -247,6 +270,7 @@ public final class IssueTemporaryAccessTokenResponseData {
             resourceType(other.getResourceType());
             token(other.getToken());
             updatedAt(other.getUpdatedAt());
+            userId(other.getUserId());
             return this;
         }
 
@@ -306,6 +330,26 @@ public final class IssueTemporaryAccessTokenResponseData {
             return this;
         }
 
+        /**
+         * <p>The user the token was issued for, when the request named one in user_lookup.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage userId(String userId) {
+            this.userId = Optional.ofNullable(userId);
+            return this;
+        }
+
+        /**
+         * <p>The user the token was issued for, when the request named one in user_lookup.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
+        public _FinalStage userId(Optional<String> userId) {
+            this.userId = userId;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage apiKeyId(String apiKeyId) {
             this.apiKeyId = Optional.ofNullable(apiKeyId);
@@ -331,6 +375,7 @@ public final class IssueTemporaryAccessTokenResponseData {
                     resourceType,
                     token,
                     updatedAt,
+                    userId,
                     additionalProperties);
         }
 
@@ -344,7 +389,8 @@ public final class IssueTemporaryAccessTokenResponseData {
                     || key.equalsIgnoreCase("issuer_type")
                     || key.equalsIgnoreCase("resource_type")
                     || key.equalsIgnoreCase("token")
-                    || key.equalsIgnoreCase("updated_at")) {
+                    || key.equalsIgnoreCase("updated_at")
+                    || key.equalsIgnoreCase("user_id")) {
                 return;
             }
             this.additionalProperties.put(key, value);

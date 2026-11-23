@@ -28,6 +28,8 @@ public final class CountAuditLogsParams {
 
     private final Optional<OffsetDateTime> endTime;
 
+    private final Optional<String> endUserId;
+
     private final Optional<String> environmentId;
 
     private final Optional<Long> limit;
@@ -44,6 +46,7 @@ public final class CountAuditLogsParams {
             Optional<ActorType> actorType,
             Optional<String> companyId,
             Optional<OffsetDateTime> endTime,
+            Optional<String> endUserId,
             Optional<String> environmentId,
             Optional<Long> limit,
             Optional<Long> offset,
@@ -53,6 +56,7 @@ public final class CountAuditLogsParams {
         this.actorType = actorType;
         this.companyId = companyId;
         this.endTime = endTime;
+        this.endUserId = endUserId;
         this.environmentId = environmentId;
         this.limit = limit;
         this.offset = offset;
@@ -74,6 +78,14 @@ public final class CountAuditLogsParams {
     @JsonProperty("end_time")
     public Optional<OffsetDateTime> getEndTime() {
         return endTime;
+    }
+
+    /**
+     * @return Only entries made with a temporary access token issued for this user
+     */
+    @JsonProperty("end_user_id")
+    public Optional<String> getEndUserId() {
+        return endUserId;
     }
 
     @JsonProperty("environment_id")
@@ -122,6 +134,7 @@ public final class CountAuditLogsParams {
         return actorType.equals(other.actorType)
                 && companyId.equals(other.companyId)
                 && endTime.equals(other.endTime)
+                && endUserId.equals(other.endUserId)
                 && environmentId.equals(other.environmentId)
                 && limit.equals(other.limit)
                 && offset.equals(other.offset)
@@ -135,6 +148,7 @@ public final class CountAuditLogsParams {
                 this.actorType,
                 this.companyId,
                 this.endTime,
+                this.endUserId,
                 this.environmentId,
                 this.limit,
                 this.offset,
@@ -159,6 +173,8 @@ public final class CountAuditLogsParams {
 
         private Optional<OffsetDateTime> endTime = Optional.empty();
 
+        private Optional<String> endUserId = Optional.empty();
+
         private Optional<String> environmentId = Optional.empty();
 
         private Optional<Long> limit = Optional.empty();
@@ -177,6 +193,7 @@ public final class CountAuditLogsParams {
             actorType(other.getActorType());
             companyId(other.getCompanyId());
             endTime(other.getEndTime());
+            endUserId(other.getEndUserId());
             environmentId(other.getEnvironmentId());
             limit(other.getLimit());
             offset(other.getOffset());
@@ -215,6 +232,20 @@ public final class CountAuditLogsParams {
 
         public Builder endTime(OffsetDateTime endTime) {
             this.endTime = Optional.ofNullable(endTime);
+            return this;
+        }
+
+        /**
+         * <p>Only entries made with a temporary access token issued for this user</p>
+         */
+        @JsonSetter(value = "end_user_id", nulls = Nulls.SKIP)
+        public Builder endUserId(Optional<String> endUserId) {
+            this.endUserId = endUserId;
+            return this;
+        }
+
+        public Builder endUserId(String endUserId) {
+            this.endUserId = Optional.ofNullable(endUserId);
             return this;
         }
 
@@ -281,7 +312,16 @@ public final class CountAuditLogsParams {
 
         public CountAuditLogsParams build() {
             return new CountAuditLogsParams(
-                    actorType, companyId, endTime, environmentId, limit, offset, q, startTime, additionalProperties);
+                    actorType,
+                    companyId,
+                    endTime,
+                    endUserId,
+                    environmentId,
+                    limit,
+                    offset,
+                    q,
+                    startTime,
+                    additionalProperties);
         }
 
         @JsonAnySetter
@@ -289,6 +329,7 @@ public final class CountAuditLogsParams {
             if (key.equalsIgnoreCase("actor_type")
                     || key.equalsIgnoreCase("company_id")
                     || key.equalsIgnoreCase("end_time")
+                    || key.equalsIgnoreCase("end_user_id")
                     || key.equalsIgnoreCase("environment_id")
                     || key.equalsIgnoreCase("limit")
                     || key.equalsIgnoreCase("offset")

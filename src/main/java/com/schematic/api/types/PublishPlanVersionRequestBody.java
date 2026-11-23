@@ -211,7 +211,7 @@ public final class PublishPlanVersionRequestBody {
     }
 
     /**
-     * @return When a custom plan that doesn't renew ends: the company moves to the default plan then, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.
+     * @return When a custom plan that doesn't renew ends: the subscription is canceled, the company moves to the fallback plan, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.
      */
     @JsonProperty("end_date")
     public Optional<OffsetDateTime> getEndDate() {
@@ -470,7 +470,7 @@ public final class PublishPlanVersionRequestBody {
         _FinalStage daysUntilDue(Long daysUntilDue);
 
         /**
-         * <p>When a custom plan that doesn't renew ends: the company moves to the default plan then, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.</p>
+         * <p>When a custom plan that doesn't renew ends: the subscription is canceled, the company moves to the fallback plan, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.</p>
          */
         _FinalStage endDate(Optional<OffsetDateTime> endDate);
 
@@ -878,7 +878,7 @@ public final class PublishPlanVersionRequestBody {
         }
 
         /**
-         * <p>When a custom plan that doesn't renew ends: the company moves to the default plan then, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.</p>
+         * <p>When a custom plan that doesn't renew ends: the subscription is canceled, the company moves to the fallback plan, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -888,7 +888,7 @@ public final class PublishPlanVersionRequestBody {
         }
 
         /**
-         * <p>When a custom plan that doesn't renew ends: the company moves to the default plan then, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.</p>
+         * <p>When a custom plan that doesn't renew ends: the subscription is canceled, the company moves to the fallback plan, and no renewal invoice is raised. Required when the version's renewal_policy is expire_to_default, and refused otherwise. Moved back to the last renewal on or before it, which must leave at least one whole billing period. Only honored on a first publish that starts a subscription.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "end_date", nulls = Nulls.SKIP)

@@ -42,6 +42,8 @@ public final class PublishPreviewResponseData {
 
     private final boolean defaultSendInvoice;
 
+    private final Optional<OffsetDateTime> earliestEndDate;
+
     private final Optional<OffsetDateTime> effectiveAt;
 
     private final Optional<OffsetDateTime> endsAt;
@@ -90,6 +92,7 @@ public final class PublishPreviewResponseData {
             BillingCollectionMethod defaultCollectionMethod,
             long defaultDaysUntilDue,
             boolean defaultSendInvoice,
+            Optional<OffsetDateTime> earliestEndDate,
             Optional<OffsetDateTime> effectiveAt,
             Optional<OffsetDateTime> endsAt,
             boolean hasBillingChanges,
@@ -118,6 +121,7 @@ public final class PublishPreviewResponseData {
         this.defaultCollectionMethod = defaultCollectionMethod;
         this.defaultDaysUntilDue = defaultDaysUntilDue;
         this.defaultSendInvoice = defaultSendInvoice;
+        this.earliestEndDate = earliestEndDate;
         this.effectiveAt = effectiveAt;
         this.endsAt = endsAt;
         this.hasBillingChanges = hasBillingChanges;
@@ -197,6 +201,14 @@ public final class PublishPreviewResponseData {
     @JsonProperty("default_send_invoice")
     public boolean getDefaultSendInvoice() {
         return defaultSendInvoice;
+    }
+
+    /**
+     * @return For a version that doesn't renew, the soonest end_date the publish accepts: the first renewal after now, or after the amendment applies when that is later, on the interval the subscription has once it applies. The term's last day is the day before. Reported whether or not the request sends an end date. Null when the version renews.
+     */
+    @JsonProperty("earliest_end_date")
+    public Optional<OffsetDateTime> getEarliestEndDate() {
+        return earliestEndDate;
     }
 
     /**
@@ -337,6 +349,7 @@ public final class PublishPreviewResponseData {
                 && defaultCollectionMethod.equals(other.defaultCollectionMethod)
                 && defaultDaysUntilDue == other.defaultDaysUntilDue
                 && defaultSendInvoice == other.defaultSendInvoice
+                && earliestEndDate.equals(other.earliestEndDate)
                 && effectiveAt.equals(other.effectiveAt)
                 && endsAt.equals(other.endsAt)
                 && hasBillingChanges == other.hasBillingChanges
@@ -369,6 +382,7 @@ public final class PublishPreviewResponseData {
                 this.defaultCollectionMethod,
                 this.defaultDaysUntilDue,
                 this.defaultSendInvoice,
+                this.earliestEndDate,
                 this.effectiveAt,
                 this.endsAt,
                 this.hasBillingChanges,
@@ -500,6 +514,13 @@ public final class PublishPreviewResponseData {
         _FinalStage currentPeriodStart(OffsetDateTime currentPeriodStart);
 
         /**
+         * <p>For a version that doesn't renew, the soonest end_date the publish accepts: the first renewal after now, or after the amendment applies when that is later, on the interval the subscription has once it applies. The term's last day is the day before. Reported whether or not the request sends an end date. Null when the version renews.</p>
+         */
+        _FinalStage earliestEndDate(Optional<OffsetDateTime> earliestEndDate);
+
+        _FinalStage earliestEndDate(OffsetDateTime earliestEndDate);
+
+        /**
          * <p>When the company moves to the new version. Null when no date can be named yet: the company's only subscription is in dunning or scheduled to cancel.</p>
          */
         _FinalStage effectiveAt(Optional<OffsetDateTime> effectiveAt);
@@ -618,6 +639,8 @@ public final class PublishPreviewResponseData {
 
         private Optional<OffsetDateTime> effectiveAt = Optional.empty();
 
+        private Optional<OffsetDateTime> earliestEndDate = Optional.empty();
+
         private Optional<OffsetDateTime> currentPeriodStart = Optional.empty();
 
         private Optional<OffsetDateTime> currentPeriodEnd = Optional.empty();
@@ -645,6 +668,7 @@ public final class PublishPreviewResponseData {
             defaultCollectionMethod(other.getDefaultCollectionMethod());
             defaultDaysUntilDue(other.getDefaultDaysUntilDue());
             defaultSendInvoice(other.getDefaultSendInvoice());
+            earliestEndDate(other.getEarliestEndDate());
             effectiveAt(other.getEffectiveAt());
             endsAt(other.getEndsAt());
             hasBillingChanges(other.getHasBillingChanges());
@@ -963,6 +987,26 @@ public final class PublishPreviewResponseData {
             return this;
         }
 
+        /**
+         * <p>For a version that doesn't renew, the soonest end_date the publish accepts: the first renewal after now, or after the amendment applies when that is later, on the interval the subscription has once it applies. The term's last day is the day before. Reported whether or not the request sends an end date. Null when the version renews.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage earliestEndDate(OffsetDateTime earliestEndDate) {
+            this.earliestEndDate = Optional.ofNullable(earliestEndDate);
+            return this;
+        }
+
+        /**
+         * <p>For a version that doesn't renew, the soonest end_date the publish accepts: the first renewal after now, or after the amendment applies when that is later, on the interval the subscription has once it applies. The term's last day is the day before. Reported whether or not the request sends an end date. Null when the version renews.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "earliest_end_date", nulls = Nulls.SKIP)
+        public _FinalStage earliestEndDate(Optional<OffsetDateTime> earliestEndDate) {
+            this.earliestEndDate = earliestEndDate;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage currentPeriodStart(OffsetDateTime currentPeriodStart) {
             this.currentPeriodStart = Optional.ofNullable(currentPeriodStart);
@@ -1067,6 +1111,7 @@ public final class PublishPreviewResponseData {
                     defaultCollectionMethod,
                     defaultDaysUntilDue,
                     defaultSendInvoice,
+                    earliestEndDate,
                     effectiveAt,
                     endsAt,
                     hasBillingChanges,
@@ -1099,6 +1144,7 @@ public final class PublishPreviewResponseData {
                     || key.equalsIgnoreCase("default_collection_method")
                     || key.equalsIgnoreCase("default_days_until_due")
                     || key.equalsIgnoreCase("default_send_invoice")
+                    || key.equalsIgnoreCase("earliest_end_date")
                     || key.equalsIgnoreCase("effective_at")
                     || key.equalsIgnoreCase("ends_at")
                     || key.equalsIgnoreCase("has_billing_changes")

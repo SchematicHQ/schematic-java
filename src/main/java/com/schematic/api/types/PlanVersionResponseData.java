@@ -38,6 +38,8 @@ public final class PlanVersionResponseData {
 
     private final PlanType planType;
 
+    private final Optional<RenewalDestinationResponseData> renewalDestination;
+
     private final RenewalPolicy renewalPolicy;
 
     private final PlanVersionStatus status;
@@ -57,6 +59,7 @@ public final class PlanVersionResponseData {
             String name,
             Optional<String> originalPlanId,
             PlanType planType,
+            Optional<RenewalDestinationResponseData> renewalDestination,
             RenewalPolicy renewalPolicy,
             PlanVersionStatus status,
             OffsetDateTime updatedAt,
@@ -70,6 +73,7 @@ public final class PlanVersionResponseData {
         this.name = name;
         this.originalPlanId = originalPlanId;
         this.planType = planType;
+        this.renewalDestination = renewalDestination;
         this.renewalPolicy = renewalPolicy;
         this.status = status;
         this.updatedAt = updatedAt;
@@ -117,6 +121,14 @@ public final class PlanVersionResponseData {
         return planType;
     }
 
+    /**
+     * @return Where the company moves at term end when renewal_policy is migrate_to_plan. Null for any other policy.
+     */
+    @JsonProperty("renewal_destination")
+    public Optional<RenewalDestinationResponseData> getRenewalDestination() {
+        return renewalDestination;
+    }
+
     @JsonProperty("renewal_policy")
     public RenewalPolicy getRenewalPolicy() {
         return renewalPolicy;
@@ -157,6 +169,7 @@ public final class PlanVersionResponseData {
                 && name.equals(other.name)
                 && originalPlanId.equals(other.originalPlanId)
                 && planType.equals(other.planType)
+                && renewalDestination.equals(other.renewalDestination)
                 && renewalPolicy.equals(other.renewalPolicy)
                 && status.equals(other.status)
                 && updatedAt.equals(other.updatedAt)
@@ -174,6 +187,7 @@ public final class PlanVersionResponseData {
                 this.name,
                 this.originalPlanId,
                 this.planType,
+                this.renewalDestination,
                 this.renewalPolicy,
                 this.status,
                 this.updatedAt,
@@ -245,6 +259,13 @@ public final class PlanVersionResponseData {
         _FinalStage originalPlanId(Optional<String> originalPlanId);
 
         _FinalStage originalPlanId(String originalPlanId);
+
+        /**
+         * <p>Where the company moves at term end when renewal_policy is migrate_to_plan. Null for any other policy.</p>
+         */
+        _FinalStage renewalDestination(Optional<RenewalDestinationResponseData> renewalDestination);
+
+        _FinalStage renewalDestination(RenewalDestinationResponseData renewalDestination);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -283,6 +304,8 @@ public final class PlanVersionResponseData {
 
         private long version;
 
+        private Optional<RenewalDestinationResponseData> renewalDestination = Optional.empty();
+
         private Optional<String> originalPlanId = Optional.empty();
 
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -299,6 +322,7 @@ public final class PlanVersionResponseData {
             name(other.getName());
             originalPlanId(other.getOriginalPlanId());
             planType(other.getPlanType());
+            renewalDestination(other.getRenewalDestination());
             renewalPolicy(other.getRenewalPolicy());
             status(other.getStatus());
             updatedAt(other.getUpdatedAt());
@@ -383,6 +407,26 @@ public final class PlanVersionResponseData {
             return this;
         }
 
+        /**
+         * <p>Where the company moves at term end when renewal_policy is migrate_to_plan. Null for any other policy.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage renewalDestination(RenewalDestinationResponseData renewalDestination) {
+            this.renewalDestination = Optional.ofNullable(renewalDestination);
+            return this;
+        }
+
+        /**
+         * <p>Where the company moves at term end when renewal_policy is migrate_to_plan. Null for any other policy.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "renewal_destination", nulls = Nulls.SKIP)
+        public _FinalStage renewalDestination(Optional<RenewalDestinationResponseData> renewalDestination) {
+            this.renewalDestination = renewalDestination;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage originalPlanId(String originalPlanId) {
             this.originalPlanId = Optional.ofNullable(originalPlanId);
@@ -407,6 +451,7 @@ public final class PlanVersionResponseData {
                     name,
                     originalPlanId,
                     planType,
+                    renewalDestination,
                     renewalPolicy,
                     status,
                     updatedAt,
@@ -424,6 +469,7 @@ public final class PlanVersionResponseData {
                     || key.equalsIgnoreCase("name")
                     || key.equalsIgnoreCase("original_plan_id")
                     || key.equalsIgnoreCase("plan_type")
+                    || key.equalsIgnoreCase("renewal_destination")
                     || key.equalsIgnoreCase("renewal_policy")
                     || key.equalsIgnoreCase("status")
                     || key.equalsIgnoreCase("updated_at")

@@ -15,6 +15,7 @@ import com.schematic.api.resources.integrationsapi.types.ClaimStripeSandboxKeysR
 import com.schematic.api.resources.integrationsapi.types.GetIntegrationWebhookUrlResponse;
 import com.schematic.api.resources.integrationsapi.types.GetStripeSandboxClaimLinkResponse;
 import com.schematic.api.resources.integrationsapi.types.GetStripeSandboxKeysResponse;
+import com.schematic.api.resources.integrationsapi.types.GetZuoraConnectionHealthResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallIntegrationResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallStripeClaimableSandboxResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallStripeResponse;
@@ -413,6 +414,30 @@ public class AsyncIntegrationsapiClient {
         CompletableFuture<BaseSchematicHttpResponse<UninstallIntegrationResponse>> rawFuture =
                 this.rawClient.uninstallIntegration(integrationId, requestOptions);
         CompletableFuture<UninstallIntegrationResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetZuoraConnectionHealthResponse> getZuoraConnectionHealth() {
+        CompletableFuture<BaseSchematicHttpResponse<GetZuoraConnectionHealthResponse>> rawFuture =
+                this.rawClient.getZuoraConnectionHealth();
+        CompletableFuture<GetZuoraConnectionHealthResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetZuoraConnectionHealthResponse> getZuoraConnectionHealth(RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetZuoraConnectionHealthResponse>> rawFuture =
+                this.rawClient.getZuoraConnectionHealth(requestOptions);
+        CompletableFuture<GetZuoraConnectionHealthResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);

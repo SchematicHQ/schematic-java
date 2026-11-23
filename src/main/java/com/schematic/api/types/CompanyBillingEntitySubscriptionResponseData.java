@@ -40,6 +40,8 @@ public final class CompanyBillingEntitySubscriptionResponseData {
 
     private final String interval;
 
+    private final Optional<Long> intervalCount;
+
     private final boolean isInitial;
 
     private final Optional<InvoiceResponseData> latestInvoice;
@@ -81,6 +83,7 @@ public final class CompanyBillingEntitySubscriptionResponseData {
             List<BillingSubscriptionDiscountView> discounts,
             Optional<OffsetDateTime> expiredAt,
             String interval,
+            Optional<Long> intervalCount,
             boolean isInitial,
             Optional<InvoiceResponseData> latestInvoice,
             Optional<BillingSubscriptionPauseBehavior> pauseBehavior,
@@ -105,6 +108,7 @@ public final class CompanyBillingEntitySubscriptionResponseData {
         this.discounts = discounts;
         this.expiredAt = expiredAt;
         this.interval = interval;
+        this.intervalCount = intervalCount;
         this.isInitial = isInitial;
         this.latestInvoice = latestInvoice;
         this.pauseBehavior = pauseBehavior;
@@ -161,6 +165,14 @@ public final class CompanyBillingEntitySubscriptionResponseData {
     @JsonProperty("interval")
     public String getInterval() {
         return interval;
+    }
+
+    /**
+     * @return With interval, the subscription's billing period: 3 with month is quarterly. Read from the subscription's line items, since interval alone is month for monthly and quarterly alike.
+     */
+    @JsonProperty("interval_count")
+    public Optional<Long> getIntervalCount() {
+        return intervalCount;
     }
 
     @JsonProperty("is_initial")
@@ -259,6 +271,7 @@ public final class CompanyBillingEntitySubscriptionResponseData {
                 && discounts.equals(other.discounts)
                 && expiredAt.equals(other.expiredAt)
                 && interval.equals(other.interval)
+                && intervalCount.equals(other.intervalCount)
                 && isInitial == other.isInitial
                 && latestInvoice.equals(other.latestInvoice)
                 && pauseBehavior.equals(other.pauseBehavior)
@@ -287,6 +300,7 @@ public final class CompanyBillingEntitySubscriptionResponseData {
                 this.discounts,
                 this.expiredAt,
                 this.interval,
+                this.intervalCount,
                 this.isInitial,
                 this.latestInvoice,
                 this.pauseBehavior,
@@ -380,6 +394,13 @@ public final class CompanyBillingEntitySubscriptionResponseData {
 
         _FinalStage expiredAt(OffsetDateTime expiredAt);
 
+        /**
+         * <p>With interval, the subscription's billing period: 3 with month is quarterly. Read from the subscription's line items, since interval alone is month for monthly and quarterly alike.</p>
+         */
+        _FinalStage intervalCount(Optional<Long> intervalCount);
+
+        _FinalStage intervalCount(Long intervalCount);
+
         _FinalStage latestInvoice(Optional<InvoiceResponseData> latestInvoice);
 
         _FinalStage latestInvoice(InvoiceResponseData latestInvoice);
@@ -470,6 +491,8 @@ public final class CompanyBillingEntitySubscriptionResponseData {
 
         private Optional<InvoiceResponseData> latestInvoice = Optional.empty();
 
+        private Optional<Long> intervalCount = Optional.empty();
+
         private Optional<OffsetDateTime> expiredAt = Optional.empty();
 
         private List<BillingSubscriptionDiscountView> discounts = new ArrayList<>();
@@ -492,6 +515,7 @@ public final class CompanyBillingEntitySubscriptionResponseData {
             discounts(other.getDiscounts());
             expiredAt(other.getExpiredAt());
             interval(other.getInterval());
+            intervalCount(other.getIntervalCount());
             isInitial(other.getIsInitial());
             latestInvoice(other.getLatestInvoice());
             pauseBehavior(other.getPauseBehavior());
@@ -709,6 +733,26 @@ public final class CompanyBillingEntitySubscriptionResponseData {
             return this;
         }
 
+        /**
+         * <p>With interval, the subscription's billing period: 3 with month is quarterly. Read from the subscription's line items, since interval alone is month for monthly and quarterly alike.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage intervalCount(Long intervalCount) {
+            this.intervalCount = Optional.ofNullable(intervalCount);
+            return this;
+        }
+
+        /**
+         * <p>With interval, the subscription's billing period: 3 with month is quarterly. Read from the subscription's line items, since interval alone is month for monthly and quarterly alike.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "interval_count", nulls = Nulls.SKIP)
+        public _FinalStage intervalCount(Optional<Long> intervalCount) {
+            this.intervalCount = intervalCount;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage expiredAt(OffsetDateTime expiredAt) {
             this.expiredAt = Optional.ofNullable(expiredAt);
@@ -783,6 +827,7 @@ public final class CompanyBillingEntitySubscriptionResponseData {
                     discounts,
                     expiredAt,
                     interval,
+                    intervalCount,
                     isInitial,
                     latestInvoice,
                     pauseBehavior,
@@ -811,6 +856,7 @@ public final class CompanyBillingEntitySubscriptionResponseData {
                     || key.equalsIgnoreCase("discounts")
                     || key.equalsIgnoreCase("expired_at")
                     || key.equalsIgnoreCase("interval")
+                    || key.equalsIgnoreCase("interval_count")
                     || key.equalsIgnoreCase("is_initial")
                     || key.equalsIgnoreCase("latest_invoice")
                     || key.equalsIgnoreCase("pause_behavior")

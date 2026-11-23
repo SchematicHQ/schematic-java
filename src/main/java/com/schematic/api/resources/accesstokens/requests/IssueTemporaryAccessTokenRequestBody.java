@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -25,15 +26,24 @@ public final class IssueTemporaryAccessTokenRequestBody {
 
     private final String resourceType;
 
+    private final Optional<Map<String, String>> userLookup;
+
     private final Map<String, Object> additionalProperties;
 
     private IssueTemporaryAccessTokenRequestBody(
-            Map<String, String> lookup, String resourceType, Map<String, Object> additionalProperties) {
+            Map<String, String> lookup,
+            String resourceType,
+            Optional<Map<String, String>> userLookup,
+            Map<String, Object> additionalProperties) {
         this.lookup = lookup;
         this.resourceType = resourceType;
+        this.userLookup = userLookup;
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return Key-value pairs that identify the company the token is for, such as {&quot;id&quot;: &quot;your-company-id&quot;}.
+     */
     @JsonProperty("lookup")
     public Map<String, String> getLookup() {
         return lookup;
@@ -42,6 +52,14 @@ public final class IssueTemporaryAccessTokenRequestBody {
     @JsonProperty("resource_type")
     public String getResourceType() {
         return resourceType;
+    }
+
+    /**
+     * @return Optional key-value pairs that identify the user of your app the token is for, such as {&quot;email&quot;: &quot;user@example.com&quot;}. The user must belong to the company named by lookup. Writes made with the token are attributed to this user in the audit log; the token's access is the same either way.
+     */
+    @JsonProperty("user_lookup")
+    public Optional<Map<String, String>> getUserLookup() {
+        return userLookup;
     }
 
     @java.lang.Override
@@ -57,12 +75,14 @@ public final class IssueTemporaryAccessTokenRequestBody {
     }
 
     private boolean equalTo(IssueTemporaryAccessTokenRequestBody other) {
-        return lookup.equals(other.lookup) && resourceType.equals(other.resourceType);
+        return lookup.equals(other.lookup)
+                && resourceType.equals(other.resourceType)
+                && userLookup.equals(other.userLookup);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.lookup, this.resourceType);
+        return Objects.hash(this.lookup, this.resourceType, this.userLookup);
     }
 
     @java.lang.Override
@@ -87,16 +107,28 @@ public final class IssueTemporaryAccessTokenRequestBody {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Key-value pairs that identify the company the token is for, such as {&quot;id&quot;: &quot;your-company-id&quot;}.</p>
+         */
         _FinalStage lookup(Map<String, String> lookup);
 
         _FinalStage putAllLookup(Map<String, String> lookup);
 
         _FinalStage lookup(String key, String value);
+
+        /**
+         * <p>Optional key-value pairs that identify the user of your app the token is for, such as {&quot;email&quot;: &quot;user@example.com&quot;}. The user must belong to the company named by lookup. Writes made with the token are attributed to this user in the audit log; the token's access is the same either way.</p>
+         */
+        _FinalStage userLookup(Optional<Map<String, String>> userLookup);
+
+        _FinalStage userLookup(Map<String, String> userLookup);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ResourceTypeStage, _FinalStage {
         private String resourceType;
+
+        private Optional<Map<String, String>> userLookup = Optional.empty();
 
         private Map<String, String> lookup = new LinkedHashMap<>();
 
@@ -108,6 +140,7 @@ public final class IssueTemporaryAccessTokenRequestBody {
         public Builder from(IssueTemporaryAccessTokenRequestBody other) {
             lookup(other.getLookup());
             resourceType(other.getResourceType());
+            userLookup(other.getUserLookup());
             return this;
         }
 
@@ -118,12 +151,40 @@ public final class IssueTemporaryAccessTokenRequestBody {
             return this;
         }
 
+        /**
+         * <p>Optional key-value pairs that identify the user of your app the token is for, such as {&quot;email&quot;: &quot;user@example.com&quot;}. The user must belong to the company named by lookup. Writes made with the token are attributed to this user in the audit log; the token's access is the same either way.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage userLookup(Map<String, String> userLookup) {
+            this.userLookup = Optional.ofNullable(userLookup);
+            return this;
+        }
+
+        /**
+         * <p>Optional key-value pairs that identify the user of your app the token is for, such as {&quot;email&quot;: &quot;user@example.com&quot;}. The user must belong to the company named by lookup. Writes made with the token are attributed to this user in the audit log; the token's access is the same either way.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "user_lookup", nulls = Nulls.SKIP)
+        public _FinalStage userLookup(Optional<Map<String, String>> userLookup) {
+            this.userLookup = userLookup;
+            return this;
+        }
+
+        /**
+         * <p>Key-value pairs that identify the company the token is for, such as {&quot;id&quot;: &quot;your-company-id&quot;}.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage lookup(String key, String value) {
             this.lookup.put(key, value);
             return this;
         }
 
+        /**
+         * <p>Key-value pairs that identify the company the token is for, such as {&quot;id&quot;: &quot;your-company-id&quot;}.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage putAllLookup(Map<String, String> lookup) {
             if (lookup != null) {
@@ -132,6 +193,9 @@ public final class IssueTemporaryAccessTokenRequestBody {
             return this;
         }
 
+        /**
+         * <p>Key-value pairs that identify the company the token is for, such as {&quot;id&quot;: &quot;your-company-id&quot;}.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "lookup", nulls = Nulls.SKIP)
         public _FinalStage lookup(Map<String, String> lookup) {
@@ -144,12 +208,14 @@ public final class IssueTemporaryAccessTokenRequestBody {
 
         @java.lang.Override
         public IssueTemporaryAccessTokenRequestBody build() {
-            return new IssueTemporaryAccessTokenRequestBody(lookup, resourceType, additionalProperties);
+            return new IssueTemporaryAccessTokenRequestBody(lookup, resourceType, userLookup, additionalProperties);
         }
 
         @JsonAnySetter
         private void putAdditionalPropertyFromJson(String key, Object value) {
-            if (key.equalsIgnoreCase("lookup") || key.equalsIgnoreCase("resource_type")) {
+            if (key.equalsIgnoreCase("lookup")
+                    || key.equalsIgnoreCase("resource_type")
+                    || key.equalsIgnoreCase("user_lookup")) {
                 return;
             }
             this.additionalProperties.put(key, value);

@@ -434,6 +434,7 @@ client.accounts().listAuditLogs(
         .actorType(ActorType.API_KEY)
         .companyId("company_id")
         .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .endUserId("end_user_id")
         .environmentId("environment_id")
         .q("q")
         .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
@@ -472,6 +473,14 @@ client.accounts().listAuditLogs(
 <dd>
 
 **endTime:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endUserId:** `Optional<String>` — Only entries made with a temporary access token issued for this user
     
 </dd>
 </dl>
@@ -582,6 +591,7 @@ client.accounts().countAuditLogs(
         .actorType(ActorType.API_KEY)
         .companyId("company_id")
         .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .endUserId("end_user_id")
         .environmentId("environment_id")
         .q("q")
         .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
@@ -620,6 +630,14 @@ client.accounts().countAuditLogs(
 <dd>
 
 **endTime:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endUserId:** `Optional<String>` — Only entries made with a temporary access token issued for this user
     
 </dd>
 </dl>
@@ -14607,7 +14625,7 @@ client.entitlements().createPlanEntitlement(
 <dl>
 <dd>
 
-**overageBillingCadence:** `Optional<BillingArrearsCadence>` — How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
+**overageBillingCadence:** `Optional<BillingArrearsCadence>` — How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. A monthly allowance on a plan with a quarterly or yearly price is billed monthly instead, because the provider would apply one allowance to the whole period; an allowance that resets daily or weekly is refused when Stripe bills the overage. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
     
 </dd>
 </dl>
@@ -14989,7 +15007,7 @@ client.entitlements().updatePlanEntitlement(
 <dl>
 <dd>
 
-**overageBillingCadence:** `Optional<BillingArrearsCadence>` — How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
+**overageBillingCadence:** `Optional<BillingArrearsCadence>` — How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. A monthly allowance on a plan with a quarterly or yearly price is billed monthly instead, because the provider would apply one allowance to the whole period; an allowance that resets daily or weekly is refused when Stripe bills the overage. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
     
 </dd>
 </dl>
@@ -15374,7 +15392,7 @@ client.entitlements().upsertPlanEntitlementForBillingProduct(
 <dl>
 <dd>
 
-**overageBillingCadence:** `Optional<BillingArrearsCadence>` — How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
+**overageBillingCadence:** `Optional<BillingArrearsCadence>` — How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. A monthly allowance on a plan with a quarterly or yearly price is billed monthly instead, because the provider would apply one allowance to the whole period; an allowance that resets daily or weekly is refused when Stripe bills the overage. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
     
 </dd>
 </dl>
@@ -18405,6 +18423,14 @@ client.planbundle().createCustomPlanBundle(
 <dl>
 <dd>
 
+**renewalDestination:** `Optional<RenewalDestinationRequestBody>` — Where the company moves at term end when renewal_policy is migrate_to_plan. Required for that policy and refused for any other.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **renewalPolicy:** `Optional<RenewalPolicy>` 
     
 </dd>
@@ -18596,6 +18622,14 @@ client.planbundle().updatePlanBundle(
 <dd>
 
 **planVersionId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**renewalDestination:** `Optional<RenewalDestinationRequestBody>` — Where the company moves at term end when the version's renewal_policy is migrate_to_plan. Left out, the version keeps the destination it has; refused for any other policy.
     
 </dd>
 </dl>
@@ -19424,6 +19458,141 @@ client.events().getEvent("event_id");
 <dd>
 
 **eventId:** `String` — event_id
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.getInferenceCost() -> GetInferenceCostResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().getInferenceCost(
+    GetInferenceCostRequest
+        .builder()
+        .endTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .startTime(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**endTime:** `Optional<OffsetDateTime>` — End of the window (exclusive). Pass together with start_time; when both are omitted, the current calendar month in UTC is used
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**startTime:** `Optional<OffsetDateTime>` — Start of the window (inclusive). Pass together with end_time; when both are omitted, the current calendar month in UTC is used
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.listInferenceCostRates() -> ListInferenceCostRatesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().listInferenceCostRates(
+    ListInferenceCostRatesRequest
+        .builder()
+        .provider("provider")
+        .responseModel("response_model")
+        .scope(InferenceCostRateScope.ACCOUNT)
+        .limit(1000000L)
+        .offset(1000000L)
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**provider:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**responseModel:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**scope:** `Optional<InferenceCostRateScope>` — Only list rates from this sheet: list_price for Schematic's list prices, account for the environment's own rate sheet.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Long>` — Page limit (default 100)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `Optional<Long>` — Page offset (default 0)
     
 </dd>
 </dl>
@@ -22252,6 +22421,31 @@ client.integrationsapi().uninstallIntegration("integration_id");
 </dl>
 </details>
 
+<details><summary><code>client.integrationsapi.getZuoraConnectionHealth() -> GetZuoraConnectionHealthResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.integrationsapi().getZuoraConnectionHealth();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## licenses
 <details><summary><code>client.licenses.listLicenses() -> ListLicensesResponse</code></summary>
 <dl>
@@ -24392,7 +24586,7 @@ client.accesstokens().issueTemporaryAccessToken(
 <dl>
 <dd>
 
-**lookup:** `Map<String, String>` 
+**lookup:** `Map<String, String>` — Key-value pairs that identify the company the token is for, such as {"id": "your-company-id"}.
     
 </dd>
 </dl>
@@ -24401,6 +24595,14 @@ client.accesstokens().issueTemporaryAccessToken(
 <dd>
 
 **resourceType:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userLookup:** `Optional<Map<String, String>>` — Optional key-value pairs that identify the user of your app the token is for, such as {"email": "user@example.com"}. The user must belong to the company named by lookup. Writes made with the token are attributed to this user in the audit log; the token's access is the same either way.
     
 </dd>
 </dl>

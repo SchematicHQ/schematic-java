@@ -8,8 +8,10 @@ import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.events.requests.CreateAccountInferenceCostRateRequestBody;
 import com.schematic.api.resources.events.requests.CreateEventBatchRequestBody;
 import com.schematic.api.resources.events.requests.GetEventSummariesRequest;
+import com.schematic.api.resources.events.requests.GetInferenceCostRequest;
 import com.schematic.api.resources.events.requests.ListAccountInferenceCostRatesRequest;
 import com.schematic.api.resources.events.requests.ListEventsRequest;
+import com.schematic.api.resources.events.requests.ListInferenceCostRatesRequest;
 import com.schematic.api.resources.events.requests.UpdateAccountInferenceCostRateRequestBody;
 import com.schematic.api.resources.events.requests.UpsertOtlpEnvironmentSettingsRequestBody;
 import com.schematic.api.resources.events.types.CreateAccountInferenceCostRateResponse;
@@ -19,10 +21,12 @@ import com.schematic.api.resources.events.types.DeleteAccountInferenceCostRateRe
 import com.schematic.api.resources.events.types.DeleteOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetEventResponse;
 import com.schematic.api.resources.events.types.GetEventSummariesResponse;
+import com.schematic.api.resources.events.types.GetInferenceCostResponse;
 import com.schematic.api.resources.events.types.GetOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetSegmentIntegrationStatusResponse;
 import com.schematic.api.resources.events.types.ListAccountInferenceCostRatesResponse;
 import com.schematic.api.resources.events.types.ListEventsResponse;
+import com.schematic.api.resources.events.types.ListInferenceCostRatesResponse;
 import com.schematic.api.resources.events.types.UpdateAccountInferenceCostRateResponse;
 import com.schematic.api.resources.events.types.UpsertOtlpEnvironmentSettingsResponse;
 import com.schematic.api.types.CreateEventRequestBody;
@@ -100,6 +104,39 @@ public class EventsClient {
 
     public GetEventResponse getEvent(String eventId, RequestOptions requestOptions) {
         return this.rawClient.getEvent(eventId, requestOptions).body();
+    }
+
+    public GetInferenceCostResponse getInferenceCost() {
+        return this.rawClient.getInferenceCost().body();
+    }
+
+    public GetInferenceCostResponse getInferenceCost(RequestOptions requestOptions) {
+        return this.rawClient.getInferenceCost(requestOptions).body();
+    }
+
+    public GetInferenceCostResponse getInferenceCost(GetInferenceCostRequest request) {
+        return this.rawClient.getInferenceCost(request).body();
+    }
+
+    public GetInferenceCostResponse getInferenceCost(GetInferenceCostRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getInferenceCost(request, requestOptions).body();
+    }
+
+    public ListInferenceCostRatesResponse listInferenceCostRates() {
+        return this.rawClient.listInferenceCostRates().body();
+    }
+
+    public ListInferenceCostRatesResponse listInferenceCostRates(RequestOptions requestOptions) {
+        return this.rawClient.listInferenceCostRates(requestOptions).body();
+    }
+
+    public ListInferenceCostRatesResponse listInferenceCostRates(ListInferenceCostRatesRequest request) {
+        return this.rawClient.listInferenceCostRates(request).body();
+    }
+
+    public ListInferenceCostRatesResponse listInferenceCostRates(
+            ListInferenceCostRatesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listInferenceCostRates(request, requestOptions).body();
     }
 
     public ListAccountInferenceCostRatesResponse listAccountInferenceCostRates() {

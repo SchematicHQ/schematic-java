@@ -34,12 +34,20 @@ public final class DataExportMetadata {
         return new DataExportMetadata(new CompanyFeatureUsageValue(value));
     }
 
+    public static DataExportMetadata creditBalance(CreditBalanceExportMetadata value) {
+        return new DataExportMetadata(new CreditBalanceValue(value));
+    }
+
     public static DataExportMetadata creditLedger(CreditLedgerExportMetadata value) {
         return new DataExportMetadata(new CreditLedgerValue(value));
     }
 
     public static DataExportMetadata event(EventExportMetadata value) {
         return new DataExportMetadata(new EventValue(value));
+    }
+
+    public static DataExportMetadata user(UserExportMetadata value) {
+        return new DataExportMetadata(new UserValue(value));
     }
 
     public boolean isAuditLog() {
@@ -50,12 +58,20 @@ public final class DataExportMetadata {
         return value instanceof CompanyFeatureUsageValue;
     }
 
+    public boolean isCreditBalance() {
+        return value instanceof CreditBalanceValue;
+    }
+
     public boolean isCreditLedger() {
         return value instanceof CreditLedgerValue;
     }
 
     public boolean isEvent() {
         return value instanceof EventValue;
+    }
+
+    public boolean isUser() {
+        return value instanceof UserValue;
     }
 
     public boolean _isUnknown() {
@@ -76,6 +92,13 @@ public final class DataExportMetadata {
         return Optional.empty();
     }
 
+    public Optional<CreditBalanceExportMetadata> getCreditBalance() {
+        if (isCreditBalance()) {
+            return Optional.of(((CreditBalanceValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<CreditLedgerExportMetadata> getCreditLedger() {
         if (isCreditLedger()) {
             return Optional.of(((CreditLedgerValue) value).value);
@@ -86,6 +109,13 @@ public final class DataExportMetadata {
     public Optional<EventExportMetadata> getEvent() {
         if (isEvent()) {
             return Optional.of(((EventValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<UserExportMetadata> getUser() {
+        if (isUser()) {
+            return Optional.of(((UserValue) value).value);
         }
         return Optional.empty();
     }
@@ -123,9 +153,13 @@ public final class DataExportMetadata {
 
         T visitCompanyFeatureUsage(CompanyFeatureUsageExportMetadata companyFeatureUsage);
 
+        T visitCreditBalance(CreditBalanceExportMetadata creditBalance);
+
         T visitCreditLedger(CreditLedgerExportMetadata creditLedger);
 
         T visitEvent(EventExportMetadata event);
+
+        T visitUser(UserExportMetadata user);
 
         T _visitUnknown(Object unknownType);
     }
@@ -138,8 +172,10 @@ public final class DataExportMetadata {
     @JsonSubTypes({
         @JsonSubTypes.Type(AuditLogValue.class),
         @JsonSubTypes.Type(CompanyFeatureUsageValue.class),
+        @JsonSubTypes.Type(CreditBalanceValue.class),
         @JsonSubTypes.Type(CreditLedgerValue.class),
-        @JsonSubTypes.Type(EventValue.class)
+        @JsonSubTypes.Type(EventValue.class),
+        @JsonSubTypes.Type(UserValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -226,6 +262,46 @@ public final class DataExportMetadata {
         }
     }
 
+    @JsonTypeName("credit-balance")
+    @JsonIgnoreProperties("export_type")
+    private static final class CreditBalanceValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "export_type", allowSetters = true)
+        private CreditBalanceExportMetadata value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private CreditBalanceValue() {}
+
+        private CreditBalanceValue(CreditBalanceExportMetadata value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitCreditBalance(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof CreditBalanceValue && equalTo((CreditBalanceValue) other);
+        }
+
+        private boolean equalTo(CreditBalanceValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "DataExportMetadata{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("credit-ledger")
     @JsonIgnoreProperties("export_type")
     private static final class CreditLedgerValue implements Value {
@@ -292,6 +368,46 @@ public final class DataExportMetadata {
         }
 
         private boolean equalTo(EventValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "DataExportMetadata{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("user")
+    @JsonIgnoreProperties("export_type")
+    private static final class UserValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "export_type", allowSetters = true)
+        private UserExportMetadata value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private UserValue() {}
+
+        private UserValue(UserExportMetadata value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitUser(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof UserValue && equalTo((UserValue) other);
+        }
+
+        private boolean equalTo(UserValue other) {
             return value.equals(other.value);
         }
 
