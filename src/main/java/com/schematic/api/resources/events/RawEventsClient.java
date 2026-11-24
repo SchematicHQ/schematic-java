@@ -23,8 +23,10 @@ import com.schematic.api.errors.UnauthorizedError;
 import com.schematic.api.resources.events.requests.CreateAccountInferenceCostRateRequestBody;
 import com.schematic.api.resources.events.requests.CreateEventBatchRequestBody;
 import com.schematic.api.resources.events.requests.GetEventSummariesRequest;
+import com.schematic.api.resources.events.requests.GetInferenceCostRequest;
 import com.schematic.api.resources.events.requests.ListAccountInferenceCostRatesRequest;
 import com.schematic.api.resources.events.requests.ListEventsRequest;
+import com.schematic.api.resources.events.requests.ListInferenceCostRatesRequest;
 import com.schematic.api.resources.events.requests.UpdateAccountInferenceCostRateRequestBody;
 import com.schematic.api.resources.events.requests.UpsertOtlpEnvironmentSettingsRequestBody;
 import com.schematic.api.resources.events.types.CreateAccountInferenceCostRateResponse;
@@ -34,10 +36,12 @@ import com.schematic.api.resources.events.types.DeleteAccountInferenceCostRateRe
 import com.schematic.api.resources.events.types.DeleteOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetEventResponse;
 import com.schematic.api.resources.events.types.GetEventSummariesResponse;
+import com.schematic.api.resources.events.types.GetInferenceCostResponse;
 import com.schematic.api.resources.events.types.GetOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetSegmentIntegrationStatusResponse;
 import com.schematic.api.resources.events.types.ListAccountInferenceCostRatesResponse;
 import com.schematic.api.resources.events.types.ListEventsResponse;
+import com.schematic.api.resources.events.types.ListInferenceCostRatesResponse;
 import com.schematic.api.resources.events.types.UpdateAccountInferenceCostRateResponse;
 import com.schematic.api.resources.events.types.UpsertOtlpEnvironmentSettingsResponse;
 import com.schematic.api.types.ApiError;
@@ -469,6 +473,193 @@ public class RawEventsClient {
             }
             try {
                 switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<GetInferenceCostResponse> getInferenceCost() {
+        return getInferenceCost(GetInferenceCostRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<GetInferenceCostResponse> getInferenceCost(RequestOptions requestOptions) {
+        return getInferenceCost(GetInferenceCostRequest.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<GetInferenceCostResponse> getInferenceCost(GetInferenceCostRequest request) {
+        return getInferenceCost(request, null);
+    }
+
+    public BaseSchematicHttpResponse<GetInferenceCostResponse> getInferenceCost(
+            GetInferenceCostRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("inference-cost");
+        if (request.getEndTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_time", request.getEndTime().get(), false);
+        }
+        if (request.getStartTime().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start_time", request.getStartTime().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GetInferenceCostResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new BaseSchematicApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new BaseSchematicException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BaseSchematicException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BaseSchematicHttpResponse<ListInferenceCostRatesResponse> listInferenceCostRates() {
+        return listInferenceCostRates(ListInferenceCostRatesRequest.builder().build());
+    }
+
+    public BaseSchematicHttpResponse<ListInferenceCostRatesResponse> listInferenceCostRates(
+            RequestOptions requestOptions) {
+        return listInferenceCostRates(ListInferenceCostRatesRequest.builder().build(), requestOptions);
+    }
+
+    public BaseSchematicHttpResponse<ListInferenceCostRatesResponse> listInferenceCostRates(
+            ListInferenceCostRatesRequest request) {
+        return listInferenceCostRates(request, null);
+    }
+
+    public BaseSchematicHttpResponse<ListInferenceCostRatesResponse> listInferenceCostRates(
+            ListInferenceCostRatesRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("inference-cost-rates");
+        if (request.getProvider().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "provider", request.getProvider().get(), false);
+        }
+        if (request.getResponseModel().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "response_model", request.getResponseModel().get(), false);
+        }
+        if (request.getScope().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "scope", request.getScope().get(), false);
+        }
+        if (request.getLimit().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "limit", request.getLimit().get(), false);
+        }
+        if (request.getOffset().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "offset", request.getOffset().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new BaseSchematicHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ListInferenceCostRatesResponse.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);
                     case 401:
                         throw new UnauthorizedError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApiError.class), response);

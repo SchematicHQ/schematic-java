@@ -172,7 +172,7 @@ public final class CustomPlanBillingResponseData {
     }
 
     /**
-     * @return When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the default plan. Null for a plan that renews.
+     * @return When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the fallback plan. Null for a plan that renews.
      */
     @JsonProperty("end_date")
     public Optional<OffsetDateTime> getEndDate() {
@@ -409,7 +409,7 @@ public final class CustomPlanBillingResponseData {
         _FinalStage checkoutId(String checkoutId);
 
         /**
-         * <p>When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the default plan. Null for a plan that renews.</p>
+         * <p>When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the fallback plan. Null for a plan that renews.</p>
          */
         _FinalStage endDate(Optional<OffsetDateTime> endDate);
 
@@ -745,7 +745,7 @@ public final class CustomPlanBillingResponseData {
         }
 
         /**
-         * <p>When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the default plan. Null for a plan that renews.</p>
+         * <p>When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the fallback plan. Null for a plan that renews.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -755,7 +755,7 @@ public final class CustomPlanBillingResponseData {
         }
 
         /**
-         * <p>When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the default plan. Null for a plan that renews.</p>
+         * <p>When a custom plan that doesn't renew ends: the renewal the subscription stops on and the company moves to the fallback plan. Null for a plan that renews.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "end_date", nulls = Nulls.SKIP)

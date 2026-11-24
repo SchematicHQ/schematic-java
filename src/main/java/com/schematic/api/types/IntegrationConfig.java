@@ -46,6 +46,10 @@ public final class IntegrationConfig {
         return new IntegrationConfig(new WorkosValue(value));
     }
 
+    public static IntegrationConfig zuora(ZuoraIntegrationConfig value) {
+        return new IntegrationConfig(new ZuoraValue(value));
+    }
+
     public boolean isClerk() {
         return value instanceof ClerkValue;
     }
@@ -64,6 +68,10 @@ public final class IntegrationConfig {
 
     public boolean isWorkos() {
         return value instanceof WorkosValue;
+    }
+
+    public boolean isZuora() {
+        return value instanceof ZuoraValue;
     }
 
     public boolean _isUnknown() {
@@ -101,6 +109,13 @@ public final class IntegrationConfig {
     public Optional<WorkOsIntegrationConfig> getWorkos() {
         if (isWorkos()) {
             return Optional.of(((WorkosValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ZuoraIntegrationConfig> getZuora() {
+        if (isZuora()) {
+            return Optional.of(((ZuoraValue) value).value);
         }
         return Optional.empty();
     }
@@ -144,6 +159,8 @@ public final class IntegrationConfig {
 
         T visitWorkos(WorkOsIntegrationConfig workos);
 
+        T visitZuora(ZuoraIntegrationConfig zuora);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -153,7 +170,8 @@ public final class IntegrationConfig {
         @JsonSubTypes.Type(MetronomeValue.class),
         @JsonSubTypes.Type(OrbValue.class),
         @JsonSubTypes.Type(StripeValue.class),
-        @JsonSubTypes.Type(WorkosValue.class)
+        @JsonSubTypes.Type(WorkosValue.class),
+        @JsonSubTypes.Type(ZuoraValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -346,6 +364,46 @@ public final class IntegrationConfig {
         }
 
         private boolean equalTo(WorkosValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "IntegrationConfig{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("zuora")
+    @JsonIgnoreProperties("type")
+    private static final class ZuoraValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ZuoraIntegrationConfig value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ZuoraValue() {}
+
+        private ZuoraValue(ZuoraIntegrationConfig value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitZuora(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ZuoraValue && equalTo((ZuoraValue) other);
+        }
+
+        private boolean equalTo(ZuoraValue other) {
             return value.equals(other.value);
         }
 

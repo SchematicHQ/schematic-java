@@ -40,6 +40,8 @@ public final class ScheduledCheckoutResponseData {
 
     private final Optional<String> scheduledInterval;
 
+    private final Optional<Long> scheduledIntervalCount;
+
     private final Optional<Long> scheduledPrice;
 
     private final Optional<OffsetDateTime> startedAt;
@@ -62,6 +64,7 @@ public final class ScheduledCheckoutResponseData {
             String fromPlanId,
             String id,
             Optional<String> scheduledInterval,
+            Optional<Long> scheduledIntervalCount,
             Optional<Long> scheduledPrice,
             Optional<OffsetDateTime> startedAt,
             ScheduledCheckoutStatus status,
@@ -77,6 +80,7 @@ public final class ScheduledCheckoutResponseData {
         this.fromPlanId = fromPlanId;
         this.id = id;
         this.scheduledInterval = scheduledInterval;
+        this.scheduledIntervalCount = scheduledIntervalCount;
         this.scheduledPrice = scheduledPrice;
         this.startedAt = startedAt;
         this.status = status;
@@ -130,6 +134,14 @@ public final class ScheduledCheckoutResponseData {
         return scheduledInterval;
     }
 
+    /**
+     * @return With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.
+     */
+    @JsonProperty("scheduled_interval_count")
+    public Optional<Long> getScheduledIntervalCount() {
+        return scheduledIntervalCount;
+    }
+
     @JsonProperty("scheduled_price")
     public Optional<Long> getScheduledPrice() {
         return scheduledPrice;
@@ -176,6 +188,7 @@ public final class ScheduledCheckoutResponseData {
                 && fromPlanId.equals(other.fromPlanId)
                 && id.equals(other.id)
                 && scheduledInterval.equals(other.scheduledInterval)
+                && scheduledIntervalCount.equals(other.scheduledIntervalCount)
                 && scheduledPrice.equals(other.scheduledPrice)
                 && startedAt.equals(other.startedAt)
                 && status.equals(other.status)
@@ -195,6 +208,7 @@ public final class ScheduledCheckoutResponseData {
                 this.fromPlanId,
                 this.id,
                 this.scheduledInterval,
+                this.scheduledIntervalCount,
                 this.scheduledPrice,
                 this.startedAt,
                 this.status,
@@ -268,6 +282,13 @@ public final class ScheduledCheckoutResponseData {
 
         _FinalStage scheduledInterval(String scheduledInterval);
 
+        /**
+         * <p>With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.</p>
+         */
+        _FinalStage scheduledIntervalCount(Optional<Long> scheduledIntervalCount);
+
+        _FinalStage scheduledIntervalCount(Long scheduledIntervalCount);
+
         _FinalStage scheduledPrice(Optional<Long> scheduledPrice);
 
         _FinalStage scheduledPrice(Long scheduledPrice);
@@ -311,6 +332,8 @@ public final class ScheduledCheckoutResponseData {
 
         private Optional<Long> scheduledPrice = Optional.empty();
 
+        private Optional<Long> scheduledIntervalCount = Optional.empty();
+
         private Optional<String> scheduledInterval = Optional.empty();
 
         private Optional<String> errorMessage = Optional.empty();
@@ -332,6 +355,7 @@ public final class ScheduledCheckoutResponseData {
             fromPlanId(other.getFromPlanId());
             id(other.getId());
             scheduledInterval(other.getScheduledInterval());
+            scheduledIntervalCount(other.getScheduledIntervalCount());
             scheduledPrice(other.getScheduledPrice());
             startedAt(other.getStartedAt());
             status(other.getStatus());
@@ -429,6 +453,26 @@ public final class ScheduledCheckoutResponseData {
             return this;
         }
 
+        /**
+         * <p>With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage scheduledIntervalCount(Long scheduledIntervalCount) {
+            this.scheduledIntervalCount = Optional.ofNullable(scheduledIntervalCount);
+            return this;
+        }
+
+        /**
+         * <p>With scheduled_interval, the scheduled price's billing period: 3 with month is quarterly. Null for a downgrade scheduled before the price was recorded.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "scheduled_interval_count", nulls = Nulls.SKIP)
+        public _FinalStage scheduledIntervalCount(Optional<Long> scheduledIntervalCount) {
+            this.scheduledIntervalCount = scheduledIntervalCount;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage scheduledInterval(String scheduledInterval) {
             this.scheduledInterval = Optional.ofNullable(scheduledInterval);
@@ -480,6 +524,7 @@ public final class ScheduledCheckoutResponseData {
                     fromPlanId,
                     id,
                     scheduledInterval,
+                    scheduledIntervalCount,
                     scheduledPrice,
                     startedAt,
                     status,
@@ -499,6 +544,7 @@ public final class ScheduledCheckoutResponseData {
                     || key.equalsIgnoreCase("from_plan_id")
                     || key.equalsIgnoreCase("id")
                     || key.equalsIgnoreCase("scheduled_interval")
+                    || key.equalsIgnoreCase("scheduled_interval_count")
                     || key.equalsIgnoreCase("scheduled_price")
                     || key.equalsIgnoreCase("started_at")
                     || key.equalsIgnoreCase("status")

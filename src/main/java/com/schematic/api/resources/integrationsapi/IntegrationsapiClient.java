@@ -14,6 +14,7 @@ import com.schematic.api.resources.integrationsapi.types.ClaimStripeSandboxKeysR
 import com.schematic.api.resources.integrationsapi.types.GetIntegrationWebhookUrlResponse;
 import com.schematic.api.resources.integrationsapi.types.GetStripeSandboxClaimLinkResponse;
 import com.schematic.api.resources.integrationsapi.types.GetStripeSandboxKeysResponse;
+import com.schematic.api.resources.integrationsapi.types.GetZuoraConnectionHealthResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallIntegrationResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallStripeClaimableSandboxResponse;
 import com.schematic.api.resources.integrationsapi.types.InstallStripeResponse;
@@ -169,5 +170,13 @@ public class IntegrationsapiClient {
         return this.rawClient
                 .uninstallIntegration(integrationId, requestOptions)
                 .body();
+    }
+
+    public GetZuoraConnectionHealthResponse getZuoraConnectionHealth() {
+        return this.rawClient.getZuoraConnectionHealth().body();
+    }
+
+    public GetZuoraConnectionHealthResponse getZuoraConnectionHealth(RequestOptions requestOptions) {
+        return this.rawClient.getZuoraConnectionHealth(requestOptions).body();
     }
 }

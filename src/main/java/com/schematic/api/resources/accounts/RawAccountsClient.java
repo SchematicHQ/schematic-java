@@ -592,6 +592,10 @@ public class RawAccountsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "end_time", request.getEndTime().get(), false);
         }
+        if (request.getEndUserId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_user_id", request.getEndUserId().get(), false);
+        }
         if (request.getEnvironmentId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "environment_id", request.getEnvironmentId().get(), false);
@@ -770,6 +774,10 @@ public class RawAccountsClient {
         if (request.getEndTime().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "end_time", request.getEndTime().get(), false);
+        }
+        if (request.getEndUserId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_user_id", request.getEndUserId().get(), false);
         }
         if (request.getEnvironmentId().isPresent()) {
             QueryStringMapper.addQueryParameter(

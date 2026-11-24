@@ -13,6 +13,8 @@ public final class IntegrationType {
 
     public static final IntegrationType WORKOS = new IntegrationType(Value.WORKOS, "workos");
 
+    public static final IntegrationType ZUORA = new IntegrationType(Value.ZUORA, "zuora");
+
     public static final IntegrationType METRONOME = new IntegrationType(Value.METRONOME, "metronome");
 
     public static final IntegrationType CLERK = new IntegrationType(Value.CLERK, "clerk");
@@ -57,6 +59,8 @@ public final class IntegrationType {
                 return visitor.visitUnknown();
             case WORKOS:
                 return visitor.visitWorkos();
+            case ZUORA:
+                return visitor.visitZuora();
             case METRONOME:
                 return visitor.visitMetronome();
             case CLERK:
@@ -78,6 +82,8 @@ public final class IntegrationType {
                 return UNKNOWN;
             case "workos":
                 return WORKOS;
+            case "zuora":
+                return ZUORA;
             case "metronome":
                 return METRONOME;
             case "clerk":
@@ -102,6 +108,8 @@ public final class IntegrationType {
 
         WORKOS,
 
+        ZUORA,
+
         _UNKNOWN
     }
 
@@ -117,6 +125,8 @@ public final class IntegrationType {
         T visitUnknown();
 
         T visitWorkos();
+
+        T visitZuora();
 
         T visitUnknown(String unknownType);
     }

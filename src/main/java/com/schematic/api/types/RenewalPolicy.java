@@ -14,6 +14,8 @@ public final class RenewalPolicy {
 
     public static final RenewalPolicy AUTO_RENEW = new RenewalPolicy(Value.AUTO_RENEW, "auto_renew");
 
+    public static final RenewalPolicy MIGRATE_TO_PLAN = new RenewalPolicy(Value.MIGRATE_TO_PLAN, "migrate_to_plan");
+
     private final Value value;
 
     private final String string;
@@ -52,6 +54,8 @@ public final class RenewalPolicy {
                 return visitor.visitHoldWithGrace();
             case AUTO_RENEW:
                 return visitor.visitAutoRenew();
+            case MIGRATE_TO_PLAN:
+                return visitor.visitMigrateToPlan();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -67,6 +71,8 @@ public final class RenewalPolicy {
                 return HOLD_WITH_GRACE;
             case "auto_renew":
                 return AUTO_RENEW;
+            case "migrate_to_plan":
+                return MIGRATE_TO_PLAN;
             default:
                 return new RenewalPolicy(Value.UNKNOWN, value);
         }
@@ -79,6 +85,8 @@ public final class RenewalPolicy {
 
         HOLD_WITH_GRACE,
 
+        MIGRATE_TO_PLAN,
+
         UNKNOWN
     }
 
@@ -88,6 +96,8 @@ public final class RenewalPolicy {
         T visitExpireToDefault();
 
         T visitHoldWithGrace();
+
+        T visitMigrateToPlan();
 
         T visitUnknown(String unknownType);
     }

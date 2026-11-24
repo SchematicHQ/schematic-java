@@ -245,7 +245,7 @@ public final class UpdatePlanEntitlementRequestBody {
     }
 
     /**
-     * @return How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
+     * @return How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. A monthly allowance on a plan with a quarterly or yearly price is billed monthly instead, because the provider would apply one allowance to the whole period; an allowance that resets daily or weekly is refused when Stripe bills the overage. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.
      */
     @JsonProperty("overage_billing_cadence")
     public Optional<BillingArrearsCadence> getOverageBillingCadence() {
@@ -537,7 +537,7 @@ public final class UpdatePlanEntitlementRequestBody {
         _FinalStage monthlyUnitPriceDecimal(String monthlyUnitPriceDecimal);
 
         /**
-         * <p>How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.</p>
+         * <p>How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. A monthly allowance on a plan with a quarterly or yearly price is billed monthly instead, because the provider would apply one allowance to the whole period; an allowance that resets daily or weekly is refused when Stripe bills the overage. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.</p>
          */
         _FinalStage overageBillingCadence(Optional<BillingArrearsCadence> overageBillingCadence);
 
@@ -1065,7 +1065,7 @@ public final class UpdatePlanEntitlementRequestBody {
         }
 
         /**
-         * <p>How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.</p>
+         * <p>How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. A monthly allowance on a plan with a quarterly or yearly price is billed monthly instead, because the provider would apply one allowance to the whole period; an allowance that resets daily or weekly is refused when Stripe bills the overage. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1075,7 +1075,7 @@ public final class UpdatePlanEntitlementRequestBody {
         }
 
         /**
-         * <p>How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.</p>
+         * <p>How often overage charges are assessed and invoiced. Defaults to end_of_billing_period, where the billing provider aggregates usage over the subscription's own period and bills it at period end. A monthly allowance on a plan with a quarterly or yearly price is billed monthly instead, because the provider would apply one allowance to the whole period; an allowance that resets daily or weekly is refused when Stripe bills the overage. Set to monthly or quarterly to have overage assessed each month or quarter and billed on its own invoice, which is the point of the setting on annual plans. A quarter charges each month's usage against that month's allowance. Only applies to overage price behavior.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "overage_billing_cadence", nulls = Nulls.SKIP)

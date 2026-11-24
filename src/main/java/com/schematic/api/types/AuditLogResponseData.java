@@ -34,6 +34,10 @@ public final class AuditLogResponseData {
 
     private final Optional<String> companyId;
 
+    private final Optional<AuditLogEndUserResponseData> endUser;
+
+    private final Optional<String> endUserId;
+
     private final Optional<OffsetDateTime> endedAt;
 
     private final Optional<EnvironmentResponseData> environment;
@@ -77,6 +81,8 @@ public final class AuditLogResponseData {
             Optional<String> apiKeyId,
             Optional<AuditLogCompanyResponseData> company,
             Optional<String> companyId,
+            Optional<AuditLogEndUserResponseData> endUser,
+            Optional<String> endUserId,
             Optional<OffsetDateTime> endedAt,
             Optional<EnvironmentResponseData> environment,
             Optional<String> environmentId,
@@ -101,6 +107,8 @@ public final class AuditLogResponseData {
         this.apiKeyId = apiKeyId;
         this.company = company;
         this.companyId = companyId;
+        this.endUser = endUser;
+        this.endUserId = endUserId;
         this.endedAt = endedAt;
         this.environment = environment;
         this.environmentId = environmentId;
@@ -149,6 +157,22 @@ public final class AuditLogResponseData {
     @JsonProperty("company_id")
     public Optional<String> getCompanyId() {
         return companyId;
+    }
+
+    /**
+     * @return The user of your app the request's temporary access token was issued for. Absent when the token named no user or the user has since been deleted.
+     */
+    @JsonProperty("end_user")
+    public Optional<AuditLogEndUserResponseData> getEndUser() {
+        return endUser;
+    }
+
+    /**
+     * @return The ID of the user of your app the request's temporary access token was issued for
+     */
+    @JsonProperty("end_user_id")
+    public Optional<String> getEndUserId() {
+        return endUserId;
     }
 
     @JsonProperty("ended_at")
@@ -257,6 +281,8 @@ public final class AuditLogResponseData {
                 && apiKeyId.equals(other.apiKeyId)
                 && company.equals(other.company)
                 && companyId.equals(other.companyId)
+                && endUser.equals(other.endUser)
+                && endUserId.equals(other.endUserId)
                 && endedAt.equals(other.endedAt)
                 && environment.equals(other.environment)
                 && environmentId.equals(other.environmentId)
@@ -285,6 +311,8 @@ public final class AuditLogResponseData {
                 this.apiKeyId,
                 this.company,
                 this.companyId,
+                this.endUser,
+                this.endUserId,
                 this.endedAt,
                 this.environment,
                 this.environmentId,
@@ -361,6 +389,20 @@ public final class AuditLogResponseData {
         _FinalStage companyId(Optional<String> companyId);
 
         _FinalStage companyId(String companyId);
+
+        /**
+         * <p>The user of your app the request's temporary access token was issued for. Absent when the token named no user or the user has since been deleted.</p>
+         */
+        _FinalStage endUser(Optional<AuditLogEndUserResponseData> endUser);
+
+        _FinalStage endUser(AuditLogEndUserResponseData endUser);
+
+        /**
+         * <p>The ID of the user of your app the request's temporary access token was issued for</p>
+         */
+        _FinalStage endUserId(Optional<String> endUserId);
+
+        _FinalStage endUserId(String endUserId);
 
         _FinalStage endedAt(Optional<OffsetDateTime> endedAt);
 
@@ -457,6 +499,10 @@ public final class AuditLogResponseData {
 
         private Optional<OffsetDateTime> endedAt = Optional.empty();
 
+        private Optional<String> endUserId = Optional.empty();
+
+        private Optional<AuditLogEndUserResponseData> endUser = Optional.empty();
+
         private Optional<String> companyId = Optional.empty();
 
         private Optional<AuditLogCompanyResponseData> company = Optional.empty();
@@ -479,6 +525,8 @@ public final class AuditLogResponseData {
             apiKeyId(other.getApiKeyId());
             company(other.getCompany());
             companyId(other.getCompanyId());
+            endUser(other.getEndUser());
+            endUserId(other.getEndUserId());
             endedAt(other.getEndedAt());
             environment(other.getEnvironment());
             environmentId(other.getEnvironmentId());
@@ -710,6 +758,46 @@ public final class AuditLogResponseData {
             return this;
         }
 
+        /**
+         * <p>The ID of the user of your app the request's temporary access token was issued for</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage endUserId(String endUserId) {
+            this.endUserId = Optional.ofNullable(endUserId);
+            return this;
+        }
+
+        /**
+         * <p>The ID of the user of your app the request's temporary access token was issued for</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "end_user_id", nulls = Nulls.SKIP)
+        public _FinalStage endUserId(Optional<String> endUserId) {
+            this.endUserId = endUserId;
+            return this;
+        }
+
+        /**
+         * <p>The user of your app the request's temporary access token was issued for. Absent when the token named no user or the user has since been deleted.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage endUser(AuditLogEndUserResponseData endUser) {
+            this.endUser = Optional.ofNullable(endUser);
+            return this;
+        }
+
+        /**
+         * <p>The user of your app the request's temporary access token was issued for. Absent when the token named no user or the user has since been deleted.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "end_user", nulls = Nulls.SKIP)
+        public _FinalStage endUser(Optional<AuditLogEndUserResponseData> endUser) {
+            this.endUser = endUser;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage companyId(String companyId) {
             this.companyId = Optional.ofNullable(companyId);
@@ -784,6 +872,8 @@ public final class AuditLogResponseData {
                     apiKeyId,
                     company,
                     companyId,
+                    endUser,
+                    endUserId,
                     endedAt,
                     environment,
                     environmentId,
@@ -812,6 +902,8 @@ public final class AuditLogResponseData {
                     || key.equalsIgnoreCase("api_key_id")
                     || key.equalsIgnoreCase("company")
                     || key.equalsIgnoreCase("company_id")
+                    || key.equalsIgnoreCase("end_user")
+                    || key.equalsIgnoreCase("end_user_id")
                     || key.equalsIgnoreCase("ended_at")
                     || key.equalsIgnoreCase("environment")
                     || key.equalsIgnoreCase("environment_id")

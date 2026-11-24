@@ -56,6 +56,8 @@ public final class PreviewSubscriptionChangeResponseData {
 
     private final Optional<OffsetDateTime> trialEnd;
 
+    private final List<String> unbilledUsageFeatureIds;
+
     private final List<FeatureUsageResponseData> usageViolations;
 
     private final Map<String, Object> additionalProperties;
@@ -77,6 +79,7 @@ public final class PreviewSubscriptionChangeResponseData {
             long proration,
             Optional<OffsetDateTime> scheduledChangeTime,
             Optional<OffsetDateTime> trialEnd,
+            List<String> unbilledUsageFeatureIds,
             List<FeatureUsageResponseData> usageViolations,
             Map<String, Object> additionalProperties) {
         this.amountOff = amountOff;
@@ -95,6 +98,7 @@ public final class PreviewSubscriptionChangeResponseData {
         this.proration = proration;
         this.scheduledChangeTime = scheduledChangeTime;
         this.trialEnd = trialEnd;
+        this.unbilledUsageFeatureIds = unbilledUsageFeatureIds;
         this.usageViolations = usageViolations;
         this.additionalProperties = additionalProperties;
     }
@@ -179,6 +183,14 @@ public final class PreviewSubscriptionChangeResponseData {
         return trialEnd;
     }
 
+    /**
+     * @return Features whose usage so far this billing period is not billed if this change is made, because the new plan does not charge for them and the billing period continues.
+     */
+    @JsonProperty("unbilled_usage_feature_ids")
+    public List<String> getUnbilledUsageFeatureIds() {
+        return unbilledUsageFeatureIds;
+    }
+
     @JsonProperty("usage_violations")
     public List<FeatureUsageResponseData> getUsageViolations() {
         return usageViolations;
@@ -213,6 +225,7 @@ public final class PreviewSubscriptionChangeResponseData {
                 && proration == other.proration
                 && scheduledChangeTime.equals(other.scheduledChangeTime)
                 && trialEnd.equals(other.trialEnd)
+                && unbilledUsageFeatureIds.equals(other.unbilledUsageFeatureIds)
                 && usageViolations.equals(other.usageViolations);
     }
 
@@ -235,6 +248,7 @@ public final class PreviewSubscriptionChangeResponseData {
                 this.proration,
                 this.scheduledChangeTime,
                 this.trialEnd,
+                this.unbilledUsageFeatureIds,
                 this.usageViolations);
     }
 
@@ -322,6 +336,15 @@ public final class PreviewSubscriptionChangeResponseData {
 
         _FinalStage trialEnd(OffsetDateTime trialEnd);
 
+        /**
+         * <p>Features whose usage so far this billing period is not billed if this change is made, because the new plan does not charge for them and the billing period continues.</p>
+         */
+        _FinalStage unbilledUsageFeatureIds(List<String> unbilledUsageFeatureIds);
+
+        _FinalStage addUnbilledUsageFeatureIds(String unbilledUsageFeatureIds);
+
+        _FinalStage addAllUnbilledUsageFeatureIds(List<String> unbilledUsageFeatureIds);
+
         _FinalStage usageViolations(List<FeatureUsageResponseData> usageViolations);
 
         _FinalStage addUsageViolations(FeatureUsageResponseData usageViolations);
@@ -364,6 +387,8 @@ public final class PreviewSubscriptionChangeResponseData {
 
         private List<FeatureUsageResponseData> usageViolations = new ArrayList<>();
 
+        private List<String> unbilledUsageFeatureIds = new ArrayList<>();
+
         private Optional<OffsetDateTime> trialEnd = Optional.empty();
 
         private Optional<OffsetDateTime> scheduledChangeTime = Optional.empty();
@@ -398,6 +423,7 @@ public final class PreviewSubscriptionChangeResponseData {
             proration(other.getProration());
             scheduledChangeTime(other.getScheduledChangeTime());
             trialEnd(other.getTrialEnd());
+            unbilledUsageFeatureIds(other.getUnbilledUsageFeatureIds());
             usageViolations(other.getUsageViolations());
             return this;
         }
@@ -492,6 +518,41 @@ public final class PreviewSubscriptionChangeResponseData {
             this.usageViolations.clear();
             if (usageViolations != null) {
                 this.usageViolations.addAll(usageViolations);
+            }
+            return this;
+        }
+
+        /**
+         * <p>Features whose usage so far this billing period is not billed if this change is made, because the new plan does not charge for them and the billing period continues.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllUnbilledUsageFeatureIds(List<String> unbilledUsageFeatureIds) {
+            if (unbilledUsageFeatureIds != null) {
+                this.unbilledUsageFeatureIds.addAll(unbilledUsageFeatureIds);
+            }
+            return this;
+        }
+
+        /**
+         * <p>Features whose usage so far this billing period is not billed if this change is made, because the new plan does not charge for them and the billing period continues.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addUnbilledUsageFeatureIds(String unbilledUsageFeatureIds) {
+            this.unbilledUsageFeatureIds.add(unbilledUsageFeatureIds);
+            return this;
+        }
+
+        /**
+         * <p>Features whose usage so far this billing period is not billed if this change is made, because the new plan does not charge for them and the billing period continues.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "unbilled_usage_feature_ids", nulls = Nulls.SKIP)
+        public _FinalStage unbilledUsageFeatureIds(List<String> unbilledUsageFeatureIds) {
+            this.unbilledUsageFeatureIds.clear();
+            if (unbilledUsageFeatureIds != null) {
+                this.unbilledUsageFeatureIds.addAll(unbilledUsageFeatureIds);
             }
             return this;
         }
@@ -604,6 +665,7 @@ public final class PreviewSubscriptionChangeResponseData {
                     proration,
                     scheduledChangeTime,
                     trialEnd,
+                    unbilledUsageFeatureIds,
                     usageViolations,
                     additionalProperties);
         }
@@ -626,6 +688,7 @@ public final class PreviewSubscriptionChangeResponseData {
                     || key.equalsIgnoreCase("proration")
                     || key.equalsIgnoreCase("scheduled_change_time")
                     || key.equalsIgnoreCase("trial_end")
+                    || key.equalsIgnoreCase("unbilled_usage_feature_ids")
                     || key.equalsIgnoreCase("usage_violations")) {
                 return;
             }

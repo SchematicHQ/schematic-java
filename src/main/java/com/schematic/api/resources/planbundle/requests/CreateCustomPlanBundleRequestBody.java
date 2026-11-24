@@ -15,6 +15,7 @@ import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.CreateCustomPlanBundlePlanRequestBody;
 import com.schematic.api.types.PlanBundleCreditGrantRequestBody;
 import com.schematic.api.types.PlanBundleEntitlementRequestBody;
+import com.schematic.api.types.RenewalDestinationRequestBody;
 import com.schematic.api.types.RenewalPolicy;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public final class CreateCustomPlanBundleRequestBody {
 
     private final CreateCustomPlanBundlePlanRequestBody plan;
 
+    private final Optional<RenewalDestinationRequestBody> renewalDestination;
+
     private final Optional<RenewalPolicy> renewalPolicy;
 
     private final Map<String, Object> additionalProperties;
@@ -45,12 +48,14 @@ public final class CreateCustomPlanBundleRequestBody {
             Optional<List<PlanBundleCreditGrantRequestBody>> creditGrants,
             List<PlanBundleEntitlementRequestBody> entitlements,
             CreateCustomPlanBundlePlanRequestBody plan,
+            Optional<RenewalDestinationRequestBody> renewalDestination,
             Optional<RenewalPolicy> renewalPolicy,
             Map<String, Object> additionalProperties) {
         this.billingProduct = billingProduct;
         this.creditGrants = creditGrants;
         this.entitlements = entitlements;
         this.plan = plan;
+        this.renewalDestination = renewalDestination;
         this.renewalPolicy = renewalPolicy;
         this.additionalProperties = additionalProperties;
     }
@@ -75,6 +80,14 @@ public final class CreateCustomPlanBundleRequestBody {
         return plan;
     }
 
+    /**
+     * @return Where the company moves at term end when renewal_policy is migrate_to_plan. Required for that policy and refused for any other.
+     */
+    @JsonProperty("renewal_destination")
+    public Optional<RenewalDestinationRequestBody> getRenewalDestination() {
+        return renewalDestination;
+    }
+
     @JsonProperty("renewal_policy")
     public Optional<RenewalPolicy> getRenewalPolicy() {
         return renewalPolicy;
@@ -96,12 +109,19 @@ public final class CreateCustomPlanBundleRequestBody {
                 && creditGrants.equals(other.creditGrants)
                 && entitlements.equals(other.entitlements)
                 && plan.equals(other.plan)
+                && renewalDestination.equals(other.renewalDestination)
                 && renewalPolicy.equals(other.renewalPolicy);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.billingProduct, this.creditGrants, this.entitlements, this.plan, this.renewalPolicy);
+        return Objects.hash(
+                this.billingProduct,
+                this.creditGrants,
+                this.entitlements,
+                this.plan,
+                this.renewalDestination,
+                this.renewalPolicy);
     }
 
     @java.lang.Override
@@ -140,6 +160,13 @@ public final class CreateCustomPlanBundleRequestBody {
 
         _FinalStage addAllEntitlements(List<PlanBundleEntitlementRequestBody> entitlements);
 
+        /**
+         * <p>Where the company moves at term end when renewal_policy is migrate_to_plan. Required for that policy and refused for any other.</p>
+         */
+        _FinalStage renewalDestination(Optional<RenewalDestinationRequestBody> renewalDestination);
+
+        _FinalStage renewalDestination(RenewalDestinationRequestBody renewalDestination);
+
         _FinalStage renewalPolicy(Optional<RenewalPolicy> renewalPolicy);
 
         _FinalStage renewalPolicy(RenewalPolicy renewalPolicy);
@@ -152,6 +179,8 @@ public final class CreateCustomPlanBundleRequestBody {
         private CreateCustomPlanBundlePlanRequestBody plan;
 
         private Optional<RenewalPolicy> renewalPolicy = Optional.empty();
+
+        private Optional<RenewalDestinationRequestBody> renewalDestination = Optional.empty();
 
         private List<PlanBundleEntitlementRequestBody> entitlements = new ArrayList<>();
 
@@ -167,6 +196,7 @@ public final class CreateCustomPlanBundleRequestBody {
             creditGrants(other.getCreditGrants());
             entitlements(other.getEntitlements());
             plan(other.getPlan());
+            renewalDestination(other.getRenewalDestination());
             renewalPolicy(other.getRenewalPolicy());
             return this;
         }
@@ -195,6 +225,26 @@ public final class CreateCustomPlanBundleRequestBody {
         @JsonSetter(value = "renewal_policy", nulls = Nulls.SKIP)
         public _FinalStage renewalPolicy(Optional<RenewalPolicy> renewalPolicy) {
             this.renewalPolicy = renewalPolicy;
+            return this;
+        }
+
+        /**
+         * <p>Where the company moves at term end when renewal_policy is migrate_to_plan. Required for that policy and refused for any other.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage renewalDestination(RenewalDestinationRequestBody renewalDestination) {
+            this.renewalDestination = Optional.ofNullable(renewalDestination);
+            return this;
+        }
+
+        /**
+         * <p>Where the company moves at term end when renewal_policy is migrate_to_plan. Required for that policy and refused for any other.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "renewal_destination", nulls = Nulls.SKIP)
+        public _FinalStage renewalDestination(Optional<RenewalDestinationRequestBody> renewalDestination) {
+            this.renewalDestination = renewalDestination;
             return this;
         }
 
@@ -238,7 +288,13 @@ public final class CreateCustomPlanBundleRequestBody {
         @java.lang.Override
         public CreateCustomPlanBundleRequestBody build() {
             return new CreateCustomPlanBundleRequestBody(
-                    billingProduct, creditGrants, entitlements, plan, renewalPolicy, additionalProperties);
+                    billingProduct,
+                    creditGrants,
+                    entitlements,
+                    plan,
+                    renewalDestination,
+                    renewalPolicy,
+                    additionalProperties);
         }
 
         @JsonAnySetter
@@ -247,6 +303,7 @@ public final class CreateCustomPlanBundleRequestBody {
                     || key.equalsIgnoreCase("credit_grants")
                     || key.equalsIgnoreCase("entitlements")
                     || key.equalsIgnoreCase("plan")
+                    || key.equalsIgnoreCase("renewal_destination")
                     || key.equalsIgnoreCase("renewal_policy")) {
                 return;
             }

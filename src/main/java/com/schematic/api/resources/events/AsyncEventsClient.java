@@ -9,8 +9,10 @@ import com.schematic.api.core.RequestOptions;
 import com.schematic.api.resources.events.requests.CreateAccountInferenceCostRateRequestBody;
 import com.schematic.api.resources.events.requests.CreateEventBatchRequestBody;
 import com.schematic.api.resources.events.requests.GetEventSummariesRequest;
+import com.schematic.api.resources.events.requests.GetInferenceCostRequest;
 import com.schematic.api.resources.events.requests.ListAccountInferenceCostRatesRequest;
 import com.schematic.api.resources.events.requests.ListEventsRequest;
+import com.schematic.api.resources.events.requests.ListInferenceCostRatesRequest;
 import com.schematic.api.resources.events.requests.UpdateAccountInferenceCostRateRequestBody;
 import com.schematic.api.resources.events.requests.UpsertOtlpEnvironmentSettingsRequestBody;
 import com.schematic.api.resources.events.types.CreateAccountInferenceCostRateResponse;
@@ -20,10 +22,12 @@ import com.schematic.api.resources.events.types.DeleteAccountInferenceCostRateRe
 import com.schematic.api.resources.events.types.DeleteOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetEventResponse;
 import com.schematic.api.resources.events.types.GetEventSummariesResponse;
+import com.schematic.api.resources.events.types.GetInferenceCostResponse;
 import com.schematic.api.resources.events.types.GetOtlpEnvironmentSettingsResponse;
 import com.schematic.api.resources.events.types.GetSegmentIntegrationStatusResponse;
 import com.schematic.api.resources.events.types.ListAccountInferenceCostRatesResponse;
 import com.schematic.api.resources.events.types.ListEventsResponse;
+import com.schematic.api.resources.events.types.ListInferenceCostRatesResponse;
 import com.schematic.api.resources.events.types.UpdateAccountInferenceCostRateResponse;
 import com.schematic.api.resources.events.types.UpsertOtlpEnvironmentSettingsResponse;
 import com.schematic.api.types.CreateEventRequestBody;
@@ -206,6 +210,105 @@ public class AsyncEventsClient {
         CompletableFuture<BaseSchematicHttpResponse<GetEventResponse>> rawFuture =
                 this.rawClient.getEvent(eventId, requestOptions);
         CompletableFuture<GetEventResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetInferenceCostResponse> getInferenceCost() {
+        CompletableFuture<BaseSchematicHttpResponse<GetInferenceCostResponse>> rawFuture =
+                this.rawClient.getInferenceCost();
+        CompletableFuture<GetInferenceCostResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetInferenceCostResponse> getInferenceCost(RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetInferenceCostResponse>> rawFuture =
+                this.rawClient.getInferenceCost(requestOptions);
+        CompletableFuture<GetInferenceCostResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetInferenceCostResponse> getInferenceCost(GetInferenceCostRequest request) {
+        CompletableFuture<BaseSchematicHttpResponse<GetInferenceCostResponse>> rawFuture =
+                this.rawClient.getInferenceCost(request);
+        CompletableFuture<GetInferenceCostResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<GetInferenceCostResponse> getInferenceCost(
+            GetInferenceCostRequest request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<GetInferenceCostResponse>> rawFuture =
+                this.rawClient.getInferenceCost(request, requestOptions);
+        CompletableFuture<GetInferenceCostResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<ListInferenceCostRatesResponse> listInferenceCostRates() {
+        CompletableFuture<BaseSchematicHttpResponse<ListInferenceCostRatesResponse>> rawFuture =
+                this.rawClient.listInferenceCostRates();
+        CompletableFuture<ListInferenceCostRatesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<ListInferenceCostRatesResponse> listInferenceCostRates(RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<ListInferenceCostRatesResponse>> rawFuture =
+                this.rawClient.listInferenceCostRates(requestOptions);
+        CompletableFuture<ListInferenceCostRatesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<ListInferenceCostRatesResponse> listInferenceCostRates(
+            ListInferenceCostRatesRequest request) {
+        CompletableFuture<BaseSchematicHttpResponse<ListInferenceCostRatesResponse>> rawFuture =
+                this.rawClient.listInferenceCostRates(request);
+        CompletableFuture<ListInferenceCostRatesResponse> future = rawFuture.thenApply(response -> response.body());
+        future.whenComplete((result_, throwable_) -> {
+            if (future.isCancelled()) {
+                rawFuture.cancel(true);
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<ListInferenceCostRatesResponse> listInferenceCostRates(
+            ListInferenceCostRatesRequest request, RequestOptions requestOptions) {
+        CompletableFuture<BaseSchematicHttpResponse<ListInferenceCostRatesResponse>> rawFuture =
+                this.rawClient.listInferenceCostRates(request, requestOptions);
+        CompletableFuture<ListInferenceCostRatesResponse> future = rawFuture.thenApply(response -> response.body());
         future.whenComplete((result_, throwable_) -> {
             if (future.isCancelled()) {
                 rawFuture.cancel(true);

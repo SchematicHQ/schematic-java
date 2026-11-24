@@ -10,6 +10,10 @@ public final class DataExportType {
     public static final DataExportType COMPANY_FEATURE_USAGE =
             new DataExportType(Value.COMPANY_FEATURE_USAGE, "company-feature-usage");
 
+    public static final DataExportType CREDIT_BALANCE = new DataExportType(Value.CREDIT_BALANCE, "credit-balance");
+
+    public static final DataExportType USER = new DataExportType(Value.USER, "user");
+
     public static final DataExportType AUDIT_LOG = new DataExportType(Value.AUDIT_LOG, "audit-log");
 
     public static final DataExportType EVENT = new DataExportType(Value.EVENT, "event");
@@ -50,6 +54,10 @@ public final class DataExportType {
         switch (value) {
             case COMPANY_FEATURE_USAGE:
                 return visitor.visitCompanyFeatureUsage();
+            case CREDIT_BALANCE:
+                return visitor.visitCreditBalance();
+            case USER:
+                return visitor.visitUser();
             case AUDIT_LOG:
                 return visitor.visitAuditLog();
             case EVENT:
@@ -67,6 +75,10 @@ public final class DataExportType {
         switch (value) {
             case "company-feature-usage":
                 return COMPANY_FEATURE_USAGE;
+            case "credit-balance":
+                return CREDIT_BALANCE;
+            case "user":
+                return USER;
             case "audit-log":
                 return AUDIT_LOG;
             case "event":
@@ -83,9 +95,13 @@ public final class DataExportType {
 
         COMPANY_FEATURE_USAGE,
 
+        CREDIT_BALANCE,
+
         CREDIT_LEDGER,
 
         EVENT,
+
+        USER,
 
         UNKNOWN
     }
@@ -95,9 +111,13 @@ public final class DataExportType {
 
         T visitCompanyFeatureUsage();
 
+        T visitCreditBalance();
+
         T visitCreditLedger();
 
         T visitEvent();
+
+        T visitUser();
 
         T visitUnknown(String unknownType);
     }

@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.schematic.api.core.ObjectMappers;
 import com.schematic.api.types.PlanBundleCreditGrantRequestBody;
 import com.schematic.api.types.PlanBundleEntitlementRequestBody;
+import com.schematic.api.types.RenewalDestinationRequestBody;
 import com.schematic.api.types.RenewalPolicy;
 import com.schematic.api.types.UpdatePlanRequestBody;
 import com.schematic.api.types.UpsertBillingProductRequestBody;
@@ -38,6 +39,8 @@ public final class UpdatePlanBundleRequestBody {
 
     private final Optional<String> planVersionId;
 
+    private final Optional<RenewalDestinationRequestBody> renewalDestination;
+
     private final Optional<RenewalPolicy> renewalPolicy;
 
     private final Map<String, Object> additionalProperties;
@@ -48,6 +51,7 @@ public final class UpdatePlanBundleRequestBody {
             List<PlanBundleEntitlementRequestBody> entitlements,
             UpdatePlanRequestBody plan,
             Optional<String> planVersionId,
+            Optional<RenewalDestinationRequestBody> renewalDestination,
             Optional<RenewalPolicy> renewalPolicy,
             Map<String, Object> additionalProperties) {
         this.billingProduct = billingProduct;
@@ -55,6 +59,7 @@ public final class UpdatePlanBundleRequestBody {
         this.entitlements = entitlements;
         this.plan = plan;
         this.planVersionId = planVersionId;
+        this.renewalDestination = renewalDestination;
         this.renewalPolicy = renewalPolicy;
         this.additionalProperties = additionalProperties;
     }
@@ -84,6 +89,14 @@ public final class UpdatePlanBundleRequestBody {
         return planVersionId;
     }
 
+    /**
+     * @return Where the company moves at term end when the version's renewal_policy is migrate_to_plan. Left out, the version keeps the destination it has; refused for any other policy.
+     */
+    @JsonProperty("renewal_destination")
+    public Optional<RenewalDestinationRequestBody> getRenewalDestination() {
+        return renewalDestination;
+    }
+
     @JsonProperty("renewal_policy")
     public Optional<RenewalPolicy> getRenewalPolicy() {
         return renewalPolicy;
@@ -106,6 +119,7 @@ public final class UpdatePlanBundleRequestBody {
                 && entitlements.equals(other.entitlements)
                 && plan.equals(other.plan)
                 && planVersionId.equals(other.planVersionId)
+                && renewalDestination.equals(other.renewalDestination)
                 && renewalPolicy.equals(other.renewalPolicy);
     }
 
@@ -117,6 +131,7 @@ public final class UpdatePlanBundleRequestBody {
                 this.entitlements,
                 this.plan,
                 this.planVersionId,
+                this.renewalDestination,
                 this.renewalPolicy);
     }
 
@@ -160,6 +175,13 @@ public final class UpdatePlanBundleRequestBody {
 
         _FinalStage planVersionId(String planVersionId);
 
+        /**
+         * <p>Where the company moves at term end when the version's renewal_policy is migrate_to_plan. Left out, the version keeps the destination it has; refused for any other policy.</p>
+         */
+        _FinalStage renewalDestination(Optional<RenewalDestinationRequestBody> renewalDestination);
+
+        _FinalStage renewalDestination(RenewalDestinationRequestBody renewalDestination);
+
         _FinalStage renewalPolicy(Optional<RenewalPolicy> renewalPolicy);
 
         _FinalStage renewalPolicy(RenewalPolicy renewalPolicy);
@@ -170,6 +192,8 @@ public final class UpdatePlanBundleRequestBody {
         private UpdatePlanRequestBody plan;
 
         private Optional<RenewalPolicy> renewalPolicy = Optional.empty();
+
+        private Optional<RenewalDestinationRequestBody> renewalDestination = Optional.empty();
 
         private Optional<String> planVersionId = Optional.empty();
 
@@ -190,6 +214,7 @@ public final class UpdatePlanBundleRequestBody {
             entitlements(other.getEntitlements());
             plan(other.getPlan());
             planVersionId(other.getPlanVersionId());
+            renewalDestination(other.getRenewalDestination());
             renewalPolicy(other.getRenewalPolicy());
             return this;
         }
@@ -211,6 +236,26 @@ public final class UpdatePlanBundleRequestBody {
         @JsonSetter(value = "renewal_policy", nulls = Nulls.SKIP)
         public _FinalStage renewalPolicy(Optional<RenewalPolicy> renewalPolicy) {
             this.renewalPolicy = renewalPolicy;
+            return this;
+        }
+
+        /**
+         * <p>Where the company moves at term end when the version's renewal_policy is migrate_to_plan. Left out, the version keeps the destination it has; refused for any other policy.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage renewalDestination(RenewalDestinationRequestBody renewalDestination) {
+            this.renewalDestination = Optional.ofNullable(renewalDestination);
+            return this;
+        }
+
+        /**
+         * <p>Where the company moves at term end when the version's renewal_policy is migrate_to_plan. Left out, the version keeps the destination it has; refused for any other policy.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "renewal_destination", nulls = Nulls.SKIP)
+        public _FinalStage renewalDestination(Optional<RenewalDestinationRequestBody> renewalDestination) {
+            this.renewalDestination = renewalDestination;
             return this;
         }
 
@@ -285,6 +330,7 @@ public final class UpdatePlanBundleRequestBody {
                     entitlements,
                     plan,
                     planVersionId,
+                    renewalDestination,
                     renewalPolicy,
                     additionalProperties);
         }
@@ -296,6 +342,7 @@ public final class UpdatePlanBundleRequestBody {
                     || key.equalsIgnoreCase("entitlements")
                     || key.equalsIgnoreCase("plan")
                     || key.equalsIgnoreCase("plan_version_id")
+                    || key.equalsIgnoreCase("renewal_destination")
                     || key.equalsIgnoreCase("renewal_policy")) {
                 return;
             }
