@@ -542,7 +542,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      *       locally): returns true without a network call.</li>
      *   <li>Otherwise, including when datastream is configured but not usable and flag checks
      *       fall back to the API: calls the API's whoami endpoint, which authenticates the API
-     *       key, and returns true if it succeeds and false on any error or timeout.</li>
+     *       key, and returns true if it succeeds and false on any error or timeout. The call has
+     *       its own 5-second timeout and is never retried, whatever the client's settings.</li>
      * </ul>
      *
      * <p>In API mode each call makes one network request, so call this from a probe, not on
@@ -553,7 +554,11 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
             if (offline || useDataStreamCache()) {
                 return true;
             }
-            accounts().getWhoAmI();
+            accounts()
+                    .getWhoAmI(RequestOptions.builder()
+                            .timeout(5, TimeUnit.SECONDS)
+                            .maxRetries(0)
+                            .build());
             return true;
         } catch (Exception e) {
             logger.warn("Schematic readiness check failed: " + e.getMessage());

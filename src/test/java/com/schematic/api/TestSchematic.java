@@ -37,7 +37,9 @@ import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.EventType;
 import com.schematic.api.types.PreflightRequestBody;
 import com.schematic.api.types.RulesengineCheckFlagResult;
+import com.sun.net.httpserver.HttpServer;
 import java.lang.reflect.Field;
+import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.time.Duration;
 import java.time.Instant;
@@ -48,6 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -1160,30 +1163,34 @@ class SchematicTest {
         DataStreamClient dataStream = mock(DataStreamClient.class);
         when(dataStream.isConnected()).thenReturn(false);
         AccountsClient accountsClient = mock(AccountsClient.class);
-        when(accountsClient.getWhoAmI()).thenReturn(mock(GetWhoAmIResponse.class));
+        when(accountsClient.getWhoAmI(any(RequestOptions.class))).thenReturn(mock(GetWhoAmIResponse.class));
         Schematic spySchematic = spy(schematic);
         when(spySchematic.accounts()).thenReturn(accountsClient);
         setDataStreamClient(spySchematic, dataStream);
 
         assertTrue(spySchematic.isReady());
-        verify(accountsClient).getWhoAmI();
+        verify(accountsClient).getWhoAmI(any(RequestOptions.class));
     }
 
     @Test
     void isReady_ApiSuccessReturnsTrue() {
         AccountsClient accountsClient = mock(AccountsClient.class);
-        when(accountsClient.getWhoAmI()).thenReturn(mock(GetWhoAmIResponse.class));
+        when(accountsClient.getWhoAmI(any(RequestOptions.class))).thenReturn(mock(GetWhoAmIResponse.class));
         Schematic spySchematic = spy(schematic);
         when(spySchematic.accounts()).thenReturn(accountsClient);
 
         assertTrue(spySchematic.isReady());
-        verify(accountsClient, times(1)).getWhoAmI();
+        ArgumentCaptor<RequestOptions> options = ArgumentCaptor.forClass(RequestOptions.class);
+        verify(accountsClient, times(1)).getWhoAmI(options.capture());
+        assertEquals(5, options.getValue().getTimeout().get());
+        assertEquals(TimeUnit.SECONDS, options.getValue().getTimeoutTimeUnit());
+        assertEquals(0, options.getValue().getMaxRetries().get());
     }
 
     @Test
     void isReady_ApiErrorReturnsFalse() {
         AccountsClient accountsClient = mock(AccountsClient.class);
-        when(accountsClient.getWhoAmI())
+        when(accountsClient.getWhoAmI(any(RequestOptions.class)))
                 .thenThrow(new BaseSchematicApiException("Error with status code 401", 401, null));
         Schematic spySchematic = spy(schematic);
         when(spySchematic.accounts()).thenReturn(accountsClient);
@@ -1194,12 +1201,36 @@ class SchematicTest {
     @Test
     void isReady_ApiTimeoutReturnsFalse() {
         AccountsClient accountsClient = mock(AccountsClient.class);
-        when(accountsClient.getWhoAmI())
+        when(accountsClient.getWhoAmI(any(RequestOptions.class)))
                 .thenThrow(new BaseSchematicException(
                         "Network error executing HTTP request", new SocketTimeoutException("timeout")));
         Schematic spySchematic = spy(schematic);
         when(spySchematic.accounts()).thenReturn(accountsClient);
 
         assertFalse(assertDoesNotThrow(spySchematic::isReady));
+    }
+
+    @Test
+    void isReady_DoesNotRetryOnServerError() throws Exception {
+        AtomicInteger hits = new AtomicInteger();
+        HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+        server.createContext("/whoami", exchange -> {
+            hits.incrementAndGet();
+            exchange.sendResponseHeaders(503, -1);
+            exchange.close();
+        });
+        server.start();
+        Schematic client = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .basePath("http://127.0.0.1:" + server.getAddress().getPort())
+                .build();
+        try {
+            assertFalse(client.isReady());
+            assertEquals(1, hits.get());
+        } finally {
+            client.close();
+            server.stop(0);
+        }
     }
 }
