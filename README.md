@@ -167,6 +167,14 @@ boolean flagValue = schematic.checkFlag("some-flag-key", company, user);
 
 `checkFlagWithEntitlement` answers the same question and hands back the whole result: the value, the reason the rules engine gave, and the matched entitlement.
 
+### Readiness checks
+
+`isReady()` tells you whether the client can serve flag checks, for example from a Kubernetes readiness probe. It returns true in offline mode, and true without a network call when flag checks are served from a connected datastream cache. Otherwise it calls the Schematic API to authenticate the API key and returns false on any error or timeout. It never throws. Because API mode makes one request per call, call it from a probe, not on every request.
+
+```java
+boolean ready = schematic.isReady();
+```
+
 ## Credit Leases and Reservations
 
 For features metered by credit burndown (inference tokens, for example), `check` reserves credits for the work about to run and `trackWithReservation` settles the reservation with the actual usage. The SDK gates in one of two modes:

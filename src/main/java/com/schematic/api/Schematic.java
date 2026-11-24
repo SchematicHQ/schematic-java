@@ -533,6 +533,35 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     /**
+     * Returns whether the client is ready to serve flag checks, for example from a readiness
+     * probe. Never throws.
+     *
+     * <ul>
+     *   <li>Offline mode: returns true, since flag checks serve flag defaults by design.</li>
+     *   <li>Datastream connected with its cache ready (the same test flag checks use to evaluate
+     *       locally): returns true without a network call.</li>
+     *   <li>Otherwise, including when datastream is configured but not usable and flag checks
+     *       fall back to the API: calls the API's whoami endpoint, which authenticates the API
+     *       key, and returns true if it succeeds and false on any error or timeout.</li>
+     * </ul>
+     *
+     * <p>In API mode each call makes one network request, so call this from a probe, not on
+     * every request.
+     */
+    public boolean isReady() {
+        try {
+            if (offline || useDataStreamCache()) {
+                return true;
+            }
+            accounts().getWhoAmI();
+            return true;
+        } catch (Exception e) {
+            logger.warn("Schematic readiness check failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Checks a feature flag, returning a boolean value.
      *
      * <p>If datastream is configured and connected and its cache is ready (in replicator mode,
