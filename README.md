@@ -169,7 +169,9 @@ boolean flagValue = schematic.checkFlag("some-flag-key", company, user);
 
 ### Readiness checks
 
-`isReady()` tells you whether the client can serve flag checks, for example from a Kubernetes readiness probe. It returns true in offline mode, and true without a network call when flag checks are served from a connected datastream cache. Otherwise it calls the Schematic API to authenticate the API key and returns false on any error or timeout. It never throws. Because API mode makes one request per call, call it from a probe, not on every request.
+`isReady()` tells you whether the client started correctly and can serve flag checks. It returns true in offline mode, and true without a network call when flag checks are served from a connected datastream cache with the rules engine loaded. Otherwise it calls the Schematic API to authenticate the API key, with a 5-second timeout and no retries, and returns false on any error or timeout. It never throws.
+
+Use it as a startup check: a Kubernetes `startupProbe` with `timeoutSeconds` above 5, or a gate before your service starts taking traffic. Don't use it for liveness or ongoing readiness. It depends on Schematic's API, so an outage would pull every pod out of service while flag checks keep serving defaults or cached values.
 
 ```java
 boolean ready = schematic.isReady();

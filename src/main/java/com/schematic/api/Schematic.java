@@ -533,25 +533,27 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
     }
 
     /**
-     * Returns whether the client is ready to serve flag checks, for example from a readiness
-     * probe. Never throws.
+     * Returns whether the client started correctly and can serve flag checks. Never throws.
      *
      * <ul>
      *   <li>Offline mode: returns true, since flag checks serve flag defaults by design.</li>
-     *   <li>Datastream connected with its cache ready (the same test flag checks use to evaluate
-     *       locally): returns true without a network call.</li>
+     *   <li>Datastream connected with its cache ready and the rules engine loaded: returns true
+     *       without a network call.</li>
      *   <li>Otherwise, including when datastream is configured but not usable and flag checks
      *       fall back to the API: calls the API's whoami endpoint, which authenticates the API
      *       key, and returns true if it succeeds and false on any error or timeout. The call has
      *       its own 5-second timeout and is never retried, whatever the client's settings.</li>
      * </ul>
      *
-     * <p>In API mode each call makes one network request, so call this from a probe, not on
-     * every request.
+     * <p>This is a startup check: use it as a Kubernetes {@code startupProbe} (with
+     * {@code timeoutSeconds} above 5) or to gate start-up. Don't use it for liveness or ongoing
+     * readiness. It depends on Schematic's API, so an outage would pull every pod while flag
+     * checks keep serving defaults or cached values. In API mode each call makes one network
+     * request.
      */
     public boolean isReady() {
         try {
-            if (offline || useDataStreamCache()) {
+            if (offline || (useDataStreamCache() && dataStreamClient.hasRulesEngine())) {
                 return true;
             }
             accounts()
@@ -561,7 +563,9 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
                             .build());
             return true;
         } catch (Exception e) {
-            logger.warn("Schematic readiness check failed: " + e.getMessage());
+            Throwable cause = e.getCause();
+            logger.warn("Schematic readiness check failed: " + e.getMessage()
+                    + (cause != null && cause != e ? " (cause: " + cause + ")" : ""));
             return false;
         }
     }

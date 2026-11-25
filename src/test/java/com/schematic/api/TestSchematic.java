@@ -1151,6 +1151,7 @@ class SchematicTest {
         DataStreamClient dataStream = mock(DataStreamClient.class);
         when(dataStream.isConnected()).thenReturn(true);
         when(dataStream.isCacheReady()).thenReturn(true);
+        when(dataStream.hasRulesEngine()).thenReturn(true);
         Schematic spySchematic = spy(schematic);
         setDataStreamClient(spySchematic, dataStream);
 
@@ -1169,6 +1170,38 @@ class SchematicTest {
         setDataStreamClient(spySchematic, dataStream);
 
         assertTrue(spySchematic.isReady());
+        verify(accountsClient).getWhoAmI(any(RequestOptions.class));
+    }
+
+    @Test
+    void isReady_DatastreamCacheNotReadyFallsBackToApi() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        when(dataStream.isCacheReady()).thenReturn(false);
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class))).thenReturn(mock(GetWhoAmIResponse.class));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+        setDataStreamClient(spySchematic, dataStream);
+
+        assertTrue(spySchematic.isReady());
+        verify(accountsClient).getWhoAmI(any(RequestOptions.class));
+    }
+
+    @Test
+    void isReady_RulesEngineMissingFallsBackToApi() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        when(dataStream.isCacheReady()).thenReturn(true);
+        when(dataStream.hasRulesEngine()).thenReturn(false);
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class)))
+                .thenThrow(new BaseSchematicApiException("Error with status code 401", 401, null));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+        setDataStreamClient(spySchematic, dataStream);
+
+        assertFalse(spySchematic.isReady());
         verify(accountsClient).getWhoAmI(any(RequestOptions.class));
     }
 
@@ -1208,6 +1241,7 @@ class SchematicTest {
         when(spySchematic.accounts()).thenReturn(accountsClient);
 
         assertFalse(assertDoesNotThrow(spySchematic::isReady));
+        verify(logger).warn(contains("SocketTimeoutException: timeout"));
     }
 
     @Test
