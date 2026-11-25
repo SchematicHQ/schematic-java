@@ -8,6 +8,8 @@ import static org.mockito.Mockito.*;
 
 import com.schematic.api.cache.CacheProvider;
 import com.schematic.api.cache.LocalCache;
+import com.schematic.api.core.BaseSchematicApiException;
+import com.schematic.api.core.BaseSchematicException;
 import com.schematic.api.core.RequestOptions;
 import com.schematic.api.credits.CheckOptions;
 import com.schematic.api.credits.CheckResult;
@@ -19,6 +21,8 @@ import com.schematic.api.credits.ReservationSettlement;
 import com.schematic.api.datastream.DataStreamClient;
 import com.schematic.api.datastream.DatastreamOptions;
 import com.schematic.api.logger.SchematicLogger;
+import com.schematic.api.resources.accounts.AccountsClient;
+import com.schematic.api.resources.accounts.types.GetWhoAmIResponse;
 import com.schematic.api.resources.features.FeaturesClient;
 import com.schematic.api.resources.features.types.CheckFlagResponse;
 import com.schematic.api.resources.features.types.CheckFlagsResponse;
@@ -33,7 +37,10 @@ import com.schematic.api.types.EventBodyTrack;
 import com.schematic.api.types.EventType;
 import com.schematic.api.types.PreflightRequestBody;
 import com.schematic.api.types.RulesengineCheckFlagResult;
+import com.sun.net.httpserver.HttpServer;
 import java.lang.reflect.Field;
+import java.net.InetSocketAddress;
+import java.net.SocketTimeoutException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -43,6 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -1119,5 +1127,162 @@ class SchematicTest {
         assertTrue(results.get(0).getValue());
         assertEquals("auto-b", results.get(1).getFlagKey());
         assertFalse(results.get(1).getValue());
+    }
+
+    @Test
+    void isReady_OfflineReturnsTrueWithoutNetworkCall() {
+        Schematic offline = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .offline(true)
+                .build();
+        try {
+            Schematic spySchematic = spy(offline);
+
+            assertTrue(spySchematic.isReady());
+            verify(spySchematic, never()).accounts();
+        } finally {
+            offline.close();
+        }
+    }
+
+    @Test
+    void isReady_FlagsReceivedReturnsTrueWithoutNetworkCall() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        when(dataStream.isCacheReady()).thenReturn(true);
+        when(dataStream.hasRulesEngine()).thenReturn(true);
+        when(dataStream.isFlagsLoaded()).thenReturn(true);
+        Schematic spySchematic = spy(schematic);
+        setDataStreamClient(spySchematic, dataStream);
+
+        assertTrue(spySchematic.isReady());
+        verify(spySchematic, never()).accounts();
+    }
+
+    @Test
+    void isReady_DatastreamNotUsableFallsBackToApi() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(false);
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class))).thenReturn(mock(GetWhoAmIResponse.class));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+        setDataStreamClient(spySchematic, dataStream);
+
+        assertTrue(spySchematic.isReady());
+        verify(accountsClient).getWhoAmI(any(RequestOptions.class));
+    }
+
+    @Test
+    void isReady_DatastreamCacheNotReadyFallsBackToApi() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        when(dataStream.isCacheReady()).thenReturn(false);
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class))).thenReturn(mock(GetWhoAmIResponse.class));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+        setDataStreamClient(spySchematic, dataStream);
+
+        assertTrue(spySchematic.isReady());
+        verify(accountsClient).getWhoAmI(any(RequestOptions.class));
+    }
+
+    @Test
+    void isReady_FlagsNotReceivedFallsBackToApi() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        when(dataStream.isCacheReady()).thenReturn(true);
+        when(dataStream.hasRulesEngine()).thenReturn(true);
+        when(dataStream.isFlagsLoaded()).thenReturn(false);
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class))).thenReturn(mock(GetWhoAmIResponse.class));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+        setDataStreamClient(spySchematic, dataStream);
+
+        assertTrue(spySchematic.isReady());
+        verify(accountsClient).getWhoAmI(any(RequestOptions.class));
+    }
+
+    @Test
+    void isReady_RulesEngineMissingFallsBackToApi() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        when(dataStream.isCacheReady()).thenReturn(true);
+        when(dataStream.hasRulesEngine()).thenReturn(false);
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class)))
+                .thenThrow(new BaseSchematicApiException("Error with status code 401", 401, null));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+        setDataStreamClient(spySchematic, dataStream);
+
+        assertFalse(spySchematic.isReady());
+        verify(accountsClient).getWhoAmI(any(RequestOptions.class));
+    }
+
+    @Test
+    void isReady_ApiSuccessReturnsTrue() {
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class))).thenReturn(mock(GetWhoAmIResponse.class));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+
+        assertTrue(spySchematic.isReady());
+        ArgumentCaptor<RequestOptions> options = ArgumentCaptor.forClass(RequestOptions.class);
+        verify(accountsClient, times(1)).getWhoAmI(options.capture());
+        assertEquals(5, options.getValue().getTimeout().get());
+        assertEquals(TimeUnit.SECONDS, options.getValue().getTimeoutTimeUnit());
+        assertEquals(0, options.getValue().getMaxRetries().get());
+    }
+
+    @Test
+    void isReady_ApiErrorReturnsFalse() {
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class)))
+                .thenThrow(new BaseSchematicApiException("Error with status code 401", 401, null));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+
+        assertFalse(assertDoesNotThrow(spySchematic::isReady));
+    }
+
+    @Test
+    void isReady_ApiTimeoutReturnsFalse() {
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class)))
+                .thenThrow(new BaseSchematicException(
+                        "Network error executing HTTP request", new SocketTimeoutException("timeout")));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+
+        assertFalse(assertDoesNotThrow(spySchematic::isReady));
+        verify(logger).warn(contains("SocketTimeoutException: timeout"));
+    }
+
+    @Test
+    void isReady_DoesNotRetryOnServerError() throws Exception {
+        AtomicInteger hits = new AtomicInteger();
+        HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+        server.createContext("/whoami", exchange -> {
+            hits.incrementAndGet();
+            exchange.sendResponseHeaders(503, -1);
+            exchange.close();
+        });
+        server.start();
+        Schematic client = Schematic.builder()
+                .apiKey("test_api_key")
+                .logger(logger)
+                .basePath("http://127.0.0.1:" + server.getAddress().getPort())
+                .build();
+        try {
+            assertFalse(client.isReady());
+            assertEquals(1, hits.get());
+        } finally {
+            client.close();
+            server.stop(0);
+        }
     }
 }

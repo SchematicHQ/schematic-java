@@ -84,6 +84,7 @@ public class DataStreamClient implements Closeable {
 
     // Replicator mode state
     private final AtomicBoolean replicatorReady = new AtomicBoolean(false);
+    private final AtomicBoolean flagsLoaded = new AtomicBoolean(false);
     // Whether the last health poll failed, so a run of failed polls warns once rather than every
     // interval.
     private volatile boolean replicatorHealthFailing;
@@ -188,6 +189,19 @@ public class DataStreamClient implements Closeable {
      */
     public boolean hasRulesEngine() {
         return rulesEngine != null && rulesEngine.isInitialized();
+    }
+
+    /**
+     * Returns whether the cache holds the full flag set. In WebSocket mode this is true once the
+     * bulk flags message for the current connection has been cached, and false while
+     * disconnected or after a reconnect until the flags arrive again. In replicator mode it is
+     * replicator readiness. Flag checks do not read this.
+     */
+    public boolean isFlagsLoaded() {
+        if (options.isReplicatorMode()) {
+            return replicatorReady.get();
+        }
+        return flagsLoaded.get() && wsClient != null && wsClient.isReady();
     }
 
     /**
@@ -735,6 +749,7 @@ public class DataStreamClient implements Closeable {
 
     private void onConnectionReady() {
         log("info", "DataStream connection established, requesting flags");
+        flagsLoaded.set(false);
         DataStreamReq req = new DataStreamReq(Action.START, EntityType.FLAGS, null);
         DataStreamBaseReq baseReq = new DataStreamBaseReq(req);
         wsClient.sendMessage(baseReq);
@@ -918,6 +933,7 @@ public class DataStreamClient implements Closeable {
                     }
                 }
                 flagCache.deleteMissing(cacheKeys, FLAG_PREFIX + "*");
+                flagsLoaded.set(true);
             } else {
                 cacheFlag(data);
             }

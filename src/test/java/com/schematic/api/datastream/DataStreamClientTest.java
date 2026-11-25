@@ -18,10 +18,12 @@ import com.schematic.api.types.RulesengineCompany;
 import com.schematic.api.types.RulesengineFlag;
 import com.schematic.api.types.RulesengineUser;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -779,6 +781,68 @@ class DataStreamClientTest {
         assertNotNull(client.getCachedFlag("flag-a"));
         assertNotNull(client.getCachedFlag("flag-b"));
         assertNull(client.getCachedFlag("flag-c"));
+    }
+
+    @Test
+    void isFlagsLoaded_followsBulkFlagsAndConnection() throws Exception {
+        DataStreamClient connected = new DataStreamClient(
+                DatastreamOptions.builder().build(), "test-key", "https://api.schematichq.com", logger);
+        DataStreamWebSocketClient ws = mock(DataStreamWebSocketClient.class);
+        when(ws.isReady()).thenReturn(true);
+        Field wsField = DataStreamClient.class.getDeclaredField("wsClient");
+        wsField.setAccessible(true);
+        wsField.set(connected, ws);
+        Method onConnectionReady = DataStreamClient.class.getDeclaredMethod("onConnectionReady");
+        onConnectionReady.setAccessible(true);
+
+        try {
+            assertFalse(connected.isFlagsLoaded());
+
+            connected.handleMessage(
+                    buildResp(EntityType.FLAG.getValue(), MessageType.FULL.getValue(), null, flagNode("one", true)));
+            assertFalse(connected.isFlagsLoaded());
+
+            ArrayNode bulkFlags = objectMapper.createArrayNode();
+            bulkFlags.add(flagNode("one", true));
+            connected.handleMessage(
+                    buildResp(EntityType.FLAGS.getValue(), MessageType.FULL.getValue(), null, bulkFlags));
+            assertTrue(connected.isFlagsLoaded());
+
+            when(ws.isReady()).thenReturn(false);
+            assertFalse(connected.isFlagsLoaded());
+
+            when(ws.isReady()).thenReturn(true);
+            onConnectionReady.invoke(connected);
+            assertFalse(connected.isFlagsLoaded());
+
+            connected.handleMessage(
+                    buildResp(EntityType.FLAGS.getValue(), MessageType.FULL.getValue(), null, bulkFlags));
+            assertTrue(connected.isFlagsLoaded());
+        } finally {
+            wsField.set(connected, null);
+            connected.close();
+        }
+    }
+
+    @Test
+    void isFlagsLoaded_replicatorModeFollowsReplicatorReadiness() throws Exception {
+        DataStreamClient replicatorClient = new DataStreamClient(
+                DatastreamOptions.builder()
+                        .withReplicatorMode("http://localhost:8090/ready")
+                        .build(),
+                "test-key",
+                "https://api.schematichq.com",
+                logger);
+        Field readyField = DataStreamClient.class.getDeclaredField("replicatorReady");
+        readyField.setAccessible(true);
+
+        try {
+            assertFalse(replicatorClient.isFlagsLoaded());
+            ((AtomicBoolean) readyField.get(replicatorClient)).set(true);
+            assertTrue(replicatorClient.isFlagsLoaded());
+        } finally {
+            replicatorClient.close();
+        }
     }
 
     // --- updateCompanyMetrics tests ---
