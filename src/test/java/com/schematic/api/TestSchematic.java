@@ -1147,11 +1147,12 @@ class SchematicTest {
     }
 
     @Test
-    void isReady_DatastreamUsableReturnsTrueWithoutNetworkCall() throws Exception {
+    void isReady_FlagsReceivedReturnsTrueWithoutNetworkCall() throws Exception {
         DataStreamClient dataStream = mock(DataStreamClient.class);
         when(dataStream.isConnected()).thenReturn(true);
         when(dataStream.isCacheReady()).thenReturn(true);
         when(dataStream.hasRulesEngine()).thenReturn(true);
+        when(dataStream.isFlagsLoaded()).thenReturn(true);
         Schematic spySchematic = spy(schematic);
         setDataStreamClient(spySchematic, dataStream);
 
@@ -1178,6 +1179,23 @@ class SchematicTest {
         DataStreamClient dataStream = mock(DataStreamClient.class);
         when(dataStream.isConnected()).thenReturn(true);
         when(dataStream.isCacheReady()).thenReturn(false);
+        AccountsClient accountsClient = mock(AccountsClient.class);
+        when(accountsClient.getWhoAmI(any(RequestOptions.class))).thenReturn(mock(GetWhoAmIResponse.class));
+        Schematic spySchematic = spy(schematic);
+        when(spySchematic.accounts()).thenReturn(accountsClient);
+        setDataStreamClient(spySchematic, dataStream);
+
+        assertTrue(spySchematic.isReady());
+        verify(accountsClient).getWhoAmI(any(RequestOptions.class));
+    }
+
+    @Test
+    void isReady_FlagsNotReceivedFallsBackToApi() throws Exception {
+        DataStreamClient dataStream = mock(DataStreamClient.class);
+        when(dataStream.isConnected()).thenReturn(true);
+        when(dataStream.isCacheReady()).thenReturn(true);
+        when(dataStream.hasRulesEngine()).thenReturn(true);
+        when(dataStream.isFlagsLoaded()).thenReturn(false);
         AccountsClient accountsClient = mock(AccountsClient.class);
         when(accountsClient.getWhoAmI(any(RequestOptions.class))).thenReturn(mock(GetWhoAmIResponse.class));
         Schematic spySchematic = spy(schematic);

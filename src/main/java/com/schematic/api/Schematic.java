@@ -537,8 +537,8 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      *
      * <ul>
      *   <li>Offline mode: returns true, since flag checks serve flag defaults by design.</li>
-     *   <li>Datastream connected with its cache ready and the rules engine loaded: returns true
-     *       without a network call.</li>
+     *   <li>Datastream connected with its cache ready, the rules engine loaded and the flags
+     *       received: returns true without a network call.</li>
      *   <li>Otherwise, including when datastream is configured but not usable and flag checks
      *       fall back to the API: calls the API's whoami endpoint, which authenticates the API
      *       key, and returns true if it succeeds and false on any error or timeout. The call has
@@ -553,7 +553,10 @@ public final class Schematic extends BaseSchematic implements AutoCloseable {
      */
     public boolean isReady() {
         try {
-            if (offline || (useDataStreamCache() && dataStreamClient.hasRulesEngine())) {
+            if (offline
+                    || (useDataStreamCache()
+                            && dataStreamClient.hasRulesEngine()
+                            && dataStreamClient.isFlagsLoaded())) {
                 return true;
             }
             accounts()
